@@ -21,23 +21,16 @@ package com.kuuhaku.command.commands.discord.information;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.BlacklistDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.RankDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,226 +64,53 @@ public class RankCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			ArrayList<Page> pages = new ArrayList<>();
 
-			if (args.length > 0 && args[0].equalsIgnoreCase("global"))
-				getLevelRanking(pages, guild, true);
-			else if (Helper.findParam(args, "credit", "creditos", "créditos"))
-				getCreditRanking(pages);
-			else if (Helper.findParam(args, "card", "kawaipon", "cartas"))
-				getCardRanking(pages);
-			else if (Helper.findParam(args, "call", "voice", "voz"))
-				getVoiceRanking(pages, guild);
-			else
-				getLevelRanking(pages, guild, false);
+			int type;
+			List<String> data;
+			if (args.length > 0 && args[0].equalsIgnoreCase("global")) {
+				type = 0;
+				data = RankDAO.getLevelRanking(null);
+			} else if (Helper.findParam(args, "credit", "creditos", "créditos")) {
+				type = 1;
+				data = RankDAO.getCreditRanking();
+			} else if (Helper.findParam(args, "card", "kawaipon", "cartas")) {
+				type = 2;
+				data = RankDAO.getCardRanking();
+			} else if (Helper.findParam(args, "call", "voice", "voz")) {
+				type = 3;
+				data = RankDAO.getVoiceRanking(guild.getId());
+			} else {
+				type = -1;
+				data = RankDAO.getLevelRanking(guild.getId());
+			}
+
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setTitle("Ranking de usuários (" + switch (type) {
+						default -> "Leve - LOCAL";
+						case 0 -> "Level - GLOBAL";
+						case 1 -> "Créditos";
+						case 2 -> "Cartas";
+						case 3 -> "Tempo em call";
+					} + ")")
+					.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+
+			List<List<String>> chunks = Helper.chunkify(data, 15);
+			for (int i = 0; i < chunks.size(); i++) {
+				eb.clearFields();
+				List<String> chunk = chunks.get(i);
+
+				if (i == 0) {
+					eb.addField(chunk.get(0), String.join("\n", chunk.subList(1, chunk.size())), false);
+				} else {
+					eb.addField(Helper.VOID, String.join("\n", chunk), false);
+				}
+
+				pages.add(new Page(PageType.EMBED, eb.build()));
+			}
 
 			m.delete().queue();
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 		});
-	}
-
-	private void getLevelRanking(List<Page> pages, Guild guild, boolean global) {
-		List<com.kuuhaku.model.persistent.Member> mbs;
-		if (global) {
-			mbs = MemberDAO.getMemberRank(null, true);
-		} else {
-			mbs = MemberDAO.getMemberRank(guild.getId(), false);
-		}
-
-		mbs.removeIf(mb -> checkUser(mb).isBlank());
-
-		String champ = "1 - %s %s %s".formatted(
-				global ? checkGuild(mbs.get(0)) : "",
-				checkUser(mbs.get(0)),
-				I18n.getString(STR_LEVEL, mbs.get(0).getLevel())
-		);
-		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
-		StringBuilder sub9Formatted = new StringBuilder();
-		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s %s\n".formatted(
-					i + 2,
-					global ? checkGuild(sub9.get(i)) : "",
-					checkUser(sub9.get(i)),
-					I18n.getString(STR_LEVEL, sub9.get(i).getLevel())
-			));
-		}
-
-		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		makeEmbed(global, pages, sub9Formatted, eb, champ);
-
-		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
-			eb.clear();
-			next10.setLength(0);
-			for (int i = 10 * x; i < mbs.size() && i < (10 * x) + 10; i++) {
-				next10.append("%s - %s %s %s\n".formatted(
-						i + 1,
-						global ? checkGuild(mbs.get(i)) : "",
-						checkUser(mbs.get(i)),
-						I18n.getString(STR_LEVEL, mbs.get(i).getLevel())
-				));
-			}
-
-			makeEmbed(global, pages, next10, eb, Helper.VOID);
-		}
-	}
-
-	private void getCreditRanking(List<Page> pages) {
-		List<Account> accs = AccountDAO.getAccountRank();
-		accs.removeIf(acc -> checkUser(acc).isBlank());
-
-		String champ = "1 - %s %s".formatted(
-				checkUser(accs.get(0)),
-				I18n.getString(STR_CREDIT, Helper.separate(accs.get(0).getBalance()))
-		);
-		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
-		StringBuilder sub9Formatted = new StringBuilder();
-		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s\n".formatted(
-					i + 2,
-					checkUser(sub9.get(i)),
-					I18n.getString(STR_CREDIT, Helper.separate(sub9.get(i).getBalance()))
-			));
-		}
-
-		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		makeEmbed(true, pages, sub9Formatted, eb, champ);
-
-		for (int x = 1; x < Math.ceil(accs.size() / 10f); x++) {
-			eb.clear();
-			next10.setLength(0);
-			for (int i = 10 * x; i < accs.size() && i < (10 * x) + 10; i++) {
-				next10.append("%s - %s %s\n".formatted(
-						i + 1,
-						checkUser(accs.get(i)),
-						I18n.getString(STR_CREDIT, accs.get(i).getBalance())
-				));
-			}
-
-			makeEmbed(true, pages, next10, eb, Helper.VOID);
-		}
-	}
-
-	private void getCardRanking(List<Page> pages) {
-		List<Object[]> kps = KawaiponDAO.getCardRank();
-		kps.removeIf(kp -> checkUser(kp).isBlank());
-
-		String champ = "1 - %s %s".formatted(
-				checkUser(kps.get(0)),
-				I18n.getString(STR_CARD, kps.get(0)[1])
-		);
-		List<Object[]> sub9 = kps.subList(1, Math.min(kps.size(), 10));
-		StringBuilder sub9Formatted = new StringBuilder();
-		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s\n".formatted(
-					i + 2,
-					checkUser(sub9.get(i)),
-					I18n.getString(STR_CARD, sub9.get(i)[1])
-			));
-		}
-
-		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		makeEmbed(true, pages, sub9Formatted, eb, champ);
-
-		for (int x = 1; x < Math.ceil(kps.size() / 10f); x++) {
-			eb.clear();
-			next10.setLength(0);
-			for (int i = 10 * x; i < kps.size() && i < (10 * x) + 10; i++) {
-				next10.append("%s - %s %s\n".formatted(
-						i + 1,
-						checkUser(kps.get(i)),
-						I18n.getString(STR_CARD, kps.get(i)[1])
-				));
-			}
-
-			makeEmbed(true, pages, next10, eb, Helper.VOID);
-		}
-	}
-
-	private void getVoiceRanking(List<Page> pages, Guild guild) {
-		List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberVoiceRank(guild.getId());
-
-		mbs.removeIf(mb -> checkUser(mb).isBlank());
-
-		String champ = "1 - %s %s".formatted(
-				checkUser(mbs.get(0)),
-				I18n.getString(STR_TIME, DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
-		);
-		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
-		StringBuilder sub9Formatted = new StringBuilder();
-		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s\n".formatted(
-					i + 2,
-					checkUser(sub9.get(i)),
-					I18n.getString(STR_TIME, DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
-			));
-		}
-
-		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		makeEmbed(false, pages, sub9Formatted, eb, champ);
-
-		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
-			eb.clear();
-			next10.setLength(0);
-			for (int i = 10 * x; i < mbs.size() && i < (10 * x) + 10; i++) {
-				next10.append("%s - %s %s\n".formatted(
-						i + 1,
-						checkUser(mbs.get(i)),
-						I18n.getString(STR_TIME, DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
-				));
-			}
-
-			makeEmbed(false, pages, next10, eb, Helper.VOID);
-		}
-	}
-
-	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
-		eb.setTitle(I18n.getString(SRT_USER_RANKING_TITLE, global ? I18n.getString(STR_GLOBAL) : I18n.getString(STR_LOCAL)));
-		eb.addField(aVoid, next10.toString(), false);
-		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
-
-		pages.add(new Page(PageType.EMBED, eb.build()));
-	}
-
-	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
-		try {
-			if (BlacklistDAO.isBlacklisted(m.getUid())) return "";
-			return Main.getInfo().getUserByID(m.getUid()).getName();
-		} catch (Exception e) {
-			return "";
-		}
-	}
-
-	private static String checkUser(Object[] kp) {
-		try {
-			if (BlacklistDAO.isBlacklisted(String.valueOf(kp[0]))) return "";
-			return Main.getInfo().getUserByID(String.valueOf(kp[0])).getName();
-		} catch (Exception e) {
-			return "";
-		}
-	}
-
-	private static String checkUser(Account acc) {
-		try {
-			if (BlacklistDAO.isBlacklisted(acc.getUid())) return "";
-			return Main.getInfo().getUserByID(acc.getUid()).getName();
-		} catch (Exception e) {
-			return "";
-		}
-	}
-
-	private static String checkGuild(com.kuuhaku.model.persistent.Member m) {
-		try {
-			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getUid(), "")).getName() + ")";
-		} catch (Exception e) {
-			return "";
-		}
 	}
 }

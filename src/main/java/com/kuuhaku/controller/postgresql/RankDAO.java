@@ -19,25 +19,117 @@
 package com.kuuhaku.controller.postgresql;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RankDAO {
 
 	@SuppressWarnings("unchecked")
-	public static List<String> levelRanking() {
+	public static List<String> getLevelRanking(String guild) {
 		EntityManager em = Manager.getEntityManager();
 
+		Query q;
+		if (guild == null) {
+			q = em.createNativeQuery("""
+					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || gc.name || ')'
+					FROM member mb
+					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+					                     FROM logs l
+					                     WHERE l.uid <> '') l ON l.uid = mb.uid
+					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+					WHERE is_blacklisted(mb.uid) IS NULL
+					ORDER BY mb.xp DESC
+					""", String.class);
+		} else {
+			q = em.createNativeQuery("""
+					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1)
+					FROM member mb
+					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+					                     FROM logs l
+					                     WHERE l.uid <> '') l ON l.uid = mb.uid
+					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+					WHERE gc.guildid = :guild
+					  AND is_blacklisted(mb.uid) IS NULL
+					ORDER BY mb.xp DESC
+					""", String.class);
+			q.setParameter("guild", guild);
+		}
+
 		try {
-			Query q = em.createQuery("SELECT p.id FROM Block p", String.class);
-			List<String> blocks = q.getResultList();
+			return q.getResultList();
+		} finally {
 			em.close();
-			return blocks;
-		} catch (NoResultException e) {
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getCreditRanking() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)'
+				FROM account a
+				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+				                         FROM logs l
+				                         WHERE l.uid <> '') l ON l.uid = a.uid
+				WHERE is_blacklisted(a.uid) IS NULL
+				ORDER BY a.balance DESC
+				""", String.class);
+
+		try {
+			return q.getResultList();
+		} finally {
 			em.close();
-			return new ArrayList<>();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getCardRanking() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT row_number() OVER (ORDER BY kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)'
+				FROM kawaipon k
+				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+				                         FROM logs l
+				                         WHERE l.uid <> '') l ON l.uid = k.uid
+				             INNER JOIN (SELECT kc.kawaipon_id
+				                              , count(1) FILTER (WHERE NOT kc.foil) AS normal
+				                              , count(1) FILTER (WHERE kc.foil)     AS foil
+				                         FROM kawaiponcard kc
+				                         GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
+				WHERE is_blacklisted(k.uid) IS NULL
+				ORDER BY kc.foil DESC, kc.normal DESC
+				""", String.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getVoiceRanking(String guild) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) ||')'
+				FROM member mb
+				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+				                         FROM logs l
+				                         WHERE l.uid <> '') l ON l.uid = mb.uid
+				             INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+				WHERE gc.guildid = :guild
+				  AND is_blacklisted(mb.uid) IS NULL
+				ORDER BY mb.xp DESC
+				""", String.class);
+		q.setParameter("guild", guild);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
 		}
 	}
 }
