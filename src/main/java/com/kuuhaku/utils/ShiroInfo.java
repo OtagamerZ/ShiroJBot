@@ -115,6 +115,7 @@ public class ShiroInfo {
 	private static final ShiroEvents shiroEvents = new ShiroEvents();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final HashMap<String, String> emoteLookup = new HashMap<>();
+	private static final Set<String> pruneQueue = new HashSet<>();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -245,6 +246,10 @@ public class ShiroInfo {
 
 	public static HashMap<String, String> getEmoteLookup() {
 		return emoteLookup;
+	}
+
+	public static Set<String> getPruneQueue() {
+		return pruneQueue;
 	}
 
 	public static String getShiro() {
