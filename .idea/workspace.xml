@@ -15,7 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas mãos no replay">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1229,13 +1230,7 @@
       <workItem from="1623092785974" duration="3291000" />
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
-    </task>
-    <task id="LOCAL-04690" summary="Criação de client da API de encoding da Shiro">
-      <created>1622754740956</created>
-      <option name="number" value="04690" />
-      <option name="presentableId" value="LOCAL-04690" />
-      <option name="project" value="LOCAL" />
-      <updated>1622754740956</updated>
+      <workItem from="1623184462452" duration="60000" />
     </task>
     <task id="LOCAL-04691" summary="Criação de client da API de encoding da Shiro">
       <created>1622755513774</created>
@@ -1573,7 +1568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623170394637</updated>
     </task>
-    <option name="localTasksCounter" value="4739" />
+    <task id="LOCAL-04739" summary="Adicionadas mãos no replay">
+      <created>1623176265449</created>
+      <option name="number" value="04739" />
+      <option name="presentableId" value="LOCAL-04739" />
+      <option name="project" value="LOCAL" />
+      <updated>1623176265449</updated>
+    </task>
+    <option name="localTasksCounter" value="4740" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
