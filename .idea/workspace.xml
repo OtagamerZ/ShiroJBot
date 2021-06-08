@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções no comando de ranking de usuários">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de ratelimit variável">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1230,20 +1229,6 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
     </task>
-    <task id="LOCAL-04683" summary="Correções menores">
-      <created>1622603134635</created>
-      <option name="number" value="04683" />
-      <option name="presentableId" value="LOCAL-04683" />
-      <option name="project" value="LOCAL" />
-      <updated>1622603134635</updated>
-    </task>
-    <task id="LOCAL-04684" summary="Correções menores">
-      <created>1622603269303</created>
-      <option name="number" value="04684" />
-      <option name="presentableId" value="LOCAL-04684" />
-      <option name="project" value="LOCAL" />
-      <updated>1622603269303</updated>
-    </task>
     <task id="LOCAL-04685" summary="Criação de client da API de encoding da Shiro">
       <created>1622696635672</created>
       <option name="number" value="04685" />
@@ -1573,7 +1558,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623125360642</updated>
     </task>
-    <option name="localTasksCounter" value="4732" />
+    <task id="LOCAL-04732" summary="Adição de ratelimit variável">
+      <created>1623155098148</created>
+      <option name="number" value="04732" />
+      <option name="presentableId" value="LOCAL-04732" />
+      <option name="project" value="LOCAL" />
+      <updated>1623155098148</updated>
+    </task>
+    <task id="LOCAL-04733" summary="Adição de ratelimit variável">
+      <created>1623155302619</created>
+      <option name="number" value="04733" />
+      <option name="presentableId" value="LOCAL-04733" />
+      <option name="project" value="LOCAL" />
+      <updated>1623155302619</updated>
+    </task>
+    <option name="localTasksCounter" value="4734" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1681,11 +1680,11 @@
     <MESSAGE value="Criação de client da API de encoding da Shiro" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção do mercado de ações" />
-    <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Remoção do botzera da staff de suporte" />
     <MESSAGE value="Balanceamento do efeito nulificador" />
     <MESSAGE value="Correções no comando de ranking de usuários" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções no comando de ranking de usuários" />
+    <MESSAGE value="Adição de ratelimit variável" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de ratelimit variável" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
