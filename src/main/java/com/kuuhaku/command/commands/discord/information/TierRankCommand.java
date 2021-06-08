@@ -74,8 +74,9 @@ public class TierRankCommand implements Executable {
 
 			eb.setTitle("Top 10 do tier %s (%s)".formatted(rt.getTier(), RankedTier.getTierName(rt.getTier(), false)));
 
-
 			for (MatchMakingRating mm : top10) {
+				User u = mm.getUser();
+				if (u == null) continue;
 				if (mm.getRankPoints() == mm.getTier().getPromRP()) {
 					StringBuilder md = new StringBuilder();
 
@@ -88,9 +89,9 @@ public class TierRankCommand implements Executable {
 					for (int i = 0; i < mm.getTier().getMd() - (mm.getPromWins() + mm.getPromLosses()); i++)
 						md.append(TagIcons.RANKED_PENDING.getTag(0).trim());
 
-					prom.append("**%s - %s**\n".formatted(mm.getUser().getName(), md.toString()));
+					prom.append("**%s - %s**\n".formatted(u.getName(), md.toString()));
 				} else
-					sb.append("%s - %s PDR\n".formatted(mm.getUser().getName(), mm.getRankPoints()));
+					sb.append("%s - %s PDR\n".formatted(u.getName(), mm.getRankPoints()));
 			}
 
 			eb.addField("Promoção de tier", prom.toString(), false)
