@@ -15,8 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas mãos no replay">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1231,13 +1231,6 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
     </task>
-    <task id="LOCAL-04688" summary="Criação de client da API de encoding da Shiro">
-      <created>1622753757461</created>
-      <option name="number" value="04688" />
-      <option name="presentableId" value="LOCAL-04688" />
-      <option name="project" value="LOCAL" />
-      <updated>1622753757461</updated>
-    </task>
     <task id="LOCAL-04689" summary="Criação de client da API de encoding da Shiro">
       <created>1622753800166</created>
       <option name="number" value="04689" />
@@ -1574,7 +1567,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623168759383</updated>
     </task>
-    <option name="localTasksCounter" value="4737" />
+    <task id="LOCAL-04737" summary="Adicionadas mãos no replay">
+      <created>1623169670257</created>
+      <option name="number" value="04737" />
+      <option name="presentableId" value="LOCAL-04737" />
+      <option name="project" value="LOCAL" />
+      <updated>1623169670257</updated>
+    </task>
+    <option name="localTasksCounter" value="4738" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

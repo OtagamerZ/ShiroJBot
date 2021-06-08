@@ -723,22 +723,24 @@ public class Champion implements Drawable, Cloneable {
 		linkedTo = new ArrayList<>();
 		bonus = new Bonus();
 		fakeCard = null;
-		mAtk = 0;
-		mDef = 0;
-		altAtk = atk;
-		altDef = def;
+		altAtk = -1;
+		altDef = -1;
 		altDescription = null;
 		altEffect = null;
 		altRace = null;
+		mAtk = 0;
+		mDef = 0;
 		redAtk = 0;
 		redDef = 0;
 		efctMana = 0;
+		efctBlood = 0;
 		efctAtk = new int[6];
 		efctDef = new int[6];
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
 		dodge = 0;
+		mDodge = 0;
 	}
 
 	public Set<String> getRequiredCards() {
@@ -787,7 +789,8 @@ public class Champion implements Drawable, Cloneable {
 			}
 		}
 
-		return out;
+		if (rem.isEmpty()) return out;
+		else return Map.of();
 	}
 
 	public void setRequiredCards(Set<String> requiredCards) {
@@ -888,8 +891,7 @@ public class Champion implements Drawable, Cloneable {
 	public Champion copy() {
 		try {
 			Champion c = (Champion) clone();
-			c.linkedTo = new ArrayList<>();
-			c.bonus = new Bonus();
+			c.reset();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;
