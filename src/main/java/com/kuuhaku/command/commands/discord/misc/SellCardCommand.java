@@ -169,6 +169,7 @@ public class SellCardCommand implements Executable {
 				default -> "Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?";
 			};
 
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(msg)
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
