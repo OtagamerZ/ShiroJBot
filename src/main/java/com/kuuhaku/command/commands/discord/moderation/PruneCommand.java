@@ -26,12 +26,14 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -45,6 +47,11 @@ public class PruneCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (ShiroInfo.getPruneQueue().contains(guild.getId())) {
+			channel.sendMessage("❌ | Ainda estou deletando as mensagens de antes, tenha calma!").queue();
+			return;
+		}
+
 		message.delete()
 				.flatMap(s -> channel.getHistory().retrievePast(100))
 				.queue(msgs -> {
@@ -71,7 +78,7 @@ public class PruneCommand implements Executable {
 					} else if (StringUtils.isNumeric(args[0])) {
 						int amount = Integer.parseInt(args[0]);
 						if (!Helper.between(amount, 1, 101)) {
-							channel.sendMessage("❌ | Só é possível apagar entre 1 e 100 mensagens de uma vez").queue();
+							channel.sendMessage("❌ | Só é possível apagar entre 1 e 100 mensagens de uma vez.").queue();
 							return;
 						}
 
@@ -149,8 +156,23 @@ public class PruneCommand implements Executable {
 					else if (pinned == 1)
 						msg += " (" + pinned + " mensagem ignorada)";
 
-					channel.purgeMessages(msgs);
-					channel.sendMessage(msg).queue();
+					ShiroInfo.getPruneQueue().add(guild.getId());
+					try {
+						String finalMsg = msg;
+						if (msgs.size() == 1) {
+							msgs.get(0).delete()
+									.flatMap(s -> channel.sendMessage(finalMsg))
+									.submit().get();
+						} else if (msgs.size() > 1) {
+							channel.deleteMessages(msgs)
+									.flatMap(s -> channel.sendMessage(finalMsg))
+									.submit().get();
+						} else {
+							channel.sendMessage("Nenhuma mensagem deletada.").submit().get();
+						}
+					} catch (ExecutionException | InterruptedException ignore) {
+					}
+					ShiroInfo.getPruneQueue().remove(guild.getId());
 				});
 	}
 }
