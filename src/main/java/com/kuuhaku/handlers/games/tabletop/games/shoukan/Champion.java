@@ -407,6 +407,10 @@ public class Champion implements Drawable, Cloneable {
 		return def;
 	}
 
+	public int getBaseStats() {
+		return atk + def;
+	}
+
 	public int getAtk() {
 		if (altAtk == -1) altAtk = atk;
 		float fBonus = 1;

@@ -592,7 +592,7 @@ public class Shoukan extends GlobalGame {
 					} else if (!h.isNullMode() && (h.getMana() < c.getMana())) {
 						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 						return;
-					} else if (h.getHp() <= c.getBlood()) {
+					} else if ((h.isNullMode() && h.getHp() <= c.getBaseStats() / 2) || h.getHp() <= c.getBlood()) {
 						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 						return;
 					}
@@ -653,8 +653,13 @@ public class Shoukan extends GlobalGame {
 
 				if (d instanceof Champion) {
 					Champion c = (Champion) d;
-					h.removeMana(c.getMana());
-					h.removeHp(c.getBlood());
+					if (c.getMana() > 0) {
+						if (h.isNullMode())
+							h.removeHp(c.getBaseStats() / 2);
+						else
+							h.removeMana(c.getMana());
+					} else
+						h.removeHp(c.getBlood());
 				}
 
 				if (makeFusion(h)) return;
@@ -1088,7 +1093,7 @@ public class Shoukan extends GlobalGame {
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
 						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
-						(h.isNullMode() || h.getMana() >= f.getMana()) &&
+						((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
 						h.getHp() > f.getBlood()
 				)
 				.findFirst()
@@ -1112,8 +1117,13 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(ON_SUMMON, current, i)) return true;
 					if (applyEffect(ON_SUMMON, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
 
-					h.removeMana(aFusion.getMana());
-					h.removeHp(aFusion.getBlood());
+					if (aFusion.getMana() > 0) {
+						if (h.isNullMode())
+							h.removeHp(aFusion.getBaseStats() / 2);
+						else
+							h.removeMana(aFusion.getMana());
+					} else
+						h.removeHp(aFusion.getBlood());
 					break;
 				}
 			}
