@@ -31,32 +31,38 @@ public class RankDAO {
 		Query q;
 		if (guild == null) {
 			q = em.createNativeQuery("""
-					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ' - ' || gc.name || ')'
-					     , mb.level
-					FROM member mb
-					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-					                     FROM logs l
-					                     WHERE l.uid <> '') l ON l.uid = mb.uid
-					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-					    EXCEPT ALL
-					SELECT b.uid, 0
-					FROM blacklist b
-					ORDER BY 2 DESC
+					SELECT x.v
+					FROM (
+						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
+						     , mb.level
+						FROM member mb
+						         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+						                     FROM logs l
+						                     WHERE l.uid <> '') l ON l.uid = mb.uid
+						         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+						    EXCEPT ALL
+						SELECT b.uid, 0
+						FROM blacklist b
+						ORDER BY 2 DESC
+						) x
 					""");
 		} else {
 			q = em.createNativeQuery("""
-					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ')'
-					     , mb.level
-					FROM member mb
-					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-					                     FROM logs l
-					                     WHERE l.uid <> '') l ON l.uid = mb.uid
-					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-					WHERE gc.guildid = :guild
-					    EXCEPT ALL
-					SELECT b.uid, 0
-					FROM blacklist b
-					ORDER BY 2 DESC
+					SELECT x.v
+					FROM (
+						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ')' AS v
+						     , mb.level
+						FROM member mb
+						         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+						                     FROM logs l
+						                     WHERE l.uid <> '') l ON l.uid = mb.uid
+						         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+						WHERE gc.guildid = :guild
+						    EXCEPT ALL
+						SELECT b.uid, 0
+						FROM blacklist b
+						ORDER BY 2 DESC
+						) x
 					""");
 			q.setParameter("guild", guild);
 		}
@@ -73,16 +79,19 @@ public class RankDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)'
-				     , a.balance
-				FROM account a
-				         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-				                     FROM logs l
-				                     WHERE l.uid <> '') l ON l.uid = a.uid
-				    EXCEPT ALL
-				SELECT b.uid, 0
-				FROM blacklist b
-				ORDER BY 2 DESC
+				SELECT x.v
+				FROM (
+					SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
+					     , a.balance
+					FROM account a
+					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+					                     FROM logs l
+					                     WHERE l.uid <> '') l ON l.uid = a.uid
+					    EXCEPT ALL
+					SELECT b.uid, 0
+					FROM blacklist b
+					ORDER BY 2 DESC
+				) x
 				""");
 
 		try {
@@ -97,23 +106,26 @@ public class RankDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)'
-				     , kc.foil + kc.normal
-				     , kc.foil
-				     , kc.normal
-				FROM kawaipon k
-				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-				                         FROM logs l
-				                         WHERE l.uid <> '') l ON l.uid = k.uid
-				             INNER JOIN (SELECT kc.kawaipon_id
-				                              , count(1) FILTER (WHERE NOT kc.foil) AS normal
-				                              , count(1) FILTER (WHERE kc.foil)     AS foil
-				                         FROM kawaiponcard kc
-				                         GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
-				    EXCEPT ALL
-				SELECT b.uid, 0, 0, 0
-				FROM blacklist b
-				ORDER BY 2 DESC, 3 DESC, 4 DESC
+				SELECT x.v
+				FROM (
+					SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)' AS v
+					     , kc.foil + kc.normal
+					     , kc.foil
+					     , kc.normal
+					FROM kawaipon k
+					             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+					                         FROM logs l
+					                         WHERE l.uid <> '') l ON l.uid = k.uid
+					             INNER JOIN (SELECT kc.kawaipon_id
+					                              , count(1) FILTER (WHERE NOT kc.foil) AS normal
+					                              , count(1) FILTER (WHERE kc.foil)     AS foil
+					                         FROM kawaiponcard kc
+					                         GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
+					    EXCEPT ALL
+					SELECT b.uid, 0, 0, 0
+					FROM blacklist b
+					ORDER BY 2 DESC, 3 DESC, 4 DESC
+				) x
 				""");
 
 		try {
@@ -128,18 +140,21 @@ public class RankDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) ||')'
-				     , mb.voicetime
-				FROM member mb
+				SELECT x.v
+				FROM (
+				    SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) || ')' AS v
+				         , mb.voicetime
+				    FROM member mb
 				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 				                         FROM logs l
 				                         WHERE l.uid <> '') l ON l.uid = mb.uid
 				             INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-				WHERE gc.guildid = :guild
-				    EXCEPT ALL
-				SELECT b.uid, 0
-				FROM blacklist b
-				ORDER BY 2 DESC
+				    WHERE gc.guildid = :guild
+				        EXCEPT ALL
+				    SELECT b.uid, 0
+				    FROM blacklist b
+				    ORDER BY 2 DESC
+				) x
 				""");
 		q.setParameter("guild", guild);
 
