@@ -51,6 +51,10 @@ public class XStringBuilder {
 		return this;
 	}
 
+	public void clear() {
+		sb.setLength(0);
+	}
+
 	@Override
 	public String toString() {
 		return sb.toString();
