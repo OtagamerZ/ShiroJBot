@@ -1229,13 +1229,6 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
     </task>
-    <task id="LOCAL-04685" summary="Criação de client da API de encoding da Shiro">
-      <created>1622696635672</created>
-      <option name="number" value="04685" />
-      <option name="presentableId" value="LOCAL-04685" />
-      <option name="project" value="LOCAL" />
-      <updated>1622696635672</updated>
-    </task>
     <task id="LOCAL-04686" summary="Criação de client da API de encoding da Shiro">
       <created>1622696770781</created>
       <option name="number" value="04686" />
@@ -1572,7 +1565,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623155302619</updated>
     </task>
-    <option name="localTasksCounter" value="4734" />
+    <task id="LOCAL-04734" summary="Adição de ratelimit variável">
+      <created>1623157729143</created>
+      <option name="number" value="04734" />
+      <option name="presentableId" value="LOCAL-04734" />
+      <option name="project" value="LOCAL" />
+      <updated>1623157729143</updated>
+    </task>
+    <option name="localTasksCounter" value="4735" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
