@@ -39,7 +39,7 @@ public class RankDAO {
 					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 					WHERE is_blacklisted(mb.uid) IS NULL
 					ORDER BY mb.xp DESC
-					""", String.class);
+					""");
 		} else {
 			q = em.createNativeQuery("""
 					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1)
@@ -51,7 +51,7 @@ public class RankDAO {
 					WHERE gc.guildid = :guild
 					  AND is_blacklisted(mb.uid) IS NULL
 					ORDER BY mb.xp DESC
-					""", String.class);
+					""");
 			q.setParameter("guild", guild);
 		}
 
@@ -74,7 +74,7 @@ public class RankDAO {
 				                         WHERE l.uid <> '') l ON l.uid = a.uid
 				WHERE is_blacklisted(a.uid) IS NULL
 				ORDER BY a.balance DESC
-				""", String.class);
+				""");
 
 		try {
 			return q.getResultList();
@@ -100,7 +100,7 @@ public class RankDAO {
 				                         GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
 				WHERE is_blacklisted(k.uid) IS NULL
 				ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
-				""", String.class);
+				""");
 
 		try {
 			return q.getResultList();
@@ -123,7 +123,7 @@ public class RankDAO {
 				WHERE gc.guildid = :guild
 				  AND is_blacklisted(mb.uid) IS NULL
 				ORDER BY mb.xp DESC
-				""", String.class);
+				""");
 		q.setParameter("guild", guild);
 
 		try {
