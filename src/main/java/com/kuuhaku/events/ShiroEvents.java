@@ -222,8 +222,12 @@ public class ShiroEvents extends ListenerAdapter {
 
 			try {
 				CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
-				if (ca != null && !Main.getSelfUser().getId().equals(author.getId()))
-					Helper.typeMessage(channel, ca.getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())));
+				if (ca != null && !Main.getSelfUser().getId().equals(author.getId())) {
+					if (message.getReferencedMessage() != null)
+						Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild), message.getReferencedMessage());
+					else
+						Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild));
+				}
 			} catch (NoResultException | NullPointerException ignore) {
 			}
 
