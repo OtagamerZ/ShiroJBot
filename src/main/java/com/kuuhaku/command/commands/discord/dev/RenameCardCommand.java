@@ -53,7 +53,7 @@ public class RenameCardCommand implements Executable {
 		}
 
 		File master = new File(System.getenv("CARDS_PATH") + "../cards-waifu2x");
-		if (new File(master, args[1]).exists()) {
+		if (new File(master, newName + ".png").exists()) {
 			channel.sendMessage("❌ | Já existe uma carta com esse nome.").queue();
 			return;
 		}
