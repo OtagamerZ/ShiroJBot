@@ -76,7 +76,7 @@ public abstract class Drop<P> implements Prize<P> {
 			add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais.", u ->
 					AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 
-			add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->
+			add(Pair.of("Ser membro da " + exceed.getName().toLowerCase(Locale.ROOT) + ".", u ->
 					ExceedDAO.hasExceed(u.getId()) && ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
 
 			add(Pair.of("Ter dívida ativa.", u ->
