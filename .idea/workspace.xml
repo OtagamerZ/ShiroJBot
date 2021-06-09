@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1241,13 +1242,6 @@
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
     </task>
-    <task id="LOCAL-04698" summary="Correções menores">
-      <created>1622817983997</created>
-      <option name="number" value="04698" />
-      <option name="presentableId" value="LOCAL-04698" />
-      <option name="project" value="LOCAL" />
-      <updated>1622817983997</updated>
-    </task>
     <task id="LOCAL-04699" summary="Correções menores">
       <created>1622818559768</created>
       <option name="number" value="04699" />
@@ -1584,7 +1578,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623256076322</updated>
     </task>
-    <option name="localTasksCounter" value="4747" />
+    <task id="LOCAL-04747" summary="Correções menores">
+      <created>1623259034947</created>
+      <option name="number" value="04747" />
+      <option name="presentableId" value="LOCAL-04747" />
+      <option name="project" value="LOCAL" />
+      <updated>1623259034947</updated>
+    </task>
+    <option name="localTasksCounter" value="4748" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
