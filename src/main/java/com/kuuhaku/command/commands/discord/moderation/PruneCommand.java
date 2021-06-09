@@ -33,6 +33,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -159,14 +160,10 @@ public class PruneCommand implements Executable {
 					ShiroInfo.getPruneQueue().add(guild.getId());
 					try {
 						String finalMsg = msg;
-						if (msgs.size() == 1) {
-							msgs.get(0).delete()
-									.flatMap(s -> channel.sendMessage(finalMsg))
-									.submit().get();
-						} else if (msgs.size() > 1) {
-							channel.deleteMessages(msgs)
-									.flatMap(s -> channel.sendMessage(finalMsg))
-									.submit().get();
+						if (msgs.size() > 1) {
+							CompletableFuture.allOf(channel.purgeMessages(msgs).toArray(CompletableFuture[]::new))
+									.thenAccept(s -> channel.sendMessage(finalMsg).submit())
+									.get();
 						} else {
 							channel.sendMessage("Nenhuma mensagem deletada.").submit().get();
 						}
