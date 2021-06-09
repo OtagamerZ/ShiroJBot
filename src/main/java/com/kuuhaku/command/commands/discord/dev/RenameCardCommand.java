@@ -75,7 +75,7 @@ public class RenameCardCommand implements Executable {
 			CardDAO.setCardName(
 					oldName,
 					newName,
-					String.join(argsAsText.replace(args[0], "").replace(args[1], ""))
+					String.join(" ", argsAsText.replace(args[0], "").replace(args[1], "")).trim()
 			);
 		else
 			CardDAO.setCardName(

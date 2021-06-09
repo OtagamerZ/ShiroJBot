@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/RenameCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1243,13 +1241,6 @@
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
     </task>
-    <task id="LOCAL-04694" summary="Criação de client da API de encoding da Shiro">
-      <created>1622777009760</created>
-      <option name="number" value="04694" />
-      <option name="presentableId" value="LOCAL-04694" />
-      <option name="project" value="LOCAL" />
-      <updated>1622777009760</updated>
-    </task>
     <task id="LOCAL-04695" summary="Correções menores">
       <created>1622813947893</created>
       <option name="number" value="04695" />
@@ -1586,7 +1577,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623241370798</updated>
     </task>
-    <option name="localTasksCounter" value="4743" />
+    <task id="LOCAL-04743" summary="Correções menores">
+      <created>1623254853385</created>
+      <option name="number" value="04743" />
+      <option name="presentableId" value="LOCAL-04743" />
+      <option name="project" value="LOCAL" />
+      <updated>1623254853385</updated>
+    </task>
+    <option name="localTasksCounter" value="4744" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
