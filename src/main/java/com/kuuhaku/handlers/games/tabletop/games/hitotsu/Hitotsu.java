@@ -106,8 +106,8 @@ public class Hitotsu extends Game {
 
 		List<KawaiponCard> foil = available.stream()
 				.filter(KawaiponCard::isFoil)
-				.sorted(Comparator.comparingDouble(v -> Math.random()))
 				.limit(50).collect(Collectors.toList());
+		Collections.shuffle(foil);
 
 		available.clear();
 		available.addAll(inGame.values().stream().flatMap(List::stream).collect(Collectors.toList()));

@@ -45,14 +45,14 @@ public abstract class Game {
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
 	private int round = 0;
-	private User current;
+	private String current;
 	private boolean closed = false;
 
 	public Game(ShardManager handler, Board board, TextChannel channel) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.current = board.getPlayers().getCurrent().getId();
 		this.custom = null;
 	}
 
@@ -60,7 +60,7 @@ public abstract class Game {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.current = board.getPlayers().getCurrent().getId();
 		this.custom = custom;
 	}
 
@@ -83,10 +83,10 @@ public abstract class Game {
 		while (p == null || !p.isInGame()) {
 			p = board.getPlayers().getNext();
 		}
-		current = handler.getUserById(p.getId());
+		current = p.getId();
 		assert current != null;
 		if (round > 0)
-			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 					.queueAfter(3, TimeUnit.MINUTES, s -> {
 						onWO.accept(s);
 						closed = true;
@@ -100,7 +100,7 @@ public abstract class Game {
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
 				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.getId().equals(pc.getOwnerId()))
+				if (pc instanceof Decoy && current.equals(pc.getOwnerId()))
 					board.setPieceAt(Spot.of(x, y), null);
 			}
 		}
@@ -109,7 +109,7 @@ public abstract class Game {
 	public void resetTimerKeepTurn() {
 		if (timeout != null) timeout.cancel(true);
 		if (round > 0)
-			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 					.queueAfter(3, TimeUnit.MINUTES, s -> {
 						onWO.accept(s);
 						closed = true;
@@ -134,7 +134,7 @@ public abstract class Game {
 	}
 
 	public User getCurrent() {
-		return current;
+		return handler.getUserById(current);
 	}
 
 	public User getPlayerById(String id) {
