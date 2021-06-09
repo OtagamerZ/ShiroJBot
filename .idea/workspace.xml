@@ -13,13 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas mãos no replay">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/RenameCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Action.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,11 +175,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.clan" />
       <recent name="com.kuuhaku.utils" />
-      <recent name="com.kuuhaku.model.persistent.guild.buttons" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1246,27 +1243,6 @@
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
     </task>
-    <task id="LOCAL-04691" summary="Criação de client da API de encoding da Shiro">
-      <created>1622755513774</created>
-      <option name="number" value="04691" />
-      <option name="presentableId" value="LOCAL-04691" />
-      <option name="project" value="LOCAL" />
-      <updated>1622755513778</updated>
-    </task>
-    <task id="LOCAL-04692" summary="Criação de client da API de encoding da Shiro">
-      <created>1622766803053</created>
-      <option name="number" value="04692" />
-      <option name="presentableId" value="LOCAL-04692" />
-      <option name="project" value="LOCAL" />
-      <updated>1622766803053</updated>
-    </task>
-    <task id="LOCAL-04693" summary="Criação de client da API de encoding da Shiro">
-      <created>1622776846456</created>
-      <option name="number" value="04693" />
-      <option name="presentableId" value="LOCAL-04693" />
-      <option name="project" value="LOCAL" />
-      <updated>1622776846456</updated>
-    </task>
     <task id="LOCAL-04694" summary="Criação de client da API de encoding da Shiro">
       <created>1622777009760</created>
       <option name="number" value="04694" />
@@ -1589,7 +1565,28 @@
       <option name="project" value="LOCAL" />
       <updated>1623176265449</updated>
     </task>
-    <option name="localTasksCounter" value="4740" />
+    <task id="LOCAL-04740" summary="Correções menores">
+      <created>1623241093998</created>
+      <option name="number" value="04740" />
+      <option name="presentableId" value="LOCAL-04740" />
+      <option name="project" value="LOCAL" />
+      <updated>1623241093998</updated>
+    </task>
+    <task id="LOCAL-04741" summary="Correções menores">
+      <created>1623241348488</created>
+      <option name="number" value="04741" />
+      <option name="presentableId" value="LOCAL-04741" />
+      <option name="project" value="LOCAL" />
+      <updated>1623241348488</updated>
+    </task>
+    <task id="LOCAL-04742" summary="Correções menores">
+      <created>1623241370798</created>
+      <option name="number" value="04742" />
+      <option name="presentableId" value="LOCAL-04742" />
+      <option name="project" value="LOCAL" />
+      <updated>1623241370798</updated>
+    </task>
+    <option name="localTasksCounter" value="4743" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1694,14 +1691,14 @@
     <MESSAGE value="Adição de replay no Shoukan" />
     <MESSAGE value="Aumento no custo dos upgrades de servidor" />
     <MESSAGE value="Criação de client da API de encoding da Shiro" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção do mercado de ações" />
     <MESSAGE value="Remoção do botzera da staff de suporte" />
     <MESSAGE value="Balanceamento do efeito nulificador" />
     <MESSAGE value="Correções no comando de ranking de usuários" />
     <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Adicionadas mãos no replay" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionadas mãos no replay" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

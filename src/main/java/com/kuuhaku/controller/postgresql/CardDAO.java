@@ -39,6 +39,33 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CardDAO {
+	public static void setCardName(String o, String n) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("UPDATE Card SET id = :new WHERE id = :old")
+				.setParameter("old", o)
+				.setParameter("new", n)
+				.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void setCardName(String o, String n, String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("UPDATE Card SET id = :new, name = :name WHERE id = :old")
+				.setParameter("old", o)
+				.setParameter("new", n)
+				.setParameter("name", name)
+				.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static long getTotalCards() {
 		EntityManager em = Manager.getEntityManager();
 
