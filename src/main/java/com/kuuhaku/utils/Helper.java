@@ -2083,7 +2083,7 @@ public class Helper {
 	}
 
 	public static BufferedImage btoa(String b64) {
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(b64))) {
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)))) {
 			return ImageIO.read(bais);
 		} catch (IOException | NullPointerException e) {
 			return null;
