@@ -249,12 +249,19 @@ public class Helper {
 	}
 
 	public static void typeMessage(MessageChannel channel, String message) {
-		channel.sendTyping().queue(tm ->
-						channel.sendMessage(makeEmoteFromMention(message.split(" ")))
-								.queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS, null, Helper::doNothing)
-				, Helper::doNothing);
+		channel.sendTyping()
+				.delay(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS)
+				.flatMap(s -> channel.sendMessage(makeEmoteFromMention(message.split(" "))))
+				.queue(null, Helper::doNothing);
 	}
 
+	public static void typeMessage(MessageChannel channel, String message, Message target) {
+
+		channel.sendTyping()
+				.delay(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS)
+				.flatMap(s -> target.reply(makeEmoteFromMention(message.split(" "))))
+				.queue(null, Helper::doNothing);
+	}
 
 	public static int rng(int maxValue, boolean exclusive) {
 		return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
