@@ -266,7 +266,7 @@ public class Arena {
 	public BufferedImage addHands(BufferedImage arena, Collection<Hand> hands) {
 		List<Hand> hs = new ArrayList<>(hands);
 		hs.sort(Comparator.comparingInt(h -> h.getSide() == Side.TOP ? 1 : 0));
-		BufferedImage bi = new BufferedImage(arena.getWidth(), arena.getHeight() + 920, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(arena.getWidth(), arena.getHeight() + 920, arena.getType());
 		Graphics2D g2d = arena.createGraphics();
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
