@@ -62,7 +62,7 @@ public abstract class GlobalGame {
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
 	private int round = 0;
-	private User current;
+	private String current;
 	private boolean closed = false;
 	private boolean wo = false;
 
@@ -70,7 +70,7 @@ public abstract class GlobalGame {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.current = board.getPlayers().getCurrent().getId();
 		this.ranked = ranked;
 		this.custom = null;
 	}
@@ -79,7 +79,7 @@ public abstract class GlobalGame {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.current = board.getPlayers().getCurrent().getId();
 		this.ranked = ranked;
 		this.custom = custom;
 	}
@@ -103,11 +103,11 @@ public abstract class GlobalGame {
 		while (p == null || !p.isInGame()) {
 			p = board.getPlayers().getNext();
 		}
-		current = handler.getUserById(p.getId());
+		current = p.getId();
 		assert current != null;
 		if (round > 0)
 			timeout = executor.schedule(() ->
-					channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 							.queue(s -> {
 								onWO.accept(s);
 								closed = true;
@@ -123,7 +123,7 @@ public abstract class GlobalGame {
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
 				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.getId().equals(pc.getOwnerId()))
+				if (pc instanceof Decoy && current.equals(pc.getOwnerId()))
 					board.setPieceAt(Spot.of(x, y), null);
 			}
 		}
@@ -182,11 +182,11 @@ public abstract class GlobalGame {
 		while (p == null || !p.isInGame()) {
 			p = board.getPlayers().getNext();
 		}
-		current = handler.getUserById(p.getId());
+		current = p.getId();
 		assert current != null;
 		if (round > 0)
 			timeout = executor.schedule(() ->
-					channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 							.queue(s -> {
 								onWO.accept(s);
 								closed = true;
@@ -202,7 +202,7 @@ public abstract class GlobalGame {
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
 				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.getId().equals(pc.getOwnerId()))
+				if (pc instanceof Decoy && current.equals(pc.getOwnerId()))
 					board.setPieceAt(Spot.of(x, y), null);
 			}
 		}
@@ -213,7 +213,7 @@ public abstract class GlobalGame {
 		timeout = null;
 		if (round > 0)
 			timeout = executor.schedule(() ->
-					channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 							.queue(s -> {
 								onWO.accept(s);
 								closed = true;
@@ -240,7 +240,7 @@ public abstract class GlobalGame {
 	}
 
 	public User getCurrent() {
-		return current;
+		return handler.getUserById(current);
 	}
 
 	public User getPlayerById(String id) {

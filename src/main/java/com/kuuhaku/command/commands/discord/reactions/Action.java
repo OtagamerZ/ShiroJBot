@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.reactions;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -28,28 +29,33 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Action {
-	private User user;
-	private User[] interaction;
+	private String user;
+	private String[] interaction;
 
 	public User getUser() {
-		return user;
+		return Main.getInfo().getUserByID(user);
 	}
 
 	public void setUser(User user) {
-		this.user = user;
+		this.user = user.getId();
 	}
 
 	public User[] getInteraction() {
-		return interaction;
+		return Arrays.stream(interaction)
+				.map(Main.getInfo()::getUserByID)
+				.toArray(User[]::new);
 	}
 
 	public void setInteraction(User[] interaction) {
-		this.interaction = interaction;
+		this.interaction = Arrays.stream(interaction)
+				.map(User::getId)
+				.toArray(String[]::new);
 	}
 
 	public abstract void answer(TextChannel chn);
