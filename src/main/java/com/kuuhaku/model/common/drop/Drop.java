@@ -23,6 +23,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Clan;
@@ -40,6 +41,7 @@ public abstract class Drop<P> implements Prize<P> {
 	private final AddedAnime anime;
 	private final ExceedEnum exceed;
 	private final ClanTier tier;
+	private final RankedTier ranked;
 	private final int[] values;
 	private final List<Pair<String, Function<User, Boolean>>> condition;
 	private final Pair<String, Function<User, Boolean>> chosen;
@@ -51,6 +53,7 @@ public abstract class Drop<P> implements Prize<P> {
 		anime = animes.get(Helper.rng(animes.size(), true));
 		exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];
+		ranked = RankedTier.values()[1 + Helper.rng(RankedTier.values().length - 1, true)];
 		values = new int[]{
 				1 + Helper.rng((int) CardDAO.totalCards(anime.getName()) - 1, false),
 				1 + Helper.rng(6, false),
@@ -82,11 +85,14 @@ public abstract class Drop<P> implements Prize<P> {
 			add(Pair.of("Ter conta vinculada com o canal do meu Nii-chan.", u ->
 					!AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
 
-			add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase(Locale.ROOT) + ".", u -> {
+			add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase(Locale.ROOT) + " ou superior.", u -> {
 				Clan c = ClanDAO.getUserClan(u.getId());
 				if (c == null) return false;
-				else return c.getTier() == tier;
+				else return c.getTier().ordinal() >= tier.ordinal();
 			}));
+
+			add(Pair.of("Possuir ranking " + ranked.getName().toLowerCase(Locale.ROOT) + " no Shoukan ou superior.", u ->
+					MatchMakingRatingDAO.getMMR(u.getId()).getTier().ordinal() >= ranked.ordinal()));
 		}};
 		chosen = condition.get(Helper.rng(condition.size(), true));
 		this.prize = prize;
