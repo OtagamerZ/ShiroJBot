@@ -112,8 +112,13 @@ public class Arena {
 					}
 				}
 
-				name = ">>> " + name + " <<<";
-				g2d.setColor(key == game.getCurrentSide() ? h.getAcc().getFrame().getColor() : Color.white);
+				if (key == game.getCurrentSide()) {
+					g2d.setColor(h.getAcc().getFrame().getColor());
+					name = ">>> " + name + " <<<";
+				} else {
+					g2d.setColor(Color.white);
+				}
+
 				if (key == Side.TOP)
 					Profile.printCenteredString(name, 1253, 499, 822, g2d);
 				else
