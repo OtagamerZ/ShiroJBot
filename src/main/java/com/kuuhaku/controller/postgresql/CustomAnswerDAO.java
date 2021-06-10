@@ -20,7 +20,6 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,16 +31,32 @@ public class CustomAnswerDAO {
 	@SuppressWarnings("unchecked")
 	public static CustomAnswer getCAByTrigger(String trigger, String guild) {
 		EntityManager em = Manager.getEntityManager();
-		List<CustomAnswer> ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE LOWER(gatilho) = :trigger AND guildID = :guild", CustomAnswer.class);
+		Query q = em.createNativeQuery("""
+				SELECT c.id
+				     , c.guildId
+				     , c.trigger
+				     , c.answer
+				     , c.anywhere
+				     , c.chance
+				FROM CustomAnswer c 
+				WHERE guildId = :guild
+				AND (
+					(c.anywhere AND :trigger LIKE LOWER('%'||trigger||'%'))
+					OR LOWER(trigger) = :trigger
+				)
+				""");
 		q.setParameter("trigger", trigger.toLowerCase(Locale.ROOT));
 		q.setParameter("guild", guild);
-		ca = q.getResultList();
 
-		em.close();
+		try {
+			List<Object[]> answers = q.getResultList();
 
-		return ca.size() > 0 ? ca.get(Helper.rng(ca.size(), true)) : null;
+			if (answers.isEmpty()) return null;
+			return Helper.map(CustomAnswer.class, Helper.getRandomN(answers, 1).get(0));
+		} finally {
+			em.close();
+		}
 	}
 
 	public static CustomAnswer getCAByID(int id) {
@@ -59,11 +74,27 @@ public class CustomAnswerDAO {
 		}
 	}
 
+	public static CustomAnswer getCAByIDAndGuild(int id, String guild) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE id = :id AND guildId = :guild", CustomAnswer.class);
+		q.setParameter("id", id);
+		q.setParameter("guild", guild);
+
+		try {
+			return (CustomAnswer) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<CustomAnswer> getCAByGuild(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE guildID = :guild", CustomAnswer.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE guildId = :guild", CustomAnswer.class);
 		q.setParameter("guild", id);
 
 		try {
@@ -73,13 +104,8 @@ public class CustomAnswerDAO {
 		}
 	}
 
-	public static void addCAtoDB(Guild g, String trigger, String answer) {
+	public static void addCustomAnswer(CustomAnswer ca) {
 		EntityManager em = Manager.getEntityManager();
-
-		CustomAnswer ca = new CustomAnswer();
-		ca.setGuildID(g.getId());
-		ca.setGatilho(trigger);
-		ca.setAnswer(answer);
 
 		em.getTransaction().begin();
 		em.merge(ca);
@@ -88,7 +114,7 @@ public class CustomAnswerDAO {
 		em.close();
 	}
 
-	public static void removeCAFromDB(CustomAnswer ca) {
+	public static void deleteCustomAnswer(CustomAnswer ca) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

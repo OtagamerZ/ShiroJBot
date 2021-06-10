@@ -27,29 +27,57 @@ public class CustomAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-    private String guildID = "";
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL")
+    private String guildId = "";
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-    private String gatilho = "";
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL")
+    private String trigger = "";
 
     @Column(columnDefinition = "TEXT")
     private String answer = "";
 
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean anywhere = false;
+
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
+    private int chance = 100;
+
+    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance) {
+        this.id = id;
+        this.guildId = guildId;
+        this.trigger = trigger;
+        this.answer = answer;
+        this.anywhere = anywhere;
+        this.chance = chance;
+    }
+
+    public CustomAnswer(String guildId, String trigger, String answer) {
+        this.guildId = guildId;
+        this.trigger = trigger;
+        this.answer = answer;
+    }
+
     public CustomAnswer() {
-
     }
 
-    public void setGuildID(String guildID) {
-        this.guildID = guildID;
+    public int getId() {
+        return id;
     }
 
-    public String getGatilho() {
-        return gatilho;
+    public String getGuildId() {
+        return guildId;
     }
 
-    public void setGatilho(String gatilho) {
-        this.gatilho = gatilho;
+    public void setGuildId(String guildID) {
+        this.guildId = guildID;
+    }
+
+    public String getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(String gatilho) {
+        this.trigger = gatilho;
     }
 
     public String getAnswer() {
@@ -60,11 +88,19 @@ public class CustomAnswer {
         this.answer = answer;
     }
 
-    public long getId() {
-        return id;
+    public boolean isAnywhere() {
+        return anywhere;
     }
 
-    public String getGuildID() {
-        return guildID;
+    public void setAnywhere(boolean anywhere) {
+        this.anywhere = anywhere;
+    }
+
+    public int getChance() {
+        return chance;
+    }
+
+    public void setChance(int chance) {
+        this.chance = chance;
     }
 }

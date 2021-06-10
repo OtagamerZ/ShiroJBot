@@ -190,4 +190,18 @@ public class CommonHandler {
 
 		return new HttpEntity<>(embedJson, headers);
 	}
+
+	@RequestMapping(value = "/customanswer", method = RequestMethod.GET)
+	public @ResponseBody
+	HttpEntity<String> serveCustomAnswerJson() throws IOException {
+		File f = new File("customanswer_example.json");
+		if (!f.exists()) throw new FileNotFoundException();
+
+		String embedJson = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
+
+		return new HttpEntity<>(embedJson, headers);
+	}
 }
