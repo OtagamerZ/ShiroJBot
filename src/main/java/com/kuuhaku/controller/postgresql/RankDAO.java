@@ -142,7 +142,7 @@ public class RankDAO {
 		Query q = em.createNativeQuery("""
 				SELECT x.v
 				FROM (
-				    SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) || ')' AS v
+				    SELECT row_number() OVER (ORDER BY mb.voicetime DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) || ')' AS v
 				         , mb.voicetime
 				    FROM member mb
 				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
