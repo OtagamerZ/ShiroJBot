@@ -32,23 +32,28 @@ public class CustomAnswerDAO {
 	public static CustomAnswer getCAByTrigger(String trigger, String guild) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("""
-				SELECT c
+		Query q = em.createNativeQuery("""
+				SELECT c.id
+				     , c.guildId
+				     , c.trigger
+				     , c.answer
+				     , c.anywhere
+				     , c.chance
 				FROM CustomAnswer c 
 				WHERE guildId = :guild
 				AND (
 					(c.anywhere AND LOWER(trigger) LIKE '%'||:trigger||'%')
 					OR LOWER(trigger) = '%'||:trigger||'%'
 				)
-				""", CustomAnswer.class);
+				""");
 		q.setParameter("trigger", trigger.toLowerCase(Locale.ROOT));
 		q.setParameter("guild", guild);
 
 		try {
-			List<CustomAnswer> answers = q.getResultList();
+			List<Object[]> answers = q.getResultList();
 
 			if (answers.isEmpty()) return null;
-			return Helper.getRandomN(answers, 1).get(0);
+			return Helper.map(CustomAnswer.class, Helper.getRandomN(answers, 1).get(0));
 		} finally {
 			em.close();
 		}
