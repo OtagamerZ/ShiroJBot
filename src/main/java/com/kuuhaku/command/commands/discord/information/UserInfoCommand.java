@@ -84,7 +84,7 @@ public class UserInfoCommand implements Executable {
 
 		boolean booster = m.getTimeBoosted() != null;
 		if (booster) {
-			int time = (int) ChronoUnit.MONTHS.between(m.getTimeBoosted(), OffsetDateTime.now());
+			int time = (int) m.getTimeBoosted().until(OffsetDateTime.now(), ChronoUnit.MONTHS);
 			if (time >= 24)
 				sb.append("<:Booster9:852288241104322651>");
 			else if (time >= 18)
@@ -101,17 +101,16 @@ public class UserInfoCommand implements Executable {
 				sb.append("<:Booster3:852288241159634945>");
 			else if (time >= 2)
 				sb.append("<:Booster2:852288241386127371>");
-			else if (time >= 1)
+			else
 				sb.append("<:Booster1:852288241193189407>");
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle(":dividers: | Dados sobre " + m.getEffectiveName() + type)
 				.setThumbnail(m.getUser().getEffectiveAvatarUrl())
-				.addField(":man_detective: | Nome real", m.getUser().getName(), true)
-				.addField(":man_detective: | Tag", "#" + m.getUser().getDiscriminator(), true)
+				.addField(":man_detective: | Nome real", "`" + m.getUser().getAsTag() + "`", true)
 				.addField(":medal: | Emblemas", sb.toString(), true)
-				.addField(":1234: | ID", m.getId(), true)
+				.addField(":1234: | ID", "`" + m.getId() + "`", true)
 				.addField(":calendar: | Conta criada em", m.getTimeCreated().format(Helper.dateFormat), true)
 				.addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Helper.dateFormat) : "Não sei", true);
 		if (booster)
