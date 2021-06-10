@@ -14,10 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Turbinada nas respostas customizadas">
-      <change afterPath="$PROJECT_DIR$/customanswer_example.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CustomAnswerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CustomAnswerDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1232,21 +1229,7 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
-      <workItem from="1623296090457" duration="713000" />
-    </task>
-    <task id="LOCAL-04702" summary="Correções menores">
-      <created>1622823788916</created>
-      <option name="number" value="04702" />
-      <option name="presentableId" value="LOCAL-04702" />
-      <option name="project" value="LOCAL" />
-      <updated>1622823788917</updated>
-    </task>
-    <task id="LOCAL-04703" summary="Correções menores">
-      <created>1622823945332</created>
-      <option name="number" value="04703" />
-      <option name="presentableId" value="LOCAL-04703" />
-      <option name="project" value="LOCAL" />
-      <updated>1622823945333</updated>
+      <workItem from="1623296090457" duration="1076000" />
     </task>
     <task id="LOCAL-04704" summary="Correções menores">
       <created>1622824547041</created>
@@ -1577,7 +1560,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623288473433</updated>
     </task>
-    <option name="localTasksCounter" value="4751" />
+    <task id="LOCAL-04751" summary="Turbinada nas respostas customizadas">
+      <created>1623296813669</created>
+      <option name="number" value="04751" />
+      <option name="presentableId" value="LOCAL-04751" />
+      <option name="project" value="LOCAL" />
+      <updated>1623296813669</updated>
+    </task>
+    <task id="LOCAL-04752" summary="Turbinada nas respostas customizadas">
+      <created>1623296953759</created>
+      <option name="number" value="04752" />
+      <option name="presentableId" value="LOCAL-04752" />
+      <option name="project" value="LOCAL" />
+      <updated>1623296953759</updated>
+    </task>
+    <option name="localTasksCounter" value="4753" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
