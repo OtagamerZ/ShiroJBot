@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1231,13 +1229,6 @@
       <workItem from="1623184462452" duration="60000" />
       <workItem from="1623296090457" duration="1508000" />
     </task>
-    <task id="LOCAL-04709" summary="Correções menores">
-      <created>1622829378414</created>
-      <option name="number" value="04709" />
-      <option name="presentableId" value="LOCAL-04709" />
-      <option name="project" value="LOCAL" />
-      <updated>1622829378414</updated>
-    </task>
     <task id="LOCAL-04710" summary="Correções menores">
       <created>1622829404745</created>
       <option name="number" value="04710" />
@@ -1574,7 +1565,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623333022374</updated>
     </task>
-    <option name="localTasksCounter" value="4758" />
+    <task id="LOCAL-04758" summary="Correções menores">
+      <created>1623333201226</created>
+      <option name="number" value="04758" />
+      <option name="presentableId" value="LOCAL-04758" />
+      <option name="project" value="LOCAL" />
+      <updated>1623333201226</updated>
+    </task>
+    <option name="localTasksCounter" value="4759" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
