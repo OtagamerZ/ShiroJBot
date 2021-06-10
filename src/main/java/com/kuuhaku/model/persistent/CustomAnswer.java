@@ -42,13 +42,17 @@ public class CustomAnswer {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
     private int chance = 100;
 
-    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance) {
+    @Column(columnDefinition = "VARCHAR(191)")
+    private String forUser = null;
+
+    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String forUser) {
         this.id = id;
         this.guildId = guildId;
         this.trigger = trigger;
         this.answer = answer;
         this.anywhere = anywhere;
         this.chance = chance;
+        this.forUser = forUser;
     }
 
     public CustomAnswer(String guildId, String trigger, String answer) {
@@ -102,5 +106,13 @@ public class CustomAnswer {
 
     public void setChance(int chance) {
         this.chance = chance;
+    }
+
+    public String getForUser() {
+        return forUser;
+    }
+
+    public void setForUser(String forUser) {
+        this.forUser = forUser;
     }
 }

@@ -85,6 +85,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -222,8 +223,15 @@ public class ShiroEvents extends ListenerAdapter {
 
 			try {
 				CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
-				if (ca != null && !Main.getSelfUser().getId().equals(author.getId())) {
-					if (ca.getChance() == 100 || Helper.chance(ca.getChance())) {
+
+				if (ca != null) {
+					Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
+					if (ca.getForUser() != null)
+						p = p.and(answer -> answer.getForUser().equals(author.getId()));
+					if (ca.getChance() != 100)
+						p = p.and(answer -> Helper.chance(answer.getChance()));
+
+					if (p.test(ca)) {
 						if (message.getReferencedMessage() != null)
 							Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild), message.getReferencedMessage());
 						else
