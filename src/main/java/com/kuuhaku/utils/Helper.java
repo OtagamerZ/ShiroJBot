@@ -571,7 +571,8 @@ public class Helper {
 		List<Role> usrRoles = user.getRoles();
 		List<Role> tgtRoles = target.getRoles();
 
-		if (usrRoles.isEmpty()) return false;
+		if (user.isOwner()) return true;
+		else if (usrRoles.isEmpty()) return false;
 		else if (tgtRoles.isEmpty()) return true;
 		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
 	}
