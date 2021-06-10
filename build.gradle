@@ -65,9 +65,9 @@ task copyToLib(type: Copy) {
 stage.dependsOn(copyToLib)
 
 dependencies {
-    //Main
+    //Core
     implementation group: "com.sedmelluq", name: "lavaplayer", version: "1.3.59"
-    implementation group: "net.dv8tion", name: "JDA", version: "4.2.1_262"
+    implementation group: "net.dv8tion", name: "JDA", version: "4.2.1_276"
     implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "2.1.8"
     implementation group: "club.minnced", name: "discord-webhooks", version: "0.3.1"
 
