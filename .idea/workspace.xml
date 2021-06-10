@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/UserInfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/UserInfoCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1228,13 +1230,7 @@
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
       <workItem from="1623296090457" duration="1508000" />
-    </task>
-    <task id="LOCAL-04717" summary="Criação de client da API de encoding da Shiro">
-      <created>1622860932667</created>
-      <option name="number" value="04717" />
-      <option name="presentableId" value="LOCAL-04717" />
-      <option name="project" value="LOCAL" />
-      <updated>1622860932667</updated>
+      <workItem from="1623335241590" duration="295000" />
     </task>
     <task id="LOCAL-04718" summary="Criação de client da API de encoding da Shiro">
       <created>1622862450010</created>
@@ -1572,7 +1568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623334827253</updated>
     </task>
-    <option name="localTasksCounter" value="4766" />
+    <task id="LOCAL-04766" summary="Correções menores">
+      <created>1623335521162</created>
+      <option name="number" value="04766" />
+      <option name="presentableId" value="LOCAL-04766" />
+      <option name="project" value="LOCAL" />
+      <updated>1623335521163</updated>
+    </task>
+    <option name="localTasksCounter" value="4767" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
