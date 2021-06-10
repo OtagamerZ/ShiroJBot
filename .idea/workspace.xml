@@ -14,9 +14,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/UserInfoCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,11 +177,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.clan" />
-      <recent name="com.kuuhaku.utils" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -199,17 +201,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1242,13 +1233,7 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
-    </task>
-    <task id="LOCAL-04701" summary="Correções menores">
-      <created>1622818613509</created>
-      <option name="number" value="04701" />
-      <option name="presentableId" value="LOCAL-04701" />
-      <option name="project" value="LOCAL" />
-      <updated>1622818613509</updated>
+      <workItem from="1623326900389" duration="1742000" />
     </task>
     <task id="LOCAL-04702" summary="Correções menores">
       <created>1622823788916</created>
@@ -1586,7 +1571,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623266448931</updated>
     </task>
-    <option name="localTasksCounter" value="4750" />
+    <task id="LOCAL-04750" summary="Correções menores">
+      <created>1623269613573</created>
+      <option name="number" value="04750" />
+      <option name="presentableId" value="LOCAL-04750" />
+      <option name="project" value="LOCAL" />
+      <updated>1623269613573</updated>
+    </task>
+    <option name="localTasksCounter" value="4751" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
