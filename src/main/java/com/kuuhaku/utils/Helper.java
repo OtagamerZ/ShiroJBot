@@ -573,7 +573,7 @@ public class Helper {
 
 		if (usrRoles.isEmpty()) return false;
 		else if (tgtRoles.isEmpty()) return true;
-		else return usrRoles.get(0).getPosition() >= tgtRoles.get(0).getPosition();
+		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
 	}
 
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
