@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "ajuda",
@@ -104,16 +105,11 @@ public class HelpCommand implements Executable {
 					continue;
 				}
 
-				StringBuilder sb = new StringBuilder();
+				String cmds = cat.getCommands().stream()
+						.map(cmd -> (gc.getDisabledCommands().contains(cmd.getCommand().getClass().getName()) ? "||~~`%s`~~||" : "`%s`").formatted(cmd.getName()))
+						.collect(Collectors.joining(" "));
 
-				for (PreparedCommand cmd : cat.getCommands()) {
-					if (gc.getDisabledCommands().contains(cmd.getCommand().getClass().getName()))
-						sb.append("||~~`%s`~~||  ".formatted(cmd.getName()));
-					else
-						sb.append("`%s`  ".formatted(cmd.getName()));
-				}
-
-				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + sb.toString().trim(), false);
+				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + cmds, false);
 				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
