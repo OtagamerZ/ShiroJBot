@@ -43,7 +43,7 @@ public class CustomAnswerDAO {
 				WHERE guildId = :guild
 				AND (
 					(c.anywhere AND LOWER(trigger) LIKE '%'||:trigger||'%')
-					OR LOWER(trigger) = '%'||:trigger||'%'
+					OR LOWER(trigger) = :trigger
 				)
 				""");
 		q.setParameter("trigger", trigger.toLowerCase(Locale.ROOT));
