@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
+import com.google.gson.JsonParseException;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
@@ -32,6 +33,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -44,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "fale",
 		aliases = {"custom"},
-		usage = "req_trigger-response",
+		usage = "req_json",
 		category = Category.MISC
 )
 @Requires({
@@ -62,18 +64,24 @@ public class CustomAnswerCommand implements Executable {
 		} else if (args.length == 0) {
 			channel.sendMessage(I18n.getString("err_custom-answer-not-enough-args")).queue();
 			return;
-		} else if (args[0].equals("lista")) {
+		} else if (Helper.equalsAny(argsAsText, "lista", "list")) {
 			List<Page> pages = new ArrayList<>();
 
-			List<CustomAnswer> ca = CustomAnswerDAO.getCAByGuild(guild.getId());
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			List<List<CustomAnswer>> answers = Helper.chunkify(CustomAnswerDAO.getCAByGuild(guild.getId()), 10);
 
-			for (int x = 0; x < Math.ceil(ca.size() / 10f); x++) {
-				eb.clear();
-				eb.setTitle(":pencil: Respostas deste servidor:");
-				for (int i = -10 + (10 * (x + 1)); i < ca.size() && i < (10 * (x + 1)); i++) {
-					eb.addField(ca.get(i).getId() + " - " + ca.get(i).getGatilho(), ca.get(i).getAnswer().length() > 100 ? ca.get(i).getAnswer().substring(0, 100) + "..." : ca.get(i).getAnswer(), false);
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setTitle(":pencil: Respostas deste servidor:");
+			for (List<CustomAnswer> chunk : answers) {
+				eb.clearFields();
+
+				for (CustomAnswer ca : chunk) {
+					eb.addField(
+							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? (" | " + ca.getChance() + "%") : "") + "`) " + ca.getTrigger(),
+							StringUtils.abbreviate(ca.getAnswer(), 100),
+							false
+					);
 				}
+
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
@@ -82,43 +90,66 @@ public class CustomAnswerCommand implements Executable {
 				return;
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+			);
 			return;
-		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
-			List<CustomAnswer> ca = CustomAnswerDAO.getCAByGuild(guild.getId());
-			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]));
-			if (ca.isEmpty()) {
+		} else if (StringUtils.isNumeric(argsAsText)) {
+			CustomAnswer ca = CustomAnswerDAO.getCAByIDAndGuild(Integer.parseInt(args[0]), guild.getId());
+
+			if (ca == null) {
 				channel.sendMessage(I18n.getString("err_custom-answer-not-found")).queue();
 				return;
 			}
-			CustomAnswer c = ca.get(0);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setTitle(":speech_balloon: Resposta Nº " + ca.getId())
+					.addField(":arrow_right: " + ca.getTrigger(), ":arrow_left: " + ca.getAnswer(), false);
 
-			eb.setTitle(":speech_balloon: Resposta Nº " + c.getId());
-			eb.addField(":arrow_right: " + c.getGatilho(), ":arrow_left: " + c.getAnswer(), false);
+			if (ca.isAnywhere())
+				eb.setDescription("Se a mensagem contiver o gatilho");
+			else
+				eb.setDescription("Se a mensagem for exatamente o gatilho");
+
+			if (ca.getChance() != 100)
+				eb.appendDescription("\nCom " + ca.getChance() + "% de chance de eu responder");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
 		}
 
-		String[] txt = String.join(" ", args).split(";");
+		try {
+			JSONObject jo = new JSONObject(argsAsText);
 
-		if (txt.length > 1) {
-			if (Helper.between(txt[0].length(), 4, 501)) {
-				if (txt[1].length() <= 500) {
-					CustomAnswerDAO.addCAtoDB(guild, txt[0].trim(), txt[1].trim());
-					channel.sendMessage("Agora quando alguém disser `" + txt[0] + "` irei responder `" + txt[1] + "`.").queue();
-				} else {
-					channel.sendMessage(I18n.getString("err_custom-answer-reply-too-long")).queue();
-				}
-			} else if (txt[0].length() <= 3) {
-				channel.sendMessage(I18n.getString("err_custom-answer-trigger-too-short")).queue();
-			} else {
-				channel.sendMessage(I18n.getString("err_custom-answer-trigger-too-long")).queue();
+			if (!jo.has("trigger") || !jo.has("answer")) {
+				channel.sendMessage(I18n.getString("❌ | Você precisa especificar ao menos o gatilho (`trigger`) e a resposta (`answer`).")).queue();
+				return;
+			} else if (!Helper.between(jo.getString("trigger").length(), 2, 129)) {
+				channel.sendMessage(I18n.getString("❌ | O gatilho tem que ter entre 2 e 128 caracteres.")).queue();
+				return;
+			} else if (!Helper.between(jo.getString("answer").length(), 2, 1025)) {
+				channel.sendMessage(I18n.getString("❌ | A resposta tem que ter entre 2 e 1024 caracteres.")).queue();
+				return;
 			}
-		} else {
-			channel.sendMessage(I18n.getString("err_custom-answer-invalid-arguments")).queue();
+
+			String msg = "Agora irei responder `%s` quando alguém disser ";
+			CustomAnswer ca = new CustomAnswer(guild.getId(), jo.getString("trigger"), jo.getString("answer"));
+			if (jo.has("anywhere")) {
+				ca.setAnywhere(jo.getBoolean("anywhere"));
+				msg += "`%s` em qualquer lugar da mensagem";
+			} else {
+				msg += "exatamente `%s`";
+			}
+
+			if (jo.has("chance")) {
+				ca.setChance(Helper.clamp(jo.getInt("chance"), 1, 100));
+				msg += ", com uma chance de " + ca.getChance() + "%";
+			}
+
+			CustomAnswerDAO.addCustomAnswer(ca);
+			channel.sendMessage(msg + ".").queue();
+		} catch (JsonParseException e) {
+			channel.sendMessage(I18n.getString("❌ | Olha, esse JSON não me parece certo não.")).queue();
 		}
 	}
 }
