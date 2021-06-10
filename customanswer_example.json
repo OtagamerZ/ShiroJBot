@@ -1,0 +1,4 @@
+{
+  "trigger": "Mensagem que servirá de gatilho para a resposta",
+  "answer": "Mensagem a ser enviada"
+}

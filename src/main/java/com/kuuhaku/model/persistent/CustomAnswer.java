@@ -42,6 +42,15 @@ public class CustomAnswer {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
     private int chance = 100;
 
+    public CustomAnswer(int id, String guildId, String trigger, String answer, boolean anywhere, int chance) {
+        this.id = id;
+        this.guildId = guildId;
+        this.trigger = trigger;
+        this.answer = answer;
+        this.anywhere = anywhere;
+        this.chance = chance;
+    }
+
     public CustomAnswer(String guildId, String trigger, String answer) {
         this.guildId = guildId;
         this.trigger = trigger;
