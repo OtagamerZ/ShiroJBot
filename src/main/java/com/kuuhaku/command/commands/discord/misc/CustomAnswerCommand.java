@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.google.gson.JsonParseException;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
@@ -76,7 +77,7 @@ public class CustomAnswerCommand implements Executable {
 
 				for (CustomAnswer ca : chunk) {
 					eb.addField(
-							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? (" | " + ca.getChance() + "%") : "") + "`) " + ca.getTrigger(),
+							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? (" | " + ca.getChance() + "%") : "") + (ca.getForUser() != null ? (" | " + Main.getInfo().getUserByID(ca.getForUser()).getName()) : "") + "`) " + ca.getTrigger(),
 							StringUtils.abbreviate(ca.getAnswer(), 100),
 							false
 					);
@@ -114,6 +115,9 @@ public class CustomAnswerCommand implements Executable {
 			if (ca.getChance() != 100)
 				eb.appendDescription("\nCom " + ca.getChance() + "% de chance de eu responder");
 
+			if (ca.getForUser() != null)
+				eb.appendDescription("\nApenas se for ativado por " + Main.getInfo().getUserByID(ca.getForUser()));
+
 			channel.sendMessage(eb.build()).queue();
 			return;
 		}
@@ -147,14 +151,14 @@ public class CustomAnswerCommand implements Executable {
 			}
 
 			if (jo.has("forUser")) {
-				User u = guild.getJDA().getUserById(jo.getString("forUser"));
-				if (u == null) {
+				Member m = guild.getMemberById(jo.getString("forUser"));
+				if (m == null) {
 					channel.sendMessage(I18n.getString("❌ | Não encontrei nenhum usuário com esse ID.")).queue();
 					return;
 				}
 
-				ca.setForUser(u.getId());
-				msg += ", apenas quando " + u.getAsMention() + " usar o gatilho";
+				ca.setForUser(m.getId());
+				msg += ", apenas quando " + m.getAsMention() + " usar o gatilho";
 			}
 			msg += ".";
 
