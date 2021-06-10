@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "usuario",
 		aliases = {"user", "us"},
-		usage = "req_mention-opt",
+		usage = "req_id-mention-opt",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
