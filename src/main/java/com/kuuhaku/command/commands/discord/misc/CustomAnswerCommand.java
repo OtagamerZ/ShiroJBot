@@ -145,6 +145,17 @@ public class CustomAnswerCommand implements Executable {
 				ca.setChance(Helper.clamp(jo.getInt("chance"), 1, 100));
 				msg += ", com uma chance de " + ca.getChance() + "%";
 			}
+
+			if (jo.has("forUser")) {
+				User u = guild.getJDA().getUserById(jo.getString("forUser"));
+				if (u == null) {
+					channel.sendMessage(I18n.getString("❌ | Não encontrei nenhum usuário com esse ID.")).queue();
+					return;
+				}
+
+				ca.setForUser(u.getId());
+				msg += ", apenas quando " + u.getAsMention() + " usar o gatilho";
+			}
 			msg += ".";
 
 			CustomAnswerDAO.addCustomAnswer(ca);

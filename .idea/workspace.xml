@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1231,13 +1233,6 @@
       <workItem from="1623184462452" duration="60000" />
       <workItem from="1623296090457" duration="1508000" />
     </task>
-    <task id="LOCAL-04707" summary="Correções menores">
-      <created>1622824968978</created>
-      <option name="number" value="04707" />
-      <option name="presentableId" value="LOCAL-04707" />
-      <option name="project" value="LOCAL" />
-      <updated>1622824968978</updated>
-    </task>
     <task id="LOCAL-04708" summary="Correções menores">
       <created>1622829223759</created>
       <option name="number" value="04708" />
@@ -1574,7 +1569,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623297448022</updated>
     </task>
-    <option name="localTasksCounter" value="4756" />
+    <task id="LOCAL-04756" summary="Correções menores">
+      <created>1623332391496</created>
+      <option name="number" value="04756" />
+      <option name="presentableId" value="LOCAL-04756" />
+      <option name="project" value="LOCAL" />
+      <updated>1623332391497</updated>
+    </task>
+    <option name="localTasksCounter" value="4757" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1684,9 +1686,9 @@
     <MESSAGE value="Correções no comando de ranking de usuários" />
     <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Adicionadas mãos no replay" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Turbinada nas respostas customizadas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Turbinada nas respostas customizadas" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
