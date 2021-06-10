@@ -42,7 +42,7 @@ public class CustomAnswerDAO {
 				FROM CustomAnswer c 
 				WHERE guildId = :guild
 				AND (
-					(c.anywhere AND LOWER(trigger) LIKE '%'||:trigger||'%')
+					(c.anywhere AND :trigger LIKE LOWER('%'||trigger||'%'))
 					OR LOWER(trigger) = :trigger
 				)
 				""");
