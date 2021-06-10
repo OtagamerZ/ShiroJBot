@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/UserInfoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Turbinada nas respostas customizadas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,7 +124,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="{a&amp;blabla&amp;1234}" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -146,11 +140,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\old" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\common\anime" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\new" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
@@ -177,11 +171,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.clan" />
+      <recent name="com.kuuhaku.utils" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1233,42 +1227,7 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
       <workItem from="1623184462452" duration="60000" />
-      <workItem from="1623326900389" duration="1742000" />
-    </task>
-    <task id="LOCAL-04702" summary="Correções menores">
-      <created>1622823788916</created>
-      <option name="number" value="04702" />
-      <option name="presentableId" value="LOCAL-04702" />
-      <option name="project" value="LOCAL" />
-      <updated>1622823788917</updated>
-    </task>
-    <task id="LOCAL-04703" summary="Correções menores">
-      <created>1622823945332</created>
-      <option name="number" value="04703" />
-      <option name="presentableId" value="LOCAL-04703" />
-      <option name="project" value="LOCAL" />
-      <updated>1622823945333</updated>
-    </task>
-    <task id="LOCAL-04704" summary="Correções menores">
-      <created>1622824547041</created>
-      <option name="number" value="04704" />
-      <option name="presentableId" value="LOCAL-04704" />
-      <option name="project" value="LOCAL" />
-      <updated>1622824547041</updated>
-    </task>
-    <task id="LOCAL-04705" summary="Correções menores">
-      <created>1622824775018</created>
-      <option name="number" value="04705" />
-      <option name="presentableId" value="LOCAL-04705" />
-      <option name="project" value="LOCAL" />
-      <updated>1622824775018</updated>
-    </task>
-    <task id="LOCAL-04706" summary="Correções menores">
-      <created>1622824872386</created>
-      <option name="number" value="04706" />
-      <option name="presentableId" value="LOCAL-04706" />
-      <option name="project" value="LOCAL" />
-      <updated>1622824872386</updated>
+      <workItem from="1623296090457" duration="1508000" />
     </task>
     <task id="LOCAL-04707" summary="Correções menores">
       <created>1622824968978</created>
@@ -1571,14 +1530,49 @@
       <option name="project" value="LOCAL" />
       <updated>1623266448931</updated>
     </task>
-    <task id="LOCAL-04750" summary="Correções menores">
-      <created>1623269613573</created>
+    <task id="LOCAL-04750" summary="Turbinada nas respostas customizadas">
+      <created>1623288473431</created>
       <option name="number" value="04750" />
       <option name="presentableId" value="LOCAL-04750" />
       <option name="project" value="LOCAL" />
-      <updated>1623269613573</updated>
+      <updated>1623288473433</updated>
     </task>
-    <option name="localTasksCounter" value="4751" />
+    <task id="LOCAL-04751" summary="Turbinada nas respostas customizadas">
+      <created>1623296813669</created>
+      <option name="number" value="04751" />
+      <option name="presentableId" value="LOCAL-04751" />
+      <option name="project" value="LOCAL" />
+      <updated>1623296813669</updated>
+    </task>
+    <task id="LOCAL-04752" summary="Turbinada nas respostas customizadas">
+      <created>1623296953759</created>
+      <option name="number" value="04752" />
+      <option name="presentableId" value="LOCAL-04752" />
+      <option name="project" value="LOCAL" />
+      <updated>1623296953759</updated>
+    </task>
+    <task id="LOCAL-04753" summary="Turbinada nas respostas customizadas">
+      <created>1623297180546</created>
+      <option name="number" value="04753" />
+      <option name="presentableId" value="LOCAL-04753" />
+      <option name="project" value="LOCAL" />
+      <updated>1623297180546</updated>
+    </task>
+    <task id="LOCAL-04754" summary="Turbinada nas respostas customizadas">
+      <created>1623297250890</created>
+      <option name="number" value="04754" />
+      <option name="presentableId" value="LOCAL-04754" />
+      <option name="project" value="LOCAL" />
+      <updated>1623297250890</updated>
+    </task>
+    <task id="LOCAL-04755" summary="Turbinada nas respostas customizadas">
+      <created>1623297448022</created>
+      <option name="number" value="04755" />
+      <option name="presentableId" value="LOCAL-04755" />
+      <option name="project" value="LOCAL" />
+      <updated>1623297448022</updated>
+    </task>
+    <option name="localTasksCounter" value="4756" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1665,7 +1659,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
     <MESSAGE value="Correções gerais e melhoria nas bordas das raridades" />
     <MESSAGE value="Melhoria no efeito da raça demônio" />
     <MESSAGE value="Segunda tentativa na centralização dos decks" />
@@ -1690,7 +1683,8 @@
     <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Adicionadas mãos no replay" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Turbinada nas respostas customizadas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Turbinada nas respostas customizadas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

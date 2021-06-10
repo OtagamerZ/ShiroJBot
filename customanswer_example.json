@@ -1,0 +1,6 @@
+{
+  "trigger": "Mensagem que servirá de gatilho para a resposta",
+  "answer": "Mensagem a ser enviada",
+  "anywhere": "true ou false - A mensagem deve ser exatamente o gatilho ou não?",
+  "chance": "A chance da resposta ser enviada"
+}
