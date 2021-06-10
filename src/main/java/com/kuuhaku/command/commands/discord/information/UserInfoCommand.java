@@ -27,9 +27,11 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "usuario",
@@ -42,7 +44,13 @@ public class UserInfoCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Member m = message.getMentionedMembers().stream().findFirst().orElse(member);
+		Member m;
+		if (args.length > 0 && StringUtils.isNumeric(args[0]))
+			m = guild.getMemberById(args[0]);
+		else if (!message.getMentionedMembers().isEmpty())
+			m = message.getMentionedMembers().get(0);
+		else
+			m = member;
 
 		String type = "";
 		if (m.isOwner())
@@ -108,6 +116,9 @@ public class UserInfoCommand implements Executable {
 				.addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Helper.dateFormat) : "Não sei", true);
 		if (booster)
 			eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.dateFormat), true);
+
+		if (!m.getRoles().isEmpty())
+			eb.addField(":beginner: | Cargos", m.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(" ")), false);
 
 		channel.sendMessage(eb.build()).queue();
 	}
