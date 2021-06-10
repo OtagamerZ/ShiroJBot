@@ -42,7 +42,7 @@ public class CustomAnswer {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
     private int chance = 100;
 
-    public CustomAnswer(int id, String guildId, String trigger, String answer, boolean anywhere, int chance) {
+    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance) {
         this.id = id;
         this.guildId = guildId;
         this.trigger = trigger;
