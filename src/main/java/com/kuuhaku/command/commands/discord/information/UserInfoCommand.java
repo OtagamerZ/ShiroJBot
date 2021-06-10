@@ -118,7 +118,7 @@ public class UserInfoCommand implements Executable {
 			eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.dateFormat), true);
 
 		if (!m.getRoles().isEmpty())
-			eb.addField(":beginner: | Cargos", m.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(" ")), false);
+			eb.addField(":beginner: | Cargos", m.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(" ")), false);
 
 		channel.sendMessage(eb.build()).queue();
 	}
