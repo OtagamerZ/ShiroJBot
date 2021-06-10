@@ -59,7 +59,7 @@ public class RemoveAnswerCommand implements Executable {
 
 		if (ca != null) {
 			CustomAnswerDAO.deleteCustomAnswer(ca);
-			channel.sendMessage("Não vou mais responder com a resposta `" + args[0] + "`.").queue();
+			channel.sendMessage("Não vou mais responder com a resposta de ID " + args[0] + ".").queue();
 		} else {
 			channel.sendMessage("❌ | ID de resposta inválido.").queue();
 		}
