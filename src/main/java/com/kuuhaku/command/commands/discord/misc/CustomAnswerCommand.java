@@ -145,9 +145,10 @@ public class CustomAnswerCommand implements Executable {
 				ca.setChance(Helper.clamp(jo.getInt("chance"), 1, 100));
 				msg += ", com uma chance de " + ca.getChance() + "%";
 			}
+			msg += ".";
 
 			CustomAnswerDAO.addCustomAnswer(ca);
-			channel.sendMessage(msg + ".").queue();
+			channel.sendMessage(msg.formatted(ca.getTrigger(), StringUtils.abbreviate(ca.getAnswer(), 100))).queue();
 		} catch (JsonParseException e) {
 			channel.sendMessage(I18n.getString("❌ | Olha, esse JSON não me parece certo não.")).queue();
 		}
