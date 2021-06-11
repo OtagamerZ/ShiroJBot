@@ -63,10 +63,10 @@ public class MuteMemberCommand implements Executable {
 
 		Member mb = message.getMentionedMembers().get(0);
 
-		if (Helper.hasRoleHigherThan(mb, member)) {
+		if (!member.canInteract(mb)) {
 			channel.sendMessage(I18n.getString("err_cannot-mute-higher-role")).queue();
 			return;
-		} else if (Helper.hasRoleHigherThan(mb, guild.getSelfMember())) {
+		} else if (!guild.getSelfMember().canInteract(mb)) {
 			channel.sendMessage(I18n.getString("err_cannot-mute-higher-role-me")).queue();
 			return;
 		} else if (ShiroInfo.getStaff().contains(mb.getId())) {
