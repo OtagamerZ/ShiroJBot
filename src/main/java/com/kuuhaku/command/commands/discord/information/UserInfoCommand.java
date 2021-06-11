@@ -86,23 +86,23 @@ public class UserInfoCommand implements Executable {
 		if (booster) {
 			int time = (int) m.getTimeBoosted().until(OffsetDateTime.now(), ChronoUnit.MONTHS);
 			if (time >= 18)
-				sb.append("<:Booster9:852288241104322651>");
+				sb.append("<:Booster9:852288241104322651> ");
 			else if (time >= 15)
-				sb.append("<:Booster8:852288241461624852>");
+				sb.append("<:Booster8:852288241461624852> ");
 			else if (time >= 12)
-				sb.append("<:Booster7:852288241499635712>");
+				sb.append("<:Booster7:852288241499635712> ");
 			else if (time >= 9)
-				sb.append("<:Booster6:852288241469096016>");
+				sb.append("<:Booster6:852288241469096016> ");
 			else if (time >= 6)
-				sb.append("<:Booster5:852288241364238366>");
+				sb.append("<:Booster5:852288241364238366> ");
 			else if (time >= 3)
-				sb.append("<:Booster4:852288241276157973>");
+				sb.append("<:Booster4:852288241276157973> ");
 			else if (time >= 2)
-				sb.append("<:Booster3:852288241159634945>");
+				sb.append("<:Booster3:852288241159634945> ");
 			else if (time >= 1)
-				sb.append("<:Booster2:852288241386127371>");
+				sb.append("<:Booster2:852288241386127371> ");
 			else
-				sb.append("<:Booster1:852288241193189407>");
+				sb.append("<:Booster1:852288241193189407> ");
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -115,6 +115,8 @@ public class UserInfoCommand implements Executable {
 				.addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Helper.dateFormat) : "Não sei", true);
 		if (booster)
 			eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.dateFormat), true);
+		else
+			eb.addBlankField(true);
 
 		if (!m.getRoles().isEmpty())
 			eb.addField(":beginner: | Cargos", m.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(" ")), false);
