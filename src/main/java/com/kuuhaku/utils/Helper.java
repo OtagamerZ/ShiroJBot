@@ -568,7 +568,7 @@ public class Helper {
 	}
 
 	public static boolean hasRoleHigherThan(Member user, Member target) {
-		List<Role> usrRoles = user.getRoles();
+		List<Role> usrRoles = user. ();
 		List<Role> tgtRoles = target.getRoles();
 
 		if (user.isOwner()) return true;
