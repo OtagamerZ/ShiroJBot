@@ -567,16 +567,6 @@ public class Helper {
 		}
 	}
 
-	public static boolean hasRoleHigherThan(Member user, Member target) {
-		List<Role> usrRoles = user. ();
-		List<Role> tgtRoles = target.getRoles();
-
-		if (user.isOwner()) return true;
-		else if (usrRoles.isEmpty()) return false;
-		else if (tgtRoles.isEmpty()) return true;
-		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
-	}
-
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
 		List<T> list = List.copyOf(col);
 		int overflow = list.size() % chunkSize;
