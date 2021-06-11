@@ -50,15 +50,17 @@ public class UnmuteMemberCommand implements Executable {
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			channel.sendMessage("❌ | Você não possui permissão para dessilenciar membros.").queue();
 			return;
-		} else if (Helper.hasRoleHigherThan(message.getMentionedMembers().get(0), member)) {
-			channel.sendMessage("❌ | Você não pode dessilenciar membros que possuem o mesmo cargo ou maior.").queue();
-			return;
-		} else if (MemberDAO.getMutedMemberById(message.getMentionedMembers().get(0).getId()) == null) {
-			channel.sendMessage("❌ | Esse membro não está silenciado.").queue();
-			return;
 		}
 
 		Member mb = message.getMentionedMembers().get(0);
+
+		if (!member.canInteract(mb)) {
+			channel.sendMessage("❌ | Você não pode dessilenciar membros que possuem o mesmo cargo ou maior.").queue();
+			return;
+		} else if (MemberDAO.getMutedMemberById(mb.getId()) == null) {
+			channel.sendMessage("❌ | Esse membro não está silenciado.").queue();
+			return;
+		}
 
 		MutedMember m = MemberDAO.getMutedMemberById(mb.getId());
 		List<Role> roles = m.getRoles().toList().stream()

@@ -906,7 +906,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
-		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
+		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && guild.getSelfMember().canInteract(member)) {
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 			if (gc.getMuteRole() != null) try {
 				Role r = gc.getMuteRole();

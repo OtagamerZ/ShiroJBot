@@ -53,14 +53,14 @@ public class BanMemberCommand implements Executable {
 		}
 
 		for (Member mb : message.getMentionedMembers()) {
-			if (Helper.hasRoleHigherThan(mb, member)) {
+			if (!member.canInteract(mb)) {
 				channel.sendMessage(I18n.getString("err_cannot-ban-high-role")).queue();
+				return;
+			} else if (!guild.getSelfMember().canInteract(mb)) {
+				channel.sendMessage(I18n.getString("err_cannot-ban-high-role-me")).queue();
 				return;
 			} else if (ShiroInfo.getStaff().contains(mb.getId())) {
 				channel.sendMessage(I18n.getString("err_cannot-ban-staff")).queue();
-				return;
-			} else if (Helper.hasRoleHigherThan(mb, guild.getSelfMember())) {
-				channel.sendMessage(I18n.getString("err_cannot-ban-high-role-me")).queue();
 				return;
 			}
 		}
