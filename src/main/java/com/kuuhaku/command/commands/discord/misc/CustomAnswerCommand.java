@@ -62,9 +62,6 @@ public class CustomAnswerCommand implements Executable {
 		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !GuildDAO.getGuildById(guild.getId()).isAnyTell()) {
 			channel.sendMessage(I18n.getString("err_custom-answer-community-disabled")).queue();
 			return;
-		} else if (args.length == 0) {
-			channel.sendMessage(I18n.getString("err_custom-answer-not-enough-args")).queue();
-			return;
 		} else if (Helper.equalsAny(argsAsText, "lista", "list")) {
 			List<Page> pages = new ArrayList<>();
 
@@ -165,7 +162,7 @@ public class CustomAnswerCommand implements Executable {
 			CustomAnswerDAO.addCustomAnswer(ca);
 			channel.sendMessage(msg.formatted(StringUtils.abbreviate(ca.getAnswer().replace("\n", " "), 100), ca.getTrigger().replace("\n", " "))).queue();
 		} catch (JsonParseException e) {
-			channel.sendMessage(I18n.getString("❌ | Olha, esse JSON não me parece certo não.")).queue();
+			channel.sendMessage("❌ | Olha, esse JSON não me parece certo não.").queue();
 		}
 	}
 }

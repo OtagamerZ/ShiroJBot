@@ -274,7 +274,7 @@ public class Arena {
 		g2d.drawImage(arena, 0, 480, null);
 		for (int i = 0; i < hs.size(); i++) {
 			BufferedImage h = hs.get(i).render();
-			g2d.drawImage(h, bi.getWidth() / 2 - h.getWidth() / 2, i == 15 ? 5 : 495 + arena.getHeight(), null);
+			g2d.drawImage(h, bi.getWidth() / 2 - h.getWidth() / 2, i == 0 ? 15 : 495 + arena.getHeight(), null);
 		}
 		g2d.dispose();
 
