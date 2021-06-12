@@ -265,7 +265,7 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public boolean canInteract(GuildMessageReceivedEvent evt) {
-		Predicate<GuildMessageReceivedEvent> condition = e -> channel.getChannels().stream().anyMatch(g -> e.getChannel().getId().equals(g.getId()));
+		Predicate<GuildMessageReceivedEvent> condition = e -> channel.getChannels().stream().anyMatch(g -> g != null && e.getChannel().getId().equals(g.getId()));
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
