@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RankDAO {
 
@@ -68,7 +69,9 @@ public class RankDAO {
 		}
 
 		try {
-			return q.getResultList();
+			return ((List<Object[]>) q.getResultList())
+					.stream().map(o -> (String) o[0])
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
@@ -95,7 +98,9 @@ public class RankDAO {
 				""");
 
 		try {
-			return q.getResultList();
+			return ((List<Object[]>) q.getResultList())
+					.stream().map(o -> (String) o[0])
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
@@ -127,7 +132,9 @@ public class RankDAO {
 				""");
 
 		try {
-			return q.getResultList();
+			return ((List<Object[]>) q.getResultList())
+					.stream().map(o -> (String) o[0])
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
@@ -157,7 +164,9 @@ public class RankDAO {
 		q.setParameter("guild", guild);
 
 		try {
-			return q.getResultList();
+			return ((List<Object[]>) q.getResultList())
+					.stream().map(o -> (String) o[0])
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
