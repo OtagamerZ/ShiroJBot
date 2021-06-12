@@ -14,9 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,17 +200,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1246,27 +1236,7 @@
       <workItem from="1623335241590" duration="1298000" />
       <workItem from="1623358048862" duration="775000" />
       <workItem from="1623419634021" duration="2779000" />
-    </task>
-    <task id="LOCAL-04721" summary="Correções menores">
-      <created>1623070270840</created>
-      <option name="number" value="04721" />
-      <option name="presentableId" value="LOCAL-04721" />
-      <option name="project" value="LOCAL" />
-      <updated>1623070270841</updated>
-    </task>
-    <task id="LOCAL-04722" summary="Correções menores">
-      <created>1623071096938</created>
-      <option name="number" value="04722" />
-      <option name="presentableId" value="LOCAL-04722" />
-      <option name="project" value="LOCAL" />
-      <updated>1623071096938</updated>
-    </task>
-    <task id="LOCAL-04723" summary="Remoção do mercado de ações">
-      <created>1623092979958</created>
-      <option name="number" value="04723" />
-      <option name="presentableId" value="LOCAL-04723" />
-      <option name="project" value="LOCAL" />
-      <updated>1623092979960</updated>
+      <workItem from="1623524100553" duration="4905000" />
     </task>
     <task id="LOCAL-04724" summary="Remoção do mercado de ações">
       <created>1623093351444</created>
@@ -1590,7 +1560,28 @@
       <option name="project" value="LOCAL" />
       <updated>1623431893733</updated>
     </task>
-    <option name="localTasksCounter" value="4770" />
+    <task id="LOCAL-04770" summary="Correções menores">
+      <created>1623456830438</created>
+      <option name="number" value="04770" />
+      <option name="presentableId" value="LOCAL-04770" />
+      <option name="project" value="LOCAL" />
+      <updated>1623456830439</updated>
+    </task>
+    <task id="LOCAL-04771" summary="Correções menores">
+      <created>1623456937080</created>
+      <option name="number" value="04771" />
+      <option name="presentableId" value="LOCAL-04771" />
+      <option name="project" value="LOCAL" />
+      <updated>1623456937080</updated>
+    </task>
+    <task id="LOCAL-04772" summary="Correções menores">
+      <created>1623456999812</created>
+      <option name="number" value="04772" />
+      <option name="presentableId" value="LOCAL-04772" />
+      <option name="project" value="LOCAL" />
+      <updated>1623456999812</updated>
+    </task>
+    <option name="localTasksCounter" value="4773" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
