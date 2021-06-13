@@ -29,7 +29,6 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -64,7 +63,7 @@ public class Hand {
 	private int manaReturn = 0;
 	private int nullTime = 0;
 
-	public Hand(Shoukan game, User user, Deck dk, Side side, Clan clan) {
+	public Hand(Shoukan game, User user, Deck dk, Side side) {
 		this.game = game;
 		this.side = side;
 		if (user == null) {
@@ -82,12 +81,11 @@ public class Hand {
 				dk.getChampions(),
 				dk.getEquipments(),
 				dk.getFields(),
-				dk.getDestinyDraw(),
-				clan
+				dk.getDestinyDraw()
 		);
 	}
 
-	private void setData(List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw, Clan cl) {
+	private void setData(List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw) {
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
@@ -190,12 +188,10 @@ public class Hand {
 		for (Drawable d : deque) {
 			d.setGame(game);
 			d.setAcc(acc);
-			d.setClan(cl);
 		}
 		for (Drawable d : destinyDeck) {
 			d.setGame(game);
 			d.setAcc(acc);
-			d.setClan(cl);
 		}
 
 		int hpMod = (combo.getLeft() == Race.DEMON ? -1500 : 0)

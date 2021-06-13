@@ -27,6 +27,7 @@ import javax.persistence.Table;
 @Table(name = "lotteryvalue")
 public class LotteryValue {
 	@Id
+	@Column(columnDefinition = "INT NOT NULL")
 	private int id;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")

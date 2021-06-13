@@ -48,7 +48,7 @@ public class ClanUpgradeCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (c.getMembers().get(author.getId()).ordinal() != 0) {
+		} else if (!c.getMember(author.getId()).isLeader()) {
 			channel.sendMessage("❌ | Apenas o líder pode evoluir o tier do clã.").queue();
 			return;
 		} else if (c.getTier() == ClanTier.DYNASTY) {

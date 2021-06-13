@@ -27,10 +27,10 @@ public class PixelOperation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String token;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String bearer;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")

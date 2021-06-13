@@ -34,7 +34,7 @@ public class Kawaipon implements Cloneable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''", unique = true)
 	private String uid = "";
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

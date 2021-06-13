@@ -28,7 +28,7 @@ import java.util.Set;
 @Table(name = "guildbuff")
 public class GuildBuff {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

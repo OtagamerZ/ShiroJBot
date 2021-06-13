@@ -24,7 +24,6 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +43,7 @@ public class Field implements Drawable, Cloneable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Card card;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
 	private String modifiers = "{}";
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -52,7 +51,6 @@ public class Field implements Drawable, Cloneable {
 
 	private transient Shoukan game = null;
 	private transient Account acc = null;
-	private transient Clan clan = null;
 	private transient boolean available = true;
 
 	public Field() {
@@ -175,16 +173,6 @@ public class Field implements Drawable, Cloneable {
 	@Override
 	public void setAcc(Account acc) {
 		this.acc = acc;
-	}
-
-	@Override
-	public Clan getClan() {
-		return clan;
-	}
-
-	@Override
-	public void setClan(Clan clan) {
-		this.clan = clan;
 	}
 
 	@Override

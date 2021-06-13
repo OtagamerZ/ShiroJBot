@@ -29,10 +29,10 @@ import java.time.ZonedDateTime;
 @Table(name = "blacklist")
 public class Blacklist {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String blockedBy = "";
 
 	@Column(columnDefinition = "TIMESTAMP")

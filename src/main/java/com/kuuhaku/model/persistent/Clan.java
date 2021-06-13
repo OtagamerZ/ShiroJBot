@@ -18,12 +18,12 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -69,11 +69,9 @@ public class Clan {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> transactions = new ArrayList<>();
 
-	@Enumerated(value = EnumType.STRING)
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "clan_id")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "clan")
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Map<String, ClanHierarchy> members = new HashMap<>();
+	private List<ClanMember> members = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "clan_id")
@@ -87,7 +85,7 @@ public class Clan {
 
 	public Clan(String name, String leader) {
 		this.name = name;
-		this.members.put(leader, ClanHierarchy.LEADER);
+		members.add(new ClanMember(leader, ClanHierarchy.LEADER));
 	}
 
 	public Clan() {
@@ -125,100 +123,97 @@ public class Clan {
 		this.banner = Helper.atob(Helper.scaleAndCenterImage(banner, 512, 256), "png");
 	}
 
-	public String getLeader() {
-		return members.entrySet().stream()
-				.filter(e -> e.getValue() == ClanHierarchy.LEADER)
+	public ClanMember getLeader() {
+		return members.stream()
+				.filter(ClanMember::isLeader)
 				.findFirst()
-				.orElse(Pair.of(null, null))
-				.getKey();
+				.orElse(null);
 	}
 
-	public String getSubLeader() {
-		return members.entrySet().stream()
-				.filter(e -> e.getValue() == ClanHierarchy.SUBLEADER)
+	public ClanMember getSubLeader() {
+		return members.stream()
+				.filter(ClanMember::isSubLeader)
 				.findFirst()
-				.orElse(Pair.of(null, null))
-				.getKey();
+				.orElse(null);
 	}
 
-	public void setLeader(String leader) {
-		members.put(leader, ClanHierarchy.LEADER);
+	public ClanMember getMember(String id) {
+		return members.stream()
+				.filter(cm -> cm.getUid().equals(id))
+				.findFirst()
+				.orElse(null);
 	}
 
-	public List<String> getFromHierarchy(ClanHierarchy ch) {
-		return members.entrySet().stream()
-				.filter(e -> e.getValue() == ch)
-				.map(Map.Entry::getKey)
+	public List<ClanMember> getFromHierarchy(ClanHierarchy ch) {
+		return members.stream()
+				.filter(cm -> cm.getRole() == ch)
 				.collect(Collectors.toList());
 	}
 
 	public void transfer() {
-		String leader = getLeader();
-		String sub = getSubLeader();
-		members.put(leader, ClanHierarchy.SUBLEADER);
-		members.put(sub, ClanHierarchy.LEADER);
+		ClanMember leader = getLeader();
+		ClanMember sub = getSubLeader();
+
+		leader.setRole(ClanHierarchy.SUBLEADER);
+		sub.setRole(ClanHierarchy.LEADER);
+		transactions.add(LogDAO.getUsername(leader.getUid()) + " transferiu a posse do clã para " + LogDAO.getUsername(sub.getUid()) + ".");
 	}
 
 	public void promote(String id, User u) {
-		ClanHierarchy ch = members.get(id);
-		ClanHierarchy next = Helper.getNext(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
-		members.put(id, Helper.getOr(next, ch));
-		transactions.add(u.getAsTag() + " promoveu o membro com ID " + id + ".");
+		ClanMember cm = getMember(id);
+		cm.promote();
+		transactions.add(u.getAsTag() + " promoveu " + LogDAO.getUsername(id) + ".");
 	}
 
 	public void promote(User tgt, User u) {
-		ClanHierarchy ch = members.get(tgt.getId());
-		ClanHierarchy next = Helper.getNext(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
-		members.put(tgt.getId(), Helper.getOr(next, ch));
-		transactions.add(u.getAsTag() + " promoveu o membro " + tgt.getAsTag() + ".");
+		ClanMember cm = getMember(tgt.getId());
+		cm.promote();
+		transactions.add(u.getAsTag() + " promoveu " + tgt.getAsTag() + ".");
 	}
 
 	public void demote(String id, User u) {
-		ClanHierarchy ch = members.get(id);
-		ClanHierarchy previous = Helper.getPrevious(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
-		members.put(id, Helper.getOr(previous, ch));
-		transactions.add(u.getAsTag() + " rebaixou o membro com ID " + id + ".");
+		ClanMember cm = getMember(id);
+		cm.demote();
+		transactions.add(u.getAsTag() + " rebaixou " + LogDAO.getUsername(id) + ".");
 	}
 
 	public void demote(User tgt, User u) {
-		ClanHierarchy ch = members.get(tgt.getId());
-		ClanHierarchy previous = Helper.getPrevious(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
-		members.put(tgt.getId(), Helper.getOr(previous, ch));
-		transactions.add(u.getAsTag() + " rebaixou o membro " + tgt.getAsTag() + ".");
+		ClanMember cm = getMember(tgt.getId());
+		cm.demote();
+		transactions.add(u.getAsTag() + " rebaixou " + tgt.getAsTag() + ".");
 	}
 
 	public void kick(String id, User u) {
-		members.remove(id);
-		transactions.add(u.getAsTag() + " expulsou o membro com ID " + id + ".");
+		members.removeIf(cm -> cm.getUid().equals(id));
+		transactions.add(u.getAsTag() + " expulsou " + LogDAO.getUsername(id) + ".");
 	}
 
 	public void kick(User tgt, User u) {
-		members.remove(tgt.getId());
-		transactions.add(u.getAsTag() + " expulsou o membro " + tgt.getAsTag() + ".");
+		members.removeIf(cm -> cm.getUid().equals(tgt.getId()));
+		transactions.add(u.getAsTag() + " expulsou " + tgt.getAsTag() + ".");
 	}
 
 	public void invite(String id, User u) {
-		members.put(id, ClanHierarchy.MEMBER);
-		transactions.add(u.getAsTag() + " adicionou o membro com ID " + id + ".");
+		members.add(new ClanMember(id, ClanHierarchy.MEMBER));
+		transactions.add(u.getAsTag() + " convidou " + LogDAO.getUsername(id) + " para o clã.");
 	}
 
 	public void invite(User tgt, User u) {
-		members.put(tgt.getId(), ClanHierarchy.MEMBER);
-		transactions.add(u.getAsTag() + " adicionou o membro " + tgt.getAsTag() + ".");
+		members.add(new ClanMember(tgt.getId(), ClanHierarchy.MEMBER));
+		transactions.add(u.getAsTag() + " convidou " + tgt.getAsTag() + " para o clã.");
 	}
 
 	public void leave(String id) {
-		if (members.remove(id) == ClanHierarchy.LEADER) {
-			String next = members.entrySet().stream().min(Comparator.comparingInt(e -> e.getValue().ordinal()))
-					.orElse(Pair.of(null, null))
-					.getKey();
-
-			members.put(next, ClanHierarchy.LEADER);
+		ClanMember cm = getMember(id);
+		if (cm.isLeader()) {
+			transfer();
+			members.remove(cm);
 		}
+		transactions.add(LogDAO.getUsername(id) + " saiu do clã.");
 	}
 
 	public ClanHierarchy getHierarchy(String id) {
-		return members.get(id);
+		return getMember(id).getRole();
 	}
 
 	public ClanTier getTier() {
@@ -288,12 +283,12 @@ public class Clan {
 		this.transactions = transactions;
 	}
 
-	public Map<String, ClanHierarchy> getMembers() {
+	public List<ClanMember> getMembers() {
+		members.sort(
+				Comparator.<ClanMember>comparingInt(cm -> cm.getRole().ordinal())
+						.thenComparing(ClanMember::getJoinedAt)
+		);
 		return members;
-	}
-
-	public void setMembers(Map<String, ClanHierarchy> members) {
-		this.members = members;
 	}
 
 	public Map<ClanHierarchy, Integer> getPermissions() {
@@ -313,6 +308,6 @@ public class Clan {
 	}
 
 	public boolean isLocked(String id, ClanPermission ch) {
-		return !ClanPermission.getPermissions(permissions.get(members.get(id))).contains(ch);
+		return !ClanPermission.getPermissions(permissions.get(getMember(id).getRole())).contains(ch);
 	}
 }

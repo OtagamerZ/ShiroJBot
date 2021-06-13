@@ -27,10 +27,10 @@ import javax.persistence.Table;
 @Table(name = "dynamicparameter")
 public class DynamicParameter {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String param = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String value = "";
 
 	public DynamicParameter() {

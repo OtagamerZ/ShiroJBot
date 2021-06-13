@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @Table(name = "matchmakingrating")
 public class MatchMakingRating {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
@@ -76,7 +77,7 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int evades = 0;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String master = "";
 
 	public MatchMakingRating(String uid) {

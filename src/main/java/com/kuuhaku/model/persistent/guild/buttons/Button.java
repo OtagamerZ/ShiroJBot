@@ -35,10 +35,10 @@ public class Button {
 	@JoinColumn(name = "parent_id")
 	private ButtonMessage parent;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String role;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String emote;
 
 	public Button() {

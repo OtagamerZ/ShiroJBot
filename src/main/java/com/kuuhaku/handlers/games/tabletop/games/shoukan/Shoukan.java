@@ -37,12 +37,14 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -70,7 +72,6 @@ import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrig
 public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
-	private final Map<Side, Clan> clans;
 	private final GameChannel channel;
 	private final Arena arena = new Arena();
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
@@ -102,66 +103,6 @@ public class Shoukan extends GlobalGame {
 	private boolean reroll = true;
 	private boolean moveLock = false;
 
-	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, List<Clan> clans, User... players) {
-		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
-		this.channel = channel;
-		this.daily = daily;
-		this.team = false;
-		this.record = record;
-
-		this.hands = Map.of(
-				Side.TOP, new Hand(this, players[0], clans.get(0).getDeck(), Side.TOP, clans.get(0)),
-				Side.BOTTOM, new Hand(this, players[1], clans.get(1).getDeck(), Side.BOTTOM, clans.get(1))
-		);
-		this.combos = Map.of(
-				Side.TOP, hands.get(Side.TOP).getCombo(),
-				Side.BOTTOM, hands.get(Side.BOTTOM).getCombo()
-		);
-		this.clans = Map.of(
-				Side.TOP, clans.get(0),
-				Side.BOTTOM, clans.get(1)
-		);
-
-		if (custom == null)
-			getHistory().setPlayers(Map.of(
-					players[0].getId(), Side.TOP,
-					players[1].getId(), Side.BOTTOM
-			));
-
-		setActions(
-				s -> {
-					close();
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
-							.queue(msg ->
-									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return msg;
-									}));
-				},
-				s -> {
-					if (custom == null) {
-						if (ranked) {
-							MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(getCurrent().getId());
-							mmr.block(30, ChronoUnit.MINUTES);
-							MatchMakingRatingDAO.saveMMR(mmr);
-						}
-
-						getHistory().setWinner(next);
-						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
-						close();
-					}
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
-							.queue(msg ->
-									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return msg;
-									}));
-				}
-		);
-	}
-
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
@@ -188,15 +129,14 @@ public class Shoukan extends GlobalGame {
 			Deck p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId()).getDeck();
 
 			this.hands = Map.of(
-					Side.TOP, new Hand(this, players[0], p1, Side.TOP, null),
-					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM, null)
+					Side.TOP, new Hand(this, players[0], p1, Side.TOP),
+					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
 			);
 		}
 		this.combos = Map.of(
 				Side.TOP, hands.get(Side.TOP).getCombo(),
 				Side.BOTTOM, hands.get(Side.BOTTOM).getCombo()
 		);
-		this.clans = null;
 
 		if (custom == null)
 			getHistory().setPlayers(Map.of(
@@ -2095,10 +2035,6 @@ public class Shoukan extends GlobalGame {
 
 	public List<Drawable> getDiscardBatch() {
 		return discardBatch;
-	}
-
-	public Map<Side, Clan> getClans() {
-		return clans;
 	}
 
 	public List<EffectOverTime> getEot() {
