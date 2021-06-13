@@ -31,10 +31,10 @@ import java.util.Objects;
 @Table(name = "exceedmember")
 public class ExceedMember {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String exceed = "";
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")

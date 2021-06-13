@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 @Table(name = "tags")
 public class Tags {
     @Id
-    @Column(columnDefinition = "VARCHAR(191)")
     private String uid;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")

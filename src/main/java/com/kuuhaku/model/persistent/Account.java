@@ -50,9 +50,10 @@ import java.util.stream.Collectors;
 @Table(name = "account")
 public class Account {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String twitchId = "";
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
@@ -100,7 +101,7 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean useFoil = false;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String ultimate = "";
 
 	@Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT ''")

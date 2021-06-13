@@ -71,6 +71,7 @@
         <class>com.kuuhaku.model.persistent.Deck</class>
         <class>com.kuuhaku.model.persistent.GiftCode</class>
         <class>com.kuuhaku.model.persistent.Clan</class>
+        <class>com.kuuhaku.model.persistent.ClanMember</class>
         <class>com.kuuhaku.model.persistent.AddedAnime</class>
         <class>com.kuuhaku.model.persistent.BotStats</class>
         <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>

@@ -40,7 +40,7 @@ public class ClanMotdCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (c.getMembers().get(author.getId()).ordinal() > 1) {
+		} else if (c.getMember(author.getId()).getRole().ordinal() > 1) {
 			channel.sendMessage("❌ | Apenas o líder, sub-líder e capitões podem alterar o MOTD do clã.").queue();
 			return;
 		} else if (c.getTier().ordinal() < ClanTier.FACTION.ordinal()) {

@@ -28,6 +28,7 @@ import java.util.Objects;
 @Table(name = "voicerole")
 public class VoiceRole {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	@Column(columnDefinition = "INT NOT NULL")

@@ -29,13 +29,13 @@ import java.util.Objects;
 @Table(name = "colorrole")
 public class ColorRole {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String name;
 
 	@Column(columnDefinition = "VARCHAR(7) NOT NULL")
 	private String hex;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	public ColorRole() {

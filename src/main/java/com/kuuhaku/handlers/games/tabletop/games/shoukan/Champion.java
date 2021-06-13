@@ -30,7 +30,6 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -94,7 +93,6 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean sealed = false;
 	private transient Shoukan game = null;
 	private transient Account acc = null;
-	private transient Clan clan = null;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient Bonus bonus = new Bonus();
 	private transient Champion fakeCard = null;
@@ -300,16 +298,6 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public void setAcc(Account acc) {
 		this.acc = acc;
-	}
-
-	@Override
-	public Clan getClan() {
-		return clan;
-	}
-
-	@Override
-	public void setClan(Clan clan) {
-		this.clan = clan;
 	}
 
 	public void setLinkedTo(List<Equipment> linkedTo) {

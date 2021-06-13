@@ -27,7 +27,7 @@ import javax.persistence.Table;
 @Table(name = "block")
 public class Block {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
 	public Block(String uid) {
