@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 @Table(name = "paidrole")
 public class PaidRole {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	@Column(columnDefinition = "INT NOT NULL")

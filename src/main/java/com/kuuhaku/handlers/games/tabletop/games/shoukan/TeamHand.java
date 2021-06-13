@@ -54,7 +54,7 @@ public class TeamHand extends Hand {
 
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
-		super(game, null, null, side, null);
+		super(game, null, null, side);
 
 		for (int i = 0; i < users.size(); i++) {
 			Deck dk = dks.get(i);

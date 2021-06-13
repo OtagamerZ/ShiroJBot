@@ -102,14 +102,10 @@ public class Arena {
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
 				String name;
-				if (game.getClans() != null) {
-					name = game.getClans().get(key).getName();
+				if (h instanceof TeamHand) {
+					name = ((TeamHand) h).getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
 				} else {
-					if (h instanceof TeamHand) {
-						name = ((TeamHand) h).getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
-					} else {
-						name = StringUtils.abbreviate(h.getUser().getName(), 32);
-					}
+					name = StringUtils.abbreviate(h.getUser().getName(), 32);
 				}
 
 				if (key == game.getCurrentSide()) {

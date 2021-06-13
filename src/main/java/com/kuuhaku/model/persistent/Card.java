@@ -38,6 +38,7 @@ import java.util.Objects;
 @Table(name = "card")
 public class Card {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(32) NOT NULL DEFAULT ''")

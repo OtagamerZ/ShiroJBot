@@ -29,6 +29,7 @@ import javax.persistence.Table;
 @Table(name = "couplemultiplier")
 public class CoupleMultiplier {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
 	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 1.25")

@@ -23,7 +23,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -36,11 +35,13 @@ import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -212,8 +213,7 @@ public class ShoukanCommand implements Executable {
 			}
 
 			boolean team = users.size() == 3;
-			boolean clan = !team && Helper.findParam(args, "cla", "clan");
-			boolean daily = !clan && Helper.findParam(args, "daily", "diario");
+			boolean daily = Helper.findParam(args, "daily", "diario");
 
 			int bet = 0;
 			JSONObject custom = Helper.findJson(argsAsText);
@@ -236,41 +236,7 @@ public class ShoukanCommand implements Executable {
 				}
 			}
 
-			Clan c = ClanDAO.getUserClan(author.getId());
-			Clan other = ClanDAO.getUserClan(message.getMentionedUsers().get(0).getId());
-			if (clan) {
-				if (c == null) {
-					channel.sendMessage("❌ | Você não possui um clã.").queue();
-					return;
-				} else if (other == null) {
-					channel.sendMessage("❌ | Ele/ela não possui um clã.").queue();
-					return;
-				} else if (c.getDeck().getChampions().size() < 30) {
-					channel.sendMessage("❌ | " + c.getName() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
-					return;
-				} else if (other.getDeck().getChampions().size() < 30) {
-					channel.sendMessage("❌ | " + other.getName() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
-					return;
-				} else if (c.getDeck().getEvoWeight() > 24) {
-					channel.sendMessage("❌ | Os equipamentos de " + c.getName() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (c.getDeck().hasInvalidChampionCopyCount()) {
-					channel.sendMessage("❌ | Os campeões de " + c.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (c.getDeck().hasInvalidEquipmentCopyCount()) {
-					channel.sendMessage("❌ | Os equipamentos de " + c.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (other.getDeck().getEvoWeight() > 24) {
-					channel.sendMessage("❌ | Os equipamentos de " + other.getName() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (other.getDeck().hasInvalidChampionCopyCount()) {
-					channel.sendMessage("❌ | Os campeões de " + other.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (other.getDeck().hasInvalidEquipmentCopyCount()) {
-					channel.sendMessage("❌ | Os equipamentos de " + other.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				}
-			} else if (!daily) {
+			if (!daily) {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 				Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
 				if (kp.getDeck().hasInvalidDeck(channel)
@@ -342,29 +308,6 @@ public class ShoukanCommand implements Executable {
 										Main.getInfo().getConfirmationPending().remove(player.getId());
 									}
 								}
-						));
-			} else if (clan) {
-				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, false, false, true, List.of(c, other), author, message.getMentionedUsers().get(0));
-				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " seu clã foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-										Main.getInfo().getConfirmationPending().remove(author.getId());
-										if (Main.getInfo().gameInProgress(mb.getId())) {
-											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
-											return;
-										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
-											return;
-										}
-
-										//Main.getInfo().getGames().put(id, t);
-										s.delete().queue(null, Helper::doNothing);
-										t.start();
-									}
-								}), true, 1, TimeUnit.MINUTES,
-								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
-								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);

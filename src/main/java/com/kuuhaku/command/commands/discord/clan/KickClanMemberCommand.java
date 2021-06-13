@@ -23,10 +23,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
+import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.ClanMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -58,34 +60,19 @@ public class KickClanMemberCommand implements Executable {
 		}
 
 		try {
-			User usr = message.getMentionedUsers().isEmpty() ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
+			ClanMember cm = c.getMembers().get(Integer.parseInt(args[0]));
 
-			if (usr == null) {
-				if (c.getMembers().get(args[0]) == null) {
-					channel.sendMessage("❌ | Membro inexistente.").queue();
-					return;
-				} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
-					channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
-					return;
-				}
-			} else {
-				if (c.getMembers().get(usr.getId()) == null) {
-					channel.sendMessage("❌ | Membro inexistente.").queue();
-					return;
-				} else if (c.getMembers().get(usr.getId()).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
-					channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
-					return;
-				}
+			if (cm.getRole().ordinal() <= c.getMember(author.getId()).getRole().ordinal()) {
+				channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
+				return;
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Tem certeza que deseja expulsar o membro " + (usr == null ? "ID " + args[0] : usr.getName()) + "?")
+			channel.sendMessage("Tem certeza que deseja expulsar o membro " + LogDAO.getUsername(cm.getUid()).split("#")[0] + "?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
-								if (usr != null) c.kick(usr, author);
-								else c.kick(args[0], author);
-
+								c.kick(cm.getUid(), author);
 								ClanDAO.saveClan(c);
 
 								s.delete().flatMap(d -> channel.sendMessage("✅ | Membro expulso com sucesso.")).queue();
@@ -93,8 +80,8 @@ public class KickClanMemberCommand implements Executable {
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
-		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | Você precisa digitar o ID ou mencionar o usuário que deseja remover dor clã.").queue();
+		} catch (IndexOutOfBoundsException | NumberFormatException e) {
+			channel.sendMessage("❌ | ID inválido.").queue();
 		}
 	}
 }

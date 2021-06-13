@@ -27,13 +27,13 @@ public class Leaderboards {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String usr;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String minigame;
 
 	@Column(columnDefinition = "INT NOT NULL")

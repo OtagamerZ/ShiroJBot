@@ -45,7 +45,7 @@ public class ClanBannerCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (c.getMembers().get(author.getId()).ordinal() > 1) {
+		} else if (c.getMember(author.getId()).getRole().ordinal() > 1) {
 			channel.sendMessage("❌ | Apenas o líder e o sub-líder podem alterar o banner do clã.").queue();
 			return;
 		} else if (c.getTier().ordinal() < ClanTier.DYNASTY.ordinal()) {

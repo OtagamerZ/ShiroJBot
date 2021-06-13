@@ -28,7 +28,6 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -80,7 +79,6 @@ public class Equipment implements Drawable, Cloneable {
 	private transient boolean available = true;
 	private transient Shoukan game = null;
 	private transient Account acc = null;
-	private transient Clan clan = null;
 	private transient Pair<Integer, Champion> linkedTo = null;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
@@ -214,16 +212,6 @@ public class Equipment implements Drawable, Cloneable {
 	@Override
 	public void setAcc(Account acc) {
 		this.acc = acc;
-	}
-
-	@Override
-	public Clan getClan() {
-		return clan;
-	}
-
-	@Override
-	public void setClan(Clan clan) {
-		this.clan = clan;
 	}
 
 	public Pair<Integer, Champion> getLinkedTo() {

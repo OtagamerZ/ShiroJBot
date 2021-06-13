@@ -30,6 +30,7 @@ import java.util.Objects;
 @Table(name = "addedanime")
 public class AddedAnime {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String name;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")

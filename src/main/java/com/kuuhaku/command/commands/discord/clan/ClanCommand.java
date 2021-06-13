@@ -25,12 +25,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
+import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.ClanMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -38,9 +39,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -108,18 +107,15 @@ public class ClanCommand implements Executable {
 			), false);
 
 		StringBuilder sb = new StringBuilder();
-		List<Map.Entry<String, ClanHierarchy>> mbs = new ArrayList<>(c.getMembers().entrySet());
-		mbs.sort(Map.Entry.
-				<String, ClanHierarchy>comparingByValue(Comparator.comparingInt(ClanHierarchy::ordinal))
-				.thenComparing(Map.Entry::getKey, String.CASE_INSENSITIVE_ORDER)
-		);
+		List<ClanMember> mbs = c.getMembers();
 		List<MessageEmbed.Field> fixed = List.copyOf(eb.getFields());
-		List<List<Map.Entry<String, ClanHierarchy>>> chunks = Helper.chunkify(mbs, 10);
-		for (List<Map.Entry<String, ClanHierarchy>> chunk : chunks) {
+		List<List<ClanMember>> chunks = Helper.chunkify(mbs, 10);
+		for (int i = 0; i < chunks.size(); i++) {
+			List<ClanMember> chunk = chunks.get(i);
 			sb.setLength(0);
 
-			for (Map.Entry<String, ClanHierarchy> mb : chunk) {
-				sb.append("`%s` | %s %s\n".formatted(mb.getKey(), mb.getValue().getIcon(), checkUser(mb.getKey())));
+			for (ClanMember mb : chunk) {
+				sb.append("`%s` | %s %s\n".formatted(i, mb.getRole().getIcon(), LogDAO.getUsername(mb.getUid()).split("#")[0]));
 			}
 
 			eb.clearFields().getFields().addAll(fixed);

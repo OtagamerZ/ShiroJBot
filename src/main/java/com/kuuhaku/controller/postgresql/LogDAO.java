@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Log;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +33,6 @@ public class LogDAO {
 
 		em.getTransaction().begin();
 		em.merge(log);
-		em.getTransaction().commit();
-
-		em.getTransaction().begin();
 		em.createQuery("DELETE FROM Log l WHERE l.guildId NOT IN (SELECT g.guildId FROM GuildConfig g)").executeUpdate();
 		em.getTransaction().commit();
 
@@ -47,7 +45,32 @@ public class LogDAO {
 
 		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetUsage\"");
 
-		return (List<Object[]>) q.getResultList();
+		try {
+			return (List<Object[]>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings({"unchecked", "SqlResolve"})
+	public static String getUsername(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT l.usr
+				FROM Log l
+				WHERE l.uid = :id
+				ORDER BY l.id DESC
+				""");
+		q.setParameter("id", id);
+
+		try {
+			return (String) q.getSingleResult();
+		} catch (NoResultException e) {
+			return "???";
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings({"unchecked", "SqlResolve"})
