@@ -672,7 +672,10 @@ public class Helper {
 							Message msg = chn.retrieveMessageById(message.getId()).submit().get();
 							resolveButton(g, message.getButtons(), buttons);
 
-							msg.clearReactions().queue();
+							try {
+								msg.clearReactions().queue();
+							} catch (InsufficientPermissionException ignore) {
+							}
 							if (message.isGatekeeper()) {
 								Role r = message.getRole(g);
 
