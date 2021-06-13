@@ -28,7 +28,7 @@ public class MonthWinner {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String exceed = "";
 
 	@Column(columnDefinition = "DATE")

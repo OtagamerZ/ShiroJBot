@@ -30,7 +30,7 @@ import java.util.Set;
 @Table(name = "buttonchannel")
 public class ButtonChannel {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")

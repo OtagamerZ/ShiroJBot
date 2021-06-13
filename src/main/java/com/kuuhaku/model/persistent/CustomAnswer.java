@@ -27,10 +27,10 @@ public class CustomAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL")
+    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     private String guildId = "";
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
     private String trigger = "";
 
     @Column(columnDefinition = "TEXT")
@@ -42,7 +42,7 @@ public class CustomAnswer {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
     private int chance = 100;
 
-    @Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255)")
     private String forUser = null;
 
     public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String forUser) {

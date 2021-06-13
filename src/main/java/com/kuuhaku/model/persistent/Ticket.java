@@ -34,7 +34,7 @@ public class Ticket {
 	@Column(columnDefinition = "TEXT")
 	private String subject = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String uid = "";
 
 	@Column(columnDefinition = "TEXT")

@@ -32,7 +32,7 @@ import java.util.Objects;
 @Table(name = "buttonmessage")
 public class ButtonMessage {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -40,13 +40,13 @@ public class ButtonMessage {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ButtonChannel parent;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String author;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean gatekeeper = false;
 
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255)")
 	private String role;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")

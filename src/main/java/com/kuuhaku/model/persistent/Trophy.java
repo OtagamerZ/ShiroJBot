@@ -30,6 +30,7 @@ import java.util.Set;
 @Table(name = "trophy")
 public class Trophy {
 	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
 	@Enumerated(value = EnumType.STRING)

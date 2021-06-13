@@ -37,7 +37,7 @@ public class GiftCode {
 	@Column(columnDefinition = "CHAR(32) NOT NULL")
 	private String code;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String redeemedBy = "";
 
 	@Column(columnDefinition = "VARCHAR(100) NOT NULL DEFAULT ''")

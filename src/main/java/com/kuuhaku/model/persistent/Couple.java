@@ -27,10 +27,10 @@ public class Couple {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String husbando = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String waifu = "";
 
 	public Couple(String husbando, String waifu) {

@@ -46,7 +46,7 @@ public class Deck {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(255)")
 	private String name = "";
 
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -64,7 +64,7 @@ public class Deck {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Field> fields = new ArrayList<>();
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String destinyDraw = "";
 
 	public Deck() {
