@@ -2098,6 +2098,10 @@ public class Shoukan extends GlobalGame {
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Pair<Champion, Integer> attacker, Pair<Champion, Integer> defender) {
 		if (activator.hasEffect() && effectLock == 0) {
+			if ((defender != null && defender.getLeft().getBonus().getSpecialData().remove("effectLock") != null)
+				|| (attacker != null && attacker.getLeft().getBonus().getSpecialData().remove("effectLock") != null)
+			) return false;
+
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
 			return postCombat();
 		}
