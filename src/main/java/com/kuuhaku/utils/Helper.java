@@ -1148,6 +1148,10 @@ public class Helper {
 		});
 	}
 
+	public static <T> T getRandomEntry(List<T> array) {
+		return array.get(rng(array.size(), true));
+	}
+
 	public static <T> List<T> getRandomN(List<T> array, int elements) {
 		List<T> aux = new ArrayList<>(array);
 		List<T> out = new ArrayList<>();
