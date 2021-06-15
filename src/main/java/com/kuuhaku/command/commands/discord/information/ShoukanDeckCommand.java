@@ -29,7 +29,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -91,61 +90,31 @@ public class ShoukanDeckCommand implements Executable {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			} else {
-				if (showClan) {
-					try {
-						Clan cl = ClanDAO.getUserClan(author.getId());
-						assert cl != null;
-						Deck dk = cl.getDeck();
+				try {
+					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+					Deck dk = kp.getDeck();
 
-						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()), cl);
-						BufferedImage cards = kb.view(dk);
+					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+					BufferedImage cards = kb.view(dk);
 
-						EmbedBuilder eb = new ColorlessEmbedBuilder()
-								.setTitle(":beginner: | Deck do clã " + cl.getName())
-								.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
-								.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
-								.setImage("attachment://deck.jpg");
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setTitle(":beginner: | Deck de " + author.getName())
+							.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
+							.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
+							.setImage("attachment://deck.jpg");
 
-						m.delete().queue();
-						if (showPrivate) {
-							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
-									.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
-									.queue(null, Helper::doNothing);
-						} else {
-							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
-						}
-					} catch (IOException e) {
-						m.editMessage(I18n.getString("err_deck-generation-error")).queue();
-						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					m.delete().queue();
+					if (showPrivate) {
+						author.openPrivateChannel()
+								.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+								.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+								.queue(null, Helper::doNothing);
+					} else {
+						channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 					}
-				} else {
-					try {
-						Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-						Deck dk = kp.getDeck();
-
-						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-						BufferedImage cards = kb.view(dk);
-
-						EmbedBuilder eb = new ColorlessEmbedBuilder()
-								.setTitle(":beginner: | Deck de " + author.getName())
-								.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
-								.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
-								.setImage("attachment://deck.jpg");
-
-						m.delete().queue();
-						if (showPrivate) {
-							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
-									.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
-									.queue(null, Helper::doNothing);
-						} else {
-							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
-						}
-					} catch (IOException e) {
-						m.editMessage(I18n.getString("err_deck-generation-error")).queue();
-						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					}
+				} catch (IOException e) {
+					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
 		});

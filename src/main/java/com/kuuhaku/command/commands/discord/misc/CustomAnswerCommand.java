@@ -161,7 +161,7 @@ public class CustomAnswerCommand implements Executable {
 
 			CustomAnswerDAO.addCustomAnswer(ca);
 			channel.sendMessage(msg.formatted(StringUtils.abbreviate(ca.getAnswer().replace("\n", " "), 100), ca.getTrigger().replace("\n", " "))).queue();
-		} catch (JsonParseException e) {
+		} catch (JsonParseException | IllegalStateException e) {
 			channel.sendMessage("❌ | Olha, esse JSON não me parece certo não.").queue();
 		}
 	}
