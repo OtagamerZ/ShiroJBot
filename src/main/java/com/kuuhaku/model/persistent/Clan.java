@@ -60,10 +60,6 @@ public class Clan {
 	@Temporal(TemporalType.DATE)
 	private Calendar paidRent = Calendar.getInstance();
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Deck clanDeck = new Deck();
-
 	@ElementCollection(fetch = FetchType.LAZY)
 	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -265,14 +261,6 @@ public class Clan {
 		this.vault -= 100000;
 		this.name = name;
 		transactions.add(u.getAsTag() + " trocou o nome do clã por 100.000 créditos.");
-	}
-
-	public Deck getDeck() {
-		return clanDeck;
-	}
-
-	public void setDeck(Deck clanDeck) {
-		this.clanDeck = clanDeck;
 	}
 
 	public List<String> getTransactions() {
