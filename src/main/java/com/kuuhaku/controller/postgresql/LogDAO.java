@@ -63,6 +63,7 @@ public class LogDAO {
 				ORDER BY l.id DESC
 				""");
 		q.setParameter("id", id);
+		q.setMaxResults(1);
 
 		try {
 			return (String) q.getSingleResult();
