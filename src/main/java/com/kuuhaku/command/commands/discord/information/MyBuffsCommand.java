@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "buffs",
-		aliases = {"meusbuffs", "modifiers", "modifs"},
+		aliases = {"meusbuffs", "modifiers", "modifs", "boosts"},
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
@@ -58,7 +58,7 @@ public class MyBuffsCommand implements Executable {
 
 		if (exceed) eb.addField("Seu Exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
-			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100) + "% XP ganho", false);
+			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + Helper.roundToString(WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100, 0) + "% XP ganho", false);
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)
@@ -78,7 +78,7 @@ public class MyBuffsCommand implements Executable {
 						.plus(b.getTime(), ChronoUnit.MILLIS)
 						.format(Helper.dateFormat);
 
-				String chance = Helper.roundToString(b.getMult() * 100 - 100, 0);
+				String chance = Helper.roundToString(b.getMult() * 100 - 100, 0) + "%";
 				switch (b.getType()) {
 					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " XP ganho (até " + until + ")", false);
 					case CARD -> {
