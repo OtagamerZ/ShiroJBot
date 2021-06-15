@@ -52,7 +52,7 @@ public class LogDAO {
 		}
 	}
 
-	@SuppressWarnings({"unchecked", "SqlResolve"})
+	@SuppressWarnings({"SqlResolve"})
 	public static String getUsername(String id) {
 		EntityManager em = Manager.getEntityManager();
 
