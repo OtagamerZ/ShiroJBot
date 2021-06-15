@@ -123,6 +123,13 @@ public class EncoderClient extends Endpoint {
 
 	public void send(String msg) {
 		try {
+			while (!Main.getInfo().isEncoderConnected()) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException ignore) {
+				}
+			}
+
 			session.getBasicRemote().sendText(msg);
 		} catch (IOException e) {
 			e.printStackTrace();

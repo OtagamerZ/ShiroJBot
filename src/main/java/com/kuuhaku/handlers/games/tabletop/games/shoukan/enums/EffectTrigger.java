@@ -39,5 +39,6 @@ public enum EffectTrigger {
 	POST_ATTACK_ASSIST,
 	ON_DODGE,
 	ON_MISS,
-	GAME_TICK
+	GAME_TICK,
+	ON_DESTROY
 }

@@ -1073,18 +1073,18 @@ public class Shoukan extends GlobalGame {
 		return false;
 	}
 
-	public void killCard(Side to, int index) {
-		Champion ch = getArena().getSlots().get(to).get(index).getTop();
+	public void killCard(Side to, int target) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventDeath")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
-		slts.get(index).setTop(null);
+		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn<Champion, Equipment> sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
 		}
 
@@ -1092,9 +1092,12 @@ public class Shoukan extends GlobalGame {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
-			c.setEfctAtk(index, 0);
-			c.setEfctDef(index, 0);
+			c.setEfctAtk(target, 0);
+			c.setEfctDef(target, 0);
 		}
+
+		if (applyEot(AFTER_DEATH, to, target)) return;
+		if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
 
 		ch.reset();
 		if (!ch.isGravelocked())
@@ -1143,6 +1146,9 @@ public class Shoukan extends GlobalGame {
 				c.setEfctDef(target, 0);
 			}
 
+			if (applyEot(AFTER_DEATH, to, target)) return;
+			if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+
 			ch.reset();
 			if (!ch.isGravelocked())
 				arena.getGraveyard().get(to).add(ch.copy());
@@ -1181,6 +1187,9 @@ public class Shoukan extends GlobalGame {
 			c.setEfctAtk(target, 0);
 			c.setEfctDef(target, 0);
 		}
+
+		if (applyEot(AFTER_DEATH, to, target)) return;
+		if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
 
 		ch.reset();
 		if (!ch.isFusion())
@@ -1229,6 +1238,9 @@ public class Shoukan extends GlobalGame {
 				c.setEfctDef(target, 0);
 			}
 
+			if (applyEot(AFTER_DEATH, to, target)) return;
+			if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+
 			ch.reset();
 			if (!ch.isFusion() || withFusion)
 				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
@@ -1268,45 +1280,51 @@ public class Shoukan extends GlobalGame {
 			c.setEfctDef(target, 0);
 		}
 
+		if (applyEot(AFTER_DEATH, to, target)) return;
+		if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+
 		ch.reset();
 		if (!ch.isFusion() || withFusion)
 			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
 	}
 
-	public void banishCard(Side side, int index, boolean equipment) {
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+	public void banishCard(Side to, int target, boolean equipment) {
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 		if (equipment) {
-			Equipment eq = slts.get(index).getBottom();
+			Equipment eq = slts.get(target).getBottom();
 			if (eq == null) return;
 
 			if (slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
 				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 			eq.setLinkedTo(null);
 
-			SlotColumn<Champion, Equipment> sd = slts.get(index);
+			SlotColumn<Champion, Equipment> sd = slts.get(target);
 			arena.getBanished().add(eq);
 			sd.setBottom(null);
 		} else {
-			Champion ch = slts.get(index).getTop();
+			Champion ch = slts.get(target).getTop();
 			if (ch == null) return;
 
-			slts.get(index).setTop(null);
+			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-					killCard(side, i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i);
 
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-					banishCard(side, i, true);
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+					banishCard(to, i, true);
 			}
 
 			for (SlotColumn<Champion, Equipment> slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(index, 0);
-				c.setEfctDef(index, 0);
+				c.setEfctAtk(target, 0);
+				c.setEfctDef(target, 0);
 			}
+
+			if (applyEot(AFTER_DEATH, to, target)) return;
+			if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
 
 			ch.reset();
 			if (!ch.isGravelocked())
