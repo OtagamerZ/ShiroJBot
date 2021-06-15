@@ -1096,8 +1096,8 @@ public class Shoukan extends GlobalGame {
 			c.setEfctDef(target, 0);
 		}
 
-		if (applyEot(AFTER_DEATH, to, target)) return;
-		if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
 		if (!ch.isGravelocked())
@@ -1146,8 +1146,8 @@ public class Shoukan extends GlobalGame {
 				c.setEfctDef(target, 0);
 			}
 
-			if (applyEot(AFTER_DEATH, to, target)) return;
-			if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+			if (applyEot(ON_DESTROY, to, target)) return;
+			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
 			if (!ch.isGravelocked())
@@ -1188,8 +1188,8 @@ public class Shoukan extends GlobalGame {
 			c.setEfctDef(target, 0);
 		}
 
-		if (applyEot(AFTER_DEATH, to, target)) return;
-		if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
 		if (!ch.isFusion())
@@ -1238,8 +1238,8 @@ public class Shoukan extends GlobalGame {
 				c.setEfctDef(target, 0);
 			}
 
-			if (applyEot(AFTER_DEATH, to, target)) return;
-			if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+			if (applyEot(ON_DESTROY, to, target)) return;
+			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
 			if (!ch.isFusion() || withFusion)
@@ -1280,8 +1280,8 @@ public class Shoukan extends GlobalGame {
 			c.setEfctDef(target, 0);
 		}
 
-		if (applyEot(AFTER_DEATH, to, target)) return;
-		if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
 		if (!ch.isFusion() || withFusion)
@@ -1323,8 +1323,8 @@ public class Shoukan extends GlobalGame {
 				c.setEfctDef(target, 0);
 			}
 
-			if (applyEot(AFTER_DEATH, to, target)) return;
-			if (applyEffect(AFTER_DEATH, ch, target, to, null, null)) return;
+			if (applyEot(ON_DESTROY, to, target)) return;
+			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
 			if (!ch.isGravelocked())
