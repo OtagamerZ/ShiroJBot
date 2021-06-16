@@ -13,15 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1243,13 +1235,6 @@
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
     </task>
-    <task id="LOCAL-04731" summary="Correções no comando de ranking de usuários">
-      <created>1623125360642</created>
-      <option name="number" value="04731" />
-      <option name="presentableId" value="LOCAL-04731" />
-      <option name="project" value="LOCAL" />
-      <updated>1623125360642</updated>
-    </task>
     <task id="LOCAL-04732" summary="Adição de ratelimit variável">
       <created>1623155098148</created>
       <option name="number" value="04732" />
@@ -1586,7 +1571,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623764048030</updated>
     </task>
-    <option name="localTasksCounter" value="4780" />
+    <task id="LOCAL-04780" summary="Correções menores">
+      <created>1623860687566</created>
+      <option name="number" value="04780" />
+      <option name="presentableId" value="LOCAL-04780" />
+      <option name="project" value="LOCAL" />
+      <updated>1623860687567</updated>
+    </task>
+    <option name="localTasksCounter" value="4781" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -107,7 +107,7 @@ public class SeeCardCommand implements Executable {
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
 			}
 
-			Champion c = CardDAO.getChampion(card.getCard());
+			Champion c = CardDAO.peekChampion(card.getCard().getId());
 			EmbedBuilder eb = new EmbedBuilder()
 					.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName())
 					.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary())
