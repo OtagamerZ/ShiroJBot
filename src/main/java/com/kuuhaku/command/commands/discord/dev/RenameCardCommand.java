@@ -45,7 +45,7 @@ public class RenameCardCommand implements Executable {
 
 		String oldName = args[0].toUpperCase(Locale.ROOT);
 		String newName = args[1].toUpperCase(Locale.ROOT);
-		Card c = CardDAO.getCard(oldName);
+		Card c = CardDAO.getRawCard(oldName);
 
 		if (c == null) {
 			channel.sendMessage("❌ | Não existe uma carta com esse nome.").queue();

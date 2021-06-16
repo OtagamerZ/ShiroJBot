@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1252,13 +1250,6 @@
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
     </task>
-    <task id="LOCAL-04733" summary="Adição de ratelimit variável">
-      <created>1623155302619</created>
-      <option name="number" value="04733" />
-      <option name="presentableId" value="LOCAL-04733" />
-      <option name="project" value="LOCAL" />
-      <updated>1623155302619</updated>
-    </task>
     <task id="LOCAL-04734" summary="Adição de ratelimit variável">
       <created>1623157729143</created>
       <option name="number" value="04734" />
@@ -1595,7 +1586,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623861144686</updated>
     </task>
-    <option name="localTasksCounter" value="4782" />
+    <task id="LOCAL-04782" summary="Correções menores">
+      <created>1623865830304</created>
+      <option name="number" value="04782" />
+      <option name="presentableId" value="LOCAL-04782" />
+      <option name="project" value="LOCAL" />
+      <updated>1623865830305</updated>
+    </task>
+    <option name="localTasksCounter" value="4783" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
