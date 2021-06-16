@@ -1250,20 +1250,6 @@
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
     </task>
-    <task id="LOCAL-04734" summary="Adição de ratelimit variável">
-      <created>1623157729143</created>
-      <option name="number" value="04734" />
-      <option name="presentableId" value="LOCAL-04734" />
-      <option name="project" value="LOCAL" />
-      <updated>1623157729143</updated>
-    </task>
-    <task id="LOCAL-04735" summary="Adição de ratelimit variável">
-      <created>1623158804477</created>
-      <option name="number" value="04735" />
-      <option name="presentableId" value="LOCAL-04735" />
-      <option name="project" value="LOCAL" />
-      <updated>1623158804477</updated>
-    </task>
     <task id="LOCAL-04736" summary="Adicionadas mãos no replay">
       <created>1623168759383</created>
       <option name="number" value="04736" />
@@ -1593,7 +1579,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623865830305</updated>
     </task>
-    <option name="localTasksCounter" value="4783" />
+    <task id="LOCAL-04783" summary="Correções menores">
+      <created>1623866646592</created>
+      <option name="number" value="04783" />
+      <option name="presentableId" value="LOCAL-04783" />
+      <option name="project" value="LOCAL" />
+      <updated>1623866646592</updated>
+    </task>
+    <task id="LOCAL-04784" summary="Correções menores">
+      <created>1623866805644</created>
+      <option name="number" value="04784" />
+      <option name="presentableId" value="LOCAL-04784" />
+      <option name="project" value="LOCAL" />
+      <updated>1623866805644</updated>
+    </task>
+    <option name="localTasksCounter" value="4785" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
