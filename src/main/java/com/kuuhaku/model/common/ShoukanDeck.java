@@ -79,8 +79,6 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 
-		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
-
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
 			Champion c = champs.get(i);
 			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
