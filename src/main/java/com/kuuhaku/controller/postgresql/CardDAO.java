@@ -165,12 +165,16 @@ public class CardDAO {
 	public static Card getCard(String name, boolean withUltimate) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q;
+		Query q = em.createQuery("""
+				SELECT c 
+				FROM Card c 
+				WHERE id = UPPER(:name) 
+				AND rarity NOT IN :blacklist 
+				AND anime.name IN :animes
+				""", Card.class);
 		if (withUltimate) {
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity NOT IN :blacklist AND anime.name IN :animes", Card.class);
 			q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD));
 		} else {
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity NOT IN :blacklist AND anime.name IN :animes", Card.class);
 			q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		}
 		q.setParameter("name", name);
@@ -311,7 +315,7 @@ public class CardDAO {
 	public static List<String> getAllChampionNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
+		Query q = em.createQuery("SELECT c.card.id FROM Champion c WHERE c.effect NOT LIKE '%//TODO%'", String.class);
 
 		try {
 			return q.getResultList();
@@ -328,9 +332,9 @@ public class CardDAO {
 
 		Query q;
 		if (withFusion)
-			q = em.createQuery("SELECT c FROM Champion c", Champion.class);
+			q = em.createQuery("SELECT c FROM Champion c WHERE c.effect NOT LIKE '%//TODO%'", Champion.class);
 		else
-			q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
+			q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 
 		try {
 			return q.getResultList();
@@ -462,7 +466,7 @@ public class CardDAO {
 	public static List<Champion> getFusions() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = TRUE", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = TRUE AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 
 		try {
 			return q.getResultList();
@@ -477,7 +481,7 @@ public class CardDAO {
 	public static List<Champion> getChampions(List<String> ids) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 		q.setParameter("ids", ids);
 
 		try {
@@ -493,7 +497,7 @@ public class CardDAO {
 	public static List<Champion> getChampions(Class c) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 		q.setParameter("class", c);
 
 		try {
@@ -509,7 +513,7 @@ public class CardDAO {
 	public static List<Champion> getChampions(Race r) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.race = :race", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.race = :race AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 		q.setParameter("race", r);
 
 		try {
@@ -524,8 +528,23 @@ public class CardDAO {
 	public static Champion getChampion(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 		q.setParameter("card", c);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Champion peekChampion(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.id = UPPER(:card)", Champion.class);
+		q.setParameter("card", name);
 
 		try {
 			return (Champion) q.getSingleResult();
@@ -539,7 +558,7 @@ public class CardDAO {
 	public static Champion getChampion(String name) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = UPPER(:card)", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.id = UPPER(:card) AND c.effect NOT LIKE '%//TODO%'", Champion.class);
 		q.setParameter("card", name);
 
 		try {
@@ -554,7 +573,7 @@ public class CardDAO {
 	public static Champion getRandomChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setMaxResults(1);
 
 		try {
@@ -569,7 +588,7 @@ public class CardDAO {
 	public static Champion getRandomChampion(boolean fusion) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = :fusion ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = :fusion AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setParameter("fusion", fusion);
 		q.setMaxResults(1);
 
@@ -585,7 +604,7 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setParameter("mana", mana);
 		q.setMaxResults(1);
 
@@ -601,7 +620,7 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana, boolean fusion) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.fusion = :fusion ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.fusion = :fusion AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setParameter("mana", mana);
 		q.setParameter("fusion", fusion);
 		q.setMaxResults(1);
@@ -618,7 +637,7 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana, Race race) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.race = :race ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.race = :race AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setParameter("mana", mana);
 		q.setParameter("race", race);
 		q.setMaxResults(1);
@@ -635,7 +654,7 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana, Race race, boolean fusion) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.race = :race AND c.fusion = :fusion ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.race = :race AND c.fusion = :fusion AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setParameter("mana", mana);
 		q.setParameter("race", race);
 		q.setParameter("fusion", fusion);
@@ -653,7 +672,7 @@ public class CardDAO {
 	public static String[] getRandomEffect(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.description, c.effect FROM Champion c WHERE c.fusion = FALSE AND c.mana = :mana ORDER BY RANDOM()");
+		Query q = em.createQuery("SELECT c.description, c.effect FROM Champion c WHERE c.fusion = FALSE AND c.mana = :mana AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()");
 		q.setParameter("mana", mana);
 		q.setMaxResults(1);
 
@@ -671,7 +690,7 @@ public class CardDAO {
 	public static Champion getFakeChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes AND c.effect NOT LIKE '%//TODO%' ORDER BY RANDOM()", Champion.class);
 		q.setParameter("animes", getValidAnimeNames());
 		q.setMaxResults(4);
 
@@ -880,6 +899,7 @@ public class CardDAO {
 						     , c.category
 						FROM deck_champion dc
 						         INNER JOIN champion c on c.id = dc.champions_id
+						WHERE c.effect NOT LIKE '%//TODO%'
 						GROUP BY dc.deck_id, c.category
 					) x
 				WHERE x.category = :cat
@@ -901,6 +921,7 @@ public class CardDAO {
 				SELECT c.card_id
 				FROM deck_champion dc
 				         INNER JOIN champion c on c.id = dc.champions_id
+				WHERE c.effect NOT LIKE '%//TODO%'
 				GROUP BY c.card_id
 				ORDER BY COUNT(1) DESC
 				""");
