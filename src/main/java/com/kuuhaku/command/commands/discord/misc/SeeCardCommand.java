@@ -67,7 +67,7 @@ public class SeeCardCommand implements Executable {
 		boolean shoukan = args.length > 1 && args[1].equalsIgnoreCase("S");
 
 		if (shoukan) {
-			Champion ch = CardDAO.getChampion(args[0]);
+			Champion ch = CardDAO.peekChampion(args[0]);
 			Equipment eq = CardDAO.getEquipment(args[0]);
 			Field f = CardDAO.getField(args[0]);
 
@@ -112,7 +112,7 @@ public class SeeCardCommand implements Executable {
 					.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName())
 					.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary())
 					.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true)
-					.addField("Elegível:", c != null && !c.isFusion() ? "Sim" : "Não", true)
+					.addField("Elegível:", c != null && !c.isFusion() ? (Helper.getOr(c.getRawEffect(), "").contains("//TODO") ? "Ainda não" : "Sim") : "Não", true)
 					.addField("Raridade:", tc.getRarity().toString(), true)
 					.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true)
 					.addField("Anime:", tc.getAnime().toString(), true)
