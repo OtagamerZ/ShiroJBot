@@ -1648,8 +1648,8 @@ public class Shoukan extends GlobalGame {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						if (c.isStasis()) c.reduceStasis();
-						if (c.isStunned()) c.reduceStun();
-						if (c.isSleeping()) c.reduceSleep();
+						else if (c.isStunned()) c.reduceStun();
+						else if (c.isSleeping()) c.reduceSleep();
 
 						if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
 							|| makeFusion(h.get())
@@ -1808,8 +1808,8 @@ public class Shoukan extends GlobalGame {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							if (c.isStasis()) c.reduceStasis();
-							if (c.isStunned()) c.reduceStun();
-							if (c.isSleeping()) c.reduceSleep();
+							else if (c.isStunned()) c.reduceStun();
+							else if (c.isSleeping()) c.reduceSleep();
 
 							if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
 								|| makeFusion(h.get())
