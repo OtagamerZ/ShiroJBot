@@ -50,6 +50,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
@@ -550,9 +551,11 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			String name = member.getEffectiveName();
-			if (gc.isMakeMentionable() && !Helper.regex(member.getEffectiveName(), "[A-z0-9]{4}").find()) {
+			if (gc.isMakeMentionable() && !Helper.regex(name, "[A-z0-9]{4}").find()) {
 				name = Unidecode.decode(name);
-			} else if (gc.isAntiHoist() && name.charAt(0) < 65) {
+			}
+
+			if (gc.isAntiHoist() && name.charAt(0) < 65) {
 				name = "￭ " + name.substring(1);
 			}
 
@@ -562,7 +565,10 @@ public class ShiroEvents extends ListenerAdapter {
 					name = names[Helper.rng(names.length, true)];
 				}
 
-				member.modifyNickname(name).queue(null, Helper::doNothing);
+				try {
+					event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
+				} catch (InsufficientPermissionException ignore) {
+				}
 			}
 
 			if (!gc.getWelcomeMessage().isBlank()) {
@@ -889,6 +895,40 @@ public class ShiroEvents extends ListenerAdapter {
 		long time = curr - Helper.getOr(voiceTime.remove(mb.getId()), curr);
 		m.setVoiceTime(time);
 		MemberDAO.updateMemberConfigs(m);
+	}
+
+	@Override
+	public void onGuildMemberUpdateNickname(@NotNull GuildMemberUpdateNicknameEvent event) {
+		String name = event.getNewNickname();
+		if (name == null) return;
+
+		boolean nonMentionable = !Helper.regex(name, "[A-z0-9]{4}").find();
+		boolean isHoister = name.charAt(0) < 65;
+
+		if (nonMentionable || isHoister) {
+			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			if (gc.isMakeMentionable() && nonMentionable) {
+				name = Unidecode.decode(name);
+			}
+
+			if (gc.isAntiHoist() && isHoister) {
+				name = "￭ " + name.substring(1);
+			}
+
+			if (!name.equals(event.getNewNickname())) {
+				if (name.length() < 2) {
+					String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
+					name = names[Helper.rng(names.length, true)];
+				}
+
+				try {
+					event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
+				} catch (InsufficientPermissionException ignore) {
+				}
+			}
+		}
+
+		Helper.logToChannel(event.getUser(), false, null, event.getUser().getAsMention() + " mudou o nome de `" + event.getOldNickname() + "` para `" + event.getNewNickname() + "`", event.getGuild());
 	}
 
 	@Override
