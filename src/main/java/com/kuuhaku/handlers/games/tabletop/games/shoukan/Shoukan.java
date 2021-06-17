@@ -90,6 +90,10 @@ public class Shoukan extends GlobalGame {
 			Side.TOP, new HashMap<>(),
 			Side.BOTTOM, new HashMap<>()
 	);
+	private final Map<Side, int[]> unavailable = Map.of(
+			Side.TOP, new int[5],
+			Side.BOTTOM, new int[5]
+	);
 	private final List<EffectOverTime> eot = new ArrayList<>();
 
 	private Phase phase = Phase.PLAN;
@@ -547,6 +551,9 @@ public class Shoukan extends GlobalGame {
 
 					if (slot.getTop() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
+						return;
+					} else if (isSlotLocked(current, dest)) {
+						channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -1050,7 +1057,7 @@ public class Shoukan extends GlobalGame {
 
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> slt = slts.get(i);
-				if (slt.getTop() == null) {
+				if (slt.getTop() == null && !isSlotLocked(current, i)) {
 					aFusion.setGame(this);
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion);
@@ -1365,8 +1372,10 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public SlotColumn<Champion, Equipment> getFirstAvailableSlot(Side s, boolean top) {
-		for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(s)) {
-			if (top ? slot.getTop() == null : slot.getBottom() == null)
+		List<SlotColumn<Champion, Equipment>> get = arena.getSlots().get(s);
+		for (int i = 0; i < get.size(); i++) {
+			SlotColumn<Champion, Equipment> slot = get.get(i);
+			if (top ? (slot.getTop() == null && !isSlotLocked(s, i)) : slot.getBottom() == null)
 				return slot;
 		}
 		return null;
@@ -1642,6 +1651,7 @@ public class Shoukan extends GlobalGame {
 				h.get().decreaseLockTime();
 				h.get().decreaseNullTime();
 				slots = arena.getSlots().get(current);
+				decreaseSlotLockTime(current);
 
 				if (applyEot(BEFORE_TURN, current, -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
@@ -1802,6 +1812,7 @@ public class Shoukan extends GlobalGame {
 					h.get().decreaseLockTime();
 					h.get().decreaseNullTime();
 					slots = arena.getSlots().get(current);
+					decreaseSlotLockTime(current);
 
 					if (applyEot(BEFORE_TURN, current, -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
@@ -2049,6 +2060,25 @@ public class Shoukan extends GlobalGame {
 
 	public void decreaseELockTime() {
 		effectLock = Math.max(0, effectLock - 1);
+	}
+
+	public boolean isSlotLocked(Side side, int slot) {
+		return unavailable.get(side)[slot] > 0;
+	}
+
+	public void setSlotLock(Side side, int slot, int time) {
+		unavailable.get(side)[slot] = time;
+	}
+
+	public void addSlotLockTime(Side side, int slot, int time) {
+		unavailable.get(side)[slot] += time;
+	}
+
+	public void decreaseSlotLockTime(Side side) {
+		int[] locks = unavailable.get(side);
+		for (int i = 0; i < 5; i++) {
+			locks[i] = Math.max(locks[i] - 1, 0);
+		}
 	}
 
 	public List<Drawable> getDiscardBatch() {
