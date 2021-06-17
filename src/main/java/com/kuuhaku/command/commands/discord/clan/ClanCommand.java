@@ -114,8 +114,9 @@ public class ClanCommand implements Executable {
 			List<ClanMember> chunk = chunks.get(i);
 			sb.setLength(0);
 
-			for (ClanMember mb : chunk) {
-				sb.append("`%s` | %s %s\n".formatted(i, mb.getRole().getIcon(), LogDAO.getUsername(mb.getUid()).split("#")[0]));
+			for (int j = 0; j < chunk.size(); j++) {
+				ClanMember mb = chunk.get(j);
+				sb.append("`%s` | %s %s\n".formatted(j + i * 10, mb.getRole().getIcon(), LogDAO.getUsername(mb.getUid()).split("#")[0]));
 			}
 
 			eb.clearFields().getFields().addAll(fixed);
