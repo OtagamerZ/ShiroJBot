@@ -78,7 +78,7 @@ public class InviteCommand implements Executable {
 
 			String finalRole = role;
 			Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
-					.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " (" + finalRole + ")"))
+					.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " **(" + finalRole + ")**\nPor favor seja detalhado e lembre-se que ajudaremos apenas sobre assuntos relacionados à Shiro.\n\n**Atenção:** nossa equipe jamais pedirá informações confidenciais como senhas ou emais, nunca forneça-os!"))
 					.queue(null, Helper::doNothing);
 
 			Guild g = Main.getInfo().getGuildByID(t.getSid());

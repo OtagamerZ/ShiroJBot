@@ -92,7 +92,7 @@ public class MarkTicketCommand implements Executable {
 
 		String finalRole = role;
 		Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
-				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getAsTag() + " (" + finalRole + ")"))
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getAsTag() + " **(" + finalRole + ")**"))
 				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);
