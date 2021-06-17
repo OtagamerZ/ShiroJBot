@@ -1578,12 +1578,41 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
+	public boolean lastTick() {
+		for (Side s : Side.values()) {
+			Hand h = hands.get(s);
+			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+
+			if (h.getHp() <= 0) {
+				for (int i = 0; i < 5; i++) {
+					Equipment e = slts.get(i).getBottom();
+					if (e == null) continue;
+
+					applyEffect(ON_LOSE, e, i, s);
+
+					if (h.getHp() <= 0) return true;
+				}
+			} else {
+				for (int i = 0; i < 5; i++) {
+					Equipment e = slts.get(i).getBottom();
+					if (e == null) continue;
+
+					applyEffect(ON_WIN, e, i, s);
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public boolean postCombat() {
 		boolean finished = false;
 		for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 			Hand h = entry.getValue();
 			Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 			if (h.getHp() <= 0) {
+				if (lastTick()) return false;
+
 				if (getCustom() == null) {
 					getHistory().setWinner(op.getSide());
 					getBoard().awardWinner(this, daily, op.getUser().getId());
@@ -2137,6 +2166,12 @@ public class Shoukan extends GlobalGame {
 		}
 
 		return false;
+	}
+
+	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side) {
+		if (activator.hasEffect() && effectLock == 0) {
+			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(null, null), channel));
+		}
 	}
 
 	public void sendWebhookMessage(String message, String gif, Drawable d) {
