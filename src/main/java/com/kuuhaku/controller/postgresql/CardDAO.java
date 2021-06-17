@@ -312,6 +312,21 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<Equipment> getAllAvailableEquipments() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE e.effectOnly = FALSE", Equipment.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<String> getAllChampionNames() {
 		EntityManager em = Manager.getEntityManager();
 
@@ -776,7 +791,7 @@ public class CardDAO {
 	public static Equipment getRandomEquipment() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM Equipment e ORDER BY RANDOM()", Equipment.class);
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setMaxResults(1);
 
 		try {
@@ -791,7 +806,7 @@ public class CardDAO {
 	public static Equipment getRandomEquipment(int tier) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM Equipment e WHERE e.tier = :tier ORDER BY RANDOM()", Equipment.class);
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setParameter("tier", tier);
 		q.setMaxResults(1);
 
@@ -809,9 +824,9 @@ public class CardDAO {
 
 		Query q;
 		if (spell)
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		else
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setMaxResults(1);
 
 		try {
@@ -828,9 +843,9 @@ public class CardDAO {
 
 		Query q;
 		if (spell)
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' AND e.tier = :tier ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		else
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' AND e.tier = :tier ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setParameter("tier", tier);
 		q.setMaxResults(1);
 
