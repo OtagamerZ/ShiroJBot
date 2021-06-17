@@ -60,11 +60,11 @@ public class GatekeeperCommand implements Executable {
 				Helper.addButton(args, message, channel, gc, "☑", true);
 
 				channel.sendMessage("✅ | Porteiro adicionado com sucesso!").queue(s -> Helper.gatekeep(m, message.getMentionedRoles().get(0)));
-			}, t -> channel.sendMessage(I18n.getString("❌ | Mensagem inválida.")).queue());
+			}, t -> channel.sendMessage("❌ | Mensagem inválida.").queue());
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage("❌ | Erro em um dos argumentos: " + e).queue();
 		} catch (ErrorResponseException e) {
-            channel.sendMessage(I18n.getString("err_role-chooser-invalid-channel")).queue();
-        }
+			channel.sendMessage(I18n.getString("err_role-chooser-invalid-channel")).queue();
+		}
 	}
 }

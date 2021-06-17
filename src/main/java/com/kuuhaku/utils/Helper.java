@@ -256,7 +256,6 @@ public class Helper {
 	}
 
 	public static void typeMessage(MessageChannel channel, String message, Message target) {
-
 		channel.sendTyping()
 				.delay(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS)
 				.flatMap(s -> target.reply(makeEmoteFromMention(message.split(" "))))
@@ -2610,13 +2609,19 @@ public class Helper {
 	}
 
 	public static <T> T map(Class<T> type, Object[] tuple) {
-		List<Class<?>> tupleTypes = new ArrayList<>();
-		for (Object field : tuple) {
-			tupleTypes.add(field.getClass());
-		}
 		try {
-			Constructor<T> ctor = type.getConstructor(tupleTypes.toArray(new Class<?>[tuple.length]));
-			return ctor.newInstance(tuple);
+			List<Constructor<?>> constructors = Arrays.stream(type.getConstructors())
+					.filter(c -> c.getParameterCount() == tuple.length)
+					.collect(Collectors.toList());
+
+			for (Constructor<?> ctor : constructors) {
+				try {
+					return (T) ctor.newInstance(tuple);
+				} catch (IllegalArgumentException ignore) {
+				}
+			}
+
+			throw new IllegalStateException("No matching constructor found.");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
