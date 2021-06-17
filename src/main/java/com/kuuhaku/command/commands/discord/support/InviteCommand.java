@@ -18,24 +18,21 @@
 
 package com.kuuhaku.command.commands.discord.support;
 
-import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.EmbedBuilder;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "convite",
@@ -52,42 +49,53 @@ public class InviteCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		List<String[]> servers = new ArrayList<>();
-		for (Guild s : Main.getShiroShards().getGuilds()) {
-			if (s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)) {
-				servers.add(new String[]{s.getName(), s.getId(), String.valueOf(s.getMembers().stream().filter(m -> !m.getUser().isBot()).count())});
-			}
-		}
-		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
-
-		List<Page> pages = new ArrayList<>();
-
-		for (int i = 0; i < svPages.size(); i++) {
-			eb.clear();
-
-			eb.setTitle("Servidores que eu posso criar um convite:");
-			for (String[] p : svPages.get(i)) {
-				eb.addField("Nome: " + p[0], "ID: " + p[1] + "\nMembros: " + p[2], false);
-			}
-			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).sum() + " resultados.", null);
-
-			pages.add(new Page(PageType.EMBED, eb.build()));
+		if (args.length < 1) {
+			channel.sendMessage(I18n.getString("err_no-ticket-id")).queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(I18n.getString("err_invalid-ticket-id")).queue();
+			return;
 		}
 
-		try {
-			if (!Main.getInfo().getRequests().containsKey(args[0])) {
-				channel.sendMessage(I18n.getString("err_assist-not-requested")).queue();
-				return;
-			}
+		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
-			Invite iv = Main.getInfo().getRequests().remove(args[0]);
-			channel.sendMessage("Aqui está!\n" + iv.getUrl()).queue(s -> Main.getInfo().getRequests().remove(args[0]));
-		} catch (ArrayIndexOutOfBoundsException e) {
-			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
-		} catch (NullPointerException ex) {
-			channel.sendMessage(I18n.getString("err_invalid-server")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+		if (t == null) {
+			channel.sendMessage(I18n.getString("err_invalid-ticket")).queue();
+			return;
+		} else if (t.isSolved()) {
+			channel.sendMessage(I18n.getString("err_ticket-already-solved")).queue();
+			return;
 		}
+
+		if (t.getInvite().isBlank()) {
+			channel.sendMessage(I18n.getString("err_assist-not-requested")).queue();
+			return;
+		}
+
+		String role = "";
+		if (ShiroInfo.getSupports().containsKey(author.getId())) {
+			role = "SUPORTE";
+		} else if (ShiroInfo.getDevelopers().contains(author.getId())) {
+			role = "DESENVOLVEDOR";
+		}
+
+		String finalRole = role;
+		Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " (" + finalRole + ")"))
+				.queue(null, Helper::doNothing);
+
+		Guild g = Main.getInfo().getGuildByID(t.getSid());
+		List<Invite> invs = g.retrieveInvites().complete();
+		Invite iv = invs.stream()
+				.filter(i -> i.getCode().equals(t.getInvite()))
+				.findFirst()
+				.orElse(null);
+
+		if (iv == null) {
+			channel.sendMessage("❌ | O convite desse ticket não é mais válido.").queue();
+			return;
+		}
+
+		channel.sendMessage("Aqui está!\n" + iv.getUrl()).queue();
 	}
 }
