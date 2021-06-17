@@ -78,6 +78,9 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean effectOnly = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean parasite = false;
+
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient Shoukan game = null;
@@ -294,6 +297,32 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void setEffectOnly(boolean effectOnly) {
 		this.effectOnly = effectOnly;
+	}
+
+	public boolean isParasite() {
+		return parasite;
+	}
+
+	public void setParasite(boolean parasite) {
+		this.parasite = parasite;
+	}
+
+	public boolean hasEffect() {
+		return effect != null;
+	}
+
+	public void getEffect(EffectParameters ep) {
+		String imports = EffectParameters.IMPORTS.formatted(card.getName());
+
+		try {
+			Interpreter i = new Interpreter();
+			i.setStrictJava(true);
+			i.set("ep", ep);
+			i.set("self", this);
+			i.eval(imports + effect);
+		} catch (EvalError e) {
+			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
