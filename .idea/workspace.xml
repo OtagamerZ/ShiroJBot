@@ -14,8 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/InviteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/InviteCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1237,56 +1236,6 @@
       <workItem from="1623524100553" duration="5992000" />
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
-      <workItem from="1623932096596" duration="315000" />
-    </task>
-    <task id="LOCAL-04737" summary="Adicionadas mãos no replay">
-      <created>1623169670257</created>
-      <option name="number" value="04737" />
-      <option name="presentableId" value="LOCAL-04737" />
-      <option name="project" value="LOCAL" />
-      <updated>1623169670257</updated>
-    </task>
-    <task id="LOCAL-04738" summary="Adicionadas mãos no replay">
-      <created>1623170394637</created>
-      <option name="number" value="04738" />
-      <option name="presentableId" value="LOCAL-04738" />
-      <option name="project" value="LOCAL" />
-      <updated>1623170394637</updated>
-    </task>
-    <task id="LOCAL-04739" summary="Adicionadas mãos no replay">
-      <created>1623176265449</created>
-      <option name="number" value="04739" />
-      <option name="presentableId" value="LOCAL-04739" />
-      <option name="project" value="LOCAL" />
-      <updated>1623176265449</updated>
-    </task>
-    <task id="LOCAL-04740" summary="Correções menores">
-      <created>1623241093998</created>
-      <option name="number" value="04740" />
-      <option name="presentableId" value="LOCAL-04740" />
-      <option name="project" value="LOCAL" />
-      <updated>1623241093998</updated>
-    </task>
-    <task id="LOCAL-04741" summary="Correções menores">
-      <created>1623241348488</created>
-      <option name="number" value="04741" />
-      <option name="presentableId" value="LOCAL-04741" />
-      <option name="project" value="LOCAL" />
-      <updated>1623241348488</updated>
-    </task>
-    <task id="LOCAL-04742" summary="Correções menores">
-      <created>1623241370798</created>
-      <option name="number" value="04742" />
-      <option name="presentableId" value="LOCAL-04742" />
-      <option name="project" value="LOCAL" />
-      <updated>1623241370798</updated>
-    </task>
-    <task id="LOCAL-04743" summary="Correções menores">
-      <created>1623254853385</created>
-      <option name="number" value="04743" />
-      <option name="presentableId" value="LOCAL-04743" />
-      <option name="project" value="LOCAL" />
-      <updated>1623254853385</updated>
     </task>
     <task id="LOCAL-04744" summary="Correções menores">
       <created>1623255532867</created>
@@ -1576,13 +1525,62 @@
       <updated>1623866805644</updated>
     </task>
     <task id="LOCAL-04785" summary="Correções menores">
-      <created>1623873215861</created>
+      <created>1623895036815</created>
       <option name="number" value="04785" />
       <option name="presentableId" value="LOCAL-04785" />
       <option name="project" value="LOCAL" />
-      <updated>1623873215861</updated>
+      <updated>1623895036815</updated>
     </task>
-    <option name="localTasksCounter" value="4786" />
+    <task id="LOCAL-04786" summary="Correções menores">
+      <created>1623895578286</created>
+      <option name="number" value="04786" />
+      <option name="presentableId" value="LOCAL-04786" />
+      <option name="project" value="LOCAL" />
+      <updated>1623895578286</updated>
+    </task>
+    <task id="LOCAL-04787" summary="Correções menores">
+      <created>1623895793094</created>
+      <option name="number" value="04787" />
+      <option name="presentableId" value="LOCAL-04787" />
+      <option name="project" value="LOCAL" />
+      <updated>1623895793094</updated>
+    </task>
+    <task id="LOCAL-04788" summary="Correções menores">
+      <created>1623896698242</created>
+      <option name="number" value="04788" />
+      <option name="presentableId" value="LOCAL-04788" />
+      <option name="project" value="LOCAL" />
+      <updated>1623896698242</updated>
+    </task>
+    <task id="LOCAL-04789" summary="Correções menores">
+      <created>1623897344448</created>
+      <option name="number" value="04789" />
+      <option name="presentableId" value="LOCAL-04789" />
+      <option name="project" value="LOCAL" />
+      <updated>1623897344448</updated>
+    </task>
+    <task id="LOCAL-04790" summary="Correções menores">
+      <created>1623899534917</created>
+      <option name="number" value="04790" />
+      <option name="presentableId" value="LOCAL-04790" />
+      <option name="project" value="LOCAL" />
+      <updated>1623899534917</updated>
+    </task>
+    <task id="LOCAL-04791" summary="Correções menores">
+      <created>1623899613313</created>
+      <option name="number" value="04791" />
+      <option name="presentableId" value="LOCAL-04791" />
+      <option name="project" value="LOCAL" />
+      <updated>1623899613313</updated>
+    </task>
+    <task id="LOCAL-04792" summary="Correções menores">
+      <created>1623899888090</created>
+      <option name="number" value="04792" />
+      <option name="presentableId" value="LOCAL-04792" />
+      <option name="project" value="LOCAL" />
+      <updated>1623899888090</updated>
+    </task>
+    <option name="localTasksCounter" value="4793" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
