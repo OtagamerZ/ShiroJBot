@@ -218,7 +218,7 @@ public class ShiroEvents extends ListenerAdapter {
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
 			if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
-				rawMsgNoPrefix = rawMessage.replaceFirst(Pattern.quote(prefix.toUpperCase(Locale.ROOT) + "|" + prefix.toLowerCase(Locale.ROOT)), "");
+				rawMsgNoPrefix = rawMessage.substring(prefix.length());
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
