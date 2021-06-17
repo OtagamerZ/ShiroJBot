@@ -133,7 +133,6 @@ public class ShiroInfo {
 			.build();
 	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
 	private final Map<String, Game> games = new HashMap<>();
-	private final Map<String, Invite> requests = new HashMap<>();
 	private final Set<String> gameLock = new HashSet<>();
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
@@ -409,10 +408,6 @@ public class ShiroInfo {
 						.expiration(1, TimeUnit.DAYS)
 						.build()
 		);
-	}
-
-	public Map<String, Invite> getRequests() {
-		return requests;
 	}
 
 	public ExpiringMap<String, KawaiponCard> getCurrentCard() {
