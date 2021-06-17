@@ -112,7 +112,7 @@ public class AnimeCommand implements Executable {
 							.addField("Episódios:", String.valueOf(media.getEpisodes()), true);
 
 					if (media.getNextAiringEpisode() != null) {
-						eb.addField("Próximo episódio (ep. " + media.getNextAiringEpisode().getEpisode() + "):", Helper.dateFormat.format(media.getNextAiringEpisode().getAiringAtDate()), true);
+						eb.addField("Próximo episódio (ep. " + media.getNextAiringEpisode().getEpisode() + "):", Helper.fullDateFormat.format(media.getNextAiringEpisode().getAiringAtDate()), true);
 					}
 
 					eb.addField("Nota:", media.getAverageScore() == 0 ? "Nenhuma" : String.valueOf(media.getAverageScore()), true)
