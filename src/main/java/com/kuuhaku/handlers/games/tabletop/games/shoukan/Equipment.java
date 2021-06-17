@@ -75,6 +75,9 @@ public class Equipment implements Drawable, Cloneable {
 	@Enumerated(value = EnumType.STRING)
 	private Arguments argType = Arguments.NONE;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean effectOnly = false;
+
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient Shoukan game = null;
@@ -283,6 +286,14 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void setArgType(Arguments argType) {
 		this.argType = argType;
+	}
+
+	public boolean isEffectOnly() {
+		return effectOnly;
+	}
+
+	public void setEffectOnly(boolean effectOnly) {
+		this.effectOnly = effectOnly;
 	}
 
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {

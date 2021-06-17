@@ -145,8 +145,8 @@ public class Hand {
 				case "cardmaster" -> {
 					deque.clear();
 					deque.addAll(CardDAO.getAllChampions(false));
-					deque.addAll(CardDAO.getAllEquipments());
-					deque.addAll(CardDAO.getAllFields());
+					deque.addAll(CardDAO.getAllAvailableEquipments());
+					deque.addAll(CardDAO.getAllAvailableFields());
 				}
 			}
 		} else {
