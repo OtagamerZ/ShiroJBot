@@ -217,7 +217,7 @@ public class ShiroEvents extends ListenerAdapter {
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
 			if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
-				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+				rawMsgNoPrefix = rawMessage.replaceFirst(Pattern.quote(prefix.toUpperCase(Locale.ROOT) + "|" + prefix.toLowerCase(Locale.ROOT)), "");
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
@@ -242,7 +242,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			String[] args = rawMsgNoPrefix.split("\s+");
-			String argsAsText = message.getContentRaw().replaceFirst(Pattern.quote(prefix + commandName), "").trim();
+			String argsAsText = rawMsgNoPrefix.replaceFirst(Pattern.quote(commandName), "").trim();
 			boolean hasArgs = args.length > 1;
 			if (hasArgs) {
 				args = Arrays.copyOfRange(args, 1, args.length);
