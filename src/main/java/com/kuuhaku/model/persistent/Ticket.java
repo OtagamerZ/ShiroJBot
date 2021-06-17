@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.JSONObject;
+import net.dv8tion.jda.api.entities.Member;
 
 import javax.persistence.*;
 import java.util.Map;
@@ -37,15 +38,22 @@ public class Ticket {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String uid = "";
 
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String sid = "";
+
 	@Column(columnDefinition = "TEXT")
 	private String msgId = "{}";
+
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String invite = "";
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean solved = false;
 
-	public Ticket(String subject, String uid) {
+	public Ticket(String subject, Member op) {
 		this.subject = subject;
-		this.uid = uid;
+		this.uid = op.getId();
+		this.sid = op.getGuild().getId();
 	}
 
 	public Ticket() {
@@ -63,6 +71,10 @@ public class Ticket {
 		return uid;
 	}
 
+	public String getSid() {
+		return sid;
+	}
+
 	public void setMsgIds(Map<String, String> msgIds) {
 		this.msgId = new JSONObject(msgIds).toString();
 	}
@@ -72,6 +84,14 @@ public class Ticket {
 
 		return ja.toMap().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAsString()));
+	}
+
+	public String getInvite() {
+		return invite;
+	}
+
+	public void setInvite(String invite) {
+		this.invite = invite;
 	}
 
 	public boolean isSolved() {

@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -36,7 +37,9 @@ import java.awt.*;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -50,7 +53,6 @@ public class ReportUserCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-
 		if (message.getMentionedUsers().size() < 1) {
 			channel.sendMessage(I18n.getString("err_mention-required")).queue();
 			return;
@@ -66,37 +68,45 @@ public class ReportUserCommand implements Executable {
 			return;
 		}
 
-		int number = TicketDAO.openTicket(mensagem, author);
-
-		EmbedBuilder eb = new EmbedBuilder()
-				.setTitle("Relatório de report (Ticket Nº " + number + ")")
-				.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
-				.addField("Enviado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
-				.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true)
-				.addField("Relatório:", "```" + mensagem + "```", false)
-				.setFooter(author.getId())
-				.setColor(Color.red);
-
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `DENUNCIAR USUÁRIO`?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
+							int number = TicketDAO.openTicket(mensagem, member);
+
+							EmbedBuilder eb = new EmbedBuilder()
+									.setTitle("Relatório de report (Ticket Nº " + number + ")")
+									.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
+									.addField("Enviado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+									.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true)
+									.addField("Relatório:", "```" + mensagem + "```", false)
+									.setFooter(author.getId())
+									.setColor(Color.red);
+
+							Ticket t = TicketDAO.getTicket(number);
+							List<String> staff = ShiroInfo.getStaff();
 							Map<String, String> ids = new HashMap<>();
-							for (String dev : ShiroInfo.getStaff()) {
-								Main.getInfo().getUserByID(dev).openPrivateChannel()
-										.flatMap(m -> m.sendMessage(eb.build()))
-										.flatMap(m -> {
-											ids.put(dev, m.getId());
-											return m.pin();
-										})
-										.complete();
+							for (String dev : staff) {
+								try {
+									Main.getInfo().getUserByID(dev).openPrivateChannel()
+											.flatMap(m -> m.sendMessage(eb.build()))
+											.flatMap(m -> {
+												ids.put(dev, m.getId());
+												return m.pin();
+											})
+											.submit().get();
+								} catch (ExecutionException | InterruptedException ignore) {
+								}
 							}
 
 							author.openPrivateChannel()
 									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
 									.queue(null, Helper::doNothing);
-							TicketDAO.setIds(number, ids);
+
+							t.setMsgIds(ids);
+							TicketDAO.updateTicket(t);
+
 							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage(I18n.getString("str_successfully-reported-user")).queue();
 						}), true, 60, TimeUnit.SECONDS,
