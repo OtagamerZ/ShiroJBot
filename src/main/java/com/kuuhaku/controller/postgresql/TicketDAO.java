@@ -19,21 +19,20 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Ticket;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.Map;
 
 public class TicketDAO {
 	public static Ticket getTicket(int id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Ticket t = em.find(Ticket.class, id);
-
-		em.close();
-
-		return t;
+		try {
+			return em.find(Ticket.class, id);
+		} finally {
+			em.close();
+		}
 	}
 
 	public static void updateTicket(Ticket t) {
@@ -46,41 +45,31 @@ public class TicketDAO {
 		em.close();
 	}
 
-	public static int openTicket(String subject, User u) {
+	public static int openTicket(String subject, Member m) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		Ticket t = new Ticket(subject, u.getId());
+		Ticket t = new Ticket(subject, m);
 		em.merge(t);
 		em.getTransaction().commit();
-		em.close();
-
-		return getNumber();
-	}
-
-	private static int getNumber() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT t FROM Ticket t ORDER BY id DESC", Ticket.class);
-		q.setMaxResults(1);
 
 		try {
-			return ((Ticket) q.getSingleResult()).getNumber();
+			return getNumber();
 		} finally {
 			em.close();
 		}
 	}
 
-	public static void setIds(int id, Map<String, String> msgs) {
+	private static int getNumber() {
 		EntityManager em = Manager.getEntityManager();
 
-		Ticket t = em.find(Ticket.class, id);
-		t.setMsgIds(msgs);
+		Query q = em.createQuery("SELECT t.number FROM Ticket t ORDER BY id DESC");
+		q.setMaxResults(1);
 
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-
-		em.close();
+		try {
+			return (int) q.getSingleResult();
+		} finally {
+			em.close();
+		}
 	}
 }

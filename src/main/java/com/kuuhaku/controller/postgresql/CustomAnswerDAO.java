@@ -54,7 +54,7 @@ public class CustomAnswerDAO {
 			List<Object[]> answers = q.getResultList();
 
 			if (answers.isEmpty()) return null;
-			return Helper.map(CustomAnswer.class, Helper.getRandomN(answers, 1).get(0));
+			return Helper.map(CustomAnswer.class, Helper.getRandomEntry(answers));
 		} finally {
 			em.close();
 		}
