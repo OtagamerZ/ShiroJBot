@@ -256,7 +256,6 @@ public class Helper {
 	}
 
 	public static void typeMessage(MessageChannel channel, String message, Message target) {
-
 		channel.sendTyping()
 				.delay(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS)
 				.flatMap(s -> target.reply(makeEmoteFromMention(message.split(" "))))
