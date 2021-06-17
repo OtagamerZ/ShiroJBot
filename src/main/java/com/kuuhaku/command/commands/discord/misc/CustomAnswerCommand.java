@@ -163,6 +163,8 @@ public class CustomAnswerCommand implements Executable {
 			channel.sendMessage(msg.formatted(StringUtils.abbreviate(ca.getAnswer().replace("\n", " "), 100), ca.getTrigger().replace("\n", " "))).queue();
 		} catch (JsonParseException | IllegalStateException e) {
 			channel.sendMessage("❌ | Olha, esse JSON não me parece certo não.").queue();
+		} catch (NumberFormatException e) {
+			channel.sendMessage("❌ | Algum dos parâmetros que você informou não parece certo (ex: a chance deve ser um valor de 1 à 100 sem %).").queue();
 		}
 	}
 }
