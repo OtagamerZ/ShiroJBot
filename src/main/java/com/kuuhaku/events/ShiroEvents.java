@@ -222,24 +222,21 @@ public class ShiroEvents extends ListenerAdapter {
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
-			try {
-				CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
+			CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
 
-				if (ca != null) {
-					Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
-					if (ca.getForUser() != null)
-						p = p.and(answer -> answer.getForUser().equals(author.getId()));
-					if (ca.getChance() != 100)
-						p = p.and(answer -> Helper.chance(answer.getChance()));
+			if (ca != null) {
+				Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
+				if (ca.getForUser() != null)
+					p = p.and(answer -> answer.getForUser().equals(author.getId()));
+				if (ca.getChance() != 100)
+					p = p.and(answer -> Helper.chance(answer.getChance()));
 
-					if (p.test(ca)) {
-						if (message.getReferencedMessage() != null)
-							Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild), message.getReferencedMessage());
-						else
-							Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild));
-					}
+				if (p.test(ca)) {
+					if (message.getReferencedMessage() != null)
+						Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild), message.getReferencedMessage());
+					else
+						Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild));
 				}
-			} catch (NoResultException | NullPointerException ignore) {
 			}
 
 			String[] args = rawMsgNoPrefix.split("\s+");
