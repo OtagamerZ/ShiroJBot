@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -55,25 +56,20 @@ public class RequestAssistCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getRequests().get(guild.getId()) != null) {
-			channel.sendMessage("❌ | Este servidor já possui um pedido de auxílio em aberto, aguarde até que um membro da equipe de suporte feche-o.").queue();
-			return;
-		}
-
-		int number = TicketDAO.openTicket("Requisição de suporte presencial.", author);
-		EmbedBuilder eb = new EmbedBuilder();
-
-		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
-		eb.addField("ID do servidor:", guild.getId(), true);
-		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-		eb.addField("Requisitado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
-		eb.setFooter(author.getId());
-		eb.setColor(Color.cyan);
-
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
+
+							int number = TicketDAO.openTicket("Requisição de suporte presencial.", member);
+							EmbedBuilder eb = new EmbedBuilder();
+
+							eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
+							eb.addField("ID do servidor:", guild.getId(), true);
+							eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
+							eb.addField("Requisitado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+							eb.setFooter(author.getId());
+							eb.setColor(Color.cyan);
 
 							InviteAction ia = Helper.createInvite(guild);
 
@@ -82,6 +78,7 @@ public class RequestAssistCommand implements Executable {
 								return;
 							}
 
+							Ticket t = TicketDAO.getTicket(number);
 							List<String> staff = ShiroInfo.getStaff();
 							Map<String, String> ids = new HashMap<>();
 							for (String dev : staff) {
@@ -101,8 +98,13 @@ public class RequestAssistCommand implements Executable {
 									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
 									.queue(null, Helper::doNothing);
 
-							TicketDAO.setIds(number, ids);
-							ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
+							t.setMsgIds(ids);
+
+							try {
+								t.setInvite(ia.setMaxUses(1).submit().get().getCode());
+								TicketDAO.updateTicket(t);
+							} catch (InterruptedException | ExecutionException ignore) {
+							}
 
 							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage(I18n.getString("str_successfully-requested-assist")).queue();

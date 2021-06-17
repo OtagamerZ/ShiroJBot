@@ -83,8 +83,16 @@ public class MarkTicketCommand implements Executable {
 			t.solved();
 		}
 
+		String role = "";
+		if (ShiroInfo.getSupports().containsKey(author.getId())) {
+			role = "SUPORTE";
+		} else if (ShiroInfo.getDevelopers().contains(author.getId())) {
+			role = "DESENVOLVEDOR";
+		}
+
+		String finalRole = role;
 		Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
-				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getAsTag() + " (" + finalRole + ")"))
 				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);

@@ -44,6 +44,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -105,7 +106,7 @@ public class DashboardSocket extends WebSocketServer {
 
 			switch (type) {
 				case "ticket" -> {
-					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
+					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getMemberByID(t.getUid()));
 					EmbedBuilder eb = new EmbedBuilder()
 							.setTitle("Feedback via site (Ticket Nº " + number + ")")
 							.addField("Enviador por:", t.getHolder(), true)
@@ -115,22 +116,28 @@ public class DashboardSocket extends WebSocketServer {
 							.setFooter(t.getUid())
 							.setColor(Color.decode("#fefefe"));
 
+					Ticket tk = TicketDAO.getTicket(number);
+					List<String> staff = ShiroInfo.getStaff();
 					Map<String, String> ids = new HashMap<>();
-					for (String dev : ShiroInfo.getStaff()) {
-						Main.getInfo().getUserByID(dev).openPrivateChannel()
-								.flatMap(m -> m.sendMessage(eb.build()))
-								.flatMap(m -> {
-									ids.put(dev, m.getId());
-									return m.pin();
-								})
-								.complete();
+					for (String dev : staff) {
+						try {
+							Main.getInfo().getUserByID(dev).openPrivateChannel()
+									.flatMap(m -> m.sendMessage(eb.build()))
+									.flatMap(m -> {
+										ids.put(dev, m.getId());
+										return m.pin();
+									})
+									.submit().get();
+						} catch (ExecutionException | InterruptedException ignore) {
+						}
 					}
 
-					Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
+					Main.getInfo().getUserByID(tk.getUid()).openPrivateChannel()
 							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
 							.queue(null, Helper::doNothing);
 
-					TicketDAO.setIds(number, ids);
+					tk.setMsgIds(ids);
+					TicketDAO.updateTicket(tk);
 				}
 				case "validate" -> {
 					User u = Main.getInfo().getUserByID(t.getUid());
