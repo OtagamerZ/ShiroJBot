@@ -120,11 +120,14 @@ public class Arena {
 				else
 					Profile.printCenteredString(name, 1253, 499, 1003, g2d);
 
+				BufferedImage broken = Helper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);
 					switch (key) {
 						case TOP -> {
-							if (c.getTop() != null) {
+							if (game.isSlotLocked(key, i)) {
+								g2d.drawImage(broken, 499 + (257 * i), 387, null);
+							} else if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
 
