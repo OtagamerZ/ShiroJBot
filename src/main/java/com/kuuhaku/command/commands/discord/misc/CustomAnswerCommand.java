@@ -144,7 +144,7 @@ public class CustomAnswerCommand implements Executable {
 
 			if (jo.has("chance")) {
 				ca.setChance(Helper.clamp(jo.getInt("chance"), 1, 100));
-				msg += ", com uma chance de " + ca.getChance() + "%";
+				msg += ", com uma chance de " + ca.getChance() + "%%";
 			}
 
 			if (jo.has("forUser")) {
