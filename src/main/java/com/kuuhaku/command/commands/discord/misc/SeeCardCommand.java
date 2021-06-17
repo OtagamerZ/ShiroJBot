@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -85,8 +86,11 @@ public class SeeCardCommand implements Executable {
 			if (d instanceof Champion) {
 				Champion c = (Champion) d;
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
-			} else if (d instanceof Equipment && ((Equipment) d).getCharm() != null)
-				eb.addField("Amuleto:", ((Equipment) d).getCharm().getName(), true);
+			} else if (d instanceof Equipment && ((Equipment) d).getCharm() != null) {
+				Equipment e = (Equipment) d;
+				Charm c = e.getCharm();
+				eb.addField("Amuleto:", c == Charm.SPELL && e.isParasite() ? "Parasita" : c.getName(), true);
+			}
 			eb.setImage("attachment://kawaipon.png");
 
 			channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(d.drawCard(false), "s_" + d.getCard().getId(), "png"), "kawaipon.png").queue();
