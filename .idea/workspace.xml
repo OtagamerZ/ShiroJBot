@@ -14,11 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Media.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NextAiringEpisode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NextAiringEpisode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1242,20 +1238,6 @@
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
     </task>
-    <task id="LOCAL-04744" summary="Correções menores">
-      <created>1623255532867</created>
-      <option name="number" value="04744" />
-      <option name="presentableId" value="LOCAL-04744" />
-      <option name="project" value="LOCAL" />
-      <updated>1623255532868</updated>
-    </task>
-    <task id="LOCAL-04745" summary="Correções menores">
-      <created>1623255548445</created>
-      <option name="number" value="04745" />
-      <option name="presentableId" value="LOCAL-04745" />
-      <option name="project" value="LOCAL" />
-      <updated>1623255548445</updated>
-    </task>
     <task id="LOCAL-04746" summary="Correções menores">
       <created>1623256076322</created>
       <option name="number" value="04746" />
@@ -1585,7 +1567,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623899888090</updated>
     </task>
-    <option name="localTasksCounter" value="4793" />
+    <task id="LOCAL-04793" summary="Correções menores">
+      <created>1623935196842</created>
+      <option name="number" value="04793" />
+      <option name="presentableId" value="LOCAL-04793" />
+      <option name="project" value="LOCAL" />
+      <updated>1623935196842</updated>
+    </task>
+    <task id="LOCAL-04794" summary="Correções menores">
+      <created>1623935212670</created>
+      <option name="number" value="04794" />
+      <option name="presentableId" value="LOCAL-04794" />
+      <option name="project" value="LOCAL" />
+      <updated>1623935212671</updated>
+    </task>
+    <option name="localTasksCounter" value="4795" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

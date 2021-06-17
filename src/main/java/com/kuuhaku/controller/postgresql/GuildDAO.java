@@ -63,7 +63,9 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(em.contains(gc) ? gc : em.merge(gc));
+		em.createQuery("DELETE FROM GuildConfig gc WHERE gc.guildId = :id")
+				.setParameter("id", gc.getGuildId())
+				.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
