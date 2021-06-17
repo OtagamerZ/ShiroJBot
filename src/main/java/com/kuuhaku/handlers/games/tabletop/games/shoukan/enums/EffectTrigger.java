@@ -40,5 +40,7 @@ public enum EffectTrigger {
 	ON_DODGE,
 	ON_MISS,
 	GAME_TICK,
-	ON_DESTROY
+	ON_DESTROY,
+	ON_LOSE,
+	ON_WIN
 }
