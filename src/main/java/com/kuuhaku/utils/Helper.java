@@ -1860,7 +1860,7 @@ public class Helper {
 		Deck dk = new Deck();
 
 		dk.setChampions(getRandomN(CardDAO.getAllChampions(false), 30, 3, seed));
-		dk.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
+		dk.setEquipments(getRandomN(CardDAO.getAllAvailableEquipments(), 6, 3, seed));
 		dk.setFields(getRandomN(CardDAO.getAllAvailableFields(), 1, 3, seed));
 
 		return dk;
