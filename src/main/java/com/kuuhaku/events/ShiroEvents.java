@@ -553,7 +553,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			if (gc.isAntiHoist() && name.charAt(0) < 65) {
-				name = "￭ " + name.substring(1);
+				name = name.substring(1);
 			}
 
 			if (!name.equals(member.getEffectiveName())) {
@@ -909,7 +909,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			if (gc.isAntiHoist() && isHoister) {
-				name = "￭ " + name.substring(1);
+				name = name.substring(1);
 			}
 
 			if (!name.equals(event.getNewNickname())) {
@@ -925,7 +925,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		Helper.logToChannel(event.getUser(), false, null, event.getUser().getAsMention() + " mudou o nome de `" + event.getOldNickname() + "` para `" + event.getNewNickname() + "`", event.getGuild());
+		Helper.logToChannel(event.getUser(), false, null, event.getUser().getAsMention() + " mudou o nome de `" + Helper.getOr(event.getOldNickname(), event.getMember().getUser().getName()) + "` para `" + Helper.getOr(event.getNewNickname(), event.getMember().getUser().getName()) + "`", event.getGuild());
 	}
 
 	@Override
