@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.common.anime;
 
-import com.kuuhaku.utils.Helper;
-
 import java.util.List;
 
 public class Media {
@@ -72,7 +70,7 @@ public class Media {
 
 	public long getEpisodes() {
 		if (nextAiringEpisode != null)
-			return Helper.getOr(episodes, nextAiringEpisode.getEpisode() - 1);
+			return Math.max(episodes, nextAiringEpisode.getEpisode() - 1);
 		else return episodes;
 	}
 

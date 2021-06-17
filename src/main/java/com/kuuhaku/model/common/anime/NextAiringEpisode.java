@@ -18,7 +18,9 @@
 
 package com.kuuhaku.model.common.anime;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class NextAiringEpisode {
 	private long episode;
@@ -40,7 +42,7 @@ public class NextAiringEpisode {
 		this.airingAt = value;
 	}
 
-	public LocalDate getAiringAtDate() {
-		return LocalDate.ofEpochDay(airingAt);
+	public ZonedDateTime getAiringAtDate() {
+		return Instant.ofEpochMilli(airingAt * 1000).atZone(ZoneId.of("GMT-3"));
 	}
 }
