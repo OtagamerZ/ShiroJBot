@@ -70,7 +70,7 @@ public class MuteMemberCommand implements Executable {
 			return;
 		}
 
-		String[] params = argsAsText.split("(?:[0-9]+d)?\\s*(?:[0-9]+h)?\\s*(?:[0-9]+m)\\s*(?:[0-9]+s)?");
+		String[] params = argsAsText.split("(?:[0-9]+d\\s*)?(?:[0-9]+h\\s*)?(?:[0-9]+m\\s*)(?:[0-9]+s)?");
 		if (params.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar um tempo e uma razão.").queue();
 			return;
