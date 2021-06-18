@@ -662,43 +662,46 @@ public class Helper {
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 		if (g != null) {
-			try {
-				for (ButtonChannel channel : channels) {
-					TextChannel chn = g.getTextChannelById(channel.getId());
+			for (ButtonChannel channel : channels) {
+				TextChannel chn = g.getTextChannelById(channel.getId());
 
-					if (chn == null) {
-						gc.getButtonConfigs().remove(channel);
-						GuildDAO.updateGuildSettings(gc);
-					} else {
-						for (ButtonMessage message : channel.getMessages()) {
-							Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-							Message msg = chn.retrieveMessageById(message.getId()).submit().get();
-							resolveButton(g, message.getButtons(), buttons);
+				if (chn == null) {
+					gc.getButtonConfigs().remove(channel);
+					GuildDAO.updateGuildSettings(gc);
+				} else {
+					for (ButtonMessage message : channel.getMessages()) {
+						Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+						Message msg;
+						try {
+							msg = chn.retrieveMessageById(message.getId()).submit().get();
+						} catch (ExecutionException | InterruptedException e) {
+							message.getParent().getMessages().remove(message);
+							GuildDAO.updateGuildSettings(gc);
+							continue;
+						}
+						resolveButton(g, message.getButtons(), buttons);
 
-							try {
-								msg.clearReactions().queue();
-							} catch (InsufficientPermissionException ignore) {
-							}
-							if (message.isGatekeeper()) {
-								Role r = message.getRole(g);
+						if (Helper.hasPermission(g.getSelfMember(), Permission.MESSAGE_MANAGE, chn))
+							msg.clearReactions().queue();
 
-								gatekeep(msg, r);
-							} else {
-								buttons.put(CANCEL, (m, ms) -> {
-									if (m.getUser().getId().equals(message.getAuthor())) {
-										message.getParent().getMessages().remove(message);
+						if (message.isGatekeeper()) {
+							Role r = message.getRole(g);
 
-										GuildDAO.updateGuildSettings(gc);
-										ms.clearReactions().queue();
-									}
-								});
+							gatekeep(msg, r);
+						} else {
+							buttons.put(CANCEL, (m, ms) -> {
+								if (m.getUser().getId().equals(message.getAuthor())) {
+									message.getParent().getMessages().remove(message);
 
-								Pages.buttonize(msg, buttons, true);
-							}
+									GuildDAO.updateGuildSettings(gc);
+									ms.clearReactions().queue();
+								}
+							});
+
+							Pages.buttonize(msg, buttons, true);
 						}
 					}
 				}
-			} catch (ExecutionException | InterruptedException ignore) {
 			}
 		}
 	}

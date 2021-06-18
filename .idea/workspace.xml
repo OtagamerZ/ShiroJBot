@@ -14,10 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1240,20 +1238,7 @@
       <workItem from="1623524100553" duration="5992000" />
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
-    </task>
-    <task id="LOCAL-04749" summary="Correções menores">
-      <created>1623266448931</created>
-      <option name="number" value="04749" />
-      <option name="presentableId" value="LOCAL-04749" />
-      <option name="project" value="LOCAL" />
-      <updated>1623266448931</updated>
-    </task>
-    <task id="LOCAL-04750" summary="Turbinada nas respostas customizadas">
-      <created>1623288473431</created>
-      <option name="number" value="04750" />
-      <option name="presentableId" value="LOCAL-04750" />
-      <option name="project" value="LOCAL" />
-      <updated>1623288473433</updated>
+      <workItem from="1624017809716" duration="3302000" />
     </task>
     <task id="LOCAL-04751" summary="Turbinada nas respostas customizadas">
       <created>1623296813669</created>
@@ -1584,7 +1569,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623960212891</updated>
     </task>
-    <option name="localTasksCounter" value="4798" />
+    <task id="LOCAL-04798" summary="Correções menores">
+      <created>1623963612952</created>
+      <option name="number" value="04798" />
+      <option name="presentableId" value="LOCAL-04798" />
+      <option name="project" value="LOCAL" />
+      <updated>1623963612953</updated>
+    </task>
+    <task id="LOCAL-04799" summary="Correções menores">
+      <created>1623963694246</created>
+      <option name="number" value="04799" />
+      <option name="presentableId" value="LOCAL-04799" />
+      <option name="project" value="LOCAL" />
+      <updated>1623963694246</updated>
+    </task>
+    <option name="localTasksCounter" value="4800" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
