@@ -20,7 +20,6 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BotStatsDAO;
-import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -29,8 +28,11 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.PermissionOverride;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -38,9 +40,8 @@ import org.quartz.JobExecutionContext;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MinuteEvent implements Job {
 	public static JobDetail minute;
@@ -58,26 +59,32 @@ public class MinuteEvent implements Job {
 
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
+
 			if (g == null) {
 				MemberDAO.removeMutedMember(m);
 			} else {
 				try {
-					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) continue;
-					Member mb = g.getMemberById(m.getUid());
-					Role r = GuildDAO.getGuildById(g.getId()).getMuteRole();
-					assert r != null;
-					assert mb != null;
+					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS))
+						continue;
 
-					if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
-						g.modifyMemberRoles(mb, r).queue(null, Helper::doNothing);
-					} else if (!m.isMuted()) {
-						List<Role> roles = m.getRoles().toList().stream()
-								.map(rol -> g.getRoleById(rol.getAsString()))
-								.filter(Objects::nonNull)
-								.collect(Collectors.toList());
-						g.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
+					Member mb = g.getMemberById(m.getUid());
+					if (mb == null) {
 						MemberDAO.removeMutedMember(m);
+						continue;
 					}
+
+					List<AuditableRestAction<Void>> act = new ArrayList<>();
+					for (TextChannel chn : g.getTextChannels()) {
+						PermissionOverride po = chn.getPermissionOverride(mb);
+						if (po != null)
+							act.add(po.delete());
+					}
+
+					RestAction.allOf(act)
+							.queue(s -> {
+								Helper.logToChannel(g.getSelfMember().getUser(), false, null, mb.getAsMention() + " foi dessilenciado por " + g.getSelfMember().getAsMention(), g);
+								MemberDAO.removeMutedMember(m);
+							}, Helper::doNothing);
 				} catch (HierarchyException ignore) {
 				} catch (IllegalArgumentException | NullPointerException e) {
 					MemberDAO.removeMutedMember(m);

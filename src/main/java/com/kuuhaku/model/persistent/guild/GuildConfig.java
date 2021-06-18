@@ -24,7 +24,6 @@ import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -49,10 +48,6 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT 's!'")
 	private String prefix = ShiroInfo.getDefaultPrefix();
-
-	//ROLES
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
-	private String muteRole = "";
 
 	//CHANNELS
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
@@ -96,11 +91,11 @@ public class GuildConfig {
 	private String generalTopic = "";
 
 	//NUMBERS
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
-	private int pollTime = 60;
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 60000")
+	private long pollTime = 60000;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
-	private int muteTime = 60;
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long muteTime = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int noSpamAmount = 5;
@@ -228,14 +223,6 @@ public class GuildConfig {
 		this.prefix = prefix;
 	}
 
-	public Role getMuteRole() {
-		return Main.getInfo().getGuildByID(guildId).getRoleById(Helper.getOr(muteRole, "1"));
-	}
-
-	public void setMuteRole(String muteRole) {
-		this.muteRole = Helper.getOr(muteRole, "");
-	}
-
 	public TextChannel getWelcomeChannel() {
 		return Main.getInfo().getGuildByID(guildId).getTextChannelById(Helper.getOr(welcomeChannel, "1"));
 	}
@@ -352,20 +339,20 @@ public class GuildConfig {
 		this.generalTopic = Helper.getOr(generalTopic, "Contagem de membros em %count% e subindo!");
 	}
 
-	public int getPollTime() {
+	public long getPollTime() {
 		return pollTime;
 	}
 
-	public void setPollTime(int pollTime) {
+	public void setPollTime(long pollTime) {
 		this.pollTime = pollTime;
 	}
 
-	public int getMuteTime() {
+	public long getMuteTime() {
 		return muteTime;
 	}
 
-	public void setMuteTime(int muteTime) {
-		this.muteTime = muteTime;
+	public void setMuteTime(long muteTime) {
+		this.muteTime = muteTime < 60000 ? 0 : muteTime;
 	}
 
 	public int getNoSpamAmount() {

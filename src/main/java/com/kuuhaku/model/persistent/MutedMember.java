@@ -18,14 +18,10 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.JSONArray;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "mutedmember")
@@ -40,16 +36,12 @@ public class MutedMember {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String reason = "";
 
-	@Column(columnDefinition = "TIMESTAMP")
-	private LocalDateTime mutedUntil;
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long mutedUntil = 0;
 
-	@Column(columnDefinition = "TEXT")
-	private String roles = "[]";
-
-	public MutedMember(String id, String guild, JSONArray roles) {
+	public MutedMember(String id, String guild) {
 		this.uid = id;
 		this.guild = guild;
-		this.roles = roles.toString();
 	}
 
 	public MutedMember() {
@@ -79,19 +71,11 @@ public class MutedMember {
 		this.reason = reason;
 	}
 
-	public void mute(int time) {
-		this.mutedUntil = LocalDateTime.from(LocalDateTime.now().plusMinutes(time));
+	public void mute(long time) {
+		this.mutedUntil = System.currentTimeMillis() + time;
 	}
 
 	public boolean isMuted() {
-		return LocalDateTime.now().until(this.mutedUntil, ChronoUnit.MILLIS) > 0;
-	}
-
-	public JSONArray getRoles() {
-		return new JSONArray(roles);
-	}
-
-	public void setRoles(JSONArray roles) {
-		this.roles = roles.toString();
+		return System.currentTimeMillis() < this.mutedUntil;
 	}
 }
