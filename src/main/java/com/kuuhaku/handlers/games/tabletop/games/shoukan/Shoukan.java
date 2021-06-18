@@ -1590,7 +1590,7 @@ public class Shoukan extends GlobalGame {
 
 					applyEffect(ON_LOSE, e, i, s);
 
-					if (h.getHp() <= 0) return true;
+					if (h.getHp() > 0) return true;
 				}
 			} else {
 				for (int i = 0; i < 5; i++) {
