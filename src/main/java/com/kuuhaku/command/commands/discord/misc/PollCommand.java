@@ -186,7 +186,7 @@ public class PollCommand implements Executable {
 			}
 		}
 
-		channel.sendMessage("✅ | Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " minutos.").queue();
+		channel.sendMessage("✅ | Enquete criada com sucesso, ela encerrará automaticamente em " + Helper.toStringDuration(gc.getPollTime()) + ".").queue();
 	}
 
 	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
