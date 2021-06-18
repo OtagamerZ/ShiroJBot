@@ -676,9 +676,7 @@ public class Helper {
 					gc.getButtonConfigs().remove(channel);
 					GuildDAO.updateGuildSettings(gc);
 				} else {
-					Iterator<ButtonMessage> iterator = channel.getMessages().iterator();
-					while (iterator.hasNext()) {
-						ButtonMessage message = iterator.next();
+					for (ButtonMessage message : channel.getMessages()) {
 						Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 						Message msg;
 						try {
