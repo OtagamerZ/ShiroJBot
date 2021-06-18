@@ -684,7 +684,7 @@ public class Helper {
 						try {
 							msg = chn.retrieveMessageById(message.getId()).submit().get();
 						} catch (ExecutionException | InterruptedException e) {
-							message.getParent().getMessages().remove(message);
+							iterator.remove();
 							GuildDAO.updateGuildSettings(gc);
 							continue;
 						}
@@ -700,7 +700,10 @@ public class Helper {
 						} else {
 							buttons.put(CANCEL, (m, ms) -> {
 								if (m.getUser().getId().equals(message.getAuthor())) {
-									message.getParent().getMessages().remove(message);
+									GuildConfig conf = GuildDAO.getGuildById(g.getId());
+									for (ButtonChannel bc : conf.getButtonConfigs()) {
+										if (bc.getMessages().remove(message)) break;
+									}
 
 									GuildDAO.updateGuildSettings(gc);
 									ms.clearReactions().queue();
