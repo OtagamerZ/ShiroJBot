@@ -1913,23 +1913,23 @@ public class Helper {
 	}
 
 	public static List<String> extractGroups(String text, @Language("RegExp") String regex) {
-		String[] out;
+		List<String> out = new ArrayList<>();
 		Matcher m = Pattern.compile(regex).matcher(text);
-		if (m.find()) out = new String[m.groupCount()];
-		else out = new String[0];
 
-		if (out.length > 1) out[0] = m.group();
-		for (int i = 1; i < out.length; i++) {
-			out[i] = m.group(i);
+		while (m.find()) {
+			for (int i = 0; i < m.groupCount(); i++) {
+				out.add(m.group(i + 1));
+			}
 		}
 
-		return List.of(out);
+		return out.stream()
+				.filter(Objects::nonNull)
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
-		Set<String> names = Set.copyOf(extractGroups(text, "\\(\\?<([a-zA-Z][A-z0-9]*)>"));
+		List<String> names = extractGroups(regex, "\\(\\?<([a-zA-Z][A-z0-9]*)>");
 		Map<String, String> out = new HashMap<>();
-
 
 		Matcher m = Pattern.compile(regex).matcher(text);
 		if (m.find()) {
@@ -1938,7 +1938,9 @@ public class Helper {
 			}
 		}
 
-		return out;
+		return out.entrySet().stream()
+				.filter(e -> e.getValue() != null)
+				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
 	public static String extract(String text, @Language("RegExp") String regex, String group) {
