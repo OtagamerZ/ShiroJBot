@@ -732,7 +732,7 @@ public class Helper {
 						} else {
 							g.addRoleToMember(m, role).queue(null, Helper::doNothing);
 						}
-					} catch (HierarchyException ignore) {
+					} catch (InsufficientPermissionException | HierarchyException ignore) {
 					}
 				} else {
 					ms.clearReactions().queue(s -> {
@@ -753,13 +753,13 @@ public class Helper {
 			put("☑", (mb, ms) -> {
 				try {
 					mb.getGuild().addRoleToMember(mb, r).queue();
-				} catch (InsufficientPermissionException ignore) {
+				} catch (InsufficientPermissionException | HierarchyException ignore) {
 				}
 			});
 			put("\uD83D\uDEAA", (mb, ms) -> {
 				try {
 					mb.kick("Não aceitou as regras.").queue();
-				} catch (InsufficientPermissionException ignore) {
+				} catch (InsufficientPermissionException | HierarchyException ignore) {
 				}
 			});
 		}}, false);
