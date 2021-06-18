@@ -2890,7 +2890,7 @@ public class Helper {
 	}
 
 	public static long stringToDurationMillis(String str) {
-		Map<String, String> args = extractNamedGroups(str, "(?:(?<DAYS>[0-9]+)d\\s*)?(?:(?<HOURS>[0-9]+)h\\s*)?(?:(?<MINUTES>[0-9]+)m\\s*)?(?:(?<SECONDS>[0-9]+)s)?");
+		Map<String, String> args = extractNamedGroups(str, "(?:(?<DAYS>[0-9]+)d)?(?:(?<HOURS>[0-9]+)h)?(?:(?<MINUTES>[0-9]+)m)?(?:(?<SECONDS>[0-9]+)s)?");
 		long out = 0;
 
 		for (Map.Entry<String, String> arg : args.entrySet()) {
