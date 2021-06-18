@@ -28,10 +28,11 @@ import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "desmutar",
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 		usage = "req_mention",
 		category = Category.MODERATION
 )
-@Requires({Permission.MANAGE_ROLES})
+@Requires({Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS})
 public class UnmuteMemberCommand implements Executable {
 
 	@Override
@@ -57,17 +58,25 @@ public class UnmuteMemberCommand implements Executable {
 		if (!member.canInteract(mb)) {
 			channel.sendMessage("❌ | Você não pode dessilenciar membros que possuem o mesmo cargo ou maior.").queue();
 			return;
-		} else if (MemberDAO.getMutedMemberById(mb.getId()) == null) {
-			channel.sendMessage("❌ | Esse membro não está silenciado.").queue();
+		} else if (!guild.getSelfMember().canInteract(mb)) {
+			channel.sendMessage(I18n.getString("err_cannot-mute-higher-role-me")).queue();
 			return;
 		}
 
 		MutedMember m = MemberDAO.getMutedMemberById(mb.getId());
-		List<Role> roles = m.getRoles().toList().stream()
-				.map(rol -> guild.getRoleById(rol.getAsString()))
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
-		guild.modifyMemberRoles(mb, roles)
+		if (m == null) {
+			channel.sendMessage("❌ | Esse membro não está silenciado.").queue();
+			return;
+		}
+
+		List<AuditableRestAction<Void>> act = new ArrayList<>();
+		for (TextChannel chn : guild.getTextChannels()) {
+			PermissionOverride po = chn.getPermissionOverride(mb);
+			if (po != null)
+				act.add(po.delete());
+		}
+
+		RestAction.allOf(act)
 				.flatMap(s -> channel.sendMessage("✅ | Usuário dessilenciado com sucesso!"))
 				.queue(s -> {
 					Helper.logToChannel(author, false, null, mb.getAsMention() + " foi dessilenciado por " + author.getAsMention(), guild);
