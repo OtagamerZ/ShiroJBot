@@ -684,7 +684,11 @@ public class Helper {
 						try {
 							msg = chn.retrieveMessageById(message.getId()).submit().get();
 						} catch (ExecutionException | InterruptedException e) {
-							iterator.remove();
+							GuildConfig conf = GuildDAO.getGuildById(g.getId());
+							for (ButtonChannel bc : conf.getButtonConfigs()) {
+								if (bc.getMessages().remove(message)) break;
+							}
+
 							GuildDAO.updateGuildSettings(gc);
 							continue;
 						}
