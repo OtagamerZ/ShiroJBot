@@ -1249,21 +1249,7 @@
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
       <workItem from="1624017809716" duration="7857000" />
-      <workItem from="1624032087853" duration="5107000" />
-    </task>
-    <task id="LOCAL-04761" summary="Correções menores">
-      <created>1623334051479</created>
-      <option name="number" value="04761" />
-      <option name="presentableId" value="LOCAL-04761" />
-      <option name="project" value="LOCAL" />
-      <updated>1623334051479</updated>
-    </task>
-    <task id="LOCAL-04762" summary="Correções menores">
-      <created>1623334173152</created>
-      <option name="number" value="04762" />
-      <option name="presentableId" value="LOCAL-04762" />
-      <option name="project" value="LOCAL" />
-      <updated>1623334173152</updated>
+      <workItem from="1624032087853" duration="5969000" />
     </task>
     <task id="LOCAL-04763" summary="Correções menores">
       <created>1623334210465</created>
@@ -1594,7 +1580,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624035939474</updated>
     </task>
-    <option name="localTasksCounter" value="4810" />
+    <task id="LOCAL-04810" summary="Melhoria no sistema de mutes">
+      <created>1624040188072</created>
+      <option name="number" value="04810" />
+      <option name="presentableId" value="LOCAL-04810" />
+      <option name="project" value="LOCAL" />
+      <updated>1624040188072</updated>
+    </task>
+    <task id="LOCAL-04811" summary="Melhoria no sistema de mutes">
+      <created>1624040260121</created>
+      <option name="number" value="04811" />
+      <option name="presentableId" value="LOCAL-04811" />
+      <option name="project" value="LOCAL" />
+      <updated>1624040260121</updated>
+    </task>
+    <option name="localTasksCounter" value="4812" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
