@@ -676,7 +676,9 @@ public class Helper {
 					gc.getButtonConfigs().remove(channel);
 					GuildDAO.updateGuildSettings(gc);
 				} else {
-					for (ButtonMessage message : channel.getMessages()) {
+					Iterator<ButtonMessage> iterator = channel.getMessages().iterator();
+					while (iterator.hasNext()) {
+						ButtonMessage message = iterator.next();
 						Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 						Message msg;
 						try {
@@ -688,7 +690,7 @@ public class Helper {
 						}
 						resolveButton(g, message.getButtons(), buttons);
 
-						if (Helper.hasPermission(g.getSelfMember(), Permission.MESSAGE_MANAGE, chn))
+						if (Helper.hasPermission(g.getSelfMember(), MESSAGE_MANAGE, chn))
 							msg.clearReactions().queue();
 
 						if (message.isGatekeeper()) {
