@@ -705,7 +705,7 @@ public class Helper {
 										if (bc.getMessages().remove(message)) break;
 									}
 
-									GuildDAO.updateGuildSettings(gc);
+									GuildDAO.updateGuildSettings(conf);
 									ms.clearReactions().queue();
 								}
 							});
