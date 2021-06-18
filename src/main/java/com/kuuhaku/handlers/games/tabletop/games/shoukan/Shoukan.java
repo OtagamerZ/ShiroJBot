@@ -1581,6 +1581,7 @@ public class Shoukan extends GlobalGame {
 	public boolean lastTick() {
 		for (Side s : Side.values()) {
 			Hand h = hands.get(s);
+			Hand op = hands.get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
 
 			if (h.getHp() <= 0) {
@@ -1590,7 +1591,7 @@ public class Shoukan extends GlobalGame {
 
 					applyEffect(ON_LOSE, e, i, s);
 
-					if (h.getHp() > 0) return true;
+					if (h.getHp() > 0 && op.getHp() > 0) return true;
 				}
 			} else {
 				for (int i = 0; i < 5; i++) {
@@ -1598,6 +1599,8 @@ public class Shoukan extends GlobalGame {
 					if (e == null) continue;
 
 					applyEffect(ON_WIN, e, i, s);
+
+					if (h.getHp() > 0 && op.getHp() > 0) return true;
 				}
 			}
 		}
