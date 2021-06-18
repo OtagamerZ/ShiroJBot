@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no sistema de mutes">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no sistema de mutes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1249,21 +1247,7 @@
       <workItem from="1623550817940" duration="4233000" />
       <workItem from="1623759085522" duration="16317000" />
       <workItem from="1624017809716" duration="7857000" />
-      <workItem from="1624032087853" duration="2484000" />
-    </task>
-    <task id="LOCAL-04755" summary="Turbinada nas respostas customizadas">
-      <created>1623297448022</created>
-      <option name="number" value="04755" />
-      <option name="presentableId" value="LOCAL-04755" />
-      <option name="project" value="LOCAL" />
-      <updated>1623297448022</updated>
-    </task>
-    <task id="LOCAL-04756" summary="Correções menores">
-      <created>1623332391496</created>
-      <option name="number" value="04756" />
-      <option name="presentableId" value="LOCAL-04756" />
-      <option name="project" value="LOCAL" />
-      <updated>1623332391497</updated>
+      <workItem from="1624032087853" duration="2793000" />
     </task>
     <task id="LOCAL-04757" summary="Correções menores">
       <created>1623333022374</created>
@@ -1594,7 +1578,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624034396937</updated>
     </task>
-    <option name="localTasksCounter" value="4804" />
+    <task id="LOCAL-04804" summary="Melhoria no sistema de mutes">
+      <created>1624034639730</created>
+      <option name="number" value="04804" />
+      <option name="presentableId" value="LOCAL-04804" />
+      <option name="project" value="LOCAL" />
+      <updated>1624034639730</updated>
+    </task>
+    <task id="LOCAL-04805" summary="Melhoria no sistema de mutes">
+      <created>1624034862519</created>
+      <option name="number" value="04805" />
+      <option name="presentableId" value="LOCAL-04805" />
+      <option name="project" value="LOCAL" />
+      <updated>1624034862519</updated>
+    </task>
+    <option name="localTasksCounter" value="4806" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
