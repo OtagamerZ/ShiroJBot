@@ -2,5 +2,6 @@
   "trigger": "Mensagem que servirá de gatilho para a resposta",
   "answer": "Mensagem a ser enviada",
   "anywhere": "true ou false - A mensagem deve ser exatamente o gatilho ou não?",
-  "chance": "A chance da resposta ser enviada"
+  "chance": "A chance da resposta ser enviada",
+  "forUser": "Caso definido, esta resposta só será enviada caso o usuário com este ID ative o gatilho"
 }
