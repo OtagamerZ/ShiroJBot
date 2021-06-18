@@ -1930,11 +1930,11 @@ public class Helper {
 	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
 		List<String> names = extractGroups(regex, "\\(\\?<([a-zA-Z][A-z0-9]*)>");
 		Map<String, String> out = new HashMap<>();
-
 		Matcher m = Pattern.compile(regex).matcher(text);
-		if (m.find()) {
+
+		while (m.find()) {
 			for (String name : names) {
-				out.put(name, m.group(name));
+				out.putIfAbsent(name, m.group(name));
 			}
 		}
 
