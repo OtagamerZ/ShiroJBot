@@ -33,7 +33,9 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "silenciar",
@@ -70,13 +72,16 @@ public class MuteMemberCommand implements Executable {
 			return;
 		}
 
-		String[] params = argsAsText.split("(?:[0-9]+d\\s*)?(?:[0-9]+h\\s*)?(?:[0-9]+m\\s*)(?:[0-9]+s)?");
-		if (params.length < 2) {
+		List<String> params = Arrays.stream(argsAsText.split("([0-9]+[dhms])+"))
+				.filter(s -> !s.isBlank())
+				.map(String::trim)
+				.collect(Collectors.toList());
+		if (params.size() < 2) {
 			channel.sendMessage("❌ | Você precisa informar um tempo e uma razão.").queue();
 			return;
 		}
 
-		String reason = params[1];
+		String reason = params.get(1);
 		MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
 		long time = Helper.stringToDurationMillis(argsAsText);
 		if (time < 60000) {
