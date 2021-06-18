@@ -62,7 +62,7 @@ public class MinuteEvent implements Job {
 
 			if (g == null) {
 				MemberDAO.removeMutedMember(m);
-			} else {
+			} else if (!m.isMuted()) {
 				try {
 					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS))
 						continue;
