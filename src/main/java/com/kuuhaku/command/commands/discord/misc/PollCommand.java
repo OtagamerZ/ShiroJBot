@@ -146,17 +146,17 @@ public class PollCommand implements Executable {
 						ShiroInfo.getPolls().remove(msg.getId());
 					}
 				});
-			}}, false, gc.getPollTime(), TimeUnit.MINUTES);
+			}}, false, (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 			ShiroInfo.getPolls().put(m.getId(), new HashMap<>());
-			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.MINUTES);
+			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 		};
 
 		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> finalOpts = opts;
 		Consumer<Message> sendOptions = m -> {
 			assert finalOpts != null;
-			Pages.buttonize(m, finalOpts.apply(m), false, gc.getPollTime(), TimeUnit.MINUTES);
+			Pages.buttonize(m, finalOpts.apply(m), false, (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 			ShiroInfo.getPolls().put(m.getId(), new HashMap<>());
-			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), gc.getPollTime(), TimeUnit.MINUTES);
+			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 		};
 
 		if (gc.getSuggestionChannel() == null) {
