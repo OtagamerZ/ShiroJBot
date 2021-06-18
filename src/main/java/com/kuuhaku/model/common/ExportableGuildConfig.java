@@ -58,12 +58,6 @@ public class ExportableGuildConfig {
 		}});
 		gc.put("pollTime", g.getPollTime());
 		gc.put("muteTime", g.getMuteTime());
-		gc.put("muteRole", new JSONObject() {{
-			put("id", g.getMuteRole().getId());
-
-			Role r = g.getMuteRole();
-			if (r != null) put("name", r.getName());
-		}});
 		gc.put("levelUpChannel", new JSONObject() {{
 			put("id", g.getLevelChannel().getId());
 

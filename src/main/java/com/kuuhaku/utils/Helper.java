@@ -132,6 +132,8 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static net.dv8tion.jda.api.Permission.*;
+
 public class Helper {
 	public static final String VOID = "\u200B";
 	public static final String CANCEL = "❎";
@@ -150,6 +152,11 @@ public class Helper {
 	public static final long MILLIS_IN_HOUR = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
 	public static final long MILLIS_IN_MINUTE = TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
 	public static final long MILLIS_IN_SECOND = TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
+	public static final long ALL_MUTE_PERMISSIONS = Permission.getRaw(
+			MESSAGE_ADD_REACTION, MESSAGE_WRITE, MESSAGE_TTS,
+			MESSAGE_MANAGE, MESSAGE_EMBED_LINKS, MESSAGE_ATTACH_FILES,
+			MESSAGE_MENTION_EVERYONE, USE_SLASH_COMMANDS
+	);
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (member == null)
@@ -1912,6 +1919,21 @@ public class Helper {
 		return List.of(out);
 	}
 
+	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
+		Set<String> names = Set.copyOf(extractGroups(text, "\\(\\?<([a-zA-Z][A-z0-9]*)>"));
+		Map<String, String> out = new HashMap<>();
+
+
+		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.find()) {
+			for (String name : names) {
+				out.put(name, m.group(name));
+			}
+		}
+
+		return out;
+	}
+
 	public static String extract(String text, @Language("RegExp") String regex, String group) {
 		Matcher m = Pattern.compile(regex).matcher(text);
 		if (m.find()) return m.group(group);
@@ -2856,5 +2878,17 @@ public class Helper {
 		GZIPInputStream gis = new GZIPInputStream(bis);
 		byte[] bytes = IOUtils.toByteArray(gis);
 		return new String(bytes, StandardCharsets.UTF_8);
+	}
+
+	public static long stringToDurationMillis(String str) {
+		Map<String, String> args = extractNamedGroups(str, "(?:(?<day>[0-9]+)d)?\\s*(?:(?<hour>[0-9]+)h)?\\s*(?:(?<minute>[0-9]+)m)\\s*(?:(?<second>[0-9]+)s)?");
+		long out = 0;
+
+		for (Map.Entry<String, String> arg : args.entrySet()) {
+			TimeUnit unit = TimeUnit.valueOf(arg.getKey());
+			out += unit.toMillis(Integer.parseInt(arg.getValue()));
+		}
+
+		return out;
 	}
 }

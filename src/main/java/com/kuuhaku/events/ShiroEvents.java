@@ -38,7 +38,6 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.ShiroInfo;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -65,7 +64,9 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -943,28 +944,37 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
-		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && guild.getSelfMember().canInteract(member)) {
-			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-			if (gc.getMuteRole() != null) try {
-				Role r = gc.getMuteRole();
-				if (r != null && !member.getRoles().contains(r)) {
-					((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
-					channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
-						msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-						Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
-					});
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-					JSONArray roles = new JSONArray(member.getRoles().stream().filter(rl -> !rl.isManaged()).map(Role::getId).collect(Collectors.toList()));
+		if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS) && h.size() >= gc.getNoSpamAmount() && guild.getSelfMember().canInteract(member)) {
+			try {
+				TextChannel ch = (TextChannel) channel;
 
-					List<Role> rls = member.getRoles().stream().filter(Role::isManaged).collect(Collectors.toList());
-					rls.add(r);
+				ch.deleteMessagesByIds(h.stream()
+						.map(Message::getId)
+						.collect(Collectors.toList())
+				).queue(null, Helper::doNothing);
 
-					guild.modifyMemberRoles(member, rls).queue(null, Helper::doNothing);
-					MutedMember mm = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId(), roles));
-					mm.mute(GuildDAO.getGuildById(guild.getId()).getMuteTime());
+				channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
+					msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
+					Helper.logToChannel(member.getUser(), false, null, "SPAM detectado no canal " + ch.getAsMention(), guild, msg.getContentRaw());
+				});
 
-					com.kuuhaku.controller.postgresql.MemberDAO.saveMutedMember(mm);
+				MutedMember m = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
+
+				m.setReason("Auto-mute por SPAM no canal " + ch.getAsMention());
+				m.mute(gc.getMuteTime());
+
+				List<PermissionOverrideAction> act = new ArrayList<>();
+				for (TextChannel chn : guild.getTextChannels()) {
+					act.add(chn.putPermissionOverride(member).deny(Helper.ALL_MUTE_PERMISSIONS));
 				}
+
+				RestAction.allOf(act)
+						.queue(s -> {
+							Helper.logToChannel(guild.getSelfMember().getUser(), false, null, member.getAsMention() + " foi silenciado por " + Helper.toStringDuration(gc.getMuteTime()) + ".\nRazão: `" + m.getReason() + "`", guild);
+							com.kuuhaku.controller.postgresql.MemberDAO.saveMutedMember(m);
+						}, Helper::doNothing);
 			} catch (Exception ignore) {
 			}
 		}
