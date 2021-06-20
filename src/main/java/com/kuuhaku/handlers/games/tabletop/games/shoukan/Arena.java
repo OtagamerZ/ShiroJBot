@@ -166,8 +166,8 @@ public class Arena {
 					g2d.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
 					g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
-					String hp = StringUtils.leftPad(String.valueOf(h.getHp()), 4, "0");
-					String mp = h.isNullMode() ? "--" : StringUtils.leftPad(String.valueOf(h.getMana()), 2, "0");
+					String hp = String.format("%04d", Math.max(0, h.getHp()));
+					String mp = h.isNullMode() ? "--" : String.format("%02d", Math.max(0, h.getMana()));
 
 					Profile.drawOutlinedText(
 							"HP: " + hp,
