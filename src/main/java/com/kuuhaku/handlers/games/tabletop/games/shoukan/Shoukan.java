@@ -1590,8 +1590,6 @@ public class Shoukan extends GlobalGame {
 					if (e == null) continue;
 
 					applyEffect(ON_LOSE, e, i, s);
-
-					if (h.getHp() > 0 && op.getHp() > 0) return true;
 				}
 			} else {
 				for (int i = 0; i < 5; i++) {
@@ -1599,10 +1597,10 @@ public class Shoukan extends GlobalGame {
 					if (e == null) continue;
 
 					applyEffect(ON_WIN, e, i, s);
-
-					if (h.getHp() > 0 && op.getHp() > 0) return true;
 				}
 			}
+
+			if (h.getHp() > 0 && op.getHp() > 0) return true;
 		}
 
 		return false;
@@ -1613,6 +1611,7 @@ public class Shoukan extends GlobalGame {
 		for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 			Hand h = entry.getValue();
 			Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+
 			if (h.getHp() <= 0) {
 				if (lastTick()) return false;
 
@@ -2207,6 +2206,7 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void close() {
+		if (!isOpen()) return;
 		if (!draw && getCustom() == null) {
 			for (Side s : Side.values()) {
 				Account acc = AccountDAO.getAccount(hands.get(s).getUser().getId());
