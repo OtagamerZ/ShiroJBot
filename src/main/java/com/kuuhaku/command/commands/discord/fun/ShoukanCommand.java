@@ -25,7 +25,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;

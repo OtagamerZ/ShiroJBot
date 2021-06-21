@@ -80,6 +80,12 @@ public class Member {
 	@Enumerated(value = EnumType.STRING)
 	private TrophyType trophy = null;
 
+	public Member(String id, String uid, String sid) {
+		this.id = id;
+		this.uid = uid;
+		this.sid = sid;
+	}
+
 	public Member() {
 
 	}

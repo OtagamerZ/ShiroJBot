@@ -18,11 +18,10 @@
 
 package com.kuuhaku.command.commands.discord.dev;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
@@ -41,8 +40,6 @@ public class KillCommand implements Executable {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue();
 		}
 
-		BackupDAO.dumpData(new DataDump(
-				com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
-		), true);
+		Main.shutdown();
 	}
 }

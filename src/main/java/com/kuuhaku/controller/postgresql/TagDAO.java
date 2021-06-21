@@ -90,18 +90,6 @@ public class TagDAO {
 		}
 	}
 
-	public static void clearTags(Tags t) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM Tags t WHERE t.uid = :id");
-		q.setParameter("id", t.getUid());
-		q.executeUpdate();
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
 	public static void giveTagBeta(String id) {
 		EntityManager em = Manager.getEntityManager();
 

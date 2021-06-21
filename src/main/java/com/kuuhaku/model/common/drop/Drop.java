@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.ExceedEnum;
@@ -68,7 +67,7 @@ public abstract class Drop<P> implements Prize<P> {
 					KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
 
 			add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
-					MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
+					MemberDAO.getMembersByUid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
 			add(Pair.of("Ter até 1.000 créditos.", u ->
 					AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
