@@ -1704,6 +1704,8 @@ public class Shoukan extends GlobalGame {
 				if (combos.get(current).getLeft() == Race.DEMON) {
 					Hand op = hands.get(next);
 					h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
+					if (h.get().getHp() < h.get().getBaseHp() / 3f)
+						h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 				}
 				switch (combos.get(current).getRight()) {
 					case BESTIAL -> {
@@ -1865,6 +1867,8 @@ public class Shoukan extends GlobalGame {
 					if (combos.get(current).getLeft() == Race.DEMON) {
 						Hand op = hands.get(next);
 						h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
+						if (h.get().getHp() < h.get().getBaseHp() / 3f)
+							h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 					}
 					switch (combos.get(current).getRight()) {
 						case BESTIAL -> {

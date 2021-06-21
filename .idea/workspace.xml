@@ -13,11 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção completa do banco de caching (SQLite)">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1258,20 +1257,6 @@
       <workItem from="1624146027425" duration="637000" />
       <workItem from="1624216807444" duration="702000" />
     </task>
-    <task id="LOCAL-04769" summary="Correções menores">
-      <created>1623431893732</created>
-      <option name="number" value="04769" />
-      <option name="presentableId" value="LOCAL-04769" />
-      <option name="project" value="LOCAL" />
-      <updated>1623431893733</updated>
-    </task>
-    <task id="LOCAL-04770" summary="Correções menores">
-      <created>1623456830438</created>
-      <option name="number" value="04770" />
-      <option name="presentableId" value="LOCAL-04770" />
-      <option name="project" value="LOCAL" />
-      <updated>1623456830439</updated>
-    </task>
     <task id="LOCAL-04771" summary="Correções menores">
       <created>1623456937080</created>
       <option name="number" value="04771" />
@@ -1601,7 +1586,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624291503559</updated>
     </task>
-    <option name="localTasksCounter" value="4818" />
+    <task id="LOCAL-04818" summary="Correções menores">
+      <created>1624292575432</created>
+      <option name="number" value="04818" />
+      <option name="presentableId" value="LOCAL-04818" />
+      <option name="project" value="LOCAL" />
+      <updated>1624292575432</updated>
+    </task>
+    <task id="LOCAL-04819" summary="Correções menores">
+      <created>1624292740846</created>
+      <option name="number" value="04819" />
+      <option name="presentableId" value="LOCAL-04819" />
+      <option name="project" value="LOCAL" />
+      <updated>1624292740846</updated>
+    </task>
+    <option name="localTasksCounter" value="4820" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1710,10 +1709,10 @@
     <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Adicionadas mãos no replay" />
     <MESSAGE value="Turbinada nas respostas customizadas" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Melhoria no sistema de mutes" />
     <MESSAGE value="Remoção completa do banco de caching (SQLite)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção completa do banco de caching (SQLite)" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
