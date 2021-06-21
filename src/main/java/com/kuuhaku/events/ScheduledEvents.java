@@ -175,5 +175,13 @@ public class ScheduledEvents implements JobListener {
 	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
 		Helper.logger(this.getClass()).info("Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
 	}
+
+	public static void shutdown() {
+		try {
+			sched.shutdown();
+		} catch (SchedulerException e) {
+			Helper.logger(ScheduledEvents.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+	}
 }
 

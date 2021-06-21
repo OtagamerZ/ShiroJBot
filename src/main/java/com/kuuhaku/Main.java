@@ -197,6 +197,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		if (exiting) return;
 		exiting = true;
 
+		ScheduledEvents.shutdown();
 		info.getSockets().shutdown();
 		SpringApplication.exit(spring);
 		shiroShards.shutdown();
