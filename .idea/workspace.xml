@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1256,13 +1255,6 @@
       <workItem from="1624146027425" duration="637000" />
       <workItem from="1624216807444" duration="702000" />
     </task>
-    <task id="LOCAL-04775" summary="Correções menores">
-      <created>1623554839236</created>
-      <option name="number" value="04775" />
-      <option name="presentableId" value="LOCAL-04775" />
-      <option name="project" value="LOCAL" />
-      <updated>1623554839236</updated>
-    </task>
     <task id="LOCAL-04776" summary="Correções menores">
       <created>1623763157640</created>
       <option name="number" value="04776" />
@@ -1599,7 +1591,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624296814002</updated>
     </task>
-    <option name="localTasksCounter" value="4824" />
+    <task id="LOCAL-04824" summary="Correções menores">
+      <created>1624303167493</created>
+      <option name="number" value="04824" />
+      <option name="presentableId" value="LOCAL-04824" />
+      <option name="project" value="LOCAL" />
+      <updated>1624303167493</updated>
+    </task>
+    <option name="localTasksCounter" value="4825" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
