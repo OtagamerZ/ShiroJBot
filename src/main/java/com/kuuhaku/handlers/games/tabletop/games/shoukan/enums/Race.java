@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public enum Race {
 	HUMAN("Humano",
-			"**(SOLO)** +1 Limite de cópias para campeões\n**(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
+			"**(SOLO)** +1 Limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
 			"+750 HP",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
@@ -41,12 +41,12 @@ public enum Race {
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
 	BESTIAL("Bestial",
-			"**(SOLO)** +1 Limite de cópias para evogears\n**(DUO)** Cartas descartadas voltam para o deck e o embaralham-no",
+			"**(SOLO)** +1 Limite de cópias para evogears **(DUO)** Cartas descartadas voltam para o deck e o embaralham-no",
 			"Inicia com 1 ponto de mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
 	MACHINE("Máquina",
-			"**(SOLO)** -1 Peso de Equipamentos\n**(DUO)** Ao puxar um equipamento ganhe 250 de HP",
+			"**(SOLO)** -1 Peso de Equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
 			"Inicia com 1 equipamento extra",
 			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo."
 	),
@@ -71,7 +71,7 @@ public enum Race {
 			"Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta."
 	),
 	DEMON("Demônio",
-			"-1500 HP, +1 Mana para cada 20% de HP perdido do oponente",
+			"-1500 HP, +1 Mana para cada 20% de HP perdido do oponente, cura 10% do HP perdido por turno enquanto abaixo de 33%",
 			"+25% dano direto causado, +33% dano direto sofrido",
 			"Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos."
 	),
