@@ -846,6 +846,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public boolean isBuffed() {
 		if (game == null) return false;
+
+		boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK);
+		if (slink) return false;
+
 		Field f = game.getArena().getField();
 		if (f != null)
 			return f.getModifiers().getFloat(getRace().name(), 1) > 1;
@@ -855,6 +859,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public boolean isNerfed() {
 		if (game == null) return false;
+
+		boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK);
+		if (slink) return false;
+
 		Field f = game.getArena().getField();
 		if (f != null)
 			return f.getModifiers().getFloat(getRace().name(), 1) < 1;
