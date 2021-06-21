@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1241,13 +1239,7 @@
       <workItem from="1624032087853" duration="9544000" />
       <workItem from="1624146027425" duration="637000" />
       <workItem from="1624216807444" duration="702000" />
-    </task>
-    <task id="LOCAL-04777" summary="Correções menores">
-      <created>1623763600134</created>
-      <option name="number" value="04777" />
-      <option name="presentableId" value="LOCAL-04777" />
-      <option name="project" value="LOCAL" />
-      <updated>1623763600134</updated>
+      <workItem from="1624308734701" duration="461000" />
     </task>
     <task id="LOCAL-04778" summary="Correções menores">
       <created>1623764038461</created>
@@ -1585,7 +1577,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624307945790</updated>
     </task>
-    <option name="localTasksCounter" value="4826" />
+    <task id="LOCAL-04826" summary="Correções menores">
+      <created>1624308812529</created>
+      <option name="number" value="04826" />
+      <option name="presentableId" value="LOCAL-04826" />
+      <option name="project" value="LOCAL" />
+      <updated>1624308812529</updated>
+    </task>
+    <option name="localTasksCounter" value="4827" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1700,17 +1699,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BroadcastCommand.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>

@@ -1949,50 +1949,31 @@ public class Helper {
 		else return null;
 	}
 
-	public static void broadcast(String message, TextChannel channel, User author) {
-		Map<String, Boolean> result = new HashMap<>();
-		StringBuilder sb = new StringBuilder();
-		List<Page> pages = new ArrayList<>();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+	public static void broadcast(String message, TextChannel channel) {
 		List<WebhookClient> clients = new ArrayList<>();
 		List<GuildConfig> gcs = GuildDAO.getAlertChannels();
-		List<List<GuildConfig>> gcPages = chunkify(gcs, 10);
 
-		for (List<GuildConfig> gs : gcPages) {
-			result.clear();
-			eb.clear();
-			sb.setLength(0);
+		int success = 0;
+		int failed = 0;
 
-			for (GuildConfig gc : gs) {
-				Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
-				if (g == null) continue;
-				try {
-					TextChannel c = gc.getAlertChannel();
-					if (c != null && c.canTalk()) {
-						Webhook wh = getOrCreateWebhook(c, "Notificações Shiro");
-						if (wh == null) result.put(g.getName(), false);
-						else {
-							WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
-							clients.add(wcb.build());
-							result.put(g.getName(), true);
-						}
-					} else result.put(g.getName(), false);
-				} catch (Exception e) {
-					result.put(g.getName(), false);
-				}
+		for (GuildConfig gc : gcs) {
+			Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
+			if (g == null) continue;
+			try {
+				TextChannel c = gc.getAlertChannel();
+				if (c != null && c.canTalk()) {
+					Webhook wh = getOrCreateWebhook(c, "Notificações Shiro");
+					if (wh == null) failed++;
+
+					else {
+						WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
+						clients.add(wcb.build());
+						success++;
+					}
+				} else failed++;
+			} catch (Exception e) {
+				failed++;
 			}
-
-			sb.append("```diff\n");
-			for (Map.Entry<String, Boolean> entry : result.entrySet()) {
-				String key = entry.getKey();
-				Boolean value = entry.getValue();
-				sb.append(value ? "+ " : "- ").append(key).append("\n");
-			}
-			sb.append("```");
-
-			eb.setTitle("__**STATUS**__ ");
-			eb.setDescription(sb.toString());
-			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
@@ -2003,10 +1984,7 @@ public class Helper {
 		wmb.setContent(message);
 		WebhookCluster cluster = new WebhookCluster(clients);
 		cluster.broadcast(wmb.build());
-		if (channel != null)
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
-			);
+		channel.sendMessage(":loud_sound: | Sucesso: " + success + "\n:mute: | Falha: " + failed).queue();
 	}
 
 	public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
