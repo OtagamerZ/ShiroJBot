@@ -1348,8 +1348,10 @@ public class Shoukan extends GlobalGame {
 		eq.setLinkedTo(null);
 
 		SlotColumn<Champion, Equipment> sd = side.get(index);
-		arena.getGraveyard().get(s).add(eq.copy());
 		sd.setBottom(null);
+
+		if (!eq.isParasite() || eq.isEffectOnly())
+			arena.getGraveyard().get(s).add(eq.copy());
 	}
 
 	public Arena getArena() {
@@ -2164,6 +2166,11 @@ public class Shoukan extends GlobalGame {
 			) return false;
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
+			for (Equipment e : activator.getLinkedTo()) {
+				if (e.isParasite() && e.hasEffect())
+					applyEffect(trigger, e, index, side);
+			}
+
 			return postCombat();
 		}
 
