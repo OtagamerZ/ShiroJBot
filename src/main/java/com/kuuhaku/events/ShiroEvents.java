@@ -484,9 +484,9 @@ public class ShiroEvents extends ListenerAdapter {
 	@Override
 	public void onReady(@NotNull ReadyEvent event) {
 		try {
-			Helper.logger(this.getClass()).info("Estou pronta!");
+			Helper.logger(this.getClass()).info("Shard " + event.getJDA().getShardInfo().getShardId() + " pronto!");
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar bot: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar shard " + event.getJDA().getShardInfo().getShardId() + ": " + e);
 		}
 	}
 
