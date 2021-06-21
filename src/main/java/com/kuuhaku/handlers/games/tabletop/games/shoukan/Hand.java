@@ -209,7 +209,7 @@ public class Hand {
 
 	public boolean manualDraw() {
 		try {
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() >= 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
 			else cards.add(getDeque().removeFirst().copy());
 			return true;
