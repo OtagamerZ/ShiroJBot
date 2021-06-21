@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -58,7 +58,7 @@ public class BotInfoCommand implements Executable {
 		eb.addField(I18n.getString("str_bot-info-field-2"), sb.toString(), false)
 				.addField(I18n.getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(I18n.getString("date-format"))), false)
 				.addField(I18n.getString("str_bot-info-field-4"), I18n.getString(STR_BOT_INFO_SERVERS, Main.getShiroShards().getGuilds().size()), false)
-				.addField(I18n.getString("str_bot-info-field-5"), I18n.getString("str_bot-info-registered-users", MemberDAO.getAllMembers().size()), false)
+				.addField(I18n.getString("str_bot-info-field-5"), I18n.getString("str_bot-info-registered-users", MemberDAO.getMembers().size()), false)
 				.addField(I18n.getString("str_bot-info-field-6"), ShiroInfo.getVersion(), false)
 				.addField("Links:", """
 								[%s](https://discordapp.com/invite/9sgkzna)

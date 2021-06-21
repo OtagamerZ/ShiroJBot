@@ -22,7 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchMakingRating;

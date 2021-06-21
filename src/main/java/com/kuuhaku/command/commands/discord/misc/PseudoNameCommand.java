@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
@@ -41,7 +41,7 @@ public class PseudoNameCommand implements Executable {
 			return;
 		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoName("");
-			MemberDAO.updateMemberConfigs(mb);
+			MemberDAO.saveMember(mb);
 			channel.sendMessage("✅ | Pseudônimo limpo com sucesso!").queue();
 			return;
 		} else if (String.join(" ", args).length() > 32) {
@@ -50,7 +50,7 @@ public class PseudoNameCommand implements Executable {
 		}
 
 		mb.setPseudoName(String.join(" ", args));
-		MemberDAO.updateMemberConfigs(mb);
+		MemberDAO.saveMember(mb);
 		channel.sendMessage("✅ | Pseudônimo definido com sucesso!").queue();
 	}
 }

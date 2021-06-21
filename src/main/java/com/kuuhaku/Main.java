@@ -25,10 +25,8 @@ import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Paginator;
 import com.github.ygimenez.model.PaginatorBuilder;
-import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TwitchEvents;
@@ -99,14 +97,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
-
-		Manager.connect();
-		if (com.kuuhaku.controller.sqlite.BackupDAO.restoreData(BackupDAO.getData()))
-			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
-		else {
-			Helper.logger(Main.class).error("Erro ao recuperar dados.");
-			return;
-		}
 
 		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
 
@@ -203,13 +193,13 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return twitchManager;
 	}
 
-	public static boolean shutdown() {
-		if (exiting) return false;
+	public static void shutdown() {
+		if (exiting) return;
 		exiting = true;
 
+		info.getSockets().shutdown();
 		SpringApplication.exit(spring);
 		shiroShards.shutdown();
-		return true;
 	}
 
 	public static ShardManager getShiroShards() {

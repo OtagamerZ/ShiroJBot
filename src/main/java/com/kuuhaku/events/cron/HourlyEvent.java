@@ -22,8 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
-import com.kuuhaku.controller.sqlite.BackupDAO;
-import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -44,10 +42,6 @@ public class HourlyEvent implements Job {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
 		if (!Main.getInfo().isLive()) Main.getShiroShards().setActivity(Main.getRandomActivity());
-
-		com.kuuhaku.controller.postgresql.BackupDAO.dumpData(
-				new DataDump(BackupDAO.getMemberDump()), false
-		);
 
 		Main.getInfo().setWinner(ExceedDAO.getWinner());
 		Helper.logger(this.getClass()).info("Atualizado vencedor mensal.");

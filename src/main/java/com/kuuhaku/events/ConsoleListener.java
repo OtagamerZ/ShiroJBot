@@ -18,8 +18,7 @@
 
 package com.kuuhaku.events;
 
-import com.kuuhaku.controller.postgresql.BackupDAO;
-import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 
 import java.io.BufferedReader;
@@ -64,9 +63,7 @@ public class ConsoleListener extends BufferedReader {
 			case "test" -> System.out.println("No need to test, I'm working!");
 			case "kill" -> {
 				System.out.println("Sayonara, Nii-chan <3");
-				BackupDAO.dumpData(new DataDump(
-						com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
-				), true);
+				Main.shutdown();
 			}
 		}
 	}

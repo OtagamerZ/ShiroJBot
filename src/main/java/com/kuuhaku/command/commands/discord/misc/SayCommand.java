@@ -24,7 +24,7 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -72,7 +72,7 @@ public class SayCommand implements Executable {
 				wmb.setAvatarUrl(m.getPseudoAvatar());
 			} catch (RuntimeException e) {
 				m.setPseudoAvatar("");
-				MemberDAO.updateMemberConfigs(m);
+				MemberDAO.saveMember(m);
 			}
 			if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
 			else try {
@@ -80,7 +80,7 @@ public class SayCommand implements Executable {
 				wmb.setUsername(nii != null && m.getPseudoName().equals(nii.getEffectiveName()) ? m.getPseudoName() + " (FAKE)" : m.getPseudoName());
 			} catch (RuntimeException e) {
 				m.setPseudoName("");
-				MemberDAO.updateMemberConfigs(m);
+				MemberDAO.saveMember(m);
 			}
 
 			assert wh != null;

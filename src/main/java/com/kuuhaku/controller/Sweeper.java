@@ -29,22 +29,19 @@ import java.util.Set;
 
 public class Sweeper {
 	public static void sweep(Set<String> guildIDs, Set<String> memberIDs) {
-		EntityManager pem = Manager.getEntityManager();
-		EntityManager sem = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		List<List<String>> gids = Helper.chunkify(guildIDs, 1000);
 		List<List<String>> mids = Helper.chunkify(memberIDs, 1000);
 
 		if (gids.size() > 0)
-			executeSweep(pem, gids, "DELETE FROM GuildConfig WHERE guildId IN :ids");
+			executeSweep(em, gids, "DELETE FROM GuildConfig WHERE guildId IN :ids");
 
 		if (mids.size() > 0) {
-			executeSweep(pem, mids, "DELETE FROM Member WHERE id IN :ids");
-			executeSweep(sem, mids, "DELETE FROM Member WHERE id IN :ids");
+			executeSweep(em, mids, "DELETE FROM Member WHERE id IN :ids");
 		}
 
-		sem.close();
-		pem.close();
+		em.close();
 	}
 
 	private static void executeSweep(EntityManager em, List<List<String>> chunks, @Language("JPAQL") String query) {
