@@ -22,10 +22,37 @@ import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MutedMember;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
 public class MemberDAO {
+	public static Member getMember(String id, String server) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Member mb = em.find(Member.class, id + server);
+			if (mb == null)
+				return saveMember(new Member(id + server, id, server));
+
+			return mb;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Member saveMember(Member m) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		m = em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+
+		return m;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<Member> getMembers() {
 		EntityManager em = Manager.getEntityManager();
@@ -35,6 +62,102 @@ public class MemberDAO {
 		em.close();
 
 		return members;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Member> getMembersByUid(String id) {
+		EntityManager em = Manager.getEntityManager();
+		List<Member> m;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE uid = :id", Member.class);
+		q.setParameter("id", id);
+		m = q.getResultList();
+
+		em.close();
+
+		return m;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Member> getMembersBySid(String id) {
+		EntityManager em = Manager.getEntityManager();
+		List<Member> m;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE sid = :id", Member.class);
+		q.setParameter("id", id);
+		m = q.getResultList();
+
+		em.close();
+
+		return m;
+	}
+
+	public static Member getHighestProfile(String id) {
+		EntityManager em = Manager.getEntityManager();
+		Member m;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE uid = :id ORDER BY level DESC", Member.class);
+		q.setMaxResults(1);
+		q.setParameter("id", id);
+		m = (Member) q.getSingleResult();
+
+		em.close();
+
+		return m;
+	}
+
+	public static int getHighestLevel() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT MAX(level) FROM Member m", Integer.class);
+
+		try {
+			return (int) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static int getMemberRankPos(String mid, String gid, boolean global) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q;
+
+		if (global)
+			q = em.createNativeQuery("""
+					SELECT x.row
+					FROM (
+						SELECT m.uid
+							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row
+						FROM Member m
+						WHERE m.uid IS NOT NULL
+					) x
+					WHERE x.uid = :mid
+					""");
+		else {
+			q = em.createNativeQuery("""
+					SELECT x.row
+					FROM (
+						SELECT m.uid
+							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row
+						FROM Member m
+						WHERE m.sid = :id
+						AND m.uid IS NOT NULL
+					) x
+					WHERE x.uid = :mid
+					""");
+			q.setParameter("id", gid);
+		}
+		q.setParameter("mid", mid);
+		q.setMaxResults(1);
+
+		try {
+			return ((Number) q.getSingleResult()).intValue();
+		} catch (NoResultException e) {
+			return 0;
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,16 +179,6 @@ public class MemberDAO {
 		} finally {
 			em.close();
 		}
-	}
-
-	public static void saveMember(Member m) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
 	}
 
 	public static void saveMutedMember(MutedMember m) {
@@ -100,19 +213,5 @@ public class MemberDAO {
 		em.close();
 
 		return gcs;
-	}
-
-	public static void clearMember(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM Member m WHERE m.uid = :id");
-		q.setParameter("id", id);
-		q.executeUpdate();
-		em.getTransaction().commit();
-
-		em.close();
-
-		com.kuuhaku.controller.sqlite.MemberDAO.clearMember(id);
 	}
 }

@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
@@ -144,7 +143,7 @@ public class DashboardSocket extends WebSocketServer {
 					User w = Member.getWaifu(u.getId()).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u.getId()));
 					CoupleMultiplier cm = WaifuDAO.getMultiplier(u.getId());
 
-					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+					List<Member> profiles = MemberDAO.getMembersByUid(u.getId());
 					JSONObject user = new JSONObject() {{
 						put("waifu", w == null ? "" : w.getAsTag());
 						put("waifuMult", cm == null ? 1.25f : cm.getMult());

@@ -20,7 +20,7 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
@@ -39,7 +39,7 @@ public enum CreditItem {
 				com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 				int lvl = m.getLevel();
 				chn.sendMessage(mb.getAsMention() + " utilizou um boost de experiência e ganhou " + m.addXp(3500) + " XP.").queue();
-				MemberDAO.updateMemberConfigs(m);
+				MemberDAO.saveMember(m);
 
 				boolean lvlUp = m.getLevel() > lvl;
 				try {

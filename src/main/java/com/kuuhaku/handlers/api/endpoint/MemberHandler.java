@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.persistent.Member;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,11 +35,11 @@ public class MemberHandler {
 
 	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
 	public Member[] requestProfileByMid(@RequestParam(value = "id") String mid) {
-		return MemberDAO.getMemberByMid(mid).toArray(new Member[0]);
+		return MemberDAO.getMembersByUid(mid).toArray(new Member[0]);
 	}
 
 	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
 	public Member[] requestProfileBySid(@RequestParam(value = "id") String sid) {
-		return MemberDAO.getMemberBySid(sid).toArray(new Member[0]);
+		return MemberDAO.getMembersBySid(sid).toArray(new Member[0]);
 	}
 }

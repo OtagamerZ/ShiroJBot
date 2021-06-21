@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
@@ -45,7 +45,7 @@ public class PseudoAvatarCommand implements Executable {
 			return;
 		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoAvatar("");
-			MemberDAO.updateMemberConfigs(mb);
+			MemberDAO.saveMember(mb);
 			channel.sendMessage("✅ | Pseudo-avatar limpo com sucesso!").queue();
 			return;
 		}
@@ -54,7 +54,7 @@ public class PseudoAvatarCommand implements Executable {
 			ImageIO.read(Helper.getImage(args[0]));
 
 			mb.setPseudoAvatar(args[0]);
-			MemberDAO.updateMemberConfigs(mb);
+			MemberDAO.saveMember(mb);
 			channel.sendMessage("✅ | Pseudo-avatar definido com sucesso!").queue();
 		} catch (ClassCastException | IOException | NullPointerException e) {
 			channel.sendMessage(I18n.getString("err_invalid-image")).queue();
