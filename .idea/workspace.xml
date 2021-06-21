@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1255,20 +1256,6 @@
       <workItem from="1624146027425" duration="637000" />
       <workItem from="1624216807444" duration="702000" />
     </task>
-    <task id="LOCAL-04773" summary="Correções menores">
-      <created>1623533189284</created>
-      <option name="number" value="04773" />
-      <option name="presentableId" value="LOCAL-04773" />
-      <option name="project" value="LOCAL" />
-      <updated>1623533189285</updated>
-    </task>
-    <task id="LOCAL-04774" summary="Correções menores">
-      <created>1623533618630</created>
-      <option name="number" value="04774" />
-      <option name="presentableId" value="LOCAL-04774" />
-      <option name="project" value="LOCAL" />
-      <updated>1623533618630</updated>
-    </task>
     <task id="LOCAL-04775" summary="Correções menores">
       <created>1623554839236</created>
       <option name="number" value="04775" />
@@ -1598,7 +1585,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624296210521</updated>
     </task>
-    <option name="localTasksCounter" value="4822" />
+    <task id="LOCAL-04822" summary="Correções menores">
+      <created>1624296718500</created>
+      <option name="number" value="04822" />
+      <option name="presentableId" value="LOCAL-04822" />
+      <option name="project" value="LOCAL" />
+      <updated>1624296718500</updated>
+    </task>
+    <task id="LOCAL-04823" summary="Correções menores">
+      <created>1624296814001</created>
+      <option name="number" value="04823" />
+      <option name="presentableId" value="LOCAL-04823" />
+      <option name="project" value="LOCAL" />
+      <updated>1624296814002</updated>
+    </task>
+    <option name="localTasksCounter" value="4824" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

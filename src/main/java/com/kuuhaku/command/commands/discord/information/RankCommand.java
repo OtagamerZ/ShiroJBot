@@ -50,15 +50,6 @@ import java.util.concurrent.TimeUnit;
 })
 public class RankCommand implements Executable {
 
-	private static final String STR_LEVEL = "str_level";
-	private static final String STR_CREDIT = "str_credit";
-	private static final String STR_PROFIT = "str_profit";
-	private static final String STR_CARD = "str_card";
-	private static final String STR_TIME = "str_time";
-	private static final String SRT_USER_RANKING_TITLE = "str_user-ranking-title";
-	private static final String STR_GLOBAL = "str_global";
-	private static final String STR_LOCAL = "str_local";
-
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
@@ -108,9 +99,13 @@ public class RankCommand implements Executable {
 			}
 
 			m.delete().queue();
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
-			);
+			if (pages.isEmpty()) {
+				channel.sendMessage("❌ | Não há dados para exibir ainda.").queue();
+			} else {
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+				);
+			}
 		});
 	}
 }
