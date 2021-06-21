@@ -68,7 +68,7 @@ public class BroadcastCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		switch (args[0].toLowerCase(Locale.ROOT)) {
-			case "geral" -> Helper.broadcast(argsAsText.replaceFirst("geral", "").trim(), channel, author);
+			case "geral" -> Helper.broadcast(argsAsText.replaceFirst("geral", "").trim(), channel);
 			case "beta" -> {
 				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
