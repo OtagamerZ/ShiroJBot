@@ -25,7 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
@@ -390,7 +389,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					boolean lvlUp = m.addXp(guild);
-					MemberDAO.updateMemberConfigs(m);
+					MemberDAO.saveMember(m);
 					try {
 						if (lvlUp && gc.isLevelNotif()) {
 							if (m.getLevel() % 210 == 0)
@@ -427,14 +426,14 @@ public class ShiroEvents extends ListenerAdapter {
 							wmb.setAvatarUrl(m.getPseudoAvatar());
 						} catch (RuntimeException e) {
 							m.setPseudoAvatar("");
-							MemberDAO.updateMemberConfigs(m);
+							MemberDAO.saveMember(m);
 						}
 						if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
 						else try {
 							wmb.setUsername(m.getPseudoName());
 						} catch (RuntimeException e) {
 							m.setPseudoName("");
-							MemberDAO.updateMemberConfigs(m);
+							MemberDAO.saveMember(m);
 						}
 
 						assert wh != null;
@@ -892,7 +891,7 @@ public class ShiroEvents extends ListenerAdapter {
 		long curr = System.currentTimeMillis();
 		long time = curr - Helper.getOr(voiceTime.remove(mb.getId()), curr);
 		m.setVoiceTime(time);
-		MemberDAO.updateMemberConfigs(m);
+		MemberDAO.saveMember(m);
 	}
 
 	@Override
@@ -960,7 +959,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Helper.logToChannel(member.getUser(), false, null, "SPAM detectado no canal " + ch.getAsMention(), guild, msg.getContentRaw());
 				});
 
-				MutedMember m = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
+				MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
 
 				m.setReason("Auto-mute por SPAM no canal " + ch.getAsMention());
 				m.mute(gc.getMuteTime());
@@ -973,7 +972,7 @@ public class ShiroEvents extends ListenerAdapter {
 				RestAction.allOf(act)
 						.queue(s -> {
 							Helper.logToChannel(guild.getSelfMember().getUser(), false, null, member.getAsMention() + " foi silenciado por " + Helper.toStringDuration(gc.getMuteTime()) + ".\nRazão: `" + m.getReason() + "`", guild);
-							com.kuuhaku.controller.postgresql.MemberDAO.saveMutedMember(m);
+							MemberDAO.saveMutedMember(m);
 						}, Helper::doNothing);
 			} catch (Exception ignore) {
 			}

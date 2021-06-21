@@ -23,8 +23,8 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.TrophyDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -86,10 +86,10 @@ public class ProfileTrophyCommand implements Executable {
 		}
 
 		if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
-			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
+			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMembersByUid(author.getId());
 			for (com.kuuhaku.model.persistent.Member m : ms) {
 				m.setTrophy(null);
-				MemberDAO.updateMemberConfigs(m);
+				MemberDAO.saveMember(m);
 			}
 			channel.sendMessage("✅ | Troféu removido com sucesso!").queue();
 			return;
@@ -103,10 +103,10 @@ public class ProfileTrophyCommand implements Executable {
 				return;
 			}
 
-			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
+			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMembersByUid(author.getId());
 			for (com.kuuhaku.model.persistent.Member m : ms) {
 				m.setTrophy(tt);
-				MemberDAO.updateMemberConfigs(m);
+				MemberDAO.saveMember(m);
 			}
 			channel.sendMessage("✅ | Troféu definido com sucesso!").queue();
 		} catch (IllegalArgumentException e) {

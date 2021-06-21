@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
@@ -56,9 +56,9 @@ public class Tags {
     }
 
     public static List<String> getUserBadges(String id) {
-        String pattern = "https://cdn.discordapp.com/emojis/%s.png?v=1";
-        String exceed = ExceedDAO.getExceed(id);
-		Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
+		String pattern = "https://cdn.discordapp.com/emojis/%s.png?v=1";
+		String exceed = ExceedDAO.getExceed(id);
+		Member mb = MemberDAO.getMembersByUid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
 		if (mb == null) return new ArrayList<>();
 
