@@ -136,7 +136,7 @@ public class MonthlyEvent implements Job {
 					""".formatted(String.join(" ", dozens), winners.size(), Helper.separate(value.getValue()));
 
 		chn.sendMessage(msg).queue();
-		Helper.broadcast(msg, null, null);
+		Helper.broadcast(msg, null);
 
 		for (Lottery l : winners) {
 			Account acc = AccountDAO.getAccount(l.getUid());
