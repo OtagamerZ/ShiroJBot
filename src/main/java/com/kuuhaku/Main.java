@@ -200,6 +200,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		info.getSockets().shutdown();
 		SpringApplication.exit(spring);
 		shiroShards.shutdown();
+
+		System.exit(0);
 	}
 
 	public static ShardManager getShiroShards() {
