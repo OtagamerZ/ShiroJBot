@@ -119,8 +119,12 @@ public class Equipment implements Drawable, Cloneable {
 				} catch (IOException ignore) {
 				}
 
-				g2d.setColor(Color.cyan);
-				Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
+				if (getMana() > 0) {
+					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/mana.png"), 184, 47, null);
+
+					g2d.setColor(new Color(0, 165, 255));
+					Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 67, g2d);
+				}
 
 				g2d.setColor(Color.black);
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
