@@ -29,15 +29,19 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Closeable;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Arena {
+public class Arena implements Closeable {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final LinkedList<Drawable> banished;
 	private Field field = null;
+	private final BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
+	private final Graphics2D g2d;
+	private boolean updateField = true;
 
 	public Arena() {
 		this.slots = Map.of(
@@ -61,6 +65,10 @@ public class Arena {
 				Side.BOTTOM, new LinkedList<>()
 		);
 		this.banished = new LinkedList<>();
+
+		assert back != null;
+		g2d = back.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 	}
 
 	public Map<Side, List<SlotColumn<Champion, Equipment>>> getSlots() {
@@ -81,18 +89,18 @@ public class Arena {
 
 	public void setField(Field field) {
 		this.field = field;
+		this.updateField = true;
 	}
 
 	public BufferedImage render(Shoukan game, Map<Side, Hand> hands) {
 		try {
-			BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
-			BufferedImage arena = Helper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
+			if (updateField) {
+				BufferedImage arena = Helper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
 
-			assert back != null;
-			assert arena != null;
-			Graphics2D g2d = back.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-			g2d.drawImage(arena, 0, 0, null);
+				assert arena != null;
+				g2d.drawImage(arena, 0, 0, null);
+				updateField = false;
+			}
 
 			for (Map.Entry<Side, List<SlotColumn<Champion, Equipment>>> entry : slots.entrySet()) {
 				Side key = entry.getKey();
@@ -278,5 +286,11 @@ public class Arena {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	@Override
+	public void close() {
+		g2d.dispose();
+		System.gc();
 	}
 }

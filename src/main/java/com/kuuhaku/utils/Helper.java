@@ -2880,21 +2880,14 @@ public class Helper {
 		return out;
 	}
 
-	public static BufferedImage toCompatibleImage(BufferedImage image) {
-		if (image == null) return null;
-		GraphicsConfiguration conf = GraphicsEnvironment.getLocalGraphicsEnvironment()
-				.getDefaultScreenDevice()
-				.getDefaultConfiguration();
+	public static boolean hasAlpha(BufferedImage image) {
+		for (int y = 0; y < image.getHeight(); y++) {
+			for (int x = 0; x < image.getWidth(); x++) {
+				if ((image.getRGB(x, y) & 0xFF000000) < 0xFF000000)
+					return true;
+			}
+		}
 
-		if (image.getColorModel().equals(conf.getColorModel()))
-			return image;
-
-		BufferedImage bi = conf.createCompatibleImage(image.getWidth(), image.getHeight(), image.getTransparency());
-		Graphics2D g2d = bi.createGraphics();
-
-		g2d.drawImage(image, 0, 0, null);
-		g2d.dispose();
-
-		return bi;
+		return false;
 	}
 }

@@ -60,13 +60,16 @@ public class Hitotsu extends Game {
 			if (canInteract(event)) play(event);
 		}
 	};
-	private BufferedImage mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+	private final BufferedImage mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+	private final Graphics2D g2d;
 	private Message message = null;
 	private boolean suddenDeath = false;
 
 	public Hitotsu(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
+		this.g2d = mount.createGraphics();
+		this.g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
 		setActions(
 				s -> {
@@ -297,12 +300,8 @@ public class Hitotsu extends Game {
 		Helper.darkenImage(0.5f, mount);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
-		Graphics2D g2d = mount.createGraphics();
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
-		g2d.dispose();
 
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
@@ -318,12 +317,8 @@ public class Hitotsu extends Game {
 		Helper.darkenImage(0.5f, mount);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
-		Graphics2D g2d = mount.createGraphics();
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
-		g2d.dispose();
 	}
 
 	public void shuffle() {
@@ -333,7 +328,7 @@ public class Hitotsu extends Game {
 		deque.addAll(available);
 		deque.remove(lastest);
 		Collections.shuffle(deque);
-		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+		g2d.clearRect(0, 0, mount.getWidth(), mount.getHeight());
 	}
 
 	public Seats getSeats() {
@@ -438,6 +433,7 @@ public class Hitotsu extends Game {
 	@Override
 	public void close() {
 		listener.close();
+		g2d.dispose();
 		super.close();
 	}
 }
