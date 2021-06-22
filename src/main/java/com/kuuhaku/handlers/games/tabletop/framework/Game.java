@@ -164,6 +164,7 @@ public abstract class Game {
 		timeout = null;
 
 		closed = true;
+		board.close();
 	}
 
 	@Override
