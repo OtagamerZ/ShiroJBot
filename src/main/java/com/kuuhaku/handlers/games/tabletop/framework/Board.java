@@ -49,10 +49,16 @@ public class Board implements Closeable {
 		this.size = size;
 		this.players = Arrays.stream(players).map(s -> new Player(s, bet, AccountDAO.getAccount(s).getLoan() > 0)).collect(Collectors.toCollection(InfiniteList::new));
 		this.matrix = new Piece[size.getHeight()][size.getWidth()];
-		this.bi = new BufferedImage(64 * size.getWidth(), 64 * size.getHeight(), BufferedImage.TYPE_INT_RGB);
-		this.g2d = bi.createGraphics();
-		this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		this.g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
+
+		if (size.getWidth() + size.getHeight() != 0) {
+			this.bi = new BufferedImage(64 * size.getWidth(), 64 * size.getHeight(), BufferedImage.TYPE_INT_RGB);
+			this.g2d = bi.createGraphics();
+			this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			this.g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
+		} else {
+			this.bi = null;
+			this.g2d = null;
+		}
 
 		Collections.reverse(this.players);
 	}
@@ -441,6 +447,7 @@ public class Board implements Closeable {
 
 	@Override
 	public void close() {
-		g2d.dispose();
+		if (g2d != null)
+			g2d.dispose();
 	}
 }
