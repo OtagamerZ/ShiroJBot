@@ -2473,7 +2473,7 @@ public class Helper {
 		});
 
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			return ImageIO.read(bais);
+			return Helper.toCompatibleImage(ImageIO.read(bais));
 		} catch (IOException e) {
 			return null;
 		}
@@ -2877,5 +2877,21 @@ public class Helper {
 		}
 
 		return out;
+	}
+
+	public static BufferedImage toCompatibleImage(BufferedImage image) {
+		if (image == null) return null;
+		GraphicsConfiguration conf = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+
+		if (image.getColorModel().equals(conf.getColorModel()))
+			return image;
+
+		BufferedImage bi = conf.createCompatibleImage(image.getWidth(), image.getHeight(), image.getTransparency());
+		Graphics2D g2d = bi.createGraphics();
+
+		g2d.drawImage(image, 0, 0, null);
+		g2d.dispose();
+
+		return bi;
 	}
 }
