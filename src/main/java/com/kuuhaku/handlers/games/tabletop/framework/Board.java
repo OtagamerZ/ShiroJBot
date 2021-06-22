@@ -31,21 +31,28 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Closeable;
 import java.util.List;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class Board {
+public class Board implements Closeable {
 	private final BoardSize size;
 	private final InfiniteList<Player> players;
 	private final Piece[][] matrix;
+	private final BufferedImage bi;
+	private final Graphics2D g2d;
 	private boolean awarded = false;
 
 	public Board(BoardSize size, long bet, String... players) {
 		this.size = size;
 		this.players = Arrays.stream(players).map(s -> new Player(s, bet, AccountDAO.getAccount(s).getLoan() > 0)).collect(Collectors.toCollection(InfiniteList::new));
 		this.matrix = new Piece[size.getHeight()][size.getWidth()];
+		this.bi = new BufferedImage(64 * size.getWidth(), 64 * size.getHeight(), BufferedImage.TYPE_INT_RGB);
+		this.g2d = bi.createGraphics();
+		this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		this.g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
 
 		Collections.reverse(this.players);
 	}
@@ -410,11 +417,6 @@ public class Board {
 	}
 
 	public BufferedImage render() {
-		BufferedImage bi = new BufferedImage(64 * size.getWidth(), 64 * size.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
-
 		for (int y = 0; y < size.getHeight(); y++) {
 			for (int x = 0; x < size.getWidth(); x++) {
 				g2d.setColor((y + x) % 2 == 0 ? Color.decode("#dcc0b4") : Color.decode("#472d22"));
@@ -429,11 +431,16 @@ public class Board {
 				}
 			}
 		}
-		g2d.dispose();
+
 		return bi;
 	}
 
 	public boolean isAwarded() {
 		return awarded;
+	}
+
+	@Override
+	public void close() {
+		g2d.dispose();
 	}
 }
