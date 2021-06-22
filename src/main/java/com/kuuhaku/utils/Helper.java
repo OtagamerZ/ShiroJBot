@@ -2473,7 +2473,8 @@ public class Helper {
 		});
 
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			return Helper.toCompatibleImage(ImageIO.read(bais));
+			//return Helper.toCompatibleImage(ImageIO.read(bais));
+			return ImageIO.read(bais);
 		} catch (IOException e) {
 			return null;
 		}
