@@ -14,6 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1254,13 +1255,6 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
     </task>
-    <task id="LOCAL-04778" summary="Correções menores">
-      <created>1623764038461</created>
-      <option name="number" value="04778" />
-      <option name="presentableId" value="LOCAL-04778" />
-      <option name="project" value="LOCAL" />
-      <updated>1623764038461</updated>
-    </task>
     <task id="LOCAL-04779" summary="Correções menores">
       <created>1623764048030</created>
       <option name="number" value="04779" />
@@ -1597,7 +1591,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624308812529</updated>
     </task>
-    <option name="localTasksCounter" value="4827" />
+    <task id="LOCAL-04827" summary="Correções menores">
+      <created>1624389562844</created>
+      <option name="number" value="04827" />
+      <option name="presentableId" value="LOCAL-04827" />
+      <option name="project" value="LOCAL" />
+      <updated>1624389562844</updated>
+    </task>
+    <option name="localTasksCounter" value="4828" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

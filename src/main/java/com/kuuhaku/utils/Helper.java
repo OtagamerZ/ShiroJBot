@@ -2881,7 +2881,9 @@ public class Helper {
 
 	public static BufferedImage toCompatibleImage(BufferedImage image) {
 		if (image == null) return null;
-		GraphicsConfiguration conf = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+		GraphicsConfiguration conf = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice()
+				.getDefaultConfiguration();
 
 		if (image.getColorModel().equals(conf.getColorModel()))
 			return image;
