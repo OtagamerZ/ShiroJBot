@@ -293,7 +293,8 @@ public class Arena {
 
 			g2d.dispose();
 
-			return back;
+			assert back != null;
+			return Helper.applyOverlay(back, front);
 		} catch (NullPointerException | InterruptedException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;

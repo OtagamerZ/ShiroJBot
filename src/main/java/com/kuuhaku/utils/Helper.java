@@ -2549,10 +2549,14 @@ public class Helper {
 		return con;
 	}
 
-	public static void applyOverlay(BufferedImage in, BufferedImage overlay) {
-		Graphics2D g2d = in.createGraphics();
+	public static BufferedImage applyOverlay(BufferedImage in, BufferedImage overlay) {
+		BufferedImage bi = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.drawImage(in, 0, 0, null);
 		g2d.drawImage(overlay, 0, 0, null);
 		g2d.dispose();
+
+		return bi;
 	}
 
 	public static int hip(int cat1, int cat2) {
