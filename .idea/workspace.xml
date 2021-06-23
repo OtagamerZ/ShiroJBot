@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1254,13 +1256,6 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
     </task>
-    <task id="LOCAL-04785" summary="Correções menores">
-      <created>1623895036815</created>
-      <option name="number" value="04785" />
-      <option name="presentableId" value="LOCAL-04785" />
-      <option name="project" value="LOCAL" />
-      <updated>1623895036815</updated>
-    </task>
     <task id="LOCAL-04786" summary="Correções menores">
       <created>1623895578286</created>
       <option name="number" value="04786" />
@@ -1597,7 +1592,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624419930437</updated>
     </task>
-    <option name="localTasksCounter" value="4834" />
+    <task id="LOCAL-04834" summary="Correções menores">
+      <created>1624420094657</created>
+      <option name="number" value="04834" />
+      <option name="presentableId" value="LOCAL-04834" />
+      <option name="project" value="LOCAL" />
+      <updated>1624420094657</updated>
+    </task>
+    <option name="localTasksCounter" value="4835" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
