@@ -261,8 +261,6 @@ public class Arena implements Closeable {
 					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 860 + g2d.getFontMetrics().getHeight() / 2, g2d);
 			}
 
-			g2d.dispose();
-
 			return back;
 		} catch (NullPointerException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
