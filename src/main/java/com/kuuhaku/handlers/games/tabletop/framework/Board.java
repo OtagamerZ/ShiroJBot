@@ -31,18 +31,16 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.Closeable;
 import java.util.List;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class Board implements Closeable {
+public class Board {
 	private final BoardSize size;
 	private final InfiniteList<Player> players;
 	private final Piece[][] matrix;
 	private final BufferedImage bi;
-	private final Graphics2D g2d;
 	private boolean awarded = false;
 
 	public Board(BoardSize size, long bet, String... players) {
@@ -52,12 +50,8 @@ public class Board implements Closeable {
 
 		if (size.getWidth() + size.getHeight() != 0) {
 			this.bi = new BufferedImage(64 * size.getWidth(), 64 * size.getHeight(), BufferedImage.TYPE_INT_RGB);
-			this.g2d = bi.createGraphics();
-			this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			this.g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
 		} else {
 			this.bi = null;
-			this.g2d = null;
 		}
 
 		Collections.reverse(this.players);
@@ -423,6 +417,10 @@ public class Board implements Closeable {
 	}
 
 	public BufferedImage render() {
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
+
 		for (int y = 0; y < size.getHeight(); y++) {
 			for (int x = 0; x < size.getWidth(); x++) {
 				g2d.setColor((y + x) % 2 == 0 ? Color.decode("#dcc0b4") : Color.decode("#472d22"));
@@ -438,16 +436,12 @@ public class Board implements Closeable {
 			}
 		}
 
+		g2d.dispose();
+
 		return bi;
 	}
 
 	public boolean isAwarded() {
 		return awarded;
-	}
-
-	@Override
-	public void close() {
-		if (g2d != null)
-			g2d.dispose();
 	}
 }
