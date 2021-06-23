@@ -2280,7 +2280,6 @@ public class Shoukan extends GlobalGame {
 
 		listener.close();
 		recordLast();
-		arena.close();
 		super.close();
 	}
 
