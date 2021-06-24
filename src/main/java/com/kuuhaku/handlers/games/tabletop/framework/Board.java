@@ -72,22 +72,22 @@ public class Board {
 	}
 
 	public Piece getPieceAt(Spot s) {
-		Piece p = matrix[s.getY()][s.getX()];
+		Piece p = matrix[s.y()][s.x()];
 		return p instanceof Decoy ? null : p;
 	}
 
 	public Piece getPieceOrDecoyAt(Spot s) {
-		return matrix[s.getY()][s.getX()];
+		return matrix[s.y()][s.x()];
 	}
 
 	public void setPieceAt(Spot s, Piece p) {
-		matrix[s.getY()][s.getX()] = p;
+		matrix[s.y()][s.x()] = p;
 	}
 
 	public Piece[] getLine(Spot from, Neighbor vector, boolean inclusive) {
 		List<Piece> pieces = new ArrayList<>();
 
-		int[] currentCoords = inclusive ? from.getCoords() : new int[]{from.getX() + vector.getX(), from.getY() + vector.getY()};
+		int[] currentCoords = inclusive ? from.getCoords() : new int[]{from.x() + vector.getX(), from.y() + vector.getY()};
 		while (true) {
 			try {
 				pieces.add(matrix[currentCoords[1]][currentCoords[0]]);
@@ -103,7 +103,7 @@ public class Board {
 	}
 
 	public void fillLine(Spot from, int distance, Piece with, Neighbor vector, boolean inclusive) {
-		int[] currentCoords = inclusive ? from.getCoords() : new int[]{from.getX() + vector.getX(), from.getY() + vector.getY()};
+		int[] currentCoords = inclusive ? from.getCoords() : new int[]{from.x() + vector.getX(), from.y() + vector.getY()};
 		for (int i = 0; i <= distance; i++) {
 			try {
 				matrix[currentCoords[1]][currentCoords[0]] = with;

@@ -16,34 +16,31 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.embed;
+package com.kuuhaku.model.records.anime;
 
-public class Field {
-	private String name;
-	private String value;
-	private boolean inline;
+import java.util.List;
 
-	public String getName() {
-		return name;
-	}
+public record Media(
+		long idMal,
+		Title title,
+		String status,
+		StartDate startDate,
+		long episodes,
+		CoverImage coverImage,
+		List<String> genres,
+		long averageScore,
+		long popularity,
+		Studios studios,
+		Staff staff,
+		NextAiringEpisode nextAiringEpisode,
+		Trailer trailer,
+		String description
+) {
 
-	public void setName(String value) {
-		this.name = value;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public boolean getInline() {
-		return inline;
-	}
-
-	public void setInline(boolean value) {
-		this.inline = value;
+	@Override
+	public long episodes() {
+		if (nextAiringEpisode != null)
+			return Math.max(episodes, nextAiringEpisode.episode() - 1);
+		else return episodes;
 	}
 }

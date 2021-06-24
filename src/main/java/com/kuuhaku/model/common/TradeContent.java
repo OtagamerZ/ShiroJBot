@@ -86,8 +86,7 @@ public class TradeContent {
 		return Stream.of(cards, equipments, fields)
 					   .flatMap(Collection::stream)
 					   .mapToInt(o -> {
-						   if (o instanceof KawaiponCard) {
-							   KawaiponCard kc = (KawaiponCard) o;
+						   if (o instanceof KawaiponCard kc) {
 							   return kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE / 2 * (kc.isFoil() ? 2 : 1);
 						   } else if (o instanceof Equipment) {
 							   return Helper.BASE_EQUIPMENT_PRICE / 2;
@@ -104,18 +103,17 @@ public class TradeContent {
 	}
 
 	public boolean canReceive(Kawaipon kp) {
-		Kawaipon aux = kp.copy();
-		Deck dk = aux.getDeck();
+		Deck dk = kp.getDeck();
 		for (KawaiponCard card : cards) {
-			if (aux.getCards().contains(card)) return false;
+			if (kp.getCards().contains(card)) return false;
 		}
 
-		for (Equipment equipment : new HashSet<>(equipments)) {
+		for (Equipment equipment : equipments) {
 			if (dk.checkEquipmentError(equipment) == 0) dk.addEquipment(equipment);
 			else return false;
 		}
 
-		for (Field field : new HashSet<>(fields)) {
+		for (Field field : fields) {
 			if (dk.checkFieldError(field) == 0) dk.addField(field);
 			else return false;
 		}
@@ -148,47 +146,43 @@ public class TradeContent {
 	}
 
 	public static void trade(Collection<TradeContent> offers) {
-		List<TradeContent> off = List.copyOf(offers);
-		TradeContent tc1 = off.get(0);
-		TradeContent tc2 = off.get(1);
+		for (TradeContent tc : offers) {
+			TradeContent other = offers.stream()
+					.filter(t -> !tc.equals(t))
+					.findFirst()
+					.orElseThrow();
 
-		Account acc1 = tc1.getAccount();
-		int liquidAmount1 = Helper.applyTax(tc1.uid, tc1.credits, 0.1);
+			Account acc = tc.getAccount();
+			Kawaipon kp = tc.getKawaipon();
+			Deck dk = kp.getDeck();
 
-		Account acc2 = tc2.getAccount();
-		int liquidAmount2 = Helper.applyTax(tc2.uid, tc2.credits, 0.1);
+			int liquidAmount = Helper.applyTax(other.uid, other.credits, 0.1);
+			acc.addCredit(liquidAmount, TradeContent.class);
 
-		Kawaipon kp1 = tc1.getKawaipon();
-		Deck dk1 = kp1.getDeck();
-		Kawaipon kp2 = tc2.getKawaipon();
-		Deck dk2 = kp2.getDeck();
+			kp.addCards(other.cards);
+			dk.addEquipments(other.equipments);
+			dk.addFields(other.fields);
 
-		acc1.addCredit(liquidAmount2, TradeContent.class);
-		acc2.removeCredit(tc2.credits, TradeContent.class);
-		kp1.addCards(tc2.cards);
-		dk1.addEquipments(tc2.equipments);
-		dk1.addFields(tc2.fields);
-		kp2.removeCards(tc2.cards);
-		dk2.removeEquipments(tc2.equipments);
-		dk2.removeFields(tc2.fields);
+			Account oAcc = tc.getAccount();
+			Kawaipon oKp = other.getKawaipon();
+			Deck oDk = oKp.getDeck();
 
-		acc2.addCredit(liquidAmount1, TradeContent.class);
-		acc1.removeCredit(tc1.credits, TradeContent.class);
-		kp2.addCards(tc1.cards);
-		dk2.addEquipments(tc1.equipments);
-		dk2.addFields(tc1.fields);
-		kp1.removeCards(tc1.cards);
-		dk1.removeEquipments(tc1.equipments);
-		dk1.removeFields(tc1.fields);
+			oAcc.removeCredit(other.credits, TradeContent.class);
 
-		KawaiponDAO.saveKawaipon(kp1);
-		KawaiponDAO.saveKawaipon(kp2);
-		AccountDAO.saveAccount(acc1);
-		AccountDAO.saveAccount(acc2);
+			oKp.removeCards(other.cards);
+			oDk.removeEquipments(other.equipments);
+			oDk.removeFields(other.fields);
 
-		LotteryValue lv = LotteryDAO.getLotteryValue();
-		lv.addValue((tc1.credits - liquidAmount1) + (tc2.credits - liquidAmount2));
-		LotteryDAO.saveLotteryValue(lv);
+			LotteryValue lv = LotteryDAO.getLotteryValue();
+			lv.addValue((tc.credits - liquidAmount));
+			LotteryDAO.saveLotteryValue(lv);
+
+			KawaiponDAO.saveKawaipon(kp);
+			AccountDAO.saveAccount(acc);
+
+			KawaiponDAO.saveKawaipon(oKp);
+			AccountDAO.saveAccount(oAcc);
+		}
 	}
 
 	@Override
@@ -224,5 +218,18 @@ public class TradeContent {
 		}
 
 		return sb.appendNewLine("```").toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TradeContent that = (TradeContent) o;
+		return Objects.equals(uid, that.uid);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uid);
 	}
 }

@@ -83,11 +83,9 @@ public class SeeCardCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
-			if (d instanceof Champion) {
-				Champion c = (Champion) d;
+			if (d instanceof Champion c) {
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
-			} else if (d instanceof Equipment && ((Equipment) d).getCharm() != null) {
-				Equipment e = (Equipment) d;
+			} else if (d instanceof Equipment e && e.getCharm() != null) {
 				Charm c = e.getCharm();
 				eb.addField("Amuleto:", c == Charm.SPELL && e.isParasite() ? "Parasita" : c.getName(), true);
 			}

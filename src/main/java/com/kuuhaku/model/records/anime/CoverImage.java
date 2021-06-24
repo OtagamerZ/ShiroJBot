@@ -16,30 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-public class StaffEdge {
-	private String role;
-	private NameNode node;
+import java.awt.*;
 
-	public String getRole() {
-		return role;
-	}
+public record CoverImage(String extraLarge, String large, String medium, String color) {
 
-	public void setRole(String value) {
-		this.role = value;
-	}
-
-	public NameNode getNode() {
-		return node;
-	}
-
-	public void setNode(NameNode value) {
-		this.node = value;
-	}
-
-	@Override
-	public String toString() {
-		return node.toString() + " (" + role + ")";
+	public Color getParsedColor() {
+		return color == null ? null : Color.decode(color);
 	}
 }

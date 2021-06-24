@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
@@ -29,9 +30,11 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
+import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "banir",
@@ -44,15 +47,23 @@ public class BanMemberCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getMentionedMembers().isEmpty()) {
-			channel.sendMessage(I18n.getString("err_mention-required")).queue();
+		Set<Member> m = new HashSet<>();
+		m.addAll(message.getMentionedMembers());
+		m.addAll(Arrays.stream(args)
+				.filter(StringUtils::isNumeric)
+				.map(guild::getMemberById)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList()));
+
+		if (m.isEmpty()) {
+			channel.sendMessage(I18n.getString("err_user-or-id-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
 			channel.sendMessage(I18n.getString("err_ban-not-allowed")).queue();
 			return;
 		}
 
-		for (Member mb : message.getMentionedMembers()) {
+		for (Member mb : m) {
 			if (!member.canInteract(mb)) {
 				channel.sendMessage(I18n.getString("err_cannot-ban-high-role")).queue();
 				return;
@@ -63,10 +74,14 @@ public class BanMemberCommand implements Executable {
 				channel.sendMessage(I18n.getString("err_cannot-ban-staff")).queue();
 				return;
 			}
+
+			args = Arrays.stream(args)
+					.filter(a -> !Helper.regex(a, "<@!?" + mb.getId() + ">|" + mb.getId()).find())
+					.toArray(String[]::new);
 		}
 
-		String reason = argsAsText.replaceAll(Helper.MENTION, "").trim();
-		if (message.getMentionedMembers().size() > 1) {
+		String reason = String.join(" ", args);
+		if (m.size() > 1) {
 			if (reason.isBlank()) {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
@@ -74,10 +89,17 @@ public class BanMemberCommand implements Executable {
 					acts.add(mb.ban(7));
 				}
 
-				RestAction.allOf(acts)
-						.mapToResult()
-						.flatMap(s -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									RestAction.allOf(acts)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			} else {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
@@ -85,20 +107,45 @@ public class BanMemberCommand implements Executable {
 					acts.add(mb.ban(7, reason));
 				}
 
-				RestAction.allOf(acts)
-						.mapToResult()
-						.flatMap(s -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + reason + "`"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + reason + "\", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									RestAction.allOf(acts)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + reason + "`"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			}
 		} else {
+			Member mm = m.stream().findFirst().orElseThrow();
+
 			if (reason.isBlank()) {
-				message.getMentionedMembers().get(0).ban(7)
-						.flatMap(s -> channel.sendMessage("✅ | Membro banido com sucesso!"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									mm.ban(7)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			} else {
-				message.getMentionedMembers().get(0).ban(7, reason)
-						.flatMap(s -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + reason + "`"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									mm.ban(7, reason)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + reason + "`"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			}
 		}
 	}

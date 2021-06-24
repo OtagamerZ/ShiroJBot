@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
@@ -29,9 +30,11 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
+import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "expulsar",
@@ -44,8 +47,16 @@ public class KickMemberCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getMentionedMembers().isEmpty()) {
-			channel.sendMessage(I18n.getString("err_mention-required")).queue();
+		Set<Member> m = new HashSet<>();
+		m.addAll(message.getMentionedMembers());
+		m.addAll(Arrays.stream(args)
+				.filter(StringUtils::isNumeric)
+				.map(guild::getMemberById)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList()));
+
+		if (m.isEmpty()) {
+			channel.sendMessage(I18n.getString("err_user-or-id-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
 			channel.sendMessage(I18n.getString("err_kick-not-allowed")).queue();
@@ -63,10 +74,14 @@ public class KickMemberCommand implements Executable {
 				channel.sendMessage(I18n.getString("err_cannot-kick-staff")).queue();
 				return;
 			}
+
+			args = Arrays.stream(args)
+					.filter(a -> !Helper.regex(a, "<@!?" + mb.getId() + ">|" + mb.getId()).find())
+					.toArray(String[]::new);
 		}
 
-		String reason = argsAsText.replaceAll(Helper.MENTION, "").trim();
-		if (message.getMentionedMembers().size() > 1) {
+		String reason = String.join(" ", args);
+		if (m.size() > 1) {
 			if (reason.isBlank()) {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
@@ -74,10 +89,17 @@ public class KickMemberCommand implements Executable {
 					acts.add(mb.kick());
 				}
 
-				RestAction.allOf(acts)
-						.mapToResult()
-						.flatMap(s -> channel.sendMessage("✅ | Membros expulsos com sucesso!"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a expulsar " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									RestAction.allOf(acts)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			} else {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
@@ -85,20 +107,45 @@ public class KickMemberCommand implements Executable {
 					acts.add(mb.kick(reason));
 				}
 
-				RestAction.allOf(acts)
-						.mapToResult()
-						.flatMap(s -> channel.sendMessage("✅ | Membros expulsos com sucesso!\nRazão: `" + reason + "`"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a expulsar " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + reason + "\", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									RestAction.allOf(acts)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + reason + "`"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			}
 		} else {
+			Member mm = m.stream().findFirst().orElseThrow();
+
 			if (reason.isBlank()) {
-				message.getMentionedMembers().get(0).kick()
-						.flatMap(s -> channel.sendMessage("✅ | Membro expulso com sucesso!"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a expulsar " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									mm.kick()
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			} else {
-				message.getMentionedMembers().get(0).kick(reason)
-						.flatMap(s -> channel.sendMessage("✅ | Membro expulso com sucesso!\nRazão: `" + reason + "`"))
-						.queue(null, Helper::doNothing);
+				channel.sendMessage("Você está prestes a expulsar " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									mm.kick(reason)
+											.mapToResult()
+											.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!\nRazão: `" + reason + "`"))
+											.flatMap(r -> s.delete())
+											.queue(null, Helper::doNothing);
+								}), true, 1, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+						), Helper::doNothing
+				);
 			}
 		}
     }

@@ -16,30 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records.anime;
 
-import com.kuuhaku.model.enums.ExceedEnum;
-
-public class Exceed {
-	private final ExceedEnum exceed;
-	private final int members;
-	private final long exp;
-
-	public Exceed(ExceedEnum exceed, int members, long exp) {
-		this.exceed = exceed;
-		this.members = members;
-		this.exp = exp;
-	}
-
-	public ExceedEnum getExceed() {
-		return exceed;
-	}
-
-	public int getMembers() {
-		return members;
-	}
-
-	public long getExp() {
-		return exp;
-	}
+public record Trailer(String site) {
 }

@@ -16,36 +16,29 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.embed;
+package com.kuuhaku.model.records.embed;
 
 import com.kuuhaku.utils.Helper;
 
-public class Image {
-	private String image;
-	private String join;
-	private String leave;
+import java.awt.*;
+import java.util.List;
 
-	public String getImage() {
-		return image;
-	}
+public record Embed(Title title,
+					Author author,
+					String color,
+					String body,
+					String thumbnail,
+					Image image,
+					boolean showDate,
+					Footer footer,
+					List<Field> fields
+) {
 
-	public void setImage(String value) {
-		this.image = value;
-	}
-
-	public String getJoin() {
-		return Helper.getOr(join, image);
-	}
-
-	public void setJoin(String value) {
-		this.join = value;
-	}
-
-	public String getLeave() {
-		return Helper.getOr(leave, image);
-	}
-
-	public void setLeave(String value) {
-		this.leave = value;
+	public Color getParsedColor() {
+		try {
+			return Color.decode(Helper.getOr(color, ""));
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 }

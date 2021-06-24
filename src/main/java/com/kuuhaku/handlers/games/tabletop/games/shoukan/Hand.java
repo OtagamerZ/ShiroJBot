@@ -109,8 +109,7 @@ public class Hand {
 			switch (game.getCustom().getString("arcade")) {
 				case "roleta" -> {
 					for (Drawable d : deque) {
-						if (d instanceof Champion) {
-							Champion c = (Champion) d;
+						if (d instanceof Champion c) {
 							c.setRawEffect("""
 									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
 										int rng = Math.round(Math.random() * 100);
@@ -161,8 +160,7 @@ public class Hand {
 			deque.stream()
 					.distinct()
 					.forEach(d -> {
-						if (d instanceof Champion) {
-							Champion c = (Champion) d;
+						if (d instanceof Champion c) {
 							if (!c.hasEffect()) {
 								String[] de = CardDAO.getRandomEffect(c.getMana());
 								c.setDescription(de[0]);

@@ -23,11 +23,11 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.ExceedScore;
+import com.kuuhaku.model.records.Exceed;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -78,9 +78,9 @@ public class ExceedRankCommand implements Executable {
 					);
 
 					for (Exceed ex : exceeds) {
-						chart.addSeries(ex.getExceed().getName(),
+						chart.addSeries(ex.exceed().getName(),
 								List.of("Exceed"),
-								List.of(Math.round(ex.getExp() / 1000d))
+								List.of(Math.round(ex.exp() / 1000d))
 						);
 					}
 
@@ -92,7 +92,7 @@ public class ExceedRankCommand implements Executable {
 					List<Color> colors = new ArrayList<>();
 					for (ExceedEnum ex : ExceedEnum.values()) {
 						List<ExceedScore> e = ExceedDAO.getExceedHistory(ex);
-						e.add(new ExceedScore(ex, ExceedDAO.getExceed(ex).getExp(), LocalDate.now().plusMonths(1)));
+						e.add(new ExceedScore(ex, ExceedDAO.getExceed(ex).exp(), LocalDate.now().plusMonths(1)));
 						e.sort(Comparator.comparing(ExceedScore::getTimestamp));
 						e.removeIf(es -> es.getTimestamp().getYear() != LocalDate.now().getYear());
 						exceeds.add(e);

@@ -16,16 +16,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records;
 
-public class Data {
-	private Media Media;
+public record YoutubeVideo(String id, String title, String desc, String thumb, String channel, boolean playlist) {
 
-	public Media getMedia() {
-		return Media;
-	}
-
-	public void setMedia(Media value) {
-		this.Media = value;
+	public String getUrl() {
+		return playlist ? "https://www.youtube.com/playlist?list=" + id : "https://www.youtube.com/watch?v=" + id;
 	}
 }

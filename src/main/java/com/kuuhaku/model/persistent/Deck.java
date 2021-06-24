@@ -269,7 +269,7 @@ public class Deck {
 	public double getAverageCost() {
 		return ListUtils.union(champions, equipments)
 				.stream()
-				.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
+				.mapToInt(d -> d instanceof Champion c ? c.getMana() : ((Equipment) d).getMana())
 				.filter(i -> i != 0)
 				.average()
 				.orElse(0);
@@ -542,13 +542,13 @@ public class Deck {
 
 		return """
 					   __**:crossed_swords: | Cartas Senshi:** %s__
-					   				
+					   					   				
 					   :large_orange_diamond: | Efeito primário: %s (%s)
 					   :small_orange_diamond: | Efeito secundário: %s (%s)
 					   :shield: | Peso evogear: %s
 					   :thermometer: | Custo médio de mana: %s
 					   :recycle: | Divergência do meta: %s/%s/%s (%s)
-					   				
+					   					   				
 					   """
 					   .formatted(
 							   champions.size(),

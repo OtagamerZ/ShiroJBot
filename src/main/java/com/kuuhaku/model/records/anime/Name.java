@@ -16,22 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-import java.util.List;
+public record Name(String first, String last) {
 
-public class Staff {
-	private List<StaffEdge> edges;
-
-	public List<StaffEdge> getEdges() {
-		return edges;
-	}
-
-	public void setEdges(List<StaffEdge> value) {
-		this.edges = value;
-	}
-
-	public String getCreator() {
-		return edges == null || edges.isEmpty() ? "Desconhecido" : edges.get(0).getNode().toString();
+	@Override
+	public String toString() {
+		return first + " " + last;
 	}
 }

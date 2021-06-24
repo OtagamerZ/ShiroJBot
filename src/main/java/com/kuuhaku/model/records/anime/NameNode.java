@@ -16,16 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-public class StudiosNode {
-	private String name;
+public record NameNode(Name name) {
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String value) {
-		this.name = value;
+	@Override
+	public String toString() {
+		return name.toString();
 	}
 }

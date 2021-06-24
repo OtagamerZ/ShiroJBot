@@ -42,8 +42,8 @@ public class LeaderboardsDAO {
 
 		Query q = em.createQuery("""
 				SELECT COALESCE(SUM(l.score), 0)
-				FROM Leaderboards l 
-				WHERE l.uid = :uid 
+				FROM Leaderboards l
+				WHERE l.uid = :uid
 				AND l.minigame = :minigame
 				""", Long.class);
 		q.setParameter("uid", id);

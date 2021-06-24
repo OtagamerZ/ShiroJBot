@@ -16,30 +16,9 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.kuuhaku.model.enums.ExceedEnum;
 
-public class Studios {
-	private List<StudiosEdge> edges;
-
-	public List<StudiosEdge> getEdges() {
-		return edges;
-	}
-
-	public void setEdges(List<StudiosEdge> value) {
-		this.edges = value;
-	}
-
-	public String getMajor() {
-		return edges == null || edges.isEmpty() ? "Desconhecido" : edges.get(0).getNode().getName();
-	}
-
-	public List<String> getNames() {
-		return edges.stream()
-				.map(StudiosEdge::getNode)
-				.map(StudiosNode::getName)
-				.collect(Collectors.toList());
-	}
+public record Exceed(ExceedEnum exceed, int members, long exp) {
 }
