@@ -22,8 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.4.RELEASE")
-        classpath("org.springframework:springloaded:1.2.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.5.1")
     }
 }
 
@@ -31,7 +30,7 @@ plugins {
     id "java"
     id "idea"
     id "application"
-    id "org.springframework.boot" version "2.3.4.RELEASE"
+    id "org.springframework.boot" version "2.5.1"
 }
 
 application {
@@ -90,7 +89,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") {
         exclude module: "spring-boot-starter-logging"
     }
-    implementation("org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE") {
+    implementation("org.springframework.boot:spring-boot-starter-web:2.5.1") {
         exclude module: "spring-boot-starter-logging"
     }
 
@@ -119,7 +118,7 @@ dependencies {
     implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.11.2"
     implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.11.2"
     implementation group: "org.apache.logging.log4j", name: "log4j-jcl", version: "2.11.2"
-    implementation group: "org.springframework.boot", name: "spring-boot-starter-log4j2", version: "2.3.4.RELEASE"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-log4j2", version: "2.5.1"
 
     //Util
     implementation group: "com.github.SvenWoltmann", name: "color-thief-java", version: "v1.1.2"
