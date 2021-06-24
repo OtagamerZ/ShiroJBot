@@ -132,7 +132,7 @@ public class DashboardSocket extends WebSocketServer {
 					}
 
 					Main.getInfo().getUserByID(tk.getUid()).openPrivateChannel()
-							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado sobre o progresso dele."))
 							.queue(null, Helper::doNothing);
 
 					tk.setMsgIds(ids);
