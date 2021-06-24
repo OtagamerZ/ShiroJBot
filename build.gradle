@@ -59,7 +59,7 @@ run {
 
 task copyToLib(type: Copy) {
     into "$buildDir/libs"
-    from(configurations.compile)
+    from(configurations.implementation)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 stage.dependsOn(copyToLib)
