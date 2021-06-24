@@ -16,9 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualizado para JDK 16">
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualizado para JDK 16" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1263,14 +1261,7 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
       <workItem from="1624473260014" duration="5634000" />
-      <workItem from="1624559303942" duration="4738000" />
-    </task>
-    <task id="LOCAL-04789" summary="Correções menores">
-      <created>1623897344448</created>
-      <option name="number" value="04789" />
-      <option name="presentableId" value="LOCAL-04789" />
-      <option name="project" value="LOCAL" />
-      <updated>1623897344448</updated>
+      <workItem from="1624559303942" duration="4809000" />
     </task>
     <task id="LOCAL-04790" summary="Correções menores">
       <created>1623899534917</created>
@@ -1608,7 +1599,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624564558543</updated>
     </task>
-    <option name="localTasksCounter" value="4838" />
+    <task id="LOCAL-04838" summary="Atualizado para JDK 16">
+      <created>1624564972966</created>
+      <option name="number" value="04838" />
+      <option name="presentableId" value="LOCAL-04838" />
+      <option name="project" value="LOCAL" />
+      <updated>1624564972966</updated>
+    </task>
+    <option name="localTasksCounter" value="4839" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
