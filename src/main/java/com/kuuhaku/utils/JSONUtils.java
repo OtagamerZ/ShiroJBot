@@ -23,6 +23,7 @@ import com.kuuhaku.model.enums.JsonType;
 
 public class JSONUtils {
 	private static final Gson gson = new GsonBuilder()
+			.registerTypeAdapterFactory(new RecordTypeAdapterFactory())
 			.registerTypeAdapter(JSONWrapper.class, new JSONAdapter())
 			.create();
 
