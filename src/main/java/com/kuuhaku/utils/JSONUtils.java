@@ -18,8 +18,11 @@
 
 package com.kuuhaku.utils;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import com.kuuhaku.model.enums.JsonType;
+
+import java.util.List;
 
 public class JSONUtils {
 	private static final Gson gson = new GsonBuilder()
@@ -35,8 +38,10 @@ public class JSONUtils {
 		return gson.toJson(o);
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	public static <T> T fromJSON(String json, Class<T> klass) {
-		return gson.fromJson(json, klass);
+		return gson.fromJson(json, new TypeToken<List<T>>() {
+		}.getType());
 	}
 
 	public static JsonObject parseJSONObject(String json) {
