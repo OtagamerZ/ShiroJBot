@@ -1263,21 +1263,7 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
       <workItem from="1624473260014" duration="5634000" />
-      <workItem from="1624559303942" duration="4971000" />
-    </task>
-    <task id="LOCAL-04792" summary="Correções menores">
-      <created>1623899888090</created>
-      <option name="number" value="04792" />
-      <option name="presentableId" value="LOCAL-04792" />
-      <option name="project" value="LOCAL" />
-      <updated>1623899888090</updated>
-    </task>
-    <task id="LOCAL-04793" summary="Correções menores">
-      <created>1623935196842</created>
-      <option name="number" value="04793" />
-      <option name="presentableId" value="LOCAL-04793" />
-      <option name="project" value="LOCAL" />
-      <updated>1623935196842</updated>
+      <workItem from="1624559303942" duration="5316000" />
     </task>
     <task id="LOCAL-04794" summary="Correções menores">
       <created>1623935212670</created>
@@ -1608,7 +1594,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624565121523</updated>
     </task>
-    <option name="localTasksCounter" value="4841" />
+    <task id="LOCAL-04841" summary="Atualizado para JDK 16">
+      <created>1624565236248</created>
+      <option name="number" value="04841" />
+      <option name="presentableId" value="LOCAL-04841" />
+      <option name="project" value="LOCAL" />
+      <updated>1624565236248</updated>
+    </task>
+    <task id="LOCAL-04842" summary="Atualizado para JDK 16">
+      <created>1624565412791</created>
+      <option name="number" value="04842" />
+      <option name="presentableId" value="LOCAL-04842" />
+      <option name="project" value="LOCAL" />
+      <updated>1624565412791</updated>
+    </task>
+    <option name="localTasksCounter" value="4843" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
