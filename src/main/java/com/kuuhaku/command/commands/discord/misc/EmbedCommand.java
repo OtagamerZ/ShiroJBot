@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
-import com.kuuhaku.model.common.embed.Embed;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
@@ -48,7 +47,7 @@ public class EmbedCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-				gc.setEmbedTemplate(new Embed());
+				gc.setEmbedTemplate(null);
 				GuildDAO.updateGuildSettings(gc);
 
 				m.delete().queue(null, Helper::doNothing);

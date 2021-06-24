@@ -16,31 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-public class NextAiringEpisode {
-	private long episode;
-	private long airingAt;
-
-	public long getEpisode() {
-		return episode;
-	}
-
-	public void setEpisode(long value) {
-		this.episode = value;
-	}
-
-	public long getAiringAt() {
-		return airingAt;
-	}
-
-	public void setAiringAt(long value) {
-		this.airingAt = value;
-	}
+public record NextAiringEpisode(long episode, long airingAt) {
 
 	public ZonedDateTime getAiringAtDate() {
 		return Instant.ofEpochMilli(airingAt * 1000).atZone(ZoneId.of("GMT-3"));

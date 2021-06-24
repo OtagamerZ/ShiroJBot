@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.disboard.model;
 
-import com.google.gson.JsonElement;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.utils.JSONArray;
@@ -55,13 +54,15 @@ public class PoliticalState {
 		return exceed;
 	}
 
-	public List<JsonElement> getCountries() {
-		return new JSONArray(countries).toList();
+	public JSONArray getCountries() {
+		return new JSONArray(countries);
 	}
 
 	public void addCountry(Country country) {
 		List<String> cs = new ArrayList<>();
-		List<Country> current = getCountries().stream().map(c -> Country.valueOf(Country.class, String.valueOf(c))).collect(Collectors.toList());
+		List<Country> current = getCountries().toList().stream()
+				.map(c -> Country.valueOf(Country.class, String.valueOf(c)))
+				.collect(Collectors.toList());
 		for (Country c : current) {
 			cs.add(c.name());
 		}
@@ -72,7 +73,9 @@ public class PoliticalState {
 
 	public void removeCountry(Country country) {
 		List<String> cs = new ArrayList<>();
-		List<Country> current = getCountries().stream().map(c -> Country.valueOf(Country.class, String.valueOf(c))).collect(Collectors.toList());
+		List<Country> current = getCountries().toList().stream()
+				.map(c -> Country.valueOf(Country.class, String.valueOf(c)))
+				.collect(Collectors.toList());
 		for (Country c : current) {
 			cs.add(c.name());
 		}
@@ -86,7 +89,10 @@ public class PoliticalState {
 	}
 
 	public int getLandValue() {
-		return getCountries().parallelStream().mapToInt(c -> Country.valueOf(Country.class, String.valueOf(c)).getSize()).sum();
+		return getCountries().toList()
+				.parallelStream()
+				.mapToInt(c -> Country.valueOf(Country.class, String.valueOf(c)).getSize())
+				.sum();
 	}
 
 	public void modifyInfluence(boolean won) {

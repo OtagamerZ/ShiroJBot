@@ -16,21 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-public class StudiosEdge {
-	private StudiosNode node;
-
-	public StudiosNode getNode() {
-		return node;
-	}
-
-	public void setNode(StudiosNode value) {
-		this.node = value;
-	}
-
-	@Override
-	public String toString() {
-		return node.getName();
-	}
+public record NAMHData(String id, String desc) {
 }

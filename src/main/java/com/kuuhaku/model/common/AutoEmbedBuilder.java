@@ -18,8 +18,8 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.model.common.embed.Embed;
-import com.kuuhaku.model.common.embed.Field;
+import com.kuuhaku.model.records.embed.Embed;
+import com.kuuhaku.model.records.embed.Field;
 import com.kuuhaku.utils.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -35,33 +35,33 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		e = embed;
 
 		setTitle(
-				StringUtils.abbreviate(e.getTitle().getName(), MessageEmbed.TITLE_MAX_LENGTH),
-				e.getTitle().getUrl()
+				StringUtils.abbreviate(e.title().name(), MessageEmbed.TITLE_MAX_LENGTH),
+				e.title().url()
 		);
 
 		setAuthor(
-				StringUtils.abbreviate(e.getAuthor().getName(), MessageEmbed.AUTHOR_MAX_LENGTH),
-				e.getAuthor().getUrl(),
-				e.getAuthor().getIcon()
+				StringUtils.abbreviate(e.author().name(), MessageEmbed.AUTHOR_MAX_LENGTH),
+				e.author().url(),
+				e.author().icon()
 		);
 
 		setColor(e.getParsedColor());
-		setDescription(StringUtils.abbreviate(e.getBody(), MessageEmbed.TEXT_MAX_LENGTH));
-		setThumbnail(e.getThumbnail());
-		setImage(e.getImage().getImage());
-		if (e.getShowDate()) setTimestamp(LocalDateTime.now());
+		setDescription(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH));
+		setThumbnail(e.thumbnail());
+		setImage(e.image().image());
+		if (e.showDate()) setTimestamp(LocalDateTime.now());
 
 		setFooter(
-				StringUtils.abbreviate(e.getFooter().getName(), MessageEmbed.TEXT_MAX_LENGTH),
-				e.getFooter().getIcon()
+				StringUtils.abbreviate(e.footer().name(), MessageEmbed.TEXT_MAX_LENGTH),
+				e.footer().icon()
 		);
 
-		List<Field> fields = e.getFields();
+		List<Field> fields = e.fields();
 		for (Field field : fields) {
 			addField(
-					StringUtils.abbreviate(field.getName(), MessageEmbed.TITLE_MAX_LENGTH),
-					StringUtils.abbreviate(field.getValue(), MessageEmbed.VALUE_MAX_LENGTH),
-					field.getInline()
+					StringUtils.abbreviate(field.name(), MessageEmbed.TITLE_MAX_LENGTH),
+					StringUtils.abbreviate(field.value(), MessageEmbed.VALUE_MAX_LENGTH),
+					field.inline()
 			);
 		}
 	}

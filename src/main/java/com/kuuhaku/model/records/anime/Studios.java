@@ -16,25 +16,21 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.embed;
+package com.kuuhaku.model.records.anime;
 
-public class Footer {
-	private String name;
-	private String icon;
+import java.util.List;
+import java.util.stream.Collectors;
 
-	public String getName() {
-		return name;
+public record Studios(List<StudiosEdge> edges) {
+
+	public String getMajor() {
+		return edges == null || edges.isEmpty() ? "Desconhecido" : edges.get(0).node().name();
 	}
 
-	public void setName(String value) {
-		this.name = value;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String value) {
-		this.icon = value;
+	public List<String> getNames() {
+		return edges.stream()
+				.map(StudiosEdge::node)
+				.map(StudiosNode::name)
+				.collect(Collectors.toList());
 	}
 }

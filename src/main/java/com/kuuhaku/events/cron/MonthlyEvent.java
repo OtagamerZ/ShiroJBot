@@ -58,7 +58,7 @@ public class MonthlyEvent implements Job {
 				Account acc = AccountDAO.getAccount(exceedMember.getUid());
 				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
 					double share = ExceedDAO.getMemberShare(u.getId());
-					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
+					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).exp() / 1000f);
 					long prize = Math.round(total * share);
 					try {
 						c.sendMessage("""

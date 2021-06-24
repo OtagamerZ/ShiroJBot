@@ -28,7 +28,6 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
-import com.kuuhaku.model.common.embed.Embed;
 import com.kuuhaku.model.enums.BotExchange;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
@@ -36,6 +35,7 @@ import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
+import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import me.xuender.unidecode.Unidecode;
@@ -588,22 +588,22 @@ public class ShiroEvents extends ListenerAdapter {
 										case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
 										default -> "";
 									},
-									e.getTitle().getUrl()
+									e.title().url()
 							);
 
-					if (e.getColor() != null) eb.setColor(e.getParsedColor());
+					if (e.color() != null) eb.setColor(e.getParsedColor());
 					else eb.setColor(Helper.colorThief(image));
 
-					if (e.getThumbnail() != null) eb.setThumbnail(e.getThumbnail());
+					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (e.getImage().getJoin() != null) eb.setImage(e.getImage().getJoin());
+					if (e.image().join() != null) eb.setImage(e.image().join());
 
 					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild));
 
-					if (e.getFooter().getName() != null) eb.setFooter(e.getFooter().getName(), e.getFooter().getIcon());
+					if (e.footer().name() != null) eb.setFooter(e.footer().name(), e.footer().icon());
 					else
-						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.getFooter().getIcon(), guild.getIconUrl()));
+						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.footer().icon(), guild.getIconUrl()));
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
@@ -666,22 +666,22 @@ public class ShiroEvents extends ListenerAdapter {
 										case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
 										default -> "";
 									},
-									e.getTitle().getUrl()
+									e.title().url()
 							);
 
-					if (e.getColor() != null) eb.setColor(e.getParsedColor());
+					if (e.color() != null) eb.setColor(e.getParsedColor());
 					else eb.setColor(Helper.colorThief(image));
 
-					if (e.getThumbnail() != null) eb.setThumbnail(e.getThumbnail());
+					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (e.getImage().getLeave() != null) eb.setImage(e.getImage().getLeave());
+					if (e.image().leave() != null) eb.setImage(e.image().leave());
 
 					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild));
 
-					if (e.getFooter().getName() != null) eb.setFooter(e.getFooter().getName(), e.getFooter().getIcon());
+					if (e.footer().name() != null) eb.setFooter(e.footer().name(), e.footer().icon());
 					else
-						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.getFooter().getIcon(), guild.getIconUrl()));
+						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.footer().icon(), guild.getIconUrl()));
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(

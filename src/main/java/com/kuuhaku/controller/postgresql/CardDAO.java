@@ -166,10 +166,10 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT c 
-				FROM Card c 
-				WHERE id = UPPER(:name) 
-				AND rarity NOT IN :blacklist 
+				SELECT c
+				FROM Card c
+				WHERE id = UPPER(:name)
+				AND rarity NOT IN :blacklist
 				AND anime.name IN :animes
 				""", Card.class);
 		if (withUltimate) {

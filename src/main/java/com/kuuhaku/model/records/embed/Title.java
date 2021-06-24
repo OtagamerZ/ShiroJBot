@@ -16,21 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.embed;
 
-public class NameNode {
-	private Name name;
-
-	public Name getName() {
-		return name;
-	}
-
-	public void setName(Name value) {
-		this.name = value;
-	}
-
-	@Override
-	public String toString() {
-		return name.toString();
-	}
+public record Title(String name, String url) {
 }

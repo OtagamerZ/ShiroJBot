@@ -16,20 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
-
-import com.kuuhaku.model.persistent.Member;
+package com.kuuhaku.model.records.anime;
 
 import java.util.List;
 
-public class DataDump {
-	private final List<Member> mDump;
+public record Staff(List<StaffEdge> edges) {
 
-	public DataDump(List<Member> mDump) {
-		this.mDump = mDump;
-	}
-
-	public List<Member> getmDump() {
-		return mDump;
+	public String getCreator() {
+		return edges == null || edges.isEmpty() ? "Desconhecido" : edges.get(0).node().toString();
 	}
 }

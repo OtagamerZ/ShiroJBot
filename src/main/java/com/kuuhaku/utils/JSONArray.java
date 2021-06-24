@@ -251,6 +251,10 @@ public class JSONArray implements JSONWrapper, Iterable<JsonElement> {
 		}
 	}
 
+	public <T> boolean contains(T value) {
+		return toList().stream().anyMatch(value::equals);
+	}
+
 	public boolean isNull(int index) {
 		return get(index) == null;
 	}
