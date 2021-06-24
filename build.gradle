@@ -162,3 +162,7 @@ applicationDefaultJvmArgs = [
         "-Duser.timezone=America/Sao_Paulo",
         "-Djava.awt.headless=true"
 ]
+
+tasks.withType( JavaCompile ).configureEach {
+    options.forkOptions.jvmArgs.addAll( ['--add-opens', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED'] )
+}
