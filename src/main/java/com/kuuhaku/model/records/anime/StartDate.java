@@ -16,16 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-public class Trailer {
-	private String site;
+import java.time.LocalDate;
 
-	public String getSite() {
-		return site;
-	}
+public record StartDate(int year, int month, int day) {
 
-	public void setSite(String value) {
-		this.site = value;
+	public LocalDate getDate() {
+		return LocalDate.of(year, month, day);
 	}
 }

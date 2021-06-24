@@ -18,26 +18,5 @@
 
 package com.kuuhaku.handlers.api.endpoint.payload;
 
-public class Bonus {
-	private final int id;
-	private final String name;
-	private final float value;
-
-	public Bonus(int id, String name, float value) {
-		this.id = id;
-		this.name = name;
-		this.value = value;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public float getValue() {
-		return value;
-	}
+public record Bonus(int id, String name, float value) {
 }

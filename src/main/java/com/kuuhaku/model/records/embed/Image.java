@@ -16,8 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.enums;
+package com.kuuhaku.model.records.embed;
 
-public enum JsonType {
-	OBJECT, ARRAY
+public record Image(String image, String join, String leave) {
 }

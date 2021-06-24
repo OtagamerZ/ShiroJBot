@@ -228,6 +228,7 @@ public class TradeCommand implements Executable {
 						if (offers.values().stream().allMatch(TradeContent::isClosed)) {
 							int code = 0;
 							User inv = null;
+
 							for (TradeContent offer : offers.values()) {
 								Account oAcc = offer.getAccount();
 								Kawaipon oKp = offer.getKawaipon();
@@ -244,8 +245,9 @@ public class TradeCommand implements Executable {
 								}
 
 								TradeContent oT = offers.values().stream()
-										.filter(t -> !t.getUid().equals(offer.getUid()))
-										.findFirst().orElseThrow();
+										.filter(t -> !t.equals(offer))
+										.findFirst()
+										.orElseThrow();
 
 								if (offer.canReceive(oT.getKawaipon())) code = 0;
 								else {

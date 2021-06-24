@@ -40,7 +40,7 @@ public class CustomAnswerDAO {
 				     , c.anywhere
 				     , c.chance
 				     , c.forUser
-				FROM CustomAnswer c 
+				FROM CustomAnswer c
 				WHERE guildId = :guild
 				AND (
 					(c.anywhere AND :trigger LIKE LOWER('%'||trigger||'%'))

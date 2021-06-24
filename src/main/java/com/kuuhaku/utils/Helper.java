@@ -566,7 +566,7 @@ public class Helper {
 	public static <T> T getOr(T get, T or) {
 		try {
 			if (get == null) return or;
-			else if (get instanceof String && ((String) get).isBlank()) return or;
+			else if (get instanceof String s && s.isBlank()) return or;
 			else return get;
 		} catch (Exception e) {
 			return or;
@@ -1923,8 +1923,7 @@ public class Helper {
 		}
 
 		return out.stream()
-				.filter(Objects::nonNull)
-				.collect(Collectors.toUnmodifiableList());
+				.filter(Objects::nonNull).toList();
 	}
 
 	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
@@ -2112,7 +2111,7 @@ public class Helper {
 
 	public static String separate(Object value) {
 		try {
-			Number n = value instanceof Number ? (Number) value : NumberUtils.createNumber(String.valueOf(value));
+			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
 			DecimalFormat df = new DecimalFormat();
 			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(new Locale("pt", "BR")));
 			df.setGroupingSize(3);

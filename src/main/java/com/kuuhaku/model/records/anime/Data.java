@@ -16,30 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-public class Name {
-	private String first;
-	private String last;
-
-	public String getFirst() {
-		return first;
-	}
-
-	public void setFirst(String value) {
-		this.first = value;
-	}
-
-	public String getLast() {
-		return last;
-	}
-
-	public void setLast(String value) {
-		this.last = value;
-	}
-
-	@Override
-	public String toString() {
-		return first + " " + last;
-	}
+public record Data(Media media) {
 }

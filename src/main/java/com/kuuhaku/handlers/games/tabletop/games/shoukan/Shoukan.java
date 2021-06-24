@@ -598,8 +598,7 @@ public class Shoukan extends GlobalGame {
 					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
 				}
 
-				if (d instanceof Champion) {
-					Champion c = (Champion) d;
+				if (d instanceof Champion c) {
 					if (c.getMana() > 0) {
 						if (h.isNullMode())
 							h.removeHp(c.getBaseStats() / 2);
@@ -1360,7 +1359,7 @@ public class Shoukan extends GlobalGame {
 
 	public Side getSideById(String id) {
 		return hands.values().stream()
-				.filter(h -> h.getUser().getId().equals(id) || (h instanceof TeamHand && ((TeamHand) h).getUsers().stream().anyMatch(u -> u.getId().equals(id))))
+				.filter(h -> h.getUser().getId().equals(id) || (h instanceof TeamHand th && th.getUsers().stream().anyMatch(u -> u.getId().equals(id))))
 				.map(Hand::getSide)
 				.findFirst().orElse(null);
 	}
@@ -1977,7 +1976,7 @@ public class Shoukan extends GlobalGame {
 		for (Map.Entry<Side, LinkedList<Drawable>> entry : getArena().getGraveyard().entrySet()) {
 			Hand h = hands.get(entry.getKey());
 			List<Champion> dead = entry.getValue().stream()
-					.filter(d -> d instanceof Champion && ((Champion) d).getMana() <= threshold)
+					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
 					.collect(Collectors.toList());
 
@@ -1986,7 +1985,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			List<Champion> inHand = h.getCards().stream()
-					.filter(d -> d instanceof Champion && ((Champion) d).getMana() <= threshold)
+					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
 					.collect(Collectors.toList());
 
@@ -1995,7 +1994,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			List<Champion> inDeck = h.getDeque().stream()
-					.filter(d -> d instanceof Champion && ((Champion) d).getMana() <= threshold)
+					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
 					.collect(Collectors.toList());
 

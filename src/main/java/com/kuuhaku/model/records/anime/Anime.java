@@ -16,22 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api;
+package com.kuuhaku.model.records.anime;
 
-public class ImageResponse {
-	private final int code;
-	private final String image;
-
-	public ImageResponse(int code, String image) {
-		this.code = code;
-		this.image = image;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public String getImage() {
-		return image;
-	}
+public record Anime(Data data) {
 }

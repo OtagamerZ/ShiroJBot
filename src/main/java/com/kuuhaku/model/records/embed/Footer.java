@@ -16,40 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.embed;
 
-import java.time.LocalDate;
-
-public class StartDate {
-	private int year;
-	private int month;
-	private int day;
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int value) {
-		this.year = value;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public void setMonth(int value) {
-		this.month = value;
-	}
-
-	public int getDay() {
-		return day;
-	}
-
-	public void setDay(int value) {
-		this.day = value;
-	}
-
-	public LocalDate getDate() {
-		return LocalDate.of(year, month, day);
-	}
+public record Footer(String name, String icon) {
 }

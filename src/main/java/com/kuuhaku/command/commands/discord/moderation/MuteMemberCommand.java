@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "silenciar",
 		aliases = {"mute", "silence"},
-		usage = "req_member-time-reason",
+		usage = "req_member-id-time-reason",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS})
@@ -48,17 +49,19 @@ public class MuteMemberCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getMentionedMembers().isEmpty()) {
-			channel.sendMessage(I18n.getString("err_mention-required")).queue();
+		Member mb = null;
+		if (args.length > 0 && StringUtils.isNumeric(args[0]))
+			mb = guild.getMemberById(args[0]);
+		else if (!message.getMentionedMembers().isEmpty())
+			mb = message.getMentionedMembers().get(0);
+
+		if (mb == null) {
+			channel.sendMessage(I18n.getString("err_user-or-id-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			channel.sendMessage(I18n.getString("err_mute-not-allowed")).queue();
 			return;
-		}
-
-		Member mb = message.getMentionedMembers().get(0);
-
-		if (!member.canInteract(mb)) {
+		} else if (!member.canInteract(mb)) {
 			channel.sendMessage(I18n.getString("err_cannot-mute-higher-role")).queue();
 			return;
 		} else if (!guild.getSelfMember().canInteract(mb)) {
@@ -97,10 +100,11 @@ public class MuteMemberCommand implements Executable {
 			act.add(chn.putPermissionOverride(mb).deny(Helper.ALL_MUTE_PERMISSIONS));
 		}
 
+		Member finalMb = mb;
 		RestAction.allOf(act)
 				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + reason + "`"))
 				.queue(s -> {
-					Helper.logToChannel(author, false, null, mb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + reason + "`", guild);
+					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + reason + "`", guild);
 					MemberDAO.saveMutedMember(m);
 				}, Helper::doNothing);
 	}

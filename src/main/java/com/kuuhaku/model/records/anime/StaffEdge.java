@@ -16,34 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.embed;
+package com.kuuhaku.model.records.anime;
 
-public class Author {
-	private String name;
-	private String url;
-	private String icon;
+public record StaffEdge(String role, NameNode node) {
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String value) {
-		this.name = value;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String value) {
-		this.url = value;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String value) {
-		this.icon = value;
+	@Override
+	public String toString() {
+		return node.toString() + " (" + role + ")";
 	}
 }

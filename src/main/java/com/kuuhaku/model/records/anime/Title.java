@@ -16,25 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-public class NAMHData {
-	private String id;
-	private String desc;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String value) {
-		this.id = value;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String value) {
-		this.desc = value;
-	}
+public record Title(String romaji, String english) {
 }

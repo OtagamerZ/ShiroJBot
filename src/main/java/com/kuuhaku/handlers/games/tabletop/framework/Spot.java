@@ -22,15 +22,8 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 
 import java.util.Locale;
 
-public class Spot {
-	private final int x;
-	private final int y;
+public record Spot(int x, int y) {
 	private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	private Spot(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
 
 	public static Spot of(int x, int y) {
 		return new Spot(x, y);
@@ -47,14 +40,6 @@ public class Spot {
 
 	public int[] getCoords() {
 		return new int[]{x, y};
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
 	}
 
 	public static String getAlphabet() {
