@@ -33,6 +33,7 @@ import java.lang.reflect.RecordComponent;
 import java.util.HashMap;
 
 public class RecordTypeAdapterFactory implements TypeAdapterFactory {
+
 	@Override
 	public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
 		@SuppressWarnings("unchecked")
