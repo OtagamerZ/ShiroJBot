@@ -135,8 +135,8 @@ public class Arena {
 					g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
 					String name;
-					if (h instanceof TeamHand) {
-						name = ((TeamHand) h).getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
+					if (h instanceof TeamHand th) {
+						name = th.getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
 					} else {
 						name = StringUtils.abbreviate(h.getUser().getName(), 32);
 					}

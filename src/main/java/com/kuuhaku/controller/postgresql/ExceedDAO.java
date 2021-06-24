@@ -19,11 +19,11 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.handlers.api.endpoint.payload.ExceedState;
-import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.model.persistent.MonthWinner;
+import com.kuuhaku.model.records.Exceed;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -87,8 +87,8 @@ public class ExceedDAO {
 
         @SuppressWarnings("SuspiciousMethodCalls")
         int pos = Arrays.stream(ExceedEnum.values())
-                .map(ExceedDAO::getExceed)
-                .sorted(Comparator.comparingLong(Exceed::getExp).reversed())
+                          .map(ExceedDAO::getExceed)
+                          .sorted(Comparator.comparingLong(Exceed::exp).reversed())
                 .collect(Collectors.toList())
                 .indexOf(ExceedEnum.getByName(exceed)) + 1;
 
@@ -285,7 +285,7 @@ public class ExceedDAO {
             Exceed ex = getExceed(ee);
 
             em.getTransaction().begin();
-            em.merge(new ExceedScore(ee, ex.getExp(), LocalDate.now()));
+            em.merge(new ExceedScore(ee, ex.exp(), LocalDate.now()));
             em.getTransaction().commit();
         }
 

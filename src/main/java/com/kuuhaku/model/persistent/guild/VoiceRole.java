@@ -61,15 +61,13 @@ public class VoiceRole {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		else if (o == null || (getClass() != o.getClass() && o.getClass() != String.class)) return false;
-		else if (o instanceof String) return id.equalsIgnoreCase((String) o);
-
-		VoiceRole levelRole = (VoiceRole) o;
-		return time == levelRole.time && Objects.equals(id, levelRole.id);
+		if (o == null || getClass() != o.getClass()) return false;
+		VoiceRole voiceRole = (VoiceRole) o;
+		return Objects.equals(id, voiceRole.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, time);
+		return Objects.hash(id);
 	}
 }

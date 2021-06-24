@@ -16,49 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.anime;
 
-import java.awt.*;
+public record StudiosEdge(StudiosNode node) {
 
-public class CoverImage {
-	private String extraLarge;
-	private String large;
-	private String medium;
-	private String color;
-
-	public String getExtraLarge() {
-		return extraLarge;
-	}
-
-	public void setExtraLarge(String value) {
-		this.extraLarge = value;
-	}
-
-	public String getLarge() {
-		return large;
-	}
-
-	public void setLarge(String value) {
-		this.large = value;
-	}
-
-	public String getMedium() {
-		return medium;
-	}
-
-	public void setMedium(String value) {
-		this.medium = value;
-	}
-
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String value) {
-		this.color = value;
-	}
-
-	public Color getParsedColor() {
-		return color == null ? null : Color.decode(color);
+	@Override
+	public String toString() {
+		return node.name();
 	}
 }

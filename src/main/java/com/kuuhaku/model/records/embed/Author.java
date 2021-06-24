@@ -16,25 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.anime;
+package com.kuuhaku.model.records.embed;
 
-public class Title {
-	private String romaji;
-	private String english;
-
-	public String getRomaji() {
-		return romaji;
-	}
-
-	public void setRomaji(String value) {
-		this.romaji = value;
-	}
-
-	public String getEnglish() {
-		return english;
-	}
-
-	public void setEnglish(String value) {
-		this.english = value;
-	}
+public record Author(String name, String url, String icon) {
 }

@@ -80,8 +80,7 @@ public class TeamHand extends Hand {
 				switch (game.getCustom().getString("arcade")) {
 					case "roleta" -> {
 						for (Drawable d : deque) {
-							if (d instanceof Champion) {
-								Champion c = (Champion) d;
+							if (d instanceof Champion c) {
 								c.setRawEffect("""
 										if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
 											int rng = Math.round(Math.random() * 100);
@@ -154,8 +153,7 @@ public class TeamHand extends Hand {
 				deque.stream()
 						.distinct()
 						.forEach(d -> {
-							if (d instanceof Champion) {
-								Champion c = (Champion) d;
+							if (d instanceof Champion c) {
 								if (!c.hasEffect()) {
 									String[] de = CardDAO.getRandomEffect(c.getMana());
 									c.setDescription(de[0]);
@@ -216,8 +214,7 @@ public class TeamHand extends Hand {
 				Drawable dr = getDeque().removeFirst().copy();
 				cards.add(dr);
 
-				if (dr instanceof Equipment) {
-					Equipment e = (Equipment) dr;
+				if (dr instanceof Equipment e) {
 					if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
 					else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
@@ -256,8 +253,7 @@ public class TeamHand extends Hand {
 				dr = getDeque().removeFirst();
 				cards.add(dr.copy());
 
-				if (dr instanceof Equipment) {
-					Equipment e = (Equipment) dr;
+				if (dr instanceof Equipment e) {
 					if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
 					else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
@@ -279,8 +275,7 @@ public class TeamHand extends Hand {
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 
-			if (dr instanceof Equipment) {
-				Equipment e = (Equipment) dr;
+			if (dr instanceof Equipment e) {
 				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
 				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
@@ -303,8 +298,7 @@ public class TeamHand extends Hand {
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 
-			if (dr instanceof Equipment) {
-				Equipment e = (Equipment) dr;
+			if (dr instanceof Equipment e) {
 				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
 				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
@@ -326,8 +320,7 @@ public class TeamHand extends Hand {
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 
-			if (dr instanceof Equipment) {
-				Equipment e = (Equipment) dr;
+			if (dr instanceof Equipment e) {
 				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
 				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)

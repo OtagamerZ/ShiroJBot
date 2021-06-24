@@ -29,7 +29,7 @@ import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.YoutubeVideo;
+import com.kuuhaku.model.records.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -80,9 +80,9 @@ public class YoutubeCommand implements Executable {
 						for (YoutubeVideo v : videos) {
 							eb.clear();
 							eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
-							eb.setTitle(v.getTitle(), v.getUrl());
-							eb.setDescription(v.getDesc());
-							eb.setThumbnail(v.getThumb());
+							eb.setTitle(v.title(), v.getUrl());
+							eb.setDescription(v.desc());
+							eb.setThumbnail(v.thumb());
 							eb.setFooter("Link: " + v.getUrl(), v.getUrl());
 							pages.add(new Page(PageType.EMBED, eb.build()));
 						}

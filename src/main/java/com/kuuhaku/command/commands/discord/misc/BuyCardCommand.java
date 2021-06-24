@@ -166,8 +166,7 @@ public class BuyCardCommand implements Executable {
 					Market m = cards.get(p);
 					User seller = Main.getInfo().getUserByID(m.getSeller());
 					String name = switch (m.getType()) {
-						case EVOGEAR -> m.getRawCard().getName();
-						case FIELD -> m.getRawCard().getName();
+						case EVOGEAR, FIELD -> m.getRawCard().getName();
 						default -> ((KawaiponCard) m.getCard()).getName();
 					};
 					String rarity = switch (m.getType()) {

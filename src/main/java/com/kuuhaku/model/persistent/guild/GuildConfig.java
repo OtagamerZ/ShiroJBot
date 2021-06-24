@@ -19,8 +19,8 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.common.embed.Embed;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
+import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
@@ -324,7 +324,10 @@ public class GuildConfig {
 	}
 
 	public void setEmbedTemplate(Embed template) {
-		this.embedTemplate = JSONUtils.toJSON(template);
+		if (template == null)
+			this.embedTemplate = "{}";
+		else
+			this.embedTemplate = JSONUtils.toJSON(template);
 	}
 
 	public String getEmbedTemplateRaw() {

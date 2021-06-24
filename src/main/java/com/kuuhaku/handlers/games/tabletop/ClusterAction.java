@@ -27,12 +27,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public class ClusterAction {
-	private final List<MessageAction> actions;
-
-	public ClusterAction(List<MessageAction> actions) {
-		this.actions = actions;
-	}
+public record ClusterAction(List<MessageAction> actions) {
 
 	public ClusterAction embed(MessageEmbed eb) {
 		actions.replaceAll(msg -> msg.embed(eb));

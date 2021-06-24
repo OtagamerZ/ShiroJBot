@@ -18,26 +18,5 @@
 
 package com.kuuhaku.handlers.api.endpoint.payload;
 
-public class ExceedState {
-	private final int id;
-	private final String name;
-	private final int ranking;
-
-	public ExceedState(int id, String name, int ranking) {
-		this.id = id;
-		this.name = name;
-		this.ranking = ranking;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getRanking() {
-		return ranking;
-	}
+public record ExceedState(int id, String name, int ranking) {
 }
