@@ -86,9 +86,4 @@ public class ErrorHandler implements ErrorController {
 	public Exception notFound() {
 		return new Exception(HttpStatus.NOT_FOUND, "Requested file not found");
 	}
-
-	@Override
-	public String getErrorPath() {
-		return "/error";
-	}
 }
