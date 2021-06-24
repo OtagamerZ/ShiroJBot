@@ -17,11 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualizado para JDK 16">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/RecordTypeAdapterFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1267,28 +1263,7 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
       <workItem from="1624473260014" duration="5634000" />
-      <workItem from="1624559303942" duration="6184000" />
-    </task>
-    <task id="LOCAL-04797" summary="Correções menores">
-      <created>1623960212891</created>
-      <option name="number" value="04797" />
-      <option name="presentableId" value="LOCAL-04797" />
-      <option name="project" value="LOCAL" />
-      <updated>1623960212891</updated>
-    </task>
-    <task id="LOCAL-04798" summary="Correções menores">
-      <created>1623963612952</created>
-      <option name="number" value="04798" />
-      <option name="presentableId" value="LOCAL-04798" />
-      <option name="project" value="LOCAL" />
-      <updated>1623963612953</updated>
-    </task>
-    <task id="LOCAL-04799" summary="Correções menores">
-      <created>1623963694246</created>
-      <option name="number" value="04799" />
-      <option name="presentableId" value="LOCAL-04799" />
-      <option name="project" value="LOCAL" />
-      <updated>1623963694246</updated>
+      <workItem from="1624559303942" duration="6490000" />
     </task>
     <task id="LOCAL-04800" summary="Correções menores">
       <created>1624021424846</created>
@@ -1612,7 +1587,28 @@
       <option name="project" value="LOCAL" />
       <updated>1624565998390</updated>
     </task>
-    <option name="localTasksCounter" value="4846" />
+    <task id="LOCAL-04846" summary="Atualizado para JDK 16">
+      <created>1624566490658</created>
+      <option name="number" value="04846" />
+      <option name="presentableId" value="LOCAL-04846" />
+      <option name="project" value="LOCAL" />
+      <updated>1624566490658</updated>
+    </task>
+    <task id="LOCAL-04847" summary="Atualizado para JDK 16">
+      <created>1624566501107</created>
+      <option name="number" value="04847" />
+      <option name="presentableId" value="LOCAL-04847" />
+      <option name="project" value="LOCAL" />
+      <updated>1624566501107</updated>
+    </task>
+    <task id="LOCAL-04848" summary="Atualizado para JDK 16">
+      <created>1624566574116</created>
+      <option name="number" value="04848" />
+      <option name="presentableId" value="LOCAL-04848" />
+      <option name="project" value="LOCAL" />
+      <updated>1624566574116</updated>
+    </task>
+    <option name="localTasksCounter" value="4849" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
