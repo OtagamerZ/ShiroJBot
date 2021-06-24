@@ -17,7 +17,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualizado para JDK 16">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1264,14 +1263,7 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
       <workItem from="1624473260014" duration="5634000" />
-      <workItem from="1624559303942" duration="4326000" />
-    </task>
-    <task id="LOCAL-04788" summary="Correções menores">
-      <created>1623896698242</created>
-      <option name="number" value="04788" />
-      <option name="presentableId" value="LOCAL-04788" />
-      <option name="project" value="LOCAL" />
-      <updated>1623896698242</updated>
+      <workItem from="1624559303942" duration="4738000" />
     </task>
     <task id="LOCAL-04789" summary="Correções menores">
       <created>1623897344448</created>
@@ -1609,7 +1601,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624563705033</updated>
     </task>
-    <option name="localTasksCounter" value="4837" />
+    <task id="LOCAL-04837" summary="Atualizado para JDK 16">
+      <created>1624564558543</created>
+      <option name="number" value="04837" />
+      <option name="presentableId" value="LOCAL-04837" />
+      <option name="project" value="LOCAL" />
+      <updated>1624564558543</updated>
+    </task>
+    <option name="localTasksCounter" value="4838" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
