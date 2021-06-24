@@ -16,7 +16,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualizado para JDK 16" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualizado para JDK 16">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1261,21 +1263,7 @@
       <workItem from="1624216807444" duration="702000" />
       <workItem from="1624308734701" duration="461000" />
       <workItem from="1624473260014" duration="5634000" />
-      <workItem from="1624559303942" duration="4809000" />
-    </task>
-    <task id="LOCAL-04790" summary="Correções menores">
-      <created>1623899534917</created>
-      <option name="number" value="04790" />
-      <option name="presentableId" value="LOCAL-04790" />
-      <option name="project" value="LOCAL" />
-      <updated>1623899534917</updated>
-    </task>
-    <task id="LOCAL-04791" summary="Correções menores">
-      <created>1623899613313</created>
-      <option name="number" value="04791" />
-      <option name="presentableId" value="LOCAL-04791" />
-      <option name="project" value="LOCAL" />
-      <updated>1623899613313</updated>
+      <workItem from="1624559303942" duration="4971000" />
     </task>
     <task id="LOCAL-04792" summary="Correções menores">
       <created>1623899888090</created>
@@ -1606,7 +1594,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624564972966</updated>
     </task>
-    <option name="localTasksCounter" value="4839" />
+    <task id="LOCAL-04839" summary="Atualizado para JDK 16">
+      <created>1624565045328</created>
+      <option name="number" value="04839" />
+      <option name="presentableId" value="LOCAL-04839" />
+      <option name="project" value="LOCAL" />
+      <updated>1624565045328</updated>
+    </task>
+    <task id="LOCAL-04840" summary="Atualizado para JDK 16">
+      <created>1624565121523</created>
+      <option name="number" value="04840" />
+      <option name="presentableId" value="LOCAL-04840" />
+      <option name="project" value="LOCAL" />
+      <updated>1624565121523</updated>
+    </task>
+    <option name="localTasksCounter" value="4841" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
