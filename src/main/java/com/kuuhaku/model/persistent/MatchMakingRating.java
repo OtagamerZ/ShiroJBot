@@ -341,7 +341,7 @@ public class MatchMakingRating {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
 							int val = (int) entry.getValue();
-							info.getInfo().merge(key, val, Helper::subtract);
+							info.info().merge(key, val, Helper::subtract);
 						}
 					}
 				}
