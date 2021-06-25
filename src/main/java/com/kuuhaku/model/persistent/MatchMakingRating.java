@@ -340,7 +340,7 @@ public class MatchMakingRating {
 					for (Map.Entry<String, Object> entry : jo.entrySet()) {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
-							int val = (int) entry.getValue();
+							int val = (int) (double) entry.getValue();
 							info.info().merge(key, val, Helper::subtract);
 						}
 					}
