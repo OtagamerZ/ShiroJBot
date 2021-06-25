@@ -132,7 +132,7 @@ public class EncoderClient extends Endpoint {
 
 			session.getBasicRemote().sendText(msg);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

@@ -108,7 +108,7 @@ public enum Country {
 				if (pixel == 0) size++;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return size;
 	}
