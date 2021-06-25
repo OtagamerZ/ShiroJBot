@@ -32,7 +32,7 @@ public class VoiceRole {
 	private String id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("guildconfig_id")
+	@JoinColumn("voiceRoles")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private GuildConfig guildConfig;
 

@@ -36,7 +36,7 @@ public class PaidRole {
 	private String id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("guildconfig_id")
+	@JoinColumn("paidRoles")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private GuildConfig guildConfig;
 

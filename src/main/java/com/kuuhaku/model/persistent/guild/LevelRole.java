@@ -32,7 +32,7 @@ public class LevelRole {
 	private String id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("guildconfig_id")
+	@JoinColumn("levelRoles")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private GuildConfig guildConfig;
 
