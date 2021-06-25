@@ -52,6 +52,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.imageio.ImageIO;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -149,7 +150,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.refreshButtons(guildConfig);
 		}
 
-		for (JDA shard : shiroShards.getShards()) {
+		List<JDA> shards = shiroShards.getShards();
+		shards.sort(Comparator.comparingInt(s -> s.getShardInfo().getShardId()));
+		for (JDA shard : shards) {
 			int id = shard.getShardInfo().getShardId();
 			try {
 				shard.awaitReady();
