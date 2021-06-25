@@ -18,5 +18,7 @@
 
 package com.kuuhaku.model.records.anime;
 
-public record Data(Media media) {
+import com.squareup.moshi.Json;
+
+public record Data(@Json(name = "Media") Media media) {
 }
