@@ -81,10 +81,11 @@
     <orderEntry type="library" name="Gradle: org.jasypt:jasypt:1.9.2" level="project" />
     <orderEntry type="library" name="Gradle: org.threeten:threetenbp:1.4.4" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
+    <orderEntry type="library" name="Gradle: dev.zacsweers.moshix:moshi-records-reflect:0.11.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.moshi:moshi:1.12.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.0-rc" level="project" />
     <orderEntry type="library" name="Gradle: org.knowm.xchart:xchart:3.6.5" level="project" />
     <orderEntry type="library" name="Gradle: net.oneandone.reflections8:reflections8:0.11.7" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.7" level="project" />
     <orderEntry type="library" name="Gradle: io.github.furstenheim:copy_down:1.0" level="project" />
     <orderEntry type="library" name="Gradle: net.jodah:expiringmap:0.5.9" level="project" />
     <orderEntry type="library" name="Gradle: me.xuender:unidecode:0.0.7" level="project" />
@@ -95,10 +96,10 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.12.3" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.13.1" level="project" />
     <orderEntry type="library" name="Gradle: net.iharder:base64:2.3.9" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:18.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.neovisionaries:nv-websocket-client:2.14" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java:pom:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
     <orderEntry type="library" name="Gradle: org.json:json:20180813" level="project" />
@@ -143,10 +144,12 @@
     <orderEntry type="library" name="Gradle: io.micrometer:micrometer-core:1.7.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.7" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.30" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jul:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-common:1.6.5-1" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:2.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10" level="project" />
     <orderEntry type="library" name="Gradle: de.rototor.pdfbox:graphics2d:0.27" level="project" />
     <orderEntry type="library" name="Gradle: de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13" level="project" />
@@ -154,7 +157,6 @@
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.4.14" level="project" />
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.15" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.12.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-commons:2.5.1" level="project" />
@@ -185,8 +187,8 @@
     <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-auth:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.vladimir-bukhtoyarov:bucket4j-core:4.7.0" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-slf4j:11.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.github.openfeign:feign-jackson:11.0" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-okhttp:11.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.openfeign:feign-jackson:11.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-configuration:commons-configuration:1.10" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-hystrix:11.0" level="project" />
     <orderEntry type="library" name="Gradle: com.apollographql.apollo:apollo-runtime:1.2.2" level="project" />
@@ -211,6 +213,7 @@
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.pdfbox:fontbox:2.0.19" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.moshi:moshi-adapters:1.12.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.sun.activation:jakarta.activation:1.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.latencyutils:LatencyUtils:2.0.3" level="project" />

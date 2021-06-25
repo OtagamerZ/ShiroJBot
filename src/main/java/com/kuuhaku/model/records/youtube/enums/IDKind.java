@@ -16,24 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records.youtube.enums;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
-public class MatchInfo {
-	private final String id;
-	private final Map<String, Integer> info = new HashMap<>();
+public enum IDKind {
+	YOUTUBE_PLAYLIST, YOUTUBE_VIDEO;
 
-	public MatchInfo(String id) {
-		this.id = id;
+	public String toValue() {
+		return switch (this) {
+			case YOUTUBE_PLAYLIST -> "youtube#playlist";
+			case YOUTUBE_VIDEO -> "youtube#video";
+		};
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public Map<String, Integer> getInfo() {
-		return info;
+	public static IDKind forValue(String value) throws IOException {
+		if (value.equals("youtube#playlist")) return YOUTUBE_PLAYLIST;
+		if (value.equals("youtube#video")) return YOUTUBE_VIDEO;
+		throw new IOException("Cannot deserialize IDKind");
 	}
 }
+

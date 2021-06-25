@@ -32,13 +32,13 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.MatchMaking;
-import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.Permission;
@@ -116,7 +116,7 @@ public class ShoukanCommand implements Executable {
 			if (mm.inGame(author.getId())) {
 				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
-			} else if (mm.getSoloLobby().containsKey(mmr) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(mmr) || rd.getP2().equals(mmr))) {
+			} else if (mm.getSoloLobby().containsKey(mmr) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(mmr) || rd.p2().equals(mmr))) {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
@@ -156,7 +156,7 @@ public class ShoukanCommand implements Executable {
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
 						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();
 						return;
-					} else if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(duo) || rd.getP2().equals(duo))) {
+					} else if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(duo) || rd.p2().equals(duo))) {
 						channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
 						return;
 					}
@@ -169,7 +169,7 @@ public class ShoukanCommand implements Executable {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
-											if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(duo) || rd.getP2().equals(duo))) {
+											if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(duo) || rd.p2().equals(duo))) {
 												channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
 												return;
 											}

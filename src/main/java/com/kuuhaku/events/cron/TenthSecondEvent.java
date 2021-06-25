@@ -26,10 +26,10 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
-import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
@@ -182,15 +182,15 @@ public class TenthSecondEvent implements Job {
 					Main.getInfo().getMatchMaking().getDuoLobby().remove(t1);
 					Main.getInfo().getMatchMaking().getDuoLobby().remove(t2);
 
-					t1.getP1().setEvades(0);
-					t1.getP2().setEvades(0);
-					t2.getP1().setEvades(0);
-					t2.getP2().setEvades(0);
+					t1.p1().setEvades(0);
+					t1.p2().setEvades(0);
+					t2.p1().setEvades(0);
+					t2.p2().setEvades(0);
 
-					MatchMakingRatingDAO.saveMMR(t1.getP1());
-					MatchMakingRatingDAO.saveMMR(t1.getP2());
-					MatchMakingRatingDAO.saveMMR(t2.getP1());
-					MatchMakingRatingDAO.saveMMR(t2.getP2());
+					MatchMakingRatingDAO.saveMMR(t1.p1());
+					MatchMakingRatingDAO.saveMMR(t1.p2());
+					MatchMakingRatingDAO.saveMMR(t2.p1());
+					MatchMakingRatingDAO.saveMMR(t2.p2());
 
 					boolean p1Starts = Helper.chance(50);
 					boolean leaderStarts = Helper.chance(50);
@@ -205,16 +205,16 @@ public class TenthSecondEvent implements Job {
 								false,
 								p1Starts ?
 										leaderStarts ?
-												t1.getP1().getUser() : t1.getP2().getUser()
+												t1.p1().getUser() : t1.p2().getUser()
 										:
 										leaderStarts ?
-												t2.getP1().getUser() : t2.getP2().getUser(),
+												t2.p1().getUser() : t2.p2().getUser(),
 								p1Starts ?
 										leaderStarts ?
-												t2.getP1().getUser() : t2.getP2().getUser()
+												t2.p1().getUser() : t2.p2().getUser()
 										:
 										leaderStarts ?
-												t1.getP1().getUser() : t1.getP2().getUser()
+												t1.p1().getUser() : t1.p2().getUser()
 						);
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
@@ -228,7 +228,7 @@ public class TenthSecondEvent implements Job {
 													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
 													ms.delete().queue();
 												}), false, 30, TimeUnit.MINUTES
-												, u -> Helper.equalsAny(u.getId(), rd.getP1().getUid(), rd.getP2().getUid())
+												, u -> Helper.equalsAny(u.getId(), rd.p1().getUid(), rd.p2().getUid())
 												, ms -> {
 													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
 													ms.delete().queue();
@@ -309,14 +309,14 @@ public class TenthSecondEvent implements Job {
 	private void sendDuoConfirmation(Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
 		RankedDuo rd = p1.getKey();
 		Set<String> confirmations = new HashSet<>() {{
-			add(rd.getP1().getUid());
-			add(rd.getP2().getUid());
+			add(rd.p1().getUid());
+			add(rd.p2().getUid());
 		}};
 
 		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
-			private Future<?> p1Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.getP1().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.getP1().getEvades() + 1)) + " minutos.")
+			private Future<?> p1Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.p1().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.p1().getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
-						MatchMakingRating mmr = rd.getP1();
+						MatchMakingRating mmr = rd.p1();
 						mmr.setEvades(mmr.getEvades() + 1);
 						mmr.block(10 * mmr.getEvades(), ChronoUnit.MINUTES);
 						MatchMakingRatingDAO.saveMMR(mmr);
@@ -324,9 +324,9 @@ public class TenthSecondEvent implements Job {
 						close();
 						if (match.size() == 2) result.run();
 					});
-			private Future<?> p2Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.getP2().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.getP2().getEvades() + 1)) + " minutos.")
+			private Future<?> p2Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.p2().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.p2().getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
-						MatchMakingRating mmr = rd.getP2();
+						MatchMakingRating mmr = rd.p2();
 						mmr.setEvades(mmr.getEvades() + 1);
 						mmr.block(10 * mmr.getEvades(), ChronoUnit.MINUTES);
 						MatchMakingRatingDAO.saveMMR(mmr);
@@ -340,7 +340,7 @@ public class TenthSecondEvent implements Job {
 						%s e %s
 						Partida encontrada, digite `aschente` para confirmar a partida.
 						Demorar para responder resultará em um bloqueio de saguão de 10 minutos.
-						""".formatted(rd.getP1().getUser().getAsMention(), rd.getP2().getUser().getAsMention())).queue();
+						""".formatted(rd.p1().getUser().getAsMention(), rd.p2().getUser().getAsMention())).queue();
 			}
 
 			@Override
@@ -365,7 +365,7 @@ public class TenthSecondEvent implements Job {
 				if (confirmations.isEmpty())
 					match.add(Pair.of(p1, true));
 
-				if (msg.getAuthor().getId().equals(rd.getP1().getUid())) {
+				if (msg.getAuthor().getId().equals(rd.p1().getUid())) {
 					p1Timeout.cancel(true);
 					p1Timeout = null;
 					close();
