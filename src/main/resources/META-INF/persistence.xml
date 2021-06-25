@@ -80,6 +80,7 @@
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
         <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
+        <class>com.kuuhaku.model.persistent.guild.VoiceRole</class>
         <class>com.kuuhaku.model.persistent.guild.buttons.ButtonChannel</class>
         <class>com.kuuhaku.model.persistent.guild.buttons.ButtonMessage</class>
         <class>com.kuuhaku.model.persistent.guild.buttons.Button</class>
