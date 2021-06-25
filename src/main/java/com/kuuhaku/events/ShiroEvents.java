@@ -91,7 +91,7 @@ import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-	private final Map<String, Long> voiceTime = new HashMap<>();
+	private final Map<String, VoiceTime> voiceTimes = new HashMap<>();
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
@@ -393,7 +393,7 @@ public class ShiroEvents extends ListenerAdapter {
 						if (lvlUp && gc.isLevelNotif()) {
 							if (m.getLevel() % 210 == 0)
 								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-										.addFile(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("assets/transition_" + m.getLevel() + ".gif")), "upgrade.gif")
+										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 										.queue();
 							else
 								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
@@ -401,7 +401,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (InsufficientPermissionException e) {
 						if (m.getLevel() % 210 == 0)
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-									.addFile(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("assets/transition_" + m.getLevel() + ".gif")), "upgrade.gif")
+									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 									.queue();
 						else
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
@@ -861,7 +861,8 @@ public class ShiroEvents extends ListenerAdapter {
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
 
-		if (!blacklisted) voiceTime.put(mb.getId(), System.currentTimeMillis());
+		if (!blacklisted)
+			voiceTimes.put(mb.getId() + mb.getGuild().getId(), VoiceTimeDAO.getVoiceTime(mb.getId(), mb.getGuild().getId()));
 	}
 
 	@Override
@@ -870,18 +871,13 @@ public class ShiroEvents extends ListenerAdapter {
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(mb.getUser());
 
-		if (blacklisted) return;
+		if (!blacklisted) {
+			VoiceTime vt = voiceTimes.remove(mb.getId() + mb.getGuild().getId());
 
-		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
-		if (m.getUid() == null) {
-			m.setUid(mb.getId());
-			m.setSid(mb.getGuild().getId());
+			if (vt != null) {
+				VoiceTimeDAO.saveVoiceTime(vt);
+			}
 		}
-
-		long curr = System.currentTimeMillis();
-		long time = curr - Helper.getOr(voiceTime.remove(mb.getId()), curr);
-		m.setVoiceTime(time);
-		MemberDAO.saveMember(m);
 	}
 
 	@Override
@@ -1004,5 +1000,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 	public void addHandler(Guild guild, SimpleMessageListener sml) {
 		getHandler().computeIfAbsent(guild.getId(), k -> new CopyOnWriteArrayList<>()).add(sml);
+	}
+
+	public Map<String, VoiceTime> getVoiceTimes() {
+		return voiceTimes;
 	}
 }

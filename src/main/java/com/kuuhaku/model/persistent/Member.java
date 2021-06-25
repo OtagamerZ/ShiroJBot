@@ -71,9 +71,6 @@ public class Member {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long lastEarntXp = 0;
 
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long voiceTime = 0;
-
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean rulesSent = false;
 
@@ -211,14 +208,6 @@ public class Member {
 	public void resetXp() {
 		level = 1;
 		xp = 0;
-	}
-
-	public long getVoiceTime() {
-		return voiceTime;
-	}
-
-	public void setVoiceTime(long voiceTime) {
-		this.voiceTime += voiceTime;
 	}
 
 	public String getId() {

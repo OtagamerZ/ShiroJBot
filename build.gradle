@@ -72,12 +72,9 @@ dependencies {
 
     //Database
     implementation group: "org.postgresql", name: "postgresql", version: "42.2.12"
-    implementation group: "com.github.gwenn", name: "sqlite-dialect", version: "0.1.0"
     implementation group: "org.hibernate", name: "hibernate-core", version: "5.4.2.Final"
     implementation group: "com.mchange", name: "c3p0", version: "0.9.5.4"
     implementation group: "org.hibernate", name: "hibernate-c3p0", version: "5.4.2.Final"
-    implementation group: "org.xerial", name: "sqlite-jdbc", version: "3.27.2.1"
-    implementation group: "com.enigmabridge", name: "hibernate4-sqlite-dialect", version: "0.1.2"
 
     //Compiler
     implementation group: "org.beanshell", name: "bsh", version: "2.0b5"

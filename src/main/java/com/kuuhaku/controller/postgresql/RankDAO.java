@@ -41,9 +41,7 @@ public class RankDAO {
 						            FROM logs l
 						            WHERE l.uid <> '') l ON l.uid = mb.uid
 						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-						    EXCEPT ALL
-						SELECT b.uid
-						FROM blacklist b
+						WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
 					) x
 					ORDER BY index
 					""");
@@ -59,9 +57,7 @@ public class RankDAO {
 						            WHERE l.uid <> '') l ON l.uid = mb.uid
 						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 						WHERE gc.guildid = :guild
-						    EXCEPT ALL
-						SELECT b.uid
-						FROM blacklist b
+						AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
 					) x
 					ORDER BY index
 					""");
@@ -90,9 +86,7 @@ public class RankDAO {
 					INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 					            FROM logs l
 					            WHERE l.uid <> '') l ON l.uid = a.uid
-					    EXCEPT ALL
-					SELECT b.uid
-					FROM blacklist b
+					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
 				) x
 				ORDER BY index
 				""");
@@ -124,9 +118,7 @@ public class RankDAO {
 					                 , count(1) FILTER (WHERE kc.foil)     AS foil
 					            FROM kawaiponcard kc
 					            GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
-					    EXCEPT ALL
-					SELECT b.uid
-					FROM blacklist b
+					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
 				) x
 				ORDER BY index
 				""");
@@ -148,16 +140,13 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-				     SELECT row_number() OVER (ORDER BY mb.voicetime DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) || ')' AS v
-				     FROM member mb
+				     SELECT row_number() OVER (ORDER BY vt.time DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(vt.time) || ')' AS v
+				     FROM voicetime vt
 				     INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 				                 FROM logs l
-				                 WHERE l.uid <> '') l ON l.uid = mb.uid
-				     INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-				     WHERE gc.guildid = :guild
-				         EXCEPT ALL
-				     SELECT b.uid
-				     FROM blacklist b
+				                 WHERE l.uid <> '') l ON l.uid = vt.uid
+				     WHERE vt.sid = :guild
+				     AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
 				) x
 				ORDER BY index
 				""");

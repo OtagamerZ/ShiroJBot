@@ -34,12 +34,13 @@ import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,7 +69,9 @@ public class MyStatsCommand implements Executable {
 		Map<String, Page> categories = new LinkedHashMap<>();
 
 		{
-			eb.addField(":timer: | Tempo em canais de voz:", DurationFormatUtils.formatDuration(mb.getVoiceTime(), "d 'dias', H 'horas', m 'minutos e' s 'segundos'"), false);
+			VoiceTime vt = Helper.getOr(ShiroInfo.getShiroEvents().getVoiceTimes().get(mb.getId()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
+			if (vt.getTime() > 0)
+				eb.addField(":timer: | Tempo em canais de voz:", Helper.toStringDuration(vt.getTime()), false);
 
 			StringBuilder badges = new StringBuilder();
 
