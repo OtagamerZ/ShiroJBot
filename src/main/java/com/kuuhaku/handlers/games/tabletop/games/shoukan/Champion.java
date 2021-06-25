@@ -80,7 +80,6 @@ public class Champion implements Drawable, Cloneable {
 	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "champion_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> requiredCards = new HashSet<>();
 

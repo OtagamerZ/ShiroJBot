@@ -33,7 +33,7 @@ public class ButtonChannel {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
+	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonMessage> messages = new HashSet<>();
 
