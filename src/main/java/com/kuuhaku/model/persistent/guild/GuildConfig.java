@@ -157,6 +157,11 @@ public class GuildConfig {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<VoiceRole> voiceRoles = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "guildconfig_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonChannel> buttonConfigs = new HashSet<>();
 
 	//CHANNELS
@@ -544,8 +549,8 @@ public class GuildConfig {
 		colorRoles.removeIf(cr -> cr.getName().equals(name));
 	}
 
-	public void setColorRoles(Set<ColorRole> levelRoles) {
-		this.colorRoles = levelRoles;
+	public void setColorRoles(Set<ColorRole> colorRoles) {
+		this.colorRoles = colorRoles;
 	}
 
 	public Set<PaidRole> getPaidRoles() {
@@ -563,8 +568,27 @@ public class GuildConfig {
 		paidRoles.removeIf(pr -> pr.getId().equals(id));
 	}
 
-	public void setPaidRoles(Set<PaidRole> levelRoles) {
-		this.paidRoles = levelRoles;
+	public void setPaidRoles(Set<PaidRole> paidRoles) {
+		this.paidRoles = paidRoles;
+	}
+
+	public Set<VoiceRole> getVoiceRoles() {
+		return voiceRoles;
+	}
+
+	public void addVoiceRole(String id, long time) {
+		VoiceRole vr = new VoiceRole(id, time);
+
+		voiceRoles.remove(vr);
+		voiceRoles.add(vr);
+	}
+
+	public void removeVoiceRole(String id) {
+		voiceRoles.removeIf(vr -> vr.getId().equals(id));
+	}
+
+	public void setVoiceRoles(Set<VoiceRole> voiceRoles) {
+		this.voiceRoles = voiceRoles;
 	}
 
 	public Set<String> getNoLinkChannels() {
