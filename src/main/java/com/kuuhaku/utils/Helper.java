@@ -48,7 +48,6 @@ import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
 import com.kuuhaku.model.records.MatchInfo;
 import com.squareup.moshi.JsonDataException;
-import com.squareup.moshi.JsonEncodingException;
 import de.androidpit.colorthief.ColorThief;
 import io.github.furstenheim.CopyDown;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -1135,7 +1134,7 @@ public class Helper {
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (JsonEncodingException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
