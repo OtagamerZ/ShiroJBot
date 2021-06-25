@@ -31,8 +31,7 @@ public class GuildBuff {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "guildconfig_id")
+	@OneToMany(mappedBy = "guildconfig_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<ServerBuff> buffs = new HashSet<>();
 
 	public String getId() {
