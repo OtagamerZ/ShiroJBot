@@ -18,58 +18,61 @@
 
 package com.kuuhaku.utils;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.*;
-import com.kuuhaku.model.enums.JsonType;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
+import dev.zacsweers.moshix.records.RecordsJsonAdapterFactory;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class JSONUtils {
-	private static final Gson gson = new GsonBuilder()
-			.registerTypeAdapterFactory(new RecordTypeAdapterFactory())
-			.registerTypeAdapter(JSONWrapper.class, new JSONAdapter())
-			.create();
+	private static final Moshi moshi = new Moshi.Builder()
+			.add(new RecordsJsonAdapterFactory())
+			.build();
 
 	public static String toJSON(Object o) {
-		if (o instanceof JSONWrapper) {
-			return gson.toJson(o, JSONWrapper.class);
+		if (o instanceof JSONWrapper json) {
+			return moshi.adapter(JSONWrapper.class).toJson(json);
 		}
 
-		return gson.toJson(o);
+		return moshi.adapter(Object.class).toJson(o);
 	}
 
-	@SuppressWarnings("UnstableApiUsage")
 	public static <T> T fromJSON(String json, Class<T> klass) {
-		return gson.fromJson(json, new TypeToken<List<T>>() {
-		}.getType());
+		try {
+			return moshi.adapter(klass).fromJson(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public static JsonObject parseJSONObject(String json) {
-		return JsonParser.parseString(json).getAsJsonObject();
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> toMap(String json) {
+		try {
+			return (Map<String, Object>) moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class)).fromJson(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public static JsonArray parseJSONArray(String json) {
-		return JsonParser.parseString(json).getAsJsonArray();
+	@SuppressWarnings("unchecked")
+	public static List<Object> toList(String json) {
+		try {
+			return (List<Object>) moshi.adapter(Types.newParameterizedType(List.class, Object.class)).fromJson(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public static JsonElement parseJSONElement(String json) {
-		return JsonParser.parseString(json);
+	public static Map<String, Object> toMap(Object o) {
+		return toMap(toJSON(o));
 	}
 
-	public static JsonObject parseJSONObject(Object o) {
-		return parseJSONObject(toJSON(o));
-	}
-
-	public static JsonArray parseJSONArray(Object o) {
-		return parseJSONArray(toJSON(o));
-	}
-
-	public static JsonElement parseJSONElement(Object o) {
-		return parseJSONElement(toJSON(o));
-	}
-
-	public static JsonType getType(String json) {
-		JsonElement je = JsonParser.parseString(json);
-		return je.isJsonObject() ? JsonType.OBJECT : JsonType.ARRAY;
+	public static List<Object> toList(Object o) {
+		return toList(toJSON(o));
 	}
 }

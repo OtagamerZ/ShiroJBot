@@ -29,7 +29,7 @@ import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.records.YoutubeVideo;
+import com.kuuhaku.model.records.youtube.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;

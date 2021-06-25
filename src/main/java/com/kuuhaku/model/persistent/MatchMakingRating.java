@@ -18,14 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.google.gson.JsonElement;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.RankedTier;
+import com.kuuhaku.model.records.MatchInfo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.User;
@@ -338,10 +337,10 @@ public class MatchMakingRating {
 				for (MatchRound round : rounds) {
 					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 
-					for (Map.Entry<String, JsonElement> entry : jo.toMap().entrySet()) {
+					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
-							int val = entry.getValue().getAsInt();
+							int val = (int) entry.getValue();
 							info.getInfo().merge(key, val, Helper::subtract);
 						}
 					}

@@ -29,9 +29,9 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.MatchInfo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -248,8 +248,8 @@ public class MatchStatsCommand implements Executable {
 			Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
 
 			for (MatchInfo info : result.get(s)) {
-				Map<String, Integer> yourResult = info.getInfo();
-				Map<String, Integer> theirResult = Helper.mergeInfo(result.get(other)).getInfo();
+				Map<String, Integer> yourResult = info.info();
+				Map<String, Integer> theirResult = Helper.mergeInfo(result.get(other)).info();
 				int spentMana = yourResult.get("mana");
 				int damageDealt = theirResult.get("hp");
 
@@ -261,7 +261,7 @@ public class MatchStatsCommand implements Executable {
 
 					JSONObject data = Helper.getOr(out.getJSONObject(s.name()), new JSONObject());
 
-					data.put(info.getId(), new JSONObject() {{
+					data.put(info.id(), new JSONObject() {{
 						put("manaEff", manaEff);
 						put("damageEff", damageEff / expEff);
 						put("sustainEff", sustainEff);
@@ -276,7 +276,7 @@ public class MatchStatsCommand implements Executable {
 
 					JSONObject data = Helper.getOr(out.getJSONObject(s.name()), new JSONObject());
 
-					data.put(info.getId(), new JSONObject() {{
+					data.put(info.id(), new JSONObject() {{
 						put("manaEff", manaEff);
 						put("damageEff", damageEff / expEff);
 						put("sustainEff", sustainEff);

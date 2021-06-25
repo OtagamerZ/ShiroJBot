@@ -16,17 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.records.youtube;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
-import java.lang.reflect.Type;
-
-public class JSONAdapter implements JsonSerializer<JSONWrapper> {
-	@Override
-	public JsonElement serialize(JSONWrapper src, Type typeOfSrc, JsonSerializationContext context) {
-		return src.getContent();
-	}
+public record Default(String url, long width, long height) {
 }

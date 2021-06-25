@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records;
+package com.kuuhaku.model.records.youtube;
 
 public record YoutubeVideo(String id, String title, String desc, String thumb, String channel, boolean playlist) {
 
