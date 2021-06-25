@@ -17,7 +17,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado cargos por tempo em call">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildBuff.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonChannel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1289,21 +1296,7 @@
       <workItem from="1624473260014" duration="5634000" />
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
-      <workItem from="1624629024614" duration="18661000" />
-    </task>
-    <task id="LOCAL-04829" summary="Correções menores">
-      <created>1624390431704</created>
-      <option name="number" value="04829" />
-      <option name="presentableId" value="LOCAL-04829" />
-      <option name="project" value="LOCAL" />
-      <updated>1624390431705</updated>
-    </task>
-    <task id="LOCAL-04830" summary="Correções menores">
-      <created>1624392752697</created>
-      <option name="number" value="04830" />
-      <option name="presentableId" value="LOCAL-04830" />
-      <option name="project" value="LOCAL" />
-      <updated>1624392752697</updated>
+      <workItem from="1624629024614" duration="19402000" />
     </task>
     <task id="LOCAL-04831" summary="Correções menores">
       <created>1624419160821</created>
@@ -1634,7 +1627,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624654100787</updated>
     </task>
-    <option name="localTasksCounter" value="4878" />
+    <task id="LOCAL-04878" summary="Adicionado cargos por tempo em call">
+      <created>1624654167752</created>
+      <option name="number" value="04878" />
+      <option name="presentableId" value="LOCAL-04878" />
+      <option name="project" value="LOCAL" />
+      <updated>1624654167752</updated>
+    </task>
+    <task id="LOCAL-04879" summary="Adicionado cargos por tempo em call">
+      <created>1624654206744</created>
+      <option name="number" value="04879" />
+      <option name="presentableId" value="LOCAL-04879" />
+      <option name="project" value="LOCAL" />
+      <updated>1624654206744</updated>
+    </task>
+    <option name="localTasksCounter" value="4880" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

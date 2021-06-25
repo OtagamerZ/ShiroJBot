@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -66,6 +67,7 @@ public class Clan {
 	private List<String> transactions = new ArrayList<>();
 
 	@OneToMany(mappedBy = "clan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<ClanMember> members = new ArrayList<>();
 
