@@ -47,7 +47,7 @@ public class Deck {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("decks")
+	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Kawaipon kawaipon;
 
