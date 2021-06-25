@@ -514,8 +514,7 @@ public class Account {
 		}
 
 		JSONObject prog = new JSONObject(dailyProgress);
-		Object je = prog.remove("DATE");
-		int date = je == null ? -1 : (int) je;
+		int date = prog.getInt("DATE", -1);
 		Map<DailyTask, Integer> tasks = prog.toMap().entrySet().stream()
 				.filter(e -> Arrays.stream(DailyTask.values()).anyMatch(dt -> dt.name().equals(e.getKey())))
 				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
