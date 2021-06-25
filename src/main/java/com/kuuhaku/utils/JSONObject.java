@@ -20,15 +20,13 @@ package com.kuuhaku.utils;
 
 import java.util.*;
 
-public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, Object>> {
-	private final Map<String, Object> map;
+public class JSONObject extends HashMap<String, Object> {
 
 	public JSONObject() {
-		map = new HashMap<>();
 	}
 
 	public JSONObject(Map<String, Object> map) {
-		this.map = map;
+		putAll(map);
 	}
 
 	public JSONObject(String json) {
@@ -39,12 +37,8 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, Objec
 		this(JSONUtils.toJSON(bean));
 	}
 
-	public Iterator<Map.Entry<String, Object>> iterator() {
-		return map.entrySet().iterator();
-	}
-
-	public Object get(String key) {
-		return map.get(key);
+	public Iterator<Entry<String, Object>> iterator() {
+		return entrySet().iterator();
 	}
 
 	public Object get(String key, Object or) {
@@ -194,7 +188,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, Objec
 	}
 
 	public boolean has(String key) {
-		return map.containsKey(key);
+		return containsKey(key);
 	}
 
 	public JSONObject increment(String key) {
@@ -202,76 +196,45 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, Objec
 		if (obj == null) return this;
 
 		if (obj instanceof Number n) {
-			map.put(key, n.longValue() + 1);
+			put(key, n.longValue() + 1);
 		}
 
 		return this;
 	}
 
 	public Iterator<String> keys() {
-		return map.keySet().iterator();
-	}
-
-	public Set<String> keySet() {
-		return map.keySet();
-	}
-
-	protected Set<Map.Entry<String, Object>> entrySet() {
-		return map.entrySet();
+		return keySet().iterator();
 	}
 
 	public JSONArray names() {
-		return new JSONArray(map.keySet());
+		return new JSONArray(keySet());
 	}
 
 	public JSONObject put(String key, Object value) {
-		map.put(key, value);
+		super.put(key, value);
 
 		return this;
 	}
 
 	public JSONObject putOnce(String key, Object value) {
-		map.putIfAbsent(key, value);
+		putIfAbsent(key, value);
 
 		return this;
 	}
 
 	public JSONObject putOpt(String key, Object value) {
-		if (map.get(key) == null && value != null)
-			map.put(key, value);
+		if (get(key) == null && value != null)
+			put(key, value);
 
 		return this;
 	}
 
-	public Object remove(String key) {
-		return map.remove(key);
-	}
-
 	public JSONArray toJSONArray() {
-		return new JSONArray(map.values());
-	}
-
-	public Map<String, Object> toMap() {
-		return map;
-	}
-
-	@Override
-	public Map<String, Object> getContent() {
-		return map;
-	}
-
-	@Override
-	public int size() {
-		return map.size();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return map.isEmpty();
+		return new JSONArray(values());
 	}
 
 	@Override
 	public String toString() {
-		return JSONUtils.toJSON(map);
+		return JSONUtils.toJSON(this);
 	}
 }
