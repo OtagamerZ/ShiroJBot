@@ -35,7 +35,7 @@ public class KawaiponCard {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("kawaipon_id")
+	@JoinColumn("cards")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Kawaipon kawaipon;
 

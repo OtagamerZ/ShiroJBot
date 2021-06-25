@@ -33,7 +33,7 @@ public class MatchRound {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("matchhistory_id")
+	@JoinColumn("rounds")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private MatchHistory history;
 
