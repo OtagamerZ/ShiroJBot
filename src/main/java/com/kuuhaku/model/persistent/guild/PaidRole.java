@@ -35,11 +35,6 @@ public class PaidRole {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private GuildConfig guildConfig;
-
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 

@@ -18,10 +18,10 @@
 
 package com.kuuhaku.model.persistent.guild;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.awt.*;
 import java.util.Objects;
 
@@ -31,11 +31,6 @@ public class ColorRole {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String name;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private GuildConfig guildConfig;
 
 	@Column(columnDefinition = "VARCHAR(7) NOT NULL")
 	private String hex;

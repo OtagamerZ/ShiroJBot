@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.utils.Helper;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -33,11 +31,6 @@ public class ClanMember {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "clan_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Clan clan;
 
 	@Enumerated(value = EnumType.STRING)
 	private ClanHierarchy role = ClanHierarchy.MEMBER;
