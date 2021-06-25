@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.disboard.model;
 import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.imageio.ImageIO;
@@ -53,7 +54,7 @@ public class Disboard {
 					chn.sendFile(baos.toByteArray(), "map.png").queue();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 			s.delete().queue();
 		});
