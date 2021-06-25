@@ -61,6 +61,7 @@ public class Clan {
 	private Calendar paidRent = Calendar.getInstance();
 
 	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> transactions = new ArrayList<>();
 
@@ -69,6 +70,7 @@ public class Clan {
 	private List<ClanMember> members = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<ClanHierarchy, Integer> permissions = new HashMap<>() {{
 		put(ClanHierarchy.LEADER, 0xf);
