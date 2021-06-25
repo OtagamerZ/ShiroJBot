@@ -150,7 +150,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.refreshButtons(guildConfig);
 		}
 
-		List<JDA> shards = shiroShards.getShards();
+		List<JDA> shards = new ArrayList<>(shiroShards.getShards());
 		shards.sort(Comparator.comparingInt(s -> s.getShardInfo().getShardId()));
 		for (JDA shard : shards) {
 			int id = shard.getShardInfo().getShardId();
