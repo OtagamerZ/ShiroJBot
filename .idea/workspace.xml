@@ -17,7 +17,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Updated copyright notice">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +131,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT&#10;CSS&#10;JavaScript&#10;JAVA" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JSON&#10;TEXT&#10;CSS&#10;JavaScript" />
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -204,7 +206,7 @@
       <recentPaths value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint" />
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -215,6 +217,27 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="wrapper" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
     </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -238,6 +261,11 @@
       <option name="AUTO_RESTART" value="false" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.ShiroJBot [wrapper]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SpringBeansView">
@@ -1263,28 +1291,7 @@
       <workItem from="1624473260014" duration="5634000" />
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
-      <workItem from="1624629024614" duration="8106000" />
-    </task>
-    <task id="LOCAL-04813" summary="Melhoria no sistema de mutes">
-      <created>1624043164819</created>
-      <option name="number" value="04813" />
-      <option name="presentableId" value="LOCAL-04813" />
-      <option name="project" value="LOCAL" />
-      <updated>1624043164820</updated>
-    </task>
-    <task id="LOCAL-04814" summary="Melhoria no sistema de mutes">
-      <created>1624044094528</created>
-      <option name="number" value="04814" />
-      <option name="presentableId" value="LOCAL-04814" />
-      <option name="project" value="LOCAL" />
-      <updated>1624044094528</updated>
-    </task>
-    <task id="LOCAL-04815" summary="Remoção completa do banco de caching (SQLite)">
-      <created>1624282055486</created>
-      <option name="number" value="04815" />
-      <option name="presentableId" value="LOCAL-04815" />
-      <option name="project" value="LOCAL" />
-      <updated>1624282055487</updated>
+      <workItem from="1624629024614" duration="8828000" />
     </task>
     <task id="LOCAL-04816" summary="Remoção completa do banco de caching (SQLite)">
       <created>1624283843441</created>
@@ -1608,7 +1615,28 @@
       <option name="project" value="LOCAL" />
       <updated>1624641591756</updated>
     </task>
-    <option name="localTasksCounter" value="4862" />
+    <task id="LOCAL-04862" summary="Updated copyright notice">
+      <created>1624641983858</created>
+      <option name="number" value="04862" />
+      <option name="presentableId" value="LOCAL-04862" />
+      <option name="project" value="LOCAL" />
+      <updated>1624641983858</updated>
+    </task>
+    <task id="LOCAL-04863" summary="Updated copyright notice">
+      <created>1624642010686</created>
+      <option name="number" value="04863" />
+      <option name="presentableId" value="LOCAL-04863" />
+      <option name="project" value="LOCAL" />
+      <updated>1624642010686</updated>
+    </task>
+    <task id="LOCAL-04864" summary="Updated copyright notice">
+      <created>1624642093200</created>
+      <option name="number" value="04864" />
+      <option name="presentableId" value="LOCAL-04864" />
+      <option name="project" value="LOCAL" />
+      <updated>1624642093200</updated>
+    </task>
+    <option name="localTasksCounter" value="4865" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
