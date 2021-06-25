@@ -17,15 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado cargos por tempo em call">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/ClanMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/ClanMember.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/KawaiponCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/KawaiponCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchRound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchRound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ColorRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ColorRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/LevelRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/LevelRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/PaidRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/PaidRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1297,28 +1289,7 @@
       <workItem from="1624473260014" duration="5634000" />
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
-      <workItem from="1624629024614" duration="18357000" />
-    </task>
-    <task id="LOCAL-04826" summary="Correções menores">
-      <created>1624308812529</created>
-      <option name="number" value="04826" />
-      <option name="presentableId" value="LOCAL-04826" />
-      <option name="project" value="LOCAL" />
-      <updated>1624308812529</updated>
-    </task>
-    <task id="LOCAL-04827" summary="Correções menores">
-      <created>1624389562844</created>
-      <option name="number" value="04827" />
-      <option name="presentableId" value="LOCAL-04827" />
-      <option name="project" value="LOCAL" />
-      <updated>1624389562844</updated>
-    </task>
-    <task id="LOCAL-04828" summary="Correções menores">
-      <created>1624390028648</created>
-      <option name="number" value="04828" />
-      <option name="presentableId" value="LOCAL-04828" />
-      <option name="project" value="LOCAL" />
-      <updated>1624390028648</updated>
+      <workItem from="1624629024614" duration="18661000" />
     </task>
     <task id="LOCAL-04829" summary="Correções menores">
       <created>1624390431704</created>
@@ -1642,7 +1613,28 @@
       <option name="project" value="LOCAL" />
       <updated>1624653663542</updated>
     </task>
-    <option name="localTasksCounter" value="4875" />
+    <task id="LOCAL-04875" summary="Adicionado cargos por tempo em call">
+      <created>1624653861710</created>
+      <option name="number" value="04875" />
+      <option name="presentableId" value="LOCAL-04875" />
+      <option name="project" value="LOCAL" />
+      <updated>1624653861710</updated>
+    </task>
+    <task id="LOCAL-04876" summary="Adicionado cargos por tempo em call">
+      <created>1624654070460</created>
+      <option name="number" value="04876" />
+      <option name="presentableId" value="LOCAL-04876" />
+      <option name="project" value="LOCAL" />
+      <updated>1624654070460</updated>
+    </task>
+    <task id="LOCAL-04877" summary="Adicionado cargos por tempo em call">
+      <created>1624654100787</created>
+      <option name="number" value="04877" />
+      <option name="presentableId" value="LOCAL-04877" />
+      <option name="project" value="LOCAL" />
+      <updated>1624654100787</updated>
+    </task>
+    <option name="localTasksCounter" value="4878" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
