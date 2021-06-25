@@ -91,7 +91,7 @@ import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-	private final Map<String, VoiceTime> voiceTimes = new HashMap<>();
+	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
