@@ -53,6 +53,8 @@ public class AnimeRequest {
 					Collections.emptyMap(),
 					System.getenv("NOWANIMES_TOKEN")
 			);
+
+			if (resposta.isEmpty()) return null;
 		} else {
 			return null;
 		}
@@ -71,6 +73,8 @@ public class AnimeRequest {
 					Collections.emptyMap(),
 					System.getenv("MEGAHENTAIS_TOKEN")
 			);
+
+			if (resposta.isEmpty()) return null;
 		} else {
 			return null;
 		}

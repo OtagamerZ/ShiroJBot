@@ -41,8 +41,8 @@ public class JSONUtils {
 		try {
 			return moshi.adapter(klass).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
-			Helper.logger(JSONUtils.class).error(json);
+			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(JSONUtils.class).warn(json);
 			return null;
 		}
 	}
@@ -52,8 +52,8 @@ public class JSONUtils {
 		try {
 			return (Map<String, Object>) moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
-			Helper.logger(JSONUtils.class).error(json);
+			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(JSONUtils.class).warn(json);
 			return new HashMap<>();
 		}
 	}
@@ -63,8 +63,8 @@ public class JSONUtils {
 		try {
 			return (List<Object>) moshi.adapter(Types.newParameterizedType(List.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
-			Helper.logger(JSONUtils.class).error(json);
+			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(JSONUtils.class).warn(json);
 			return new ArrayList<>();
 		}
 	}
