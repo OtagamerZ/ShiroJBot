@@ -1115,9 +1115,7 @@ public class Helper {
 
 	public static JSONObject get(String endpoint, JSONObject payload, String token) {
 		try {
-			Map<String, Object> params = payload.toMap();
-
-			HttpRequest req = HttpRequest.get(endpoint, params, true)
+			HttpRequest req = HttpRequest.get(endpoint, payload, true)
 					.header("Content-Type", "application/json; charset=UTF-8")
 					.header("Accept", "application/json")
 					.header("User-Agent", "Mozilla/5.0")
@@ -1131,9 +1129,7 @@ public class Helper {
 
 	public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
 		try {
-			Map<String, Object> params = payload.toMap();
-
-			HttpRequest req = HttpRequest.get(endpoint, params, true)
+			HttpRequest req = HttpRequest.get(endpoint, payload, true)
 					.headers(headers)
 					.header("Authorization", token);
 
@@ -1144,7 +1140,7 @@ public class Helper {
 	}
 
 	public static String urlEncode(JSONObject payload) {
-		String[] params = payload.toMap().entrySet().stream()
+		String[] params = payload.entrySet().stream()
 				.map(e -> e.getKey() + "=" + e.getValue())
 				.toArray(String[]::new);
 
