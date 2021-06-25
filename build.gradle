@@ -132,10 +132,10 @@ dependencies {
     implementation group: "net.oneandone.reflections8", name: "reflections8", version: "0.11.7"
     implementation group: 'com.squareup.moshi', name: 'moshi', version: '1.12.0'
     implementation group: 'dev.zacsweers.moshix', name: 'moshi-records-reflect', version: '0.11.2'
-    runtimeOnly group: 'com.squareup.moshi', name: 'moshi-adapters', version: '1.12.0'
     implementation group: "io.github.furstenheim", name: "copy_down", version: "1.0"
     implementation group: 'net.jodah', name: 'expiringmap', version: '0.5.9'
     implementation group: 'me.xuender', name: 'unidecode', version: '0.0.7'
+    runtimeOnly group: 'com.squareup.moshi', name: 'moshi-adapters', version: '1.12.0'
 }
 
 apply plugin: "org.springframework.boot"

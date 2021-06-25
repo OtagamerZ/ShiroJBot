@@ -20,15 +20,13 @@ package com.kuuhaku.utils;
 
 import java.util.*;
 
-public class JSONArray implements JSONWrapper, Iterable<Object> {
-	private final List<Object> arr;
+public class JSONArray extends ArrayList<Object> {
 
 	public JSONArray() {
-		arr = new ArrayList<>();
 	}
 
 	public JSONArray(List<Object> list) {
-		arr = list;
+		addAll(list);
 	}
 
 	public JSONArray(String json) {
@@ -41,14 +39,6 @@ public class JSONArray implements JSONWrapper, Iterable<Object> {
 
 	public JSONArray(Object array) {
 		this(JSONUtils.toJSON(array));
-	}
-
-	public Iterator<Object> iterator() {
-		return arr.iterator();
-	}
-
-	public Object get(int index) {
-		return arr.get(index);
 	}
 
 	public Object get(int index, Object or) {
@@ -197,16 +187,12 @@ public class JSONArray implements JSONWrapper, Iterable<Object> {
 		}
 	}
 
-	public boolean contains(Object value) {
-		return toList().stream().anyMatch(value::equals);
-	}
-
 	public JSONArray increment(int index) {
 		Object obj = get(index);
 		if (obj == null) return this;
 
 		if (obj instanceof Number n) {
-			arr.set(index, n.longValue() + 1);
+			set(index, n.longValue() + 1);
 		}
 
 		return this;
@@ -214,7 +200,7 @@ public class JSONArray implements JSONWrapper, Iterable<Object> {
 
 	public String join(String separator) {
 		List<String> out = new ArrayList<>();
-		for (Object elem : arr) {
+		for (Object elem : this) {
 			out.add(elem.toString());
 		}
 
@@ -222,45 +208,22 @@ public class JSONArray implements JSONWrapper, Iterable<Object> {
 	}
 
 	public JSONArray put(Object value) {
-		arr.add(value);
+		add(value);
 
 		return this;
-	}
-
-	public Object remove(int index) {
-		return arr.remove(index);
 	}
 
 	public JSONObject toJSONObject(JSONArray names) {
 		JSONObject out = new JSONObject();
 		for (int i = 0; i < names.size(); i++) {
-			out.put(names.getString(i), arr.get(i));
+			out.put(names.getString(i), get(i));
 		}
 
 		return out;
 	}
 
-	public List<Object> toList() {
-		return arr;
-	}
-
-	@Override
-	public Object getContent() {
-		return arr;
-	}
-
-	@Override
-	public int size() {
-		return arr.size();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return arr.isEmpty();
-	}
-
 	@Override
 	public String toString() {
-		return JSONUtils.toJSON(arr);
+		return JSONUtils.toJSON(this);
 	}
 }
