@@ -23,6 +23,8 @@ import com.squareup.moshi.Types;
 import dev.zacsweers.moshix.records.RecordsJsonAdapterFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +54,7 @@ public class JSONUtils {
 		} catch (IOException e) {
 			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
 			Helper.logger(JSONUtils.class).error(json);
-			return null;
+			return new HashMap<>();
 		}
 	}
 
@@ -63,7 +65,7 @@ public class JSONUtils {
 		} catch (IOException e) {
 			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
 			Helper.logger(JSONUtils.class).error(json);
-			return null;
+			return new ArrayList<>();
 		}
 	}
 
