@@ -22,16 +22,17 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
+import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
+import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
+import com.kuuhaku.model.persistent.guild.VoiceRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -146,13 +147,21 @@ public class TenthMinuteEvent implements Job {
 				Set<String> toExpire = pr.getExpiredUsers();
 				valid.removeAll(toExpire);
 
-				List<AuditableRestAction<Void>> acts = new ArrayList<>();
+				List<RestAction<?>> acts = new ArrayList<>();
 				for (String s : toExpire) {
 					Member m = guild.getMemberById(s);
 					if (m == null) continue;
 
-					acts.add(guild.removeRoleFromMember(m, r));
+					if (!m.getRoles().contains(r)) {
+						TextChannel tc = gc.getLevelChannel();
+						acts.add(guild.removeRoleFromMember(m, r).flatMap(
+								p -> gc.isLevelNotif() && tc != null,
+								v -> tc.sendMessage(" O cargo **`" + r.getName() + "`** de " + m.getAsMention() + " expirou! :alarm_clock:")
+						));
+					}
 				}
+
+
 				for (String s : valid) {
 					Member m = guild.getMemberById(s);
 					if (m == null) continue;
@@ -167,19 +176,45 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		Guild supportServer = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
-		Role seniorRole = supportServer.getRoleById("815429753058230292");
-		Role supRole = supportServer.getRoleById("738837622805364876");
+		guilds = GuildDAO.getAllGuildsWithVoiceRoles();
+		for (GuildConfig gc : guilds) {
+			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
+			if (guild == null) continue;
 
-		for (Map.Entry<String, SupportTier> sup : ShiroInfo.getSupports().entrySet()) {
-			if (seniorRole != null && sup.getValue() == SupportTier.SENIOR)
-				supportServer.addRoleToMember(sup.getKey(), seniorRole);
-			if (supRole != null)
-				supportServer.addRoleToMember(sup.getKey(), supRole);
+			List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
+
+			for (VoiceRole vr : gc.getVoiceRoles()) {
+				Role r = guild.getRoleById(vr.getId());
+				if (r == null) continue;
+
+				Set<String> valid = vts.stream()
+						.filter(vt -> vt.getTime() >= vr.getTime())
+						.map(VoiceTime::getUid)
+						.collect(Collectors.toSet());
+
+				List<RestAction<?>> acts = new ArrayList<>();
+				for (String s : valid) {
+					Member m = guild.getMemberById(s);
+					if (m == null) continue;
+
+					if (!m.getRoles().contains(r)) {
+						TextChannel tc = gc.getLevelChannel();
+						acts.add(guild.addRoleToMember(m, r).flatMap(
+								p -> gc.isLevelNotif() && tc != null,
+								v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vr.getTime()) + " em call! :tada:")
+						));
+					}
+				}
+
+				if (acts.isEmpty()) continue;
+				RestAction.allOf(acts)
+						.mapToResult()
+						.queue();
+			}
 		}
 
-
-		for (GuildConfig gc : GuildDAO.getAllGuildsWithGeneralChannel()) {
+		guilds = GuildDAO.getAllGuildsWithGeneralChannel();
+		for (GuildConfig gc : guilds) {
 			Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
 				TextChannel tc = gc.getGeneralChannel();

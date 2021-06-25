@@ -112,8 +112,8 @@ public class ConfigLevelRoleCommand implements Executable {
 			}
 
 			Role r = message.getMentionedRoles().get(0);
-			if (r.getPosition() > highest) {
-				channel.sendMessage("❌ | Você não pode atribuir cargos maiores que os seus.").queue();
+			if (r.getPosition() >= highest) {
+				channel.sendMessage("❌ | Você não pode atribuir cargos maiores ou iguais aos seus.").queue();
 				return;
 			}
 

@@ -29,7 +29,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.guild.PaidRole;
+import com.kuuhaku.model.persistent.guild.VoiceRole;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -40,13 +40,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Command(
-		name = "cargopago",
-		aliases = {"cargop", "paidrole", "prole"},
-		usage = "req_value-role-time",
+		name = "cargovoz",
+		aliases = {"voicerole"},
+		usage = "req_level-role",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES})
-public class ConfigPaidRoleCommand implements Executable {
+public class ConfigVoiceRoleCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -58,7 +58,7 @@ public class ConfigPaidRoleCommand implements Executable {
 
 		if (args.length < 2 && !message.getMentionedRoles().isEmpty()) {
 			Role r = message.getMentionedRoles().get(0);
-			gc.removeLevelRole(r.getId());
+			gc.removeVoiceRole(r.getId());
 
 			channel.sendMessage("✅ | Cargo `" + r.getName() + "` removido da listagem com sucesso!").queue();
 			GuildDAO.updateGuildSettings(gc);
@@ -67,34 +67,31 @@ public class ConfigPaidRoleCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(":bank: | Cargos pagos configurados no servidor");
+					.setTitle(":dna: | Cargos de voz configurados no servidor");
 
-			List<PaidRole> roles = List.copyOf(gc.getPaidRoles());
+			List<VoiceRole> roles = List.copyOf(gc.getVoiceRoles());
 			if (roles.size() == 0) {
-				channel.sendMessage("Não há nenhum cargo pago configurado neste servidor.").queue();
+				channel.sendMessage("Não há nenhum cargo de voz configurado neste servidor.").queue();
 				return;
 			}
 
-			Map<Integer, String> fields = new TreeMap<>();
-			for (PaidRole role : roles) {
+			Map<Long, String> fields = new TreeMap<>();
+			for (VoiceRole role : roles) {
 				Role r = guild.getRoleById(role.getId());
 				if (r == null) {
 					gc.removeLevelRole(role.getId());
 					continue;
 				}
 
-				if (role.getDuration() > -1)
-					fields.merge(role.getPrice(), r.getAsMention() + " (" + Helper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
-				else
-					fields.merge(role.getPrice(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
+				fields.merge(role.getTime(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 			GuildDAO.updateGuildSettings(gc);
 
-			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
-			for (List<Integer> chunk : chunks) {
+			List<List<Long>> chunks = Helper.chunkify(fields.keySet(), 10);
+			for (List<Long> chunk : chunks) {
 				eb.clearFields();
-				for (int value : chunk)
-					eb.addField("Valor: " + Helper.separate(value) + " créditos", fields.get(value), false);
+				for (long time : chunk)
+					eb.addField("Tempo: " + Helper.toStringDuration(time), fields.get(time), true);
 
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
@@ -106,33 +103,24 @@ public class ConfigPaidRoleCommand implements Executable {
 		}
 
 		try {
-			int value = Integer.parseInt(args[0]);
-			if (value <= 0) {
-				channel.sendMessage(I18n.getString("err_invalid-credit-amount")).queue();
-				return;
-			}
-
 			Role r = message.getMentionedRoles().get(0);
 			if (r.getPosition() >= highest) {
 				channel.sendMessage("❌ | Você não pode atribuir cargos maiores ou iguais aos seus.").queue();
 				return;
 			}
 
-			long time = args.length > 2 ? Helper.stringToDurationMillis(Arrays.stream(args).skip(2).collect(Collectors.joining(" "))) : -1;
+			long time = args.length > 1 ? Helper.stringToDurationMillis(Arrays.stream(args).skip(1).collect(Collectors.joining(" "))) : -1;
 			if (Helper.between(time, 0, 60000)) {
 				channel.sendMessage("❌ | A duração mínima é 1 minuto.").queue();
 				return;
 			}
 
-			gc.addPaidRole(r.getId(), value, time);
+			gc.addVoiceRole(r.getId(), time);
 
-			if (time > -1)
-				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**! (" + Helper.toStringDuration(time) + ")").queue();
-			else
-				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**!").queue();
+			channel.sendMessage("✅ | Membros com tempo em canais de voz maior que " + Helper.toStringDuration(time) + " receberão o cargo `" + r.getName() + "`!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(I18n.getString("err_invalid-price")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-level")).queue();
 		} catch (IndexOutOfBoundsException e) {
 			channel.sendMessage("❌ | Você precisa mencionar um cargo.").queue();
 		}
