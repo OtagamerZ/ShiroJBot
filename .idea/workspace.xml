@@ -16,28 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Updated copyright notice">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigVoiceRoleCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/VoiceTimeDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/VoiceTime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigLevelRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigLevelRoleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/err/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/err/locale_pt.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado cargos por tempo em call" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1308,21 +1287,7 @@
       <workItem from="1624473260014" duration="5634000" />
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
-      <workItem from="1624629024614" duration="15149000" />
-    </task>
-    <task id="LOCAL-04818" summary="Correções menores">
-      <created>1624292575432</created>
-      <option name="number" value="04818" />
-      <option name="presentableId" value="LOCAL-04818" />
-      <option name="project" value="LOCAL" />
-      <updated>1624292575432</updated>
-    </task>
-    <task id="LOCAL-04819" summary="Correções menores">
-      <created>1624292740846</created>
-      <option name="number" value="04819" />
-      <option name="presentableId" value="LOCAL-04819" />
-      <option name="project" value="LOCAL" />
-      <updated>1624292740846</updated>
+      <workItem from="1624629024614" duration="15324000" />
     </task>
     <task id="LOCAL-04820" summary="Correções menores">
       <created>1624294736584</created>
@@ -1653,7 +1618,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624642927513</updated>
     </task>
-    <option name="localTasksCounter" value="4867" />
+    <task id="LOCAL-04867" summary="Adicionado cargos por tempo em call">
+      <created>1624650672715</created>
+      <option name="number" value="04867" />
+      <option name="presentableId" value="LOCAL-04867" />
+      <option name="project" value="LOCAL" />
+      <updated>1624650672716</updated>
+    </task>
+    <task id="LOCAL-04868" summary="Adicionado cargos por tempo em call">
+      <created>1624650753998</created>
+      <option name="number" value="04868" />
+      <option name="presentableId" value="LOCAL-04868" />
+      <option name="project" value="LOCAL" />
+      <updated>1624650753998</updated>
+    </task>
+    <option name="localTasksCounter" value="4869" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1740,7 +1719,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Criação da arena Daten City" />
     <MESSAGE value="Melhoria no comando de venda de cartas" />
     <MESSAGE value="Filtros de imagem agora também criam gifs" />
     <MESSAGE value="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;" />
@@ -1765,7 +1743,8 @@
     <MESSAGE value="Atualizado para JDK 16" />
     <MESSAGE value="Aterada biblioteca de JSON de GSON para Moshi" />
     <MESSAGE value="Updated copyright notice" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated copyright notice" />
+    <MESSAGE value="Adicionado cargos por tempo em call" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado cargos por tempo em call" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
