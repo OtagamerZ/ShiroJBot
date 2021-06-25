@@ -49,7 +49,7 @@ public class ButtonMessage {
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String role;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
+	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Button> buttons = new ArrayList<>();
 
