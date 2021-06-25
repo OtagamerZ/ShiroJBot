@@ -337,7 +337,7 @@ public class MatchMakingRating {
 				for (MatchRound round : rounds) {
 					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 
-					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+					for (Map.Entry<String, Object> entry : jo.entrySet()) {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
 							int val = (int) entry.getValue();

@@ -79,9 +79,7 @@ public class Ticket {
 	}
 
 	public Map<String, Object> getMsgIds() {
-		JSONObject ja = new JSONObject(msgId);
-
-		return ja.toMap();
+		return new JSONObject(msgId);
 	}
 
 	public String getInvite() {
