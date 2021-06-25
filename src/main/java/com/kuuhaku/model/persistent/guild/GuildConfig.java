@@ -155,7 +155,7 @@ public class GuildConfig {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<VoiceRole> voiceRoles = new HashSet<>();
 
-	@OneToMany(mappedBy = "guildconfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "guildConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonChannel> buttonConfigs = new HashSet<>();
 
