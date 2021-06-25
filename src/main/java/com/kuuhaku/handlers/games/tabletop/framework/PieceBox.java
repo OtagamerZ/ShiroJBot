@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,8 +40,7 @@ public class PieceBox {
 				}
 			}
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-			e.printStackTrace();
-			//Helper.logger(this.getClass()).error(e + " | " + e.getStacktrace[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
