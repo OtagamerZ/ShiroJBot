@@ -41,6 +41,13 @@ public class JSONObject extends HashMap<String, Object> {
 		return entrySet().iterator();
 	}
 
+	public Object get(String key) {
+		Object o = super.get(key);
+		if (o == null) throw new NullPointerException();
+
+		return o;
+	}
+
 	public Object get(String key, Object or) {
 		return Helper.getOr(get(key), or);
 	}

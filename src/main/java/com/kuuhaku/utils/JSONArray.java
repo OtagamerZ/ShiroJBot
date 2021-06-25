@@ -41,6 +41,13 @@ public class JSONArray extends ArrayList<Object> {
 		this(JSONUtils.toJSON(array));
 	}
 
+	public Object get(int index) {
+		Object o = super.get(index);
+		if (o == null) throw new NullPointerException();
+
+		return o;
+	}
+
 	public Object get(int index, Object or) {
 		return Helper.getOr(get(index), or);
 	}
