@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -140,22 +141,27 @@ public class GuildConfig {
 	//COLLECTIONS
 	//ROLES
 	@OneToMany(mappedBy = "guildConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<LevelRole> levelRoles = new HashSet<>();
 
 	@OneToMany(mappedBy = "guildConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ColorRole> colorRoles = new HashSet<>();
 
 	@OneToMany(mappedBy = "guildConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<PaidRole> paidRoles = new HashSet<>();
 
 	@OneToMany(mappedBy = "guildConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<VoiceRole> voiceRoles = new HashSet<>();
 
 	@OneToMany(mappedBy = "guildConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonChannel> buttonConfigs = new HashSet<>();
 

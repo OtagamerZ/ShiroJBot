@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.guild.buttons;
 
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -40,6 +41,7 @@ public class ButtonChannel {
 	private GuildConfig guildConfig;
 
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonMessage> messages = new HashSet<>();
 
