@@ -34,7 +34,8 @@ public class GuildBuff {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
-	@OneToMany(mappedBy = "guildBuff", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "guildconfig_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ServerBuff> buffs = new HashSet<>();

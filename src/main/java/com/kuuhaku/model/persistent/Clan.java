@@ -66,7 +66,8 @@ public class Clan {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "clan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "clan_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<ClanMember> members = new ArrayList<>();
