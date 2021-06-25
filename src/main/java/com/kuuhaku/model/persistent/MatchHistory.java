@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -51,6 +52,7 @@ public class MatchHistory {
 	private boolean wo = false;
 
 	@OneToMany(mappedBy = "history", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
