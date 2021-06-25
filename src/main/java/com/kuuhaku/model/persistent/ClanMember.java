@@ -35,7 +35,6 @@ public class ClanMember {
 	private String uid;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Clan clan;
 
