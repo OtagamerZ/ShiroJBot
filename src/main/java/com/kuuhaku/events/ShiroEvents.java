@@ -43,7 +43,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -479,17 +478,6 @@ public class ShiroEvents extends ListenerAdapter {
 
 		GuildDAO.updateGuildSettings(gc);
 		Helper.logToChannel(null, false, null, "Cargo deletado: " + event.getRole().getName(), event.getGuild());
-	}
-
-	@Override
-	public void onReady(@NotNull ReadyEvent event) {
-		int id = event.getJDA().getShardInfo().getShardId();
-		try {
-			Helper.logger(this.getClass()).info("Shard " + id + " pronto!");
-			Main.shardSequence.addSignature(id, null);
-		} catch (Exception e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar shard " + id + ": " + e);
-		}
 	}
 
 	@Override
