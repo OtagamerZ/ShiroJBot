@@ -32,10 +32,6 @@ public class JSONUtils {
 			.build();
 
 	public static String toJSON(Object o) {
-		if (o instanceof JSONWrapper json) {
-			return moshi.adapter(JSONWrapper.class).toJson(json);
-		}
-
 		return moshi.adapter(Object.class).toJson(o);
 	}
 
@@ -43,7 +39,7 @@ public class JSONUtils {
 		try {
 			return moshi.adapter(klass).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -53,7 +49,7 @@ public class JSONUtils {
 		try {
 			return (Map<String, Object>) moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -63,7 +59,7 @@ public class JSONUtils {
 		try {
 			return (List<Object>) moshi.adapter(Types.newParameterizedType(List.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).error(e + " | " + e.getStackTrace()[0]);
+			e.printStackTrace();
 			return null;
 		}
 	}
