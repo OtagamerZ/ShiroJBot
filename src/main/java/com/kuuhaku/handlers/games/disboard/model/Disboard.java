@@ -54,7 +54,7 @@ public class Disboard {
 					chn.sendFile(baos.toByteArray(), "map.png").queue();
 				}
 			} catch (IOException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				Helper.logger(Disboard.class).error(e + " | " + e.getStackTrace()[0]);
 			}
 			s.delete().queue();
 		});
