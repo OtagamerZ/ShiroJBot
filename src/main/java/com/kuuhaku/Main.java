@@ -36,6 +36,7 @@ import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.TwitchCommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.NContract;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -67,6 +68,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static TwitchEvents twitchManager;
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
+	public static NContract<Void> shardSequence;
 
 	public static void main(String[] args) throws Exception {
 		System.setProperty("sun.java2d.opengl", "true");
@@ -149,13 +151,17 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.refreshButtons(guildConfig);
 		}
 
-		System.runFinalization();
-		System.gc();
-		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
-		Helper.logger(Main.class).info("Estou pronta!");
+		shardSequence = new NContract<>(shiroShards.getShardsTotal(), v -> {
+			System.runFinalization();
+			System.gc();
+			Helper.logger(Main.class).info("<----------END OF BOOT---------->");
+			Helper.logger(Main.class).info("Estou pronta!");
 
-		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
-		shiroShards.setActivity(getRandomActivity());
+			shiroShards.addEventListener(ShiroInfo.getShiroEvents());
+			shiroShards.setActivity(getRandomActivity());
+
+			return null;
+		});
 	}
 
 	public static Activity getRandomActivity() {
