@@ -29,12 +29,14 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
-import com.google.gson.JsonSyntaxException;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.ColorlessWebhookEmbedBuilder;
+import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.common.GifFrame;
 import com.kuuhaku.model.common.drop.*;
 import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.*;
@@ -44,6 +46,8 @@ import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.model.persistent.guild.buttons.Button;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
+import com.kuuhaku.model.records.MatchInfo;
+import com.squareup.moshi.JsonDataException;
 import de.androidpit.colorthief.ColorThief;
 import io.github.furstenheim.CopyDown;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -563,11 +567,13 @@ public class Helper {
 					   .collect(Collectors.joining("\n"));
 	}
 
-	public static <T> T getOr(T get, T or) {
+	@SuppressWarnings("unchecked")
+	public static <T> T getOr(Object get, T or) {
 		try {
 			if (get == null) return or;
+			else if (!or.getClass().isInstance(get)) return or;
 			else if (get instanceof String s && s.isBlank()) return or;
-			else return get;
+			else return (T) or.getClass().cast(get);
 		} catch (Exception e) {
 			return or;
 		}
@@ -1064,7 +1070,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (JsonSyntaxException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1076,7 +1082,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (JsonSyntaxException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1089,7 +1095,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (JsonSyntaxException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1102,15 +1108,14 @@ public class Helper {
 					.send(payload);
 
 			return new JSONObject(req.body());
-		} catch (JsonSyntaxException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject get(String endpoint, JSONObject payload, String token) {
 		try {
-			Map<String, String> params = payload.toMap().entrySet().stream()
-					.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAsString()));
+			Map<String, Object> params = payload.toMap();
 
 			HttpRequest req = HttpRequest.get(endpoint, params, true)
 					.header("Content-Type", "application/json; charset=UTF-8")
@@ -1119,29 +1124,28 @@ public class Helper {
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (JsonSyntaxException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
 		try {
-			Map<String, String> params = payload.toMap().entrySet().stream()
-					.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAsString()));
+			Map<String, Object> params = payload.toMap();
 
 			HttpRequest req = HttpRequest.get(endpoint, params, true)
 					.headers(headers)
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (JsonSyntaxException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static String urlEncode(JSONObject payload) {
 		String[] params = payload.toMap().entrySet().stream()
-				.map(e -> e.getKey() + "=" + e.getValue().getAsString())
+				.map(e -> e.getKey() + "=" + e.getValue())
 				.toArray(String[]::new);
 
 		return String.join("&", params);
@@ -2191,8 +2195,8 @@ public class Helper {
 		MatchInfo mi = new MatchInfo("");
 
 		for (MatchInfo info : infos) {
-			for (Map.Entry<String, Integer> entry : info.getInfo().entrySet()) {
-				mi.getInfo().merge(entry.getKey(), entry.getValue(), Helper::average);
+			for (Map.Entry<String, Integer> entry : info.info().entrySet()) {
+				mi.info().merge(entry.getKey(), entry.getValue(), Helper::average);
 			}
 		}
 

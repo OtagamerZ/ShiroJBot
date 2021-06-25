@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.RankedDuo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,7 +36,7 @@ public class MatchMaking {
 	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> soloLobby = new LinkedHashMap<>();
 	private final Map<RankedDuo, Pair<Integer, TextChannel>> duoLobby = new LinkedHashMap<>();
 	private final List<GlobalGame> games = new ArrayList<>();
-	boolean locked = false;
+	private boolean locked = false;
 
 	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getSoloLobby() {
 		return soloLobby;

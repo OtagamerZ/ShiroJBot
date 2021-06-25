@@ -18,47 +18,36 @@
 
 package com.kuuhaku.utils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonElement>> {
-	private final JsonObject obj;
+public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, Object>> {
+	private final Map<String, Object> map;
 
 	public JSONObject() {
-		obj = new JsonObject();
+		map = new HashMap<>();
 	}
 
-	public JSONObject(JsonObject json) {
-		obj = json;
+	public JSONObject(Map<String, Object> map) {
+		this.map = map;
 	}
 
-	public JSONObject(String source) {
-		this(JSONUtils.parseJSONObject(source));
-	}
-
-	public JSONObject(Map<?, ?> m) {
-		this(JSONUtils.toJSON(m));
+	public JSONObject(String json) {
+		this(JSONUtils.toMap(json));
 	}
 
 	public JSONObject(Object bean) {
 		this(JSONUtils.toJSON(bean));
 	}
 
-	public Iterator<Map.Entry<String, JsonElement>> iterator() {
-		return obj.entrySet().iterator();
+	public Iterator<Map.Entry<String, Object>> iterator() {
+		return map.entrySet().iterator();
 	}
 
-	public JsonElement get(String key) {
-		return obj.get(key);
+	public Object get(String key) {
+		return map.get(key);
 	}
 
-	public JsonElement get(String key, JsonElement or) {
+	public Object get(String key, Object or) {
 		return Helper.getOr(get(key), or);
 	}
 
@@ -80,7 +69,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public boolean getBoolean(String key) {
 		try {
-			return get(key).getAsBoolean();
+			return (boolean) get(key);
 		} catch (NullPointerException e) {
 			return false;
 		}
@@ -88,39 +77,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public boolean getBoolean(String key, boolean or) {
 		try {
-			return Helper.getOr(get(key).getAsBoolean(), false) || or;
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public BigInteger getBigInteger(String key) {
-		try {
-			return get(key).getAsBigInteger();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public BigInteger getBigInteger(String key, BigInteger or) {
-		try {
-			return Helper.getOr(get(key).getAsBigInteger(), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public BigDecimal getBigDecimal(String key) {
-		try {
-			return get(key).getAsBigDecimal();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public BigDecimal getBigDecimal(String key, BigDecimal or) {
-		try {
-			return Helper.getOr(get(key).getAsBigDecimal(), or);
+			return Helper.getOr(get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -128,7 +85,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public double getDouble(String key) {
 		try {
-			return get(key).getAsDouble();
+			return (double) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -136,7 +93,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public double getDouble(String key, double or) {
 		try {
-			return Helper.getOr(get(key).getAsDouble(), or);
+			return Helper.getOr(get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -144,7 +101,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public float getFloat(String key) {
 		try {
-			return get(key).getAsFloat();
+			return (float) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -152,23 +109,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public float getFloat(String key, float or) {
 		try {
-			return Helper.getOr(get(key).getAsFloat(), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public Number getNumber(String key) {
-		try {
-			return get(key).getAsNumber();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public Number getNumber(String key, Number or) {
-		try {
-			return Helper.getOr(get(key).getAsNumber(), or);
+			return Helper.getOr(get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -176,7 +117,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public int getInt(String key) {
 		try {
-			return get(key).getAsInt();
+			return (int) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -184,37 +125,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public int getInt(String key, int or) {
 		try {
-			return Helper.getOr(get(key).getAsInt(), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public JSONArray getJSONArray(String key) {
-		try {
-			return new JSONArray(get(key).getAsJsonArray());
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public JSONArray getJSONArray(String key, JSONArray or) {
-		JsonArray ja = get(key).getAsJsonArray();
-		return ja == null ? or : new JSONArray(ja);
-	}
-
-	public JSONObject getJSONObject(String key) {
-		try {
-			return new JSONObject(get(key).getAsJsonObject());
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public JSONObject getJSONObject(String key, JSONObject or) {
-		try {
-			JsonObject jo = get(key).getAsJsonObject();
-			return jo == null ? or : new JSONObject(jo);
+			return Helper.getOr(get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -222,7 +133,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public long getLong(String key) {
 		try {
-			return get(key).getAsLong();
+			return (long) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -230,7 +141,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public long getLong(String key, long or) {
 		try {
-			return Helper.getOr(get(key).getAsLong(), or);
+			return Helper.getOr(get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -238,7 +149,7 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public String getString(String key) {
 		try {
-			return get(key).getAsString();
+			return (String) get(key);
 		} catch (NullPointerException e) {
 			return "";
 		}
@@ -246,134 +157,121 @@ public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonE
 
 	public String getString(String key, String or) {
 		try {
-			return Helper.getOr(get(key).getAsString(), or);
+			return Helper.getOr(get(key), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
+	}
+
+	public JSONArray getJSONArray(String key) {
+		try {
+			return new JSONArray(get(key));
+		} catch (NullPointerException e) {
+			return null;
+		}
+	}
+
+	public JSONArray getJSONArray(String key, JSONArray or) {
+		List<?> ja = (List<?>) get(key);
+		return ja == null ? or : new JSONArray(ja);
+	}
+
+	public JSONObject getJSONObject(String key) {
+		try {
+			return new JSONObject(get(key));
+		} catch (NullPointerException e) {
+			return null;
+		}
+	}
+
+	public JSONObject getJSONObject(String key, JSONObject or) {
+		try {
+			Map<?, ?> jo = (Map<?, ?>) get(key);
+			return jo == null ? or : new JSONObject(jo);
 		} catch (NullPointerException e) {
 			return or;
 		}
 	}
 
 	public boolean has(String key) {
-		return obj.has(key);
+		return map.containsKey(key);
 	}
 
 	public JSONObject increment(String key) {
-		JsonElement je = get(key);
-		if (je == null) return this;
+		Object obj = get(key);
+		if (obj == null) return this;
 
-		if (je.isJsonPrimitive() && je.getAsJsonPrimitive().isNumber()) {
-			int n = je.getAsInt() + 1;
-			obj.addProperty(key, n);
+		if (obj instanceof Number n) {
+			map.put(key, n.longValue() + 1);
 		}
 
 		return this;
 	}
 
-	public boolean isNull(String key) {
-		return get(key) == null;
-	}
-
 	public Iterator<String> keys() {
-		return obj.keySet().iterator();
+		return map.keySet().iterator();
 	}
 
 	public Set<String> keySet() {
-		return obj.keySet();
+		return map.keySet();
 	}
 
-	protected Set<Map.Entry<String, JsonElement>> entrySet() {
-		return obj.entrySet();
-	}
-
-	public int size() {
-		return obj.size();
-	}
-
-	public boolean isEmpty() {
-		return size() == 0;
+	protected Set<Map.Entry<String, Object>> entrySet() {
+		return map.entrySet();
 	}
 
 	public JSONArray names() {
-		return new JSONArray(obj.keySet());
-	}
-
-	public JSONObject put(String key, boolean value) {
-		obj.addProperty(key, value);
-
-		return this;
-	}
-
-	public JSONObject put(String key, Collection<?> value) {
-		obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
-
-		return this;
-	}
-
-	public JSONObject put(String key, double value) {
-		obj.addProperty(key, value);
-
-		return this;
-	}
-
-	public JSONObject put(String key, float value) {
-		obj.addProperty(key, value);
-
-		return this;
-	}
-
-	public JSONObject put(String key, int value) {
-		obj.addProperty(key, value);
-
-		return this;
-	}
-
-	public JSONObject put(String key, long value) {
-		obj.addProperty(key, value);
-
-		return this;
-	}
-
-	public JSONObject put(String key, Map<?, ?> value) {
-		obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
-
-		return this;
+		return new JSONArray(map.keySet());
 	}
 
 	public JSONObject put(String key, Object value) {
-		obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		map.put(key, value);
 
 		return this;
 	}
 
 	public JSONObject putOnce(String key, Object value) {
-		if (!obj.has(key))
-			obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		map.putIfAbsent(key, value);
 
 		return this;
 	}
 
 	public JSONObject putOpt(String key, Object value) {
-		if (obj.has(key) && !get(key).isJsonNull() && value != null)
-			obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		if (map.get(key) == null && value != null)
+			map.put(key, value);
 
 		return this;
 	}
 
-	public JsonElement remove(String key) {
-		return obj.remove(key);
+	public Object remove(String key) {
+		return map.remove(key);
 	}
 
-	public Map<String, JsonElement> toMap() {
-		return obj.entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+	public JSONArray toJSONArray() {
+		return new JSONArray(map.values());
+	}
+
+	public Map<String, Object> toMap() {
+		return map;
 	}
 
 	@Override
-	public JsonElement getContent() {
-		return obj;
+	public Map<String, Object> getContent() {
+		return map;
+	}
+
+	@Override
+	public int size() {
+		return map.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return map.isEmpty();
 	}
 
 	@Override
 	public String toString() {
-		return JSONUtils.toJSON(obj);
+		return JSONUtils.toJSON(map);
 	}
 }

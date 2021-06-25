@@ -16,31 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records.youtube.enums;
 
-import com.kuuhaku.model.enums.Slot;
+import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.List;
+public enum ItemKind {
+	YOUTUBE_SEARCH_RESULT;
 
-public class GamblePool {
-	public static record Gamble(Slot slot, int weight) {
-	}
-
-	public void addGamble(Gamble gamble) {
-		for (int i = 0; i < gamble.weight(); i++) {
-			g.add(gamble);
-		}
-	}
-
-	private static final List<Gamble> g = new ArrayList<>();
-
-	public Slot[] getPool() {
-		List<Slot> pool = new ArrayList<>();
-		for (Gamble gamble : g) {
-			pool.add(gamble.slot());
+	public String toValue() {
+		if (this == ItemKind.YOUTUBE_SEARCH_RESULT) {
+			return "youtube#searchResult";
 		}
 
-		return pool.toArray(new Slot[0]);
+		return null;
+	}
+
+	public static ItemKind forValue(String value) throws IOException {
+		if (value.equals("youtube#searchResult")) return YOUTUBE_SEARCH_RESULT;
+		throw new IOException("Cannot deserialize ItemKind");
 	}
 }

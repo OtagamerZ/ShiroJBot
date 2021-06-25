@@ -23,7 +23,6 @@ import net.dv8tion.jda.api.entities.Member;
 
 import javax.persistence.*;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "ticket")
@@ -79,11 +78,10 @@ public class Ticket {
 		this.msgId = new JSONObject(msgIds).toString();
 	}
 
-	public Map<String, String> getMsgIds() {
+	public Map<String, Object> getMsgIds() {
 		JSONObject ja = new JSONObject(msgId);
 
-		return ja.toMap().entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAsString()));
+		return ja.toMap();
 	}
 
 	public String getInvite() {
