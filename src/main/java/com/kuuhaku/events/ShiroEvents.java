@@ -483,10 +483,12 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onReady(@NotNull ReadyEvent event) {
+		int id = event.getJDA().getShardInfo().getShardId();
 		try {
-			Helper.logger(this.getClass()).info("Shard " + event.getJDA().getShardInfo().getShardId() + " pronto!");
+			Helper.logger(this.getClass()).info("Shard " + id + " pronto!");
+			Main.shardSequence.addSignature(id, null);
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar shard " + event.getJDA().getShardInfo().getShardId() + ": " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar shard " + id + ": " + e);
 		}
 	}
 
