@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.utils.JSONObject;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -31,11 +29,6 @@ public class MatchRound {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "matchhistory_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private MatchHistory history;
 
 	@Enumerated(value = EnumType.STRING)
 	private Side side = Side.BOTTOM;

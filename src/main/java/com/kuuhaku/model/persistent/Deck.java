@@ -46,11 +46,6 @@ public class Deck {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "kawaipon_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Kawaipon kawaipon;
-
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String name = "";
 
