@@ -37,7 +37,6 @@ public class MatchHistory {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "matchhistory_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, Side> players = new HashMap<>();
 
@@ -50,8 +49,7 @@ public class MatchHistory {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean wo = false;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "matchhistory_id")
+	@OneToMany(mappedBy = "matchhistory_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 

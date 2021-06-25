@@ -42,7 +42,6 @@ public class PaidRole {
 	private long duration;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "paidrole_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, Long> users = new HashMap<>();
 
