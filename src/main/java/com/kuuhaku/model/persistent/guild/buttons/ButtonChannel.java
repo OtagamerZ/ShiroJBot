@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.guild.buttons;
 
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -33,6 +34,11 @@ public class ButtonChannel {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn("guildconfig_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private GuildConfig guildConfig;
+
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonMessage> messages = new HashSet<>();
@@ -46,6 +52,10 @@ public class ButtonChannel {
 
 	public String getId() {
 		return id;
+	}
+
+	public GuildConfig getGuildConfig() {
+		return guildConfig;
 	}
 
 	public Set<ButtonMessage> getMessages() {

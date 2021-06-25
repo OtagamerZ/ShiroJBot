@@ -49,7 +49,7 @@ public class MatchHistory {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean wo = false;
 
-	@OneToMany(mappedBy = "matchhistory_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "history", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 

@@ -19,6 +19,8 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.model.enums.BuffType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -30,6 +32,11 @@ public class ServerBuff {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn("guildconfig_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private GuildBuff guildBuff;
 
 	@Enumerated(EnumType.STRING)
 	private BuffType type;
@@ -54,6 +61,10 @@ public class ServerBuff {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public GuildBuff getGuildBuff() {
+		return guildBuff;
 	}
 
 	public BuffType getType() {
