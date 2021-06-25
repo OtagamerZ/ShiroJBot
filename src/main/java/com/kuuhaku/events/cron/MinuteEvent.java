@@ -21,8 +21,10 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BotStatsDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.persistent.MutedMember;
+import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -41,6 +43,7 @@ import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class MinuteEvent implements Job {
@@ -55,6 +58,12 @@ public class MinuteEvent implements Job {
 				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 			} catch (URISyntaxException | DeploymentException | IOException ignore) {
 			}
+		}
+
+		Collection<VoiceTime> voiceTimes = ShiroInfo.getShiroEvents().getVoiceTimes().values();
+		for (VoiceTime vt : voiceTimes) {
+			vt.update();
+			VoiceTimeDAO.saveVoiceTime(vt);
 		}
 
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
