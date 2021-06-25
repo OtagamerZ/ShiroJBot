@@ -50,7 +50,8 @@ public class ButtonMessage {
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String role;
 
-	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "parent_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Button> buttons = new ArrayList<>();
