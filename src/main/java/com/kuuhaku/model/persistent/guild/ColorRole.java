@@ -33,7 +33,7 @@ public class ColorRole {
 	private String name;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("colorRoles")
+	@JoinColumn(name = "guildconfig_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private GuildConfig guildConfig;
 

@@ -34,7 +34,7 @@ public class ServerBuff {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn("buffs")
+	@JoinColumn(name = "guildconfig_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private GuildBuff guildBuff;
 
