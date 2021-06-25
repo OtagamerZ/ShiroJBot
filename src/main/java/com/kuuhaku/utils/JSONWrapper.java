@@ -18,8 +18,10 @@
 
 package com.kuuhaku.utils;
 
-import com.google.gson.JsonElement;
-
 public interface JSONWrapper {
-	JsonElement getContent();
+	Object getContent();
+
+	int size();
+
+	boolean isEmpty();
 }

@@ -18,17 +18,45 @@
 
 package com.kuuhaku.model.common;
 
-import org.apache.commons.lang3.StringUtils;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.kuuhaku.utils.Helper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class Extensions {
-	private static final String[] ext = new String[]{
-			".com", ".br", ".net", ".org", ".gov",
-			".gg", ".xyz", ".site", ".blog", ".tv",
-			".biz", ".fly", ".gl", ".ru", ".es",
-			".tech"
-	};
+	private static final String[] list;
+
+	static {
+		String[] tldList;
+		try {
+			HttpRequest iana = HttpRequest.get("http://data.iana.org/TLD/tlds-alpha-by-domain.txt", true)
+					.header("Content-Type", "application/json; charset=UTF-8")
+					.header("User-Agent", "Mozilla/5.0");
+
+			List<String> tlds = new ArrayList<>();
+			LineIterator list = IOUtils.lineIterator(iana.stream(), StandardCharsets.UTF_8);
+			while (list.hasNext()) {
+				String line = list.next();
+				if (!line.startsWith("#"))
+					tlds.add("." + line.toLowerCase(Locale.ROOT));
+
+			}
+
+			tldList = tlds.toArray(String[]::new);
+		} catch (IOException e) {
+			tldList = new String[0];
+		}
+
+		list = tldList;
+	}
 
 	public static boolean checkExtension(String str) {
-		return StringUtils.containsAny(str, ext);
+		return Helper.containsAny(str, list);
 	}
 }

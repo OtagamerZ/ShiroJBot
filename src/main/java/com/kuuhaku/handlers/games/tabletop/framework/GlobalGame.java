@@ -27,12 +27,12 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.DailyQuest;
-import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.MatchRound;
+import com.kuuhaku.model.records.MatchInfo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.Member;
@@ -298,10 +298,10 @@ public abstract class GlobalGame {
 				Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
 
 				for (MatchInfo info : result.get(s)) {
-					Map<String, Integer> yourResult = info.getInfo();
-					Map<String, Integer> theirResult = Helper.mergeInfo(result.get(other)).getInfo();
-					MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(info.getId());
-					long theirMMR = Helper.getAverageMMR(result.get(other).stream().map(MatchInfo::getId).toArray(String[]::new));
+					Map<String, Integer> yourResult = info.info();
+					Map<String, Integer> theirResult = Helper.mergeInfo(result.get(other)).info();
+					MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(info.id());
+					long theirMMR = Helper.getAverageMMR(result.get(other).stream().map(MatchInfo::id).toArray(String[]::new));
 					int spentMana = yourResult.get("mana");
 					int damageDealt = theirResult.get("hp");
 

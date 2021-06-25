@@ -19,11 +19,9 @@
 package com.kuuhaku.controller;
 
 import com.google.api.services.youtube.YouTube;
-import com.google.gson.JsonElement;
-import com.kuuhaku.model.records.YoutubeVideo;
+import com.kuuhaku.model.records.youtube.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
 
@@ -36,55 +34,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Youtube {
-	public static List<YoutubeVideo> getData(String query) throws IOException {
-		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + ShiroInfo.getYoutubeToken() + "&part=snippet&type=playlist,video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
-		JSONArray ja = requestVideoData(url);
-		List<YoutubeVideo> videos = new ArrayList<>();
-		try {
-			for (JsonElement j : ja) {
-				JSONObject root = new JSONObject(j.getAsJsonObject());
-				JSONObject jid = root.getJSONObject("id");
-				JSONObject jsnippet = root.getJSONObject("snippet");
+	private static final String API_URL = YouTube.DEFAULT_BASE_URL + "search?key=" + ShiroInfo.getYoutubeToken() + "&part=snippet&type=playlist,video&q=%s&maxResults=10";
 
-				String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
-				String title = jsnippet.getString("title");
-				String desc = jsnippet.getString("description");
-				String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
-				String channel = jsnippet.getString("channelTitle");
-				videos.add(new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId")));
+	public static List<YoutubeVideo> getData(String query) throws IOException {
+		URL url = new URL(API_URL.formatted(URLEncoder.encode(query, StandardCharsets.UTF_8.toString())));
+		YoutubeData yd = requestVideoData(url);
+		List<YoutubeVideo> videos = new ArrayList<>();
+
+		try {
+			for (Item i : yd.items()) {
+				ID jid = i.id();
+				Snippet jsnippet = i.snippet();
+
+				videos.add(new YoutubeVideo(
+						Helper.getOr(jid.videoId(), jid.playlistId()),
+						jsnippet.title(),
+						jsnippet.description(),
+						jsnippet.thumbnails().medium().url(),
+						jsnippet.channelTitle(),
+						jid.playlistId() != null
+				));
 			}
+
 			return videos;
 		} catch (IllegalStateException e) {
-			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + ja);
+			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + yd);
 			throw new IOException();
 		}
 	}
 
-	private static JSONArray requestVideoData(URL url) throws IOException {
+	private static YoutubeData requestVideoData(URL url) throws IOException {
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Accept", "application/json");
 		con.addRequestProperty("Accept-Charset", "UTF-8");
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 
-		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
+		YoutubeData yd = JSONUtils.fromJSON(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8), YoutubeData.class);
 
-		Helper.logger(Youtube.class).debug(resposta);
-		return resposta.getJSONArray("items");
+		Helper.logger(Youtube.class).debug(yd);
+		return yd;
 	}
 
 	public static YoutubeVideo getSingleData(String query) throws IOException {
-		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + ShiroInfo.getYoutubeToken() + "&part=snippet&type=playlist,video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
-		JSONArray ja = requestVideoData(url);
-		JSONObject jid = ja.getJSONObject(0).getJSONObject("id");
-		JSONObject jsnippet = ja.getJSONObject(0).getJSONObject("snippet");
+		URL url = new URL(API_URL.formatted(URLEncoder.encode(query, StandardCharsets.UTF_8.toString())));
+		YoutubeData yd = requestVideoData(url);
+		Item i = yd.items().get(0);
 
-		String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
-		String title = jsnippet.getString("title");
-		String desc = jsnippet.getString("description");
-		String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
-		String channel = jsnippet.getString("channelTitle");
+		ID jid = i.id();
+		Snippet jsnippet = i.snippet();
 
-		return new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId"));
+		return new YoutubeVideo(
+				Helper.getOr(jid.videoId(), jid.playlistId()),
+				jsnippet.title(),
+				jsnippet.description(),
+				jsnippet.thumbnails().medium().url(),
+				jsnippet.channelTitle(),
+				jid.playlistId() != null
+		);
 	}
 }

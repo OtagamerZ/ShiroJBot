@@ -29,10 +29,10 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MatchMaking;
-import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -65,8 +65,8 @@ public class LobbyCommand implements Executable {
 			if (mm.getSoloLobby().containsKey(mmr)) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 				channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
-			} else if (mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(mmr) || rd.getP2().equals(mmr))) {
-				Main.getInfo().getMatchMaking().getDuoLobby().entrySet().removeIf(e -> e.getKey().getP1().equals(mmr) || e.getKey().getP2().equals(mmr));
+			} else if (mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(mmr) || rd.p2().equals(mmr))) {
+				Main.getInfo().getMatchMaking().getDuoLobby().entrySet().removeIf(e -> e.getKey().p1().equals(mmr) || e.getKey().p2().equals(mmr));
 				channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
 			} else {
 				channel.sendMessage("❌ | Você não está em nenhum saguão.").queue();
@@ -116,7 +116,7 @@ public class LobbyCommand implements Executable {
 				for (List<RankedDuo> chunk : lobby) {
 					sb.setLength(0);
 					for (RankedDuo duo : chunk)
-						sb.append("%s (%s)\n".formatted(duo.getP1().getUser().getName() + " | " + duo.getP2().getUser().getName(), RankedTier.getTierName(duo.getAvgTier(), false)));
+						sb.append("%s (%s)\n".formatted(duo.p1().getUser().getName() + " | " + duo.p2().getUser().getName(), RankedTier.getTierName(duo.getAvgTier(), false)));
 
 					eb.setDescription(sb.toString());
 					pages.add(new Page(PageType.EMBED, eb.build()));

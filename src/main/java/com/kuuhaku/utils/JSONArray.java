@@ -18,27 +18,21 @@
 
 package com.kuuhaku.utils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 
-public class JSONArray implements JSONWrapper, Iterable<JsonElement> {
-	private final JsonArray arr;
+public class JSONArray implements JSONWrapper, Iterable<Object> {
+	private final List<Object> arr;
 
 	public JSONArray() {
-		arr = new JsonArray();
+		arr = new ArrayList<>();
 	}
 
-	public JSONArray(JsonArray array) {
-		arr = array;
+	public JSONArray(List<Object> list) {
+		arr = list;
 	}
 
-	public JSONArray(String source) {
-		this(JSONUtils.parseJSONArray(source));
+	public JSONArray(String json) {
+		this(JSONUtils.toList(json));
 	}
 
 	public JSONArray(Collection<?> collection) {
@@ -49,15 +43,15 @@ public class JSONArray implements JSONWrapper, Iterable<JsonElement> {
 		this(JSONUtils.toJSON(array));
 	}
 
-	public Iterator<JsonElement> iterator() {
+	public Iterator<Object> iterator() {
 		return arr.iterator();
 	}
 
-	public JsonElement get(int index) {
+	public Object get(int index) {
 		return arr.get(index);
 	}
 
-	public JsonElement get(int index, JsonElement or) {
+	public Object get(int index, Object or) {
 		return Helper.getOr(get(index), or);
 	}
 
@@ -79,248 +73,161 @@ public class JSONArray implements JSONWrapper, Iterable<JsonElement> {
 
 	public boolean getBoolean(int index) {
 		try {
-			return get(index).getAsBoolean();
-		} catch (NullPointerException e) {
+			return (boolean) get(index);
+		} catch (IndexOutOfBoundsException e) {
 			return false;
 		}
 	}
 
 	public boolean getBoolean(int index, boolean or) {
 		try {
-			return Helper.getOr(get(index).getAsBoolean(), false) || or;
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public BigInteger getBigInteger(int index) {
-		try {
-			return get(index).getAsBigInteger();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public BigInteger getBigInteger(int index, BigInteger or) {
-		try {
-			return Helper.getOr(get(index).getAsBigInteger(), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public BigDecimal getBigDecimal(int index) {
-		try {
-			return get(index).getAsBigDecimal();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public BigDecimal getBigDecimal(int index, BigDecimal or) {
-		try {
-			return Helper.getOr(get(index).getAsBigDecimal(), or);
-		} catch (NullPointerException e) {
+			return Helper.getOr(get(index), or);
+		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
 	public double getDouble(int index) {
 		try {
-			return get(index).getAsDouble();
-		} catch (NullPointerException e) {
+			return (double) get(index);
+		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
 	}
 
 	public double getDouble(int index, double or) {
 		try {
-			return Helper.getOr(get(index).getAsDouble(), or);
-		} catch (NullPointerException e) {
+			return Helper.getOr(get(index), or);
+		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
 	public float getFloat(int index) {
 		try {
-			return get(index).getAsFloat();
-		} catch (NullPointerException e) {
+			return (float) get(index);
+		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
 	}
 
 	public float getFloat(int index, float or) {
 		try {
-			return Helper.getOr(get(index).getAsFloat(), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
-	}
-
-	public Number getNumber(int index) {
-		try {
-			return get(index).getAsNumber();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public Number getNumber(int index, Number or) {
-		try {
-			return Helper.getOr(get(index).getAsNumber(), or);
-		} catch (NullPointerException e) {
+			return Helper.getOr(get(index), or);
+		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
 	public int getInt(int index) {
-		return get(index).getAsInt();
+		return (int) get(index);
 	}
 
 	public int getInt(int index, int or) {
 		try {
-			return Helper.getOr(get(index).getAsInt(), or);
-		} catch (NullPointerException e) {
+			return Helper.getOr(get(index), or);
+		} catch (IndexOutOfBoundsException e) {
 			return or;
-		}
-	}
-
-	public JSONArray getJSONArray(int index) {
-		try {
-			return new JSONArray(get(index).getAsJsonArray());
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public JSONArray getJSONArray(int index, JSONArray or) {
-		try {
-			JsonArray ja = get(index).getAsJsonArray();
-			return ja == null ? or : new JSONArray(ja);
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public JSONObject getJSONObject(int index) {
-		try {
-			return new JSONObject(get(index).getAsJsonObject());
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	public JSONObject getJSONObject(int index, JSONObject or) {
-		try {
-			JsonObject jo = get(index).getAsJsonObject();
-			return jo == null ? or : new JSONObject(jo);
-		} catch (NullPointerException e) {
-			return null;
 		}
 	}
 
 	public long getLong(int index) {
 		try {
-			return get(index).getAsLong();
-		} catch (NullPointerException e) {
+			return (long) get(index);
+		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
 	}
 
 	public long getLong(int index, long or) {
 		try {
-			return Helper.getOr(get(index).getAsLong(), or);
-		} catch (NullPointerException e) {
+			return Helper.getOr(get(index), or);
+		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
 	public String getString(int index) {
 		try {
-			return get(index).getAsString();
-		} catch (NullPointerException e) {
+			return (String) get(index);
+		} catch (IndexOutOfBoundsException e) {
 			return "";
 		}
 	}
 
 	public String getString(int index, String or) {
 		try {
-			return Helper.getOr(get(index).getAsString(), or);
-		} catch (NullPointerException e) {
+			return Helper.getOr(get(index), or);
+		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
-	public <T> boolean contains(T value) {
+	public JSONArray getJSONArray(int index) {
+		try {
+			return new JSONArray(get(index));
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public JSONArray getJSONArray(int index, JSONArray or) {
+		try {
+			List<?> ja = (List<?>) get(index);
+			return ja == null ? or : new JSONArray(ja);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public JSONObject getJSONObject(int index) {
+		try {
+			return new JSONObject(get(index));
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public JSONObject getJSONObject(int index, JSONObject or) {
+		try {
+			Map<?, ?> jo = (Map<?, ?>) get(index);
+			return jo == null ? or : new JSONObject(jo);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public boolean contains(Object value) {
 		return toList().stream().anyMatch(value::equals);
 	}
 
-	public boolean isNull(int index) {
-		return get(index) == null;
+	public JSONArray increment(int index) {
+		Object obj = get(index);
+		if (obj == null) return this;
+
+		if (obj instanceof Number n) {
+			arr.set(index, n.longValue() + 1);
+		}
+
+		return this;
 	}
 
 	public String join(String separator) {
 		List<String> out = new ArrayList<>();
-		for (JsonElement elem : arr) {
+		for (Object elem : arr) {
 			out.add(elem.toString());
 		}
 
 		return String.join(separator, out);
 	}
 
-	public int size() {
-		return arr.size();
-	}
-
-	public JSONArray put(boolean value) {
-		arr.add(value);
-
-		return this;
-	}
-
-	public JSONArray put(Collection<?> value) {
-		arr.add(JSONUtils.parseJSONArray(value));
-
-		return this;
-	}
-
-	public JSONArray put(double value) {
-		arr.add(value);
-
-		return this;
-	}
-
-	public JSONArray put(float value) {
-		arr.add(value);
-
-		return this;
-	}
-
-	public JSONArray put(int value) {
-		arr.add(value);
-
-		return this;
-	}
-
-	public JSONArray put(long value) {
-		arr.add(value);
-
-		return this;
-	}
-
-	public JSONArray put(Map<?, ?> value) {
-		arr.add(JSONUtils.parseJSONObject(value));
-
-		return this;
-	}
-
 	public JSONArray put(Object value) {
-		arr.add(JSONUtils.parseJSONElement(value));
+		arr.add(value);
 
 		return this;
 	}
 
-	public JsonElement remove(int index) {
+	public Object remove(int index) {
 		return arr.remove(index);
 	}
 
@@ -333,22 +240,23 @@ public class JSONArray implements JSONWrapper, Iterable<JsonElement> {
 		return out;
 	}
 
-	public List<JsonElement> toList() {
-		List<JsonElement> out = new ArrayList<>();
-		for (JsonElement elem : arr) {
-			out.add(elem);
-		}
-
-		return out;
-	}
-
-	public boolean isEmpty() {
-		return size() == 0;
+	public List<Object> toList() {
+		return arr;
 	}
 
 	@Override
-	public JsonElement getContent() {
+	public Object getContent() {
 		return arr;
+	}
+
+	@Override
+	public int size() {
+		return arr.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return arr.isEmpty();
 	}
 
 	@Override

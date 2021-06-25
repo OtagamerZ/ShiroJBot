@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.google.gson.JsonParseException;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -35,6 +34,7 @@ import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import com.squareup.moshi.JsonDataException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -161,7 +161,7 @@ public class CustomAnswerCommand implements Executable {
 
 			CustomAnswerDAO.addCustomAnswer(ca);
 			channel.sendMessage(msg.formatted(StringUtils.abbreviate(ca.getAnswer().replace("\n", " "), 100), ca.getTrigger().replace("\n", " "))).queue();
-		} catch (JsonParseException | IllegalStateException e) {
+		} catch (JsonDataException | IllegalStateException e) {
 			channel.sendMessage("❌ | Olha, esse JSON não me parece certo não.").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | Algum dos parâmetros que você informou não parece certo (ex: a chance deve ser um valor de 1 à 100 sem %).").queue();

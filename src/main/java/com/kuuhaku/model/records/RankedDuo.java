@@ -16,34 +16,16 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records;
 
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.Objects;
-
-public class RankedDuo {
-	private final MatchMakingRating p1;
-	private final MatchMakingRating p2;
+public record RankedDuo(MatchMakingRating p1, MatchMakingRating p2) {
 
 	public RankedDuo(User p1, User p2) {
-		this.p1 = MatchMakingRatingDAO.getMMR(p1.getId());
-		this.p2 = MatchMakingRatingDAO.getMMR(p2.getId());
-	}
-
-	public RankedDuo(MatchMakingRating p1, MatchMakingRating p2) {
-		this.p1 = p1;
-		this.p2 = p2;
-	}
-
-	public MatchMakingRating getP1() {
-		return p1;
-	}
-
-	public MatchMakingRating getP2() {
-		return p2;
+		this(MatchMakingRatingDAO.getMMR(p1.getId()), MatchMakingRatingDAO.getMMR(p2.getId()));
 	}
 
 	public long getAvgMMR() {
@@ -52,18 +34,5 @@ public class RankedDuo {
 
 	public int getAvgTier() {
 		return (int) (Math.ceil(p1.getTier().getTier() + p2.getTier().getTier()) / 2d);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		RankedDuo rankedDuo = (RankedDuo) o;
-		return Objects.equals(p1, rankedDuo.p1) && Objects.equals(p2, rankedDuo.p2);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(p1, p2);
 	}
 }
