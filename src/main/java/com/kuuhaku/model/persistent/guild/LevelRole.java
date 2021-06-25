@@ -18,10 +18,10 @@
 
 package com.kuuhaku.model.persistent.guild;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +30,11 @@ public class LevelRole {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn("guildconfig_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private GuildConfig guildConfig;
 
 	@Column(columnDefinition = "INT NOT NULL")
 	private int level;
@@ -48,6 +53,10 @@ public class LevelRole {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public GuildConfig getGuildConfig() {
+		return guildConfig;
 	}
 
 	public int getLevel() {

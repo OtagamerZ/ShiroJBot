@@ -46,6 +46,11 @@ public class Deck {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn("kawaipon_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Kawaipon kawaipon;
+
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String name = "";
 
@@ -82,6 +87,10 @@ public class Deck {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Kawaipon getKawaipon() {
+		return kawaipon;
 	}
 
 	public String getName() {

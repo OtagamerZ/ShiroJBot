@@ -35,6 +35,11 @@ public class PaidRole {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn("guildconfig_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private GuildConfig guildConfig;
+
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
@@ -60,6 +65,10 @@ public class PaidRole {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public GuildConfig getGuildConfig() {
+		return guildConfig;
 	}
 
 	public int getPrice() {
