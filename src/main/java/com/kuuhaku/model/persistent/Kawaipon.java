@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.utils.Helper;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -38,6 +39,7 @@ public class Kawaipon implements Cloneable {
 	private String uid = "";
 
 	@OneToMany(mappedBy = "kawaipon", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<KawaiponCard> cards = new HashSet<>();
 
@@ -45,6 +47,7 @@ public class Kawaipon implements Cloneable {
 	private int activeDeck = 0;
 
 	@OneToMany(mappedBy = "kawaipon", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Deck> decks = new ArrayList<>();
 
