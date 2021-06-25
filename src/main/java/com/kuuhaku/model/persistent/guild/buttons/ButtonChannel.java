@@ -35,11 +35,6 @@ public class ButtonChannel {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private GuildConfig guildConfig;
-
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "parent_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)

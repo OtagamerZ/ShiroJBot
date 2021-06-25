@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
@@ -33,11 +31,6 @@ public class KawaiponCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "kawaipon_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Kawaipon kawaipon;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Card card;
