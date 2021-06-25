@@ -17,12 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Updated copyright notice">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1268,21 +1263,7 @@
       <workItem from="1624473260014" duration="5634000" />
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
-      <workItem from="1624629024614" duration="7790000" />
-    </task>
-    <task id="LOCAL-04811" summary="Melhoria no sistema de mutes">
-      <created>1624040260121</created>
-      <option name="number" value="04811" />
-      <option name="presentableId" value="LOCAL-04811" />
-      <option name="project" value="LOCAL" />
-      <updated>1624040260121</updated>
-    </task>
-    <task id="LOCAL-04812" summary="Melhoria no sistema de mutes">
-      <created>1624041026531</created>
-      <option name="number" value="04812" />
-      <option name="presentableId" value="LOCAL-04812" />
-      <option name="project" value="LOCAL" />
-      <updated>1624041026531</updated>
+      <workItem from="1624629024614" duration="8106000" />
     </task>
     <task id="LOCAL-04813" summary="Melhoria no sistema de mutes">
       <created>1624043164819</created>
@@ -1613,7 +1594,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624640844615</updated>
     </task>
-    <option name="localTasksCounter" value="4860" />
+    <task id="LOCAL-04860" summary="Updated copyright notice">
+      <created>1624641550744</created>
+      <option name="number" value="04860" />
+      <option name="presentableId" value="LOCAL-04860" />
+      <option name="project" value="LOCAL" />
+      <updated>1624641550744</updated>
+    </task>
+    <task id="LOCAL-04861" summary="Updated copyright notice">
+      <created>1624641591756</created>
+      <option name="number" value="04861" />
+      <option name="presentableId" value="LOCAL-04861" />
+      <option name="project" value="LOCAL" />
+      <updated>1624641591756</updated>
+    </task>
+    <option name="localTasksCounter" value="4862" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
