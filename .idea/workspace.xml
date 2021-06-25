@@ -16,7 +16,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aterada biblioteca de JSON de GSON para Moshi" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aterada biblioteca de JSON de GSON para Moshi">
+      <change beforePath="$PROJECT_DIR$/.idea/copyright/Shiro.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copyright/Shiro.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -138,7 +141,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39928058" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="settings.editor.selected.configurable" value="copyright.profiles" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -1261,14 +1264,7 @@
       <workItem from="1624473260014" duration="5634000" />
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
-      <workItem from="1624629024614" duration="4715000" />
-    </task>
-    <task id="LOCAL-04805" summary="Melhoria no sistema de mutes">
-      <created>1624034862519</created>
-      <option name="number" value="04805" />
-      <option name="presentableId" value="LOCAL-04805" />
-      <option name="project" value="LOCAL" />
-      <updated>1624034862519</updated>
+      <workItem from="1624629024614" duration="5168000" />
     </task>
     <task id="LOCAL-04806" summary="Melhoria no sistema de mutes">
       <created>1624034923270</created>
@@ -1606,7 +1602,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624637042292</updated>
     </task>
-    <option name="localTasksCounter" value="4854" />
+    <task id="LOCAL-04854" summary="Aterada biblioteca de JSON de GSON para Moshi">
+      <created>1624637258908</created>
+      <option name="number" value="04854" />
+      <option name="presentableId" value="LOCAL-04854" />
+      <option name="project" value="LOCAL" />
+      <updated>1624637258908</updated>
+    </task>
+    <option name="localTasksCounter" value="4855" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
