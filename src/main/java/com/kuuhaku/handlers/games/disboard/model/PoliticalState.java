@@ -60,7 +60,7 @@ public class PoliticalState {
 
 	public void addCountry(Country country) {
 		List<String> cs = new ArrayList<>();
-		List<Country> current = getCountries().toList().stream()
+		List<Country> current = getCountries().stream()
 				.map(c -> Country.valueOf(Country.class, String.valueOf(c)))
 				.collect(Collectors.toList());
 		for (Country c : current) {
@@ -73,7 +73,7 @@ public class PoliticalState {
 
 	public void removeCountry(Country country) {
 		List<String> cs = new ArrayList<>();
-		List<Country> current = getCountries().toList().stream()
+		List<Country> current = getCountries().stream()
 				.map(c -> Country.valueOf(Country.class, String.valueOf(c)))
 				.collect(Collectors.toList());
 		for (Country c : current) {
@@ -89,7 +89,7 @@ public class PoliticalState {
 	}
 
 	public int getLandValue() {
-		return getCountries().toList()
+		return getCountries()
 				.parallelStream()
 				.mapToInt(c -> Country.valueOf(Country.class, String.valueOf(c)).getSize())
 				.sum();
