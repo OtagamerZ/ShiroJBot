@@ -16,15 +16,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado cargos por tempo em call">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildBuff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1298,13 +1291,6 @@
       <workItem from="1624622498203" duration="2238000" />
       <workItem from="1624629024614" duration="19402000" />
     </task>
-    <task id="LOCAL-04831" summary="Correções menores">
-      <created>1624419160821</created>
-      <option name="number" value="04831" />
-      <option name="presentableId" value="LOCAL-04831" />
-      <option name="project" value="LOCAL" />
-      <updated>1624419160821</updated>
-    </task>
     <task id="LOCAL-04832" summary="Correções menores">
       <created>1624419703291</created>
       <option name="number" value="04832" />
@@ -1641,7 +1627,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624654206744</updated>
     </task>
-    <option name="localTasksCounter" value="4880" />
+    <task id="LOCAL-04880" summary="Correções menores">
+      <created>1624660826265</created>
+      <option name="number" value="04880" />
+      <option name="presentableId" value="LOCAL-04880" />
+      <option name="project" value="LOCAL" />
+      <updated>1624660826265</updated>
+    </task>
+    <option name="localTasksCounter" value="4881" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1748,12 +1741,12 @@
     <MESSAGE value="Turbinada nas respostas customizadas" />
     <MESSAGE value="Melhoria no sistema de mutes" />
     <MESSAGE value="Remoção completa do banco de caching (SQLite)" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Atualizado para JDK 16" />
     <MESSAGE value="Aterada biblioteca de JSON de GSON para Moshi" />
     <MESSAGE value="Updated copyright notice" />
     <MESSAGE value="Adicionado cargos por tempo em call" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado cargos por tempo em call" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
