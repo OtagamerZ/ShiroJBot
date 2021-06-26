@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,19 +206,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1292,14 +1280,9 @@
       <workItem from="1624559303942" duration="8344000" />
       <workItem from="1624622498203" duration="2238000" />
       <workItem from="1624629024614" duration="19402000" />
-      <workItem from="1624674995046" duration="1351000" />
-    </task>
-    <task id="LOCAL-04836" summary="Atualizado para JDK 16">
-      <created>1624563705033</created>
-      <option name="number" value="04836" />
-      <option name="presentableId" value="LOCAL-04836" />
-      <option name="project" value="LOCAL" />
-      <updated>1624563705033</updated>
+      <workItem from="1624674995046" duration="2224000" />
+      <workItem from="1624677317487" duration="386000" />
+      <workItem from="1624677971198" duration="344000" />
     </task>
     <task id="LOCAL-04837" summary="Atualizado para JDK 16">
       <created>1624564558543</created>
@@ -1637,7 +1620,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624667469216</updated>
     </task>
-    <option name="localTasksCounter" value="4885" />
+    <task id="LOCAL-04885" summary="Correções menores">
+      <created>1624676606716</created>
+      <option name="number" value="04885" />
+      <option name="presentableId" value="LOCAL-04885" />
+      <option name="project" value="LOCAL" />
+      <updated>1624676606724</updated>
+    </task>
+    <option name="localTasksCounter" value="4886" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
