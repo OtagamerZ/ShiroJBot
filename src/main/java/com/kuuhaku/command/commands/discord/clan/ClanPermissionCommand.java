@@ -76,13 +76,11 @@ public class ClanPermissionCommand implements Executable {
 						Expulsar membros: %s
 						Sacar créditos do cofre: %s
 						Convidar membros: %s
-						Alterar o deck: %s
 						""".formatted(
 						perms.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						perms.contains(ClanPermission.KICK) ? "✅" : "❌",
 						perms.contains(ClanPermission.WITHDRAW) ? "✅" : "❌",
-						perms.contains(ClanPermission.INVITE) ? "✅" : "❌",
-						perms.contains(ClanPermission.DECK) ? "✅" : "❌"
+						perms.contains(ClanPermission.INVITE) ? "✅" : "❌"
 				), false);
 			}
 
@@ -152,16 +150,6 @@ public class ClanPermissionCommand implements Executable {
 							refreshPermField(eb, ch, p);
 							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
 						});
-						put(Helper.getNumericEmoji(5), (mb, ms) -> {
-							EnumSet<ClanPermission> p = c.getPermissions(ch);
-							boolean enabled = p.contains(ClanPermission.DECK);
-							if (!enabled) p.add(ClanPermission.DECK);
-							else p.remove(ClanPermission.DECK);
-							c.setPermissions(ch, p);
-
-							refreshPermField(eb, ch, p);
-							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
-						});
 					}},
 					true,
 					1, TimeUnit.MINUTES,
@@ -182,13 +170,11 @@ public class ClanPermissionCommand implements Executable {
 						Expulsar membros: %s
 						Sacar créditos do cofre: %s
 						Convidar membros: %s
-						Alterar o deck: %s
 						""".formatted(
 						p.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						p.contains(ClanPermission.KICK) ? "✅" : "❌",
 						p.contains(ClanPermission.WITHDRAW) ? "✅" : "❌",
-						p.contains(ClanPermission.INVITE) ? "✅" : "❌",
-						p.contains(ClanPermission.DECK) ? "✅" : "❌"
+						p.contains(ClanPermission.INVITE) ? "✅" : "❌"
 				), false);
 	}
 }

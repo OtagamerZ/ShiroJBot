@@ -22,7 +22,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -50,7 +49,6 @@ public class ShoukanDeckCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		boolean showPrivate = Helper.equalsAny("p", args);
-		boolean showClan = Helper.equalsAny("c", args) && ClanDAO.isMember(author.getId());
 
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			if (Helper.containsAny(args, "daily", "diario")) {
