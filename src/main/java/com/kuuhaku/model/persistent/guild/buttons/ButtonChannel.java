@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.guild.buttons;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -36,7 +35,6 @@ public class ButtonChannel {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "parent_id")
-	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonMessage> messages = new HashSet<>();
 
