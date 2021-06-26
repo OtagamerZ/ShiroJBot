@@ -42,6 +42,7 @@ public class VoiceTimeDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT vt FROM VoiceTime vt WHERE vt.sid = :guild", VoiceTime.class);
+		q.setParameter("guild", guild);
 
 		try {
 			return q.getResultList();
