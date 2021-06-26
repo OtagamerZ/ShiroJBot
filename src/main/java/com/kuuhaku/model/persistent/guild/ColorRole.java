@@ -61,10 +61,6 @@ public class ColorRole {
 		this.name = name;
 	}
 
-	public GuildConfig getGuildConfig() {
-		return guildConfig;
-	}
-
 	public Color getColor() {
 		return Color.decode(hex);
 	}

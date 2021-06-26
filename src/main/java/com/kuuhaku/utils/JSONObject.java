@@ -102,7 +102,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key) {
 		try {
-			return (float) get(key);
+			return (float) (double) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -110,7 +110,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key, float or) {
 		try {
-			return Helper.getOr(get(key), or);
+			return Helper.getOr((float) (double) get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -118,7 +118,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key) {
 		try {
-			return (int) get(key);
+			return (int) (double) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -126,7 +126,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key, int or) {
 		try {
-			return Helper.getOr(get(key), or);
+			return Helper.getOr((int) (double) get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -134,7 +134,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key) {
 		try {
-			return (long) get(key);
+			return (long) (double) get(key);
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -142,7 +142,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key, long or) {
 		try {
-			return Helper.getOr(get(key), or);
+			return Helper.getOr((long) (double) get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -150,7 +150,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public String getString(String key) {
 		try {
-			return (String) get(key);
+			return String.valueOf(get(key));
 		} catch (NullPointerException e) {
 			return "";
 		}
@@ -158,7 +158,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public String getString(String key, String or) {
 		try {
-			return Helper.getOr(get(key), or);
+			return Helper.getOr(String.valueOf(get(key)), or);
 		} catch (NullPointerException e) {
 			return or;
 		}

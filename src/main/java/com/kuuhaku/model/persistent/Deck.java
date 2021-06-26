@@ -84,10 +84,6 @@ public class Deck {
 		this.id = id;
 	}
 
-	public Kawaipon getKawaipon() {
-		return kawaipon;
-	}
-
 	public String getName() {
 		return name;
 	}
