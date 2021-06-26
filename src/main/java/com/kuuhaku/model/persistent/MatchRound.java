@@ -40,10 +40,6 @@ public class MatchRound {
 		return id;
 	}
 
-	public MatchHistory getHistory() {
-		return history;
-	}
-
 	public JSONObject getScript() {
 		return new JSONObject(state);
 	}

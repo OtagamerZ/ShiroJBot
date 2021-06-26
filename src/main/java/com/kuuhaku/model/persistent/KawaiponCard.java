@@ -63,10 +63,6 @@ public class KawaiponCard {
 		this.id = id;
 	}
 
-	public Kawaipon getKawaipon() {
-		return kawaipon;
-	}
-
 	public Card getCard() {
 		return card;
 	}

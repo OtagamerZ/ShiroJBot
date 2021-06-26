@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.guild.buttons;
 
-import com.kuuhaku.model.persistent.guild.GuildConfig;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -50,10 +49,6 @@ public class ButtonChannel {
 
 	public String getId() {
 		return id;
-	}
-
-	public GuildConfig getGuildConfig() {
-		return guildConfig;
 	}
 
 	public Set<ButtonMessage> getMessages() {

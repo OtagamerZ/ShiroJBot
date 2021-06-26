@@ -50,10 +50,6 @@ public class LevelRole {
 		this.id = id;
 	}
 
-	public GuildConfig getGuildConfig() {
-		return guildConfig;
-	}
-
 	public int getLevel() {
 		return level;
 	}

@@ -50,10 +50,6 @@ public class VoiceRole {
 		this.id = id;
 	}
 
-	public GuildConfig getGuildConfig() {
-		return guildConfig;
-	}
-
 	public long getTime() {
 		return time;
 	}
