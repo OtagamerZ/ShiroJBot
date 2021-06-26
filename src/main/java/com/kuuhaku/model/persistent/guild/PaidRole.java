@@ -63,10 +63,6 @@ public class PaidRole {
 		this.id = id;
 	}
 
-	public GuildConfig getGuildConfig() {
-		return guildConfig;
-	}
-
 	public int getPrice() {
 		return price;
 	}

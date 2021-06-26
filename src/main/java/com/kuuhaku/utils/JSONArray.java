@@ -102,7 +102,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public float getFloat(int index) {
 		try {
-			return (float) get(index);
+			return (float) (double) get(index);
 		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
@@ -110,19 +110,19 @@ public class JSONArray extends ArrayList<Object> {
 
 	public float getFloat(int index, float or) {
 		try {
-			return Helper.getOr(get(index), or);
+			return Helper.getOr((float) (double) get(index), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
 	public int getInt(int index) {
-		return (int) get(index);
+		return (int) (double) get(index);
 	}
 
 	public int getInt(int index, int or) {
 		try {
-			return Helper.getOr(get(index), or);
+			return Helper.getOr((int) (double) get(index), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -138,7 +138,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public long getLong(int index, long or) {
 		try {
-			return Helper.getOr(get(index), or);
+			return Helper.getOr((long) (double) get(index), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -146,7 +146,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public String getString(int index) {
 		try {
-			return (String) get(index);
+			return String.valueOf(get(index));
 		} catch (IndexOutOfBoundsException e) {
 			return "";
 		}
@@ -154,7 +154,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public String getString(int index, String or) {
 		try {
-			return Helper.getOr(get(index), or);
+			return Helper.getOr(String.valueOf(get(index)), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
