@@ -60,7 +60,7 @@ public class InviteClanMemberCommand implements Executable {
 		}
 
 		User usr = message.getMentionedUsers().get(0);
-		if (ClanDAO.isMember(usr.getId())) {
+		if (ClanDAO.getUserClan(usr.getId()) != null) {
 			channel.sendMessage("❌ | Esse usuário já possui um clã.").queue();
 			return;
 		}

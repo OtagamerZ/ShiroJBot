@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 @Command(
 		name = "bilhetes",
 		aliases = {"tickets"},
-		usage = "req_daily-deck-p-c",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
