@@ -50,10 +50,6 @@ public class ClanMember {
 		return uid;
 	}
 
-	public Clan getClan() {
-		return clan;
-	}
-
 	public ClanHierarchy getRole() {
 		return role;
 	}
@@ -87,11 +83,11 @@ public class ClanMember {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ClanMember that = (ClanMember) o;
-		return Objects.equals(uid, that.uid) && Objects.equals(clan, that.clan);
+		return Objects.equals(uid, that.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid, clan);
+		return Objects.hash(uid);
 	}
 }

@@ -56,10 +56,6 @@ public class ServerBuff {
 		this.id = id;
 	}
 
-	public GuildBuff getGuildBuff() {
-		return guildBuff;
-	}
-
 	public BuffType getType() {
 		return type;
 	}
