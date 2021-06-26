@@ -30,6 +30,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Leaderboards;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -90,9 +91,9 @@ public class LeaderboardsCommand implements Executable {
 			};
 
 			if (i == 0)
-				sb.appendNewLine("**%dº - %s (%d %s)**".formatted(i + 1, l.getUsr(), l.getScore(), unit));
+				sb.appendNewLine("**%dº - %s (%s %s)**".formatted(i + 1, l.getUsr(), Helper.separate(l.getScore()), unit));
 			else
-				sb.appendNewLine("%dº - %s (%d %s)".formatted(i + 1, l.getUsr(), l.getScore(), unit));
+				sb.appendNewLine("%dº - %s (%s %s)".formatted(i + 1, l.getUsr(), Helper.separate(l.getScore()), unit));
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
