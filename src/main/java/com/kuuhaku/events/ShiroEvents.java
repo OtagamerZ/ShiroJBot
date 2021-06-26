@@ -587,13 +587,17 @@ public class ShiroEvents extends ListenerAdapter {
 					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (e.image().join() != null) eb.setImage(e.image().join());
+					if (e.image() != null && e.image().join() != null)
+						eb.setImage(e.image().join());
 
 					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild));
 
-					if (e.footer().name() != null) eb.setFooter(e.footer().name(), e.footer().icon());
-					else
+					if (e.footer() != null && e.footer().name() != null)
+						eb.setFooter(e.footer().name(), e.footer().icon());
+					else if (e.footer() != null)
 						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.footer().icon(), guild.getIconUrl()));
+					else
+						eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
@@ -665,13 +669,17 @@ public class ShiroEvents extends ListenerAdapter {
 					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (e.image().leave() != null) eb.setImage(e.image().leave());
+					if (e.image() != null && e.image().leave() != null)
+						eb.setImage(e.image().leave());
 
 					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild));
 
-					if (e.footer().name() != null) eb.setFooter(e.footer().name(), e.footer().icon());
-					else
+					if (e.footer() != null && e.footer().name() != null)
+						eb.setFooter(e.footer().name(), e.footer().icon());
+					else if (e.footer() != null)
 						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.footer().icon(), guild.getIconUrl()));
+					else
+						eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
