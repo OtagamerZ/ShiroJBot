@@ -34,35 +34,42 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 	public AutoEmbedBuilder(Embed embed) {
 		e = embed;
 
-		setTitle(
-				StringUtils.abbreviate(e.title().name(), MessageEmbed.TITLE_MAX_LENGTH),
-				e.title().url()
-		);
+		if (e.title() != null)
+			setTitle(
+					StringUtils.abbreviate(e.title().name(), MessageEmbed.TITLE_MAX_LENGTH),
+					e.title().url()
+			);
 
-		setAuthor(
-				StringUtils.abbreviate(e.author().name(), MessageEmbed.AUTHOR_MAX_LENGTH),
-				e.author().url(),
-				e.author().icon()
-		);
+		if (e.author() != null)
+			setAuthor(
+					StringUtils.abbreviate(e.author().name(), MessageEmbed.AUTHOR_MAX_LENGTH),
+					e.author().url(),
+					e.author().icon()
+			);
 
 		setColor(e.getParsedColor());
 		setDescription(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH));
 		setThumbnail(e.thumbnail());
-		setImage(e.image().image());
-		if (e.showDate()) setTimestamp(LocalDateTime.now());
+		if (e.image() != null)
+			setImage(e.image().image());
+		if (e.showDate())
+			setTimestamp(LocalDateTime.now());
 
-		setFooter(
-				StringUtils.abbreviate(e.footer().name(), MessageEmbed.TEXT_MAX_LENGTH),
-				e.footer().icon()
-		);
-
-		List<Field> fields = e.fields();
-		for (Field field : fields) {
-			addField(
-					StringUtils.abbreviate(field.name(), MessageEmbed.TITLE_MAX_LENGTH),
-					StringUtils.abbreviate(field.value(), MessageEmbed.VALUE_MAX_LENGTH),
-					field.inline()
+		if (e.footer() != null)
+			setFooter(
+					StringUtils.abbreviate(e.footer().name(), MessageEmbed.TEXT_MAX_LENGTH),
+					e.footer().icon()
 			);
+
+		if (e.fields() != null) {
+			List<Field> fields = e.fields();
+			for (Field field : fields) {
+				addField(
+						StringUtils.abbreviate(field.name(), MessageEmbed.TITLE_MAX_LENGTH),
+						StringUtils.abbreviate(field.value(), MessageEmbed.VALUE_MAX_LENGTH),
+						field.inline()
+				);
+			}
 		}
 	}
 
