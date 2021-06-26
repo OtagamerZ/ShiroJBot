@@ -45,29 +45,13 @@ public class ClanDAO {
 	public static Clan getUserClan(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m.clan FROM ClanMember m WHERE m.uid = :id", Clan.class);
+		Query q = em.createQuery("SELECT c FROM Clan c JOIN c.members m WHERE m.uid = :id", Clan.class);
 		q.setParameter("id", id);
 
 		try {
 			return (Clan) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
-		} finally {
-			em.close();
-		}
-	}
-
-	public static boolean isMember(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT m.clan FROM ClanMember m WHERE m.uid = :id", Clan.class);
-		q.setParameter("id", id);
-
-		try {
-			q.getSingleResult();
-			return true;
-		} catch (NoResultException e) {
-			return false;
 		} finally {
 			em.close();
 		}
