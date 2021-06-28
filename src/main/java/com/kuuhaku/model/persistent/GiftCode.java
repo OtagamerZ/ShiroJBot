@@ -18,10 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
-import bsh.EvalError;
-import bsh.Interpreter;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
+import groovy.lang.GroovyShell;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -97,13 +96,12 @@ public class GiftCode {
 		Account acc = AccountDAO.getAccount(id);
 
 		try {
-			Interpreter i = new Interpreter();
-			i.setStrictJava(true);
-			i.set("acc", acc);
-			i.eval(imports + gift);
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("acc", acc);
+			gs.evaluate(imports + gift);
 
 			AccountDAO.saveAccount(acc);
-		} catch (EvalError e) {
+		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
