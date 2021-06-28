@@ -1983,7 +1983,8 @@ public class Helper {
 		wmb.setContent(message);
 		WebhookCluster cluster = new WebhookCluster(clients);
 		cluster.broadcast(wmb.build());
-		channel.sendMessage(":loud_sound: | Sucesso: " + success + "\n:mute: | Falha: " + failed).queue();
+		if (channel != null)
+			channel.sendMessage(":loud_sound: | Sucesso: " + success + "\n:mute: | Falha: " + failed).queue();
 	}
 
 	public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
@@ -2892,5 +2893,9 @@ public class Helper {
 		}
 
 		return false;
+	}
+
+	public static <T> T safeCast(Object obj, Class<T> klass) {
+		return klass != null && klass.isInstance(obj) ? klass.cast(obj) : null;
 	}
 }
