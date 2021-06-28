@@ -18,12 +18,13 @@
 
 package com.kuuhaku.utils;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class NContract<A> extends CompletableFuture<A> {
 	private final int signers;
@@ -59,16 +60,16 @@ public class NContract<A> extends CompletableFuture<A> {
 
 	private A checkContract() {
 		if (this.signatures.size() == signers) {
-			List<A> ordered = new ArrayList<>();
-			for (Map.Entry<Integer, A> entry : signatures.entrySet()) {
-				Integer key = entry.getKey();
-				A value = entry.getValue();
-				ordered.add(key, value);
-			}
+			List<A> ordered = signatures.entrySet().stream()
+					.sorted(Comparator.comparingInt(Map.Entry::getKey))
+					.map(Map.Entry::getValue)
+					.collect(Collectors.toList());
+
 			A result = action.apply(ordered);
 			signatures.clear();
 			return result;
 		}
+
 		return null;
 	}
 }
