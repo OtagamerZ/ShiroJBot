@@ -150,6 +150,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.refreshButtons(guildConfig);
 		}
 
+		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
+		shiroShards.setActivity(getRandomActivity());
+
 		List<JDA> shards = new ArrayList<>(shiroShards.getShards());
 		shards.sort(Comparator.comparingInt(s -> s.getShardInfo().getShardId()));
 		for (JDA shard : shards) {
@@ -166,9 +169,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		System.gc();
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
-
-		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
-		shiroShards.setActivity(getRandomActivity());
 	}
 
 	public static Activity getRandomActivity() {
