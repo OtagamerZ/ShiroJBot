@@ -238,7 +238,9 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 
-			String[] args = rawMsgNoCommand.split(" ");
+			String[] args = Arrays.stream(rawMsgNoCommand.split(" "))
+					.filter(s -> !s.isBlank())
+					.toArray(String[]::new);
 
 			boolean found = false;
 			if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
