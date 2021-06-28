@@ -78,6 +78,7 @@ dependencies {
 
     //Compiler
     implementation group: "org.beanshell", name: "bsh", version: "2.0b5"
+    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.8'
 
     //Music
     implementation group: "com.sedmelluq", name: "jda-nas", version: "1.1.0"
