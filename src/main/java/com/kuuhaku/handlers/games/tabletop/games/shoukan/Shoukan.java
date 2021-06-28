@@ -1047,31 +1047,27 @@ public class Shoukan extends GlobalGame {
 				.orElse(null);
 
 		if (aFusion != null) {
-			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(current);
-
 			for (Map.Entry<String, Pair<Integer, Boolean>> material : aFusion.canFuse(champsInField, equipsInField, field).entrySet()) {
 				Pair<Integer, Boolean> p = material.getValue();
 				banishCard(current, p.getLeft(), p.getRight());
 			}
 
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> slt = slts.get(i);
-				if (slt.getTop() == null && !isSlotLocked(current, i)) {
-					aFusion.setGame(this);
-					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
-					slt.setTop(aFusion);
-					if (applyEot(ON_SUMMON, current, i)) return true;
-					if (applyEffect(ON_SUMMON, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
+			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(current, true);
+			if (sc != null) {
+				aFusion.setGame(this);
+				aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+				sc.setTop(aFusion);
+				if (applyEot(ON_SUMMON, current, sc.getIndex())) return true;
+				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), current, Pair.of(aFusion, sc.getIndex()), null))
+					return true;
 
-					if (aFusion.getMana() > 0) {
-						if (h.isNullMode())
-							h.removeHp(aFusion.getBaseStats() / 2);
-						else
-							h.removeMana(aFusion.getMana());
-					} else
-						h.removeHp(aFusion.getBlood());
-					break;
-				}
+				if (aFusion.getMana() > 0) {
+					if (h.isNullMode())
+						h.removeHp(aFusion.getBaseStats() / 2);
+					else
+						h.removeMana(aFusion.getMana());
+				} else
+					h.removeHp(aFusion.getBlood());
 			}
 
 			return makeFusion(h);
