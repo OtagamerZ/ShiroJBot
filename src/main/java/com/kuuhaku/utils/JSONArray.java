@@ -86,7 +86,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public double getDouble(int index) {
 		try {
-			return (double) get(index);
+			return ((Number) get(index)).doubleValue();
 		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
@@ -94,7 +94,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public double getDouble(int index, double or) {
 		try {
-			return Helper.getOr(get(index), or);
+			return Helper.getOr(((Number) get(index)).doubleValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -102,7 +102,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public float getFloat(int index) {
 		try {
-			return (float) (double) get(index);
+			return ((Number) get(index)).floatValue();
 		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
@@ -110,19 +110,19 @@ public class JSONArray extends ArrayList<Object> {
 
 	public float getFloat(int index, float or) {
 		try {
-			return Helper.getOr((float) (double) get(index), or);
+			return Helper.getOr(((Number) get(index)).floatValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
 	}
 
 	public int getInt(int index) {
-		return (int) (double) get(index);
+		return ((Number) get(index)).intValue();
 	}
 
 	public int getInt(int index, int or) {
 		try {
-			return Helper.getOr((int) (double) get(index), or);
+			return Helper.getOr(((Number) get(index)).intValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -130,7 +130,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public long getLong(int index) {
 		try {
-			return (long) get(index);
+			return ((Number) get(index)).longValue();
 		} catch (IndexOutOfBoundsException e) {
 			return 0;
 		}
@@ -138,7 +138,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public long getLong(int index, long or) {
 		try {
-			return Helper.getOr((long) (double) get(index), or);
+			return Helper.getOr(((Number) get(index)).longValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}

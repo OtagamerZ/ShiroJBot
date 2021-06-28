@@ -86,7 +86,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
@@ -136,7 +135,7 @@ public class ShiroEvents extends ListenerAdapter {
 			Message message = event.getMessage();
 			TextChannel channel = message.getTextChannel();
 			Guild guild = message.getGuild();
-			String rawMessage = StringUtils.normalizeSpace(message.getContentRaw());
+			String rawMessage = message.getContentRaw().replace("\s+", " ");
 
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
@@ -214,11 +213,12 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!author.isBot()) Main.getInfo().cache(guild, message);
 
-			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
+			String rawMsgNoCommand = "";
 			if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
-				rawMsgNoPrefix = rawMessage.substring(prefix.length());
+				String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
+				rawMsgNoCommand = rawMessage.substring(prefix.length() + commandName.length()).trim();
 			}
 
 			CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
@@ -238,14 +238,9 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 
-			String[] args = rawMsgNoPrefix.split("\s+");
-			String argsAsText = rawMsgNoPrefix.replaceFirst(Pattern.quote(commandName), "").trim();
-			boolean hasArgs = args.length > 1;
-			if (hasArgs) {
-				args = Arrays.copyOfRange(args, 1, args.length);
-			} else {
-				args = new String[0];
-			}
+			String[] args = Arrays.stream(rawMsgNoCommand.split(" "))
+					.filter(s -> !s.isBlank())
+					.toArray(String[]::new);
 
 			boolean found = false;
 			if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
@@ -302,7 +297,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
-					command.execute(author, member, commandName, argsAsText, args, message, channel, guild, prefix);
+					command.execute(author, member, commandName, rawMsgNoCommand, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
 
 					LogDAO.saveLog(new Log(guild, author, rawMessage));
@@ -457,8 +452,8 @@ public class ShiroEvents extends ListenerAdapter {
 					acc.setLastQuest();
 
 					float mod = tasks.getDifficultyMod();
-					if (Helper.round(mod, 1) >= 3.7)
-						acc.addGem(1);
+					if (Helper.round(mod, 1) >= 4)
+						acc.addGem();
 					else
 						acc.addCredit(Math.round(2500 * mod), this.getClass());
 

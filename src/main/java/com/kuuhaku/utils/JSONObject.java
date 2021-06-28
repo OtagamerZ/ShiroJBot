@@ -86,7 +86,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public double getDouble(String key) {
 		try {
-			return (double) get(key);
+			return ((Number) get(key)).doubleValue();
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -94,7 +94,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public double getDouble(String key, double or) {
 		try {
-			return Helper.getOr(get(key), or);
+			return Helper.getOr(((Number) get(key)).doubleValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -102,7 +102,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key) {
 		try {
-			return (float) (double) get(key);
+			return ((Number) get(key)).floatValue();
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -110,7 +110,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key, float or) {
 		try {
-			return Helper.getOr((float) (double) get(key), or);
+			return Helper.getOr(((Number) get(key)).floatValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -118,7 +118,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key) {
 		try {
-			return (int) (double) get(key);
+			return ((Number) get(key)).intValue();
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -126,7 +126,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key, int or) {
 		try {
-			return Helper.getOr((int) (double) get(key), or);
+			return Helper.getOr(((Number) get(key)).intValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -134,7 +134,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key) {
 		try {
-			return (long) (double) get(key);
+			return ((Number) get(key)).longValue();
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -142,7 +142,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key, long or) {
 		try {
-			return Helper.getOr((long) (double) get(key), or);
+			return Helper.getOr(((Number) get(key)).longValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
