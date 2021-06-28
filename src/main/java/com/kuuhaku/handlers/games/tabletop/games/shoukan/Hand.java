@@ -403,10 +403,40 @@ public class Hand {
 		return cards;
 	}
 
+	public boolean hasCard(String id) {
+		return getAvailableCards().stream()
+				.map(d -> d.getCard().getId())
+				.anyMatch(id::equalsIgnoreCase);
+	}
+
+	public List<Champion> getSortedChampions() {
+		return getAvailableCards().stream()
+				.filter(d -> d instanceof Champion)
+				.map(d -> (Champion) d)
+				.sorted(Comparator.comparingInt(Champion::getMana)
+						.thenComparing(Champion::getAtk)
+						.thenComparing(Champion::getDef)
+				).collect(Collectors.toList());
+	}
+
+	public List<Equipment> getSortedEquipments() {
+		return getAvailableCards().stream()
+				.filter(d -> d instanceof Equipment)
+				.map(d -> (Equipment) d)
+				.sorted(Comparator.comparingInt(Equipment::getMana)
+						.thenComparing(Equipment::getAtk)
+						.thenComparing(Equipment::getDef)
+				).collect(Collectors.toList());
+	}
+
 	public List<Drawable> getAvailableCards() {
-		return cards.stream()
+		return getCards().stream()
 				.filter(Drawable::isAvailable)
 				.collect(Collectors.toList());
+	}
+
+	public void removeCard(String name) {
+		getAvailableCards().removeIf(d -> d.getCard().getId().equalsIgnoreCase(name));
 	}
 
 	public List<Drawable> getDestinyDeck() {

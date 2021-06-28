@@ -90,7 +90,7 @@ public abstract class Drop<P> implements Prize<P> {
 				else return c.getTier().ordinal() >= tier.ordinal();
 			}));
 
-			add(Pair.of("Possuir ranking " + ranked.getName().toLowerCase(Locale.ROOT) + " no Shoukan ou superior.", u ->
+			add(Pair.of("Possuir ranking " + ranked.getName() + " no Shoukan ou superior.", u ->
 					MatchMakingRatingDAO.getMMR(u.getId()).getTier().ordinal() >= ranked.ordinal()));
 		}};
 		chosen = condition.get(Helper.rng(condition.size(), true));
