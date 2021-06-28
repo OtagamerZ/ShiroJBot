@@ -135,7 +135,7 @@ public class ShiroEvents extends ListenerAdapter {
 			Message message = event.getMessage();
 			TextChannel channel = message.getTextChannel();
 			Guild guild = message.getGuild();
-			String rawMessage = StringUtils.normalizeSpace(message.getContentRaw());
+			String rawMessage = message.getContentRaw().replace("\s+", " ");
 
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
@@ -238,7 +238,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 
-			String[] args = rawMsgNoCommand.split("\s+");
+			String[] args = rawMsgNoCommand.split(" ");
 
 			boolean found = false;
 			if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
