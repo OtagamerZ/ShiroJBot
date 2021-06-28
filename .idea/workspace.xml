@@ -208,17 +208,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1296,14 +1285,7 @@
       <workItem from="1624674995046" duration="2224000" />
       <workItem from="1624677317487" duration="386000" />
       <workItem from="1624677971198" duration="989000" />
-      <workItem from="1624908485229" duration="1414000" />
-    </task>
-    <task id="LOCAL-04849" summary="Atualizado para JDK 16">
-      <created>1624566812033</created>
-      <option name="number" value="04849" />
-      <option name="presentableId" value="LOCAL-04849" />
-      <option name="project" value="LOCAL" />
-      <updated>1624566812033</updated>
+      <workItem from="1624908485229" duration="2104000" />
     </task>
     <task id="LOCAL-04850" summary="Aterada biblioteca de JSON de GSON para Moshi">
       <created>1624633355849</created>
@@ -1641,7 +1623,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624909342871</updated>
     </task>
-    <option name="localTasksCounter" value="4898" />
+    <task id="LOCAL-04898" summary="Correções menores">
+      <created>1624909929718</created>
+      <option name="number" value="04898" />
+      <option name="presentableId" value="LOCAL-04898" />
+      <option name="project" value="LOCAL" />
+      <updated>1624909929718</updated>
+    </task>
+    <option name="localTasksCounter" value="4899" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

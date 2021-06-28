@@ -28,6 +28,7 @@ import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
+import org.codehaus.groovy.control.CompilationFailedException;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -51,11 +52,11 @@ public class CompileCommand implements Executable {
 					String code = argsAsText.replace("```java", "").replace("```", "");
 
 					GroovyShell gs = new GroovyShell();
+					gs.setVariable("out", null);
 					gs.setVariable("msg", message);
-					gs.evaluate(code);
 
 					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
-				} catch (Exception e) {
+				} catch (CompilationFailedException e) {
 					return Pair.of(e.toString().replace("`", "´"), -1L);
 				}
 			});
