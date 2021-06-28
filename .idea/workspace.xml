@@ -18,7 +18,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1297,14 +1296,7 @@
       <workItem from="1624674995046" duration="2224000" />
       <workItem from="1624677317487" duration="386000" />
       <workItem from="1624677971198" duration="989000" />
-      <workItem from="1624908485229" duration="653000" />
-    </task>
-    <task id="LOCAL-04848" summary="Atualizado para JDK 16">
-      <created>1624566574116</created>
-      <option name="number" value="04848" />
-      <option name="presentableId" value="LOCAL-04848" />
-      <option name="project" value="LOCAL" />
-      <updated>1624566574116</updated>
+      <workItem from="1624908485229" duration="1414000" />
     </task>
     <task id="LOCAL-04849" summary="Atualizado para JDK 16">
       <created>1624566812033</created>
@@ -1642,7 +1634,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624902991522</updated>
     </task>
-    <option name="localTasksCounter" value="4897" />
+    <task id="LOCAL-04897" summary="Correções menores">
+      <created>1624909342871</created>
+      <option name="number" value="04897" />
+      <option name="presentableId" value="LOCAL-04897" />
+      <option name="project" value="LOCAL" />
+      <updated>1624909342871</updated>
+    </task>
+    <option name="localTasksCounter" value="4898" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

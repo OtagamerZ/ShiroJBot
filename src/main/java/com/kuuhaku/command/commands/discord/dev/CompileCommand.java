@@ -24,7 +24,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import groovy.util.Eval;
+import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
@@ -50,7 +50,11 @@ public class CompileCommand implements Executable {
 				try {
 					String code = argsAsText.replace("```java", "").replace("```", "");
 
-					return Pair.of(String.valueOf(Eval.x(message, code)), System.currentTimeMillis() - start);
+					GroovyShell gs = new GroovyShell();
+					gs.setVariable("msg", message);
+					gs.evaluate(code);
+
+					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
 				} catch (Exception e) {
 					return Pair.of(e.toString().replace("`", "´"), -1L);
 				}
