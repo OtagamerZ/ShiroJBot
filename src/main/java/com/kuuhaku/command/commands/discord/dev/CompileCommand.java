@@ -54,6 +54,7 @@ public class CompileCommand implements Executable {
 					GroovyShell gs = new GroovyShell();
 					gs.setVariable("out", null);
 					gs.setVariable("msg", message);
+					gs.evaluate(code);
 
 					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
 				} catch (CompilationFailedException e) {
