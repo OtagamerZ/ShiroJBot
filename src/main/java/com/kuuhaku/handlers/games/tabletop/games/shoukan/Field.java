@@ -47,6 +47,9 @@ public class Field implements Drawable, Cloneable {
 	private String modifiers = "{}";
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean day = false;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean effectOnly = false;
 
 	private transient Shoukan game = null;
@@ -97,6 +100,11 @@ public class Field implements Drawable, Cloneable {
 			}
 		}
 
+		if (day)
+			g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/day.png"), 135, 58, null);
+		else
+			g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/night.png"), 135, 58, null);
+
 		if (!available) {
 			g2d.setColor(new Color(0, 0, 0, 150));
 			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
@@ -126,6 +134,14 @@ public class Field implements Drawable, Cloneable {
 
 	public void setModifiers(String modifiers) {
 		this.modifiers = modifiers;
+	}
+
+	public boolean isDay() {
+		return day;
+	}
+
+	public void setDay(boolean day) {
+		this.day = day;
 	}
 
 	public boolean isEffectOnly() {
