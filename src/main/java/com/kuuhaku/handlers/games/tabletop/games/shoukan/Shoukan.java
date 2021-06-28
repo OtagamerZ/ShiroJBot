@@ -2214,6 +2214,24 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
+	public int getAttributeSum(Side s, boolean attacking) {
+		List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+
+		return slts.stream()
+				.map(SlotColumn::getTop)
+				.filter(Objects::nonNull)
+				.mapToInt(c -> attacking
+						? c.isDefending() ? 0 : c.getFinAtk()
+						: c.isDefending() ? c.getFinDef() : c.getFinAtk()
+				).sum();
+	}
+
+	public boolean isInGraveyard(Side s, String id) {
+		return arena.getGraveyard().get(s).stream()
+				.map(d -> d.getCard().getId())
+				.anyMatch(id::equalsIgnoreCase);
+	}
+
 	@Override
 	public void close() {
 		if (!isOpen()) return;

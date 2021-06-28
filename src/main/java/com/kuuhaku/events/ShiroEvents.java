@@ -457,8 +457,8 @@ public class ShiroEvents extends ListenerAdapter {
 					acc.setLastQuest();
 
 					float mod = tasks.getDifficultyMod();
-					if (Helper.round(mod, 1) >= 3.7)
-						acc.addGem(1);
+					if (Helper.round(mod, 1) >= 4)
+						acc.addGem();
 					else
 						acc.addCredit(Math.round(2500 * mod), this.getClass());
 
