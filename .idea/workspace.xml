@@ -18,6 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GiftCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GiftCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +95,16 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GroovyConsoleState">
+    <option name="list">
+      <list>
+        <Entry>
+          <option name="moduleName" value="com.kuuhaku.shiro-j-bot.main" />
+          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
+        </Entry>
+      </list>
+    </option>
+  </component>
   <component name="InvalidFacetManager">
     <ignored-facets>
       <facet id="shiro-j-bot.main/invalid/JPA" />
@@ -129,7 +142,9 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Edit As Language" value="Groovy&#10;JavaScript&#10;JAVA" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JSON&#10;TEXT&#10;CSS&#10;JavaScript" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Set Highlighting Language" value="Groovy&#10;JAVA&#10;TypeScript JSX" />
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -140,7 +155,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39928058" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="copyright.profiles" />
+    <property name="settings.editor.selected.configurable" value="IntelliLang.Configuration" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -205,6 +220,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1281,100 +1309,9 @@
       <workItem from="1624629024614" duration="19402000" />
       <workItem from="1624674995046" duration="2224000" />
       <workItem from="1624677317487" duration="386000" />
-      <workItem from="1624677971198" duration="1238000" />
-      <workItem from="1624730358149" duration="823000" />
-      <workItem from="1624918360830" duration="1271000" />
-    </task>
-    <task id="LOCAL-04840" summary="Atualizado para JDK 16">
-      <created>1624565121523</created>
-      <option name="number" value="04840" />
-      <option name="presentableId" value="LOCAL-04840" />
-      <option name="project" value="LOCAL" />
-      <updated>1624565121523</updated>
-    </task>
-    <task id="LOCAL-04841" summary="Atualizado para JDK 16">
-      <created>1624565236248</created>
-      <option name="number" value="04841" />
-      <option name="presentableId" value="LOCAL-04841" />
-      <option name="project" value="LOCAL" />
-      <updated>1624565236248</updated>
-    </task>
-    <task id="LOCAL-04842" summary="Atualizado para JDK 16">
-      <created>1624565412791</created>
-      <option name="number" value="04842" />
-      <option name="presentableId" value="LOCAL-04842" />
-      <option name="project" value="LOCAL" />
-      <updated>1624565412791</updated>
-    </task>
-    <task id="LOCAL-04843" summary="Atualizado para JDK 16">
-      <created>1624565650026</created>
-      <option name="number" value="04843" />
-      <option name="presentableId" value="LOCAL-04843" />
-      <option name="project" value="LOCAL" />
-      <updated>1624565650026</updated>
-    </task>
-    <task id="LOCAL-04844" summary="Atualizado para JDK 16">
-      <created>1624565949433</created>
-      <option name="number" value="04844" />
-      <option name="presentableId" value="LOCAL-04844" />
-      <option name="project" value="LOCAL" />
-      <updated>1624565949433</updated>
-    </task>
-    <task id="LOCAL-04845" summary="Atualizado para JDK 16">
-      <created>1624565998390</created>
-      <option name="number" value="04845" />
-      <option name="presentableId" value="LOCAL-04845" />
-      <option name="project" value="LOCAL" />
-      <updated>1624565998390</updated>
-    </task>
-    <task id="LOCAL-04846" summary="Atualizado para JDK 16">
-      <created>1624566490658</created>
-      <option name="number" value="04846" />
-      <option name="presentableId" value="LOCAL-04846" />
-      <option name="project" value="LOCAL" />
-      <updated>1624566490658</updated>
-    </task>
-    <task id="LOCAL-04847" summary="Atualizado para JDK 16">
-      <created>1624566501107</created>
-      <option name="number" value="04847" />
-      <option name="presentableId" value="LOCAL-04847" />
-      <option name="project" value="LOCAL" />
-      <updated>1624566501107</updated>
-    </task>
-    <task id="LOCAL-04848" summary="Atualizado para JDK 16">
-      <created>1624566574116</created>
-      <option name="number" value="04848" />
-      <option name="presentableId" value="LOCAL-04848" />
-      <option name="project" value="LOCAL" />
-      <updated>1624566574116</updated>
-    </task>
-    <task id="LOCAL-04849" summary="Atualizado para JDK 16">
-      <created>1624566812033</created>
-      <option name="number" value="04849" />
-      <option name="presentableId" value="LOCAL-04849" />
-      <option name="project" value="LOCAL" />
-      <updated>1624566812033</updated>
-    </task>
-    <task id="LOCAL-04850" summary="Aterada biblioteca de JSON de GSON para Moshi">
-      <created>1624633355849</created>
-      <option name="number" value="04850" />
-      <option name="presentableId" value="LOCAL-04850" />
-      <option name="project" value="LOCAL" />
-      <updated>1624633355849</updated>
-    </task>
-    <task id="LOCAL-04851" summary="Aterada biblioteca de JSON de GSON para Moshi">
-      <created>1624636889920</created>
-      <option name="number" value="04851" />
-      <option name="presentableId" value="LOCAL-04851" />
-      <option name="project" value="LOCAL" />
-      <updated>1624636889920</updated>
-    </task>
-    <task id="LOCAL-04852" summary="Aterada biblioteca de JSON de GSON para Moshi">
-      <created>1624636980998</created>
-      <option name="number" value="04852" />
-      <option name="presentableId" value="LOCAL-04852" />
-      <option name="project" value="LOCAL" />
-      <updated>1624636980998</updated>
+      <workItem from="1624677971198" duration="989000" />
+      <workItem from="1624908485229" duration="2104000" />
+      <workItem from="1624910913618" duration="3180000" />
     </task>
     <task id="LOCAL-04853" summary="Aterada biblioteca de JSON de GSON para Moshi">
       <created>1624637042292</created>
@@ -1622,13 +1559,104 @@
       <updated>1624678963429</updated>
     </task>
     <task id="LOCAL-04888" summary="Correções menores">
-      <created>1624679109442</created>
+      <created>1624888310367</created>
       <option name="number" value="04888" />
       <option name="presentableId" value="LOCAL-04888" />
       <option name="project" value="LOCAL" />
-      <updated>1624679109442</updated>
+      <updated>1624888310368</updated>
     </task>
-    <option name="localTasksCounter" value="4889" />
+    <task id="LOCAL-04889" summary="Correções menores">
+      <created>1624897342050</created>
+      <option name="number" value="04889" />
+      <option name="presentableId" value="LOCAL-04889" />
+      <option name="project" value="LOCAL" />
+      <updated>1624897342050</updated>
+    </task>
+    <task id="LOCAL-04890" summary="Correções menores">
+      <created>1624899434130</created>
+      <option name="number" value="04890" />
+      <option name="presentableId" value="LOCAL-04890" />
+      <option name="project" value="LOCAL" />
+      <updated>1624899434130</updated>
+    </task>
+    <task id="LOCAL-04891" summary="Correções menores">
+      <created>1624899697060</created>
+      <option name="number" value="04891" />
+      <option name="presentableId" value="LOCAL-04891" />
+      <option name="project" value="LOCAL" />
+      <updated>1624899697060</updated>
+    </task>
+    <task id="LOCAL-04892" summary="Correções menores">
+      <created>1624899790078</created>
+      <option name="number" value="04892" />
+      <option name="presentableId" value="LOCAL-04892" />
+      <option name="project" value="LOCAL" />
+      <updated>1624899790078</updated>
+    </task>
+    <task id="LOCAL-04893" summary="Correções menores">
+      <created>1624899866139</created>
+      <option name="number" value="04893" />
+      <option name="presentableId" value="LOCAL-04893" />
+      <option name="project" value="LOCAL" />
+      <updated>1624899866139</updated>
+    </task>
+    <task id="LOCAL-04894" summary="Correções menores">
+      <created>1624900090128</created>
+      <option name="number" value="04894" />
+      <option name="presentableId" value="LOCAL-04894" />
+      <option name="project" value="LOCAL" />
+      <updated>1624900090129</updated>
+    </task>
+    <task id="LOCAL-04895" summary="Correções menores">
+      <created>1624902785399</created>
+      <option name="number" value="04895" />
+      <option name="presentableId" value="LOCAL-04895" />
+      <option name="project" value="LOCAL" />
+      <updated>1624902785399</updated>
+    </task>
+    <task id="LOCAL-04896" summary="Correções menores">
+      <created>1624902991522</created>
+      <option name="number" value="04896" />
+      <option name="presentableId" value="LOCAL-04896" />
+      <option name="project" value="LOCAL" />
+      <updated>1624902991522</updated>
+    </task>
+    <task id="LOCAL-04897" summary="Correções menores">
+      <created>1624909342871</created>
+      <option name="number" value="04897" />
+      <option name="presentableId" value="LOCAL-04897" />
+      <option name="project" value="LOCAL" />
+      <updated>1624909342871</updated>
+    </task>
+    <task id="LOCAL-04898" summary="Correções menores">
+      <created>1624909929718</created>
+      <option name="number" value="04898" />
+      <option name="presentableId" value="LOCAL-04898" />
+      <option name="project" value="LOCAL" />
+      <updated>1624909929718</updated>
+    </task>
+    <task id="LOCAL-04899" summary="Correções menores">
+      <created>1624910955323</created>
+      <option name="number" value="04899" />
+      <option name="presentableId" value="LOCAL-04899" />
+      <option name="project" value="LOCAL" />
+      <updated>1624910955323</updated>
+    </task>
+    <task id="LOCAL-04900" summary="Correções menores">
+      <created>1624911020569</created>
+      <option name="number" value="04900" />
+      <option name="presentableId" value="LOCAL-04900" />
+      <option name="project" value="LOCAL" />
+      <updated>1624911020569</updated>
+    </task>
+    <task id="LOCAL-04901" summary="Correções menores">
+      <created>1624911352683</created>
+      <option name="number" value="04901" />
+      <option name="presentableId" value="LOCAL-04901" />
+      <option name="project" value="LOCAL" />
+      <updated>1624911352683</updated>
+    </task>
+    <option name="localTasksCounter" value="4902" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

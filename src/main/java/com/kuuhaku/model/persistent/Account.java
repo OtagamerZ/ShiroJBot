@@ -28,21 +28,17 @@ import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @Entity
 @DynamicUpdate
@@ -513,12 +509,15 @@ public class Account {
 			lastQuest = prev;
 		}
 
+		Map<DailyTask, Integer> tasks = new HashMap<>();
 		JSONObject prog = new JSONObject(dailyProgress);
 		int date = prog.getInt("DATE", -1);
-		Map<DailyTask, Integer> tasks = prog.entrySet().stream()
-				.filter(e -> Arrays.stream(DailyTask.values()).anyMatch(dt -> dt.name().equals(e.getKey())))
-				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
-				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+		for (String k : prog.keySet()) {
+			try {
+				tasks.put(DailyTask.valueOf(k), prog.getInt(k));
+			} catch (IllegalArgumentException ignore) {
+			}
+		}
 
 		if (date > -1 && (date != today.getDayOfYear() || lastQuest.getDayOfYear() == today.getDayOfYear())) {
 			setDailyProgress(new HashMap<>());

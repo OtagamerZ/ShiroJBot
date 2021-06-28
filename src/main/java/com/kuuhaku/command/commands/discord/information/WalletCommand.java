@@ -50,7 +50,7 @@ public class WalletCommand implements Executable {
 						I18n.getString("str_balance-loan-bugs",
 								Helper.separate(acc.getVBalance()),
 								Helper.separate(acc.getLoan()),
-								Helper.separate(acc.getBugs())
+								Helper.separate(acc.getGems())
 						), true
 				)
 				.addField(
