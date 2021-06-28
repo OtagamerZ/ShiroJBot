@@ -66,6 +66,11 @@ public class AnimeCommand implements Executable {
 				JSONObject data = AnimeRequest.getData(argsAsText, query);
 				try {
 					Anime anime = JSONUtils.fromJSON(data.toString(), Anime.class);
+					if (anime == null) {
+						m.editMessage(I18n.getString("err_anime-not-found")).queue();
+						return;
+					}
+
 					Media media = anime.data().media();
 					if (media == null) throw new IllegalStateException();
 
@@ -133,7 +138,7 @@ public class AnimeCommand implements Executable {
 
 					m.delete().queue();
 					channel.sendMessage(eb.build()).queue();
-				} catch (IllegalStateException e) {
+				} catch (IllegalStateException | IllegalArgumentException e) {
 					m.editMessage(I18n.getString("err_anime-not-found")).queue();
 					Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 					Helper.logger(this.getClass()).warn(data.toString());
