@@ -2894,4 +2894,8 @@ public class Helper {
 
 		return false;
 	}
+
+	public static <T> T safeCast(Object obj, Class<T> klass) {
+		return klass != null && klass.isInstance(obj) ? klass.cast(obj) : null;
+	}
 }
