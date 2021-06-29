@@ -18,16 +18,14 @@
 
 package com.kuuhaku.model.records.youtube;
 
-import java.time.OffsetDateTime;
-
 public record Snippet(
-		OffsetDateTime publishedAt,
+		String publishedAt,
 		String channelId,
 		String title,
 		String description,
 		Thumbnails thumbnails,
 		String channelTitle,
 		String liveBroadcastContent,
-		OffsetDateTime publishTime
+		String publishTime
 ) {
 }
