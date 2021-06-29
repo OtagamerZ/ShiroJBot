@@ -18,9 +18,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GiftCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GiftCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +154,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39928058" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="IntelliLang.Configuration" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -220,19 +219,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1311,14 +1297,8 @@
       <workItem from="1624677317487" duration="386000" />
       <workItem from="1624677971198" duration="989000" />
       <workItem from="1624908485229" duration="2104000" />
-      <workItem from="1624910913618" duration="3180000" />
-    </task>
-    <task id="LOCAL-04853" summary="Aterada biblioteca de JSON de GSON para Moshi">
-      <created>1624637042292</created>
-      <option name="number" value="04853" />
-      <option name="presentableId" value="LOCAL-04853" />
-      <option name="project" value="LOCAL" />
-      <updated>1624637042292</updated>
+      <workItem from="1624910913618" duration="3256000" />
+      <workItem from="1624968178776" duration="5311000" />
     </task>
     <task id="LOCAL-04854" summary="Aterada biblioteca de JSON de GSON para Moshi">
       <created>1624637258908</created>
@@ -1656,7 +1636,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624911352683</updated>
     </task>
-    <option name="localTasksCounter" value="4902" />
+    <task id="LOCAL-04902" summary="Correções menores">
+      <created>1624914155454</created>
+      <option name="number" value="04902" />
+      <option name="presentableId" value="LOCAL-04902" />
+      <option name="project" value="LOCAL" />
+      <updated>1624914155454</updated>
+    </task>
+    <option name="localTasksCounter" value="4903" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
