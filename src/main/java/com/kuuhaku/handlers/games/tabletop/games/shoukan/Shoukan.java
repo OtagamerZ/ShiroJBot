@@ -682,7 +682,7 @@ public class Shoukan extends GlobalGame {
 										hands.get(next).getUser().getName(),
 										yPower,
 										(getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "")
-										+ (demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "")
+										+ (demonFac > 1 ? " (efeito de raça: +" + (Math.round(yPower * demonFac) - yPower) + " dano direto)" : "")
 								)
 								, true, false);
 					}
@@ -918,8 +918,8 @@ public class Shoukan extends GlobalGame {
 									his.getCard().getName(),
 									yPower,
 									hPower,
-									demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "",
-									sleeping ? " (alvo dormindo: +25%)" : ""
+									demonFac > 1 ? " (efeito de raça: +" + (Math.round((yPower - hPower) * demonFac) - (yPower - hPower)) + " dano direto)" : "",
+									sleeping ? " (alvo dormindo: +25% dano final)" : ""
 							);
 
 							reportEvent(null, msg, true, false);
