@@ -2898,4 +2898,8 @@ public class Helper {
 	public static <T> T safeCast(Object obj, Class<T> klass) {
 		return klass != null && klass.isInstance(obj) ? klass.cast(obj) : null;
 	}
+
+	public static String parseToGroovy(String code) {
+		return code.replaceAll("\\s+([+\\-/*])\\s+", "$1");
+	}
 }
