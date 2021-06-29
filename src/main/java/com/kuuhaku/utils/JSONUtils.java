@@ -24,12 +24,16 @@ import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 import dev.zacsweers.moshix.records.RecordsJsonAdapterFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JSONUtils {
 	private static final Moshi moshi = new Moshi.Builder()
 			.add(new RecordsJsonAdapterFactory())
-			.add(Date.class, new Rfc3339DateJsonAdapter())
+			.add(OffsetDateTime.class, new Rfc3339DateJsonAdapter())
 			.build();
 
 	public static String toJSON(Object o) {
