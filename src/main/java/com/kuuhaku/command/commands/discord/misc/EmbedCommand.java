@@ -58,7 +58,6 @@ public class EmbedCommand implements Executable {
 			try {
 				AutoEmbedBuilder eb = new AutoEmbedBuilder(argsAsText);
 
-				m.delete().queue(null, Helper::doNothing);
 				if (Helper.hasPermission(member, PrivilegeLevel.MOD))
 					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
 							.embed(eb.build())
@@ -68,14 +67,16 @@ public class EmbedCommand implements Executable {
 												gc.setEmbedTemplate(eb.getEmbed());
 												GuildDAO.updateGuildSettings(gc);
 
-												s.delete().flatMap(r -> m.delete()).queue(null, Helper::doNothing);
-												channel.sendMessage("✅ | Embed de servidor definido com sucesso!").queue();
+												channel.sendMessage("✅ | Embed de servidor definido com sucesso!")
+														.flatMap(r -> m.delete())
+														.flatMap(r -> s.delete())
+														.queue();
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
-											, ms -> {
-												channel.sendMessage(eb.build()).flatMap(r -> m.delete()).queue();
-												ms.delete().queue();
-											}
+											, ms -> channel.sendMessage(eb.build())
+													.flatMap(r -> m.delete())
+													.flatMap(r -> ms.delete())
+													.queue()
 									), Helper::doNothing
 							);
 				else
