@@ -123,13 +123,13 @@ public class CustomAnswerCommand implements Executable {
 			JSONObject jo = new JSONObject(argsAsText);
 
 			if (!jo.has("trigger") || !jo.has("answer")) {
-				channel.sendMessage(I18n.getString("❌ | Você precisa especificar ao menos o gatilho (`trigger`) e a resposta (`answer`).")).queue();
+				channel.sendMessage("❌ | Você precisa especificar ao menos o gatilho (`trigger`) e a resposta (`answer`).").queue();
 				return;
 			} else if (!Helper.between(jo.getString("trigger").length(), 2, 129)) {
-				channel.sendMessage(I18n.getString("❌ | O gatilho tem que ter entre 2 e 128 caracteres.")).queue();
+				channel.sendMessage("❌ | O gatilho tem que ter entre 2 e 128 caracteres.").queue();
 				return;
 			} else if (!Helper.between(jo.getString("answer").length(), 2, 1025)) {
-				channel.sendMessage(I18n.getString("❌ | A resposta tem que ter entre 2 e 1024 caracteres.")).queue();
+				channel.sendMessage("❌ | A resposta tem que ter entre 2 e 1024 caracteres.").queue();
 				return;
 			}
 
@@ -150,7 +150,7 @@ public class CustomAnswerCommand implements Executable {
 			if (jo.has("forUser")) {
 				Member m = guild.getMemberById(jo.getString("forUser"));
 				if (m == null) {
-					channel.sendMessage(I18n.getString("❌ | Não encontrei nenhum usuário com esse ID.")).queue();
+					channel.sendMessage("❌ | Não encontrei nenhum usuário com esse ID.").queue();
 					return;
 				}
 
