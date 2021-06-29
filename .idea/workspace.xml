@@ -1306,21 +1306,7 @@
       <workItem from="1624908485229" duration="2104000" />
       <workItem from="1624910913618" duration="3256000" />
       <workItem from="1624968178776" duration="7296000" />
-      <workItem from="1624985651644" duration="1292000" />
-    </task>
-    <task id="LOCAL-04865" summary="Updated copyright notice">
-      <created>1624642695610</created>
-      <option name="number" value="04865" />
-      <option name="presentableId" value="LOCAL-04865" />
-      <option name="project" value="LOCAL" />
-      <updated>1624642695610</updated>
-    </task>
-    <task id="LOCAL-04866" summary="Updated copyright notice">
-      <created>1624642927513</created>
-      <option name="number" value="04866" />
-      <option name="presentableId" value="LOCAL-04866" />
-      <option name="project" value="LOCAL" />
-      <updated>1624642927513</updated>
+      <workItem from="1624985651644" duration="1630000" />
     </task>
     <task id="LOCAL-04867" summary="Adicionado cargos por tempo em call">
       <created>1624650672715</created>
@@ -1651,7 +1637,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624986753741</updated>
     </task>
-    <option name="localTasksCounter" value="4914" />
+    <task id="LOCAL-04914" summary="Correções menores">
+      <created>1624987071346</created>
+      <option name="number" value="04914" />
+      <option name="presentableId" value="LOCAL-04914" />
+      <option name="project" value="LOCAL" />
+      <updated>1624987071346</updated>
+    </task>
+    <task id="LOCAL-04915" summary="Correções menores">
+      <created>1624987135572</created>
+      <option name="number" value="04915" />
+      <option name="presentableId" value="LOCAL-04915" />
+      <option name="project" value="LOCAL" />
+      <updated>1624987135572</updated>
+    </task>
+    <option name="localTasksCounter" value="4916" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
