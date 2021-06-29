@@ -66,12 +66,12 @@ public class ChampionDrop extends Drop<Champion> {
 	public String toString(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
 		Deck dk = kp.getDeck();
-		if (dk.getChampions().size() < 36)
+		if (dk.getChampions().size() <= 36)
 			return "Campeão " + getPrize().getCard().getName();
 		else
 			return "~~Campeão %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
-					getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE
+					Helper.separate(getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE)
 			);
 	}
 }

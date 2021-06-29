@@ -39,7 +39,7 @@ public class JSONUtils {
 
 	public static <T> T fromJSON(String json, Class<T> klass) {
 		try {
-			return moshi.adapter(klass).fromJson(json);
+			return moshi.adapter(klass).nullSafe().fromJson(json);
 		} catch (IOException e) {
 			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
 			Helper.logger(JSONUtils.class).warn(json);
