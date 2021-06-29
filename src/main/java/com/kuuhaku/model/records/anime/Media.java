@@ -40,15 +40,15 @@ public record Media(
 ) {
 
 	@Override
+	public Long idMal() {
+		return Helper.getOr(idMal, 0L);
+	}
+
+	@Override
 	public Long episodes() {
 		if (nextAiringEpisode != null)
 			return Helper.getOr(episodes, nextAiringEpisode.episode() - 1);
 		else return episodes;
-	}
-
-	@Override
-	public Long idMal() {
-		return Helper.getOr(idMal, 0L);
 	}
 
 	@Override
