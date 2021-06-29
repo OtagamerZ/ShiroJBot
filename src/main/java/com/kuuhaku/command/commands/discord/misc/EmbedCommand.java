@@ -68,18 +68,18 @@ public class EmbedCommand implements Executable {
 												gc.setEmbedTemplate(eb.getEmbed());
 												GuildDAO.updateGuildSettings(gc);
 
-												s.delete().queue(null, Helper::doNothing);
+												s.delete().flatMap(r -> m.delete()).queue(null, Helper::doNothing);
 												channel.sendMessage("✅ | Embed de servidor definido com sucesso!").queue();
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
 											, ms -> {
-												channel.sendMessage(eb.build()).queue();
+												channel.sendMessage(eb.build()).flatMap(r -> m.delete()).queue();
 												ms.delete().queue();
 											}
 									), Helper::doNothing
 							);
 				else
-					channel.sendMessage(eb.build()).queue();
+					channel.sendMessage(eb.build()).flatMap(s -> m.delete()).queue();
 			} catch (IllegalStateException ex) {
 				m.editMessage("❌ | JSON em formato inválido, um exemplo da estrutura do embed pode ser encontrado em https://api.shirojbot.site/embedjson").queue();
 			} catch (Exception e) {
