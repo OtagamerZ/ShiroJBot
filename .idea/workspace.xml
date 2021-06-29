@@ -18,8 +18,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1300,13 +1298,6 @@
       <workItem from="1624910913618" duration="3256000" />
       <workItem from="1624968178776" duration="7296000" />
     </task>
-    <task id="LOCAL-04855" summary="Updated copyright notice">
-      <created>1624637889084</created>
-      <option name="number" value="04855" />
-      <option name="presentableId" value="LOCAL-04855" />
-      <option name="project" value="LOCAL" />
-      <updated>1624637889084</updated>
-    </task>
     <task id="LOCAL-04856" summary="Updated copyright notice">
       <created>1624640172364</created>
       <option name="number" value="04856" />
@@ -1643,7 +1634,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624973738191</updated>
     </task>
-    <option name="localTasksCounter" value="4904" />
+    <task id="LOCAL-04904" summary="Correções menores">
+      <created>1624978638314</created>
+      <option name="number" value="04904" />
+      <option name="presentableId" value="LOCAL-04904" />
+      <option name="project" value="LOCAL" />
+      <updated>1624978638314</updated>
+    </task>
+    <option name="localTasksCounter" value="4905" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
