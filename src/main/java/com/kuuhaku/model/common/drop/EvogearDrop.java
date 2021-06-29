@@ -71,7 +71,7 @@ public class EvogearDrop extends Drop<Equipment> {
 		else
 			return "~~Evogear %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
-					Helper.BASE_EQUIPMENT_PRICE
+					Helper.separate(Helper.BASE_EQUIPMENT_PRICE)
 			);
 	}
 }
