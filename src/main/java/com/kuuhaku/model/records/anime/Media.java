@@ -45,4 +45,19 @@ public record Media(
 			return Helper.getOr(episodes, nextAiringEpisode.episode() - 1);
 		else return episodes;
 	}
+
+	@Override
+	public Long idMal() {
+		return Helper.getOr(idMal, 0L);
+	}
+
+	@Override
+	public Long popularity() {
+		return Helper.getOr(popularity, 0L);
+	}
+
+	@Override
+	public Long averageScore() {
+		return Helper.getOr(averageScore, 0L);
+	}
 }
