@@ -135,7 +135,7 @@ public class ShiroEvents extends ListenerAdapter {
 			Message message = event.getMessage();
 			TextChannel channel = message.getTextChannel();
 			Guild guild = message.getGuild();
-			String rawMessage = message.getContentRaw().replace("\s+", " ");
+			String rawMessage = message.getContentRaw().replaceAll("\s+", " ");
 
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
