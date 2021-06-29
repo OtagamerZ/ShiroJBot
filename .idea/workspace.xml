@@ -18,7 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/youtube/Snippet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/youtube/Snippet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,6 +220,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1298,14 +1311,7 @@
       <workItem from="1624908485229" duration="2104000" />
       <workItem from="1624910913618" duration="3256000" />
       <workItem from="1624968178776" duration="7296000" />
-      <workItem from="1624985651644" duration="611000" />
-    </task>
-    <task id="LOCAL-04862" summary="Updated copyright notice">
-      <created>1624641983858</created>
-      <option name="number" value="04862" />
-      <option name="presentableId" value="LOCAL-04862" />
-      <option name="project" value="LOCAL" />
-      <updated>1624641983858</updated>
+      <workItem from="1624985651644" duration="979000" />
     </task>
     <task id="LOCAL-04863" summary="Updated copyright notice">
       <created>1624642010686</created>
@@ -1643,7 +1649,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624985435418</updated>
     </task>
-    <option name="localTasksCounter" value="4911" />
+    <task id="LOCAL-04911" summary="Correções menores">
+      <created>1624986333776</created>
+      <option name="number" value="04911" />
+      <option name="presentableId" value="LOCAL-04911" />
+      <option name="project" value="LOCAL" />
+      <updated>1624986333776</updated>
+    </task>
+    <option name="localTasksCounter" value="4912" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
