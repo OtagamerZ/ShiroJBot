@@ -35,7 +35,7 @@ public class EffectParameters {
 	private final int index;
 	private final Side side;
 	private final Map<Side, Hand> hands;
-	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
+	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final Duelists duelists;
 	private final GameChannel channel;
@@ -102,7 +102,7 @@ public class EffectParameters {
 		return hands;
 	}
 
-	public Map<Side, List<SlotColumn<Champion, Equipment>>> getSlots() {
+	public Map<Side, List<SlotColumn>> getSlots() {
 		return slots;
 	}
 
