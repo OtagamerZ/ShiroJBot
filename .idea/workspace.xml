@@ -1296,13 +1296,6 @@
       <workItem from="1624910913618" duration="3256000" />
       <workItem from="1624968178776" duration="7296000" />
     </task>
-    <task id="LOCAL-04857" summary="Updated copyright notice">
-      <created>1624640440203</created>
-      <option name="number" value="04857" />
-      <option name="presentableId" value="LOCAL-04857" />
-      <option name="project" value="LOCAL" />
-      <updated>1624640440203</updated>
-    </task>
     <task id="LOCAL-04858" summary="Updated copyright notice">
       <created>1624640600098</created>
       <option name="number" value="04858" />
@@ -1639,7 +1632,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624982731323</updated>
     </task>
-    <option name="localTasksCounter" value="4906" />
+    <task id="LOCAL-04906" summary="Correções menores">
+      <created>1624983387556</created>
+      <option name="number" value="04906" />
+      <option name="presentableId" value="LOCAL-04906" />
+      <option name="project" value="LOCAL" />
+      <updated>1624983387556</updated>
+    </task>
+    <option name="localTasksCounter" value="4907" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
