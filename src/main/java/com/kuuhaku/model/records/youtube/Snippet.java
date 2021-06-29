@@ -23,7 +23,7 @@ import com.kuuhaku.model.records.youtube.enums.LiveBroadcastContent;
 import java.time.OffsetDateTime;
 
 public record Snippet(
-		DateTime publishedAt,
+		OffsetDateTime publishedAt,
 		String channelId,
 		String title,
 		String description,
