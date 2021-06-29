@@ -16,12 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/youtube/Snippet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/youtube/Snippet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1311,21 +1306,7 @@
       <workItem from="1624908485229" duration="2104000" />
       <workItem from="1624910913618" duration="3256000" />
       <workItem from="1624968178776" duration="7296000" />
-      <workItem from="1624985651644" duration="979000" />
-    </task>
-    <task id="LOCAL-04863" summary="Updated copyright notice">
-      <created>1624642010686</created>
-      <option name="number" value="04863" />
-      <option name="presentableId" value="LOCAL-04863" />
-      <option name="project" value="LOCAL" />
-      <updated>1624642010686</updated>
-    </task>
-    <task id="LOCAL-04864" summary="Updated copyright notice">
-      <created>1624642093200</created>
-      <option name="number" value="04864" />
-      <option name="presentableId" value="LOCAL-04864" />
-      <option name="project" value="LOCAL" />
-      <updated>1624642093200</updated>
+      <workItem from="1624985651644" duration="1292000" />
     </task>
     <task id="LOCAL-04865" summary="Updated copyright notice">
       <created>1624642695610</created>
@@ -1656,7 +1637,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624986333776</updated>
     </task>
-    <option name="localTasksCounter" value="4912" />
+    <task id="LOCAL-04912" summary="Correções menores">
+      <created>1624986698661</created>
+      <option name="number" value="04912" />
+      <option name="presentableId" value="LOCAL-04912" />
+      <option name="project" value="LOCAL" />
+      <updated>1624986698661</updated>
+    </task>
+    <task id="LOCAL-04913" summary="Correções menores">
+      <created>1624986753741</created>
+      <option name="number" value="04913" />
+      <option name="presentableId" value="LOCAL-04913" />
+      <option name="project" value="LOCAL" />
+      <updated>1624986753741</updated>
+    </task>
+    <option name="localTasksCounter" value="4914" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
