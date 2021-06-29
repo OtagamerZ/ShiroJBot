@@ -43,16 +43,16 @@ public class Youtube {
 
 		try {
 			for (Item i : yd.items()) {
-				ID jid = i.id();
 				Snippet jsnippet = i.snippet();
 
+				boolean playlist = !i.id().kind().equals("youtube#video");
 				videos.add(new YoutubeVideo(
-						Helper.getOr(jid.videoId(), jid.playlistId()),
+						playlist ? i.id().playlistId() : i.id().videoId(),
 						jsnippet.title(),
 						jsnippet.description(),
 						jsnippet.thumbnails().medium().url(),
 						jsnippet.channelTitle(),
-						jid.playlistId() != null
+						playlist
 				));
 			}
 
