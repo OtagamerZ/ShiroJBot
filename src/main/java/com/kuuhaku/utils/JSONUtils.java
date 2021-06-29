@@ -20,6 +20,7 @@ package com.kuuhaku.utils;
 
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 import dev.zacsweers.moshix.records.RecordsJsonAdapterFactory;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class JSONUtils {
 	private static final Moshi moshi = new Moshi.Builder()
 			.add(new RecordsJsonAdapterFactory())
+			.add(new Rfc3339DateJsonAdapter())
 			.build();
 
 	public static String toJSON(Object o) {
