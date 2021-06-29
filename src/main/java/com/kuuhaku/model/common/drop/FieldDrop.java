@@ -65,12 +65,12 @@ public class FieldDrop extends Drop<Field> {
 	public String toString(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
 		Deck dk = kp.getDeck();
-		if (dk.getFields().size() < 3)
+		if (dk.getFields().size() <= 3)
 			return "Campo " + getPrize().getCard().getName();
 		else
 			return "~~Campo %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
-					Helper.BASE_FIELD_PRICE
+					Helper.separate(Helper.BASE_FIELD_PRICE)
 			);
 	}
 }

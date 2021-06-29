@@ -18,8 +18,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1298,14 +1298,7 @@
       <workItem from="1624677971198" duration="989000" />
       <workItem from="1624908485229" duration="2104000" />
       <workItem from="1624910913618" duration="3256000" />
-      <workItem from="1624968178776" duration="5311000" />
-    </task>
-    <task id="LOCAL-04854" summary="Aterada biblioteca de JSON de GSON para Moshi">
-      <created>1624637258908</created>
-      <option name="number" value="04854" />
-      <option name="presentableId" value="LOCAL-04854" />
-      <option name="project" value="LOCAL" />
-      <updated>1624637258908</updated>
+      <workItem from="1624968178776" duration="7296000" />
     </task>
     <task id="LOCAL-04855" summary="Updated copyright notice">
       <created>1624637889084</created>
@@ -1643,7 +1636,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624914155454</updated>
     </task>
-    <option name="localTasksCounter" value="4903" />
+    <task id="LOCAL-04903" summary="Correções menores">
+      <created>1624973738190</created>
+      <option name="number" value="04903" />
+      <option name="presentableId" value="LOCAL-04903" />
+      <option name="project" value="LOCAL" />
+      <updated>1624973738191</updated>
+    </task>
+    <option name="localTasksCounter" value="4904" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
