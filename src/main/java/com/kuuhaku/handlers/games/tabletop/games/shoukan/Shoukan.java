@@ -242,7 +242,7 @@ public class Shoukan extends GlobalGame {
 
 		if (phase == Phase.PLAN) {
 			try {
-				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
+				List<SlotColumn> slots = arena.getSlots().get(current);
 				if (args.length == 1) {
 					if (index < 0 || index >= slots.size()) {
 						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
@@ -357,7 +357,7 @@ public class Shoukan extends GlobalGame {
 									return;
 								}
 								int pos = Integer.parseInt(args[2]) - 1;
-								List<SlotColumn<Champion, Equipment>> eSlots = arena.getSlots().get(next);
+								List<SlotColumn> eSlots = arena.getSlots().get(next);
 								Champion target = eSlots.get(pos).getTop();
 
 								if (target == null) {
@@ -382,7 +382,7 @@ public class Shoukan extends GlobalGame {
 								}
 
 								allyPos = Pair.of(target, pos1);
-								List<SlotColumn<Champion, Equipment>> eSlots = arena.getSlots().get(next);
+								List<SlotColumn> eSlots = arena.getSlots().get(next);
 								target = eSlots.get(pos2).getTop();
 
 								if (target == null) {
@@ -468,7 +468,7 @@ public class Shoukan extends GlobalGame {
 					}
 
 					int dest = Integer.parseInt(args[1]) - 1;
-					SlotColumn<Champion, Equipment> slot = slots.get(dest);
+					SlotColumn slot = slots.get(dest);
 
 					if (slot.getBottom() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -481,7 +481,7 @@ public class Shoukan extends GlobalGame {
 					}
 					int toEquip = Integer.parseInt(args[2]) - 1;
 
-					SlotColumn<Champion, Equipment> target = slots.get(toEquip);
+					SlotColumn target = slots.get(toEquip);
 
 					if (target.getTop() == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -509,7 +509,7 @@ public class Shoukan extends GlobalGame {
 							}
 							case DOUBLETAP -> t.getEffect(new EffectParameters(ON_SUMMON, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
 							case DOPPELGANGER -> {
-								SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(current, true);
+								SlotColumn sc = getFirstAvailableSlot(current, true);
 
 								if (sc != null) {
 									Champion dp = t.copy();
@@ -547,7 +547,7 @@ public class Shoukan extends GlobalGame {
 					}
 					int dest = Integer.parseInt(args[1]) - 1;
 
-					SlotColumn<Champion, Equipment> slot = slots.get(dest);
+					SlotColumn slot = slots.get(dest);
 
 					if (slot.getTop() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -624,8 +624,8 @@ public class Shoukan extends GlobalGame {
 
 				int[] is = {index, args.length == 1 ? 0 : Integer.parseInt(args[1]) - 1};
 
-				List<SlotColumn<Champion, Equipment>> yourSide = arena.getSlots().get(current);
-				List<SlotColumn<Champion, Equipment>> hisSide = arena.getSlots().get(next);
+				List<SlotColumn> yourSide = arena.getSlots().get(current);
+				List<SlotColumn> hisSide = arena.getSlots().get(next);
 
 				if (args.length == 1) {
 					if (is[0] < 0 || is[0] >= yourSide.size()) {
@@ -727,10 +727,10 @@ public class Shoukan extends GlobalGame {
 
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
 		for (Side s : Side.values()) {
-			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+			List<SlotColumn> slts = arena.getSlots().get(s);
 
 			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> slot = slts.get(i);
+				SlotColumn slot = slts.get(i);
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1052,7 +1052,7 @@ public class Shoukan extends GlobalGame {
 				banishCard(current, p.getLeft(), p.getRight());
 			}
 
-			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(current, true);
+			SlotColumn sc = getFirstAvailableSlot(current, true);
 			if (sc != null) {
 				aFusion.setGame(this);
 				aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
@@ -1078,11 +1078,11 @@ public class Shoukan extends GlobalGame {
 	public void killCard(Side to, int target) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventDeath")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			SlotColumn sd = slts.get(i);
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
@@ -1090,7 +1090,7 @@ public class Shoukan extends GlobalGame {
 				unequipCard(to, i, slts);
 		}
 
-		for (SlotColumn<Champion, Equipment> slot : slts) {
+		for (SlotColumn slot : slts) {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
@@ -1109,7 +1109,7 @@ public class Shoukan extends GlobalGame {
 	public void destroyCard(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
@@ -1132,7 +1132,7 @@ public class Shoukan extends GlobalGame {
 
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				SlotColumn sd = slts.get(i);
 				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
@@ -1140,7 +1140,7 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
-			for (SlotColumn<Champion, Equipment> slot : slts) {
+			for (SlotColumn slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1160,7 +1160,7 @@ public class Shoukan extends GlobalGame {
 	public void destroyCard(Side to, int target) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
@@ -1174,7 +1174,7 @@ public class Shoukan extends GlobalGame {
 
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			SlotColumn sd = slts.get(i);
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
@@ -1182,7 +1182,7 @@ public class Shoukan extends GlobalGame {
 				unequipCard(to, i, slts);
 		}
 
-		for (SlotColumn<Champion, Equipment> slot : slts) {
+		for (SlotColumn slot : slts) {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
@@ -1201,7 +1201,7 @@ public class Shoukan extends GlobalGame {
 	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
@@ -1224,7 +1224,7 @@ public class Shoukan extends GlobalGame {
 
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				SlotColumn sd = slts.get(i);
 				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
@@ -1232,7 +1232,7 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
-			for (SlotColumn<Champion, Equipment> slot : slts) {
+			for (SlotColumn slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1252,7 +1252,7 @@ public class Shoukan extends GlobalGame {
 	public void captureCard(Side to, int target, boolean withFusion) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
@@ -1266,7 +1266,7 @@ public class Shoukan extends GlobalGame {
 
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			SlotColumn sd = slts.get(i);
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
@@ -1274,7 +1274,7 @@ public class Shoukan extends GlobalGame {
 				unequipCard(to, i, slts);
 		}
 
-		for (SlotColumn<Champion, Equipment> slot : slts) {
+		for (SlotColumn slot : slts) {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
@@ -1291,7 +1291,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public void banishCard(Side to, int target, boolean equipment) {
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 		if (equipment) {
 			Equipment eq = slts.get(target).getBottom();
 			if (eq == null) return;
@@ -1300,7 +1300,7 @@ public class Shoukan extends GlobalGame {
 				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 			eq.setLinkedTo(null);
 
-			SlotColumn<Champion, Equipment> sd = slts.get(target);
+			SlotColumn sd = slts.get(target);
 			arena.getBanished().add(eq);
 			sd.setBottom(null);
 		} else {
@@ -1309,7 +1309,7 @@ public class Shoukan extends GlobalGame {
 
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				SlotColumn sd = slts.get(i);
 				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
@@ -1317,7 +1317,7 @@ public class Shoukan extends GlobalGame {
 					banishCard(to, i, true);
 			}
 
-			for (SlotColumn<Champion, Equipment> slot : slts) {
+			for (SlotColumn slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1334,7 +1334,7 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
-	public void unequipCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
+	public void unequipCard(Side s, int index, List<SlotColumn> side) {
 		Equipment eq = side.get(index).getBottom();
 		if (eq == null) return;
 
@@ -1342,7 +1342,7 @@ public class Shoukan extends GlobalGame {
 			side.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 		eq.setLinkedTo(null);
 
-		SlotColumn<Champion, Equipment> sd = side.get(index);
+		SlotColumn sd = side.get(index);
 		sd.setBottom(null);
 
 		if (!eq.isParasite() || eq.isEffectOnly())
@@ -1368,10 +1368,10 @@ public class Shoukan extends GlobalGame {
 		return combos;
 	}
 
-	public SlotColumn<Champion, Equipment> getFirstAvailableSlot(Side s, boolean top) {
-		List<SlotColumn<Champion, Equipment>> get = arena.getSlots().get(s);
+	public SlotColumn getFirstAvailableSlot(Side s, boolean top) {
+		List<SlotColumn> get = arena.getSlots().get(s);
 		for (int i = 0; i < get.size(); i++) {
-			SlotColumn<Champion, Equipment> slot = get.get(i);
+			SlotColumn slot = get.get(i);
 			if (top ? (slot.getTop() == null && !isSlotLocked(s, i)) : slot.getBottom() == null)
 				return slot;
 		}
@@ -1381,7 +1381,7 @@ public class Shoukan extends GlobalGame {
 	public void convertCard(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
@@ -1402,7 +1402,7 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(from, true);
+			SlotColumn sc = getFirstAvailableSlot(from, true);
 			if (sc != null) {
 				ch.clearLinkedTo();
 				ch.setGame(this);
@@ -1410,7 +1410,7 @@ public class Shoukan extends GlobalGame {
 				sc.setTop(ch);
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
-					SlotColumn<Champion, Equipment> sd = slts.get(i);
+					SlotColumn sd = slts.get(i);
 					if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 						killCard(to, i);
 
@@ -1418,7 +1418,7 @@ public class Shoukan extends GlobalGame {
 						unequipCard(to, i, slts);
 				}
 
-				for (SlotColumn<Champion, Equipment> slot : slts) {
+				for (SlotColumn slot : slts) {
 					if (slot.getTop() == null) continue;
 
 					Champion c = slot.getTop();
@@ -1433,7 +1433,7 @@ public class Shoukan extends GlobalGame {
 		Side from = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
@@ -1445,7 +1445,7 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(from, true);
+		SlotColumn sc = getFirstAvailableSlot(from, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
 			ch.setGame(this);
@@ -1453,7 +1453,7 @@ public class Shoukan extends GlobalGame {
 			sc.setTop(ch);
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				SlotColumn sd = slts.get(i);
 				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
@@ -1461,7 +1461,7 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
-			for (SlotColumn<Champion, Equipment> slot : slts) {
+			for (SlotColumn slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1474,7 +1474,7 @@ public class Shoukan extends GlobalGame {
 	public void switchCards(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
@@ -1496,7 +1496,7 @@ public class Shoukan extends GlobalGame {
 			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				SlotColumn sd = slts.get(i);
 				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
@@ -1504,7 +1504,7 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
-			for (SlotColumn<Champion, Equipment> slot : slts) {
+			for (SlotColumn slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1513,14 +1513,14 @@ public class Shoukan extends GlobalGame {
 			}
 
 			if (chi == null) return;
-			List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(from);
+			List<SlotColumn> slots = getArena().getSlots().get(from);
 
 			chi.clearLinkedTo();
 			chi.setGame(this);
 			chi.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
-				SlotColumn<Champion, Equipment> sd = slots.get(i);
+				SlotColumn sd = slots.get(i);
 				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(from, i);
 
@@ -1528,7 +1528,7 @@ public class Shoukan extends GlobalGame {
 					unequipCard(from, i, slots);
 			}
 
-			for (SlotColumn<Champion, Equipment> slot : slts) {
+			for (SlotColumn slot : slts) {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
@@ -1545,7 +1545,7 @@ public class Shoukan extends GlobalGame {
 		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
+		List<SlotColumn> slts = getArena().getSlots().get(his);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
@@ -1560,7 +1560,7 @@ public class Shoukan extends GlobalGame {
 		for (int i = 0; i < 5; i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(to, false);
+				SlotColumn sc = getFirstAvailableSlot(to, false);
 				if (sc != null) {
 					ch.removeLinkedTo(eq);
 					slts.get(i).setBottom(null);
@@ -1579,7 +1579,7 @@ public class Shoukan extends GlobalGame {
 		for (Side s : Side.values()) {
 			Hand h = hands.get(s);
 			Hand op = hands.get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
-			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+			List<SlotColumn> slts = arena.getSlots().get(s);
 
 			if (h.getHp() <= 0) {
 				for (int i = 0; i < 5; i++) {
@@ -1649,7 +1649,7 @@ public class Shoukan extends GlobalGame {
 
 				AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
-				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
+				List<SlotColumn> slots = arena.getSlots().get(current);
 
 				if (applyEot(AFTER_TURN, current, -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
@@ -1816,7 +1816,7 @@ public class Shoukan extends GlobalGame {
 
 					AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
 					h.get().getCards().removeIf(d -> !d.isAvailable());
-					List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
+					List<SlotColumn> slots = arena.getSlots().get(current);
 
 					if (applyEot(AFTER_TURN, current, -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
@@ -2211,7 +2211,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public int getAttributeSum(Side s, boolean attacking) {
-		List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+		List<SlotColumn> slts = arena.getSlots().get(s);
 
 		return slts.stream()
 				.map(SlotColumn::getTop)
