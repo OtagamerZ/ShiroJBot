@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
-import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.OnDelete;
@@ -677,25 +676,15 @@ public class Champion implements Drawable, Cloneable {
 	public void getEffect(EffectParameters ep) {
 		String imports = EffectParameters.IMPORTS.formatted(card.getName());
 
-		if (effect.startsWith("//ENGINE: GROOVY"))
-			try {
-				GroovyShell gs = new GroovyShell();
-				gs.setVariable("ep", ep);
-				gs.setVariable("self", this);
-				gs.evaluate(Helper.getOr(altEffect, effect));
-			} catch (Exception e) {
-				Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
-			}
-		else
-			try {
-				Interpreter i = new Interpreter();
-				i.setStrictJava(true);
-				i.set("ep", ep);
-				i.set("self", this);
-				i.eval(imports + Helper.getOr(altEffect, effect));
-			} catch (Exception e) {
-				Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
-			}
+		try {
+			Interpreter i = new Interpreter();
+			i.setStrictJava(true);
+			i.set("ep", ep);
+			i.set("self", this);
+			i.eval(imports + Helper.getOr(altEffect, effect));
+		} catch (Exception e) {
+			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 	public void activateParasites(EffectParameters ep) {
