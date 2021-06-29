@@ -163,7 +163,7 @@ public class TradeContent {
 			dk.addEquipments(other.equipments);
 			dk.addFields(other.fields);
 
-			Account oAcc = tc.getAccount();
+			Account oAcc = other.getAccount();
 			Kawaipon oKp = other.getKawaipon();
 			Deck oDk = oKp.getDeck();
 
