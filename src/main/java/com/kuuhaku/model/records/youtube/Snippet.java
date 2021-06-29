@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.records.youtube;
 
-import com.kuuhaku.model.records.youtube.enums.LiveBroadcastContent;
-
 import java.time.OffsetDateTime;
 
 public record Snippet(
@@ -29,7 +27,7 @@ public record Snippet(
 		String description,
 		Thumbnails thumbnails,
 		String channelTitle,
-		LiveBroadcastContent liveBroadcastContent,
+		String liveBroadcastContent,
 		OffsetDateTime publishTime
 ) {
 }

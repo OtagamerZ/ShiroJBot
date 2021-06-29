@@ -18,7 +18,5 @@
 
 package com.kuuhaku.model.records.youtube;
 
-import com.kuuhaku.model.records.youtube.enums.ItemKind;
-
-public record Item(ItemKind kind, String etag, ID id, Snippet snippet) {
+public record Item(String kind, String etag, ID id, Snippet snippet) {
 }
