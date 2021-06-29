@@ -87,10 +87,10 @@ public class YoutubeCommand implements Executable {
 							pages.add(new Page(PageType.EMBED, eb.build()));
 						}
 
-						Main.getInfo().getConfirmationPending().put(author.getId(), true);
 						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
-							Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
+								Main.getInfo().getConfirmationPending().put(author.getId(), true);
+								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 
