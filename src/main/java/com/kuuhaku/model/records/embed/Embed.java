@@ -29,7 +29,7 @@ public record Embed(Title title,
 					String body,
 					String thumbnail,
 					Image image,
-					boolean showDate,
+					Boolean showDate,
 					Footer footer,
 					List<Field> fields
 ) {
@@ -40,5 +40,10 @@ public record Embed(Title title,
 		} catch (NumberFormatException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public Boolean showDate() {
+		return Helper.getOr(showDate, false);
 	}
 }

@@ -18,18 +18,20 @@
 
 package com.kuuhaku.model.records.anime;
 
+import com.kuuhaku.utils.Helper;
+
 import java.util.List;
 
 public record Media(
-		long idMal,
+		Long idMal,
 		Title title,
 		String status,
 		StartDate startDate,
-		long episodes,
+		Long episodes,
 		CoverImage coverImage,
 		List<String> genres,
-		long averageScore,
-		long popularity,
+		Long averageScore,
+		Long popularity,
 		Studios studios,
 		Staff staff,
 		NextAiringEpisode nextAiringEpisode,
@@ -38,9 +40,9 @@ public record Media(
 ) {
 
 	@Override
-	public long episodes() {
+	public Long episodes() {
 		if (nextAiringEpisode != null)
-			return Math.max(episodes, nextAiringEpisode.episode() - 1);
+			return Helper.getOr(episodes, nextAiringEpisode.episode() - 1);
 		else return episodes;
 	}
 }
