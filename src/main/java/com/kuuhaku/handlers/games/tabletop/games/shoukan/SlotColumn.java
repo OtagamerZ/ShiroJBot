@@ -18,34 +18,34 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-public class SlotColumn<A, B> {
-	private A top = null;
-	private B bottom = null;
+public class SlotColumn {
+	private Champion top = null;
+	private Equipment bottom = null;
 	private final int index;
 
 	public SlotColumn(int index) {
 		this.index = index;
 	}
 
-	public SlotColumn(A top, B bottom, int index) {
+	public SlotColumn(Champion top, Equipment bottom, int index) {
 		this.top = top;
 		this.bottom = bottom;
 		this.index = index;
 	}
 
-	public A getTop() {
+	public Champion getTop() {
 		return top;
 	}
 
-	public void setTop(A top) {
+	public void setTop(Champion top) {
 		this.top = top;
 	}
 
-	public B getBottom() {
+	public Equipment getBottom() {
 		return bottom;
 	}
 
-	public void setBottom(B bottom) {
+	public void setBottom(Equipment bottom) {
 		this.bottom = bottom;
 	}
 

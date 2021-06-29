@@ -38,7 +38,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Arena {
-	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
+	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final LinkedList<Drawable> banished;
 	private final BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
@@ -49,18 +49,18 @@ public class Arena {
 	public Arena() {
 		this.slots = Map.of(
 				Side.TOP, List.of(
-						new SlotColumn<>(0),
-						new SlotColumn<>(1),
-						new SlotColumn<>(2),
-						new SlotColumn<>(3),
-						new SlotColumn<>(4)
+						new SlotColumn(0),
+						new SlotColumn(1),
+						new SlotColumn(2),
+						new SlotColumn(3),
+						new SlotColumn(4)
 				),
 				Side.BOTTOM, List.of(
-						new SlotColumn<>(0),
-						new SlotColumn<>(1),
-						new SlotColumn<>(2),
-						new SlotColumn<>(3),
-						new SlotColumn<>(4)
+						new SlotColumn(0),
+						new SlotColumn(1),
+						new SlotColumn(2),
+						new SlotColumn(3),
+						new SlotColumn(4)
 				)
 		);
 		this.graveyard = Map.of(
@@ -73,7 +73,7 @@ public class Arena {
 		front = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
 	}
 
-	public Map<Side, List<SlotColumn<Champion, Equipment>>> getSlots() {
+	public Map<Side, List<SlotColumn>> getSlots() {
 		return slots;
 	}
 
@@ -123,13 +123,13 @@ public class Arena {
 			});
 
 			ExecutorService exec = Executors.newFixedThreadPool(2);
-			for (Map.Entry<Side, List<SlotColumn<Champion, Equipment>>> entry : slots.entrySet()) {
+			for (Map.Entry<Side, List<SlotColumn>> entry : slots.entrySet()) {
 				exec.execute(() -> {
 					BufferedImage layer = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
 					Graphics2D g2d = layer.createGraphics();
 
 					Side key = entry.getKey();
-					List<SlotColumn<Champion, Equipment>> value = entry.getValue();
+					List<SlotColumn> value = entry.getValue();
 					Hand h = hands.get(key);
 					LinkedList<Drawable> grv = graveyard.get(key);
 					g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
@@ -155,7 +155,7 @@ public class Arena {
 
 					BufferedImage broken = Helper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
 					for (int i = 0; i < value.size(); i++) {
-						SlotColumn<Champion, Equipment> c = value.get(i);
+						SlotColumn c = value.get(i);
 						switch (key) {
 							case TOP -> {
 								if (game.isSlotLocked(key, i)) {
