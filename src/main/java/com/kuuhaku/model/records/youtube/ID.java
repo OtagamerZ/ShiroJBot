@@ -18,7 +18,5 @@
 
 package com.kuuhaku.model.records.youtube;
 
-import com.kuuhaku.model.records.youtube.enums.IDKind;
-
-public record ID(IDKind kind, String videoId, String playlistId) {
+public record ID(String kind, String videoId, String playlistId) {
 }
