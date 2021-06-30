@@ -323,7 +323,7 @@ public class Equipment implements Drawable, Cloneable {
 			gs.setVariable("self", this);
 			gs.evaluate(header + effect);
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).warn(e);
 		}
 	}
 
@@ -340,7 +340,7 @@ public class Equipment implements Drawable, Cloneable {
 			gs.setVariable("self", this);
 			gs.evaluate(header + effect);
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).warn(e);
 		}
 	}
 
