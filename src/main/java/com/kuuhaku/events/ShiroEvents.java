@@ -992,7 +992,7 @@ public class ShiroEvents extends ListenerAdapter {
 				acc.addVCredit((long) Math.ceil(value * be.getRate()), this.getClass());
 				AccountDAO.saveAccount(acc);
 
-				msg.getChannel().sendMessage("✅ | Obrigada, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos voláteis com sucesso!").queue();
+				msg.getChannel().sendMessage("✅ | Obrigada, seus " + Helper.separate(value) + " " + Helper.separate(be.getCurrency()) + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos voláteis com sucesso!").queue();
 			}
 		}
 	}
