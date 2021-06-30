@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import bsh.Interpreter;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
@@ -31,6 +30,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.OnDelete;
@@ -674,14 +674,13 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String imports = EffectParameters.IMPORTS.formatted(card.getName());
+		String header = "//" + card.getName() + "\n";
 
 		try {
-			Interpreter i = new Interpreter();
-			i.setStrictJava(true);
-			i.set("ep", ep);
-			i.set("self", this);
-			i.eval(imports + Helper.getOr(altEffect, effect));
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("ep", ep);
+			gs.setVariable("self", this);
+			gs.evaluate(header + Helper.getOr(altEffect, effect));
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
