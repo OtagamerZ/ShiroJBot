@@ -51,7 +51,6 @@
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.4.2.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.quartz-scheduler:quartz:2.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:c3p0:0.9.5.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.beanshell:bsh:2.0b5" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:3.0.8" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:jda-nas:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.5.1" level="project" />
