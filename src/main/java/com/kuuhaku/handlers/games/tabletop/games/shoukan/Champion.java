@@ -682,7 +682,7 @@ public class Champion implements Drawable, Cloneable {
 			gs.setVariable("self", this);
 			gs.evaluate(header + Helper.getOr(altEffect, effect));
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).warn(e);
 		}
 	}
 
