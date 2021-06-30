@@ -187,7 +187,6 @@
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.pdfbox:fontbox:2.0.19" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.DhyanB:Open-Imaging:1.09" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.sun.activation:jakarta.activation:1.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.latencyutils:LatencyUtils:2.0.3" level="project" />

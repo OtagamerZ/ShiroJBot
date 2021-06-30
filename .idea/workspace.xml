@@ -16,9 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança de engine de script de BeanShell para Groovy">
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança de engine de script de BeanShell para Groovy" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -217,6 +215,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1299,21 +1308,7 @@
       <workItem from="1624968178776" duration="7296000" />
       <workItem from="1624985651644" duration="14392000" />
       <workItem from="1625054842455" duration="23968000" />
-      <workItem from="1625084220211" duration="1225000" />
-    </task>
-    <task id="LOCAL-04878" summary="Adicionado cargos por tempo em call">
-      <created>1624654167752</created>
-      <option name="number" value="04878" />
-      <option name="presentableId" value="LOCAL-04878" />
-      <option name="project" value="LOCAL" />
-      <updated>1624654167752</updated>
-    </task>
-    <task id="LOCAL-04879" summary="Adicionado cargos por tempo em call">
-      <created>1624654206744</created>
-      <option name="number" value="04879" />
-      <option name="presentableId" value="LOCAL-04879" />
-      <option name="project" value="LOCAL" />
-      <updated>1624654206744</updated>
+      <workItem from="1625084220211" duration="1405000" />
     </task>
     <task id="LOCAL-04880" summary="Correções menores">
       <created>1624660826265</created>
@@ -1644,7 +1639,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625085157739</updated>
     </task>
-    <option name="localTasksCounter" value="4927" />
+    <task id="LOCAL-04927" summary="Mudança de engine de script de BeanShell para Groovy">
+      <created>1625085546865</created>
+      <option name="number" value="04927" />
+      <option name="presentableId" value="LOCAL-04927" />
+      <option name="project" value="LOCAL" />
+      <updated>1625085546865</updated>
+    </task>
+    <task id="LOCAL-04928" summary="Mudança de engine de script de BeanShell para Groovy">
+      <created>1625085609349</created>
+      <option name="number" value="04928" />
+      <option name="presentableId" value="LOCAL-04928" />
+      <option name="project" value="LOCAL" />
+      <updated>1625085609349</updated>
+    </task>
+    <option name="localTasksCounter" value="4929" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
