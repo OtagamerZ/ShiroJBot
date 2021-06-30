@@ -43,12 +43,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.math3.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Command(
 		name = "sintetizar",
@@ -89,9 +87,10 @@ public class SynthesizeCardCommand implements Executable {
 
 		List<Card> tributes = new ArrayList<>();
 		for (String name : names) {
+			name = name.trim();
 			Card c = CardDAO.getCard(name, false);
 			if (c == null) {
-				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe.").queue();
+				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe, você não quis dizer `" + Helper.didYouMean(name, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
 				return;
 			} else if (foilSynth ? !kp.getCards().contains(new KawaiponCard(c, true)) : !kp.getCards().contains(new KawaiponCard(c, false))) {
 				channel.sendMessage("❌ | Você só pode usar na síntese cartas que você tenha na coleção kawaipon.").queue();
