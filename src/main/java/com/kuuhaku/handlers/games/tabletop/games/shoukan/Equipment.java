@@ -18,8 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import bsh.EvalError;
-import bsh.Interpreter;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
@@ -31,6 +29,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -316,33 +315,31 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String imports = EffectParameters.IMPORTS.formatted(card.getName());
+		String header = "//" + card.getName() + "\n";
 
 		try {
-			Interpreter i = new Interpreter();
-			i.setStrictJava(true);
-			i.set("ep", ep);
-			i.set("self", this);
-			i.eval(imports + effect);
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("ep", ep);
+			gs.setVariable("self", this);
+			gs.evaluate(header + effect);
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
-		String imports = EffectParameters.IMPORTS.formatted(card.getName());
+		String header = "//" + card.getName() + "\n";
 
 		try {
-			Interpreter i = new Interpreter();
-			i.setStrictJava(true);
-			i.set("you", you);
-			i.set("opponent", opponent);
-			i.set("game", game);
-			i.set("allyPos", allyPos);
-			i.set("enemyPos", enemyPos);
-			i.set("self", this);
-			i.eval(imports + effect);
-		} catch (EvalError e) {
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("you", you);
+			gs.setVariable("opponent", opponent);
+			gs.setVariable("game", game);
+			gs.setVariable("allyPos", allyPos);
+			gs.setVariable("enemyPos", enemyPos);
+			gs.setVariable("self", this);
+			gs.evaluate(header + effect);
+		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
