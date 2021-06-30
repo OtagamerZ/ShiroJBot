@@ -77,7 +77,6 @@ dependencies {
     implementation group: "org.hibernate", name: "hibernate-c3p0", version: "5.4.2.Final"
 
     //Compiler
-    implementation group: "org.beanshell", name: "bsh", version: "2.0b5"
     implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.8'
 
     //Music
