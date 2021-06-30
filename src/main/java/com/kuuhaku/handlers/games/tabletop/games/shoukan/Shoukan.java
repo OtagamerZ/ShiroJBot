@@ -1724,7 +1724,8 @@ public class Shoukan extends GlobalGame {
 				reroll = false;
 				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
-		if (phase == Phase.PLAN)
+		if (phase == Phase.PLAN) {
+			//:package:
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
@@ -1765,8 +1766,33 @@ public class Shoukan extends GlobalGame {
 				}
 
 				remaining = h.getMaxCards() - h.getCards().size();
-				reportEvent(h, getCurrent().getName() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")", true, false);
+				reportEvent(h, getCurrent().getName() + " puxou uma carta. (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")", true, false);
 			});
+			buttons.put("\uD83D\uDCE6", (mb, ms) -> {
+				if (phase != Phase.PLAN) {
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				Hand h = hands.get(current);
+
+				int remaining = h.getMaxCards() - h.getCards().size();
+				if (remaining <= 0) {
+					channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				int toDraw = Math.min(remaining, h.getDeque().size());
+				for (int i = 0; i < toDraw; i++) {
+					h.manualDraw();
+				}
+
+				if (toDraw == 1)
+					reportEvent(h, getCurrent().getName() + " puxou uma carta.", true, false);
+				else
+					reportEvent(h, getCurrent().getName() + " puxou " + toDraw + " cartas.", true, false);
+			});
+		}
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
 			buttons.put("\uD83D\uDD04", (mb, ms) -> {
 				if (phase != Phase.PLAN) {
