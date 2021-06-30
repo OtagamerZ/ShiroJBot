@@ -133,7 +133,6 @@ dependencies {
     implementation group: "net.jodah", name: "expiringmap", version: "0.5.9"
     implementation group: "me.xuender", name: "unidecode", version: "0.0.7"
     implementation group: "com.squareup.moshi", name: "moshi-adapters", version: "1.12.0"
-    implementation group: "com.github.DhyanB", name: "Open-Imaging", version: "1.09"
 }
 
 apply plugin: "org.springframework.boot"
