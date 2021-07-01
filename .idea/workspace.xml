@@ -93,16 +93,6 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="GroovyConsoleState">
-    <option name="list">
-      <list>
-        <Entry>
-          <option name="moduleName" value="com.kuuhaku.shiro-j-bot.main" />
-          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
-        </Entry>
-      </list>
-    </option>
-  </component>
   <component name="InvalidFacetManager">
     <ignored-facets>
       <facet id="shiro-j-bot.main/invalid/JPA" />
