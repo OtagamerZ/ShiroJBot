@@ -2223,6 +2223,24 @@ public class Shoukan extends GlobalGame {
 		return false;
 	}
 
+	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Duelists duelists) {
+		if (activator.hasEffect() && effectLock == 0) {
+			if ((duelists.getDefender() != null && duelists.getDefender().getBonus().getSpecialData().remove("effectLock") != null)
+				|| (duelists.getAttacker() != null && duelists.getAttacker().getBonus().getSpecialData().remove("effectLock") != null)
+			) return false;
+
+			activator.getEffect(new EffectParameters(trigger, this, index, side, duelists, channel));
+			for (Equipment e : activator.getLinkedTo()) {
+				if (e.isParasite() && e.hasEffect())
+					applyEffect(trigger, e, index, side);
+			}
+
+			return postCombat();
+		}
+
+		return false;
+	}
+
 	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side) {
 		if (activator.hasEffect() && effectLock == 0) {
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(null, null), channel));
@@ -2273,6 +2291,28 @@ public class Shoukan extends GlobalGame {
 		return arena.getGraveyard().get(s).stream()
 				.map(d -> d.getCard().getId())
 				.anyMatch(id::equalsIgnoreCase);
+	}
+
+	public Champion evolveTo(Champion from, String to, EffectParameters ep) {
+		Champion nc = CardDAO.getChampion(to);
+		assert nc != null;
+		nc.setGame(from.getGame());
+		nc.setAcc(from.getAcc());
+		nc.setLinkedTo(from.getLinkedTo());
+		nc.setDefending(from.isDefending());
+		nc.setFlipped(from.isFlipped());
+
+		int index = switch (ep.getTrigger()) {
+			case ON_ATTACK, ON_SUMMON, BEFORE_TURN,
+					AFTER_TURN, ON_SWITCH, ON_SUICIDE,
+					ON_EQUIP, POST_ATTACK, ON_MISS, GAME_TICK -> ep.getDuelists().getAttackerPos();
+			default -> ep.getDuelists().getDefenderPos();
+		};
+		banishCard(ep.getSide(), index, false);
+		arena.getSlots().get(ep.getSide()).get(index).setTop(nc);
+		applyEffect(ON_SUMMON, from, index, ep.getSide(), ep.getDuelists());
+		applyEot(ON_SUMMON, ep.getSide(), index);
+		return nc;
 	}
 
 	@Override
