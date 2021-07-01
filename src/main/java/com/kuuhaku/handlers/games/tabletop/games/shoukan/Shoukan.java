@@ -1725,7 +1725,6 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
 		if (phase == Phase.PLAN) {
-			//:package:
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
