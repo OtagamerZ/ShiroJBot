@@ -2262,8 +2262,7 @@ public class Shoukan extends GlobalGame {
 				if (gif != null) {
 					wmb.addEmbeds(new WebhookEmbedBuilder()
 							.setImageUrl(ShiroInfo.RESOURCES_URL + "/shoukan/gifs/" + gif + ".gif")
-							.build()
-					);
+							.build());
 				}
 
 				try {
