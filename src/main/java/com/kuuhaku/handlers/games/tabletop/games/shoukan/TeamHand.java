@@ -67,7 +67,7 @@ public class TeamHand extends Hand {
 			this.users.add(user.getId());
 			this.accs.add(acc);
 
-			Consumer<Drawable> bonding = d -> d.bond(this);
+			Consumer<Drawable> bonding = d -> d.bind(this);
 			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)
 					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));

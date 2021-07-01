@@ -1054,7 +1054,7 @@ public class Shoukan extends GlobalGame {
 
 			SlotColumn sc = getFirstAvailableSlot(current, true);
 			if (sc != null) {
-				aFusion.bond(h);
+				aFusion.bind(h);
 				sc.setTop(aFusion);
 				if (applyEot(ON_SUMMON, current, sc.getIndex())) return true;
 				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), current, Pair.of(aFusion, sc.getIndex()), null))
@@ -1404,7 +1404,7 @@ public class Shoukan extends GlobalGame {
 			SlotColumn sc = getFirstAvailableSlot(from, true);
 			if (sc != null) {
 				ch.clearLinkedTo();
-				ch.bond(hands.get(from));
+				ch.bind(hands.get(from));
 				sc.setTop(ch);
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
@@ -1446,7 +1446,7 @@ public class Shoukan extends GlobalGame {
 		SlotColumn sc = getFirstAvailableSlot(from, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
-			ch.bond(hands.get(from));
+			ch.bind(hands.get(from));
 			sc.setTop(ch);
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
@@ -1489,7 +1489,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			ch.clearLinkedTo();
-			ch.bond(hands.get(from));
+			ch.bind(hands.get(from));
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
@@ -1512,7 +1512,7 @@ public class Shoukan extends GlobalGame {
 			List<SlotColumn> slots = getArena().getSlots().get(from);
 
 			chi.clearLinkedTo();
-			ch.bond(hands.get(to));
+			ch.bind(hands.get(to));
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn sd = slots.get(i);
@@ -1562,7 +1562,7 @@ public class Shoukan extends GlobalGame {
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
-					ch.bond(hands.get(to));
+					ch.bind(hands.get(to));
 					sc.setBottom(eq);
 				} else return;
 			}
