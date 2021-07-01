@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
@@ -2259,7 +2260,11 @@ public class Shoukan extends GlobalGame {
 						.setUsername(c.getName());
 
 				if (gif != null) {
-					wmb.setContent(ShiroInfo.RESOURCES_URL + "/shoukan/gifs/" + gif + ".gif");
+					wmb.addEmbeds(
+							new WebhookEmbedBuilder()
+									.setImageUrl(ShiroInfo.RESOURCES_URL + "/shoukan/gifs/" + gif + ".gif")
+									.build()
+					);
 				}
 
 				try {
