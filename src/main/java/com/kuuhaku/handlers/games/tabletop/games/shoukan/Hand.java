@@ -80,7 +80,7 @@ public class Hand {
 		this.user = user.getId();
 		this.acc = AccountDAO.getAccount(user.getId());
 
-		Consumer<Drawable> bonding = d -> d.bond(this);
+		Consumer<Drawable> bonding = d -> d.bind(this);
 		this.deque = new BondedList<>(bonding);
 		this.cards = new BondedList<>(bonding);
 		this.destinyDeck = new BondedList<>(bonding);

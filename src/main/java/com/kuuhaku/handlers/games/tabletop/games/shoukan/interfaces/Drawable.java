@@ -46,7 +46,7 @@ public interface Drawable {
 
 	void setAcc(Account acc);
 
-	void bond(Hand h);
+	void bind(Hand h);
 
 	Drawable copy();
 }
