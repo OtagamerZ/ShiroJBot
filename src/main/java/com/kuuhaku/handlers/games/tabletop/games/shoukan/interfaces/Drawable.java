@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -44,6 +45,8 @@ public interface Drawable {
 	Account getAcc();
 
 	void setAcc(Account acc);
+
+	void bond(Hand h);
 
 	Drawable copy();
 }

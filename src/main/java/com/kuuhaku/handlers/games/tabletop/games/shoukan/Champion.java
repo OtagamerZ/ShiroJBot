@@ -299,6 +299,12 @@ public class Champion implements Drawable, Cloneable {
 		this.acc = acc;
 	}
 
+	@Override
+	public void bond(Hand h) {
+		this.game = h.getGame();
+		this.acc = h.getAcc();
+	}
+
 	public void setLinkedTo(List<Equipment> linkedTo) {
 		this.linkedTo = Helper.getOr(linkedTo, new ArrayList<>());
 		for (Equipment e : this.linkedTo) {
@@ -710,33 +716,6 @@ public class Champion implements Drawable, Cloneable {
 		this.fakeCard = fakeCard;
 	}
 
-	public void reset() {
-		flipped = false;
-		available = true;
-		defending = false;
-		linkedTo = new ArrayList<>();
-		bonus = new Bonus();
-		fakeCard = null;
-		altAtk = -1;
-		altDef = -1;
-		altDescription = null;
-		altEffect = null;
-		altRace = null;
-		mAtk = 0;
-		mDef = 0;
-		redAtk = 0;
-		redDef = 0;
-		efctMana = 0;
-		efctBlood = 0;
-		efctAtk = new int[6];
-		efctDef = new int[6];
-		stasis = 0;
-		stun = 0;
-		sleep = 0;
-		dodge = 0;
-		mDodge = 0;
-	}
-
 	public Set<String> getRequiredCards() {
 		return requiredCards;
 	}
@@ -874,6 +853,33 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setGravelocked(boolean gravelocked) {
 		this.gravelocked = gravelocked;
+	}
+
+	public void reset() {
+		flipped = false;
+		available = true;
+		defending = false;
+		linkedTo = new ArrayList<>();
+		bonus = new Bonus();
+		fakeCard = null;
+		altAtk = -1;
+		altDef = -1;
+		altDescription = null;
+		altEffect = null;
+		altRace = null;
+		mAtk = 0;
+		mDef = 0;
+		redAtk = 0;
+		redDef = 0;
+		efctMana = 0;
+		efctBlood = 0;
+		efctAtk = new int[6];
+		efctDef = new int[6];
+		stasis = 0;
+		stun = 0;
+		sleep = 0;
+		dodge = 0;
+		mDodge = 0;
 	}
 
 	@Override

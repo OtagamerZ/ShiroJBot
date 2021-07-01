@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.utils.BondedList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
@@ -40,6 +41,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,9 +50,9 @@ public class Hand {
 	private final Account acc;
 	private final Side side;
 	private final String user;
-	private final LinkedList<Drawable> deque = new LinkedList<>();
-	private final List<Drawable> cards = new ArrayList<>();
-	private final List<Drawable> destinyDeck = new ArrayList<>();
+	private final BondedList<Drawable> deque;
+	private final BondedList<Drawable> cards;
+	private final BondedList<Drawable> destinyDeck;
 	private Pair<Race, Race> combo;
 	private int baseHp;
 	private int baseManaPerTurn;
@@ -69,11 +71,19 @@ public class Hand {
 		if (user == null) {
 			this.user = null;
 			this.acc = null;
+			this.deque = null;
+			this.cards = null;
+			this.destinyDeck = null;
 			return;
 		}
 
 		this.user = user.getId();
 		this.acc = AccountDAO.getAccount(user.getId());
+
+		Consumer<Drawable> bonding = d -> d.bond(this);
+		this.deque = new BondedList<>(bonding);
+		this.cards = new BondedList<>(bonding);
+		this.destinyDeck = new BondedList<>(bonding);
 
 		game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
@@ -129,7 +139,6 @@ public class Hand {
 				case "blackrock" -> {
 					Field f = CardDAO.getField("OTHERWORLD");
 					assert f != null;
-					f.setAcc(acc);
 					game.getArena().setField(f);
 					deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
@@ -181,15 +190,6 @@ public class Hand {
 		}
 		for (Drawable drawable : destinyDeck) {
 			deque.remove(drawable);
-		}
-
-		for (Drawable d : deque) {
-			d.setGame(game);
-			d.setAcc(acc);
-		}
-		for (Drawable d : destinyDeck) {
-			d.setGame(game);
-			d.setAcc(acc);
 		}
 
 		int hpMod = (combo.getLeft() == Race.DEMON ? -1500 : 0)
@@ -391,7 +391,7 @@ public class Hand {
 		return combo;
 	}
 
-	public LinkedList<Drawable> getDeque() {
+	public BondedList<Drawable> getDeque() {
 		if (deque.isEmpty()) {
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
@@ -399,7 +399,7 @@ public class Hand {
 		return deque;
 	}
 
-	public List<Drawable> getCards() {
+	public BondedList<Drawable> getCards() {
 		return cards;
 	}
 
@@ -439,7 +439,7 @@ public class Hand {
 		getAvailableCards().removeIf(d -> d.getCard().getId().equalsIgnoreCase(name));
 	}
 
-	public List<Drawable> getDestinyDeck() {
+	public BondedList<Drawable> getDestinyDeck() {
 		return destinyDeck;
 	}
 

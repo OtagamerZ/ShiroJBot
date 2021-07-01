@@ -16,9 +16,16 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança de engine de script de BeanShell para Groovy">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/BondedList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,6 +215,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1292,13 +1310,7 @@
       <workItem from="1625054842455" duration="23968000" />
       <workItem from="1625084220211" duration="1731000" />
       <workItem from="1625086378333" duration="354000" />
-    </task>
-    <task id="LOCAL-04881" summary="Correções menores">
-      <created>1624663569875</created>
-      <option name="number" value="04881" />
-      <option name="presentableId" value="LOCAL-04881" />
-      <option name="project" value="LOCAL" />
-      <updated>1624663569875</updated>
+      <workItem from="1625112927168" duration="2475000" />
     </task>
     <task id="LOCAL-04882" summary="Correções menores">
       <created>1624664948638</created>
@@ -1636,7 +1648,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625085939190</updated>
     </task>
-    <option name="localTasksCounter" value="4930" />
+    <task id="LOCAL-04930" summary="Correções menores">
+      <created>1625098014262</created>
+      <option name="number" value="04930" />
+      <option name="presentableId" value="LOCAL-04930" />
+      <option name="project" value="LOCAL" />
+      <updated>1625098014262</updated>
+    </task>
+    <option name="localTasksCounter" value="4931" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1746,9 +1765,9 @@
     <MESSAGE value="Aterada biblioteca de JSON de GSON para Moshi" />
     <MESSAGE value="Updated copyright notice" />
     <MESSAGE value="Adicionado cargos por tempo em call" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Mudança de engine de script de BeanShell para Groovy" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mudança de engine de script de BeanShell para Groovy" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
