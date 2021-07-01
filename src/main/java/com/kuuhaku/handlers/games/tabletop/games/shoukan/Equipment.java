@@ -224,7 +224,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	@Override
-	public void bond(Hand h) {
+	public void bind(Hand h) {
 		this.game = h.getGame();
 		this.acc = h.getAcc();
 	}
