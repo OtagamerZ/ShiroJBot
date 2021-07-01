@@ -223,6 +223,12 @@ public class Equipment implements Drawable, Cloneable {
 		this.acc = acc;
 	}
 
+	@Override
+	public void bond(Hand h) {
+		this.game = h.getGame();
+		this.acc = h.getAcc();
+	}
+
 	public Pair<Integer, Champion> getLinkedTo() {
 		return linkedTo;
 	}
@@ -348,6 +354,14 @@ public class Equipment implements Drawable, Cloneable {
 		this.effect = effect;
 	}
 
+	public void reset() {
+		flipped = false;
+		available = true;
+		linkedTo = null;
+		altAtk = -1;
+		altDef = -1;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -364,7 +378,9 @@ public class Equipment implements Drawable, Cloneable {
 	@Override
 	public Equipment copy() {
 		try {
-			return (Equipment) clone();
+			Equipment e = (Equipment) clone();
+			e.reset();
+			return e;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}

@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.utils.BondedList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.InfiniteList;
 import net.dv8tion.jda.api.entities.User;
@@ -41,6 +42,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,9 +50,9 @@ public class TeamHand extends Hand {
 	private final Pair<Race, Race> combo;
 	private final InfiniteList<String> users = new InfiniteList<>();
 	private final InfiniteList<Account> accs = new InfiniteList<>();
-	private final InfiniteList<LinkedList<Drawable>> deques = new InfiniteList<>();
-	private final InfiniteList<List<Drawable>> cards = new InfiniteList<>();
-	private final InfiniteList<List<Drawable>> destinyDecks = new InfiniteList<>();
+	private final InfiniteList<BondedList<Drawable>> deques = new InfiniteList<>();
+	private final InfiniteList<BondedList<Drawable>> cards = new InfiniteList<>();
+	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
 
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
@@ -61,15 +63,15 @@ public class TeamHand extends Hand {
 			User user = users.get(i);
 			game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
-			LinkedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
-					.flatMap(List::stream)
-					.collect(Collectors.toCollection(LinkedList::new));
-
-			List<Drawable> destinyDeck = new ArrayList<>();
-
 			Account acc = AccountDAO.getAccount(user.getId());
 			this.users.add(user.getId());
 			this.accs.add(acc);
+
+			Consumer<Drawable> bonding = d -> d.bond(this);
+			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
+					.flatMap(List::stream)
+					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));
+			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
 
 			if (game.getCustom() != null) {
 				if (game.getCustom().getBoolean("semequip"))
@@ -100,8 +102,6 @@ public class TeamHand extends Hand {
 					case "blackrock" -> {
 						Field f = CardDAO.getField("OTHERWORLD");
 						assert f != null;
-						f.setGame(game);
-						f.setAcc(acc);
 						game.getArena().setField(f);
 						deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 						for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
@@ -133,18 +133,9 @@ public class TeamHand extends Hand {
 				deque.remove(drawable);
 			}
 
-			for (Drawable d : deque) {
-				d.setGame(game);
-				d.setAcc(acc);
-			}
-			for (Drawable d : destinyDeck) {
-				d.setGame(game);
-				d.setAcc(acc);
-			}
-
 			this.deques.add(deque);
 			this.destinyDecks.add(destinyDeck);
-			this.cards.add(new ArrayList<>());
+			this.cards.add(new BondedList<>(bonding));
 		}
 
 		combo = Race.getCombo(dks.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
@@ -488,9 +479,9 @@ public class TeamHand extends Hand {
 		return combo;
 	}
 
-	public LinkedList<Drawable> getDeque() {
-		LinkedList<Drawable> deque = deques.getCurrent();
-		List<Drawable> destinyDeck = getDestinyDeck();
+	public BondedList<Drawable> getDeque() {
+		BondedList<Drawable> deque = deques.getCurrent();
+		BondedList<Drawable> destinyDeck = getDestinyDeck();
 
 		if (deque.isEmpty()) {
 			deque.addAll(destinyDeck);
@@ -499,7 +490,7 @@ public class TeamHand extends Hand {
 		return deque;
 	}
 
-	public List<Drawable> getCards() {
+	public BondedList<Drawable> getCards() {
 		return cards.getCurrent();
 	}
 
@@ -539,7 +530,7 @@ public class TeamHand extends Hand {
 		getAvailableCards().removeIf(d -> d.getCard().getId().equalsIgnoreCase(name));
 	}
 
-	public List<Drawable> getDestinyDeck() {
+	public BondedList<Drawable> getDestinyDeck() {
 		return destinyDecks.getCurrent();
 	}
 

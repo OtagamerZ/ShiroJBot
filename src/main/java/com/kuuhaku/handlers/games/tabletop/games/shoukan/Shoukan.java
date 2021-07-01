@@ -297,7 +297,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (args[1].equalsIgnoreCase("d") && args.length < 3) {
-					discardBatch.add(d.copy());
+					discardBatch.add(d);
 					d.setAvailable(false);
 
 					if (makeFusion(h)) return;
@@ -1054,8 +1054,7 @@ public class Shoukan extends GlobalGame {
 
 			SlotColumn sc = getFirstAvailableSlot(current, true);
 			if (sc != null) {
-				aFusion.setGame(this);
-				aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+				aFusion.bond(h);
 				sc.setTop(aFusion);
 				if (applyEot(ON_SUMMON, current, sc.getIndex())) return true;
 				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), current, Pair.of(aFusion, sc.getIndex()), null))
@@ -1405,8 +1404,7 @@ public class Shoukan extends GlobalGame {
 			SlotColumn sc = getFirstAvailableSlot(from, true);
 			if (sc != null) {
 				ch.clearLinkedTo();
-				ch.setGame(this);
-				ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+				ch.bond(hands.get(from));
 				sc.setTop(ch);
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
@@ -1448,8 +1446,7 @@ public class Shoukan extends GlobalGame {
 		SlotColumn sc = getFirstAvailableSlot(from, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
-			ch.setGame(this);
-			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+			ch.bond(hands.get(from));
 			sc.setTop(ch);
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
@@ -1492,8 +1489,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			ch.clearLinkedTo();
-			ch.setGame(this);
-			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+			ch.bond(hands.get(from));
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
@@ -1516,8 +1512,7 @@ public class Shoukan extends GlobalGame {
 			List<SlotColumn> slots = getArena().getSlots().get(from);
 
 			chi.clearLinkedTo();
-			chi.setGame(this);
-			chi.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+			ch.bond(hands.get(to));
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn sd = slots.get(i);
@@ -1567,8 +1562,7 @@ public class Shoukan extends GlobalGame {
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
-					eq.setGame(this);
-					eq.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+					ch.bond(hands.get(to));
 					sc.setBottom(eq);
 				} else return;
 			}
@@ -1663,11 +1657,23 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
+				for (Drawable d : discardBatch) {
+					d.setAvailable(true);
+				}
 				if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
-					h.get().getDeque().addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
+					h.get().getDeque().addAll(
+							discardBatch.stream()
+									.map(Drawable::copy)
+									.collect(Collectors.toList())
+					);
 					Collections.shuffle(h.get().getDeque());
-				} else
-					arena.getGraveyard().get(current).addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
+				} else {
+					arena.getGraveyard().get(current).addAll(
+							discardBatch.stream()
+									.map(Drawable::copy)
+									.collect(Collectors.toList())
+					);
+				}
 				discardBatch.clear();
 
 				if (getRound() > 0) reroll = false;
@@ -1855,7 +1861,23 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 
-					arena.getGraveyard().get(current).addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
+					for (Drawable d : discardBatch) {
+						d.setAvailable(true);
+					}
+					if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
+						h.get().getDeque().addAll(
+								discardBatch.stream()
+										.map(Drawable::copy)
+										.collect(Collectors.toList())
+						);
+						Collections.shuffle(h.get().getDeque());
+					} else {
+						arena.getGraveyard().get(current).addAll(
+								discardBatch.stream()
+										.map(Drawable::copy)
+										.collect(Collectors.toList())
+						);
+					}
 					discardBatch.clear();
 
 					if (getRound() > 0) reroll = false;

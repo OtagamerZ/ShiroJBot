@@ -192,6 +192,12 @@ public class Field implements Drawable, Cloneable {
 	}
 
 	@Override
+	public void bond(Hand h) {
+		this.game = h.getGame();
+		this.acc = h.getAcc();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
