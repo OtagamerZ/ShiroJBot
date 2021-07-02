@@ -1280,7 +1280,7 @@ public class Shoukan extends GlobalGame {
 
 			ch.reset();
 			if (!ch.isFusion() || withFusion)
-				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
+				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch.copy());
 		}
 	}
 
@@ -1322,7 +1322,7 @@ public class Shoukan extends GlobalGame {
 
 		ch.reset();
 		if (!ch.isFusion() || withFusion)
-			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
+			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch.copy());
 	}
 
 	public void banishCard(Side to, int target, boolean equipment) {
@@ -1365,7 +1365,7 @@ public class Shoukan extends GlobalGame {
 
 			ch.reset();
 			if (!ch.isGravelocked())
-				arena.getBanished().add(ch);
+				arena.getBanished().add(ch.copy());
 		}
 	}
 
