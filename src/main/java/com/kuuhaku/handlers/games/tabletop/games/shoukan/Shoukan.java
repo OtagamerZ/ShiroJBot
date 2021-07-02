@@ -672,7 +672,7 @@ public class Shoukan extends GlobalGame {
 
 					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
 
-					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(Math.round(yPower * demonFac));
+					if (!c.isDecoy()) enemy.removeHp(Math.round(yPower * demonFac));
 					c.setAvailable(false);
 
 					if (!postCombat()) {
@@ -773,6 +773,9 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
 
+		Pair<Champion, Integer> attacker = Pair.of(yours, is[0]);
+		Pair<Champion, Integer> defender = Pair.of(his, is[1]);
+
 		if (his.isStasis()) {
 			channel.sendMessage("❌ | Você não pode atacar cartas inalvejáveis.").queue();
 			return;
@@ -780,235 +783,267 @@ public class Shoukan extends GlobalGame {
 
 		if (yours.isDefending()) return;
 
-		if (applyEot(ON_ATTACK, current, is[0])) return;
-		if (is[0] > 0) {
-			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
-			if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
-		}
-		if (is[0] < 4) {
-			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
-			if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
-		}
-		if (applyEffect(ON_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-		if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
-			yours.setAvailable(false);
-			yours.resetAttribs();
-			his.resetAttribs();
-
-			if (applyEot(POST_ATTACK, current, is[0])) return;
-			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-			reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
-			return;
-		}
-
-		if (applyEot(ON_DEFEND, next, is[1])) return;
-		if (is[1] > 0) {
-			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
-			if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
-		}
-		if (is[1] < 4) {
-			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
-			if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
-		}
-		if (applyEffect(ON_DEFEND, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-		if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
-			yours.setAvailable(false);
-			yours.resetAttribs();
-			his.resetAttribs();
-
-			if (applyEot(POST_DEFENSE, next, is[1])) return;
-			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-			reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
-		} else {
-			int yPower;
-			if (!yours.getCard().getId().equals("DECOY")) {
-				yPower = yours.getFinAtk();
-			} else {
-				yPower = 0;
+		/* PRE-ATTACK */
+		{
+			if (applyEot(ON_ATTACK, current, is[0])) return;
+			if (is[0] > 0) {
+				Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
+				if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, attacker, defender))
+					return;
 			}
-
-			int hPower;
-			if (his.isDefending()) {
-				if (his.isFlipped()) {
-					his.setFlipped(false);
-					his.setDefending(true);
-					if (applyEot(ON_FLIP, next, is[1])) return;
-					if (applyEffect(ON_FLIP, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-				}
-				hPower = his.getFinDef();
-			} else if (!his.getCard().getId().equals("DECOY")) {
-				hPower = his.getFinAtk();
-			} else {
-				hPower = 0;
+			if (is[0] < 4) {
+				Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
+				if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, attacker, defender))
+					return;
 			}
+			if (applyEffect(ON_ATTACK, yours, is[0], current, attacker, defender)) return;
 
-			boolean yourDodge = yours.getDodge() > 0 && Helper.chance(yours.getDodge());
-			boolean hisDodge = his.getDodge() > 0 && Helper.chance(his.getDodge());
-
-			yours.setAvailable(false);
-			yours.resetAttribs();
-			if (yPower > hPower || (yPower == hPower && yourDodge)) {
-				if (hisDodge) {
-					his.resetAttribs();
-
-					if (applyEot(ON_MISS, current, is[0])) return;
-					if (applyEffect(ON_MISS, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-					if (applyEot(ON_DODGE, next, is[1])) return;
-					if (applyEffect(ON_DODGE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-					reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
-				} else {
-					if (applyEot(POST_ATTACK, current, is[0])) return;
-					if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-						return;
-
-					if (applyEot(BEFORE_DEATH, next, is[1])) return;
-					if (applyEffect(BEFORE_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-					float demonFac = 1;
-
-					if (getHands().get(current).getCombo().getRight() == Race.DEMON)
-						demonFac *= 1.25f;
-					if (getHands().get(next).getCombo().getRight() == Race.DEMON)
-						demonFac *= 1.33f;
-
-					boolean sleeping = his.isSleeping();
-					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						if (his.isDefending()) {
-							if (his.isSleeping()) {
-								Hand enemy = hands.get(next);
-								if (yours.getBonus().getSpecialData().has("totalDamage"))
-									enemy.removeHp(Math.round(yPower * 1.25f * demonFac));
-								else {
-									enemy.removeHp(Math.round((yPower * 1.25f - hPower) * demonFac));
-								}
-							} else {
-								int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
-								Hand enemy = hands.get(next);
-								enemy.removeHp(apDamage);
-							}
-						} else if (getCustom() == null || !getCustom().getBoolean("semdano")) {
-							Hand enemy = hands.get(next);
-							if (yours.getBonus().getSpecialData().has("totalDamage"))
-								enemy.removeHp(Math.round(yPower * demonFac));
-							else {
-								enemy.removeHp(Math.round((yPower - hPower) * demonFac));
-							}
-						}
-					}
-
-					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						killCard(next, is[1]);
-
-						if (applyEot(AFTER_DEATH, next, is[1])) return;
-						if (applyEffect(AFTER_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-							return;
-						if (!postCombat()) {
-							String msg = "%s derrotou %s! (%d > %d)%s%s".formatted(
-									yours.getName(),
-									his.getCard().getName(),
-									yPower,
-									hPower,
-									demonFac > 1 ? " (efeito de raça: +" + (Math.round((yPower - hPower) * demonFac) - (yPower - hPower)) + " dano direto)" : "",
-									sleeping ? " (alvo dormindo: +25% dano final)" : ""
-							);
-
-							reportEvent(null, msg, true, false);
-						} else return;
-					} else if (yours.getCard().getId().equals("DECOY")) {
-						reportEvent(null, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
-					} else {
-						killCard(next, is[1]);
-						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-					}
-				}
-			} else {
+			if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
+				yours.setAvailable(false);
+				yours.resetAttribs();
 				his.resetAttribs();
 
-				if (applyEot(ON_SUICIDE, current, is[0])) return;
-				if (applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+				if (applyEot(POST_ATTACK, current, is[0])) return;
+				if (applyEffect(POST_ATTACK, yours, is[0], current, attacker, defender)) return;
 
-				if (yPower < hPower || hisDodge) {
-					if (applyEot(POST_DEFENSE, next, is[1])) return;
-					if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().getBoolean("semdano"))) {
-							Hand you = hands.get(current);
-							you.removeHp(hPower - yPower);
-						}
-					}
-
-					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						killCard(current, is[0]);
-						if (!postCombat()) {
-							reportEvent(null, yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")", true, false);
-						} else return;
-					} else if (his.getCard().getId().equals("DECOY")) {
-						killCard(current, is[0]);
-						reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
-					} else {
-						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-					}
-				} else {
-					if (applyEot(BEFORE_DEATH, next, is[1])) return;
-					if (applyEffect(BEFORE_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						killCard(next, is[1]);
-						killCard(current, is[0]);
-
-						if (applyEot(AFTER_DEATH, next, is[1])) return;
-						if (applyEffect(AFTER_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-							return;
-
-						if (!postCombat()) {
-							reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")", true, false);
-						} else return;
-					} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						killCard(next, is[1]);
-						killCard(current, is[0]);
-						reportEvent(null, "As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")", true, false);
-					} else if (his.getCard().getId().equals("DECOY")) {
-						killCard(next, is[1]);
-						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
-					} else {
-						killCard(current, is[0]);
-						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
-					}
-				}
+				reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
+				return;
 			}
+		}
+
+		/* PRE-DEFENSE */
+		{
+			if (applyEot(ON_DEFEND, next, is[1])) return;
+			if (is[1] > 0) {
+				Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
+				if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, attacker, defender))
+					return;
+			}
+			if (is[1] < 4) {
+				Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
+				if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, attacker, defender))
+					return;
+			}
+			if (applyEffect(ON_DEFEND, his, is[1], next, attacker, defender)) return;
+
+			if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
+				yours.setAvailable(false);
+				yours.resetAttribs();
+				his.resetAttribs();
+
+				if (applyEot(POST_DEFENSE, next, is[1])) return;
+				if (applyEffect(POST_DEFENSE, his, is[1], next, attacker, defender)) return;
+
+				reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
+			}
+		}
+
+		int yPower = Math.round((yours.isDecoy() ? 0 : yours.getFinAtk()) * (his.isSleeping() ? 1.25f : 1));
+
+		int hPower;
+		if (his.isDefending()) {
+			if (his.isFlipped()) {
+				his.setFlipped(false);
+				if (applyEot(ON_FLIP, next, is[1])) return;
+				if (applyEffect(ON_FLIP, his, is[1], next, attacker, defender)) return;
+			}
+
+			hPower = his.getFinDef();
+		} else {
+			hPower = his.isDecoy() ? 0 : his.getFinAtk();
+		}
+
+		boolean yDodge = yours.getDodge() > 0 && Helper.chance(yours.getDodge());
+		boolean hDodge = his.getDodge() > 0 && Helper.chance(his.getDodge());
+
+		yours.resetAttribs();
+		his.resetAttribs();
+
+		/* ATTACK SUCCESS */
+		{
+			if (hDodge) {
+				if (applyEot(ON_MISS, current, is[0])) return;
+				if (applyEffect(ON_MISS, yours, is[0], current, attacker, defender)) return;
+
+				if (applyEot(ON_DODGE, next, is[1])) return;
+				if (applyEffect(ON_DODGE, his, is[1], next, attacker, defender)) return;
+
+				reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
+			} else if (yPower > hPower || (yPower == hPower && yDodge)) {
+				if (applyEot(POST_ATTACK, current, is[0])) return;
+				if (applyEffect(POST_ATTACK, yours, is[0], current, attacker, defender)) return;
+
+				if (applyEot(BEFORE_DEATH, next, is[1])) return;
+				if (applyEffect(BEFORE_DEATH, his, is[1], next, attacker, defender)) return;
+
+				float demonFac = 1;
+				if (combos.get(current).getRight() == Race.DEMON)
+					demonFac *= 1.25f;
+				if (combos.get(next).getRight() == Race.DEMON)
+					demonFac *= 1.33f;
+
+				if (yours.isDecoy()) {
+					reportEvent(null, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
+				} else if (his.isDecoy()) {
+					killCard(next, is[1]);
+					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+				}
+
+				float dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
+				boolean noDmg = (his.isDefending() && !(his.isSleeping() || his.isStunned()))
+								|| his.getBonus().getSpecialData().remove("noDamage") != null
+								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
+
+				Hand op = hands.get(next);
+				if (noDmg)
+					dmg += yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+
+				op.removeHp(Math.round(dmg * demonFac));
+				killCard(next, is[1]);
+
+				if (applyEot(AFTER_DEATH, next, is[1])) return;
+				if (applyEffect(AFTER_DEATH, his, is[1], next, attacker, defender)) return;
+
+				if (!postCombat()) {
+					String msg = "%s derrotou %s! (%d > %d)%s%s".formatted(
+							yours.getName(),
+							his.getCard().getName(),
+							yPower,
+							hPower,
+							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto causado)" : "",
+							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+					);
+
+					reportEvent(null, msg, true, false);
+				} else return;
+			}
+
+			yours.setAvailable(false);
+		}
+
+		/* ATTACK FAILED */
+		{
+			if (yPower < hPower || (yPower == hPower && hDodge)) {
+				if (applyEot(ON_SUICIDE, current, is[0])) return;
+				if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
+
+				if (applyEot(POST_DEFENSE, next, is[1])) return;
+				if (applyEffect(POST_DEFENSE, his, is[1], next, attacker, defender)) return;
+
+				float demonFac = 1;
+				if (combos.get(next).getRight() == Race.DEMON)
+					demonFac *= 1.25f;
+				if (combos.get(current).getRight() == Race.DEMON)
+					demonFac *= 1.33f;
+
+				if (yours.isDecoy()) {
+					killCard(current, is[0]);
+					reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " < " + hPower + ")", true, false);
+				} else if (his.isDecoy()) {
+					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+				}
+
+				float dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
+				boolean noDmg = (yours.isDefending() && !(yours.isSleeping() || yours.isStunned()))
+								|| yours.getBonus().getSpecialData().remove("noDamage") != null
+								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
+
+				Hand you = hands.get(current);
+				if (noDmg)
+					dmg += his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+
+				you.removeHp(Math.round(dmg * demonFac));
+				killCard(current, is[0]);
+
+				if (!postCombat()) {
+					String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
+							yours.getName(),
+							his.getCard().getName(),
+							yPower,
+							hPower,
+							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
+							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+					);
+
+					reportEvent(null, msg, true, false);
+				} else return;
+			}
+
+			yours.setAvailable(false);
+		}
+
+		/* ATTACK CLASHED */
+		{
+			if (yPower == hPower) {
+				if (applyEot(ON_SUICIDE, current, is[0])) return;
+				if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
+
+				if (applyEot(BEFORE_DEATH, next, is[1])) return;
+				if (applyEffect(BEFORE_DEATH, his, is[1], next, attacker, defender)) return;
+
+				float demonFac = 1;
+				if (combos.get(next).getRight() == Race.DEMON)
+					demonFac *= 1.25f;
+				if (combos.get(current).getRight() == Race.DEMON)
+					demonFac *= 1.33f;
+
+				if (yours.isDecoy() && his.isDecoy()) {
+					killCard(current, is[0]);
+					killCard(next, is[1]);
+					reportEvent(null, "As duas cartas eram iscas!", true, false);
+				} else if (yours.isDecoy()) {
+					killCard(current, is[0]);
+					reportEvent(null, "Ambas as cartas foram destruídas? (" + yPower + " = " + hPower + ")", true, false);
+				} else if (his.isDecoy()) {
+					killCard(next, is[1]);
+					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+				}
+
+				float dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+
+				Hand op = hands.get(next);
+				op.removeHp(Math.round(dmg * demonFac));
+				killCard(current, is[0]);
+				killCard(next, is[1]);
+
+				if (applyEot(AFTER_DEATH, next, is[1])) return;
+				if (applyEffect(AFTER_DEATH, his, is[1], next, attacker, defender)) return;
+
+				if (!postCombat()) {
+					String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
+							yPower,
+							hPower,
+							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
+							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+					);
+
+					reportEvent(null, msg, true, false);
+				} else return;
+			}
+
+			yours.setAvailable(false);
 		}
 
 		if (is[0] > 0) {
 			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
 			if (c != null)
-				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]));
+				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, attacker, defender);
 		}
 		if (is[0] < 4) {
 			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
 			if (c != null)
-				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]));
+				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, attacker, defender);
 		}
 
 		if (is[1] > 0) {
 			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
 			if (c != null)
-				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]));
+				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, attacker, defender);
 		}
 		if (is[1] < 4) {
 			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
 			if (c != null)
-				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]));
+				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, attacker, defender);
 		}
 
 		postCombat();
@@ -1082,7 +1117,7 @@ public class Shoukan extends GlobalGame {
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1132,7 +1167,7 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1174,7 +1209,7 @@ public class Shoukan extends GlobalGame {
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1224,7 +1259,7 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1266,7 +1301,7 @@ public class Shoukan extends GlobalGame {
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 				killCard(to, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1309,7 +1344,7 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1409,7 +1444,7 @@ public class Shoukan extends GlobalGame {
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
 					SlotColumn sd = slts.get(i);
-					if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 						killCard(to, i);
 
 					if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1451,7 +1486,7 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
@@ -1493,7 +1528,7 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(to, i);
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == source)
@@ -1516,7 +1551,7 @@ public class Shoukan extends GlobalGame {
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn sd = slots.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
 					killCard(from, i);
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)

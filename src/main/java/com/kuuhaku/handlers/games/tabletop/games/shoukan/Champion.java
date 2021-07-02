@@ -266,6 +266,7 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public void setFlipped(boolean flipped) {
+		if (this.flipped && !flipped) defending = true;
 		this.flipped = flipped;
 	}
 
@@ -333,7 +334,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDefending() {
-		return flipped || defending || getStun() > 0 || getStasis() > 0;
+		return flipped || defending || isStasis() || isStunned() || isSleeping();
 	}
 
 	public void setDefending(boolean defending) {
@@ -594,7 +595,8 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public double getDodge() {
-		return Helper.clamp(dodge + mDodge + getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count() * 15, 0, 100);
+		double d = Helper.clamp(dodge + mDodge + getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count() * 15, 0, 100);
+		return Helper.roundTrunc((int) (d * 10), 5) / 10d;
 	}
 
 	public void setDodge(double dodge) {
@@ -853,6 +855,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setGravelocked(boolean gravelocked) {
 		this.gravelocked = gravelocked;
+	}
+
+	public boolean isDecoy() {
+		return card.getId().equals("DECOY");
 	}
 
 	public void reset() {
