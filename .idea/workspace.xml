@@ -16,10 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no cálculo de combate do Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no cálculo de combate do Shoukan" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1308,13 +1305,6 @@
       <workItem from="1625112927168" duration="2475000" />
       <workItem from="1625180887711" duration="696000" />
     </task>
-    <task id="LOCAL-04886" summary="Correções menores">
-      <created>1624678320521</created>
-      <option name="number" value="04886" />
-      <option name="presentableId" value="LOCAL-04886" />
-      <option name="project" value="LOCAL" />
-      <updated>1624678320521</updated>
-    </task>
     <task id="LOCAL-04887" summary="Correções menores">
       <created>1624678963429</created>
       <option name="number" value="04887" />
@@ -1651,7 +1641,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625250963021</updated>
     </task>
-    <option name="localTasksCounter" value="4935" />
+    <task id="LOCAL-04935" summary="Melhoria no cálculo de combate do Shoukan">
+      <created>1625251383846</created>
+      <option name="number" value="04935" />
+      <option name="presentableId" value="LOCAL-04935" />
+      <option name="project" value="LOCAL" />
+      <updated>1625251383846</updated>
+    </task>
+    <option name="localTasksCounter" value="4936" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
