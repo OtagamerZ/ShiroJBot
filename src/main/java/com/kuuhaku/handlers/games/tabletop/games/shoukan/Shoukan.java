@@ -800,7 +800,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(ON_ATTACK, yours, is[0], current, attacker, defender)) return;
 
 			if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
-				yours.setAvailable(false);
 				yours.resetAttribs();
 				his.resetAttribs();
 
@@ -828,7 +827,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(ON_DEFEND, his, is[1], next, attacker, defender)) return;
 
 			if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
-				yours.setAvailable(false);
 				yours.resetAttribs();
 				his.resetAttribs();
 
@@ -857,11 +855,12 @@ public class Shoukan extends GlobalGame {
 		boolean yDodge = yours.getDodge() > 0 && Helper.chance(yours.getDodge());
 		boolean hDodge = his.getDodge() > 0 && Helper.chance(his.getDodge());
 
+		yours.setAvailable(false);
 		yours.resetAttribs();
 		his.resetAttribs();
 
 		/* ATTACK SUCCESS */
-		{
+		if (yPower > hPower || (yPower == hPower && yDodge)) {
 			if (hDodge) {
 				if (applyEot(ON_MISS, current, is[0])) return;
 				if (applyEffect(ON_MISS, yours, is[0], current, attacker, defender)) return;
@@ -870,7 +869,7 @@ public class Shoukan extends GlobalGame {
 				if (applyEffect(ON_DODGE, his, is[1], next, attacker, defender)) return;
 
 				reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
-			} else if (yPower > hPower || (yPower == hPower && yDodge)) {
+			} else {
 				if (applyEot(POST_ATTACK, current, is[0])) return;
 				if (applyEffect(POST_ATTACK, yours, is[0], current, attacker, defender)) return;
 
@@ -920,113 +919,103 @@ public class Shoukan extends GlobalGame {
 					reportEvent(null, msg, true, false);
 				} else return;
 			}
-
-			yours.setAvailable(false);
 		}
 
 		/* ATTACK FAILED */
-		{
-			if (yPower < hPower || (yPower == hPower && hDodge)) {
-				if (applyEot(ON_SUICIDE, current, is[0])) return;
-				if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
+		else if (yPower < hPower || hDodge) {
+			if (applyEot(ON_SUICIDE, current, is[0])) return;
+			if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
 
-				if (applyEot(POST_DEFENSE, next, is[1])) return;
-				if (applyEffect(POST_DEFENSE, his, is[1], next, attacker, defender)) return;
+			if (applyEot(POST_DEFENSE, next, is[1])) return;
+			if (applyEffect(POST_DEFENSE, his, is[1], next, attacker, defender)) return;
 
-				float demonFac = 1;
-				if (combos.get(next).getRight() == Race.DEMON)
-					demonFac *= 1.25f;
-				if (combos.get(current).getRight() == Race.DEMON)
-					demonFac *= 1.33f;
+			float demonFac = 1;
+			if (combos.get(next).getRight() == Race.DEMON)
+				demonFac *= 1.25f;
+			if (combos.get(current).getRight() == Race.DEMON)
+				demonFac *= 1.33f;
 
-				if (yours.isDecoy()) {
-					killCard(current, is[0]);
-					reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " < " + hPower + ")", true, false);
-				} else if (his.isDecoy()) {
-					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-				}
-
-				boolean noDmg = (yours.isDefending() && !(yours.isSleeping() || yours.isStunned()))
-								|| yours.getBonus().getSpecialData().remove("noDamage") != null
-								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
-
-				Hand you = hands.get(current);
-				float dmg;
-				if (noDmg)
-					dmg = his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
-				else
-					dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
-
-				you.removeHp(Math.round(dmg * demonFac));
+			if (yours.isDecoy()) {
 				killCard(current, is[0]);
-
-				if (!postCombat()) {
-					String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
-							yours.getName(),
-							his.getCard().getName(),
-							yPower,
-							hPower,
-							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
-							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
-					);
-
-					reportEvent(null, msg, true, false);
-				} else return;
+				reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " < " + hPower + ")", true, false);
+			} else if (his.isDecoy()) {
+				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			yours.setAvailable(false);
+			boolean noDmg = (yours.isDefending() && !(yours.isSleeping() || yours.isStunned()))
+							|| yours.getBonus().getSpecialData().remove("noDamage") != null
+							|| (getCustom() != null && !getCustom().getBoolean("semdano"));
+
+			Hand you = hands.get(current);
+			float dmg;
+			if (noDmg)
+				dmg = his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+			else
+				dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
+
+			you.removeHp(Math.round(dmg * demonFac));
+			killCard(current, is[0]);
+
+			if (!postCombat()) {
+				String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
+						yours.getName(),
+						his.getCard().getName(),
+						yPower,
+						hPower,
+						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
+						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+				);
+
+				reportEvent(null, msg, true, false);
+			} else return;
 		}
 
 		/* ATTACK CLASHED */
-		{
-			if (yPower == hPower) {
-				if (applyEot(ON_SUICIDE, current, is[0])) return;
-				if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
+		else {
+			if (applyEot(ON_SUICIDE, current, is[0])) return;
+			if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
 
-				if (applyEot(BEFORE_DEATH, next, is[1])) return;
-				if (applyEffect(BEFORE_DEATH, his, is[1], next, attacker, defender)) return;
+			if (applyEot(BEFORE_DEATH, next, is[1])) return;
+			if (applyEffect(BEFORE_DEATH, his, is[1], next, attacker, defender)) return;
 
-				float demonFac = 1;
-				if (combos.get(next).getRight() == Race.DEMON)
-					demonFac *= 1.25f;
-				if (combos.get(current).getRight() == Race.DEMON)
-					demonFac *= 1.33f;
+			float demonFac = 1;
+			if (combos.get(next).getRight() == Race.DEMON)
+				demonFac *= 1.25f;
+			if (combos.get(current).getRight() == Race.DEMON)
+				demonFac *= 1.33f;
 
-				if (yours.isDecoy() && his.isDecoy()) {
-					killCard(current, is[0]);
-					killCard(next, is[1]);
-					reportEvent(null, "As duas cartas eram iscas!", true, false);
-				} else if (yours.isDecoy()) {
-					killCard(current, is[0]);
-					reportEvent(null, "Ambas as cartas foram destruídas? (" + yPower + " = " + hPower + ")", true, false);
-				} else if (his.isDecoy()) {
-					killCard(next, is[1]);
-					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-				}
-
-				float dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
-
-				Hand op = hands.get(next);
-				op.removeHp(Math.round(dmg * demonFac));
+			if (yours.isDecoy() && his.isDecoy()) {
 				killCard(current, is[0]);
 				killCard(next, is[1]);
-
-				if (applyEot(AFTER_DEATH, next, is[1])) return;
-				if (applyEffect(AFTER_DEATH, his, is[1], next, attacker, defender)) return;
-
-				if (!postCombat()) {
-					String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
-							yPower,
-							hPower,
-							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
-							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
-					);
-
-					reportEvent(null, msg, true, false);
-				} else return;
+				reportEvent(null, "As duas cartas eram iscas!", true, false);
+			} else if (yours.isDecoy()) {
+				killCard(current, is[0]);
+				reportEvent(null, "Ambas as cartas foram destruídas? (" + yPower + " = " + hPower + ")", true, false);
+			} else if (his.isDecoy()) {
+				killCard(next, is[1]);
+				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			yours.setAvailable(false);
+			float dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+
+			Hand op = hands.get(next);
+			op.removeHp(Math.round(dmg * demonFac));
+			killCard(current, is[0]);
+			killCard(next, is[1]);
+
+			if (applyEot(AFTER_DEATH, next, is[1])) return;
+			if (applyEffect(AFTER_DEATH, his, is[1], next, attacker, defender)) return;
+
+			if (!postCombat()) {
+				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
+						yPower,
+						hPower,
+						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
+						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+				);
+
+				reportEvent(null, msg, true, false);
+			} else return;
 		}
 
 		if (is[0] > 0) {
@@ -2359,7 +2348,11 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void close() {
+		listener.close();
+		recordLast();
+		super.close();
 		if (!isOpen()) return;
+
 		if (!draw && getCustom() == null) {
 			for (Side s : Side.values()) {
 				Account acc = AccountDAO.getAccount(hands.get(s).getUser().getId());
@@ -2419,10 +2412,6 @@ public class Shoukan extends GlobalGame {
 							u -> hands.values().stream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
 					));
 		}
-
-		listener.close();
-		recordLast();
-		super.close();
 	}
 
 	public Side getCurrentSide() {
