@@ -2348,6 +2348,7 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void close() {
+		if (!isOpen()) return;
 		listener.close();
 		recordLast();
 		super.close();
