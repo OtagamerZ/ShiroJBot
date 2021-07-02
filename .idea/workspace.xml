@@ -17,10 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no cálculo de combate do Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +132,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Edit As Language" value="Groovy&#10;JavaScript&#10;JAVA" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JupyterPython&#10;JSON&#10;TEXT&#10;CSS" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Set Highlighting Language" value="Groovy&#10;JAVA&#10;TypeScript JSX" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Set Highlighting Language" value="JSON&#10;Groovy&#10;JAVA&#10;TypeScript JSX" />
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -1310,13 +1308,6 @@
       <workItem from="1625112927168" duration="2475000" />
       <workItem from="1625180887711" duration="696000" />
     </task>
-    <task id="LOCAL-04885" summary="Correções menores">
-      <created>1624676606716</created>
-      <option name="number" value="04885" />
-      <option name="presentableId" value="LOCAL-04885" />
-      <option name="project" value="LOCAL" />
-      <updated>1624676606724</updated>
-    </task>
     <task id="LOCAL-04886" summary="Correções menores">
       <created>1624678320521</created>
       <option name="number" value="04886" />
@@ -1653,7 +1644,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625248906258</updated>
     </task>
-    <option name="localTasksCounter" value="4934" />
+    <task id="LOCAL-04934" summary="Melhoria no cálculo de combate do Shoukan">
+      <created>1625250963021</created>
+      <option name="number" value="04934" />
+      <option name="presentableId" value="LOCAL-04934" />
+      <option name="project" value="LOCAL" />
+      <updated>1625250963021</updated>
+    </task>
+    <option name="localTasksCounter" value="4935" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

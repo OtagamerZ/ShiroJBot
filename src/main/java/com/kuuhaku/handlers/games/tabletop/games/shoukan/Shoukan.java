@@ -678,12 +678,12 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						reportEvent(h,
-								"%s atacou %s causando %s de dano direto!%s".formatted(
+								"%s atacou %s causando %s de dano direto!%s%s".formatted(
 										c.getName(),
 										hands.get(next).getUser().getName(),
 										yPower,
-										(getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "")
-										+ (demonFac > 1 ? " (efeito de raça: +" + (Math.round(yPower * demonFac) - yPower) + " dano direto)" : "")
+										getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
+										demonFac > 1 ? " (efeito de raça: +" + Math.round(yPower * demonFac - yPower) + " dano direto causado)" : ""
 								)
 								, true, false);
 					}
@@ -912,7 +912,7 @@ public class Shoukan extends GlobalGame {
 							his.getCard().getName(),
 							yPower,
 							hPower,
-							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto causado)" : "",
+							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto causado)" : "",
 							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 					);
 
@@ -962,7 +962,7 @@ public class Shoukan extends GlobalGame {
 						his.getCard().getName(),
 						yPower,
 						hPower,
-						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
+						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)" : "",
 						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 				);
 
@@ -1010,7 +1010,7 @@ public class Shoukan extends GlobalGame {
 				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
 						yPower,
 						hPower,
-						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg - dmg / demonFac) + " dano direto sofrido)" : "",
+						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)" : "",
 						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 				);
 
