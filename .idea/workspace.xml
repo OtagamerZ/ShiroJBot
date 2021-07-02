@@ -1294,13 +1294,6 @@
       <workItem from="1625112927168" duration="2475000" />
       <workItem from="1625180887711" duration="696000" />
     </task>
-    <task id="LOCAL-04883" summary="Correções menores">
-      <created>1624666790886</created>
-      <option name="number" value="04883" />
-      <option name="presentableId" value="LOCAL-04883" />
-      <option name="project" value="LOCAL" />
-      <updated>1624666790886</updated>
-    </task>
     <task id="LOCAL-04884" summary="Correções menores">
       <created>1624667469216</created>
       <option name="number" value="04884" />
@@ -1637,7 +1630,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625141626855</updated>
     </task>
-    <option name="localTasksCounter" value="4932" />
+    <task id="LOCAL-04932" summary="Melhoria no cálculo de combate do Shoukan">
+      <created>1625247905386</created>
+      <option name="number" value="04932" />
+      <option name="presentableId" value="LOCAL-04932" />
+      <option name="project" value="LOCAL" />
+      <updated>1625247905387</updated>
+    </task>
+    <option name="localTasksCounter" value="4933" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

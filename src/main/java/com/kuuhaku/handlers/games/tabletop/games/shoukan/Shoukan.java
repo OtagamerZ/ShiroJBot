@@ -890,14 +890,16 @@ public class Shoukan extends GlobalGame {
 					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 				}
 
-				float dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
 				boolean noDmg = (his.isDefending() && !(his.isSleeping() || his.isStunned()))
 								|| his.getBonus().getSpecialData().remove("noDamage") != null
 								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
 
 				Hand op = hands.get(next);
+				float dmg;
 				if (noDmg)
-					dmg += yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+					dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+				else
+					dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
 
 				op.removeHp(Math.round(dmg * demonFac));
 				killCard(next, is[1]);
@@ -944,14 +946,16 @@ public class Shoukan extends GlobalGame {
 					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 				}
 
-				float dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
 				boolean noDmg = (yours.isDefending() && !(yours.isSleeping() || yours.isStunned()))
 								|| yours.getBonus().getSpecialData().remove("noDamage") != null
 								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
 
 				Hand you = hands.get(current);
+				float dmg;
 				if (noDmg)
-					dmg += his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+					dmg = his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+				else
+					dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
 
 				you.removeHp(Math.round(dmg * demonFac));
 				killCard(current, is[0]);
