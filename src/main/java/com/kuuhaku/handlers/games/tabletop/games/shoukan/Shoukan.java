@@ -2351,7 +2351,6 @@ public class Shoukan extends GlobalGame {
 		listener.close();
 		recordLast();
 		super.close();
-		if (!isOpen()) return;
 
 		if (!draw && getCustom() == null) {
 			for (Side s : Side.values()) {
