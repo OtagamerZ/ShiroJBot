@@ -513,6 +513,9 @@ public class Shoukan extends GlobalGame {
 								SlotColumn sc = getFirstAvailableSlot(current, true);
 
 								if (sc != null) {
+									t.addRedAtk(Math.round(t.getAltAtk() * 0.25f));
+									t.addRedDef(Math.round(t.getAltDef() * 0.25f));
+
 									Champion dp = t.copy();
 									dp.addRedAtk(Math.round(dp.getAltAtk() * 0.25f));
 									dp.addRedDef(Math.round(dp.getAltDef() * 0.25f));
