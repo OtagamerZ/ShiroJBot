@@ -16,7 +16,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no cálculo de combate do Shoukan" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1292,13 +1294,6 @@
       <workItem from="1625112927168" duration="2475000" />
       <workItem from="1625180887711" duration="696000" />
     </task>
-    <task id="LOCAL-04889" summary="Correções menores">
-      <created>1624897342050</created>
-      <option name="number" value="04889" />
-      <option name="presentableId" value="LOCAL-04889" />
-      <option name="project" value="LOCAL" />
-      <updated>1624897342050</updated>
-    </task>
     <task id="LOCAL-04890" summary="Correções menores">
       <created>1624899434130</created>
       <option name="number" value="04890" />
@@ -1635,7 +1630,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625252127461</updated>
     </task>
-    <option name="localTasksCounter" value="4938" />
+    <task id="LOCAL-04938" summary="Correções menores">
+      <created>1625528130588</created>
+      <option name="number" value="04938" />
+      <option name="presentableId" value="LOCAL-04938" />
+      <option name="project" value="LOCAL" />
+      <updated>1625528130589</updated>
+    </task>
+    <option name="localTasksCounter" value="4939" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1745,9 +1747,9 @@
     <MESSAGE value="Updated copyright notice" />
     <MESSAGE value="Adicionado cargos por tempo em call" />
     <MESSAGE value="Mudança de engine de script de BeanShell para Groovy" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Melhoria no cálculo de combate do Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no cálculo de combate do Shoukan" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
