@@ -134,6 +134,15 @@ public class Clan {
 				.orElse(null);
 	}
 
+	public ClanMember getNextInHierarchy() {
+		return members.stream()
+				.filter(cm -> !cm.isLeader())
+				.min(Comparator
+						.<ClanMember>comparingInt(cm -> cm.getRole().ordinal())
+						.thenComparing(ClanMember::getJoinedAt))
+				.orElse(null);
+	}
+
 	public ClanMember getMember(String id) {
 		return members.stream()
 				.filter(cm -> cm.getUid().equals(id))
@@ -149,7 +158,7 @@ public class Clan {
 
 	public void transfer() {
 		ClanMember leader = getLeader();
-		ClanMember sub = getSubLeader();
+		ClanMember sub = getNextInHierarchy();
 
 		leader.setRole(ClanHierarchy.SUBLEADER);
 		sub.setRole(ClanHierarchy.LEADER);
@@ -204,8 +213,9 @@ public class Clan {
 		ClanMember cm = getMember(id);
 		if (cm.isLeader()) {
 			transfer();
-			members.remove(cm);
 		}
+
+		members.remove(cm);
 		transactions.add(LogDAO.getUsername(id) + " saiu do clã.");
 	}
 
