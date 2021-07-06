@@ -386,7 +386,7 @@ public class ShiroEvents extends ListenerAdapter {
 					MemberDAO.saveMember(m);
 					try {
 						if (lvlUp && gc.isLevelNotif()) {
-							if (m.getLevel() % 210 == 0)
+							if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
 								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
 										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 										.queue();
@@ -394,7 +394,7 @@ public class ShiroEvents extends ListenerAdapter {
 								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
-						if (m.getLevel() % 210 == 0)
+						if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
 									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 									.queue();
