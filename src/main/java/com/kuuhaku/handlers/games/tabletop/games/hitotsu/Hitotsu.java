@@ -377,14 +377,14 @@ public class Hitotsu extends Game {
 				eb.addField("Carta atual", "(" + played.getLast().getCard().getAnime().toString() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName(), false);
 
 			List<Page> pages = new ArrayList<>();
-			List<List<KawaiponCard>> chunks = Helper.chunkify(seats.get(getCurrent().getId()).getCards(), 10);
+			List<List<KawaiponCard>> chunks = Helper.chunkify(seats.get(getCurrent().getId()).getCards(), 5);
 
 			int j = 0;
 			StringBuilder sb = new StringBuilder();
 			for (List<KawaiponCard> cards : chunks) {
 				for (int i = 0; i < cards.size(); i++) {
 					sb.append("**%s** - (%s)%s%s\n".formatted(
-							i + j * 10,
+							i + j * 5,
 							cards.get(i).getCard().getAnime(),
 							cards.get(i).getCard().getRarity().getEmote(),
 							cards.get(i).getName()
