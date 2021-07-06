@@ -354,7 +354,7 @@ public class Profile {
 
 	private static void drawPrestigeDetails(Graphics2D g2d, BufferedImage avatar, Color main, int lvl) {
 		int polyOffset = 30;
-		if (lvl >= 210) {
+		if (lvl >= 215) {
 			g2d.setColor(Color.black);
 			g2d.fillPolygon(new int[]{
 					38 + (avatar.getWidth() + 24) / 2,
@@ -397,7 +397,7 @@ public class Profile {
 			}, 8);
 		}
 
-		if (lvl >= 420) {
+		if (lvl >= 425) {
 			g2d.setColor(Color.black);
 			g2d.fillPolygon(new int[]{
 					38 + (avatar.getHeight() + 24) / 2 - polyOffset * 2,
