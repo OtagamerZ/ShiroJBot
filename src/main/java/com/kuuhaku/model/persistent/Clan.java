@@ -83,6 +83,7 @@ public class Clan {
 	public Clan(String name, String leader) {
 		this.name = name;
 		members.add(new ClanMember(leader, ClanHierarchy.LEADER));
+		transactions.add(LogDAO.getUsername(leader) + " criou o clã por 10.000 créditos.");
 	}
 
 	public Clan() {
