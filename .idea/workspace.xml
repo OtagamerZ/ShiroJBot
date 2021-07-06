@@ -17,9 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanHistoryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanHistoryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1295,13 +1294,7 @@
       <workItem from="1625086378333" duration="354000" />
       <workItem from="1625112927168" duration="2475000" />
       <workItem from="1625180887711" duration="696000" />
-    </task>
-    <task id="LOCAL-04890" summary="Correções menores">
-      <created>1624899434130</created>
-      <option name="number" value="04890" />
-      <option name="presentableId" value="LOCAL-04890" />
-      <option name="project" value="LOCAL" />
-      <updated>1624899434130</updated>
+      <workItem from="1625582191475" duration="289000" />
     </task>
     <task id="LOCAL-04891" summary="Correções menores">
       <created>1624899697060</created>
@@ -1639,7 +1632,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625528130589</updated>
     </task>
-    <option name="localTasksCounter" value="4939" />
+    <task id="LOCAL-04939" summary="Correções menores">
+      <created>1625581976463</created>
+      <option name="number" value="04939" />
+      <option name="presentableId" value="LOCAL-04939" />
+      <option name="project" value="LOCAL" />
+      <updated>1625581976463</updated>
+    </task>
+    <option name="localTasksCounter" value="4940" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
