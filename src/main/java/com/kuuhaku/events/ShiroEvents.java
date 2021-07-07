@@ -574,7 +574,7 @@ public class ShiroEvents extends ListenerAdapter {
 										case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
 										default -> "";
 									},
-									e.title().url()
+									e.title() != null ? e.title().url() : null
 							);
 
 					if (e.color() != null) eb.setColor(e.getParsedColor());
@@ -652,7 +652,7 @@ public class ShiroEvents extends ListenerAdapter {
 										case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
 										default -> "";
 									},
-									e.title().url()
+									e.title() != null ? e.title().url() : null
 							);
 
 					if (e.color() != null) eb.setColor(e.getParsedColor());
