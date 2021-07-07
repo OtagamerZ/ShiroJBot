@@ -72,6 +72,7 @@ import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
@@ -515,44 +516,44 @@ public class ShiroEvents extends ListenerAdapter {
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
 		User author = event.getUser();
+		if (BlacklistDAO.isBlacklisted(author)) return;
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+		long mins = ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), LocalDateTime.now());
+		if (gc.isAntiRaid() && mins < gc.getAntiRaidTime()) {
+			guild.kick(member).queue(s ->
+					Helper.logToChannel(
+							author,
+							false,
+							null,
+							"Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(Conta criada a " + mins + " minutos)`",
+							guild
+					), Helper::doNothing);
+			return;
+		}
+
+		String name = member.getEffectiveName();
+		if (gc.isMakeMentionable() && !Helper.regex(name, "[A-z0-9]{4}").find()) {
+			name = Unidecode.decode(name);
+		}
+
+		if (gc.isAntiHoist() && name.charAt(0) < 65) {
+			name = name.substring(1);
+		}
+
+		if (!name.equals(member.getEffectiveName())) {
+			if (name.length() < 2) {
+				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
+				name = names[Helper.rng(names.length, true)];
+			}
+
+			try {
+				event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
+			} catch (InsufficientPermissionException ignore) {
+			}
+		}
+
 		try {
-			if (BlacklistDAO.isBlacklisted(author)) return;
-			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-
-			long mins = ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), LocalDateTime.now());
-			if (gc.isAntiRaid() && mins < gc.getAntiRaidTime()) {
-				guild.kick(member).queue(s ->
-						Helper.logToChannel(
-								author,
-								false,
-								null,
-								"Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(Conta criada a " + mins + " minutos)`",
-								guild
-						), Helper::doNothing);
-				return;
-			}
-
-			String name = member.getEffectiveName();
-			if (gc.isMakeMentionable() && !Helper.regex(name, "[A-z0-9]{4}").find()) {
-				name = Unidecode.decode(name);
-			}
-
-			if (gc.isAntiHoist() && name.charAt(0) < 65) {
-				name = name.substring(1);
-			}
-
-			if (!name.equals(member.getEffectiveName())) {
-				if (name.length() < 2) {
-					String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
-					name = names[Helper.rng(names.length, true)];
-				}
-
-				try {
-					event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
-				} catch (InsufficientPermissionException ignore) {
-				}
-			}
-
 			if (!gc.getWelcomeMessage().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -620,7 +621,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 				Helper.logToChannel(author, false, null, "Um usuário entrou no servidor", guild);
 			}
-		} catch (Exception ignore) {
+		} catch (IOException ignore) {
 		}
 	}
 
@@ -628,13 +629,9 @@ public class ShiroEvents extends ListenerAdapter {
 	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
 		Guild guild = event.getGuild();
 		User author = event.getUser();
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
 		try {
-			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-
-			/*com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
-			m.setMarkForDelete(true);
-			MemberDAO.updateMemberConfigs(m);*/
-
 			if (!gc.getByeMessage().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -699,7 +696,7 @@ public class ShiroEvents extends ListenerAdapter {
 					chn.sendMessage(eb.build()).queue();
 				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
-		} catch (Exception ignore) {
+		} catch (IOException ignore) {
 		}
 	}
 
@@ -815,37 +812,34 @@ public class ShiroEvents extends ListenerAdapter {
 			} catch (NullPointerException ignore) {
 			}
 		} else {
-			try {
-				if (event.getMessage().getContentRaw().equalsIgnoreCase("silenciar")) {
-					Account acc = AccountDAO.getAccount(event.getAuthor().getId());
-					acc.setReceiveNotifs(false);
-					AccountDAO.saveAccount(acc);
+			if (event.getMessage().getContentRaw().equalsIgnoreCase("silenciar")) {
+				Account acc = AccountDAO.getAccount(event.getAuthor().getId());
+				acc.setReceiveNotifs(false);
+				AccountDAO.saveAccount(acc);
 
-					event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue(null, Helper::doNothing);
-					return;
-				}
-
-				event.getAuthor().openPrivateChannel().queue(c -> {
-					if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
-						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
-								.queue(s -> {
-									EmbedBuilder eb = new ColorlessEmbedBuilder()
-											.setDescription((event.getMessage().getContentRaw() + "\n\n" + (event.getMessage().getAttachments().size() > 0 ? "`Contém " + event.getMessage().getAttachments().size() + " anexos`" : "")).trim())
-											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
-											.setFooter(event.getAuthor().getId())
-											.setTimestamp(Instant.now());
-
-									for (String d : staffIds) {
-										Main.getInfo().getUserByID(d).openPrivateChannel()
-												.flatMap(ch -> ch.sendMessage(eb.build()))
-												.queue();
-									}
-									s.delete().queueAfter(1, TimeUnit.MINUTES);
-								}, Helper::doNothing);
-					}
-				});
-			} catch (Exception ignored) {
+				event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue(null, Helper::doNothing);
+				return;
 			}
+
+			event.getAuthor().openPrivateChannel().queue(c -> {
+				if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
+					c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
+							.queue(s -> {
+								EmbedBuilder eb = new ColorlessEmbedBuilder()
+										.setDescription((event.getMessage().getContentRaw() + "\n\n" + (event.getMessage().getAttachments().size() > 0 ? "`Contém " + event.getMessage().getAttachments().size() + " anexos`" : "")).trim())
+										.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
+										.setFooter(event.getAuthor().getId())
+										.setTimestamp(Instant.now());
+
+								for (String d : staffIds) {
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(ch -> ch.sendMessage(eb.build()))
+											.queue();
+								}
+								s.delete().queueAfter(1, TimeUnit.MINUTES);
+							}, Helper::doNothing);
+				}
+			});
 		}
 	}
 
@@ -935,36 +929,33 @@ public class ShiroEvents extends ListenerAdapter {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS) && h.size() >= gc.getNoSpamAmount() && guild.getSelfMember().canInteract(member)) {
-			try {
-				TextChannel ch = (TextChannel) channel;
+			TextChannel ch = (TextChannel) channel;
 
-				ch.deleteMessagesByIds(h.stream()
-						.map(Message::getId)
-						.collect(Collectors.toList())
-				).queue(null, Helper::doNothing);
+			ch.deleteMessagesByIds(h.stream()
+					.map(Message::getId)
+					.collect(Collectors.toList())
+			).queue(null, Helper::doNothing);
 
-				channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
-					msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-					Helper.logToChannel(member.getUser(), false, null, "SPAM detectado no canal " + ch.getAsMention(), guild, msg.getContentRaw());
-				});
+			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
+				msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
+				Helper.logToChannel(member.getUser(), false, null, "SPAM detectado no canal " + ch.getAsMention(), guild, msg.getContentRaw());
+			});
 
-				MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
+			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
 
-				m.setReason("Auto-mute por SPAM no canal " + ch.getAsMention());
-				m.mute(gc.getMuteTime());
+			m.setReason("Auto-mute por SPAM no canal " + ch.getAsMention());
+			m.mute(gc.getMuteTime());
 
-				List<PermissionOverrideAction> act = new ArrayList<>();
-				for (TextChannel chn : guild.getTextChannels()) {
-					act.add(chn.putPermissionOverride(member).deny(Helper.ALL_MUTE_PERMISSIONS));
-				}
-
-				RestAction.allOf(act)
-						.queue(s -> {
-							Helper.logToChannel(guild.getSelfMember().getUser(), false, null, member.getAsMention() + " foi silenciado por " + Helper.toStringDuration(gc.getMuteTime()) + ".\nRazão: `" + m.getReason() + "`", guild);
-							MemberDAO.saveMutedMember(m);
-						}, Helper::doNothing);
-			} catch (Exception ignore) {
+			List<PermissionOverrideAction> act = new ArrayList<>();
+			for (TextChannel chn : guild.getTextChannels()) {
+				act.add(chn.putPermissionOverride(member).deny(Helper.ALL_MUTE_PERMISSIONS));
 			}
+
+			RestAction.allOf(act)
+					.queue(s -> {
+						Helper.logToChannel(guild.getSelfMember().getUser(), false, null, member.getAsMention() + " foi silenciado por " + Helper.toStringDuration(gc.getMuteTime()) + ".\nRazão: `" + m.getReason() + "`", guild);
+						MemberDAO.saveMutedMember(m);
+					}, Helper::doNothing);
 		}
 	}
 
