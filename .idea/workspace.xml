@@ -18,7 +18,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,17 +207,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1305,21 +1293,7 @@
       <workItem from="1625086378333" duration="354000" />
       <workItem from="1625112927168" duration="2475000" />
       <workItem from="1625180887711" duration="696000" />
-      <workItem from="1625582191475" duration="289000" />
-    </task>
-    <task id="LOCAL-04891" summary="Correções menores">
-      <created>1624899697060</created>
-      <option name="number" value="04891" />
-      <option name="presentableId" value="LOCAL-04891" />
-      <option name="project" value="LOCAL" />
-      <updated>1624899697060</updated>
-    </task>
-    <task id="LOCAL-04892" summary="Correções menores">
-      <created>1624899790078</created>
-      <option name="number" value="04892" />
-      <option name="presentableId" value="LOCAL-04892" />
-      <option name="project" value="LOCAL" />
-      <updated>1624899790078</updated>
+      <workItem from="1625582191475" duration="611000" />
     </task>
     <task id="LOCAL-04893" summary="Correções menores">
       <created>1624899866139</created>
@@ -1650,7 +1624,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625581976463</updated>
     </task>
-    <option name="localTasksCounter" value="4940" />
+    <task id="LOCAL-04940" summary="Correções menores">
+      <created>1625582633047</created>
+      <option name="number" value="04940" />
+      <option name="presentableId" value="LOCAL-04940" />
+      <option name="project" value="LOCAL" />
+      <updated>1625582633048</updated>
+    </task>
+    <task id="LOCAL-04941" summary="Correções menores">
+      <created>1625582759656</created>
+      <option name="number" value="04941" />
+      <option name="presentableId" value="LOCAL-04941" />
+      <option name="project" value="LOCAL" />
+      <updated>1625582759657</updated>
+    </task>
+    <option name="localTasksCounter" value="4942" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
