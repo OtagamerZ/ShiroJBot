@@ -113,7 +113,7 @@ public class Music {
             eb.addField("Postado por:", at.getInfo().author, true);
             eb.addField("Duração:", String.valueOf(Helper.round(((double) at.getDuration() / 1000) / 60, 2)).replace(".", ":"), true);
 
-            channel.sendMessage(eb.build()).queue();
+            channel.sendMessageEmbeds(eb.build()).queue();
         } catch (IOException e) {
             channel.sendMessage(I18n.getString("err_music-data")).queue();
         }
@@ -155,7 +155,7 @@ public class Music {
             pages.add(new Page(PageType.EMBED, eb.build()));
         }
 
-        channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
+        channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
     }
 
     public static void setVolume(TextChannel channel, int volume) {

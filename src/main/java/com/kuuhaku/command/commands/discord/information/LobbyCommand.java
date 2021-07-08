@@ -100,7 +100,7 @@ public class LobbyCommand implements Executable {
 					pages.add(new Page(PageType.EMBED, eb.build()));
 				}
 
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
 			}
@@ -122,7 +122,7 @@ public class LobbyCommand implements Executable {
 					pages.add(new Page(PageType.EMBED, eb.build()));
 				}
 
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
 			}

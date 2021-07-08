@@ -542,13 +542,13 @@ public class Deck {
 
 		return """
 					   __**:crossed_swords: | Cartas Senshi:** %s__
-					   					   				
+					   					   					   				
 					   :large_orange_diamond: | Efeito primário: %s (%s)
 					   :small_orange_diamond: | Efeito secundário: %s (%s)
 					   :shield: | Peso evogear: %s
 					   :thermometer: | Custo médio de mana: %s
 					   :recycle: | Divergência do meta: %s/%s/%s (%s)
-					   					   				
+					   					   					   				
 					   """
 					   .formatted(
 							   champions.size(),

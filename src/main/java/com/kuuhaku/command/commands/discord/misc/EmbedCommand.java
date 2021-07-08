@@ -60,7 +60,7 @@ public class EmbedCommand implements Executable {
 
 				if (Helper.hasPermission(member, PrivilegeLevel.MOD))
 					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
-							.embed(eb.build())
+							.setEmbeds(eb.build())
 							.queue(s ->
 									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
@@ -73,14 +73,14 @@ public class EmbedCommand implements Executable {
 														.queue();
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
-											, ms -> channel.sendMessage(eb.build())
+											, ms -> channel.sendMessageEmbeds(eb.build())
 													.flatMap(r -> m.delete())
 													.flatMap(r -> ms.delete())
 													.queue()
 									), Helper::doNothing
 							);
 				else
-					channel.sendMessage(eb.build()).flatMap(s -> m.delete()).queue();
+					channel.sendMessageEmbeds(eb.build()).flatMap(s -> m.delete()).queue();
 			} catch (IllegalStateException ex) {
 				m.editMessage("❌ | JSON em formato inválido, um exemplo da estrutura do embed pode ser encontrado em https://api.shirojbot.site/embedjson").queue();
 			} catch (Exception e) {

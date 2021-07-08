@@ -113,7 +113,7 @@ public class TradeCommand implements Executable {
 	}
 
 	private void sendTradeWindow(User author, TextChannel channel, Guild guild, User tgt, Map<String, TradeContent> offers, Account acc, Account tacc, EmbedBuilder eb) {
-		channel.sendMessage(eb.build()).queue(msg -> {
+		channel.sendMessageEmbeds(eb.build()).queue(msg -> {
 			SimpleMessageListener sml = new SimpleMessageListener() {
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -212,7 +212,7 @@ public class TradeCommand implements Executable {
 								.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 								.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
-						msg.editMessage(eb.build()).queue(null, t -> {
+						msg.editMessageEmbeds(eb.build()).queue(null, t -> {
 							msg.delete().queue(null, Helper::doNothing);
 							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
 						});
@@ -290,7 +290,7 @@ public class TradeCommand implements Executable {
 								.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 								.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
-						msg.editMessage(eb.build()).queue(null, t -> {
+						msg.editMessageEmbeds(eb.build()).queue(null, t -> {
 							msg.delete().queue(null, Helper::doNothing);
 							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
 						});

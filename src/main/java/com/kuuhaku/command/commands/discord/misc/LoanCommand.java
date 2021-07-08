@@ -78,7 +78,7 @@ public class LoanCommand implements Executable {
 			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.setFooter("Não há prazo para debitar a dívida, todo crédito que você ganhar reduzirá a dívida.");
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();

@@ -69,7 +69,7 @@ public class EmoteCommand implements Executable {
 				);
 			}
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 		} catch (IOException e) {
 			channel.sendMessage("❌ | Ocorreu um erro ao tentar recuperar a imagem do emote.").queue();
 		}

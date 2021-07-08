@@ -83,6 +83,6 @@ public class BotInfoCommand implements Executable {
 				)
 				.setImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff&v=" + Helper.generateRandomHash(5));
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

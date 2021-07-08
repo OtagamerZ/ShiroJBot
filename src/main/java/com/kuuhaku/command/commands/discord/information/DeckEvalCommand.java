@@ -53,6 +53,6 @@ public class DeckEvalCommand implements Executable {
 		else
 			eb.setDescription(dk.getTips().isEmpty() ? "Seu deck está bem distribuído, parabéns!" : String.join("\n\n", dk.getTips()));
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

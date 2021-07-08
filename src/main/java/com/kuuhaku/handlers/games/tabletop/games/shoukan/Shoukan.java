@@ -2408,7 +2408,7 @@ public class Shoukan extends GlobalGame {
 											}
 
 											m.editMessage(mb.getUser().getAsMention())
-													.embed(eb.build())
+													.setEmbeds(eb.build())
 													.queue(null, Helper::doNothing);
 										});
 							}), true, 1, TimeUnit.MINUTES,

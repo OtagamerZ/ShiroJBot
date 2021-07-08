@@ -33,7 +33,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +53,7 @@ public class ShoukanDeck {
 		this.clan = null;
 	}
 
-	public BufferedImage view(Deck dk) throws IOException {
+	public BufferedImage view(Deck dk) {
 		List<Champion> champs = dk.getChampions();
 		List<Equipment> equips = dk.getEquipments();
 		List<Field> fields = dk.getFields();

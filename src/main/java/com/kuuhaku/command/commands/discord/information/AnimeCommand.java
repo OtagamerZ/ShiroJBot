@@ -137,7 +137,7 @@ public class AnimeCommand implements Executable {
 					eb.addField("Gêneros:", media.genres().stream().map(s -> "`" + s + "`").collect(Collectors.joining(", ")), false);
 
 					m.delete().queue();
-					channel.sendMessage(eb.build()).queue();
+					channel.sendMessageEmbeds(eb.build()).queue();
 				} catch (IllegalStateException | IllegalArgumentException e) {
 					m.editMessage(I18n.getString("err_anime-not-found")).queue();
 					Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);

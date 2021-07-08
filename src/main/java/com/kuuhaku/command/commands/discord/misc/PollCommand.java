@@ -107,7 +107,7 @@ public class PollCommand implements Executable {
 						if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
 						ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), emote);
 						eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
-						m.editMessage(eb.build()).queue();
+						m.editMessageEmbeds(eb.build()).queue();
 					});
 				}
 				buttons.put("❌", (mb, msg) -> {
@@ -132,13 +132,13 @@ public class PollCommand implements Executable {
 					if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
 					ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D");
 					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
-					m.editMessage(eb.build()).queue();
+					m.editMessageEmbeds(eb.build()).queue();
 				});
 				put("\uD83D\uDC4E", (mb, msg) -> {
 					if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
 					ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E");
 					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
-					m.editMessage(eb.build()).queue();
+					m.editMessageEmbeds(eb.build()).queue();
 				});
 				put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) {
@@ -163,14 +163,14 @@ public class PollCommand implements Executable {
 			gc.setSuggestionChannel(null);
 			GuildDAO.updateGuildSettings(gc);
 
-			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
-			else channel.sendMessage(eb.build()).queue(sendSimple);
+			if (options != null) channel.sendMessageEmbeds(eb.build()).queue(sendOptions);
+			else channel.sendMessageEmbeds(eb.build()).queue(sendSimple);
 		} else {
 			try {
 				if (options != null)
-					gc.getSuggestionChannel().sendMessage(eb.build()).queue(sendOptions);
+					gc.getSuggestionChannel().sendMessageEmbeds(eb.build()).queue(sendOptions);
 				else
-					gc.getSuggestionChannel().sendMessage(eb.build()).queue(sendSimple);
+					gc.getSuggestionChannel().sendMessageEmbeds(eb.build()).queue(sendSimple);
 			} catch (Exception e) {
 				try {
 					if (gc.getSuggestionChannel() == null)
@@ -201,8 +201,8 @@ public class PollCommand implements Executable {
 		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(neg, (pos + neg)), 1) + "%", true);
 		eb.setFooter(null);
 
-		msg.editMessage(eb.build()).queue(null, Helper::doNothing);
-		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
+		msg.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+		member.getUser().openPrivateChannel().queue(c -> c.sendMessageEmbeds(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
 		msg.clearReactions().queue(null, Helper::doNothing);
 	}
 
@@ -242,8 +242,8 @@ public class PollCommand implements Executable {
 		for (MessageEmbed.Field field : fields) {
 			eb.addField(field);
 		}
-		msg.editMessage(eb.build()).queue(null, Helper::doNothing);
-		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
+		msg.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+		member.getUser().openPrivateChannel().queue(c -> c.sendMessageEmbeds(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
 		msg.clearReactions().queue(null, Helper::doNothing);
 	}
 }

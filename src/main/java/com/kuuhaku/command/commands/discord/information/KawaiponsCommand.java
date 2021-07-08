@@ -93,7 +93,7 @@ public class KawaiponsCommand implements Executable {
                     eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
                     m.delete().queue();
-                    channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "jpg")).queue();
+                    channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "jpg")).queue();
                     return;
                 }
 
@@ -209,7 +209,7 @@ public class KawaiponsCommand implements Executable {
                 .setImage(url);
         m.delete().queue();
 
-        channel.sendMessage(eb.build()).queue();
+        channel.sendMessageEmbeds(eb.build()).queue();
     }
 
     private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) {
@@ -225,7 +225,7 @@ public class KawaiponsCommand implements Executable {
                 .setImage(url);
         m.delete().queue();
 
-        channel.sendMessage(eb.build()).queue();
+        channel.sendMessageEmbeds(eb.build()).queue();
     }
 
     private void send(User author, MessageChannel channel, Message m, BufferedImage cards, Race r, String s) {
@@ -246,6 +246,6 @@ public class KawaiponsCommand implements Executable {
         }
         m.delete().queue();
 
-        channel.sendMessage(eb.build()).queue();
+        channel.sendMessageEmbeds(eb.build()).queue();
     }
 }

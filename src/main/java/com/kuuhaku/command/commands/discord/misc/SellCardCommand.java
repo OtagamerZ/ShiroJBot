@@ -119,7 +119,7 @@ public class SellCardCommand implements Executable {
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage(eb.build())
+			channel.sendMessageEmbeds(eb.build())
 					.queue(s -> Pages.buttonize(s, btns, true,
 							1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),

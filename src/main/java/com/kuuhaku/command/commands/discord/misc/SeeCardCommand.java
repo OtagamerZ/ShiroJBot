@@ -91,7 +91,7 @@ public class SeeCardCommand implements Executable {
 			}
 			eb.setImage("attachment://kawaipon.png");
 
-			channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(d.drawCard(false), "s_" + d.getCard().getId(), "png"), "kawaipon.png").queue();
+			channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(d.drawCard(false), "s_" + d.getCard().getId(), "png"), "kawaipon.png").queue();
 		} else {
 			Card tc = CardDAO.getCard(args[0], true);
 			if (tc == null) {
@@ -124,9 +124,9 @@ public class SeeCardCommand implements Executable {
 				BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
 
 				if (cards.contains(card))
-					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
+					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
 				else
-					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
+					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
 			} catch (IOException e) {
 				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
