@@ -706,7 +706,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		Guild guild = event.getGuild();
 		User author = event.getUser();
-		if (author.isBot()) return;
+		if (author.isBot() || StarboardDAO.isStarboarded(msg)) return;
 
 		int stars = msg.getReactions().stream()
 				.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("⭐"))
@@ -735,6 +735,8 @@ public class ShiroEvents extends ListenerAdapter {
 			chn.sendMessage(":star: | " + msg.getTextChannel().getAsMention())
 					.setEmbeds(eb.build())
 					.queue(null, Helper::doNothing);
+
+			StarboardDAO.starboard(msg);
 		}
 	}
 
