@@ -294,23 +294,20 @@ public class Helper {
 	}
 
 	public static Color colorThief(String url) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-		BufferedImage icon = ImageIO.read(con.getInputStream());
+		BufferedImage icon = ImageIO.read(getImage(url));
 
+		return colorThief(icon);
+	}
+
+	public static Color colorThief(BufferedImage image) {
 		try {
-			if (icon != null) {
-				int[] colors = ColorThief.getColor(icon, 5, false);
+			if (image != null) {
+				int[] colors = ColorThief.getColor(image, 5, false);
 				return new Color(colors[0], colors[1], colors[2]);
 			} else return getRandomColor();
 		} catch (NullPointerException e) {
 			return getRandomColor();
 		}
-	}
-
-	public static Color colorThief(BufferedImage image) {
-		int[] colors = ColorThief.getColor(image, 5, false);
-		return new Color(colors[0], colors[1], colors[2]);
 	}
 
 	public static void spawnAd(MessageChannel channel) {
