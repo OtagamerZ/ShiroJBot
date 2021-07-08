@@ -17,7 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores e criação do comando de Starboard">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +132,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Edit As Language" value="Groovy&#10;JavaScript&#10;JAVA" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JupyterPython&#10;JSON&#10;TEXT&#10;CSS" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Set Highlighting Language" value="JSON&#10;Groovy&#10;JAVA&#10;TypeScript JSX" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Set Highlighting Language" value="Groovy&#10;JSON&#10;JAVA&#10;TypeScript JSX" />
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -1306,21 +1307,7 @@
       <workItem from="1625180887711" duration="696000" />
       <workItem from="1625582191475" duration="611000" />
       <workItem from="1625668875960" duration="888000" />
-      <workItem from="1625746353458" duration="5119000" />
-    </task>
-    <task id="LOCAL-04898" summary="Correções menores">
-      <created>1624909929718</created>
-      <option name="number" value="04898" />
-      <option name="presentableId" value="LOCAL-04898" />
-      <option name="project" value="LOCAL" />
-      <updated>1624909929718</updated>
-    </task>
-    <task id="LOCAL-04899" summary="Correções menores">
-      <created>1624910955323</created>
-      <option name="number" value="04899" />
-      <option name="presentableId" value="LOCAL-04899" />
-      <option name="project" value="LOCAL" />
-      <updated>1624910955323</updated>
+      <workItem from="1625746353458" duration="11317000" />
     </task>
     <task id="LOCAL-04900" summary="Correções menores">
       <created>1624911020569</created>
@@ -1651,7 +1638,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625752924624</updated>
     </task>
-    <option name="localTasksCounter" value="4947" />
+    <task id="LOCAL-04947" summary="Correções menores e criação do comando de Starboard">
+      <created>1625753119540</created>
+      <option name="number" value="04947" />
+      <option name="presentableId" value="LOCAL-04947" />
+      <option name="project" value="LOCAL" />
+      <updated>1625753119540</updated>
+    </task>
+    <task id="LOCAL-04948" summary="Correções menores e criação do comando de Starboard">
+      <created>1625753234339</created>
+      <option name="number" value="04948" />
+      <option name="presentableId" value="LOCAL-04948" />
+      <option name="project" value="LOCAL" />
+      <updated>1625753234339</updated>
+    </task>
+    <option name="localTasksCounter" value="4949" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
