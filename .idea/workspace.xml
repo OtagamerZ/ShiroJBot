@@ -16,9 +16,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores e criação do comando de Starboard">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,17 +207,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1307,14 +1295,7 @@
       <workItem from="1625180887711" duration="696000" />
       <workItem from="1625582191475" duration="611000" />
       <workItem from="1625668875960" duration="888000" />
-      <workItem from="1625746353458" duration="11317000" />
-    </task>
-    <task id="LOCAL-04900" summary="Correções menores">
-      <created>1624911020569</created>
-      <option name="number" value="04900" />
-      <option name="presentableId" value="LOCAL-04900" />
-      <option name="project" value="LOCAL" />
-      <updated>1624911020569</updated>
+      <workItem from="1625746353458" duration="13483000" />
     </task>
     <task id="LOCAL-04901" summary="Correções menores">
       <created>1624911352683</created>
@@ -1652,7 +1633,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625753234339</updated>
     </task>
-    <option name="localTasksCounter" value="4949" />
+    <task id="LOCAL-04949" summary="Correções menores">
+      <created>1625774849285</created>
+      <option name="number" value="04949" />
+      <option name="presentableId" value="LOCAL-04949" />
+      <option name="project" value="LOCAL" />
+      <updated>1625774849285</updated>
+    </task>
+    <option name="localTasksCounter" value="4950" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1762,9 +1750,9 @@
     <MESSAGE value="Adicionado cargos por tempo em call" />
     <MESSAGE value="Mudança de engine de script de BeanShell para Groovy" />
     <MESSAGE value="Melhoria no cálculo de combate do Shoukan" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Correções menores e criação do comando de Starboard" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores e criação do comando de Starboard" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
