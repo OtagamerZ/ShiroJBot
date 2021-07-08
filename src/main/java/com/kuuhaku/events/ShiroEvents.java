@@ -695,7 +695,13 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
-		Message msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+		Message msg;
+		try {
+			msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+		} catch (InsufficientPermissionException e) {
+			return;
+		}
+
 		Guild guild = event.getGuild();
 		User author = event.getUser();
 		if (author.isBot()) return;
