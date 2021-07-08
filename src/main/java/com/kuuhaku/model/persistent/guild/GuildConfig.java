@@ -77,6 +77,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String generalChannel = "";
 
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String starboardChannel = "";
+
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
 	private String welcomeMessage = "Seja bem-vindo(a) ao %guild%, %user%!";
@@ -100,8 +103,11 @@ public class GuildConfig {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int noSpamAmount = 5;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 10")
 	private int antiRaidTime = 10;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 3")
+	private int starRequirement = 3;
 
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
@@ -300,6 +306,14 @@ public class GuildConfig {
 		this.generalChannel = Helper.getOr(generalChannel, "");
 	}
 
+	public TextChannel getStarboardChannel() {
+		return Main.getInfo().getGuildByID(guildId).getTextChannelById(Helper.getOr(starboardChannel, "1"));
+	}
+
+	public void setStarboardChannel(String starboardChannel) {
+		this.starboardChannel = Helper.getOr(starboardChannel, "");
+	}
+
 	public String getWelcomeMessage() {
 		return welcomeMessage;
 	}
@@ -377,6 +391,14 @@ public class GuildConfig {
 
 	public void setAntiRaidTime(int antiRaidTime) {
 		this.antiRaidTime = antiRaidTime;
+	}
+
+	public int getStarRequirement() {
+		return starRequirement;
+	}
+
+	public void setStarRequirement(int starRequirement) {
+		this.starRequirement = starRequirement;
 	}
 
 	public boolean isLevelNotif() {

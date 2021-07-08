@@ -333,7 +333,7 @@ public class Account {
 					eb.setFooter("Data do último voto: " + lastVoted);
 
 					Main.getInfo().getUserByID(uid).openPrivateChannel()
-							.flatMap(s -> s.sendMessage(eb.build()))
+							.flatMap(s -> s.sendMessageEmbeds(eb.build()))
 							.queue(null, e -> remind = false);
 				} catch (NullPointerException ignore) {
 				} finally {

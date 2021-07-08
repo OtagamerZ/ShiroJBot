@@ -92,7 +92,7 @@ public class BuyRoleCommand implements Executable {
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 			return;

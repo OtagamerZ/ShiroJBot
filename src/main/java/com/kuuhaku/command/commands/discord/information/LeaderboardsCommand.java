@@ -107,6 +107,6 @@ public class LeaderboardsCommand implements Executable {
 				})
 				.setDescription(sb.toString());
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

@@ -166,7 +166,7 @@ public class TwitchEvents {
 				acc.addCredit(5000, this.getClass());
 				acc.setFollower(true);
 				AccountDAO.saveAccount(acc);
-				c.sendMessage(eb.build()).queue(null, Helper::doNothing);
+				c.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 			} catch (RuntimeException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}

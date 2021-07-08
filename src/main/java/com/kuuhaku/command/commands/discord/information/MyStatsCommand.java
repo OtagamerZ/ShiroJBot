@@ -158,7 +158,7 @@ public class MyStatsCommand implements Executable {
 			categories.put("\uD83D\uDCCB", new Page(PageType.EMBED, eb.build()));
 		}
 
-		channel.sendMessage((MessageEmbed) categories.get("\uD83D\uDD23").getContent()).queue(s ->
+		channel.sendMessageEmbeds((MessageEmbed) categories.get("\uD83D\uDD23").getContent()).queue(s ->
 				Pages.categorize(s, categories, 1, TimeUnit.MINUTES)
 		);
 	}

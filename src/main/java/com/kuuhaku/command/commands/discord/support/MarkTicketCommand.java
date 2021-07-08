@@ -75,7 +75,7 @@ public class MarkTicketCommand implements Executable {
 
 		for (String dev : ShiroInfo.getStaff()) {
 			Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
-					.flatMap(m -> m.sendMessage(eb.build()))
+					.flatMap(m -> m.sendMessageEmbeds(eb.build()))
 					.complete();
 			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
 					.flatMap(Message::delete)

@@ -99,7 +99,7 @@ public class ShipCommand implements Executable {
 
 			MessageBuilder mb = new MessageBuilder();
 			mb.append(sb.toString());
-			mb.setEmbed(eb.build());
+			mb.setEmbeds(eb.build());
 
 			channel.sendMessage(mb.build()).addFile(baos.toByteArray(), "ship.png").queue();
 		} catch (IOException e) {

@@ -66,7 +66,7 @@ public class ColorTesterCommand implements Executable {
 			eb.setTitle(I18n.getString("str_color", args[0]));
 			eb.setThumbnail("attachment://color.png");
 
-			channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "color.png").queue();
+			channel.sendMessageEmbeds(eb.build()).addFile(baos.toByteArray(), "color.png").queue();
 
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();

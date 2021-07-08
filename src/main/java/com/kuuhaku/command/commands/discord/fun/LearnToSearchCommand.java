@@ -52,6 +52,6 @@ public class LearnToSearchCommand implements Executable {
 		eb.setDescription("[Clique aqui para ver.](https://pt-br.lmgtfy.com/?q=" + URLEncoder.encode(String.join(" ", args), StandardCharsets.UTF_8) + "&iie=1)");
 		eb.setThumbnail("https://img.icons8.com/cotton/2x/checkmark.png");
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

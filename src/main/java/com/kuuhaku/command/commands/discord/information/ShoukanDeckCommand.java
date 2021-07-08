@@ -36,7 +36,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 @Command(
 		name = "deck",
@@ -52,67 +51,52 @@ public class ShoukanDeckCommand implements Executable {
 
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			if (Helper.containsAny(args, "daily", "diario")) {
-				try {
-					Deck dk = Helper.getDailyDeck();
+				Deck dk = Helper.getDailyDeck();
 
-					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(dk);
+				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				BufferedImage cards = kb.view(dk);
 
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setTitle(":date: | Deck diário")
-							.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 30 cartas Senshi joguem. Ganhar usando ele premiará seu Exceed com 5x mais pontos de influência (PDI).")
-							.setImage("attachment://deck.jpg");
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle(":date: | Deck diário")
+						.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 30 cartas Senshi joguem. Ganhar usando ele premiará seu Exceed com 5x mais pontos de influência (PDI).")
+						.setImage("attachment://deck.jpg");
 
-					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
-				} catch (IOException e) {
-					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
+				m.delete().queue();
+				channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 			} else if (Helper.containsAny(args, "meta")) {
-				try {
-					Deck dk = CardDAO.getMetaDeck();
+				Deck dk = CardDAO.getMetaDeck();
 
-					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(dk);
+				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				BufferedImage cards = kb.view(dk);
 
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setTitle(":date: | Deck meta")
-							.setDescription("O deck meta reflete as cartas mais utilizadas pela comunidade (não necessáriamente sendo a melhor combinação possível).")
-							.setImage("attachment://deck.jpg");
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle(":date: | Deck meta")
+						.setDescription("O deck meta reflete as cartas mais utilizadas pela comunidade (não necessáriamente sendo a melhor combinação possível).")
+						.setImage("attachment://deck.jpg");
 
-					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
-				} catch (IOException e) {
-					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
+				m.delete().queue();
+				channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 			} else {
-				try {
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-					Deck dk = kp.getDeck();
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+				Deck dk = kp.getDeck();
 
-					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(dk);
+				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				BufferedImage cards = kb.view(dk);
 
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setTitle(":beginner: | Deck de " + author.getName())
-							.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
-							.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
-							.setImage("attachment://deck.jpg");
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle(":beginner: | Deck de " + author.getName())
+						.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
+						.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
+						.setImage("attachment://deck.jpg");
 
-					m.delete().queue();
-					if (showPrivate) {
-						author.openPrivateChannel()
-								.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
-								.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
-								.queue(null, Helper::doNothing);
-					} else {
-						channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
-					}
-				} catch (IOException e) {
-					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				m.delete().queue();
+				if (showPrivate) {
+					author.openPrivateChannel()
+							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+							.queue(null, Helper::doNothing);
+				} else {
+					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 				}
 			}
 		});

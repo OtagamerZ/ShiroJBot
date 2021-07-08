@@ -50,6 +50,6 @@ public class ExceedPaletteCommand implements Executable {
 			eb.addField(TagIcons.getExceed(ex) + " | " + ex.getName() + ":", String.format("#%02x%02x%02x", ex.getPalette().getRed(), ex.getPalette().getGreen(), ex.getPalette().getBlue()), true);
 		}
 		eb.setThumbnail("https://image.flaticon.com/icons/png/512/564/564232.png");
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

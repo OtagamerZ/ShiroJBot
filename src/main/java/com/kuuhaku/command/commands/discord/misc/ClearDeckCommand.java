@@ -43,7 +43,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -78,57 +77,52 @@ public class ClearDeckCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
-			try {
-				File f = Helper.writeAndGet(sd.view(dk), "deque", "jpg");
-				channel.sendMessage(eb.build()).addFile(f)
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
+			File f = Helper.writeAndGet(sd.view(dk), "deque", "jpg");
+			channel.sendMessageEmbeds(eb.build()).addFile(f)
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 
-									Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
-									Deck fdk = fkp.getDeck();
+								Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
+								Deck fdk = fkp.getDeck();
 
-									for (Champion c : fdk.getChampions()) {
-										Market mk = new Market(
-												author.getId(),
-												new KawaiponCard(c.getCard(), false),
-												9999999
-										);
-										MarketDAO.saveCard(mk);
-									}
-									fdk.getChampions().clear();
+								for (Champion c : fdk.getChampions()) {
+									Market mk = new Market(
+											author.getId(),
+											new KawaiponCard(c.getCard(), false),
+											9999999
+									);
+									MarketDAO.saveCard(mk);
+								}
+								fdk.getChampions().clear();
 
-									for (Equipment e : fdk.getEquipments()) {
-										Market mk = new Market(
-												author.getId(),
-												e,
-												9999999
-										);
-										MarketDAO.saveCard(mk);
-									}
-									fdk.getEquipments().clear();
+								for (Equipment e : fdk.getEquipments()) {
+									Market mk = new Market(
+											author.getId(),
+											e,
+											9999999
+									);
+									MarketDAO.saveCard(mk);
+								}
+								fdk.getEquipments().clear();
 
-									for (Field fd : fdk.getFields()) {
-										Market mk = new Market(
-												author.getId(),
-												fd,
-												9999999
-										);
-										MarketDAO.saveCard(mk);
-									}
-									fdk.getFields().clear();
+								for (Field fd : fdk.getFields()) {
+									Market mk = new Market(
+											author.getId(),
+											fd,
+											9999999
+									);
+									MarketDAO.saveCard(mk);
+								}
+								fdk.getFields().clear();
 
-									KawaiponDAO.saveKawaipon(fkp);
-									s.delete().queue();
-									channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES,
-								u -> u.getId().equals(author.getId()),
-								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-						));
-				m.delete().queue();
-			} catch (IOException e) {
-				m.editMessage("❌ | Erro ao gerar o deck.").queue();
-				Main.getInfo().getConfirmationPending().remove(author.getId());
-			}
+								KawaiponDAO.saveKawaipon(fkp);
+								s.delete().queue();
+								channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+			m.delete().queue();
 		});
 	}
 }

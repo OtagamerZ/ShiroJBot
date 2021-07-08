@@ -84,7 +84,7 @@ public class ImageCommand implements Executable {
 				eb.setImage(item.getString("link"));
 
 				m.delete().queue();
-				channel.sendMessage(eb.build()).queue();
+				channel.sendMessageEmbeds(eb.build()).queue();
 			} catch (IOException | IllegalStateException e) {
 				m.editMessage("❌ | Humm...não achei nenhuma imagem com esses termos, talvez você tenha escrito algo errado?").queue();
 			}

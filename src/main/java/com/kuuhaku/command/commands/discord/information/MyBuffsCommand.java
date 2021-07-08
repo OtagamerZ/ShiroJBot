@@ -105,6 +105,6 @@ public class MyBuffsCommand implements Executable {
 
 		eb.setColor(Helper.getRandomColor());
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

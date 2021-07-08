@@ -88,7 +88,7 @@ public class CustomAnswerCommand implements Executable {
 				return;
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 			return;
@@ -115,7 +115,7 @@ public class CustomAnswerCommand implements Executable {
 			if (ca.getForUser() != null)
 				eb.appendDescription("\nApenas se for ativado por " + Main.getInfo().getUserByID(ca.getForUser()));
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		}
 
