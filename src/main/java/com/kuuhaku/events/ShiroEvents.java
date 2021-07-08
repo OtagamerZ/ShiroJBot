@@ -695,6 +695,8 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
+		if (!event.getReactionEmote().isEmoji() || !event.getReactionEmote().getEmoji().equals("⭐")) return;
+
 		Message msg;
 		try {
 			msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
