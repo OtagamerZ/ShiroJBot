@@ -75,7 +75,7 @@ public class DiscordBotsListHandler {
 					eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
 				}
 
-				chn.sendMessage(eb.build()).queue(null, Helper::doNothing);
+				chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 			}
 		} catch (RuntimeException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -117,7 +117,7 @@ public class DiscordBotsListHandler {
 								eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
 							}
 
-							chn.sendMessage(eb.build()).queue(null, Helper::doNothing);
+							chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						}
 					} catch (RuntimeException e) {
 						Helper.logger(DiscordBotsListHandler.class).error(e + " | " + e.getStackTrace()[0]);

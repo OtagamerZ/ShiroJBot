@@ -66,7 +66,7 @@ public class DonationHandler {
 
 			for (String d : ShiroInfo.getDevelopers()) {
 				Main.getInfo().getUserByID(d).openPrivateChannel()
-						.flatMap(c -> c.sendMessage(eb.build()))
+						.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 						.queue();
 			}
 
@@ -99,7 +99,7 @@ public class DonationHandler {
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(Locale.ROOT), d.getTransaction(), d.getUid()));
 
 				u.openPrivateChannel()
-						.flatMap(c -> c.sendMessage(eb.build()))
+						.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 						.queue(null, Helper::doNothing);
 
 				for (String dev : ShiroInfo.getDevelopers()) {
@@ -132,7 +132,7 @@ public class DonationHandler {
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(Locale.ROOT), d.getTransaction(), d.getUid()));
 
 				u.openPrivateChannel()
-						.flatMap(c -> c.sendMessage(eb.build()))
+						.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 						.queue(null, Helper::doNothing);
 
 				for (String dev : ShiroInfo.getDevelopers()) {
@@ -148,7 +148,7 @@ public class DonationHandler {
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(Locale.ROOT), d.getTransaction(), d.getUid()));
 
 				u.openPrivateChannel()
-						.flatMap(c -> c.sendMessage(eb.build()))
+						.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 						.queue(null, Helper::doNothing);
 			}
 		}

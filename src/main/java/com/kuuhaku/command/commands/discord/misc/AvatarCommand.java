@@ -72,6 +72,6 @@ public class AvatarCommand implements Executable {
 			eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
 			eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=4096)");
 		}
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

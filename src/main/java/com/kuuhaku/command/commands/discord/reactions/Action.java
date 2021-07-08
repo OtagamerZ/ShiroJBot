@@ -76,7 +76,7 @@ public abstract class Action {
 			if (allowReact) {
 				eb.setFooter("↪ | Clique para retribuir");
 				channel.sendMessage(message)
-						.embed(eb.build())
+						.setEmbeds(eb.build())
 						.queue(s -> Pages.buttonize(s, Collections.singletonMap("↪", (mb, ms) -> {
 							if (mb.getId().equals(target.getId())) {
 								answer(channel);
@@ -85,7 +85,7 @@ public abstract class Action {
 								}), false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
 						);
 			} else {
-				channel.sendMessage(message).embed(eb.build()).queue();
+				channel.sendMessage(message).setEmbeds(eb.build()).queue();
 			}
 		} finally {
 			msg.delete().queue(null, Helper::doNothing);

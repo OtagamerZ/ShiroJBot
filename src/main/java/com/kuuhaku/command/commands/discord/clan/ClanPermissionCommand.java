@@ -84,7 +84,7 @@ public class ClanPermissionCommand implements Executable {
 				), false);
 			}
 
-			MessageAction ma = channel.sendMessage(eb.build());
+			MessageAction ma = channel.sendMessageEmbeds(eb.build());
 			if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
 			ma.queue();
 		} else {
@@ -106,7 +106,7 @@ public class ClanPermissionCommand implements Executable {
 			refreshPermField(eb, ch, perms);
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			MessageAction ma = channel.sendMessage(eb.build());
+			MessageAction ma = channel.sendMessageEmbeds(eb.build());
 			if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
 			ma.queue(s -> Pages.buttonize(s,
 					new LinkedHashMap<>() {{
@@ -118,7 +118,7 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
 						put(Helper.getNumericEmoji(2), (mb, ms) -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
@@ -128,7 +128,7 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
 						put(Helper.getNumericEmoji(3), (mb, ms) -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
@@ -138,7 +138,7 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
 						put(Helper.getNumericEmoji(4), (mb, ms) -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
@@ -148,7 +148,7 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
 					}},
 					true,

@@ -60,6 +60,6 @@ public class WalletCommand implements Executable {
 				)
 				.setThumbnail("https://i.imgur.com/nhWckfq.png");
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

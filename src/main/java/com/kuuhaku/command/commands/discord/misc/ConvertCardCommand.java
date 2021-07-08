@@ -103,7 +103,7 @@ public class ConvertCardCommand implements Executable {
 			eb.setImage("attachment://card.png");
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(c.drawCard(false), "kp_" + c.getId(), "png"), "card.png")
+			channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(c.drawCard(false), "kp_" + c.getId(), "png"), "card.png")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								kp.removeCard(kc);

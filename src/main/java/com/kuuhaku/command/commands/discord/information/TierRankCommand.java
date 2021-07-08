@@ -111,7 +111,7 @@ public class TierRankCommand implements Executable {
 
 		eb.setDescription(sb.toString());
 
-		channel.sendMessage(eb.build()).queue(s ->
+		channel.sendMessageEmbeds(eb.build()).queue(s ->
 				Pages.categorize(s, categories, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}

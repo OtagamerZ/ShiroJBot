@@ -129,7 +129,7 @@ public class HelpCommand implements Executable {
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
-			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
+			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
 			return;
 		} else if (args.length == 0) {
 			eb.setTitle(I18n.getString(STR_COMMAND_LIST_TITLE));
@@ -155,7 +155,7 @@ public class HelpCommand implements Executable {
 			eb.setFooter(ShiroInfo.getFullName(), null);
 			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		}
 
@@ -208,7 +208,7 @@ public class HelpCommand implements Executable {
 
 		eb.setDescription(I18n.getString("str_command-list-category", cmd.getDescription(), cmd.getAliases().length != 0 ? aliases.toString().trim() + "\n" : "", cmd.getCategory().getName()));
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 
 	}
 }

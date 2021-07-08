@@ -55,6 +55,7 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.events.user.UserTypingEvent;
@@ -615,7 +616,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 				TextChannel chn = gc.getWelcomeChannel();
 				if (chn != null) {
-					chn.sendMessage(author.getAsMention()).embed(eb.build()).queue();
+					chn.sendMessage(author.getAsMention()).setEmbeds(eb.build()).queue();
 					if (author.getId().equals(ShiroInfo.getNiiChan()))
 						chn.sendMessage("<:b_shirolove:752890212371267676> | Seja bem-vindo Nii-chan!").queue();
 				}
@@ -693,10 +694,47 @@ public class ShiroEvents extends ListenerAdapter {
 
 				TextChannel chn = gc.getByeChannel();
 				if (chn != null)
-					chn.sendMessage(eb.build()).queue();
+					chn.sendMessageEmbeds(eb.build()).queue();
 				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
 		} catch (IOException ignore) {
+		}
+	}
+
+	@Override
+	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
+		Message msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+		Guild guild = event.getGuild();
+		User author = event.getUser();
+		if (author.isBot()) return;
+
+		int stars = msg.getReactions().stream()
+				.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("⭐"))
+				.mapToInt(MessageReaction::getCount)
+				.sum();
+
+		if (stars == 0) return;
+
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		TextChannel chn = gc.getStarboardChannel();
+		if (chn != null) {
+			if (stars < gc.getStarRequirement()) return;
+
+			EmbedBuilder eb = new EmbedBuilder()
+					.setColor(Color.orange)
+					.setAuthor("Destaque de " + msg.getAuthor().getAsTag(), msg.getJumpUrl(), msg.getAuthor().getEffectiveAvatarUrl())
+					.setDescription(msg.getContentRaw());
+
+			if (!msg.getAttachments().isEmpty()) {
+				Message.Attachment att = msg.getAttachments().get(0);
+
+				if (att.isImage() || att.isVideo())
+					eb.setImage(att.getUrl());
+			}
+
+			chn.sendMessage(":star: | " + msg.getTextChannel().getAsMention())
+					.setEmbeds(eb.build())
+					.queue(null, Helper::doNothing);
 		}
 	}
 
@@ -760,7 +798,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 							BlockDAO.block(new Block(args[1]));
 							u.openPrivateChannel().queue(c ->
-									c.sendMessage(eb.build()).queue(null, Helper::doNothing));
+									c.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing));
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
@@ -795,7 +833,7 @@ public class ShiroEvents extends ListenerAdapter {
 									.setTimestamp(Instant.now());
 
 							u.openPrivateChannel().queue(c ->
-									c.sendMessage(eb.build()).queue(null, Helper::doNothing));
+									c.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing));
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
@@ -833,7 +871,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 								for (String d : staffIds) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
-											.flatMap(ch -> ch.sendMessage(eb.build()))
+											.flatMap(ch -> ch.sendMessageEmbeds(eb.build()))
 											.queue();
 								}
 								s.delete().queueAfter(1, TimeUnit.MINUTES);

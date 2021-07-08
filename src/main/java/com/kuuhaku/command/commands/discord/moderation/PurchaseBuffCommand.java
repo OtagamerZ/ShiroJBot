@@ -111,7 +111,7 @@ public class PurchaseBuffCommand implements Executable {
 					, false);
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		} else if (!Helper.equalsAny(args[0], "xp", "carta", "drop", "cromada")) {
 			channel.sendMessage("❌ | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromada`.").queue();

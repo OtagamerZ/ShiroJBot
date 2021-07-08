@@ -85,20 +85,12 @@ public class GiftCode {
 	}
 
 	public void useCode(String id) {
-		String imports = """
-				//%s
-				import com.kuuhaku.controller.postgresql.*;
-				import com.kuuhaku.model.persistent.*;
-				import com.kuuhaku.utils.*;
-								
-				          """.formatted(code);
-
 		Account acc = AccountDAO.getAccount(id);
 
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("acc", acc);
-			gs.evaluate(imports + gift);
+			gs.evaluate(gift);
 
 			AccountDAO.saveAccount(acc);
 		} catch (Exception e) {
