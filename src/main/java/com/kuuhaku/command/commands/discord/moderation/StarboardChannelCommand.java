@@ -30,7 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 @Command(
 		name = "canaldestaques",
 		aliases = {"canaldtk", "starboard"},
-		usage = "req_channel-reset",
+		usage = "req_channel-reset-amount",
 		category = Category.MODERATION
 )
 public class StarboardChannelCommand implements Executable {
