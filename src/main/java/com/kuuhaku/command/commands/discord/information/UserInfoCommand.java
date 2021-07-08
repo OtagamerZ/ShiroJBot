@@ -121,6 +121,6 @@ public class UserInfoCommand implements Executable {
 		if (!m.getRoles().isEmpty())
 			eb.addField(":beginner: | Cargos", m.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(" ")), false);
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

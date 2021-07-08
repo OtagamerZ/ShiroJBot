@@ -87,7 +87,7 @@ public class YoutubeCommand implements Executable {
 							pages.add(new Page(PageType.EMBED, eb.build()));
 						}
 
-						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
+						channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 								Main.getInfo().getConfirmationPending().put(author.getId(), true);
 								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);

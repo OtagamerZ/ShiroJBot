@@ -189,7 +189,7 @@ public class SynthesizeCardCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
-					.embed(eb.build())
+					.setEmbeds(eb.build())
 					.queue(s -> {
 								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {

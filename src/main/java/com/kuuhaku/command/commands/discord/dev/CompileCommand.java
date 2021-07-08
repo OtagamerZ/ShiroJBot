@@ -67,7 +67,7 @@ public class CompileCommand implements Executable {
 							```diff
 							+ Tempo de execução: %s ms
 							--------------------------------
-							Out -> %s       
+							Out -> %s
 							```
 							""".formatted(out.getRight(), out.getLeft())
 					).queue();

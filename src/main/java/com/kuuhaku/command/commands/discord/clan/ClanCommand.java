@@ -124,7 +124,7 @@ public class ClanCommand implements Executable {
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
-		MessageAction ma = channel.sendMessage((MessageEmbed) pages.get(0).getContent());
+		MessageAction ma = channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent());
 		if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
 		if (c.getBanner() != null) ma = ma.addFile(Helper.writeAndGet(c.getBanner(), "banner", "png"));
 		ma.queue(s ->

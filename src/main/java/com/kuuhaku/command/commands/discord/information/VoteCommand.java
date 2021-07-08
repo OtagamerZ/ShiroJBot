@@ -46,7 +46,7 @@ public class VoteCommand implements Executable {
 					.addField("Acúmulos de voto", acc.getStreak() + " acúmulos", false);
 
 			channel.sendMessage("Você já votou nas últimas 12 horas, volte mais tarde para poder votar novamente.")
-					.embed(eb.build())
+					.setEmbeds(eb.build())
 					.queue();
 		} else {
 			channel.sendMessage("""

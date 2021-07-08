@@ -55,7 +55,7 @@ public class ControlCommand implements Executable {
 			eb.addField(prefix + "c info", "Mostra a música atual.", true);
 			eb.addField(prefix + "c queue", "Mostra a fila atual.", true);
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		}
 

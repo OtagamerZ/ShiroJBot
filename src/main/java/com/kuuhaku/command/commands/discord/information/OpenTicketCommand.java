@@ -89,7 +89,7 @@ public class OpenTicketCommand implements Executable {
 							for (String dev : staff) {
 								try {
 									Main.getInfo().getUserByID(dev).openPrivateChannel()
-											.flatMap(m -> m.sendMessage(eb.build()))
+											.flatMap(m -> m.sendMessageEmbeds(eb.build()))
 											.flatMap(m -> {
 												ids.put(dev, m.getId());
 												return m.pin();

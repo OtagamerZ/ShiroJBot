@@ -439,7 +439,7 @@ public class Helper {
 			if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
 			eb.setTimestamp(Instant.now());
 
-			tc.sendMessage(eb.build()).queue(null, Helper::doNothing);
+			tc.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 		} catch (Exception e) {
 			gc.setLogChannel("");
 			GuildDAO.updateGuildSettings(gc);
@@ -474,7 +474,7 @@ public class Helper {
 			}
 			eb.setTimestamp(Instant.now());
 
-			tc.sendMessage(eb.build()).queue();
+			tc.sendMessageEmbeds(eb.build()).queue();
 		} catch (Exception e) {
 			gc.setLogChannel("");
 			GuildDAO.updateGuildSettings(gc);
@@ -658,7 +658,7 @@ public class Helper {
 		eb.setDescription(s + System.getenv(link));
 		eb.setColor(Color.green);
 
-		author.openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
+		author.openPrivateChannel().queue(c -> c.sendMessageEmbeds(eb.build()).queue());
 	}
 
 	public static void finishEmbed(Guild guild, List<Page> pages, List<MessageEmbed.Field> f, EmbedBuilder eb, int i) {
@@ -1326,7 +1326,7 @@ public class Helper {
 				eb.setImage("attachment://kawaipon.png");
 
 			if (gc.getKawaiponChannel() == null) {
-				channel.sendMessage(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
+				channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
 						.delay(1, TimeUnit.MINUTES)
 						.flatMap(Message::delete)
 						.queue(null, Helper::doNothing);
@@ -1336,12 +1336,12 @@ public class Helper {
 				if (tc == null) {
 					gc.setKawaiponChannel(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+					channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
 							.delay(1, TimeUnit.MINUTES)
 							.flatMap(Message::delete)
 							.queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+					tc.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
 							.delay(1, TimeUnit.MINUTES)
 							.flatMap(Message::delete)
 							.queue(null, Helper::doNothing);
@@ -1398,7 +1398,7 @@ public class Helper {
 			eb.setImage("attachment://kawaipon.png");
 
 		if (gc.getKawaiponChannel() == null) {
-			channel.sendMessage(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
+			channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
 					.delay(1, TimeUnit.MINUTES)
 					.flatMap(Message::delete)
 					.queue(null, Helper::doNothing);
@@ -1408,12 +1408,12 @@ public class Helper {
 			if (tc == null) {
 				gc.setKawaiponChannel(null);
 				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+				channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
 						.delay(1, TimeUnit.MINUTES)
 						.flatMap(Message::delete)
 						.queue(null, Helper::doNothing);
 			} else {
-				tc.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+				tc.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
 						.delay(1, TimeUnit.MINUTES)
 						.flatMap(Message::delete)
 						.queue(null, Helper::doNothing);
@@ -1452,16 +1452,16 @@ public class Helper {
 					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
 			if (gc.getDropChannel() == null) {
-				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessageEmbeds(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
 				TextChannel tc = gc.getDropChannel();
 
 				if (tc == null) {
 					gc.setDropChannel(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					channel.sendMessageEmbeds(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					tc.sendMessageEmbeds(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				}
 			}
 			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
@@ -2263,7 +2263,7 @@ public class Helper {
 			eb.addField(fieldExtractor.apply(item));
 		}
 
-		return chn.sendMessage(eb.build());
+		return chn.sendMessageEmbeds(eb.build());
 	}
 
 	public static <T> MessageAction generateStore(User u, TextChannel chn, String title, String desc, Color color, List<T> items, Function<T, MessageEmbed.Field> fieldExtractor) {
@@ -2281,7 +2281,7 @@ public class Helper {
 			eb.addField(fieldExtractor.apply(item));
 		}
 
-		return chn.sendMessage(eb.build());
+		return chn.sendMessageEmbeds(eb.build());
 	}
 
 	public static String buildFrame(String sketch) {
@@ -2625,6 +2625,7 @@ public class Helper {
 		).stream().filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T map(Class<T> type, Object[] tuple) {
 		try {
 			List<Constructor<?>> constructors = Arrays.stream(type.getConstructors())

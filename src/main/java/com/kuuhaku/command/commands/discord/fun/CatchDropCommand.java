@@ -75,7 +75,7 @@ public class CatchDropCommand implements Executable {
 				.addField("Conteúdo:", p.toString(author), true);
 
 		channel.sendMessage("✅ | " + author.getAsMention() + " coletou o drop com sucesso!")
-				.embed(eb.build())
+				.setEmbeds(eb.build())
 				.queue();
 	}
 }

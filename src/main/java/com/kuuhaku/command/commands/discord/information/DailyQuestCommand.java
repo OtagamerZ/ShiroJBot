@@ -78,6 +78,6 @@ public class DailyQuestCommand implements Executable {
 			);
 		}
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

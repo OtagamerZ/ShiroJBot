@@ -67,6 +67,6 @@ public class MyTicketsCommand implements Executable {
 				.setDescription(sb.toString())
 				.setFooter("Prêmio atual: %s créditos".formatted(Helper.separate(LotteryDAO.getLotteryValue().getValue())));
 
-		channel.sendMessage(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }

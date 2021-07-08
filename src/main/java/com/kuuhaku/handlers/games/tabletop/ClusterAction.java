@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 public record ClusterAction(List<MessageAction> actions) {
 
 	public ClusterAction embed(MessageEmbed eb) {
-		actions.replaceAll(msg -> msg.embed(eb));
+		actions.replaceAll(msg -> msg.setEmbeds(eb));
 		return this;
 	}
 

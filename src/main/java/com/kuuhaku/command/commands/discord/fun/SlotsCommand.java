@@ -68,7 +68,7 @@ public class SlotsCommand implements Executable {
 			eb.setTitle("Tabela de prêmios");
 			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 1000 créditos)");
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 1000) {
 			channel.sendMessage(I18n.getString("err_slots-invalid-number")).queue();

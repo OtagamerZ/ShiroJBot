@@ -69,7 +69,7 @@ public class DeckStashCommand implements Executable {
 						true);
 			}
 
-			channel.sendMessage(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		}
 
