@@ -740,16 +740,19 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+		Message msg = event.getMessage();
+		if (msg.getAuthor().isBot()) return;
+
+		String content = msg.getContentRaw();
+		String[] args = content.split(" ");
+
 		List<String> staffIds = ShiroInfo.getStaff();
 		if (staffIds.contains(event.getAuthor().getId())) {
-			String msg = event.getMessage().getContentRaw();
-			String[] args = msg.split(" ");
-
 			try {
 				switch (args[0].toLowerCase(Locale.ROOT)) {
 					case "send", "s" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
+						String msgNoArgs = Helper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
 							User u = Main.getInfo().getUserByID(args[1]);
@@ -777,7 +780,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 					case "block", "b" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
+						String msgNoArgs = Helper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
 							User u = Main.getInfo().getUserByID(args[1]);
@@ -813,7 +816,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 					case "alert", "a" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
+						String msgNoArgs = Helper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
 							User u = Main.getInfo().getUserByID(args[1]);
@@ -850,7 +853,7 @@ public class ShiroEvents extends ListenerAdapter {
 			} catch (NullPointerException ignore) {
 			}
 		} else {
-			if (event.getMessage().getContentRaw().equalsIgnoreCase("silenciar")) {
+			if (content.equalsIgnoreCase("silenciar")) {
 				Account acc = AccountDAO.getAccount(event.getAuthor().getId());
 				acc.setReceiveNotifs(false);
 				AccountDAO.saveAccount(acc);
@@ -864,7 +867,7 @@ public class ShiroEvents extends ListenerAdapter {
 					c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 							.queue(s -> {
 								EmbedBuilder eb = new ColorlessEmbedBuilder()
-										.setDescription((event.getMessage().getContentRaw() + "\n\n" + (event.getMessage().getAttachments().size() > 0 ? "`Contém " + event.getMessage().getAttachments().size() + " anexos`" : "")).trim())
+										.setDescription((content + "\n\n" + (msg.getAttachments().size() > 0 ? "`Contém " + msg.getAttachments().size() + " anexos`" : "")).trim())
 										.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
 										.setFooter(event.getAuthor().getId())
 										.setTimestamp(Instant.now());
