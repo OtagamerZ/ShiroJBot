@@ -270,7 +270,7 @@ public class TenthSecondEvent implements Job {
 						if (match.size() == 2) result.run();
 					});
 
-			static {
+			{
 				p1Channel.sendMessage("""
 						%s
 						Partida encontrada, digite `aschente` para confirmar a partida.
@@ -335,7 +335,7 @@ public class TenthSecondEvent implements Job {
 						if (match.size() == 2) result.run();
 					});
 
-			static {
+			{
 				p1Channel.sendMessage("""
 						%s e %s
 						Partida encontrada, digite `aschente` para confirmar a partida.
