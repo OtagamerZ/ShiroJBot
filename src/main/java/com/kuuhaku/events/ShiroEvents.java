@@ -74,8 +74,6 @@ import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -556,10 +554,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		try {
 			if (!gc.getWelcomeMessage().isBlank()) {
-				URL url = new URL(author.getEffectiveAvatarUrl());
-				HttpURLConnection con = (HttpURLConnection) url.openConnection();
-				con.setRequestProperty("User-Agent", "Mozilla/5.0");
-				BufferedImage image = ImageIO.read(con.getInputStream());
+				BufferedImage image = ImageIO.read(Helper.getImage(author.getEffectiveAvatarUrl()));
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
 				EmbedBuilder eb;
@@ -634,10 +629,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		try {
 			if (!gc.getByeMessage().isBlank()) {
-				URL url = new URL(author.getEffectiveAvatarUrl());
-				HttpURLConnection con = (HttpURLConnection) url.openConnection();
-				con.setRequestProperty("User-Agent", "Mozilla/5.0");
-				BufferedImage image = ImageIO.read(con.getInputStream());
+				BufferedImage image = ImageIO.read(Helper.getImage(author.getEffectiveAvatarUrl()));
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
 				EmbedBuilder eb;
