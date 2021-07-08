@@ -719,7 +719,7 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				attack(current, next, is);
+				attack(Pair.of(current, is[0]), Pair.of(next, is[1]));
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
 
@@ -773,12 +773,12 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
-	public void attack(Side current, Side next, int[] is) {
-		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
-		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
+	public void attack(Pair<Side, Integer> atkr, Pair<Side, Integer> defr) {
+		Champion yours = getArena().getSlots().get(atkr.getLeft()).get(atkr.getRight()).getTop();
+		Champion his = getArena().getSlots().get(defr.getLeft()).get(defr.getRight()).getTop();
 
-		Pair<Champion, Integer> attacker = Pair.of(yours, is[0]);
-		Pair<Champion, Integer> defender = Pair.of(his, is[1]);
+		Pair<Champion, Integer> attacker = Pair.of(yours, atkr.getRight());
+		Pair<Champion, Integer> defender = Pair.of(his, defr.getRight());
 
 		if (his.isStasis()) {
 			channel.sendMessage("❌ | Você não pode atacar cartas inalvejáveis.").queue();
@@ -789,25 +789,25 @@ public class Shoukan extends GlobalGame {
 
 		/* PRE-ATTACK */
 		{
-			if (applyEot(ON_ATTACK, current, is[0])) return;
-			if (is[0] > 0) {
-				Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
-				if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, attacker, defender))
+			if (applyEot(ON_ATTACK, atkr.getLeft(), atkr.getRight())) return;
+			if (atkr.getRight() > 0) {
+				Champion c = arena.getSlots().get(atkr.getLeft()).get(atkr.getRight() - 1).getTop();
+				if (c != null && applyEffect(ATTACK_ASSIST, c, atkr.getRight(), atkr.getLeft(), attacker, defender))
 					return;
 			}
-			if (is[0] < 4) {
-				Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
-				if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, attacker, defender))
+			if (atkr.getRight() < 4) {
+				Champion c = arena.getSlots().get(atkr.getLeft()).get(atkr.getRight() + 1).getTop();
+				if (c != null && applyEffect(ATTACK_ASSIST, c, atkr.getRight(), atkr.getLeft(), attacker, defender))
 					return;
 			}
-			if (applyEffect(ON_ATTACK, yours, is[0], current, attacker, defender)) return;
+			if (applyEffect(ON_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
 			if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
 				yours.resetAttribs();
 				his.resetAttribs();
 
-				if (applyEot(POST_ATTACK, current, is[0])) return;
-				if (applyEffect(POST_ATTACK, yours, is[0], current, attacker, defender)) return;
+				if (applyEot(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
+				if (applyEffect(POST_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
 				return;
@@ -816,25 +816,25 @@ public class Shoukan extends GlobalGame {
 
 		/* PRE-DEFENSE */
 		{
-			if (applyEot(ON_DEFEND, next, is[1])) return;
-			if (is[1] > 0) {
-				Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
-				if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, attacker, defender))
+			if (applyEot(ON_DEFEND, defr.getLeft(), defr.getRight())) return;
+			if (defr.getRight() > 0) {
+				Champion c = arena.getSlots().get(defr.getLeft()).get(defr.getRight() - 1).getTop();
+				if (c != null && applyEffect(DEFENSE_ASSIST, c, defr.getRight(), defr.getLeft(), attacker, defender))
 					return;
 			}
-			if (is[1] < 4) {
-				Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
-				if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, attacker, defender))
+			if (defr.getRight() < 4) {
+				Champion c = arena.getSlots().get(defr.getLeft()).get(defr.getRight() + 1).getTop();
+				if (c != null && applyEffect(DEFENSE_ASSIST, c, defr.getRight(), defr.getLeft(), attacker, defender))
 					return;
 			}
-			if (applyEffect(ON_DEFEND, his, is[1], next, attacker, defender)) return;
+			if (applyEffect(ON_DEFEND, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
 				yours.resetAttribs();
 				his.resetAttribs();
 
-				if (applyEot(POST_DEFENSE, next, is[1])) return;
-				if (applyEffect(POST_DEFENSE, his, is[1], next, attacker, defender)) return;
+				if (applyEot(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
+				if (applyEffect(POST_DEFENSE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
 			}
@@ -846,8 +846,8 @@ public class Shoukan extends GlobalGame {
 		if (his.isDefending()) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
-				if (applyEot(ON_FLIP, next, is[1])) return;
-				if (applyEffect(ON_FLIP, his, is[1], next, attacker, defender)) return;
+				if (applyEot(ON_FLIP, defr.getLeft(), defr.getRight())) return;
+				if (applyEffect(ON_FLIP, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 			}
 
 			hPower = his.getFinDef();
@@ -865,30 +865,30 @@ public class Shoukan extends GlobalGame {
 		/* ATTACK SUCCESS */
 		if (yPower > hPower || (yPower == hPower && yDodge)) {
 			if (hDodge) {
-				if (applyEot(ON_MISS, current, is[0])) return;
-				if (applyEffect(ON_MISS, yours, is[0], current, attacker, defender)) return;
+				if (applyEot(ON_MISS, atkr.getLeft(), atkr.getRight())) return;
+				if (applyEffect(ON_MISS, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-				if (applyEot(ON_DODGE, next, is[1])) return;
-				if (applyEffect(ON_DODGE, his, is[1], next, attacker, defender)) return;
+				if (applyEot(ON_DODGE, defr.getLeft(), defr.getRight())) return;
+				if (applyEffect(ON_DODGE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
 			} else {
-				if (applyEot(POST_ATTACK, current, is[0])) return;
-				if (applyEffect(POST_ATTACK, yours, is[0], current, attacker, defender)) return;
+				if (applyEot(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
+				if (applyEffect(POST_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-				if (applyEot(BEFORE_DEATH, next, is[1])) return;
-				if (applyEffect(BEFORE_DEATH, his, is[1], next, attacker, defender)) return;
+				if (applyEot(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
+				if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				float demonFac = 1;
-				if (combos.get(current).getRight() == Race.DEMON)
+				if (combos.get(atkr.getLeft()).getRight() == Race.DEMON)
 					demonFac *= 1.25f;
-				if (combos.get(next).getRight() == Race.DEMON)
+				if (combos.get(defr.getLeft()).getRight() == Race.DEMON)
 					demonFac *= 1.33f;
 
 				if (yours.isDecoy()) {
 					reportEvent(null, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
 				} else if (his.isDecoy()) {
-					killCard(next, is[1]);
+					killCard(defr.getLeft(), defr.getRight());
 					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 				}
 
@@ -896,7 +896,7 @@ public class Shoukan extends GlobalGame {
 								|| his.getBonus().getSpecialData().remove("noDamage") != null
 								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
 
-				Hand op = hands.get(next);
+				Hand op = hands.get(defr.getLeft());
 				float dmg;
 				if (noDmg)
 					dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
@@ -904,10 +904,10 @@ public class Shoukan extends GlobalGame {
 					dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
 
 				op.removeHp(Math.round(dmg * demonFac));
-				killCard(next, is[1]);
+				killCard(defr.getLeft(), defr.getRight());
 
-				if (applyEot(AFTER_DEATH, next, is[1])) return;
-				if (applyEffect(AFTER_DEATH, his, is[1], next, attacker, defender)) return;
+				if (applyEot(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
+				if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				if (!postCombat()) {
 					String msg = "%s derrotou %s! (%d > %d)%s%s".formatted(
@@ -926,20 +926,20 @@ public class Shoukan extends GlobalGame {
 
 		/* ATTACK FAILED */
 		else if (yPower < hPower || hDodge) {
-			if (applyEot(ON_SUICIDE, current, is[0])) return;
-			if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
+			if (applyEot(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
+			if (applyEffect(ON_SUICIDE, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-			if (applyEot(POST_DEFENSE, next, is[1])) return;
-			if (applyEffect(POST_DEFENSE, his, is[1], next, attacker, defender)) return;
+			if (applyEot(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
+			if (applyEffect(POST_DEFENSE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			float demonFac = 1;
-			if (combos.get(next).getRight() == Race.DEMON)
+			if (combos.get(defr.getLeft()).getRight() == Race.DEMON)
 				demonFac *= 1.25f;
-			if (combos.get(current).getRight() == Race.DEMON)
+			if (combos.get(atkr.getLeft()).getRight() == Race.DEMON)
 				demonFac *= 1.33f;
 
 			if (yours.isDecoy()) {
-				killCard(current, is[0]);
+				killCard(atkr.getLeft(), atkr.getRight());
 				reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " < " + hPower + ")", true, false);
 			} else if (his.isDecoy()) {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
@@ -949,7 +949,7 @@ public class Shoukan extends GlobalGame {
 							|| yours.getBonus().getSpecialData().remove("noDamage") != null
 							|| (getCustom() != null && !getCustom().getBoolean("semdano"));
 
-			Hand you = hands.get(current);
+			Hand you = hands.get(atkr.getLeft());
 			float dmg;
 			if (noDmg)
 				dmg = his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
@@ -957,7 +957,7 @@ public class Shoukan extends GlobalGame {
 				dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
 
 			you.removeHp(Math.round(dmg * demonFac));
-			killCard(current, is[0]);
+			killCard(atkr.getLeft(), atkr.getRight());
 
 			if (!postCombat()) {
 				String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
@@ -975,39 +975,39 @@ public class Shoukan extends GlobalGame {
 
 		/* ATTACK CLASHED */
 		else {
-			if (applyEot(ON_SUICIDE, current, is[0])) return;
-			if (applyEffect(ON_SUICIDE, yours, is[0], current, attacker, defender)) return;
+			if (applyEot(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
+			if (applyEffect(ON_SUICIDE, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-			if (applyEot(BEFORE_DEATH, next, is[1])) return;
-			if (applyEffect(BEFORE_DEATH, his, is[1], next, attacker, defender)) return;
+			if (applyEot(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
+			if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			float demonFac = 1;
-			if (combos.get(next).getRight() == Race.DEMON)
+			if (combos.get(defr.getLeft()).getRight() == Race.DEMON)
 				demonFac *= 1.25f;
-			if (combos.get(current).getRight() == Race.DEMON)
+			if (combos.get(atkr.getLeft()).getRight() == Race.DEMON)
 				demonFac *= 1.33f;
 
 			if (yours.isDecoy() && his.isDecoy()) {
-				killCard(current, is[0]);
-				killCard(next, is[1]);
+				killCard(atkr.getLeft(), atkr.getRight());
+				killCard(defr.getLeft(), defr.getRight());
 				reportEvent(null, "As duas cartas eram iscas!", true, false);
 			} else if (yours.isDecoy()) {
-				killCard(current, is[0]);
+				killCard(atkr.getLeft(), atkr.getRight());
 				reportEvent(null, "Ambas as cartas foram destruídas? (" + yPower + " = " + hPower + ")", true, false);
 			} else if (his.isDecoy()) {
-				killCard(next, is[1]);
+				killCard(defr.getLeft(), defr.getRight());
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
 			float dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 
-			Hand op = hands.get(next);
+			Hand op = hands.get(defr.getLeft());
 			op.removeHp(Math.round(dmg * demonFac));
-			killCard(current, is[0]);
-			killCard(next, is[1]);
+			killCard(atkr.getLeft(), atkr.getRight());
+			killCard(defr.getLeft(), defr.getRight());
 
-			if (applyEot(AFTER_DEATH, next, is[1])) return;
-			if (applyEffect(AFTER_DEATH, his, is[1], next, attacker, defender)) return;
+			if (applyEot(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
+			if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			if (!postCombat()) {
 				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
@@ -1021,33 +1021,29 @@ public class Shoukan extends GlobalGame {
 			} else return;
 		}
 
-		if (is[0] > 0) {
-			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
+		if (atkr.getRight() > 0) {
+			Champion c = arena.getSlots().get(atkr.getLeft()).get(atkr.getRight() - 1).getTop();
 			if (c != null)
-				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, attacker, defender);
+				applyEffect(POST_ATTACK_ASSIST, c, atkr.getRight(), atkr.getLeft(), attacker, defender);
 		}
-		if (is[0] < 4) {
-			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
+		if (atkr.getRight() < 4) {
+			Champion c = arena.getSlots().get(atkr.getLeft()).get(atkr.getRight() + 1).getTop();
 			if (c != null)
-				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, attacker, defender);
+				applyEffect(POST_ATTACK_ASSIST, c, atkr.getRight(), atkr.getLeft(), attacker, defender);
 		}
 
-		if (is[1] > 0) {
-			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
+		if (defr.getRight() > 0) {
+			Champion c = arena.getSlots().get(defr.getLeft()).get(defr.getRight() - 1).getTop();
 			if (c != null)
-				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, attacker, defender);
+				applyEffect(POST_DEFENSE_ASSIST, c, defr.getRight(), defr.getLeft(), attacker, defender);
 		}
-		if (is[1] < 4) {
-			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
+		if (defr.getRight() < 4) {
+			Champion c = arena.getSlots().get(defr.getLeft()).get(defr.getRight() + 1).getTop();
 			if (c != null)
-				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, attacker, defender);
+				applyEffect(POST_DEFENSE_ASSIST, c, defr.getRight(), defr.getLeft(), attacker, defender);
 		}
 
 		postCombat();
-	}
-
-	public void forceAttack(int[] is) {
-		attack(next, current, is);
 	}
 
 	private boolean makeFusion(Hand h) {
