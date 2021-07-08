@@ -86,6 +86,7 @@
         <class>com.kuuhaku.model.persistent.guild.buttons.Button</class>
         <class>com.kuuhaku.model.persistent.Leaderboards</class>
         <class>com.kuuhaku.model.persistent.VoiceTime</class>
+        <class>com.kuuhaku.model.persistent.Starboard</class>
 
         <properties>
             <!-- dados da conexao -->
