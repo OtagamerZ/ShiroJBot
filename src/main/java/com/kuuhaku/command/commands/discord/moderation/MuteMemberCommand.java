@@ -96,8 +96,18 @@ public class MuteMemberCommand implements Executable {
 		m.mute(time);
 
 		List<PermissionOverrideAction> act = new ArrayList<>();
-		for (TextChannel chn : guild.getTextChannels()) {
-			act.add(chn.putPermissionOverride(mb).deny(Helper.ALL_MUTE_PERMISSIONS));
+		for (GuildChannel gc : guild.getChannels()) {
+			switch (gc.getType()) {
+				case TEXT -> {
+					TextChannel chn = (TextChannel) gc;
+					if (chn.canTalk(mb))
+						act.add(chn.putPermissionOverride(mb).deny(Helper.ALL_MUTE_PERMISSIONS));
+				}
+				case VOICE -> {
+					VoiceChannel chn = (VoiceChannel) gc;
+					act.add(chn.putPermissionOverride(mb).deny(Permission.VOICE_SPEAK));
+				}
+			}
 		}
 
 		Member finalMb = mb;
