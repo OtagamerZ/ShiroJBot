@@ -610,7 +610,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 
 				TextChannel chn = gc.getWelcomeChannel();
-				if (chn != null) {
+				if (chn != null && chn.canTalk(guild.getSelfMember())) {
 					chn.sendMessage(author.getAsMention()).setEmbeds(eb.build()).queue();
 					if (author.getId().equals(ShiroInfo.getNiiChan()))
 						chn.sendMessage("<:b_shirolove:752890212371267676> | Seja bem-vindo Nii-chan!").queue();
@@ -685,7 +685,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 
 				TextChannel chn = gc.getByeChannel();
-				if (chn != null)
+				if (chn != null && chn.canTalk(guild.getSelfMember()))
 					chn.sendMessageEmbeds(eb.build()).queue();
 				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
@@ -700,7 +700,7 @@ public class ShiroEvents extends ListenerAdapter {
 		Message msg;
 		try {
 			msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
-		} catch (InsufficientPermissionException e) {
+		} catch (InsufficientPermissionException | ErrorResponseException e) {
 			return;
 		}
 
@@ -717,7 +717,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		TextChannel chn = gc.getStarboardChannel();
-		if (chn != null) {
+		if (chn != null && chn.canTalk(guild.getSelfMember())) {
 			if (stars < gc.getStarRequirement()) return;
 
 			EmbedBuilder eb = new EmbedBuilder()

@@ -238,14 +238,14 @@ public class Helper {
 		);
 
 		final Pattern urlPattern = Pattern.compile(
-				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
+				"([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\w.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 		text = StringUtils.deleteWhitespace(text);
 		text = replaceWith(text, leetSpeak);
-		text = (Extensions.checkExtension(text) ? "http://" : "") + text;
+		text = text.replaceFirst("(((ht|f)tp|ws)(s?)://|www\\.)", "");
 
 		final Matcher msg = urlPattern.matcher(text.toLowerCase(Locale.ROOT));
-		return msg.matches();
+		return msg.find() && Extensions.checkExtension(text);
 	}
 
 	public static boolean findMentions(String text) {
@@ -1322,30 +1322,33 @@ public class Helper {
 			else
 				eb.setImage("attachment://kawaipon.png");
 
-			if (gc.getKawaiponChannel() == null) {
-				channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
-						.delay(1, TimeUnit.MINUTES)
-						.flatMap(Message::delete)
-						.queue(null, Helper::doNothing);
-			} else {
-				TextChannel tc = gc.getKawaiponChannel();
-
-				if (tc == null) {
-					gc.setKawaiponChannel(null);
-					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+			try {
+				if (gc.getKawaiponChannel() == null) {
+					channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
 							.delay(1, TimeUnit.MINUTES)
 							.flatMap(Message::delete)
 							.queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
-							.delay(1, TimeUnit.MINUTES)
-							.flatMap(Message::delete)
-							.queue(null, Helper::doNothing);
+					TextChannel tc = gc.getKawaiponChannel();
+
+					if (tc == null) {
+						gc.setKawaiponChannel(null);
+						GuildDAO.updateGuildSettings(gc);
+						channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+								.delay(1, TimeUnit.MINUTES)
+								.flatMap(Message::delete)
+								.queue(null, Helper::doNothing);
+					} else {
+						tc.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+								.delay(1, TimeUnit.MINUTES)
+								.flatMap(Message::delete)
+								.queue(null, Helper::doNothing);
+					}
 				}
+				Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+				Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
+			} catch (IllegalStateException ignore) {
 			}
-			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-			Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 		}
 	}
 
@@ -1394,30 +1397,33 @@ public class Helper {
 		else
 			eb.setImage("attachment://kawaipon.png");
 
-		if (gc.getKawaiponChannel() == null) {
-			channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
-					.delay(1, TimeUnit.MINUTES)
-					.flatMap(Message::delete)
-					.queue(null, Helper::doNothing);
-		} else {
-			TextChannel tc = gc.getKawaiponChannel();
-
-			if (tc == null) {
-				gc.setKawaiponChannel(null);
-				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+		try {
+			if (gc.getKawaiponChannel() == null) {
+				channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
 						.delay(1, TimeUnit.MINUTES)
 						.flatMap(Message::delete)
 						.queue(null, Helper::doNothing);
 			} else {
-				tc.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
-						.delay(1, TimeUnit.MINUTES)
-						.flatMap(Message::delete)
-						.queue(null, Helper::doNothing);
+				TextChannel tc = gc.getKawaiponChannel();
+
+				if (tc == null) {
+					gc.setKawaiponChannel(null);
+					GuildDAO.updateGuildSettings(gc);
+					channel.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+							.delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.queue(null, Helper::doNothing);
+				} else {
+					tc.sendMessageEmbeds(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+							.delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.queue(null, Helper::doNothing);
+				}
 			}
+			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+			Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
+		} catch (IllegalStateException ignore) {
 		}
-		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-		Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
@@ -1448,21 +1454,33 @@ public class Helper {
 					.addField("Código captcha:", drop.getCaptcha(), true)
 					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
-			if (gc.getDropChannel() == null) {
-				channel.sendMessageEmbeds(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			} else {
-				TextChannel tc = gc.getDropChannel();
-
-				if (tc == null) {
-					gc.setDropChannel(null);
-					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessageEmbeds(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			try {
+				if (gc.getDropChannel() == null) {
+					channel.sendMessageEmbeds(eb.build())
+							.delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessageEmbeds(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					TextChannel tc = gc.getDropChannel();
+
+					if (tc == null) {
+						gc.setDropChannel(null);
+						GuildDAO.updateGuildSettings(gc);
+						channel.sendMessageEmbeds(eb.build())
+								.delay(1, TimeUnit.MINUTES)
+								.flatMap(Message::delete)
+								.queue(null, Helper::doNothing);
+					} else {
+						tc.sendMessageEmbeds(eb.build())
+								.delay(1, TimeUnit.MINUTES)
+								.flatMap(Message::delete)
+								.queue(null, Helper::doNothing);
+					}
 				}
+				Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
+				Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
+			} catch (IllegalStateException ignore) {
 			}
-			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
-			Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
 		}
 	}
 

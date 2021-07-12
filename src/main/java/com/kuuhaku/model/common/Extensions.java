@@ -45,7 +45,6 @@ public class Extensions {
 				String line = list.next();
 				if (!line.startsWith("#"))
 					tlds.add("." + line.toLowerCase(Locale.ROOT));
-
 			}
 
 			tldList = tlds.toArray(String[]::new);
