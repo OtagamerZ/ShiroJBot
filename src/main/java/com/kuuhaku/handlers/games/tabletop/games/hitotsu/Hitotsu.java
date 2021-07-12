@@ -27,7 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -96,25 +96,26 @@ public class Hitotsu extends Game {
 			available.addAll(kp.getCards());
 		}
 
-		Map<KawaiponRarity, List<KawaiponCard>> inGame = available.stream()
-				.filter(kc -> !kc.isFoil())
-				.collect(Collectors.groupingBy(kc -> kc.getCard().getRarity()));
-		for (Map.Entry<KawaiponRarity, List<KawaiponCard>> entry : inGame.entrySet()) {
-			entry.setValue(Helper.getRandomN(entry.getValue(), 10, 3));
-		}
+		Map<AddedAnime, List<KawaiponCard>> animes = available.stream()
+				.collect(Collectors.groupingBy(kc -> kc.getCard().getAnime()));
 
-		List<KawaiponCard> foil = available.stream()
-				.filter(KawaiponCard::isFoil)
-				.limit(20).collect(Collectors.toList());
-		Collections.shuffle(foil);
+		List<KawaiponCard> inGame = animes.values().stream()
+				.sorted(Comparator.<List<KawaiponCard>>comparingInt(List::size).reversed())
+				.limit(5)
+				.flatMap(l -> l.stream()
+						.sorted(Comparator.comparingDouble(ls -> Math.random()))
+						.limit(20)
+				)
+				.collect(Collectors.toList());
 
-		available.clear();
-		available.addAll(inGame.values().stream().flatMap(List::stream).collect(Collectors.toList()));
-		available.addAll(foil);
-		if (available.size() < 50)
-			available.addAll(available.subList(0, 50 - available.size()));
+		deque.addAll(inGame);
+		if (deque.size() < 50)
+			deque.addAll(available.stream()
+					.sorted(Comparator.comparingDouble(k -> Math.random()))
+					.limit(50 - deque.size())
+					.collect(Collectors.toList())
+			);
 
-		deque.addAll(available);
 		Collections.shuffle(deque);
 
 		for (User u : players) {
@@ -296,8 +297,7 @@ public class Hitotsu extends Game {
 		Helper.darkenImage(0.5f, mount);
 
 		Graphics2D g2d = mount.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
@@ -319,8 +319,7 @@ public class Hitotsu extends Game {
 		Helper.darkenImage(0.5f, mount);
 
 		Graphics2D g2d = mount.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
