@@ -1312,14 +1312,7 @@
       <workItem from="1625777716265" duration="391000" />
       <workItem from="1626100650737" duration="1046000" />
       <workItem from="1626102186973" duration="96000" />
-      <workItem from="1626105768243" duration="8479000" />
-    </task>
-    <task id="LOCAL-04905" summary="Correções menores">
-      <created>1624982731323</created>
-      <option name="number" value="04905" />
-      <option name="presentableId" value="LOCAL-04905" />
-      <option name="project" value="LOCAL" />
-      <updated>1624982731323</updated>
+      <workItem from="1626105768243" duration="9982000" />
     </task>
     <task id="LOCAL-04906" summary="Correções menores">
       <created>1624983387556</created>
@@ -1657,7 +1650,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626113469702</updated>
     </task>
-    <option name="localTasksCounter" value="4954" />
+    <task id="LOCAL-04954" summary="Atualização da biblioteca de paginação">
+      <created>1626115113590</created>
+      <option name="number" value="04954" />
+      <option name="presentableId" value="LOCAL-04954" />
+      <option name="project" value="LOCAL" />
+      <updated>1626115113591</updated>
+    </task>
+    <option name="localTasksCounter" value="4955" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
