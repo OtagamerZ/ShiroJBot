@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -185,7 +184,7 @@ public class BuyCardCommand implements Executable {
 					);
 				}
 
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(eb.build()));
 			}
 
 			if (pages.isEmpty()) {

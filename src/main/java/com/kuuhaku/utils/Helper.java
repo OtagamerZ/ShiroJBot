@@ -28,7 +28,6 @@ import com.github.kevinsawicki.http.HttpRequest;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
@@ -663,7 +662,7 @@ public class Helper {
 		eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
 		eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
-		pages.add(new Page(PageType.EMBED, eb.build()));
+		pages.add(new Page(eb.build()));
 	}
 
 	public static void refreshButtons(GuildConfig gc) {

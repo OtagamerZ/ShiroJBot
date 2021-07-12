@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -93,7 +92,7 @@ public class TierCommand implements Executable {
 
 			if (firstPass) eb.addField("Promoção de tier", prom.toString(), false);
 			eb.addField(Helper.VOID, sb.toString(), false);
-			pages.add(new Page(PageType.EMBED, eb.build()));
+			pages.add(new Page(eb.build()));
 			firstPass = false;
 		}
 

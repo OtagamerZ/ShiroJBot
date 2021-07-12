@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
@@ -76,7 +75,7 @@ public class ProfileTrophyCommand implements Executable {
 				for (TrophyType tt : chunk)
 					eb.addField("`ID: %s` | %s".formatted(tt.name(), tt.getName()), tt.getDescription(), false);
 
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(eb.build()));
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->

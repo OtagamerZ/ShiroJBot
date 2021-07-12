@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -97,7 +96,7 @@ public class TierRankCommand implements Executable {
 			eb.addField("Promoção de tier", prom.toString(), false)
 					.addField(Helper.VOID, sb.toString(), false)
 					.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
-			categories.put(Helper.getNumericEmoji(rt.getTier()), new Page(PageType.EMBED, eb.build()));
+			categories.put(Helper.getNumericEmoji(rt.getTier()), new Page(eb.build()));
 		}
 
 		sb.setLength(0);

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.exceed;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -86,7 +85,7 @@ public class ExceedMembersCommand implements Executable {
 						.append("\n");
 			}
 			eb.addField("Total de membros: " + members.size(), sb.toString(), false);
-			pages.add(new Page(PageType.EMBED, eb.build()));
+			pages.add(new Page(eb.build()));
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
