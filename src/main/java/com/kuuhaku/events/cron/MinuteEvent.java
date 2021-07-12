@@ -29,9 +29,9 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.PermissionOverride;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
@@ -83,8 +83,8 @@ public class MinuteEvent implements Job {
 					}
 
 					List<AuditableRestAction<Void>> act = new ArrayList<>();
-					for (TextChannel chn : g.getTextChannels()) {
-						PermissionOverride po = chn.getPermissionOverride(mb);
+					for (GuildChannel gc : g.getChannels()) {
+						PermissionOverride po = gc.getPermissionOverride(mb);
 						if (po != null)
 							act.add(po.delete());
 					}
