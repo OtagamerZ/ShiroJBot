@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -85,7 +84,7 @@ public class MyStatsCommand implements Executable {
 
 			eb.addField("Emblemas:", badges.toString(), false);
 
-			categories.put("\uD83D\uDD23", new Page(PageType.EMBED, eb.build()));
+			categories.put("\uD83D\uDD23", new Page(eb.build()));
 		}
 
 		eb.clear();
@@ -121,7 +120,7 @@ public class MyStatsCommand implements Executable {
 
 			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false);
 
-			categories.put("\uD83D\uDCC8", new Page(PageType.EMBED, eb.build()));
+			categories.put("\uD83D\uDCC8", new Page(eb.build()));
 		}
 
 		eb.clear();
@@ -155,7 +154,7 @@ public class MyStatsCommand implements Executable {
 			if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
 				eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
 
-			categories.put("\uD83D\uDCCB", new Page(PageType.EMBED, eb.build()));
+			categories.put("\uD83D\uDCCB", new Page(eb.build()));
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) categories.get("\uD83D\uDD23").getContent()).queue(s ->

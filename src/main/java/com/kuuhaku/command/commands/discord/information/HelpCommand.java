@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -88,7 +87,7 @@ public class HelpCommand implements Executable {
 			eb.setFooter(ShiroInfo.getFullName(), null);
 			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
 
-			pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
+			pages.put(Helper.HOME, new Page(eb.build()));
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new ColorlessEmbedBuilder();
@@ -111,7 +110,7 @@ public class HelpCommand implements Executable {
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n\n" + cmds, false);
 				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
-				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
+				pages.put(cat.getEmoteId(), new Page(ceb.build()));
 			}
 
 			EmbedBuilder ceb = new ColorlessEmbedBuilder()
@@ -127,7 +126,7 @@ public class HelpCommand implements Executable {
 					.addField(Helper.VOID, I18n.getString("str_loan-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_placeholder-tip", prefix), false);
 
-			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
+			pages.put("684039810079522846", new Page(ceb.build()));
 
 			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
 			return;

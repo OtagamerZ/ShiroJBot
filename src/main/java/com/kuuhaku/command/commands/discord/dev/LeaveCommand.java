@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.dev;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -70,7 +69,7 @@ public class LeaveCommand implements Executable {
 			}
 			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
-			pages.add(new Page(PageType.EMBED, eb.build()));
+			pages.add(new Page(eb.build()));
 		}
 
 		try {

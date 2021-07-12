@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -67,7 +66,7 @@ public class FrameColorCommand implements Executable {
 				eb.setDescription(fc.getDescription());
 				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/card_back_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
 				eb.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/card_front_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(eb.build()));
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
