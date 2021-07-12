@@ -44,8 +44,8 @@ public class JSONUtils {
 		try {
 			return moshi.adapter(klass).nullSafe().fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
-			Helper.logger(JSONUtils.class).warn(json);
+			Helper.logger(JSONUtils.class).debug(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(JSONUtils.class).debug(json);
 			return null;
 		}
 	}
@@ -55,8 +55,8 @@ public class JSONUtils {
 		try {
 			return (Map<String, Object>) moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
-			Helper.logger(JSONUtils.class).warn(json);
+			Helper.logger(JSONUtils.class).debug(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(JSONUtils.class).debug(json);
 			return new HashMap<>();
 		}
 	}
@@ -66,8 +66,8 @@ public class JSONUtils {
 		try {
 			return (List<Object>) moshi.adapter(Types.newParameterizedType(List.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			Helper.logger(JSONUtils.class).warn(e + " | " + e.getStackTrace()[0]);
-			Helper.logger(JSONUtils.class).warn(json);
+			Helper.logger(JSONUtils.class).debug(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(JSONUtils.class).debug(json);
 			return new ArrayList<>();
 		}
 	}

@@ -70,8 +70,8 @@ public class UnmuteMemberCommand implements Executable {
 		}
 
 		List<AuditableRestAction<Void>> act = new ArrayList<>();
-		for (TextChannel chn : guild.getTextChannels()) {
-			PermissionOverride po = chn.getPermissionOverride(mb);
+		for (GuildChannel gc : guild.getChannels()) {
+			PermissionOverride po = gc.getPermissionOverride(mb);
 			if (po != null)
 				act.add(po.delete());
 		}
