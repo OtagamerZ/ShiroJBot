@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
@@ -99,7 +98,7 @@ public class RemainingCardsCommand implements Executable {
 			if (i % 30 == 0 && i > 0 || i == cards.size() - 1) {
 				eb.setDescription(sb.toString());
 				sb.setLength(0);
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(eb.build()));
 			}
 		}
 

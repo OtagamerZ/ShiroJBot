@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -97,7 +96,7 @@ public class LobbyCommand implements Executable {
 						sb.append("%s (%s)\n".formatted(mmr.getUser().getName(), mmr.getTier().getName()));
 
 					eb.setDescription(sb.toString());
-					pages.add(new Page(PageType.EMBED, eb.build()));
+					pages.add(new Page(eb.build()));
 				}
 
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
@@ -119,7 +118,7 @@ public class LobbyCommand implements Executable {
 						sb.append("%s (%s)\n".formatted(duo.p1().getUser().getName() + " | " + duo.p2().getUser().getName(), RankedTier.getTierName(duo.getAvgTier(), false)));
 
 					eb.setDescription(sb.toString());
-					pages.add(new Page(PageType.EMBED, eb.build()));
+					pages.add(new Page(eb.build()));
 				}
 
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
