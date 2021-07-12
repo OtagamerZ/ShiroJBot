@@ -21,7 +21,6 @@ package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -101,19 +100,19 @@ public class Hitotsu extends Game {
 				.filter(kc -> !kc.isFoil())
 				.collect(Collectors.groupingBy(kc -> kc.getCard().getRarity()));
 		for (Map.Entry<KawaiponRarity, List<KawaiponCard>> entry : inGame.entrySet()) {
-			entry.setValue(Helper.getRandomN(entry.getValue(), 20, 3));
+			entry.setValue(Helper.getRandomN(entry.getValue(), 10, 3));
 		}
 
 		List<KawaiponCard> foil = available.stream()
 				.filter(KawaiponCard::isFoil)
-				.limit(50).collect(Collectors.toList());
+				.limit(20).collect(Collectors.toList());
 		Collections.shuffle(foil);
 
 		available.clear();
 		available.addAll(inGame.values().stream().flatMap(List::stream).collect(Collectors.toList()));
 		available.addAll(foil);
-		if (available.size() < 100)
-			available.addAll(available.subList(0, 100 - available.size()));
+		if (available.size() < 50)
+			available.addAll(available.subList(0, 50 - available.size()));
 
 		deque.addAll(available);
 		Collections.shuffle(deque);
@@ -391,7 +390,7 @@ public class Hitotsu extends Game {
 					));
 				}
 				eb.setDescription(sb.toString());
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(eb.build()));
 				j++;
 			}
 

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.dev;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -89,7 +88,7 @@ public class AuditCommand implements Executable {
 					sb.append("`%s`: %s usos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), entry[1]));
 
 			eb.setDescription(sb.toString());
-			pages.add(new Page(PageType.EMBED, eb.build()));
+			pages.add(new Page(eb.build()));
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -92,7 +91,7 @@ public class MatchStatsCommand implements Executable {
 				}
 
 				eb.setDescription(sb.toString());
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(eb.build()));
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->

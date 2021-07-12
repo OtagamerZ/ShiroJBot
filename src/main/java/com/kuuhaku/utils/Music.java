@@ -20,7 +20,6 @@ package com.kuuhaku.utils;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
@@ -152,7 +151,7 @@ public class Music {
             eb.setTitle("Fila de músicas:");
             eb.setFooter("Tempo estimado da fila: " + Helper.toDuration(musicManager.scheduler.queue().stream().mapToLong(AudioTrack::getDuration).sum()), null);
 
-            pages.add(new Page(PageType.EMBED, eb.build()));
+            pages.add(new Page(eb.build()));
         }
 
         channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
