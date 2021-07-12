@@ -296,6 +296,7 @@ public class Hitotsu extends Game {
 		Helper.darkenImage(0.5f, mount);
 
 		Graphics2D g2d = mount.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
@@ -318,6 +319,7 @@ public class Hitotsu extends Game {
 		Helper.darkenImage(0.5f, mount);
 
 		Graphics2D g2d = mount.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
@@ -381,6 +383,8 @@ public class Hitotsu extends Game {
 			int j = 0;
 			StringBuilder sb = new StringBuilder();
 			for (List<KawaiponCard> cards : chunks) {
+				sb.setLength(0);
+
 				for (int i = 0; i < cards.size(); i++) {
 					sb.append("**%s** - (%s)%s%s\n".formatted(
 							i + j * 5,
@@ -389,6 +393,7 @@ public class Hitotsu extends Game {
 							cards.get(i).getName()
 					));
 				}
+
 				eb.setDescription(sb.toString());
 				pages.add(new Page(eb.build()));
 				j++;
