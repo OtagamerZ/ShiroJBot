@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -148,9 +149,6 @@
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
-  <component name="ReaderModeSettings">
-    <option name="enabled" value="false" />
-  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records\anime" />
@@ -208,17 +206,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1312,21 +1299,10 @@
       <workItem from="1625777716265" duration="391000" />
       <workItem from="1626100650737" duration="1046000" />
       <workItem from="1626102186973" duration="96000" />
-      <workItem from="1626105768243" duration="9982000" />
-    </task>
-    <task id="LOCAL-04906" summary="Correções menores">
-      <created>1624983387556</created>
-      <option name="number" value="04906" />
-      <option name="presentableId" value="LOCAL-04906" />
-      <option name="project" value="LOCAL" />
-      <updated>1624983387556</updated>
-    </task>
-    <task id="LOCAL-04907" summary="Correções menores">
-      <created>1624983615178</created>
-      <option name="number" value="04907" />
-      <option name="presentableId" value="LOCAL-04907" />
-      <option name="project" value="LOCAL" />
-      <updated>1624983615178</updated>
+      <workItem from="1626105768243" duration="12526000" />
+      <workItem from="1626178471611" duration="209000" />
+      <workItem from="1626197277850" duration="25000" />
+      <workItem from="1626197525035" duration="601000" />
     </task>
     <task id="LOCAL-04908" summary="Correções menores">
       <created>1624985342973</created>
@@ -1657,7 +1633,21 @@
       <option name="project" value="LOCAL" />
       <updated>1626115113591</updated>
     </task>
-    <option name="localTasksCounter" value="4955" />
+    <task id="LOCAL-04955" summary="Atualização da biblioteca de paginação">
+      <created>1626116499101</created>
+      <option name="number" value="04955" />
+      <option name="presentableId" value="LOCAL-04955" />
+      <option name="project" value="LOCAL" />
+      <updated>1626116499101</updated>
+    </task>
+    <task id="LOCAL-04956" summary="Atualização da biblioteca de paginação">
+      <created>1626116584417</created>
+      <option name="number" value="04956" />
+      <option name="presentableId" value="LOCAL-04956" />
+      <option name="project" value="LOCAL" />
+      <updated>1626116584417</updated>
+    </task>
+    <option name="localTasksCounter" value="4957" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
