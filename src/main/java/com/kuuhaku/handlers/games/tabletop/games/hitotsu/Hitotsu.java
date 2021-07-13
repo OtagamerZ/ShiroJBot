@@ -398,8 +398,6 @@ public class Hitotsu extends Game {
 				j++;
 			}
 
-			System.out.println(pages.size());
-
 			getCurrent().openPrivateChannel()
 					.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
 					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES), Helper::doNothing);
