@@ -102,19 +102,17 @@ public class Hitotsu extends Game {
 		List<KawaiponCard> inGame = animes.values().stream()
 				.sorted(Comparator.<List<KawaiponCard>>comparingInt(List::size).reversed())
 				.limit(5)
-				.flatMap(l -> l.stream()
-						.sorted(Comparator.comparingDouble(ls -> Math.random()))
-						.limit(20)
-				)
+				.flatMap(l -> {
+					Collections.shuffle(l);
+					return l.stream().limit(25);
+				})
 				.collect(Collectors.toList());
 
 		deque.addAll(inGame);
-		if (deque.size() < 50)
-			deque.addAll(available.stream()
-					.sorted(Comparator.comparingDouble(k -> Math.random()))
-					.limit(50 - deque.size())
-					.collect(Collectors.toList())
-			);
+		if (deque.size() < 100) {
+			Collections.shuffle(available);
+			deque.addAll(available.subList(0, 100 - deque.size()));
+		}
 
 		Collections.shuffle(deque);
 
@@ -379,9 +377,9 @@ public class Hitotsu extends Game {
 			List<Page> pages = new ArrayList<>();
 			List<List<KawaiponCard>> chunks = Helper.chunkify(seats.get(getCurrent().getId()).getCards(), 5);
 
-			int j = 0;
 			StringBuilder sb = new StringBuilder();
-			for (List<KawaiponCard> cards : chunks) {
+			for (int j = 0; j < chunks.size(); j++) {
+				List<KawaiponCard> cards = chunks.get(j);
 				sb.setLength(0);
 
 				for (int i = 0; i < cards.size(); i++) {
@@ -395,7 +393,6 @@ public class Hitotsu extends Game {
 
 				eb.setDescription(sb.toString());
 				pages.add(new Page(eb.build()));
-				j++;
 			}
 
 			getCurrent().openPrivateChannel()
