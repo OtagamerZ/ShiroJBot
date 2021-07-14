@@ -158,7 +158,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			int id = shard.getShardInfo().getShardId();
 			try {
 				shard.awaitReady();
-				shard.getPresence().setActivity(getRandomActivity());
+				shard.getPresence().setActivity(getRandomActivity(shard));
 				Helper.logger(Main.class).info("Shard " + id + " pronto!");
 			} catch (InterruptedException e) {
 				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
@@ -171,11 +171,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("Estou pronta!");
 	}
 
-	public static Activity getRandomActivity() {
+	public static Activity getRandomActivity(JDA jda) {
 		List<Activity> activities = new ArrayList<>() {{
 			add(Activity.playing("Digite " + ShiroInfo.getDefaultPrefix() + "ajuda para ver meus comandos!"));
 			add(Activity.competing("Shoukan ranqueado!"));
-			add(Activity.listening(shiroShards.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
+			add(Activity.listening(jda.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
 			add(Activity.watching("No Game No Life pela " + Helper.extract(ShiroInfo.getVersion(), ".(\\d+)$", 1) + "ª vez, e ainda não enjoei de ver como eu atuo bem!"));
 		}};
 

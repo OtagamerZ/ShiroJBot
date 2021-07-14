@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Emote;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -41,7 +42,10 @@ public class HourlyEvent implements Job {
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
-		if (!Main.getInfo().isLive()) Main.getShiroShards().setActivity(Main.getRandomActivity());
+		if (!Main.getInfo().isLive())
+			for (JDA shard : Main.getShiroShards().getShards()) {
+				shard.getPresence().setActivity(Main.getRandomActivity(shard));
+			}
 
 		Main.getInfo().setWinner(ExceedDAO.getWinner());
 		Helper.logger(this.getClass()).info("Atualizado vencedor mensal.");
