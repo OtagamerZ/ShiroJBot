@@ -18,7 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,11 +139,11 @@
     <property name="last.edited.regexp" value="```java abc```" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/anime" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39928058" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="debugger.hotswap" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -204,18 +204,7 @@
       <recentPaths value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint" />
     </option>
   </component>
-  <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1315,14 +1304,9 @@
       <workItem from="1626197525035" duration="5853000" />
       <workItem from="1626203635985" duration="12000" />
       <workItem from="1626209306224" duration="693000" />
-      <workItem from="1626264006782" duration="3955000" />
-    </task>
-    <task id="LOCAL-04915" summary="Correções menores">
-      <created>1624987135572</created>
-      <option name="number" value="04915" />
-      <option name="presentableId" value="LOCAL-04915" />
-      <option name="project" value="LOCAL" />
-      <updated>1624987135572</updated>
+      <workItem from="1626264006782" duration="4189000" />
+      <workItem from="1626268770238" duration="763000" />
+      <workItem from="1626272370564" duration="130000" />
     </task>
     <task id="LOCAL-04916" summary="Correções menores">
       <created>1624987367353</created>
@@ -1660,7 +1644,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626267418436</updated>
     </task>
-    <option name="localTasksCounter" value="4964" />
+    <task id="LOCAL-04964" summary="Atualização da biblioteca de paginação">
+      <created>1626268219854</created>
+      <option name="number" value="04964" />
+      <option name="presentableId" value="LOCAL-04964" />
+      <option name="project" value="LOCAL" />
+      <updated>1626268219854</updated>
+    </task>
+    <option name="localTasksCounter" value="4965" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
