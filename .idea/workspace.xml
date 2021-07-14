@@ -18,7 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1315,14 +1315,7 @@
       <workItem from="1626197525035" duration="5853000" />
       <workItem from="1626203635985" duration="12000" />
       <workItem from="1626209306224" duration="693000" />
-      <workItem from="1626264006782" duration="3241000" />
-    </task>
-    <task id="LOCAL-04914" summary="Correções menores">
-      <created>1624987071346</created>
-      <option name="number" value="04914" />
-      <option name="presentableId" value="LOCAL-04914" />
-      <option name="project" value="LOCAL" />
-      <updated>1624987071346</updated>
+      <workItem from="1626264006782" duration="3955000" />
     </task>
     <task id="LOCAL-04915" summary="Correções menores">
       <created>1624987135572</created>
@@ -1660,7 +1653,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626264908676</updated>
     </task>
-    <option name="localTasksCounter" value="4963" />
+    <task id="LOCAL-04963" summary="Atualização da biblioteca de paginação">
+      <created>1626267418436</created>
+      <option name="number" value="04963" />
+      <option name="presentableId" value="LOCAL-04963" />
+      <option name="project" value="LOCAL" />
+      <updated>1626267418436</updated>
+    </task>
+    <option name="localTasksCounter" value="4964" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1775,18 +1775,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Atualização da biblioteca de paginação" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" log-message="true" suspend="NONE" type="java-line">
-          <condition expression="evt.getUserId().equals(ShiroInfo.getNiiChan())" language="JAVA" custom="com.kuuhaku.utils.ShiroInfo" />
-          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ygimenez/Pagination-Utils/2.3.0/ebb5e3538ec39b104984e3ce0d4fab50516f2c96/Pagination-Utils-2.3.0-sources.jar!/com/github/ygimenez/listener/MessageHandler.java</url>
-          <line>110</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
