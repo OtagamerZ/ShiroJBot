@@ -18,7 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,7 +136,7 @@
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="```java abc```" />
+    <property name="last.edited.regexp" value="1.2.3.9999" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/anime" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
@@ -205,6 +205,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [wrapper]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1306,14 +1317,7 @@
       <workItem from="1626209306224" duration="693000" />
       <workItem from="1626264006782" duration="4189000" />
       <workItem from="1626268770238" duration="763000" />
-      <workItem from="1626272370564" duration="130000" />
-    </task>
-    <task id="LOCAL-04916" summary="Correções menores">
-      <created>1624987367353</created>
-      <option name="number" value="04916" />
-      <option name="presentableId" value="LOCAL-04916" />
-      <option name="project" value="LOCAL" />
-      <updated>1624987367353</updated>
+      <workItem from="1626272370564" duration="1243000" />
     </task>
     <task id="LOCAL-04917" summary="Correções menores">
       <created>1624988212226</created>
@@ -1651,7 +1655,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626268219854</updated>
     </task>
-    <option name="localTasksCounter" value="4965" />
+    <task id="LOCAL-04965" summary="Atualização da biblioteca de paginação">
+      <created>1626272572127</created>
+      <option name="number" value="04965" />
+      <option name="presentableId" value="LOCAL-04965" />
+      <option name="project" value="LOCAL" />
+      <updated>1626272572127</updated>
+    </task>
+    <option name="localTasksCounter" value="4966" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
