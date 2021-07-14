@@ -46,7 +46,7 @@ public class Hand {
 	}
 
 	public void redrawHand(GameDeque<KawaiponCard> deque) {
-		for (int i = 0; i < 8; i++) draw(deque);
+		for (int i = 0; i < 5; i++) draw(deque);
 	}
 
 	public User getUser() {

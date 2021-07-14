@@ -32,7 +32,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +72,7 @@ public class HitotsuCommand implements Executable {
 
 		for (User u : message.getMentionedUsers()) {
 			Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
-			if (false && k.getCards().size() < 25) {
+			if (k.getCards().size() < 25) {
 				channel.sendMessage(I18n.getString("err_not-enough-cards-mention", u.getAsMention())).queue();
 				return;
 			} else if (Main.getInfo().getConfirmationPending().get(u.getId()) != null) {
@@ -133,13 +132,6 @@ public class HitotsuCommand implements Executable {
 		else
 			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 
-		if (message.getMentionedUsers().get(0).getId().equals(message.getJDA().getSelfUser().getId()) && author.getId().equals(ShiroInfo.getNiiChan())) {
-			Collections.reverse(players);
-			t = new Hitotsu(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
-			t.start();
-			return;
-		}
-
 		for (User player : players) {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);
 		}
@@ -162,7 +154,7 @@ public class HitotsuCommand implements Executable {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							//Main.getInfo().getGames().put(id, t);
 							s.delete().queue(null, Helper::doNothing);
-							//t.start();
+							t.start();
 						}
 					}
 				}), true, 1, TimeUnit.MINUTES,
