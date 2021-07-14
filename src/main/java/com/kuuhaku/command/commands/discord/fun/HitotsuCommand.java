@@ -162,7 +162,7 @@ public class HitotsuCommand implements Executable {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							//Main.getInfo().getGames().put(id, t);
 							s.delete().queue(null, Helper::doNothing);
-							t.start();
+							//t.start();
 						}
 					}
 				}), true, 1, TimeUnit.MINUTES,
