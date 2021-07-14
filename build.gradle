@@ -149,7 +149,7 @@ idea {
 applicationDefaultJvmArgs = [
         "-Xms512M",
         "-Xmx10G",
-        "-XX:+UseG1GC",
+        "-XX:+UseZGC",
         "-XX:+UseStringDeduplication",
         "-XX:+HeapDumpOnOutOfMemoryError",
         "-XX:HeapDumpPath=/shiro/ShiroJBot/logs/memdump.hprof",
