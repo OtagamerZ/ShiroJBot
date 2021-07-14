@@ -32,6 +32,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -131,6 +132,13 @@ public class HitotsuCommand implements Executable {
 			msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 		else
 			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
+
+		if (message.getMentionedUsers().get(0).getId().equals(message.getJDA().getSelfUser().getId()) && author.getId().equals(ShiroInfo.getNiiChan())) {
+			Collections.reverse(players);
+			t = new Hitotsu(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
+			t.start();
+			return;
+		}
 
 		for (User player : players) {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);

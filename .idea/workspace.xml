@@ -18,7 +18,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1303,14 +1304,8 @@
       <workItem from="1626197277850" duration="25000" />
       <workItem from="1626197525035" duration="5853000" />
       <workItem from="1626203635985" duration="12000" />
-      <workItem from="1626209306224" duration="581000" />
-    </task>
-    <task id="LOCAL-04911" summary="Correções menores">
-      <created>1624986333776</created>
-      <option name="number" value="04911" />
-      <option name="presentableId" value="LOCAL-04911" />
-      <option name="project" value="LOCAL" />
-      <updated>1624986333776</updated>
+      <workItem from="1626209306224" duration="693000" />
+      <workItem from="1626264006782" duration="835000" />
     </task>
     <task id="LOCAL-04912" summary="Correções menores">
       <created>1624986698661</created>
@@ -1648,7 +1643,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626209366377</updated>
     </task>
-    <option name="localTasksCounter" value="4960" />
+    <task id="LOCAL-04960" summary="Atualização da biblioteca de paginação">
+      <created>1626210004917</created>
+      <option name="number" value="04960" />
+      <option name="presentableId" value="LOCAL-04960" />
+      <option name="project" value="LOCAL" />
+      <updated>1626210004917</updated>
+    </task>
+    <option name="localTasksCounter" value="4961" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1763,20 +1765,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Atualização da biblioteca de paginação" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java</url>
-          <line>399</line>
-          <properties>
-            <option name="lambda-ordinal" value="0" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
