@@ -42,6 +42,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -187,7 +188,9 @@ public class TwitchEvents {
 
 	private void onChannelGoOfflineEvent(ChannelGoOfflineEvent evt) {
 		Main.getInfo().setLive(false);
-		Main.getShiroShards().setActivity(Main.getRandomActivity());
+		for (JDA shard : Main.getShiroShards().getShards()) {
+			shard.getPresence().setActivity(Main.getRandomActivity(shard));
+		}
 		Guild sup = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
 		TextChannel tth = sup.getTextChannelById(ShiroInfo.getTwitchChannelID());
 
