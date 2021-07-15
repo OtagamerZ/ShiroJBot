@@ -16,11 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1311,21 +1307,7 @@
       <workItem from="1626278600308" duration="592000" />
       <workItem from="1626356965116" duration="2256000" />
       <workItem from="1626360138308" duration="3432000" />
-      <workItem from="1626369984614" duration="128000" />
-    </task>
-    <task id="LOCAL-04923" summary="Mudança de engine de script de BeanShell para Groovy">
-      <created>1625075262940</created>
-      <option name="number" value="04923" />
-      <option name="presentableId" value="LOCAL-04923" />
-      <option name="project" value="LOCAL" />
-      <updated>1625075262940</updated>
-    </task>
-    <task id="LOCAL-04924" summary="Mudança de engine de script de BeanShell para Groovy">
-      <created>1625082533213</created>
-      <option name="number" value="04924" />
-      <option name="presentableId" value="LOCAL-04924" />
-      <option name="project" value="LOCAL" />
-      <updated>1625082533213</updated>
+      <workItem from="1626369984614" duration="850000" />
     </task>
     <task id="LOCAL-04925" summary="Mudança de engine de script de BeanShell para Groovy">
       <created>1625082635120</created>
@@ -1656,7 +1638,21 @@
       <option name="project" value="LOCAL" />
       <updated>1626367060863</updated>
     </task>
-    <option name="localTasksCounter" value="4972" />
+    <task id="LOCAL-04972" summary="Atualização da biblioteca de paginação">
+      <created>1626370181786</created>
+      <option name="number" value="04972" />
+      <option name="presentableId" value="LOCAL-04972" />
+      <option name="project" value="LOCAL" />
+      <updated>1626370181787</updated>
+    </task>
+    <task id="LOCAL-04973" summary="Atualização da biblioteca de paginação">
+      <created>1626370326951</created>
+      <option name="number" value="04973" />
+      <option name="presentableId" value="LOCAL-04973" />
+      <option name="project" value="LOCAL" />
+      <updated>1626370326951</updated>
+    </task>
+    <option name="localTasksCounter" value="4974" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
