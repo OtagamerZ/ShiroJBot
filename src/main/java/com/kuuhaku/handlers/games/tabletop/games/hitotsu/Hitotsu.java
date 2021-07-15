@@ -43,6 +43,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -396,9 +397,17 @@ public class Hitotsu extends Game {
 				pages.add(new Page(eb.build()));
 			}
 
-			getCurrent().openPrivateChannel()
-					.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
-					.submit().thenAccept(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));
+			try {
+				Message m = getCurrent().openPrivateChannel()
+						.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
+						.submit().get();
+
+				System.out.println(m.getId());
+				Pages.paginate(m, pages, 1, TimeUnit.MINUTES);
+				System.out.println(m.getId());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
