@@ -396,12 +396,9 @@ public class Hitotsu extends Game {
 				pages.add(new Page(eb.build()));
 			}
 
-			ms.getChannel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent())
-					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES), Helper::doNothing);
-
-			/*getCurrent().openPrivateChannel()
+			getCurrent().openPrivateChannel()
 					.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
-					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES), Helper::doNothing);*/
+					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES), Helper::doNothing);
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
