@@ -17,7 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca de paginação">
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1319,14 +1319,7 @@
       <workItem from="1626272370564" duration="1965000" />
       <workItem from="1626278600308" duration="592000" />
       <workItem from="1626356965116" duration="2256000" />
-      <workItem from="1626360138308" duration="1181000" />
-    </task>
-    <task id="LOCAL-04921" summary="Correções menores">
-      <created>1624998848087</created>
-      <option name="number" value="04921" />
-      <option name="presentableId" value="LOCAL-04921" />
-      <option name="project" value="LOCAL" />
-      <updated>1624998848087</updated>
+      <workItem from="1626360138308" duration="3244000" />
     </task>
     <task id="LOCAL-04922" summary="Correções menores">
       <created>1625075235156</created>
@@ -1664,7 +1657,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626361305816</updated>
     </task>
-    <option name="localTasksCounter" value="4970" />
+    <task id="LOCAL-04970" summary="Atualização da biblioteca de paginação">
+      <created>1626364799520</created>
+      <option name="number" value="04970" />
+      <option name="presentableId" value="LOCAL-04970" />
+      <option name="project" value="LOCAL" />
+      <updated>1626364799520</updated>
+    </task>
+    <option name="localTasksCounter" value="4971" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1783,22 +1783,17 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java</url>
-          <line>400</line>
-          <properties>
-            <option name="lambda-ordinal" value="0" />
-          </properties>
-          <option name="timeStamp" value="1" />
+        <line-breakpoint enabled="true" log-message="true" suspend="THREAD" type="java-line">
+          <condition expression="msg.getPrivateChannel().getId().equals(ShiroInfo.getNiiChan())" language="JAVA" custom="com.kuuhaku.utils.ShiroInfo" />
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ygimenez/Pagination-Utils/2.3.0/ebb5e3538ec39b104984e3ce0d4fab50516f2c96/Pagination-Utils-2.3.0-sources.jar!/com/github/ygimenez/method/Pages.java</url>
+          <line>210</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
+      <breakpoints-defaults>
+        <breakpoint suspend="THREAD" type="java-line" />
+      </breakpoints-defaults>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Remote">
-        <watch expression="getEventId(msg)" language="JAVA" />
-        <watch expression="handler.getEventMap()" language="JAVA" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
