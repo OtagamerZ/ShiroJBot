@@ -26,6 +26,7 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -367,7 +368,7 @@ public class Hitotsu extends Game {
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83D\uDCCB", (mb, ms) -> {
-			/*EmbedBuilder eb = new ColorlessEmbedBuilder()
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Suas cartas");
 
 			if (played.size() > 0)
@@ -395,18 +396,7 @@ public class Hitotsu extends Game {
 				pages.add(new Page(eb.build()));
 			}
 
-			getCurrent().openPrivateChannel()
-					.flatMap(s -> s.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
-					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));*/
-
-			EmbedBuilder eb = new EmbedBuilder();
-
-			List<Page> pages = new ArrayList<>();
-			for (int i = 0; i < 10; i++) {
-				pages.add(new Page(eb.setDescription(Math.random() + "").build()));
-			}
-
-			getCurrent().openPrivateChannel()
+			mb.getUser().openPrivateChannel()
 					.flatMap(s -> s.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
 					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));
 		});
