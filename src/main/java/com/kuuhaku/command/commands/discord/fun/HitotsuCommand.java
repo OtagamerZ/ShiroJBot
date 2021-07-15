@@ -32,6 +32,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -63,6 +64,8 @@ public class HitotsuCommand implements Executable {
 			return;
 		}
 
+		if (!author.getId().equals(ShiroInfo.getNiiChan())) return;
+
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		if (kp.getCards().size() < 25) {
@@ -71,7 +74,7 @@ public class HitotsuCommand implements Executable {
 		}
 
 		for (User u : message.getMentionedUsers()) {
-			Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
+			/*Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
 			if (k.getCards().size() < 25) {
 				channel.sendMessage(I18n.getString("err_not-enough-cards-mention", u.getAsMention())).queue();
 				return;
@@ -84,7 +87,7 @@ public class HitotsuCommand implements Executable {
 			} else if (u.getId().equals(author.getId())) {
 				channel.sendMessage(I18n.getString("err_cannot-play-with-yourself")).queue();
 				return;
-			}
+			}*/
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
@@ -124,6 +127,13 @@ public class HitotsuCommand implements Executable {
 		Set<String> accepted = new HashSet<>() {{
 			add(author.getId());
 		}};
+
+		if (message.getMentionedUsers().get(0).getId().equals(guild.getSelfMember().getId())) {
+			Collections.reverse(players);
+			Game t = new Hitotsu(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
+			t.start();
+			return;
+		}
 
 		Game t = new Hitotsu(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
 		String msg;
