@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -43,7 +44,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -397,15 +397,14 @@ public class Hitotsu extends Game {
 				pages.add(new Page(eb.build()));
 			}
 
-			try {
-				PrivateChannel c = getCurrent().openPrivateChannel().submit().get();
-				Message m = c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).submit().get();
-				Pages.paginate(m, pages, 1, TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
+			System.out.println(getCurrent().getId());
+			Main.getInfo().getUserByID(getCurrent().getId()).openPrivateChannel()
+					.flatMap(s -> s.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
+					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));
+
+			//getCurrent().openPrivateChannel()
+			//		.flatMap(s -> s.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
+			//		.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
