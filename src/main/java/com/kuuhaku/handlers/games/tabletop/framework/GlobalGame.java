@@ -62,7 +62,6 @@ public abstract class GlobalGame {
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
 	private int round = 0;
-	private String current;
 	private boolean closed = false;
 	private boolean wo = false;
 
@@ -70,7 +69,6 @@ public abstract class GlobalGame {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = board.getPlayers().getCurrent().getId();
 		this.ranked = ranked;
 		this.custom = null;
 	}
@@ -79,7 +77,6 @@ public abstract class GlobalGame {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = board.getPlayers().getCurrent().getId();
 		this.ranked = ranked;
 		this.custom = custom;
 	}
@@ -103,8 +100,7 @@ public abstract class GlobalGame {
 		while (p == null || !p.isInGame()) {
 			p = board.getPlayers().getNext();
 		}
-		current = p.getId();
-		assert current != null;
+
 		if (round > 0)
 			timeout = executor.schedule(() ->
 					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
@@ -119,14 +115,6 @@ public abstract class GlobalGame {
 							onExpiration.accept(s);
 							closed = true;
 						}), 3, TimeUnit.MINUTES);
-
-		for (int y = 0; y < board.getMatrix().length; y++) {
-			for (int x = 0; x < board.getMatrix().length; x++) {
-				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.equals(pc.getOwnerId()))
-					board.setPieceAt(Spot.of(x, y), null);
-			}
-		}
 	}
 
 	public void resetTimer(Shoukan shkn) {
@@ -182,8 +170,7 @@ public abstract class GlobalGame {
 		while (p == null || !p.isInGame()) {
 			p = board.getPlayers().getNext();
 		}
-		current = p.getId();
-		assert current != null;
+
 		if (round > 0)
 			timeout = executor.schedule(() ->
 					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
@@ -198,14 +185,6 @@ public abstract class GlobalGame {
 							onExpiration.accept(s);
 							closed = true;
 						}), 3, TimeUnit.MINUTES);
-
-		for (int y = 0; y < board.getMatrix().length; y++) {
-			for (int x = 0; x < board.getMatrix().length; x++) {
-				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.equals(pc.getOwnerId()))
-					board.setPieceAt(Spot.of(x, y), null);
-			}
-		}
 	}
 
 	public void resetTimerKeepTurn() {
@@ -240,7 +219,7 @@ public abstract class GlobalGame {
 	}
 
 	public User getCurrent() {
-		return handler.getUserById(current);
+		return handler.getUserById(board.getPlayers().getCurrent().getId());
 	}
 
 	public User getPlayerById(String id) {
