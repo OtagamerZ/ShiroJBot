@@ -138,7 +138,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="1.2.3.9999" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/anime" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../untitled/src/main/java/com/kuuhaku/Main.java" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -1311,14 +1311,7 @@
       <workItem from="1626278600308" duration="592000" />
       <workItem from="1626356965116" duration="2256000" />
       <workItem from="1626360138308" duration="3432000" />
-      <workItem from="1626369984614" duration="1680000" />
-    </task>
-    <task id="LOCAL-04926" summary="Mudança de engine de script de BeanShell para Groovy">
-      <created>1625085157739</created>
-      <option name="number" value="04926" />
-      <option name="presentableId" value="LOCAL-04926" />
-      <option name="project" value="LOCAL" />
-      <updated>1625085157739</updated>
+      <workItem from="1626369984614" duration="4523000" />
     </task>
     <task id="LOCAL-04927" summary="Mudança de engine de script de BeanShell para Groovy">
       <created>1625085546865</created>
@@ -1656,7 +1649,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626371081880</updated>
     </task>
-    <option name="localTasksCounter" value="4975" />
+    <task id="LOCAL-04975" summary="Atualização da biblioteca de paginação">
+      <created>1626372390775</created>
+      <option name="number" value="04975" />
+      <option name="presentableId" value="LOCAL-04975" />
+      <option name="project" value="LOCAL" />
+      <updated>1626372390776</updated>
+    </task>
+    <option name="localTasksCounter" value="4976" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
