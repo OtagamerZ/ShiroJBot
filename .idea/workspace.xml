@@ -1310,14 +1310,7 @@
       <workItem from="1626356965116" duration="2256000" />
       <workItem from="1626360138308" duration="3432000" />
       <workItem from="1626369984614" duration="4523000" />
-      <workItem from="1626375558664" duration="296000" />
-    </task>
-    <task id="LOCAL-04928" summary="Mudança de engine de script de BeanShell para Groovy">
-      <created>1625085609349</created>
-      <option name="number" value="04928" />
-      <option name="presentableId" value="LOCAL-04928" />
-      <option name="project" value="LOCAL" />
-      <updated>1625085609349</updated>
+      <workItem from="1626375558664" duration="729000" />
     </task>
     <task id="LOCAL-04929" summary="Mudança de engine de script de BeanShell para Groovy">
       <created>1625085939190</created>
@@ -1655,7 +1648,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626375679292</updated>
     </task>
-    <option name="localTasksCounter" value="4977" />
+    <task id="LOCAL-04977" summary="Atualização da biblioteca de paginação">
+      <created>1626375860527</created>
+      <option name="number" value="04977" />
+      <option name="presentableId" value="LOCAL-04977" />
+      <option name="project" value="LOCAL" />
+      <updated>1626375860527</updated>
+    </task>
+    <option name="localTasksCounter" value="4978" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

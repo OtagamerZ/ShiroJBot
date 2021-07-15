@@ -398,14 +398,12 @@ public class Hitotsu extends Game {
 			}
 
 			try {
-				Message m = getCurrent().openPrivateChannel()
-						.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
-						.submit().get();
-
-				System.out.println(m.getId());
+				PrivateChannel c = getCurrent().openPrivateChannel().submit().get();
+				Message m = c.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).submit().get();
 				Pages.paginate(m, pages, 1, TimeUnit.MINUTES);
-				System.out.println(m.getId());
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 		});
