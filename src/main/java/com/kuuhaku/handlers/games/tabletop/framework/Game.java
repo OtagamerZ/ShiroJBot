@@ -45,14 +45,12 @@ public abstract class Game {
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
 	private int round = 0;
-	private String current;
 	private boolean closed = false;
 
 	public Game(ShardManager handler, Board board, TextChannel channel) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = board.getPlayers().getCurrent().getId();
 		this.custom = null;
 	}
 
@@ -60,7 +58,6 @@ public abstract class Game {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.current = board.getPlayers().getCurrent().getId();
 		this.custom = custom;
 	}
 
@@ -83,8 +80,7 @@ public abstract class Game {
 		while (p == null || !p.isInGame()) {
 			p = board.getPlayers().getNext();
 		}
-		current = p.getId();
-		assert current != null;
+
 		if (round > 0)
 			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 					.queueAfter(3, TimeUnit.MINUTES, s -> {
@@ -100,7 +96,7 @@ public abstract class Game {
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
 				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.equals(pc.getOwnerId()))
+				if (pc instanceof Decoy && getCurrent().equals(pc.getOwnerId()))
 					board.setPieceAt(Spot.of(x, y), null);
 			}
 		}
@@ -134,7 +130,7 @@ public abstract class Game {
 	}
 
 	public User getCurrent() {
-		return handler.getUserById(current);
+		return handler.getUserById(board.getPlayers().getCurrent().getId());
 	}
 
 	public User getPlayerById(String id) {
