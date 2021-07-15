@@ -204,6 +204,22 @@ public class CardDAO {
 		}
 	}
 
+	public static Card getRandomCard() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity NOT IN :blacklist ORDER BY RANDOM()", Card.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
+		q.setMaxResults(1);
+
+		try {
+			return (Card) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Card getUltimate(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
