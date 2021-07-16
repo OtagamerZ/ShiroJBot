@@ -554,7 +554,6 @@ public class TeamHand extends Hand {
 		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		for (int i = 0; i < cards.size(); i++) {
@@ -577,7 +576,6 @@ public class TeamHand extends Hand {
 		BufferedImage bi = new BufferedImage(Math.max(5, op.getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = op.getCards();
@@ -605,7 +603,6 @@ public class TeamHand extends Hand {
 		BufferedImage bi = new BufferedImage(Math.max(5, amount) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = op.getDeque();

@@ -78,7 +78,6 @@ public class KawaiponBook {
 
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 72));
 		if (foil) g2d.setColor(Color.yellow);
 		Profile.printCenteredString(text, 4026, 35, 168, g2d);
@@ -88,7 +87,6 @@ public class KawaiponBook {
 			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (299 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g.drawImage(header, 0, 0, null);
 
@@ -110,7 +108,6 @@ public class KawaiponBook {
 					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.png")));
 					Graphics2D g = row.createGraphics();
 					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 					List<KawaiponCard> chunk = chunks.get(finalC);
 					for (int i = 0; i < chunk.size(); i++) {
@@ -195,7 +192,6 @@ public class KawaiponBook {
 
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 72));
 		Profile.printCenteredString(title, 4026, 35, 168, g2d);
 
@@ -204,7 +200,6 @@ public class KawaiponBook {
 			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (299 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g.drawImage(header, 0, 0, null);
 
@@ -226,7 +221,6 @@ public class KawaiponBook {
 					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.png")));
 					Graphics2D g = row.createGraphics();
 					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					g.setColor(Color.white);
 
 					List<Drawable> chunk = chunks.get(finalC);

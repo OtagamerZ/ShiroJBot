@@ -950,7 +950,6 @@ public class Helper {
 
 		canvas = new BufferedImage(bi.getWidth(), 45 + (45 * wrappedLines.size()) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		g2d = canvas.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());

@@ -98,7 +98,6 @@ public class Card {
 				Graphics2D g2d = canvas.createGraphics();
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2d.drawImage(foil ? adjust(card, false) : card, 15, 15, null);
 				g2d.drawImage(foil ? adjust(frame, true) : frame, 0, 0, null);
 
