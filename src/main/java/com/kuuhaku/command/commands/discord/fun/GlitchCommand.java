@@ -115,6 +115,8 @@ public class GlitchCommand implements Executable {
 					} catch (NumberFormatException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("❌ | A intensidade deve ser um valor numérico.").queue();
+					} catch (IllegalArgumentException e) {
+						channel.sendMessage("❌ | A imagem final ficou muito grande, que tal tentar com uma imagem menor?").queue();
 					}
 				});
 	}

@@ -112,6 +112,8 @@ public class NegativeCommand implements Executable {
 					} catch (IOException | ImageReadException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("❌ | Deu erro ao baixar a imagem, tente com outra.").queue();
+					} catch (IllegalArgumentException e) {
+						channel.sendMessage("❌ | A imagem final ficou muito grande, que tal tentar com uma imagem menor?").queue();
 					}
 				});
 	}
