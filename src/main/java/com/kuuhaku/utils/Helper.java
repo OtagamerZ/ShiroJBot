@@ -237,11 +237,10 @@ public class Helper {
 		);
 
 		final Pattern urlPattern = Pattern.compile(
-				"([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\w.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?",
+				"(((ht|f)tp|ws)(s?)://|www\\.)([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\w.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 		text = StringUtils.deleteWhitespace(text);
 		text = replaceWith(text, leetSpeak);
-		text = text.replaceFirst("(((ht|f)tp|ws)(s?)://|www\\.)", "");
 
 		final Matcher msg = urlPattern.matcher(text.toLowerCase(Locale.ROOT));
 		return msg.find() && Extensions.checkExtension(text);
