@@ -17,7 +17,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1327,13 +1331,6 @@
       <workItem from="1626376616613" duration="1340000" />
       <workItem from="1626436811022" duration="307000" />
     </task>
-    <task id="LOCAL-04936" summary="Melhoria no cálculo de combate do Shoukan">
-      <created>1625252116045</created>
-      <option name="number" value="04936" />
-      <option name="presentableId" value="LOCAL-04936" />
-      <option name="project" value="LOCAL" />
-      <updated>1625252116045</updated>
-    </task>
     <task id="LOCAL-04937" summary="Melhoria no cálculo de combate do Shoukan">
       <created>1625252127461</created>
       <option name="number" value="04937" />
@@ -1670,7 +1667,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626451215420</updated>
     </task>
-    <option name="localTasksCounter" value="4985" />
+    <task id="LOCAL-04985" summary="Correções menores">
+      <created>1626461381461</created>
+      <option name="number" value="04985" />
+      <option name="presentableId" value="LOCAL-04985" />
+      <option name="project" value="LOCAL" />
+      <updated>1626461381461</updated>
+    </task>
+    <option name="localTasksCounter" value="4986" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
