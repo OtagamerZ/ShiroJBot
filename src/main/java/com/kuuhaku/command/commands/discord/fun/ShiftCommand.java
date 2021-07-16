@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "polarizar",
 		aliases = {"polarize", "shift"},
-		usage = "req_intensity",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_HISTORY})
@@ -74,22 +73,11 @@ public class ShiftCommand implements Executable {
 						String url = Helper.getImageFrom(msg);
 						File f;
 
-						int pow = 5;
-						if (args.length > 0) {
-							pow = Integer.parseInt(args[0]);
-							if (!Helper.between(pow, -20, 21)) {
-								ms.get().delete().queue(null, Helper::doNothing);
-								channel.sendMessage("❌ | A intensidade deve ser um valor entre -20 e 20.").queue();
-								return;
-							}
-						}
-
 						if (url.contains(".gif")) {
-							int finalPow = pow;
 							f = File.createTempFile("shifted", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
-									ImageFilters.shift(frame.getAdjustedFrame(), finalPow),
+									ImageFilters.shift(frame.getAdjustedFrame()),
 									frame.getDisposal(),
 									frame.getWidth(),
 									frame.getHeight(),
@@ -102,7 +90,7 @@ public class ShiftCommand implements Executable {
 						} else {
 							BufferedImage bi = ImageIO.read(Helper.getImage(url));
 
-							f = Helper.writeAndGet(ImageFilters.shift(bi, pow), "shifted", "png");
+							f = Helper.writeAndGet(ImageFilters.shift(bi), "shifted", "png");
 						}
 
 						ms.get().delete().queue(null, Helper::doNothing);
@@ -112,9 +100,6 @@ public class ShiftCommand implements Executable {
 					} catch (IOException | ImageReadException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("❌ | Deu erro ao baixar a imagem, tente com outra.").queue();
-					} catch (NumberFormatException e) {
-						ms.get().delete().queue(null, Helper::doNothing);
-						channel.sendMessage("❌ | A intensidade deve ser um valor numérico.").queue();
 					}
 				});
 	}
