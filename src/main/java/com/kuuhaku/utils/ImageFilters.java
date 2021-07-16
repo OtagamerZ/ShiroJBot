@@ -46,6 +46,7 @@ public class ImageFilters {
 
 			try {
 				if (y % 2 == 0) out.setRGB(x, y, 0);
+				else out.setRGB(x, y, rgb);
 			} catch (ArrayIndexOutOfBoundsException ignore) {
 			}
 		});
