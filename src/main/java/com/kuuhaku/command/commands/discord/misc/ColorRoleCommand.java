@@ -67,7 +67,6 @@ public class ColorRoleCommand implements Executable {
 
 			BufferedImage bi = new BufferedImage(960, 60 + 30 * (roles.size() / 3), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setFont(new Font("arial", Font.BOLD, 30));
 
 			int i = 0;
