@@ -136,7 +136,9 @@ public class Arena {
 
 					String name;
 					if (h instanceof TeamHand th) {
-						name = th.getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
+						name = th.getNames().stream()
+								.map(n -> StringUtils.abbreviate(n, 16))
+								.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
 					} else {
 						name = StringUtils.abbreviate(h.getUser().getName(), 32);
 					}
@@ -219,13 +221,15 @@ public class Arena {
 							g2d.drawImage(grv.peekLast().drawCard(false),
 									key == Side.TOP ? 1889 : 137,
 									key == Side.TOP ? 193 : 1206, null);
-							Profile.printCenteredString("%s/%s/%s".formatted(
-									StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
-									StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
-									StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-									), 225,
-									key == Side.TOP ? 1889 : 137,
-									key == Side.TOP ? 178 : 1638, g2d);
+
+							Integer[] count = new Integer[3];
+							for (Drawable d : grv) {
+								if (d instanceof Champion) count[0]++;
+								else if (d instanceof Equipment) count[1]++;
+								else count[2]++;
+							}
+
+							Profile.printCenteredString("%02d/%02d/%02d".formatted((Object[]) count), 225, key == Side.TOP ? 1889 : 137, key == Side.TOP ? 178 : 1638, g2d);
 						}
 
 						if (h.getDeque().size() > 0) {

@@ -210,7 +210,7 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public boolean canInteract(GuildMessageReceivedEvent evt) {
-		Predicate<GuildMessageReceivedEvent> condition = e -> channel.getChannels().stream().anyMatch(g -> g != null && e.getChannel().getId().equals(g.getId()));
+		Predicate<GuildMessageReceivedEvent> condition = e -> channel.getChannels().parallelStream().anyMatch(g -> g != null && e.getChannel().getId().equals(g.getId()));
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
@@ -642,7 +642,7 @@ public class Shoukan extends GlobalGame {
 					if (c == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
-					} else if (hisSide.stream().anyMatch(s -> s.getTop() != null)) {
+					} else if (hisSide.parallelStream().anyMatch(s -> s.getTop() != null)) {
 						channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue(null, Helper::doNothing);
 						return;
 					} else if (!c.isAvailable()) {
@@ -899,7 +899,10 @@ public class Shoukan extends GlobalGame {
 				Hand op = hands.get(defr.getLeft());
 				float dmg;
 				if (noDmg)
-					dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+					dmg = yours.getLinkedTo().parallelStream()
+							.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
+							.mapToInt(Equipment::getAtk)
+							.sum();
 				else
 					dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
 
@@ -952,7 +955,10 @@ public class Shoukan extends GlobalGame {
 			Hand you = hands.get(atkr.getLeft());
 			float dmg;
 			if (noDmg)
-				dmg = his.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+				dmg = his.getLinkedTo().parallelStream()
+						.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
+						.mapToInt(Equipment::getAtk)
+						.sum();
 			else
 				dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
 
@@ -999,7 +1005,10 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			float dmg = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+			float dmg = yours.getLinkedTo().parallelStream()
+					.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
+					.mapToInt(Equipment::getAtk)
+					.sum();
 
 			Hand op = hands.get(defr.getLeft());
 			op.removeHp(Math.round(dmg * demonFac));
@@ -1048,14 +1057,14 @@ public class Shoukan extends GlobalGame {
 
 	private boolean makeFusion(Hand h) {
 		if (fusionLock > 0) return false;
-		List<String> champsInField = arena.getSlots().get(current)
-				.stream()
+		List<SlotColumn> slts = arena.getSlots().get(current);
+
+		List<String> champsInField = slts.parallelStream()
 				.map(SlotColumn::getTop)
 				.map(c -> c == null || c.isSealed() ? null : c.getCard().getId())
 				.collect(Collectors.toList());
 
-		List<String> equipsInField = arena.getSlots().get(current)
-				.stream()
+		List<String> equipsInField = slts.parallelStream()
 				.map(SlotColumn::getBottom)
 				.map(dr -> dr == null ? null : dr.getCard().getId())
 				.collect(Collectors.toList());
@@ -1063,7 +1072,7 @@ public class Shoukan extends GlobalGame {
 		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : null;
 
 		Champion aFusion = fusions
-				.stream()
+				.parallelStream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
 						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
@@ -1381,8 +1390,8 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public Side getSideById(String id) {
-		return hands.values().stream()
-				.filter(h -> h.getUser().getId().equals(id) || (h instanceof TeamHand th && th.getUsers().stream().anyMatch(u -> u.getId().equals(id))))
+		return hands.values().parallelStream()
+				.filter(h -> h.getUser().getId().equals(id) || (h instanceof TeamHand th && th.getUsers().parallelStream().anyMatch(u -> u.getId().equals(id))))
 				.map(Hand::getSide)
 				.findFirst().orElse(null);
 	}
@@ -2046,7 +2055,7 @@ public class Shoukan extends GlobalGame {
 
 		for (Map.Entry<Side, LinkedList<Drawable>> entry : getArena().getGraveyard().entrySet()) {
 			Hand h = hands.get(entry.getKey());
-			List<Champion> dead = entry.getValue().stream()
+			List<Champion> dead = entry.getValue().parallelStream()
 					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
 					.collect(Collectors.toList());
@@ -2055,7 +2064,7 @@ public class Shoukan extends GlobalGame {
 				entry.getValue().remove(c);
 			}
 
-			List<Champion> inHand = h.getCards().stream()
+			List<Champion> inHand = h.getCards().parallelStream()
 					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
 					.collect(Collectors.toList());
@@ -2064,7 +2073,7 @@ public class Shoukan extends GlobalGame {
 				h.getCards().remove(c);
 			}
 
-			List<Champion> inDeck = h.getDeque().stream()
+			List<Champion> inDeck = h.getDeque().parallelStream()
 					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
 					.collect(Collectors.toList());
@@ -2308,7 +2317,7 @@ public class Shoukan extends GlobalGame {
 	public int getAttributeSum(Side s, boolean attacking) {
 		List<SlotColumn> slts = arena.getSlots().get(s);
 
-		return slts.stream()
+		return slts.parallelStream()
 				.map(SlotColumn::getTop)
 				.filter(Objects::nonNull)
 				.mapToInt(c -> attacking
@@ -2318,7 +2327,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public boolean isInGraveyard(Side s, String id) {
-		return arena.getGraveyard().get(s).stream()
+		return arena.getGraveyard().get(s).parallelStream()
 				.map(d -> d.getCard().getId())
 				.anyMatch(id::equalsIgnoreCase);
 	}
@@ -2408,7 +2417,7 @@ public class Shoukan extends GlobalGame {
 													.queue(null, Helper::doNothing);
 										});
 							}), true, 1, TimeUnit.MINUTES,
-							u -> hands.values().stream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
+							u -> hands.values().parallelStream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
 					));
 		}
 	}

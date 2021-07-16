@@ -49,7 +49,6 @@ public class MemeHandler {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/twobuttons.jpg")));
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setBackground(Color.black);
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Arial", Font.BOLD, 25));
@@ -86,7 +85,6 @@ public class MemeHandler {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/expandingbrain.png")));
 			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Arial", Font.BOLD, 40));
@@ -118,7 +116,6 @@ public class MemeHandler {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/drake.jpg")));
 			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Arial", Font.BOLD, 40));
@@ -148,7 +145,6 @@ public class MemeHandler {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/sadbuttrue.png")));
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setBackground(Color.black);
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));

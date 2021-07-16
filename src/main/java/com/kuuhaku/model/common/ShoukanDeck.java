@@ -24,7 +24,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.collections4.ListUtils;
@@ -39,18 +38,11 @@ import java.util.stream.Collectors;
 
 public class ShoukanDeck {
 	private final Account acc;
-	private final Clan clan;
 	final int SENSHI_COLUMNS = 6;
 	final int EVOGEAR_COLUMNS = 4;
 
-	public ShoukanDeck(Account acc, Clan clan) {
-		this.acc = acc;
-		this.clan = clan;
-	}
-
 	public ShoukanDeck(Account acc) {
 		this.acc = acc;
-		this.clan = null;
 	}
 
 	public BufferedImage view(Deck dk) {
@@ -75,7 +67,6 @@ public class ShoukanDeck {
 		assert deck != null;
 		Graphics2D g2d = deck.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
