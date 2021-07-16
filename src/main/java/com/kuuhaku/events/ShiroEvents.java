@@ -370,7 +370,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 
 				try {
-					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
+					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 						message.delete().reason("Mensagem possui um URL").queue();
 						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
 						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
