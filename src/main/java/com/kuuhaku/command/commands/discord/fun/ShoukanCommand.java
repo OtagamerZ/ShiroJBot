@@ -302,7 +302,7 @@ public class ShoukanCommand implements Executable {
 										}
 									}
 								}), true, 1, TimeUnit.MINUTES,
-								u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
+								u -> players.parallelStream().map(User::getId).anyMatch(i -> i.equals(u.getId())),
 								ms -> {
 									for (User player : players) {
 										Main.getInfo().getConfirmationPending().remove(player.getId());
