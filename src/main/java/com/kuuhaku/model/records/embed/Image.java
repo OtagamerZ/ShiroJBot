@@ -33,10 +33,12 @@ public record Image(List<String> image, List<String> join, List<String> leave) {
 	}
 
 	public String getRandomJoin() {
+		if (join.isEmpty()) return getRandomImage();
 		return Helper.getRandomEntry(Helper.getOr(join, image()));
 	}
 
 	public String getRandomLeave() {
+		if (join.isEmpty()) return getRandomImage();
 		return Helper.getRandomEntry(Helper.getOr(leave, image()));
 	}
 }
