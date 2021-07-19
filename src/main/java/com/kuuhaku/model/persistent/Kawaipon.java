@@ -31,7 +31,7 @@ import java.util.*;
 @Table(name = "kawaipon")
 public class Kawaipon implements Cloneable {
 	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''", unique = true)
+	@Column(columnDefinition = "VARCHAR(255)")
 	private String uid = "";
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
