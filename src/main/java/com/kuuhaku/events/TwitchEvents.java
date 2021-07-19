@@ -189,7 +189,7 @@ public class TwitchEvents {
 	private void onChannelGoOfflineEvent(ChannelGoOfflineEvent evt) {
 		Main.getInfo().setLive(false);
 		for (JDA shard : Main.getShiroShards().getShards()) {
-			shard.getPresence().setActivity(Main.getRandomActivity(shard));
+			shard.getPresence().setActivity(Main.getRandomActivity());
 		}
 		Guild sup = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
 		TextChannel tth = sup.getTextChannelById(ShiroInfo.getTwitchChannelID());
