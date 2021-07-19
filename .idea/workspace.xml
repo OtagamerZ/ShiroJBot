@@ -1327,14 +1327,7 @@
       <workItem from="1626376616613" duration="1340000" />
       <workItem from="1626436811022" duration="307000" />
       <workItem from="1626696567491" duration="6602000" />
-      <workItem from="1626706189676" duration="608000" />
-    </task>
-    <task id="LOCAL-04943" summary="Correções menores">
-      <created>1625669377575</created>
-      <option name="number" value="04943" />
-      <option name="presentableId" value="LOCAL-04943" />
-      <option name="project" value="LOCAL" />
-      <updated>1625669377575</updated>
+      <workItem from="1626706189676" duration="2657000" />
     </task>
     <task id="LOCAL-04944" summary="Correções menores e criação do comando de Starboard">
       <created>1625752207851</created>
@@ -1672,7 +1665,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626702164320</updated>
     </task>
-    <option name="localTasksCounter" value="4992" />
+    <task id="LOCAL-04992" summary="Correções menores">
+      <created>1626713655757</created>
+      <option name="number" value="04992" />
+      <option name="presentableId" value="LOCAL-04992" />
+      <option name="project" value="LOCAL" />
+      <updated>1626713655757</updated>
+    </task>
+    <option name="localTasksCounter" value="4993" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
