@@ -17,16 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Hashable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/id/CompositeMemberId.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/VoiceTimeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/VoiceTimeDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/VoiceTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/VoiceTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1333,21 +1325,7 @@
       <workItem from="1626375558664" duration="729000" />
       <workItem from="1626376616613" duration="1340000" />
       <workItem from="1626436811022" duration="307000" />
-      <workItem from="1626696567491" duration="3839000" />
-    </task>
-    <task id="LOCAL-04939" summary="Correções menores">
-      <created>1625581976463</created>
-      <option name="number" value="04939" />
-      <option name="presentableId" value="LOCAL-04939" />
-      <option name="project" value="LOCAL" />
-      <updated>1625581976463</updated>
-    </task>
-    <task id="LOCAL-04940" summary="Correções menores">
-      <created>1625582633047</created>
-      <option name="number" value="04940" />
-      <option name="presentableId" value="LOCAL-04940" />
-      <option name="project" value="LOCAL" />
-      <updated>1625582633048</updated>
+      <workItem from="1626696567491" duration="5130000" />
     </task>
     <task id="LOCAL-04941" summary="Correções menores">
       <created>1625582759656</created>
@@ -1678,7 +1656,21 @@
       <option name="project" value="LOCAL" />
       <updated>1626461665081</updated>
     </task>
-    <option name="localTasksCounter" value="4988" />
+    <task id="LOCAL-04988" summary="Correções menores">
+      <created>1626700464053</created>
+      <option name="number" value="04988" />
+      <option name="presentableId" value="LOCAL-04988" />
+      <option name="project" value="LOCAL" />
+      <updated>1626700464053</updated>
+    </task>
+    <task id="LOCAL-04989" summary="Correções menores">
+      <created>1626700698060</created>
+      <option name="number" value="04989" />
+      <option name="presentableId" value="LOCAL-04989" />
+      <option name="project" value="LOCAL" />
+      <updated>1626700698060</updated>
+    </task>
+    <option name="localTasksCounter" value="4990" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
