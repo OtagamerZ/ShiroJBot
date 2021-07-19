@@ -68,7 +68,7 @@ public class MyStatsCommand implements Executable {
 		Map<String, Page> categories = new LinkedHashMap<>();
 
 		{
-			VoiceTime vt = Helper.getOr(ShiroInfo.getShiroEvents().getVoiceTimes().get(mb.getId()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
+			VoiceTime vt = Helper.getOr(ShiroInfo.getShiroEvents().getVoiceTimes().get(mb.getUid() + mb.getSid()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
 			if (vt.getTime() > 0)
 				eb.addField(":timer: | Tempo em canais de voz:", Helper.toStringDuration(vt.getTime()), false);
 

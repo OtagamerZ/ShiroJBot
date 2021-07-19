@@ -222,7 +222,7 @@ public class Arena {
 									key == Side.TOP ? 1889 : 137,
 									key == Side.TOP ? 193 : 1206, null);
 
-							Integer[] count = new Integer[3];
+							Integer[] count = {0, 0, 0};
 							for (Drawable d : grv) {
 								if (d instanceof Champion) count[0]++;
 								else if (d instanceof Equipment) count[1]++;

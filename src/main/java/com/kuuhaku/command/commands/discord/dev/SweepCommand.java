@@ -107,13 +107,13 @@ public class SweepCommand implements Executable {
 						});
 						loaded.get();
 					} catch (ExecutionException | InterruptedException err) {
-						foundIds.addAll(mbs.stream().map(com.kuuhaku.model.persistent.Member::getId).collect(Collectors.toList()));
+						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).collect(Collectors.toList()));
 					}
 				}
 			}
 
 			for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
-				if (!foundIds.contains(mb1.getId())) {
+				if (!foundIds.contains(mb1.getUid() + mb1.getSid())) {
 					missingIds.putIfAbsent(mb1.getSid(), new HashSet<>());
 					missingIds.get(mb1.getSid()).add(mb1.getUid());
 				}

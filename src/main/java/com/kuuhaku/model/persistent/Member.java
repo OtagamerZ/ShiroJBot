@@ -21,34 +21,37 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
+import com.kuuhaku.model.common.Hashable;
 import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
+import com.kuuhaku.model.persistent.id.CompositeMemberId;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.zip.CRC32;
 
 @Entity
 @DynamicUpdate
 @Table(name = "member")
-public class Member {
+@IdClass(CompositeMemberId.class)
+public class Member implements Hashable {
 	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String id;
-
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String uid = "";
 
+	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String sid = "";
 
@@ -77,8 +80,7 @@ public class Member {
 	@Enumerated(value = EnumType.STRING)
 	private TrophyType trophy = null;
 
-	public Member(String id, String uid, String sid) {
-		this.id = id;
+	public Member(String uid, String sid) {
 		this.uid = uid;
 		this.sid = sid;
 	}
@@ -210,20 +212,12 @@ public class Member {
 		xp = 0;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	public int getLevel() {
 		return level;
 	}
 
 	public long getXp() {
 		return xp;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getUid() {
@@ -286,8 +280,7 @@ public class Member {
 		Account acc = AccountDAO.getAccount(uid);
 
 		return new JSONObject() {{
-			put("id", id);
-			put("mid", uid);
+			put("uid", uid);
 			put("sid", sid);
 			put("pseudoName", pseudoName);
 			put("profileColor", acc.getProfileColor());
@@ -306,11 +299,20 @@ public class Member {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Member member = (Member) o;
-		return Objects.equals(id, member.id);
+		return Objects.equals(uid, member.uid) && Objects.equals(sid, member.sid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(uid, sid);
+	}
+
+	@Override
+	public String getHash() {
+		CRC32 crc = new CRC32();
+		crc.update(sid.getBytes(StandardCharsets.UTF_8));
+		crc.update(uid.getBytes(StandardCharsets.UTF_8));
+
+		return Long.toHexString(crc.getValue());
 	}
 }

@@ -20,6 +20,8 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MutedMember;
+import com.kuuhaku.model.persistent.id.CompositeMemberId;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,30 +29,25 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class MemberDAO {
-	public static Member getMember(String id, String server) {
+	public static Member getMember(String id, String guild) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Member mb = em.find(Member.class, id + server);
-			if (mb == null)
-				return saveMember(new Member(id + server, id, server));
-
-			return mb;
+			return Helper.getOr(em.find(Member.class, new CompositeMemberId(id, guild)), new Member(id, guild));
 		} finally {
 			em.close();
 		}
 	}
 
-	public static Member saveMember(Member m) {
+	public static void saveMember(Member m) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		m = em.merge(m);
+		em.merge(m);
 		em.getTransaction().commit();
 
 		em.close();
 
-		return m;
 	}
 
 	@SuppressWarnings("unchecked")
