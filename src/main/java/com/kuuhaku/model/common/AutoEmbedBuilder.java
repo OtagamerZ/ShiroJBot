@@ -51,7 +51,7 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		setDescription(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH));
 		setThumbnail(e.thumbnail());
 		if (e.image() != null)
-			setImage(e.image().image());
+			setImage(e.image().getRandomImage());
 		if (e.showDate())
 			setTimestamp(LocalDateTime.now());
 

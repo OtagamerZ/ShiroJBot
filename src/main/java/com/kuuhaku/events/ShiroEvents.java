@@ -579,8 +579,8 @@ public class ShiroEvents extends ListenerAdapter {
 					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (e.image() != null && e.image().join() != null)
-						eb.setImage(e.image().join());
+					if (e.image() != null)
+						eb.setImage(e.image().getRandomJoin());
 
 					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild));
 
@@ -654,8 +654,8 @@ public class ShiroEvents extends ListenerAdapter {
 					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (e.image() != null && e.image().leave() != null)
-						eb.setImage(e.image().leave());
+					if (e.image() != null)
+						eb.setImage(e.image().getRandomLeave());
 
 					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild));
 
