@@ -31,9 +31,6 @@ import java.util.*;
 @Table(name = "kawaipon")
 public class Kawaipon implements Cloneable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''", unique = true)
 	private String uid = "";
 
@@ -49,6 +46,13 @@ public class Kawaipon implements Cloneable {
 	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Deck> decks = new ArrayList<>();
+
+	public Kawaipon() {
+	}
+
+	public Kawaipon(String uid) {
+		this.uid = uid;
+	}
 
 	public String getUid() {
 		return uid;
@@ -108,20 +112,7 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public Deck getDeck() {
-		if (uid == null) {
-			decks.add(new Deck());
-		} else {
-			Account acc = AccountDAO.getAccount(uid);
-			if (decks.size() < acc.getStashCapacity()) {
-				for (int i = 0; i < acc.getStashCapacity() - decks.size(); i++) {
-					decks.add(new Deck());
-				}
-				KawaiponDAO.saveKawaipon(this);
-			}
-		}
-
-		decks.sort(Comparator.comparingInt(d -> Helper.getOr(d.getId(), 0)));
-		return decks.get(activeDeck);
+		return getDecks().get(activeDeck);
 	}
 
 	public void setDeck(int i) {
