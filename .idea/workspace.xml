@@ -18,9 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/embed/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/embed/Image.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1330,21 +1328,7 @@
       <workItem from="1626376616613" duration="1340000" />
       <workItem from="1626436811022" duration="307000" />
       <workItem from="1626696567491" duration="6602000" />
-      <workItem from="1626706189676" duration="6158000" />
-    </task>
-    <task id="LOCAL-04945" summary="Correções menores e criação do comando de Starboard">
-      <created>1625752483733</created>
-      <option name="number" value="04945" />
-      <option name="presentableId" value="LOCAL-04945" />
-      <option name="project" value="LOCAL" />
-      <updated>1625752483733</updated>
-    </task>
-    <task id="LOCAL-04946" summary="Correções menores e criação do comando de Starboard">
-      <created>1625752924623</created>
-      <option name="number" value="04946" />
-      <option name="presentableId" value="LOCAL-04946" />
-      <option name="project" value="LOCAL" />
-      <updated>1625752924624</updated>
+      <workItem from="1626706189676" duration="7424000" />
     </task>
     <task id="LOCAL-04947" summary="Correções menores e criação do comando de Starboard">
       <created>1625753119540</created>
@@ -1675,7 +1659,21 @@
       <option name="project" value="LOCAL" />
       <updated>1626715666332</updated>
     </task>
-    <option name="localTasksCounter" value="4994" />
+    <task id="LOCAL-04994" summary="Correções menores">
+      <created>1626721850568</created>
+      <option name="number" value="04994" />
+      <option name="presentableId" value="LOCAL-04994" />
+      <option name="project" value="LOCAL" />
+      <updated>1626721850568</updated>
+    </task>
+    <task id="LOCAL-04995" summary="Correções menores">
+      <created>1626721925666</created>
+      <option name="number" value="04995" />
+      <option name="presentableId" value="LOCAL-04995" />
+      <option name="project" value="LOCAL" />
+      <updated>1626721925666</updated>
+    </task>
+    <option name="localTasksCounter" value="4996" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
