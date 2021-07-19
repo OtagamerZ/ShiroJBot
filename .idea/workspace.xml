@@ -16,7 +16,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -202,13 +204,15 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1322,14 +1326,8 @@
       <workItem from="1626375558664" duration="729000" />
       <workItem from="1626376616613" duration="1340000" />
       <workItem from="1626436811022" duration="307000" />
-      <workItem from="1626696567491" duration="5470000" />
-    </task>
-    <task id="LOCAL-04942" summary="Correções menores">
-      <created>1625669102428</created>
-      <option name="number" value="04942" />
-      <option name="presentableId" value="LOCAL-04942" />
-      <option name="project" value="LOCAL" />
-      <updated>1625669102428</updated>
+      <workItem from="1626696567491" duration="6602000" />
+      <workItem from="1626706189676" duration="608000" />
     </task>
     <task id="LOCAL-04943" summary="Correções menores">
       <created>1625669377575</created>
@@ -1667,7 +1665,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626702009336</updated>
     </task>
-    <option name="localTasksCounter" value="4991" />
+    <task id="LOCAL-04991" summary="Correções menores">
+      <created>1626702164320</created>
+      <option name="number" value="04991" />
+      <option name="presentableId" value="LOCAL-04991" />
+      <option name="project" value="LOCAL" />
+      <updated>1626702164320</updated>
+    </task>
+    <option name="localTasksCounter" value="4992" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
