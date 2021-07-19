@@ -19,10 +19,9 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Kawaipon;
-import org.hibernate.exception.ConstraintViolationException;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -30,16 +29,8 @@ public class KawaiponDAO {
 	public static Kawaipon getKawaipon(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM Kawaipon k WHERE k.uid = :id", Kawaipon.class);
-		q.setParameter("id", id);
-
 		try {
-			return (Kawaipon) q.getSingleResult();
-		} catch (NoResultException e) {
-			Kawaipon kp = new Kawaipon();
-			kp.setUid(id);
-			saveKawaipon(kp);
-			return getKawaipon(id);
+			return Helper.getOr(em.find(Kawaipon.class, id), new Kawaipon(id));
 		} finally {
 			em.close();
 		}
@@ -48,12 +39,9 @@ public class KawaiponDAO {
 	public static void saveKawaipon(Kawaipon k) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			em.getTransaction().begin();
-			em.merge(k);
-			em.getTransaction().commit();
-		} catch (ConstraintViolationException ignore) {
-		}
+		em.getTransaction().begin();
+		em.merge(k);
+		em.getTransaction().commit();
 
 		em.close();
 	}
