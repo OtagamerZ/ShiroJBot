@@ -18,5 +18,25 @@
 
 package com.kuuhaku.model.records.embed;
 
-public record Image(String image, String join, String leave) {
+import com.kuuhaku.utils.Helper;
+
+import java.util.List;
+
+public record Image(List<String> image, List<String> join, List<String> leave) {
+	@Override
+	public List<String> image() {
+		return Helper.getOr(image, List.of());
+	}
+
+	public String getRandomImage() {
+		return Helper.getRandomEntry(image());
+	}
+
+	public String getRandomJoin() {
+		return Helper.getRandomEntry(Helper.getOr(join, image()));
+	}
+
+	public String getRandomLeave() {
+		return Helper.getRandomEntry(Helper.getOr(leave, image()));
+	}
 }
