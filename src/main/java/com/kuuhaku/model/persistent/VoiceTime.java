@@ -18,23 +18,24 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.model.common.Hashable;
+import com.kuuhaku.model.persistent.id.CompositeMemberId;
 import com.kuuhaku.utils.Helper;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+import java.util.zip.CRC32;
 
 @Entity
 @Table(name = "voicetime")
-public class VoiceTime {
+@IdClass(CompositeMemberId.class)
+public class VoiceTime implements Hashable {
 	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String id;
-
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
+	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String sid;
 
@@ -44,7 +45,6 @@ public class VoiceTime {
 	private transient int joinOffset = (int) (System.currentTimeMillis() % 60000);
 
 	public VoiceTime(String uid, String sid) {
-		this.id = uid + sid;
 		this.uid = uid;
 		this.sid = sid;
 	}
@@ -60,8 +60,20 @@ public class VoiceTime {
 		this.uid = uid;
 	}
 
+	public String getSid() {
+		return sid;
+	}
+
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+
 	public long getTime() {
 		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 	public void update() {
@@ -74,5 +86,27 @@ public class VoiceTime {
 
 	public String getReadableTime() {
 		return Helper.toStringDuration(time);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		VoiceTime voiceTime = (VoiceTime) o;
+		return Objects.equals(uid, voiceTime.uid) && Objects.equals(sid, voiceTime.sid);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uid, sid);
+	}
+
+	@Override
+	public String getHash() {
+		CRC32 crc = new CRC32();
+		crc.update(sid.getBytes(StandardCharsets.UTF_8));
+		crc.update(uid.getBytes(StandardCharsets.UTF_8));
+
+		return Long.toHexString(crc.getValue());
 	}
 }

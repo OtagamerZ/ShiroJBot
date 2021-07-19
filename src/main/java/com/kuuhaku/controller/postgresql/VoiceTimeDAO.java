@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.VoiceTime;
+import com.kuuhaku.model.persistent.id.CompositeMemberId;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
@@ -31,7 +32,7 @@ public class VoiceTimeDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return Helper.getOr(em.find(VoiceTime.class, id + guild), new VoiceTime(id, guild));
+			return Helper.getOr(em.find(VoiceTime.class, new CompositeMemberId(id, guild)), new VoiceTime(id, guild));
 		} finally {
 			em.close();
 		}
