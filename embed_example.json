@@ -12,9 +12,15 @@
   "body": "Texto do corpo do embed",
   "thumbnail": "Ícone no canto superior direito do embed",
   "image": {
-    "image": "Imagem exibida na parte inferior do embed",
-    "join": "Imagem exibida na parte inferior do embed quando um membro entrar no servidor",
-    "leave": "Imagem exibida na parte inferior do embed quando um membro sair do servidor"
+    "image": [
+      "Imagens exibidas na parte inferior do embed"
+    ],
+    "join": [
+      "Igual à image, mas aparece apenas quando um membro entrar no servidor"
+    ],
+    "leave": [
+      "Igual à image, mas aparece apenas quando um membro sair do servidor"
+    ]
   },
   "showDate": "true ou false - Exibe o marcador de quando o embed foi enviado",
   "footer": {
