@@ -44,7 +44,7 @@ public class HourlyEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		if (!Main.getInfo().isLive())
 			for (JDA shard : Main.getShiroShards().getShards()) {
-				shard.getPresence().setActivity(Main.getRandomActivity(shard));
+				shard.getPresence().setActivity(Main.getRandomActivity());
 			}
 
 		Main.getInfo().setWinner(ExceedDAO.getWinner());
