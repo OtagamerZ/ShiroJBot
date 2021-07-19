@@ -1163,6 +1163,7 @@ public class Helper {
 	}
 
 	public static <T> T getRandomEntry(List<T> array) {
+		if (array.isEmpty()) return null;
 		return array.get(rng(array.size(), true));
 	}
 
