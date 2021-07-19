@@ -251,7 +251,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void setAltAtk(int altAtk) {
-		this.altAtk = Math.max(-1, altAtk);
+		this.altAtk = altAtk;
 	}
 
 	public int getAltDef() {
@@ -259,7 +259,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void setAltDef(int altDef) {
-		this.altDef = Math.max(-1, altDef);
+		this.altDef = altDef;
 	}
 
 	public int getMana() {
