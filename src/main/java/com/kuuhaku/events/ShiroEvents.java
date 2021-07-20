@@ -255,16 +255,19 @@ public class ShiroEvents extends ListenerAdapter {
 				evts.removeIf(SimpleMessageListener::isClosed);
 			}
 
-			Account acc = AccountDAO.getAccount(author.getId());
-			if (acc.isAfk()) {
-				message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
-				acc.setAfkMessage(null);
-			}
+			if (!author.isBot()) {
+				Account acc = AccountDAO.getAccount(author.getId());
+				if (acc.isAfk()) {
+					message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
+					acc.setAfkMessage(null);
+					AccountDAO.saveAccount(acc);
+				}
 
-			for (Member m : message.getMentionedMembers()) {
-				Account tgt = AccountDAO.getAccount(m.getId());
-				if (tgt.isAfk()) {
-					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.makeEmoteFromMention(tgt.getAfkMessage())).queue();
+				for (Member m : message.getMentionedMembers()) {
+					Account tgt = AccountDAO.getAccount(m.getId());
+					if (tgt.isAfk()) {
+						message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.makeEmoteFromMention(tgt.getAfkMessage())).queue();
+					}
 				}
 			}
 
