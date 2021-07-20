@@ -50,7 +50,7 @@ public class ProfileCommand implements Executable {
 		if (message.getMentionedMembers().isEmpty()) mb = member;
 		else mb = message.getMentionedMembers().get(0);
 
-		Account acc = AccountDAO.getAccount(mb.getUser().getId());
+		Account acc = AccountDAO.getAccount(mb.getId());
 
 		channel.sendMessage(I18n.getString("str_generating-profile")).queue(m -> {
 			try {

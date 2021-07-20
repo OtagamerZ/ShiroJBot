@@ -19,6 +19,8 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "couple")
@@ -32,6 +34,9 @@ public class Couple {
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String waifu = "";
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private ZonedDateTime marriedAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public Couple(String husbando, String waifu) {
 		this.husbando = husbando;
@@ -59,5 +64,9 @@ public class Couple {
 
 	public void setWaifu(String waifu) {
 		this.waifu = waifu;
+	}
+
+	public ZonedDateTime getMarriedAt() {
+		return marriedAt;
 	}
 }
