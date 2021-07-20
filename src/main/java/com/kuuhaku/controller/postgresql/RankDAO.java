@@ -117,7 +117,7 @@ public class RankDAO {
 					                 , count(1) FILTER (WHERE NOT kc.foil) AS normal
 					                 , count(1) FILTER (WHERE kc.foil)     AS foil
 					            FROM kawaiponcard kc
-					            GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
+					            GROUP BY kc.kawaipon_id) kc on k.uid = kc.kawaipon_id
 					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
 				) x
 				ORDER BY index
