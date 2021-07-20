@@ -36,7 +36,7 @@ public enum Race {
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
 	ELF("Elfo",
-			"+1 Mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas.",
+			"+1 Mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas",
 			"+1 Mana a cada 3 turnos",
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
@@ -51,12 +51,12 @@ public enum Race {
 			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo."
 	),
 	DIVINITY("Divindade",
-			"Cartas sem efeito em seu deck ganham um aleatório de mesmo custo (exceto fusões).",
+			"Cartas sem efeito em seu deck ganham um aleatório de mesmo custo (exceto fusões)",
 			"Inicia com 1 campeão extra",
 			"Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos."
 	),
 	MYSTICAL("Místico",
-			"**(SOLO)** -1 Peso de Magias\n**(DUO)** Ao puxar uma magia ganhe 1 de mana",
+			"**(SOLO)** -1 Peso de Magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
 			"Inicia com 1 magia extra",
 			"Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos."
 	),
