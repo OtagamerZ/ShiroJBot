@@ -111,6 +111,9 @@ public class Account {
 	@Column(columnDefinition = "TEXT")
 	private String dailyProgress = "{}";
 
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String afkMessage = null;
+
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastQuest = null;
 
@@ -541,5 +544,17 @@ public class Account {
 	public boolean hasPendingQuest() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		return lastQuest == null || lastQuest.getDayOfYear() != today.getDayOfYear();
+	}
+
+	public boolean isAfk() {
+		return afkMessage != null;
+	}
+
+	public String getAfkMessage() {
+		return afkMessage;
+	}
+
+	public void setAfkMessage(String afkMessage) {
+		this.afkMessage = afkMessage;
 	}
 }
