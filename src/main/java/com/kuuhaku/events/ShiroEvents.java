@@ -255,8 +255,8 @@ public class ShiroEvents extends ListenerAdapter {
 				evts.removeIf(SimpleMessageListener::isClosed);
 			}
 
+			Account acc = AccountDAO.getAccount(author.getId());
 			if (!author.isBot()) {
-				Account acc = AccountDAO.getAccount(author.getId());
 				if (acc.isAfk()) {
 					message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
 					acc.setAfkMessage(null);
