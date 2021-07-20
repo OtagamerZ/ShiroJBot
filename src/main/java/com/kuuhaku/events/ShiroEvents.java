@@ -255,6 +255,19 @@ public class ShiroEvents extends ListenerAdapter {
 				evts.removeIf(SimpleMessageListener::isClosed);
 			}
 
+			Account acc = AccountDAO.getAccount(author.getId());
+			if (acc.isAfk()) {
+				message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
+				acc.setAfkMessage(null);
+			}
+
+			for (Member m : message.getMentionedMembers()) {
+				Account tgt = AccountDAO.getAccount(m.getId());
+				if (tgt.isAfk()) {
+					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.makeEmoteFromMention(tgt.getAfkMessage())).queue();
+				}
+			}
+
 			PreparedCommand command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
 				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
@@ -306,7 +319,6 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot() && !blacklisted) {
-				Account acc = AccountDAO.getAccount(author.getId());
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
 				}
@@ -443,7 +455,6 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 			}
 
-			Account acc = AccountDAO.getAccount(author.getId());
 			if (acc.hasPendingQuest()) {
 				DailyQuest tasks = DailyQuest.getQuest(author.getIdLong());
 				Map<DailyTask, Integer> pg = acc.getDailyProgress();
