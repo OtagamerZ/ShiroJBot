@@ -19,12 +19,10 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Couple;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
@@ -54,7 +52,7 @@ public class Profile {
 
 	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		BufferedImage avatar;
-		Member mb = MemberDAO.getMember(m.getUser().getId(), g.getId());
+		Member mb = MemberDAO.getMember(m.getId(), g.getId());
 		Account acc = AccountDAO.getAccount(m.getId());
 
 		try {
@@ -150,9 +148,10 @@ public class Profile {
 		drawOutlinedText(name, 270, 342, g2d);
 
 		try {
-			if (!Member.getWaifu(m.getUser().getId()).isEmpty()) {
+			Couple c = WaifuDAO.getCouple(m.getId());
+			if (c != null) {
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser().getId())).getName(), 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + LogDAO.getUsername(Member.getWaifu(m.getId())) + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
