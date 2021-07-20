@@ -62,7 +62,6 @@ public class Hand {
 	private int hp = 0;
 	private int suppressTime = 0;
 	private int lockTime = 0;
-	private int manaReturn = 0;
 	private int nullTime = 0;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
@@ -549,7 +548,7 @@ public class Hand {
 	}
 
 	public int getMana() {
-		return mana;
+		return isSuppressed() ? 0 : mana;
 	}
 
 	public int getBaseManaPerTurn() {
@@ -614,16 +613,10 @@ public class Hand {
 
 	public void setSuppressTime(int time) {
 		this.suppressTime = time;
-		this.manaReturn += mana;
-		this.mana = 0;
 	}
 
 	public void decreaseSuppression() {
 		suppressTime = Math.max(0, suppressTime - 1);
-		if (suppressTime == 0) {
-			mana += manaReturn;
-			manaReturn = 0;
-		}
 	}
 
 	public void addLockTime(int time) {
