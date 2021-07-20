@@ -1234,6 +1234,37 @@ public class Shoukan extends GlobalGame {
 			arena.getGraveyard().get(to).add(ch.copy());
 	}
 
+	public void dizimateCard(Side to, int target) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
+		if (ch == null) return;
+		List<SlotColumn> slts = getArena().getSlots().get(to);
+
+		slts.get(target).setTop(null);
+		for (int i = 0; i < slts.size(); i++) {
+			SlotColumn sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+				unequipCard(to, i, slts);
+		}
+
+		for (SlotColumn slot : slts) {
+			if (slot.getTop() == null) continue;
+
+			Champion c = slot.getTop();
+			c.setEfctAtk(target, 0);
+			c.setEfctDef(target, 0);
+		}
+
+		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
+
+		ch.reset();
+		if (!ch.isFusion())
+			arena.getGraveyard().get(to).add(ch.copy());
+	}
+
 	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
