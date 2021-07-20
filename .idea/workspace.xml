@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,19 +205,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1327,14 +1315,8 @@
       <workItem from="1626376616613" duration="1340000" />
       <workItem from="1626436811022" duration="307000" />
       <workItem from="1626696567491" duration="6602000" />
-      <workItem from="1626706189676" duration="8672000" />
-    </task>
-    <task id="LOCAL-04950" summary="Correções menores">
-      <created>1625777554149</created>
-      <option name="number" value="04950" />
-      <option name="presentableId" value="LOCAL-04950" />
-      <option name="project" value="LOCAL" />
-      <updated>1625777554149</updated>
+      <workItem from="1626706189676" duration="9935000" />
+      <workItem from="1626792740624" duration="328000" />
     </task>
     <task id="LOCAL-04951" summary="Correções menores">
       <created>1625778089214</created>
@@ -1672,7 +1654,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626723539783</updated>
     </task>
-    <option name="localTasksCounter" value="4999" />
+    <task id="LOCAL-04999" summary="Correções menores">
+      <created>1626725798444</created>
+      <option name="number" value="04999" />
+      <option name="presentableId" value="LOCAL-04999" />
+      <option name="project" value="LOCAL" />
+      <updated>1626725798444</updated>
+    </task>
+    <option name="localTasksCounter" value="5000" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

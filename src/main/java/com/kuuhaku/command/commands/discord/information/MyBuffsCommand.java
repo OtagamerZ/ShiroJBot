@@ -33,10 +33,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 @Command(
@@ -74,9 +70,7 @@ public class MyBuffsCommand implements Executable {
 		if (gb.getBuffs().size() > 0) {
 			for (ServerBuff b : gb.getBuffs()) {
 				boolean isUltimate = b.getTier() == 4;
-				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
-						.plus(b.getTime(), ChronoUnit.MILLIS)
-						.format(Helper.dateFormat);
+				String until = "<t:" + (b.getAcquiredAt() + b.getTime()) + ">";
 
 				String chance = Helper.roundToString(b.getMult() * 100 - 100, 0) + "%";
 				switch (b.getType()) {
