@@ -18,8 +18,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando de AFK">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Couple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Couple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1329,14 +1329,7 @@
       <workItem from="1626696567491" duration="6602000" />
       <workItem from="1626706189676" duration="9935000" />
       <workItem from="1626792740624" duration="476000" />
-      <workItem from="1626798761437" duration="2499000" />
-    </task>
-    <task id="LOCAL-04955" summary="Atualização da biblioteca de paginação">
-      <created>1626116499101</created>
-      <option name="number" value="04955" />
-      <option name="presentableId" value="LOCAL-04955" />
-      <option name="project" value="LOCAL" />
-      <updated>1626116499101</updated>
+      <workItem from="1626798761437" duration="9155000" />
     </task>
     <task id="LOCAL-04956" summary="Atualização da biblioteca de paginação">
       <created>1626116584417</created>
@@ -1674,7 +1667,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626800503621</updated>
     </task>
-    <option name="localTasksCounter" value="5004" />
+    <task id="LOCAL-05004" summary="Adicionado comando de AFK">
+      <created>1626801500935</created>
+      <option name="number" value="05004" />
+      <option name="presentableId" value="LOCAL-05004" />
+      <option name="project" value="LOCAL" />
+      <updated>1626801500935</updated>
+    </task>
+    <option name="localTasksCounter" value="5005" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
