@@ -16,15 +16,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AfkCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando de AFK">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/err/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/err/locale_pt.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Couple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Couple.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,6 +206,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1323,28 +1329,7 @@
       <workItem from="1626696567491" duration="6602000" />
       <workItem from="1626706189676" duration="9935000" />
       <workItem from="1626792740624" duration="476000" />
-      <workItem from="1626798761437" duration="1536000" />
-    </task>
-    <task id="LOCAL-04952" summary="Correções menores">
-      <created>1626110400278</created>
-      <option name="number" value="04952" />
-      <option name="presentableId" value="LOCAL-04952" />
-      <option name="project" value="LOCAL" />
-      <updated>1626110400279</updated>
-    </task>
-    <task id="LOCAL-04953" summary="Atualização da biblioteca de paginação">
-      <created>1626113469702</created>
-      <option name="number" value="04953" />
-      <option name="presentableId" value="LOCAL-04953" />
-      <option name="project" value="LOCAL" />
-      <updated>1626113469702</updated>
-    </task>
-    <task id="LOCAL-04954" summary="Atualização da biblioteca de paginação">
-      <created>1626115113590</created>
-      <option name="number" value="04954" />
-      <option name="presentableId" value="LOCAL-04954" />
-      <option name="project" value="LOCAL" />
-      <updated>1626115113591</updated>
+      <workItem from="1626798761437" duration="2499000" />
     </task>
     <task id="LOCAL-04955" summary="Atualização da biblioteca de paginação">
       <created>1626116499101</created>
@@ -1668,7 +1653,28 @@
       <option name="project" value="LOCAL" />
       <updated>1626793074717</updated>
     </task>
-    <option name="localTasksCounter" value="5001" />
+    <task id="LOCAL-05001" summary="Adicionado comando de AFK">
+      <created>1626800321279</created>
+      <option name="number" value="05001" />
+      <option name="presentableId" value="LOCAL-05001" />
+      <option name="project" value="LOCAL" />
+      <updated>1626800321280</updated>
+    </task>
+    <task id="LOCAL-05002" summary="Adicionado comando de AFK">
+      <created>1626800488921</created>
+      <option name="number" value="05002" />
+      <option name="presentableId" value="LOCAL-05002" />
+      <option name="project" value="LOCAL" />
+      <updated>1626800488922</updated>
+    </task>
+    <task id="LOCAL-05003" summary="Adicionado comando de AFK">
+      <created>1626800503621</created>
+      <option name="number" value="05003" />
+      <option name="presentableId" value="LOCAL-05003" />
+      <option name="project" value="LOCAL" />
+      <updated>1626800503621</updated>
+    </task>
+    <option name="localTasksCounter" value="5004" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1755,7 +1761,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria nas requisições de anime" />
     <MESSAGE value="Adição de punição por não gastar créditos" />
     <MESSAGE value="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;" />
     <MESSAGE value="Melhoria nos embeds customizados" />
@@ -1780,7 +1785,8 @@
     <MESSAGE value="Correções menores e criação do comando de Starboard" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Adicionado comando de AFK" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado comando de AFK" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

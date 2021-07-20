@@ -702,7 +702,7 @@ public class Helper {
 							gatekeep(msg, r);
 						} else {
 							buttons.put(CANCEL, (m, ms) -> {
-								if (m.getUser().getId().equals(message.getAuthor())) {
+								if (m.getId().equals(message.getAuthor())) {
 									GuildConfig conf = GuildDAO.getGuildById(g.getId());
 									for (ButtonChannel bc : conf.getButtonConfigs()) {
 										if (bc.getMessages().remove(message)) break;
