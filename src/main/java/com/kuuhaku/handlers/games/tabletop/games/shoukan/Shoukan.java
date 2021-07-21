@@ -1102,7 +1102,9 @@ public class Shoukan extends GlobalGame {
 						h.removeHp(aFusion.getBaseStats() / 2);
 					else
 						h.removeMana(aFusion.getMana());
-				} else
+				}
+
+				if (aFusion.getBlood() > 0)
 					h.removeHp(aFusion.getBlood());
 			}
 
@@ -2364,8 +2366,22 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public Champion evolveTo(Champion from, String to, EffectParameters ep) {
+		Hand h = hands.get(ep.getSide());
 		Champion nc = CardDAO.getChampion(to);
 		assert nc != null;
+		if (((h.isNullMode() && !(h.getHp() <= nc.getBaseStats() / 2)) || h.getMana() < nc.getMana()) || h.getHp() <= nc.getBlood())
+			return from;
+
+		if (nc.getMana() > 0) {
+			if (h.isNullMode())
+				h.removeHp(nc.getBaseStats() / 2);
+			else
+				h.removeMana(nc.getMana());
+		}
+
+		if (nc.getBlood() > 0)
+			h.removeHp(nc.getBlood());
+
 		nc.setGame(from.getGame());
 		nc.setAcc(from.getAcc());
 		nc.setLinkedTo(from.getLinkedTo());
