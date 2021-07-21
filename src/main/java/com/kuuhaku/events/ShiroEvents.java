@@ -1020,23 +1020,18 @@ public class ShiroEvents extends ListenerAdapter {
 		if (BotExchange.isBotAdded(u.getId()) && msg.getMentionedUsers().stream().anyMatch(usr -> usr.getId().equals(Main.getSelfUser().getId()))) {
 			BotExchange be = BotExchange.getById(u.getId());
 
-			if (be.matchTrigger(msg.getContentRaw()).find()) {
+			if (be.matchTrigger(msg.getContentRaw())) {
 				if (be.getReactionEmote() != null) msg.addReaction(be.getReactionEmote()).queue();
-			} else if (be.matchConfirmation(msg.getContentRaw()).find()) {
-				String[] args = msg.getContentRaw().replaceAll(be.getConfirmation(), "").replace(",", "").split(" ");
-				int value = 0;
-				for (String arg : args) {
-					if (StringUtils.isNumeric(arg)) {
-						value = Integer.parseInt(arg);
-						break;
-					}
-				}
-				if (value == 0) return;
+			} else if (be.matchConfirmation(msg.getContentRaw())) {
+				Map<String, String> vals = be.getConfirmationValues(msg.getContentRaw());
 
-				User target = msg.getMentionedUsers().stream().filter(usr -> !usr.getId().equals(Main.getSelfUser().getId())).findFirst().orElse(null);
-				if (target == null) return;
+				User from = msg.getMentionedUsers().stream()
+						.filter(usr -> usr.getId().equals(vals.get("from")))
+						.findFirst().orElseThrow();
 
-				Account acc = AccountDAO.getAccount(target.getId());
+				int value = Integer.parseInt(vals.get("value").replace(",", ""));
+
+				Account acc = AccountDAO.getAccount(from.getId());
 				acc.addVCredit((long) Math.ceil(value * be.getRate()), this.getClass());
 				AccountDAO.saveAccount(acc);
 

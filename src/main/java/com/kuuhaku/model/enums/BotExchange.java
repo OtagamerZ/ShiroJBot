@@ -18,25 +18,27 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.utils.Helper;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 public enum BotExchange {
 	LORITTA(
 			"297153970613387264",
 			1.25f,
-			"(<:lori_rica:593979718919913474> \\*\\*\\|\\*\\* )<(@|@!)\\d+>( Você está prestes a transferir ).+( sonhos para )<(@|@!)\\d+>(!)",
-			"(\uD83D\uDCB8 \\*\\*\\|\\*\\* )<(@|@!)\\d+>( Transação realizada com sucesso! )<(@|@!)\\d+>( recebeu \\*\\*)",
+			"<:lori_rica:593979718919913474> \\*\\*\\|\\*\\* (?:<@(?<from>\\d+)>) Você está prestes a transferir (?<value>[\\d,]+) sonhos para <@572413282653306901>",
+			"(?::money_with_wings:|\uD83D\uDCB8) \\| (?:<@(?<from>\\d+)>) Transação realizada com sucesso! <@572413282653306901> recebeu (?<value>[\\d,]+) Sonhos!",
 			"sonho",
 			"✅"
 	);
 
 	private final String id;
 	private final float rate;
+	@Language("RegExp")
 	private final String trigger;
+	@Language("RegExp")
 	private final String confirmation;
 	private final String currency;
 	private final String reactionEmote;
@@ -82,11 +84,19 @@ public enum BotExchange {
 		return Arrays.stream(values()).filter(b -> b.id.equals(id)).findFirst().orElseThrow();
 	}
 
-	public Matcher matchTrigger(String s) {
-		return Pattern.compile(trigger).matcher(s);
+	public boolean matchTrigger(String s) {
+		return Helper.regex(s, trigger).find();
 	}
 
-	public Matcher matchConfirmation(String s) {
-		return Pattern.compile(confirmation).matcher(s);
+	public Map<String, String> getTriggerValues(String s) {
+		return Helper.extractNamedGroups(s, trigger);
+	}
+
+	public boolean matchConfirmation(String s) {
+		return Helper.regex(s, confirmation).find();
+	}
+
+	public Map<String, String> getConfirmationValues(String s) {
+		return Helper.extractNamedGroups(s, confirmation);
 	}
 }
