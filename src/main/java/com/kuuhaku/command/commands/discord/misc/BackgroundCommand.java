@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -49,8 +50,8 @@ public class BackgroundCommand implements Executable {
 			return;
 		}
 
-		try {
-			InputStream is = Helper.getImage(args[0]);
+		try (InputStream is = Helper.getImage(args[0])) {
+			ImageIO.read(is);
 			byte[] bytes = is.readAllBytes();
 
 			if (bytes.length > StorageUnit.B.convert(4, StorageUnit.MB)) {
