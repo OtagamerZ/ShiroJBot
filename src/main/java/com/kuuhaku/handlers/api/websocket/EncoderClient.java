@@ -47,6 +47,8 @@ public class EncoderClient extends Endpoint {
 
 		if (res.getInt("code") == HttpStatus.OK.value()) {
 			completed.get(res.getString("hash")).complete(res.getString("url"));
+		} else if (res.getInt("code") == HttpStatus.REQUEST_TIMEOUT.value()) {
+			completed.get(res.getString("hash")).complete(null);
 		}
 	};
 	private Session session = null;

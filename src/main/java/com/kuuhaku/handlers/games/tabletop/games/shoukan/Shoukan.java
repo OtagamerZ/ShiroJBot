@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
@@ -2447,8 +2448,11 @@ public class Shoukan extends GlobalGame {
 										.queue(m -> {
 											EmbedBuilder eb = new EmbedBuilder();
 											try {
-												String url = Main.getInfo().getEncoderClient().requestEncoding(String.valueOf(hashCode()), getFrames()).get(2L * getFrames().size(), TimeUnit.SECONDS);
+												String url = Main.getInfo().getEncoderClient()
+														.requestEncoding(String.valueOf(hashCode()), getFrames())
+														.get(1, TimeUnit.HOURS);
 
+												if (url == null) throw new TimeoutException();
 												eb.setColor(Color.green)
 														.setTitle("Replay pronto!")
 														.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
