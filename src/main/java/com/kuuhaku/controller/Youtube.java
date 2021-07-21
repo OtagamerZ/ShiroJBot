@@ -19,26 +19,33 @@
 package com.kuuhaku.controller;
 
 import com.google.api.services.youtube.YouTube;
-import com.kuuhaku.model.records.youtube.*;
+import com.kuuhaku.model.records.youtube.Item;
+import com.kuuhaku.model.records.youtube.Snippet;
+import com.kuuhaku.model.records.youtube.YoutubeData;
+import com.kuuhaku.model.records.youtube.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Youtube {
-	private static final String API_URL = YouTube.DEFAULT_BASE_URL + "search?key=" + ShiroInfo.getYoutubeToken() + "&part=snippet&type=playlist,video&q=%s&maxResults=10";
-
 	public static List<YoutubeVideo> getData(String query) throws IOException {
-		URL url = new URL(API_URL.formatted(URLEncoder.encode(query, StandardCharsets.UTF_8.toString())));
-		YoutubeData yd = requestVideoData(url);
+		JSONObject jo = Helper.get(YouTube.DEFAULT_BASE_URL, new JSONObject() {{
+			put("key", ShiroInfo.getYoutubeToken());
+			put("part", "snippet");
+			put("type", "playlist,video");
+			put("q", query);
+			put("maxResults", "10");
+		}});
+
+		YoutubeData yd = JSONUtils.fromJSON(jo.toString(), YoutubeData.class);
+		Helper.logger(Youtube.class).debug(yd);
+		if (yd == null) return null;
+
 		List<YoutubeVideo> videos = new ArrayList<>();
 
 		try {
@@ -61,36 +68,5 @@ public class Youtube {
 			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + yd);
 			throw new IOException();
 		}
-	}
-
-	private static YoutubeData requestVideoData(URL url) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Accept", "application/json");
-		con.addRequestProperty("Accept-Charset", "UTF-8");
-		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-
-		YoutubeData yd = JSONUtils.fromJSON(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8), YoutubeData.class);
-
-		Helper.logger(Youtube.class).debug(yd);
-		return yd;
-	}
-
-	public static YoutubeVideo getSingleData(String query) throws IOException {
-		URL url = new URL(API_URL.formatted(URLEncoder.encode(query, StandardCharsets.UTF_8.toString())));
-		YoutubeData yd = requestVideoData(url);
-		Item i = yd.items().get(0);
-
-		ID jid = i.id();
-		Snippet jsnippet = i.snippet();
-
-		return new YoutubeVideo(
-				Helper.getOr(jid.videoId(), jid.playlistId()),
-				jsnippet.title(),
-				jsnippet.description(),
-				jsnippet.thumbnails().medium().url(),
-				jsnippet.channelTitle(),
-				jid.playlistId() != null
-		);
 	}
 }
