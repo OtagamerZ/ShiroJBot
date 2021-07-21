@@ -38,7 +38,10 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.entities.*;
 import net.jodah.expiringmap.ExpiringMap;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.HttpHeaders;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import javax.websocket.DeploymentException;
@@ -112,7 +115,9 @@ public class ShiroInfo {
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final ShiroEvents shiroEvents = new ShiroEvents();
-	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
+	private static final CloseableHttpClient http = HttpClients.custom().setDefaultHeaders(List.of(
+			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
+	)).build();
 	private static final HashMap<String, String> emoteLookup = new HashMap<>();
 	private static final Set<String> pruneQueue = new HashSet<>();
 
@@ -214,6 +219,10 @@ public class ShiroInfo {
 		gmms.put(id, gmm);
 	}
 
+	public static CloseableHttpClient getHttp() {
+		return http;
+	}
+
 	public static ShiroEvents getShiroEvents() {
 		return shiroEvents;
 	}
@@ -236,10 +245,6 @@ public class ShiroInfo {
 
 	public static String getAnnouncementChannelID() {
 		return announcementChannelID;
-	}
-
-	public static HttpClientBuilder getHttpBuilder() {
-		return httpBuilder;
 	}
 
 	public static HashMap<String, String> getEmoteLookup() {
