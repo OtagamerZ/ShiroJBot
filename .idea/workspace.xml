@@ -17,9 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando de AFK">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1319,14 +1317,7 @@
       <workItem from="1626706189676" duration="9935000" />
       <workItem from="1626792740624" duration="476000" />
       <workItem from="1626798761437" duration="10567000" />
-      <workItem from="1626869006460" duration="3515000" />
-    </task>
-    <task id="LOCAL-04958" summary="Atualização da biblioteca de paginação">
-      <created>1626199255251</created>
-      <option name="number" value="04958" />
-      <option name="presentableId" value="LOCAL-04958" />
-      <option name="project" value="LOCAL" />
-      <updated>1626199255251</updated>
+      <workItem from="1626869006460" duration="3823000" />
     </task>
     <task id="LOCAL-04959" summary="Atualização da biblioteca de paginação">
       <created>1626209366375</created>
@@ -1664,7 +1655,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626869807345</updated>
     </task>
-    <option name="localTasksCounter" value="5007" />
+    <task id="LOCAL-05007" summary="Adicionado comando de AFK">
+      <created>1626873029974</created>
+      <option name="number" value="05007" />
+      <option name="presentableId" value="LOCAL-05007" />
+      <option name="project" value="LOCAL" />
+      <updated>1626873029974</updated>
+    </task>
+    <option name="localTasksCounter" value="5008" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
