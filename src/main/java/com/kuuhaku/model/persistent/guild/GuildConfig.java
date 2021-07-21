@@ -24,6 +24,7 @@ import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
+import com.squareup.moshi.JsonDataException;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -339,7 +340,11 @@ public class GuildConfig {
 	}
 
 	public Embed getEmbedTemplate() {
-		return JSONUtils.fromJSON(Helper.getOr(embedTemplate, "{}"), Embed.class);
+		try {
+			return JSONUtils.fromJSON(Helper.getOr(embedTemplate, "{}"), Embed.class);
+		} catch (JsonDataException e) {
+			return JSONUtils.fromJSON("{}", Embed.class);
+		}
 	}
 
 	public void setEmbedTemplate(Embed template) {
