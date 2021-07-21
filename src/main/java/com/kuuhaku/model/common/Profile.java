@@ -151,7 +151,7 @@ public class Profile {
 			Couple c = WaifuDAO.getCouple(m.getId());
 			if (c != null) {
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + LogDAO.getUsername(Member.getWaifu(m.getId())) + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + LogDAO.getUsername(Member.getWaifu(m.getId())).split("#")[0] + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
