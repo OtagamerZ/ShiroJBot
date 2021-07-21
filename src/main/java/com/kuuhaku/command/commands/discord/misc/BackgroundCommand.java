@@ -45,12 +45,12 @@ public class BackgroundCommand implements Executable {
 		if (args.length == 0) {
 			channel.sendMessage(I18n.getString("err_no-image")).queue();
 			return;
-		} else if (Helper.containsAny(args[0], "google", "goo.gl")) {
+		} else if (Helper.containsAny(argsAsText, "google", "goo.gl")) {
 			channel.sendMessage("❌ | Você pegou o link da **pesquisa do Google** bobo!").queue();
 			return;
 		}
 
-		try (InputStream is = Helper.getImage(args[0])) {
+		try (InputStream is = Helper.getImage(argsAsText)) {
 			ImageIO.read(is);
 			byte[] bytes = is.readAllBytes();
 
@@ -60,9 +60,9 @@ public class BackgroundCommand implements Executable {
 			}
 
 			Account acc = AccountDAO.getAccount(author.getId());
-			acc.setBackground(args[0]);
+			acc.setBackground(argsAsText);
 			AccountDAO.saveAccount(acc);
-			if (args[0].contains("discordapp"))
+			if (argsAsText.contains("discordapp"))
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
 			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {

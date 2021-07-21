@@ -18,6 +18,13 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando de AFK">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ImageCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,6 +211,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1317,14 +1335,8 @@
       <workItem from="1626706189676" duration="9935000" />
       <workItem from="1626792740624" duration="476000" />
       <workItem from="1626798761437" duration="10567000" />
-      <workItem from="1626869006460" duration="7138000" />
-    </task>
-    <task id="LOCAL-04961" summary="Atualização da biblioteca de paginação">
-      <created>1626264872057</created>
-      <option name="number" value="04961" />
-      <option name="presentableId" value="LOCAL-04961" />
-      <option name="project" value="LOCAL" />
-      <updated>1626264872058</updated>
+      <workItem from="1626869006460" duration="9843000" />
+      <workItem from="1626898551060" duration="2810000" />
     </task>
     <task id="LOCAL-04962" summary="Atualização da biblioteca de paginação">
       <created>1626264908676</created>
@@ -1662,7 +1674,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626885139941</updated>
     </task>
-    <option name="localTasksCounter" value="5010" />
+    <task id="LOCAL-05010" summary="Adicionado comando de AFK">
+      <created>1626890779591</created>
+      <option name="number" value="05010" />
+      <option name="presentableId" value="LOCAL-05010" />
+      <option name="project" value="LOCAL" />
+      <updated>1626890779591</updated>
+    </task>
+    <option name="localTasksCounter" value="5011" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
