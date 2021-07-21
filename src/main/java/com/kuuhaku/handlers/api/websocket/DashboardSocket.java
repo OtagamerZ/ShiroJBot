@@ -31,13 +31,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.jodah.expiringmap.ExpiringMap;
+import org.apache.http.HttpStatus;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.awt.*;
-import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -89,7 +89,7 @@ public class DashboardSocket extends WebSocketServer {
 			if (!payload.has("token") || !validate(payload.getString("token"), conn)) {
 				conn.send(new JSONObject() {{
 					put("type", type);
-					put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+					put("code", HttpStatus.SC_UNAUTHORIZED);
 				}}.toString());
 				return;
 			}
@@ -98,7 +98,7 @@ public class DashboardSocket extends WebSocketServer {
 			if (t == null) {
 				conn.send(new JSONObject() {{
 					put("type", type);
-					put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+					put("code", HttpStatus.SC_UNAUTHORIZED);
 				}}.toString());
 				return;
 			}
@@ -178,7 +178,7 @@ public class DashboardSocket extends WebSocketServer {
 					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
 					conn.send(new JSONObject() {{
 						put("type", type);
-						put("code", HttpURLConnection.HTTP_OK);
+						put("code", HttpStatus.SC_OK);
 						put("data", new JSONObject() {{
 							put("userData", user);
 							put("serverData", guilds);
@@ -227,7 +227,7 @@ public class DashboardSocket extends WebSocketServer {
 
 						conn.send(new JSONObject() {{
 							put("type", type);
-							put("code", HttpURLConnection.HTTP_OK);
+							put("code", HttpStatus.SC_OK);
 							put("total", CardDAO.getValidAnime().size());
 							put("data", new JSONObject() {{
 								put("cardData", animeCards);
@@ -252,7 +252,7 @@ public class DashboardSocket extends WebSocketServer {
 
 					conn.send(new JSONObject() {{
 						put("type", type);
-						put("code", HttpURLConnection.HTTP_OK);
+						put("code", HttpStatus.SC_OK);
 						put("total", cards.size());
 						put("data", data);
 					}}.toString());
@@ -293,7 +293,7 @@ public class DashboardSocket extends WebSocketServer {
 
 					conn.send(new JSONObject() {{
 						put("type", type);
-						put("code", HttpURLConnection.HTTP_OK);
+						put("code", HttpStatus.SC_OK);
 						put("data", data);
 					}}.toString());
 				}
@@ -334,7 +334,7 @@ public class DashboardSocket extends WebSocketServer {
 
 						if (err == 0) {
 							if (seller.getUid().equals(t.getUid())) {
-								code.set(HttpURLConnection.HTTP_OK);
+								code.set(HttpStatus.SC_OK);
 								msg.set("Carta retirada com sucesso!");
 
 								m.setBuyer(t.getUid());
@@ -348,7 +348,7 @@ public class DashboardSocket extends WebSocketServer {
 								MarketDAO.saveCard(m);
 							} else {
 								if (acc.getBalance() < rawAmount) {
-									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+									code.set(HttpStatus.SC_UNAUTHORIZED);
 									msg.set("Saldo insuficiente.");
 								} else {
 									m.setBuyer(t.getUid());
@@ -384,12 +384,12 @@ public class DashboardSocket extends WebSocketServer {
 											Helper::doNothing
 									);
 
-									code.set(HttpURLConnection.HTTP_OK);
+									code.set(HttpStatus.SC_OK);
 									msg.set("Carta comprada com sucesso!");
 								}
 							}
 						} else {
-							code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+							code.set(HttpStatus.SC_UNAUTHORIZED);
 							switch (m.getType()) {
 								case EVOGEAR -> {
 									switch (err) {
@@ -449,7 +449,7 @@ public class DashboardSocket extends WebSocketServer {
 	private boolean validate(String token, WebSocket conn) {
 		if (!TokenDAO.validateToken(token)) {
 			conn.send(new JSONObject() {{
-				put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+				put("code", HttpStatus.SC_UNAUTHORIZED);
 				put("reason", "Provided token is not valid");
 			}}.toString());
 			return false;

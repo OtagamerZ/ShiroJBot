@@ -24,7 +24,6 @@ import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.coder4.emoji.EmojiUtils;
-import com.github.kevinsawicki.http.HttpRequest;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
@@ -76,6 +75,17 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Precision;
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
@@ -102,7 +112,8 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -320,25 +331,25 @@ public class Helper {
 		} else return null;
 	}
 
-	public static JSONObject callApi(String url) {
-		try {
-			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-			con.addRequestProperty("User-Agent", "Mozilla/5.0");
-			return new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
-		} catch (IOException e) {
-			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-			return null;
-		}
-	}
-
 	public static Logger logger(Class<?> source) {
 		return LogManager.getLogger(source.getName());
 	}
 
 	public static InputStream getImage(String url) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		return con.getInputStream();
+		try {
+			HttpGet req = new HttpGet(url);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return ent.getContent();
+				else
+					return null;
+			}
+		} catch (JsonDataException | IllegalStateException | IOException e) {
+			return null;
+		}
 	}
 
 	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) throws InterruptedException, ExecutionException {
@@ -1056,79 +1067,209 @@ public class Helper {
 
 	public static JSONObject post(String endpoint, JSONObject payload, String token) {
 		try {
-			HttpRequest req = HttpRequest.post(endpoint)
-					.header("Content-Type", "application/json; charset=UTF-8")
-					.header("Accept", "application/json")
-					.header("User-Agent", "Mozilla/5.0")
-					.header("Authorization", token)
-					.send(payload.toString());
+			HttpPost req = new HttpPost(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
 
-			return new JSONObject(req.body());
-		} catch (JsonDataException | IllegalStateException e) {
+			req.setEntity(new StringEntity(payload.toString()));
+
+			URI uri = ub.build();
+
+			req.setHeaders(new Header[]{
+					new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"),
+					new BasicHeader(HttpHeaders.ACCEPT, "application/json"),
+					new BasicHeader(HttpHeaders.ACCEPT_CHARSET, "UTF-8"),
+					new BasicHeader(HttpHeaders.AUTHORIZATION, token)
+			});
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers) {
 		try {
-			HttpRequest req = HttpRequest.post(endpoint)
-					.headers(headers)
-					.send(payload.toString());
+			HttpPost req = new HttpPost(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
 
-			return new JSONObject(req.body());
-		} catch (JsonDataException | IllegalStateException e) {
+			req.setEntity(new StringEntity(payload.toString()));
+
+			URI uri = ub.build();
+
+			req.setHeaders(headers.entrySet().parallelStream()
+					.map(e -> new BasicHeader(e.getKey(), e.getValue()))
+					.toArray(Header[]::new)
+			);
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
 		try {
-			HttpRequest req = HttpRequest.post(endpoint)
-					.headers(headers)
-					.header("Authorization", token)
-					.send(payload.toString());
+			HttpPost req = new HttpPost(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
 
-			return new JSONObject(req.body());
-		} catch (JsonDataException | IllegalStateException e) {
+			req.setEntity(new StringEntity(payload.toString()));
+
+			URI uri = ub.build();
+
+			req.setHeaders(headers.entrySet().parallelStream()
+					.map(e -> new BasicHeader(e.getKey(), e.getValue()))
+					.toArray(Header[]::new)
+			);
+			req.setHeader(HttpHeaders.AUTHORIZATION, token);
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject post(String endpoint, String payload, Map<String, String> headers, String token) {
 		try {
-			HttpRequest req = HttpRequest.post(endpoint)
-					.headers(headers)
-					.header("Authorization", token)
-					.send(payload);
+			HttpPost req = new HttpPost(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
 
-			return new JSONObject(req.body());
-		} catch (JsonDataException | IllegalStateException e) {
+			req.setEntity(new StringEntity(payload));
+
+			URI uri = ub.build();
+
+			req.setHeaders(headers.entrySet().parallelStream()
+					.map(e -> new BasicHeader(e.getKey(), e.getValue()))
+					.toArray(Header[]::new)
+			);
+			req.setHeader(HttpHeaders.AUTHORIZATION, token);
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
+			return new JSONObject();
+		}
+	}
+
+	public static JSONObject get(String endpoint, JSONObject payload) {
+		try {
+			HttpGet req = new HttpGet(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
+
+			for (Map.Entry<String, Object> params : payload.entrySet()) {
+				ub.setParameter(params.getKey(), String.valueOf(params.getValue()));
+			}
+
+			URI uri = ub.build();
+
+			req.setHeaders(new Header[]{
+					new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"),
+					new BasicHeader(HttpHeaders.ACCEPT, "application/json"),
+					new BasicHeader(HttpHeaders.ACCEPT_CHARSET, "UTF-8")
+			});
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject get(String endpoint, JSONObject payload, String token) {
 		try {
-			HttpRequest req = HttpRequest.get(endpoint, payload, true)
-					.header("Content-Type", "application/json; charset=UTF-8")
-					.header("Accept", "application/json")
-					.header("User-Agent", "Mozilla/5.0")
-					.header("Authorization", token);
+			HttpGet req = new HttpGet(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
 
-			return new JSONObject(req.body());
-		} catch (JsonDataException | IllegalStateException e) {
+			for (Map.Entry<String, Object> params : payload.entrySet()) {
+				ub.setParameter(params.getKey(), String.valueOf(params.getValue()));
+			}
+
+			URI uri = ub.build();
+
+			req.setHeaders(new Header[]{
+					new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"),
+					new BasicHeader(HttpHeaders.ACCEPT, "application/json"),
+					new BasicHeader(HttpHeaders.ACCEPT_CHARSET, "UTF-8"),
+					new BasicHeader(HttpHeaders.AUTHORIZATION, token)
+			});
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
 			return new JSONObject();
 		}
 	}
 
 	public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
 		try {
-			HttpRequest req = HttpRequest.get(endpoint, payload, true)
-					.headers(headers)
-					.header("Authorization", token);
+			HttpGet req = new HttpGet(endpoint);
+			URIBuilder ub = new URIBuilder(req.getURI());
 
-			return new JSONObject(req.body());
-		} catch (JsonDataException | IllegalStateException e) {
+			for (Map.Entry<String, Object> params : payload.entrySet()) {
+				ub.setParameter(params.getKey(), String.valueOf(params.getValue()));
+			}
+
+			URI uri = ub.build();
+
+			req.setHeaders(headers.entrySet().parallelStream()
+					.map(e -> new BasicHeader(e.getKey(), e.getValue()))
+					.toArray(Header[]::new)
+			);
+			req.setURI(uri);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return new JSONObject(EntityUtils.toString(ent));
+				else
+					return new JSONObject();
+			}
+		} catch (JsonDataException | IllegalStateException | URISyntaxException | IOException e) {
 			return new JSONObject();
 		}
 	}
@@ -1782,11 +1923,20 @@ public class Helper {
 	}
 
 	public static String getFileType(String url) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-		con.setRequestMethod("HEAD");
-		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		con.connect();
-		return con.getContentType();
+		try {
+			HttpHead req = new HttpHead(url);
+
+			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
+				HttpEntity ent = res.getEntity();
+
+				if (ent != null)
+					return ent.getContentType().getValue();
+				else
+					return null;
+			}
+		} catch (JsonDataException | IllegalStateException | IOException e) {
+			return null;
+		}
 	}
 
 	public static String hash(byte[] bytes, String encoding) {
