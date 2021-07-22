@@ -21,9 +21,10 @@ package com.kuuhaku.model.records;
 import com.kuuhaku.utils.Helper;
 
 import java.awt.*;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
-public record ClanRanking(Integer id, String name, Long score, String icon) {
+public record ClanRanking(int id, String name, BigInteger score, String icon) {
 	public Color getColor() {
 		if (icon != null)
 			return Helper.colorThief(Helper.btoa(icon));
