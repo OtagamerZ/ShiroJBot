@@ -21,12 +21,8 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
@@ -87,11 +83,6 @@ public class JankenponCommand implements Executable {
 		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + pcChoice + (
 				switch (finalWin) {
 					case 0 -> {
-						if (ExceedDAO.hasExceed(author.getId())) {
-							PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-							ps.modifyInfluence(false);
-							com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
-						}
 						int lost = LeaderboardsDAO.getUserScore(author.getId(), JankenponCommand.class);
 						if (lost > 0)
 							LeaderboardsDAO.submit(author, JankenponCommand.class, -lost);
@@ -101,11 +92,6 @@ public class JankenponCommand implements Executable {
 						int crd = Math.max(10, Helper.rng(50, false));
 						acc.addCredit(crd, this.getClass());
 						AccountDAO.saveAccount(acc);
-						if (ExceedDAO.hasExceed(author.getId())) {
-							PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-							ps.modifyInfluence(2);
-							PStateDAO.savePoliticalState(ps);
-						}
 						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);
 						yield "\nVocê ganhou! Aqui, " + Helper.separate(crd) + " créditos por ter jogado comigo!";
 					}

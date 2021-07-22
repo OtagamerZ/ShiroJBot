@@ -25,7 +25,6 @@ import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Paginator;
 import com.github.ygimenez.model.PaginatorBuilder;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.ScheduledEvents;
@@ -126,7 +125,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	private static void finishStartUp() {
-		getInfo().setWinner(ExceedDAO.getWinner());
 		ConsoleListener console = new ConsoleListener();
 
 		for (Emote emote : shiroShards.getEmotes()) {

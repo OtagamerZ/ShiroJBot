@@ -19,9 +19,7 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.ExceedMember;
 
 public enum CreditLoan {
 	LOAN_1(1000, 0.1),
@@ -46,10 +44,8 @@ public enum CreditLoan {
 		return loan;
 	}
 
-	public double getInterest(ExceedMember ex) {
-		if (ex == null) return 1 + interest;
-		ExceedEnum ee = ExceedEnum.getByName(ex.getExceed());
-		return 1 + interest * (ee == null ? 1 : 1 - PStateDAO.getInfluenceShare(ee));
+	public double getInterest() {
+		return 1 + interest;
 	}
 
 	public void sign(Account acc) {

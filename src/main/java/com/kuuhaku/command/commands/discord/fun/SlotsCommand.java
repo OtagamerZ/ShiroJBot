@@ -21,12 +21,12 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
+import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.Slot;
 import com.kuuhaku.model.persistent.Account;
@@ -130,20 +130,8 @@ public class SlotsCommand implements Executable {
 							""".formatted(combo.getMessage(), Helper.separate(prize))).queue();
 					LeaderboardsDAO.submit(author, SlotsCommand.class, (int) prize);
 				}
-
-				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-					ps.modifyInfluence(combo.getInfluence());
-					PStateDAO.savePoliticalState(ps);
-				}
 			} else {
 				channel.sendMessage("Poxa, parece que você não teve sorte hoje. Volte sempre!").queue();
-
-				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-					ps.modifyInfluence(false);
-					PStateDAO.savePoliticalState(ps);
-				}
 			}
 
 			Main.getInfo().getConfirmationPending().remove(author.getId());

@@ -21,12 +21,12 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -141,11 +141,7 @@ public class GuessTheCardsCommand implements Executable {
 
 							Account acc = AccountDAO.getAccount(author.getId());
 							acc.addCredit(reward, GuessTheCardsCommand.class);
-							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-								ps.modifyInfluence(2 * points);
-								PStateDAO.savePoliticalState(ps);
-							}
+
 							switch (points) {
 								case 0 -> {
 									channel.sendMessage(

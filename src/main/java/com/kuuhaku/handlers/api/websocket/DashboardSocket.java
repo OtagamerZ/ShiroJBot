@@ -148,7 +148,6 @@ public class DashboardSocket extends WebSocketServer {
 						put("waifu", w == null ? "" : w.getAsTag());
 						put("waifuMult", cm == null ? 1.25f : cm.getMult());
 						put("profiles", profiles.stream().map(Member::toJson).collect(Collectors.toList()));
-						put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
 						put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 						put("bonuses", Member.getBonuses(u));
 						put("badges", Tags.getUserBadges(u.getId()));
