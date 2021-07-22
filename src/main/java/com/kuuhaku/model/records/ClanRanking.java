@@ -23,12 +23,15 @@ import com.kuuhaku.utils.Helper;
 import java.awt.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.zip.CRC32;
 
 public record ClanRanking(int id, String name, BigInteger score, String icon) {
 	public Color getColor() {
 		if (icon != null)
 			return Helper.colorThief(Helper.btoa(icon));
 
-		return Color.decode(Helper.hash(name.getBytes(StandardCharsets.UTF_8), "MD5").substring(0, 5));
+		CRC32 crc = new CRC32();
+		crc.update(name.getBytes(StandardCharsets.UTF_8));
+		return Color.decode(Long.toHexString(crc.getValue() & 0xFFFFFF));
 	}
 }
