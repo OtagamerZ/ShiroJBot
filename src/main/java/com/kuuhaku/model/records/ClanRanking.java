@@ -29,6 +29,6 @@ public record ClanRanking(int id, String name, BigInteger score, String icon) {
 		if (icon != null)
 			return Helper.colorThief(Helper.btoa(icon));
 
-		return Color.decode(Helper.hash(name.getBytes(StandardCharsets.UTF_8), "MD-5").substring(0, 5));
+		return Color.decode(Helper.hash(name.getBytes(StandardCharsets.UTF_8), "MD5").substring(0, 5));
 	}
 }
