@@ -1915,12 +1915,7 @@ public class Helper {
 			HttpHead req = new HttpHead(url);
 
 			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
-				HttpEntity ent = res.getEntity();
-
-				if (ent != null)
-					return ent.getContentType().getValue();
-				else
-					return null;
+				return res.getFirstHeader("Content-Type").getValue();
 			}
 		} catch (JsonDataException | IllegalStateException | IOException e) {
 			return null;
