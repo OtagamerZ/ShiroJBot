@@ -146,4 +146,14 @@ public class ClanDAO {
 
 		em.close();
 	}
+
+	public static void resetScores() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("UPDATE ClanMember SET score = 0").executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }
