@@ -107,7 +107,6 @@ public class ClanDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static ClanRanking getClanChampion() {
 		EntityManager em = Manager.getEntityManager();
 
