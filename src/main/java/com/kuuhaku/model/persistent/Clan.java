@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -239,17 +240,39 @@ public class Clan {
 	public void deposit(long amount, User u) {
 		this.vault += amount;
 		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " créditos.");
+
+		for (ClanMember mb : members) {
+			mb.addScore(amount / members.size());
+		}
 	}
 
 	public void withdraw(long amount, User u) {
 		this.vault -= amount;
 		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " créditos.");
+
+		for (ClanMember mb : members) {
+			mb.removeScore(amount / members.size());
+		}
 	}
 
 	public void upgrade(User u) {
 		this.vault -= tier.getNext().getCost();
 		this.tier = this.tier.getNext();
 		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier.getCost()) + " créditos.");
+	}
+
+	public long getScore() {
+		GeometricMean geo = new GeometricMean();
+		for (ClanMember mb : members) {
+			geo.increment(mb.getScore() <= 0 ? 1 : mb.getScore());
+		}
+
+		return Math.round(geo.getResult() * switch (tier) {
+			case PARTY -> 1;
+			case FACTION -> 0.95;
+			case GUILD -> 0.9;
+			case DYNASTY -> 0.85;
+		});
 	}
 
 	public boolean hasPaidRent() {
@@ -273,6 +296,10 @@ public class Clan {
 		this.vault -= 100000;
 		this.name = name;
 		transactions.add(u.getAsTag() + " trocou o nome do clã por 100.000 créditos.");
+
+		for (ClanMember mb : members) {
+			mb.removeScore(mb.getScore() / 3);
+		}
 	}
 
 	public List<String> getTransactions() {

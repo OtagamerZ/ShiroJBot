@@ -16,37 +16,18 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent;
+package com.kuuhaku.model.records;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import com.kuuhaku.utils.Helper;
 
-@Entity
-@Table(name = "monthwinner")
-public class MonthWinner {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+import java.awt.*;
+import java.nio.charset.StandardCharsets;
 
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
-	private String exceed = "";
+public record ClanRanking(int id, String name, long score, String icon) {
+	public Color getColor() {
+		if (icon != null)
+			return Helper.colorThief(Helper.btoa(icon));
 
-	@Column(columnDefinition = "DATE")
-	private LocalDate expiry = LocalDate.now().plusWeeks(1);
-
-	public String getExceed() {
-		return exceed;
-	}
-
-	public void setExceed(String exceed) {
-		this.exceed = exceed;
-	}
-
-	public LocalDate getExpiry() {
-		return expiry;
-	}
-
-	public void setExpiry(LocalDate expiry) {
-		this.expiry = expiry;
+		return Color.decode(Helper.hash(name.getBytes(StandardCharsets.UTF_8), "MD-5").substring(0, 5));
 	}
 }

@@ -21,16 +21,15 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.SupportTier;
-import com.kuuhaku.model.enums.TagIcons;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Blacklist;
+import com.kuuhaku.model.persistent.Lottery;
+import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -49,52 +48,6 @@ public class MonthlyEvent implements Job {
 	}
 
 	public static void call() {
-		if (ExceedDAO.verifyMonth()) {
-			ExceedDAO.markWinner(ExceedDAO.findWinner());
-			String ex = ExceedDAO.getWinner();
-			ExceedEnum ee = ExceedEnum.getByName(ex);
-			for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ee)) {
-				User u = Main.getInfo().getUserByID(exceedMember.getUid());
-				Account acc = AccountDAO.getAccount(exceedMember.getUid());
-				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-					double share = ExceedDAO.getMemberShare(u.getId());
-					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).exp() / 1000f);
-					long prize = Math.round(total * share);
-					try {
-						c.sendMessage("""
-								%s **O seu Exceed foi campeão neste mês, parabéns!** %s
-								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
-								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s pontos)**.
-								""".formatted(
-								TagIcons.EXCEED_CHAMPION.getTag(0),
-								TagIcons.EXCEED_CHAMPION.getTag(0),
-								ex,
-								Helper.roundToString(share * 100, 2),
-								Helper.separate(prize),
-								total
-						)).queue(null, Helper::doNothing);
-					} catch (Exception e) {
-						Helper.logger(MonthlyEvent.class).error(e + " | " + e.getStackTrace()[0]);
-					}
-					acc.addCredit(prize, MonthlyEvent.class);
-					AccountDAO.saveAccount(acc);
-				});
-			}
-
-			for (ExceedMember em : ExceedDAO.getExceedMembers()) {
-				if (Main.getInfo().getUserByID(em.getUid()) == null || em.getContribution() == 0)
-					ExceedDAO.removeMember(em);
-				else {
-					em.resetContribution();
-					ExceedDAO.saveExceedMember(em);
-				}
-			}
-
-			ExceedDAO.unblock();
-
-			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
-		}
-
 		List<String> ns = List.of(
 				"00", "01", "02", "03", "04", "05",
 				"06", "07", "08", "09", "10", "11",

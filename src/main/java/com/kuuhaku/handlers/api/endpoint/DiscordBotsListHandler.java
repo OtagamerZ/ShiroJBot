@@ -19,10 +19,10 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -67,14 +67,6 @@ public class DiscordBotsListHandler {
 				eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
 				eb.setColor(Color.cyan);
 
-				if (ExceedDAO.hasExceed(u.getId())) {
-					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
-					ps.modifyInfluence(5);
-					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
-
-					eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
-				}
-
 				chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 			}
 		} catch (RuntimeException e) {
@@ -108,14 +100,6 @@ public class DiscordBotsListHandler {
 							eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 							eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
 							eb.setColor(Color.cyan);
-
-							if (ExceedDAO.hasExceed(u.getId())) {
-								PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
-								ps.modifyInfluence(5);
-								PStateDAO.savePoliticalState(ps);
-
-								eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
-							}
 
 							chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						}

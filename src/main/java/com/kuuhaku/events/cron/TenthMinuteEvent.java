@@ -20,13 +20,10 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
@@ -39,9 +36,6 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -50,7 +44,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -74,67 +71,7 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
-		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
-		String[] exNames = {"imanity", "ex-machina", "exmachina", "flugel", "flügel", "werebeast", "elf", "seiren"};
-
-		for (GuildConfig gc : guilds) {
-			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
-			if (guild == null) continue;
-
-			List<Member> mbs = guild.getMembers()
-					.stream()
-					.filter(m -> m != null && ems.stream().anyMatch(em -> em.getUid().equals(m.getId())))
-					.collect(Collectors.toList());
-
-			Map<ExceedEnum, List<Role>> roles = new HashMap<>();
-			List<Pair<String, Role>> addRoles = guild.getRoles()
-					.stream()
-					.filter(r -> r.getPosition() < guild.getSelfMember().getRoles().get(0).getPosition())
-					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName()), exNames))
-					.map(r -> {
-						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName()), s)).findFirst().orElse(null);
-						return Pair.of(name, r);
-					})
-					.filter(p -> p.getKey() != null)
-					.collect(Collectors.toList());
-
-			for (Pair<String, Role> addRole : addRoles) {
-				ExceedEnum ee = ExceedEnum.getByName(addRole.getLeft());
-				roles.computeIfAbsent(ee, k -> new ArrayList<>()).add(addRole.getRight());
-			}
-
-			List<AuditableRestAction<Void>> acts = new ArrayList<>();
-			for (Member mb : mbs) {
-				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
-
-				if (ex != null) {
-					List<Role> validRoles = roles.get(ex);
-					List<Role> invalidRoles = roles.entrySet()
-							.stream()
-							.filter(e -> !e.getKey().equals(ex))
-							.map(Map.Entry::getValue)
-							.flatMap(List::stream)
-							.collect(Collectors.toList());
-
-					acts.add(guild.modifyMemberRoles(mb, validRoles, invalidRoles));
-				} else {
-					List<Role> invalidRoles = roles.values()
-							.stream()
-							.flatMap(List::stream)
-							.collect(Collectors.toList());
-
-					acts.add(guild.modifyMemberRoles(mb, null, invalidRoles));
-				}
-			}
-
-			if (acts.isEmpty()) continue;
-			RestAction.allOf(acts)
-					.mapToResult()
-					.queue();
-		}
-
-		guilds = GuildDAO.getAllGuildsWithPaidRoles();
+		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithPaidRoles();
 		for (GuildConfig gc : guilds) {
 			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (guild == null) continue;

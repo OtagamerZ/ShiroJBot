@@ -120,7 +120,6 @@ public class HelpCommand implements Executable {
 					.addField(Helper.VOID, I18n.getString("str_quick-emote-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_pagination-tip"), false)
 					.addField(Helper.VOID, I18n.getString("str_waifu-tip", prefix), false)
-					.addField(Helper.VOID, I18n.getString("str_exceed-tip"), false)
 					.addField(Helper.VOID, I18n.getString("str_kawaipon-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_edit-message-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_loan-tip", prefix), false)

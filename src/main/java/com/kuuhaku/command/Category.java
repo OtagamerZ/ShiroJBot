@@ -41,7 +41,6 @@ public enum Category {
 	MISC(I18n.getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", I18n.getString("cat_misc-description"), PrivilegeLevel.USER),
 	INFO(I18n.getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", I18n.getString("cat_info-description"), PrivilegeLevel.USER),
 	MUSIC(I18n.getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", I18n.getString("cat_music-description"), PrivilegeLevel.USER),
-	EXCEED(I18n.getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", I18n.getString("cat_exceed-description"), PrivilegeLevel.USER),
 	CLAN(I18n.getString("cat_clan-name"), "<:fun:674261700941185035>", "674261700941185035", I18n.getString("cat_clan-description"), PrivilegeLevel.USER),
 	NSFW(I18n.getString("cat_nsfw-name"), "<:nsfw:687649035204558894>", "687649035204558894", I18n.getString("cat_nsfw-description"), PrivilegeLevel.USER);
 

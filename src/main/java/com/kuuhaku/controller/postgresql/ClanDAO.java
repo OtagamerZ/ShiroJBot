@@ -19,6 +19,9 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.ClanMember;
+import com.kuuhaku.model.records.ClanRanking;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -88,5 +91,60 @@ public class ClanDAO {
 		} finally {
 			em.close();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<ClanRanking> getClanRanking() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.icon FROM shiro.\"GetClanRanking\" c");
+		q.setMaxResults(10);
+
+		try {
+			return Helper.map(ClanRanking.class, q.getResultList());
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ClanRanking getClanChampion() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.icon FROM shiro.\"GetClanChampion\" c");
+		q.setMaxResults(1);
+
+		try {
+			return Helper.map(ClanRanking.class, (Object[]) q.getSingleResult());
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static ClanMember getClanMember(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m FROM ClanMember m WHERE m.uid = :id", ClanMember.class);
+		q.setParameter("id", id);
+
+		try {
+			return (ClanMember) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveMember(ClanMember member) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(member);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }

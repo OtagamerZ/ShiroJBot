@@ -22,13 +22,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
@@ -124,12 +120,6 @@ public class StandoffCommand implements Executable {
 							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 							acc.addCredit(prize, this.getClass());
 							AccountDAO.saveAccount(acc);
-
-							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-								ps.modifyInfluence(10 * level);
-								PStateDAO.savePoliticalState(ps);
-							}
 
 							LeaderboardsDAO.submit(author, StandoffCommand.class, (int) react);
 						}
