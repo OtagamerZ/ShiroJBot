@@ -242,7 +242,7 @@ public class Clan {
 		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " créditos.");
 
 		for (ClanMember mb : members) {
-			mb.addScore(amount / members.size());
+			mb.addScore(amount / tier.getCapacity());
 		}
 	}
 
@@ -251,7 +251,7 @@ public class Clan {
 		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " créditos.");
 
 		for (ClanMember mb : members) {
-			mb.removeScore(amount / members.size());
+			mb.removeScore(amount / tier.getCapacity());
 		}
 	}
 
@@ -263,8 +263,10 @@ public class Clan {
 
 	public long getScore() {
 		GeometricMean geo = new GeometricMean();
-		for (ClanMember mb : members) {
-			geo.increment(mb.getScore() <= 0 ? 1 : mb.getScore());
+		for (int i = 0; i < tier.getCapacity(); i++) {
+			ClanMember mb = i >= members.size() ? null : members.get(i);
+			long score = mb == null || mb.getScore() <= 0 ? 1 : mb.getScore();
+			geo.increment(score);
 		}
 
 		return Math.round(geo.getResult() * switch (tier) {
