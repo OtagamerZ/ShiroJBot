@@ -18,9 +18,10 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.model.enums.*;
+import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.RankedTier;
+import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Couple;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -42,7 +43,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -228,11 +228,6 @@ public class Profile {
 
 	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Graphics2D g2d) throws IOException {
 		List<BufferedImage> badges = new ArrayList<>() {{
-			String exceed = ExceedDAO.getExceed(m.getId());
-			if (!exceed.isEmpty()) {
-				add(ImageIO.read(Helper.getImage(Objects.requireNonNull(Main.getShiroShards().getEmoteById(TagIcons.getExceedId(ExceedEnum.getByName(exceed)))).getImageUrl())));
-			}
-
 			Set<Tag> tags = Tag.getTags(m);
 			for (Tag t : tags) {
 				try {

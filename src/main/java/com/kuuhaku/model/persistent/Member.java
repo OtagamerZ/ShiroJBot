@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
 import com.kuuhaku.model.common.Hashable;
@@ -92,8 +91,6 @@ public class Member implements Hashable {
 	public static List<Bonus> getBonuses(User u) {
 		List<Bonus> bonuses = new ArrayList<>();
 
-		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
-			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
 		if (!getWaifu(u.getId()).isEmpty())
 			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u.getId()).getMult()));
 
@@ -119,8 +116,6 @@ public class Member implements Hashable {
 	public synchronized boolean addXp(Guild g) {
 		AtomicReference<Double> mult = new AtomicReference<>(1d);
 
-		if (ExceedDAO.hasExceed(uid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(uid)))
-			mult.updateAndGet(v -> v * 2);
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(uid)))
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
 
@@ -152,10 +147,10 @@ public class Member implements Hashable {
 			AccountDAO.saveAccount(acc);
 		}
 
-		ExceedMember em = ExceedDAO.getExceedMember(uid);
-		if (em != null) {
-			em.addContribution((int) (15 * mult.get() * spamModif));
-			ExceedDAO.saveExceedMember(em);
+		ClanMember cm = ClanDAO.getClanMember(uid);
+		if (cm != null) {
+			cm.addScore((long) (10 * mult.get() * spamModif));
+			ClanDAO.saveMember(cm);
 		}
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
@@ -172,10 +167,10 @@ public class Member implements Hashable {
 		xp += amount * spamModif;
 		lastEarntXp = System.currentTimeMillis();
 
-		ExceedMember em = ExceedDAO.getExceedMember(uid);
-		if (em != null) {
-			em.addContribution((int) (amount * spamModif));
-			ExceedDAO.saveExceedMember(em);
+		ClanMember cm = ClanDAO.getClanMember(uid);
+		if (cm != null) {
+			cm.addScore((long) (amount * spamModif));
+			ClanDAO.saveMember(cm);
 		}
 
 		Account acc = AccountDAO.getAccount(uid);

@@ -20,14 +20,12 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
@@ -63,7 +61,6 @@ public class MyStatsCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
-		String exceed = ExceedDAO.getExceed(author.getId());
 		Set<Tag> tags = Tag.getTags(member);
 		Map<String, Page> categories = new LinkedHashMap<>();
 
@@ -73,11 +70,6 @@ public class MyStatsCommand implements Executable {
 				eb.addField(":timer: | Tempo em canais de voz:", Helper.toStringDuration(vt.getTime()), false);
 
 			StringBuilder badges = new StringBuilder();
-
-			if (!exceed.isEmpty()) {
-				badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
-			}
-
 			for (Tag t : tags) {
 				badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel()));
 			}
@@ -90,11 +82,9 @@ public class MyStatsCommand implements Executable {
 		eb.clear();
 
 		{
-			boolean victorious = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 			boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 			int xp = (int) (15
-							* (victorious ? 2 : 1)
 							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
 							* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
 			);

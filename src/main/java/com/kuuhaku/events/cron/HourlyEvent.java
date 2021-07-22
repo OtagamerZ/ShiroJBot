@@ -20,7 +20,6 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
@@ -46,9 +45,6 @@ public class HourlyEvent implements Job {
 			for (JDA shard : Main.getShiroShards().getShards()) {
 				shard.getPresence().setActivity(Main.getRandomActivity());
 			}
-
-		Main.getInfo().setWinner(ExceedDAO.getWinner());
-		Helper.logger(this.getClass()).info("Atualizado vencedor mensal.");
 
 		if (Main.getInfo().getDblApi() != null) {
 			int size = Main.getShiroShards().getGuilds().size();

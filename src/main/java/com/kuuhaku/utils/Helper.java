@@ -44,6 +44,7 @@ import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.model.persistent.guild.buttons.Button;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
+import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.model.records.MatchInfo;
 import com.squareup.moshi.JsonDataException;
 import de.androidpit.colorthief.ColorThief;
@@ -2407,7 +2408,9 @@ public class Helper {
 	}
 
 	public static int applyTax(String id, int raw, double tax) {
-		boolean victorious = ExceedDAO.hasExceed(id) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(id));
+		Clan c = ClanDAO.getUserClan(id);
+		ClanRanking cr = ClanDAO.getClanChampion();
+		boolean victorious = c != null && cr != null && cr.id() == c.getId();
 
 		return raw - (victorious ? 0 : (int) (raw * tax));
 	}

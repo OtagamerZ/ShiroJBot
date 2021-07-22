@@ -23,13 +23,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -59,7 +57,6 @@ public class LoanCommand implements Executable {
 			return;
 		}
 
-		ExceedMember ex = ExceedDAO.getExceedMember(author.getId());
 		if (args.length < 1) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -71,11 +68,11 @@ public class LoanCommand implements Executable {
 					     
 					Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.
 					""");
-			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest(ex) * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2.500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest(ex) * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest(ex) * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_4.getInterest(ex) * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest(ex) * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest() * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2.500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest() * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest() * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_4.getInterest() * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest() * 100 - 100, 1) + "%)", false);
 			eb.setFooter("Não há prazo para debitar a dívida, todo crédito que você ganhar reduzirá a dívida.");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
@@ -102,7 +99,7 @@ public class LoanCommand implements Executable {
 		CreditLoan cl = CreditLoan.getById(loan);
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest(ex))) + " de dívida**__), deseja confirmar?")
+		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + Helper.round(cl.getInterest() * 100 - 100, 1) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest())) + " de dívida**__), deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							Account finalAcc = AccountDAO.getAccount(author.getId());

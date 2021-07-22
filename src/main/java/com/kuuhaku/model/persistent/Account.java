@@ -19,7 +19,10 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -163,9 +166,8 @@ public class Account {
 	}
 
 	public void signLoan(CreditLoan loan) {
-		ExceedMember ex = ExceedDAO.getExceedMember(uid);
 		this.addCredit(loan.getLoan(), this.getClass());
-		this.loan = Math.round(loan.getLoan() * loan.getInterest(ex));
+		this.loan = Math.round(loan.getLoan() * loan.getInterest());
 	}
 
 	public void addCredit(long credit, Class<?> from) {
@@ -412,14 +414,6 @@ public class Account {
 
 	public void setFollower(boolean follower) {
 		this.follower = follower;
-	}
-
-	public boolean isReceivingNotifs() {
-		return receiveNotifs;
-	}
-
-	public void setReceiveNotifs(boolean receiveNotifs) {
-		this.receiveNotifs = receiveNotifs;
 	}
 
 	public FrameColor getFrame() {
