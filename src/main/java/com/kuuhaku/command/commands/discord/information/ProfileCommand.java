@@ -67,7 +67,6 @@ public class ProfileCommand implements Executable {
 							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
 			} catch (IOException | NullPointerException | ImageReadException e) {
 				m.editMessage(I18n.getString("err_profile-generation-error")).queue();
-				Helper.logger(this.getClass()).error(e, e);
 			} catch (InsufficientPermissionException e) {
 				m.editMessage(I18n.getString("err_no-attach-files-permission")).queue();
 			}
