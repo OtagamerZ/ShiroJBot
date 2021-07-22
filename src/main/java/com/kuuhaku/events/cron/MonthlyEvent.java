@@ -21,6 +21,7 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
+import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.Account;
@@ -48,6 +49,8 @@ public class MonthlyEvent implements Job {
 	}
 
 	public static void call() {
+		ClanDAO.resetScores();
+
 		List<String> ns = List.of(
 				"00", "01", "02", "03", "04", "05",
 				"06", "07", "08", "09", "10", "11",
