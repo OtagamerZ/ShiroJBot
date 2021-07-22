@@ -16,10 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do sistema de Exceeds">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ClanDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ClanDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do sistema de Exceeds" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1332,14 +1329,7 @@
       <workItem from="1626869006460" duration="9843000" />
       <workItem from="1626898551060" duration="2849000" />
       <workItem from="1626958246202" duration="2189000" />
-      <workItem from="1626970006993" duration="10111000" />
-    </task>
-    <task id="LOCAL-04976" summary="Atualização da biblioteca de paginação">
-      <created>1626375679292</created>
-      <option name="number" value="04976" />
-      <option name="presentableId" value="LOCAL-04976" />
-      <option name="project" value="LOCAL" />
-      <updated>1626375679292</updated>
+      <workItem from="1626970006993" duration="10477000" />
     </task>
     <task id="LOCAL-04977" summary="Atualização da biblioteca de paginação">
       <created>1626375860527</created>
@@ -1677,7 +1667,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626979648701</updated>
     </task>
-    <option name="localTasksCounter" value="5025" />
+    <task id="LOCAL-05025" summary="Remoção do sistema de Exceeds">
+      <created>1626980234637</created>
+      <option name="number" value="05025" />
+      <option name="presentableId" value="LOCAL-05025" />
+      <option name="project" value="LOCAL" />
+      <updated>1626980234637</updated>
+    </task>
+    <option name="localTasksCounter" value="5026" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
