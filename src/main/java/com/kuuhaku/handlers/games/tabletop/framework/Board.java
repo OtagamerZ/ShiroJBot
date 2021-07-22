@@ -19,12 +19,8 @@
 package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.InfiniteList;
 import org.apache.commons.lang3.ArrayUtils;
@@ -159,24 +155,10 @@ public class Board {
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
 		AccountDAO.saveAccount(wacc);
 
-		if (ExceedDAO.hasExceed(id)) {
-			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-		}
-
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 		}
 
 		awarded = true;
@@ -188,26 +170,12 @@ public class Board {
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
 
-		if (ExceedDAO.hasExceed(id)) {
-			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-		}
-
 		wacc.playedDaily();
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
@@ -223,26 +191,12 @@ public class Board {
 			Account wacc = AccountDAO.getAccount(id);
 			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
 			AccountDAO.saveAccount(wacc);
-
-			if (ExceedDAO.hasExceed(id)) {
-				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-			}
 		}
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 		}
 
 		awarded = true;
@@ -255,13 +209,6 @@ public class Board {
 			Account wacc = AccountDAO.getAccount(id);
 			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
 
-			if (ExceedDAO.hasExceed(id)) {
-				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-			}
-
 			wacc.playedDaily();
 			AccountDAO.saveAccount(wacc);
 		}
@@ -269,13 +216,6 @@ public class Board {
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
@@ -291,24 +231,10 @@ public class Board {
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
 		AccountDAO.saveAccount(wacc);
 
-		if (ExceedDAO.hasExceed(id)) {
-			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-		}
-
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 		}
 
 		awarded = true;
@@ -320,26 +246,12 @@ public class Board {
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
 
-		if (ExceedDAO.hasExceed(id)) {
-			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-		}
-
 		wacc.playedDaily();
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
@@ -355,26 +267,12 @@ public class Board {
 			Account wacc = AccountDAO.getAccount(id);
 			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
 			AccountDAO.saveAccount(wacc);
-
-			if (ExceedDAO.hasExceed(id)) {
-				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-			}
 		}
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
-			}
 		}
 
 		awarded = true;
@@ -387,13 +285,6 @@ public class Board {
 			Account wacc = AccountDAO.getAccount(id);
 			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
 
-			if (ExceedDAO.hasExceed(id)) {
-				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
-				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
-			}
-
 			wacc.playedDaily();
 			AccountDAO.saveAccount(wacc);
 		}
@@ -401,13 +292,6 @@ public class Board {
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			if (ExceedDAO.hasExceed(l.getId())) {
-				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
-				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				PStateDAO.savePoliticalState(lps);
-			}
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);

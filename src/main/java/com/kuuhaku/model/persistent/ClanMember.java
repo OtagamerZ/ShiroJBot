@@ -38,6 +38,9 @@ public class ClanMember {
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private ZonedDateTime joinedAt = ZonedDateTime.now();
 
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long score = 0;
+
 	public ClanMember(String uid, ClanHierarchy role) {
 		this.uid = uid;
 		this.role = role;
@@ -76,6 +79,18 @@ public class ClanMember {
 
 	public void demote() {
 		role = Helper.getPrevious(role, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
+	}
+
+	public long getScore() {
+		return score;
+	}
+
+	public void addScore(long score) {
+		this.score += score;
+	}
+
+	public void removeScore(long score) {
+		this.score -= score;
 	}
 
 	@Override

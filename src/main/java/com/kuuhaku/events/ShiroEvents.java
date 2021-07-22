@@ -869,15 +869,6 @@ public class ShiroEvents extends ListenerAdapter {
 			} catch (NullPointerException ignore) {
 			}
 		} else {
-			if (content.equalsIgnoreCase("silenciar")) {
-				Account acc = AccountDAO.getAccount(event.getAuthor().getId());
-				acc.setReceiveNotifs(false);
-				AccountDAO.saveAccount(acc);
-
-				event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue(null, Helper::doNothing);
-				return;
-			}
-
 			event.getAuthor().openPrivateChannel().queue(c -> {
 				if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
 					c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")

@@ -133,9 +133,6 @@ public class GuildConfig {
 	private boolean dropSpawn = false;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean autoExceedRoles = false;
-
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean smallCards = false;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -488,18 +485,6 @@ public class GuildConfig {
 
 	public void toggleDropSpawn() {
 		this.dropSpawn = !dropSpawn;
-	}
-
-	public boolean isAutoExceedRoles() {
-		return autoExceedRoles;
-	}
-
-	public void setAutoExceedRoles(boolean autoExceedRoles) {
-		this.autoExceedRoles = autoExceedRoles;
-	}
-
-	public void toggleAutoExceedRoles() {
-		this.autoExceedRoles = !autoExceedRoles;
 	}
 
 	public boolean isSmallCards() {

@@ -32,7 +32,7 @@ public enum TagIcons {
 	READER,
 	MODERATOR,
 	MARRIED,
-    RICH,
+	RICH,
 	COLLECTION25,
 	COLLECTION50,
 	COLLECTION75,
@@ -42,7 +42,7 @@ public enum TagIcons {
 	FOIL75,
 	FOIL100,
 	LEVEL,
-	EXCEED_CHAMPION,
+	CLAN_CHAMPION,
 	BUGHUNTER,
 	RANKED_WIN,
 	RANKED_LOSE,
@@ -59,7 +59,7 @@ public enum TagIcons {
 			case MODERATOR -> "<:moderator:697879725628194878> ";
 			case MARRIED -> "<:married:697879725888241684> ";
 			case RICH -> "<:rich:718447753944105012> ";
-            case COLLECTION25 -> "<:collection_25:724662152366915636> ";
+			case COLLECTION25 -> "<:collection_25:724662152366915636> ";
 			case COLLECTION50 -> "<:collection_50:724662153570812446> ";
 			case COLLECTION75 -> "<:collection_75:724662152602058762> ";
 			case COLLECTION100 -> "<:collection_100:724662152824225862> ";
@@ -68,7 +68,7 @@ public enum TagIcons {
 			case FOIL75 -> "<:foil_75:747511886202798192> ";
 			case FOIL100 -> "<:foil_100:747511886307655770> ";
 			case LEVEL -> getLevelEmote(lvl).getAsMention() + " ";
-			case EXCEED_CHAMPION -> "<:exceed_champion:755126333482336326> ";
+			case CLAN_CHAMPION -> "<:exceed_champion:755126333482336326> ";
 			case BUGHUNTER -> "<:bughunter:775923780643061780> ";
 			case RANKED_WIN -> "<:ranked_win:789231688122236939> ";
 			case RANKED_LOSE -> "<:ranked_lose:789231689820930048> ";
@@ -87,7 +87,7 @@ public enum TagIcons {
 			case MODERATOR -> "697879725628194878";
 			case MARRIED -> "697879725888241684";
 			case RICH -> "718447753944105012";
-            case COLLECTION25 -> "724662152366915636";
+			case COLLECTION25 -> "724662152366915636";
 			case COLLECTION50 -> "724662153570812446";
 			case COLLECTION75 -> "724662152602058762";
 			case COLLECTION100 -> "724662152824225862";
@@ -96,34 +96,12 @@ public enum TagIcons {
 			case FOIL75 -> "747511886202798192";
 			case FOIL100 -> "74751188630765577";
 			case LEVEL -> getLevelEmote(lvl).getId();
-			case EXCEED_CHAMPION -> "755126333482336326";
+			case CLAN_CHAMPION -> "755126333482336326";
 			case BUGHUNTER -> "775923780643061780";
 			case RANKED_WIN -> "789231688122236939";
 			case RANKED_LOSE -> "789231689820930048";
 			case RANKED_PENDING -> "789231687950663691";
 			case EASTER_EGG -> "828634002197970955";
-		};
-	}
-
-	public static String getExceed(ExceedEnum t) {
-		return switch (t) {
-			case IMANITY -> "<:imanity:771067569490755624> "; //Old: 697879725690847324
-			case SEIREN -> "<:seiren:771067569603084373> "; //Old: 697879725640515685
-			case WEREBEAST -> "<:werebeast:771067569229791253> "; //Old: 697879725934379178
-			case ELF -> "<:elf:771067569301880853> "; //Old: 697879725661749300
-			case EXMACHINA -> "<:exmachina:771067569649483846> "; //Old: 697879725988904971
-			case FLUGEL -> "<:flugel:771067569389305896> "; //Old: 697879725967933440
-		};
-	}
-
-	public static String getExceedId(ExceedEnum t) {
-		return switch (t) {
-			case IMANITY -> "771067569490755624";
-			case SEIREN -> "771067569603084373";
-			case WEREBEAST -> "771067569229791253";
-			case ELF -> "771067569301880853";
-			case EXMACHINA -> "771067569649483846";
-			case FLUGEL -> "771067569389305896";
 		};
 	}
 

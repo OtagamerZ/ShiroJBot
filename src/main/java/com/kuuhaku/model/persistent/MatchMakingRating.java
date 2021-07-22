@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -103,11 +104,25 @@ public class MatchMakingRating {
 	}
 
 	public void addMMR(long gained, long opponent, boolean ranked) {
-		this.mmr += gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
+		double score = gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
+		this.mmr += score;
+
+		ClanMember cm = ClanDAO.getClanMember(uid);
+		if (cm != null) {
+			cm.addScore((long) score);
+			ClanDAO.saveMember(cm);
+		}
 	}
 
 	public void removeMMR(long lost, long opponent, boolean ranked) {
-		this.mmr -= Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
+		double score = Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
+		this.mmr -= score;
+
+		ClanMember cm = ClanDAO.getClanMember(uid);
+		if (cm != null) {
+			cm.removeScore((long) score);
+			ClanDAO.saveMember(cm);
+		}
 	}
 
 	public void setMMR(long mmr) {

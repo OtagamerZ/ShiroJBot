@@ -20,7 +20,9 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -74,8 +76,8 @@ public enum Tag {
 	CARTAS_CROMADAS_25(TagIcons.FOIL25, "Usuário que completou 25% da coleção de Kawaipons cromados.",
 			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 25, 50)),
 
-    CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
-            (user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 50, 75)),
+	CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 50, 75)),
 
 	CARTAS_CROMADAS_75(TagIcons.FOIL75, "Usuário que completou 75% da coleção de Kawaipons cromados.",
 			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 75, 100)),
@@ -83,8 +85,12 @@ public enum Tag {
 	CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
 			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards() == 100),
 
-	EXCEED_VITORIOSO(TagIcons.EXCEED_CHAMPION, "Seu Exceed foi vitorioso neste mês.",
-			(user, member) -> ExceedDAO.hasExceed(user.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(user.getId()))),
+	CLA_VITORIOSO(TagIcons.CLAN_CHAMPION, "Seu clã está em primeiro lugar.",
+			(user, member) -> {
+				Clan c = ClanDAO.getUserClan(user.getId());
+				ClanRanking cr = ClanDAO.getClanChampion();
+				return c != null && cr != null && cr.id() == c.getId();
+			}),
 
 	BUG_HUNTER(TagIcons.BUGHUNTER, "Você ajudou a corrigir muitos bugs na Shiro.",
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25);

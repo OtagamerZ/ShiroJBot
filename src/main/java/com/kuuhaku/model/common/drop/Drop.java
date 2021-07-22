@@ -21,7 +21,6 @@ package com.kuuhaku.model.common.drop;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.DailyTask;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
@@ -38,7 +37,6 @@ import java.util.function.Function;
 
 public abstract class Drop<P> implements Prize<P> {
 	private final AddedAnime anime;
-	private final ExceedEnum exceed;
 	private final ClanTier tier;
 	private final RankedTier ranked;
 	private final int[] values;
@@ -50,7 +48,6 @@ public abstract class Drop<P> implements Prize<P> {
 	protected Drop(P prize) {
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		anime = animes.get(Helper.rng(animes.size(), true));
-		exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];
 		ranked = RankedTier.values()[1 + Helper.rng(RankedTier.values().length - 1, true)];
 		values = new int[]{
@@ -75,9 +72,6 @@ public abstract class Drop<P> implements Prize<P> {
 			add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais.", u ->
 					AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 
-			add(Pair.of("Ser membro da " + exceed.getName().toLowerCase(Locale.ROOT) + ".", u ->
-					ExceedDAO.hasExceed(u.getId()) && ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
-
 			add(Pair.of("Ter dívida ativa.", u ->
 					AccountDAO.getAccount(u.getId()).getLoan() > 0));
 
@@ -99,10 +93,6 @@ public abstract class Drop<P> implements Prize<P> {
 
 	public AddedAnime getAnime() {
 		return anime;
-	}
-
-	public ExceedEnum getExceed() {
-		return exceed;
 	}
 
 	public int[] getValues() {

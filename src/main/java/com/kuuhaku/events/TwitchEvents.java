@@ -33,10 +33,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.TwitchCommand;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
@@ -155,14 +151,6 @@ public class TwitchEvents {
 				eb.setDescription("Como agradecimento, aqui estão 5.000 créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 				eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance() + 5000), "https://i.imgur.com/U0nPjLx.gif");
 				eb.setColor(Color.cyan);
-
-				if (ExceedDAO.hasExceed(c.getUser().getId())) {
-					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(c.getUser().getId())));
-					ps.modifyInfluence(50);
-					PStateDAO.savePoliticalState(ps);
-
-					eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 50 pontos de influência adicionais!", false);
-				}
 
 				acc.addCredit(5000, this.getClass());
 				acc.setFollower(true);
