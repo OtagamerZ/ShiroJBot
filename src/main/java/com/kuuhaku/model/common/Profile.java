@@ -226,7 +226,7 @@ public class Profile {
 		return bi;
 	}
 
-	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Graphics2D g2d) throws IOException {
+	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Graphics2D g2d) {
 		List<BufferedImage> badges = new ArrayList<>() {{
 			Set<Tag> tags = Tag.getTags(m);
 			for (Tag t : tags) {
