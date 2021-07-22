@@ -60,14 +60,14 @@ public class ClanRankCommand implements Executable {
 					List<ClanRanking> rank = ClanDAO.getClanRanking();
 
 					CategoryChart chart = Helper.buildBarChart(
-							"Ranking dos Clans",
+							"Ranking dos Clãs",
 							Pair.of("", "Pontos"),
 							rank.stream().map(ClanRanking::getColor).collect(Collectors.toList())
 					);
 
 					for (ClanRanking cr : rank) {
 						chart.addSeries(cr.name(),
-								List.of("Clan"),
+								List.of("Clã"),
 								List.of(cr.score())
 						);
 					}
