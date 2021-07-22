@@ -16,9 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do sistema de Exceeds">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/ClanRanking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/ClanRanking.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do sistema de Exceeds" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1331,28 +1329,7 @@
       <workItem from="1626869006460" duration="9843000" />
       <workItem from="1626898551060" duration="2849000" />
       <workItem from="1626958246202" duration="2189000" />
-      <workItem from="1626970006993" duration="7433000" />
-    </task>
-    <task id="LOCAL-04965" summary="Atualização da biblioteca de paginação">
-      <created>1626272572127</created>
-      <option name="number" value="04965" />
-      <option name="presentableId" value="LOCAL-04965" />
-      <option name="project" value="LOCAL" />
-      <updated>1626272572127</updated>
-    </task>
-    <task id="LOCAL-04966" summary="Atualização da biblioteca de paginação">
-      <created>1626273728694</created>
-      <option name="number" value="04966" />
-      <option name="presentableId" value="LOCAL-04966" />
-      <option name="project" value="LOCAL" />
-      <updated>1626273728694</updated>
-    </task>
-    <task id="LOCAL-04967" summary="Atualização da biblioteca de paginação">
-      <created>1626273897116</created>
-      <option name="number" value="04967" />
-      <option name="presentableId" value="LOCAL-04967" />
-      <option name="project" value="LOCAL" />
-      <updated>1626273897116</updated>
+      <workItem from="1626970006993" duration="7734000" />
     </task>
     <task id="LOCAL-04968" summary="Atualização da biblioteca de paginação">
       <created>1626360362674</created>
@@ -1676,7 +1653,28 @@
       <option name="project" value="LOCAL" />
       <updated>1626977357743</updated>
     </task>
-    <option name="localTasksCounter" value="5014" />
+    <task id="LOCAL-05014" summary="Remoção do sistema de Exceeds">
+      <created>1626977517359</created>
+      <option name="number" value="05014" />
+      <option name="presentableId" value="LOCAL-05014" />
+      <option name="project" value="LOCAL" />
+      <updated>1626977517359</updated>
+    </task>
+    <task id="LOCAL-05015" summary="Remoção do sistema de Exceeds">
+      <created>1626977599020</created>
+      <option name="number" value="05015" />
+      <option name="presentableId" value="LOCAL-05015" />
+      <option name="project" value="LOCAL" />
+      <updated>1626977599020</updated>
+    </task>
+    <task id="LOCAL-05016" summary="Remoção do sistema de Exceeds">
+      <created>1626977811157</created>
+      <option name="number" value="05016" />
+      <option name="presentableId" value="LOCAL-05016" />
+      <option name="project" value="LOCAL" />
+      <updated>1626977811157</updated>
+    </task>
+    <option name="localTasksCounter" value="5017" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

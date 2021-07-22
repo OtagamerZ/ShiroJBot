@@ -32,6 +32,6 @@ public record ClanRanking(int id, String name, BigInteger score, String icon) {
 
 		CRC32 crc = new CRC32();
 		crc.update(name.getBytes(StandardCharsets.UTF_8));
-		return Color.decode(Long.toHexString(crc.getValue() & 0xFFFFFF));
+		return Color.decode("#%02X%02X%02X".formatted(crc.getValue() & 0xFFFFFF));
 	}
 }
