@@ -336,21 +336,8 @@ public class Helper {
 		return LogManager.getLogger(source.getName());
 	}
 
-	public static InputStream getImage(String url) throws IOException {
-		try {
-			HttpGet req = new HttpGet(url);
-
-			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
-				HttpEntity ent = res.getEntity();
-
-				if (ent != null)
-					return ent.getContent();
-				else
-					return null;
-			}
-		} catch (JsonDataException | IllegalStateException | IOException e) {
-			return null;
-		}
+	public static InputStream getImage(String link) throws IOException {
+		return new URL(link).openStream();
 	}
 
 	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) throws InterruptedException, ExecutionException {
