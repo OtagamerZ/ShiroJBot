@@ -66,6 +66,9 @@ public class StoreCardCommand implements Executable {
 		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
 			return;
+		} else if (args.length < 1) {
+			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
+			return;
 		}
 
 		String name = args[0].toUpperCase(Locale.ROOT);
