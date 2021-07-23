@@ -25,6 +25,8 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -135,13 +137,14 @@ public class CardStashCommand implements Executable {
 						default -> ((KawaiponCard) s.getCard()).getName();
 					};
 					String rarity = switch (s.getType()) {
-						case EVOGEAR -> "Equipamento";
-						case FIELD -> "Campo";
-						default -> s.getRawCard().getRarity().toString();
+						case EVOGEAR -> "Equipamento " + StringUtils.repeat("⭐", ((Equipment) s.getCard()).getTier());
+						case FIELD -> "Campo " + (((Field) s.getCard()).isDay() ? "(DIURNO)" : "(NOTURNO)");
+						default -> s.getRawCard().getRarity().getEmote() + s.getRawCard().getRarity().toString();
 					};
+					String anime = s.getRawCard().getAnime().toString();
 
 					eb.addField("`ID: " + s.getId() + "` | " + name,
-							rarity + " - " + s.getRawCard().getAnime().toString(),
+							rarity + (anime == null ? "" : " - " + anime),
 							false
 					);
 				}
