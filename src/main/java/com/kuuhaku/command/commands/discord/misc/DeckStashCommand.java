@@ -36,8 +36,8 @@ import net.dv8tion.jda.api.entities.*;
 import java.util.List;
 
 @Command(
-		name = "reserva",
-		aliases = {"stash", "estoque"},
+		name = "alternar",
+		aliases = {"stash", "switch"},
 		usage = "req_slot",
 		category = Category.MISC
 )
