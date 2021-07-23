@@ -172,7 +172,7 @@ public class BuyCardCommand implements Executable {
 						default -> ((KawaiponCard) m.getCard()).getName();
 					};
 					String rarity = switch (m.getType()) {
-						case EVOGEAR -> "Equipamento " + StringUtils.repeat("⭐", ((Equipment) m.getCard()).getTier());
+						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Equipment) m.getCard()).getTier()) + ")";
 						case FIELD -> "Campo " + (((Field) m.getCard()).isDay() ? "(DIURNO)" : "(NOTURNO)");
 						default -> m.getRawCard().getRarity().getEmote() + m.getRawCard().getRarity().toString();
 					};
