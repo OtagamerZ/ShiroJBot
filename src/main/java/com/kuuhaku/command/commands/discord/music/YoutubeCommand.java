@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.music;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.Emote;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -38,10 +39,11 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "play",
@@ -70,37 +72,49 @@ public class YoutubeCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
 			try {
 				List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+				List<String> urls = new ArrayList<>();
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
 
 				m.editMessage(":mag: Resultados da busca").queue(s -> {
 					if (videos.size() > 0) {
 						List<Page> pages = new ArrayList<>();
 
 						for (YoutubeVideo v : videos) {
-							eb.clear();
-							eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
-							eb.setTitle(v.title(), v.getUrl());
-							eb.setDescription(v.desc());
-							eb.setThumbnail(v.thumb());
-							eb.setFooter("Link: " + v.getUrl(), v.getUrl());
+							eb.setTitle(v.title(), v.getUrl())
+									.setDescription(v.desc())
+									.setThumbnail(v.thumb());
+
 							pages.add(new Page(eb.build()));
+							urls.add(v.getUrl());
 						}
 
 						channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 								Main.getInfo().getConfirmationPending().put(author.getId(), true);
-								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
-								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-											Main.getInfo().getConfirmationPending().remove(author.getId());
 
+								AtomicInteger p = new AtomicInteger();
+								Pages.buttonize(msg, Map.of(
+										Pages.getPaginator().getEmote(Emote.PREVIOUS), (mb, ms) -> {
+											if (p.get() > 0) {
+												p.getAndDecrement();
+												ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
+											}
+										},
+										Pages.getPaginator().getEmote(Emote.NEXT), (mb, ms) -> {
+											if (p.get() < pages.size()) {
+												p.getAndIncrement();
+												ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
+											}
+										},
+										Helper.ACCEPT, (mb, ms) -> {
 											try {
-												String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
-												assert url != null;
+												String url = urls.get(p.get());
 												if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isBeta()) {
 													channel.sendMessage("❌ | Você precisa ser um usuário com acesso beta para poder adicionar playlists.").queue();
-													msg.delete().queue();
 													return;
 												}
+
 												Music.loadAndPlay(member, channel, url);
 												msg.delete().queue(null, Helper::doNothing);
 											} catch (ErrorResponseException ignore) {
@@ -109,6 +123,8 @@ public class YoutubeCommand implements Executable {
 										u -> u.getId().equals(author.getId()),
 										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 								);
+							} else {
+								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
 							}
 						});
 					} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
