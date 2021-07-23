@@ -121,30 +121,7 @@ public class BuyCardCommand implements Executable {
 
 				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
 			}
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-			eb.setTitle(":scales: | Mercado de cartas");
-			eb.setDescription("""
-					Use `%scomprar ID` para comprar uma carta.
-					       
-					**Parâmetros de pesquisa:**
-					`-n` - Busca cartas por nome
-					`-r` - Busca cartas por raridade
-					`-a` - Busca cartas por anime
-					`-c` - Busca apenas cartas cromadas
-					`-k` - Busca apenas cartas kawaipon
-					`-e` - Busca apenas cartas-equipamento
-					`-f` - Busca apenas cartas de campo
-					`-m` - Busca apenas suas cartas anunciadas
-					`-min` - Define um preço mínimo
-					`-max` - Define um preço máximo
-					       
-					Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
-					""".formatted(prefix)
-			);
-			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-
-			List<Page> pages = new ArrayList<>();
 			List<Market> cards = MarketDAO.getOffers(
 					byName.get(),
 					minPrice.get(),
@@ -158,11 +135,35 @@ public class BuyCardCommand implements Executable {
 					onlyMine.get() ? author.getId() : null
 			);
 
-			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setAuthor("Cartas anunciadas: " + Helper.separate(cards.size()))
+					.setTitle(":scales: | Mercado de cartas")
+					.setDescription("""
+							Use `%scomprar ID` para comprar uma carta.
+							       
+							**Parâmetros de pesquisa:**
+							`-n` - Busca cartas por nome
+							`-r` - Busca cartas por raridade
+							`-a` - Busca cartas por anime
+							`-c` - Busca apenas cartas cromadas
+							`-k` - Busca apenas cartas kawaipon
+							`-e` - Busca apenas cartas-equipamento
+							`-f` - Busca apenas cartas de campo
+							`-m` - Busca apenas suas cartas anunciadas
+							`-min` - Define um preço mínimo
+							`-max` - Define um preço máximo
+							       
+							Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
+							""".formatted(prefix)
+					)
+					.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+
+			List<Page> pages = new ArrayList<>();
+			List<List<Market>> chunks = Helper.chunkify(cards, 10);
+			for (List<Market> chunk : chunks) {
 				eb.clearFields();
 
-				for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
-					Market m = cards.get(p);
+				for (Market m : chunk) {
 					User seller = Main.getInfo().getUserByID(m.getSeller());
 					String name = switch (m.getType()) {
 						case EVOGEAR, FIELD -> m.getRawCard().getName();

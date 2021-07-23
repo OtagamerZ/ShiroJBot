@@ -76,7 +76,10 @@ public class Account {
 	private int bugs = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 2")
-	private int stashCapacity = 2;
+	private int deckStashCapacity = 2;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 50")
+	private int cardStashCapacity = 50;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
@@ -479,12 +482,20 @@ public class Account {
 		this.bugs = bugs;
 	}
 
-	public int getStashCapacity() {
-		return stashCapacity;
+	public int getDeckStashCapacity() {
+		return deckStashCapacity;
 	}
 
-	public void setStashCapacity(int stashCapacity) {
-		this.stashCapacity = stashCapacity;
+	public void setDeckStashCapacity(int deckStashCapacity) {
+		this.deckStashCapacity = deckStashCapacity;
+	}
+
+	public int getCardStashCapacity() {
+		return cardStashCapacity;
+	}
+
+	public void setCardStashCapacity(int cardStashCapacity) {
+		this.cardStashCapacity = cardStashCapacity;
 	}
 
 	public boolean isVoted() {

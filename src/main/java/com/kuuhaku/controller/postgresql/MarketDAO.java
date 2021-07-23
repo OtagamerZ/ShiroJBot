@@ -40,52 +40,6 @@ public class MarketDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Market> getCardsByCard(String id, boolean foil) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("""
-				SELECT m
-				FROM Market m
-				WHERE m.card.id = UPPER(:id)
-				AND m.foil = :foil
-				AND m.publishDate IS NOT NULL
-				AND m.buyer <> ''
-				AND m.buyer <> m.seller
-				""", Market.class);
-		q.setParameter("id", id);
-		q.setParameter("foil", foil);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Market> getCardsByRarity(KawaiponRarity r, boolean foil) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("""
-				SELECT m
-				FROM Market m
-				WHERE m.card.rarity = :rarity
-				AND m.foil = :foil
-				AND m.publishDate IS NOT NULL
-				AND m.buyer <> ''
-				AND m.buyer <> m.seller
-				""", Market.class);
-		q.setParameter("rarity", r);
-		q.setParameter("foil", foil);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
 	public static Market getCard(int id) {
 		EntityManager em = Manager.getEntityManager();
 

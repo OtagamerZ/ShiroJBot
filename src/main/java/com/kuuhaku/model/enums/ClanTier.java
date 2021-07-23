@@ -24,7 +24,7 @@ public enum ClanTier {
 	PARTY("Grupo", 10, 50_000, 10_000),
 	FACTION("Facção", 50, 250_000, 35_000),
 	GUILD("Guilda", 100, 1_500_000, 150_000),
-	DYNASTY("Dinastia", 500, 0, 1_000_000);
+	DYNASTY("Dinastia", 500, 5_000_000, 1_000_000);
 
 	private final String name;
 	private final int capacity;
