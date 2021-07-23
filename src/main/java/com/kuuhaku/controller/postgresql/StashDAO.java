@@ -84,7 +84,9 @@ public class StashDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(card);
+		em.createQuery("DELETE FROM Stash WHERE id = :id")
+				.setParameter("id", card.getId())
+				.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
