@@ -116,12 +116,12 @@ public enum GemItem {
 			}
 	),
 	CARD_STASH_SIZE(
-			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 10",
+			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 15",
 			3,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());
 
-				acc.setCardStashCapacity(acc.getCardStashCapacity() + 10);
+				acc.setCardStashCapacity(acc.getCardStashCapacity() + 15);
 				AccountDAO.saveAccount(acc);
 
 				return true;
