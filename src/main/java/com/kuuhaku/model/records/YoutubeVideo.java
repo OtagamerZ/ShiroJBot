@@ -16,17 +16,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.youtube;
+package com.kuuhaku.model.records;
 
-import java.util.List;
+public record YoutubeVideo(String id, String title, String desc, String thumb, String channel, boolean playlist) {
 
-public record YoutubeData(
-		String kind,
-		String etag,
-		String nextPageToken,
-		String regionCode,
-		PageInfo pageInfo,
-		List<Item> items
-) {
+	public String getUrl() {
+		return playlist ? "https://www.youtube.com/playlist?list=" + id : "https://www.youtube.com/watch?v=" + id;
+	}
 }
-
