@@ -23,10 +23,7 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
-import com.kuuhaku.controller.postgresql.MarketDAO;
-import com.kuuhaku.controller.postgresql.StashDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
@@ -166,7 +163,6 @@ public class ReserveCardCommand implements Executable {
 				eb.clearFields();
 
 				for (Market m : chunk) {
-					User seller = Main.getInfo().getUserByID(m.getSeller());
 					String name = switch (m.getType()) {
 						case EVOGEAR, FIELD -> m.getRawCard().getName();
 						default -> ((KawaiponCard) m.getCard()).getName();
@@ -176,13 +172,20 @@ public class ReserveCardCommand implements Executable {
 						case FIELD -> "Campo " + (((Field) m.getCard()).isDay() ? "(DIURNO)" : "(NOTURNO)");
 						default -> m.getRawCard().getRarity().getEmote() + m.getRawCard().getRarity().toString();
 					};
+					String anime = m.getRawCard().getAnime().toString();
 
 					eb.addField(
-							"`ID: " + m.getId() + "` | " + name + " (" + rarity + ")",
-							blackfriday ?
-									"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "** créditos")
-									:
-									"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "**" + Helper.separate(m.getPrice()) + "** créditos"),
+							"`ID: " + m.getId() + "` | " + name,
+							"""
+									%s
+									Por %s | Preço %s créditos
+									""".formatted(
+									rarity + (anime == null ? "" : " - " + anime),
+									LogDAO.getUsername(m.getSeller()).split("#")[0],
+									blackfriday
+											? (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
+											: (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "**" + Helper.separate(m.getPrice()) + "**")
+							),
 							false
 					);
 				}
