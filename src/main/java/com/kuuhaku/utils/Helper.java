@@ -3047,4 +3047,10 @@ public class Helper {
 	public static <T> T safeCast(Object obj, Class<T> klass) {
 		return klass != null && klass.isInstance(obj) ? klass.cast(obj) : null;
 	}
+
+	public static String getUsername(String id) {
+		User u = Main.getInfo().getUserByID(id);
+
+		return u == null ? LogDAO.getUsername(id) : u.getName();
+	}
 }

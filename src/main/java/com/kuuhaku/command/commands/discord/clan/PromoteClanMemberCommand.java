@@ -23,7 +23,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanPermission;
@@ -68,7 +67,7 @@ public class PromoteClanMemberCommand implements Executable {
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Tem certeza que deseja promover o membro " + LogDAO.getUsername(cm.getUid()).split("#")[0] + "?")
+			channel.sendMessage("Tem certeza que deseja promover o membro " + Helper.getUsername(cm.getUid()) + "?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
