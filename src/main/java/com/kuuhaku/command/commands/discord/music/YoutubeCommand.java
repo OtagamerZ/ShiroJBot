@@ -125,7 +125,7 @@ public class YoutubeCommand implements Executable {
 										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 								);
 							} else {
-								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
+								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES);
 							}
 						});
 					} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
