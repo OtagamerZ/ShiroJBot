@@ -39,8 +39,8 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -72,7 +72,6 @@ public class YoutubeCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
 			try {
 				List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
-				List<String> urls = new ArrayList<>();
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
 
@@ -86,7 +85,6 @@ public class YoutubeCommand implements Executable {
 									.setThumbnail(v.thumb());
 
 							pages.add(new Page(eb.build()));
-							urls.add(v.getUrl());
 						}
 
 						channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
@@ -94,33 +92,34 @@ public class YoutubeCommand implements Executable {
 								Main.getInfo().getConfirmationPending().put(author.getId(), true);
 
 								AtomicInteger p = new AtomicInteger();
-								Pages.buttonize(msg, Map.of(
-										Pages.getPaginator().getEmote(Emote.PREVIOUS), (mb, ms) -> {
-											if (p.get() > 0) {
-												p.getAndDecrement();
-												ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
-											}
-										},
-										Pages.getPaginator().getEmote(Emote.NEXT), (mb, ms) -> {
-											if (p.get() < pages.size()) {
-												p.getAndIncrement();
-												ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
-											}
-										},
-										Helper.ACCEPT, (mb, ms) -> {
-											try {
-												String url = urls.get(p.get());
-												if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isBeta()) {
-													channel.sendMessage("❌ | Você precisa ser um usuário com acesso beta para poder adicionar playlists.").queue();
-													return;
+								Pages.buttonize(msg, new LinkedHashMap<>() {{
+											put(Pages.getPaginator().getEmote(Emote.PREVIOUS), (mb, ms) -> {
+												if (p.get() > 0) {
+													p.getAndDecrement();
+													ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
 												}
+											});
+											put(Helper.ACCEPT, (mb, ms) -> {
+												try {
+													YoutubeVideo yv = videos.get(p.get());
+													if (yv.playlist() && !TagDAO.getTagById(author.getId()).isBeta()) {
+														channel.sendMessage("❌ | Você precisa ser um usuário com acesso beta para poder adicionar playlists.").queue();
+														return;
+													}
 
-												Main.getInfo().getConfirmationPending().remove(author.getId());
-												Music.loadAndPlay(member, channel, url);
-												msg.delete().queue(null, Helper::doNothing);
-											} catch (ErrorResponseException ignore) {
-											}
-										}), true, 1, TimeUnit.MINUTES,
+													Main.getInfo().getConfirmationPending().remove(author.getId());
+													Music.loadAndPlay(member, channel, yv.getUrl());
+													msg.delete().queue(null, Helper::doNothing);
+												} catch (ErrorResponseException ignore) {
+												}
+											});
+											put(Pages.getPaginator().getEmote(Emote.NEXT), (mb, ms) -> {
+												if (p.get() < pages.size()) {
+													p.getAndIncrement();
+													ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
+												}
+											});
+										}}, true, 1, TimeUnit.MINUTES,
 										u -> u.getId().equals(author.getId()),
 										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 								);
