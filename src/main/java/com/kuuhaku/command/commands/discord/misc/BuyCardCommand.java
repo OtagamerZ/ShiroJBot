@@ -23,7 +23,10 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
+import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
@@ -163,6 +166,7 @@ public class BuyCardCommand implements Executable {
 				eb.clearFields();
 
 				for (Market m : chunk) {
+					User seller = Main.getInfo().getUserByID(m.getSeller());
 					String name = switch (m.getType()) {
 						case EVOGEAR, FIELD -> m.getRawCard().getName();
 						default -> ((KawaiponCard) m.getCard()).getName();
@@ -181,7 +185,7 @@ public class BuyCardCommand implements Executable {
 									Por %s | Preço %s créditos
 									""".formatted(
 									rarity + (anime == null ? "" : " - " + anime),
-									LogDAO.getUsername(m.getSeller()).split("#")[0],
+									seller == null ? "Desconhecido" : seller.getName(),
 									blackfriday
 											? (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
 											: (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "**" + Helper.separate(m.getPrice()) + "**")
