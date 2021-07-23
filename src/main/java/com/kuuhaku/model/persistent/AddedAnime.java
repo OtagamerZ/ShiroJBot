@@ -63,6 +63,8 @@ public class AddedAnime {
 
 	@Override
 	public String toString() {
-		return CardDAO.getUltimate(name).getName();
+		Card c = CardDAO.getUltimate(name);
+		if (c == null) return "Nenhum";
+		return c.getName();
 	}
 }
