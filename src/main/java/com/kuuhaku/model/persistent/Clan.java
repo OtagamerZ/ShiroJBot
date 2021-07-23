@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.ClanTier;
@@ -84,7 +83,7 @@ public class Clan {
 	public Clan(String name, String leader) {
 		this.name = name;
 		members.add(new ClanMember(leader, ClanHierarchy.LEADER));
-		transactions.add(LogDAO.getUsername(leader) + " criou o clã por 10.000 créditos.");
+		transactions.add(Helper.getUsername(leader) + " criou o clã por 10.000 créditos.");
 	}
 
 	public Clan() {
@@ -164,13 +163,13 @@ public class Clan {
 
 		leader.setRole(ClanHierarchy.SUBLEADER);
 		sub.setRole(ClanHierarchy.LEADER);
-		transactions.add(LogDAO.getUsername(leader.getUid()) + " transferiu a posse do clã para " + LogDAO.getUsername(sub.getUid()) + ".");
+		transactions.add(Helper.getUsername(leader.getUid()) + " transferiu a posse do clã para " + Helper.getUsername(sub.getUid()) + ".");
 	}
 
 	public void promote(String id, User u) {
 		ClanMember cm = getMember(id);
 		cm.promote();
-		transactions.add(u.getAsTag() + " promoveu " + LogDAO.getUsername(id) + ".");
+		transactions.add(u.getAsTag() + " promoveu " + Helper.getUsername(id) + ".");
 	}
 
 	public void promote(User tgt, User u) {
@@ -182,7 +181,7 @@ public class Clan {
 	public void demote(String id, User u) {
 		ClanMember cm = getMember(id);
 		cm.demote();
-		transactions.add(u.getAsTag() + " rebaixou " + LogDAO.getUsername(id) + ".");
+		transactions.add(u.getAsTag() + " rebaixou " + Helper.getUsername(id) + ".");
 	}
 
 	public void demote(User tgt, User u) {
@@ -193,7 +192,7 @@ public class Clan {
 
 	public void kick(String id, User u) {
 		members.removeIf(cm -> cm.getUid().equals(id));
-		transactions.add(u.getAsTag() + " expulsou " + LogDAO.getUsername(id) + ".");
+		transactions.add(u.getAsTag() + " expulsou " + Helper.getUsername(id) + ".");
 	}
 
 	public void kick(User tgt, User u) {
@@ -203,7 +202,7 @@ public class Clan {
 
 	public void invite(String id, User u) {
 		members.add(new ClanMember(id, ClanHierarchy.MEMBER));
-		transactions.add(u.getAsTag() + " convidou " + LogDAO.getUsername(id) + " para o clã.");
+		transactions.add(u.getAsTag() + " convidou " + Helper.getUsername(id) + " para o clã.");
 	}
 
 	public void invite(User tgt, User u) {
@@ -218,7 +217,7 @@ public class Clan {
 		}
 
 		members.remove(cm);
-		transactions.add(LogDAO.getUsername(id) + " saiu do clã.");
+		transactions.add(Helper.getUsername(id) + " saiu do clã.");
 	}
 
 	public ClanHierarchy getHierarchy(String id) {

@@ -23,7 +23,6 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -117,7 +116,7 @@ public class ClanCommand implements Executable {
 				ClanMember mb = chunk.get(j);
 				sb.append("`%s` | %s %s (%s pontos)\n".formatted(
 						j + i * 10,
-						mb.getRole().getIcon(), LogDAO.getUsername(mb.getUid()).split("#")[0],
+						mb.getRole().getIcon(), Helper.getUsername(mb.getUid()),
 						Helper.separate(mb.getScore())
 				));
 			}

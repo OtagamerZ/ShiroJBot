@@ -66,7 +66,7 @@ public class LogDAO {
 		q.setMaxResults(1);
 
 		try {
-			return (String) q.getSingleResult();
+			return ((String) q.getSingleResult()).split("#")[0];
 		} catch (NoResultException e) {
 			return "???";
 		} finally {
