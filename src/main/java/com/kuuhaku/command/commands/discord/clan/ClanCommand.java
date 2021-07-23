@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.clan;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
@@ -69,8 +68,9 @@ public class ClanCommand implements Executable {
 				.setThumbnail("attachment://icon.png")
 				.setImage("attachment://banner.png")
 				.setDescription(c.getMotd())
-				.addField("Cofre", ":coin: | %s%s créditos".formatted(Helper.separate(c.getVault()), c.getTier() != ClanTier.DYNASTY ? "/" + Helper.separate(c.getTier().getVaultSize()) : ""), false)
-				.addField("Aluguel", ":receipt: | %s créditos/mês (%s)".formatted(Helper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false);
+				.addField("Cofre", ":coin: | %s/%s créditos".formatted(Helper.separate(c.getVault()), Helper.separate(c.getTier().getVaultSize())), false)
+				.addField("Aluguel", ":receipt: | %s créditos/mês (%s)".formatted(Helper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false)
+				.addField("Ranking", ":bar_chart: | %sº lugar (%s pontos)".formatted(ClanDAO.getClanPosition(c.getId()).rank(), Helper.separate(c.getScore())), false);
 
 		if (c.getTier() != ClanTier.DYNASTY)
 			eb.addField("Metas para promoção", """
@@ -98,7 +98,7 @@ public class ClanCommand implements Executable {
 						case GUILD -> """
 								Título de dinastia
 								Capacidade de membros (~~100~~ -> 500)
-								Capacidade do cofre (~~1.500.000~~ -> ilimitado)
+								Capacidade do cofre (~~1.500.000~~ -> 5.000.000)
 								Banner
 								""";
 						default -> "";
@@ -115,7 +115,11 @@ public class ClanCommand implements Executable {
 
 			for (int j = 0; j < chunk.size(); j++) {
 				ClanMember mb = chunk.get(j);
-				sb.append("`%s` | %s %s\n".formatted(j + i * 10, mb.getRole().getIcon(), LogDAO.getUsername(mb.getUid()).split("#")[0]));
+				sb.append("`%s` | %s %s (%s pontos)\n".formatted(
+						j + i * 10,
+						mb.getRole().getIcon(), LogDAO.getUsername(mb.getUid()).split("#")[0],
+						Helper.separate(mb.getScore())
+				));
 			}
 
 			eb.clearFields().getFields().addAll(fixed);
@@ -129,13 +133,5 @@ public class ClanCommand implements Executable {
 		ma.queue(s ->
 				Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
-	}
-
-	private static String checkUser(String id) {
-		try {
-			return Main.getInfo().getUserByID(id).getName();
-		} catch (Exception e) {
-			return "`Desconhecido`";
-		}
 	}
 }

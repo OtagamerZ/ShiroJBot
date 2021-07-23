@@ -53,7 +53,7 @@ public class DeckStashCommand implements Executable {
 			List<Deck> stashes = kp.getDecks();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle("Decks reserva (capacidade: " + acc.getStashCapacity() + " slots)");
+					.setTitle("Decks reserva (capacidade: " + acc.getDeckStashCapacity() + " slots)");
 
 			for (int j = 0; j < stashes.size(); j++) {
 				Deck dk = stashes.get(j);
@@ -76,7 +76,7 @@ public class DeckStashCommand implements Executable {
 		try {
 			int slot = Integer.parseInt(args[0]);
 
-			if (slot < 0 || slot >= acc.getStashCapacity()) {
+			if (slot < 0 || slot >= acc.getDeckStashCapacity()) {
 				channel.sendMessage("❌ | Slot inválido.").queue();
 				return;
 			} else if (slot == kp.getActiveDeck()) {

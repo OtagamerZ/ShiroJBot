@@ -949,8 +949,7 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			boolean noDmg = (yours.isDefending() && !(yours.isSleeping() || yours.isStunned()))
-							|| yours.getBonus().getSpecialData().remove("noDamage") != null
+			boolean noDmg = yours.getBonus().getSpecialData().remove("noDamage") != null
 							|| (getCustom() != null && !getCustom().getBoolean("semdano"));
 
 			Hand you = hands.get(atkr.getLeft());

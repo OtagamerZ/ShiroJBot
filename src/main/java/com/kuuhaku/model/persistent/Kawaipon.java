@@ -99,8 +99,8 @@ public class Kawaipon implements Cloneable {
 			decks.add(new Deck());
 		} else {
 			Account acc = AccountDAO.getAccount(uid);
-			if (decks.size() < acc.getStashCapacity()) {
-				for (int i = 0; i < acc.getStashCapacity() - decks.size(); i++) {
+			if (decks.size() < acc.getDeckStashCapacity()) {
+				for (int i = 0; i < acc.getDeckStashCapacity() - decks.size(); i++) {
 					decks.add(new Deck());
 				}
 				KawaiponDAO.saveKawaipon(this);
