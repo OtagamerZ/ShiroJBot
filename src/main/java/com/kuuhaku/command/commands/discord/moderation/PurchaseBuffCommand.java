@@ -109,7 +109,7 @@ public class PurchaseBuffCommand implements Executable {
 									Helper.separate(new ServerBuff(BuffType.FOIL, 4).getPrice())
 							)
 					, false);
-			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+			eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;

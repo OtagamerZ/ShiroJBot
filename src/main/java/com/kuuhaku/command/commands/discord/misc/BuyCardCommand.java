@@ -156,7 +156,7 @@ public class BuyCardCommand implements Executable {
 							Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
 							""".formatted(prefix)
 					)
-					.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+					.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
 			List<List<Market>> chunks = Helper.chunkify(cards, 10);
