@@ -18,9 +18,11 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
@@ -82,6 +84,18 @@ public enum CreditItem {
 
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), an, false);
+				return true;
+			}
+	),
+	CARD_STASH_SIZE(
+			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 5",
+			30000,
+			(mb, chn, args) -> {
+				Account acc = AccountDAO.getAccount(mb.getId());
+
+				acc.setCardStashCapacity(acc.getCardStashCapacity() + 5);
+				AccountDAO.saveAccount(acc);
+
 				return true;
 			}
 	),
