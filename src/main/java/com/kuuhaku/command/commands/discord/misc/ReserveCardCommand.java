@@ -24,9 +24,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.postgresql.MarketDAO;
+import com.kuuhaku.controller.postgresql.StashDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -50,8 +52,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
-		name = "comprar",
-		aliases = {"buy"},
+		name = "reservar",
+		aliases = {"reserve"},
 		usage = "req_id",
 		category = Category.MISC
 )
@@ -60,7 +62,7 @@ import java.util.concurrent.atomic.AtomicReference;
 		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_ADD_REACTION
 })
-public class BuyCardCommand implements Executable {
+public class ReserveCardCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -202,8 +204,10 @@ public class BuyCardCommand implements Executable {
 			channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
 			return;
 		} else if (buyer.getLoan() > 0) {
-			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
+			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 			return;
+		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+
 		}
 
 		Account seller = AccountDAO.getAccount(m.getSeller());
@@ -216,33 +220,11 @@ public class BuyCardCommand implements Executable {
 				return;
 			}
 
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			switch (m.getType()) {
-				case EVOGEAR -> {
-					Deck dk = kp.getDeck();
-
-					if (dk.checkEquipment(m.getCard(), channel)) return;
-
-					dk.addEquipment(m.getCard());
-				}
-				case FIELD -> {
-					Deck dk = kp.getDeck();
-
-					if (dk.checkField(m.getCard(), channel)) return;
-
-					dk.addField(m.getCard());
-
-				}
-				default -> {
-					if (kp.getCards().contains((KawaiponCard) m.getCard())) {
-						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
-						return;
-					}
-
-					kp.addCard(m.getCard());
-				}
-			}
-			KawaiponDAO.saveKawaipon(kp);
+			StashDAO.saveCard(switch (m.getType()) {
+				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
+				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
+			});
 
 			int rawAmount = m.getPrice();
 			int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
@@ -275,40 +257,18 @@ public class BuyCardCommand implements Executable {
 					Helper::doNothing
 			);
 
-			channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
+			channel.sendMessage("✅ | Carta comprada e reservada com sucesso!").queue();
 		} else {
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			switch (m.getType()) {
-				case EVOGEAR -> {
-					Deck dk = kp.getDeck();
-
-					if (dk.checkEquipment(m.getCard(), channel)) return;
-
-					dk.addEquipment(m.getCard());
-				}
-				case FIELD -> {
-					Deck dk = kp.getDeck();
-
-					if (dk.checkField(m.getCard(), channel)) return;
-
-					dk.addField(m.getCard());
-
-				}
-				default -> {
-					if (kp.getCards().contains((KawaiponCard) m.getCard())) {
-						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
-						return;
-					}
-
-					kp.addCard(m.getCard());
-				}
-			}
-			KawaiponDAO.saveKawaipon(kp);
+			StashDAO.saveCard(switch (m.getType()) {
+				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
+				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
+			});
 
 			m.setBuyer(author.getId());
 			MarketDAO.saveCard(m);
 
-			channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
+			channel.sendMessage("✅ | Carta reservada com sucesso!").queue();
 		}
 	}
 }
