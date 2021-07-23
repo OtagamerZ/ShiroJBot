@@ -64,7 +64,7 @@ public class Youtube {
 			}
 
 			return videos;
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException | NullPointerException e) {
 			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + yd);
 			throw new IOException();
 		}
