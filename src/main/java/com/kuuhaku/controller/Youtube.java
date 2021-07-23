@@ -18,14 +18,13 @@
 
 package com.kuuhaku.controller;
 
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
-import com.kuuhaku.model.records.youtube.Item;
-import com.kuuhaku.model.records.youtube.Snippet;
-import com.kuuhaku.model.records.youtube.YoutubeData;
-import com.kuuhaku.model.records.youtube.YoutubeVideo;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
-import com.kuuhaku.utils.JSONUtils;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.kuuhaku.model.records.YoutubeVideo;
 import com.kuuhaku.utils.ShiroInfo;
 
 import java.io.IOException;
@@ -33,40 +32,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Youtube {
-	public static List<YoutubeVideo> getData(String query) throws IOException {
-		JSONObject jo = Helper.get(YouTube.DEFAULT_BASE_URL, new JSONObject() {{
-			put("key", ShiroInfo.getYoutubeToken());
-			put("part", "snippet");
-			put("type", "playlist,video");
-			put("q", query);
-			put("maxResults", "10");
-		}});
+	private static final YouTube yt = new YouTube(
+			new NetHttpTransport(),
+			new JacksonFactory(),
+			request -> {
+			}
+	);
 
-		YoutubeData yd = JSONUtils.fromJSON(jo.toString(), YoutubeData.class);
-		Helper.logger(Youtube.class).debug(yd);
-		if (yd == null) return null;
+	public static List<YoutubeVideo> getData(String query) throws IOException {
+		SearchListResponse search = yt.search().list("snippet")
+				.setKey(ShiroInfo.getYoutubeToken())
+				.setQ(query)
+				.setType("playlist,video")
+				.setMaxResults(10L)
+				.execute();
 
 		List<YoutubeVideo> videos = new ArrayList<>();
+		for (SearchResult i : search.getItems()) {
+			SearchResultSnippet s = i.getSnippet();
 
-		try {
-			for (Item i : yd.items()) {
-				Snippet jsnippet = i.snippet();
-
-				boolean playlist = !i.id().kind().equals("youtube#video");
-				videos.add(new YoutubeVideo(
-						playlist ? i.id().playlistId() : i.id().videoId(),
-						jsnippet.title(),
-						jsnippet.description(),
-						jsnippet.thumbnails().medium().url(),
-						jsnippet.channelTitle(),
-						playlist
-				));
-			}
-
-			return videos;
-		} catch (IllegalStateException | NullPointerException e) {
-			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + yd);
-			throw new IOException();
+			boolean playlist = i.getId().getKind().equals("youtube#video");
+			videos.add(new YoutubeVideo(
+					playlist ? i.getId().getPlaylistId() : i.getId().getVideoId(),
+					s.getTitle(),
+					s.getDescription(),
+					s.getThumbnails().getDefault().getUrl(),
+					s.getChannelTitle(),
+					playlist
+			));
 		}
+
+		return videos;
 	}
 }
