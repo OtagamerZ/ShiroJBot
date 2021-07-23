@@ -16,9 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado armazém pessoal de cartas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado armazém pessoal de cartas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1323,21 +1321,7 @@
       <workItem from="1626970006993" duration="16818000" />
       <workItem from="1627041771915" duration="10198000" />
       <workItem from="1627062621409" duration="964000" />
-      <workItem from="1627067719339" duration="315000" />
-    </task>
-    <task id="LOCAL-04995" summary="Correções menores">
-      <created>1626721925666</created>
-      <option name="number" value="04995" />
-      <option name="presentableId" value="LOCAL-04995" />
-      <option name="project" value="LOCAL" />
-      <updated>1626721925666</updated>
-    </task>
-    <task id="LOCAL-04996" summary="Correções menores">
-      <created>1626723490026</created>
-      <option name="number" value="04996" />
-      <option name="presentableId" value="LOCAL-04996" />
-      <option name="project" value="LOCAL" />
-      <updated>1626723490026</updated>
+      <workItem from="1627067719339" duration="613000" />
     </task>
     <task id="LOCAL-04997" summary="Correções menores">
       <created>1626723519664</created>
@@ -1668,7 +1652,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627068022953</updated>
     </task>
-    <option name="localTasksCounter" value="5044" />
+    <task id="LOCAL-05044" summary="Adicionado armazém pessoal de cartas">
+      <created>1627068049224</created>
+      <option name="number" value="05044" />
+      <option name="presentableId" value="LOCAL-05044" />
+      <option name="project" value="LOCAL" />
+      <updated>1627068049224</updated>
+    </task>
+    <task id="LOCAL-05045" summary="Adicionado armazém pessoal de cartas">
+      <created>1627068194659</created>
+      <option name="number" value="05045" />
+      <option name="presentableId" value="LOCAL-05045" />
+      <option name="project" value="LOCAL" />
+      <updated>1627068194659</updated>
+    </task>
+    <option name="localTasksCounter" value="5046" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
