@@ -143,9 +143,9 @@ public class StoreCardCommand implements Executable {
 			}
 
 			String msg = switch (off.getLeft().getRarity()) {
-				case EQUIPMENT -> "Este equipamento sairá do seu deck. Deseja mesmo armazená-lo?";
-				case FIELD -> "Este campo sairá do seu deck. Deseja mesmo armazená-lo?";
-				default -> "Esta carta sairá da sua coleção. Deseja mesmo armazená-la?";
+				case EQUIPMENT -> "Este equipamento sairá do seu deck. Deseja mesmo guardá-lo?";
+				case FIELD -> "Este campo sairá do seu deck. Deseja mesmo guardá-lo?";
+				default -> "Esta carta sairá da sua coleção. Deseja mesmo guardá-la?";
 			};
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
