@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
 		name = "retirar",
-		aliases = {"recover", "armazém"},
+		aliases = {"recover", "armazem"},
 		usage = "req_id",
 		category = Category.MISC
 )
