@@ -137,7 +137,7 @@ public class CardStashCommand implements Executable {
 						default -> ((KawaiponCard) s.getCard()).getName();
 					};
 					String rarity = switch (s.getType()) {
-						case EVOGEAR -> "Equipamento " + StringUtils.repeat("⭐", ((Equipment) s.getCard()).getTier());
+						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Equipment) s.getCard()).getTier()) + ")";
 						case FIELD -> "Campo " + (((Field) s.getCard()).isDay() ? "(DIURNO)" : "(NOTURNO)");
 						default -> s.getRawCard().getRarity().getEmote() + s.getRawCard().getRarity().toString();
 					};
