@@ -43,11 +43,10 @@ public class StashDAO {
 	public static int getRemainingSpace(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("""
-				SELECT a.cardStashCapacity - COUNT(s)
-				FROM Stash s
-				INNER JOIN Account a ON a.uid = s.owner
-				WHERE s.owner = :id
+		Query q = em.createNativeQuery("""
+				SELECT a.cardStashCapacity - (SELECT COUNT(1) FROM Stash s WHERE s.owner = a.uid)
+				FROM Account a
+				WHERE a.uid = :id
 				""");
 		q.setParameter("id", id);
 
