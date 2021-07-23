@@ -125,7 +125,7 @@ public class CardStashCommand implements Executable {
 					);
 
 			List<Page> pages = new ArrayList<>();
-			List<List<Stash>> chunks = Helper.chunkify(cards, 10);
+			List<List<Stash>> chunks = Helper.chunkify(cards, 12);
 			for (List<Stash> chunk : chunks) {
 				eb.clearFields();
 
@@ -140,7 +140,7 @@ public class CardStashCommand implements Executable {
 						default -> s.getRawCard().getRarity().toString();
 					};
 
-					eb.addField("`ID: " + s.getId() + "` | " + name + " (" + rarity + ")", Helper.VOID, false);
+					eb.addField("`ID: " + s.getId() + "` | " + name + " (" + rarity + ")", Helper.VOID, true);
 				}
 
 				pages.add(new Page(eb.build()));
