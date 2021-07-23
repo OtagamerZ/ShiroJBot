@@ -18,7 +18,10 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
@@ -151,7 +154,7 @@ public class Profile {
 			Couple c = WaifuDAO.getCouple(m.getId());
 			if (c != null) {
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + LogDAO.getUsername(Member.getWaifu(m.getId())).split("#")[0] + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + Helper.getUsername(Member.getWaifu(m.getId())) + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
