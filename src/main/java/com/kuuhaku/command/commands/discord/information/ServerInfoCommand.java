@@ -50,7 +50,7 @@ public class ServerInfoCommand implements Executable {
 				.addField(":busts_in_silhouette: | Membros", """
 						Usuários: %s
 						Bots: %s
-						""".formatted(guild.getMemberCount() - bots, bots), true)
+						""".formatted(Helper.separate(guild.getMemberCount() - bots), bots), true)
 				.addField(":calendar: | Criado em", guild.getTimeCreated().format(Helper.dateFormat), true)
 				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Helper.dateFormat) : "Não lembro", true);
 
