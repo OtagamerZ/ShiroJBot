@@ -93,8 +93,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setEventPool(Executors.newFixedThreadPool(20), true)
 				.build();
 
-		shiroShards.setActivity(Activity.playing("Iniciando..."));
-
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
@@ -156,6 +154,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			int id = shard.getShardInfo().getShardId();
 			try {
 				shard.awaitReady();
+				shard.getPresence().setActivity(Activity.playing("Iniciando shards..."));
 				Helper.logger(Main.class).info("Shard " + id + " pronto!");
 			} catch (InterruptedException e) {
 				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
