@@ -109,7 +109,7 @@ public class CardStashCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor("Cartas armazenadas: " + Helper.separate(cards.size()) + "/" + Helper.separate(acc.getCardStashCapacity()))
-					.setTitle(":scales: | Mercado de cartas")
+					.setTitle(":package: | Armazém de cartas")
 					.setDescription("""
 							Use `%sretirar ID` para retirar a carta do armazém.
 							       
