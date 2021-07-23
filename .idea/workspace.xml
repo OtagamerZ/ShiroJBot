@@ -1323,28 +1323,7 @@
       <workItem from="1626970006993" duration="16818000" />
       <workItem from="1627041771915" duration="10198000" />
       <workItem from="1627062621409" duration="964000" />
-      <workItem from="1627067719339" duration="2478000" />
-    </task>
-    <task id="LOCAL-05000" summary="Correções menores">
-      <created>1626793074716</created>
-      <option name="number" value="05000" />
-      <option name="presentableId" value="LOCAL-05000" />
-      <option name="project" value="LOCAL" />
-      <updated>1626793074717</updated>
-    </task>
-    <task id="LOCAL-05001" summary="Adicionado comando de AFK">
-      <created>1626800321279</created>
-      <option name="number" value="05001" />
-      <option name="presentableId" value="LOCAL-05001" />
-      <option name="project" value="LOCAL" />
-      <updated>1626800321280</updated>
-    </task>
-    <task id="LOCAL-05002" summary="Adicionado comando de AFK">
-      <created>1626800488921</created>
-      <option name="number" value="05002" />
-      <option name="presentableId" value="LOCAL-05002" />
-      <option name="project" value="LOCAL" />
-      <updated>1626800488922</updated>
+      <workItem from="1627067719339" duration="2778000" />
     </task>
     <task id="LOCAL-05003" summary="Adicionado comando de AFK">
       <created>1626800503621</created>
@@ -1668,7 +1647,28 @@
       <option name="project" value="LOCAL" />
       <updated>1627069463132</updated>
     </task>
-    <option name="localTasksCounter" value="5049" />
+    <task id="LOCAL-05049" summary="Adicionado armazém pessoal de cartas">
+      <created>1627070227886</created>
+      <option name="number" value="05049" />
+      <option name="presentableId" value="LOCAL-05049" />
+      <option name="project" value="LOCAL" />
+      <updated>1627070227886</updated>
+    </task>
+    <task id="LOCAL-05050" summary="Adicionado armazém pessoal de cartas">
+      <created>1627070361449</created>
+      <option name="number" value="05050" />
+      <option name="presentableId" value="LOCAL-05050" />
+      <option name="project" value="LOCAL" />
+      <updated>1627070361449</updated>
+    </task>
+    <task id="LOCAL-05051" summary="Adicionado armazém pessoal de cartas">
+      <created>1627070372796</created>
+      <option name="number" value="05051" />
+      <option name="presentableId" value="LOCAL-05051" />
+      <option name="project" value="LOCAL" />
+      <updated>1627070372796</updated>
+    </task>
+    <option name="localTasksCounter" value="5052" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
