@@ -17,9 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado armazém pessoal de cartas">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CardStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CardStashCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StashDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StashDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/StoreCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/StoreCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1336,35 +1334,7 @@
       <workItem from="1626898551060" duration="2849000" />
       <workItem from="1626958246202" duration="2189000" />
       <workItem from="1626970006993" duration="16818000" />
-      <workItem from="1627041771915" duration="4190000" />
-    </task>
-    <task id="LOCAL-04980" summary="Atualização da biblioteca de paginação">
-      <created>1626379582538</created>
-      <option name="number" value="04980" />
-      <option name="presentableId" value="LOCAL-04980" />
-      <option name="project" value="LOCAL" />
-      <updated>1626379582538</updated>
-    </task>
-    <task id="LOCAL-04981" summary="Atualização da biblioteca de paginação">
-      <created>1626379763428</created>
-      <option name="number" value="04981" />
-      <option name="presentableId" value="LOCAL-04981" />
-      <option name="project" value="LOCAL" />
-      <updated>1626379763428</updated>
-    </task>
-    <task id="LOCAL-04982" summary="Atualização da biblioteca de paginação">
-      <created>1626380128055</created>
-      <option name="number" value="04982" />
-      <option name="presentableId" value="LOCAL-04982" />
-      <option name="project" value="LOCAL" />
-      <updated>1626380128055</updated>
-    </task>
-    <task id="LOCAL-04983" summary="Correções menores">
-      <created>1626447681978</created>
-      <option name="number" value="04983" />
-      <option name="presentableId" value="LOCAL-04983" />
-      <option name="project" value="LOCAL" />
-      <updated>1626447681978</updated>
+      <workItem from="1627041771915" duration="4884000" />
     </task>
     <task id="LOCAL-04984" summary="Correções menores">
       <created>1626451215420</created>
@@ -1681,7 +1651,35 @@
       <option name="project" value="LOCAL" />
       <updated>1627045614979</updated>
     </task>
-    <option name="localTasksCounter" value="5029" />
+    <task id="LOCAL-05029" summary="Adicionado armazém pessoal de cartas">
+      <created>1627046011109</created>
+      <option name="number" value="05029" />
+      <option name="presentableId" value="LOCAL-05029" />
+      <option name="project" value="LOCAL" />
+      <updated>1627046011109</updated>
+    </task>
+    <task id="LOCAL-05030" summary="Adicionado armazém pessoal de cartas">
+      <created>1627046143638</created>
+      <option name="number" value="05030" />
+      <option name="presentableId" value="LOCAL-05030" />
+      <option name="project" value="LOCAL" />
+      <updated>1627046143638</updated>
+    </task>
+    <task id="LOCAL-05031" summary="Adicionado armazém pessoal de cartas">
+      <created>1627046237014</created>
+      <option name="number" value="05031" />
+      <option name="presentableId" value="LOCAL-05031" />
+      <option name="project" value="LOCAL" />
+      <updated>1627046237014</updated>
+    </task>
+    <task id="LOCAL-05032" summary="Adicionado armazém pessoal de cartas">
+      <created>1627046256401</created>
+      <option name="number" value="05032" />
+      <option name="presentableId" value="LOCAL-05032" />
+      <option name="project" value="LOCAL" />
+      <updated>1627046256401</updated>
+    </task>
+    <option name="localTasksCounter" value="5033" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
