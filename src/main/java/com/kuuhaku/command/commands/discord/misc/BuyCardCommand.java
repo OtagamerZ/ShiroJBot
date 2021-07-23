@@ -27,6 +27,8 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.postgresql.MarketDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -170,9 +172,9 @@ public class BuyCardCommand implements Executable {
 						default -> ((KawaiponCard) m.getCard()).getName();
 					};
 					String rarity = switch (m.getType()) {
-						case EVOGEAR -> "Equipamento";
-						case FIELD -> "Campo";
-						default -> m.getRawCard().getRarity().toString();
+						case EVOGEAR -> "Equipamento " + StringUtils.repeat("⭐", ((Equipment) m.getCard()).getTier());
+						case FIELD -> "Campo " + (((Field) m.getCard()).isDay() ? "(DIURNO)" : "(NOTURNO)");
+						default -> m.getRawCard().getRarity().getEmote() + m.getRawCard().getRarity().toString();
 					};
 
 					eb.addField(
