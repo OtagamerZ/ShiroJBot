@@ -51,7 +51,7 @@ public class Youtube {
 		for (SearchResult i : search.getItems()) {
 			SearchResultSnippet s = i.getSnippet();
 
-			boolean playlist = i.getId().getKind().equals("youtube#video");
+			boolean playlist = i.getId().getKind().equals("youtube#playlist");
 			videos.add(new YoutubeVideo(
 					playlist ? i.getId().getPlaylistId() : i.getId().getVideoId(),
 					s.getTitle(),
