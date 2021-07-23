@@ -32,12 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Youtube {
-	private static final YouTube yt = new YouTube(
+	private static final YouTube yt = new YouTube.Builder(
 			new NetHttpTransport(),
 			new JacksonFactory(),
 			request -> {
 			}
-	);
+	).setApplicationName(ShiroInfo.getName()).build();
 
 	public static List<YoutubeVideo> getData(String query) throws IOException {
 		SearchListResponse search = yt.search().list("snippet")
