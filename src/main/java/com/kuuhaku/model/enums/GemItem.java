@@ -115,6 +115,18 @@ public enum GemItem {
 				return true;
 			}
 	),
+	CARD_STASH_SIZE(
+			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 10",
+			3,
+			(mb, chn, args) -> {
+				Account acc = AccountDAO.getAccount(mb.getId());
+
+				acc.setCardStashCapacity(acc.getCardStashCapacity() + 10);
+				AccountDAO.saveAccount(acc);
+
+				return true;
+			}
+	),
 	CARD_FOIL(
 			"Melhoria de carta", "Transforma uma carta em cromada",
 			5,
@@ -169,18 +181,18 @@ public enum GemItem {
 				return true;
 			}
 	),
-	STASH_SLOT(
+	DECK_STASH_SLOT(
 			"Aumentar capacidade de decks reserva", "Libera 1 espaço extra nos seus decks reserva (máximo 10 slots)",
 			20,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());
 
-				if (acc.getStashCapacity() >= 10) {
+				if (acc.getDeckStashCapacity() >= 10) {
 					chn.sendMessage("❌ | Você já alcançou a capacidade máxima de decks reserva.").queue();
 					return false;
 				}
 
-				acc.setStashCapacity(acc.getStashCapacity() + 1);
+				acc.setDeckStashCapacity(acc.getDeckStashCapacity() + 1);
 				AccountDAO.saveAccount(acc);
 
 				return true;

@@ -97,7 +97,7 @@ public class ClanDAO {
 	public static List<ClanRanking> getClanRanking() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.icon FROM shiro.\"GetClanRanking\" c");
+		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.rank, c.icon FROM shiro.\"GetClanRanking\" c");
 		q.setMaxResults(10);
 
 		try {
@@ -110,13 +110,26 @@ public class ClanDAO {
 	public static ClanRanking getClanChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.icon FROM shiro.\"GetClanChampion\" c");
+		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.rank, c.icon FROM shiro.\"GetClanChampion\" c");
 		q.setMaxResults(1);
 
 		try {
 			return Helper.map(ClanRanking.class, (Object[]) q.getSingleResult());
 		} catch (NoResultException e) {
 			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static ClanRanking getClanPosition(int id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT c.id, c.name, c.score, c.rank, c.icon FROM shiro.\"GetClanRanking\" c WHERE c.id = :id");
+		q.setParameter("id", id);
+
+		try {
+			return Helper.map(ClanRanking.class, (Object[]) q.getSingleResult());
 		} finally {
 			em.close();
 		}

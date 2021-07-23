@@ -25,7 +25,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;
 
-public record ClanRanking(int id, String name, BigInteger score, String icon) {
+public record ClanRanking(int id, String name, BigInteger score, BigInteger rank, String icon) {
 	public Color getColor() {
 		if (icon != null)
 			return Helper.colorThief(Helper.btoa(icon));
