@@ -73,8 +73,9 @@ public class MyStatsCommand implements Executable {
 				badges.append(t.getEmote() == null ? "" : t.getEmote().getTag(mb.getLevel()));
 			}
 
-			eb.addField("Emblemas:", badges.toString(), false)
-					.setThumbnail(TagIcons.getLevelEmote(mb.getLevel()).getImageUrl());
+			eb.addField("Emblemas:", badges.toString(), false);
+			if (mb.getLevel() >= 5)
+				eb.setThumbnail(TagIcons.getLevelEmote(mb.getLevel()).getImageUrl());
 
 			categories.put("\uD83D\uDD23", new Page(eb.build()));
 		}
