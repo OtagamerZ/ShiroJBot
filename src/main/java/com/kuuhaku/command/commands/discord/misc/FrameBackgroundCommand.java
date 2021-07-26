@@ -56,7 +56,7 @@ public class FrameBackgroundCommand implements Executable {
 			return;
 		}
 
-		boolean canUse = CardDAO.totalCards(anime.getName()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count();
+		boolean canUse = acc.getCompState().get(anime.getName()).any();
 		if (!canUse) {
 			channel.sendMessage("❌ | Você só pode usar como fundo animes que você já tenha completado a coleção.").queue();
 			return;

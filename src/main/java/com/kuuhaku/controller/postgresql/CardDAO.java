@@ -28,14 +28,12 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.model.records.CompletionState;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CardDAO {
@@ -116,6 +114,25 @@ public class CardDAO {
 
 		try {
 			return em.find(AddedAnime.class, name);
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, CompletionState> getCompletionState(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT * FROM \"GetCompletionState\"(:id)");
+		q.setParameter("id", id);
+
+		try {
+			List<Object[]> res = (List<Object[]>) q.getResultList();
+			return res.stream()
+					.collect(Collectors.toMap(
+							o -> String.valueOf(o[0]),
+							o -> new CompletionState((boolean) o[1], (boolean) o[2])
+					));
 		} finally {
 			em.close();
 		}
