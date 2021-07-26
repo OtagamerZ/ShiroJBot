@@ -42,7 +42,11 @@ public class BackgroundCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length == 0) {
+		String img;
+		if (!argsAsText.isBlank()) img = argsAsText;
+		else img = Helper.getImageFrom(message);
+
+		if (img == null) {
 			channel.sendMessage(I18n.getString("err_no-image")).queue();
 			return;
 		} else if (Helper.containsAny(argsAsText, "google", "goo.gl")) {
@@ -50,7 +54,7 @@ public class BackgroundCommand implements Executable {
 			return;
 		}
 
-		try (InputStream is = Helper.getImage(argsAsText)) {
+		try (InputStream is = Helper.getImage(img)) {
 			ImageIO.read(is);
 			byte[] bytes = is.readAllBytes();
 
