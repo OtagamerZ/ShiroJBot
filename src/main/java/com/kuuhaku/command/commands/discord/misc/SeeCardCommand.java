@@ -105,7 +105,7 @@ public class SeeCardCommand implements Executable {
 			Set<KawaiponCard> cards = kp.getCards();
 			Set<AddedAnime> animes = CardDAO.getValidAnime();
 			for (AddedAnime anime : animes) {
-				if (CardDAO.hasCompleted(author.getId(), anime.getName(), false))
+				if (acc.getCompState().get(anime.getName()).any())
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
 			}
 

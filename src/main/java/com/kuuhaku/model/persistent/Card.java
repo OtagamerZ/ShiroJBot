@@ -149,6 +149,27 @@ public class Card {
 		}
 	}
 
+	public BufferedImage drawCardNoBorder(Account acc) {
+		try {
+			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+				try {
+					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+				} catch (IOException e) {
+					return null;
+				}
+			});
+
+			assert cardBytes != null;
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+				return acc.isUsingFoil() && acc.getCompState().get(anime.getName()).foil()
+						? adjust(ImageIO.read(bais), false)
+						: ImageIO.read(bais);
+			}
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
 	private BufferedImage adjust(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 

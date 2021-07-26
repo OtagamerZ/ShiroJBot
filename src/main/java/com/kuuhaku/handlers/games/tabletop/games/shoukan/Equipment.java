@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -33,11 +32,9 @@ import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Objects;
 
 @Entity
@@ -93,8 +90,6 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
-		boolean useFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), card.getAnime().getName(), true);
-
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -102,7 +97,7 @@ public class Equipment implements Drawable, Cloneable {
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
-			g2d.drawImage(card.drawCardNoBorder(useFoil), 0, 0, null);
+			g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
 
 			if (charm != null && charm.equals(Charm.SPELL)) {
 				g2d.drawImage(acc.getFrame().getFrontSpell(), 0, 0, null);
@@ -110,12 +105,10 @@ public class Equipment implements Drawable, Cloneable {
 
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-				try {
-					BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
+				BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
+				if (star != null)
 					for (int i = 0; i < tier; i++)
 						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
-				} catch (IOException ignore) {
-				}
 
 				if (getMana() > 0) {
 					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/mana.png"), 184, 47, null);
@@ -135,12 +128,11 @@ public class Equipment implements Drawable, Cloneable {
 
 				if (charm != null)
 					g2d.drawImage(charm.getIcon(), 135, 58, null);
-				try {
-					BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
+
+				BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
+				if (star != null)
 					for (int i = 0; i < tier; i++)
 						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
-				} catch (IOException ignore) {
-				}
 
 				g2d.setColor(Color.red);
 				Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
@@ -150,15 +142,10 @@ public class Equipment implements Drawable, Cloneable {
 
 				if (linkedTo != null) {
 					if (linkedTo.getRight().getFakeCard() != null) {
-						boolean linkedFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), linkedTo.getRight().getFakeCard().getCard().getAnime().getName(), true);
-
-						g2d.drawImage(linkedTo.getRight().getFakeCard().getCard().drawCardNoBorder(linkedFoil), 20, 52, 60, 93, null);
+						g2d.drawImage(linkedTo.getRight().getFakeCard().getCard().drawCardNoBorder(acc), 20, 52, 60, 93, null);
 					} else {
-						boolean linkedFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), linkedTo.getRight().getCard().getAnime().getName(), true);
-
-						g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(linkedFoil), 20, 52, 60, 93, null);
+						g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(acc), 20, 52, 60, 93, null);
 					}
-					g2d.setClip(null);
 				}
 			}
 		}
