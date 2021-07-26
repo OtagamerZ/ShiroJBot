@@ -1606,6 +1606,41 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
+	public void convertEquipment(Champion target, int pos, Side to, int index) {
+		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
+		Champion ch = getArena().getSlots().get(his).get(index).getTop();
+		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
+		List<SlotColumn> slts = getArena().getSlots().get(his);
+
+		for (int i = 0; i < slts.size(); i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
+					unequipCard(his, i, slts);
+					return;
+				}
+			}
+		}
+
+		for (int i = 0; i < 5; i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				SlotColumn sc = getFirstAvailableSlot(to, false);
+				if (sc != null) {
+					ch.removeLinkedTo(eq);
+					slts.get(i).setBottom(null);
+
+					target.addLinkedTo(eq);
+					eq.setLinkedTo(Pair.of(pos, target));
+					ch.bind(hands.get(to));
+					sc.setBottom(eq);
+				} else return;
+
+				break;
+			}
+		}
+	}
+
 	public void convertEquipments(Champion target, int pos, Side to, int index) {
 		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
