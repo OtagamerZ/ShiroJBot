@@ -24,13 +24,17 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
 
 public enum Tag {
@@ -51,9 +55,6 @@ public enum Tag {
 
 	LEITOR(TagIcons.READER, "Você leu as regras, que bom!",
 			(user, member) -> TagDAO.getTagById(user.getId()).isReader()),
-
-	LEVEL(null, "Usuário que atingiu um dos marcos de level.",
-			(user, member) -> true),
 
 	CASADO(TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
 			(user, member) -> WaifuDAO.isWaifued(user.getId())),
@@ -106,15 +107,12 @@ public enum Tag {
 	}
 
 	public InputStream getPath(com.kuuhaku.model.persistent.Member mb) throws IOException, NullPointerException {
-		return Helper.getImage(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Objects.requireNonNull(getEmote(mb)).getId(mb.getLevel()))).getImageUrl());
-	}
+		Emote e = Main.getShiroShards().getEmoteById(getEmote().getId(mb.getLevel()));
 
-	public TagIcons getEmote(com.kuuhaku.model.persistent.Member mb) {
-		if (this.equals(LEVEL)) {
-			if (mb.getLevel() >= 5) return TagIcons.LEVEL;
-			else return null;
-		}
-		return emote;
+		if (e != null)
+			return Helper.getImage(e.getImageUrl());
+		else
+			return null;
 	}
 
 	public TagIcons getEmote() {
