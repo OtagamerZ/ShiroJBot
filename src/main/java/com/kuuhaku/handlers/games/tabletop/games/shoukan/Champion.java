@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
@@ -36,11 +35,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
@@ -138,13 +135,9 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			if (fakeCard != null) {
-				boolean useFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), fakeCard.getCard().getAnime().getName(), true);
-
-				g2d.drawImage(fakeCard.getCard().drawCardNoBorder(useFoil), 0, 0, null);
+				g2d.drawImage(fakeCard.getCard().drawCardNoBorder(acc), 0, 0, null);
 			} else {
-				boolean useFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), card.getAnime().getName(), true);
-
-				g2d.drawImage(card.drawCardNoBorder(useFoil), 0, 0, null);
+				g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
 			}
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
@@ -218,29 +211,13 @@ public class Champion implements Drawable, Cloneable {
 			}
 
 			if (isStasis()) {
-				try {
-					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stasis.png")));
-					g2d.drawImage(dm, 0, 0, null);
-				} catch (IOException ignore) {
-				}
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/stasis.png"), 0, 0, null);
 			} else if (isStunned()) {
-				try {
-					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stun.png")));
-					g2d.drawImage(dm, 0, 0, null);
-				} catch (IOException ignore) {
-				}
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/stun.png"), 0, 0, null);
 			} else if (isSleeping()) {
-				try {
-					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/sleep.png")));
-					g2d.drawImage(dm, 0, 0, null);
-				} catch (IOException ignore) {
-				}
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/sleep.png"), 0, 0, null);
 			} else if (isDefending()) {
-				try {
-					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
-					g2d.drawImage(dm, 0, 0, null);
-				} catch (IOException ignore) {
-				}
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/defense_mode.png"), 0, 0, null);
 			}
 		}
 
