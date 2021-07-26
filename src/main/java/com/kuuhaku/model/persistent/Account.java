@@ -563,7 +563,9 @@ public class Account {
 	}
 
 	public Map<String, CompletionState> getCompState() {
-		if (compState == null) CardDAO.getCompletionState(uid);
+		if (compState == null)
+			compState = CardDAO.getCompletionState(uid);
+
 		return compState;
 	}
 }
