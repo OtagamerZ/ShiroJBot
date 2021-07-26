@@ -109,7 +109,8 @@ public class MyStatsCommand implements Executable {
 							Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
 					);
 
-			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false);
+			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false)
+					.setThumbnail(author.getEffectiveAvatarUrl());
 
 			categories.put("\uD83D\uDCC8", new Page(eb.build()));
 		}
@@ -144,6 +145,8 @@ public class MyStatsCommand implements Executable {
 
 			if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
 				eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
+
+			eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png");
 
 			categories.put("\uD83D\uDCCB", new Page(eb.build()));
 		}
