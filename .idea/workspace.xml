@@ -16,7 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado armazém pessoal de cartas">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1325,13 +1325,7 @@
       <workItem from="1627062621409" duration="964000" />
       <workItem from="1627067719339" duration="5391000" />
       <workItem from="1627301032411" duration="2151000" />
-    </task>
-    <task id="LOCAL-05009" summary="Adicionado comando de AFK">
-      <created>1626885139941</created>
-      <option name="number" value="05009" />
-      <option name="presentableId" value="LOCAL-05009" />
-      <option name="project" value="LOCAL" />
-      <updated>1626885139941</updated>
+      <workItem from="1627307867917" duration="1811000" />
     </task>
     <task id="LOCAL-05010" summary="Adicionado comando de AFK">
       <created>1626890779591</created>
@@ -1669,7 +1663,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627072715743</updated>
     </task>
-    <option name="localTasksCounter" value="5058" />
+    <task id="LOCAL-05058" summary="Correções menores">
+      <created>1627308097713</created>
+      <option name="number" value="05058" />
+      <option name="presentableId" value="LOCAL-05058" />
+      <option name="project" value="LOCAL" />
+      <updated>1627308097713</updated>
+    </task>
+    <option name="localTasksCounter" value="5059" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1776,12 +1777,12 @@
     <MESSAGE value="Melhoria no cálculo de combate do Shoukan" />
     <MESSAGE value="Correções menores e criação do comando de Starboard" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Adicionado comando de AFK" />
     <MESSAGE value="Troca da API de requisições HTTP" />
     <MESSAGE value="Remoção do sistema de Exceeds" />
     <MESSAGE value="Adicionado armazém pessoal de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado armazém pessoal de cartas" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

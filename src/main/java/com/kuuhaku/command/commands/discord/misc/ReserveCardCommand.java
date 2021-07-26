@@ -182,7 +182,8 @@ public class ReserveCardCommand implements Executable {
 							"`ID: " + m.getId() + "` | " + name,
 							"""
 									%s
-									Por %s | Preço %s créditos
+									Por %s
+									Preço %s créditos
 									""".formatted(
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
