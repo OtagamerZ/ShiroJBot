@@ -84,7 +84,6 @@ public class MuteMemberCommand implements Executable {
 			return;
 		}
 
-		String reason = params.get(1);
 		MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
 		long time = Helper.stringToDurationMillis(argsAsText);
 		if (time < 60000) {
@@ -92,7 +91,7 @@ public class MuteMemberCommand implements Executable {
 			return;
 		}
 
-		m.setReason(reason);
+		m.setReason(argsAsText);
 		m.mute(time);
 
 		List<PermissionOverrideAction> act = new ArrayList<>();
@@ -112,9 +111,9 @@ public class MuteMemberCommand implements Executable {
 
 		Member finalMb = mb;
 		RestAction.allOf(act)
-				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + reason + "`"))
+				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + argsAsText + "`"))
 				.queue(s -> {
-					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + reason + "`", guild);
+					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + argsAsText + "`", guild);
 					MemberDAO.saveMutedMember(m);
 				}, Helper::doNothing);
 	}
