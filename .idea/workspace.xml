@@ -17,14 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado armazém pessoal de cartas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/DemoteClanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/DemoteClanMemberCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/KickClanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/KickClanMemberCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/PromoteClanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/PromoteClanMemberCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LogDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LogDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,17 +204,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1341,14 +1323,8 @@
       <workItem from="1626970006993" duration="16818000" />
       <workItem from="1627041771915" duration="10198000" />
       <workItem from="1627062621409" duration="964000" />
-      <workItem from="1627067719339" duration="4922000" />
-    </task>
-    <task id="LOCAL-05008" summary="Adicionado comando de AFK">
-      <created>1626873279051</created>
-      <option name="number" value="05008" />
-      <option name="presentableId" value="LOCAL-05008" />
-      <option name="project" value="LOCAL" />
-      <updated>1626873279051</updated>
+      <workItem from="1627067719339" duration="5391000" />
+      <workItem from="1627301032411" duration="2151000" />
     </task>
     <task id="LOCAL-05009" summary="Adicionado comando de AFK">
       <created>1626885139941</created>
@@ -1686,7 +1662,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627072309072</updated>
     </task>
-    <option name="localTasksCounter" value="5057" />
+    <task id="LOCAL-05057" summary="Adicionado armazém pessoal de cartas">
+      <created>1627072715743</created>
+      <option name="number" value="05057" />
+      <option name="presentableId" value="LOCAL-05057" />
+      <option name="project" value="LOCAL" />
+      <updated>1627072715743</updated>
+    </task>
+    <option name="localTasksCounter" value="5058" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
