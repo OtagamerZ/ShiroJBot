@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -64,6 +65,7 @@ public class KawaiponsCommand implements Executable {
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
         channel.sendMessage(I18n.getString("str_generating-collection")).queue(m -> {
             try {
+                Account acc = AccountDAO.getAccount(author.getId());
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
                 if (kp.getCards().isEmpty()) {
@@ -73,7 +75,7 @@ public class KawaiponsCommand implements Executable {
                     Set<KawaiponCard> collection = new HashSet<>();
                     Set<AddedAnime> animes = CardDAO.getValidAnime();
                     for (AddedAnime anime : animes) {
-                        if (CardDAO.hasCompleted(author.getId(), anime.getName(), false))
+                        if (acc.getCompState().get(anime.getName()).any())
                             collection.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
                     }
 

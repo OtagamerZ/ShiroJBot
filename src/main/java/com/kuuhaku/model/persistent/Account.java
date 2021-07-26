@@ -21,13 +21,13 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -131,6 +131,8 @@ public class Account {
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastDaily = null;
+
+	private transient Map<String, CompletionState> compState = null;
 
 	public String getUid() {
 		return uid;
@@ -430,11 +432,8 @@ public class Account {
 	public String getUltimate() {
 		if (ultimate != null && !ultimate.isBlank()) {
 			try {
-				Kawaipon kp = KawaiponDAO.getKawaipon(uid);
-
 				AddedAnime an = CardDAO.verifyAnime(ultimate);
-				if (CardDAO.totalCards(an.getName()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
-					return ultimate;
+				if (getCompState().get(an.getName()).any()) return ultimate;
 			} catch (IllegalArgumentException e) {
 				return "";
 			}
@@ -561,5 +560,10 @@ public class Account {
 
 	public void setAfkMessage(String afkMessage) {
 		this.afkMessage = afkMessage;
+	}
+
+	public Map<String, CompletionState> getCompState() {
+		if (compState == null) CardDAO.getCompletionState(uid);
+		return compState;
 	}
 }
