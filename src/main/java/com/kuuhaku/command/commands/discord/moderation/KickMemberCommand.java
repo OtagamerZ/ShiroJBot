@@ -80,9 +80,8 @@ public class KickMemberCommand implements Executable {
 					.toArray(String[]::new);
 		}
 
-		String reason = String.join(" ", args);
 		if (m.size() > 1) {
-			if (reason.isBlank()) {
+			if (argsAsText.isBlank()) {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
 				for (Member mb : message.getMentionedMembers()) {
@@ -90,13 +89,12 @@ public class KickMemberCommand implements Executable {
 				}
 
 				channel.sendMessage("Você está prestes a expulsar " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									RestAction.allOf(acts)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										RestAction.allOf(acts)
+												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao expulsar.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
@@ -104,17 +102,16 @@ public class KickMemberCommand implements Executable {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
 				for (Member mb : message.getMentionedMembers()) {
-					acts.add(mb.kick(reason));
+					acts.add(mb.kick(argsAsText));
 				}
 
-				channel.sendMessage("Você está prestes a expulsar " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + reason + "\", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									RestAction.allOf(acts)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + reason + "`"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+				channel.sendMessage("Você está prestes a expulsar " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										RestAction.allOf(acts)
+												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + argsAsText + "`"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao expulsar.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
@@ -122,31 +119,29 @@ public class KickMemberCommand implements Executable {
 		} else {
 			Member mm = m.stream().findFirst().orElseThrow();
 
-			if (reason.isBlank()) {
+			if (argsAsText.isBlank()) {
 				channel.sendMessage("Você está prestes a expulsar " + mm.getEffectiveName() + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									mm.kick()
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										mm.kick()
+												.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao expulsar.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
 			} else {
 				channel.sendMessage("Você está prestes a expulsar " + mm.getEffectiveName() + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									mm.kick(reason)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!\nRazão: `" + reason + "`"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										mm.kick(argsAsText)
+												.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!\nRazão: `" + argsAsText + "`"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao expulsar.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
 			}
 		}
-    }
+	}
 }
