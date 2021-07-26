@@ -44,6 +44,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -234,7 +235,9 @@ public class Profile {
 			Set<Tag> tags = Tag.getTags(m);
 			for (Tag t : tags) {
 				try {
-					add(ImageIO.read(t.getPath(mb)));
+					InputStream is = t.getPath(mb);
+					if (is != null)
+						add(ImageIO.read(is));
 				} catch (IOException e) {
 					Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
 				} catch (NullPointerException ignore) {

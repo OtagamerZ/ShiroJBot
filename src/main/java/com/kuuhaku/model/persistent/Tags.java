@@ -67,7 +67,7 @@ public class Tags {
 		else tags = Tag.getTags(g.getMemberById(mb.getUid()));
 
 		for (Tag t : tags) {
-			badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", Objects.requireNonNull(t.getEmote(mb)).getId(mb.getLevel())));
+			badges.add(t.getEmote() == null ? "" : pattern.replace("{id}", Objects.requireNonNull(t.getEmote()).getId(mb.getLevel())));
 		}
 
 		return badges;
