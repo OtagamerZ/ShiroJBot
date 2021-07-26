@@ -80,9 +80,8 @@ public class BanMemberCommand implements Executable {
 					.toArray(String[]::new);
 		}
 
-		String reason = String.join(" ", args);
 		if (m.size() > 1) {
-			if (reason.isBlank()) {
+			if (argsAsText.isBlank()) {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
 				for (Member mb : message.getMentionedMembers()) {
@@ -90,13 +89,12 @@ public class BanMemberCommand implements Executable {
 				}
 
 				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									RestAction.allOf(acts)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										RestAction.allOf(acts)
+												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
@@ -104,17 +102,16 @@ public class BanMemberCommand implements Executable {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
 				for (Member mb : message.getMentionedMembers()) {
-					acts.add(mb.ban(7, reason));
+					acts.add(mb.ban(7, argsAsText));
 				}
 
-				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + reason + "\", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									RestAction.allOf(acts)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + reason + "`"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										RestAction.allOf(acts)
+												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + argsAsText + "`"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
@@ -122,27 +119,25 @@ public class BanMemberCommand implements Executable {
 		} else {
 			Member mm = m.stream().findFirst().orElseThrow();
 
-			if (reason.isBlank()) {
+			if (argsAsText.isBlank()) {
 				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									mm.ban(7)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										mm.ban(7)
+												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
 			} else {
 				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									mm.ban(7, reason)
-											.mapToResult()
-											.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + reason + "`"))
-											.flatMap(r -> s.delete())
-											.queue(null, Helper::doNothing);
-								}), true, 1, TimeUnit.MINUTES
+						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
+										mm.ban(7, argsAsText)
+												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + argsAsText + "`"))
+												.flatMap(r -> s.delete())
+												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
+								), true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
