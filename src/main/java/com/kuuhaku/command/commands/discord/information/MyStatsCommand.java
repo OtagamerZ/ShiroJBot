@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -71,10 +70,11 @@ public class MyStatsCommand implements Executable {
 
 			StringBuilder badges = new StringBuilder();
 			for (Tag t : tags) {
-				badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel()));
+				badges.append(t.getEmote() == null ? "" : t.getEmote().getTag(mb.getLevel()));
 			}
 
-			eb.addField("Emblemas:", badges.toString(), false);
+			eb.addField("Emblemas:", badges.toString(), false)
+					.setThumbnail(TagIcons.getLevelEmote(mb.getLevel()).getImageUrl());
 
 			categories.put("\uD83D\uDD23", new Page(eb.build()));
 		}
