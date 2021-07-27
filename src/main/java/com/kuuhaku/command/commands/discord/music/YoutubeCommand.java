@@ -114,7 +114,7 @@ public class YoutubeCommand implements Executable {
 												}
 											});
 											put(Pages.getPaginator().getEmote(Emote.NEXT), (mb, ms) -> {
-												if (p.get() < pages.size()) {
+												if (p.get() < pages.size() - 1) {
 													p.getAndIncrement();
 													ms.editMessageEmbeds((MessageEmbed) pages.get(p.get()).getContent()).queue();
 												}
