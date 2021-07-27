@@ -50,27 +50,27 @@ public class AvatarCommand implements Executable {
 					return;
 				}
 				eb.setTitle("Ícone do servidor");
-				eb.setImage(guild.getIconUrl() + "?size=4096");
-				eb.setDescription("[Clique aqui se não conseguir ver](" + guild.getIconUrl() + "?size=4096)");
+				eb.setImage(guild.getIconUrl() + "?size=1024");
+				eb.setDescription("[Clique aqui se não conseguir ver](" + guild.getIconUrl() + "?size=1024)");
 			} else if (message.getMentionedUsers().size() > 0) {
 				if (author.getId().equals(message.getMentionedUsers().get(0).getId())) {
 					eb.setTitle("Seu avatar");
-					eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
-					eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=4096)");
+					eb.setImage(author.getEffectiveAvatarUrl() + "?size=1024");
+					eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=1024)");
 				} else {
 					eb.setTitle("Avatar de: " + message.getMentionedUsers().get(0).getAsTag());
-					eb.setImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=4096");
-					eb.setDescription("[Clique aqui se não conseguir ver](" + message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=4096)");
+					eb.setImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=1024");
+					eb.setDescription("[Clique aqui se não conseguir ver](" + message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=1024)");
 				}
 			} else {
 				eb.setTitle("Seu avatar");
-				eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
-				eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=4096)");
+				eb.setImage(author.getEffectiveAvatarUrl() + "?size=1024");
+				eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=1024)");
 			}
 		} else {
 			eb.setTitle("Seu avatar");
-			eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
-			eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=4096)");
+			eb.setImage(author.getEffectiveAvatarUrl() + "?size=1024");
+			eb.setDescription("[Clique aqui se não conseguir ver](" + author.getEffectiveAvatarUrl() + "?size=1024)");
 		}
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

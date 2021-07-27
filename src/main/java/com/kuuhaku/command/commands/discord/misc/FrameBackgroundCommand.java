@@ -56,7 +56,7 @@ public class FrameBackgroundCommand implements Executable {
 			return;
 		}
 
-		boolean canUse = acc.getCompState().get(anime.getName()).any();
+		boolean canUse = acc.getCompletion(anime.getName()).any();
 		if (!canUse) {
 			channel.sendMessage("❌ | Você só pode usar como fundo animes que você já tenha completado a coleção.").queue();
 			return;
