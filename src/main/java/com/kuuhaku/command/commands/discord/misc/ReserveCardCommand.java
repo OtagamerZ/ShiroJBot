@@ -161,7 +161,7 @@ public class ReserveCardCommand implements Executable {
 					.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
-			List<List<Market>> chunks = Helper.chunkify(cards, 10);
+			List<List<Market>> chunks = Helper.chunkify(cards, 6);
 			for (List<Market> chunk : chunks) {
 				eb.clearFields();
 
