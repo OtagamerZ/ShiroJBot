@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1339,14 +1340,7 @@
       <workItem from="1627067719339" duration="5391000" />
       <workItem from="1627301032411" duration="2151000" />
       <workItem from="1627307867917" duration="1811000" />
-      <workItem from="1627387311342" duration="5397000" />
-    </task>
-    <task id="LOCAL-05018" summary="Remoção do sistema de Exceeds">
-      <created>1626977937908</created>
-      <option name="number" value="05018" />
-      <option name="presentableId" value="LOCAL-05018" />
-      <option name="project" value="LOCAL" />
-      <updated>1626977937908</updated>
+      <workItem from="1627387311342" duration="6082000" />
     </task>
     <task id="LOCAL-05019" summary="Remoção do sistema de Exceeds">
       <created>1626977950896</created>
@@ -1684,7 +1678,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627409824175</updated>
     </task>
-    <option name="localTasksCounter" value="5067" />
+    <task id="LOCAL-05067" summary="Correções menores">
+      <created>1627416746164</created>
+      <option name="number" value="05067" />
+      <option name="presentableId" value="LOCAL-05067" />
+      <option name="project" value="LOCAL" />
+      <updated>1627416746164</updated>
+    </task>
+    <option name="localTasksCounter" value="5068" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
