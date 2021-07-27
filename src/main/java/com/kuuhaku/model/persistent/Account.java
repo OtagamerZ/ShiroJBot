@@ -433,7 +433,7 @@ public class Account {
 		if (ultimate != null && !ultimate.isBlank()) {
 			try {
 				AddedAnime an = CardDAO.verifyAnime(ultimate);
-				if (getCompState().get(an.getName()).any()) return ultimate;
+				if (getCompletion(an.getName()).any()) return ultimate;
 			} catch (IllegalArgumentException e) {
 				return "";
 			}
@@ -566,6 +566,10 @@ public class Account {
 		if (compState == null)
 			compState = CardDAO.getCompletionState(uid);
 
-		return compState;
+		return Helper.getOr(compState, Map.of());
+	}
+
+	public CompletionState getCompletion(String anime) {
+		return getCompState().getOrDefault(anime, new CompletionState(false, false));
 	}
 }

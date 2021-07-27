@@ -332,6 +332,7 @@ public class ShiroInfo {
 	}
 
 	public User getUserByID(String userID) {
+		if (userID == null || userID.isBlank()) return null;
 		return Main.getShiroShards().getUserById(userID);
 	}
 

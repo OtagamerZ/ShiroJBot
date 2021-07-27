@@ -43,7 +43,7 @@ public class ServerInfoCommand implements Executable {
 
 		eb.setTitle(":dividers: | Dados sobre o servidor")
 				.setThumbnail(guild.getIconUrl())
-				.setImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=512" : null)
+				.setImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=1024" : null)
 				.addField(":beginner: | Nome", guild.getName(), true)
 				.addField(":name_badge: | Dono", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), true)
 				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), true)
