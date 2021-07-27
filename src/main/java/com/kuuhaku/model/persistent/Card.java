@@ -161,7 +161,7 @@ public class Card {
 
 			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				return acc.isUsingFoil() && acc.getCompletion(anime.getName()).foil()
+				return acc.isUsingFoil() && acc.getCompletion(anime).foil()
 						? adjust(ImageIO.read(bais), false)
 						: ImageIO.read(bais);
 			}
