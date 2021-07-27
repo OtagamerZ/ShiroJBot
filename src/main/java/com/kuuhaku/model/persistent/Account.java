@@ -566,7 +566,7 @@ public class Account {
 		if (compState == null)
 			compState = CardDAO.getCompletionState(uid);
 
-		return Helper.getOr(compState, Map.of());
+		return compState;
 	}
 
 	public CompletionState getCompletion(String anime) {

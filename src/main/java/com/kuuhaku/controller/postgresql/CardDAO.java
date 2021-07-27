@@ -123,7 +123,7 @@ public class CardDAO {
 	public static Map<String, CompletionState> getCompletionState(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT * FROM \"GetCompletionState\"(:id)");
+		Query q = em.createNativeQuery("SELECT x.name, x.all_normal, x.all_foil FROM \"GetCompletionState\"(:id) x");
 		q.setParameter("id", id);
 
 		try {
