@@ -61,7 +61,7 @@ public enum FrameColor {
 	}
 
 	public BufferedImage getBack(Account acc) {
-		boolean withUlt = !acc.getUltimate().isBlank() && acc.getCompState().get(acc.getUltimate()).any();
+		boolean withUlt = !acc.getUltimate().isBlank() && acc.getCompletion(acc.getUltimate()).any();
 		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_back_" + name().toLowerCase(Locale.ROOT) + (withUlt ? "_t" : "") + ".png");
 		assert cover != null;
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
