@@ -127,7 +127,7 @@ public class CardStashCommand implements Executable {
 					);
 
 			List<Page> pages = new ArrayList<>();
-			List<List<Stash>> chunks = Helper.chunkify(cards, 10);
+			List<List<Stash>> chunks = Helper.chunkify(cards, 6);
 			for (List<Stash> chunk : chunks) {
 				eb.clearFields();
 
