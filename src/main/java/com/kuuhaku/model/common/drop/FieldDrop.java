@@ -32,6 +32,8 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.Map;
 
 public class FieldDrop extends Drop<Field> {
+	boolean mainPrize = true;
+
 	public FieldDrop() {
 		super(CardDAO.getRandomField());
 	}
@@ -44,6 +46,8 @@ public class FieldDrop extends Drop<Field> {
 			dk.addField(getPrize());
 		} else {
 			awardInstead(u, Helper.BASE_FIELD_PRICE);
+			mainPrize = false;
+			return;
 		}
 		KawaiponDAO.saveKawaipon(kp);
 
@@ -63,9 +67,7 @@ public class FieldDrop extends Drop<Field> {
 
 	@Override
 	public String toString(User u) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		Deck dk = kp.getDeck();
-		if (dk.getFields().size() <= 3)
+		if (mainPrize)
 			return "Campo " + getPrize().getCard().getName();
 		else
 			return "~~Campo %s~~\n(convertido em %s créditos)".formatted(
