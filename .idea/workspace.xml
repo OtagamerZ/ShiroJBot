@@ -17,8 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/BotExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/BotExchange.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1328,14 +1328,7 @@
       <workItem from="1627301032411" duration="2151000" />
       <workItem from="1627307867917" duration="1811000" />
       <workItem from="1627387311342" duration="8368000" />
-      <workItem from="1627473819173" duration="6118000" />
-    </task>
-    <task id="LOCAL-05021" summary="Remoção do sistema de Exceeds">
-      <created>1626979257016</created>
-      <option name="number" value="05021" />
-      <option name="presentableId" value="LOCAL-05021" />
-      <option name="project" value="LOCAL" />
-      <updated>1626979257016</updated>
+      <workItem from="1627473819173" duration="6864000" />
     </task>
     <task id="LOCAL-05022" summary="Remoção do sistema de Exceeds">
       <created>1626979392653</created>
@@ -1673,7 +1666,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627417871620</updated>
     </task>
-    <option name="localTasksCounter" value="5070" />
+    <task id="LOCAL-05070" summary="Correções menores">
+      <created>1627494073685</created>
+      <option name="number" value="05070" />
+      <option name="presentableId" value="LOCAL-05070" />
+      <option name="project" value="LOCAL" />
+      <updated>1627494073686</updated>
+    </task>
+    <option name="localTasksCounter" value="5071" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
