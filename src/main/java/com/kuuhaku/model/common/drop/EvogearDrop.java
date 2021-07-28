@@ -32,6 +32,8 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.Map;
 
 public class EvogearDrop extends Drop<Equipment> {
+	boolean mainPrize = true;
+
 	public EvogearDrop() {
 		super(CardDAO.getRandomEquipment());
 	}
@@ -44,6 +46,7 @@ public class EvogearDrop extends Drop<Equipment> {
 			dk.addEquipment(getPrize());
 		} else {
 			awardInstead(u, Helper.BASE_EQUIPMENT_PRICE);
+			mainPrize = false;
 			return;
 		}
 		KawaiponDAO.saveKawaipon(kp);
@@ -64,9 +67,7 @@ public class EvogearDrop extends Drop<Equipment> {
 
 	@Override
 	public String toString(User u) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		Deck dk = kp.getDeck();
-		if (dk.getEvoWeight() + getPrize().getWeight(dk) <= 24)
+		if (mainPrize)
 			return "Evogear " + getPrize().getCard().getName();
 		else
 			return "~~Evogear %s~~\n(convertido em %s créditos)".formatted(
