@@ -17,8 +17,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ChampionDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ChampionDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/EvogearDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/EvogearDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1328,21 +1330,7 @@
       <workItem from="1627301032411" duration="2151000" />
       <workItem from="1627307867917" duration="1811000" />
       <workItem from="1627387311342" duration="8368000" />
-      <workItem from="1627473819173" duration="6864000" />
-    </task>
-    <task id="LOCAL-05022" summary="Remoção do sistema de Exceeds">
-      <created>1626979392653</created>
-      <option name="number" value="05022" />
-      <option name="presentableId" value="LOCAL-05022" />
-      <option name="project" value="LOCAL" />
-      <updated>1626979392654</updated>
-    </task>
-    <task id="LOCAL-05023" summary="Remoção do sistema de Exceeds">
-      <created>1626979629236</created>
-      <option name="number" value="05023" />
-      <option name="presentableId" value="LOCAL-05023" />
-      <option name="project" value="LOCAL" />
-      <updated>1626979629236</updated>
+      <workItem from="1627473819173" duration="13904000" />
     </task>
     <task id="LOCAL-05024" summary="Remoção do sistema de Exceeds">
       <created>1626979648701</created>
@@ -1673,7 +1661,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627494073686</updated>
     </task>
-    <option name="localTasksCounter" value="5071" />
+    <task id="LOCAL-05071" summary="Correções menores">
+      <created>1627494775924</created>
+      <option name="number" value="05071" />
+      <option name="presentableId" value="LOCAL-05071" />
+      <option name="project" value="LOCAL" />
+      <updated>1627494775924</updated>
+    </task>
+    <task id="LOCAL-05072" summary="Correções menores">
+      <created>1627494816133</created>
+      <option name="number" value="05072" />
+      <option name="presentableId" value="LOCAL-05072" />
+      <option name="project" value="LOCAL" />
+      <updated>1627494816133</updated>
+    </task>
+    <option name="localTasksCounter" value="5073" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
