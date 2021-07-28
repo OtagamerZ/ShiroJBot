@@ -58,8 +58,8 @@ public class BackgroundCommand implements Executable {
 			ImageIO.read(is);
 			byte[] bytes = is.readAllBytes();
 
-			if (bytes.length > StorageUnit.B.convert(4, StorageUnit.MB)) {
-				channel.sendMessage("❌ | Só são permitidas imagens de até 4 MB.").queue();
+			if (bytes.length > StorageUnit.B.convert(5, StorageUnit.MB)) {
+				channel.sendMessage("❌ | Só são permitidas imagens de até 5 MB.").queue();
 				return;
 			}
 
