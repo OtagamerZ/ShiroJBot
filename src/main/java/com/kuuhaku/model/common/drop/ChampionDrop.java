@@ -32,6 +32,8 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.Map;
 
 public class ChampionDrop extends Drop<Champion> {
+	boolean mainPrize = true;
+
 	public ChampionDrop() {
 		super(CardDAO.getRandomChampion(false));
 	}
@@ -44,6 +46,7 @@ public class ChampionDrop extends Drop<Champion> {
 			dk.addChampion(getPrize());
 		} else {
 			awardInstead(u, getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE);
+			mainPrize = false;
 			return;
 		}
 		KawaiponDAO.saveKawaipon(kp);
@@ -64,9 +67,7 @@ public class ChampionDrop extends Drop<Champion> {
 
 	@Override
 	public String toString(User u) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		Deck dk = kp.getDeck();
-		if (dk.getChampions().size() <= 36)
+		if (mainPrize)
 			return "Campeão " + getPrize().getCard().getName();
 		else
 			return "~~Campeão %s~~\n(convertido em %s créditos)".formatted(
