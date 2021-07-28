@@ -2727,11 +2727,11 @@ public class Helper {
 		if (m.getAttachments().size() > 0) {
 			Message.Attachment att = m.getAttachments().get(0);
 			if (att.isImage())
-				return att.getUrl();
+				return att.getProxyUrl();
 		} else if (m.getEmbeds().size() > 0) {
 			MessageEmbed emb = m.getEmbeds().get(0);
 			if (emb.getImage() != null)
-				return emb.getImage().getUrl();
+				return emb.getImage().getProxyUrl();
 		} else if (m.getEmotes().size() > 0) {
 			Emote e = m.getEmotes().stream().findFirst().orElse(null);
 			if (e != null)
