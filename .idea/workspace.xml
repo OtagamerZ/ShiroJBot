@@ -18,9 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CardStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CardStashCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ReserveCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ReserveCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/BotExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/BotExchange.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,19 +205,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote JVM Debug.Remote Debug">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1342,14 +1327,8 @@
       <workItem from="1627067719339" duration="5391000" />
       <workItem from="1627301032411" duration="2151000" />
       <workItem from="1627307867917" duration="1811000" />
-      <workItem from="1627387311342" duration="6723000" />
-    </task>
-    <task id="LOCAL-05020" summary="Remoção do sistema de Exceeds">
-      <created>1626978116535</created>
-      <option name="number" value="05020" />
-      <option name="presentableId" value="LOCAL-05020" />
-      <option name="project" value="LOCAL" />
-      <updated>1626978116536</updated>
+      <workItem from="1627387311342" duration="8368000" />
+      <workItem from="1627473819173" duration="6118000" />
     </task>
     <task id="LOCAL-05021" summary="Remoção do sistema de Exceeds">
       <created>1626979257016</created>
@@ -1687,7 +1666,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627417384827</updated>
     </task>
-    <option name="localTasksCounter" value="5069" />
+    <task id="LOCAL-05069" summary="Correções menores">
+      <created>1627417871620</created>
+      <option name="number" value="05069" />
+      <option name="presentableId" value="LOCAL-05069" />
+      <option name="project" value="LOCAL" />
+      <updated>1627417871620</updated>
+    </task>
+    <option name="localTasksCounter" value="5070" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
