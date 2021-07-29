@@ -22,11 +22,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
@@ -43,7 +41,6 @@ public class FrameBackgroundCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa especificar um anime com coleção completa para definir como imagem de fundo de seu deck Shoukan.").queue();
