@@ -19,7 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
@@ -34,7 +34,7 @@ import java.util.List;
 public class Youtube {
 	private static final YouTube yt = new YouTube.Builder(
 			new NetHttpTransport(),
-			new GsonFactory(),
+			new JacksonFactory(),
 			request -> {
 			}
 	).setApplicationName(ShiroInfo.getName()).build();
