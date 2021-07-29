@@ -18,11 +18,10 @@
 
 package com.kuuhaku.command.commands.discord.information;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.Manager;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.enums.I18n;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -37,13 +36,13 @@ public class PingCommand implements Executable {
 		long currTime = System.currentTimeMillis();
 		channel.sendMessage(":ping_pong: Pong! ")
 				.flatMap(m -> m.editMessage(m.getContentRaw() + """
-						 %s ms!
-						:floppy_disk: %s MB!
-						:telephone: %s
+						 %s ms.
+						:file_cabinet: %s ms.
+						:floppy_disk: %s MB.
 						""".formatted(
 						System.currentTimeMillis() - currTime,
-						fp,
-						I18n.getString("str_listeners", Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
+						Manager.ping(),
+						fp
 				)))
 				.queue();
 	}
