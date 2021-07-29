@@ -69,7 +69,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static ConfigurableApplicationContext spring;
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("sun.java2d.opengl", "true");
 		ImageIO.setUseCache(false);
 
 		Helper.logger(Main.class).info("""
@@ -93,59 +92,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setEventPool(Executors.newFixedThreadPool(20), true)
 				.build();
 
-		info.setStartTime(System.currentTimeMillis());
-		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
-
-		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
-
-		AudioSourceManagers.registerRemoteSources(ShiroInfo.getApm());
-		AudioSourceManagers.registerLocalSource(ShiroInfo.getApm());
-
-		spring = SpringApplication.run(Application.class, args);
-
-		if (System.getenv().containsKey("TWITCH_TOKEN")) {
-			OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
-			twitch = TwitchClientBuilder.builder()
-					.withEnableHelix(true)
-					.withEnableChat(true)
-					.withDefaultAuthToken(cred)
-					.withChatAccount(cred)
-					.build();
-
-			twitchManager = new TwitchEvents(twitch);
-			twitch.getChat().joinChannel("kuuhaku_otgmz");
-			twitch.getClientHelper().enableStreamEventListener("kuuhaku_otgmz");
-			twitch.getClientHelper().enableFollowEventListener("kuuhaku_otgmz");
-		}
-
-		info.setSockets(new WebSocketConfig());
-		finishStartUp();
-	}
-
-	private static void finishStartUp() {
-		ConsoleListener console = new ConsoleListener();
-
-		for (Emote emote : shiroShards.getEmotes()) {
-			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
-		}
-
-		try {
-			Paginator p = PaginatorBuilder.createPaginator()
-					.setHandler(shiroShards)
-					.shouldEventLock(true)
-					.build();
-
-			Pages.activate(p);
-		} catch (InvalidHandlerException e) {
-			Helper.logger(Main.class).error(e + " | " + e.getStackTrace()[0]);
-		}
-
-		console.start();
-
-		for (GuildConfig guildConfig : GuildDAO.getAllGuildsWithButtons()) {
-			Helper.refreshButtons(guildConfig);
-		}
-
 		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 
 		List<JDA> shards = new ArrayList<>(shiroShards.getShards());
@@ -164,6 +110,57 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		for (JDA shard : shards) {
 			shard.getPresence().setActivity(getRandomActivity());
 		}
+
+		info.setStartTime(System.currentTimeMillis());
+		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
+
+		AudioSourceManagers.registerRemoteSources(ShiroInfo.getApm());
+		AudioSourceManagers.registerLocalSource(ShiroInfo.getApm());
+
+		if (System.getenv().containsKey("TWITCH_TOKEN")) {
+			OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
+			twitch = TwitchClientBuilder.builder()
+					.withEnableHelix(true)
+					.withEnableChat(true)
+					.withDefaultAuthToken(cred)
+					.withChatAccount(cred)
+					.build();
+
+			twitchManager = new TwitchEvents(twitch);
+			twitch.getChat().joinChannel("kuuhaku_otgmz");
+			twitch.getClientHelper().enableStreamEventListener("kuuhaku_otgmz");
+			twitch.getClientHelper().enableFollowEventListener("kuuhaku_otgmz");
+		}
+
+		info.setSockets(new WebSocketConfig());
+		spring = SpringApplication.run(Application.class, args);
+		finishStartUp();
+	}
+
+	private static void finishStartUp() {
+		ConsoleListener console = new ConsoleListener();
+		console.start();
+
+		try {
+			Paginator p = PaginatorBuilder.createPaginator()
+					.setHandler(shiroShards)
+					.shouldEventLock(true)
+					.build();
+
+			Pages.activate(p);
+		} catch (InvalidHandlerException e) {
+			Helper.logger(Main.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+
+		for (Emote emote : shiroShards.getEmotes()) {
+			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
+		}
+
+		for (GuildConfig guildConfig : GuildDAO.getAllGuildsWithButtons()) {
+			Helper.refreshButtons(guildConfig);
+		}
+
+		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
 
 		System.runFinalization();
 		System.gc();
