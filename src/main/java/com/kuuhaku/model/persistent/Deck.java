@@ -203,7 +203,7 @@ public class Deck {
 
 	public List<Integer> getDestinyDraw() {
 		if (destinyDraw.isBlank()) return List.of();
-		return Arrays.stream(destinyDraw.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+		return Arrays.stream(destinyDraw.split(",")).map(Integer::parseInt).toList();
 	}
 
 	public void setDestinyDraw(List<Integer> destinyDraw) {

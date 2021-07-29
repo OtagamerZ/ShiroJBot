@@ -24,7 +24,6 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LeaderboardsDAO {
 	public static void submit(User u, Class<?> minigame, int score) {
@@ -77,7 +76,7 @@ public class LeaderboardsDAO {
 		try {
 			return ((List<Object[]>) q.getResultList()).stream()
 					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), (int) o[4]))
-					.collect(Collectors.toList());
+					.toList();
 		} finally {
 			em.close();
 		}
@@ -103,7 +102,7 @@ public class LeaderboardsDAO {
 		try {
 			return ((List<Object[]>) q.getResultList()).stream()
 					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), (int) o[4]))
-					.collect(Collectors.toList());
+					.toList();
 		} finally {
 			em.close();
 		}
@@ -129,7 +128,7 @@ public class LeaderboardsDAO {
 		try {
 			return ((List<Object[]>) q.getResultList()).stream()
 					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), (int) (long) o[4]))
-					.collect(Collectors.toList());
+					.toList();
 		} finally {
 			em.close();
 		}

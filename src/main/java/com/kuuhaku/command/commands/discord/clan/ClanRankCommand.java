@@ -35,7 +35,6 @@ import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "clanrank",
@@ -62,7 +61,7 @@ public class ClanRankCommand implements Executable {
 					CategoryChart chart = Helper.buildBarChart(
 							"Ranking dos Clãs",
 							Pair.of("", "Pontos"),
-							rank.stream().map(ClanRanking::getColor).collect(Collectors.toList())
+							rank.stream().map(ClanRanking::getColor).toList()
 					);
 
 					for (ClanRanking cr : rank) {

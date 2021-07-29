@@ -27,7 +27,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public enum Race {
 	HUMAN("Humano",
@@ -134,7 +133,7 @@ public enum Race {
 	public static Pair<Race, Race> getCombo(List<Champion> champs) {
 		List<Race> races = champs.stream()
 				.map(Champion::getRace)
-				.collect(Collectors.toList());
+				.toList();
 		Map<Race, Integer> counts = new HashMap<>();
 
 		for (Race race : Race.validValues()) {
