@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.Manager;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
@@ -42,6 +43,9 @@ public class BotStats {
 	private long ping;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long dbPing;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long memoryUsage;
 
 	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
@@ -49,9 +53,6 @@ public class BotStats {
 
 	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
 	private double cpuUsage;
-
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int servers;
 
 	//CACHES
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -85,8 +86,8 @@ public class BotStats {
 		memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		memoryPrcnt = Helper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
 		cpuUsage = ShiroInfo.getSystemInfo().getProcessCpuLoad();
-		servers = Main.getShiroShards().getGuilds().size();
 		ping = Main.getShiroShards().getShards().get(0).getRestPing().complete();
+		dbPing = Manager.ping();
 
 		ratelimitCount = Main.getInfo().getRatelimit().size();
 		confirmationPendingCount = Main.getInfo().getConfirmationPending().size();
@@ -123,6 +124,14 @@ public class BotStats {
 		this.ping = ping;
 	}
 
+	public long getDbPing() {
+		return dbPing;
+	}
+
+	public void setDbPing(long dbPing) {
+		this.dbPing = dbPing;
+	}
+
 	public long getMemoryUsage() {
 		return memoryUsage;
 	}
@@ -145,14 +154,6 @@ public class BotStats {
 
 	public void setCpuUsage(double cpuUsage) {
 		this.cpuUsage = cpuUsage;
-	}
-
-	public int getServers() {
-		return servers;
-	}
-
-	public void setServers(int servers) {
-		this.servers = servers;
 	}
 
 	public int getRatelimitCount() {
@@ -225,10 +226,10 @@ public class BotStats {
 			put("id", id);
 			put("timestamp", timestamp.toInstant().toEpochMilli());
 			put("ping", ping);
+			put("dbPing", dbPing);
 			put("memoryUsage", memoryUsage);
 			put("memoryPrcnt", memoryPrcnt);
 			put("cpuUsage", cpuUsage);
-			put("servers", servers);
 		}}.toString();
 	}
 }
