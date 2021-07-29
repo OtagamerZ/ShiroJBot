@@ -85,7 +85,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithPaidRoles() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(paidRoles) > 0", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.paidRoles) > 0", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
@@ -97,7 +97,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithVoiceRoles() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(voiceRoles) > 0", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.voiceRoles) > 0", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
@@ -121,7 +121,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithGeneralChannel() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE generalChannel <> ''", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE g.generalChannel <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
@@ -133,7 +133,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAlertChannels() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE alertChannel <> ''", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE g.alertChannel <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
