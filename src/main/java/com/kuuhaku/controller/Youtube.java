@@ -19,7 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
@@ -34,16 +34,16 @@ import java.util.List;
 public class Youtube {
 	private static final YouTube yt = new YouTube.Builder(
 			new NetHttpTransport(),
-			new JacksonFactory(),
+			new GsonFactory(),
 			request -> {
 			}
 	).setApplicationName(ShiroInfo.getName()).build();
 
 	public static List<YoutubeVideo> getData(String query) throws IOException {
-		SearchListResponse search = yt.search().list("snippet")
+		SearchListResponse search = yt.search().list(List.of("snippet"))
 				.setKey(ShiroInfo.getYoutubeToken())
 				.setQ(query)
-				.setType("playlist,video")
+				.setType(List.of("playlist", "video"))
 				.setMaxResults(10L)
 				.execute();
 
