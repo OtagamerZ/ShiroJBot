@@ -20,18 +20,22 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.Manager;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.SlashCommand;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 @Command(
 		name = "ping",
 		category = Category.INFO
 )
-public class PingCommand implements Executable {
+@SlashCommand(name = "ping")
+public class PingCommand implements Executable, Slashed {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 		long currTime = System.currentTimeMillis();
 		channel.sendMessage(":ping_pong: Pong! ")
@@ -45,5 +49,10 @@ public class PingCommand implements Executable {
 						fp
 				)))
 				.queue();
+	}
+
+	@Override
+	public String toCommand(SlashCommandEvent evt) {
+		return "";
 	}
 }

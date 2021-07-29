@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CardStashCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);

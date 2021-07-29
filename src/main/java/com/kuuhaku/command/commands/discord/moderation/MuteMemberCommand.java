@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class MuteMemberCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Member mb = null;
 		if (args.length > 0 && StringUtils.isNumeric(args[0]))
 			mb = guild.getMemberById(args[0]);

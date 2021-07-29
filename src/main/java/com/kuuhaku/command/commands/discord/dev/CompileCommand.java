@@ -42,7 +42,7 @@ import java.util.concurrent.Future;
 public class CompileCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		channel.sendMessage("<a:loading:697879726630502401> | Compilando...").queue(m -> {
 			Future<Pair<String, Long>> execute = ShiroInfo.getCompilationPool().submit(() -> {
 				final long start = System.currentTimeMillis();

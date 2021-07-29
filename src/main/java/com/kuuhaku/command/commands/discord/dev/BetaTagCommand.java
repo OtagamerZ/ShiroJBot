@@ -37,7 +37,7 @@ import javax.persistence.NoResultException;
 public class BetaTagCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (message.getMentionedUsers().size() > 0) {
 			try {
 				resolveBetaByMention(message, channel);

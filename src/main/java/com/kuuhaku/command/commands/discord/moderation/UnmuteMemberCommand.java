@@ -44,7 +44,7 @@ import java.util.List;
 public class UnmuteMemberCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_mention-required")).queue();
 			return;

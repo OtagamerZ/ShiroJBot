@@ -45,7 +45,7 @@ import java.util.List;
 public class DeckStashCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Account acc = AccountDAO.getAccount(author.getId());
 

@@ -46,7 +46,7 @@ import java.util.List;
 public class ClanRankCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Clan c = ClanDAO.getUserClan(author.getId());
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();

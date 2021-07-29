@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
 public class StoreCardCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 

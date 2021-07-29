@@ -23,6 +23,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
@@ -40,6 +41,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
@@ -52,6 +54,7 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
@@ -63,6 +66,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
@@ -277,7 +281,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 				if (found) {
 					if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-						channel.sendMessage("❌ | Comandos estão bloqueados neste canal").queue();
+						channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
 						return;
 					} else if (author.getId().equals(Main.getSelfUser().getId())) {
 						channel.sendMessage(I18n.getString("err_human-command")).queue();
@@ -313,7 +317,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
-					command.execute(author, member, commandName, rawMsgNoCommand, args, message, channel, guild, prefix);
+					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild);
 					Helper.spawnAd(channel);
 
 					LogDAO.saveLog(new Log(guild, author, rawMessage));
@@ -477,6 +481,91 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 		}
+	}
+
+	@Override
+	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
+		if (!evt.isFromGuild()) {
+			evt.deferReply(true)
+					.setContent("❌ | Meus comandos não funcionam em canais privados.")
+					.queue();
+		}
+
+		Guild guild = evt.getGuild();
+		TextChannel channel = evt.getTextChannel();
+		Member member = evt.getMember();
+		User author = evt.getUser();
+
+		assert guild != null;
+		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+		if (blacklisted) {
+			evt.deferReply(true)
+					.setContent(I18n.getString("err_user-blacklisted"))
+					.queue();
+		}
+
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		PreparedCommand command = Main.getCommandManager().getSlash(evt.getName(), evt.getSubcommandName());
+
+		if (!(command instanceof Slashed slash)) {
+			evt.deferReply(true)
+					.setContent("❌ | Comando inexistente.")
+					.queue();
+			return;
+		} else if (!command.getCategory().isEnabled(guild, author) || gc.getDisabledCommands().contains(command.getCommand().getClass().getName())) {
+			evt.deferReply(true)
+					.setContent("❌ | Comando desabilitado.")
+					.queue();
+			return;
+		} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+			evt.deferReply(true)
+					.setContent("❌ | Comandos estão bloqueados neste canal.")
+					.queue();
+			return;
+		} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
+			evt.deferReply(true)
+					.setContent(I18n.getString("err_nsfw-in-non-nsfw-channel"))
+					.queue();
+			return;
+		} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+			evt.deferReply(true)
+					.setContent(I18n.getString("err_not-enough-permission"))
+					.queue();
+			return;
+		} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
+			evt.deferReply(true)
+					.setContent(I18n.getString("err_user-ratelimited"))
+					.queue();
+			Main.getInfo().getRatelimit().put(author.getId(), true, 3 + Helper.rng(4, false), TimeUnit.SECONDS);
+			return;
+		} else if (command.getMissingPerms(channel).length > 0) {
+			evt.deferReply(true)
+					.setContent("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
+							Arrays.stream(command.getPermissions())
+									.map(p -> "- " + p.getName())
+									.collect(Collectors.joining("\n"))
+					))
+					.queue();
+			return;
+		}
+
+		String commandLine = slash.toCommand(evt);
+		String[] args = Arrays.stream(commandLine.split(" "))
+				.filter(s -> !s.isBlank())
+				.toArray(String[]::new);
+
+		if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+			Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
+
+		evt.deferReply()
+				.setContent("_._")
+				.flatMap(InteractionHook::deleteOriginal)
+				.queue();
+		command.execute(author, member, commandLine, args, new MessageBuilder("").build(), channel, guild);
+		Helper.spawnAd(channel);
+
+		LogDAO.saveLog(new Log(guild, author, commandLine));
+		Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
 	}
 
 	@Override

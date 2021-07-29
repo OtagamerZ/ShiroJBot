@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.entities.*;
 public class PunchReaction extends Action implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;

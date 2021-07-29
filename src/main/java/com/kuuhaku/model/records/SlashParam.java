@@ -16,10 +16,9 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command;
+package com.kuuhaku.model.records;
 
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
-public interface Executable {
-	void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild);
+public record SlashParam(String name, String description, OptionType type) {
 }

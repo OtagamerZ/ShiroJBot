@@ -18,8 +18,8 @@
 
 package com.kuuhaku.command;
 
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
-public interface Executable {
-	void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild);
+public interface Slashed {
+	String toCommand(SlashCommandEvent evt);
 }
