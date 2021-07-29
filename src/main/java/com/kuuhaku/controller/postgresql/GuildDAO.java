@@ -109,7 +109,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithButtons() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(buttonConfigs) > 0", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.buttonConfigs) > 0", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
