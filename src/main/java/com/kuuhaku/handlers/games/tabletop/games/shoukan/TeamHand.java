@@ -138,7 +138,7 @@ public class TeamHand extends Hand {
 			this.cards.add(new BondedList<>(bonding));
 		}
 
-		combo = Race.getCombo(dks.stream().flatMap(kp -> kp.getChampions().stream()).toList());
+		combo = Race.getCombo(dks.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
 		if (combo.getLeft() == Race.DIVINITY) {
 			for (LinkedList<Drawable> deque : deques) {
 				deque.stream()
@@ -435,7 +435,7 @@ public class TeamHand extends Hand {
 		LinkedList<Drawable> deque = getDeque();
 		List<Drawable> cards = getCards();
 
-		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).toList();
+		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
 		deque.addAll(notUsed);
 		cards.removeIf(Drawable::isAvailable);
 
@@ -507,7 +507,7 @@ public class TeamHand extends Hand {
 				.sorted(Comparator.comparingInt(Champion::getMana)
 						.thenComparing(Champion::getAtk)
 						.thenComparing(Champion::getDef)
-				).toList();
+				).collect(Collectors.toList());
 	}
 
 	public List<Equipment> getSortedEquipments() {
@@ -517,13 +517,13 @@ public class TeamHand extends Hand {
 				.sorted(Comparator.comparingInt(Equipment::getMana)
 						.thenComparing(Equipment::getAtk)
 						.thenComparing(Equipment::getDef)
-				).toList();
+				).collect(Collectors.toList());
 	}
 
 	public List<Drawable> getAvailableCards() {
 		return getCards().stream()
 				.filter(Drawable::isAvailable)
-				.toList();
+				.collect(Collectors.toList());
 	}
 
 	public void removeCard(String name) {

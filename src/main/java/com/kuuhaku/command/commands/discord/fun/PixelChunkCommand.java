@@ -48,7 +48,7 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 public class PixelChunkCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(I18n.getString("err_canvas-no-chunk")).queue();
 			return;

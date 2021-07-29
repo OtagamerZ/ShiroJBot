@@ -42,6 +42,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "cartasrestantes",
@@ -58,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 public class RemainingCardsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa especificar um anime para as cartas que faltam (colocar `_` no lugar de espaços).").queue();
 			return;
@@ -77,7 +78,7 @@ public class RemainingCardsCommand implements Executable {
 				.filter(c -> !c.isFoil())
 				.map(KawaiponCard::getCard)
 				.filter(c -> c.getAnime().equals(anime))
-				.toList();
+				.collect(Collectors.toList());
 		List<Card> cards = CardDAO.getCardsByAnime(anime.getName());
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())

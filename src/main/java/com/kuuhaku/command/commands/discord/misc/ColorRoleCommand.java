@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public class ColorRoleCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
@@ -91,7 +91,7 @@ public class ColorRoleCommand implements Executable {
 				.collect(Collectors.toMap(cr -> StringUtils.capitalize(cr.getName().toLowerCase(Locale.ROOT)), Function.identity()));
 		List<Role> rols = member.getRoles().stream()
 				.filter(r -> roles.values().stream().noneMatch(cr -> cr.getId().equals(r.getId())))
-				.toList();
+				.collect(Collectors.toList());
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
 			guild.modifyMemberRoles(member, rols).queue();

@@ -46,7 +46,7 @@ import java.awt.image.BufferedImage;
 public class ShoukanDeckCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		boolean showPrivate = Helper.equalsAny("p", args);
 
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {

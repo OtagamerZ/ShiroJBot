@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "emotes",
@@ -50,13 +51,13 @@ import java.util.concurrent.TimeUnit;
 public class LocalEmoteListCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 		List<MessageEmbed.Field> f = new ArrayList<>();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		for (Emote emote : guild.getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).toList()) {
+		for (Emote emote : guild.getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList())) {
 			f.add(new MessageEmbed.Field("Emote " + emote.getAsMention(), "Menção: " + emote.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
 		}
 

@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class MuteMemberCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Member mb = null;
 		if (args.length > 0 && StringUtils.isNumeric(args[0]))
 			mb = guild.getMemberById(args[0]);
@@ -78,7 +78,7 @@ public class MuteMemberCommand implements Executable {
 		List<String> params = Arrays.stream(argsAsText.split("([0-9]+[dhms])+"))
 				.filter(s -> !s.isBlank())
 				.map(String::trim)
-				.toList();
+				.collect(Collectors.toList());
 		if (params.size() < 2) {
 			channel.sendMessage("❌ | Você precisa informar um tempo e uma razão.").queue();
 			return;

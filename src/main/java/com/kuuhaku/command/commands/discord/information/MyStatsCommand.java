@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "eu",
@@ -53,7 +54,7 @@ import java.util.concurrent.TimeUnit;
 public class MyStatsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -82,7 +83,7 @@ public class MyStatsCommand implements Executable {
 		eb.clear();
 
 		{
-			boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+			boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 			int xp = (int) (15
 							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
