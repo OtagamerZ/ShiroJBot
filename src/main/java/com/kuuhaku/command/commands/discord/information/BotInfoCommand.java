@@ -44,7 +44,7 @@ public class BotInfoCommand implements Executable {
 	private static final String STR_BOT_INFO_SERVERS = "str_bot-info-servers";
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(I18n.getString("str_bot-info-title"))

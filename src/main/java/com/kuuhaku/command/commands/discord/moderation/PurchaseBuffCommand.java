@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 public class PurchaseBuffCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length < 2) {

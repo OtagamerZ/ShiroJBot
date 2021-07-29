@@ -41,7 +41,7 @@ import net.dv8tion.jda.api.entities.*;
 public class WalletCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		Account acc = AccountDAO.getAccount(author.getId());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(I18n.getString("str_balance-title", author.getName()))

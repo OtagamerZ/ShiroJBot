@@ -35,7 +35,7 @@ import javax.persistence.NoResultException;
 public class DivorceCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		try {
 			if (!WaifuDAO.isWaifued(author.getId())) {
 				channel.sendMessage(I18n.getString("err_divorce-no-waifu")).queue();

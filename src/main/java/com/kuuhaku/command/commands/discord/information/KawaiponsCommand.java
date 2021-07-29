@@ -62,17 +62,17 @@ import java.util.stream.Collectors;
 public class KawaiponsCommand implements Executable {
 
     @Override
-    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        channel.sendMessage(I18n.getString("str_generating-collection")).queue(m -> {
-            try {
-                Account acc = AccountDAO.getAccount(author.getId());
-                Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+		channel.sendMessage(I18n.getString("str_generating-collection")).queue(m -> {
+			try {
+				Account acc = AccountDAO.getAccount(author.getId());
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-                if (kp.getCards().isEmpty()) {
-                    m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
-                    return;
-                } else if (args.length == 0) {
-                    Set<KawaiponCard> collection = new HashSet<>();
+				if (kp.getCards().isEmpty()) {
+					m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
+					return;
+				} else if (args.length == 0) {
+					Set<KawaiponCard> collection = new HashSet<>();
                     Set<AddedAnime> animes = CardDAO.getValidAnime();
                     for (AddedAnime anime : animes) {
                         if (acc.getCompletion(anime).any())
