@@ -97,7 +97,7 @@ public class BotStatsCommand implements Executable {
 						new Color(158, 220, 140),
 						new Color(224, 123, 46),
 						new Color(36, 172, 227),
-						new Color(130, 32, 243)
+						new Color(32, 43, 243)
 				)
 		);
 
@@ -143,17 +143,17 @@ public class BotStatsCommand implements Executable {
 				.setYAxisGroup(1);
 
 		chart.addSeries(
-				"Ping (ms)",
-				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getPing).collect(Collectors.toList())
-		).setMarker(SeriesMarkers.NONE)
+						"Ping REST (ms)",
+						List.copyOf(reducedStats.keySet()),
+						reducedStats.values().stream().map(BotStats::getPing).collect(Collectors.toList())
+				).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
-				"Servidores",
-				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getServers).collect(Collectors.toList())
-		).setMarker(SeriesMarkers.NONE)
+						"Ping DB (ms)",
+						List.copyOf(reducedStats.keySet()),
+						reducedStats.values().stream().map(BotStats::getDbPing).collect(Collectors.toList())
+				).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		return Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "stats", "png");
