@@ -58,7 +58,7 @@ import java.util.function.Consumer;
 public class GuessTheCardsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 			return;

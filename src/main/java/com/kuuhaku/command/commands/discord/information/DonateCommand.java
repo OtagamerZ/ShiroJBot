@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 public class DonateCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		channel.sendMessage("Apoie meu projeto e ajude-me a melhorar cada vez mais, além de receber recompensas em troca!\nhttps://donatebot.io/checkout/421495229594730496").queue();
 	}
 }

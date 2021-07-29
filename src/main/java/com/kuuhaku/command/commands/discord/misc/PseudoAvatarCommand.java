@@ -38,7 +38,7 @@ import java.io.IOException;
 public class PseudoAvatarCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 		if (args.length == 0) {
 			channel.sendMessage(I18n.getString("err_no-image")).queue();

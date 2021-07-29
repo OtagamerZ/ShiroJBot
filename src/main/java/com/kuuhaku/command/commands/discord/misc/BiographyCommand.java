@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.entities.*;
 public class BiographyCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (String.join(" ", args).length() > 140) {
 			channel.sendMessage(I18n.getString("err_biography-too-long")).queue();
 			return;

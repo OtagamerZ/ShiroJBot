@@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ShardRestartCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | É necessário informar o ID do Shard a ser reiniciado.").queue();
 			return;

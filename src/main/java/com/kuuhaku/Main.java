@@ -114,6 +114,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			shard.getPresence().setActivity(getRandomActivity());
 		}
 
+		cmdManager.registerCommands();
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
@@ -229,6 +230,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static ShardManager getShiroShards() {
 		return shiroShards;
+	}
+
+	public static JDA getDefaultShard() {
+		return shiroShards.getShardById(0);
 	}
 
 	public static JDA getTet() {

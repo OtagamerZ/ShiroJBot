@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.entities.*;
 public class AfkCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		String text = args.length > 0 ? String.join(" ", args) : "Não estou disponível no momento, tente mais tarde!";
 		if (text.length() > 250) {
 			channel.sendMessage(I18n.getString("err_afk-message-too-long")).queue();

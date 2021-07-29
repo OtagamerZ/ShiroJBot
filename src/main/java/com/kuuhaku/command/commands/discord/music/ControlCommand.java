@@ -42,7 +42,7 @@ import java.util.Objects;
 public class ControlCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (args.length < 1) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 

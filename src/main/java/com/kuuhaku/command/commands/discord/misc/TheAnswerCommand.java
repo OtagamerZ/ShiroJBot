@@ -38,7 +38,7 @@ import javax.persistence.NoResultException;
 public class TheAnswerCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (guild.getId().equals("421495229594730496")) {
 			try {
 				if (TagDAO.getTagById(author.getId()).isReader())

@@ -92,7 +92,7 @@ public class PreparedCommand implements Executable {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		this.command.execute(author, member, command, argsAsText, args, message, channel, guild, prefix);
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+		this.command.execute(author, member, argsAsText, args, message, channel, guild);
 	}
 }

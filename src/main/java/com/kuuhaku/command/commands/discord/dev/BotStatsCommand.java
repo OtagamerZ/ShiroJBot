@@ -54,7 +54,7 @@ import java.util.TreeMap;
 public class BotStatsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		List<BotStats> stats = BotStatsDAO.getStats();
 
 		for (int i = 1; i < stats.size() - 1; i++) {

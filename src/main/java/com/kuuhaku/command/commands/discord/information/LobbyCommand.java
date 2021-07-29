@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 public class LobbyCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (args.length > 0 && Helper.equalsAny(args[0], "sair", "exit")) {
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 			MatchMaking mm = Main.getInfo().getMatchMaking();
