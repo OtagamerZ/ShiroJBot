@@ -33,7 +33,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 public class UptimeCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		String uptime = DurationFormatUtils.formatPeriod(Main.getInfo().getStartTime(), System.currentTimeMillis(), "d 'dias,' H 'horas,' m 'minutos e' s 'segundos'");
 
 		channel.sendMessage(I18n.getString("str_uptime-message", uptime)).queue();

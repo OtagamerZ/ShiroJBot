@@ -32,7 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 public class LockRankedCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		MatchMaking mm = Main.getInfo().getMatchMaking();
 		if (mm.isLocked())
 			channel.sendMessage("❌ | A fila ranqueada já está bloqueada (" + mm.getGames().size() + " jogos restantes).").queue();

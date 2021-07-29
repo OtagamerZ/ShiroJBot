@@ -39,7 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 public class TransferCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (args.length < 2) {
 			channel.sendMessage(I18n.getString("err_transfer-no-amount")).queue();
 			return;

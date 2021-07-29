@@ -48,7 +48,7 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 public class PixelCanvasCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (args.length < 1) {
 			Main.getInfo().getCanvas().viewCanvas(message.getTextChannel()).queue();
 			return;

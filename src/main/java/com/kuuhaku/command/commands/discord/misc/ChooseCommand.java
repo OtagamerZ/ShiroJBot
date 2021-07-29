@@ -35,7 +35,7 @@ import java.util.Random;
 public class ChooseCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você não me deu nenhuma opção.").queue();
 			return;

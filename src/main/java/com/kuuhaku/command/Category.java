@@ -20,7 +20,6 @@ package com.kuuhaku.command;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.utils.Helper;
@@ -36,7 +35,6 @@ public enum Category {
 	DEV(I18n.getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", I18n.getString("cat_dev-description"), PrivilegeLevel.DEV),
 	SUPPORT(I18n.getString("cat_support-name"), "<:sheriff:674261700538662913>", "674261700538662913", I18n.getString("cat_support-description"), PrivilegeLevel.SUPPORT),
 	MODERATION(I18n.getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", I18n.getString("cat_moderation-description"), PrivilegeLevel.MOD),
-	BETA(I18n.getString("cat_beta-name"), "<:beta:674261701109219328>", "674261701109219328", I18n.getString("cat_beta-description"), PrivilegeLevel.USER),
 	FUN(I18n.getString("cat_fun-name"), "<:rpg:674261700962418688>", "674261700962418688", I18n.getString("cat_fun-description"), PrivilegeLevel.USER),
 	MISC(I18n.getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", I18n.getString("cat_misc-description"), PrivilegeLevel.USER),
 	INFO(I18n.getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", I18n.getString("cat_info-description"), PrivilegeLevel.USER),
@@ -87,7 +85,6 @@ public enum Category {
 			case NSFW -> false;
 			case DEV -> ShiroInfo.getDevelopers().contains(u.getId());
 			case SUPPORT -> ShiroInfo.getStaff().contains(u.getId());
-			case BETA -> TagDAO.getTagById(g.getOwnerId()).isBeta() || ShiroInfo.getStaff().contains(u.getId());
 			default -> true;
 		};
 	}

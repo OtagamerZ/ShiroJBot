@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ShiftCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
 		AtomicReference<Message> ms = new AtomicReference<>();
 		channel.sendMessage("<a:loading:697879726630502401> Polarizando a imagem...")
 				.flatMap(s -> {

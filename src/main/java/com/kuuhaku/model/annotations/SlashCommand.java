@@ -16,10 +16,17 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command;
+package com.kuuhaku.model.annotations;
 
-import net.dv8tion.jda.api.entities.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface Executable {
-	void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild);
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface SlashCommand {
+	String name();
+
+	String[] args() default {};
 }
