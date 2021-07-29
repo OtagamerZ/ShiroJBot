@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,5 +44,17 @@ public class Manager {
 		emf.getCache().evictAll();
 
 		return emf.createEntityManager();
+	}
+
+	public static long ping() {
+		EntityManager em = getEntityManager();
+
+		long curr = System.currentTimeMillis();
+		Query q = em.createQuery("SELECT current_date FROM Version v");
+
+		q.getSingleResult();
+		em.close();
+
+		return System.currentTimeMillis() - curr;
 	}
 }

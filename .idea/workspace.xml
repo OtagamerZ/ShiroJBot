@@ -17,10 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização de dependecias e do header de licença">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/Manager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1353,14 +1350,7 @@
       <workItem from="1627473819173" duration="14247000" />
       <workItem from="1627560409382" duration="3588000" />
       <workItem from="1627565803547" duration="7667000" />
-      <workItem from="1627577296291" duration="1951000" />
-    </task>
-    <task id="LOCAL-05037" summary="Adicionado armazém pessoal de cartas">
-      <created>1627048646412</created>
-      <option name="number" value="05037" />
-      <option name="presentableId" value="LOCAL-05037" />
-      <option name="project" value="LOCAL" />
-      <updated>1627048646412</updated>
+      <workItem from="1627577296291" duration="2264000" />
     </task>
     <task id="LOCAL-05038" summary="Adicionado armazém pessoal de cartas">
       <created>1627048678148</created>
@@ -1698,7 +1688,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627578826871</updated>
     </task>
-    <option name="localTasksCounter" value="5086" />
+    <task id="LOCAL-05086" summary="Atualização de dependecias e do header de licença">
+      <created>1627579320695</created>
+      <option name="number" value="05086" />
+      <option name="presentableId" value="LOCAL-05086" />
+      <option name="project" value="LOCAL" />
+      <updated>1627579320695</updated>
+    </task>
+    <option name="localTasksCounter" value="5087" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
