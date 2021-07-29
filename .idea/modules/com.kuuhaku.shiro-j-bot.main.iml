@@ -72,7 +72,7 @@
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
-    <orderEntry type="library" name="Gradle: commons-io:commons-io:20030203.000550" level="project" />
+    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.11.0" level="project" />
     <orderEntry type="library" name="Gradle: net.coobird:thumbnailator:0.4.14" level="project" />
     <orderEntry type="library" name="Gradle: com.github.kevinsawicki:http-request:6.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jasypt:jasypt:1.9.3" level="project" />
