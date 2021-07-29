@@ -66,7 +66,11 @@ public class ShardStatusCommand implements Executable {
 		for (List<JDA> chunk : shards) {
 			sb.setLength(0);
 			for (JDA jda : chunk)
-				sb.append("**Shard %s:** `%s`\n".formatted(jda.getShardInfo().getShardId(), jda.getStatus().name()));
+				sb.append("**Shard %s:** `%s` (%s servers)\n".formatted(
+						jda.getShardInfo().getShardId(),
+						jda.getStatus().name(),
+						jda.getGuilds().size()
+				));
 
 			eb.setDescription(sb.toString());
 			pages.add(new Page(eb.build()));
