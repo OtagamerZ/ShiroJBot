@@ -40,10 +40,10 @@ public class Youtube {
 	).setApplicationName(ShiroInfo.getName()).build();
 
 	public static List<YoutubeVideo> getData(String query) throws IOException {
-		SearchListResponse search = yt.search().list(List.of("snippet"))
+		SearchListResponse search = yt.search().list("snippet")
 				.setKey(ShiroInfo.getYoutubeToken())
 				.setQ(query)
-				.setType(List.of("playlist", "video"))
+				.setType("playlist,video")
 				.setMaxResults(10L)
 				.execute();
 
