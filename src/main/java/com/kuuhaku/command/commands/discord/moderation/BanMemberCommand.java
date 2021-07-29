@@ -75,11 +75,12 @@ public class BanMemberCommand implements Executable {
 				return;
 			}
 
-			args = Arrays.stream(args)
+			argsAsText = Arrays.stream(args)
 					.filter(a -> !Helper.regex(a, "<@!?" + mb.getId() + ">|" + mb.getId()).find())
-					.toArray(String[]::new);
+					.collect(Collectors.joining(" "));
 		}
 
+		String finalArgsAsText = argsAsText;
 		if (m.size() > 1) {
 			if (argsAsText.isBlank()) {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
@@ -108,7 +109,7 @@ public class BanMemberCommand implements Executable {
 				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
 										RestAction.allOf(acts)
-												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + argsAsText + "`"))
+												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + finalArgsAsText + "`"))
 												.flatMap(r -> s.delete())
 												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
 								), true, 1, TimeUnit.MINUTES
@@ -133,8 +134,8 @@ public class BanMemberCommand implements Executable {
 			} else {
 				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
-										mm.ban(7, argsAsText)
-												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + argsAsText + "`"))
+										mm.ban(7, finalArgsAsText)
+												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + finalArgsAsText + "`"))
 												.flatMap(r -> s.delete())
 												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
 								), true, 1, TimeUnit.MINUTES

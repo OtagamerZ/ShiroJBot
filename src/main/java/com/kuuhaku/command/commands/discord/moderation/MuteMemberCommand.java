@@ -110,10 +110,15 @@ public class MuteMemberCommand implements Executable {
 		}
 
 		Member finalMb = mb;
+		argsAsText = Arrays.stream(args)
+				.filter(a -> !Helper.regex(a, "<@!?" + finalMb.getId() + ">|" + finalMb.getId()).find())
+				.collect(Collectors.joining(" "));
+
+		String finalArgsAsText = argsAsText;
 		RestAction.allOf(act)
-				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + argsAsText + "`"))
+				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + finalArgsAsText + "`"))
 				.queue(s -> {
-					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + argsAsText + "`", guild);
+					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + finalArgsAsText + "`", guild);
 					MemberDAO.saveMutedMember(m);
 				}, Helper::doNothing);
 	}
