@@ -40,7 +40,7 @@ group "com.kuuhaku"
 version "STANDALONE"
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
-gradleLint.rules = ['all-dependency']
+//gradleLint.rules = ['all-dependency']
 applicationDefaultJvmArgs = [
         "-Xms512M",
         "-Xmx10G",
