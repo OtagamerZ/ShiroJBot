@@ -50,10 +50,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.imageio.ImageIO;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 public class Main implements Thread.UncaughtExceptionHandler {
@@ -72,11 +75,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		ImageIO.setUseCache(false);
 
 		Helper.logger(Main.class).info("""
-				Shiro J. Bot  Copyright (C) 2021 Yago Gimenez (KuuHaKu)
+				Shiro J. Bot  Copyright (C) 2019-%s Yago Gimenez (KuuHaKu)
 				This program comes with ABSOLUTELY NO WARRANTY
 				This is free software, and you are welcome to redistribute it under certain conditions
 				See license for more information regarding redistribution conditions
-				""");
+				""".formatted(LocalDate.now().getYear()));
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		cmdManager = new CommandManager();
@@ -160,12 +163,21 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.refreshButtons(guildConfig);
 		}
 
-		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
+		CompletableFuture<Void> lst = new CompletableFuture<>();
+		Executors.newSingleThreadExecutor().execute(() -> {
+			new ScheduledEvents();
+			lst.complete(null);
+		});
 
-		System.runFinalization();
-		System.gc();
-		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
-		Helper.logger(Main.class).info("Estou pronta!");
+		try {
+			lst.get();
+			System.runFinalization();
+			System.gc();
+
+			Helper.logger(Main.class).info("<----------END OF BOOT---------->");
+			Helper.logger(Main.class).info("Estou pronta!");
+		} catch (ExecutionException | InterruptedException ignore) {
+		}
 	}
 
 	public static Activity getRandomActivity() {
