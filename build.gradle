@@ -29,7 +29,6 @@ plugins {
     id "application"
     id "org.springframework.boot" version "2.5.3"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
-    //id "nebula.lint" version "17.1.0"
 }
 
 application {
@@ -40,7 +39,6 @@ group "com.kuuhaku"
 version "STANDALONE"
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
-//gradleLint.rules = ['all-dependency']
 applicationDefaultJvmArgs = [
         "-Xms512M",
         "-Xmx10G",
