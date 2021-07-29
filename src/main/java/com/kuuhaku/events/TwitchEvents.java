@@ -42,14 +42,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class TwitchEvents {
 	private final SimpleEventHandler handler;
@@ -66,28 +65,25 @@ public class TwitchEvents {
 		EventUser author = message.getUser();
 		EventChannel channel = message.getChannel();
 		TwitchClient client = Main.getTwitch();
-		String rawMessage = StringUtils.normalizeSpace(message.getMessage());
-		String rawMsgNoPrefix = rawMessage;
-		String commandName = "";
+		String rawMessage = message.getMessage().replaceAll("\s+", " ");
 
-		if (message.getUser().getName().equalsIgnoreCase("shirojbot")) return;
+		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+		if (blacklisted || message.getUser().getName().equalsIgnoreCase("shirojbot")) return;
 
 		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
 
-		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(ShiroInfo.getDefaultPrefix())) {
-			rawMsgNoPrefix = rawMessage.substring(ShiroInfo.getDefaultPrefix().length()).trim();
+		String prefix = ShiroInfo.getDefaultPrefix();
+		String commandName = "";
+		String rawMsgNoCommand = "";
+		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
+			String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 			commandName = rawMsgNoPrefix.split(" ")[0].trim();
+			rawMsgNoCommand = rawMessage.substring(prefix.length() + commandName.length()).trim();
 		}
 
-		String[] args = rawMsgNoPrefix.split(" ");
-		String argsAsText = rawMsgNoPrefix.replaceFirst(commandName, "").trim();
-		boolean hasArgs = (args.length > 1);
-		if (hasArgs) {
-			args = Arrays.copyOfRange(args, 1, args.length);
-			args = ArrayUtils.removeAllOccurences(args, "");
-		} else {
-			args = new String[0];
-		}
+		String[] args = Arrays.stream(rawMsgNoCommand.split(" "))
+				.filter(s -> !s.isBlank())
+				.toArray(String[]::new);
 
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
 		if (command != null) {
@@ -102,18 +98,15 @@ public class TwitchEvents {
 				return;
 			}
 
-			Main.getInfo().getRatelimit().put(author.getId(), true);
+			Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
-			command.execute(author, acc, commandName, argsAsText, args, message, channel, client.getChat(), message.getPermissions());
+			command.execute(author, acc, commandName, rawMsgNoCommand, args, message, channel, client.getChat(), message.getPermissions());
 
 			String ad = Helper.getAd();
 			if (ad != null) {
 				client.getChat().sendMessage(channel.getName(), ad);
 			}
 		} else if (acc != null && Main.getInfo().isLive()) {
-			acc.addCredit(50, this.getClass());
-			AccountDAO.saveAccount(acc);
-
 			try {
 				User u = Main.getInfo().getUserByID(acc.getUid());
 				TextChannel tc = Main.getInfo()
