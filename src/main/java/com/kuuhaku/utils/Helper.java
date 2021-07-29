@@ -817,7 +817,7 @@ public class Helper {
 	}
 
 	public static String getSponsors() {
-		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).collect(Collectors.toList());
+		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).toList();
 		List<Guild> spGuilds = new ArrayList<>();
 		for (String sp : sponsors) {
 			spGuilds.add(Main.getShiroShards()
@@ -1429,7 +1429,7 @@ public class Helper {
 			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-					.collect(Collectors.toList())
+					.toList()
 			);
 
 			List<Card> cards = CardDAO.getCardsByRarity(kr);
@@ -1494,15 +1494,15 @@ public class Helper {
 					.map(Card::getRarity)
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-					.collect(Collectors.toList())
+					.toList()
 			);
 
-			cards = cds.stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
+			cards = cds.stream().filter(c -> c.getRarity() == kr).toList();
 		} else {
 			kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-					.collect(Collectors.toList())
+					.toList()
 			);
 
 			cards = CardDAO.getCardsByRarity(kr);
@@ -1983,7 +1983,7 @@ public class Helper {
 					}
 					return Pair.of(f, time);
 				})
-				.collect(Collectors.toList());
+				.toList();
 
 		files.removeIf(p -> p.getRight() == null);
 
@@ -2011,7 +2011,7 @@ public class Helper {
 				values.stream()
 						.sorted(Comparator.comparingDouble(org.apache.commons.math3.util.Pair::getValue))
 						.map(p -> p.getValue() < 0 ? org.apache.commons.math3.util.Pair.create(p.getFirst(), 0d) : p)
-						.collect(Collectors.toList())
+						.toList()
 		);
 
 		return ed.sample();
@@ -2778,7 +2778,7 @@ public class Helper {
 		try {
 			List<Constructor<?>> constructors = Arrays.stream(type.getConstructors())
 					.filter(c -> c.getParameterCount() == tuple.length)
-					.collect(Collectors.toList());
+					.toList();
 
 			for (Constructor<?> ctor : constructors) {
 				try {

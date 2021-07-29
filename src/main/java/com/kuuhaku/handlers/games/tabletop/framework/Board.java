@@ -149,7 +149,7 @@ public class Board {
 	}
 
 	public void awardWinner(Game game, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).toList();
 
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
@@ -165,7 +165,7 @@ public class Board {
 	}
 
 	public void awardWinner(Game game, boolean daily, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).toList();
 
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
@@ -185,7 +185,7 @@ public class Board {
 	}
 
 	public void awardWinners(Game game, String... ids) {
-		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).toList();
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
@@ -203,7 +203,7 @@ public class Board {
 	}
 
 	public void awardWinners(Game game, boolean daily, String... ids) {
-		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).toList();
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
@@ -225,7 +225,7 @@ public class Board {
 	}
 
 	public void awardWinner(GlobalGame game, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).toList();
 
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
@@ -241,7 +241,7 @@ public class Board {
 	}
 
 	public void awardWinner(GlobalGame game, boolean daily, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).toList();
 
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
@@ -261,7 +261,7 @@ public class Board {
 	}
 
 	public void awardWinners(GlobalGame game, String... ids) {
-		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).toList();
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
@@ -279,7 +279,7 @@ public class Board {
 	}
 
 	public void awardWinners(GlobalGame game, boolean daily, String... ids) {
-		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).toList();
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);

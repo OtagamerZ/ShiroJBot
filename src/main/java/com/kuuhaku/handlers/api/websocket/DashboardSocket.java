@@ -47,7 +47,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
 	private final ExpiringMap<String, BiContract<WebSocket, ReadyData>> requests = ExpiringMap.builder().expiration(5, TimeUnit.MINUTES).build();
@@ -147,7 +146,7 @@ public class DashboardSocket extends WebSocketServer {
 					JSONObject user = new JSONObject() {{
 						put("waifu", w == null ? "" : w.getAsTag());
 						put("waifuMult", cm == null ? 1.25f : cm.getMult());
-						put("profiles", profiles.stream().map(Member::toJson).collect(Collectors.toList()));
+						put("profiles", profiles.stream().map(Member::toJson).toList());
 						put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 						put("bonuses", Member.getBonuses(u));
 						put("badges", Tags.getUserBadges(u.getId()));

@@ -44,7 +44,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "guardar",
@@ -195,7 +194,7 @@ public class StoreCardCommand implements Executable {
 		List<KawaiponCard> kcs = kp.getCards().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.sorted(Comparator.comparing(KawaiponCard::isFoil))
-				.collect(Collectors.toList());
+				.toList();
 
 		if (kcs.size() > 1) {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);

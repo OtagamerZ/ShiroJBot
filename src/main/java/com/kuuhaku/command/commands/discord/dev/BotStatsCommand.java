@@ -44,7 +44,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "status",
@@ -117,42 +116,42 @@ public class BotStatsCommand implements Executable {
 		chart.addSeries(
 				"Uso de memória (%)",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
+				reducedStats.values().stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
 		chart.addSeries(
 				"Uso de memória (MB)",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 				"Uso de memória (Avg)",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getAverageMemory(), StorageUnit.B)).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getAverageMemory(), StorageUnit.B)).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 				"Uso de CPU (%)",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
 		chart.addSeries(
 						"Ping REST (ms)",
 						List.copyOf(reducedStats.keySet()),
-						reducedStats.values().stream().map(BotStats::getPing).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getPing).toList()
 				).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 						"Ping DB (ms)",
 						List.copyOf(reducedStats.keySet()),
-						reducedStats.values().stream().map(BotStats::getDbPing).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getDbPing).toList()
 				).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
@@ -190,35 +189,35 @@ public class BotStatsCommand implements Executable {
 		chart.addSeries(
 				"Ratelimit",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getRatelimitCount).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getRatelimitCount).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 				"Confirmações",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getConfirmationPendingCount).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getConfirmationPendingCount).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 				"Eventos especiais",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getSpecialEventCount).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getSpecialEventCount).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 				"Drops spawnados",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getCurrentDropCount).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getCurrentDropCount).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
 		chart.addSeries(
 				"Cartas spawnadas",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getCurrentCardCount).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getCurrentCardCount).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
@@ -226,14 +225,14 @@ public class BotStatsCommand implements Executable {
 		chart.addSeries(
 				"Cartas em cache (%)",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(s -> Helper.prcnt(s.getCardCacheCount(), maxCards) * 100).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> Helper.prcnt(s.getCardCacheCount(), maxCards) * 100).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
 		chart.addSeries(
 				"Recursos em cache",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getResourceCacheCount).collect(Collectors.toList())
+						reducedStats.values().stream().map(BotStats::getResourceCacheCount).toList()
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 

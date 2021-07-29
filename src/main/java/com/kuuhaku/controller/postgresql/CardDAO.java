@@ -1049,12 +1049,12 @@ public class CardDAO {
 			return new Deck(
 					((List<String>) champs.getResultList()).stream()
 							.map(CardDAO::getChampion)
-							.collect(Collectors.toList()),
+							.toList(),
 					((List<String>) evos.getResultList()).stream()
 							.map(CardDAO::getEquipment)
-							.collect(Collectors.toList()),
+							.toList(),
 					((List<String>) fields.getResultList()).stream()
-							.map(CardDAO::getField).collect(Collectors.toList())
+							.map(CardDAO::getField).toList()
 			);
 		} finally {
 			em.close();

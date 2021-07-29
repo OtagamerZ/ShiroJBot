@@ -19,7 +19,6 @@
 package com.kuuhaku.model.records.anime;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record Studios(List<StudiosEdge> edges) {
 
@@ -31,6 +30,6 @@ public record Studios(List<StudiosEdge> edges) {
 		return edges.stream()
 				.map(StudiosEdge::node)
 				.map(StudiosNode::name)
-				.collect(Collectors.toList());
+				.toList();
 	}
 }

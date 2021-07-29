@@ -30,7 +30,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "clan")
@@ -154,7 +153,7 @@ public class Clan {
 	public List<ClanMember> getFromHierarchy(ClanHierarchy ch) {
 		return members.stream()
 				.filter(cm -> cm.getRole() == ch)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public void transfer() {
