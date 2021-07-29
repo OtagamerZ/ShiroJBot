@@ -56,7 +56,7 @@ public class SlotsCommand implements Executable {
 	private final List<Slot> rolled = new ArrayList<>();
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você não pode jogar slots se estiver em uma transação ou houver outro slots em progresso.").queue();
 			return;

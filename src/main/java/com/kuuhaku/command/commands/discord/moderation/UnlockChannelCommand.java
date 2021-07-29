@@ -40,7 +40,7 @@ import java.util.List;
 public class UnlockChannelCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (!Helper.hasPermission(member, Permission.MANAGE_CHANNEL, channel)) {
 			channel.sendMessage("❌ | Você não possui permissão para gerenciar canais.").queue();
 			return;

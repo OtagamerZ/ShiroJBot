@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AsciiCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			if (message.getAttachments().isEmpty() || !message.getAttachments().get(0).isImage()) {
 				channel.sendMessage(I18n.getString("err_ascii-no-text-or-image")).queue();

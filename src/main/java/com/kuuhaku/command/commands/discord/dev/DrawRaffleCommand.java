@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "rifa",
@@ -44,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 public class DrawRaffleCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(I18n.getString("err_no-period")).queue();
 			return;
@@ -62,7 +63,7 @@ public class DrawRaffleCommand implements Executable {
 					.map(Main.getInfo()::getUserByID)
 					.filter(Objects::nonNull)
 					.map(u -> u.getAsMention() + " (" + Helper.bugText(u.getName()) + ")")
-					.toList();
+					.collect(Collectors.toList());
 
 			if (votes.isEmpty()) {
 				channel.sendMessage(I18n.getString("err_raffle-no-votes")).queue();

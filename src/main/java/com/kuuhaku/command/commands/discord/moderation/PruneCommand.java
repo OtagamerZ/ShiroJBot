@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 public class PruneCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (ShiroInfo.getPruneQueue().contains(guild.getId())) {
 			channel.sendMessage("❌ | Ainda estou deletando as mensagens de antes, tenha calma!").queue();
 			return;

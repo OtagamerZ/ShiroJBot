@@ -28,6 +28,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MatchMakingRatingDAO {
 	public static MatchMakingRating getMMR(String id) {
@@ -104,7 +105,7 @@ public class MatchMakingRatingDAO {
 		try {
 			return (List<MatchMakingRating>) q.getResultStream()
 					.filter(r -> ((MatchMakingRating) r).getTier().getTier() == tier)
-					.toList();
+					.collect(Collectors.toList());
 		} catch (NoResultException e) {
 			return new ArrayList<>();
 		} finally {

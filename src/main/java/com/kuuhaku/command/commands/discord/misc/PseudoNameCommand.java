@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.entities.*;
 public class PseudoNameCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa digitar um nome ou `reset`.").queue();

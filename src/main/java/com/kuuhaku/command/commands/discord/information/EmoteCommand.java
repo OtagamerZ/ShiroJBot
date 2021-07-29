@@ -39,7 +39,7 @@ import java.io.IOException;
 public class EmoteCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getEmotes().size() < 1) {
 			channel.sendMessage("❌ | Você precisa informar um emote.").queue();
 			return;

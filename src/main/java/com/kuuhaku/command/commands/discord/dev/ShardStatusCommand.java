@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "fragmentos",
@@ -50,13 +51,13 @@ import java.util.concurrent.TimeUnit;
 public class ShardStatusCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 
 		List<List<JDA>> shards = Helper.chunkify(
 				Main.getShiroShards().getShardCache().stream()
 						.sorted(Comparator.comparingInt(jda -> jda.getShardInfo().getShardId()))
-						.toList()
+						.collect(Collectors.toList())
 				, 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

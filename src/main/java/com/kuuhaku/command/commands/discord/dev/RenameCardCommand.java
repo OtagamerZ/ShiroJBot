@@ -37,7 +37,7 @@ import java.util.Locale;
 public class RenameCardCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa especificar o nome atual e o novo nome para renomear.").queue();
 			return;

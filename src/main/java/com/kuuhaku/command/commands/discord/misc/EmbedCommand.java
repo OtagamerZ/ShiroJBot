@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 public class EmbedCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
