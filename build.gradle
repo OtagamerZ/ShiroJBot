@@ -130,7 +130,7 @@ dependencies {
     implementation group: "com.github.SvenWoltmann", name: "color-thief-java", version: "v1.1.2"
     implementation group: "com.github.liheyuan", name: "simple-emoji-4j", version: "f26d3b39be"
     implementation group: "org.quartz-scheduler", name: "quartz", version: '2.3.2'
-    implementation group: "commons-io", name: "commons-io", version: '20030203.000550'
+    implementation group: "commons-io", name: "commons-io", version: '2.11.0'
     implementation group: "net.coobird", name: "thumbnailator", version: '0.4.14'
     implementation group: "com.github.kevinsawicki", name: "http-request", version: "6.0"
     implementation group: "org.jasypt", name: "jasypt", version: '1.9.3'
