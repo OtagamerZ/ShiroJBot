@@ -41,7 +41,7 @@ sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 applicationDefaultJvmArgs = [
 		"-Xms512M",
-		"-Xmx10G",
+		"-Xmx6G",
 		"-XX:+UseZGC",
 		"-XX:+UseStringDeduplication",
 		"-XX:+HeapDumpOnOutOfMemoryError",
