@@ -47,10 +47,10 @@ public class Manager {
 	}
 
 	public static long ping() {
+		long curr = System.currentTimeMillis();
 		EntityManager em = getEntityManager();
 
-		long curr = System.currentTimeMillis();
-		Query q = em.createQuery("SELECT current_date FROM Version v");
+		Query q = em.createQuery("SELECT v FROM Version v");
 
 		q.getSingleResult();
 		em.close();
