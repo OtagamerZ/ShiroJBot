@@ -35,6 +35,7 @@ import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "clanrank",
@@ -46,7 +47,7 @@ import java.util.List;
 public class ClanRankCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Clan c = ClanDAO.getUserClan(author.getId());
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
@@ -61,7 +62,7 @@ public class ClanRankCommand implements Executable {
 					CategoryChart chart = Helper.buildBarChart(
 							"Ranking dos Clãs",
 							Pair.of("", "Pontos"),
-							rank.stream().map(ClanRanking::getColor).toList()
+							rank.stream().map(ClanRanking::getColor).collect(Collectors.toList())
 					);
 
 					for (ClanRanking cr : rank) {

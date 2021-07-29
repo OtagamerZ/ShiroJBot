@@ -317,7 +317,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
-					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild);
+					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
 
 					LogDAO.saveLog(new Log(guild, author, rawMessage));
@@ -561,7 +561,7 @@ public class ShiroEvents extends ListenerAdapter {
 				.setContent("_._")
 				.flatMap(InteractionHook::deleteOriginal)
 				.queue();
-		command.execute(author, member, commandLine, args, new MessageBuilder("").build(), channel, guild);
+		command.execute(author, member, commandLine, args, new MessageBuilder("").build(), channel, guild, gc.getPrefix());
 		Helper.spawnAd(channel);
 
 		LogDAO.saveLog(new Log(guild, author, commandLine));
@@ -1070,7 +1070,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			ch.deleteMessagesByIds(h.stream()
 					.map(Message::getId)
-					.toList()
+					.collect(Collectors.toList())
 			).queue(null, Helper::doNothing);
 
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {

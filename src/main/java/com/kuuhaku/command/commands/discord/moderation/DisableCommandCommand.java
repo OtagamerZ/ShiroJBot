@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class DisableCommandCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | É necessário especificar um ou mais comandos para serem desativados.").queue();
 			return;

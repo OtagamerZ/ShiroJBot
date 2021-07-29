@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum GemItem {
 	CONVERT_CREDITS(
@@ -103,7 +104,7 @@ public enum GemItem {
 				List<Card> cards = CardDAO.getCards()
 						.stream()
 						.filter(cd -> !kp.getCards().contains(new KawaiponCard(cd, foil)))
-						.toList();
+						.collect(Collectors.toList());
 
 				Card chosen = cards.get(Helper.rng(cards.size(), true));
 

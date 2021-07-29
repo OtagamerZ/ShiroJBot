@@ -42,7 +42,7 @@ import java.nio.charset.StandardCharsets;
 public class LogCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		try (FileInputStream fis = new FileInputStream(new File("logs/stacktrace.log").getAbsoluteFile())) {
 			String log = IOUtils.toString(fis, StandardCharsets.UTF_8);
 

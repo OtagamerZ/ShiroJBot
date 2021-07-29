@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 public class AuditCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | É necessário informar o tipo de auditoria (`T` = transações e `C` = comandos) e o ID do usuário.").queue();
 			return;

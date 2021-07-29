@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class BuyRoleCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		Account acc = AccountDAO.getAccount(author.getId());
 		List<PaidRole> prs = new ArrayList<>(gc.getPaidRoles());

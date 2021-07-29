@@ -39,7 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 public class AntiraidCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length > 0 && StringUtils.isNumeric(args[0])) {

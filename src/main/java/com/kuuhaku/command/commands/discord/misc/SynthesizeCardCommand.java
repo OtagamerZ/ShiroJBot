@@ -45,6 +45,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Command(
@@ -62,7 +63,7 @@ import java.util.stream.Stream;
 public class SynthesizeCardCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
 			return;
@@ -168,10 +169,10 @@ public class SynthesizeCardCommand implements Executable {
 
 			List<Equipment> equips = CardDAO.getAllAvailableEquipments();
 			List<Equipment> chosenTier = Helper.getRandom(List.of(
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).toList(), tier1),
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).toList(), tier2),
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).toList(), tier3),
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).toList(), tier4)
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
 			));
 
 			Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));

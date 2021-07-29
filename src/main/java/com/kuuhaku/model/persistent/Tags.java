@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tags")
@@ -53,7 +54,7 @@ public class Tags {
 
     public static List<String> getUserBadges(String id) {
 		String pattern = "https://cdn.discordapp.com/emojis/%s.png?v=1";
-		Member mb = MemberDAO.getMembersByUid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).toList().stream().findFirst().orElse(null);
+		Member mb = MemberDAO.getMembersByUid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
 		if (mb == null) return new ArrayList<>();
 

@@ -28,6 +28,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "destino",
@@ -38,7 +39,7 @@ import java.util.Arrays;
 public class DestinyCardsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
@@ -63,7 +64,7 @@ public class DestinyCardsCommand implements Executable {
 					}
 				}
 
-				dk.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).toList());
+				dk.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).collect(Collectors.toList()));
 
 				channel.sendMessage("✅ | Cartas do destino definidas com sucesso.").queue();
 			} catch (NumberFormatException e) {

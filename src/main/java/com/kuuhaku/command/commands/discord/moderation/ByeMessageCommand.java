@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.entities.*;
 public class ByeMessageCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		if (args.length == 0) {
 			channel.sendMessage("A mensagem de adeus atual do servidor é ```" + gc.getByeMessage() + "```.").queue();

@@ -46,14 +46,14 @@ import java.util.stream.Collectors;
 public class KickMemberCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Set<Member> m = new HashSet<>();
 		m.addAll(message.getMentionedMembers());
 		m.addAll(Arrays.stream(args)
 				.filter(StringUtils::isNumeric)
 				.map(guild::getMemberById)
 				.filter(Objects::nonNull)
-				.toList());
+				.collect(Collectors.toList()));
 
 		if (m.isEmpty()) {
 			channel.sendMessage(I18n.getString("err_user-or-id-required")).queue();

@@ -41,7 +41,7 @@ import java.io.InputStream;
 public class BackgroundCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		String img;
 		if (!argsAsText.isBlank()) img = argsAsText;
 		else img = Helper.getImageFrom(message);

@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class GlitchCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		AtomicReference<Message> ms = new AtomicReference<>();
 		channel.sendMessage("<a:loading:697879726630502401> Bugando a imagem...")
 				.flatMap(s -> {

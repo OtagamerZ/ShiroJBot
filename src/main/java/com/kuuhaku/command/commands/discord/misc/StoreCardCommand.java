@@ -44,6 +44,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "guardar",
@@ -55,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 public class StoreCardCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
@@ -194,7 +195,7 @@ public class StoreCardCommand implements Executable {
 		List<KawaiponCard> kcs = kp.getCards().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.sorted(Comparator.comparing(KawaiponCard::isFoil))
-				.toList();
+				.collect(Collectors.toList());
 
 		if (kcs.size() > 1) {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);

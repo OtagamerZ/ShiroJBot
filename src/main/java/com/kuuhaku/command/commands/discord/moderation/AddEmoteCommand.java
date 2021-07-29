@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class AddEmoteCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Message.Attachment att = message.getAttachments().stream().filter(Message.Attachment::isImage).findFirst().orElse(null);
 		long currAnim = guild.getEmotes().stream().filter(Emote::isAnimated).count();
 		long currNormal = guild.getEmotes().size() - currAnim;

@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 public class ProfileTrophyCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Trophy t = TrophyDAO.getTrophies(author.getId());
 
 		if (args.length == 0) {
