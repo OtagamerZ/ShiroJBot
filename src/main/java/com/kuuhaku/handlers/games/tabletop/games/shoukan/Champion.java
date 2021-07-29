@@ -571,8 +571,9 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public double getDodge() {
-		double d = Helper.clamp(dodge + mDodge + getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count() * 15, 0, 100);
-		return Helper.roundTrunc((int) (d * 10), 5) / 10d;
+		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
+		double d = Helper.clamp(dodge + mDodge + agiEquips * 15, 0, 100);
+		return Helper.roundTrunc((int) (d * 100), 5) / 100d;
 	}
 
 	public void setDodge(double dodge) {
