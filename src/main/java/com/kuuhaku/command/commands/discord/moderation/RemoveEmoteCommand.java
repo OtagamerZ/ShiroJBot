@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "removeremote",
@@ -60,7 +59,7 @@ public class RemoveEmoteCommand implements Executable {
 					.flatMap(s -> channel.sendMessage("✅ | Emote removido com sucesso!"))
 					.queue(null, Helper::doNothing);
 		} else {
-			List<Emote> filteredList = message.getEmotes().stream().filter(e -> guild.getEmoteById(e.getId()) != null).collect(Collectors.toList());
+			List<Emote> filteredList = message.getEmotes().stream().filter(e -> guild.getEmoteById(e.getId()) != null).toList();
 			List<AuditableRestAction<Void>> acts = new ArrayList<>();
 			int removed = 0;
 			for (Emote emote : filteredList) {

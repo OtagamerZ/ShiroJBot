@@ -52,7 +52,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("localvariable")
@@ -284,7 +283,7 @@ public class ShiroInfo {
 	}
 
 	public static List<String> getStaff() {
-		return Stream.concat(developers.stream(), supports.keySet().stream()).distinct().collect(Collectors.toList());
+		return Stream.concat(developers.stream(), supports.keySet().stream()).distinct().toList();
 	}
 
 	//NON-STATIC
@@ -343,7 +342,7 @@ public class ShiroInfo {
 
 	public List<Member> getMembersByID(String userID) {
 		User u = getUserByID(userID);
-		return u.getMutualGuilds().stream().map(g -> g.getMemberById(userID)).collect(Collectors.toList());
+		return u.getMutualGuilds().stream().map(g -> g.getMemberById(userID)).toList();
 	}
 
 	public Role getRoleByID(String roleID) {

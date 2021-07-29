@@ -36,7 +36,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "sweep",
@@ -90,7 +89,7 @@ public class SweepCommand implements Executable {
 					guildTrashBin.add(e.getKey());
 
 					missingIds.computeIfAbsent(e.getKey(), t -> new HashSet<>())
-							.addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
+							.addAll(e.getValue().stream().map(id -> id + e.getKey()).toList());
 					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					try {
@@ -99,7 +98,7 @@ public class SweepCommand implements Executable {
 							foundIds.addAll(
 									res.stream()
 											.map(m -> m.getId() + e.getKey())
-											.collect(Collectors.toList())
+											.toList()
 							);
 
 							loaded.complete(null);
@@ -107,7 +106,7 @@ public class SweepCommand implements Executable {
 						});
 						loaded.get();
 					} catch (ExecutionException | InterruptedException err) {
-						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).collect(Collectors.toList()));
+						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).toList());
 					}
 				}
 			}

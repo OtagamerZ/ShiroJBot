@@ -27,7 +27,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class GameChannel {
 	private final Set<String> channels = new HashSet<>();
@@ -41,14 +40,14 @@ public class GameChannel {
 		return channels.stream()
 				.map(ids -> ids.split(Pattern.quote("."))[0])
 				.map(id -> Main.getInfo().getGuildByID(id))
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public List<TextChannel> getChannels() {
 		return channels.stream()
 				.map(ids -> ids.split(Pattern.quote(".")))
 				.map(ids -> Main.getInfo().getGuildByID(ids[0]).getTextChannelById(ids[1]))
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public ClusterAction sendFile(File f) {

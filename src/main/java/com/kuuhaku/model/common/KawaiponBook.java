@@ -43,7 +43,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class KawaiponBook {
 	private final Set<KawaiponCard> cards;
@@ -69,7 +68,7 @@ public class KawaiponBook {
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
 		);
-		List<List<KawaiponCard>> chunks = Helper.chunkify(cardList.stream().map(c -> new KawaiponCard(c, foil)).collect(Collectors.toList()), COLUMN_COUNT);
+		List<List<KawaiponCard>> chunks = Helper.chunkify(cardList.stream().map(c -> new KawaiponCard(c, foil)).toList(), COLUMN_COUNT);
 		chunks.removeIf(List::isEmpty);
 
 		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
@@ -173,7 +172,7 @@ public class KawaiponBook {
 							.reversed()
 							.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 					)
-					.collect(Collectors.toList());
+					.toList();
 		else
 			cards = cardList.stream()
 					.peek(d -> d.setAcc(acc))
@@ -182,7 +181,7 @@ public class KawaiponBook {
 							.reversed()
 							.thenComparing(c -> ((Equipment) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 					)
-					.collect(Collectors.toList());
+					.toList();
 
 		List<List<Drawable>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
 		chunks.removeIf(List::isEmpty);

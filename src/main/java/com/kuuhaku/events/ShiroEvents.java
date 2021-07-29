@@ -981,7 +981,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			ch.deleteMessagesByIds(h.stream()
 					.map(Message::getId)
-					.collect(Collectors.toList())
+					.toList()
 			).queue(null, Helper::doNothing);
 
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {

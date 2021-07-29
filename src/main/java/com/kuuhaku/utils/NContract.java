@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class NContract<A> extends CompletableFuture<A> {
 	private final int signers;
@@ -63,7 +62,7 @@ public class NContract<A> extends CompletableFuture<A> {
 			List<A> ordered = signatures.entrySet().stream()
 					.sorted(Comparator.comparingInt(Map.Entry::getKey))
 					.map(Map.Entry::getValue)
-					.collect(Collectors.toList());
+					.toList();
 
 			A result = action.apply(ordered);
 			signatures.clear();

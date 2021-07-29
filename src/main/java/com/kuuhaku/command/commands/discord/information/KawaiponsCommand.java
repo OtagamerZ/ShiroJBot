@@ -117,7 +117,7 @@ public class KawaiponsCommand implements Executable {
                                 send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
                                 return;
                             } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
-                                List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
+                                List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).toList();
 
                                 KawaiponBook kb = new KawaiponBook();
                                 BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
@@ -125,7 +125,7 @@ public class KawaiponsCommand implements Executable {
                                 send(author, channel, m, cards, "Cartas elegíveis", null);
                                 return;
                             } else if (Helper.equalsAny(args[0], "item", "itens", "equips", "equipamentos", "equipments", "evogear")) {
-                                List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+								List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).toList();
 
                                 KawaiponBook kb = new KawaiponBook();
                                 BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos evogear", false);
@@ -133,7 +133,7 @@ public class KawaiponsCommand implements Executable {
                                 send(author, channel, m, cards, "Equipamentos evogear", null);
                                 return;
                             } else if (Helper.equalsAny(args[0], "fusao", "fusion", "fusions", "fusoes", "evolucao", "evolution", "evolucoes", "evolutions")) {
-                                List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+								List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).toList();
 
                                 KawaiponBook kb = new KawaiponBook();
                                 BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Fusões Senshi", true);
@@ -160,7 +160,7 @@ public class KawaiponsCommand implements Executable {
                             return;
                         }
 
-                        List<Drawable> cardList = CardDAO.getChampions(r).stream().map(d -> (Drawable) d).collect(Collectors.toList());
+						List<Drawable> cardList = CardDAO.getChampions(r).stream().map(d -> (Drawable) d).toList();
 
                         KawaiponBook kb = new KawaiponBook();
                         BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), r.getName(), true);
@@ -169,7 +169,7 @@ public class KawaiponsCommand implements Executable {
                         return;
                     }
 
-                    List<Drawable> cardList = CardDAO.getChampions(c).stream().map(d -> (Drawable) d).collect(Collectors.toList());
+					List<Drawable> cardList = CardDAO.getChampions(c).stream().map(d -> (Drawable) d).toList();
 
                     KawaiponBook kb = new KawaiponBook();
                     BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), c.getName(), true);

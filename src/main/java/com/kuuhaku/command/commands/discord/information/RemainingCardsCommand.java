@@ -42,7 +42,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "cartasrestantes",
@@ -78,7 +77,7 @@ public class RemainingCardsCommand implements Executable {
 				.filter(c -> !c.isFoil())
 				.map(KawaiponCard::getCard)
 				.filter(c -> c.getAnime().equals(anime))
-				.collect(Collectors.toList());
+				.toList();
 		List<Card> cards = CardDAO.getCardsByAnime(anime.getName());
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
