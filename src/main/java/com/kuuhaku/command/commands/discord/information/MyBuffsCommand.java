@@ -35,6 +35,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.stream.Collectors;
+
 @Command(
 		name = "buffs",
 		aliases = {"meusbuffs", "modifiers", "modifs", "boosts"},
@@ -44,10 +46,10 @@ import net.dv8tion.jda.api.entities.*;
 public class MyBuffsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 		eb.setTitle(":level_slider: Modificadores ativos");
 

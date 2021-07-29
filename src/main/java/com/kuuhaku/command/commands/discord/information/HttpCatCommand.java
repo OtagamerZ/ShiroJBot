@@ -40,7 +40,7 @@ import java.io.IOException;
 public class HttpCatCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(I18n.getString("err_http-cat-not-enough-args")).queue();
 			return;

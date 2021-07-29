@@ -60,7 +60,7 @@ public class HelpCommand implements Executable {
 	private static final String STR_COMMAND_LIST_DESCRIPTION = "str_command-list-description";
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		Map<String, Page> pages = new LinkedHashMap<>();

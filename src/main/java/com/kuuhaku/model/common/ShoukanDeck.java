@@ -34,6 +34,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShoukanDeck {
 	private final Account acc;
@@ -51,14 +52,14 @@ public class ShoukanDeck {
 
 		champs = champs.stream()
 				.peek(c -> c.setAcc(acc))
-				.toList();
+				.collect(Collectors.toList());
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
 				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(dk) - 1, 0), new Equipment())).stream())
-				.toList();
+				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
-				.toList();
+				.collect(Collectors.toList());
 
 		BufferedImage deck = Helper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
 		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/destiny.png");

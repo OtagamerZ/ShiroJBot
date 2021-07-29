@@ -34,6 +34,7 @@ import org.quartz.JobExecutionContext;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DailyEvent implements Job {
 	public static JobDetail daily;
@@ -86,7 +87,7 @@ public class DailyEvent implements Job {
 		} else {
 			List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank().stream()
 					.filter(mmr -> mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
-					.toList();
+					.collect(Collectors.toList());
 
 			for (MatchMakingRating mmr : mmrs) {
 				mmr.applyInactivityPenalty();

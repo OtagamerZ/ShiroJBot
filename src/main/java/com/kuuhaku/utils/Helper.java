@@ -144,6 +144,7 @@ import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -817,7 +818,7 @@ public class Helper {
 	}
 
 	public static String getSponsors() {
-		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).toList();
+		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).collect(Collectors.toList());
 		List<Guild> spGuilds = new ArrayList<>();
 		for (String sp : sponsors) {
 			spGuilds.add(Main.getShiroShards()
@@ -1429,7 +1430,7 @@ public class Helper {
 			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-					.toList()
+					.collect(Collectors.toList())
 			);
 
 			List<Card> cards = CardDAO.getCardsByRarity(kr);
@@ -1494,15 +1495,15 @@ public class Helper {
 					.map(Card::getRarity)
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-					.toList()
+					.collect(Collectors.toList())
 			);
 
-			cards = cds.stream().filter(c -> c.getRarity() == kr).toList();
+			cards = cds.stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
 		} else {
 			kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-					.toList()
+					.collect(Collectors.toList())
 			);
 
 			cards = CardDAO.getCardsByRarity(kr);
@@ -1983,7 +1984,7 @@ public class Helper {
 					}
 					return Pair.of(f, time);
 				})
-				.toList();
+				.collect(Collectors.toList());
 
 		files.removeIf(p -> p.getRight() == null);
 
@@ -2011,7 +2012,7 @@ public class Helper {
 				values.stream()
 						.sorted(Comparator.comparingDouble(org.apache.commons.math3.util.Pair::getValue))
 						.map(p -> p.getValue() < 0 ? org.apache.commons.math3.util.Pair.create(p.getFirst(), 0d) : p)
-						.toList()
+						.collect(Collectors.toList())
 		);
 
 		return ed.sample();
@@ -2069,7 +2070,7 @@ public class Helper {
 		}
 
 		return out.stream()
-				.filter(Objects::nonNull).toList();
+				.filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
 	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
@@ -2765,12 +2766,12 @@ public class Helper {
 		long seconds = millis / MILLIS_IN_SECOND;
 		seconds %= MILLIS_IN_SECOND;
 
-		return List.of(
+		return Stream.of(
 				days > 0 ? days + " dia" + (days != 1 ? "s" : "") : "",
 				hours > 0 ? hours + " hora" + (hours != 1 ? "s" : "") : "",
 				minutes > 0 ? minutes + " minuto" + (minutes != 1 ? "s" : "") : "",
 				seconds > 0 ? seconds + " segundo" + (seconds != 1 ? "s" : "") : ""
-		).stream().filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
+		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -2778,7 +2779,7 @@ public class Helper {
 		try {
 			List<Constructor<?>> constructors = Arrays.stream(type.getConstructors())
 					.filter(c -> c.getParameterCount() == tuple.length)
-					.toList();
+					.collect(Collectors.toList());
 
 			for (Constructor<?> ctor : constructors) {
 				try {

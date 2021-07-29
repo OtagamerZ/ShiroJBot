@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 public class UserInfoCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Member m;
 		if (args.length > 0 && StringUtils.isNumeric(args[0]))
 			m = guild.getMemberById(args[0]);

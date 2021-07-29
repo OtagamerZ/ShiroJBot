@@ -67,6 +67,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
@@ -1061,12 +1062,12 @@ public class Shoukan extends GlobalGame {
 		List<String> champsInField = slts.parallelStream()
 				.map(SlotColumn::getTop)
 				.map(c -> c == null || c.isSealed() ? null : c.getCard().getId())
-				.toList();
+				.collect(Collectors.toList());
 
 		List<String> equipsInField = slts.parallelStream()
 				.map(SlotColumn::getBottom)
 				.map(dr -> dr == null ? null : dr.getCard().getId())
-				.toList();
+				.collect(Collectors.toList());
 
 		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : null;
 
@@ -1768,14 +1769,14 @@ public class Shoukan extends GlobalGame {
 					h.get().getDeque().addAll(
 							discardBatch.stream()
 									.map(Drawable::copy)
-									.toList()
+									.collect(Collectors.toList())
 					);
 					Collections.shuffle(h.get().getDeque());
 				} else {
 					arena.getGraveyard().get(current).addAll(
 							discardBatch.stream()
 									.map(Drawable::copy)
-									.toList()
+									.collect(Collectors.toList())
 					);
 				}
 				discardBatch.clear();
@@ -1972,14 +1973,14 @@ public class Shoukan extends GlobalGame {
 						h.get().getDeque().addAll(
 								discardBatch.stream()
 										.map(Drawable::copy)
-										.toList()
+										.collect(Collectors.toList())
 						);
 						Collections.shuffle(h.get().getDeque());
 					} else {
 						arena.getGraveyard().get(current).addAll(
 								discardBatch.stream()
 										.map(Drawable::copy)
-										.toList()
+										.collect(Collectors.toList())
 						);
 					}
 					discardBatch.clear();
@@ -2125,7 +2126,7 @@ public class Shoukan extends GlobalGame {
 			List<Champion> dead = entry.getValue().parallelStream()
 					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
-					.toList();
+					.collect(Collectors.toList());
 
 			for (Champion c : dead) {
 				entry.getValue().remove(c);
@@ -2134,7 +2135,7 @@ public class Shoukan extends GlobalGame {
 			List<Champion> inHand = h.getCards().parallelStream()
 					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
-					.toList();
+					.collect(Collectors.toList());
 
 			for (Champion c : inHand) {
 				h.getCards().remove(c);
@@ -2143,7 +2144,7 @@ public class Shoukan extends GlobalGame {
 			List<Champion> inDeck = h.getDeque().parallelStream()
 					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
 					.map(d -> (Champion) d)
-					.toList();
+					.collect(Collectors.toList());
 
 			for (Champion c : inDeck) {
 				h.getDeque().remove(c);

@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class ReversiCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;

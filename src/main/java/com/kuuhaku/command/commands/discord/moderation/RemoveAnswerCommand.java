@@ -38,7 +38,7 @@ import java.util.List;
 public class RemoveAnswerCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa especificar um ID.").queue();
 			return;

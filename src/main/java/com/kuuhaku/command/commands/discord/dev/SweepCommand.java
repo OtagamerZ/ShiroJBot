@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "sweep",
@@ -45,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 public class SweepCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild) {
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
@@ -89,7 +90,7 @@ public class SweepCommand implements Executable {
 					guildTrashBin.add(e.getKey());
 
 					missingIds.computeIfAbsent(e.getKey(), t -> new HashSet<>())
-							.addAll(e.getValue().stream().map(id -> id + e.getKey()).toList());
+							.addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
 					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					try {
@@ -98,7 +99,7 @@ public class SweepCommand implements Executable {
 							foundIds.addAll(
 									res.stream()
 											.map(m -> m.getId() + e.getKey())
-											.toList()
+											.collect(Collectors.toList())
 							);
 
 							loaded.complete(null);
@@ -106,7 +107,7 @@ public class SweepCommand implements Executable {
 						});
 						loaded.get();
 					} catch (ExecutionException | InterruptedException err) {
-						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).toList());
+						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).collect(Collectors.toList()));
 					}
 				}
 			}

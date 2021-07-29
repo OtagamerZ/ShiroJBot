@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Hand {
@@ -97,7 +98,7 @@ public class Hand {
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
-						.toList()
+						.collect(Collectors.toList())
 		);
 
 		int baseHp;
@@ -358,7 +359,7 @@ public class Hand {
 	}
 
 	public void redrawHand() {
-		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).toList();
+		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
 		deque.addAll(notUsed);
 		cards.removeIf(Drawable::isAvailable);
 
@@ -414,7 +415,7 @@ public class Hand {
 				.sorted(Comparator.comparingInt(Champion::getMana)
 						.thenComparing(Champion::getAtk)
 						.thenComparing(Champion::getDef)
-				).toList();
+				).collect(Collectors.toList());
 	}
 
 	public List<Equipment> getSortedEquipments() {
@@ -424,13 +425,13 @@ public class Hand {
 				.sorted(Comparator.comparingInt(Equipment::getMana)
 						.thenComparing(Equipment::getAtk)
 						.thenComparing(Equipment::getDef)
-				).toList();
+				).collect(Collectors.toList());
 	}
 
 	public List<Drawable> getAvailableCards() {
 		return getCards().stream()
 				.filter(Drawable::isAvailable)
-				.toList();
+				.collect(Collectors.toList());
 	}
 
 	public void removeCard(String name) {

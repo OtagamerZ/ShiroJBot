@@ -38,6 +38,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "matchmakingrating")
@@ -334,7 +335,7 @@ public class MatchMakingRating {
 					.sorted(Comparator.comparingInt(Map.Entry::getKey))
 					.map(Map.Entry::getValue)
 					.filter(mr -> mr.getSide() == s)
-					.toList();
+					.collect(Collectors.toList());
 
 			Set<String> ids = new HashSet<>();
 			for (MatchRound round : rounds) {
