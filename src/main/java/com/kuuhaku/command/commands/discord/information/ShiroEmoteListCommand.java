@@ -36,7 +36,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "semotes",
@@ -58,7 +57,7 @@ public class ShiroEmoteListCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		for (Emote emote : Main.getShiroShards().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList())) {
+		for (Emote emote : Main.getShiroShards().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).toList()) {
 			f.add(new MessageEmbed.Field("Emote " + emote.getAsMention(), "Menção: " + emote.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
 		}
 

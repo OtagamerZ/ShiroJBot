@@ -45,7 +45,6 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Command(
@@ -169,10 +168,10 @@ public class SynthesizeCardCommand implements Executable {
 
 			List<Equipment> equips = CardDAO.getAllAvailableEquipments();
 			List<Equipment> chosenTier = Helper.getRandom(List.of(
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
-					Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).toList(), tier1),
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).toList(), tier2),
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).toList(), tier3),
+					Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).toList(), tier4)
 			));
 
 			Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));

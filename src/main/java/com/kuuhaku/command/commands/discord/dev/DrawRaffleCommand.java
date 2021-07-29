@@ -34,7 +34,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "rifa",
@@ -63,7 +62,7 @@ public class DrawRaffleCommand implements Executable {
 					.map(Main.getInfo()::getUserByID)
 					.filter(Objects::nonNull)
 					.map(u -> u.getAsMention() + " (" + Helper.bugText(u.getName()) + ")")
-					.collect(Collectors.toList());
+					.toList();
 
 			if (votes.isEmpty()) {
 				channel.sendMessage(I18n.getString("err_raffle-no-votes")).queue();

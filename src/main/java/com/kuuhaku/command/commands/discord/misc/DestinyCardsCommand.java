@@ -28,7 +28,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "destino",
@@ -64,7 +63,7 @@ public class DestinyCardsCommand implements Executable {
 					}
 				}
 
-				dk.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).collect(Collectors.toList()));
+				dk.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).toList());
 
 				channel.sendMessage("✅ | Cartas do destino definidas com sucesso.").queue();
 			} catch (NumberFormatException e) {

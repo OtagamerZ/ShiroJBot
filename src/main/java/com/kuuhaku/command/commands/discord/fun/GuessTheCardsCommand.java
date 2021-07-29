@@ -48,7 +48,6 @@ import java.util.Locale;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "adivinheascartas",
@@ -72,11 +71,11 @@ public class GuessTheCardsCommand implements Executable {
 			BufferedImage mask = Helper.toColorSpace(ImageIO.read(masks[Helper.rng(masks.length, true)]), BufferedImage.TYPE_INT_ARGB);
 
 			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
-			List<String> names = c.stream().map(Card::getId).collect(Collectors.toList());
+			List<String> names = c.stream().map(Card::getId).toList();
 			List<BufferedImage> imgs = c.stream()
 					.map(Card::drawCardNoBorder)
 					.map(bi -> Helper.toColorSpace(bi, BufferedImage.TYPE_INT_ARGB))
-					.collect(Collectors.toList());
+					.toList();
 
 			BufferedImage img = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = img.createGraphics();

@@ -33,6 +33,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -52,7 +53,11 @@ public class ShardStatusCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 
-		List<List<JDA>> shards = Helper.chunkify(Main.getShiroShards().getShards(), 10);
+		List<List<JDA>> shards = Helper.chunkify(
+				Main.getShiroShards().getShardCache().stream()
+						.sorted(Comparator.comparingInt(jda -> jda.getShardInfo().getShardId()))
+						.toList()
+				, 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Status dos Shards da Shiro");

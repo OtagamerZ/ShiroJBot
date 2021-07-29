@@ -48,7 +48,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Profile {
 	public static final int WIDTH = 944;
@@ -264,7 +263,7 @@ public class Profile {
 				.peek(frame -> frame.rescaleFrame(WIDTH, HEIGHT))
 				.peek(frame -> frame.roundEdges(0.1f))
 				.peek(frame -> frame.applyOverlay(overlay))
-				.collect(Collectors.toList());
+				.toList();
 
 		Helper.makeGIF(out, frames, 0, -1, 7);
 		return out;

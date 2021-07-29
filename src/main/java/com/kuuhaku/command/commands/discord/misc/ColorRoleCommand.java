@@ -91,7 +91,7 @@ public class ColorRoleCommand implements Executable {
 				.collect(Collectors.toMap(cr -> StringUtils.capitalize(cr.getName().toLowerCase(Locale.ROOT)), Function.identity()));
 		List<Role> rols = member.getRoles().stream()
 				.filter(r -> roles.values().stream().noneMatch(cr -> cr.getId().equals(r.getId())))
-				.collect(Collectors.toList());
+				.toList();
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
 			guild.modifyMemberRoles(member, rols).queue();
