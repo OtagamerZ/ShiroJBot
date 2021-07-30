@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +140,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="1.2.3.9999" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../untitled/src/main/java/com/kuuhaku/Main.java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -152,10 +153,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records\anime" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\utils" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -1361,13 +1362,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05061" summary="Correções menores">
-      <created>1627328395827</created>
-      <option name="number" value="05061" />
-      <option name="presentableId" value="LOCAL-05061" />
-      <option name="project" value="LOCAL" />
-      <updated>1627328395827</updated>
-    </task>
     <task id="LOCAL-05062" summary="Correções menores">
       <created>1627331506039</created>
       <option name="number" value="05062" />
@@ -1704,7 +1698,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627657034712</updated>
     </task>
-    <option name="localTasksCounter" value="5110" />
+    <task id="LOCAL-05110" summary="Correções menores">
+      <created>1627669147465</created>
+      <option name="number" value="05110" />
+      <option name="presentableId" value="LOCAL-05110" />
+      <option name="project" value="LOCAL" />
+      <updated>1627669147465</updated>
+    </task>
+    <option name="localTasksCounter" value="5111" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
