@@ -27,4 +27,8 @@ public record NextAiringEpisode(long episode, long airingAt) {
 	public ZonedDateTime getAiringAtDate() {
 		return Instant.ofEpochMilli(airingAt * 1000).atZone(ZoneId.of("GMT-3"));
 	}
+
+	public String getUnixTimestamp() {
+		return "<t:" + airingAt + ":R>";
+	}
 }
