@@ -26,6 +26,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.records.SlashParam;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
@@ -175,10 +176,12 @@ public class CommandManager {
 					SlashCommand cmd = klass.getDeclaredAnnotation(SlashCommand.class);
 					SubcommandData sd = new SubcommandData(
 							cmd.name(),
-							"cmd_" + klass.getSimpleName()
-									.replaceFirst("(Command|Reaction)$", "")
-									.replaceAll("[a-z](?=[A-Z])", "$0-")
-									.toLowerCase(Locale.ROOT)
+							I18n.getString(
+									"cmd_" + klass.getSimpleName()
+											.replaceFirst("(Command|Reaction)$", "")
+											.replaceAll("[a-z](?=[A-Z])", "$0-")
+											.toLowerCase(Locale.ROOT)
+							)
 					);
 					List<SlashParam> params = new ArrayList<>();
 					for (String arg : cmd.args()) {
@@ -197,10 +200,12 @@ public class CommandManager {
 					SlashCommand cmd = klass.getDeclaredAnnotation(SlashCommand.class);
 					CommandData cd = new CommandData(
 							cmd.name(),
-							"cmd_" + klass.getSimpleName()
-									.replaceFirst("(Command|Reaction)$", "")
-									.replaceAll("[a-z](?=[A-Z])", "$0-")
-									.toLowerCase(Locale.ROOT)
+							I18n.getString(
+									"cmd_" + klass.getSimpleName()
+											.replaceFirst("(Command|Reaction)$", "")
+											.replaceAll("[a-z](?=[A-Z])", "$0-")
+											.toLowerCase(Locale.ROOT)
+							)
 					);
 					List<SlashParam> params = new ArrayList<>();
 					for (String arg : cmd.args()) {
