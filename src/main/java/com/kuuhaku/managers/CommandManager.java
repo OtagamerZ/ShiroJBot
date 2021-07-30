@@ -191,6 +191,8 @@ public class CommandManager {
 					for (SlashParam param : params) {
 						sd.addOption(param.type(), param.name(), param.description());
 					}
+
+					sds.add(sd);
 				}
 
 				cds.add(new CommandData(group, "Categoria " + group.toUpperCase())
