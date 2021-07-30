@@ -97,7 +97,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 
-		List<JDA> shards = new ArrayList<>(shiroShards.getShards());
+		List<JDA> shards = shiroShards.getShards();
 		shards.sort(Comparator.comparingInt(s -> s.getShardInfo().getShardId()));
 		for (JDA shard : shards) {
 			int id = shard.getShardInfo().getShardId();
