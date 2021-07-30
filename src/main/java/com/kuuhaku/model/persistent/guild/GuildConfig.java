@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
 import com.squareup.moshi.JsonDataException;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -80,6 +81,13 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String starboardChannel = "";
+
+	//ROLES
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String welcomerRole = "";
+
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String joinRole = "";
 
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
@@ -310,6 +318,22 @@ public class GuildConfig {
 
 	public void setStarboardChannel(String starboardChannel) {
 		this.starboardChannel = Helper.getOr(starboardChannel, "");
+	}
+
+	public Role getWelcomerRole() {
+		return Main.getInfo().getGuildByID(guildId).getRoleById(Helper.getOr(welcomerRole, "1"));
+	}
+
+	public void setWelcomerRole(String welcomerRole) {
+		this.welcomerRole = Helper.getOr(welcomerRole, "");
+	}
+
+	public Role getJoinRole() {
+		return Main.getInfo().getGuildByID(guildId).getRoleById(Helper.getOr(joinRole, "1"));
+	}
+
+	public void setJoinRole(String joinRole) {
+		this.joinRole = Helper.getOr(joinRole, "");
 	}
 
 	public String getWelcomeMessage() {

@@ -664,10 +664,14 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			try {
-				event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
+				member.modifyNickname(name).queue(null, Helper::doNothing);
 			} catch (InsufficientPermissionException ignore) {
 			}
 		}
+
+		Role r = gc.getJoinRole();
+		if (r != null)
+			guild.addRoleToMember(member, r).queue(null, Helper::doNothing);
 
 		try {
 			if (!gc.getWelcomeMessage().isBlank()) {
@@ -728,7 +732,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 				TextChannel chn = gc.getWelcomeChannel();
 				if (chn != null && chn.canTalk(guild.getSelfMember())) {
-					chn.sendMessage(author.getAsMention()).setEmbeds(eb.build()).queue();
+					Role welcomer = gc.getWelcomerRole();
+					chn.sendMessage(author.getAsMention() + (welcomer != null ? " " + welcomer.getAsMention() : ""))
+							.setEmbeds(eb.build())
+							.queue();
+
 					if (author.getId().equals(ShiroInfo.getNiiChan()))
 						chn.sendMessage("<:b_shirolove:752890212371267676> | Seja bem-vindo Nii-chan!").queue();
 				}
