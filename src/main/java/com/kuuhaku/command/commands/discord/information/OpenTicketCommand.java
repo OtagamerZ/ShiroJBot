@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
 @SlashGroup("suporte")
 @SlashCommand(name = "ticket", args = {
-		"{\"name\": \"texto\", \"description\": \"Conteúdo do ticket.\", \"type\": \"STRING\"}"
+		"{\"name\": \"texto\", \"description\": \"Conteúdo do ticket (min: 100 caractéres).\", \"type\": \"STRING\", \"required\": true}"
 })
 public class OpenTicketCommand implements Executable, Slashed {
 

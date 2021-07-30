@@ -189,7 +189,7 @@ public class CommandManager {
 					}
 
 					for (SlashParam param : params) {
-						sd.addOption(param.type(), param.name(), param.description());
+						sd.addOption(param.type(), param.name(), param.description(), param.required());
 					}
 
 					sds.add(sd);
@@ -215,7 +215,7 @@ public class CommandManager {
 					}
 
 					for (SlashParam param : params) {
-						cd.addOption(param.type(), param.name(), param.description());
+						cd.addOption(param.type(), param.name(), param.description(), param.required());
 					}
 
 					cds.add(cd);

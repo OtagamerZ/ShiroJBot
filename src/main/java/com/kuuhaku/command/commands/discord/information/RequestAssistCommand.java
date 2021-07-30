@@ -22,9 +22,12 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
@@ -52,7 +55,9 @@ import java.util.concurrent.TimeUnit;
 		Permission.MESSAGE_ADD_REACTION,
 		Permission.CREATE_INSTANT_INVITE
 })
-public class RequestAssistCommand implements Executable {
+@SlashGroup("suporte")
+@SlashCommand(name = "presencial")
+public class RequestAssistCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
