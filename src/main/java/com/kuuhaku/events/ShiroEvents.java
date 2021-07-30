@@ -513,7 +513,7 @@ public class ShiroEvents extends ListenerAdapter {
 		else
 			command = Main.getCommandManager().getSlash(evt.getName(), evt.getSubcommandName());
 
-		if (!(command instanceof Slashed slash)) {
+		if (!(command.getCommand() instanceof Slashed slash)) {
 			hook.sendMessage("❌ | Comando inexistente.").queue();
 		} else if (!command.getCategory().isEnabled(guild, author) || gc.getDisabledCommands().contains(command.getCommand().getClass().getName())) {
 			hook.sendMessage("❌ | Comando desabilitado.").queue();

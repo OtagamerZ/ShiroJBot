@@ -216,6 +216,7 @@ public class CommandManager {
 			}
 		}
 
-		Main.getDefaultShard().updateCommands().addCommands(cds).queue();
+		Main.getDefaultShard().updateCommands().addCommands(cds).complete();
+		Helper.logger(this.getClass()).info(slashes.values().stream().mapToLong(Set::size).sum() + " comandos Slash registrados.");
 	}
 }

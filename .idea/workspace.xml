@@ -17,7 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1360,13 +1360,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05047" summary="Adicionado armazém pessoal de cartas">
-      <created>1627069360470</created>
-      <option name="number" value="05047" />
-      <option name="presentableId" value="LOCAL-05047" />
-      <option name="project" value="LOCAL" />
-      <updated>1627069360470</updated>
-    </task>
     <task id="LOCAL-05048" summary="Adicionado armazém pessoal de cartas">
       <created>1627069463132</created>
       <option name="number" value="05048" />
@@ -1703,7 +1696,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627648196763</updated>
     </task>
-    <option name="localTasksCounter" value="5096" />
+    <task id="LOCAL-05096" summary="Correções menores">
+      <created>1627648633145</created>
+      <option name="number" value="05096" />
+      <option name="presentableId" value="LOCAL-05096" />
+      <option name="project" value="LOCAL" />
+      <updated>1627648633145</updated>
+    </task>
+    <option name="localTasksCounter" value="5097" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
