@@ -22,9 +22,12 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
@@ -32,6 +35,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -39,6 +43,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -49,7 +54,11 @@ import java.util.concurrent.TimeUnit;
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
-public class OpenTicketCommand implements Executable {
+@SlashGroup("suporte")
+@SlashCommand(name = "ticket", args = {
+		"{\"name\": \"texto\", \"description\": \"Conteúdo do ticket.\", \"type\": \"STRING\"}"
+})
+public class OpenTicketCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -112,5 +121,10 @@ public class OpenTicketCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));
+	}
+
+	@Override
+	public String toCommand(SlashCommandEvent evt) {
+		return Objects.requireNonNull(evt.getOption("texto")).getAsString();
 	}
 }

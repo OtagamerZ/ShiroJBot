@@ -18,7 +18,12 @@
 
 package com.kuuhaku.model.records;
 
+import com.kuuhaku.utils.JSONUtils;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 public record SlashParam(String name, String description, OptionType type) {
+	@Override
+	public String toString() {
+		return JSONUtils.toJSON(this);
+	}
 }
