@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.utils.Helper;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class WebSocketConfig {
@@ -49,7 +50,7 @@ public class WebSocketConfig {
 		try {
 			dashboard.stop();
 			canvas.stop();
-		} catch (InterruptedException e) {
+		} catch (IOException | InterruptedException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
