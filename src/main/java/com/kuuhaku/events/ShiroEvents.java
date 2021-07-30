@@ -507,7 +507,11 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		PreparedCommand command = Main.getCommandManager().getSlash(evt.getName(), evt.getSubcommandName());
+		PreparedCommand command;
+		if (evt.getSubcommandName() == null)
+			command = Main.getCommandManager().getSlash(null, evt.getName());
+		else
+			command = Main.getCommandManager().getSlash(evt.getName(), evt.getSubcommandName());
 
 		if (!(command instanceof Slashed slash)) {
 			hook.sendMessage("❌ | Comando inexistente.").queue();
