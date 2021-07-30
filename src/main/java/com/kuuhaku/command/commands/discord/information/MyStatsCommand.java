@@ -22,9 +22,12 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
@@ -51,7 +54,9 @@ import java.util.stream.Collectors;
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
-public class MyStatsCommand implements Executable {
+@SlashGroup("meus")
+@SlashCommand(name = "stats")
+public class MyStatsCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
