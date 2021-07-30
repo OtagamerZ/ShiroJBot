@@ -17,12 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/JoinRoleCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/WelcomerRoleCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,6 +134,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Edit As Language" value="Groovy&#10;JavaScript&#10;JAVA" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JupyterPython&#10;JSON&#10;TEXT&#10;CSS" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Set Highlighting Language" value="Groovy&#10;JSON&#10;JAVA&#10;TypeScript JSX" />
+    <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="JavaScript" />
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -149,7 +145,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39928058" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -1365,13 +1361,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05060" summary="Correções menores">
-      <created>1627322320103</created>
-      <option name="number" value="05060" />
-      <option name="presentableId" value="LOCAL-05060" />
-      <option name="project" value="LOCAL" />
-      <updated>1627322320104</updated>
-    </task>
     <task id="LOCAL-05061" summary="Correções menores">
       <created>1627328395827</created>
       <option name="number" value="05061" />
@@ -1708,7 +1697,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627655053012</updated>
     </task>
-    <option name="localTasksCounter" value="5109" />
+    <task id="LOCAL-05109" summary="Correções menores">
+      <created>1627657034710</created>
+      <option name="number" value="05109" />
+      <option name="presentableId" value="LOCAL-05109" />
+      <option name="project" value="LOCAL" />
+      <updated>1627657034712</updated>
+    </task>
+    <option name="localTasksCounter" value="5110" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
