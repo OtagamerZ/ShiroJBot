@@ -17,8 +17,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/anime/NextAiringEpisode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/anime/NextAiringEpisode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/OpenTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/OpenTicketCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ReportUserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ReportUserCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RequestAssistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RequestAssistCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/SlashParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/SlashParam.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1361,20 +1366,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05054" summary="Adicionado armazém pessoal de cartas">
-      <created>1627072100279</created>
-      <option name="number" value="05054" />
-      <option name="presentableId" value="LOCAL-05054" />
-      <option name="project" value="LOCAL" />
-      <updated>1627072100279</updated>
-    </task>
-    <task id="LOCAL-05055" summary="Adicionado armazém pessoal de cartas">
-      <created>1627072211733</created>
-      <option name="number" value="05055" />
-      <option name="presentableId" value="LOCAL-05055" />
-      <option name="project" value="LOCAL" />
-      <updated>1627072211733</updated>
-    </task>
     <task id="LOCAL-05056" summary="Adicionado armazém pessoal de cartas">
       <created>1627072309072</created>
       <option name="number" value="05056" />
@@ -1704,7 +1695,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627653034716</updated>
     </task>
-    <option name="localTasksCounter" value="5103" />
+    <task id="LOCAL-05103" summary="Correções menores">
+      <created>1627653136674</created>
+      <option name="number" value="05103" />
+      <option name="presentableId" value="LOCAL-05103" />
+      <option name="project" value="LOCAL" />
+      <updated>1627653136674</updated>
+    </task>
+    <task id="LOCAL-05104" summary="Correções menores">
+      <created>1627653182838</created>
+      <option name="number" value="05104" />
+      <option name="presentableId" value="LOCAL-05104" />
+      <option name="project" value="LOCAL" />
+      <updated>1627653182838</updated>
+    </task>
+    <option name="localTasksCounter" value="5105" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
