@@ -51,7 +51,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.imageio.ImageIO;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -97,8 +96,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 
-		List<JDA> shards = new ArrayList<>(shiroShards.getShards());
-		shards.sort(Comparator.comparingInt(s -> s.getShardInfo().getShardId()));
+		List<JDA> shards = shiroShards.getShards().stream()
+				.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
+				.toList();
 		for (JDA shard : shards) {
 			int id = shard.getShardInfo().getShardId();
 			try {
@@ -108,10 +108,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			} catch (InterruptedException e) {
 				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
 			}
-		}
-
-		for (JDA shard : shards) {
-			shard.getPresence().setActivity(getRandomActivity());
 		}
 
 		cmdManager.registerCommands();
@@ -170,6 +166,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			lst.complete(null);
 		});
 
+		List<JDA> shards = shiroShards.getShards();
+		for (JDA shard : shards) {
+			shard.getPresence().setActivity(getRandomActivity());
+		}
+
 		try {
 			lst.get();
 			System.runFinalization();
@@ -182,14 +183,14 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	public static Activity getRandomActivity() {
-		List<Activity> activities = new ArrayList<>() {{
-			add(Activity.playing("Digite " + ShiroInfo.getDefaultPrefix() + "ajuda para ver meus comandos!"));
-			add(Activity.competing("Shoukan ranqueado!"));
-			add(Activity.listening(shiroShards.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
-			add(Activity.watching("No Game No Life pela " + Helper.extract(ShiroInfo.getVersion(), ".(\\d+)$", 1) + "ª vez, e ainda não enjoei de ver como eu atuo bem!"));
-		}};
+		List<Activity> activities = List.of(
+				Activity.playing("Digite " + ShiroInfo.getDefaultPrefix() + "ajuda para ver meus comandos!"),
+				Activity.competing("Shoukan ranqueado!"),
+				Activity.listening(shiroShards.getGuilds().size() + " servidores, e isso ainda é só o começo!"),
+				Activity.watching("No Game No Life pela " + Helper.extract(ShiroInfo.getVersion(), ".(\\d+)$", 1) + "ª vez, e ainda não enjoei de ver como eu atuo bem!")
+		);
 
-		return activities.get(Helper.rng(activities.size(), true));
+		return Helper.getRandomEntry(activities);
 	}
 
 	public static ShiroInfo getInfo() {
