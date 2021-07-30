@@ -17,8 +17,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/PseudoMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Slashed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Slashed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyTicketsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyTicketsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/OpenTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/OpenTicketCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/annotations/SlashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/annotations/SlashCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/SlashParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/SlashParam.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1361,20 +1368,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05049" summary="Adicionado armazém pessoal de cartas">
-      <created>1627070227886</created>
-      <option name="number" value="05049" />
-      <option name="presentableId" value="LOCAL-05049" />
-      <option name="project" value="LOCAL" />
-      <updated>1627070227886</updated>
-    </task>
-    <task id="LOCAL-05050" summary="Adicionado armazém pessoal de cartas">
-      <created>1627070361449</created>
-      <option name="number" value="05050" />
-      <option name="presentableId" value="LOCAL-05050" />
-      <option name="project" value="LOCAL" />
-      <updated>1627070361449</updated>
-    </task>
     <task id="LOCAL-05051" summary="Adicionado armazém pessoal de cartas">
       <created>1627070372796</created>
       <option name="number" value="05051" />
@@ -1704,7 +1697,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627648973830</updated>
     </task>
-    <option name="localTasksCounter" value="5098" />
+    <task id="LOCAL-05098" summary="Correções menores">
+      <created>1627651292312</created>
+      <option name="number" value="05098" />
+      <option name="presentableId" value="LOCAL-05098" />
+      <option name="project" value="LOCAL" />
+      <updated>1627651292313</updated>
+    </task>
+    <task id="LOCAL-05099" summary="Correções menores">
+      <created>1627651412273</created>
+      <option name="number" value="05099" />
+      <option name="presentableId" value="LOCAL-05099" />
+      <option name="project" value="LOCAL" />
+      <updated>1627651412273</updated>
+    </task>
+    <option name="localTasksCounter" value="5100" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

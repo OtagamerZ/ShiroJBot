@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.Manager;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.SlashCommand;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 @Command(
 		name = "ping",
@@ -49,10 +48,5 @@ public class PingCommand implements Executable, Slashed {
 						fp
 				)))
 				.queue();
-	}
-
-	@Override
-	public String toCommand(SlashCommandEvent evt) {
-		return "";
 	}
 }

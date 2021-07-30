@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.annotations;
 
+import org.intellij.lang.annotations.Language;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,5 +30,6 @@ import java.lang.annotation.Target;
 public @interface SlashCommand {
 	String name();
 
+	@Language("JSON")
 	String[] args() default {};
 }
