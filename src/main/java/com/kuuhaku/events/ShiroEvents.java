@@ -29,6 +29,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
+import com.kuuhaku.model.common.PseudoMessage;
 import com.kuuhaku.model.enums.BotExchange;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
@@ -41,7 +42,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
@@ -67,6 +67,7 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
@@ -538,11 +539,42 @@ public class ShiroEvents extends ListenerAdapter {
 					.filter(s -> !s.isBlank())
 					.toArray(String[]::new);
 
+			List<User> users = new ArrayList<>();
+			List<Member> members = new ArrayList<>();
+			List<Role> roles = new ArrayList<>();
+			List<TextChannel> channels = new ArrayList<>();
+
+			for (OptionMapping op : evt.getOptions()) {
+				switch (op.getType()) {
+					case USER -> {
+						users.add(op.getAsUser());
+						members.add(guild.getMember(op.getAsUser()));
+					}
+					case ROLE -> roles.add(op.getAsRole());
+					case CHANNEL -> {
+						if (op.getChannelType() == ChannelType.TEXT)
+							channels.add((TextChannel) op.getAsGuildChannel());
+					}
+				}
+			}
+
+			members.removeIf(Objects::isNull);
+			Message msg = new PseudoMessage(
+					commandLine,
+					author,
+					member,
+					channel,
+					users,
+					members,
+					roles,
+					channels
+			);
+
 			if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 				Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
 			hook.deleteOriginal().queue();
-			command.execute(author, member, commandLine, args, new MessageBuilder("").build(), channel, guild, gc.getPrefix());
+			command.execute(author, member, commandLine, args, msg, channel, guild, gc.getPrefix());
 			Helper.spawnAd(channel);
 
 			LogDAO.saveLog(new Log(guild, author, commandLine));
