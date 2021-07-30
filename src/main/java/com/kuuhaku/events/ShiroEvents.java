@@ -485,10 +485,10 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
+		InteractionHook hook = evt.deferReply().complete();
+
 		if (!evt.isFromGuild()) {
-			evt.deferReply(true)
-					.setContent("❌ | Meus comandos não funcionam em canais privados.")
-					.queue();
+			hook.sendMessage("❌ | Meus comandos não funcionam em canais privados.").queue();
 		}
 
 		Guild guild = evt.getGuild();
@@ -499,73 +499,47 @@ public class ShiroEvents extends ListenerAdapter {
 		assert guild != null;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 		if (blacklisted) {
-			evt.deferReply(true)
-					.setContent(I18n.getString("err_user-blacklisted"))
-					.queue();
+			hook.sendMessage(I18n.getString("err_user-blacklisted")).queue();
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		PreparedCommand command = Main.getCommandManager().getSlash(evt.getName(), evt.getSubcommandName());
 
 		if (!(command instanceof Slashed slash)) {
-			evt.deferReply(true)
-					.setContent("❌ | Comando inexistente.")
-					.queue();
-			return;
+			hook.sendMessage("❌ | Comando inexistente.").queue();
 		} else if (!command.getCategory().isEnabled(guild, author) || gc.getDisabledCommands().contains(command.getCommand().getClass().getName())) {
-			evt.deferReply(true)
-					.setContent("❌ | Comando desabilitado.")
-					.queue();
-			return;
+			hook.sendMessage("❌ | Comando desabilitado.").queue();
 		} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-			evt.deferReply(true)
-					.setContent("❌ | Comandos estão bloqueados neste canal.")
-					.queue();
-			return;
+			hook.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
 		} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
-			evt.deferReply(true)
-					.setContent(I18n.getString("err_nsfw-in-non-nsfw-channel"))
-					.queue();
-			return;
+			hook.sendMessage(I18n.getString("err_nsfw-in-non-nsfw-channel")).queue();
 		} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-			evt.deferReply(true)
-					.setContent(I18n.getString("err_not-enough-permission"))
-					.queue();
-			return;
+			hook.sendMessage(I18n.getString("err_not-enough-permission")).queue();
 		} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
-			evt.deferReply(true)
-					.setContent(I18n.getString("err_user-ratelimited"))
-					.queue();
+			hook.sendMessage(I18n.getString("err_user-ratelimited")).queue();
 			Main.getInfo().getRatelimit().put(author.getId(), true, 3 + Helper.rng(4, false), TimeUnit.SECONDS);
-			return;
 		} else if (command.getMissingPerms(channel).length > 0) {
-			evt.deferReply(true)
-					.setContent("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
-							Arrays.stream(command.getPermissions())
-									.map(p -> "- " + p.getName())
-									.collect(Collectors.joining("\n"))
-					))
-					.queue();
-			return;
+			hook.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
+					Arrays.stream(command.getPermissions())
+							.map(p -> "- " + p.getName())
+							.collect(Collectors.joining("\n"))
+			)).queue();
+		} else {
+			String commandLine = slash.toCommand(evt);
+			String[] args = Arrays.stream(commandLine.split(" "))
+					.filter(s -> !s.isBlank())
+					.toArray(String[]::new);
+
+			if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+				Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
+
+			hook.deleteOriginal().queue();
+			command.execute(author, member, commandLine, args, new MessageBuilder("").build(), channel, guild, gc.getPrefix());
+			Helper.spawnAd(channel);
+
+			LogDAO.saveLog(new Log(guild, author, commandLine));
+			Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
 		}
-
-		String commandLine = slash.toCommand(evt);
-		String[] args = Arrays.stream(commandLine.split(" "))
-				.filter(s -> !s.isBlank())
-				.toArray(String[]::new);
-
-		if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-			Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
-
-		evt.deferReply()
-				.setContent("_._")
-				.flatMap(InteractionHook::deleteOriginal)
-				.queue();
-		command.execute(author, member, commandLine, args, new MessageBuilder("").build(), channel, guild, gc.getPrefix());
-		Helper.spawnAd(channel);
-
-		LogDAO.saveLog(new Log(guild, author, commandLine));
-		Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
 	}
 
 	@Override
