@@ -317,7 +317,11 @@ public class ShiroEvents extends ListenerAdapter {
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
-					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
+					try {
+						command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
+					} catch (Exception e) {
+						Helper.logger(command.getCommand().getClass()).error("Erro ao executar comando " + command.getName(), e);
+					}
 					Helper.spawnAd(channel);
 
 					LogDAO.saveLog(new Log(guild, author, rawMessage));
