@@ -21,5 +21,7 @@ package com.kuuhaku.command;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public interface Slashed {
-	String toCommand(SlashCommandEvent evt);
+	default String toCommand(SlashCommandEvent evt) {
+		return "";
+	}
 }
