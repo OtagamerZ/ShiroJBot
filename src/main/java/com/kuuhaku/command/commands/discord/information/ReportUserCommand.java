@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
 @SlashGroup("suporte")
-@SlashCommand(name = "ticket", args = {
+@SlashCommand(name = "reportar", args = {
 		"{\"name\": \"usuário\", \"description\": \"Usuário a ser reportado.\", \"type\": \"USER\", \"required\": true}",
 		"{\"name\": \"texto\", \"description\": \"Conteúdo da denúncia.\", \"type\": \"STRING\", \"required\": true}"
 })
