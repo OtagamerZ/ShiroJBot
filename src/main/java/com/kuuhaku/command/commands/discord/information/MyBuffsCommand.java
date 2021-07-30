@@ -75,7 +75,7 @@ public class MyBuffsCommand implements Executable, Slashed {
 		if (gb.getBuffs().size() > 0) {
 			for (ServerBuff b : gb.getBuffs()) {
 				boolean isUltimate = b.getTier() == 4;
-				String until = "<t:" + (b.getAcquiredAt() + b.getTime()) + ">";
+				String until = "<t:" + ((b.getAcquiredAt() + b.getTime()) / 1000) + ":R>";
 
 				String chance = Helper.roundToString(b.getMult() * 100 - 100, 0) + "%";
 				switch (b.getType()) {
