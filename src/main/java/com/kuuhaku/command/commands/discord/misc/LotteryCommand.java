@@ -72,7 +72,7 @@ public class LotteryCommand implements Executable {
 			}
 		}
 
-		long cost = (long) (1000 * Math.pow(5, LotteryDAO.getLotteriesByUser(author.getId()).size()));
+		long cost = (long) (750 * Math.pow(5, LotteryDAO.getLotteriesByUser(author.getId()).size()));
 		if (acc.getTotalBalance() < cost) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
