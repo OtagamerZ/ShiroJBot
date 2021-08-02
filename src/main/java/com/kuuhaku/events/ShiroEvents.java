@@ -491,7 +491,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
-		InteractionHook hook = evt.deferReply().complete().setEphemeral(true);
+		InteractionHook hook = evt.deferReply().complete();
 
 		if (!evt.isFromGuild()) {
 			hook.sendMessage("❌ | Meus comandos não funcionam em canais privados.").queue();
@@ -505,7 +505,9 @@ public class ShiroEvents extends ListenerAdapter {
 		assert guild != null;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 		if (blacklisted) {
-			hook.sendMessage(I18n.getString("err_user-blacklisted")).queue();
+			hook.sendMessage(I18n.getString("err_user-blacklisted"))
+					.setEphemeral(true)
+					.queue();
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
@@ -515,79 +517,85 @@ public class ShiroEvents extends ListenerAdapter {
 		else
 			command = Main.getCommandManager().getSlash(evt.getName(), evt.getSubcommandName());
 
-		if (!(command.getCommand() instanceof Slashed slash)) {
-			hook.sendMessage("❌ | Comando inexistente.").queue();
+		String error = null;
+		if (!(command.getCommand() instanceof Slashed)) {
+			error = "❌ | Comando inexistente.";
 		} else if (!command.getCategory().isEnabled(guild, author) || gc.getDisabledCommands().contains(command.getCommand().getClass().getName())) {
-			hook.sendMessage("❌ | Comando desabilitado.").queue();
+			error = "❌ | Comando desabilitado.";
 		} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-			hook.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
+			error = "❌ | Comandos estão bloqueados neste canal.";
 		} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
-			hook.sendMessage(I18n.getString("err_nsfw-in-non-nsfw-channel")).queue();
+			error = I18n.getString("err_nsfw-in-non-nsfw-channel");
 		} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-			hook.sendMessage(I18n.getString("err_not-enough-permission")).queue();
+			error = I18n.getString("err_not-enough-permission");
 		} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
-			hook.sendMessage(I18n.getString("err_user-ratelimited")).queue();
+			error = I18n.getString("err_user-ratelimited");
 			Main.getInfo().getRatelimit().put(author.getId(), true, 3 + Helper.rng(4, false), TimeUnit.SECONDS);
 		} else if (command.getMissingPerms(channel).length > 0) {
-			hook.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
+			error = "❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
 					Arrays.stream(command.getPermissions())
 							.map(p -> "- " + p.getName())
 							.collect(Collectors.joining("\n"))
-			)).queue();
-		} else {
-			String commandLine;
-			try {
-				commandLine = slash.toCommand(evt);
-			} catch (ValidationException e) {
-				hook.sendMessage(e.getMessage()).queue();
-				return;
-			}
+			);
+		}
 
-			String[] args = Arrays.stream(commandLine.split(" "))
-					.filter(s -> !s.isBlank())
-					.toArray(String[]::new);
+		if (error != null) {
+			hook.sendMessage(error).setEphemeral(true).queue();
+			return;
+		}
 
-			List<User> users = new ArrayList<>();
-			List<Member> members = new ArrayList<>();
-			List<Role> roles = new ArrayList<>();
-			List<TextChannel> channels = new ArrayList<>();
+		String commandLine;
+		try {
+			commandLine = ((Slashed) command.getCommand()).toCommand(evt);
+		} catch (ValidationException e) {
+			hook.sendMessage(e.getMessage()).setEphemeral(true).queue();
+			return;
+		}
 
-			for (OptionMapping op : evt.getOptions()) {
-				switch (op.getType()) {
-					case USER -> {
-						users.add(op.getAsUser());
-						members.add(guild.getMember(op.getAsUser()));
-					}
-					case ROLE -> roles.add(op.getAsRole());
-					case CHANNEL -> {
-						if (op.getChannelType() == ChannelType.TEXT)
-							channels.add((TextChannel) op.getAsGuildChannel());
-					}
+		String[] args = Arrays.stream(commandLine.split(" "))
+				.filter(s -> !s.isBlank())
+				.toArray(String[]::new);
+
+		List<User> users = new ArrayList<>();
+		List<Member> members = new ArrayList<>();
+		List<Role> roles = new ArrayList<>();
+		List<TextChannel> channels = new ArrayList<>();
+
+		for (OptionMapping op : evt.getOptions()) {
+			switch (op.getType()) {
+				case USER -> {
+					users.add(op.getAsUser());
+					members.add(guild.getMember(op.getAsUser()));
+				}
+				case ROLE -> roles.add(op.getAsRole());
+				case CHANNEL -> {
+					if (op.getChannelType() == ChannelType.TEXT)
+						channels.add((TextChannel) op.getAsGuildChannel());
 				}
 			}
-
-			members.removeIf(Objects::isNull);
-			Message msg = new PseudoMessage(
-					commandLine,
-					author,
-					member,
-					channel,
-					users,
-					members,
-					roles,
-					channels
-			);
-
-			if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-				Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
-
-			hook.deleteOriginal().queue();
-			command.execute(author, member, commandLine, args, msg, channel, guild, gc.getPrefix());
-			Helper.spawnAd(channel);
-
-			LogDAO.saveLog(new Log(guild, author, commandLine));
-			Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
 		}
+
+		members.removeIf(Objects::isNull);
+		Message msg = new PseudoMessage(
+				commandLine,
+				author,
+				member,
+				channel,
+				users,
+				members,
+				roles,
+				channels
+		);
+
+		if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+			Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
+
+		hook.deleteOriginal().queue();
+		command.execute(author, member, commandLine, args, msg, channel, guild, gc.getPrefix());
+		Helper.spawnAd(channel);
+
+		LogDAO.saveLog(new Log(guild, author, commandLine));
+		Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
 	}
 
 	@Override
