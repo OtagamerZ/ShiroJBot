@@ -108,6 +108,15 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			}
 		}
 
+		try {
+			PaginatorBuilder.createPaginator()
+					.setHandler(shiroShards)
+					.shouldEventLock(true)
+					.activate();
+		} catch (InvalidHandlerException e) {
+			Helper.logger(Main.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+
 		cmdManager.registerCommands();
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
@@ -138,15 +147,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static void finishStartUp() {
 		ConsoleListener console = new ConsoleListener();
 		console.start();
-
-		try {
-			PaginatorBuilder.createPaginator()
-					.setHandler(shiroShards)
-					.shouldEventLock(true)
-					.activate();
-		} catch (InvalidHandlerException e) {
-			Helper.logger(Main.class).error(e + " | " + e.getStackTrace()[0]);
-		}
 
 		for (Emote emote : shiroShards.getEmotes()) {
 			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());

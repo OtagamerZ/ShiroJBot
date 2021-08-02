@@ -491,7 +491,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
-		InteractionHook hook = evt.deferReply().setEphemeral(true).complete();
+		InteractionHook hook = evt.deferReply().complete();
 
 		if (!evt.isFromGuild()) {
 			hook.sendMessage("❌ | Meus comandos não funcionam em canais privados.").queue();
