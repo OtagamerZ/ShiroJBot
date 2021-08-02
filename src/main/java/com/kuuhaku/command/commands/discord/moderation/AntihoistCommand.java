@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"antihoist", "semhoist"},
 		category = Category.MODERATION
 )
-public class AntiHoistCommand implements Executable {
+public class AntihoistCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {

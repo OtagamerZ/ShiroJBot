@@ -73,6 +73,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
+import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -650,14 +651,15 @@ public class ShiroEvents extends ListenerAdapter {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.isAntiRaid()) {
-			List<String> arc = Main.getInfo().getAntiRaidCache().computeIfAbsent(guild.getId(), k -> new ArrayList<>());
+			ExpiringMap<Long, String> arc = Main.getInfo().getAntiRaidCache()
+					.computeIfAbsent(guild.getId(), k -> ExpiringMap.builder().expiration(5, TimeUnit.SECONDS).build());
 
-			arc.add(author.getId());
+			arc.put(System.currentTimeMillis(), author.getId());
 			if (arc.size() >= gc.getAntiRaidLimit()) {
 				Main.getInfo().getAntiRaidCache().remove(guild.getId());
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
-				for (String id : arc) {
+				for (String id : arc.values()) {
 					acts.add(guild.kick(id, "Detectada tentativa de raid"));
 				}
 
