@@ -50,9 +50,9 @@ public class AntiraidCommand implements Executable {
 					return;
 				}
 
-				gc.setAntiRaidTime(time);
+				gc.setAntiRaidLimit(time);
 				gc.setAntiRaid(true);
-				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidTime() + " minutos.").queue();
+				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidLimit() + " minutos.").queue();
 			} catch (NumberFormatException e) {
 				channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			}
@@ -60,7 +60,7 @@ public class AntiraidCommand implements Executable {
 			gc.toggleAntiRaid();
 
 			if (gc.isAntiRaid())
-				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidTime() + " minutos.").queue();
+				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidLimit() + " minutos.").queue();
 			else
 				channel.sendMessage("✅ | Modo anti-raid desativado.").queue();
 		}

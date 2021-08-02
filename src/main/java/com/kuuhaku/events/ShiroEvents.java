@@ -70,6 +70,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import org.apache.commons.lang3.StringUtils;
@@ -81,7 +82,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -649,17 +649,30 @@ public class ShiroEvents extends ListenerAdapter {
 		if (BlacklistDAO.isBlacklisted(author)) return;
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		long mins = ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), LocalDateTime.now());
-		if (gc.isAntiRaid() && mins < gc.getAntiRaidTime()) {
-			guild.kick(member).queue(s ->
-					Helper.logToChannel(
-							author,
-							false,
-							null,
-							"Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(Conta criada a " + mins + " minutos)`",
-							guild
-					), Helper::doNothing);
-			return;
+		if (gc.isAntiRaid()) {
+			List<String> arc = Main.getInfo().getAntiRaidCache().computeIfAbsent(guild.getId(), k -> new ArrayList<>());
+
+			arc.add(author.getId());
+			if (arc.size() >= gc.getAntiRaidLimit()) {
+				Main.getInfo().getAntiRaidCache().remove(guild.getId());
+				List<AuditableRestAction<Void>> acts = new ArrayList<>();
+
+				for (String id : arc) {
+					acts.add(guild.kick(id, "Detectada tentativa de raid"));
+				}
+
+				RestAction.allOf(acts)
+						.queue(s ->
+								Helper.logToChannel(
+										author,
+										false,
+										null,
+										"ANTIRAID: " + arc.size() + " usuários expulsos por entrarem ao mesmo tempo no servidor em um intervalo de 5 segundos (limite: " + gc.getAntiRaidLimit() + " membros/5 seg).",
+										guild
+								), Helper::doNothing
+						);
+				return;
+			}
 		}
 
 		String name = member.getEffectiveName();
