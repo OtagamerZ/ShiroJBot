@@ -1372,20 +1372,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05069" summary="Correções menores">
-      <created>1627417871620</created>
-      <option name="number" value="05069" />
-      <option name="presentableId" value="LOCAL-05069" />
-      <option name="project" value="LOCAL" />
-      <updated>1627417871620</updated>
-    </task>
-    <task id="LOCAL-05070" summary="Correções menores">
-      <created>1627494073685</created>
-      <option name="number" value="05070" />
-      <option name="presentableId" value="LOCAL-05070" />
-      <option name="project" value="LOCAL" />
-      <updated>1627494073686</updated>
-    </task>
     <task id="LOCAL-05071" summary="Correções menores">
       <created>1627494775924</created>
       <option name="number" value="05071" />
@@ -1715,7 +1701,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627923403472</updated>
     </task>
-    <option name="localTasksCounter" value="5118" />
+    <task id="LOCAL-05118" summary="Correções menores">
+      <created>1627924123869</created>
+      <option name="number" value="05118" />
+      <option name="presentableId" value="LOCAL-05118" />
+      <option name="project" value="LOCAL" />
+      <updated>1627924123869</updated>
+    </task>
+    <task id="LOCAL-05119" summary="Correções menores">
+      <created>1627924339673</created>
+      <option name="number" value="05119" />
+      <option name="presentableId" value="LOCAL-05119" />
+      <option name="project" value="LOCAL" />
+      <updated>1627924339673</updated>
+    </task>
+    <option name="localTasksCounter" value="5120" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
