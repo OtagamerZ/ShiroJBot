@@ -22,8 +22,6 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.ygimenez.exception.InvalidHandlerException;
-import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.Paginator;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.events.ConsoleListener;
@@ -142,12 +140,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		console.start();
 
 		try {
-			Paginator p = PaginatorBuilder.createPaginator()
+			PaginatorBuilder.createPaginator()
 					.setHandler(shiroShards)
 					.shouldEventLock(true)
-					.build();
-
-			Pages.activate(p);
+					.activate();
 		} catch (InvalidHandlerException e) {
 			Helper.logger(Main.class).error(e + " | " + e.getStackTrace()[0]);
 		}
