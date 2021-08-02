@@ -186,8 +186,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		List<Activity> activities = List.of(
 				Activity.playing("Digite " + ShiroInfo.getDefaultPrefix() + "ajuda para ver meus comandos!"),
 				Activity.competing("Shoukan ranqueado!"),
-				Activity.listening(shiroShards.getGuilds().size() + " servidores, e isso ainda é só o começo!"),
-				Activity.watching("No Game No Life pela " + Helper.extract(ShiroInfo.getVersion(), ".(\\d+)$", 1) + "ª vez, e ainda não enjoei de ver como eu atuo bem!")
+				Activity.listening(Helper.separate(shiroShards.getGuilds().size()) + " servidores, e isso ainda é só o começo!"),
+				Activity.watching("No Game No Life pela " + Helper.separate(Helper.extract(ShiroInfo.getVersion(), ".(\\d+)$", 1)) + "ª vez, e ainda não enjoei de ver como eu atuo bem!")
 		);
 
 		return Helper.getRandomEntry(activities);
