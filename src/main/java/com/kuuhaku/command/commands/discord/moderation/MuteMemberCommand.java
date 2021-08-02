@@ -29,6 +29,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import org.apache.commons.lang3.StringUtils;
@@ -96,16 +97,21 @@ public class MuteMemberCommand implements Executable {
 
 		List<PermissionOverrideAction> act = new ArrayList<>();
 		for (GuildChannel gc : guild.getChannels()) {
-			switch (gc.getType()) {
-				case TEXT -> {
-					TextChannel chn = (TextChannel) gc;
-					if (chn.canTalk(mb))
-						act.add(chn.putPermissionOverride(mb).deny(Helper.ALL_MUTE_PERMISSIONS));
+			try {
+				switch (gc.getType()) {
+					case TEXT -> {
+						TextChannel chn = (TextChannel) gc;
+
+						if (chn.canTalk(mb))
+							act.add(chn.putPermissionOverride(mb).deny(Helper.ALL_MUTE_PERMISSIONS));
+					}
+					case VOICE -> {
+						VoiceChannel chn = (VoiceChannel) gc;
+
+						act.add(chn.putPermissionOverride(mb).deny(Permission.VOICE_SPEAK));
+					}
 				}
-				case VOICE -> {
-					VoiceChannel chn = (VoiceChannel) gc;
-					act.add(chn.putPermissionOverride(mb).deny(Permission.VOICE_SPEAK));
-				}
+			} catch (InsufficientPermissionException ignore) {
 			}
 		}
 
