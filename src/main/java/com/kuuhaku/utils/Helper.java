@@ -564,10 +564,8 @@ public class Helper {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getOr(Object get, T or) {
-		if (get == null) return or;
-		else if (!or.getClass().isInstance(get)) return or;
-		else if (get instanceof String s && s.isBlank()) return or;
-		else return (T) get;
+		if (get instanceof String s && s.isBlank()) return or;
+		else return get == null ? or : (T) get;
 	}
 
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
