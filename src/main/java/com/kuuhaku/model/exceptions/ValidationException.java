@@ -16,13 +16,10 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command;
+package com.kuuhaku.model.exceptions;
 
-import com.kuuhaku.model.exceptions.ValidationException;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-
-public interface Slashed {
-	default String toCommand(SlashCommandEvent evt) throws ValidationException {
-		return "";
+public class ValidationException extends RuntimeException {
+	public ValidationException(String message) {
+		super(message);
 	}
 }

@@ -22,9 +22,12 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.TagIcons;
@@ -52,7 +55,9 @@ import java.util.concurrent.TimeUnit;
 		Permission.MESSAGE_ADD_REACTION,
 		Permission.MESSAGE_EXT_EMOJI
 })
-public class TierRankCommand implements Executable {
+@SlashGroup("shoukan")
+@SlashCommand(name = "top10")
+public class TierRankCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
