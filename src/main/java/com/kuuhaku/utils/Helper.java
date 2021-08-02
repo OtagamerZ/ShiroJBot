@@ -563,8 +563,9 @@ public class Helper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <O, T extends O> T getOr(O get, T or) {
+	public static <T> T getOr(Object get, T or) {
 		if (get == null) return or;
+		else if (!or.getClass().isInstance(get)) return or;
 		else if (get instanceof String s && s.isBlank()) return or;
 		else return (T) get;
 	}
