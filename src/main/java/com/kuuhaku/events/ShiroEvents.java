@@ -34,6 +34,7 @@ import com.kuuhaku.model.enums.BotExchange;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
+import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
@@ -490,7 +491,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
-		InteractionHook hook = evt.deferReply().complete();
+		InteractionHook hook = evt.deferReply().complete().setEphemeral(true);
 
 		if (!evt.isFromGuild()) {
 			hook.sendMessage("❌ | Meus comandos não funcionam em canais privados.").queue();
@@ -534,7 +535,14 @@ public class ShiroEvents extends ListenerAdapter {
 							.collect(Collectors.joining("\n"))
 			)).queue();
 		} else {
-			String commandLine = slash.toCommand(evt);
+			String commandLine;
+			try {
+				commandLine = slash.toCommand(evt);
+			} catch (ValidationException e) {
+				hook.sendMessage(e.getMessage()).queue();
+				return;
+			}
+
 			String[] args = Arrays.stream(commandLine.split(" "))
 					.filter(s -> !s.isBlank())
 					.toArray(String[]::new);

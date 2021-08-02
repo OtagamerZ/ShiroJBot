@@ -20,30 +20,41 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 import java.awt.image.BufferedImage;
 
 @Command(
 		name = "deck",
-		usage = "req_daily-meta-p-c",
+		usage = "req_daily-meta-p",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
-public class ShoukanDeckCommand implements Executable {
+@SlashGroup("shoukan")
+@SlashCommand(name = "deck", args = {
+		"{\"name\": \"tipo\", \"description\": \"Tipo de deck a ser exibido (daily/meta)\", \"type\": \"STRING\"}",
+		"{\"name\": \"privado\", \"description\": \"Exibe o deck nas mensagens privadas\", \"type\": \"BOOLEAN\"}"
+})
+public class ShoukanDeckCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -62,7 +73,14 @@ public class ShoukanDeckCommand implements Executable {
 						.setImage("attachment://deck.jpg");
 
 				m.delete().queue();
-				channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+				if (showPrivate) {
+					author.openPrivateChannel()
+							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+							.queue(null, Helper::doNothing);
+				} else {
+					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+				}
 			} else if (Helper.containsAny(args, "meta")) {
 				Deck dk = CardDAO.getMetaDeck();
 
@@ -75,7 +93,14 @@ public class ShoukanDeckCommand implements Executable {
 						.setImage("attachment://deck.jpg");
 
 				m.delete().queue();
-				channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+				if (showPrivate) {
+					author.openPrivateChannel()
+							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+							.queue(null, Helper::doNothing);
+				} else {
+					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+				}
 			} else {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 				Deck dk = kp.getDeck();
@@ -100,5 +125,17 @@ public class ShoukanDeckCommand implements Executable {
 				}
 			}
 		});
+	}
+
+	@Override
+	public String toCommand(SlashCommandEvent evt) {
+		OptionMapping type = evt.getOption("tipo");
+		OptionMapping prv = evt.getOption("privado");
+
+		String tp = type == null ? "" : type.getAsString();
+		if (!Helper.equalsAny(tp, "daily", "meta"))
+			throw new ValidationException("❌ | O tipo deve ser `daily` ou `meta`.");
+
+		return tp + (prv == null ? "" : (prv.getAsBoolean() ? "p" : ""));
 	}
 }
