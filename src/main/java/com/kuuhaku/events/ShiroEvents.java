@@ -491,7 +491,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
-		InteractionHook hook = evt.deferReply().complete();
+		InteractionHook hook = evt.deferReply().setEphemeral(true).complete();
 
 		if (!evt.isFromGuild()) {
 			hook.sendMessage("❌ | Meus comandos não funcionam em canais privados.").queue();
@@ -505,9 +505,7 @@ public class ShiroEvents extends ListenerAdapter {
 		assert guild != null;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 		if (blacklisted) {
-			hook.sendMessage(I18n.getString("err_user-blacklisted"))
-					.setEphemeral(true)
-					.queue();
+			hook.sendMessage(I18n.getString("err_user-blacklisted")).queue();
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
@@ -540,7 +538,7 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 
 		if (error != null) {
-			hook.sendMessage(error).setEphemeral(true).queue();
+			hook.sendMessage(error).queue();
 			return;
 		}
 
@@ -548,7 +546,7 @@ public class ShiroEvents extends ListenerAdapter {
 		try {
 			commandLine = ((Slashed) command.getCommand()).toCommand(evt);
 		} catch (ValidationException e) {
-			hook.sendMessage(e.getMessage()).setEphemeral(true).queue();
+			hook.sendMessage(e.getMessage()).queue();
 			return;
 		}
 
