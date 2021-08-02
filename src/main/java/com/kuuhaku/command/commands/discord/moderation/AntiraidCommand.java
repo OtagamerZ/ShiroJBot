@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 @Command(
 		name = "semraid",
 		aliases = {"noraid", "antiraid"},
-		usage = "req_minutes-opt",
+		usage = "req_threshold",
 		category = Category.MODERATION
 )
 @Requires({Permission.KICK_MEMBERS})
@@ -44,15 +44,15 @@ public class AntiraidCommand implements Executable {
 
 		if (args.length > 0 && StringUtils.isNumeric(args[0])) {
 			try {
-				int time = Integer.parseInt(args[0]);
-				if (time < 10) {
-					channel.sendMessage("❌ | O tempo precisa ser maior ou igual a 10 minutos.").queue();
+				int threshold = Integer.parseInt(args[0]);
+				if (threshold < 5) {
+					channel.sendMessage("❌ | O limiar deve ser maior que 5.").queue();
 					return;
 				}
 
-				gc.setAntiRaidLimit(time);
+				gc.setAntiRaidLimit(threshold);
 				gc.setAntiRaid(true);
-				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidLimit() + " minutos.").queue();
+				channel.sendMessage("✅ | Modo antiraid ativado, expulsarei entrem " + gc.getAntiRaidLimit() + " novos membros em um intervalo de 5 segundos.").queue();
 			} catch (NumberFormatException e) {
 				channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			}
@@ -60,9 +60,9 @@ public class AntiraidCommand implements Executable {
 			gc.toggleAntiRaid();
 
 			if (gc.isAntiRaid())
-				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidLimit() + " minutos.").queue();
+				channel.sendMessage("✅ | Modo antiraid ativado, expulsarei entrem " + gc.getAntiRaidLimit() + " novos membros em um intervalo de 5 segundos.").queue();
 			else
-				channel.sendMessage("✅ | Modo anti-raid desativado.").queue();
+				channel.sendMessage("✅ | Modo antiraid desativado.").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);

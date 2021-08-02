@@ -54,7 +54,7 @@ public class AntispamCommand implements Executable {
 					}
 
 					gc.setHardAntispam(false);
-					channel.sendMessage("✅ | Modo de anti-spam trocado para **SOFT**").queue();
+					channel.sendMessage("✅ | Modo de antispam trocado para **SOFT**").queue();
 				}
 				case "hard" -> {
 					if (gc.isHardAntispam()) {
@@ -63,7 +63,7 @@ public class AntispamCommand implements Executable {
 					}
 
 					gc.setHardAntispam(true);
-					channel.sendMessage("✅ | Modo de anti-spam trocado para **HARD**").queue();
+					channel.sendMessage("✅ | Modo de antispam trocado para **HARD**").queue();
 				}
 			}
 
