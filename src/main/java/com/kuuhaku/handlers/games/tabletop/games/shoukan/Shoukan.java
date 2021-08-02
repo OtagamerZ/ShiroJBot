@@ -895,7 +895,7 @@ public class Shoukan extends GlobalGame {
 
 				boolean noDmg = (his.isDefending() && !(his.isSleeping() || his.isStunned()))
 								|| his.getBonus().getSpecialData().remove("noDamage") != null
-								|| (getCustom() != null && !getCustom().getBoolean("semdano"));
+								|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 				Hand op = hands.get(defr.getLeft());
 				float dmg;
@@ -950,7 +950,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			boolean noDmg = yours.getBonus().getSpecialData().remove("noDamage") != null
-							|| (getCustom() != null && !getCustom().getBoolean("semdano"));
+							|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 			Hand you = hands.get(atkr.getLeft());
 			float dmg;
