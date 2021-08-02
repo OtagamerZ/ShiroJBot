@@ -57,14 +57,7 @@ public class ButtonMessage {
 	public ButtonMessage() {
 	}
 
-	public ButtonMessage(String id, String author, boolean gatekeeper, String role) {
-		this.id = id;
-		this.author = author;
-		this.gatekeeper = gatekeeper;
-		this.role = role;
-	}
-
-	public ButtonMessage(String id, ButtonChannel parent, String author, boolean gatekeeper, String role) {
+	public ButtonMessage(ButtonChannel parent, String id, String author, boolean gatekeeper, String role) {
 		this.id = id;
 		this.parent = parent;
 		this.author = author;
