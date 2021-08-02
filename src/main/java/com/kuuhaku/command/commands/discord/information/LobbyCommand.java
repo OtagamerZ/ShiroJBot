@@ -61,8 +61,8 @@ import java.util.concurrent.TimeUnit;
 })
 @SlashGroup("shoukan")
 @SlashCommand(name = "lobby", args = {
-		"{\"name\": \"sair\", \"description\": \"Deseja sair do saguão atual?\", \"type\": \"BOOLEAN\"}",
-		"{\"name\": \"tipo\", \"description\": \"Tipo de saguão a ser exibido (SOLO/DUO)\", \"type\": \"STRING\"}"
+		"{\"name\": \"sair\", \"description\": \"Deseja sair do saguão atual?\", \"type\": \"BOOLEAN\", \"required\": false}",
+		"{\"name\": \"tipo\", \"description\": \"Tipo de saguão a ser exibido (SOLO/DUO)\", \"type\": \"STRING\", \"required\": false}"
 })
 public class LobbyCommand implements Executable, Slashed {
 
