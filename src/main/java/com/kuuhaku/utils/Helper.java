@@ -563,9 +563,8 @@ public class Helper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getOr(Object get, T or) {
+	public static <O, T extends O> T getOr(O get, T or) {
 		if (get == null) return or;
-		else if (!get.getClass().isInstance(or)) return or;
 		else if (get instanceof String s && s.isBlank()) return or;
 		else return (T) get;
 	}
@@ -3041,7 +3040,7 @@ public class Helper {
 	}
 
 	public static <T> T safeCast(Object obj, Class<T> klass) {
-		return obj.getClass().isInstance(klass) ? klass.cast(obj) : null;
+		return klass != null && klass.isInstance(obj) ? klass.cast(obj) : null;
 	}
 
 	public static String getUsername(String id) {
