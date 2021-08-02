@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.model.records.embed.Field;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -48,7 +49,7 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 			);
 
 		setColor(e.getParsedColor());
-		setDescription(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH));
+		setDescription(Helper.getOr(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH), Helper.VOID));
 		setThumbnail(e.thumbnail());
 		if (e.image() != null)
 			setImage(e.image().getRandomImage());
