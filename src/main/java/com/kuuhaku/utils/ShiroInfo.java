@@ -143,7 +143,7 @@ public class ShiroInfo {
 
 	//CACHES
 	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
-	private final ExpiringMap<String, List<String>> antiRaidCache = ExpiringMap.builder().expiration(5, TimeUnit.SECONDS).build();
+	private final ConcurrentMap<String, ExpiringMap<Long, String>> antiRaidCache = new ConcurrentHashMap<>();
 	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private final ExpiringMap<String, Boolean> confirmationPending = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
@@ -416,7 +416,7 @@ public class ShiroInfo {
 		);
 	}
 
-	public ExpiringMap<String, List<String>> getAntiRaidCache() {
+	public ConcurrentMap<String, ExpiringMap<Long, String>> getAntiRaidCache() {
 		return antiRaidCache;
 	}
 
