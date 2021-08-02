@@ -47,11 +47,6 @@ public class Button {
 	public Button() {
 	}
 
-	public Button(String role, String emote) {
-		this.role = role;
-		this.emote = emote;
-	}
-
 	public Button(ButtonMessage parent, String role, String emote) {
 		this.parent = parent;
 		this.role = role;
