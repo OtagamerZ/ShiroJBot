@@ -566,7 +566,6 @@ public class Helper {
 	public static <T> T getOr(Object get, T or) {
 		try {
 			if (get == null) return or;
-			else if (!or.getClass().isInstance(get)) return or;
 			else if (get instanceof String s && s.isBlank()) return or;
 			else return (T) or.getClass().cast(get);
 		} catch (Exception e) {
