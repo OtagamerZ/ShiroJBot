@@ -788,8 +788,7 @@ public class Helper {
 
 		if (bm == null) {
 			bm = new ButtonMessage(
-					args[0],
-					bc,
+					bc, args[0],
 					message.getAuthor().getId(),
 					gatekeeper,
 					gatekeeper ? r.getId() : null
