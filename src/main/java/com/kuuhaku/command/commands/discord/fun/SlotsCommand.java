@@ -70,7 +70,7 @@ public class SlotsCommand implements Executable {
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 1000) {
+		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 750) {
 			channel.sendMessage(I18n.getString("err_slots-invalid-number")).queue();
 			return;
 		} else if (Main.getInfo().gameInProgress(author.getId())) {

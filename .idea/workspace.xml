@@ -17,13 +17,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiHoistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntihoistCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiraidCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiraidCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntispamCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntispamCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DailyQuestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DailyQuestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LotteryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LotteryCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CreditItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CreditItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/err/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/err/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1378,41 +1381,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05081" summary="Atualização de dependecias e do header de licença">
-      <created>1627576041345</created>
-      <option name="number" value="05081" />
-      <option name="presentableId" value="LOCAL-05081" />
-      <option name="project" value="LOCAL" />
-      <updated>1627576041345</updated>
-    </task>
-    <task id="LOCAL-05082" summary="Atualização de dependecias e do header de licença">
-      <created>1627576237360</created>
-      <option name="number" value="05082" />
-      <option name="presentableId" value="LOCAL-05082" />
-      <option name="project" value="LOCAL" />
-      <updated>1627576237360</updated>
-    </task>
-    <task id="LOCAL-05083" summary="Atualização de dependecias e do header de licença">
-      <created>1627576286847</created>
-      <option name="number" value="05083" />
-      <option name="presentableId" value="LOCAL-05083" />
-      <option name="project" value="LOCAL" />
-      <updated>1627576286847</updated>
-    </task>
-    <task id="LOCAL-05084" summary="Atualização de dependecias e do header de licença">
-      <created>1627577195521</created>
-      <option name="number" value="05084" />
-      <option name="presentableId" value="LOCAL-05084" />
-      <option name="project" value="LOCAL" />
-      <updated>1627577195522</updated>
-    </task>
-    <task id="LOCAL-05085" summary="Atualização de dependecias e do header de licença">
-      <created>1627578826870</created>
-      <option name="number" value="05085" />
-      <option name="presentableId" value="LOCAL-05085" />
-      <option name="project" value="LOCAL" />
-      <updated>1627578826871</updated>
-    </task>
     <task id="LOCAL-05086" summary="Atualização de dependecias e do header de licença">
       <created>1627579320695</created>
       <option name="number" value="05086" />
@@ -1721,7 +1689,42 @@
       <option name="project" value="LOCAL" />
       <updated>1627934161826</updated>
     </task>
-    <option name="localTasksCounter" value="5130" />
+    <task id="LOCAL-05130" summary="Correções menores">
+      <created>1627934623339</created>
+      <option name="number" value="05130" />
+      <option name="presentableId" value="LOCAL-05130" />
+      <option name="project" value="LOCAL" />
+      <updated>1627934623339</updated>
+    </task>
+    <task id="LOCAL-05131" summary="Correções menores">
+      <created>1627934670489</created>
+      <option name="number" value="05131" />
+      <option name="presentableId" value="LOCAL-05131" />
+      <option name="project" value="LOCAL" />
+      <updated>1627934670489</updated>
+    </task>
+    <task id="LOCAL-05132" summary="Correções menores">
+      <created>1627934677672</created>
+      <option name="number" value="05132" />
+      <option name="presentableId" value="LOCAL-05132" />
+      <option name="project" value="LOCAL" />
+      <updated>1627934677672</updated>
+    </task>
+    <task id="LOCAL-05133" summary="Correções menores">
+      <created>1627934853465</created>
+      <option name="number" value="05133" />
+      <option name="presentableId" value="LOCAL-05133" />
+      <option name="project" value="LOCAL" />
+      <updated>1627934853465</updated>
+    </task>
+    <task id="LOCAL-05134" summary="Correções menores">
+      <created>1627935948239</created>
+      <option name="number" value="05134" />
+      <option name="presentableId" value="LOCAL-05134" />
+      <option name="project" value="LOCAL" />
+      <updated>1627935948239</updated>
+    </task>
+    <option name="localTasksCounter" value="5135" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
