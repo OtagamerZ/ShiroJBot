@@ -36,7 +36,7 @@ public record Embed(Title title,
 
 	public Color getParsedColor() {
 		try {
-			return Color.decode(Helper.getOr(color, ""));
+			return color == null ? null : Color.decode(color);
 		} catch (NumberFormatException e) {
 			return null;
 		}

@@ -3053,4 +3053,8 @@ public class Helper {
 
 		return u == null ? LogDAO.getUsername(id) : u.getName();
 	}
+
+	public static boolean notNull(Object... objs) {
+		return Arrays.stream(objs).allMatch(Objects::nonNull);
+	}
 }
