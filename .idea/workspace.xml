@@ -17,7 +17,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiraidCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiraidCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1372,20 +1375,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05078" summary="Atualização de dependecias e do header de licença">
-      <created>1627570913793</created>
-      <option name="number" value="05078" />
-      <option name="presentableId" value="LOCAL-05078" />
-      <option name="project" value="LOCAL" />
-      <updated>1627570913793</updated>
-    </task>
-    <task id="LOCAL-05079" summary="Atualização de dependecias e do header de licença">
-      <created>1627575166237</created>
-      <option name="number" value="05079" />
-      <option name="presentableId" value="LOCAL-05079" />
-      <option name="project" value="LOCAL" />
-      <updated>1627575166237</updated>
-    </task>
     <task id="LOCAL-05080" summary="Atualização de dependecias e do header de licença">
       <created>1627575945030</created>
       <option name="number" value="05080" />
@@ -1715,7 +1704,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627932372923</updated>
     </task>
-    <option name="localTasksCounter" value="5127" />
+    <task id="LOCAL-05127" summary="Correções menores">
+      <created>1627932863598</created>
+      <option name="number" value="05127" />
+      <option name="presentableId" value="LOCAL-05127" />
+      <option name="project" value="LOCAL" />
+      <updated>1627932863598</updated>
+    </task>
+    <task id="LOCAL-05128" summary="Correções menores">
+      <created>1627933027181</created>
+      <option name="number" value="05128" />
+      <option name="presentableId" value="LOCAL-05128" />
+      <option name="project" value="LOCAL" />
+      <updated>1627933027182</updated>
+    </task>
+    <option name="localTasksCounter" value="5129" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
