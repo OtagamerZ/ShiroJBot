@@ -113,7 +113,7 @@ public class GuildConfig {
 	private int noSpamAmount = 5;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 10")
-	private int antiRaidTime = 10;
+	private int antiRaidLimit = 10;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 3")
 	private int starRequirement = 3;
@@ -411,12 +411,12 @@ public class GuildConfig {
 		this.noSpamAmount = noSpamAmount;
 	}
 
-	public int getAntiRaidTime() {
-		return antiRaidTime;
+	public int getAntiRaidLimit() {
+		return antiRaidLimit;
 	}
 
-	public void setAntiRaidTime(int antiRaidTime) {
-		this.antiRaidTime = antiRaidTime;
+	public void setAntiRaidLimit(int antiRaidTime) {
+		this.antiRaidLimit = antiRaidTime;
 	}
 
 	public int getStarRequirement() {
