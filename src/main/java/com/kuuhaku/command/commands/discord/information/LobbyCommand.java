@@ -23,19 +23,25 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.enums.RankedTier;
+import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +59,12 @@ import java.util.concurrent.TimeUnit;
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION
 })
-public class LobbyCommand implements Executable {
+@SlashGroup("shoukan")
+@SlashCommand(name = "lobby", args = {
+		"{\"name\": \"sair\", \"description\": \"Deseja sair do saguão atual?\", \"type\": \"BOOLEAN\"}",
+		"{\"name\": \"tipo\", \"description\": \"Tipo de saguão a ser exibido (SOLO/DUO)\", \"type\": \"STRING\"}"
+})
+public class LobbyCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -135,6 +146,25 @@ public class LobbyCommand implements Executable {
 						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
 			}
+		}
+	}
+
+	@Override
+	public String toCommand(SlashCommandEvent evt) {
+		OptionMapping exit = evt.getOption("sair");
+		OptionMapping type = evt.getOption("tipo");
+
+		if (exit != null && exit.getAsBoolean()) {
+			if (type != null)
+				throw new ValidationException("❌ | Você não deve informar o tipo do saguão se deseja sair.");
+
+			return "sair";
+		} else {
+			String tp = type == null ? "" : type.getAsString();
+			if (!Helper.equalsAny(tp, "SOLO", "DUO"))
+				throw new ValidationException("❌ | O tipo deve ser `SOLO` ou `DUO`.");
+
+			return tp;
 		}
 	}
 }
