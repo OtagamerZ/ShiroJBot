@@ -682,8 +682,10 @@ public class ShiroEvents extends ListenerAdapter {
 			name = Unidecode.decode(name);
 		}
 
-		if (gc.isAntiHoist() && name.charAt(0) < 65) {
-			name = name.substring(1);
+		if (gc.isAntiHoist()) {
+			while (name.length() > 0 && name.charAt(0) < 65) {
+				name = name.substring(1);
+			}
 		}
 
 		if (!name.equals(member.getEffectiveName())) {
