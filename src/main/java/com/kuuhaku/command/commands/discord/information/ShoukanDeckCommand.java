@@ -51,8 +51,8 @@ import java.awt.image.BufferedImage;
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
 @SlashGroup("shoukan")
 @SlashCommand(name = "deck", args = {
-		"{\"name\": \"tipo\", \"description\": \"Tipo de deck a ser exibido (daily/meta)\", \"type\": \"STRING\"}",
-		"{\"name\": \"privado\", \"description\": \"Exibe o deck nas mensagens privadas\", \"type\": \"BOOLEAN\"}"
+		"{\"name\": \"tipo\", \"description\": \"Tipo de deck a ser exibido (daily/meta)\", \"type\": \"STRING\", \"required\": false}",
+		"{\"name\": \"privado\", \"description\": \"Exibe o deck nas mensagens privadas\", \"type\": \"BOOLEAN\", \"required\": false}"
 })
 public class ShoukanDeckCommand implements Executable, Slashed {
 
