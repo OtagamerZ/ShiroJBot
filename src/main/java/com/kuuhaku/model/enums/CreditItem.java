@@ -89,7 +89,7 @@ public enum CreditItem {
 	),
 	CARD_STASH_SIZE(
 			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 5",
-			20000,
+			17500,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());
 
@@ -101,7 +101,7 @@ public enum CreditItem {
 	),
 	SPAWN_CARD_FOIL(
 			"Invocar Carta Cromada", "Invoca uma carta cromada aleatória",
-			250000,
+			100000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, true);
@@ -110,7 +110,7 @@ public enum CreditItem {
 	),
 	SPAWN_ANIME_FOIL(
 			"Invocar Anime Cromado", "Invoca uma carta cromada aleatória de um anime específico",
-			600000,
+			250000,
 			(mb, chn, args) -> {
 				if (args.length < 2) {
 					chn.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();

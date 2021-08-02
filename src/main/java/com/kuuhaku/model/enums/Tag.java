@@ -59,8 +59,8 @@ public enum Tag {
 	CASADO(TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
 			(user, member) -> WaifuDAO.isWaifued(user.getId())),
 
-	RICO(TagIcons.RICH, "Usuário que possui 750 mil créditos ou mais.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 750000),
+	RICO(TagIcons.RICH, "Usuário que possui 500 mil créditos ou mais.",
+			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 500000),
 
 	CARTAS_NORMAIS_25(TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons normais.",
 			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(k -> !k.isFoil()).count() * 100 / CardDAO.totalCards(), 25, 50)),

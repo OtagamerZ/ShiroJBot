@@ -477,10 +477,10 @@ public class ShiroEvents extends ListenerAdapter {
 					acc.setLastQuest();
 
 					float mod = tasks.getDifficultyMod();
-					if (Helper.round(mod, 1) >= 4)
+					if (Helper.round(mod, 1) >= 3.8)
 						acc.addGem();
 					else
-						acc.addCredit(Math.round(2500 * mod), this.getClass());
+						acc.addCredit(Math.round(2000 * mod), this.getClass());
 
 					AccountDAO.saveAccount(acc);
 					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();

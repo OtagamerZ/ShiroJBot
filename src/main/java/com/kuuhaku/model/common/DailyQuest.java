@@ -66,12 +66,12 @@ public class DailyQuest {
 		for (Map.Entry<DailyTask, Integer> task : tasks.entrySet()) {
 			DailyTask dt = task.getKey();
 			mod += 1 * switch (dt) {
-				case CREDIT_TASK -> Helper.prcnt(task.getValue(), 50000) * 0.75;
+				case CREDIT_TASK -> Helper.prcnt(task.getValue(), 25000) * 0.55;
 				case CARD_TASK -> Helper.prcnt(task.getValue(), 25);
 				case DROP_TASK -> Helper.prcnt(task.getValue(), 20);
 				case WINS_TASK -> Helper.prcnt(task.getValue(), 5) * 1.25;
 				case OFFMETA_TASK -> Helper.prcnt(task.getValue(), 1.75);
-				case XP_TASK -> Helper.prcnt(task.getValue(), 10000) * 0.75;
+				case XP_TASK -> Helper.prcnt(task.getValue(), 10000) * 0.45;
 				case ANIME_TASK -> Helper.prcnt(task.getValue(), 3) * 0.9;
 				case RACE_TASK -> Helper.prcnt(task.getValue(), 10) * 1.1;
 			};
