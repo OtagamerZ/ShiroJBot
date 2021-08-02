@@ -99,6 +99,11 @@ public class LobbyCommand implements Executable {
 					pages.add(new Page(eb.build()));
 				}
 
+				if (pages.isEmpty()) {
+					channel.sendMessage("❌ | Não há ninguém no saguão SOLO no momento.").queue();
+					return;
+				}
+
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
@@ -119,6 +124,11 @@ public class LobbyCommand implements Executable {
 
 					eb.setDescription(sb.toString());
 					pages.add(new Page(eb.build()));
+				}
+
+				if (pages.isEmpty()) {
+					channel.sendMessage("❌ | Não há ninguém no saguão SOLO no momento.").queue();
+					return;
 				}
 
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
