@@ -17,6 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/embed/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/embed/Image.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1372,13 +1373,6 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
     </task>
-    <task id="LOCAL-05071" summary="Correções menores">
-      <created>1627494775924</created>
-      <option name="number" value="05071" />
-      <option name="presentableId" value="LOCAL-05071" />
-      <option name="project" value="LOCAL" />
-      <updated>1627494775924</updated>
-    </task>
     <task id="LOCAL-05072" summary="Correções menores">
       <created>1627494816133</created>
       <option name="number" value="05072" />
@@ -1715,7 +1709,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627924339673</updated>
     </task>
-    <option name="localTasksCounter" value="5120" />
+    <task id="LOCAL-05120" summary="Correções menores">
+      <created>1627924848653</created>
+      <option name="number" value="05120" />
+      <option name="presentableId" value="LOCAL-05120" />
+      <option name="project" value="LOCAL" />
+      <updated>1627924848653</updated>
+    </task>
+    <option name="localTasksCounter" value="5121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

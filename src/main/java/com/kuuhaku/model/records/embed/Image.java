@@ -23,13 +23,8 @@ import com.kuuhaku.utils.Helper;
 import java.util.List;
 
 public record Image(List<String> image, List<String> join, List<String> leave) {
-	@Override
-	public List<String> image() {
-		return Helper.getOr(image, List.of());
-	}
-
 	public String getRandomImage() {
-		return Helper.getRandomEntry(image());
+		return Helper.getRandomEntry(Helper.getOr(image, List.of()));
 	}
 
 	public String getRandomJoin() {
