@@ -66,7 +66,7 @@ public class SlotsCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setDescription(prizeTable());
 			eb.setTitle("Tabela de prêmios");
-			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 1000 créditos)");
+			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 750 créditos)");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
