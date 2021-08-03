@@ -17,7 +17,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ReserveCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ReserveCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,9 +67,9 @@
         <option value="AnnotationType" />
         <option value="JavaScript File" />
         <option value="Interface" />
-        <option value="Enum" />
         <option value="Record" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -1371,13 +1376,7 @@
       <workItem from="1627565803547" duration="7667000" />
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
-    </task>
-    <task id="LOCAL-05087" summary="Atualização de dependecias e do header de licença">
-      <created>1627579742722</created>
-      <option name="number" value="05087" />
-      <option name="presentableId" value="LOCAL-05087" />
-      <option name="project" value="LOCAL" />
-      <updated>1627579742722</updated>
+      <workItem from="1627992219621" duration="4562000" />
     </task>
     <task id="LOCAL-05088" summary="Atualização de dependecias e do header de licença">
       <created>1627580015234</created>
@@ -1715,7 +1714,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627936898740</updated>
     </task>
-    <option name="localTasksCounter" value="5136" />
+    <task id="LOCAL-05136" summary="Correções menores">
+      <created>1627937530269</created>
+      <option name="number" value="05136" />
+      <option name="presentableId" value="LOCAL-05136" />
+      <option name="project" value="LOCAL" />
+      <updated>1627937530269</updated>
+    </task>
+    <option name="localTasksCounter" value="5137" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

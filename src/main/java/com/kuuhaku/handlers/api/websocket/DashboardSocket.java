@@ -25,6 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
+import com.kuuhaku.model.enums.Event;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -304,8 +305,7 @@ public class DashboardSocket extends WebSocketServer {
 					int id = payload.getInt("id");
 					boolean foil = payload.getBoolean("foil");
 					CardType ct = payload.getEnum(CardType.class, "type");
-					Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
-					boolean blackfriday = today.get(Calendar.MONTH) == Calendar.NOVEMBER && today.get(Calendar.DAY_OF_MONTH) == 27;
+					boolean blackfriday = Event.getCurrent() == Event.BLACKFRIDAY;
 
 					AtomicInteger code = new AtomicInteger(0);
 					AtomicReference<String> msg = new AtomicReference<>("");

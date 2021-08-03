@@ -30,10 +30,8 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.common.PseudoMessage;
-import com.kuuhaku.model.enums.BotExchange;
-import com.kuuhaku.model.enums.DailyTask;
-import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.enums.PrivilegeLevel;
+import com.kuuhaku.model.enums.Event;
+import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
@@ -345,10 +343,10 @@ public class ShiroEvents extends ListenerAdapter {
 				if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
 				if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
 
-				Calendar cal = Calendar.getInstance();
-				if (cal.get(Calendar.MONTH) == Calendar.DECEMBER && gc.isDropSpawn())
+				Event ev = Event.getCurrent();
+				if (ev == Event.XMAS && gc.isDropSpawn())
 					Helper.spawnPadoru(gc, channel);
-				else if (cal.get(Calendar.MONTH) == Calendar.APRIL && gc.isDropSpawn())
+				else if (ev == Event.EASTER && gc.isDropSpawn())
 					Helper.spawnUsaTan(gc, channel);
 
 				try {
