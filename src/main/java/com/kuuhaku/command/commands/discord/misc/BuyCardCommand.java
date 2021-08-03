@@ -209,7 +209,7 @@ public class BuyCardCommand implements Executable {
 			channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
 			return;
 		} else if (buyer.getLoan() > 0) {
-			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
+			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 			return;
 		}
 
