@@ -212,7 +212,8 @@ public class ReserveCardCommand implements Executable {
 			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 			return;
 		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
-
+			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
+			return;
 		}
 
 		Account seller = AccountDAO.getAccount(m.getSeller());
