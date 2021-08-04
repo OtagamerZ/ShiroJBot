@@ -58,7 +58,7 @@ public class BotInfoCommand implements Executable {
 		eb.addField(I18n.getString("str_bot-info-field-2"), sb.toString(), false)
 				.addField(I18n.getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(I18n.getString("date-format"))), false)
 				.addField(I18n.getString("str_bot-info-field-4"), I18n.getString(STR_BOT_INFO_SERVERS, Main.getShiroShards().getGuilds().size()), false)
-				.addField(I18n.getString("str_bot-info-field-5"), I18n.getString("str_bot-info-registered-users", MemberDAO.getMembers().size()), false)
+				.addField(I18n.getString("str_bot-info-field-5"), I18n.getString("str_bot-info-registered-users", Helper.separate(MemberDAO.getMemberCount())), false)
 				.addField(I18n.getString("str_bot-info-field-6"), ShiroInfo.getVersion(), false)
 				.addField("Links:", """
 								[%s](https://discordapp.com/invite/9sgkzna)
