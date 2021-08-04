@@ -37,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -79,9 +78,7 @@ public class Shiritori extends Game {
 		);
 
 		try {
-			URL url = this.getClass().getClassLoader().getResource("shiritori/ptBR_dict.txt");
-			assert url != null;
-			File f = new File(url.toURI());
+			File f = new File(Helper.getResource(this.getClass(), "shiritori/ptBR_dict.txt").toURI());
 			available.addAll(Files.readAllLines(f.toPath()));
 		} catch (URISyntaxException | IOException ignore) {
 		}
