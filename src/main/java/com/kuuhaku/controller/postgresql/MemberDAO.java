@@ -26,6 +26,7 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.math.BigInteger;
 import java.util.List;
 
 public class MemberDAO {
@@ -35,7 +36,7 @@ public class MemberDAO {
 		Query q = em.createNativeQuery("SELECT COUNT(1) FROM Member");
 
 		try {
-			return (long) q.getSingleResult();
+			return ((BigInteger) q.getSingleResult()).longValue();
 		} finally {
 			em.close();
 		}
