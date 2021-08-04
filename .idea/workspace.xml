@@ -18,8 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/Button.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/BotInfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/BotInfoCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1374,14 +1375,7 @@
       <workItem from="1627577296291" duration="6753000" />
       <workItem from="1627585264575" duration="7083000" />
       <workItem from="1627992219621" duration="6410000" />
-      <workItem from="1628086114952" duration="3147000" />
-    </task>
-    <task id="LOCAL-05093" summary="Implementação inicial dos comandos Slash">
-      <created>1627591780454</created>
-      <option name="number" value="05093" />
-      <option name="presentableId" value="LOCAL-05093" />
-      <option name="project" value="LOCAL" />
-      <updated>1627591780454</updated>
+      <workItem from="1628086114952" duration="3905000" />
     </task>
     <task id="LOCAL-05094" summary="Correções menores">
       <created>1627595353906</created>
@@ -1719,7 +1713,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628088623204</updated>
     </task>
-    <option name="localTasksCounter" value="5142" />
+    <task id="LOCAL-05142" summary="Correções menores">
+      <created>1628089323942</created>
+      <option name="number" value="05142" />
+      <option name="presentableId" value="LOCAL-05142" />
+      <option name="project" value="LOCAL" />
+      <updated>1628089323942</updated>
+    </task>
+    <option name="localTasksCounter" value="5143" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
