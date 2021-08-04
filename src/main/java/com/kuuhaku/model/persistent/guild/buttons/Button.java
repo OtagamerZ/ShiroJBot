@@ -34,7 +34,6 @@ public class Button {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "parent_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ButtonMessage parent;
 
@@ -47,8 +46,7 @@ public class Button {
 	public Button() {
 	}
 
-	public Button(ButtonMessage parent, String role, String emote) {
-		this.parent = parent;
+	public Button(String role, String emote) {
 		this.role = role;
 		this.emote = emote;
 	}
@@ -59,6 +57,10 @@ public class Button {
 
 	public ButtonMessage getParent() {
 		return parent;
+	}
+
+	public void setParent(ButtonMessage parent) {
+		this.parent = parent;
 	}
 
 	public Role getRole(Guild g) {
