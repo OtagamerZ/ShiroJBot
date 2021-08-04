@@ -36,6 +36,7 @@ public class ButtonMessage {
 	private String id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ButtonChannel parent;
 

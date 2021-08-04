@@ -34,6 +34,7 @@ public class Button {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ButtonMessage parent;
 
