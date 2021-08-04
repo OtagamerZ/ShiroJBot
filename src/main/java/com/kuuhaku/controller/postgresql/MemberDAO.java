@@ -29,6 +29,18 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class MemberDAO {
+	public static long getMemberCount() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT COUNT(1) FROM Member");
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Member getMember(String id, String guild) {
 		EntityManager em = Manager.getEntityManager();
 
