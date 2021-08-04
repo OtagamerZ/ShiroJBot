@@ -349,8 +349,82 @@ public class ShiroEvents extends ListenerAdapter {
 				else if (ev == Event.EASTER && gc.isDropSpawn())
 					Helper.spawnUsaTan(gc, channel);
 
-				applyLevelRoles(author, member, channel, guild, gc);
-				announceLevelUp(author, member, message, channel, guild, rawMessage, gc);
+				try {
+					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+						message.delete().reason("Mensagem possui um URL").queue();
+						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
+						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
+					}
+
+					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
+					if (m.getUid() == null) {
+						m.setUid(author.getId());
+						m.setSid(guild.getId());
+					}
+
+					boolean lvlUp = m.addXp(guild);
+					MemberDAO.saveMember(m);
+					try {
+						if (lvlUp && gc.isLevelNotif()) {
+							if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
+								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+										.queue();
+							else
+								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+						}
+					} catch (InsufficientPermissionException e) {
+						if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+									.queue();
+						else
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+					}
+
+					Set<LevelRole> roles = gc.getLevelRoles()
+							.stream()
+							.filter(e -> m.getLevel() >= e.getLevel())
+							.collect(Collectors.toSet());
+
+					int curr = roles.stream().mapToInt(LevelRole::getLevel).max().orElse(0);
+					if (curr > 0) {
+						List<Role> prev = new ArrayList<>();
+						List<Role> rols = new ArrayList<>();
+						for (LevelRole role : roles) {
+							Role r = guild.getRoleById(role.getId());
+							if (r == null) {
+								gc.removeLevelRole(role.getId());
+								continue;
+							}
+
+							if (role.getLevel() < curr) {
+								prev.add(r);
+							} else {
+								rols.add(r);
+							}
+						}
+						GuildDAO.updateGuildSettings(gc);
+
+						rols.removeIf(member.getRoles()::contains);
+						if (!rols.isEmpty()) {
+							guild.modifyMemberRoles(member, rols, prev).queue(null, Helper::doNothing);
+							if (gc.isLevelNotif()) {
+								TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
+								if (rols.size() > 1) {
+									String names = rols.stream()
+											.map(rl -> "**`" + rl.getName() + "`**")
+											.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
+									chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
+								} else
+									chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
+							}
+						}
+					}
+				} catch (ErrorResponseException | NullPointerException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				} catch (HierarchyException | InsufficientPermissionException ignore) {
+				}
 
 				if (gc.isNQNMode() && Helper.hasEmote(rawMessage))
 					try {
@@ -408,94 +482,6 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
-		}
-	}
-
-	private void announceLevelUp(User author, Member member, Message message, TextChannel channel, Guild guild, String rawMessage, GuildConfig gc) {
-		try {
-			if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-				message.delete().reason("Mensagem possui um URL").queue();
-				channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
-				Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
-			}
-
-			com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
-			if (m.getUid() == null) {
-				m.setUid(author.getId());
-				m.setSid(guild.getId());
-			}
-
-			boolean lvlUp = m.addXp(guild);
-			MemberDAO.saveMember(m);
-			try {
-				if (lvlUp && gc.isLevelNotif()) {
-					if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-						Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-								.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
-								.queue();
-					else
-						Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
-
-					applyLevelRoles(author, member, channel, guild, gc);
-				}
-			} catch (InsufficientPermissionException e) {
-				if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-					channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-							.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
-							.queue();
-				else
-					channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
-
-				applyLevelRoles(author, member, channel, guild, gc);
-			}
-		} catch (ErrorResponseException | NullPointerException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
-	}
-
-	private void applyLevelRoles(User author, Member member, TextChannel channel, Guild guild, GuildConfig gc) {
-		try {
-			com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
-			Set<LevelRole> roles = gc.getLevelRoles()
-					.stream()
-					.filter(e -> mb.getLevel() >= e.getLevel())
-					.collect(Collectors.toSet());
-
-			int curr = roles.stream().mapToInt(LevelRole::getLevel).max().orElse(0);
-			if (curr > 0) {
-				List<Role> prev = new ArrayList<>();
-				List<Role> rols = new ArrayList<>();
-				for (LevelRole role : roles) {
-					Role r = guild.getRoleById(role.getId());
-					if (r == null) {
-						gc.removeLevelRole(role.getId());
-						continue;
-					}
-
-					if (role.getLevel() < curr) {
-						prev.add(r);
-					} else {
-						rols.add(r);
-					}
-				}
-				GuildDAO.updateGuildSettings(gc);
-
-				rols.removeIf(member.getRoles()::contains);
-				if (!rols.isEmpty()) {
-					guild.modifyMemberRoles(member, rols, prev).queue(null, Helper::doNothing);
-					if (gc.isLevelNotif()) {
-						TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
-						if (rols.size() > 1) {
-							String names = rols.stream()
-									.map(rl -> "**`" + rl.getName() + "`**")
-									.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
-							chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
-						} else
-							chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
-					}
-				}
-			}
-		} catch (HierarchyException | InsufficientPermissionException ignore) {
 		}
 	}
 
