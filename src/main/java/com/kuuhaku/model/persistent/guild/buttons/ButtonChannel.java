@@ -33,8 +33,7 @@ public class ButtonChannel {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "parent_id")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonMessage> messages = new HashSet<>();
 
@@ -51,6 +50,16 @@ public class ButtonChannel {
 
 	public Set<ButtonMessage> getMessages() {
 		return messages;
+	}
+
+	public void addMessage(ButtonMessage bm) {
+		bm.setParent(this);
+		messages.add(bm);
+	}
+
+	public boolean removeMessage(ButtonMessage bm) {
+		bm.setParent(null);
+		return messages.remove(bm);
 	}
 
 	@Override

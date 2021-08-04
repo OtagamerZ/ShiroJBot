@@ -679,7 +679,7 @@ public class Helper {
 						} catch (ExecutionException | InterruptedException e) {
 							GuildConfig conf = GuildDAO.getGuildById(g.getId());
 							for (ButtonChannel bc : conf.getButtonConfigs()) {
-								if (bc.getMessages().remove(message)) break;
+								if (bc.removeMessage(message)) break;
 							}
 
 							GuildDAO.updateGuildSettings(gc);
@@ -699,7 +699,7 @@ public class Helper {
 								if (m.getId().equals(message.getAuthor())) {
 									GuildConfig conf = GuildDAO.getGuildById(g.getId());
 									for (ButtonChannel bc : conf.getButtonConfigs()) {
-										if (bc.getMessages().remove(message)) break;
+										if (bc.removeMessage(message)) break;
 									}
 
 									GuildDAO.updateGuildSettings(conf);
@@ -734,7 +734,7 @@ public class Helper {
 						ms.getChannel().sendMessage(":warning: | Botão removido devido a cargo inexistente.").queue();
 						GuildConfig gc = GuildDAO.getGuildById(g.getId());
 
-						b.getParent().getButtons().remove(b);
+						b.getParent().removeButton(b);
 
 						GuildDAO.updateGuildSettings(gc);
 					});
@@ -782,16 +782,22 @@ public class Helper {
 
 		if (bm == null) {
 			bm = new ButtonMessage(
-					bc, args[0],
+					args[0],
 					message.getAuthor().getId(),
 					gatekeeper,
 					gatekeeper ? r.getId() : null
 			);
 
-			if (gatekeeper && bc.getMessages().stream().anyMatch(ButtonMessage::isGatekeeper))
-				bc.getMessages().removeIf(ButtonMessage::isGatekeeper);
+			if (gatekeeper && bc.getMessages().stream().anyMatch(ButtonMessage::isGatekeeper)) {
+				Set<ButtonMessage> msgs = Set.copyOf(bc.getMessages());
+				for (ButtonMessage bMsg : msgs) {
+					if (bMsg.isGatekeeper()) {
+						bc.removeMessage(bMsg);
+					}
+				}
+			}
 
-			bc.getMessages().add(bm);
+			bc.addMessage(bm);
 		}
 
 		if (!gatekeeper) {
@@ -804,7 +810,7 @@ public class Helper {
 				else id = e.getId();
 			}
 
-			bm.getButtons().add(new Button(bm, r.getId(), id));
+			bm.addButton(new Button(r.getId(), id));
 		}
 
 		GuildDAO.updateGuildSettings(gc);
