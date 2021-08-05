@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent.guild.buttons;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.jsoup.internal.StringUtil;
 
 import javax.persistence.*;
@@ -35,7 +33,6 @@ public class Button {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "parent_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ButtonMessage parent;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")

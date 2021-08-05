@@ -56,7 +56,6 @@ import java.util.stream.Collectors;
 		category = Category.FUN
 )
 @Requires({
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_ADD_REACTION,
 		Permission.MESSAGE_ATTACH_FILES
 })
