@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.Couple;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
+import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.imaging.ImageReadException;
 
@@ -55,15 +56,9 @@ public class Profile {
 	public static final int HEIGHT = 600;
 
 	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
-		BufferedImage avatar;
+		BufferedImage avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl() + "?size=256")), 200, 200);
 		Member mb = MemberDAO.getMember(m.getId(), g.getId());
 		Account acc = AccountDAO.getAccount(m.getId());
-
-		try {
-			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl() + "?size=1024")), 200, 200);
-		} catch (NullPointerException | IOException e) {
-			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
-		}
 
 		BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -146,9 +141,9 @@ public class Profile {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 50));
 		g2d.setColor(Color.WHITE);
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
-		String name = m.getEffectiveName();
-		if (g2d.getFontMetrics().stringWidth(m.getEffectiveName()) >= 678)
-			name = m.getEffectiveName().substring(0, 21).concat("...");
+		String name = Unidecode.decode(m.getEffectiveName());
+		if (g2d.getFontMetrics().stringWidth(name) >= 678)
+			name = name.substring(0, 21).concat("...");
 		drawOutlinedText(name, 270, 342, g2d);
 
 		try {
