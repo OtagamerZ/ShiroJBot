@@ -54,6 +54,7 @@ public class Shiritori extends Game {
 	private final Set<String> used = new HashSet<>();
 	private Message message = null;
 	private String word;
+	private boolean suddenDeath = false;
 
 	public Shiritori(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Table(bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
@@ -147,9 +148,10 @@ public class Shiritori extends Game {
 			channel.sendMessage("❌ | Palavra inválida, veja se escreveu-a corretamente.").queue();
 		}
 
-		if (getRound() > 50) {
+		if (getRound() > 50 && !suddenDeath) {
 			channel.sendMessage(":warning: | ALERTA: Morte-súbita ativada, o tempo para W.O. foi reduzido para 30 segundos!").queue();
 			setTime(30);
+			suddenDeath = true;
 		}
 	}
 
