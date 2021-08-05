@@ -52,7 +52,9 @@ public class DailyEvent implements Job {
 				if (clan.getVault() < clan.getTier().getRent()) {
 					User u = Main.getInfo().getUserByID(clan.getLeader().getUid());
 
-					u.openPrivateChannel().queue(s -> s.sendMessage(":warning: | Alerta: Não há saldo suficiente no cofre do clã " + clan.getName() + " para pagamento do aluguel. Por favor deposite créditos e pague manualmente usando o comando `s!aluguel`.\n**Você tem até dia 8 ou o clã será desfeito.**").queue(null, Helper::doNothing), Helper::doNothing);
+					u.openPrivateChannel()
+							.flatMap(s -> s.sendMessage(":warning: | Alerta: Não há saldo suficiente no cofre do clã " + clan.getName() + " para pagamento do aluguel. Por favor deposite " + Helper.separate(clan.getTier().getRent()) + " créditos no cofre do clã.\n**Você tem até dia 8 ou o clã será desfeito.**"))
+							.queue(null, Helper::doNothing);
 				} else {
 					clan.payRent();
 					ClanDAO.saveClan(clan);
