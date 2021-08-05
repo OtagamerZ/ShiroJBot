@@ -16,9 +16,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criado jogo Shiritori">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização do dicionário do Shiritori">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/DailyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/DailyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1376,13 +1377,7 @@
       <workItem from="1628086114952" duration="3905000" />
       <workItem from="1628108378649" duration="1860000" />
       <workItem from="1628165063573" duration="120000" />
-    </task>
-    <task id="LOCAL-05096" summary="Correções menores">
-      <created>1627648633145</created>
-      <option name="number" value="05096" />
-      <option name="presentableId" value="LOCAL-05096" />
-      <option name="project" value="LOCAL" />
-      <updated>1627648633145</updated>
+      <workItem from="1628170498839" duration="1523000" />
     </task>
     <task id="LOCAL-05097" summary="Correções menores">
       <created>1627648973830</created>
@@ -1720,7 +1715,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628109543957</updated>
     </task>
-    <option name="localTasksCounter" value="5145" />
+    <task id="LOCAL-05145" summary="Atualização do dicionário do Shiritori">
+      <created>1628170615511</created>
+      <option name="number" value="05145" />
+      <option name="presentableId" value="LOCAL-05145" />
+      <option name="project" value="LOCAL" />
+      <updated>1628170615511</updated>
+    </task>
+    <option name="localTasksCounter" value="5146" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1808,7 +1810,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Remoção do mercado de ações" />
     <MESSAGE value="Remoção do botzera da staff de suporte" />
     <MESSAGE value="Balanceamento do efeito nulificador" />
     <MESSAGE value="Correções no comando de ranking de usuários" />
@@ -1833,7 +1834,8 @@
     <MESSAGE value="Implementação inicial dos comandos Slash" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Criado jogo Shiritori" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criado jogo Shiritori" />
+    <MESSAGE value="Atualização do dicionário do Shiritori" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualização do dicionário do Shiritori" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
