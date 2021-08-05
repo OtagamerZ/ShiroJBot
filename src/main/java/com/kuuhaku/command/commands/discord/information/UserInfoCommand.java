@@ -20,13 +20,19 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.OffsetDateTime;
@@ -40,7 +46,11 @@ import java.util.stream.Collectors;
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
-public class UserInfoCommand implements Executable {
+@SlashGroup("info")
+@SlashCommand(name = "usuario", args = {
+		"{\"name\": \"usuario\", \"description\": \"Usuário a ser analisado\", \"type\": \"USER\", \"required\": false}"
+})
+public class UserInfoCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -53,6 +63,7 @@ public class UserInfoCommand implements Executable {
 			m = member;
 
 		String type = "";
+		assert m != null;
 		if (m.isOwner())
 			type = " <:Owner:852289952632799302>";
 		else if (m.getUser().isBot()) {
@@ -122,5 +133,12 @@ public class UserInfoCommand implements Executable {
 			eb.addField(":beginner: | Cargos", m.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(" ")), false);
 
 		channel.sendMessageEmbeds(eb.build()).queue();
+	}
+
+	@Override
+	public String toCommand(SlashCommandEvent evt) throws ValidationException {
+		OptionMapping user = evt.getOption("usuario");
+
+		return user == null ? "" : user.getAsUser().getId();
 	}
 }
