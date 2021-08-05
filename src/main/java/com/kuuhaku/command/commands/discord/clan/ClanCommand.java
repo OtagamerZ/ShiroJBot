@@ -47,7 +47,6 @@ import java.util.concurrent.TimeUnit;
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_EXT_EMOJI,
 		Permission.MESSAGE_ADD_REACTION
 })

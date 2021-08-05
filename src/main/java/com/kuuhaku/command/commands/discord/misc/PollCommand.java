@@ -50,7 +50,6 @@ import java.util.function.Function;
 )
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_ADD_REACTION
 })
 public class PollCommand implements Executable {

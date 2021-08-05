@@ -33,7 +33,6 @@ import net.dv8tion.jda.api.entities.*;
 		category = Category.FUN
 )
 @Requires({
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION
 })

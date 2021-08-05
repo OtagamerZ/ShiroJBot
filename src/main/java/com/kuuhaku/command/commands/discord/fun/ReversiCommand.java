@@ -44,8 +44,8 @@ import java.util.concurrent.TimeUnit;
 		category = Category.FUN
 )
 @Requires({
-		Permission.MESSAGE_MANAGE,
-		Permission.MESSAGE_ADD_REACTION
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_ATTACH_FILES
 })
 public class ReversiCommand implements Executable {
 
