@@ -243,6 +243,10 @@ public class Clan {
 		for (ClanMember mb : members) {
 			mb.addScore(amount / tier.getCapacity());
 		}
+
+		if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) < 8 && vault >= tier.getRent()) {
+			payRent();
+		}
 	}
 
 	public void withdraw(long amount, User u) {

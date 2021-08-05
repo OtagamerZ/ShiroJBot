@@ -61,7 +61,12 @@ public class DailyEvent implements Job {
 		} else if (c.get(Calendar.DAY_OF_MONTH) == 8) {
 			List<Clan> unpaid = ClanDAO.getUnpaidClans();
 			for (Clan clan : unpaid) {
-				ClanDAO.removeClan(clan);
+				if (clan.getVault() < clan.getTier().getRent()) {
+					ClanDAO.removeClan(clan);
+				} else {
+					clan.payRent();
+					ClanDAO.saveClan(clan);
+				}
 			}
 		}
 
