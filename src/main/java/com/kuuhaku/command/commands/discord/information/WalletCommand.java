@@ -20,9 +20,12 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.SlashCommand;
+import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -33,12 +36,14 @@ import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "carteira",
-		aliases = {"banco", "bank", "money", "wallet", "atm"},
+		aliases = {"banco", "bank", "money", "wallet", "atm", "bal", "balance"},
 		usage = "req_text",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
-public class WalletCommand implements Executable {
+@SlashGroup("meus")
+@SlashCommand(name = "creditos")
+public class WalletCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
