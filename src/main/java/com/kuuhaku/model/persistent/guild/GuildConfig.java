@@ -27,8 +27,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import com.squareup.moshi.JsonDataException;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -153,55 +151,45 @@ public class GuildConfig {
 	//ROLES
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<LevelRole> levelRoles = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ColorRole> colorRoles = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<PaidRole> paidRoles = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<VoiceRole> voiceRoles = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonChannel> buttonConfigs = new HashSet<>();
 
 	//CHANNELS
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "guildconfig_guildid")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> noLinkChannels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "guildconfig_guildid")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> noSpamChannels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "guildconfig_guildid")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> noCommandChannels = new HashSet<>();
 
 	//CONFIGS
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "guildconfig_guildid")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> disabledCommands = new HashSet<>();
 
 	//LAZY
 	@ElementCollection(fetch = FetchType.LAZY)
 	@JoinColumn(name = "guildconfig_guildid")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> rules = new ArrayList<>();
 
 	public GuildConfig(String guildId, String name) {

@@ -47,10 +47,7 @@ import java.util.stream.Collectors;
 		usage = "req_name",
 		category = Category.INFO
 )
-@Requires({
-		Permission.MESSAGE_MANAGE,
-		Permission.MESSAGE_EXT_EMOJI
-})
+@Requires({Permission.MESSAGE_EXT_EMOJI})
 public class AnimeCommand implements Executable {
 
 	@Override
@@ -71,8 +68,8 @@ public class AnimeCommand implements Executable {
 						return;
 					}
 
+					if (anime.data() == null) throw new IllegalStateException();
 					Media media = anime.data().media();
-					if (media == null) throw new IllegalStateException();
 
 					EmbedBuilder eb = new EmbedBuilder();
 					boolean hentai = media.genres().stream().anyMatch("hentai"::equalsIgnoreCase);

@@ -19,8 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.ZoneId;
@@ -38,7 +36,6 @@ public class MatchHistory {
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "matchhistory_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, Side> players = new HashMap<>();
 
 	@Enumerated(value = EnumType.STRING)
@@ -52,7 +49,6 @@ public class MatchHistory {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "matchhistory_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
 	@Column(columnDefinition = "TIMESTAMP")

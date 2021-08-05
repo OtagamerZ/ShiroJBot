@@ -45,7 +45,6 @@ import java.util.concurrent.TimeUnit;
 )
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_ADD_REACTION
 })
 public class LoanCommand implements Executable {

@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent.guild.buttons;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,7 +35,6 @@ public class ButtonMessage {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "parent_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ButtonChannel parent;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
@@ -50,7 +47,6 @@ public class ButtonMessage {
 	private String role;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Button> buttons = new ArrayList<>();
 
 	public ButtonMessage() {
