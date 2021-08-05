@@ -33,6 +33,7 @@ import com.kuuhaku.utils.Helper;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -143,14 +144,15 @@ public class Profile {
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = Unidecode.decode(m.getEffectiveName());
 		if (g2d.getFontMetrics().stringWidth(name) >= 678)
-			name = name.substring(0, 21).concat("...");
+			StringUtils.abbreviate(name, 20);
 		drawOutlinedText(name, 270, 342, g2d);
 
 		try {
 			Couple c = WaifuDAO.getCouple(m.getId());
 			if (c != null) {
+				String waifu = StringUtils.abbreviate(Unidecode.decode(Helper.getUsername(Member.getWaifu(m.getId()))), 20);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + Helper.getUsername(Member.getWaifu(m.getId())) + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + waifu + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
