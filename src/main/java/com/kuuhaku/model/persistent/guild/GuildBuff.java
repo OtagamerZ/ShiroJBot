@@ -19,8 +19,6 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.postgresql.GuildBuffDAO;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -35,7 +33,6 @@ public class GuildBuff {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "guildconfig_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ServerBuff> buffs = new HashSet<>();
 
 	public String getId() {

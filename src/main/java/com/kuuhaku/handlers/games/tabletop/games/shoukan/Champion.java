@@ -32,8 +32,6 @@ import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -77,7 +75,6 @@ public class Champion implements Drawable, Cloneable {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "champion_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> requiredCards = new HashSet<>();
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")

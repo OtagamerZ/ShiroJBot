@@ -32,8 +32,6 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -51,17 +49,14 @@ public class Deck {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Champion> champions = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Equipment> equipments = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Field> fields = new ArrayList<>();
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")

@@ -40,7 +40,6 @@ import java.util.List;
 		category = Category.SUPPORT
 )
 @Requires({
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION
 })

@@ -53,7 +53,6 @@ import java.util.concurrent.atomic.AtomicReference;
 )
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_ADD_REACTION
 })
 public class CardStashCommand implements Executable {

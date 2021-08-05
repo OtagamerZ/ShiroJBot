@@ -18,9 +18,6 @@
 
 package com.kuuhaku.model.persistent.guild;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +40,6 @@ public class PaidRole {
 
 	@ElementCollection(fetch = FetchType.LAZY)
 	@JoinColumn(name = "paidrole_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, Long> users = new HashMap<>();
 
 	public PaidRole() {
