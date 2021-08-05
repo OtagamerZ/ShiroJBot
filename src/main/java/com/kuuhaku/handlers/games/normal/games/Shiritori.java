@@ -101,6 +101,7 @@ public class Shiritori extends Game {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
+				.and(e -> !evt.getMessage().getContentRaw().contains(" "))
 				.and(e -> isOpen())
 				.test(evt);
 	}
@@ -110,10 +111,10 @@ public class Shiritori extends Game {
 		Message message = evt.getMessage();
 		String command = StringUtils.stripAccents(message.getContentRaw().toLowerCase(Locale.ROOT));
 
-		if (word != null && !command.substring(0, 2).equals(word.substring(word.length() - 2))) {
+		if (word != null && !word.endsWith(command.substring(0, 2))) {
 			channel.sendMessage("❌ | Palavra não permitida. Só são permitidas palavras onde as duas primeiras letras sejam as mesmas que as 2 últimas letras da palavra anterior (ex: maca**co** -> **co**lmeia).").queue();
 		} else if (used.contains(command)) {
-			channel.sendMessage(getCurrent().getAsMention() + " escreveu uma palavra já usada, ESTÁ FORA!").queue(null, Helper::doNothing);
+			channel.sendMessage(":negative_squared_cross_mark: | " + getCurrent().getAsMention() + " escreveu uma palavra já usada, ESTÁ FORA!").queue(null, Helper::doNothing);
 			getTable().leaveGame();
 			resetTimer();
 

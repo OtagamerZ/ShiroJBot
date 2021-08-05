@@ -16,15 +16,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiritoriCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/framework/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/framework/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/framework/Table.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criado jogo Shiritori">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +140,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="1.2.3.9999" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shiritori" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -159,11 +153,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shiritori" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records\anime" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\utils" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.controller.postgresql.MemberDAO" />
@@ -1380,21 +1374,8 @@
       <workItem from="1627585264575" duration="7083000" />
       <workItem from="1627992219621" duration="6410000" />
       <workItem from="1628086114952" duration="3905000" />
-      <workItem from="1628108378649" duration="857000" />
-    </task>
-    <task id="LOCAL-05094" summary="Correções menores">
-      <created>1627595353906</created>
-      <option name="number" value="05094" />
-      <option name="presentableId" value="LOCAL-05094" />
-      <option name="project" value="LOCAL" />
-      <updated>1627595353906</updated>
-    </task>
-    <task id="LOCAL-05095" summary="Correções menores">
-      <created>1627648196763</created>
-      <option name="number" value="05095" />
-      <option name="presentableId" value="LOCAL-05095" />
-      <option name="project" value="LOCAL" />
-      <updated>1627648196763</updated>
+      <workItem from="1628108378649" duration="1860000" />
+      <workItem from="1628165063573" duration="120000" />
     </task>
     <task id="LOCAL-05096" summary="Correções menores">
       <created>1627648633145</created>
@@ -1725,7 +1706,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628089323942</updated>
     </task>
-    <option name="localTasksCounter" value="5143" />
+    <task id="LOCAL-05143" summary="Criado jogo Shiritori">
+      <created>1628109312577</created>
+      <option name="number" value="05143" />
+      <option name="presentableId" value="LOCAL-05143" />
+      <option name="project" value="LOCAL" />
+      <updated>1628109312577</updated>
+    </task>
+    <task id="LOCAL-05144" summary="Criado jogo Shiritori">
+      <created>1628109543957</created>
+      <option name="number" value="05144" />
+      <option name="presentableId" value="LOCAL-05144" />
+      <option name="project" value="LOCAL" />
+      <updated>1628109543957</updated>
+    </task>
+    <option name="localTasksCounter" value="5145" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1813,7 +1808,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Criação de client da API de encoding da Shiro" />
     <MESSAGE value="Remoção do mercado de ações" />
     <MESSAGE value="Remoção do botzera da staff de suporte" />
     <MESSAGE value="Balanceamento do efeito nulificador" />
@@ -1838,7 +1832,8 @@
     <MESSAGE value="Atualização de dependecias e do header de licença" />
     <MESSAGE value="Implementação inicial dos comandos Slash" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Criado jogo Shiritori" />
+    <option name="LAST_COMMIT_MESSAGE" value="Criado jogo Shiritori" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
