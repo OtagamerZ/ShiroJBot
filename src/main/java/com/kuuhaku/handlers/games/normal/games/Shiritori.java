@@ -136,6 +136,7 @@ public class Shiritori extends Game {
 			used.add(command);
 			word = command;
 
+			resetTimer();
 			channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
