@@ -666,18 +666,33 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					Hand enemy = hands.get(next);
+					Hand you = hands.get(current);
+					Hand op = hands.get(next);
 
 					float demonFac = 1;
 
 					if (h.getCombo().getRight() == Race.DEMON)
 						demonFac *= 1.25f;
-					if (enemy.getCombo().getRight() == Race.DEMON)
+					if (op.getCombo().getRight() == Race.DEMON)
 						demonFac *= 1.33f;
 
 					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
 
-					if (!c.isDecoy()) enemy.removeHp(Math.round(yPower * demonFac));
+					if (!c.isDecoy()) {
+						op.removeHp(Math.round(yPower * demonFac));
+						if (op.getMana() > 0) {
+							int toSteal = (int) Math.min(
+									op.getMana(),
+									c.getLinkedTo().parallelStream()
+											.filter(e -> e.getCharm() == Charm.DRAIN)
+											.count()
+							);
+
+							you.addMana(toSteal);
+							op.removeMana(toSteal);
+						}
+					}
+
 					c.setAvailable(false);
 
 					if (!postCombat()) {
@@ -863,6 +878,9 @@ public class Shoukan extends GlobalGame {
 		yours.resetAttribs();
 		his.resetAttribs();
 
+		Hand you = hands.get(atkr.getLeft());
+		Hand op = hands.get(defr.getLeft());
+
 		/* ATTACK SUCCESS */
 		if (yPower > hPower || (yPower == hPower && yDodge)) {
 			if (hDodge) {
@@ -897,7 +915,6 @@ public class Shoukan extends GlobalGame {
 								|| his.getBonus().getSpecialData().remove("noDamage") != null
 								|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
-				Hand op = hands.get(defr.getLeft());
 				float dmg;
 				if (noDmg)
 					dmg = yours.getLinkedTo().parallelStream()
@@ -908,6 +925,18 @@ public class Shoukan extends GlobalGame {
 					dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
 
 				op.removeHp(Math.round(dmg * demonFac));
+				if (op.getMana() > 0) {
+					int toSteal = (int) Math.min(
+							op.getMana(),
+							yours.getLinkedTo().parallelStream()
+									.filter(e -> e.getCharm() == Charm.DRAIN)
+									.count()
+					);
+
+					you.addMana(toSteal);
+					op.removeMana(toSteal);
+				}
+
 				killCard(defr.getLeft(), defr.getRight());
 
 				if (applyEot(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
@@ -952,7 +981,6 @@ public class Shoukan extends GlobalGame {
 			boolean noDmg = yours.getBonus().getSpecialData().remove("noDamage") != null
 							|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
-			Hand you = hands.get(atkr.getLeft());
 			float dmg;
 			if (noDmg)
 				dmg = his.getLinkedTo().parallelStream()
@@ -963,6 +991,18 @@ public class Shoukan extends GlobalGame {
 				dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
 
 			you.removeHp(Math.round(dmg * demonFac));
+			if (you.getMana() > 0) {
+				int toSteal = (int) Math.min(
+						you.getMana(),
+						his.getLinkedTo().parallelStream()
+								.filter(e -> e.getCharm() == Charm.DRAIN)
+								.count()
+				);
+
+				op.addMana(toSteal);
+				you.removeMana(toSteal);
+			}
+
 			killCard(atkr.getLeft(), atkr.getRight());
 
 			if (!postCombat()) {
@@ -987,12 +1027,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
 			if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
-			float demonFac = 1;
-			if (combos.get(defr.getLeft()).getRight() == Race.DEMON)
-				demonFac *= 1.25f;
-			if (combos.get(atkr.getLeft()).getRight() == Race.DEMON)
-				demonFac *= 1.33f;
-
 			if (yours.isDecoy() && his.isDecoy()) {
 				killCard(atkr.getLeft(), atkr.getRight());
 				killCard(defr.getLeft(), defr.getRight());
@@ -1005,13 +1039,60 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			float dmg = yours.getLinkedTo().parallelStream()
+			float yDemonFac = 1;
+			float hDemonFac = 1;
+
+			if (combos.get(defr.getLeft()).getRight() == Race.DEMON) {
+				yDemonFac *= 1.25f;
+				hDemonFac *= 1.33f;
+			}
+			if (combos.get(atkr.getLeft()).getRight() == Race.DEMON) {
+				yDemonFac *= 1.33f;
+				hDemonFac *= 1.25f;
+			}
+
+			float yDmg = yours.getLinkedTo().parallelStream()
 					.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
 					.mapToInt(Equipment::getAtk)
 					.sum();
 
-			Hand op = hands.get(defr.getLeft());
-			op.removeHp(Math.round(dmg * demonFac));
+			float hDmg = his.getLinkedTo().parallelStream()
+					.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
+					.mapToInt(Equipment::getAtk)
+					.sum();
+
+			op.removeHp(Math.round(yDmg * yDemonFac));
+			if (op.getMana() > 0 || you.getMana() > 0) {
+				int yToSteal = (int) Math.min(
+						op.getMana(),
+						yours.getLinkedTo().parallelStream()
+								.filter(e -> e.getCharm() == Charm.DRAIN)
+								.count()
+				);
+				int hToSteal = (int) Math.min(
+						you.getMana(),
+						his.getLinkedTo().parallelStream()
+								.filter(e -> e.getCharm() == Charm.DRAIN)
+								.count()
+				);
+
+
+				if (op.getMana() > 0) {
+					int toSteal = Math.max(0, yToSteal - hToSteal);
+
+					you.addMana(toSteal);
+					op.removeMana(toSteal);
+				}
+				if (you.getMana() > 0) {
+					int toSteal = Math.max(0, hToSteal - yToSteal);
+
+					op.addMana(toSteal);
+					you.removeMana(toSteal);
+				}
+			}
+
+			you.removeHp(Math.round(hDmg * hDemonFac));
+
 			killCard(atkr.getLeft(), atkr.getRight());
 			killCard(defr.getLeft(), defr.getRight());
 
@@ -1022,7 +1103,7 @@ public class Shoukan extends GlobalGame {
 				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
 						yPower,
 						hPower,
-						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)" : "",
+						hDemonFac > 1 ? " (efeito de raça: +" + Math.round(hDmg * hDemonFac - hDmg) + " dano direto sofrido)" : "",
 						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 				);
 
@@ -2466,42 +2547,42 @@ public class Shoukan extends GlobalGame {
 
 			channel.sendMessage("Deseja baixar o replay desta partida?")
 					.queue(s -> Pages.buttonize(s, Map.of(
-							Helper.ACCEPT, (mb, ms) -> {
-								ms.delete().queue(null, Helper::doNothing);
-								ms.getChannel().sendMessage("<a:loading:697879726630502401> Aguardando conexão com API...")
-										.flatMap(m -> {
-											while (!Main.getInfo().isEncoderConnected()) {
-												try {
-													Thread.sleep(2000);
-												} catch (InterruptedException ignore) {
-												}
-											}
+									Helper.ACCEPT, (mb, ms) -> {
+										ms.delete().queue(null, Helper::doNothing);
+										ms.getChannel().sendMessage("<a:loading:697879726630502401> Aguardando conexão com API...")
+												.flatMap(m -> {
+													while (!Main.getInfo().isEncoderConnected()) {
+														try {
+															Thread.sleep(2000);
+														} catch (InterruptedException ignore) {
+														}
+													}
 
-											return m.editMessage("<a:loading:697879726630502401> Processando replay...");
-										})
-										.queue(m -> {
-											EmbedBuilder eb = new EmbedBuilder();
-											try {
-												String url = Main.getInfo().getEncoderClient()
-														.requestEncoding(String.valueOf(hashCode()), getFrames())
-														.get(1, TimeUnit.HOURS);
+													return m.editMessage("<a:loading:697879726630502401> Processando replay...");
+												})
+												.queue(m -> {
+													EmbedBuilder eb = new EmbedBuilder();
+													try {
+														String url = Main.getInfo().getEncoderClient()
+																.requestEncoding(String.valueOf(hashCode()), getFrames())
+																.get(1, TimeUnit.HOURS);
 
-												if (url == null) throw new TimeoutException();
-												eb.setColor(Color.green)
-														.setTitle("Replay pronto!")
-														.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
-											} catch (Exception e) {
-												Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-												eb.setColor(Color.red)
-														.setTitle("Erro!")
-														.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
-											}
+														if (url == null) throw new TimeoutException();
+														eb.setColor(Color.green)
+																.setTitle("Replay pronto!")
+																.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
+													} catch (Exception e) {
+														Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+														eb.setColor(Color.red)
+																.setTitle("Erro!")
+																.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
+													}
 
-											m.editMessage(mb.getUser().getAsMention())
-													.setEmbeds(eb.build())
-													.queue(null, Helper::doNothing);
-										});
-							}), true, 1, TimeUnit.MINUTES,
+													m.editMessage(mb.getUser().getAsMention())
+															.setEmbeds(eb.build())
+															.queue(null, Helper::doNothing);
+												});
+									}), true, 1, TimeUnit.MINUTES,
 							u -> hands.values().parallelStream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
 					));
 		}
