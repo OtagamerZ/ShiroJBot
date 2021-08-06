@@ -33,7 +33,8 @@ public enum Charm {
 	SOULLINK("Vínculo espiritual"),
 	SPELL("Magia"),
 	ARMORPIERCING("Penetração de armadura"),
-	AGILITY("Agilidade");
+	AGILITY("Agilidade"),
+	DRAIN("Dreno");
 
 	private final String name;
 
