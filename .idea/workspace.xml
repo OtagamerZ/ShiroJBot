@@ -17,7 +17,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização do dicionário do Shiritori">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/drain.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +142,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="1.2.3.9999" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shiritori" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/charm" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -152,11 +155,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shiritori" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records\anime" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\records" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.controller.postgresql.MemberDAO" />
@@ -1375,21 +1378,8 @@
       <workItem from="1628086114952" duration="3905000" />
       <workItem from="1628108378649" duration="1860000" />
       <workItem from="1628165063573" duration="120000" />
-      <workItem from="1628170498839" duration="5394000" />
-    </task>
-    <task id="LOCAL-05101" summary="Correções menores">
-      <created>1627652880881</created>
-      <option name="number" value="05101" />
-      <option name="presentableId" value="LOCAL-05101" />
-      <option name="project" value="LOCAL" />
-      <updated>1627652880881</updated>
-    </task>
-    <task id="LOCAL-05102" summary="Correções menores">
-      <created>1627653034716</created>
-      <option name="number" value="05102" />
-      <option name="presentableId" value="LOCAL-05102" />
-      <option name="project" value="LOCAL" />
-      <updated>1627653034716</updated>
+      <workItem from="1628170498839" duration="6417000" />
+      <workItem from="1628271702393" duration="1094000" />
     </task>
     <task id="LOCAL-05103" summary="Correções menores">
       <created>1627653136674</created>
@@ -1720,7 +1710,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628191455536</updated>
     </task>
-    <option name="localTasksCounter" value="5150" />
+    <task id="LOCAL-05150" summary="Atualização do dicionário do Shiritori">
+      <created>1628192923850</created>
+      <option name="number" value="05150" />
+      <option name="presentableId" value="LOCAL-05150" />
+      <option name="project" value="LOCAL" />
+      <updated>1628192923850</updated>
+    </task>
+    <task id="LOCAL-05151" summary="Atualização do dicionário do Shiritori">
+      <created>1628193035860</created>
+      <option name="number" value="05151" />
+      <option name="presentableId" value="LOCAL-05151" />
+      <option name="project" value="LOCAL" />
+      <updated>1628193035860</updated>
+    </task>
+    <option name="localTasksCounter" value="5152" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
