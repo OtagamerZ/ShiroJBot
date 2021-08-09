@@ -307,21 +307,17 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String header = "//" + card.getName() + "\n";
-
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
-			gs.evaluate(header + effect);
+			gs.evaluate(effect);
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e);
+			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
 
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
-		String header = "//" + card.getName() + "\n";
-
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("you", you);
@@ -330,9 +326,9 @@ public class Equipment implements Drawable, Cloneable {
 			gs.setVariable("allyPos", allyPos);
 			gs.setVariable("enemyPos", enemyPos);
 			gs.setVariable("self", this);
-			gs.evaluate(header + effect);
+			gs.evaluate(effect);
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e);
+			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
 

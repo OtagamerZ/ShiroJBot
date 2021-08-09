@@ -656,15 +656,13 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String header = "//" + card.getName() + "\n";
-
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
-			gs.evaluate(header + Helper.getOr(altEffect, effect));
+			gs.evaluate(Helper.getOr(altEffect, effect));
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e);
+			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
 
