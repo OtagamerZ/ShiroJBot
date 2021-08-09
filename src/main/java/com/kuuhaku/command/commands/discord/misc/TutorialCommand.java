@@ -27,7 +27,6 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -67,7 +66,6 @@ public class TutorialCommand implements Executable {
 			Main.getInfo().getIgnore().remove(author.getId());
 		};
 		try {
-			Main.getInfo().getIgnore().add(author.getId());
 			AtomicReference<CompletableFuture<Boolean>> next = new AtomicReference<>();
 			Message msg;
 
@@ -108,25 +106,8 @@ public class TutorialCommand implements Executable {
 			}
 
 			{
-				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setTitle(I18n.getString("str_balance-title", author.getName()))
-						.addField(
-								I18n.getString("str_balance-field-title", Helper.separate(acc.getBalance()), Helper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent())),
-								I18n.getString("str_balance-loan-bugs",
-										Helper.separate(acc.getVBalance()),
-										Helper.separate(acc.getLoan()),
-										Helper.separate(acc.getGems())
-								), true
-						)
-						.addField(
-								I18n.getString("str_balance-last-voted"),
-								acc.getLastVoted() == null ? "Nunca" : Helper.fullDateFormat.format(acc.getLastVoted()),
-								true
-						)
-						.setThumbnail("https://i.imgur.com/nhWckfq.png");
-
 				next.set(new CompletableFuture<>());
-				msg = channel.sendMessageEmbeds(eb.build(), thirdStep()).complete();
+				msg = channel.sendMessageEmbeds(thirdStep()).complete();
 				Pages.buttonize(
 						msg,
 						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
@@ -143,6 +124,7 @@ public class TutorialCommand implements Executable {
 			}
 
 			{
+				Main.getInfo().getIgnore().add(author.getId());
 				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("MIKO"), false);
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
@@ -152,7 +134,7 @@ public class TutorialCommand implements Executable {
 						.setImage("attachment://kawaipon.png");
 
 				next.set(new CompletableFuture<>());
-				msg = channel.sendMessageEmbeds(eb.build(), fourthStep(prefix))
+				msg = channel.sendMessageEmbeds(fourthStep(prefix), eb.build())
 						.addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "kp_" + kc.getCard().getId(), "png"), "kawaipon.png")
 						.complete();
 				Helper.awaitMessage(author,
@@ -164,6 +146,25 @@ public class TutorialCommand implements Executable {
 								KawaiponDAO.saveKawaipon(kp);
 
 								channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
+
+				Main.getInfo().getIgnore().remove(author.getId());
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
+
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(fifthStep(prefix)).complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equals(prefix + "kps no_game_no_life")) {
 								next.get().complete(true);
 								return true;
 							} else return false;
@@ -275,9 +276,7 @@ public class TutorialCommand implements Executable {
 						**Cromadas:** Cartas que possuem uma paleta alternativa, podendo também sertem usadas como material para sintetizar campos.
 												
 						Se estiver com dificuldades para ver a imagem ou quiser ver a lista em formato de texto, basta usar o comando `restante` e o nome do anime, igual você fez antes.
-												
-						Para continuar, digite `%skps no_game_no_life`.
-						""".formatted(prefix))
+						""")
 				.build();
 	}
 }
