@@ -145,7 +145,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
-			} else if (member == null || Main.getInfo().getIgnore().contains(author.getId())) return;
+			} else if (member == null) return;
 
 			String prefix = "";
 			try {
@@ -280,7 +280,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (command != null) {
 				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
-				if (found) {
+				if (found && !Main.getInfo().getIgnore().contains(author.getId())) {
 					if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 						channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
 						return;
