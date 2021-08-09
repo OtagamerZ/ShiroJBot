@@ -152,32 +152,12 @@ public class Board {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
+		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-			AccountDAO.saveAccount(lacc);
-		}
-
-		awarded = true;
-	}
-
-	public void awardWinner(Game game, boolean daily, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
-
-		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
-
-		wacc.playedDaily();
-		AccountDAO.saveAccount(wacc);
-
-		for (Player l : losers) {
-			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			lacc.playedDaily();
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
@@ -189,35 +169,13 @@ public class Board {
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
+			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, game.getClass());
 			AccountDAO.saveAccount(wacc);
 		}
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-			AccountDAO.saveAccount(lacc);
-		}
-
-		awarded = true;
-	}
-
-	public void awardWinners(Game game, boolean daily, String... ids) {
-		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
-
-		for (String id : ids) {
-			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
-
-			wacc.playedDaily();
-			AccountDAO.saveAccount(wacc);
-		}
-
-		for (Player l : losers) {
-			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			lacc.playedDaily();
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
@@ -228,32 +186,12 @@ public class Board {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
+		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-			AccountDAO.saveAccount(lacc);
-		}
-
-		awarded = true;
-	}
-
-	public void awardWinner(GlobalGame game, boolean daily, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
-
-		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
-
-		wacc.playedDaily();
-		AccountDAO.saveAccount(wacc);
-
-		for (Player l : losers) {
-			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			lacc.playedDaily();
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
@@ -265,35 +203,13 @@ public class Board {
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
+			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, game.getClass());
 			AccountDAO.saveAccount(wacc);
 		}
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-			AccountDAO.saveAccount(lacc);
-		}
-
-		awarded = true;
-	}
-
-	public void awardWinners(GlobalGame game, boolean daily, String... ids) {
-		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
-
-		for (String id : ids) {
-			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
-
-			wacc.playedDaily();
-			AccountDAO.saveAccount(wacc);
-		}
-
-		for (Player l : losers) {
-			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
-
-			lacc.playedDaily();
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
