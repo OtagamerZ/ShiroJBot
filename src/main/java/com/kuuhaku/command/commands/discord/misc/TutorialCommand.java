@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
@@ -58,8 +59,12 @@ public class TutorialCommand implements Executable {
 		}
 		 */
 
-		Runnable r = () -> channel.sendMessage("❌ | Tempo expirado, por favor use o comando novamente.").queue();
+		Runnable r = () -> {
+			channel.sendMessage("❌ | Tempo expirado, por favor use o comando novamente.").queue();
+			Main.getInfo().getIgnore().remove(author.getId());
+		};
 		try {
+			Main.getInfo().getIgnore().add(author.getId());
 			AtomicReference<CompletableFuture<Boolean>> next = new AtomicReference<>();
 
 			next.set(new CompletableFuture<>());
@@ -115,10 +120,13 @@ public class TutorialCommand implements Executable {
 					.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")
 					.setColor(Color.orange)
-					.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " créditos).", null);
+					.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " créditos).", null)
+					.setImage("attachment://kawaipon.png");
 
 			next.set(new CompletableFuture<>());
-			msg = channel.sendMessageEmbeds(fourthStep(prefix), eb.build()).complete();
+			msg = channel.sendMessageEmbeds(fourthStep(prefix), eb.build())
+					.addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "kp_" + kc.getCard().getId(), "png"), "kawaipon.png")
+					.complete();
 			Helper.awaitMessage(author,
 					channel,
 					m -> {
@@ -139,7 +147,7 @@ public class TutorialCommand implements Executable {
 			msg.delete().queue(null, Helper::doNothing);
 
 			next.set(new CompletableFuture<>());
-			msg = channel.sendMessageEmbeds(secondStep(prefix)).complete();
+			msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
 			Helper.awaitMessage(author,
 					channel,
 					m -> {

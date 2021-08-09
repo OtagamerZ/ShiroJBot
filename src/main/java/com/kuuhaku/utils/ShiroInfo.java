@@ -140,6 +140,7 @@ public class ShiroInfo {
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
+	private final Set<String> ignore = new HashSet<>();
 
 	//CACHES
 	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
@@ -321,6 +322,10 @@ public class ShiroInfo {
 
 	public MatchMaking getMatchMaking() {
 		return matchMaking;
+	}
+
+	public Set<String> getIgnore() {
+		return ignore;
 	}
 
 	//VARIABLES
