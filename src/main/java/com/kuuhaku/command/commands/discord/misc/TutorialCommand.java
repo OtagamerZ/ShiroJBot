@@ -153,8 +153,8 @@ public class TutorialCommand implements Executable {
 						2, TimeUnit.MINUTES, r
 				);
 
-				Main.getInfo().getIgnore().remove(author.getId());
 				if (!next.get().get()) return;
+				Main.getInfo().getIgnore().remove(author.getId());
 				msg.delete().queue(null, Helper::doNothing);
 			}
 
