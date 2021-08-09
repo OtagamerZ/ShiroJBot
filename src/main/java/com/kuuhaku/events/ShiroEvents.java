@@ -277,10 +277,10 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			PreparedCommand command = Main.getCommandManager().getCommand(commandName);
-			if (command != null) {
+			if (command != null && !Main.getInfo().getIgnore().contains(author.getId())) {
 				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
-				if (found && !Main.getInfo().getIgnore().contains(author.getId())) {
+				if (found) {
 					if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 						channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
 						return;
