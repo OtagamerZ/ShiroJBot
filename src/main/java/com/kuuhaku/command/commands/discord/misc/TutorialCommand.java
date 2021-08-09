@@ -52,7 +52,7 @@ public class TutorialCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!author.getId().equals(ShiroInfo.getNiiChan())) return;
+		if (!ShiroInfo.getStaff().contains(author.getId())) return;
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		/*
@@ -178,16 +178,16 @@ public class TutorialCommand implements Executable {
 
 			{
 				next.set(new CompletableFuture<>());
-				msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
-				Helper.awaitMessage(author,
-						channel,
-						m -> {
-							if (m.getContentRaw().equals(prefix + "kps no_game_no_life")) {
-								next.get().complete(true);
-								return true;
-							} else return false;
-						},
-						2, TimeUnit.MINUTES, r
+				msg = channel.sendMessageEmbeds(sixthStep()).complete();
+				Pages.buttonize(
+						msg,
+						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
+						true, 2, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						s -> {
+							next.get().complete(false);
+							r.run();
+						}
 				);
 
 				if (!next.get().get()) return;
@@ -233,9 +233,9 @@ public class TutorialCommand implements Executable {
 						Muito bem!
 												
 						Com este comando você pode ver quantos créditos você possui, além dos créditos voláteis, dívida, gemas acumuladas e a data do seu último voto.
-						**Créditos voláteis:** São iguais aos créditos normais, mas só podem ser usados para transações comigo além de perder 25% a cada hora.
-						**Dívidas:** Caso você faça um empréstimo de créditos (ou seja pego abusando de algum comando) você receberá um valor de dívida, fazendo com que você não receba mais créditos até terminar de pagá-la.
-						**Gemas:** A moeda VIP para quem vota frequentemente em mim, com ela você consegue comprar melhorias exóticas na loja exclusiva.
+						- **Créditos voláteis:** São iguais aos créditos normais, mas só podem ser usados para transações comigo além de perder 25% a cada hora.
+						- **Dívidas:** Caso você faça um empréstimo de créditos (ou seja pego abusando de algum comando) você receberá um valor de dívida, fazendo com que você não receba mais créditos até terminar de pagá-la.
+						- **Gemas:** A moeda VIP para quem vota frequentemente em mim, com ela você consegue comprar melhorias exóticas na loja exclusiva.
 												
 						Para continuar, clique em ▶️.
 						""")
@@ -266,16 +266,27 @@ public class TutorialCommand implements Executable {
 				.build();
 	}
 
-	private MessageEmbed sixthStep(String prefix) {
+	private MessageEmbed sixthStep() {
 		return new ColorlessEmbedBuilder()
 				.setDescription("""
 						Nossa, faltam muitas ainda não? Mas não se preocupe, com o tempo você irá completar todas as coleções, pode confiar!
 												
 						Existem 2 tipos de cartas:
-						**Normais:** Cartas que podem ser convertidas para o Shoukan, além de serem usadas como material para sintetizar equipamentos evogear.
-						**Cromadas:** Cartas que possuem uma paleta alternativa, podendo também sertem usadas como material para sintetizar campos.
+						- **Normais:** Cartas que podem ser convertidas para o Shoukan, além de serem usadas como material para sintetizar equipamentos evogear.
+						- **Cromadas:** Cartas que possuem uma paleta alternativa, podendo também sertem usadas como material para sintetizar campos.
 												
 						Se estiver com dificuldades para ver a imagem ou quiser ver a lista em formato de texto, basta usar o comando `restante` e o nome do anime, igual você fez antes.
+												
+						Para continuar, clique em ▶️.
+						""")
+				.build();
+	}
+
+	private MessageEmbed seventhStep() {
+		return new ColorlessEmbedBuilder()
+				.setDescription("""
+						Sobre o Shoukan, recomendo ler [este guia](https://www.reddit.com/r/ShiroJBot/comments/jkbjtd/shoukan_o_duelo_entre_invocadores/) quando tiver um tempo, ele foi escrito por meu Nii-chan e contém informações muito úteis sobre como jogar!
+						Você sabia? Jogadores que leem o guia têm 99% de chance de não passar vergonha na primeira partida! 
 						""")
 				.build();
 	}
