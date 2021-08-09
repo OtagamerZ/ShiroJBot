@@ -131,10 +131,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -1286,6 +1283,41 @@ public class Helper {
 				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
 					if (act.apply(event.getMessage()))
 						close();
+				}
+			}
+		});
+	}
+
+	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit) {
+		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
+			final ScheduledFuture<?> timeout = Executors.newSingleThreadScheduledExecutor().schedule(this::close, time, unit);
+
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
+					if (act.apply(event.getMessage())) {
+						timeout.cancel(true);
+						close();
+					}
+				}
+			}
+		});
+	}
+
+	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, Runnable onTimeout) {
+		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
+			final ScheduledFuture<?> timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+				close();
+				onTimeout.run();
+			}, time, unit);
+
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
+					if (act.apply(event.getMessage())) {
+						timeout.cancel(true);
+						close();
+					}
 				}
 			}
 		});
