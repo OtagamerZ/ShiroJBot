@@ -16,13 +16,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado amuleto Dreno">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/framework/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/framework/Table.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/normal/games/Shiritori.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1382,14 +1377,7 @@
       <workItem from="1628165063573" duration="120000" />
       <workItem from="1628170498839" duration="6417000" />
       <workItem from="1628271702393" duration="3840000" />
-      <workItem from="1628510556359" duration="1656000" />
-    </task>
-    <task id="LOCAL-05104" summary="Correções menores">
-      <created>1627653182838</created>
-      <option name="number" value="05104" />
-      <option name="presentableId" value="LOCAL-05104" />
-      <option name="project" value="LOCAL" />
-      <updated>1627653182838</updated>
+      <workItem from="1628510556359" duration="3555000" />
     </task>
     <task id="LOCAL-05105" summary="Correções menores">
       <created>1627654850888</created>
@@ -1727,7 +1715,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628272829315</updated>
     </task>
-    <option name="localTasksCounter" value="5153" />
+    <task id="LOCAL-05153" summary="Correções menores">
+      <created>1628518661750</created>
+      <option name="number" value="05153" />
+      <option name="presentableId" value="LOCAL-05153" />
+      <option name="project" value="LOCAL" />
+      <updated>1628518661751</updated>
+    </task>
+    <option name="localTasksCounter" value="5154" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1836,11 +1831,11 @@
     <MESSAGE value="Adicionado armazém pessoal de cartas" />
     <MESSAGE value="Atualização de dependecias e do header de licença" />
     <MESSAGE value="Implementação inicial dos comandos Slash" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Criado jogo Shiritori" />
     <MESSAGE value="Atualização do dicionário do Shiritori" />
     <MESSAGE value="Adicionado amuleto Dreno" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado amuleto Dreno" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
