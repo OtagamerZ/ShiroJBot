@@ -22,10 +22,13 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -52,8 +55,8 @@ public class TutorialCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (!author.getId().equals(ShiroInfo.getNiiChan())) return;
 
-		/*
 		Account acc = AccountDAO.getAccount(author.getId());
+		/*
 		if (acc.hasStarted()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
 		}
@@ -66,101 +69,129 @@ public class TutorialCommand implements Executable {
 		try {
 			Main.getInfo().getIgnore().add(author.getId());
 			AtomicReference<CompletableFuture<Boolean>> next = new AtomicReference<>();
+			Message msg;
 
-			next.set(new CompletableFuture<>());
-			Message msg = channel.sendMessageEmbeds(firstStep()).complete();
-			Pages.buttonize(
-					msg,
-					Map.of("▶️", (mb, ms) -> next.get().complete(true)),
-					true, 1, TimeUnit.MINUTES,
-					u -> u.getId().equals(author.getId()),
-					s -> {
-						next.get().complete(false);
-						r.run();
-					}
-			);
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(firstStep()).complete();
+				Pages.buttonize(
+						msg,
+						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
+						true, 2, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						s -> {
+							next.get().complete(false);
+							r.run();
+						}
+				);
 
-			if (!next.get().get()) return;
-			msg.delete().queue(null, Helper::doNothing);
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
 
-			next.set(new CompletableFuture<>());
-			msg = channel.sendMessageEmbeds(secondStep(prefix)).complete();
-			Helper.awaitMessage(author,
-					channel,
-					m -> {
-						if (m.getContentRaw().equals(prefix + "atm")) {
-							next.get().complete(true);
-							return true;
-						} else return false;
-					},
-					1, TimeUnit.MINUTES, r
-			);
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(secondStep(prefix)).complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equals(prefix + "atm")) {
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
 
-			if (!next.get().get()) return;
-			msg.delete().queue(null, Helper::doNothing);
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
 
-			next.set(new CompletableFuture<>());
-			msg = channel.sendMessageEmbeds(thirdStep()).complete();
-			Pages.buttonize(
-					msg,
-					Map.of("▶️", (mb, ms) -> next.get().complete(true)),
-					true, 1, TimeUnit.MINUTES,
-					u -> u.getId().equals(author.getId()),
-					s -> {
-						next.get().complete(false);
-						r.run();
-					}
-			);
+			{
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle(I18n.getString("str_balance-title", author.getName()))
+						.addField(
+								I18n.getString("str_balance-field-title", Helper.separate(acc.getBalance()), Helper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent())),
+								I18n.getString("str_balance-loan-bugs",
+										Helper.separate(acc.getVBalance()),
+										Helper.separate(acc.getLoan()),
+										Helper.separate(acc.getGems())
+								), true
+						)
+						.addField(
+								I18n.getString("str_balance-last-voted"),
+								acc.getLastVoted() == null ? "Nunca" : Helper.fullDateFormat.format(acc.getLastVoted()),
+								true
+						)
+						.setThumbnail("https://i.imgur.com/nhWckfq.png");
 
-			if (!next.get().get()) return;
-			msg.delete().queue(null, Helper::doNothing);
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(eb.build(), thirdStep()).complete();
+				Pages.buttonize(
+						msg,
+						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
+						true, 2, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						s -> {
+							next.get().complete(false);
+							r.run();
+						}
+				);
 
-			KawaiponCard kc = new KawaiponCard(CardDAO.getCard("MIKO"), false);
-			EmbedBuilder eb = new EmbedBuilder()
-					.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
-					.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")
-					.setColor(Color.orange)
-					.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " créditos).", null)
-					.setImage("attachment://kawaipon.png");
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
 
-			next.set(new CompletableFuture<>());
-			msg = channel.sendMessageEmbeds(fourthStep(prefix), eb.build())
-					.addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "kp_" + kc.getCard().getId(), "png"), "kawaipon.png")
-					.complete();
-			Helper.awaitMessage(author,
-					channel,
-					m -> {
-						if (m.getContentRaw().equals(prefix + "coletar")) {
-							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-							kp.getCards().add(kc);
-							KawaiponDAO.saveKawaipon(kp);
+			{
+				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("MIKO"), false);
+				EmbedBuilder eb = new EmbedBuilder()
+						.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
+						.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")
+						.setColor(Color.orange)
+						.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " créditos).", null)
+						.setImage("attachment://kawaipon.png");
 
-							channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
-							next.get().complete(true);
-							return true;
-						} else return false;
-					},
-					1, TimeUnit.MINUTES, r
-			);
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(eb.build(), fourthStep(prefix))
+						.addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "kp_" + kc.getCard().getId(), "png"), "kawaipon.png")
+						.complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equals(prefix + "coletar")) {
+								Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+								kp.getCards().add(kc);
+								KawaiponDAO.saveKawaipon(kp);
 
-			if (!next.get().get()) return;
-			msg.delete().queue(null, Helper::doNothing);
+								channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
 
-			next.set(new CompletableFuture<>());
-			msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
-			Helper.awaitMessage(author,
-					channel,
-					m -> {
-						if (m.getContentRaw().equals(prefix + "kps no_game_no_life")) {
-							next.get().complete(true);
-							return true;
-						} else return false;
-					},
-					1, TimeUnit.MINUTES, r
-			);
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
 
-			if (!next.get().get()) return;
-			msg.delete().queue(null, Helper::doNothing);
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equals(prefix + "kps no_game_no_life")) {
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
+
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
 		} catch (ExecutionException | InterruptedException ignore) {
 		}
 	}
@@ -215,8 +246,10 @@ public class TutorialCommand implements Executable {
 				.setDescription("""
 						Olha só!
 												
-						Essa é uma carta kawaipon, elas aparecem conforme o movimento nos chats do servidor e podem ser coletadas para adicionar à sua coleção. Pegue-a, rápido!
+						Essa é uma carta kawaipon, elas aparecem conforme o movimento nos chats do servidor e podem ser coletadas para adicionar à sua coleção.
+						Para coletá-las você precisa de créditos (conforme escrito abaixo da imagem), mas como estamos em um tutorial esta carta sairá de graça.
 												
+						Pegue-a, rápido!
 						Para continuar, digite `%scoletar`.
 						""".formatted(prefix))
 				.build();
