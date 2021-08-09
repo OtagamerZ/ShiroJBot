@@ -170,7 +170,7 @@ public class Shoukan extends GlobalGame {
 						}
 
 						getHistory().setWinner(next);
-						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 						close();
 					}
 					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
@@ -1794,7 +1794,7 @@ public class Shoukan extends GlobalGame {
 
 				if (getCustom() == null) {
 					getHistory().setWinner(op.getSide());
-					getBoard().awardWinner(this, daily, op.getUser().getId());
+					getBoard().awardWinner(this, op.getUser().getId());
 				}
 
 				String msg;
@@ -1934,7 +1934,7 @@ public class Shoukan extends GlobalGame {
 				if (!h.manualDraw()) {
 					if (getCustom() == null) {
 						getHistory().setWinner(next);
-						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 					}
 
 					String msg;

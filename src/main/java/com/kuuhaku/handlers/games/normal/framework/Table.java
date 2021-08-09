@@ -54,12 +54,12 @@ public class Table {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
+		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
