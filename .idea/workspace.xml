@@ -17,7 +17,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TutorialCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntihoistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntihoistCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeMentionableCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeMentionableCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,11 +189,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.fun" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.command.commands" />
       <recent name="com.kuuhaku.command" />
-      <recent name="com.kuuhaku.model.annotations" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1377,14 +1383,7 @@
       <workItem from="1628165063573" duration="120000" />
       <workItem from="1628170498839" duration="6417000" />
       <workItem from="1628271702393" duration="3840000" />
-      <workItem from="1628510556359" duration="3555000" />
-    </task>
-    <task id="LOCAL-05105" summary="Correções menores">
-      <created>1627654850888</created>
-      <option name="number" value="05105" />
-      <option name="presentableId" value="LOCAL-05105" />
-      <option name="project" value="LOCAL" />
-      <updated>1627654850888</updated>
+      <workItem from="1628510556359" duration="11780000" />
     </task>
     <task id="LOCAL-05106" summary="Correções menores">
       <created>1627654933933</created>
@@ -1722,7 +1721,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628518661751</updated>
     </task>
-    <option name="localTasksCounter" value="5154" />
+    <task id="LOCAL-05154" summary="Correções menores">
+      <created>1628520770581</created>
+      <option name="number" value="05154" />
+      <option name="presentableId" value="LOCAL-05154" />
+      <option name="project" value="LOCAL" />
+      <updated>1628520770581</updated>
+    </task>
+    <option name="localTasksCounter" value="5155" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
