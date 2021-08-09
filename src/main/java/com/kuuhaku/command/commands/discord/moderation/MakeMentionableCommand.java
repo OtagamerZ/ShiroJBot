@@ -22,7 +22,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -30,6 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"makementionable"},
 		category = Category.MODERATION
 )
+@Requires({Permission.NICKNAME_MANAGE})
 public class MakeMentionableCommand implements Executable {
 
 	@Override

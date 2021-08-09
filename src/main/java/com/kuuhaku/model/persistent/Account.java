@@ -61,6 +61,9 @@ public class Account {
 	private long vBalance = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long sBalance = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long loan = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
@@ -101,6 +104,9 @@ public class Account {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean useFoil = false;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean started = false;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String ultimate = "";
@@ -155,11 +161,11 @@ public class Account {
 	}
 
 	public long getVBalance() {
-		return vBalance;
+		return vBalance + sBalance;
 	}
 
 	public long getTotalBalance() {
-		return balance + vBalance;
+		return balance + vBalance + sBalance;
 	}
 
 	public long getSpent() {
@@ -204,6 +210,16 @@ public class Account {
 		TransactionDAO.register(uid, from, credit);
 	}
 
+	public void addSCredit(long credit, Class<?> from) {
+		if (credit == 0) return;
+		vBalance += credit;
+		TransactionDAO.register(uid, from, credit);
+	}
+
+	public void setSBalance(long sBalance) {
+		this.sBalance = sBalance;
+	}
+
 	public long debitLoan() {
 		long stBalance = balance;
 
@@ -219,23 +235,24 @@ public class Account {
 	}
 
 	public void removeCredit(long credit, Class<?> from) {
-		this.balance -= credit;
 		this.spent += credit;
+		this.balance -= credit;
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
 
 	public void consumeCredit(long credit, Class<?> from) {
-		long remaining = vBalance - credit;
-
-		if (remaining < 0) {
-			this.vBalance = 0;
-			this.balance -= Math.abs(remaining);
-			this.spent += Math.abs(remaining);
-		} else {
-			this.vBalance -= credit;
-		}
-
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
+
+		spent += credit;
+		sBalance = Math.abs(credit -= sBalance);
+
+		if (credit > 0) {
+			vBalance = Math.abs(credit -= vBalance);
+
+			if (credit > 0) {
+				balance = Math.abs(credit - balance);
+			}
+		}
 	}
 
 	public void expireVCredit() {
@@ -360,6 +377,14 @@ public class Account {
 
 	public void setUseFoil(boolean useFoil) {
 		this.useFoil = useFoil;
+	}
+
+	public boolean hasStarted() {
+		return started;
+	}
+
+	public void setStarted(boolean started) {
+		this.started = started;
 	}
 
 	public int getStreak() {
