@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -52,8 +51,6 @@ public class TutorialCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!ShiroInfo.getStaff().contains(author.getId())) return;
-
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.hasStarted()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
