@@ -177,7 +177,7 @@ public class CrissCross extends Game {
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))

@@ -67,8 +67,7 @@ public class Shiritori extends Game {
 					getTable().leaveGame();
 					resetTimer();
 					if (getTable().getInGamePlayers().size() == 1) {
-						User u = getCurrent();
-						getTable().awardWinner(this, u.getId());
+						getTable().awardWinner(this, getCurrent().getId());
 						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.queue(msg -> {
