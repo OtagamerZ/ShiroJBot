@@ -361,6 +361,7 @@ public class TutorialCommand implements Executable {
 						Você sabia? Jogadores que leem o guia têm 99%% de chance de não passar vergonha na primeira partida!
 												
 						Para poder jogar, você vai precisar de um deck, que existem 3 tipos.
+						OBS: Para ver seu deck use o comando `deck`.
 												
 						Para continuar, digite `%skps elegiveis`.
 						""".formatted(prefix))
