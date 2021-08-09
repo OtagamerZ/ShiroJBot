@@ -55,11 +55,9 @@ public class TutorialCommand implements Executable {
 		if (!ShiroInfo.getStaff().contains(author.getId())) return;
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		/*
 		if (acc.hasStarted()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
 		}
-		 */
 
 		Runnable r = () -> {
 			channel.sendMessage("❌ | Tempo expirado, por favor use o comando novamente.").queue();
@@ -93,7 +91,7 @@ public class TutorialCommand implements Executable {
 				Helper.awaitMessage(author,
 						channel,
 						m -> {
-							if (m.getContentRaw().equals(prefix + "atm")) {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "atm")) {
 								next.get().complete(true);
 								return true;
 							} else return false;
@@ -125,7 +123,7 @@ public class TutorialCommand implements Executable {
 
 			{
 				Main.getInfo().getIgnore().add(author.getId());
-				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("MIKO"), false);
+				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("QUEEN"), false);
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 						.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")
@@ -140,7 +138,7 @@ public class TutorialCommand implements Executable {
 				Helper.awaitMessage(author,
 						channel,
 						m -> {
-							if (m.getContentRaw().equals(prefix + "coletar")) {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "coletar")) {
 								Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 								kp.getCards().add(kc);
 								KawaiponDAO.saveKawaipon(kp);
@@ -164,7 +162,7 @@ public class TutorialCommand implements Executable {
 				Helper.awaitMessage(author,
 						channel,
 						m -> {
-							if (m.getContentRaw().equals(prefix + "kps no_game_no_life")) {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps no_game_no_life")) {
 								next.get().complete(true);
 								return true;
 							} else return false;
@@ -192,6 +190,83 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+			}
+
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(seventhStep(prefix)).complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps elegiveis")) {
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
+
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
+
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(eightStep(prefix)).complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps evogear")) {
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
+
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
+
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(ninethStep(prefix)).complete();
+				Helper.awaitMessage(author,
+						channel,
+						m -> {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "see forest s")) {
+								next.get().complete(true);
+								return true;
+							} else return false;
+						},
+						2, TimeUnit.MINUTES, r
+				);
+
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
+
+			{
+				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(finalStep()).complete();
+				Pages.buttonize(
+						msg,
+						Map.of("✅", (mb, ms) -> next.get().complete(true)),
+						true, 2, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						s -> {
+							next.get().complete(false);
+							r.run();
+						}
+				);
+
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+
+				acc.addSCredit(25000, this.getClass());
+				acc.setStarted(true);
+				AccountDAO.saveAccount(acc);
+				channel.sendMessage(author.getAsMention() + " recebeu **25.000** créditos de iniciante!").queue();
 			}
 		} catch (ExecutionException | InterruptedException ignore) {
 		}
@@ -282,12 +357,93 @@ public class TutorialCommand implements Executable {
 				.build();
 	}
 
-	private MessageEmbed seventhStep() {
+	private MessageEmbed seventhStep(String prefix) {
 		return new ColorlessEmbedBuilder()
 				.setDescription("""
 						Sobre o Shoukan, recomendo ler [este guia](https://www.reddit.com/r/ShiroJBot/comments/jkbjtd/shoukan_o_duelo_entre_invocadores/) quando tiver um tempo, ele foi escrito por meu Nii-chan e contém informações muito úteis sobre como jogar!
-						Você sabia? Jogadores que leem o guia têm 99% de chance de não passar vergonha na primeira partida! 
+						Você sabia? Jogadores que leem o guia têm 99%% de chance de não passar vergonha na primeira partida!
+												
+						Para poder jogar, você vai precisar de um deck, que existem 3 tipos.
+												
+						Para continuar, digite `%skps elegiveis`.
+						""".formatted(prefix))
+				.build();
+	}
+
+	private MessageEmbed eightStep(String prefix) {
+		return new ColorlessEmbedBuilder()
+				.setDescription("""
+						**Senshi**
+												
+						A sua linha de frente, campeões que irão lutar até o fim para lhe trazer a vitória.
+						Cada um possui seus próprios atributos, efeitos, raças e classes, permitindo uma ampla customização do seu deck.
+												
+						Certos campeões também possuem fusões - versões muito mais poderosas que podem alterar o rumo de uma partida.
+												
+						Se quiser (e eu recomendo) ler mais sobre as raças e classes, basta usar este mesmo comando mas informando a raça/classe que deseja ver.
+						Adicionalmente, usar várias cartas de uma mesma raça garantem efeitos únicos e poderosos durante o jogo, então planeje bem sua estratégia!
+												
+						Para continuar, digite `%skps evogear`.
+						""".formatted(prefix))
+				.build();
+	}
+
+	private MessageEmbed ninethStep(String prefix) {
+		return new ColorlessEmbedBuilder()
+				.setDescription("""
+						**Evogear**
+												
+						Equipamentos e feitiços para adicionar um "tempero" às suas cartas.
+						Eles são obtidos através de sínteses ou drops e são essenciais em qualquer deck, seja ele de um guerreiro ou de um mago.
+												
+						Você possui 24 espaços para adicionar evogears, mas eles consomem espaços de acordo com o tier:
+						- **Tier 1:** Evogears geralmente baratos e de atributos inferiores, mas consomem apenas 1 espaço do deck permitindo usar uma grande quantidade deles.
+						- **Tier 2:** Evogears de atributos medianos e efeitos variados, digamos que "um meio termo" entre os tiers 1 e 3.
+						- **Tier 3:** Evogears poderosos e efeitos capazes de virar o jogo ou garantir a vitoria. Apesar de fortes deve-se usá-los com moderação pois ocupam 3 espaços do deck.
+						- **Tier 4 (mítico):** Evogears extremamente impactantes que criam oportunidades de vitória instantânea se usados corretamente. Um deck pode possuir apenas 1 evogear mítico e são banidos logo após o uso, então a escolha deve levar em consideração o seu deck como um todo.
+												
+						Para continuar, digite `%ssee forest s`.
+						""".formatted(prefix))
+				.build();
+	}
+
+	private MessageEmbed tenthStep() {
+		return new ColorlessEmbedBuilder()
+				.setDescription("""
+						**Campo**
+												
+						Campos são modificadores globais que afetam cartas de determinadas raças, tanto positivamente quanto negativamente.
+						Geralmente são usados campos que sinergizam com seu deck, mas também podem ser usados como medida anti-deck contra o oponente.
+												
+						Neste campo por exemplo, os efeitos são:
+						- **Elfo:** +25% atributos
+						- **Betial:** +25% atributos
+						- **Místico:** +33% atributos
+						- **Criatura:** +33% atributos
+												
+						A raça da carta pode ser descoberta olhando no canto esquerdo superior, logo antes do nome.
+												
+						Para continuar, clique em ▶️.
 						""")
+				.build();
+	}
+
+	private MessageEmbed finalStep() {
+		return new ColorlessEmbedBuilder()
+				.setDescription("""
+						Isso é tudo, acha que está pronto para começar sua jornada?
+						Para aprofundar ainda mais nas mecânicas do Shoukan recomendo encontrar um jogador disposto a fazer um contrato de aprendiz, ele dará à ambos uma recompensa após completá-lo.
+						Para fazer um, use o comando `tutor` e mencione o usuário disposto a treinar você para tornar-se um mestre invocador!
+												
+						**Mas espere, é perigoso ir sozinho!**
+						Aqui, como recompensa por completar o tutorial e para lhe ajudar a começar sua jornada, vou te dar **25.000** créditos de iniciante.
+						Eles são iguais aos créditos voláteis mas não expiram com o tempo.
+												
+						Boa sorte jogador, esperarei seu sucesso nos campos de invocação!
+												
+						Para terminar, clique em ✅.
+						""")
+				.setImage("https://c.tenor.com/kDAUCWniovoAAAAC/no-game-no-life-thumbs-up.gif")
 				.build();
 	}
 }
