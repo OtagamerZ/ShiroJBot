@@ -145,7 +145,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
-			} else if (member == null) return;
+			} else if (member == null || Main.getInfo().getIgnore().contains(author.getId())) return;
 
 			String prefix = "";
 			try {
