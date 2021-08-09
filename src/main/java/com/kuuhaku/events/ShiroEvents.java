@@ -142,10 +142,12 @@ public class ShiroEvents extends ListenerAdapter {
 			Guild guild = message.getGuild();
 			String rawMessage = message.getContentRaw().replaceAll("\s+", " ");
 
+			if (Main.getInfo().getIgnore().contains(author.getId())) return;
+
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
-			} else if (member == null || Main.getInfo().getIgnore().contains(author.getId())) return;
+			} else if (member == null) return;
 
 			String prefix = "";
 			try {
