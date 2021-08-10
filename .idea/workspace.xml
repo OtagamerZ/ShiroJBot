@@ -17,9 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Concluído tutorial sobre kawaipon">
+      <change afterPath="$PROJECT_DIR$/.jpb/persistence-units.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TutorialCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TutorialCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,6 +104,22 @@
       <facet id="shiro-j-bot.test/invalid/Web" />
     </ignored-facets>
   </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="JPA Inspector" value="true" />
+        <entry key="JPA Palette" value="true" />
+        <entry key="JPA Structure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="JPA Inspector" value="false" />
+        <entry key="JPA Palette" value="false" />
+        <entry key="JPA Structure" value="false" />
+      </map>
+    </option>
+  </component>
   <component name="JupyterTrust" id="3cddea61-70ea-4139-828d-65ac523ec76d" />
   <component name="ProblemsViewState">
     <option name="selectedIndex" value="2" />
@@ -141,7 +156,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="1.2.3.9999" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/charm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -1379,21 +1394,8 @@
       <workItem from="1628165063573" duration="120000" />
       <workItem from="1628170498839" duration="6417000" />
       <workItem from="1628271702393" duration="3840000" />
-      <workItem from="1628510556359" duration="15935000" />
-    </task>
-    <task id="LOCAL-05113" summary="Correções menores">
-      <created>1627915104886</created>
-      <option name="number" value="05113" />
-      <option name="presentableId" value="LOCAL-05113" />
-      <option name="project" value="LOCAL" />
-      <updated>1627915104886</updated>
-    </task>
-    <task id="LOCAL-05114" summary="Correções menores">
-      <created>1627921372110</created>
-      <option name="number" value="05114" />
-      <option name="presentableId" value="LOCAL-05114" />
-      <option name="project" value="LOCAL" />
-      <updated>1627921372110</updated>
+      <workItem from="1628510556359" duration="16287000" />
+      <workItem from="1628597454532" duration="1174000" />
     </task>
     <task id="LOCAL-05115" summary="Correções menores">
       <created>1627922095535</created>
@@ -1724,7 +1726,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628542400952</updated>
     </task>
-    <option name="localTasksCounter" value="5162" />
+    <task id="LOCAL-05162" summary="Concluído tutorial sobre kawaipon">
+      <created>1628542529850</created>
+      <option name="number" value="05162" />
+      <option name="presentableId" value="LOCAL-05162" />
+      <option name="project" value="LOCAL" />
+      <updated>1628542529850</updated>
+    </task>
+    <task id="LOCAL-05163" summary="Concluído tutorial sobre kawaipon">
+      <created>1628542603168</created>
+      <option name="number" value="05163" />
+      <option name="presentableId" value="LOCAL-05163" />
+      <option name="project" value="LOCAL" />
+      <updated>1628542603168</updated>
+    </task>
+    <option name="localTasksCounter" value="5164" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
