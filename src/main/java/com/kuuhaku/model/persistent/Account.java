@@ -250,7 +250,7 @@ public class Account {
 
 		if (credit > 0) {
 			aux = credit;
-			credit -= sBalance;
+			credit -= vBalance;
 			vBalance = Math.max(0, vBalance - aux);
 
 			if (credit > 0) {
