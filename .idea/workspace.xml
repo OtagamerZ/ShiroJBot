@@ -1394,14 +1394,7 @@
       <workItem from="1628170498839" duration="6417000" />
       <workItem from="1628271702393" duration="3840000" />
       <workItem from="1628510556359" duration="16287000" />
-      <workItem from="1628597454532" duration="3991000" />
-    </task>
-    <task id="LOCAL-05118" summary="Correções menores">
-      <created>1627924123869</created>
-      <option name="number" value="05118" />
-      <option name="presentableId" value="LOCAL-05118" />
-      <option name="project" value="LOCAL" />
-      <updated>1627924123869</updated>
+      <workItem from="1628597454532" duration="4679000" />
     </task>
     <task id="LOCAL-05119" summary="Correções menores">
       <created>1627924339673</created>
@@ -1739,7 +1732,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628598906248</updated>
     </task>
-    <option name="localTasksCounter" value="5167" />
+    <task id="LOCAL-05167" summary="Concluído tutorial sobre kawaipon">
+      <created>1628604947168</created>
+      <option name="number" value="05167" />
+      <option name="presentableId" value="LOCAL-05167" />
+      <option name="project" value="LOCAL" />
+      <updated>1628604947168</updated>
+    </task>
+    <option name="localTasksCounter" value="5168" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
