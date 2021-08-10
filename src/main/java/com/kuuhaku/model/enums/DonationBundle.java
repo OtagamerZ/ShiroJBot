@@ -18,32 +18,23 @@
 
 package com.kuuhaku.model.enums;
 
-import java.util.Arrays;
-
 public enum DonationBundle {
-	SIMPLE("vzFl1enz7D", 1000, 0, true),
-	SUPPORTER("NGQPKYjbo", 7500, 0, false),
-	SUPPORTER_P("yxDWN85zUH", 15000, 1, false),
-	SUPPORTER_PP("P3fE4ClNHr", 150000, 5, false);
+	SUPPORTER(7500, 0),
+	SUPPORTER_P(15000, 1),
+	SUPPORTER_PP(150000, 5);
 
-	private final String id;
 	private final int credits;
 	private final int gems;
-	private final boolean cumulative;
 
-	DonationBundle(String id, int credits, int gems, boolean cumulative) {
-		this.id = id;
+	DonationBundle(int credits, int gems) {
 		this.credits = credits;
 		this.gems = gems;
-		this.cumulative = cumulative;
 	}
 
-	public static DonationBundle getById(String id) {
-		return Arrays.stream(values()).filter(db -> db.id.equals(id)).findFirst().orElse(null);
-	}
-
-	public String getId() {
-		return id;
+	public static DonationBundle getByValue(int value) {
+		if (value < 10) return SUPPORTER;
+		else if (value < 25) return SUPPORTER_P;
+		else return SUPPORTER_PP;
 	}
 
 	public int getCredits() {
@@ -52,9 +43,5 @@ public enum DonationBundle {
 
 	public int getGems() {
 		return gems;
-	}
-
-	public boolean isCumulative() {
-		return cumulative;
 	}
 }
