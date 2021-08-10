@@ -246,6 +246,24 @@ public class TutorialCommand implements Executable {
 
 			{
 				next.set(new CompletableFuture<>());
+				msg = channel.sendMessageEmbeds(tenthStep()).complete();
+				Pages.buttonize(
+						msg,
+						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
+						true, 2, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						s -> {
+							next.get().complete(false);
+							r.run();
+						}
+				);
+
+				if (!next.get().get()) return;
+				msg.delete().queue(null, Helper::doNothing);
+			}
+
+			{
+				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(finalStep()).complete();
 				Pages.buttonize(
 						msg,
