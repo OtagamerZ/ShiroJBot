@@ -39,6 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -141,7 +142,7 @@ public class TutorialCommand implements Executable {
 								KawaiponDAO.saveKawaipon(kp);
 
 								channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
-								next.get().complete(true);
+								Executors.newSingleThreadScheduledExecutor().schedule(() -> next.get().complete(true), 1, TimeUnit.SECONDS);
 								return true;
 							} else return false;
 						},
