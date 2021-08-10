@@ -2216,24 +2216,11 @@ public class Helper {
 		return false;
 	}
 
-	public static String getFancyNumber(int number, boolean animated) {
-		Map<Character, String> emotes = Map.of(
-				'0', "<:0_n:795486513541939230>",
-				'1', "<:1_n:795486513618092042>",
-				'2', "<:2_n:795486513412046908>",
-				'3', "<:3_n:795486513319772211>",
-				'4', "<:4_n:795486513197744178>",
-				'5', "<:5_n:795486513235492875>",
-				'6', "<:6_n:795486513328554008>",
-				'7', "<:7_n:795486513067720755>",
-				'8', "<:8_n:795486513428824075>",
-				'9', "<:9_n:795486513143742465>"
-		);
-
+	public static String getFancyNumber(int number) {
 		String sNumber = String.valueOf(number);
 		StringBuilder sb = new StringBuilder();
 		for (char c : sNumber.toCharArray())
-			sb.append(emotes.get(c));
+			sb.append(getNumericEmoji(Integer.parseInt(String.valueOf(c))));
 
 		return sb.toString();
 	}
