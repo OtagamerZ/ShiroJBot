@@ -22,7 +22,7 @@
       "Igual à image, mas aparece apenas quando um membro sair do servidor"
     ]
   },
-  "showDate": "true ou false - Exibe o marcador de quando o embed foi enviado",
+  "showDate": "true ou false (sem aspas) - Exibe o marcador de quando o embed foi enviado",
   "footer": {
     "name": "Texto do rodapé",
     "icon": "Ícone a ser exibido à esquerda do rodapé"
@@ -36,22 +36,22 @@
     {
       "name": "Nome do campo 2",
       "value": "Texto do campo 2",
-      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+      "inline": "true ou false (sem aspas) - Exibe o campo na mesma fileira que outros campos ou sozinho"
     },
     {
       "name": "Nome do campo 3",
       "value": "Texto do campo 3",
-      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+      "inline": "true ou false (sem aspas) - Exibe o campo na mesma fileira que outros campos ou sozinho"
     },
     {
       "name": "Nome do campo 4",
       "value": "Texto do campo 4",
-      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+      "inline": "true ou false (sem aspas) - Exibe o campo na mesma fileira que outros campos ou sozinho"
     },
     {
       "name": "Nome do campo 5",
       "value": "Texto do campo 5",
-      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+      "inline": "true ou false (sem aspas) - Exibe o campo na mesma fileira que outros campos ou sozinho"
     }
   ]
 }
