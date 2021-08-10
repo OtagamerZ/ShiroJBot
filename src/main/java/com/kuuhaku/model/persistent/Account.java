@@ -244,13 +244,15 @@ public class Account {
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 
 		spent += credit;
-		sBalance = Math.max(0, Math.abs(credit -= sBalance));
+		credit -= sBalance;
+		sBalance = Math.max(0, sBalance - credit);
 
 		if (credit > 0) {
-			vBalance = Math.max(0, Math.abs(credit -= vBalance));
+			credit -= sBalance;
+			vBalance = Math.max(0, vBalance - credit);
 
 			if (credit > 0) {
-				balance = credit - balance;
+				balance -= credit;
 			}
 		}
 	}
