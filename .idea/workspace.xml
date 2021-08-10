@@ -16,14 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Concluído tutorial sobre kawaipon">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/DonationType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/records/KoFi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DonationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DonationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/DonationBundle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/DonationBundle.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Concluído tutorial sobre kawaipon" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1400,14 +1393,7 @@
       <workItem from="1628271702393" duration="3840000" />
       <workItem from="1628510556359" duration="16287000" />
       <workItem from="1628597454532" duration="6510000" />
-      <workItem from="1628615742526" duration="3675000" />
-    </task>
-    <task id="LOCAL-05122" summary="Correções menores">
-      <created>1627925379464</created>
-      <option name="number" value="05122" />
-      <option name="presentableId" value="LOCAL-05122" />
-      <option name="project" value="LOCAL" />
-      <updated>1627925379464</updated>
+      <workItem from="1628615742526" duration="4288000" />
     </task>
     <task id="LOCAL-05123" summary="Correções menores">
       <created>1627925524212</created>
@@ -1745,7 +1731,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628606437595</updated>
     </task>
-    <option name="localTasksCounter" value="5171" />
+    <task id="LOCAL-05171" summary="Concluído tutorial sobre kawaipon">
+      <created>1628622493367</created>
+      <option name="number" value="05171" />
+      <option name="presentableId" value="LOCAL-05171" />
+      <option name="project" value="LOCAL" />
+      <updated>1628622493368</updated>
+    </task>
+    <option name="localTasksCounter" value="5172" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
