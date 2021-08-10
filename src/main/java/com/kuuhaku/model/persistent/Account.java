@@ -242,14 +242,16 @@ public class Account {
 
 	public void consumeCredit(long credit, Class<?> from) {
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
-
 		spent += credit;
+
+		long aux = credit;
 		credit -= sBalance;
-		sBalance = Math.max(0, sBalance - credit);
+		sBalance = Math.max(0, sBalance - aux);
 
 		if (credit > 0) {
+			aux = credit;
 			credit -= sBalance;
-			vBalance = Math.max(0, vBalance - credit);
+			vBalance = Math.max(0, vBalance - aux);
 
 			if (credit > 0) {
 				balance -= credit;
