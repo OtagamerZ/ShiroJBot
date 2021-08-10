@@ -16,22 +16,37 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.endpoint;
+package com.kuuhaku.model.records;
 
-import com.kuuhaku.model.records.KoFi;
-import com.kuuhaku.utils.JSONUtils;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.squareup.moshi.Json;
 
-@RestController
-public class DonationHandler {
+import java.time.ZonedDateTime;
 
-	@RequestMapping(value = "/webhook/donate", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = RequestMethod.POST)
-	public void handleDonation(@RequestParam("data") String payload) {
-		KoFi kofi = JSONUtils.fromJSON(payload, KoFi.class);
+public record KoFi(
+		ZonedDateTime timestamp,
+		String type,
+		String message,
+		String amount,
+		String currency,
+		String url,
+		String email,
 
-	}
+		@Json(name = "message_id")
+		String messageID,
+
+		@Json(name = "kofi_transaction_id")
+		String kofiTransactionID,
+
+		@Json(name = "from_name")
+		String fromName,
+
+		@Json(name = "is_subscription_payment")
+		boolean isSubscriptionPayment,
+
+		@Json(name = "is_first_subscription_payment")
+		boolean isFirstSubscriptionPayment,
+
+		@Json(name = "is_public")
+		boolean isPublic
+) {
 }

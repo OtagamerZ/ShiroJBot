@@ -29,6 +29,7 @@ import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
@@ -36,7 +37,7 @@ import java.awt.*;
 @RestController
 public class DiscordBotsListHandler {
 
-	@RequestMapping(value = "/webhook/dbl", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/webhook/dbl", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public void handleVote(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 
