@@ -16,7 +16,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Reforçado sistema antiraid" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1394,14 +1398,7 @@
       <workItem from="1628510556359" duration="16287000" />
       <workItem from="1628597454532" duration="6510000" />
       <workItem from="1628615742526" duration="5221000" />
-      <workItem from="1628683355589" duration="5926000" />
-    </task>
-    <task id="LOCAL-05129" summary="Correções menores">
-      <created>1627934161826</created>
-      <option name="number" value="05129" />
-      <option name="presentableId" value="LOCAL-05129" />
-      <option name="project" value="LOCAL" />
-      <updated>1627934161826</updated>
+      <workItem from="1628683355589" duration="7029000" />
     </task>
     <task id="LOCAL-05130" summary="Correções menores">
       <created>1627934623339</created>
@@ -1739,7 +1736,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628689144023</updated>
     </task>
-    <option name="localTasksCounter" value="5178" />
+    <task id="LOCAL-05178" summary="Correções menores">
+      <created>1628690497075</created>
+      <option name="number" value="05178" />
+      <option name="presentableId" value="LOCAL-05178" />
+      <option name="project" value="LOCAL" />
+      <updated>1628690497075</updated>
+    </task>
+    <option name="localTasksCounter" value="5179" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1849,10 +1853,10 @@
     <MESSAGE value="Criado jogo Shiritori" />
     <MESSAGE value="Atualização do dicionário do Shiritori" />
     <MESSAGE value="Adicionado amuleto Dreno" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Concluído tutorial sobre kawaipon" />
     <MESSAGE value="Reforçado sistema antiraid" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reforçado sistema antiraid" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
