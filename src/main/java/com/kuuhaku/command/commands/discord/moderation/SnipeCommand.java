@@ -30,6 +30,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang.StringUtils;
 
@@ -49,7 +50,19 @@ public class SnipeCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		ExpiringMap<String, Message> c = Main.getInfo().retrieveCache(guild);
 
-		List<List<Message>> chunks = Helper.chunkify(c.values().stream().filter(m -> m.getChannel().getId().equals(channel.getId())).toList(), 10);
+		List<List<Message>> chunks = Helper.chunkify(
+				c.values().stream()
+						.filter(m -> m.getChannel().getId().equals(channel.getId()))
+						.filter(m -> {
+							try {
+								channel.retrieveMessageById(m.getId()).complete();
+								return false;
+							} catch (ErrorResponseException e) {
+								return true;
+							}
+						})
+						.toList(),
+				10);
 		if (chunks.isEmpty()) {
 			channel.sendMessage("❌ | Não há nenhuma mensagem deletada recentemente neste canal.").queue();
 			return;
