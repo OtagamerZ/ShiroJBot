@@ -26,9 +26,11 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 @Command(
 		name = "rshard",
-		aliases = {"reiniciar", "reboot"},
+		aliases = {"reiniciar", "reboot", "restart"},
 		usage = "req_id",
 		category = Category.DEV
 )
@@ -56,5 +58,6 @@ public class ShardRestartCommand implements Executable {
 		}
 
 		Main.getShiroShards().restart(id);
+		Objects.requireNonNull(Main.getShiroShards().getShardById(id)).getPresence().setActivity(Main.getRandomActivity());
 	}
 }
