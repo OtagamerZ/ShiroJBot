@@ -506,10 +506,15 @@ public class Shoukan extends GlobalGame {
 					if (e.getCharm() != null) {
 						switch (e.getCharm()) {
 							case TIMEWARP -> {
-								t.getEffect(new EffectParameters(BEFORE_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
-								t.getEffect(new EffectParameters(AFTER_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+								if (t.hasEffect()) {
+									t.getEffect(new EffectParameters(BEFORE_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+									t.getEffect(new EffectParameters(AFTER_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+								}
 							}
-							case DOUBLETAP -> t.getEffect(new EffectParameters(ON_SUMMON, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+							case DOUBLETAP -> {
+								if (t.hasEffect())
+									t.getEffect(new EffectParameters(ON_SUMMON, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+							}
 							case DOPPELGANGER -> {
 								SlotColumn sc = getFirstAvailableSlot(current, true);
 
