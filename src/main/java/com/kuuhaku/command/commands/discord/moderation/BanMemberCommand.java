@@ -76,7 +76,7 @@ public class BanMemberCommand implements Executable {
 			}
 
 			argsAsText = Arrays.stream(args)
-					.filter(a -> !Helper.regex(a, "<@!?" + mb.getId() + ">|" + mb.getId()).find())
+					.filter(a -> !Helper.regex(a, "<@!?\\d+>|" + mb.getId()).find())
 					.collect(Collectors.joining(" "));
 		}
 
