@@ -52,7 +52,7 @@ public class AntiraidCommand implements Executable {
 
 				gc.setAntiRaidLimit(threshold);
 				gc.setAntiRaid(true);
-				channel.sendMessage("✅ | Modo antiraid ativado, expulsarei caso entrem " + gc.getAntiRaidLimit() + " novos membros em um intervalo de 5 segundos.").queue();
+				channel.sendMessage("✅ | Modo antiraid ativado, o sistema R.A.ID será ativado caso entrem " + gc.getAntiRaidLimit() + " novos membros em um intervalo de 5 segundos.").queue();
 			} catch (NumberFormatException e) {
 				channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			}
@@ -60,7 +60,7 @@ public class AntiraidCommand implements Executable {
 			gc.toggleAntiRaid();
 
 			if (gc.isAntiRaid())
-				channel.sendMessage("✅ | Modo antiraid ativado, expulsarei caso entrem " + gc.getAntiRaidLimit() + " novos membros em um intervalo de 5 segundos.").queue();
+				channel.sendMessage("✅ | Modo antiraid ativado, o sistema R.A.ID será ativado caso entrem " + gc.getAntiRaidLimit() + " novos membros em um intervalo de 5 segundos.").queue();
 			else
 				channel.sendMessage("✅ | Modo antiraid desativado.").queue();
 		}
