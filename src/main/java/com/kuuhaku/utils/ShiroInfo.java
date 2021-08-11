@@ -20,6 +20,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
@@ -33,11 +34,16 @@ import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sun.management.OperatingSystemMXBean;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpHeaders;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -45,10 +51,12 @@ import org.apache.http.message.BasicHeader;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import javax.websocket.DeploymentException;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
@@ -141,6 +149,40 @@ public class ShiroInfo {
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
 	private final Set<String> ignore = new HashSet<>();
+	private final ConcurrentMap<String, Pair<Long, Integer>> antiRaidStreak = ExpiringMap.builder()
+			.expirationListener((k, v) -> {
+				Guild guild = Main.getShiroShards().getGuildById((String) k);
+				if (guild == null) return;
+
+				Pair<Long, Integer> p = (Pair<Long, Integer>) v;
+				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+				TextChannel chn = gc.getGeneralChannel();
+				if (chn != null) {
+					EmbedBuilder eb = new EmbedBuilder()
+							.setColor(Color.green)
+							.setTitle("**RELATÓRIO DO SISTEMA R.A.ID**")
+							.setDescription("""
+									Detectado fim da raid, usuários podem voltar à rotina normal.
+									          
+									Duração da raid: %s
+									Usuários banidos: %s
+									""".formatted(Helper.toStringDuration(System.currentTimeMillis() - p.getLeft()), p.getRight())
+							)
+							.setFooter("Aguarde, o sistema será encerrado em breve")
+							.setImage("https://i.imgur.com/KkhWWJf.gif");
+
+					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+				}
+
+				for (TextChannel tc : guild.getTextChannels()) {
+					if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
+						tc.getManager().setSlowmode(0).queue(null, Helper::doNothing);
+					}
+				}
+			})
+			.expirationPolicy(ExpirationPolicy.ACCESSED)
+			.expiration(10, TimeUnit.SECONDS)
+			.build();
 
 	//CACHES
 	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
@@ -326,6 +368,10 @@ public class ShiroInfo {
 
 	public Set<String> getIgnore() {
 		return ignore;
+	}
+
+	public ConcurrentMap<String, Pair<Long, Integer>> getAntiRaidStreak() {
+		return antiRaidStreak;
 	}
 
 	//VARIABLES
