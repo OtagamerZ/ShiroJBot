@@ -77,17 +77,17 @@ public class UserInfoCommand implements Executable, Slashed {
 		for (User.UserFlag flag : m.getUser().getFlags()) {
 			sb.append(
 					switch (flag) {
-						case STAFF -> "<:DiscordStaff:852288722565201930>";
-						case PARTNER -> "<:DiscordPartner:852288518314786817>";
-						case HYPESQUAD -> "<:HypesquadEvents:852288043774771201>";
-						case HYPESQUAD_BRAVERY -> "<:HypesquadBravery:852288048180101151>";
-						case HYPESQUAD_BRILLIANCE -> "<:HypesquadBrilliance:852288180384563221>";
-						case HYPESQUAD_BALANCE -> "<:HypesquadBalance:852288047545319424>";
-						case EARLY_SUPPORTER -> "<:EarlySupporter:852288574790565948>";
-						case BUG_HUNTER_LEVEL_1 -> "<:BugHunter1:852288420545429525>";
-						case BUG_HUNTER_LEVEL_2 -> "<:BugHunter2:852288421157797908>";
-						case VERIFIED_DEVELOPER -> "<:EarlyBotDeveloper:852288651706892298>";
-						case CERTIFIED_MODERATOR -> "<:CertifiedModerator:852538983333363732>";
+						case STAFF -> "<:DiscordStaff:852288722565201930> ";
+						case PARTNER -> "<:DiscordPartner:852288518314786817> ";
+						case HYPESQUAD -> "<:HypesquadEvents:852288043774771201> ";
+						case HYPESQUAD_BRAVERY -> "<:HypesquadBravery:852288048180101151> ";
+						case HYPESQUAD_BRILLIANCE -> "<:HypesquadBrilliance:852288180384563221> ";
+						case HYPESQUAD_BALANCE -> "<:HypesquadBalance:852288047545319424> ";
+						case EARLY_SUPPORTER -> "<:EarlySupporter:852288574790565948> ";
+						case BUG_HUNTER_LEVEL_1 -> "<:BugHunter1:852288420545429525> ";
+						case BUG_HUNTER_LEVEL_2 -> "<:BugHunter2:852288421157797908> ";
+						case VERIFIED_DEVELOPER -> "<:EarlyBotDeveloper:852288651706892298> ";
+						case CERTIFIED_MODERATOR -> "<:CertifiedModerator:852538983333363732> ";
 						default -> "";
 					}
 			);
