@@ -664,11 +664,11 @@ public class ShiroEvents extends ListenerAdapter {
 							.setColor(Color.red)
 							.setTitle("**⚠️ | RAID DETECTADA | ⚠️**")
 							.setDescription("""
-									Usuários permaneçam em suas casas, isto não é um treinamento, o servidor está sofrendo uma tentativa de raid.
+									Usuários permaneçam em suas casas, isto não é um treinamento, **o servidor está sofrendo uma tentativa de raid**!
 									          
-									Elevando nível de defesa para DEFCON 1...Ok
-									Ativando sistemas de proteção R.A.ID...Ok
-									Notificando dono do servidor...Ok
+									Elevando nível de defesa para DEFCON 1...**Ok**
+									Ativando sistemas de proteção R.A.ID...**Ok**
+									Notificando dono do servidor...**Ok**
 									""")
 							.setFooter("Aguarde, o sistema será encerrado em breve")
 							.setImage("https://i.imgur.com/KkhWWJf.gif");

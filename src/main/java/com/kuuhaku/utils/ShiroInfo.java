@@ -167,9 +167,7 @@ public class ShiroInfo {
 									Duração da raid: %s
 									Usuários banidos: %s
 									""".formatted(Helper.toStringDuration(System.currentTimeMillis() - p.getLeft()), p.getRight())
-							)
-							.setFooter("Aguarde, o sistema será encerrado em breve")
-							.setImage("https://i.imgur.com/KkhWWJf.gif");
+							);
 
 					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 				}
