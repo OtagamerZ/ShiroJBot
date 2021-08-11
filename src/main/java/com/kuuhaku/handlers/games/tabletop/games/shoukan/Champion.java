@@ -628,7 +628,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean hasEffect() {
-		return effect != null && !sealed;
+		return Helper.getOr(altEffect, effect) != null && !sealed;
 	}
 
 	public boolean isFusion() {
