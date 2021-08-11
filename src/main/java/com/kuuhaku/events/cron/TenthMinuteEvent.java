@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -109,6 +110,30 @@ public class TenthMinuteEvent implements Job {
 				RestAction.allOf(acts)
 						.mapToResult()
 						.queue();
+			}
+		}
+
+		guilds = GuildDAO.getAllGuildsWithGeneralChannel();
+		for (GuildConfig gc : guilds) {
+			Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
+			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
+				TextChannel tc = gc.getGeneralChannel();
+				if (tc != null)
+					try {
+						tc.getManager()
+								.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount())))
+								.queue(null, t -> {
+									gc.setGeneralChannel(null);
+									GuildDAO.updateGuildSettings(gc);
+								});
+					} catch (InsufficientPermissionException e) {
+						gc.setGeneralChannel(null);
+						GuildDAO.updateGuildSettings(gc);
+					}
+				else {
+					gc.setGeneralChannel(null);
+					GuildDAO.updateGuildSettings(gc);
+				}
 			}
 		}
 
