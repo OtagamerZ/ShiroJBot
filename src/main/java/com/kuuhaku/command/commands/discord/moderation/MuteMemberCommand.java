@@ -117,7 +117,7 @@ public class MuteMemberCommand implements Executable {
 
 		Member finalMb = mb;
 		argsAsText = Arrays.stream(args)
-				.filter(a -> !Helper.regex(a, "<@!?" + finalMb.getId() + ">|" + finalMb.getId()).find())
+				.filter(a -> !Helper.regex(a, "<@!?\\d+>|" + finalMb.getId()).find())
 				.collect(Collectors.joining(" "));
 
 		String finalArgsAsText = argsAsText;
