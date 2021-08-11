@@ -143,16 +143,22 @@ public class ShiroEvents extends ListenerAdapter {
 			Guild guild = message.getGuild();
 			String rawMessage = message.getContentRaw().replaceAll("\s+", " ");
 
+			System.out.println("1");
+
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
 			} else if (member == null) return;
+
+			System.out.println("2");
 
 			String prefix = "";
 			try {
 				prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase(Locale.ROOT);
 			} catch (NoResultException | NullPointerException ignore) {
 			}
+
+			System.out.println("3");
 
 			if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId()) && rawMessage.length() > 1) {
 				try {
