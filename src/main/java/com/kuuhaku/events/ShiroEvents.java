@@ -662,12 +662,12 @@ public class ShiroEvents extends ListenerAdapter {
 				if (chn != null) {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(Color.red)
-							.setTitle("**⚠️ | RAID DETECTADA | ⚠️**")
+							.setTitle("**⚠️ | RAID DETECTADA - SISTEMA R.A.ID ATIVADO | ⚠️**")
 							.setDescription("""
 									Usuários permaneçam em suas casas, isto não é um treinamento, **o servidor está sofrendo uma tentativa de raid**!
 									          
 									Elevando nível de defesa para DEFCON 1...**Ok**
-									Ativando sistemas de proteção R.A.ID...**Ok**
+									Ativando slowmode em canais públicos...**Ok**
 									Notificando dono do servidor...**Ok**
 									""")
 							.setFooter("Aguarde, o sistema será encerrado em breve")
