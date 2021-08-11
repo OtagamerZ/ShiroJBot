@@ -644,7 +644,7 @@ public class ShiroEvents extends ListenerAdapter {
 		Member member = event.getMember();
 		User author = event.getUser();
 
-		if (Main.getInfo().getAntiRaidStreak().containsKey(guild.getId())) {
+		if (Main.getInfo().getAntiRaidStreak().get(guild.getId()) != null) {
 			Main.getInfo().getAntiRaidStreak().computeIfPresent(guild.getId(), (k, p) -> Pair.of(p.getLeft(), p.getRight() + 1));
 			guild.ban(member, 7, "Detectada tentativa de raid").queue();
 			return;
