@@ -81,7 +81,7 @@ public class MuteMemberCommand implements Executable {
 				.map(String::trim)
 				.collect(Collectors.toList());
 		if (params.size() < 2) {
-			channel.sendMessage("❌ | Você precisa informar um tempo e uma razão.").queue();
+			channel.sendMessage("❌ | Você precisa informar um tempo.").queue();
 			return;
 		}
 
@@ -89,6 +89,15 @@ public class MuteMemberCommand implements Executable {
 		long time = Helper.stringToDurationMillis(argsAsText);
 		if (time < 60000) {
 			channel.sendMessage("❌ | O tempo deve ser maior que 1 minuto.").queue();
+			return;
+		}
+
+		Member finalMb = mb;
+		argsAsText = Arrays.stream(args)
+				.filter(a -> !Helper.regex(a, "<@!?\\d+>|" + finalMb.getId()).find())
+				.collect(Collectors.joining(" "));
+		if (argsAsText.isBlank()) {
+			channel.sendMessage("❌ | Você precisa informar uma razão.").queue();
 			return;
 		}
 
@@ -114,11 +123,6 @@ public class MuteMemberCommand implements Executable {
 			} catch (InsufficientPermissionException ignore) {
 			}
 		}
-
-		Member finalMb = mb;
-		argsAsText = Arrays.stream(args)
-				.filter(a -> !Helper.regex(a, "<@!?\\d+>|" + finalMb.getId()).find())
-				.collect(Collectors.joining(" "));
 
 		String finalArgsAsText = argsAsText;
 		RestAction.allOf(act)
