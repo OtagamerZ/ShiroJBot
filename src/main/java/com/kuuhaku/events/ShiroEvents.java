@@ -73,6 +73,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -642,7 +643,13 @@ public class ShiroEvents extends ListenerAdapter {
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
 		User author = event.getUser();
-		if (BlacklistDAO.isBlacklisted(author)) return;
+
+		if (Main.getInfo().getAntiRaidStreak().containsKey(guild.getId())) {
+			Main.getInfo().getAntiRaidStreak().computeIfPresent(guild.getId(), (k, p) -> Pair.of(p.getLeft(), p.getRight() + 1));
+			guild.ban(member, 7, "Detectada tentativa de raid").queue();
+			return;
+		}
+
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.isAntiRaid()) {
@@ -651,11 +658,44 @@ public class ShiroEvents extends ListenerAdapter {
 
 			arc.put(System.currentTimeMillis(), author.getId());
 			if (arc.size() >= gc.getAntiRaidLimit()) {
+				TextChannel chn = gc.getGeneralChannel();
+				if (chn != null) {
+					EmbedBuilder eb = new EmbedBuilder()
+							.setColor(Color.red)
+							.setTitle("**⚠️ | RAID DETECTADA | ⚠️**")
+							.setDescription("""
+									Usuários permaneçam em suas casas, isto não é um treinamento, o servidor está sofrendo uma tentativa de raid.
+									          
+									Elevando nível de defesa para DEFCON 1...Ok
+									Ativando sistemas de proteção R.A.ID...Ok
+									Notificando dono do servidor...Ok
+									""")
+							.setFooter("Aguarde, o sistema será encerrado em breve")
+							.setImage("https://i.imgur.com/KkhWWJf.gif");
+
+					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+				}
+
+				User owner = Main.getInfo().getUserByID(guild.getOwnerId());
+				if (owner != null) {
+					owner.openPrivateChannel()
+							.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
+							.queue(null, Helper::doNothing);
+				}
+
+				Main.getInfo().getAntiRaidStreak().put(guild.getId(), Pair.of(System.currentTimeMillis(), arc.size()));
+
+				for (TextChannel tc : guild.getTextChannels()) {
+					if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
+						tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+					}
+				}
+
 				Main.getInfo().getAntiRaidCache().remove(guild.getId());
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
 				for (String id : arc.values()) {
-					acts.add(guild.kick(id, "Detectada tentativa de raid"));
+					acts.add(guild.ban(id, 7, "Detectada tentativa de raid"));
 				}
 
 				RestAction.allOf(acts)
@@ -664,13 +704,15 @@ public class ShiroEvents extends ListenerAdapter {
 										author,
 										false,
 										null,
-										"ANTIRAID: " + arc.size() + " usuários expulsos por entrarem ao mesmo tempo no servidor em um intervalo de 5 segundos (limite: " + gc.getAntiRaidLimit() + " membros/5 seg).",
+										"ANTIRAID: " + arc.size() + " usuários banidos por entrarem ao mesmo tempo no servidor em um intervalo de 5 segundos (limite: " + gc.getAntiRaidLimit() + " membros/5 seg).",
 										guild
 								), Helper::doNothing
 						);
 				return;
 			}
 		}
+
+		if (BlacklistDAO.isBlacklisted(author)) return;
 
 		String name = member.getEffectiveName();
 		if (gc.isMakeMentionable() && !Helper.regex(name, "[A-z0-9]{4}").find()) {
