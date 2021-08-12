@@ -19,6 +19,8 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "customanswer")
@@ -42,18 +44,13 @@ public class CustomAnswer {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
     private int chance = 100;
 
-	@Column(columnDefinition = "VARCHAR(255)")
-    private String forUser = null;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customanswer_id")
+    private Set<String> users = new HashSet<>();
 
-    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String forUser) {
-        this.id = id;
-        this.guildId = guildId;
-        this.trigger = trigger;
-        this.answer = answer;
-        this.anywhere = anywhere;
-        this.chance = chance;
-        this.forUser = forUser;
-    }
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customanswer_id")
+    private Set<String> channels = new HashSet<>();
 
     public CustomAnswer(String guildId, String trigger, String answer) {
         this.guildId = guildId;
@@ -108,11 +105,11 @@ public class CustomAnswer {
         this.chance = chance;
     }
 
-    public String getForUser() {
-        return forUser;
+    public Set<String> getUsers() {
+        return users;
     }
 
-    public void setForUser(String forUser) {
-        this.forUser = forUser;
+    public Set<String> getChannels() {
+        return channels;
     }
 }

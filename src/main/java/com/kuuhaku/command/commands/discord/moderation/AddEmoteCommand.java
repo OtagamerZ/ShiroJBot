@@ -115,7 +115,7 @@ public class AddEmoteCommand implements Executable {
 
 				String msg;
 				if (message.getMentionedRoles().size() > 0) {
-					msg = "✅ | Emote adicionado com sucesso para os cargos " + message.getMentionedRoles().stream().map(r -> "`" + r.getName() + "`").collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + "!";
+					msg = "✅ | Emote adicionado com sucesso para os cargos " + Helper.parseAndJoin(message.getMentionedRoles(), IMentionable::getAsMention) + "!";
 				} else {
 					msg = "✅ | Emote adicionado com sucesso!";
 				}
