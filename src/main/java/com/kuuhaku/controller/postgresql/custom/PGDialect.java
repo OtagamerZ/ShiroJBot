@@ -26,5 +26,6 @@ public class PGDialect extends PostgreSQL10Dialect {
 	public PGDialect() {
 		super();
 		registerFunction("string_agg", new SQLFunctionTemplate(StandardBasicTypes.STRING, "string_agg(?1, ?2)"));
+		registerFunction("array_to_string", new SQLFunctionTemplate(StandardBasicTypes.STRING, "array_to_string(?1, ?2)"));
 	}
 }
