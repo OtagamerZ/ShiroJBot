@@ -2761,18 +2761,23 @@ public class Helper {
 		return null;
 	}
 
-	public static Function<List<String>, String> properlyJoin() {
+	public static <T extends Collection<String>> Function<T, String> properlyJoin() {
 		return objs -> {
+			List<String> ls = List.copyOf(objs);
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < objs.size(); i++) {
-				if (i == objs.size() - 1 && objs.size() > 1) sb.append(" e ");
+			for (int i = 0; i < ls.size(); i++) {
+				if (i == ls.size() - 1 && ls.size() > 1) sb.append(" e ");
 				else if (i > 0) sb.append(", ");
 
-				sb.append(objs.get(i));
+				sb.append(ls.get(i));
 			}
 
 			return sb.toString();
 		};
+	}
+
+	public static <C, T extends Collection<C>> String parseAndJoin(T col, Function<C, String> mapper) {
+		return col.stream().map(mapper).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
 	}
 
 	public static String toStringDuration(long millis) {
