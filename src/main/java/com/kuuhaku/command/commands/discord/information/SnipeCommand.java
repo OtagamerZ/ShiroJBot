@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.moderation;
+package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
@@ -37,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "snipe",
@@ -61,7 +62,7 @@ public class SnipeCommand implements Executable {
 								return true;
 							}
 						})
-						.toList(),
+						.collect(Collectors.toList()),
 				10);
 		if (chunks.isEmpty()) {
 			channel.sendMessage("❌ | Não há nenhuma mensagem deletada recentemente neste canal.").queue();

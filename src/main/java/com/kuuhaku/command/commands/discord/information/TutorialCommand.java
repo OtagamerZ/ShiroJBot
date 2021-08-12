@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.misc;
+package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "tutorial",
 		aliases = {"start", "begin", "comecar"},
-		category = Category.MISC
+		category = Category.INFO
 )
 public class TutorialCommand implements Executable {
 
