@@ -17,7 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na customização das mensagens personalizadas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CustomAnswerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CustomAnswerDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1397,21 +1397,7 @@
       <workItem from="1628597454532" duration="6510000" />
       <workItem from="1628615742526" duration="5221000" />
       <workItem from="1628683355589" duration="17055000" />
-      <workItem from="1628772560062" duration="6088000" />
-    </task>
-    <task id="LOCAL-05150" summary="Atualização do dicionário do Shiritori">
-      <created>1628192923850</created>
-      <option name="number" value="05150" />
-      <option name="presentableId" value="LOCAL-05150" />
-      <option name="project" value="LOCAL" />
-      <updated>1628192923850</updated>
-    </task>
-    <task id="LOCAL-05151" summary="Atualização do dicionário do Shiritori">
-      <created>1628193035860</created>
-      <option name="number" value="05151" />
-      <option name="presentableId" value="LOCAL-05151" />
-      <option name="project" value="LOCAL" />
-      <updated>1628193035860</updated>
+      <workItem from="1628772560062" duration="6959000" />
     </task>
     <task id="LOCAL-05152" summary="Adicionado amuleto Dreno">
       <created>1628272829314</created>
@@ -1742,7 +1728,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628784246078</updated>
     </task>
-    <option name="localTasksCounter" value="5199" />
+    <task id="LOCAL-05199" summary="Melhoria na customização das mensagens personalizadas">
+      <created>1628784567125</created>
+      <option name="number" value="05199" />
+      <option name="presentableId" value="LOCAL-05199" />
+      <option name="project" value="LOCAL" />
+      <updated>1628784567125</updated>
+    </task>
+    <task id="LOCAL-05200" summary="Melhoria na customização das mensagens personalizadas">
+      <created>1628784691083</created>
+      <option name="number" value="05200" />
+      <option name="presentableId" value="LOCAL-05200" />
+      <option name="project" value="LOCAL" />
+      <updated>1628784691084</updated>
+    </task>
+    <option name="localTasksCounter" value="5201" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
