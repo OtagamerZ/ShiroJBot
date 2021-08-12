@@ -39,8 +39,8 @@ public class CustomAnswerDAO {
 					 , c.answer
 					 , c.anywhere
 					 , c.chance
-					 , array_to_string(cu.users, ',') AS users
-					 , array_to_string(cc.channels, ',') AS channels
+					 , array_to_string(array_agg(cu.users), ',') AS users
+					 , array_to_string(array_agg(cc.channels), ',') AS channels
 				FROM CustomAnswer c
 						 LEFT JOIN customanswer_users cu ON c.id = cu.customanswer_id
 						 LEFT JOIN customanswer_channels cc ON c.id = cc.customanswer_id
