@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
@@ -32,6 +31,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import com.squareup.moshi.JsonDataException;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -40,7 +40,9 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -72,7 +74,7 @@ public class CustomAnswerCommand implements Executable {
 
 				for (CustomAnswer ca : chunk) {
 					eb.addField(
-							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? (" | " + ca.getChance() + "%") : "") + (ca.getForUser() != null ? (" | " + Main.getInfo().getUserByID(ca.getForUser()).getName()) : "") + "`) " + ca.getTrigger(),
+							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? (" | " + ca.getChance() + "%") : "") + "`) " + ca.getTrigger(),
 							StringUtils.abbreviate(ca.getAnswer(), 100),
 							false
 					);
@@ -110,8 +112,11 @@ public class CustomAnswerCommand implements Executable {
 			if (ca.getChance() != 100)
 				eb.appendDescription("\nCom " + ca.getChance() + "% de chance de eu responder");
 
-			if (ca.getForUser() != null)
-				eb.appendDescription("\nApenas se for ativado por " + Main.getInfo().getUserByID(ca.getForUser()));
+			if (!ca.getUsers().isEmpty())
+				eb.appendDescription("\nApenas se for ativado por " + Helper.parseAndJoin(ca.getUsers(), Helper::getUsername));
+
+			if (!ca.getChannels().isEmpty())
+				eb.appendDescription("\nApenas se for ativado em " + Helper.parseAndJoin(ca.getChannels(), Helper::getUsername));
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
@@ -145,15 +150,38 @@ public class CustomAnswerCommand implements Executable {
 				msg += ", com uma chance de " + ca.getChance() + "%%";
 			}
 
-			if (jo.has("forUser")) {
-				Member m = guild.getMemberById(jo.getString("forUser"));
-				if (m == null) {
-					channel.sendMessage("❌ | Não encontrei nenhum usuário com esse ID.").queue();
-					return;
+			if (jo.has("users")) {
+				Set<String> names = new HashSet<>();
+				JSONArray ja = jo.getJSONArray("users");
+				for (Object id : ja) {
+					Member m = guild.getMemberById(String.valueOf(id));
+					if (m == null) {
+						channel.sendMessage("❌ | Não encontrei nenhum usuário com o ID `" + id + "`.").queue();
+						return;
+					}
+
+					ca.getUsers().add(m.getId());
+					names.add(m.getAsMention());
 				}
 
-				ca.setForUser(m.getId());
-				msg += ", apenas quando " + m.getAsMention() + " usar o gatilho";
+				msg += ", apenas quando " + Helper.properlyJoin().apply(names) + " usar" + (names.size() == 1 ? "" : "em") + " o gatilho";
+			}
+
+			if (jo.has("channels")) {
+				Set<String> names = new HashSet<>();
+				JSONArray ja = jo.getJSONArray("channels");
+				for (Object id : ja) {
+					TextChannel tc = guild.getTextChannelById(String.valueOf(id));
+					if (tc == null) {
+						channel.sendMessage("❌ | Não encontrei nenhum canal com o ID `" + id + "`.").queue();
+						return;
+					}
+
+					ca.getChannels().add(tc.getId());
+					names.add(tc.getAsMention());
+				}
+
+				msg += ", apenas o gatilho for usado " + (names.size() == 1 ? "no canal" : "nos canais") + " " + Helper.properlyJoin().apply(names);
 			}
 			msg += ".";
 

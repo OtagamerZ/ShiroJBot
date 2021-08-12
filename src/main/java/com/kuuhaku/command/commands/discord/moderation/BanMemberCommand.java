@@ -89,7 +89,7 @@ public class BanMemberCommand implements Executable {
 					acts.add(mb.ban(7));
 				}
 
-				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", deseja confirmar?").queue(
+				channel.sendMessage("Você está prestes a banir " + Helper.parseAndJoin(m, IMentionable::getAsMention) + ", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
 										RestAction.allOf(acts)
 												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
@@ -106,7 +106,7 @@ public class BanMemberCommand implements Executable {
 					acts.add(mb.ban(7, argsAsText));
 				}
 
-				channel.sendMessage("Você está prestes a banir " + m.stream().map(Member::getEffectiveName).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
+				channel.sendMessage("Você está prestes a banir " + Helper.parseAndJoin(m, IMentionable::getAsMention) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) ->
 										RestAction.allOf(acts)
 												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + finalArgsAsText + "`"))

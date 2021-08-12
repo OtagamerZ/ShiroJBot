@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
@@ -136,9 +135,7 @@ public class Arena {
 
 					String name;
 					if (h instanceof TeamHand th) {
-						name = th.getNames().stream()
-								.map(n -> StringUtils.abbreviate(n, 16))
-								.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
+						name = Helper.parseAndJoin(th.getNames(), n -> StringUtils.abbreviate(n, 16));
 					} else {
 						name = StringUtils.abbreviate(h.getUser().getName(), 32);
 					}

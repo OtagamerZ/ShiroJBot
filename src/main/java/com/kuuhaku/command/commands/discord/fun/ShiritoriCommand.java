@@ -107,7 +107,7 @@ public class ShiritoriCommand implements Executable {
 		Game t = new Shiritori(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
 		String msg;
 		if (players.size() > 2)
-			msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", vocês foram desafiados a uma partida de Shiritori, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
+			msg = Helper.parseAndJoin(message.getMentionedUsers(), IMentionable::getAsMention) + ", vocês foram desafiados a uma partida de Shiritori, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 		else
 			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shiritori, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 
