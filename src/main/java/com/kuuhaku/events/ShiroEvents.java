@@ -146,7 +146,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
-			} else if (member == null) return;
+			} else if (member == null || !channel.canTalk()) return;
 
 			String prefix = "";
 			try {
@@ -498,6 +498,8 @@ public class ShiroEvents extends ListenerAdapter {
 		TextChannel channel = evt.getTextChannel();
 		Member member = evt.getMember();
 		User author = evt.getUser();
+
+		if (!channel.canTalk()) return;
 
 		assert guild != null;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
