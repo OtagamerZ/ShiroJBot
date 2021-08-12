@@ -44,13 +44,22 @@ public class CustomAnswer {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
     private int chance = 100;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @JoinColumn(name = "customanswer_id")
     private Set<String> users = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @JoinColumn(name = "customanswer_id")
     private Set<String> channels = new HashSet<>();
+
+    public CustomAnswer(int id, String guildId, String trigger, String answer, boolean anywhere, int chance) {
+        this.id = id;
+        this.guildId = guildId;
+        this.trigger = trigger;
+        this.answer = answer;
+        this.anywhere = anywhere;
+        this.chance = chance;
+    }
 
     public CustomAnswer(String guildId, String trigger, String answer) {
         this.guildId = guildId;
