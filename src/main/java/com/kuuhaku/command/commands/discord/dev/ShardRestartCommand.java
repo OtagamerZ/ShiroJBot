@@ -58,6 +58,12 @@ public class ShardRestartCommand implements Executable {
 		}
 
 		Main.getShiroShards().restart(id);
-		Objects.requireNonNull(Main.getShiroShards().getShardById(id)).getPresence().setActivity(Main.getRandomActivity());
+
+		try {
+			Objects.requireNonNull(Main.getShiroShards().getShardById(id))
+					.awaitReady()
+					.getPresence().setActivity(Main.getRandomActivity());
+		} catch (InterruptedException ignore) {
+		}
 	}
 }
