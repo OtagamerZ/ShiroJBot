@@ -364,7 +364,7 @@ public class TutorialCommand implements Executable {
 												
 						Existem 2 tipos de cartas:
 						- **Normais:** Cartas que podem ser convertidas para o Shoukan, além de serem usadas como material para sintetizar equipamentos evogear.
-						- **Cromadas:** Cartas que possuem uma paleta alternativa, podendo também sertem usadas como material para sintetizar campos.
+						- **Cromadas:** Cartas que possuem uma paleta alternativa, podendo também serem usadas como material para sintetizar campos.
 												
 						Se estiver com dificuldades para ver a imagem ou quiser ver a lista em formato de texto, basta usar o comando `restante` e o nome do anime, igual você fez antes.
 												
