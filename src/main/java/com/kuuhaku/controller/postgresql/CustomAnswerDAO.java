@@ -34,17 +34,22 @@ public class CustomAnswerDAO {
 
 		Query q = em.createNativeQuery("""
 				SELECT c.id
-				     , c.guildId
-				     , c.trigger
-				     , c.answer
-				     , c.anywhere
-				     , c.chance
+					 , c.guildId
+					 , c.trigger
+					 , c.answer
+					 , c.anywhere
+					 , c.chance
+					 , CAST(array_agg(cu.users) AS varchar[]) AS users
+					 , CAST(array_agg(cc.channels) AS varchar[]) AS channels
 				FROM CustomAnswer c
+						 LEFT JOIN customanswer_users cu ON c.id = cu.customanswer_id
+						 LEFT JOIN customanswer_channels cc ON c.id = cc.customanswer_id
 				WHERE guildId = :guild
-				AND (
-					(c.anywhere AND :trigger LIKE LOWER('%'||trigger||'%'))
-					OR LOWER(trigger) = :trigger
-				)
+				  AND (
+						(c.anywhere AND :trigger LIKE LOWER('%'||trigger||'%'))
+						OR LOWER(trigger) = :trigger
+					)
+				group by c.id
 				""");
 		q.setParameter("trigger", trigger.toLowerCase(Locale.ROOT));
 		q.setParameter("guild", guild);
