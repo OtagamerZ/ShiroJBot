@@ -16,9 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na customização das mensagens personalizadas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na customização das mensagens personalizadas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1397,14 +1395,7 @@
       <workItem from="1628597454532" duration="6510000" />
       <workItem from="1628615742526" duration="5221000" />
       <workItem from="1628683355589" duration="17055000" />
-      <workItem from="1628772560062" duration="6959000" />
-    </task>
-    <task id="LOCAL-05152" summary="Adicionado amuleto Dreno">
-      <created>1628272829314</created>
-      <option name="number" value="05152" />
-      <option name="presentableId" value="LOCAL-05152" />
-      <option name="project" value="LOCAL" />
-      <updated>1628272829315</updated>
+      <workItem from="1628772560062" duration="8978000" />
     </task>
     <task id="LOCAL-05153" summary="Correções menores">
       <created>1628518661750</created>
@@ -1742,7 +1733,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628784691084</updated>
     </task>
-    <option name="localTasksCounter" value="5201" />
+    <task id="LOCAL-05201" summary="Melhoria na customização das mensagens personalizadas">
+      <created>1628785446434</created>
+      <option name="number" value="05201" />
+      <option name="presentableId" value="LOCAL-05201" />
+      <option name="project" value="LOCAL" />
+      <updated>1628785446434</updated>
+    </task>
+    <option name="localTasksCounter" value="5202" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
