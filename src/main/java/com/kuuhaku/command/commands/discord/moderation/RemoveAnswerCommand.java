@@ -55,12 +55,16 @@ public class RemoveAnswerCommand implements Executable {
 			return;
 		}
 
-		CustomAnswer ca = CustomAnswerDAO.getCAByIDAndGuild(Integer.parseInt(args[0]), guild.getId());
+		try {
+			CustomAnswer ca = CustomAnswerDAO.getCAByIDAndGuild(Integer.parseInt(args[0]), guild.getId());
 
-		if (ca != null) {
-			CustomAnswerDAO.deleteCustomAnswer(ca);
-			channel.sendMessage("Não vou mais responder com a resposta de ID " + args[0] + ".").queue();
-		} else {
+			if (ca != null) {
+				CustomAnswerDAO.deleteCustomAnswer(ca);
+				channel.sendMessage("Não vou mais responder com a resposta de ID " + args[0] + ".").queue();
+			} else {
+				channel.sendMessage("❌ | ID de resposta inválido.").queue();
+			}
+		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | ID de resposta inválido.").queue();
 		}
 	}
