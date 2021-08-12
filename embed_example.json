@@ -31,7 +31,7 @@
     {
       "name": "Nome do campo 1",
       "value": "Texto do campo 1",
-      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+      "inline": "true ou false (sem aspas) - Exibe o campo na mesma fileira que outros campos ou sozinho"
     },
     {
       "name": "Nome do campo 2",

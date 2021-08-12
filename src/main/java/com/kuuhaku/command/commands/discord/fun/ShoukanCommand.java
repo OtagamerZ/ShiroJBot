@@ -47,7 +47,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "shoukan",
@@ -277,7 +276,7 @@ public class ShoukanCommand implements Executable {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, players.toArray(User[]::new));
-				channel.sendMessage(users.stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
+				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (players.contains(mb.getUser())) {
 										if (Main.getInfo().gameInProgress(mb.getId())) {

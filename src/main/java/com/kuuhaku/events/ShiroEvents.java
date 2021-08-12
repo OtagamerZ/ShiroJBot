@@ -231,8 +231,10 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (ca != null) {
 				Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
-				if (ca.getForUser() != null)
-					p = p.and(answer -> answer.getForUser().equals(author.getId()));
+				if (!ca.getChannels().isEmpty())
+					p = p.and(answer -> ca.getChannels().contains(channel.getId()));
+				if (!ca.getUsers().isEmpty())
+					p = p.and(answer -> ca.getUsers().contains(author.getId()));
 				if (ca.getChance() != 100)
 					p = p.and(answer -> Helper.chance(answer.getChance()));
 
@@ -413,9 +415,7 @@ public class ShiroEvents extends ListenerAdapter {
 							if (gc.isLevelNotif()) {
 								TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
 								if (rols.size() > 1) {
-									String names = rols.stream()
-											.map(rl -> "**`" + rl.getName() + "`**")
-											.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
+									String names = Helper.parseAndJoin(rols, rl -> "**`" + rl.getName() + "`**");
 									chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
 								} else
 									chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
