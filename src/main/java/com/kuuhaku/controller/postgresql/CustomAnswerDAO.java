@@ -39,7 +39,6 @@ public class CustomAnswerDAO {
 				     , c.answer
 				     , c.anywhere
 				     , c.chance
-				     , c.forUser
 				FROM CustomAnswer c
 				WHERE guildId = :guild
 				AND (
