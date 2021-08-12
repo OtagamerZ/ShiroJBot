@@ -20,10 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "customanswer")
@@ -55,15 +52,15 @@ public class CustomAnswer {
     @JoinColumn(name = "customanswer_id")
     private Set<String> channels = new HashSet<>();
 
-    public CustomAnswer(int id, String guildId, String trigger, String answer, boolean anywhere, int chance, String[] users, String[] channels) {
+    public CustomAnswer(int id, String guildId, String trigger, String answer, boolean anywhere, int chance, String users, String channels) {
         this.id = id;
         this.guildId = guildId;
         this.trigger = trigger;
         this.answer = answer;
         this.anywhere = anywhere;
         this.chance = chance;
-        this.users = Stream.of(users).filter(Objects::nonNull).collect(Collectors.toSet());
-        this.channels = Stream.of(channels).filter(Objects::nonNull).collect(Collectors.toSet());
+        this.users = Set.of(users.split(","));
+        this.channels = Set.of(channels.split(","));
     }
 
     public CustomAnswer(String guildId, String trigger, String answer) {
