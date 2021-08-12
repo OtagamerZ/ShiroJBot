@@ -31,13 +31,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "snipe",
@@ -49,10 +47,10 @@ public class SnipeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		ExpiringMap<String, Message> c = Main.getInfo().retrieveCache(guild);
+		List<Message> c = List.copyOf(Main.getInfo().retrieveCache(guild).values());
 
 		List<List<Message>> chunks = Helper.chunkify(
-				c.values().stream()
+				c.stream()
 						.filter(m -> m.getChannel().getId().equals(channel.getId()))
 						.filter(m -> {
 							try {
@@ -62,7 +60,7 @@ public class SnipeCommand implements Executable {
 								return true;
 							}
 						})
-						.collect(Collectors.toList()),
+						.toList(),
 				10);
 		if (chunks.isEmpty()) {
 			channel.sendMessage("❌ | Não há nenhuma mensagem deletada recentemente neste canal.").queue();
