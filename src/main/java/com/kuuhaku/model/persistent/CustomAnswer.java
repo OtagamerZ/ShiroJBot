@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,8 +61,8 @@ public class CustomAnswer {
         this.answer = answer;
         this.anywhere = anywhere;
         this.chance = chance;
-        this.users = Set.of(users.split(","));
-        this.channels = Set.of(channels.split(","));
+        this.users = Set.of(Helper.getOr(users, "").split(","));
+        this.channels = Set.of(Helper.getOr(channels, "").split(","));
     }
 
     public CustomAnswer(String guildId, String trigger, String answer) {
