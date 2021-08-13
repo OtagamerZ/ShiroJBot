@@ -126,7 +126,7 @@ public class ShiroInfo {
 	private static final CloseableHttpClient http = HttpClients.custom().setDefaultHeaders(List.of(
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 	)).build();
-	private static final HashMap<String, String> emoteLookup = new HashMap<>();
+	private static final Map<String, String> emoteLookup = new HashMap<>();
 	private static final Set<String> pruneQueue = new HashSet<>();
 
 	//STATIC CONSTRUCTOR
@@ -289,7 +289,7 @@ public class ShiroInfo {
 		return announcementChannelID;
 	}
 
-	public static HashMap<String, String> getEmoteLookup() {
+	public static Map<String, String> getEmoteLookup() {
 		return emoteLookup;
 	}
 

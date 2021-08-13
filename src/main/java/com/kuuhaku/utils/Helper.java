@@ -983,13 +983,16 @@ public class Helper {
 			String[] oldWords = oldLines[l].split(" ");
 			String[] newWords = new String[oldWords.length];
 			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
-				if (!oldWords[i].matches(":.+:")) {
-					newWords[i] = unmention(oldWords[i]);
+				String old = oldWords[i];
+				if (!old.matches(":.+:")) {
+					newWords[i] = unmention(old);
+					continue;
+				} else if (!g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
 					continue;
 				}
 
 				boolean makenew = false;
-				String id = ShiroInfo.getEmoteLookup().get(oldWords[i]);
+				String id = ShiroInfo.getEmoteLookup().get(old);
 				Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
 				if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
 					makenew = true;
@@ -1001,6 +1004,7 @@ public class Helper {
 							e = g.createEmote(e.getName(), Icon.from(getImage(e.getImageUrl())), g.getSelfMember().getRoles().get(0)).complete();
 							Emote finalE = e;
 							queue.add(aVoid -> after.accept(finalE));
+
 							if (animated) aSlots--;
 							else slots--;
 						}
@@ -1009,7 +1013,7 @@ public class Helper {
 						logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
 					}
 					emotes++;
-				} else newWords[i] = oldWords[i];
+				} else newWords[i] = old;
 			}
 
 			newLines[l] = String.join(" ", newWords);
