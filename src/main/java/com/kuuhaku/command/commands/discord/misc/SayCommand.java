@@ -33,8 +33,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Command(
@@ -57,15 +57,14 @@ public class SayCommand implements Executable {
 		}
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
-		MessageBuilder mb = new MessageBuilder();
-		mb.append(Helper.makeEmoteFromMention(args));
+		MessageBuilder mb = new MessageBuilder(Helper.unmention(message.getContentDisplay()));
 
 		try {
 			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-			Map<String, Runnable> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
+			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentDisplay());
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
+			wmb.setContent(s.getLeft());
 			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
 				wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
 			else try {
@@ -87,7 +86,7 @@ public class SayCommand implements Executable {
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			try {
 				message.delete().queue(null, Helper::doNothing);
-				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).run()).get();
+				wc.send(wmb.build()).thenAccept(rm -> s.getRight().run()).get();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}

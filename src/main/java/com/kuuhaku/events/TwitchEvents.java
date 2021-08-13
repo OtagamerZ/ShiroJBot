@@ -116,7 +116,7 @@ public class TwitchEvents {
 				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-				wmb.setContent(Helper.stripEmotesAndMentions(rawMessage));
+				wmb.setContent(Helper.unmention(rawMessage));
 				wmb.setUsername(u.getName());
 				wmb.setAvatarUrl(u.getEffectiveAvatarUrl());
 
