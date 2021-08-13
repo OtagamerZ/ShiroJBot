@@ -409,8 +409,18 @@ public class Helper {
 		return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
-	public static String stripEmotesAndMentions(String source) {
-		return getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
+	public static String unmention(String source) {
+		String[] out = source.replace("\n", "\n ").split(" ");
+		for (int i = 0; i < out.length; i++) {
+			String s = out[i];
+			if (s.matches("<(?:[@#&!]|a?:)+.+:?>|[@#].+")) {
+				s = bugText(s);
+			}
+
+			out[i] = s;
+		}
+
+		return String.join(" ", out).replace("\n ", "\n");
 	}
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
@@ -963,7 +973,7 @@ public class Helper {
 		return baos;
 	}
 
-	public static Map<String, Runnable> sendEmotifiedString(Guild g, String text) {
+	public static Pair<String, Runnable> sendEmotifiedString(Guild g, String text) {
 		String[] oldLines = text.split("\n");
 		String[] newLines = new String[oldLines.length];
 		List<Consumer<Void>> queue = new ArrayList<>();
@@ -973,8 +983,8 @@ public class Helper {
 			String[] oldWords = oldLines[l].split(" ");
 			String[] newWords = new String[oldWords.length];
 			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
-				if (!oldWords[i].startsWith(":") || !oldWords[i].endsWith(":")) {
-					newWords[i] = oldWords[i];
+				if (!oldWords[i].matches(":.+:")) {
+					newWords[i] = unmention(oldWords[i]);
 					continue;
 				}
 
@@ -1005,11 +1015,14 @@ public class Helper {
 			newLines[l] = String.join(" ", newWords);
 		}
 
-		return Collections.singletonMap(String.join("\n", newLines), () -> {
-			for (Consumer<Void> q : queue) {
-				q.accept(null);
-			}
-		});
+		return Pair.of(
+				String.join("\n", newLines),
+				() -> {
+					for (Consumer<Void> q : queue) {
+						q.accept(null);
+					}
+				}
+		);
 	}
 
 	public static boolean isEmpty(String... values) {
