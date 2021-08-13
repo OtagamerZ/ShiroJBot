@@ -16,7 +16,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na customização das mensagens personalizadas" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na customização das mensagens personalizadas">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,6 +90,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="121264a9-1ee2-4838-b413-2e4092840409" />
   </component>
   <component name="GithubProjectSettings">
     <option name="branchProtectionPatterns">
@@ -159,7 +168,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39928058" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -1396,20 +1405,10 @@
       <workItem from="1628615742526" duration="5221000" />
       <workItem from="1628683355589" duration="17055000" />
       <workItem from="1628772560062" duration="8978000" />
-    </task>
-    <task id="LOCAL-05153" summary="Correções menores">
-      <created>1628518661750</created>
-      <option name="number" value="05153" />
-      <option name="presentableId" value="LOCAL-05153" />
-      <option name="project" value="LOCAL" />
-      <updated>1628518661751</updated>
-    </task>
-    <task id="LOCAL-05154" summary="Correções menores">
-      <created>1628520770581</created>
-      <option name="number" value="05154" />
-      <option name="presentableId" value="LOCAL-05154" />
-      <option name="project" value="LOCAL" />
-      <updated>1628520770581</updated>
+      <workItem from="1628801168923" duration="333000" />
+      <workItem from="1628874003982" duration="52000" />
+      <workItem from="1628874298815" duration="1610000" />
+      <workItem from="1628883540099" duration="2602000" />
     </task>
     <task id="LOCAL-05155" summary="Correções menores">
       <created>1628538221018</created>
@@ -1740,7 +1739,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628785446434</updated>
     </task>
-    <option name="localTasksCounter" value="5202" />
+    <task id="LOCAL-05202" summary="Melhoria na customização das mensagens personalizadas">
+      <created>1628801341887</created>
+      <option name="number" value="05202" />
+      <option name="presentableId" value="LOCAL-05202" />
+      <option name="project" value="LOCAL" />
+      <updated>1628801341887</updated>
+    </task>
+    <task id="LOCAL-05203" summary="Melhoria na customização das mensagens personalizadas">
+      <created>1628801434997</created>
+      <option name="number" value="05203" />
+      <option name="presentableId" value="LOCAL-05203" />
+      <option name="project" value="LOCAL" />
+      <updated>1628801434997</updated>
+    </task>
+    <option name="localTasksCounter" value="5204" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

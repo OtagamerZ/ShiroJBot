@@ -335,7 +335,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
-					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
+					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.unmention(rawMessage));
 				}
 
 				/*if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.isPinging(message, ShiroInfo.getNiiChan())) {
@@ -427,15 +427,15 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 
-				if (gc.isNQNMode() && Helper.hasEmote(rawMessage))
+				if (gc.isNQNMode() && Helper.hasEmote(message.getContentDisplay()))
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
 						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-						Map<String, Runnable> s = Helper.sendEmotifiedString(guild, rawMessage);
+						Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentDisplay());
 
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-						wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
+						wmb.setContent(String.valueOf(s.getLeft()));
 						if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
 							wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
 						else try {
@@ -456,7 +456,7 @@ public class ShiroEvents extends ListenerAdapter {
 						WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 						message.delete().queue(d -> {
 							try {
-								wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).run()).get();
+								wc.send(wmb.build()).thenAccept(rm -> s.getRight().run()).get();
 							} catch (InterruptedException | ExecutionException e) {
 								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 							}
