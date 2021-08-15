@@ -427,7 +427,7 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 
-				if (gc.isNQNMode() && Helper.hasEmote(message.getContentDisplay()))
+				if (false && gc.isNQNMode() && Helper.hasEmote(message.getContentDisplay()))
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
