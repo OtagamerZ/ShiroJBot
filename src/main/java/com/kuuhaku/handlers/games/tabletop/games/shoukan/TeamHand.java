@@ -174,9 +174,7 @@ public class TeamHand extends Hand {
 			baseManaPerTurn = 5;
 		}
 
-		int hpMod = (combo.getLeft() == Race.DEMON ? -1500 : 0)
-					+ (combo.getRight() == Race.HUMAN ? 750 : 0);
-
+		int hpMod = combo.getLeft() == Race.DEMON ? -1500 : 0;
 		int manaMod = combo.getLeft() == Race.ELF ? 1 : 0;
 
 		setBaseHp(Math.max(baseHp + hpMod, 1));
@@ -188,6 +186,11 @@ public class TeamHand extends Hand {
 		setMaxCards(Math.max(maxCards
 							 + (combo.getLeft() == Race.CREATURE ? 2 : combo.getLeft() == Race.HUMAN ? 3 : 0)
 							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
+		);
+		setMitigation(combo.getRight() == Race.HUMAN ? deques.stream()
+															   .flatMap(List::stream)
+															   .filter(d -> d instanceof Champion c && c.getMana() <= 2)
+															   .count() / 2f : 0
 		);
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
