@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public enum Race {
 	HUMAN("Humano",
 			"**(SOLO)** +1 Limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
-			"+750 HP",
+			"(**SOLO** | -1%/**DUO** | -0,5%) dano direto sofrido para cada campeão com 1 ou 2 de custo em seu deck",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
 	ELF("Elfo",
