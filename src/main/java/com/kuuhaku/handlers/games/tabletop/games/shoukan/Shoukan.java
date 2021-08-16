@@ -706,7 +706,11 @@ public class Shoukan extends GlobalGame {
 										hands.get(getNextSide()).getUser().getName(),
 										yPower,
 										getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
-										demonFac > 1 ? " (efeito de raça: +" + Math.round(yPower * demonFac - yPower) + " dano direto causado)" : ""
+										demonFac > 1
+												? " (efeito de raça: +" + Math.round(yPower * demonFac - yPower) + " dano direto causado)"
+												: demonFac < 1
+												? " (efeito de raça: " + Math.round(yPower * demonFac - yPower) + " dano direto causado)"
+												: ""
 								)
 								, true, false);
 					}
@@ -952,7 +956,11 @@ public class Shoukan extends GlobalGame {
 							his.getCard().getName(),
 							yPower,
 							hPower,
-							demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto causado)" : "",
+							demonFac > 1
+									? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto causado)"
+									: demonFac < 1
+									? " (efeito de raça: " + Math.round(dmg * demonFac - dmg) + " dano direto causado)"
+									: "",
 							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 					);
 
@@ -1015,7 +1023,11 @@ public class Shoukan extends GlobalGame {
 						his.getCard().getName(),
 						yPower,
 						hPower,
-						demonFac > 1 ? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)" : "",
+						demonFac > 1
+								? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)"
+								: demonFac < 1
+								? " (efeito de raça: " + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)"
+								: "",
 						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 				);
 
@@ -1043,18 +1055,6 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			float yDemonFac = 1 - you.getMitigation();
-			float hDemonFac = 1 - op.getMitigation();
-
-			if (op.getCombo().getRight() == Race.DEMON) {
-				yDemonFac *= 1.25f;
-				hDemonFac *= 1.33f;
-			}
-			if (you.getCombo().getRight() == Race.DEMON) {
-				yDemonFac *= 1.33f;
-				hDemonFac *= 1.25f;
-			}
-
 			float yDmg = yours.getLinkedTo().parallelStream()
 					.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
 					.mapToInt(Equipment::getAtk)
@@ -1065,7 +1065,7 @@ public class Shoukan extends GlobalGame {
 					.mapToInt(Equipment::getAtk)
 					.sum();
 
-			op.removeHp(Math.round(yDmg * yDemonFac));
+			op.removeHp(Math.round(yDmg));
 			if (op.getMana() > 0 || you.getMana() > 0) {
 				int yToSteal = (int) Math.min(
 						op.getMana(),
@@ -1095,7 +1095,7 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			you.removeHp(Math.round(hDmg * hDemonFac));
+			you.removeHp(Math.round(hDmg));
 
 			killCard(atkr.getLeft(), atkr.getRight());
 			killCard(defr.getLeft(), defr.getRight());
@@ -1104,10 +1104,9 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			if (!postCombat()) {
-				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s%s".formatted(
+				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s".formatted(
 						yPower,
 						hPower,
-						hDemonFac > 1 ? " (efeito de raça: +" + Math.round(hDmg * hDemonFac - hDmg) + " dano direto sofrido)" : "",
 						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 				);
 

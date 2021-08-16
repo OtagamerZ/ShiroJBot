@@ -17,9 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores e adicionada proteção contra instakill">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1396,28 +1395,7 @@
       <workItem from="1628874003982" duration="52000" />
       <workItem from="1628874298815" duration="1610000" />
       <workItem from="1628883540099" duration="4638000" />
-      <workItem from="1629133986875" duration="1557000" />
-    </task>
-    <task id="LOCAL-05158" summary="Correções menores">
-      <created>1628539240189</created>
-      <option name="number" value="05158" />
-      <option name="presentableId" value="LOCAL-05158" />
-      <option name="project" value="LOCAL" />
-      <updated>1628539240189</updated>
-    </task>
-    <task id="LOCAL-05159" summary="Correções menores">
-      <created>1628539423443</created>
-      <option name="number" value="05159" />
-      <option name="presentableId" value="LOCAL-05159" />
-      <option name="project" value="LOCAL" />
-      <updated>1628539423443</updated>
-    </task>
-    <task id="LOCAL-05160" summary="Correções menores">
-      <created>1628539911102</created>
-      <option name="number" value="05160" />
-      <option name="presentableId" value="LOCAL-05160" />
-      <option name="project" value="LOCAL" />
-      <updated>1628539911102</updated>
+      <workItem from="1629133986875" duration="3472000" />
     </task>
     <task id="LOCAL-05161" summary="Concluído tutorial sobre kawaipon">
       <created>1628542400952</created>
@@ -1741,7 +1719,28 @@
       <option name="project" value="LOCAL" />
       <updated>1629134783789</updated>
     </task>
-    <option name="localTasksCounter" value="5207" />
+    <task id="LOCAL-05207" summary="Correções menores e adicionada proteção contra instakill">
+      <created>1629135598540</created>
+      <option name="number" value="05207" />
+      <option name="presentableId" value="LOCAL-05207" />
+      <option name="project" value="LOCAL" />
+      <updated>1629135598540</updated>
+    </task>
+    <task id="LOCAL-05208" summary="Correções menores e adicionada proteção contra instakill">
+      <created>1629135633605</created>
+      <option name="number" value="05208" />
+      <option name="presentableId" value="LOCAL-05208" />
+      <option name="project" value="LOCAL" />
+      <updated>1629135633605</updated>
+    </task>
+    <task id="LOCAL-05209" summary="Correções menores e adicionada proteção contra instakill">
+      <created>1629136185151</created>
+      <option name="number" value="05209" />
+      <option name="presentableId" value="LOCAL-05209" />
+      <option name="project" value="LOCAL" />
+      <updated>1629136185151</updated>
+    </task>
+    <option name="localTasksCounter" value="5210" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
