@@ -186,7 +186,7 @@ public class Shoukan extends GlobalGame {
 	public void start() {
 		Hand h = hands.get(getCurrentSide());
 		h.addMana(h.getManaPerTurn());
-		if (combos.get(getCurrentSide()).getRight() == Race.BESTIAL)
+		if (h.getCombo().getRight() == Race.BESTIAL)
 			h.addMana(1);
 
 		AtomicBoolean shownHand = new AtomicBoolean(false);
@@ -673,7 +673,7 @@ public class Shoukan extends GlobalGame {
 					Hand you = hands.get(getCurrentSide());
 					Hand op = hands.get(getNextSide());
 
-					float demonFac = 1;
+					float demonFac = 1 - op.getMitigation();
 
 					if (h.getCombo().getRight() == Race.DEMON)
 						demonFac *= 1.25f;
@@ -902,10 +902,10 @@ public class Shoukan extends GlobalGame {
 				if (applyEot(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
-				float demonFac = 1;
-				if (combos.get(atkr.getLeft()).getRight() == Race.DEMON)
+				float demonFac = 1 - op.getMitigation();
+				if (you.getCombo().getRight() == Race.DEMON)
 					demonFac *= 1.25f;
-				if (combos.get(defr.getLeft()).getRight() == Race.DEMON)
+				if (op.getCombo().getRight() == Race.DEMON)
 					demonFac *= 1.33f;
 
 				if (yours.isDecoy()) {
@@ -969,10 +969,10 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
 			if (applyEffect(POST_DEFENSE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
-			float demonFac = 1;
-			if (combos.get(defr.getLeft()).getRight() == Race.DEMON)
+			float demonFac = 1 - you.getMitigation();
+			if (op.getCombo().getRight() == Race.DEMON)
 				demonFac *= 1.25f;
-			if (combos.get(atkr.getLeft()).getRight() == Race.DEMON)
+			if (you.getCombo().getRight() == Race.DEMON)
 				demonFac *= 1.33f;
 
 			if (yours.isDecoy()) {
@@ -1043,14 +1043,14 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			float yDemonFac = 1;
-			float hDemonFac = 1;
+			float yDemonFac = 1 - you.getMitigation();
+			float hDemonFac = 1 - op.getMitigation();
 
-			if (combos.get(defr.getLeft()).getRight() == Race.DEMON) {
+			if (op.getCombo().getRight() == Race.DEMON) {
 				yDemonFac *= 1.25f;
 				hDemonFac *= 1.33f;
 			}
-			if (combos.get(atkr.getLeft()).getRight() == Race.DEMON) {
+			if (you.getCombo().getRight() == Race.DEMON) {
 				yDemonFac *= 1.33f;
 				hDemonFac *= 1.25f;
 			}
@@ -1892,13 +1892,14 @@ public class Shoukan extends GlobalGame {
 				}
 
 				h.get().addMana(h.get().getManaPerTurn());
-				if (combos.get(getCurrentSide()).getLeft() == Race.DEMON) {
+				if (h.get().getCombo().getLeft() == Race.DEMON) {
 					Hand op = hands.get(getNextSide());
 					h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
 					if (h.get().getHp() < h.get().getBaseHp() / 3f)
 						h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 				}
-				switch (combos.get(getCurrentSide()).getRight()) {
+
+				switch (h.get().getCombo().getRight()) {
 					case BESTIAL -> {
 						if (getRound() <= 1)
 							h.get().addMana(1);
@@ -2096,13 +2097,14 @@ public class Shoukan extends GlobalGame {
 					}
 
 					h.get().addMana(h.get().getManaPerTurn());
-					if (combos.get(getCurrentSide()).getLeft() == Race.DEMON) {
+					if (h.get().getCombo().getLeft() == Race.DEMON) {
 						Hand op = hands.get(getNextSide());
 						h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
 						if (h.get().getHp() < h.get().getBaseHp() / 3f)
 							h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 					}
-					switch (combos.get(getCurrentSide()).getRight()) {
+
+					switch (h.get().getCombo().getRight()) {
 						case BESTIAL -> {
 							if (getRound() <= 1)
 								h.get().addMana(1);
