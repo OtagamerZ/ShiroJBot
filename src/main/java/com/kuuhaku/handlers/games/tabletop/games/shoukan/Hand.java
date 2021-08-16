@@ -600,7 +600,8 @@ public class Hand {
 	}
 
 	public void removeHp(int value) {
-		hp -= Math.max(0, value);
+		if (hp > baseHp / 3) crippleHp(value);
+		else hp -= Math.max(0, value);
 	}
 
 	public void crippleHp(int value) {
