@@ -100,8 +100,6 @@ public class Shoukan extends GlobalGame {
 
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
-	private Side current = Side.BOTTOM;
-	private Side next = Side.TOP;
 	private int fusionLock = 0;
 	private int spellLock = 0;
 	private int effectLock = 0;
@@ -169,7 +167,7 @@ public class Shoukan extends GlobalGame {
 							MatchMakingRatingDAO.saveMMR(mmr);
 						}
 
-						getHistory().setWinner(next);
+						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 						close();
 					}
@@ -186,9 +184,9 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void start() {
-		Hand h = hands.get(current);
+		Hand h = hands.get(getCurrentSide());
 		h.addMana(h.getManaPerTurn());
-		if (combos.get(current).getRight() == Race.BESTIAL)
+		if (combos.get(getCurrentSide()).getRight() == Race.BESTIAL)
 			h.addMana(1);
 
 		AtomicBoolean shownHand = new AtomicBoolean(false);
@@ -228,7 +226,7 @@ public class Shoukan extends GlobalGame {
 	public synchronized void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
 		String cmd = message.getContentRaw();
-		Hand h = hands.get(current);
+		Hand h = hands.get(getCurrentSide());
 
 		if (cmd.equalsIgnoreCase("reload")) {
 			reportEvent(h, message.getAuthor().getName() + " recriou a mensagem do jogo.", false, false);
@@ -244,7 +242,7 @@ public class Shoukan extends GlobalGame {
 
 		if (phase == Phase.PLAN) {
 			try {
-				List<SlotColumn> slots = arena.getSlots().get(current);
+				List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
 				if (args.length == 1) {
 					if (index < 0 || index >= slots.size()) {
 						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
@@ -270,8 +268,8 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					if (applyEot(ON_SWITCH, current, index)) return;
-					if (applyEffect(ON_SWITCH, c, index, current, Pair.of(c, index), null)) return;
+					if (applyEot(ON_SWITCH, getCurrentSide(), index)) return;
+					if (applyEffect(ON_SWITCH, c, index, getCurrentSide(), Pair.of(c, index), null)) return;
 
 					String msg;
 					if (c.isFlipped()) {
@@ -359,7 +357,7 @@ public class Shoukan extends GlobalGame {
 									return;
 								}
 								int pos = Integer.parseInt(args[2]) - 1;
-								List<SlotColumn> eSlots = arena.getSlots().get(next);
+								List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
 								Champion target = eSlots.get(pos).getTop();
 
 								if (target == null) {
@@ -384,7 +382,7 @@ public class Shoukan extends GlobalGame {
 								}
 
 								allyPos = Pair.of(target, pos1);
-								List<SlotColumn> eSlots = arena.getSlots().get(next);
+								List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
 								target = eSlots.get(pos2).getTop();
 
 								if (target == null) {
@@ -399,11 +397,11 @@ public class Shoukan extends GlobalGame {
 						reroll = false;
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
-						e.activate(h, hands.get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
+						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 						if (e.getTier() == 4)
 							arena.getBanished().add(e.copy());
 						else
-							arena.getGraveyard().get(current).add(e.copy());
+							arena.getGraveyard().get(getCurrentSide()).add(e.copy());
 
 						if (makeFusion(h)) return;
 
@@ -500,23 +498,23 @@ public class Shoukan extends GlobalGame {
 					}
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
-					if (applyEot(ON_EQUIP, current, toEquip)) return;
-					if (applyEffect(ON_EQUIP, t, toEquip, current, Pair.of(t, toEquip), null)) return;
+					if (applyEot(ON_EQUIP, getCurrentSide(), toEquip)) return;
+					if (applyEffect(ON_EQUIP, t, toEquip, getCurrentSide(), Pair.of(t, toEquip), null)) return;
 
 					if (e.getCharm() != null) {
 						switch (e.getCharm()) {
 							case TIMEWARP -> {
 								if (t.hasEffect()) {
-									t.getEffect(new EffectParameters(BEFORE_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
-									t.getEffect(new EffectParameters(AFTER_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+									t.getEffect(new EffectParameters(BEFORE_TURN, this, toEquip, getCurrentSide(), Duelists.of(t, toEquip, null, -1), channel));
+									t.getEffect(new EffectParameters(AFTER_TURN, this, toEquip, getCurrentSide(), Duelists.of(t, toEquip, null, -1), channel));
 								}
 							}
 							case DOUBLETAP -> {
 								if (t.hasEffect())
-									t.getEffect(new EffectParameters(ON_SUMMON, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+									t.getEffect(new EffectParameters(ON_SUMMON, this, toEquip, getCurrentSide(), Duelists.of(t, toEquip, null, -1), channel));
 							}
 							case DOPPELGANGER -> {
-								SlotColumn sc = getFirstAvailableSlot(current, true);
+								SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 
 								if (sc != null) {
 									t.addRedAtk(Math.round(t.getAltAtk() * 0.25f));
@@ -562,7 +560,7 @@ public class Shoukan extends GlobalGame {
 					if (slot.getTop() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
-					} else if (isSlotLocked(current, dest)) {
+					} else if (isSlotLocked(getCurrentSide(), dest)) {
 						channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
 						return;
 					}
@@ -589,10 +587,11 @@ public class Shoukan extends GlobalGame {
 					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
-					if (applyEot(ON_SUMMON, current, dest)) return;
-					if (!c.isFlipped() && applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)) return;
+					if (applyEot(ON_SUMMON, getCurrentSide(), dest)) return;
+					if (!c.isFlipped() && applyEffect(ON_SUMMON, c, dest, getCurrentSide(), Pair.of(c, dest), null))
+						return;
 
-					summoned.get(current).merge(c.getRace(), 1, Integer::sum);
+					summoned.get(getCurrentSide()).merge(c.getRace(), 1, Integer::sum);
 
 					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
 				} else {
@@ -634,8 +633,8 @@ public class Shoukan extends GlobalGame {
 
 				int[] is = {index, args.length == 1 ? 0 : Integer.parseInt(args[1]) - 1};
 
-				List<SlotColumn> yourSide = arena.getSlots().get(current);
-				List<SlotColumn> hisSide = arena.getSlots().get(next);
+				List<SlotColumn> yourSide = arena.getSlots().get(getCurrentSide());
+				List<SlotColumn> hisSide = arena.getSlots().get(getNextSide());
 
 				if (args.length == 1) {
 					if (is[0] < 0 || is[0] >= yourSide.size()) {
@@ -671,8 +670,8 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					Hand you = hands.get(current);
-					Hand op = hands.get(next);
+					Hand you = hands.get(getCurrentSide());
+					Hand op = hands.get(getNextSide());
 
 					float demonFac = 1;
 
@@ -704,7 +703,7 @@ public class Shoukan extends GlobalGame {
 						reportEvent(h,
 								"%s atacou %s causando %s de dano direto!%s%s".formatted(
 										c.getName(),
-										hands.get(next).getUser().getName(),
+										hands.get(getNextSide()).getUser().getName(),
 										yPower,
 										getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
 										demonFac > 1 ? " (efeito de raça: +" + Math.round(yPower * demonFac - yPower) + " dano direto causado)" : ""
@@ -740,7 +739,7 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				attack(Pair.of(current, is[0]), Pair.of(next, is[1]));
+				attack(Pair.of(getCurrentSide(), is[0]), Pair.of(getNextSide(), is[1]));
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
 
@@ -1143,7 +1142,7 @@ public class Shoukan extends GlobalGame {
 
 	private boolean makeFusion(Hand h) {
 		if (fusionLock > 0) return false;
-		List<SlotColumn> slts = arena.getSlots().get(current);
+		List<SlotColumn> slts = arena.getSlots().get(getCurrentSide());
 
 		List<String> champsInField = slts.parallelStream()
 				.map(SlotColumn::getTop)
@@ -1172,15 +1171,15 @@ public class Shoukan extends GlobalGame {
 		if (aFusion != null) {
 			for (Map.Entry<String, Pair<Integer, Boolean>> material : aFusion.canFuse(champsInField, equipsInField, field).entrySet()) {
 				Pair<Integer, Boolean> p = material.getValue();
-				banishCard(current, p.getLeft(), p.getRight());
+				banishCard(getCurrentSide(), p.getLeft(), p.getRight());
 			}
 
-			SlotColumn sc = getFirstAvailableSlot(current, true);
+			SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 			if (sc != null) {
 				aFusion.bind(h);
 				sc.setTop(aFusion);
-				if (applyEot(ON_SUMMON, current, sc.getIndex())) return true;
-				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), current, Pair.of(aFusion, sc.getIndex()), null))
+				if (applyEot(ON_SUMMON, getCurrentSide(), sc.getIndex())) return true;
+				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), getCurrentSide(), Pair.of(aFusion, sc.getIndex()), null))
 					return true;
 
 				if (aFusion.getMana() > 0) {
@@ -1832,17 +1831,17 @@ public class Shoukan extends GlobalGame {
 			buttons.put("▶️", (mb, ms) -> {
 				User u = getCurrent();
 
-				AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
+				AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
-				List<SlotColumn> slots = arena.getSlots().get(current);
+				List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
 
-				if (applyEot(AFTER_TURN, current, -1)) return;
+				if (applyEot(AFTER_TURN, getCurrentSide(), -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
 						c.resetAttribs();
-						if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
+						if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 							|| makeFusion(h.get())
 						) return;
 					}
@@ -1859,7 +1858,7 @@ public class Shoukan extends GlobalGame {
 					);
 					Collections.shuffle(h.get().getDeque());
 				} else {
-					arena.getGraveyard().get(current).addAll(
+					arena.getGraveyard().get(getCurrentSide()).addAll(
 							discardBatch.stream()
 									.map(Drawable::copy)
 									.collect(Collectors.toList())
@@ -1871,14 +1870,14 @@ public class Shoukan extends GlobalGame {
 				resetTimer(this);
 
 				phase = Phase.PLAN;
-				h.set(hands.get(current));
+				h.set(hands.get(getCurrentSide()));
 				h.get().decreaseSuppression();
 				h.get().decreaseLockTime();
 				h.get().decreaseNullTime();
-				slots = arena.getSlots().get(current);
-				decreaseSlotLockTime(current);
+				slots = arena.getSlots().get(getCurrentSide());
+				decreaseSlotLockTime(getCurrentSide());
 
-				if (applyEot(BEFORE_TURN, current, -1)) return;
+				if (applyEot(BEFORE_TURN, getCurrentSide(), -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
@@ -1886,20 +1885,20 @@ public class Shoukan extends GlobalGame {
 						else if (c.isStunned()) c.reduceStun();
 						else if (c.isSleeping()) c.reduceSleep();
 
-						if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
+						if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 							|| makeFusion(h.get())
 						) return;
 					}
 				}
 
 				h.get().addMana(h.get().getManaPerTurn());
-				if (combos.get(current).getLeft() == Race.DEMON) {
-					Hand op = hands.get(next);
+				if (combos.get(getCurrentSide()).getLeft() == Race.DEMON) {
+					Hand op = hands.get(getNextSide());
 					h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
 					if (h.get().getHp() < h.get().getBaseHp() / 3f)
 						h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 				}
-				switch (combos.get(current).getRight()) {
+				switch (combos.get(getCurrentSide()).getRight()) {
 					case BESTIAL -> {
 						if (getRound() <= 1)
 							h.get().addMana(1);
@@ -1928,7 +1927,7 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				Hand h = hands.get(current);
+				Hand h = hands.get(getCurrentSide());
 
 				int remaining = h.getMaxCards() - h.getCards().size();
 				if (remaining <= 0) {
@@ -1938,15 +1937,15 @@ public class Shoukan extends GlobalGame {
 
 				if (!h.manualDraw()) {
 					if (getCustom() == null) {
-						getHistory().setWinner(next);
+						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 					}
 
 					String msg;
 					if (team)
-						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) hands.get(next)).getMentions() + " venceram! (" + getRound() + " turnos)";
+						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) hands.get(getNextSide())).getMentions() + " venceram! (" + getRound() + " turnos)";
 					else
-						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
+						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(getNextSide()).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
 
 					close();
 					channel.sendMessage(msg)
@@ -1970,7 +1969,7 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				Hand h = hands.get(current);
+				Hand h = hands.get(getCurrentSide());
 
 				int remaining = h.getMaxCards() - h.getCards().size();
 				if (remaining <= 0) {
@@ -1996,20 +1995,20 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				Hand h = hands.get(current);
+				Hand h = hands.get(getCurrentSide());
 				h.redrawHand();
 
 				reroll = false;
 				reportEvent(h, getCurrent().getName() + " rolou novamente as cartas na mão!", true, false);
 			});
-		if (hands.get(current).getHp() < hands.get(current).getBaseHp() / 3 && hands.get(current).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
+		if (hands.get(getCurrentSide()).getHp() < hands.get(getCurrentSide()).getBaseHp() / 3 && hands.get(getCurrentSide()).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
 			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				Hand h = hands.get(current);
+				Hand h = hands.get(getCurrentSide());
 				h.destinyDraw();
 
 				reportEvent(h, getCurrent().getName() + " executou um saque do destino!", true, false);
@@ -2036,17 +2035,17 @@ public class Shoukan extends GlobalGame {
 				} else {
 					User u = getCurrent();
 
-					AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
+					AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
 					h.get().getCards().removeIf(d -> !d.isAvailable());
-					List<SlotColumn> slots = arena.getSlots().get(current);
+					List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
 
-					if (applyEot(AFTER_TURN, current, -1)) return;
+					if (applyEot(AFTER_TURN, getCurrentSide(), -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
-							if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
+							if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 								|| makeFusion(h.get())
 							) return;
 						}
@@ -2063,7 +2062,7 @@ public class Shoukan extends GlobalGame {
 						);
 						Collections.shuffle(h.get().getDeque());
 					} else {
-						arena.getGraveyard().get(current).addAll(
+						arena.getGraveyard().get(getCurrentSide()).addAll(
 								discardBatch.stream()
 										.map(Drawable::copy)
 										.collect(Collectors.toList())
@@ -2075,14 +2074,14 @@ public class Shoukan extends GlobalGame {
 					resetTimer(this);
 
 					phase = Phase.PLAN;
-					h.set(hands.get(current));
+					h.set(hands.get(getCurrentSide()));
 					h.get().decreaseSuppression();
 					h.get().decreaseLockTime();
 					h.get().decreaseNullTime();
-					slots = arena.getSlots().get(current);
-					decreaseSlotLockTime(current);
+					slots = arena.getSlots().get(getCurrentSide());
+					decreaseSlotLockTime(getCurrentSide());
 
-					if (applyEot(BEFORE_TURN, current, -1)) return;
+					if (applyEot(BEFORE_TURN, getCurrentSide(), -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
@@ -2090,20 +2089,20 @@ public class Shoukan extends GlobalGame {
 							else if (c.isStunned()) c.reduceStun();
 							else if (c.isSleeping()) c.reduceSleep();
 
-							if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
+							if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 								|| makeFusion(h.get())
 							) return;
 						}
 					}
 
 					h.get().addMana(h.get().getManaPerTurn());
-					if (combos.get(current).getLeft() == Race.DEMON) {
-						Hand op = hands.get(next);
+					if (combos.get(getCurrentSide()).getLeft() == Race.DEMON) {
+						Hand op = hands.get(getNextSide());
 						h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
 						if (h.get().getHp() < h.get().getBaseHp() / 3f)
 							h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 					}
-					switch (combos.get(current).getRight()) {
+					switch (combos.get(getCurrentSide()).getRight()) {
 						case BESTIAL -> {
 							if (getRound() <= 1)
 								h.get().addMana(1);
@@ -2121,7 +2120,7 @@ public class Shoukan extends GlobalGame {
 		if (getRound() > 8)
 			buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 				if (getCustom() == null) {
-					getHistory().setWinner(next);
+					getHistory().setWinner(getNextSide());
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				}
 
@@ -2144,7 +2143,7 @@ public class Shoukan extends GlobalGame {
 	private void recordLast() {
 		Hand top = hands.get(Side.TOP);
 		Hand bot = hands.get(Side.BOTTOM);
-		getHistory().getRound(getRound() + 1).setSide(current);
+		getHistory().getRound(getRound() + 1).setSide(getCurrentSide());
 		getHistory().getRound(getRound() + 1).setScript(new JSONObject() {{
 			put("top", new JSONObject() {{
 				put("id", top.getUser().getId());
@@ -2594,19 +2593,21 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public Side getCurrentSide() {
-		return current;
+		return getRound() % 2 == 0 ? Side.BOTTOM : Side.TOP;
+	}
+
+	public Side getNextSide() {
+		return getRound() % 2 == 1 ? Side.TOP : Side.BOTTOM;
 	}
 
 	@Override
 	public void resetTimer(Shoukan shkn) {
-		getCurrRound().setSide(current);
+		getCurrRound().setSide(getCurrentSide());
 		decreaseFLockTime();
 		decreaseSLockTime();
 		decreaseELockTime();
 		super.resetTimer(shkn);
 
-		if (team) ((TeamHand) hands.get(current)).next();
-		current = next;
-		next = current == Side.TOP ? Side.BOTTOM : Side.TOP;
+		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
 	}
 }
