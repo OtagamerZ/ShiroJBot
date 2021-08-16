@@ -57,35 +57,36 @@ public abstract class Drop<P> implements Prize<P> {
 				1 + Helper.rng(MemberDAO.getHighestLevel() / 2 - 1, false)
 		};
 		condition = new ArrayList<>() {{
-			add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
-					KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
+			add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais",
+					u -> KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
 
-			add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + " ou mais.", u ->
-					KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
+			add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + " ou mais",
+					u -> KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
 
-			add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
-					MemberDAO.getMembersByUid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
+			add(Pair.of("Ser level " + values[3] + " ou maior",
+					u -> MemberDAO.getMembersByUid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
-			add(Pair.of("Ter até 1.000 créditos.", u ->
-					AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
+			add(Pair.of("Ter até 1.000 créditos",
+					u -> AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
 
-			add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais.", u ->
-					AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
+			add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais",
+					u -> AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 
-			add(Pair.of("Ter dívida ativa.", u ->
-					AccountDAO.getAccount(u.getId()).getLoan() > 0));
+			add(Pair.of("Ter dívida ativa",
+					u -> AccountDAO.getAccount(u.getId()).getLoan() > 0));
 
-			add(Pair.of("Ter conta vinculada com o canal do meu Nii-chan.", u ->
-					!AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
+			add(Pair.of("Ter conta vinculada com o canal do meu Nii-chan",
+					u -> !AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
 
-			add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase(Locale.ROOT) + " ou superior.", u -> {
-				Clan c = ClanDAO.getUserClan(u.getId());
-				if (c == null) return false;
-				else return c.getTier().ordinal() >= tier.ordinal();
-			}));
+			add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase(Locale.ROOT) + " ou superior",
+					u -> {
+						Clan c = ClanDAO.getUserClan(u.getId());
+						if (c == null) return false;
+						else return c.getTier().ordinal() >= tier.ordinal();
+					}));
 
-			add(Pair.of("Possuir ranking " + ranked.getName() + " no Shoukan ou superior.", u ->
-					MatchMakingRatingDAO.getMMR(u.getId()).getTier().ordinal() >= ranked.ordinal()));
+			add(Pair.of("Possuir ranking " + ranked.getName() + " no Shoukan ou superior",
+					u -> MatchMakingRatingDAO.getMMR(u.getId()).getTier().ordinal() >= ranked.ordinal()));
 		}};
 		chosen = condition.get(Helper.rng(condition.size(), true));
 		this.prize = prize;
