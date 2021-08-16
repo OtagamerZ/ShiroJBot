@@ -56,6 +56,7 @@ public class Hand {
 	private Pair<Race, Race> combo;
 	private int baseHp;
 	private int baseManaPerTurn;
+	private float mitigation = 0;
 	private int maxCards = 0;
 	private int manaPerTurn = 0;
 	private int mana = 0;
@@ -191,13 +192,14 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		int hpMod = (combo.getLeft() == Race.DEMON ? -1500 : 0)
-					+ (combo.getRight() == Race.HUMAN ? 750 : 0);
-
+		int hpMod = combo.getLeft() == Race.DEMON ? -1500 : 0;
 		int manaMod = combo.getLeft() == Race.ELF ? 1 : 0;
 
 		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
 		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
+		this.mitigation = combo.getRight() == Race.HUMAN ? deque.stream()
+				.filter(d -> d instanceof Champion c && c.getMana() <= 2)
+				.count() : 0;
 		this.maxCards = Math.max(maxCards
 								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
 								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
@@ -537,6 +539,14 @@ public class Hand {
 
 	public int sumAttack() {
 		return cards.stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
+	}
+
+	public float getMitigation() {
+		return mitigation;
+	}
+
+	public void setMitigation(float mitigation) {
+		this.mitigation = mitigation;
 	}
 
 	public int getMaxCards() {
