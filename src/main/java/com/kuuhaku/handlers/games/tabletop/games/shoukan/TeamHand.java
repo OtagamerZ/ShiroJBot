@@ -187,10 +187,11 @@ public class TeamHand extends Hand {
 							 + (combo.getLeft() == Race.CREATURE ? 2 : combo.getLeft() == Race.HUMAN ? 3 : 0)
 							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
 		);
-		setMitigation(combo.getRight() == Race.HUMAN ? deques.stream()
-															   .flatMap(List::stream)
-															   .filter(d -> d instanceof Champion c && c.getMana() <= 2)
-															   .count() / 2f : 0
+		setMitigation(combo.getRight() == Race.HUMAN
+				? deques.stream()
+						  .flatMap(List::stream)
+						  .filter(d -> d instanceof Champion c && c.getMana() <= 2)
+						  .count() / 2f : 0
 		);
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
