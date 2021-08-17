@@ -22,108 +22,113 @@ import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "customanswer")
 public class CustomAnswer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
-    private String guildId = "";
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-    private String trigger = "";
+	private String guildId = "";
 
-    @Column(columnDefinition = "TEXT")
-    private String answer = "";
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	private String trigger = "";
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean anywhere = false;
+	@Column(columnDefinition = "TEXT")
+	private String answer = "";
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 100")
-    private int chance = 100;
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean anywhere = false;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customanswer_id")
-    private final Set<String> users = new HashSet<>();
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 100")
+	private int chance = 100;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customanswer_id")
-    private final Set<String> channels = new HashSet<>();
+	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customanswer_id")
+	private final Set<String> users = new HashSet<>();
 
-    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String users, String channels) {
-        this.id = id;
-        this.guildId = guildId;
-        this.trigger = trigger;
-        this.answer = answer;
-        this.anywhere = anywhere;
-        this.chance = chance;
-        this.users.addAll(List.of(Helper.getOr(users, "").split(",")));
-        this.channels.addAll(List.of(Helper.getOr(channels, "").split(",")));
-    }
+	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customanswer_id")
+	private final Set<String> channels = new HashSet<>();
 
-    public CustomAnswer(String guildId, String trigger, String answer) {
-        this.guildId = guildId;
-        this.trigger = trigger;
-        this.answer = answer;
-    }
+	public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String users, String channels) {
+		this.id = id;
+		this.guildId = guildId;
+		this.trigger = trigger;
+		this.answer = answer;
+		this.anywhere = anywhere;
+		this.chance = chance;
 
-    public CustomAnswer() {
-    }
+		for (String s : Helper.getOr(users, "").split(",")) {
+			if (!s.isBlank()) this.users.add(s);
+		}
 
-    public int getId() {
-        return id;
-    }
+		for (String s : Helper.getOr(channels, "").split(",")) {
+			if (!s.isBlank()) this.channels.add(s);
+		}
+	}
 
-    public String getGuildId() {
-        return guildId;
-    }
+	public CustomAnswer(String guildId, String trigger, String answer) {
+		this.guildId = guildId;
+		this.trigger = trigger;
+		this.answer = answer;
+	}
 
-    public void setGuildId(String guildID) {
-        this.guildId = guildID;
-    }
+	public CustomAnswer() {
+	}
 
-    public String getTrigger() {
-        return trigger;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setTrigger(String gatilho) {
-        this.trigger = gatilho;
-    }
+	public String getGuildId() {
+		return guildId;
+	}
 
-    public String getAnswer() {
-        return answer;
-    }
+	public void setGuildId(String guildID) {
+		this.guildId = guildID;
+	}
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
+	public String getTrigger() {
+		return trigger;
+	}
 
-    public boolean isAnywhere() {
-        return anywhere;
-    }
+	public void setTrigger(String gatilho) {
+		this.trigger = gatilho;
+	}
 
-    public void setAnywhere(boolean anywhere) {
-        this.anywhere = anywhere;
-    }
+	public String getAnswer() {
+		return answer;
+	}
 
-    public int getChance() {
-        return chance;
-    }
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 
-    public void setChance(int chance) {
-        this.chance = chance;
-    }
+	public boolean isAnywhere() {
+		return anywhere;
+	}
 
-    public Set<String> getUsers() {
-        return users;
-    }
+	public void setAnywhere(boolean anywhere) {
+		this.anywhere = anywhere;
+	}
 
-    public Set<String> getChannels() {
-        return channels;
-    }
+	public int getChance() {
+		return chance;
+	}
+
+	public void setChance(int chance) {
+		this.chance = chance;
+	}
+
+	public Set<String> getUsers() {
+		return users;
+	}
+
+	public Set<String> getChannels() {
+		return channels;
+	}
 }
