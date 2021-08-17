@@ -78,7 +78,7 @@ public class Hitotsu extends Game {
 				s -> {
 					getBoard().leaveGame();
 					resetTimer();
-					
+
 					if (getBoard().getInGamePlayers().size() == 1) {
 						getBoard().awardWinner(this, getCurrent().getId());
 						close();
