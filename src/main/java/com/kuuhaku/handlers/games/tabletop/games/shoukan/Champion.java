@@ -128,46 +128,32 @@ public class Champion implements Drawable, Cloneable {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+		Champion c = Helper.getOr(fakeCard, this);
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
-			if (fakeCard != null) {
-				g2d.drawImage(fakeCard.getCard().drawCardNoBorder(acc), 0, 0, null);
-			} else {
-				g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
-			}
+			g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
-			if (fakeCard != null) {
-				Profile.printCenteredString(StringUtils.abbreviate(fakeCard.getCard().getName(), 15), 181, 38, 32, g2d);
-				g2d.drawImage(fakeCard.getRace().getIcon(), 11, 12, 23, 23, null);
-			} else {
-				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 15), 181, 38, 32, g2d);
-				g2d.drawImage(getRace().getIcon(), 11, 12, 23, 23, null);
-			}
+			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 181, 38, 32, g2d);
+			g2d.drawImage(c.getRace().getIcon(), 11, 12, 23, 23, null);
 
 			boolean drawnMana = false;
-			if (getMana() > 0 || (fakeCard != null && fakeCard.getMana() > 0)) {
+			if (c.getMana() > 0) {
 				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/mana.png"), 184, 47, null);
 
 				g2d.setColor(new Color(0, 165, 255));
-				if (fakeCard != null)
-					Profile.drawOutlinedText(String.valueOf(fakeCard.getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getMana())), 67, g2d);
-				else
-					Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 67, g2d);
+				Profile.drawOutlinedText(String.valueOf(c.getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(c.getMana())), 67, g2d);
 
 				drawnMana = true;
 			}
 
-			if (getBlood() > 0 || (fakeCard != null && fakeCard.getBlood() > 0)) {
+			if (c.getBlood() > 0) {
 				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/blood.png"), 184, 47 + (drawnMana ? 23 : 0), null);
 
 				g2d.setColor(new Color(255, 51, 0));
-				if (fakeCard != null)
-					Profile.drawOutlinedText(String.valueOf(fakeCard.getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
-				else
-					Profile.drawOutlinedText(String.valueOf(getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
+				Profile.drawOutlinedText(String.valueOf(c.getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(c.getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
 			}
 
 			String data = bonus.getSpecialData().getString("write");
@@ -177,15 +163,14 @@ public class Champion implements Drawable, Cloneable {
 				Profile.drawOutlinedText(data, 20, 66, g2d);
 			}
 
-			Champion c = Helper.getOr(fakeCard, this);
 			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef());
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
-			g2d.drawString("[" + getRace().toString().toUpperCase(Locale.ROOT) + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
+			g2d.drawString("[" + c.getRace().toString().toUpperCase(Locale.ROOT) + (c.hasEffect() ? "/EFEITO" : "") + "]", 9, 277);
 
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
+			Profile.drawStringMultiLineNO(g2d, c.getDescription(), 205, 9, 293);
 
 			if (isStasis() || isStunned() || isSleeping()) {
 				available = false;
@@ -605,7 +590,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getDescription() {
-		return sealed ? "Carta selada." : description;
+		return sealed ? "Carta selada." : Helper.getOr(altDescription, description);
 	}
 
 	public void setDescription(String description) {
