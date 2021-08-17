@@ -24,6 +24,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.XStringBuilder;
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -56,7 +57,14 @@ public class CompileCommand implements Executable {
 
 					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
 				} catch (Exception e) {
-					return Pair.of(e.toString().replace("`", "´"), -1L);
+					XStringBuilder sb = new XStringBuilder(e.toString());
+					for (StackTraceElement element : e.getStackTrace()) {
+						if (element.toString().startsWith("com.kuuhaku")) {
+							sb.appendNewLine("at " + element);
+						}
+					}
+
+					return Pair.of(sb.toString(), -1L);
 				}
 			});
 
