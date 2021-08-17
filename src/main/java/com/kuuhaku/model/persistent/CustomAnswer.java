@@ -54,7 +54,7 @@ public class CustomAnswer {
     @JoinColumn(name = "customanswer_id")
     private Set<String> channels = new HashSet<>();
 
-    public CustomAnswer(int id, String guildId, String trigger, String answer, boolean anywhere, int chance, String users, String channels) {
+    public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String users, String channels) {
         this.id = id;
         this.guildId = guildId;
         this.trigger = trigger;
