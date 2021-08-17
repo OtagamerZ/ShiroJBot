@@ -17,23 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de prune">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_blue.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_cyan.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_grey.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_pink.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_purple.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_cyan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_pink.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_purple.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_yellow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1412,14 +1396,7 @@
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
       <workItem from="1629201941505" duration="8985000" />
-      <workItem from="1629224236326" duration="5743000" />
-    </task>
-    <task id="LOCAL-05176" summary="Reforçado sistema antiraid">
-      <created>1628689054696</created>
-      <option name="number" value="05176" />
-      <option name="presentableId" value="LOCAL-05176" />
-      <option name="project" value="LOCAL" />
-      <updated>1628689054696</updated>
+      <workItem from="1629224236326" duration="6641000" />
     </task>
     <task id="LOCAL-05177" summary="Reforçado sistema antiraid">
       <created>1628689144023</created>
@@ -1757,7 +1734,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629229826624</updated>
     </task>
-    <option name="localTasksCounter" value="5225" />
+    <task id="LOCAL-05225" summary="Melhoria no comando de prune">
+      <created>1629230326443</created>
+      <option name="number" value="05225" />
+      <option name="presentableId" value="LOCAL-05225" />
+      <option name="project" value="LOCAL" />
+      <updated>1629230326443</updated>
+    </task>
+    <option name="localTasksCounter" value="5226" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
