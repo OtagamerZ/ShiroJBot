@@ -18,7 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de prune">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1397,14 +1399,7 @@
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
       <workItem from="1629201941505" duration="8985000" />
-      <workItem from="1629224236326" duration="4521000" />
-    </task>
-    <task id="LOCAL-05174" summary="Reforçado sistema antiraid">
-      <created>1628687526872</created>
-      <option name="number" value="05174" />
-      <option name="presentableId" value="LOCAL-05174" />
-      <option name="project" value="LOCAL" />
-      <updated>1628687526873</updated>
+      <workItem from="1629224236326" duration="5322000" />
     </task>
     <task id="LOCAL-05175" summary="Reforçado sistema antiraid">
       <created>1628688985354</created>
@@ -1742,7 +1737,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629228147958</updated>
     </task>
-    <option name="localTasksCounter" value="5223" />
+    <task id="LOCAL-05223" summary="Melhoria no comando de prune">
+      <created>1629228811604</created>
+      <option name="number" value="05223" />
+      <option name="presentableId" value="LOCAL-05223" />
+      <option name="project" value="LOCAL" />
+      <updated>1629228811604</updated>
+    </task>
+    <option name="localTasksCounter" value="5224" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
