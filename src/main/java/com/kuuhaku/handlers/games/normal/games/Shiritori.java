@@ -76,10 +76,10 @@ public class Shiritori extends Game {
 								});
 					} else {
 						channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
-								.queue(s -> {
+								.queue(msg -> {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-									this.message = s;
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									this.message = msg;
+									Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}
