@@ -100,7 +100,7 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
 
 			if (charm != null && charm.equals(Charm.SPELL)) {
-				g2d.drawImage(acc.getFrame().getFrontSpell(), 0, 0, null);
+				g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
@@ -123,7 +123,7 @@ public class Equipment implements Drawable, Cloneable {
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 			} else {
-				g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
+				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);

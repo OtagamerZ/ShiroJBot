@@ -76,12 +76,12 @@ public enum FrameColor {
 		return canvas;
 	}
 
-	public BufferedImage getFrontArena() {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_arena_" + name().toLowerCase(Locale.ROOT) + ".png");
+	public BufferedImage getFrontEquipment() {
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_equip_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 
-	public BufferedImage getFrontSpell() {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_spell_" + name().toLowerCase(Locale.ROOT) + ".png");
+	public BufferedImage getFrontArena() {
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_arena_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 
 	public String getDescription() {
