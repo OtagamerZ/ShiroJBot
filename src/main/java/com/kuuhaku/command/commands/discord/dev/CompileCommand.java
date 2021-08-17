@@ -27,10 +27,13 @@ import com.kuuhaku.utils.ShiroInfo;
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "compilar",
@@ -54,9 +57,14 @@ public class CompileCommand implements Executable {
 					gs.setVariable("msg", message);
 					gs.evaluate(code);
 
-					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
+					String vars = ((Map<?, ?>) gs.getContext().getVariables()).entrySet()
+							.parallelStream()
+							.map(e -> e.getKey() + " -> " + e.getValue())
+							.collect(Collectors.joining("\n"));
+
+					return Pair.of(vars, System.currentTimeMillis() - start);
 				} catch (Exception e) {
-					return Pair.of(e.toString().replace("`", "´"), -1L);
+					return Pair.of(ExceptionUtils.getStackTrace(e).replace("`", "´"), -1L);
 				}
 			});
 
