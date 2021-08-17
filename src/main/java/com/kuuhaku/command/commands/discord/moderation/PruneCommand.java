@@ -35,7 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -189,18 +188,25 @@ public class PruneCommand implements Executable {
 
 		ShiroInfo.getPruneQueue().add(guild.getId());
 		try {
-			String finalMsg = msg;
-			if (msgs.size() > 1) {
-				CompletableFuture.allOf(channel.purgeMessages(msgs).toArray(CompletableFuture[]::new))
-						.thenAccept(s -> channel.sendMessage(finalMsg).submit())
-						.get();
+			if (msgs.size() > 2) {
+				List<List<Message>> chunks = Helper.chunkify(msgs, 100);
+				for (List<Message> chunk : chunks) {
+					channel.deleteMessages(chunk).complete();
+
+					Thread.sleep(1500);
+				}
+
+				channel.sendMessage(msg).queue();
+			}
+			if (msgs.size() == 1) {
+				msgs.get(0).delete().complete();
+
+				channel.sendMessage(msg).queue();
 			} else {
 				channel.sendMessage("Nenhuma mensagem deletada.").submit().get();
 			}
 		} catch (ExecutionException | InterruptedException ignore) {
 		}
 		ShiroInfo.getPruneQueue().remove(guild.getId());
-
-		message.delete().queue();
 	}
 }
