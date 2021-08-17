@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores e adicionada proteção contra instakill">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1395,21 +1396,7 @@
       <workItem from="1628874298815" duration="1610000" />
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
-      <workItem from="1629201941505" duration="1533000" />
-    </task>
-    <task id="LOCAL-05163" summary="Concluído tutorial sobre kawaipon">
-      <created>1628542603168</created>
-      <option name="number" value="05163" />
-      <option name="presentableId" value="LOCAL-05163" />
-      <option name="project" value="LOCAL" />
-      <updated>1628542603168</updated>
-    </task>
-    <task id="LOCAL-05164" summary="Concluído tutorial sobre kawaipon">
-      <created>1628598724100</created>
-      <option name="number" value="05164" />
-      <option name="presentableId" value="LOCAL-05164" />
-      <option name="project" value="LOCAL" />
-      <updated>1628598724100</updated>
+      <workItem from="1629201941505" duration="2405000" />
     </task>
     <task id="LOCAL-05165" summary="Concluído tutorial sobre kawaipon">
       <created>1628598858609</created>
@@ -1740,7 +1727,21 @@
       <option name="project" value="LOCAL" />
       <updated>1629142245632</updated>
     </task>
-    <option name="localTasksCounter" value="5212" />
+    <task id="LOCAL-05212" summary="Correções menores e adicionada proteção contra instakill">
+      <created>1629208459651</created>
+      <option name="number" value="05212" />
+      <option name="presentableId" value="LOCAL-05212" />
+      <option name="project" value="LOCAL" />
+      <updated>1629208459652</updated>
+    </task>
+    <task id="LOCAL-05213" summary="Correções menores e adicionada proteção contra instakill">
+      <created>1629208514474</created>
+      <option name="number" value="05213" />
+      <option name="presentableId" value="LOCAL-05213" />
+      <option name="project" value="LOCAL" />
+      <updated>1629208514474</updated>
+    </task>
+    <option name="localTasksCounter" value="5214" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
