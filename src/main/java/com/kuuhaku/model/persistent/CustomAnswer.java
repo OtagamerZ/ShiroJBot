@@ -22,6 +22,7 @@ import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,11 +49,11 @@ public class CustomAnswer {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @JoinColumn(name = "customanswer_id")
-    private Set<String> users = new HashSet<>();
+    private final Set<String> users = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
     @JoinColumn(name = "customanswer_id")
-    private Set<String> channels = new HashSet<>();
+    private final Set<String> channels = new HashSet<>();
 
     public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String users, String channels) {
         this.id = id;
@@ -61,8 +62,8 @@ public class CustomAnswer {
         this.answer = answer;
         this.anywhere = anywhere;
         this.chance = chance;
-        this.users = Set.of(Helper.getOr(users, "").split(","));
-        this.channels = Set.of(Helper.getOr(channels, "").split(","));
+        this.users.addAll(List.of(Helper.getOr(users, "").split(",")));
+        this.channels.addAll(List.of(Helper.getOr(channels, "").split(",")));
     }
 
     public CustomAnswer(String guildId, String trigger, String answer) {
