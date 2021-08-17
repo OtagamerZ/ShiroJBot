@@ -52,6 +52,11 @@ public record Media(
 	}
 
 	@Override
+	public List<String> genres() {
+		return Helper.getOr(genres, List.of());
+	}
+
+	@Override
 	public Long popularity() {
 		return Helper.getOr(popularity, 0L);
 	}
