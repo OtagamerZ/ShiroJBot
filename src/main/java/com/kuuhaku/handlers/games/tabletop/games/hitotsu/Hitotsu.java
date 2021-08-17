@@ -78,14 +78,23 @@ public class Hitotsu extends Game {
 				s -> {
 					getBoard().leaveGame();
 					resetTimer();
+					
 					if (getBoard().getInGamePlayers().size() == 1) {
-						User u = getCurrent();
-						getBoard().awardWinner(this, u.getId());
+						getBoard().awardWinner(this, getCurrent().getId());
 						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 								.queue(msg -> {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								});
+					} else {
+						channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
+								.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+								.queue(msg -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									this.message = msg;
+									seats.get(getCurrent().getId()).showHand();
+									Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}

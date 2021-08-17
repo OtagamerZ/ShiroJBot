@@ -66,12 +66,20 @@ public class Shiritori extends Game {
 				s -> {
 					getTable().leaveGame();
 					resetTimer();
+
 					if (getTable().getInGamePlayers().size() == 1) {
 						getTable().awardWinner(this, getCurrent().getId());
 						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.queue(msg -> {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								});
+					} else {
+						channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
+								.queue(s -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									this.message = s;
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}
