@@ -70,7 +70,8 @@ public class AnimeCommand implements Executable {
 
 					if (anime.data() == null) throw new IllegalStateException();
 					Media media = anime.data().media();
-
+					
+					if (media == null) throw new IllegalStateException();
 					EmbedBuilder eb = new EmbedBuilder();
 					boolean hentai = media.genres().stream().anyMatch("hentai"::equalsIgnoreCase);
 					if (hentai && !message.getTextChannel().isNSFW()) {
