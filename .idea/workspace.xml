@@ -17,7 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de prune">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1396,14 +1396,7 @@
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
       <workItem from="1629201941505" duration="8985000" />
-      <workItem from="1629224236326" duration="6641000" />
-    </task>
-    <task id="LOCAL-05177" summary="Reforçado sistema antiraid">
-      <created>1628689144023</created>
-      <option name="number" value="05177" />
-      <option name="presentableId" value="LOCAL-05177" />
-      <option name="project" value="LOCAL" />
-      <updated>1628689144023</updated>
+      <workItem from="1629224236326" duration="7375000" />
     </task>
     <task id="LOCAL-05178" summary="Correções menores">
       <created>1628690497075</created>
@@ -1741,7 +1734,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629230326443</updated>
     </task>
-    <option name="localTasksCounter" value="5226" />
+    <task id="LOCAL-05226" summary="Melhoria no comando de prune">
+      <created>1629231078933</created>
+      <option name="number" value="05226" />
+      <option name="presentableId" value="LOCAL-05226" />
+      <option name="project" value="LOCAL" />
+      <updated>1629231078933</updated>
+    </task>
+    <option name="localTasksCounter" value="5227" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
