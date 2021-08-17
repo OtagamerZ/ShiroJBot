@@ -57,8 +57,13 @@ public class CompileCommand implements Executable {
 
 					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
 				} catch (Exception e) {
-					XStringBuilder sb = new XStringBuilder(e.toString());
-					for (StackTraceElement element : e.getStackTrace()) {
+					Throwable t = e;
+					while (t.getCause() != null) {
+						t = t.getCause();
+					}
+
+					XStringBuilder sb = new XStringBuilder(t.toString());
+					for (StackTraceElement element : t.getStackTrace()) {
 						if (element.toString().startsWith("com.kuuhaku")) {
 							sb.appendNewLine("at " + element);
 						}
@@ -84,7 +89,7 @@ public class CompileCommand implements Executable {
 							```diff
 							- Erro ao compilar
 							--------------------------------
-							Out -> %s
+							Err -> %s
 							```
 							""".formatted(out.getLeft())
 					).queue();

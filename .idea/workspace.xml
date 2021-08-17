@@ -17,7 +17,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores e adicionada proteção contra instakill">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1395,14 +1397,7 @@
       <workItem from="1628874298815" duration="1610000" />
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
-      <workItem from="1629201941505" duration="3351000" />
-    </task>
-    <task id="LOCAL-05167" summary="Concluído tutorial sobre kawaipon">
-      <created>1628604947168</created>
-      <option name="number" value="05167" />
-      <option name="presentableId" value="LOCAL-05167" />
-      <option name="project" value="LOCAL" />
-      <updated>1628604947168</updated>
+      <workItem from="1629201941505" duration="4025000" />
     </task>
     <task id="LOCAL-05168" summary="Concluído tutorial sobre kawaipon">
       <created>1628605640896</created>
@@ -1740,7 +1735,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629210091380</updated>
     </task>
-    <option name="localTasksCounter" value="5216" />
+    <task id="LOCAL-05216" summary="Correções menores e adicionada proteção contra instakill">
+      <created>1629210422516</created>
+      <option name="number" value="05216" />
+      <option name="presentableId" value="LOCAL-05216" />
+      <option name="project" value="LOCAL" />
+      <updated>1629210422516</updated>
+    </task>
+    <option name="localTasksCounter" value="5217" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
