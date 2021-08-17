@@ -16,7 +16,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores e adicionada proteção contra instakill">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de prune">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
     </list>
@@ -1396,14 +1396,8 @@
       <workItem from="1628874298815" duration="1610000" />
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
-      <workItem from="1629201941505" duration="7345000" />
-    </task>
-    <task id="LOCAL-05171" summary="Concluído tutorial sobre kawaipon">
-      <created>1628622493367</created>
-      <option name="number" value="05171" />
-      <option name="presentableId" value="LOCAL-05171" />
-      <option name="project" value="LOCAL" />
-      <updated>1628622493368</updated>
+      <workItem from="1629201941505" duration="8985000" />
+      <workItem from="1629224236326" duration="3728000" />
     </task>
     <task id="LOCAL-05172" summary="Concluído tutorial sobre kawaipon">
       <created>1628623101422</created>
@@ -1741,7 +1735,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629211717313</updated>
     </task>
-    <option name="localTasksCounter" value="5220" />
+    <task id="LOCAL-05220" summary="Melhoria no comando de prune">
+      <created>1629221065168</created>
+      <option name="number" value="05220" />
+      <option name="presentableId" value="LOCAL-05220" />
+      <option name="project" value="LOCAL" />
+      <updated>1629221065168</updated>
+    </task>
+    <option name="localTasksCounter" value="5221" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1829,7 +1830,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no sistema de mutes" />
     <MESSAGE value="Remoção completa do banco de caching (SQLite)" />
     <MESSAGE value="Atualizado para JDK 16" />
     <MESSAGE value="Aterada biblioteca de JSON de GSON para Moshi" />
@@ -1854,7 +1854,8 @@
     <MESSAGE value="Melhoria na customização das mensagens personalizadas" />
     <MESSAGE value="Correções no envio de mensagens com menções" />
     <MESSAGE value="Correções menores e adicionada proteção contra instakill" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores e adicionada proteção contra instakill" />
+    <MESSAGE value="Melhoria no comando de prune" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no comando de prune" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

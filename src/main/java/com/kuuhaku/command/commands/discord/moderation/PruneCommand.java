@@ -40,6 +40,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "apagar",
@@ -172,8 +173,9 @@ public class PruneCommand implements Executable {
 			return;
 		}
 
-		List<Message> msgs = hist.getRetrievedHistory();
-		msgs.removeIf(cond);
+		List<Message> msgs = hist.getRetrievedHistory().stream()
+				.filter(cond)
+				.collect(Collectors.toList());
 
 		int pinned = msgs.size();
 		msgs.removeIf(Message::isPinned);
