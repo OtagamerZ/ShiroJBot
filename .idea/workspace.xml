@@ -1397,21 +1397,7 @@
       <workItem from="1628883540099" duration="4638000" />
       <workItem from="1629133986875" duration="5070000" />
       <workItem from="1629201941505" duration="8985000" />
-      <workItem from="1629224236326" duration="3728000" />
-    </task>
-    <task id="LOCAL-05172" summary="Concluído tutorial sobre kawaipon">
-      <created>1628623101422</created>
-      <option name="number" value="05172" />
-      <option name="presentableId" value="LOCAL-05172" />
-      <option name="project" value="LOCAL" />
-      <updated>1628623101422</updated>
-    </task>
-    <task id="LOCAL-05173" summary="Reforçado sistema antiraid">
-      <created>1628686892966</created>
-      <option name="number" value="05173" />
-      <option name="presentableId" value="LOCAL-05173" />
-      <option name="project" value="LOCAL" />
-      <updated>1628686892966</updated>
+      <workItem from="1629224236326" duration="4521000" />
     </task>
     <task id="LOCAL-05174" summary="Reforçado sistema antiraid">
       <created>1628687526872</created>
@@ -1742,7 +1728,21 @@
       <option name="project" value="LOCAL" />
       <updated>1629221065168</updated>
     </task>
-    <option name="localTasksCounter" value="5221" />
+    <task id="LOCAL-05221" summary="Melhoria no comando de prune">
+      <created>1629228007984</created>
+      <option name="number" value="05221" />
+      <option name="presentableId" value="LOCAL-05221" />
+      <option name="project" value="LOCAL" />
+      <updated>1629228007985</updated>
+    </task>
+    <task id="LOCAL-05222" summary="Melhoria no comando de prune">
+      <created>1629228147958</created>
+      <option name="number" value="05222" />
+      <option name="presentableId" value="LOCAL-05222" />
+      <option name="project" value="LOCAL" />
+      <updated>1629228147958</updated>
+    </task>
+    <option name="localTasksCounter" value="5223" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
