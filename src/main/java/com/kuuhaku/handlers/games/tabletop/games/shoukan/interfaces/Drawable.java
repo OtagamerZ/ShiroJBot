@@ -20,9 +20,13 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.Helper;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public interface Drawable {
@@ -49,4 +53,28 @@ public interface Drawable {
 	void bind(Hand h);
 
 	Drawable copy();
+
+	static void drawAttributes(BufferedImage in, int atk, int def) {
+		Graphics2D g2d = in.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+
+		if (atk > 0) {
+			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
+			g2d.drawImage(icon, 19, 232, null);
+
+			g2d.setColor(Color.red);
+			Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
+		}
+
+		if (def > 0) {
+			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
+			g2d.drawImage(icon, 182, 232, null);
+
+			g2d.setColor(Color.green);
+			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
+		}
+
+		g2d.dispose();
+	}
 }
