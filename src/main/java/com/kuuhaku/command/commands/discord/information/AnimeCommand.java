@@ -38,7 +38,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Command(
@@ -52,15 +51,16 @@ public class AnimeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
+		if (argsAsText.isBlank()) {
 			channel.sendMessage(I18n.getString("err_no-name")).queue();
 			return;
 		}
 
 		channel.sendMessage("<a:loading:697879726630502401> Buscando anime...").queue(m -> {
 			try {
-				String query = IOUtils.toString(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("anilist.graphql")), StandardCharsets.UTF_8);
+				String query = IOUtils.toString(Helper.getResourceAsStream(this.getClass(), "anilist.graphql"), StandardCharsets.UTF_8);
 				JSONObject data = AnimeRequest.getData(argsAsText, query);
+
 				try {
 					Anime anime = JSONUtils.fromJSON(data.toString(), Anime.class);
 					if (anime == null) {
@@ -70,7 +70,7 @@ public class AnimeCommand implements Executable {
 
 					if (anime.data() == null) throw new IllegalStateException();
 					Media media = anime.data().media();
-					
+
 					if (media == null) throw new IllegalStateException();
 					EmbedBuilder eb = new EmbedBuilder();
 					boolean hentai = media.genres().stream().anyMatch("hentai"::equalsIgnoreCase);
