@@ -111,6 +111,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URI;
@@ -2831,6 +2832,10 @@ public class Helper {
 
 			throw new IllegalStateException("No matching constructor found.");
 		} catch (Exception e) {
+			if (e instanceof InvocationTargetException ex) {
+				throw new RuntimeException(ex.getCause());
+			}
+
 			throw new RuntimeException(e);
 		}
 	}
