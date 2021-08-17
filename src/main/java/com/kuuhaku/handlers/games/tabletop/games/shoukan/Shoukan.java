@@ -2598,7 +2598,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public Side getNextSide() {
-		return getRound() % 2 == 1 ? Side.TOP : Side.BOTTOM;
+		return getCurrentSide() == Side.TOP ? Side.BOTTOM : Side.TOP;
 	}
 
 	@Override
