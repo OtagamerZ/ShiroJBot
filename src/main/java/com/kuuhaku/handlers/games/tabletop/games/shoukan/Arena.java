@@ -124,6 +124,7 @@ public class Arena {
 			ExecutorService exec = Executors.newFixedThreadPool(2);
 			for (Map.Entry<Side, List<SlotColumn>> entry : slots.entrySet()) {
 				exec.execute(() -> {
+					assert back != null;
 					BufferedImage layer = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
 					Graphics2D g2d = layer.createGraphics();
 
