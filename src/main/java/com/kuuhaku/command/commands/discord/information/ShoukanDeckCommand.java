@@ -72,14 +72,17 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 						.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 30 cartas Senshi joguem.")
 						.setImage("attachment://deck.jpg");
 
-				m.delete().queue();
 				if (showPrivate) {
 					author.openPrivateChannel()
 							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
 							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+							.flatMap(c -> m.delete())
 							.queue(null, Helper::doNothing);
 				} else {
-					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+					channel.sendMessageEmbeds(eb.build())
+							.addFile(Helper.writeAndGet(cards, "deck", "jpg"))
+							.flatMap(c -> m.delete())
+							.queue();
 				}
 			} else if (Helper.containsAny(args, "meta")) {
 				Deck dk = CardDAO.getMetaDeck();
@@ -92,14 +95,17 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 						.setDescription("O deck meta reflete as cartas mais utilizadas pela comunidade (não necessáriamente sendo a melhor combinação possível).")
 						.setImage("attachment://deck.jpg");
 
-				m.delete().queue();
 				if (showPrivate) {
 					author.openPrivateChannel()
 							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
 							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+							.flatMap(c -> m.delete())
 							.queue(null, Helper::doNothing);
 				} else {
-					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+					channel.sendMessageEmbeds(eb.build())
+							.addFile(Helper.writeAndGet(cards, "deck", "jpg"))
+							.flatMap(c -> m.delete())
+							.queue();
 				}
 			} else {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -114,14 +120,17 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 						.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
 						.setImage("attachment://deck.jpg");
 
-				m.delete().queue();
 				if (showPrivate) {
 					author.openPrivateChannel()
 							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
 							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
+							.flatMap(c -> m.delete())
 							.queue(null, Helper::doNothing);
 				} else {
-					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+					channel.sendMessageEmbeds(eb.build())
+							.addFile(Helper.writeAndGet(cards, "deck", "jpg"))
+							.flatMap(c -> m.delete())
+							.queue();
 				}
 			}
 		});
