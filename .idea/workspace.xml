@@ -17,8 +17,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/ShardRestartCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/ShardRestartCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1401,14 +1399,7 @@
       <workItem from="1629224236326" duration="9122000" />
       <workItem from="1629288719963" duration="9624000" />
       <workItem from="1629302544135" duration="724000" />
-      <workItem from="1629304465257" duration="3486000" />
-    </task>
-    <task id="LOCAL-05196" summary="Melhoria na customização das mensagens personalizadas">
-      <created>1628780569982</created>
-      <option name="number" value="05196" />
-      <option name="presentableId" value="LOCAL-05196" />
-      <option name="project" value="LOCAL" />
-      <updated>1628780569982</updated>
+      <workItem from="1629304465257" duration="3859000" />
     </task>
     <task id="LOCAL-05197" summary="Melhoria na customização das mensagens personalizadas">
       <created>1628784185746</created>
@@ -1746,7 +1737,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629314505681</updated>
     </task>
-    <option name="localTasksCounter" value="5245" />
+    <task id="LOCAL-05245" summary="Correções menores">
+      <created>1629315103182</created>
+      <option name="number" value="05245" />
+      <option name="presentableId" value="LOCAL-05245" />
+      <option name="project" value="LOCAL" />
+      <updated>1629315103183</updated>
+    </task>
+    <option name="localTasksCounter" value="5246" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
