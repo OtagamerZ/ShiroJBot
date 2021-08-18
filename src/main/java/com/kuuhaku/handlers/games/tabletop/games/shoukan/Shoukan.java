@@ -398,7 +398,7 @@ public class Shoukan extends GlobalGame {
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
-						if (e.getTier() == 4)
+						if (e.getTier() >= 4)
 							arena.getBanished().add(e.copy());
 						else
 							arena.getGraveyard().get(getCurrentSide()).add(e.copy());
@@ -1496,7 +1496,8 @@ public class Shoukan extends GlobalGame {
 		SlotColumn sd = side.get(index);
 		sd.setBottom(null);
 
-		if (!eq.isParasite() || eq.isEffectOnly())
+		eq.reset();
+		if (!eq.isParasite() || eq.isEffectOnly() || eq.getTier() >= 4)
 			arena.getGraveyard().get(s).add(eq.copy());
 	}
 

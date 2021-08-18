@@ -354,6 +354,7 @@ public class Equipment implements Drawable, Cloneable {
 		linkedTo = null;
 		altAtk = -1;
 		altDef = -1;
+		altTier = -1;
 	}
 
 	@Override
