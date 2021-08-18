@@ -199,7 +199,7 @@ public class Hand {
 		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
 		this.mitigation = combo.getRight() == Race.HUMAN ? deque.stream()
 				.filter(d -> d instanceof Champion c && c.getMana() <= 2)
-				.count() : 0;
+				.count() * 0.01f : 0;
 		this.maxCards = Math.max(maxCards
 								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
 								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
