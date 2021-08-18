@@ -20,6 +20,7 @@ package com.kuuhaku.events;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -335,7 +336,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
-					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.unmention(rawMessage));
+					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + ": " + rawMessage);
 				}
 
 				/*if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.isPinging(message, ShiroInfo.getNiiChan())) {
@@ -427,28 +428,27 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 
-				if (false && gc.isNQNMode() && Helper.hasEmote(message.getContentDisplay()))
+				if (gc.isNQNMode() && Helper.hasEmote(message.getContentDisplay()))
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
 						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
 						Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentDisplay());
 
-						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-						wmb.setContent(String.valueOf(s.getLeft()));
-						if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
+						WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+								.setAllowedMentions(AllowedMentions.none())
+								.setContent(String.valueOf(s.getLeft()));
+
+						if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank()) {
+							wmb.setUsername(author.getName());
 							wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
-						else try {
+						} else try {
+							Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
+							wmb.setUsername(nii != null && m.getPseudoName().equals(nii.getEffectiveName()) ? m.getPseudoName() + " (FAKE)" : m.getPseudoName());
 							wmb.setAvatarUrl(m.getPseudoAvatar());
 						} catch (RuntimeException e) {
-							m.setPseudoAvatar("");
-							MemberDAO.saveMember(m);
-						}
-						if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
-						else try {
-							wmb.setUsername(m.getPseudoName());
-						} catch (RuntimeException e) {
 							m.setPseudoName("");
+							m.setPseudoAvatar("");
 							MemberDAO.saveMember(m);
 						}
 
@@ -456,7 +456,9 @@ public class ShiroEvents extends ListenerAdapter {
 						WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 						message.delete().queue(d -> {
 							try {
-								wc.send(wmb.build()).thenAccept(rm -> s.getRight().run()).get();
+								wc.send(wmb.build())
+										.thenRun(s.getRight())
+										.get();
 							} catch (InterruptedException | ExecutionException e) {
 								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 							}
