@@ -410,20 +410,6 @@ public class Helper {
 		return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
-	public static String unmention(String source) {
-		String[] out = source.replace("\n", "\n ").split(" ");
-		for (int i = 0; i < out.length; i++) {
-			String s = out[i];
-			if (s.matches("<(?:[@#&!]|a?:)+.+:?>|[@#].+")) {
-				s = bugText(s);
-			}
-
-			out[i] = s;
-		}
-
-		return String.join(" ", out).replace("\n ", "\n");
-	}
-
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getLogChannel() == null) return;
@@ -986,7 +972,7 @@ public class Helper {
 			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
 				String old = oldWords[i];
 				if (!old.matches(":.+:")) {
-					newWords[i] = unmention(old);
+					newWords[i] = old;
 					continue;
 				} else if (!g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
 					continue;

@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -28,13 +29,13 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Command(
@@ -57,28 +58,24 @@ public class SayCommand implements Executable {
 		}
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
-		MessageBuilder mb = new MessageBuilder(Helper.unmention(message.getContentDisplay()));
-
 		try {
 			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentDisplay());
+			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, argsAsText);
 
-			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-			wmb.setContent(s.getLeft());
-			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
+			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+					.setAllowedMentions(AllowedMentions.none())
+					.setContent(s.getLeft());
+
+			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank()) {
+				wmb.setUsername(author.getName());
 				wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
-			else try {
-				wmb.setAvatarUrl(m.getPseudoAvatar());
-			} catch (RuntimeException e) {
-				m.setPseudoAvatar("");
-				MemberDAO.saveMember(m);
-			}
-			if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
-			else try {
+			} else try {
 				Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
 				wmb.setUsername(nii != null && m.getPseudoName().equals(nii.getEffectiveName()) ? m.getPseudoName() + " (FAKE)" : m.getPseudoName());
+				wmb.setAvatarUrl(m.getPseudoAvatar());
 			} catch (RuntimeException e) {
 				m.setPseudoName("");
+				m.setPseudoAvatar("");
 				MemberDAO.saveMember(m);
 			}
 
@@ -86,12 +83,14 @@ public class SayCommand implements Executable {
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			try {
 				message.delete().queue(null, Helper::doNothing);
-				wc.send(wmb.build()).thenAccept(rm -> s.getRight().run()).get();
+				wc.send(wmb.build())
+						.thenRun(s.getRight())
+						.get();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException e) {
-			channel.sendMessage(mb.build()).queue();
+			channel.sendMessage(argsAsText).allowedMentions(List.of()).queue();
 			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
 				message.delete().queue(null, Helper::doNothing);
 		}
