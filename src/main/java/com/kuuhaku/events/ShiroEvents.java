@@ -484,7 +484,8 @@ public class ShiroEvents extends ListenerAdapter {
 					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 				}
 			}
-		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
+		} catch (InsufficientPermissionException | ErrorResponseException e) {
+			e.printStackTrace();
 		}
 	}
 
