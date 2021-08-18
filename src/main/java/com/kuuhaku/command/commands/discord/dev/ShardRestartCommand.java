@@ -23,7 +23,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -56,24 +55,24 @@ public class ShardRestartCommand implements Executable {
 			return;
 		}
 
-		if (author.getId().equals(ShiroInfo.getNiiChan())) {
-			channel.sendMessage("Reiniciando Shard com ID %s...".formatted(id)).queue();
-		}
+		channel.sendMessage("Reiniciando Shard com ID %s...".formatted(id)).queue(m -> {
+			Main.getShiroShards().restart(id);
+			List<JDA> shards = Main.getShiroShards().getShards().stream()
+					.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
+					.filter(s -> s.getStatus() != JDA.Status.CONNECTED)
+					.toList();
+			for (JDA shard : shards) {
+				try {
+					shard.awaitReady();
+					shard.getPresence().setActivity(Main.getRandomActivity());
 
-		Main.getShiroShards().restart(id);
-		List<JDA> shards = Main.getShiroShards().getShards().stream()
-				.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
-				.filter(s -> s.getStatus() != JDA.Status.CONNECTED)
-				.toList();
-		for (JDA shard : shards) {
-			try {
-				shard.awaitReady();
-				shard.getPresence().setActivity(Main.getRandomActivity());
-
-				Helper.logger(Main.class).info("Shard " + id + " pronto!");
-			} catch (InterruptedException e) {
-				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
+					Helper.logger(Main.class).info("Shard " + id + " pronto!");
+				} catch (InterruptedException e) {
+					Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
+				}
 			}
-		}
+
+			m.editMessage("Shard reiniciado com sucesso.").queue();
+		});
 	}
 }
