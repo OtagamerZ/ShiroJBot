@@ -320,6 +320,9 @@ public class Shoukan extends GlobalGame {
 						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
 							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 							return;
+						} else if (h.getHp() <= e.getBlood()) {
+							channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+							return;
 						} else if (args.length - 2 < e.getArgType().getArgs()) {
 							channel.sendMessage(
 									switch (e.getArgType()) {
@@ -397,6 +400,7 @@ public class Shoukan extends GlobalGame {
 						reroll = false;
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
+						h.removeHp(e.getBlood());
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 						if (e.getTier() >= 4)
 							arena.getBanished().add(e.copy());
