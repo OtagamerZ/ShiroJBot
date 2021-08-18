@@ -18,35 +18,65 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Flag;
 import com.kuuhaku.utils.JSONObject;
 
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class Bonus implements Cloneable {
 	private final JSONObject specialData;
+	private final Set<Flag> flags;
 	private final int[] atk = new int[6];
 	private final int[] def = new int[6];
 	private int mana = 0;
 	private int blood = 0;
+	private String write = null;
 
-	public Bonus(JSONObject specialData, int atk, int def, int mana, int blood) {
-		this.specialData = new JSONObject(specialData.toString());
+	public Bonus(JSONObject specialData, Set<Flag> flags, int atk, int def, int mana, int blood, String write) {
+		this.specialData = specialData;
+		this.flags = flags;
 		this.atk[0] = atk;
 		this.def[0] = def;
 		this.mana = mana;
 		this.blood = blood;
+		this.write = write;
 	}
 
 	public Bonus(JSONObject specialData) {
 		this.specialData = new JSONObject(specialData.toString());
+		this.flags = EnumSet.noneOf(Flag.class);
 	}
 
 	public Bonus() {
 		this.specialData = new JSONObject();
+		this.flags = EnumSet.noneOf(Flag.class);
 	}
 
 	public JSONObject getSpecialData() {
 		return specialData;
+	}
+
+	public void addProp(String key, Object value) {
+		specialData.put(key, value);
+	}
+
+	public Set<Flag> getFlags() {
+		return flags;
+	}
+
+	public boolean hasFlag(Flag flag) {
+		return flags.contains(flag);
+	}
+
+	public boolean popFlag(Flag flag) {
+		return flags.remove(flag);
+	}
+
+	public void setFlag(Flag flag, boolean on) {
+		if (on) flags.add(flag);
+		else flags.remove(flag);
 	}
 
 	public int getAtk() {
@@ -129,16 +159,26 @@ public class Bonus implements Cloneable {
 		this.blood -= blood;
 	}
 
+	public String getWrite() {
+		return write;
+	}
+
+	public void setWrite(String write) {
+		this.write = write;
+	}
+
 	public Bonus copy() {
 		try {
 			Bonus b = (Bonus) clone();
 
 			return new Bonus(
 					b.getSpecialData(),
+					b.getFlags(),
 					b.getAtk(),
 					b.getDef(),
 					b.getMana(),
-					b.getBlood()
+					b.getBlood(),
+					b.getWrite()
 			);
 		} catch (CloneNotSupportedException e) {
 			return null;
