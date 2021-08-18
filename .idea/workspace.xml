@@ -18,6 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1399,21 +1400,7 @@
       <workItem from="1629224236326" duration="9122000" />
       <workItem from="1629288719963" duration="9624000" />
       <workItem from="1629302544135" duration="724000" />
-      <workItem from="1629304465257" duration="1473000" />
-    </task>
-    <task id="LOCAL-05192" summary="Correções menores">
-      <created>1628775426353</created>
-      <option name="number" value="05192" />
-      <option name="presentableId" value="LOCAL-05192" />
-      <option name="project" value="LOCAL" />
-      <updated>1628775426353</updated>
-    </task>
-    <task id="LOCAL-05193" summary="Correções menores">
-      <created>1628776954516</created>
-      <option name="number" value="05193" />
-      <option name="presentableId" value="LOCAL-05193" />
-      <option name="project" value="LOCAL" />
-      <updated>1628776954516</updated>
+      <workItem from="1629304465257" duration="2766000" />
     </task>
     <task id="LOCAL-05194" summary="Melhoria na customização das mensagens personalizadas">
       <created>1628779502962</created>
@@ -1744,7 +1731,21 @@
       <option name="project" value="LOCAL" />
       <updated>1629304811591</updated>
     </task>
-    <option name="localTasksCounter" value="5241" />
+    <task id="LOCAL-05241" summary="Correções menores">
+      <created>1629310759173</created>
+      <option name="number" value="05241" />
+      <option name="presentableId" value="LOCAL-05241" />
+      <option name="project" value="LOCAL" />
+      <updated>1629310759174</updated>
+    </task>
+    <task id="LOCAL-05242" summary="Correções menores">
+      <created>1629310975567</created>
+      <option name="number" value="05242" />
+      <option name="presentableId" value="LOCAL-05242" />
+      <option name="project" value="LOCAL" />
+      <updated>1629310975567</updated>
+    </task>
+    <option name="localTasksCounter" value="5243" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
