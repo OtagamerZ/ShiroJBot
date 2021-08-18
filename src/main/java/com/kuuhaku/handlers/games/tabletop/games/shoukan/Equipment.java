@@ -111,8 +111,8 @@ public class Equipment implements Drawable, Cloneable {
 
 				BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
 				if (star != null)
-					for (int i = 0; i < tier; i++)
-						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
+					for (int i = 0; i < getTier(); i++)
+						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 42, null);
 
 				boolean drawnMana = false;
 				if (getMana() > 0) {
@@ -147,14 +147,10 @@ public class Equipment implements Drawable, Cloneable {
 
 				BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
 				if (star != null)
-					for (int i = 0; i < tier; i++)
-						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
+					for (int i = 0; i < getTier(); i++)
+						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 42, null);
 
-				g2d.setColor(Color.red);
-				Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
-
-				g2d.setColor(Color.green);
-				Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
+				Drawable.drawEvoAttributes(bi, getAtk(), getDef());
 
 				if (linkedTo != null) {
 					if (linkedTo.getRight().getFakeCard() != null) {
