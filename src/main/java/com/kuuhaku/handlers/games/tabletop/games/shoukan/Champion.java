@@ -153,7 +153,7 @@ public class Champion implements Drawable, Cloneable {
 				Profile.drawOutlinedText(String.valueOf(c.getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(c.getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
 			}
 
-			if (!bonus.getWrite().isBlank()) {
+			if (bonus.getWrite() != null) {
 				g2d.setColor(Color.yellow);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
 				Profile.drawOutlinedText(bonus.getWrite(), 20, 66, g2d);

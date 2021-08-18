@@ -139,6 +139,10 @@ public class Bonus implements Cloneable {
 		return mana;
 	}
 
+	public void setMana(int mana) {
+		this.mana = mana;
+	}
+
 	public void addMana(int mana) {
 		this.mana += mana;
 	}
@@ -149,6 +153,10 @@ public class Bonus implements Cloneable {
 
 	public int getBlood() {
 		return blood;
+	}
+
+	public void setBlood(int blood) {
+		this.blood = blood;
 	}
 
 	public void addBlood(int blood) {
