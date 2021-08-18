@@ -974,8 +974,11 @@ public class Helper {
 				if (!old.matches(":.+:")) {
 					newWords[i] = old;
 					continue;
-				} else if (!g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
-					continue;
+				} else {
+					List<Emote> svEmts = g.getEmotesByName(old.replace(":", ""), false);
+					svEmts.removeIf(e -> !e.isAnimated());
+
+					if (!svEmts.isEmpty()) continue;
 				}
 
 				boolean makenew = false;
