@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -174,6 +175,7 @@ public class PruneCommand implements Executable {
 
 		List<Message> msgs = hist.getRetrievedHistory().stream()
 				.filter(cond)
+				.filter(m -> m.getTimeCreated().isBefore(OffsetDateTime.now().minusWeeks(2)))
 				.collect(Collectors.toList());
 
 		int pinned = msgs.size();
