@@ -92,8 +92,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setEventPool(Executors.newFixedThreadPool(20), true)
 				.build();
 
-		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
-
 		List<JDA> shards = shiroShards.getShards().stream()
 				.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
 				.toList();
@@ -107,6 +105,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
 			}
 		}
+
+		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 
 		try {
 			PaginatorBuilder.createPaginator()
