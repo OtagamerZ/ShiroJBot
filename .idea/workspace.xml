@@ -20,8 +20,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Bonus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Bonus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,8 +65,8 @@
         <option value="JavaScript File" />
         <option value="Interface" />
         <option value="Record" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -1401,21 +1399,7 @@
       <workItem from="1629133986875" duration="5070000" />
       <workItem from="1629201941505" duration="8985000" />
       <workItem from="1629224236326" duration="9122000" />
-      <workItem from="1629288719963" duration="4504000" />
-    </task>
-    <task id="LOCAL-05184" summary="Correções menores">
-      <created>1628698787209</created>
-      <option name="number" value="05184" />
-      <option name="presentableId" value="LOCAL-05184" />
-      <option name="project" value="LOCAL" />
-      <updated>1628698787209</updated>
-    </task>
-    <task id="LOCAL-05185" summary="Correções menores">
-      <created>1628704070766</created>
-      <option name="number" value="05185" />
-      <option name="presentableId" value="LOCAL-05185" />
-      <option name="project" value="LOCAL" />
-      <updated>1628704070766</updated>
+      <workItem from="1629288719963" duration="7697000" />
     </task>
     <task id="LOCAL-05186" summary="Correções menores">
       <created>1628704200544</created>
@@ -1746,7 +1730,21 @@
       <option name="project" value="LOCAL" />
       <updated>1629291272508</updated>
     </task>
-    <option name="localTasksCounter" value="5233" />
+    <task id="LOCAL-05233" summary="Correções menores">
+      <created>1629293309262</created>
+      <option name="number" value="05233" />
+      <option name="presentableId" value="LOCAL-05233" />
+      <option name="project" value="LOCAL" />
+      <updated>1629293309262</updated>
+    </task>
+    <task id="LOCAL-05234" summary="Correções menores">
+      <created>1629294133354</created>
+      <option name="number" value="05234" />
+      <option name="presentableId" value="LOCAL-05234" />
+      <option name="project" value="LOCAL" />
+      <updated>1629294133354</updated>
+    </task>
+    <option name="localTasksCounter" value="5235" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
