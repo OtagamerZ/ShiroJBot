@@ -42,11 +42,11 @@ import java.util.function.Consumer;
 
 @Command(
 		name = "confronto",
-		aliases = {"standoff", "highnoon", "duelo"},
+		aliases = {"faceoff", "highnoon", "duelo"},
 		usage = "req_difficulty",
 		category = Category.FUN
 )
-public class StandoffCommand implements Executable {
+public class FaceoffCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -121,7 +121,7 @@ public class StandoffCommand implements Executable {
 							acc.addCredit(prize, this.getClass());
 							AccountDAO.saveAccount(acc);
 
-							LeaderboardsDAO.submit(author, StandoffCommand.class, (int) react);
+							LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
 						}
 					}
 				});
