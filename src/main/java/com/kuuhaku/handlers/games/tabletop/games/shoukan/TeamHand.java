@@ -191,7 +191,7 @@ public class TeamHand extends Hand {
 				? deques.stream()
 						  .flatMap(List::stream)
 						  .filter(d -> d instanceof Champion c && c.getMana() <= 2)
-						  .count() / 2f : 0
+						  .count() * 0.005f : 0
 		);
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
