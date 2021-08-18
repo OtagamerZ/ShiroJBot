@@ -517,14 +517,12 @@ public class Shoukan extends GlobalGame {
 								SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 
 								if (sc != null) {
-									t.addRedAtk(Math.round(t.getAltAtk() * 0.25f));
-									t.addRedDef(Math.round(t.getAltDef() * 0.25f));
+									t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
+									t.removeDef(Math.round(t.getAltDef() * 0.25f));
 
 									Champion dp = t.copy();
-									dp.addRedAtk(Math.round(dp.getAltAtk() * 0.25f));
-									dp.addRedDef(Math.round(dp.getAltDef() * 0.25f));
 									dp.setBonus(t.getBonus().copy());
-									dp.setEfctMana(-dp.getMana() / 2);
+									dp.getBonus().removeMana(dp.getMana() / 2);
 									dp.setGravelocked(true);
 
 									sc.setTop(dp);
@@ -1216,15 +1214,15 @@ public class Shoukan extends GlobalGame {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
-			c.setEfctAtk(target, 0);
-			c.setEfctDef(target, 0);
+			c.getBonus().setAtk(target, 0);
+			c.getBonus().setDef(target, 0);
 		}
 
 		if (applyEot(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
-		if (!ch.isGravelocked())
+		if (ch.canGoToGrave())
 			arena.getGraveyard().get(to).add(ch.copy());
 	}
 
@@ -1266,15 +1264,15 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(target, 0);
-				c.setEfctDef(target, 0);
+				c.getBonus().setAtk(target, 0);
+				c.getBonus().setDef(target, 0);
 			}
 
 			if (applyEot(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
-			if (!ch.isGravelocked())
+			if (ch.canGoToGrave())
 				arena.getGraveyard().get(to).add(ch.copy());
 		}
 	}
@@ -1308,8 +1306,8 @@ public class Shoukan extends GlobalGame {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
-			c.setEfctAtk(target, 0);
-			c.setEfctDef(target, 0);
+			c.getBonus().setAtk(target, 0);
+			c.getBonus().setDef(target, 0);
 		}
 
 		if (applyEot(ON_DESTROY, to, target)) return;
@@ -1339,8 +1337,8 @@ public class Shoukan extends GlobalGame {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
-			c.setEfctAtk(target, 0);
-			c.setEfctDef(target, 0);
+			c.getBonus().setAtk(target, 0);
+			c.getBonus().setDef(target, 0);
 		}
 
 		if (applyEot(ON_DESTROY, to, target)) return;
@@ -1389,8 +1387,8 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(target, 0);
-				c.setEfctDef(target, 0);
+				c.getBonus().setAtk(target, 0);
+				c.getBonus().setDef(target, 0);
 			}
 
 			if (applyEot(ON_DESTROY, to, target)) return;
@@ -1431,8 +1429,8 @@ public class Shoukan extends GlobalGame {
 			if (slot.getTop() == null) continue;
 
 			Champion c = slot.getTop();
-			c.setEfctAtk(target, 0);
-			c.setEfctDef(target, 0);
+			c.getBonus().setAtk(target, 0);
+			c.getBonus().setDef(target, 0);
 		}
 
 		if (applyEot(ON_DESTROY, to, target)) return;
@@ -1474,15 +1472,15 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(target, 0);
-				c.setEfctDef(target, 0);
+				c.getBonus().setAtk(target, 0);
+				c.getBonus().setDef(target, 0);
 			}
 
 			if (applyEot(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
-			if (!ch.isGravelocked())
+			if (ch.canGoToGrave())
 				arena.getBanished().add(ch.copy());
 		}
 	}
@@ -1574,8 +1572,8 @@ public class Shoukan extends GlobalGame {
 					if (slot.getTop() == null) continue;
 
 					Champion c = slot.getTop();
-					c.setEfctAtk(target, 0);
-					c.setEfctDef(target, 0);
+					c.getBonus().setAtk(target, 0);
+					c.getBonus().setDef(target, 0);
 				}
 			}
 		}
@@ -1616,8 +1614,8 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(target, 0);
-				c.setEfctDef(target, 0);
+				c.getBonus().setAtk(target, 0);
+				c.getBonus().setDef(target, 0);
 			}
 		}
 	}
@@ -1658,8 +1656,8 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(target, 0);
-				c.setEfctDef(target, 0);
+				c.getBonus().setAtk(target, 0);
+				c.getBonus().setDef(target, 0);
 			}
 
 			if (chi == null) return;
@@ -1681,8 +1679,8 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				c.setEfctAtk(source, 0);
-				c.setEfctDef(source, 0);
+				c.getBonus().setAtk(target, 0);
+				c.getBonus().setDef(target, 0);
 			}
 
 			slts.get(target).setTop(chi);
@@ -2503,21 +2501,18 @@ public class Shoukan extends GlobalGame {
 		if (nc.getBlood() > 0)
 			h.removeHp(nc.getBlood());
 
-		nc.setGame(from.getGame());
-		nc.setAcc(from.getAcc());
+		nc.bind(h);
 		nc.setLinkedTo(from.getLinkedTo());
 		nc.setDefending(from.isDefending());
 		nc.setFlipped(from.isFlipped());
 
-		int index = switch (ep.getTrigger()) {
-			case ON_ATTACK, ON_SUMMON, BEFORE_TURN,
-					AFTER_TURN, ON_SWITCH, ON_SUICIDE,
-					ON_EQUIP, POST_ATTACK, ON_MISS, GAME_TICK -> ep.getDuelists().getAttackerPos();
-			default -> ep.getDuelists().getDefenderPos();
-		};
+		int index = ep.getTrigger().isDefensive()
+				? ep.getDuelists().getDefenderPos()
+				: ep.getDuelists().getAttackerPos();
+
 		banishCard(ep.getSide(), index, false);
 		arena.getSlots().get(ep.getSide()).get(index).setTop(nc);
-		applyEffect(ON_SUMMON, from, index, ep.getSide(), ep.getDuelists());
+		applyEffect(ON_SUMMON, nc, index, ep.getSide(), ep.getDuelists());
 		applyEot(ON_SUMMON, ep.getSide(), index);
 		return nc;
 	}

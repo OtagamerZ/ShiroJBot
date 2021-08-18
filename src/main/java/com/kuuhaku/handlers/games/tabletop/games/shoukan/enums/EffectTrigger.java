@@ -19,28 +19,39 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum EffectTrigger {
-	NONE,
-	ON_FLIP,
-	BEFORE_DEATH,
-	AFTER_DEATH,
-	ON_ATTACK,
-	ON_SUMMON,
-	BEFORE_TURN,
-	AFTER_TURN,
-	ON_DEFEND,
-	ON_SWITCH,
-	ON_SUICIDE,
-	ON_EQUIP,
-	POST_ATTACK,
-	POST_DEFENSE,
-	DEFENSE_ASSIST,
-	ATTACK_ASSIST,
-	POST_DEFENSE_ASSIST,
-	POST_ATTACK_ASSIST,
-	ON_DODGE,
-	ON_MISS,
-	GAME_TICK,
-	ON_DESTROY,
-	ON_LOSE,
-	ON_WIN
+	NONE(false),
+	ON_FLIP(false),
+	ON_ATTACK(false),
+	ON_SUMMON(false),
+	BEFORE_TURN(false),
+	AFTER_TURN(false),
+	ON_SWITCH(false),
+	ON_SUICIDE(false),
+	ON_EQUIP(false),
+	POST_ATTACK(false),
+	ATTACK_ASSIST(false),
+	POST_DEFENSE_ASSIST(false),
+	POST_ATTACK_ASSIST(false),
+	ON_MISS(false),
+	GAME_TICK(false),
+	ON_DESTROY(false),
+	ON_LOSE(false),
+	ON_WIN(false),
+
+	BEFORE_DEATH(true),
+	AFTER_DEATH(true),
+	ON_DEFEND(true),
+	POST_DEFENSE(true),
+	DEFENSE_ASSIST(true),
+	ON_DODGE(true);
+
+	private final boolean defensive;
+
+	EffectTrigger(boolean defensive) {
+		this.defensive = defensive;
+	}
+
+	public boolean isDefensive() {
+		return defensive;
+	}
 }

@@ -20,15 +20,21 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.utils.JSONObject;
 
-public class Bonus implements Cloneable {
-	private int atk = 0;
-	private int def = 0;
-	private final JSONObject specialData;
+import java.util.stream.IntStream;
 
-	public Bonus(int atk, int def, JSONObject specialData) {
-		this.atk = atk;
-		this.def = def;
+public class Bonus implements Cloneable {
+	private final JSONObject specialData;
+	private final int[] atk = new int[6];
+	private final int[] def = new int[6];
+	private int mana = 0;
+	private int blood = 0;
+
+	public Bonus(JSONObject specialData, int atk, int def, int mana, int blood) {
 		this.specialData = new JSONObject(specialData.toString());
+		this.atk[0] = atk;
+		this.def[0] = def;
+		this.mana = mana;
+		this.blood = blood;
 	}
 
 	public Bonus(JSONObject specialData) {
@@ -39,40 +45,88 @@ public class Bonus implements Cloneable {
 		this.specialData = new JSONObject();
 	}
 
+	public JSONObject getSpecialData() {
+		return specialData;
+	}
+
 	public int getAtk() {
-		return atk;
+		return IntStream.of(atk).sum();
 	}
 
 	public void setAtk(int atk) {
-		this.atk = atk;
+		this.atk[0] = atk;
 	}
 
-	public int getDef() {
-		return def;
-	}
-
-	public void setDef(int def) {
-		this.def = def;
+	public void setAtk(int index, int atk) {
+		this.atk[index + 1] = atk;
 	}
 
 	public void addAtk(int atk) {
-		this.atk += atk;
+		this.atk[0] += atk;
+	}
+
+	public void addAtk(int index, int atk) {
+		this.atk[index + 1] += atk;
 	}
 
 	public void removeAtk(int atk) {
-		this.atk -= atk;
+		this.atk[0] -= atk;
+	}
+
+	public void removeAtk(int index, int atk) {
+		this.atk[index + 1] -= atk;
+	}
+
+	public int getDef() {
+		return IntStream.of(def).sum();
+	}
+
+	public void setDef(int def) {
+		this.def[0] = def;
+	}
+
+	public void setDef(int index, int def) {
+		this.def[index + 1] = def;
 	}
 
 	public void addDef(int def) {
-		this.def += def;
+		this.def[0] += def;
+	}
+
+	public void addDef(int index, int def) {
+		this.def[index + 1] += def;
 	}
 
 	public void removeDef(int def) {
-		this.def -= def;
+		this.def[0] -= def;
 	}
 
-	public JSONObject getSpecialData() {
-		return specialData;
+	public void removeDef(int index, int def) {
+		this.def[index + 1] -= def;
+	}
+
+	public int getMana() {
+		return mana;
+	}
+
+	public void addMana(int mana) {
+		this.mana += mana;
+	}
+
+	public void removeMana(int mana) {
+		this.mana -= mana;
+	}
+
+	public int getBlood() {
+		return blood;
+	}
+
+	public void addBlood(int blood) {
+		this.blood += blood;
+	}
+
+	public void removeBlood(int blood) {
+		this.blood -= blood;
 	}
 
 	public Bonus copy() {
@@ -80,9 +134,11 @@ public class Bonus implements Cloneable {
 			Bonus b = (Bonus) clone();
 
 			return new Bonus(
+					b.getSpecialData(),
 					b.getAtk(),
 					b.getDef(),
-					b.getSpecialData()
+					b.getMana(),
+					b.getBlood()
 			);
 		} catch (CloneNotSupportedException e) {
 			return null;
