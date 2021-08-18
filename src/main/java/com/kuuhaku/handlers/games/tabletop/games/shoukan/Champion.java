@@ -80,34 +80,31 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean fusion = false;
 
+	private transient Shoukan game = null;
+	private transient Account acc = null;
+	private transient Bonus bonus = new Bonus();
+	private transient Champion fakeCard = null;
+	private transient List<Equipment> linkedTo = new ArrayList<>();
+
+	private transient String altDescription = null;
+	private transient String altEffect = null;
+	private transient Race altRace = null;
+
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient boolean defending = false;
 	private transient boolean sealed = false;
-	private transient Shoukan game = null;
-	private transient Account acc = null;
-	private transient List<Equipment> linkedTo = new ArrayList<>();
-	private transient Bonus bonus = new Bonus();
-	private transient Champion fakeCard = null;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
-	private transient String altDescription = null;
-	private transient String altEffect = null;
-	private transient Race altRace = null;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
-	private transient int redAtk = 0;
-	private transient int redDef = 0;
-	private transient int efctMana = 0;
-	private transient int efctBlood = 0;
-	private transient int[] efctAtk = new int[6];
-	private transient int[] efctDef = new int[6];
-	private transient int stasis = 0;
-	private transient int stun = 0;
-	private transient int sleep = 0;
 	private transient double dodge = 0;
 	private transient double mDodge = 0;
 	private transient boolean gravelocked = false;
+
+	private transient int stasis = 0;
+	private transient int stun = 0;
+	private transient int sleep = 0;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -301,39 +298,15 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana + efctMana;
+		return mana + bonus.getMana();
 	}
 
 	public void setMana(int mana) {
 		this.mana = mana;
 	}
 
-	public void setEfctMana(int mana) {
-		this.efctMana = mana;
-	}
-
-	public void addEfctMana(int mana) {
-		this.efctMana += mana;
-	}
-
-	public void removeEfctMana(int mana) {
-		this.efctMana -= mana;
-	}
-
 	public int getBlood() {
-		return blood + efctBlood;
-	}
-
-	public void setEfctBlood(int blood) {
-		this.efctBlood = blood;
-	}
-
-	public void addEfctBlood(int blood) {
-		this.efctBlood += blood;
-	}
-
-	public void removeEfctBlood(int blood) {
-		this.efctBlood -= blood;
+		return blood + bonus.getBlood();
 	}
 
 	public void setBlood(int blood) {
@@ -379,7 +352,7 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altAtk - redAtk + getEfctAtk()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
 	}
 
 	public int getDef() {
@@ -402,7 +375,23 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altDef - redDef + getEfctDef()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altDef - bonus.getDef()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+	}
+
+	public void addAtk(int atk) {
+		bonus.addAtk(atk);
+	}
+
+	public void addDef(int def) {
+		bonus.addDef(def);
+	}
+
+	public void removeAtk(int atk) {
+		bonus.removeAtk(atk);
+	}
+
+	public void removeDef(int def) {
+		bonus.removeDef(def);
 	}
 
 	public int getAltAtk() {
@@ -445,92 +434,12 @@ public class Champion implements Drawable, Cloneable {
 		this.mDef -= mDef;
 	}
 
-	public int getRedAtk() {
-		return redAtk;
-	}
-
-	public void setRedAtk(int redAtk) {
-		this.redAtk = redAtk;
-	}
-
-	public void addRedAtk(int redAtk) {
-		this.redAtk += redAtk;
-	}
-
-	public void removeRedAtk(int redAtk) {
-		this.redAtk -= redAtk;
-	}
-
-	public int getRedDef() {
-		return redDef;
-	}
-
-	public void setRedDef(int redDef) {
-		this.redDef = redDef;
-	}
-
-	public void addRedDef(int redDef) {
-		this.redDef += redDef;
-	}
-
-	public void removeRedDef(int redDef) {
-		this.redDef -= redDef;
-	}
-
-	public int getEfctAtk() {
-		return Arrays.stream(efctAtk).sum();
-	}
-
-	public void addEfctAtk(int efctAtk) {
-		this.efctAtk[5] += efctAtk;
-	}
-
-	public void removeEfctAtk(int efctAtk) {
-		this.efctAtk[5] -= efctAtk;
-	}
-
-	public void setEfctAtk(int index, int efctAtk) {
-		this.efctAtk[index] = efctAtk;
-	}
-
-	public void addEfctAtk(int index, int efctAtk) {
-		this.efctAtk[index] += efctAtk;
-	}
-
-	public void removeEfctAtk(int index, int efctAtk) {
-		this.efctAtk[index] -= efctAtk;
-	}
-
-	public int getEfctDef() {
-		return Arrays.stream(efctDef).sum();
-	}
-
-	public void addEfctDef(int efctDef) {
-		this.efctDef[5] += efctDef;
-	}
-
-	public void removeEfctDef(int efctDef) {
-		this.efctDef[5] -= efctDef;
-	}
-
-	public void setEfctDef(int index, int efctDef) {
-		this.efctDef[index] = efctDef;
-	}
-
-	public void addEfctDef(int index, int efctDef) {
-		this.efctDef[index] += efctDef;
-	}
-
-	public void removeEfctDef(int index, int efctDef) {
-		this.efctDef[index] -= efctDef;
-	}
-
 	public int getEffAtk() {
-		return Math.max(0, getAtk() + mAtk + bonus.getAtk());
+		return Math.max(0, getAtk() + mAtk);
 	}
 
 	public int getEffDef() {
-		return Math.max(0, getDef() + mDef + bonus.getDef());
+		return Math.max(0, getDef() + mDef);
 	}
 
 	public int getFinAtk() {
@@ -795,8 +704,8 @@ public class Champion implements Drawable, Cloneable {
 		return false;
 	}
 
-	public boolean isGravelocked() {
-		return fusion || gravelocked;
+	public boolean canGoToGrave() {
+		return !fusion && !gravelocked;
 	}
 
 	public void setGravelocked(boolean gravelocked) {
@@ -821,12 +730,6 @@ public class Champion implements Drawable, Cloneable {
 		altRace = null;
 		mAtk = 0;
 		mDef = 0;
-		redAtk = 0;
-		redDef = 0;
-		efctMana = 0;
-		efctBlood = 0;
-		efctAtk = new int[6];
-		efctDef = new int[6];
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
