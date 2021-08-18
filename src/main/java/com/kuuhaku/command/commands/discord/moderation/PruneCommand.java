@@ -175,7 +175,7 @@ public class PruneCommand implements Executable {
 
 		List<Message> msgs = hist.getRetrievedHistory().stream()
 				.filter(cond)
-				.filter(m -> m.getTimeCreated().isBefore(OffsetDateTime.now().minusWeeks(2)))
+				.filter(m -> m.getTimeCreated().isAfter(OffsetDateTime.now().minusWeeks(2)))
 				.collect(Collectors.toList());
 
 		int pinned = msgs.size();
