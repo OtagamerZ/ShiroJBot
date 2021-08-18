@@ -56,6 +56,9 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int mana;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int blood;
+
 	@Column(columnDefinition = "VARCHAR(175) NOT NULL DEFAULT ''")
 	private String description;
 
@@ -111,11 +114,21 @@ public class Equipment implements Drawable, Cloneable {
 					for (int i = 0; i < tier; i++)
 						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
 
+				boolean drawnMana = false;
 				if (getMana() > 0) {
 					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/mana.png"), 184, 47, null);
 
 					g2d.setColor(new Color(0, 165, 255));
 					Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 67, g2d);
+
+					drawnMana = true;
+				}
+
+				if (getBlood() > 0) {
+					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/blood.png"), 184, 47 + (drawnMana ? 23 : 0), null);
+
+					g2d.setColor(new Color(255, 51, 0));
+					Profile.drawOutlinedText(String.valueOf(getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
 				}
 
 				Drawable.drawAttributes(bi, getAtk(), getDef());
@@ -258,6 +271,14 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void setMana(int mana) {
 		this.mana = mana;
+	}
+
+	public int getBlood() {
+		return blood;
+	}
+
+	public void setBlood(int blood) {
+		this.blood = blood;
 	}
 
 	public int getTier() {
