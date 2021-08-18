@@ -824,7 +824,7 @@ public class Shoukan extends GlobalGame {
 			}
 			if (applyEffect(ON_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-			if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
+			if (yours.getBonus().popFlag(Flag.SKIPCOMBAT)) {
 				yours.resetAttribs();
 				his.resetAttribs();
 
@@ -851,7 +851,7 @@ public class Shoukan extends GlobalGame {
 			}
 			if (applyEffect(ON_DEFEND, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
-			if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
+			if (his.getBonus().popFlag(Flag.SKIPCOMBAT)) {
 				yours.resetAttribs();
 				his.resetAttribs();
 
@@ -918,7 +918,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				boolean noDmg = (his.isDefending() && !(his.isSleeping() || his.isStunned()))
-								|| his.getBonus().getSpecialData().remove("noDamage") != null
+								|| his.getBonus().popFlag(Flag.NODAMAGE)
 								|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 				float dmg;
@@ -928,7 +928,7 @@ public class Shoukan extends GlobalGame {
 							.mapToInt(Equipment::getAtk)
 							.sum();
 				else
-					dmg = (yours.getBonus().getSpecialData().has("totalDamage") ? yPower : yPower - hPower);
+					dmg = (yours.getBonus().hasFlag(Flag.ALLDAMAGE) ? yPower : yPower - hPower);
 
 				op.removeHp(Math.round(dmg * demonFac));
 				if (op.getMana() > 0) {
@@ -988,7 +988,7 @@ public class Shoukan extends GlobalGame {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
-			boolean noDmg = yours.getBonus().getSpecialData().remove("noDamage") != null
+			boolean noDmg = yours.getBonus().popFlag(Flag.NODAMAGE)
 							|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 			float dmg;
@@ -998,7 +998,7 @@ public class Shoukan extends GlobalGame {
 						.mapToInt(Equipment::getAtk)
 						.sum();
 			else
-				dmg = (his.getBonus().getSpecialData().has("totalDamage") ? hPower : hPower - yPower);
+				dmg = (his.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower);
 
 			you.removeHp(Math.round(dmg * demonFac));
 			if (you.getMana() > 0) {
@@ -1197,7 +1197,7 @@ public class Shoukan extends GlobalGame {
 
 	public void killCard(Side to, int target) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventDeath")) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NODEATH)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		slts.get(target).setTop(null);
@@ -1531,7 +1531,7 @@ public class Shoukan extends GlobalGame {
 
 	public void convertCard(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
@@ -1582,7 +1582,7 @@ public class Shoukan extends GlobalGame {
 	public void convertCard(Side to, int target) {
 		Side from = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
@@ -1622,7 +1622,7 @@ public class Shoukan extends GlobalGame {
 
 	public void switchCards(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
@@ -1691,7 +1691,7 @@ public class Shoukan extends GlobalGame {
 	public void convertEquipment(Champion target, int pos, Side to, int index) {
 		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(his);
 
 		for (int i = 0; i < slts.size(); i++) {
@@ -1726,7 +1726,7 @@ public class Shoukan extends GlobalGame {
 	public void convertEquipments(Champion target, int pos, Side to, int index) {
 		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(his);
 
 		for (int i = 0; i < slts.size(); i++) {
@@ -2396,8 +2396,8 @@ public class Shoukan extends GlobalGame {
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Pair<Champion, Integer> attacker, Pair<Champion, Integer> defender) {
 		if (activator.hasEffect() && effectLock == 0) {
-			if ((defender != null && defender.getLeft().getBonus().getSpecialData().remove("effectLock") != null)
-				|| (attacker != null && attacker.getLeft().getBonus().getSpecialData().remove("effectLock") != null)
+			if ((defender != null && defender.getLeft().getBonus().popFlag(Flag.NOEFFECT))
+				|| (attacker != null && attacker.getLeft().getBonus().popFlag(Flag.NOEFFECT))
 			) return false;
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
@@ -2414,8 +2414,8 @@ public class Shoukan extends GlobalGame {
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Duelists duelists) {
 		if (activator.hasEffect() && effectLock == 0) {
-			if ((duelists.getDefender() != null && duelists.getDefender().getBonus().getSpecialData().remove("effectLock") != null)
-				|| (duelists.getAttacker() != null && duelists.getAttacker().getBonus().getSpecialData().remove("effectLock") != null)
+			if ((duelists.getDefender() != null && duelists.getDefender().getBonus().popFlag(Flag.NOEFFECT))
+				|| (duelists.getAttacker() != null && duelists.getAttacker().getBonus().popFlag(Flag.NOEFFECT))
 			) return false;
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, duelists, channel));
