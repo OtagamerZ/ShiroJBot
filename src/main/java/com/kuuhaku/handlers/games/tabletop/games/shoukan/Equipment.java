@@ -82,6 +82,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Pair<Integer, Champion> linkedTo = null;
+	private transient int altTier = -1;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
 
@@ -260,7 +261,16 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getTier() {
-		return tier;
+		if (altTier == -1) altTier = tier;
+		return altTier;
+	}
+
+	public int getAltTier() {
+		return altTier;
+	}
+
+	public void setAltTier(int altTier) {
+		this.altTier = altTier;
 	}
 
 	public int getWeight(Deck d) {
