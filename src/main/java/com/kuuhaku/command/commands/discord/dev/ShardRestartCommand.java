@@ -22,9 +22,14 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Command(
 		name = "rshard",
@@ -56,5 +61,20 @@ public class ShardRestartCommand implements Executable {
 		}
 
 		Main.getShiroShards().restart(id);
+		List<JDA> shards = Main.getShiroShards().getShards().stream()
+				.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
+				.toList();
+		for (JDA shard : shards) {
+			if (shard.getStatus() != JDA.Status.CONNECTED) {
+				try {
+					shard.awaitReady();
+					shard.getPresence().setActivity(Main.getRandomActivity());
+
+					Helper.logger(Main.class).info("Shard " + id + " pronto!");
+				} catch (InterruptedException e) {
+					Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
+				}
+			}
+		}
 	}
 }
