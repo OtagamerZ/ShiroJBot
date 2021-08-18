@@ -63,17 +63,16 @@ public class ShardRestartCommand implements Executable {
 		Main.getShiroShards().restart(id);
 		List<JDA> shards = Main.getShiroShards().getShards().stream()
 				.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
+				.filter(s -> s.getStatus() != JDA.Status.CONNECTED)
 				.toList();
 		for (JDA shard : shards) {
-			if (shard.getStatus() != JDA.Status.CONNECTED) {
-				try {
-					shard.awaitReady();
-					shard.getPresence().setActivity(Main.getRandomActivity());
+			try {
+				shard.awaitReady();
+				shard.getPresence().setActivity(Main.getRandomActivity());
 
-					Helper.logger(Main.class).info("Shard " + id + " pronto!");
-				} catch (InterruptedException e) {
-					Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
-				}
+				Helper.logger(Main.class).info("Shard " + id + " pronto!");
+			} catch (InterruptedException e) {
+				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
 			}
 		}
 	}
