@@ -75,7 +75,7 @@ public class LeaderboardsCommand implements Executable {
 
 	private void sendLeaderboards(PreparedCommand cmd, List<Leaderboards> lb, TextChannel channel) {
 		if (lb == null) {
-			channel.sendMessage("❌ | Esse comando não é um minigame ou não possui placares.").queue();
+			channel.sendMessage("❌ | Esse minigame não possui placares.").queue();
 			return;
 		}
 
