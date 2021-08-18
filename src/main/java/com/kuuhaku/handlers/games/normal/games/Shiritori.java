@@ -107,8 +107,9 @@ public class Shiritori extends Game {
 		Predicate<GuildMessageReceivedEvent> condition = e -> e.getChannel().getId().equals(channel.getId());
 
 		return condition
+				.and(e -> e.getMessage().getContentRaw().length() > 2)
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> !evt.getMessage().getContentRaw().contains(" "))
+				.and(e -> !e.getMessage().getContentRaw().contains(" "))
 				.and(e -> isOpen())
 				.test(evt);
 	}
