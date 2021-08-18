@@ -20,6 +20,7 @@ package com.kuuhaku.events;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
@@ -115,10 +116,11 @@ public class TwitchEvents {
 				assert tc != null;
 				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
 
-				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-				wmb.setContent(Helper.unmention(rawMessage));
-				wmb.setUsername(u.getName());
-				wmb.setAvatarUrl(u.getEffectiveAvatarUrl());
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+						.setAllowedMentions(AllowedMentions.none())
+						.setContent(rawMessage)
+						.setUsername(u.getName())
+						.setAvatarUrl(u.getEffectiveAvatarUrl());
 
 				assert wh != null;
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
