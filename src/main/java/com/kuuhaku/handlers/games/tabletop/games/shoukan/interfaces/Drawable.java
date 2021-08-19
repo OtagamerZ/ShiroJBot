@@ -77,4 +77,28 @@ public interface Drawable {
 
 		g2d.dispose();
 	}
+
+	static void drawEvoAttributes(BufferedImage in, int atk, int def) {
+		Graphics2D g2d = in.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+
+		if (atk > 0) {
+			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
+			g2d.drawImage(icon, 19, 298, null);
+
+			g2d.setColor(Color.red);
+			Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
+		}
+
+		if (def > 0) {
+			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
+			g2d.drawImage(icon, 182, 298, null);
+
+			g2d.setColor(Color.green);
+			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
+		}
+
+		g2d.dispose();
+	}
 }
