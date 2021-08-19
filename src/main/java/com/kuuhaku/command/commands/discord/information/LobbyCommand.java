@@ -137,7 +137,7 @@ public class LobbyCommand implements Executable, Slashed {
 				}
 
 				if (pages.isEmpty()) {
-					channel.sendMessage("❌ | Não há ninguém no saguão SOLO no momento.").queue();
+					channel.sendMessage("❌ | Não há ninguém no saguão DUO no momento.").queue();
 					return;
 				}
 
