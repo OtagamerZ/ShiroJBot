@@ -1237,7 +1237,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = chi == null ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
+		double chance = chi == null || chi.getMana() == 0 ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
@@ -1360,7 +1360,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = chi == null ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
+		double chance = chi == null || chi.getMana() == 0 ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
@@ -1541,7 +1541,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = chi == null ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
+		double chance = chi == null || chi.getMana() == 0 ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
@@ -1632,7 +1632,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = chi == null ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
+		double chance = chi == null || chi.getMana() == 0 ? 100 : Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
