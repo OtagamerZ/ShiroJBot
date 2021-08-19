@@ -342,9 +342,11 @@ public class ShiroEvents extends ListenerAdapter {
 					channel.sendMessage("✅ | Você comprou um \"Pingue o Sora por **1.000 de dívida**\" com sucesso!").queue();
 					acc.addLoan(1000);
 				}*/
-
-			if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
-			if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
+			try {
+				if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
+				if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
+			} catch (MissingAccessException ignore) {
+			} 
 
 			Event ev = Event.getCurrent();
 			if (ev == Event.XMAS && gc.isDropSpawn())
