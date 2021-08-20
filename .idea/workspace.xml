@@ -16,44 +16,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização das bordas do Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/blue_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/cyan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/cyan_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/gray_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/green_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/pink.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/pink_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/purple.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/purple_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/red_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/yellow_t.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/blue_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/cyan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/cyan_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/gray_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/green_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/pink.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/pink_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/purple.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/purple_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/red_nodesc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/yellow_nodesc.png" beforeDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas bordas com requisitos">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1437,21 +1401,7 @@
       <workItem from="1629302544135" duration="724000" />
       <workItem from="1629304465257" duration="6384000" />
       <workItem from="1629465408431" duration="7035000" />
-      <workItem from="1629485666527" duration="5748000" />
-    </task>
-    <task id="LOCAL-05214" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629209320184</created>
-      <option name="number" value="05214" />
-      <option name="presentableId" value="LOCAL-05214" />
-      <option name="project" value="LOCAL" />
-      <updated>1629209320184</updated>
-    </task>
-    <task id="LOCAL-05215" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629210091380</created>
-      <option name="number" value="05215" />
-      <option name="presentableId" value="LOCAL-05215" />
-      <option name="project" value="LOCAL" />
-      <updated>1629210091380</updated>
+      <workItem from="1629485666527" duration="6072000" />
     </task>
     <task id="LOCAL-05216" summary="Correções menores e adicionada proteção contra instakill">
       <created>1629210422516</created>
@@ -1782,7 +1732,21 @@
       <option name="project" value="LOCAL" />
       <updated>1629488821216</updated>
     </task>
-    <option name="localTasksCounter" value="5263" />
+    <task id="LOCAL-05263" summary="Adicionadas bordas com requisitos">
+      <created>1629491623677</created>
+      <option name="number" value="05263" />
+      <option name="presentableId" value="LOCAL-05263" />
+      <option name="project" value="LOCAL" />
+      <updated>1629491623677</updated>
+    </task>
+    <task id="LOCAL-05264" summary="Adicionadas bordas com requisitos">
+      <created>1629491645109</created>
+      <option name="number" value="05264" />
+      <option name="presentableId" value="LOCAL-05264" />
+      <option name="project" value="LOCAL" />
+      <updated>1629491645109</updated>
+    </task>
+    <option name="localTasksCounter" value="5265" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1870,7 +1834,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualizado para JDK 16" />
     <MESSAGE value="Aterada biblioteca de JSON de GSON para Moshi" />
     <MESSAGE value="Updated copyright notice" />
     <MESSAGE value="Adicionado cargos por tempo em call" />
@@ -1895,7 +1858,8 @@
     <MESSAGE value="Melhoria no comando de prune" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Atualização das bordas do Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização das bordas do Shoukan" />
+    <MESSAGE value="Adicionadas bordas com requisitos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionadas bordas com requisitos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
