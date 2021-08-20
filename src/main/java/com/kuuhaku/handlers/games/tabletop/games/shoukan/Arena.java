@@ -143,6 +143,9 @@ public class Arena {
 
 					if (key == game.getCurrentSide()) {
 						g2d.setColor(h.getAcc().getFrame().getColor());
+						if (g2d.getColor().equals(Color.BLACK))
+							g2d.setBackground(Color.WHITE);
+
 						name = ">>> " + name + " <<<";
 					} else {
 						g2d.setColor(Color.white);
@@ -153,6 +156,7 @@ public class Arena {
 					else
 						Profile.printCenteredString(name, 1253, 499, 1003, g2d);
 
+					g2d.setBackground(Color.BLACK);
 					BufferedImage broken = Helper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
 					for (int i = 0; i < value.size(); i++) {
 						SlotColumn c = value.get(i);
