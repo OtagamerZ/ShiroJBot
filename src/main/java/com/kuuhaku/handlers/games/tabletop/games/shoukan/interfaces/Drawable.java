@@ -67,7 +67,7 @@ public interface Drawable {
 			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.green);
-			Profile.drawOutlinedText(String.valueOf(def), 54, y + 24, g2d);
+			Profile.drawOutlinedText(String.valueOf(def), 57, y + 21, g2d);
 
 			drewDef = true;
 		}
@@ -77,24 +77,25 @@ public interface Drawable {
 			g2d.drawImage(icon, 29, y - (drewDef ? 25 : 0), null);
 
 			g2d.setColor(Color.red);
-			Profile.drawOutlinedText(String.valueOf(atk), 54, y + 24 - (drewDef ? 25 : 0), g2d);
+			Profile.drawOutlinedText(String.valueOf(atk), 57, y + 21 - (drewDef ? 25 : 0), g2d);
 		}
 
+		y = 59;
 		boolean drewMana = false;
 		if (mana > 0) {
-			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/mana.png"), 184, 47, null);
+			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/mana.png"), 184, y, null);
 
 			g2d.setColor(new Color(0, 165, 255));
-			Profile.drawOutlinedText(String.valueOf(mana), 176 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 59, g2d);
+			Profile.drawOutlinedText(String.valueOf(mana), 179 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), y + 21, g2d);
 
 			drewMana = true;
 		}
 
 		if (blood > 0) {
-			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/blood.png"), 184, 47 + (drewMana ? 23 : 0), null);
+			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/blood.png"), 184, y + (drewMana ? 25 : 0), null);
 
 			g2d.setColor(new Color(255, 51, 0));
-			Profile.drawOutlinedText(String.valueOf(blood), 176 - g2d.getFontMetrics().stringWidth(String.valueOf(blood)), 59 + (drewMana ? 24 : 0), g2d);
+			Profile.drawOutlinedText(String.valueOf(blood), 179 - g2d.getFontMetrics().stringWidth(String.valueOf(blood)), y + 21 + (drewMana ? 25 : 0), g2d);
 		}
 
 		g2d.dispose();

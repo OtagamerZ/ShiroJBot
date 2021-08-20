@@ -129,7 +129,14 @@ public class Champion implements Drawable, Cloneable {
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
+			g2d.setClip(new Polygon(
+					new int[]{13, 212, 223, 223, 212, 13, 2, 2},
+					new int[]{2, 2, 13, 337, 348, 348, 337, 13},
+					8
+			));
 			g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
+			g2d.setClip(null);
+
 			g2d.drawImage(acc.getFrame().getFront(true), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
