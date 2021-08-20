@@ -103,7 +103,14 @@ public class Equipment implements Drawable, Cloneable {
 		} else {
 			boolean hasDesc = charm != null && charm.equals(Charm.SPELL);
 
+			g2d.setClip(new Polygon(
+					new int[]{13, 212, 223, 223, 212, 13, 2, 2},
+					new int[]{2, 2, 13, 337, 348, 348, 337, 13},
+					8
+			));
 			g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
+			g2d.setClip(null);
+
 			g2d.drawImage(acc.getFrame().getFront(hasDesc), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 

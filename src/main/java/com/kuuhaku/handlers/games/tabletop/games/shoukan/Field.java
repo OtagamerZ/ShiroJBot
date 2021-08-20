@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -68,33 +69,42 @@ public class Field implements Drawable, Cloneable {
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
+			g2d.setClip(new Polygon(
+					new int[]{13, 212, 223, 223, 212, 13, 2, 2},
+					new int[]{2, 2, 13, 337, 348, 348, 337, 13},
+					8
+			));
 			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+			g2d.setClip(null);
 
-			g2d.drawImage(acc.getFrame().getFrontArena(), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getFront(false), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-			Color[] colors = {
-					Color.decode("#9013fe"), //HUMAN
-					Color.decode("#7ed321"), //ELF
-					Color.decode("#ffe0af"), //BESTIAL
-					Color.decode("#f5a623"), //MACHINE
-					Color.decode("#f8e71c"), //DIVINITY
-					Color.decode("#4fe4c3"), //MYSTICAL
-					Color.decode("#8b572a"), //CREATURE
-					Color.white,             //SPIRIT
-					Color.decode("#d0021b"), //DEMON
-					Color.decode("#fd88fd")  //UNDEAD
-			};
+			Map<Race, String> colors = Map.of(
+					Race.HUMAN, "#9013fe",
+					Race.ELF, "#7ed321",
+					Race.BESTIAL, "#ffe0af",
+					Race.MACHINE, "#f5a623",
+					Race.DIVINITY, "#f8e71c",
+					Race.MYSTICAL, "#4fe4c3",
+					Race.CREATURE, "#8b572a",
+					Race.SPIRIT, "#ffffff",
+					Race.DEMON, "#d0021b",
+					Race.UNDEAD, "#fd88fd"
+			);
+			int y = 80;
 			int i = 0;
-			for (Race r : Race.validValues()) {
+			for (Map.Entry<String, Object> entry : getModifiers().entrySet()) {
+				Race r = Race.valueOf(entry.getKey());
+				float modif = ((float) entry.getValue()) - 1;
 				BufferedImage icon = r.getIcon();
-				assert icon != null;
-				g2d.setColor(colors[i]);
-				g2d.drawImage(icon, 20, 59 + (26 * i), 23, 23, null);
-				float modif = getModifiers().getFloat(r.name(), 1f) - 1;
-				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0) + "%", 45, 80 + (26 * i), g2d);
+				if (icon == null) continue;
+
+				g2d.setColor(Color.decode(colors.get(r)));
+				g2d.drawImage(icon, 29, y + (25 * i), 23, 23, null);
+				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0) + "%", 57, y + 21 + (25 * i), g2d);
 				i++;
 			}
 		}
