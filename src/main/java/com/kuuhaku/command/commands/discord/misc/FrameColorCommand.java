@@ -77,6 +77,9 @@ public class FrameColorCommand implements Executable {
 		if (fc == null) {
 			channel.sendMessage("❌ | Nenhuma cor encontrada com esse nome.").queue();
 			return;
+		} else if (!fc.canUse(acc)) {
+			channel.sendMessage("❌ | Você ainda não desbloqueou essa cor.").queue();
+			return;
 		}
 
 		acc.setFrame(fc);
