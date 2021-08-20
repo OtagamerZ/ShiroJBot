@@ -31,8 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "field")
@@ -96,7 +96,14 @@ public class Field implements Drawable, Cloneable {
 			);
 			int y = 80;
 			int i = 0;
-			for (Map.Entry<String, Object> entry : getModifiers().entrySet()) {
+
+			List<Map.Entry<String, Object>> races = new ArrayList<>(getModifiers().entrySet());
+			races.sort(Comparator
+					.<Map.Entry<String, Object>>comparingDouble(e -> ((double) e.getValue()))
+					.reversed()
+			);
+			
+			for (Map.Entry<String, Object> entry : races) {
 				Race r = Race.valueOf(entry.getKey());
 				double modif = ((double) entry.getValue()) - 1;
 				BufferedImage icon = r.getIcon();
