@@ -18,10 +18,8 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
@@ -129,6 +127,8 @@ public class Champion implements Drawable, Cloneable {
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
+			FrameColor fc = acc.getFrame();
+
 			g2d.setClip(new Polygon(
 					new int[]{13, 212, 223, 223, 212, 13, 2, 2},
 					new int[]{2, 2, 13, 337, 348, 348, 337, 13},
@@ -137,8 +137,10 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
 			g2d.setClip(null);
 
-			g2d.drawImage(acc.getFrame().getFront(true), 0, 0, null);
+			g2d.drawImage(fc.getFront(true), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+			g2d.setColor(fc.getTextColor());
+			g2d.setBackground(fc.getBackgroundColor());
 
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 181, 38, 32, g2d);
 			g2d.drawImage(c.getRace().getIcon(), 11, 12, 23, 23, null);
@@ -152,7 +154,7 @@ public class Champion implements Drawable, Cloneable {
 			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), true);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
-			g2d.setColor(Color.black);
+			g2d.setColor(fc.getTextColor());
 			g2d.drawString("[" + c.getRace().toString().toUpperCase(Locale.ROOT) + (c.hasEffect() ? "/EFEITO" : "") + "]", 9, 277);
 
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));

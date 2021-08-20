@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
@@ -101,6 +102,7 @@ public class Equipment implements Drawable, Cloneable {
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
+			FrameColor fc = acc.getFrame();
 			boolean hasDesc = charm != null && charm.equals(Charm.SPELL);
 
 			g2d.setClip(new Polygon(
@@ -111,8 +113,10 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
 			g2d.setClip(null);
 
-			g2d.drawImage(acc.getFrame().getFront(hasDesc), 0, 0, null);
+			g2d.drawImage(fc.getFront(hasDesc), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+			g2d.setColor(fc.getTextColor());
+			g2d.setBackground(fc.getBackgroundColor());
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
