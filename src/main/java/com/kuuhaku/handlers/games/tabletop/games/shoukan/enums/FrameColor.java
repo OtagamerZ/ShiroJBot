@@ -36,7 +36,7 @@ public enum FrameColor {
 	GREEN("A cor da natureza, canalize o poder de Disboard no seu deck!", null),
 	YELLOW("A cor de Werebeast, mostre o poder da tecnologia e das nekos!", null),
 	RED("A cor do combate, mostre a dominância de suas invocações!", null),
-	GREY("A cor neutra, lute para vencer e apenas vencer!", null);
+	GRAY("A cor neutra, lute para vencer e apenas vencer!", null);
 
 	private final String description;
 	private final Function<Account, Boolean> req;
@@ -55,7 +55,7 @@ public enum FrameColor {
 			case GREEN -> new Color(139, 232, 116);
 			case YELLOW -> new Color(232, 222, 116);
 			case RED -> new Color(232, 116, 116);
-			case GREY -> new Color(190, 190, 190);
+			case GRAY -> new Color(190, 190, 190);
 		};
 	}
 
@@ -101,7 +101,7 @@ public enum FrameColor {
 			case GREEN -> "Verde";
 			case YELLOW -> "Amarelo";
 			case RED -> "Vermelho";
-			case GREY -> "Cinza";
+			case GRAY -> "Cinza";
 		};
 	}
 }
