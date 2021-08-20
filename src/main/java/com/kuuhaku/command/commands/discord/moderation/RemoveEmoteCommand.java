@@ -60,7 +60,10 @@ public class RemoveEmoteCommand implements Executable {
 					.flatMap(s -> channel.sendMessage("✅ | Emote removido com sucesso!"))
 					.queue(null, Helper::doNothing);
 		} else {
-			List<Emote> filteredList = message.getEmotes().stream().filter(e -> guild.getEmoteById(e.getId()) != null).collect(Collectors.toList());
+			List<Emote> filteredList = message.getEmotes().stream()
+					.filter(e -> guild.getEmoteById(e.getId()) != null)
+					.collect(Collectors.toList());
+
 			List<AuditableRestAction<Void>> acts = new ArrayList<>();
 			int removed = 0;
 			for (Emote emote : filteredList) {
