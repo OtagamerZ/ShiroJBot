@@ -17,74 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização das bordas do Shoukan">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/cyan_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/gray_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/green_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/pink_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/purple_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/red_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/yellow_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/blue_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/cyan_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/gray_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/green_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/nodesc_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/purple_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/blue_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/cyan_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/green_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/grey.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/grey_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/pink_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/purple_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/red_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/back/yellow_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/blue_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/cyan_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/green_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/grey.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/grey_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/pink_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/purple_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/red_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/legacy/front/yellow_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/old_source.7z" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +89,7 @@
     </file-type-list>
   </component>
   <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="121264a9-1ee2-4838-b413-2e4092840409" />
+    <option name="defaultAccountId" value="98bea066-350d-4dd1-8d92-ad063ae19808" />
   </component>
   <component name="GithubProjectSettings">
     <option name="branchProtectionPatterns">
@@ -1468,13 +1402,7 @@
       <workItem from="1629302544135" duration="724000" />
       <workItem from="1629304465257" duration="6384000" />
       <workItem from="1629465408431" duration="7035000" />
-    </task>
-    <task id="LOCAL-05204" summary="Correções no envio de mensagens com menções">
-      <created>1628886193395</created>
-      <option name="number" value="05204" />
-      <option name="presentableId" value="LOCAL-05204" />
-      <option name="project" value="LOCAL" />
-      <updated>1628886193396</updated>
+      <workItem from="1629485666527" duration="720000" />
     </task>
     <task id="LOCAL-05205" summary="Correções no envio de mensagens com menções">
       <created>1628887985374</created>
@@ -1812,7 +1740,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629482289205</updated>
     </task>
-    <option name="localTasksCounter" value="5253" />
+    <task id="LOCAL-05253" summary="Atualização das bordas do Shoukan">
+      <created>1629485737191</created>
+      <option name="number" value="05253" />
+      <option name="presentableId" value="LOCAL-05253" />
+      <option name="project" value="LOCAL" />
+      <updated>1629485737192</updated>
+    </task>
+    <option name="localTasksCounter" value="5254" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
