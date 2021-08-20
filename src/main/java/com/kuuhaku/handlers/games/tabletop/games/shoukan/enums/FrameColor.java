@@ -48,10 +48,10 @@ public enum FrameColor {
 	LEGACY_RED("Empoeirado e gasto, ainda sujo com o sangue de seus inimigos.", null),
 	LEGACY_GRAY("Empoeirado e gasto, praticamente desbotado mas afiado.", null),
 
-	RAINBOW("(Complete 10 coleções cromadas) Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
+	RAINBOW("**(Complete 10 coleções cromadas)** Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
 			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
 
-	BLACK("(???) Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
+	BLACK("**(???)** Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
 			acc -> false);
 
 	private final String description;
@@ -134,6 +134,6 @@ public enum FrameColor {
 
 			case RAINBOW -> "Arco-iris";
 			case BLACK -> "Negro";
-		};
+		} + "(`" + name().toLowerCase(Locale.ROOT) + "`)";
 	}
 }
