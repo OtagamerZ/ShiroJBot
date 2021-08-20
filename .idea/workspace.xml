@@ -17,7 +17,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas bordas com requisitos">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1401,21 +1406,7 @@
       <workItem from="1629302544135" duration="724000" />
       <workItem from="1629304465257" duration="6384000" />
       <workItem from="1629465408431" duration="7035000" />
-      <workItem from="1629485666527" duration="6072000" />
-    </task>
-    <task id="LOCAL-05216" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629210422516</created>
-      <option name="number" value="05216" />
-      <option name="presentableId" value="LOCAL-05216" />
-      <option name="project" value="LOCAL" />
-      <updated>1629210422516</updated>
-    </task>
-    <task id="LOCAL-05217" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629211021882</created>
-      <option name="number" value="05217" />
-      <option name="presentableId" value="LOCAL-05217" />
-      <option name="project" value="LOCAL" />
-      <updated>1629211021882</updated>
+      <workItem from="1629485666527" duration="6929000" />
     </task>
     <task id="LOCAL-05218" summary="Correções menores e adicionada proteção contra instakill">
       <created>1629211317142</created>
@@ -1746,7 +1737,21 @@
       <option name="project" value="LOCAL" />
       <updated>1629491645109</updated>
     </task>
-    <option name="localTasksCounter" value="5265" />
+    <task id="LOCAL-05265" summary="Adicionadas bordas com requisitos">
+      <created>1629491839300</created>
+      <option name="number" value="05265" />
+      <option name="presentableId" value="LOCAL-05265" />
+      <option name="project" value="LOCAL" />
+      <updated>1629491839300</updated>
+    </task>
+    <task id="LOCAL-05266" summary="Adicionadas bordas com requisitos">
+      <created>1629492009660</created>
+      <option name="number" value="05266" />
+      <option name="presentableId" value="LOCAL-05266" />
+      <option name="project" value="LOCAL" />
+      <updated>1629492009660</updated>
+    </task>
+    <option name="localTasksCounter" value="5267" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

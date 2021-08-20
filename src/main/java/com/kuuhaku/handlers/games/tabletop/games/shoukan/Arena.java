@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -142,9 +143,10 @@ public class Arena {
 					}
 
 					if (key == game.getCurrentSide()) {
-						g2d.setColor(h.getAcc().getFrame().getColor());
-						if (g2d.getColor().equals(Color.BLACK))
-							g2d.setBackground(Color.WHITE);
+						FrameColor fc = h.getAcc().getFrame();
+
+						g2d.setColor(fc.getColor());
+						g2d.setBackground(fc.getBackgroundColor());
 
 						name = ">>> " + name + " <<<";
 					} else {
