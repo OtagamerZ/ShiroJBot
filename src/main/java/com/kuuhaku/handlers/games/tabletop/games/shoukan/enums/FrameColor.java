@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
 
 import java.awt.*;
@@ -29,14 +30,29 @@ import java.util.Locale;
 import java.util.function.Function;
 
 public enum FrameColor {
-	PINK("A cor característica da Shiro, batalhe com estratégia e perspicácia!", null),
-	PURPLE("A cor de Imanity, seja o representante da peça rei!", null),
-	BLUE("A cor da sabedoria, conquiste seus inimigos com calma e precisão!", null),
-	CYAN("A cor de Seiren, divirta-se encurralando seus oponentes!", null),
-	GREEN("A cor da natureza, canalize o poder de Disboard no seu deck!", null),
-	YELLOW("A cor de Werebeast, mostre o poder da tecnologia e das nekos!", null),
-	RED("A cor do combate, mostre a dominância de suas invocações!", null),
-	GRAY("A cor neutra, lute para vencer e apenas vencer!", null);
+	PINK("Batalhe com perspicácia com a cor característica da Shiro!", null),
+	PURPLE("Lute para dominar o campo, dê checkmate com a peça rei!", null),
+	BLUE("Seja sábio, preveja a estratégia de seus oponentes!", null),
+	CYAN("Divirta-se enquanto destroi seus oponentes!", null),
+	GREEN("Canalize a força da natureza e lute com a graça de um pássaro!", null),
+	YELLOW("Alveje o ponto fraco de seus oponentes, mostre a inovação de seu deck!", null),
+	RED("No massacre você floresce, leve o campo de batalha aos seus inimigos!", null),
+	GRAY("Lute com frieza, calcule seus movimentos e desintegre seus oponentes!", null),
+
+	LEGACY_PINK("Empoeirado e gasto, trazendo a perspicácia de um tempo distante.", null),
+	LEGACY_PURPLE("Empoeirado e gasto, mostrando a dominação de um tempo distante.", null),
+	LEGACY_BLUE("Empoeirado e gasto, meditando sobre a sabedoria de um tempo distante.", null),
+	LEGACY_CYAN("Empoeirado e gasto, relembrando suas vitórias passadas.", null),
+	LEGACY_GREEN("Empoeirado e gasto, mas verde como um grande pinheiro de outrora.", null),
+	LEGACY_YELLOW("Empoeirado e gasto, com uma tecnologia a muito tempo perdida.", null),
+	LEGACY_RED("Empoeirado e gasto, ainda sujo com o sangue de seus inimigos.", null),
+	LEGACY_GRAY("Empoeirado e gasto, praticamente desbotado mas afiado.", null),
+
+	RAINBOW("(Complete 10 coleções cromadas) Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
+			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
+
+	BLACK("(???) Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
+			acc -> false);
 
 	private final String description;
 	private final Function<Account, Boolean> req;
@@ -48,14 +64,17 @@ public enum FrameColor {
 
 	public Color getColor() {
 		return switch (this) {
-			case PINK -> new Color(232, 116, 188);
-			case PURPLE -> new Color(174, 116, 232);
-			case BLUE -> new Color(116, 126, 232);
-			case CYAN -> new Color(116, 197, 232);
-			case GREEN -> new Color(139, 232, 116);
-			case YELLOW -> new Color(232, 222, 116);
-			case RED -> new Color(232, 116, 116);
-			case GRAY -> new Color(190, 190, 190);
+			case PINK, LEGACY_PINK -> new Color(232, 116, 188);
+			case PURPLE, LEGACY_PURPLE -> new Color(174, 116, 232);
+			case BLUE, LEGACY_BLUE -> new Color(116, 126, 232);
+			case CYAN, LEGACY_CYAN -> new Color(116, 197, 232);
+			case GREEN, LEGACY_GREEN -> new Color(139, 232, 116);
+			case YELLOW, LEGACY_YELLOW -> new Color(232, 222, 116);
+			case RED, LEGACY_RED -> new Color(232, 116, 116);
+			case GRAY, LEGACY_GRAY -> new Color(190, 190, 190);
+
+			case RAINBOW -> Helper.getRandomColor();
+			case BLACK -> Color.BLACK;
 		};
 	}
 
@@ -67,6 +86,7 @@ public enum FrameColor {
 		boolean trans = !acc.getUltimate().isBlank() && acc.getCompletion(acc.getUltimate()).any();
 		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (trans ? "_t" : "") + ".png");
 		assert cover != null;
+
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = canvas.createGraphics();
 
@@ -102,6 +122,18 @@ public enum FrameColor {
 			case YELLOW -> "Amarelo";
 			case RED -> "Vermelho";
 			case GRAY -> "Cinza";
+
+			case LEGACY_PINK -> "Legado Rosa";
+			case LEGACY_PURPLE -> "Legado Roxo";
+			case LEGACY_BLUE -> "Legado Azul";
+			case LEGACY_CYAN -> "Legado Ciano";
+			case LEGACY_GREEN -> "Legado Verde";
+			case LEGACY_YELLOW -> "Legado Amarelo";
+			case LEGACY_RED -> "Legado Vermelho";
+			case LEGACY_GRAY -> "Legado Cinza";
+
+			case RAINBOW -> "Arco-iris";
+			case BLACK -> "Negro";
 		};
 	}
 }

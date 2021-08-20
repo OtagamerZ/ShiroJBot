@@ -102,7 +102,7 @@ public class Field implements Drawable, Cloneable {
 					.<Map.Entry<String, Object>>comparingDouble(e -> ((double) e.getValue()))
 					.reversed()
 			);
-			
+
 			for (Map.Entry<String, Object> entry : races) {
 				Race r = Race.valueOf(entry.getKey());
 				double modif = ((double) entry.getValue()) - 1;
