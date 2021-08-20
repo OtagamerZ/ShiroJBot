@@ -78,6 +78,38 @@ public enum FrameColor {
 		};
 	}
 
+	public Color getTextColor() {
+		return switch (this) {
+			case PINK, LEGACY_PINK,
+					PURPLE, LEGACY_PURPLE,
+					BLUE, LEGACY_BLUE,
+					CYAN, LEGACY_CYAN,
+					GREEN, LEGACY_GREEN,
+					YELLOW, LEGACY_YELLOW,
+					RED, LEGACY_RED,
+					GRAY, LEGACY_GRAY,
+					RAINBOW -> Color.BLACK;
+
+			case BLACK -> Color.WHITE;
+		};
+	}
+
+	public Color getBackgroundColor() {
+		return switch (this) {
+			case PINK, LEGACY_PINK,
+					PURPLE, LEGACY_PURPLE,
+					BLUE, LEGACY_BLUE,
+					CYAN, LEGACY_CYAN,
+					GREEN, LEGACY_GREEN,
+					YELLOW, LEGACY_YELLOW,
+					RED, LEGACY_RED,
+					GRAY, LEGACY_GRAY -> Color.BLACK;
+
+			case RAINBOW -> Helper.getRandomColor();
+			case BLACK -> Color.WHITE;
+		};
+	}
+
 	public BufferedImage getFront(boolean desc) {
 		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
 	}
@@ -134,6 +166,6 @@ public enum FrameColor {
 
 			case RAINBOW -> "Arco-iris";
 			case BLACK -> "Negro";
-		} + "(`" + name().toLowerCase(Locale.ROOT) + "`)";
+		} + " (`" + name().toLowerCase(Locale.ROOT) + "`)";
 	}
 }
