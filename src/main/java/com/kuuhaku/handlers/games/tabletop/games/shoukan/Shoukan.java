@@ -2607,8 +2607,8 @@ public class Shoukan extends GlobalGame {
 		decreaseFLockTime();
 		decreaseSLockTime();
 		decreaseELockTime();
-		super.resetTimer(shkn);
 
 		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
+		super.resetTimer(shkn);
 	}
 }
