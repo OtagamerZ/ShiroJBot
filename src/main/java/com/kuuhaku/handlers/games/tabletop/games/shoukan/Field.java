@@ -82,8 +82,8 @@ public class Field implements Drawable, Cloneable {
 
 			g2d.drawImage(fc.getFront(false), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-			g2d.setColor(fc.getTextColor());
-			g2d.setBackground(fc.getBackgroundColor());
+			g2d.setColor(fc.getBackgroundColor());
+			g2d.setBackground(fc.getTextColor());
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
