@@ -101,65 +101,24 @@ public class Equipment implements Drawable, Cloneable {
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
+			boolean hasDesc = charm != null && charm.equals(Charm.SPELL);
+
 			g2d.drawImage(card.drawCardNoBorder(acc), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getFront(hasDesc), 0, 0, null);
+			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
-			if (charm != null && charm.equals(Charm.SPELL)) {
-				g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
-				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+			BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
+			if (star != null)
+				for (int i = 0; i < getTier(); i++)
+					g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 53, null);
 
-				BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
-				if (star != null)
-					for (int i = 0; i < getTier(); i++)
-						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 42, null);
+			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), hasDesc);
 
-				boolean drawnMana = false;
-				if (getMana() > 0) {
-					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/mana.png"), 184, 47, null);
-
-					g2d.setColor(new Color(0, 165, 255));
-					Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 67, g2d);
-
-					drawnMana = true;
-				}
-
-				if (getBlood() > 0) {
-					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/blood.png"), 184, 47 + (drawnMana ? 23 : 0), null);
-
-					g2d.setColor(new Color(255, 51, 0));
-					Profile.drawOutlinedText(String.valueOf(getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
-				}
-
-				Drawable.drawAttributes(bi, getAtk(), getDef());
-
-				g2d.setColor(Color.black);
-				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
-				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
-			} else {
-				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
-				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-
-				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
-
-				if (charm != null)
-					g2d.drawImage(charm.getIcon(), 135, 58, null);
-
-				BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
-				if (star != null)
-					for (int i = 0; i < getTier(); i++)
-						g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 42, null);
-
-				Drawable.drawEvoAttributes(bi, getAtk(), getDef());
-
-				if (linkedTo != null) {
-					if (linkedTo.getRight().getFakeCard() != null) {
-						g2d.drawImage(linkedTo.getRight().getFakeCard().getCard().drawCardNoBorder(acc), 20, 52, 60, 93, null);
-					} else {
-						g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(acc), 20, 52, 60, 93, null);
-					}
-				}
-			}
+			g2d.setColor(Color.black);
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
+			Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 		}
 
 		if (!available) {
