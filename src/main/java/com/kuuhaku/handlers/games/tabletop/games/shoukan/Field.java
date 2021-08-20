@@ -102,9 +102,9 @@ public class Field implements Drawable, Cloneable {
 				BufferedImage icon = r.getIcon();
 				if (icon == null) continue;
 
+				g2d.drawImage(icon, 29, y - (25 * i), 23, 23, null);
 				g2d.setColor(Color.decode(colors.get(r)));
-				g2d.drawImage(icon, 29, y + (25 * i), 23, 23, null);
-				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0) + "%", 57, y + 21 + (25 * i), g2d);
+				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0) + "%", 57, y + 21 - (25 * i), g2d);
 				i++;
 			}
 		}

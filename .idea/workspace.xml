@@ -18,7 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização das bordas do Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveEmoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveEmoteCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1402,28 +1402,7 @@
       <workItem from="1629302544135" duration="724000" />
       <workItem from="1629304465257" duration="6384000" />
       <workItem from="1629465408431" duration="7035000" />
-      <workItem from="1629485666527" duration="2144000" />
-    </task>
-    <task id="LOCAL-05209" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629136185151</created>
-      <option name="number" value="05209" />
-      <option name="presentableId" value="LOCAL-05209" />
-      <option name="project" value="LOCAL" />
-      <updated>1629136185151</updated>
-    </task>
-    <task id="LOCAL-05210" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629141337984</created>
-      <option name="number" value="05210" />
-      <option name="presentableId" value="LOCAL-05210" />
-      <option name="project" value="LOCAL" />
-      <updated>1629141337984</updated>
-    </task>
-    <task id="LOCAL-05211" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629142245632</created>
-      <option name="number" value="05211" />
-      <option name="presentableId" value="LOCAL-05211" />
-      <option name="project" value="LOCAL" />
-      <updated>1629142245632</updated>
+      <workItem from="1629485666527" duration="2879000" />
     </task>
     <task id="LOCAL-05212" summary="Correções menores e adicionada proteção contra instakill">
       <created>1629208459651</created>
@@ -1747,7 +1726,28 @@
       <option name="project" value="LOCAL" />
       <updated>1629487147499</updated>
     </task>
-    <option name="localTasksCounter" value="5258" />
+    <task id="LOCAL-05258" summary="Atualização das bordas do Shoukan">
+      <created>1629487927589</created>
+      <option name="number" value="05258" />
+      <option name="presentableId" value="LOCAL-05258" />
+      <option name="project" value="LOCAL" />
+      <updated>1629487927589</updated>
+    </task>
+    <task id="LOCAL-05259" summary="Atualização das bordas do Shoukan">
+      <created>1629487970770</created>
+      <option name="number" value="05259" />
+      <option name="presentableId" value="LOCAL-05259" />
+      <option name="project" value="LOCAL" />
+      <updated>1629487970771</updated>
+    </task>
+    <task id="LOCAL-05260" summary="Atualização das bordas do Shoukan">
+      <created>1629488099162</created>
+      <option name="number" value="05260" />
+      <option name="presentableId" value="LOCAL-05260" />
+      <option name="project" value="LOCAL" />
+      <updated>1629488099162</updated>
+    </task>
+    <option name="localTasksCounter" value="5261" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
