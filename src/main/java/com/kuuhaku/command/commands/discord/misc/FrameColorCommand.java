@@ -63,8 +63,8 @@ public class FrameColorCommand implements Executable {
 				eb.clear();
 				eb.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT));
 				eb.setDescription(fc.getDescription());
-				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/card_back_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
-				eb.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/card_front_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
+				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/back/" + fc.name().toLowerCase(Locale.ROOT) + ".png");
+				eb.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/front/" + fc.name().toLowerCase(Locale.ROOT) + ".png");
 				pages.add(new Page(eb.build()));
 			}
 
