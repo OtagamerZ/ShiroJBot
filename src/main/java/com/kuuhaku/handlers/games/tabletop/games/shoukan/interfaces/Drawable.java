@@ -54,49 +54,47 @@ public interface Drawable {
 
 	Drawable copy();
 
-	static void drawAttributes(BufferedImage in, int atk, int def) {
+	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
-		if (atk > 0) {
-			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
-			g2d.drawImage(icon, 19, 232, null);
+		int y = hasDesc ? 220 : 287;
 
-			g2d.setColor(Color.red);
-			Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
-		}
-
+		boolean drewDef = false;
 		if (def > 0) {
 			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
-			g2d.drawImage(icon, 182, 232, null);
+			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.green);
-			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
+			Profile.drawOutlinedText(String.valueOf(def), 54, y + 24, g2d);
+
+			drewDef = true;
 		}
-
-		g2d.dispose();
-	}
-
-	static void drawEvoAttributes(BufferedImage in, int atk, int def) {
-		Graphics2D g2d = in.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 		if (atk > 0) {
 			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
-			g2d.drawImage(icon, 19, 298, null);
+			g2d.drawImage(icon, 29, y - (drewDef ? 25 : 0), null);
 
 			g2d.setColor(Color.red);
-			Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
+			Profile.drawOutlinedText(String.valueOf(atk), 54, y + 24 - (drewDef ? 25 : 0), g2d);
 		}
 
-		if (def > 0) {
-			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
-			g2d.drawImage(icon, 182, 298, null);
+		boolean drewMana = false;
+		if (mana > 0) {
+			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/mana.png"), 184, 47, null);
 
-			g2d.setColor(Color.green);
-			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
+			g2d.setColor(new Color(0, 165, 255));
+			Profile.drawOutlinedText(String.valueOf(mana), 176 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 59, g2d);
+
+			drewMana = true;
+		}
+
+		if (blood > 0) {
+			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/blood.png"), 184, 47 + (drewMana ? 23 : 0), null);
+
+			g2d.setColor(new Color(255, 51, 0));
+			Profile.drawOutlinedText(String.valueOf(blood), 176 - g2d.getFontMetrics().stringWidth(String.valueOf(blood)), 59 + (drewMana ? 24 : 0), g2d);
 		}
 
 		g2d.dispose();

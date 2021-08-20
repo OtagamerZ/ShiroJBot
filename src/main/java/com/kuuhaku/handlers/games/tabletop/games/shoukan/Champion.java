@@ -130,36 +130,19 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
-			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getFront(true), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 181, 38, 32, g2d);
 			g2d.drawImage(c.getRace().getIcon(), 11, 12, 23, 23, null);
 
-			boolean drawnMana = false;
-			if (c.getMana() > 0) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/mana.png"), 184, 47, null);
-
-				g2d.setColor(new Color(0, 165, 255));
-				Profile.drawOutlinedText(String.valueOf(c.getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(c.getMana())), 67, g2d);
-
-				drawnMana = true;
-			}
-
-			if (c.getBlood() > 0) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/blood.png"), 184, 47 + (drawnMana ? 23 : 0), null);
-
-				g2d.setColor(new Color(255, 51, 0));
-				Profile.drawOutlinedText(String.valueOf(c.getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(c.getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
-			}
-
 			if (bonus.getWrite() != null) {
 				g2d.setColor(Color.yellow);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
-				Profile.drawOutlinedText(bonus.getWrite(), 20, 66, g2d);
+				Profile.drawOutlinedText(bonus.getWrite(), 29, 100, g2d);
 			}
 
-			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef());
+			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), true);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
