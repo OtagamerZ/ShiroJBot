@@ -139,6 +139,7 @@ public class Account {
 	private ZonedDateTime lastDaily = null;
 
 	private transient Map<String, CompletionState> compState = null;
+	private transient FrameColor cachedFrame = null;
 
 	public String getUid() {
 		return uid;
@@ -451,10 +452,15 @@ public class Account {
 	}
 
 	public FrameColor getFrame() {
-		return frame;
+		if (cachedFrame == null) {
+			cachedFrame = frame.canUse(this) ? frame : FrameColor.PINK;
+		}
+
+		return cachedFrame;
 	}
 
 	public void setFrame(FrameColor frame) {
+		this.cachedFrame = frame;
 		this.frame = frame;
 	}
 
