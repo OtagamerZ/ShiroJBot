@@ -98,7 +98,7 @@ public class Field implements Drawable, Cloneable {
 			int i = 0;
 			for (Map.Entry<String, Object> entry : getModifiers().entrySet()) {
 				Race r = Race.valueOf(entry.getKey());
-				float modif = ((float) entry.getValue()) - 1;
+				double modif = ((double) entry.getValue()) - 1;
 				BufferedImage icon = r.getIcon();
 				if (icon == null) continue;
 
