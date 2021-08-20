@@ -26,21 +26,24 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.function.Function;
 
 public enum FrameColor {
-	PINK("A cor característica da Shiro, batalhe com estratégia e perspicácia!"),
-	PURPLE("A cor de Imanity, seja o representante da peça rei!"),
-	BLUE("A cor da sabedoria, conquiste seus inimigos com calma e precisão!"),
-	CYAN("A cor de Seiren, divirta-se encurralando seus oponentes!"),
-	GREEN("A cor da natureza, canalize o poder de Disboard no seu deck!"),
-	YELLOW("A cor de Werebeast, mostre o poder da tecnologia e das nekos!"),
-	RED("A cor do combate, mostre a dominância de suas invocações!"),
-	GREY("A cor neutra, lute para vencer e apenas vencer!");
+	PINK("A cor característica da Shiro, batalhe com estratégia e perspicácia!", null),
+	PURPLE("A cor de Imanity, seja o representante da peça rei!", null),
+	BLUE("A cor da sabedoria, conquiste seus inimigos com calma e precisão!", null),
+	CYAN("A cor de Seiren, divirta-se encurralando seus oponentes!", null),
+	GREEN("A cor da natureza, canalize o poder de Disboard no seu deck!", null),
+	YELLOW("A cor de Werebeast, mostre o poder da tecnologia e das nekos!", null),
+	RED("A cor do combate, mostre a dominância de suas invocações!", null),
+	GREY("A cor neutra, lute para vencer e apenas vencer!", null);
 
 	private final String description;
+	private final Function<Account, Boolean> req;
 
-	FrameColor(String description) {
+	FrameColor(String description, Function<Account, Boolean> req) {
 		this.description = description;
+		this.req = req;
 	}
 
 	public Color getColor() {
@@ -56,19 +59,19 @@ public enum FrameColor {
 		};
 	}
 
-	public BufferedImage getFront() {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_" + name().toLowerCase(Locale.ROOT) + ".png");
+	public BufferedImage getFront(boolean desc) {
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "nodesc") + ".png");
 	}
 
 	public BufferedImage getBack(Account acc) {
-		boolean withUlt = !acc.getUltimate().isBlank() && acc.getCompletion(acc.getUltimate()).any();
-		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_back_" + name().toLowerCase(Locale.ROOT) + (withUlt ? "_t" : "") + ".png");
+		boolean trans = !acc.getUltimate().isBlank() && acc.getCompletion(acc.getUltimate()).any();
+		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (trans ? "_t" : "") + ".png");
 		assert cover != null;
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = canvas.createGraphics();
 
-		if (withUlt) {
-			g2d.drawImage(CardDAO.getUltimate(acc.getUltimate()).drawCardNoBorder(), 26, 43, 172, 268, null);
+		if (trans) {
+			g2d.drawImage(CardDAO.getUltimate(acc.getUltimate()).drawCardNoBorder(), 15, 16, 195, 318, null);
 		}
 
 		g2d.drawImage(cover, 0, 0, null);
@@ -76,16 +79,12 @@ public enum FrameColor {
 		return canvas;
 	}
 
-	public BufferedImage getFrontEquipment() {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_equip_" + name().toLowerCase(Locale.ROOT) + ".png");
-	}
-
-	public BufferedImage getFrontArena() {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_arena_" + name().toLowerCase(Locale.ROOT) + ".png");
-	}
-
 	public String getDescription() {
 		return description;
+	}
+
+	public boolean canUse(Account acc) {
+		return req == null || req.apply(acc);
 	}
 
 	public static FrameColor getByName(String name) {
