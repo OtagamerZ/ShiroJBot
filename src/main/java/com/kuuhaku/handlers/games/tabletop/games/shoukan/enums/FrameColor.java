@@ -60,7 +60,7 @@ public enum FrameColor {
 	}
 
 	public BufferedImage getFront(boolean desc) {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "nodesc") + ".png");
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
 	}
 
 	public BufferedImage getBack(Account acc) {
