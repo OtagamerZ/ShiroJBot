@@ -69,10 +69,11 @@ public class RemoveEmoteCommand implements Executable {
 			}
 
 			int finalRemoved = removed;
-			RestAction.allOf(acts)
+			channel.sendMessage("<a:loading:697879726630502401> Removendo emotes...")
+					.flatMap(s -> RestAction.allOf(acts))
 					.mapToResult()
 					.flatMap(s -> channel.sendMessage("✅ | " + finalRemoved + " emotes removidos com sucesso!"))
-					.queue(null, Helper::doNothing);
+					.queue();
 		}
 	}
 }
