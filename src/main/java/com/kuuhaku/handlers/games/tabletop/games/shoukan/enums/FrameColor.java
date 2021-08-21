@@ -88,9 +88,9 @@ public enum FrameColor {
 					YELLOW, LEGACY_YELLOW,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY,
-					RAINBOW -> Color.BLACK;
+					RAINBOW -> Color.WHITE;
 
-			case BLACK -> Color.WHITE;
+			case BLACK -> Color.BLACK;
 		};
 	}
 
@@ -103,10 +103,10 @@ public enum FrameColor {
 					GREEN, LEGACY_GREEN,
 					YELLOW, LEGACY_YELLOW,
 					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY -> Color.WHITE;
+					GRAY, LEGACY_GRAY -> Color.BLACK;
 
 			case RAINBOW -> Helper.getRandomColor();
-			case BLACK -> Color.BLACK;
+			case BLACK -> Color.WHITE;
 		};
 	}
 
