@@ -199,8 +199,7 @@ public class PruneCommand implements Executable {
 				}
 
 				channel.sendMessage(msg).queue();
-			}
-			if (msgs.size() == 1) {
+			} else if (msgs.size() == 1) {
 				msgs.get(0).delete().complete();
 
 				channel.sendMessage(msg).queue();
