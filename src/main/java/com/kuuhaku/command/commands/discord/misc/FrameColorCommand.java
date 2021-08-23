@@ -26,7 +26,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -58,7 +57,7 @@ public class FrameColorCommand implements Executable {
 		if (args.length == 0) {
 			List<Page> pages = new ArrayList<>();
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 			for (FrameColor fc : FrameColor.values()) {
 				eb.clear()
 						.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT))
