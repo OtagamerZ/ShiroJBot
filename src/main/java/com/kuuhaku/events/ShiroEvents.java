@@ -741,9 +741,12 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		Role r = gc.getJoinRole();
-		if (r != null)
-			guild.addRoleToMember(member, r).queue(null, Helper::doNothing);
+		try {
+			Role r = gc.getJoinRole();
+			if (r != null)
+				guild.addRoleToMember(member, r).queue(null, Helper::doNothing);
+		} catch (InsufficientPermissionException | HierarchyException ignore) {
+		}
 
 		try {
 			if (!gc.getWelcomeMessage().isBlank()) {
