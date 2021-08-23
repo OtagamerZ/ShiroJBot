@@ -17,38 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/cyan.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/cyan_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/cyan_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/green_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/green_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/orange.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/orange.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/orange_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/orange_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/pink.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/pink_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/pink_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/purple.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/purple_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/purple_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/red_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/red_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/yellow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/yellow_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/yellow_t.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/blue.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/blue_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/blue_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/cyan.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/cyan_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/cyan_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/green_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/green_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/orange.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/orange.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/orange_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/orange_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/pink.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/pink_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/pink_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/purple.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/purple_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/purple_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow_nodesc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1435,27 +1404,6 @@
       <workItem from="1629485666527" duration="7500000" />
       <workItem from="1629723863346" duration="2840000" />
     </task>
-    <task id="LOCAL-05222" summary="Melhoria no comando de prune">
-      <created>1629228147958</created>
-      <option name="number" value="05222" />
-      <option name="presentableId" value="LOCAL-05222" />
-      <option name="project" value="LOCAL" />
-      <updated>1629228147958</updated>
-    </task>
-    <task id="LOCAL-05223" summary="Melhoria no comando de prune">
-      <created>1629228811604</created>
-      <option name="number" value="05223" />
-      <option name="presentableId" value="LOCAL-05223" />
-      <option name="project" value="LOCAL" />
-      <updated>1629228811604</updated>
-    </task>
-    <task id="LOCAL-05224" summary="Melhoria no comando de prune">
-      <created>1629229826623</created>
-      <option name="number" value="05224" />
-      <option name="presentableId" value="LOCAL-05224" />
-      <option name="project" value="LOCAL" />
-      <updated>1629229826624</updated>
-    </task>
     <task id="LOCAL-05225" summary="Melhoria no comando de prune">
       <created>1629230326443</created>
       <option name="number" value="05225" />
@@ -1778,7 +1726,28 @@
       <option name="project" value="LOCAL" />
       <updated>1629741811502</updated>
     </task>
-    <option name="localTasksCounter" value="5271" />
+    <task id="LOCAL-05271" summary="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.">
+      <created>1629742791315</created>
+      <option name="number" value="05271" />
+      <option name="presentableId" value="LOCAL-05271" />
+      <option name="project" value="LOCAL" />
+      <updated>1629742791315</updated>
+    </task>
+    <task id="LOCAL-05272" summary="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.">
+      <created>1629742919925</created>
+      <option name="number" value="05272" />
+      <option name="presentableId" value="LOCAL-05272" />
+      <option name="project" value="LOCAL" />
+      <updated>1629742919925</updated>
+    </task>
+    <task id="LOCAL-05273" summary="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.">
+      <created>1629742970073</created>
+      <option name="number" value="05273" />
+      <option name="presentableId" value="LOCAL-05273" />
+      <option name="project" value="LOCAL" />
+      <updated>1629742970073</updated>
+    </task>
+    <option name="localTasksCounter" value="5274" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
