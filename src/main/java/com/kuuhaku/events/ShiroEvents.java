@@ -1134,7 +1134,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 				try {
 					event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
-				} catch (InsufficientPermissionException ignore) {
+				} catch (InsufficientPermissionException | HierarchyException ignore) {
 				}
 			}
 		}
