@@ -62,7 +62,7 @@ public enum FrameColor {
 		this.req = req;
 	}
 
-	public Color getColor() {
+	public Color getThemeColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK -> new Color(232, 116, 188);
 			case PURPLE, LEGACY_PURPLE -> new Color(174, 116, 232);
@@ -78,23 +78,7 @@ public enum FrameColor {
 		};
 	}
 
-	public Color getTextColor() {
-		return switch (this) {
-			case PINK, LEGACY_PINK,
-					PURPLE, LEGACY_PURPLE,
-					BLUE, LEGACY_BLUE,
-					CYAN, LEGACY_CYAN,
-					GREEN, LEGACY_GREEN,
-					YELLOW, LEGACY_YELLOW,
-					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY,
-					RAINBOW -> Color.BLACK;
-
-			case BLACK -> Color.WHITE;
-		};
-	}
-
-	public Color getBackgroundColor() {
+	public Color getPrimaryColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
 					PURPLE, LEGACY_PURPLE,
@@ -107,6 +91,22 @@ public enum FrameColor {
 
 			case RAINBOW -> Helper.getRandomColor();
 			case BLACK -> Color.BLACK;
+		};
+	}
+
+	public Color getSecondaryColor() {
+		return switch (this) {
+			case PINK, LEGACY_PINK,
+					PURPLE, LEGACY_PURPLE,
+					BLUE, LEGACY_BLUE,
+					CYAN, LEGACY_CYAN,
+					GREEN, LEGACY_GREEN,
+					YELLOW, LEGACY_YELLOW,
+					RED, LEGACY_RED,
+					GRAY, LEGACY_GRAY,
+					RAINBOW -> Color.BLACK;
+
+			case BLACK -> Color.WHITE;
 		};
 	}
 
