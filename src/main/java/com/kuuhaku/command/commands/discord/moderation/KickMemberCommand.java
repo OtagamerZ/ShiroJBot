@@ -75,9 +75,7 @@ public class KickMemberCommand implements Executable {
 				return;
 			}
 
-			argsAsText = Arrays.stream(args)
-					.filter(a -> !Helper.regex(a, "<@!?\\d+>|" + mb.getId()).find())
-					.collect(Collectors.joining(" "));
+			argsAsText = argsAsText.replaceFirst("<@!?" + mb.getId() + ">|" + mb.getId(), "").trim();
 		}
 
 		String finalArgsAsText = argsAsText;
