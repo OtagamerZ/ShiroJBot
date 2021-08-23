@@ -60,11 +60,13 @@ public class FrameColorCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			for (FrameColor fc : FrameColor.values()) {
-				eb.clear();
-				eb.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT));
-				eb.setDescription(fc.getDescription());
-				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/back/" + fc.name().toLowerCase(Locale.ROOT) + ".png");
-				eb.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/front/" + fc.name().toLowerCase(Locale.ROOT) + ".png");
+				eb.clear()
+						.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT))
+						.setDescription(fc.getDescription())
+						.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/back/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
+						.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/front/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
+						.setColor(fc.getThemeColor());
+
 				pages.add(new Page(eb.build()));
 			}
 
