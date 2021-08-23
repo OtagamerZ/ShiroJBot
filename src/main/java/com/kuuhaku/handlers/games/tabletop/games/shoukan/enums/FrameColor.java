@@ -113,10 +113,9 @@ public enum FrameColor {
 					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY,
-					RAINBOW,
-					HALLOWEEN -> Color.BLACK;
+					RAINBOW -> Color.BLACK;
 
-			case BLACK -> Color.WHITE;
+			case BLACK, HALLOWEEN -> Color.WHITE;
 		};
 	}
 
