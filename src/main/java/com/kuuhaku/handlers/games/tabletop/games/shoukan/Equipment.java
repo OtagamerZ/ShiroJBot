@@ -115,8 +115,8 @@ public class Equipment implements Drawable, Cloneable {
 
 			g2d.drawImage(fc.getFront(hasDesc), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-			g2d.setColor(fc.getBackgroundColor());
-			g2d.setBackground(fc.getTextColor());
+			g2d.setColor(fc.getPrimaryColor());
+			g2d.setBackground(fc.getSecondaryColor());
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
@@ -127,7 +127,7 @@ public class Equipment implements Drawable, Cloneable {
 
 			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), hasDesc);
 
-			g2d.setColor(Color.black);
+			g2d.setColor(fc.getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 		}

@@ -79,6 +79,10 @@ public class Member implements Hashable {
 	@Enumerated(value = EnumType.STRING)
 	private TrophyType trophy = null;
 
+	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private List<String> warns = new ArrayList<>();
+
 	public Member(String uid, String sid) {
 		this.uid = uid;
 		this.sid = sid;
@@ -269,6 +273,10 @@ public class Member implements Hashable {
 
 	public void setTrophy(TrophyType trophy) {
 		this.trophy = trophy;
+	}
+
+	public List<String> getWarns() {
+		return warns;
 	}
 
 	public JSONObject toJson() {
