@@ -145,8 +145,8 @@ public class Arena {
 					if (key == game.getCurrentSide()) {
 						FrameColor fc = h.getAcc().getFrame();
 
-						g2d.setColor(fc.getColor());
-						g2d.setBackground(fc.getBackgroundColor());
+						g2d.setColor(fc.getThemeColor());
+						g2d.setBackground(fc.getSecondaryColor());
 
 						name = ">>> " + name + " <<<";
 					} else {

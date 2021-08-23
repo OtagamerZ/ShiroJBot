@@ -93,10 +93,8 @@ public class MuteMemberCommand implements Executable {
 		}
 
 		Member finalMb = mb;
-		argsAsText = Arrays.stream(args)
-				.filter(a -> !Helper.regex(a, "<@!?\\d+>|" + finalMb.getId()).find())
-				.collect(Collectors.joining(" "));
-		if (argsAsText.isBlank()) {
+		String reason = argsAsText.replaceFirst("<@!?" + mb.getId() + ">|" + mb.getId(), "").trim();
+		if (reason.isBlank()) {
 			channel.sendMessage("❌ | Você precisa informar uma razão.").queue();
 			return;
 		}
@@ -124,11 +122,10 @@ public class MuteMemberCommand implements Executable {
 			}
 		}
 
-		String finalArgsAsText = argsAsText;
 		RestAction.allOf(act)
-				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + finalArgsAsText + "`"))
+				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + reason + "`"))
 				.queue(s -> {
-					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + finalArgsAsText + "`", guild);
+					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + reason + "`", guild);
 					MemberDAO.saveMutedMember(m);
 				}, Helper::doNothing);
 	}
