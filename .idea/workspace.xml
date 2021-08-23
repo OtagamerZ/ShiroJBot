@@ -16,18 +16,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Revert &quot;Adicionados comandos de warn e pardon; Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.&quot;&#10;&#10;This reverts commit 9559d5bc">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/halloween.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/halloween_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/orange_t.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/halloween.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/halloween_nodesc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/orange_nodesc.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/black.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/black_t.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/black_t.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/back/blue.png" afterDir="false" />
@@ -68,7 +58,6 @@
       <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/red_nodesc.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow_nodesc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/front/yellow_nodesc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1455,13 +1444,6 @@
       <workItem from="1629485666527" duration="7500000" />
       <workItem from="1629723863346" duration="2840000" />
     </task>
-    <task id="LOCAL-05219" summary="Correções menores e adicionada proteção contra instakill">
-      <created>1629211717313</created>
-      <option name="number" value="05219" />
-      <option name="presentableId" value="LOCAL-05219" />
-      <option name="project" value="LOCAL" />
-      <updated>1629211717313</updated>
-    </task>
     <task id="LOCAL-05220" summary="Melhoria no comando de prune">
       <created>1629221065168</created>
       <option name="number" value="05220" />
@@ -1798,7 +1780,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629492714280</updated>
     </task>
-    <option name="localTasksCounter" value="5268" />
+    <task id="LOCAL-05268" summary="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes.">
+      <created>1629740276541</created>
+      <option name="number" value="05268" />
+      <option name="presentableId" value="LOCAL-05268" />
+      <option name="project" value="LOCAL" />
+      <updated>1629740276541</updated>
+    </task>
+    <option name="localTasksCounter" value="5269" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1873,7 +1862,19 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -1886,7 +1887,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Aterada biblioteca de JSON de GSON para Moshi" />
     <MESSAGE value="Updated copyright notice" />
     <MESSAGE value="Adicionado cargos por tempo em call" />
     <MESSAGE value="Mudança de engine de script de BeanShell para Groovy" />
@@ -1911,7 +1911,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Atualização das bordas do Shoukan" />
     <MESSAGE value="Adicionadas bordas com requisitos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionadas bordas com requisitos" />
+    <MESSAGE value="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionados comandos de warn e pardon;&#10;Adicionadas mais 2 cores de frame e ajustada tonalidade dos existentes." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
