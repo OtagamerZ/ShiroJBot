@@ -36,6 +36,7 @@ public enum FrameColor {
 	CYAN("Divirta-se enquanto destroi seus oponentes!", null),
 	GREEN("Canalize a força da natureza e lute com a graça de um pássaro!", null),
 	YELLOW("Alveje o ponto fraco de seus oponentes, mostre a inovação de seu deck!", null),
+	ORANGE("Laranja como o pôr do sol, mantenha o foco mesmo nos duelos mais arriscados!", null),
 	RED("No massacre você floresce, leve o campo de batalha aos seus inimigos!", null),
 	GRAY("Lute com frieza, calcule seus movimentos e desintegre seus oponentes!", null),
 
@@ -52,6 +53,9 @@ public enum FrameColor {
 			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
 
 	BLACK("**(???)** Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
+			acc -> false),
+
+	HALLOWEEN("**(???)** Muahaha, invoque os espíritos malígnos para atormentar seus oponentes!",
 			acc -> false);
 
 	private final String description;
@@ -70,11 +74,13 @@ public enum FrameColor {
 			case CYAN, LEGACY_CYAN -> new Color(116, 197, 232);
 			case GREEN, LEGACY_GREEN -> new Color(139, 232, 116);
 			case YELLOW, LEGACY_YELLOW -> new Color(232, 222, 116);
+			case ORANGE -> new Color(243, 149, 73);
 			case RED, LEGACY_RED -> new Color(232, 116, 116);
 			case GRAY, LEGACY_GRAY -> new Color(190, 190, 190);
 
 			case RAINBOW -> Helper.getRandomColor();
 			case BLACK -> Color.BLACK;
+			case HALLOWEEN -> new Color(220, 89, 16);
 		};
 	}
 
@@ -86,11 +92,13 @@ public enum FrameColor {
 					CYAN, LEGACY_CYAN,
 					GREEN, LEGACY_GREEN,
 					YELLOW, LEGACY_YELLOW,
+					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY -> Color.WHITE;
 
 			case RAINBOW -> Helper.getRandomColor();
 			case BLACK -> Color.BLACK;
+			case HALLOWEEN -> new Color(220, 89, 16);
 		};
 	}
 
@@ -102,9 +110,11 @@ public enum FrameColor {
 					CYAN, LEGACY_CYAN,
 					GREEN, LEGACY_GREEN,
 					YELLOW, LEGACY_YELLOW,
+					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY,
-					RAINBOW -> Color.BLACK;
+					RAINBOW,
+					HALLOWEEN -> Color.BLACK;
 
 			case BLACK -> Color.WHITE;
 		};
@@ -152,6 +162,7 @@ public enum FrameColor {
 			case CYAN -> "Ciano";
 			case GREEN -> "Verde";
 			case YELLOW -> "Amarelo";
+			case ORANGE -> "Laranja";
 			case RED -> "Vermelho";
 			case GRAY -> "Cinza";
 
@@ -166,6 +177,7 @@ public enum FrameColor {
 
 			case RAINBOW -> "Arco-iris";
 			case BLACK -> "Negro";
+			case HALLOWEEN -> "Halloween";
 		} + " (`" + name().toLowerCase(Locale.ROOT) + "`)";
 	}
 }
