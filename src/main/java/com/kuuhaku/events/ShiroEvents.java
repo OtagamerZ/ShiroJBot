@@ -65,7 +65,6 @@ import net.dv8tion.jda.api.events.user.UserTypingEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.exceptions.MissingAccessException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -346,7 +345,7 @@ public class ShiroEvents extends ListenerAdapter {
 			try {
 				if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
 				if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
-			} catch (MissingAccessException | InsufficientPermissionException ignore) {
+			} catch (InsufficientPermissionException ignore) {
 			} 
 
 			Event ev = Event.getCurrent();
