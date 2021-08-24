@@ -346,7 +346,7 @@ public class ShiroEvents extends ListenerAdapter {
 			try {
 				if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
 				if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
-			} catch (MissingAccessException ignore) {
+			} catch (MissingAccessException | InsufficientPermissionException ignore) {
 			} 
 
 			Event ev = Event.getCurrent();
