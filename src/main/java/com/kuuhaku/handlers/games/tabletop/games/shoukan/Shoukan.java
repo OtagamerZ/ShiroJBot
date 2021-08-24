@@ -2375,19 +2375,19 @@ public class Shoukan extends GlobalGame {
 				if (effect.getTarget() == null || effect.getTarget() == to) {
 					if (CollectionUtils.containsAny(effect.getTriggers(), Set.of(BEFORE_TURN, AFTER_TURN))) {
 						if (effect.getTriggers().contains(trigger)) {
-							effect.getEffect().accept(to, index, effect.getTurns() == 1);
+							effect.getEffect().accept(to, index, effect.getTurns() == 0);
 							effect.decreaseTurn();
 						}
 					} else {
 						if (effect.getTriggers().contains(trigger))
-							effect.getEffect().accept(to, index, effect.getTurns() == 1);
+							effect.getEffect().accept(to, index, effect.getTurns() == 0);
 
 						if (trigger == AFTER_TURN)
 							effect.decreaseTurn();
 					}
 				}
 
-				if (effect.getTurns() <= 0) {
+				if (effect.getTurns() < 0) {
 					channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
 					i.remove();
 				}
