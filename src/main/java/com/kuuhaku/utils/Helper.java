@@ -974,23 +974,18 @@ public class Helper {
 				if (!old.matches(":.+:")) {
 					newWords[i] = old;
 					continue;
-				} else {
-					List<Emote> svEmts = g.getEmotesByName(old.replace(":", ""), false);
-					svEmts.removeIf(e -> !e.isAnimated());
-
-					if (!svEmts.isEmpty()) continue;
+				} else if (!g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
+					newWords[i] = old;
+					continue;
 				}
 
-				boolean makenew = false;
 				String id = ShiroInfo.getEmoteLookup().get(old);
 				Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
-				if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
-					makenew = true;
 
 				if (e != null) {
 					try {
 						boolean animated = e.isAnimated();
-						if (makenew && (animated ? aSlots : slots) > 0) {
+						if ((animated ? aSlots : slots) > 0) {
 							e = g.createEmote(e.getName(), Icon.from(getImage(e.getImageUrl())), g.getSelfMember().getRoles().get(0)).complete();
 							Emote finalE = e;
 							queue.add(aVoid -> after.accept(finalE));
