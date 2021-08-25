@@ -82,7 +82,9 @@ public class Champion implements Drawable, Cloneable {
 	private transient Account acc = null;
 	private transient Bonus bonus = new Bonus();
 	private transient Champion fakeCard = null;
+	private transient Champion nemesis = null;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
+	private transient int index = -1;
 
 	private transient String altDescription = null;
 	private transient String altEffect = null;
@@ -195,24 +197,9 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
-	public boolean isFlipped() {
-		return flipped;
-	}
-
-	@Override
-	public void setFlipped(boolean flipped) {
-		if (this.flipped && !flipped) defending = true;
-		this.flipped = flipped;
-	}
-
-	@Override
-	public boolean isAvailable() {
-		return available;
-	}
-
-	@Override
-	public void setAvailable(boolean available) {
-		this.available = available;
+	public void bind(Hand h) {
+		this.game = h.getGame();
+		this.acc = h.getAcc();
 	}
 
 	@Override
@@ -236,9 +223,34 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
-	public void bind(Hand h) {
-		this.game = h.getGame();
-		this.acc = h.getAcc();
+	public int getIndex() {
+		return index;
+	}
+
+	@Override
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	@Override
+	public boolean isFlipped() {
+		return flipped;
+	}
+
+	@Override
+	public void setFlipped(boolean flipped) {
+		if (this.flipped && !flipped) defending = true;
+		this.flipped = flipped;
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return available;
+	}
+
+	@Override
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 	public void setLinkedTo(List<Equipment> linkedTo) {
@@ -564,6 +576,14 @@ public class Champion implements Drawable, Cloneable {
 		this.fakeCard = fakeCard;
 	}
 
+	public Champion getNemesis() {
+		return nemesis;
+	}
+
+	public void setNemesis(Champion nemesis) {
+		this.nemesis = nemesis;
+	}
+
 	public Set<String> getRequiredCards() {
 		return requiredCards;
 	}
@@ -714,6 +734,8 @@ public class Champion implements Drawable, Cloneable {
 		linkedTo = new ArrayList<>();
 		bonus = new Bonus();
 		fakeCard = null;
+		nemesis = null;
+		index = -1;
 		altAtk = -1;
 		altDef = -1;
 		altDescription = null;

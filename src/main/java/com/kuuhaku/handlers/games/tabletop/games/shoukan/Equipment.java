@@ -81,11 +81,13 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean parasite = false;
 
-	private transient boolean flipped = false;
-	private transient boolean available = true;
 	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Pair<Integer, Champion> linkedTo = null;
+	private transient int index = -1;
+
+	private transient boolean flipped = false;
+	private transient boolean available = true;
 	private transient int altTier = -1;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
@@ -152,23 +154,9 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	@Override
-	public boolean isFlipped() {
-		return flipped;
-	}
-
-	@Override
-	public void setFlipped(boolean flipped) {
-		this.flipped = flipped;
-	}
-
-	@Override
-	public boolean isAvailable() {
-		return available;
-	}
-
-	@Override
-	public void setAvailable(boolean available) {
-		this.available = available;
+	public void bind(Hand h) {
+		this.game = h.getGame();
+		this.acc = h.getAcc();
 	}
 
 	@Override
@@ -192,9 +180,33 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	@Override
-	public void bind(Hand h) {
-		this.game = h.getGame();
-		this.acc = h.getAcc();
+	public int getIndex() {
+		return index;
+	}
+
+	@Override
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	@Override
+	public boolean isFlipped() {
+		return flipped;
+	}
+
+	@Override
+	public void setFlipped(boolean flipped) {
+		this.flipped = flipped;
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return available;
+	}
+
+	@Override
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 	public Pair<Integer, Champion> getLinkedTo() {

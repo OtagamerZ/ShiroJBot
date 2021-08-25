@@ -34,13 +34,7 @@ public interface Drawable {
 
 	Card getCard();
 
-	boolean isFlipped();
-
-	void setFlipped(boolean flipped);
-
-	boolean isAvailable();
-
-	void setAvailable(boolean available);
+	void bind(Hand h);
 
 	Shoukan getGame();
 
@@ -50,7 +44,25 @@ public interface Drawable {
 
 	void setAcc(Account acc);
 
-	void bind(Hand h);
+	default int getIndex() {
+		return -1;
+	}
+
+	default void setIndex(int index) {
+
+	}
+
+	default boolean isFlipped() {
+		return false;
+	}
+
+	default void setFlipped(boolean flipped) {
+
+	}
+
+	boolean isAvailable();
+
+	void setAvailable(boolean available);
 
 	Drawable copy();
 

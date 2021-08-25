@@ -38,6 +38,7 @@ public class SlotColumn {
 	}
 
 	public void setTop(Champion top) {
+		if (top != null) top.setIndex(index);
 		this.top = top;
 	}
 
@@ -46,6 +47,7 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Equipment bottom) {
+		if (bottom != null) bottom.setIndex(index);
 		this.bottom = bottom;
 	}
 
