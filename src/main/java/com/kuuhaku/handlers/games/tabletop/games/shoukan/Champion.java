@@ -645,7 +645,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDuelling() {
-		if (nemesis.getIndex() == -1) {
+		if (nemesis != null && nemesis.getIndex() == -1) {
 			nemesis = null;
 			if (index != -1)
 				onDuelEnd.accept(game.getSideById(acc.getUid()), game);
