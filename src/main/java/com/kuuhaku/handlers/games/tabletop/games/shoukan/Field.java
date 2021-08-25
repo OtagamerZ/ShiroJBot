@@ -103,10 +103,7 @@ public class Field implements Drawable, Cloneable {
 			int i = 0;
 
 			List<Map.Entry<String, Object>> races = new ArrayList<>(getModifiers().entrySet());
-			races.sort(Comparator
-					.<Map.Entry<String, Object>>comparingDouble(e -> ((double) e.getValue()))
-					.reversed()
-			);
+			races.sort(Comparator.comparingDouble(e -> ((double) e.getValue())));
 
 			g2d.setBackground(Color.BLACK);
 			for (Map.Entry<String, Object> entry : races) {
