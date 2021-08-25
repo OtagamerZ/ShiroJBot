@@ -417,7 +417,7 @@ public class KawaiponBook {
 					if (!has) has = kp.getDeck().getChampion(d.getCard()) != null;
 					if (!has) has = kp.getDeck().getEquipment(d.getCard()) != null;
 					if (!has) has = kp.getDeck().getField(d.getCard()) != null;
-					
+
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
 					card = d.drawCard(false);
