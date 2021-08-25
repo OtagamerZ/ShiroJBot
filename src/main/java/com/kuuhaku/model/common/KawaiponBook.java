@@ -413,7 +413,10 @@ public class KawaiponBook {
 				List<Drawable> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Drawable d = chunk.get(i);
-					boolean has = kp.hasCard(d.getCard());
+					boolean has = kp.getCard(d.getCard(), false) != null
+								  || kp.getDeck().getChampion(d.getCard()) != null
+								  || kp.getDeck().getEquipment(d.getCard()) != null
+								  || kp.getDeck().getField(d.getCard()) != null;
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
 					card = d.drawCard(false);
