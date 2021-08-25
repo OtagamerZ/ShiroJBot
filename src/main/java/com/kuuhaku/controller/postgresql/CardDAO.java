@@ -460,7 +460,7 @@ public class CardDAO {
 	public static Map<String, Boolean> getCardsByAnime(String id, String anime, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT x.id, x.has FROM \"GetAnimeCompletionState\"(:id, :anime, :foil) x");
+		Query q = em.createNativeQuery("SELECT x.name, x.has FROM \"GetAnimeCompletionState\"(:id, :anime, :foil) x");
 		q.setParameter("id", id);
 		q.setParameter("anime", anime);
 		q.setParameter("foil", foil);
@@ -493,7 +493,7 @@ public class CardDAO {
 	public static Map<String, Boolean> getCardsByRarity(String id, String rarity, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT x.id, x.has FROM \"GetRarityCompletionState\"(:id, :rarity, :foil) x");
+		Query q = em.createNativeQuery("SELECT x.name, x.has FROM \"GetRarityCompletionState\"(:id, :rarity, :foil) x");
 		q.setParameter("id", id);
 		q.setParameter("rarity", rarity);
 		q.setParameter("foil", foil);
