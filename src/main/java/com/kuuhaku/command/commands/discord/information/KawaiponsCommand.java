@@ -80,7 +80,7 @@ public class KawaiponsCommand implements Executable {
                     }
 
                     KawaiponBook kb = new KawaiponBook(collection);
-                    BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
+                    BufferedImage cards = kb.view(author.getId(), CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
 
                     EmbedBuilder eb = new ColorlessEmbedBuilder();
                     int count = collection.size();
@@ -89,10 +89,10 @@ public class KawaiponsCommand implements Executable {
 
                     eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
                     eb.addField(":books: | Coleções completas:", count + " de " + CardDAO.getValidAnime().size() + " (" + Helper.prcntToInt(count, CardDAO.getValidAnime().size()) + "%)", true);
-                    eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
-                    eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
+                    eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.getTotalCards() + " (" + Helper.prcntToInt(common, CardDAO.getTotalCards()) + "%)", true);
+                    eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.getTotalCards() + " (" + Helper.prcntToInt(foil, CardDAO.getTotalCards()) + "%)", true);
                     eb.setImage("attachment://cards.jpg");
-                    eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
+                    eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.getTotalCards() * 2) + "%");
 
                     m.delete().queue();
                     channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "jpg")).queue();
@@ -112,9 +112,9 @@ public class KawaiponsCommand implements Executable {
                                 Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
                                 KawaiponBook kb = new KawaiponBook(toRender);
-                                BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", foil);
+                                BufferedImage cards = kb.view(author.getId(), CardDAO.getCards(), "Todas as cartas", foil);
 
-                                send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
+                                send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.getTotalCards());
                                 return;
                             } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
                                 List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
@@ -154,9 +154,9 @@ public class KawaiponsCommand implements Executable {
                             Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
                             KawaiponBook kb = new KawaiponBook(toRender);
-                            BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime.getName()), anime.toString(), foil);
+                            BufferedImage cards = kb.view(author.getId(), CardDAO.getCardsByAnime(anime.getName()), anime.toString(), foil);
 
-                            send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime.getName()));
+                            send(author, channel, m, collection, cards, anime.toString(), CardDAO.getTotalCards(anime.getName()));
                             return;
                         }
 
@@ -181,10 +181,10 @@ public class KawaiponsCommand implements Executable {
                     Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
                     KawaiponBook kb = new KawaiponBook(toRender);
-                    BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), foil);
+                    BufferedImage cards = kb.view(author.getId(), CardDAO.getCardsByRarity(rr), rr.toString(), foil);
 
 
-                    send(author, channel, m, collection, cards, rr.toString(), CardDAO.totalCards(rr));
+                    send(author, channel, m, collection, cards, rr.toString(), CardDAO.getTotalCards(rr));
                 }
             } catch (IOException | InterruptedException e) {
                 m.editMessage(I18n.getString("err_collection-generation-error")).queue();

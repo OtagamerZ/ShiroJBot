@@ -99,13 +99,13 @@ public class Member implements Hashable {
 			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u.getId()).getMult()));
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)
+		if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 1)
 			bonuses.add(new Bonus(4, "Coleção de cartas (100%)", 2));
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.75)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.75)
 			bonuses.add(new Bonus(4, "Coleção de cartas (75%)", 1.75f));
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.5)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.5)
 			bonuses.add(new Bonus(4, "Coleção de cartas (50%)", 1.5f));
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.25)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.25)
 			bonuses.add(new Bonus(4, "Coleção de cartas (25%)", 1.25f));
 
 		return bonuses;
@@ -124,13 +124,13 @@ public class Member implements Hashable {
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(uid);
-		if (kp.getCards().size() / ((float) CardDAO.totalCards()) * 2 >= 1) {
+		if (kp.getCards().size() / ((float) CardDAO.getTotalCards()) * 2 >= 1) {
 			mult.updateAndGet(v -> v * 1.5f);
-		} else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.75)
+		} else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.75)
 			mult.updateAndGet(v -> v * 1.37f);
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.5)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.5)
 			mult.updateAndGet(v -> v * 1.25f);
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.25)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.25)
 			mult.updateAndGet(v -> v * 1.12f);
 
 		GuildBuff gb = GuildBuffDAO.getBuffs(g.getId());

@@ -95,7 +95,7 @@ public class MyStatsCommand implements Executable, Slashed {
 							* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
 			);
 
-			float collection = Helper.prcnt(kp.getCards().size(), CardDAO.totalCards() * 2);
+			float collection = Helper.prcnt(kp.getCards().size(), CardDAO.getTotalCards() * 2);
 			if (collection >= 1) xp *= 2;
 			else if (collection >= 0.75) xp *= 1.75;
 			else if (collection >= 0.5) xp *= 1.5;

@@ -18,22 +18,22 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.model.persistent.RarityColors;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Comparator;
@@ -59,7 +59,7 @@ public class KawaiponBook {
 		this.cards = null;
 	}
 
-	public BufferedImage view(List<Card> cardList, String title, boolean foil) throws IOException, InterruptedException {
+	public BufferedImage view(String uid, List<Card> cardList, String title, boolean foil) throws IOException, InterruptedException {
 		String text;
 		if (foil) text = "« " + title + " »";
 		else text = title;
@@ -111,7 +111,8 @@ public class KawaiponBook {
 
 					List<KawaiponCard> chunk = chunks.get(finalC);
 					for (int i = 0; i < chunk.size(); i++) {
-						BufferedImage card = cards.contains(chunk.get(i)) ? chunk.get(i).getCard().drawCard(foil) : slot;
+						KawaiponCard kc = chunk.get(i);
+						BufferedImage card = cards.contains(kc) ? kc.getCard().drawCard(foil) : slot;
 
 						int width = 4026 / COLUMN_COUNT;
 						int actualWidth = width * chunk.size();
@@ -120,21 +121,24 @@ public class KawaiponBook {
 						int height = row.getHeight();
 						int y = ((height - CARD_HEIGHT) / 2);
 
-						if (cards.contains(chunk.get(i))) {
+						if (cards.contains(kc)) {
 							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-							RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
+							RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
 
 							g2d.setColor(foil ? rc.getSecondary() : rc.getPrimary());
 
 							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
-						} else if (chunk.get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
+							Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
+						} else if (kc.getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
+							double prcnt = CardDAO.getCollectionProgress(uid, kc.getCard().getAnime().getName(), false);
+							g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT - CARD_HEIGHT * prcnt, CARD_WIDTH, CARD_HEIGHT * prcnt));
 							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
+							g.setClip(null);
+							Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 						} else {
 							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
@@ -164,6 +168,7 @@ public class KawaiponBook {
 	}
 
 	public BufferedImage view(List<Drawable> cardList, Account acc, String title, boolean senshi) throws IOException, InterruptedException {
+		Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUid());
 		List<Drawable> cards;
 		if (senshi)
 			cards = cardList.stream()
@@ -187,9 +192,12 @@ public class KawaiponBook {
 		List<List<Drawable>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
 		chunks.removeIf(List::isEmpty);
 
-		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
-		BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.png")));
+		BufferedImage header = Helper.getResourceAsImage(this.getClass(), "kawaipon/header.png");
+		BufferedImage footer = Helper.getResourceAsImage(this.getClass(), "kawaipon/footer.png");
+		BufferedImage slotLock = Helper.getResourceAsImage(this.getClass(), "shoukan/slot_lock.png");
 
+		assert header != null;
+		assert footer != null;
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 72));
@@ -225,7 +233,11 @@ public class KawaiponBook {
 
 					List<Drawable> chunk = chunks.get(finalC);
 					for (int i = 0; i < chunk.size(); i++) {
-						BufferedImage card = chunk.get(i).drawCard(false);
+						Drawable d = chunk.get(i);
+						boolean has = kp.hasCard(d.getCard());
+						BufferedImage card;
+						if (!has) d.setAvailable(false);
+						card = d.drawCard(false);
 
 						int width = 4026 / COLUMN_COUNT;
 						int actualWidth = width * chunk.size();
@@ -237,6 +249,10 @@ public class KawaiponBook {
 						g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 						g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 						Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getCard().getName(), 15), CARD_WIDTH, x, y + 274, g);
+
+						if (!has) {
+							g.drawImage(slotLock, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+						}
 					}
 
 					g.dispose();

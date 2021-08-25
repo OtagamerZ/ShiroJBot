@@ -1997,7 +1997,7 @@ public class Helper {
 	public static CardStatus checkStatus(Kawaipon kp) {
 		int normalCount = (int) kp.getCards().stream().filter(cd -> !cd.isFoil()).count();
 		int foilCount = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
-		int total = (int) CardDAO.totalCards();
+		int total = (int) CardDAO.getTotalCards();
 
 		if (normalCount + foilCount == total * 2) return CardStatus.NO_CARDS;
 		else if (foilCount == total) return CardStatus.NORMAL_CARDS;

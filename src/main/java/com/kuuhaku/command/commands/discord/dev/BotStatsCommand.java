@@ -222,7 +222,7 @@ public class BotStatsCommand implements Executable {
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
-		long maxCards = CardDAO.getTotalCards();
+		long maxCards = CardDAO.getCardCount();
 		chart.addSeries(
 				"Cartas em cache (%)",
 				List.copyOf(reducedStats.keySet()),
