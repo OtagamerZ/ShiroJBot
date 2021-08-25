@@ -31,7 +31,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -66,12 +64,11 @@ public class KawaiponBook {
 	}
 
 	public BufferedImage view(String uid, String name) throws InterruptedException {
-		List<KawaiponCard> cards = CardDAO.getValidAnimeNames().stream()
+		List<Card> cards = CardDAO.getValidAnimeNames().stream()
 				.sorted(Comparator.comparing(String::toString, String.CASE_INSENSITIVE_ORDER))
 				.map(CardDAO::getUltimate)
-				.map(c -> new KawaiponCard(c, false))
 				.collect(Collectors.toList());
-		List<List<KawaiponCard>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
+		List<List<Card>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -97,13 +94,15 @@ public class KawaiponBook {
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
-				Graphics2D g = row.createGraphics();
+				BufferedImage bi = new BufferedImage(row.getWidth(), row.getHeight(), row.getType());
+				Graphics2D g = bi.createGraphics();
 				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				g.drawImage(row, 0, 0, null);
 
-				List<KawaiponCard> chunk = chunks.get(finalC);
+				List<Card> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
-					KawaiponCard kc = chunk.get(i);
-					BufferedImage card = kc.getCard().drawCard(false);
+					Card kc = chunk.get(i);
+					BufferedImage card = kc.drawCard(false);
 
 					int width = 4026 / COLUMN_COUNT;
 					int actualWidth = width * chunk.size();
@@ -115,8 +114,9 @@ public class KawaiponBook {
 					g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 					g.setBackground(Color.black);
 					g.setColor(Color.white);
+					g.drawImage(slot, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 
-					double prcnt = CardDAO.getCollectionProgress(uid, kc.getCard().getAnime().getName(), false);
+					double prcnt = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
 					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT - CARD_HEIGHT * prcnt, CARD_WIDTH, CARD_HEIGHT * prcnt));
 					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					g.setClip(null);
@@ -198,8 +198,10 @@ public class KawaiponBook {
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
-				Graphics2D g = row.createGraphics();
+				BufferedImage bi = new BufferedImage(row.getWidth(), row.getHeight(), row.getType());
+				Graphics2D g = bi.createGraphics();
 				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				g.drawImage(row, 0, 0, null);
 
 				List<KawaiponCard> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
@@ -305,8 +307,10 @@ public class KawaiponBook {
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
-				Graphics2D g = row.createGraphics();
+				BufferedImage bi = new BufferedImage(row.getWidth(), row.getHeight(), row.getType());
+				Graphics2D g = bi.createGraphics();
 				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				g.drawImage(row, 0, 0, null);
 
 				List<KawaiponCard> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
@@ -401,41 +405,38 @@ public class KawaiponBook {
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
-				try {
-					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.png")));
-					Graphics2D g = row.createGraphics();
-					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-					g.setColor(Color.white);
+				BufferedImage bi = new BufferedImage(row.getWidth(), row.getHeight(), row.getType());
+				Graphics2D g = bi.createGraphics();
+				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				g.drawImage(row, 0, 0, null);
 
-					List<Drawable> chunk = chunks.get(finalC);
-					for (int i = 0; i < chunk.size(); i++) {
-						Drawable d = chunk.get(i);
-						boolean has = kp.hasCard(d.getCard());
-						BufferedImage card;
-						if (!has) d.setAvailable(false);
-						card = d.drawCard(false);
+				List<Drawable> chunk = chunks.get(finalC);
+				for (int i = 0; i < chunk.size(); i++) {
+					Drawable d = chunk.get(i);
+					boolean has = kp.hasCard(d.getCard());
+					BufferedImage card;
+					if (!has) d.setAvailable(false);
+					card = d.drawCard(false);
 
-						int width = 4026 / COLUMN_COUNT;
-						int actualWidth = width * chunk.size();
-						int x = 35 + ((4026 - actualWidth) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
+					int width = 4026 / COLUMN_COUNT;
+					int actualWidth = width * chunk.size();
+					int x = 35 + ((4026 - actualWidth) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
 
-						int height = row.getHeight();
-						int y = ((height - CARD_HEIGHT) / 2);
+					int height = row.getHeight();
+					int y = ((height - CARD_HEIGHT) / 2);
 
-						g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-						g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-						Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getCard().getName(), 15), CARD_WIDTH, x, y + 274, g);
+					g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+					Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getCard().getName(), 15), CARD_WIDTH, x, y + 274, g);
 
-						if (!has) {
-							g.drawImage(slotLock, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-						}
+					if (!has) {
+						g.drawImage(slotLock, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					}
-
-					g.dispose();
-
-					act.addSignature(finalC, row);
-				} catch (IOException ignore) {
 				}
+
+				g.dispose();
+
+				act.addSignature(finalC, row);
 			});
 		}
 
