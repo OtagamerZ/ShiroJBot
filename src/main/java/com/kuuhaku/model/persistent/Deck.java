@@ -24,7 +24,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -190,14 +189,6 @@ public class Deck {
 
 	public int getFieldCopies(Card card) {
 		return (int) fields.stream().filter(k -> k.getCard().equals(card)).count();
-	}
-
-	public List<Drawable> getDrawables() {
-		List<Drawable> out = new ArrayList<>(champions);
-		out.addAll(equipments);
-		out.addAll(fields);
-
-		return out;
 	}
 
 	public List<Integer> getDestinyDraw() {
