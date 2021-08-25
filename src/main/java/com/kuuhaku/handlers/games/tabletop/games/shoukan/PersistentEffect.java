@@ -25,7 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectConsum
 import java.util.Objects;
 import java.util.Set;
 
-public class EffectOverTime {
+public class PersistentEffect {
 	private final long stamp = System.currentTimeMillis();
 	private final String source;
 	private final Set<EffectTrigger> triggers;
@@ -34,7 +34,7 @@ public class EffectOverTime {
 	private final boolean debuff;
 	private int turns;
 
-	public EffectOverTime(String source, EffectConsumer effect, Side target, boolean debuff, int turns, EffectTrigger... triggers) {
+	public PersistentEffect(String source, EffectConsumer effect, Side target, boolean debuff, int turns, EffectTrigger... triggers) {
 		this.source = source;
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
@@ -79,7 +79,7 @@ public class EffectOverTime {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		EffectOverTime that = (EffectOverTime) o;
+		PersistentEffect that = (PersistentEffect) o;
 		return stamp == that.stamp;
 	}
 
