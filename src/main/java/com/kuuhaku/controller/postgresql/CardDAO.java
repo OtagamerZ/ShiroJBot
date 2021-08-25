@@ -456,6 +456,24 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static Map<String, Boolean> getCardsByAnime(String id, String anime, boolean foil) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT x.id, x.has FROM \"GetAnimeCompletionState\"(:id, :anime, :foil) x");
+		q.setParameter("id", id);
+		q.setParameter("anime", anime);
+		q.setParameter("foil", foil);
+
+		try {
+			List<Object[]> res = (List<Object[]>) q.getResultList();
+			return res.stream()
+					.collect(Collectors.toMap(o -> (String) o[0], o -> (boolean) o[1]));
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -465,6 +483,24 @@ public class CardDAO {
 
 		try {
 			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Boolean> getCardsByRarity(String id, String rarity, boolean foil) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT x.id, x.has FROM \"GetRarityCompletionState\"(:id, :rarity, :foil) x");
+		q.setParameter("id", id);
+		q.setParameter("rarity", rarity);
+		q.setParameter("foil", foil);
+
+		try {
+			List<Object[]> res = (List<Object[]>) q.getResultList();
+			return res.stream()
+					.collect(Collectors.toMap(o -> (String) o[0], o -> (boolean) o[1]));
 		} finally {
 			em.close();
 		}
