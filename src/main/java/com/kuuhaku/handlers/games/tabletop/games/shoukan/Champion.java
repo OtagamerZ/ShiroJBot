@@ -36,6 +36,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.function.BiConsumer;
 
 @Entity
 @Table(name = "champion")
@@ -83,6 +84,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient Bonus bonus = new Bonus();
 	private transient Champion fakeCard = null;
 	private transient Champion nemesis = null;
+	private transient BiConsumer<Side, Shoukan> onDuelEnd = null;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient int index = -1;
 
@@ -171,7 +173,9 @@ public class Champion implements Drawable, Cloneable {
 				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 			}
 
-			if (isStasis()) {
+			if (isDuelling()) {
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/duel.png"), 0, 0, null);
+			} else if (isStasis()) {
 				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/stasis.png"), 0, 0, null);
 			} else if (isStunned()) {
 				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/stun.png"), 0, 0, null);
@@ -281,7 +285,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDefending() {
-		return flipped || defending || isStasis() || isStunned() || isSleeping();
+		return !isDuelling() && (flipped || defending || isStasis() || isStunned() || isSleeping());
 	}
 
 	public void setDefending(boolean defending) {
@@ -455,7 +459,7 @@ public class Champion implements Drawable, Cloneable {
 
 	public double getDodge() {
 		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
-		double d = Helper.clamp(dodge + mDodge + agiEquips * 15, 0, 100);
+		double d = Helper.clamp(dodge + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0), 0, 100);
 		return Helper.roundTrunc((int) (d * 100), 5) / 100d;
 	}
 
@@ -576,14 +580,6 @@ public class Champion implements Drawable, Cloneable {
 		this.fakeCard = fakeCard;
 	}
 
-	public Champion getNemesis() {
-		return nemesis;
-	}
-
-	public void setNemesis(Champion nemesis) {
-		this.nemesis = nemesis;
-	}
-
 	public Set<String> getRequiredCards() {
 		return requiredCards;
 	}
@@ -638,8 +634,28 @@ public class Champion implements Drawable, Cloneable {
 		this.requiredCards = requiredCards;
 	}
 
+	public void duel(Champion nemesis, BiConsumer<Side, Shoukan> onDuelEnd) {
+		this.nemesis = nemesis;
+		this.onDuelEnd = onDuelEnd;
+		nemesis.duel(this, onDuelEnd);
+	}
+
+	public Champion getNemesis() {
+		return nemesis;
+	}
+
+	public boolean isDuelling() {
+		if (nemesis.getIndex() == -1) {
+			nemesis = null;
+			if (index != -1)
+				onDuelEnd.accept(game.getSideById(acc.getUid()), game);
+			onDuelEnd = null;
+		}
+		return nemesis == null;
+	}
+
 	public boolean isStasis() {
-		return stasis > 0;
+		return !isDuelling() && stasis > 0;
 	}
 
 	public int getStasis() {

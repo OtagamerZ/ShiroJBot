@@ -806,6 +806,12 @@ public class Shoukan extends GlobalGame {
 		if (his.isStasis()) {
 			channel.sendMessage("❌ | Você não pode atacar cartas inalvejáveis.").queue();
 			return;
+		} else if (yours.isDuelling()) {
+			channel.sendMessage("❌ | " + yours.getName() + " só pode atacar " + his.getName() + " (DUELO).").queue();
+			return;
+		} else if (his.isDuelling()) {
+			channel.sendMessage("❌ | " + his.getName() + " só pode ser atacado por " + yours.getName() + " (DUELO).").queue();
+			return;
 		}
 
 		if (yours.isDefending()) return;
@@ -2390,8 +2396,8 @@ public class Shoukan extends GlobalGame {
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Pair<Champion, Integer> attacker, Pair<Champion, Integer> defender) {
 		if (activator.hasEffect() && effectLock == 0) {
-			if ((defender != null && defender.getLeft().getBonus().popFlag(Flag.NOEFFECT))
-				|| (attacker != null && attacker.getLeft().getBonus().popFlag(Flag.NOEFFECT))
+			if ((defender != null && (defender.getLeft().isDuelling() || defender.getLeft().getBonus().popFlag(Flag.NOEFFECT)))
+				|| (attacker != null && (attacker.getLeft().isDuelling() || attacker.getLeft().getBonus().popFlag(Flag.NOEFFECT)))
 			) return false;
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
@@ -2406,11 +2412,11 @@ public class Shoukan extends GlobalGame {
 		return false;
 	}
 
-	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Duelists duelists) {
+	public void applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Duelists duelists) {
 		if (activator.hasEffect() && effectLock == 0) {
-			if ((duelists.getDefender() != null && duelists.getDefender().getBonus().popFlag(Flag.NOEFFECT))
-				|| (duelists.getAttacker() != null && duelists.getAttacker().getBonus().popFlag(Flag.NOEFFECT))
-			) return false;
+			if ((duelists.getDefender() != null && (duelists.getDefender().isDuelling() || duelists.getDefender().getBonus().popFlag(Flag.NOEFFECT)))
+				|| (duelists.getAttacker() != null && (duelists.getAttacker().isDuelling() || duelists.getAttacker().getBonus().popFlag(Flag.NOEFFECT)))
+			) return;
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, duelists, channel));
 			for (Equipment e : activator.getLinkedTo()) {
@@ -2418,10 +2424,8 @@ public class Shoukan extends GlobalGame {
 					applyEffect(trigger, e, index, side);
 			}
 
-			return postCombat();
+			postCombat();
 		}
-
-		return false;
 	}
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side) {
