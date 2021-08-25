@@ -29,6 +29,7 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.records.CompletionState;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -546,7 +547,7 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 
 		try {
-			return ((BigDecimal) q.getSingleResult()).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+			return Helper.getOr(q.getSingleResult(), BigDecimal.valueOf(0)).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
 		} catch (NoResultException e) {
 			return 0;
 		} finally {
