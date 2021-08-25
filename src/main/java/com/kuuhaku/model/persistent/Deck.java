@@ -193,7 +193,11 @@ public class Deck {
 	}
 
 	public List<Drawable> getDrawables() {
-		return ListUtils.union(ListUtils.union(champions, equipments), fields);
+		List<Drawable> out = new ArrayList<>(champions);
+		out.addAll(equipments);
+		out.addAll(fields);
+
+		return out;
 	}
 
 	public List<Integer> getDestinyDraw() {
