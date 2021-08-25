@@ -3088,4 +3088,12 @@ public class Helper {
 	public static boolean notNull(Object... objs) {
 		return Arrays.stream(objs).allMatch(Objects::nonNull);
 	}
+
+	public static <T> boolean contains(Collection<T> col, T... elem) {
+		for (T t : col) {
+			if (t.equals(elem)) return true;
+		}
+
+		return false;
+	}
 }
