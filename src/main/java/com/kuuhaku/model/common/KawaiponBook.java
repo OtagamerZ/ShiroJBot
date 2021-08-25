@@ -401,6 +401,9 @@ public class KawaiponBook {
 			return bg;
 		});
 
+		//noinspection ResultOfMethodCallIgnored
+		kp.getCards();
+		kp.getDeck();
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -413,12 +416,7 @@ public class KawaiponBook {
 				List<Drawable> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Drawable d = chunk.get(i);
-					boolean has = kp.getCard(d.getCard(), false) != null;
-
-					Deck dk = kp.getDeck();
-					if (!has) has = dk.getChampion(d.getCard()) != null;
-					if (!has) has = dk.getEquipment(d.getCard()) != null;
-					if (!has) has = dk.getField(d.getCard()) != null;
+					boolean has = kp.hasCard(d.getCard(), false);
 
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
