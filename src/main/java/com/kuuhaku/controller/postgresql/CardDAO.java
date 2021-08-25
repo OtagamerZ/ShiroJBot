@@ -1120,6 +1120,46 @@ public class CardDAO {
 		}
 	}
 
+	public static boolean hasCard(String id, String card) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT count(1) > 0 AS has
+					FROM (
+				SELECT kc.card_id
+				FROM kawaiponcard kc
+				WHERE kc.kawaipon_id = :id
+				UNION ALL
+				SELECT c.card_id
+				FROM deck d
+					  INNER JOIN deck_champion dc on d.id = dc.deck_id
+					  INNER JOIN champion c on c.id = dc.champions_id
+				WHERE d.kawaipon_id = :id
+				UNION ALL
+				SELECT e.card_id
+				FROM deck d
+					  INNER JOIN deck_equipment de on d.id = de.deck_id
+					  INNER JOIN equipment e on e.id = de.equipments_id
+				WHERE d.kawaipon_id = :id
+				UNION ALL
+				SELECT f.card_id
+				FROM deck d
+					  INNER JOIN deck_field df on d.id = df.deck_id
+					  INNER JOIN field f on f.id = df.fields_id
+				WHERE d.kawaipon_id = :id
+				) x
+					WHERE x.card_id = :card
+				""");
+		q.setParameter("id", id);
+		q.setParameter("card", card);
+
+		try {
+			return (boolean) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static CardType identifyType(String name) {
 		if (getField(name) != null) return CardType.FIELD;
 		else if (getEquipment(name) != null) return CardType.EVOGEAR;
