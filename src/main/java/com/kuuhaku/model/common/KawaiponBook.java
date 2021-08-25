@@ -125,7 +125,7 @@ public class KawaiponBook {
 
 				g.dispose();
 
-				act.addSignature(finalC, row);
+				act.addSignature(finalC, bi);
 			});
 		}
 
@@ -234,7 +234,7 @@ public class KawaiponBook {
 
 				g.dispose();
 
-				act.addSignature(finalC, row);
+				act.addSignature(finalC, bi);
 			});
 		}
 
@@ -343,7 +343,7 @@ public class KawaiponBook {
 
 				g.dispose();
 
-				act.addSignature(finalC, row);
+				act.addSignature(finalC, bi);
 			});
 		}
 
@@ -436,7 +436,7 @@ public class KawaiponBook {
 
 				g.dispose();
 
-				act.addSignature(finalC, row);
+				act.addSignature(finalC, bi);
 			});
 		}
 
