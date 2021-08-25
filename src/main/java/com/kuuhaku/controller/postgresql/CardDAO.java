@@ -1150,7 +1150,7 @@ public class CardDAO {
 		q.setParameter("id", id);
 
 		try {
-			return Set.copyOf((Set<String>) q.getResultList());
+			return Set.copyOf((List<String>) q.getResultList());
 		} finally {
 			em.close();
 		}
