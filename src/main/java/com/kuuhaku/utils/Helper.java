@@ -2295,7 +2295,7 @@ public class Helper {
 		return text.replace("%user%", author.getName())
 				.replace("%guild%", guild.getName())
 				.replace("%count%", String.valueOf(guild.getMemberCount()))
-				.replace("%created%", TIMESTAMP.formatted(author.getTimeCreated()));
+				.replace("%created%", TIMESTAMP.formatted(author.getTimeCreated().toEpochSecond()));
 	}
 
 	public static boolean isPureMention(String msg) {
