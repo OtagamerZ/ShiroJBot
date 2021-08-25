@@ -99,7 +99,7 @@ public class CustomAnswerDAO {
 	public static List<CustomAnswer> getCAByGuild(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE guildId = :guild", CustomAnswer.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE guildId = :guild ORDER BY c.id", CustomAnswer.class);
 		q.setParameter("guild", id);
 
 		try {
