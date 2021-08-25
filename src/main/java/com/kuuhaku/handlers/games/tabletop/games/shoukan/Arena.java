@@ -156,7 +156,7 @@ public class Arena {
 					if (key == Side.TOP)
 						Profile.printCenteredString(name, 1253, 499, 822, g2d);
 					else
-						Profile.printCenteredString(name, 1253, 499, 1003, g2d);
+						Profile.printCenteredString(name, 1253, 499, 998, g2d);
 
 					g2d.setBackground(Color.BLACK);
 					BufferedImage broken = Helper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
