@@ -414,9 +414,11 @@ public class KawaiponBook {
 				for (int i = 0; i < chunk.size(); i++) {
 					Drawable d = chunk.get(i);
 					boolean has = kp.getCard(d.getCard(), false) != null;
-					if (!has) has = kp.getDeck().getChampion(d.getCard()) != null;
-					if (!has) has = kp.getDeck().getEquipment(d.getCard()) != null;
-					if (!has) has = kp.getDeck().getField(d.getCard()) != null;
+
+					Deck dk = kp.getDeck();
+					if (!has) has = dk.getChampion(d.getCard()) != null;
+					if (!has) has = dk.getEquipment(d.getCard()) != null;
+					if (!has) has = dk.getField(d.getCard()) != null;
 
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
