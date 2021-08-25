@@ -651,7 +651,8 @@ public class Champion implements Drawable, Cloneable {
 				onDuelEnd.accept(game.getSideById(acc.getUid()), game);
 			onDuelEnd = null;
 		}
-		return nemesis == null;
+
+		return nemesis != null;
 	}
 
 	public boolean isStasis() {
