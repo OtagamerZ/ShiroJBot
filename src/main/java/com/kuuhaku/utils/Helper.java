@@ -2294,7 +2294,8 @@ public class Helper {
 	public static String replaceTags(String text, User author, Guild guild) {
 		return text.replace("%user%", author.getName())
 				.replace("%guild%", guild.getName())
-				.replace("%count%", String.valueOf(guild.getMemberCount()));
+				.replace("%count%", String.valueOf(guild.getMemberCount()))
+				.replace("%created%", TIMESTAMP.formatted(author.getTimeCreated()));
 	}
 
 	public static boolean isPureMention(String msg) {
@@ -3089,6 +3090,7 @@ public class Helper {
 		return Arrays.stream(objs).allMatch(Objects::nonNull);
 	}
 
+	@SafeVarargs
 	public static <T> boolean contains(Collection<T> col, T... elem) {
 		for (T t : col) {
 			if (t.equals(elem)) return true;
