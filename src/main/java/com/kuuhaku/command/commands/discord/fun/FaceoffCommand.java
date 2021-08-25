@@ -89,6 +89,7 @@ public class FaceoffCommand implements Executable {
 					private final AtomicBoolean win = new AtomicBoolean();
 					private ScheduledFuture<?> timeout = Main.getInfo().getScheduler().schedule(() -> {
 								if (!win.get()) {
+									win.set(true);
 									success.accept(null);
 									channel.sendMessage(":gun: BANG! Você perdeu..").complete();
 								}
@@ -111,11 +112,11 @@ public class FaceoffCommand implements Executable {
 
 						if (!win.get()) {
 							win.set(true);
-							long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
 							success.accept(null);
 							timeout.cancel(true);
 							timeout = null;
 
+							long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
 							int prize = (int) Math.round(min * Helper.rng(500f * (level + 1)) / react);
 							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 							acc.addCredit(prize, this.getClass());
