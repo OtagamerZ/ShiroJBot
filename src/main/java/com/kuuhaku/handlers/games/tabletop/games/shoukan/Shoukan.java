@@ -84,7 +84,6 @@ public class Shoukan extends GlobalGame {
 	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
-	private final boolean daily;
 	private final boolean team;
 	private final boolean record;
 	private final Map<Side, Map<Race, Integer>> summoned = Map.of(
@@ -109,7 +108,6 @@ public class Shoukan extends GlobalGame {
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
-		this.daily = daily;
 		this.team = players.length == 4;
 		this.record = record;
 
@@ -1878,20 +1876,6 @@ public class Shoukan extends GlobalGame {
 				slots = arena.getSlots().get(getCurrentSide());
 				decreaseSlotLockTime(getCurrentSide());
 
-				if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
-				for (int i = 0; i < slots.size(); i++) {
-					Champion c = slots.get(i).getTop();
-					if (c != null) {
-						if (c.isStasis()) c.reduceStasis();
-						else if (c.isStunned()) c.reduceStun();
-						else if (c.isSleeping()) c.reduceSleep();
-
-						if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
-							|| makeFusion(h.get())
-						) return;
-					}
-				}
-
 				h.get().addMana(h.get().getManaPerTurn());
 				if (h.get().getCombo().getLeft() == Race.DEMON) {
 					Hand op = hands.get(getNextSide());
@@ -1908,6 +1892,20 @@ public class Shoukan extends GlobalGame {
 					case ELF -> {
 						if (getRound() > 1 && getRound() - (h.get().getSide() == Side.TOP ? 1 : 0) % 3 == 0)
 							h.get().addMana(1);
+					}
+				}
+
+				if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
+				for (int i = 0; i < slots.size(); i++) {
+					Champion c = slots.get(i).getTop();
+					if (c != null) {
+						if (c.isStasis()) c.reduceStasis();
+						else if (c.isStunned()) c.reduceStun();
+						else if (c.isSleeping()) c.reduceSleep();
+
+						if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
+							|| makeFusion(h.get())
+						) return;
 					}
 				}
 
@@ -2083,20 +2081,6 @@ public class Shoukan extends GlobalGame {
 					slots = arena.getSlots().get(getCurrentSide());
 					decreaseSlotLockTime(getCurrentSide());
 
-					if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
-					for (int i = 0; i < slots.size(); i++) {
-						Champion c = slots.get(i).getTop();
-						if (c != null) {
-							if (c.isStasis()) c.reduceStasis();
-							else if (c.isStunned()) c.reduceStun();
-							else if (c.isSleeping()) c.reduceSleep();
-
-							if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
-								|| makeFusion(h.get())
-							) return;
-						}
-					}
-
 					h.get().addMana(h.get().getManaPerTurn());
 					if (h.get().getCombo().getLeft() == Race.DEMON) {
 						Hand op = hands.get(getNextSide());
@@ -2113,6 +2097,20 @@ public class Shoukan extends GlobalGame {
 						case ELF -> {
 							if (getRound() > 1 && getRound() - (h.get().getSide() == Side.TOP ? 1 : 0) % 3 == 0)
 								h.get().addMana(1);
+						}
+					}
+
+					if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
+					for (int i = 0; i < slots.size(); i++) {
+						Champion c = slots.get(i).getTop();
+						if (c != null) {
+							if (c.isStasis()) c.reduceStasis();
+							else if (c.isStunned()) c.reduceStun();
+							else if (c.isSleeping()) c.reduceSleep();
+
+							if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
+								|| makeFusion(h.get())
+							) return;
 						}
 					}
 
