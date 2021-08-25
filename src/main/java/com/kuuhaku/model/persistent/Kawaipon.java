@@ -59,7 +59,11 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public KawaiponCard getCard(Card card, boolean foil) {
-		return cards.stream().filter(k -> k.getCard().equals(card) && k.isFoil() == foil).findFirst().orElse(null);
+		for (KawaiponCard kawaiponCard : cards) {
+			if (kawaiponCard.getCard().equals(card) && kawaiponCard.isFoil() == foil) return kawaiponCard;
+		}
+
+		return null;
 	}
 
 	public Set<KawaiponCard> getCards() {

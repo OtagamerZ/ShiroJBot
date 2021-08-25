@@ -60,7 +60,7 @@ public class SayCommand implements Executable {
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 		try {
 			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, argsAsText);
+			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, Helper.replaceTags(argsAsText, author, guild));
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 					.setAllowedMentions(AllowedMentions.none())
@@ -90,7 +90,7 @@ public class SayCommand implements Executable {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException e) {
-			channel.sendMessage(argsAsText).allowedMentions(List.of()).queue();
+			channel.sendMessage(Helper.replaceTags(argsAsText, author, guild)).allowedMentions(List.of()).queue();
 			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
 				message.delete().queue(null, Helper::doNothing);
 		}
