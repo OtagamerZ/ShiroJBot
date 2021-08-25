@@ -115,6 +115,11 @@ public class Kawaipon implements Cloneable {
 		this.activeDeck = i;
 	}
 
+	public boolean hasCard(Card c) {
+		return getCards().stream().anyMatch(kc -> !kc.isFoil() && kc.getCard().equals(c))
+			   || getDeck().getDrawables().stream().anyMatch(d -> d.getCard().equals(c));
+	}
+
 	public Kawaipon copy() {
 		try {
 			return (Kawaipon) super.clone();

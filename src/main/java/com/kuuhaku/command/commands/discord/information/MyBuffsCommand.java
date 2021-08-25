@@ -62,13 +62,13 @@ public class MyBuffsCommand implements Executable, Slashed {
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + Helper.roundToString(WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100, 0) + "% XP ganho", false);
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)
+		if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 1)
 			eb.addField("Coleção de cartas (100%)", "+100% XP ganho", false);
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.75)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.75)
 			eb.addField("Coleção de cartas (75%)", "+75% XP ganho", false);
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.5)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.5)
 			eb.addField("Coleção de cartas (50%)", "+50% XP ganho", false);
-		else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.25)
+		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.25)
 			eb.addField("Coleção de cartas (25%)", "+25% XP ganho", false);
 
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
