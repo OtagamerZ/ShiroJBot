@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -401,9 +402,8 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		//noinspection ResultOfMethodCallIgnored
-		kp.getCards();
-		kp.getDeck();
+		Set<KawaiponCard> kps = kp.getCards();
+		Deck dk = kp.getDeck();
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -416,7 +416,10 @@ public class KawaiponBook {
 				List<Drawable> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Drawable d = chunk.get(i);
-					boolean has = kp.hasCard(d.getCard(), false);
+					boolean has = kps.contains(new KawaiponCard(d.getCard(), false))
+								  || dk.getChampion(d.getCard()) != null
+								  || dk.getEquipment(d.getCard()) != null
+								  || dk.getField(d.getCard()) != null;
 
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
