@@ -87,7 +87,11 @@ public class Deck {
 	}
 
 	public Champion getChampion(Card card) {
-		return champions.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
+		for (Champion champion : champions) {
+			if (champion.getCard().equals(card)) return champion;
+		}
+
+		return null;
 	}
 
 	public List<Champion> getChampions() {
@@ -115,7 +119,11 @@ public class Deck {
 	}
 
 	public Equipment getEquipment(Card card) {
-		return equipments.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
+		for (Equipment equipment : equipments) {
+			if (equipment.getCard().equals(card)) return equipment;
+		}
+
+		return null;
 	}
 
 	public List<Equipment> getEquipments() {
@@ -160,7 +168,11 @@ public class Deck {
 	}
 
 	public Field getField(Card card) {
-		return fields.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
+		for (Field field : fields) {
+			if (field.getCard().equals(card)) return field;
+		}
+
+		return null;
 	}
 
 	public List<Field> getFields() {
