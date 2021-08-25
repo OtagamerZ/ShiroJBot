@@ -240,7 +240,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (p.test(ca)) {
 				if (message.getReferencedMessage() != null)
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild), message.getReferencedMessage());
+					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild), message.getReferencedMessage());
 				else
 					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild));
 			}
