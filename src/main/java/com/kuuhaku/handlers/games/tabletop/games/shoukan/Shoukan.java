@@ -2366,17 +2366,20 @@ public class Shoukan extends GlobalGame {
 			Iterator<PersistentEffect> i = persistentEffects.iterator();
 			for (PersistentEffect e = i.next(); i.hasNext(); e = i.next()) {
 				if (e.getTarget() == null || e.getTarget() == to) {
-					if (Set.of(BEFORE_TURN, AFTER_TURN).contains(trigger) && !Helper.contains(e.getTriggers(), BEFORE_TURN, AFTER_TURN))
+					if (trigger == AFTER_TURN && e.getTurns() > 0) {
 						e.decreaseTurn();
+					}
 
 					if (e.getTriggers().contains(trigger)) {
-						e.decreaseTurn();
-						e.getEffect().accept(to, index, e.getTurns() == 0);
+						if (e.getLimit() > 0)
+							e.decreaseLimit();
+
+						e.getEffect().accept(to, index, e.getTurns() == 0 || e.getLimit() == 0);
 					}
 				}
 
-				if (e.getTurns() <= 0) {
-					channel.sendMessage(":timer: | O efeito da carta " + e.getSource() + " expirou!").queue();
+				if (e.getTurns() == 0 || e.getLimit() == 0) {
+					channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
 					i.remove();
 				}
 			}
