@@ -122,6 +122,9 @@ public class Equipment implements Drawable, Cloneable {
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
+			if (charm != null)
+				g2d.drawImage(charm.getIcon(), 135, 58, null);
+
 			BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
 			if (star != null)
 				for (int i = 0; i < getTier(); i++)
