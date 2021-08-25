@@ -1120,12 +1120,11 @@ public class CardDAO {
 		}
 	}
 
-	public static boolean hasCard(String id, String card) {
+	@SuppressWarnings("unchecked")
+	public static Set<String> getCollectedCardNames(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT count(1) > 0 AS has
-					FROM (
 				SELECT kc.card_id
 				FROM kawaiponcard kc
 				WHERE kc.kawaipon_id = :id
@@ -1147,14 +1146,11 @@ public class CardDAO {
 					  INNER JOIN deck_field df on d.id = df.deck_id
 					  INNER JOIN field f on f.id = df.fields_id
 				WHERE d.kawaipon_id = :id
-				) x
-					WHERE x.card_id = :card
 				""");
 		q.setParameter("id", id);
-		q.setParameter("card", card);
 
 		try {
-			return (boolean) q.getSingleResult();
+			return Set.copyOf((Set<String>) q.getResultList());
 		} finally {
 			em.close();
 		}

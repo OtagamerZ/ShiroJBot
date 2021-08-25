@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -401,6 +402,7 @@ public class KawaiponBook {
 			return bg;
 		});
 
+		Set<String> allCards = CardDAO.getCollectedCardNames(acc.getUid());
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -413,7 +415,7 @@ public class KawaiponBook {
 				List<Drawable> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Drawable d = chunk.get(i);
-					boolean has = CardDAO.hasCard(acc.getUid(), d.getCard().getId());
+					boolean has = allCards.contains(d.getCard().getId());
 
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
