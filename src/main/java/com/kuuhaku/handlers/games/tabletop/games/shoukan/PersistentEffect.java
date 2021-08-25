@@ -33,8 +33,9 @@ public class PersistentEffect {
 	private final Side target;
 	private final boolean debuff;
 	private int turns;
+	private int limit;
 
-	public PersistentEffect(String source, EffectConsumer effect, Side target, boolean debuff, int turns, EffectTrigger... triggers) {
+	public PersistentEffect(String source, EffectConsumer effect, Side target, boolean debuff, int turns, int limit, EffectTrigger... triggers) {
 		this.source = source;
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
@@ -73,6 +74,18 @@ public class PersistentEffect {
 
 	public void setTurns(int turns) {
 		this.turns = turns;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void decreaseLimit() {
+		this.limit--;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 	@Override
