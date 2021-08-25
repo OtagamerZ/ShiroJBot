@@ -131,6 +131,14 @@ public class KawaiponsCommand implements Executable {
 
                                 send(author, channel, m, cards, "Equipamentos evogear", null);
                                 return;
+                            } else if (Helper.equalsAny(args[0], "campo", "campos", "field", "fields")) {
+                                List<Drawable> cardList = CardDAO.getAllFields().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+
+                                KawaiponBook kb = new KawaiponBook();
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Campos Shoukan", false);
+
+                                send(author, channel, m, cards, "Equipamentos evogear", null);
+                                return;
                             } else if (Helper.equalsAny(args[0], "fusao", "fusion", "fusions", "fusoes", "evolucao", "evolution", "evolucoes", "evolutions")) {
                                 List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 

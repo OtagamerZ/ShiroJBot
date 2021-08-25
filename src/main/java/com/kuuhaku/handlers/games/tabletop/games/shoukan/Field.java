@@ -99,7 +99,7 @@ public class Field implements Drawable, Cloneable {
 					Race.DEMON, "#d0021b",
 					Race.UNDEAD, "#fd88fd"
 			);
-			int y = 80;
+			int y = 287;
 			int i = 0;
 
 			List<Map.Entry<String, Object>> races = new ArrayList<>(getModifiers().entrySet());
