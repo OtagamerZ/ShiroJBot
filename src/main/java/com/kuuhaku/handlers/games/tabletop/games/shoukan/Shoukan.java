@@ -53,7 +53,6 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.util.CollectionUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -96,7 +95,7 @@ public class Shoukan extends GlobalGame {
 			Side.TOP, new int[5],
 			Side.BOTTOM, new int[5]
 	);
-	private final List<EffectOverTime> eot = new ArrayList<>();
+	private final Set<PersistentEffect> persistentEffects = new HashSet<>();
 
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
@@ -268,7 +267,7 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					if (applyEot(ON_SWITCH, getCurrentSide(), index)) return;
+					if (applyPersistentEffects(ON_SWITCH, getCurrentSide(), index)) return;
 					if (applyEffect(ON_SWITCH, c, index, getCurrentSide(), Pair.of(c, index), null)) return;
 
 					String msg;
@@ -502,7 +501,7 @@ public class Shoukan extends GlobalGame {
 					}
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
-					if (applyEot(ON_EQUIP, getCurrentSide(), toEquip)) return;
+					if (applyPersistentEffects(ON_EQUIP, getCurrentSide(), toEquip)) return;
 					if (applyEffect(ON_EQUIP, t, toEquip, getCurrentSide(), Pair.of(t, toEquip), null)) return;
 
 					if (e.getCharm() != null) {
@@ -589,7 +588,7 @@ public class Shoukan extends GlobalGame {
 					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
-					if (applyEot(ON_SUMMON, getCurrentSide(), dest)) return;
+					if (applyPersistentEffects(ON_SUMMON, getCurrentSide(), dest)) return;
 					if (!c.isFlipped() && applyEffect(ON_SUMMON, c, dest, getCurrentSide(), Pair.of(c, dest), null))
 						return;
 
@@ -815,7 +814,7 @@ public class Shoukan extends GlobalGame {
 
 		/* PRE-ATTACK */
 		{
-			if (applyEot(ON_ATTACK, atkr.getLeft(), atkr.getRight())) return;
+			if (applyPersistentEffects(ON_ATTACK, atkr.getLeft(), atkr.getRight())) return;
 			if (atkr.getRight() > 0) {
 				Champion c = arena.getSlots().get(atkr.getLeft()).get(atkr.getRight() - 1).getTop();
 				if (c != null && applyEffect(ATTACK_ASSIST, c, atkr.getRight(), atkr.getLeft(), attacker, defender))
@@ -832,7 +831,7 @@ public class Shoukan extends GlobalGame {
 				yours.resetAttribs();
 				his.resetAttribs();
 
-				if (applyEot(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
+				if (applyPersistentEffects(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
 				if (applyEffect(POST_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
@@ -842,7 +841,7 @@ public class Shoukan extends GlobalGame {
 
 		/* PRE-DEFENSE */
 		{
-			if (applyEot(ON_DEFEND, defr.getLeft(), defr.getRight())) return;
+			if (applyPersistentEffects(ON_DEFEND, defr.getLeft(), defr.getRight())) return;
 			if (defr.getRight() > 0) {
 				Champion c = arena.getSlots().get(defr.getLeft()).get(defr.getRight() - 1).getTop();
 				if (c != null && applyEffect(DEFENSE_ASSIST, c, defr.getRight(), defr.getLeft(), attacker, defender))
@@ -859,7 +858,7 @@ public class Shoukan extends GlobalGame {
 				yours.resetAttribs();
 				his.resetAttribs();
 
-				if (applyEot(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
+				if (applyPersistentEffects(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(POST_DEFENSE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
@@ -872,7 +871,7 @@ public class Shoukan extends GlobalGame {
 		if (his.isDefending()) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
-				if (applyEot(ON_FLIP, defr.getLeft(), defr.getRight())) return;
+				if (applyPersistentEffects(ON_FLIP, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(ON_FLIP, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 			}
 
@@ -894,18 +893,18 @@ public class Shoukan extends GlobalGame {
 		/* ATTACK SUCCESS */
 		if (yPower > hPower || (yPower == hPower && yDodge)) {
 			if (hDodge) {
-				if (applyEot(ON_MISS, atkr.getLeft(), atkr.getRight())) return;
+				if (applyPersistentEffects(ON_MISS, atkr.getLeft(), atkr.getRight())) return;
 				if (applyEffect(ON_MISS, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-				if (applyEot(ON_DODGE, defr.getLeft(), defr.getRight())) return;
+				if (applyPersistentEffects(ON_DODGE, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(ON_DODGE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
 			} else {
-				if (applyEot(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
+				if (applyPersistentEffects(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
 				if (applyEffect(POST_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-				if (applyEot(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
+				if (applyPersistentEffects(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				float demonFac = 1 - op.getMitigation();
@@ -949,7 +948,7 @@ public class Shoukan extends GlobalGame {
 
 				killCard(defr.getLeft(), defr.getRight());
 
-				if (applyEot(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
+				if (applyPersistentEffects(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				if (!postCombat()) {
@@ -973,10 +972,10 @@ public class Shoukan extends GlobalGame {
 
 		/* ATTACK FAILED */
 		else if (yPower < hPower || hDodge) {
-			if (applyEot(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
+			if (applyPersistentEffects(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
 			if (applyEffect(ON_SUICIDE, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-			if (applyEot(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
+			if (applyPersistentEffects(POST_DEFENSE, defr.getLeft(), defr.getRight())) return;
 			if (applyEffect(POST_DEFENSE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			float demonFac = 1 - you.getMitigation();
@@ -1039,10 +1038,10 @@ public class Shoukan extends GlobalGame {
 
 		/* ATTACK CLASHED */
 		else {
-			if (applyEot(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
+			if (applyPersistentEffects(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
 			if (applyEffect(ON_SUICIDE, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
-			if (applyEot(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
+			if (applyPersistentEffects(BEFORE_DEATH, defr.getLeft(), defr.getRight())) return;
 			if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			if (yours.isDecoy() && his.isDecoy()) {
@@ -1102,7 +1101,7 @@ public class Shoukan extends GlobalGame {
 			killCard(atkr.getLeft(), atkr.getRight());
 			killCard(defr.getLeft(), defr.getRight());
 
-			if (applyEot(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
+			if (applyPersistentEffects(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
 			if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			if (!postCombat()) {
@@ -1179,7 +1178,7 @@ public class Shoukan extends GlobalGame {
 			if (sc != null) {
 				aFusion.bind(h);
 				sc.setTop(aFusion);
-				if (applyEot(ON_SUMMON, getCurrentSide(), sc.getIndex())) return true;
+				if (applyPersistentEffects(ON_SUMMON, getCurrentSide(), sc.getIndex())) return true;
 				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), getCurrentSide(), Pair.of(aFusion, sc.getIndex()), null))
 					return true;
 
@@ -1222,7 +1221,7 @@ public class Shoukan extends GlobalGame {
 			c.getBonus().setDef(target, 0);
 		}
 
-		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
@@ -1272,7 +1271,7 @@ public class Shoukan extends GlobalGame {
 				c.getBonus().setDef(target, 0);
 			}
 
-			if (applyEot(ON_DESTROY, to, target)) return;
+			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
@@ -1314,7 +1313,7 @@ public class Shoukan extends GlobalGame {
 			c.getBonus().setDef(target, 0);
 		}
 
-		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
@@ -1345,7 +1344,7 @@ public class Shoukan extends GlobalGame {
 			c.getBonus().setDef(target, 0);
 		}
 
-		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
@@ -1395,7 +1394,7 @@ public class Shoukan extends GlobalGame {
 				c.getBonus().setDef(target, 0);
 			}
 
-			if (applyEot(ON_DESTROY, to, target)) return;
+			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
@@ -1437,7 +1436,7 @@ public class Shoukan extends GlobalGame {
 			c.getBonus().setDef(target, 0);
 		}
 
-		if (applyEot(ON_DESTROY, to, target)) return;
+		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 		ch.reset();
@@ -1480,7 +1479,7 @@ public class Shoukan extends GlobalGame {
 				c.getBonus().setDef(target, 0);
 			}
 
-			if (applyEot(ON_DESTROY, to, target)) return;
+			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
 
 			ch.reset();
@@ -1837,7 +1836,7 @@ public class Shoukan extends GlobalGame {
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
 
-				if (applyEot(AFTER_TURN, getCurrentSide(), -1)) return;
+				if (applyPersistentEffects(AFTER_TURN, getCurrentSide(), -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
@@ -1879,7 +1878,7 @@ public class Shoukan extends GlobalGame {
 				slots = arena.getSlots().get(getCurrentSide());
 				decreaseSlotLockTime(getCurrentSide());
 
-				if (applyEot(BEFORE_TURN, getCurrentSide(), -1)) return;
+				if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
@@ -2042,7 +2041,7 @@ public class Shoukan extends GlobalGame {
 					h.get().getCards().removeIf(d -> !d.isAvailable());
 					List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
 
-					if (applyEot(AFTER_TURN, getCurrentSide(), -1)) return;
+					if (applyPersistentEffects(AFTER_TURN, getCurrentSide(), -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
@@ -2084,7 +2083,7 @@ public class Shoukan extends GlobalGame {
 					slots = arena.getSlots().get(getCurrentSide());
 					decreaseSlotLockTime(getCurrentSide());
 
-					if (applyEot(BEFORE_TURN, getCurrentSide(), -1)) return;
+					if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
@@ -2358,37 +2357,23 @@ public class Shoukan extends GlobalGame {
 		return discardBatch;
 	}
 
-	public List<EffectOverTime> getEot() {
-		return eot;
+	public Set<PersistentEffect> getPersistentEffects() {
+		return persistentEffects;
 	}
 
-	public void removeEot(String name) {
-		eot.removeIf(e -> e.getSource().equalsIgnoreCase(name));
-	}
-
-	public boolean applyEot(EffectTrigger trigger, Side to, int index) {
-		if (eot.size() > 0) {
-			Iterator<EffectOverTime> i = eot.iterator();
-			while (i.hasNext()) {
-				EffectOverTime effect = i.next();
-
-				if (effect.getTarget() == null || effect.getTarget() == to) {
-					if (CollectionUtils.containsAny(effect.getTriggers(), Set.of(BEFORE_TURN, AFTER_TURN))) {
-						if (effect.getTriggers().contains(trigger)) {
-							effect.getEffect().accept(to, index, effect.getTurns() == 1);
-							effect.decreaseTurn();
-						}
-					} else {
-						if (effect.getTriggers().contains(trigger))
-							effect.getEffect().accept(to, index, effect.getTurns() == 1);
-
-						if (trigger == AFTER_TURN)
-							effect.decreaseTurn();
+	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
+		if (persistentEffects.size() > 0) {
+			Iterator<PersistentEffect> i = persistentEffects.iterator();
+			for (PersistentEffect e = i.next(); i.hasNext(); e = i.next()) {
+				if (e.getTarget() == null || e.getTarget() == to) {
+					if (e.getTriggers().contains(trigger)) {
+						e.decreaseTurn();
+						e.getEffect().accept(to, index, e.getTurns() == 0);
 					}
 				}
 
-				if (effect.getTurns() <= 0) {
-					channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
+				if (e.getTurns() <= 0) {
+					channel.sendMessage(":timer: | O efeito da carta " + e.getSource() + " expirou!").queue();
 					i.remove();
 				}
 			}
@@ -2518,7 +2503,7 @@ public class Shoukan extends GlobalGame {
 		banishCard(ep.getSide(), index, false);
 		arena.getSlots().get(ep.getSide()).get(index).setTop(nc);
 		applyEffect(ON_SUMMON, nc, index, ep.getSide(), ep.getDuelists());
-		applyEot(ON_SUMMON, ep.getSide(), index);
+		applyPersistentEffects(ON_SUMMON, ep.getSide(), index);
 		return nc;
 	}
 
