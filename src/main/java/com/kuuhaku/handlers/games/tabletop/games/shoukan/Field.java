@@ -146,6 +146,42 @@ public class Field implements Drawable, Cloneable {
 		return card;
 	}
 
+	@Override
+	public void bind(Hand h) {
+		this.game = h.getGame();
+		this.acc = h.getAcc();
+	}
+
+	@Override
+	public Shoukan getGame() {
+		return game;
+	}
+
+	@Override
+	public void setGame(Shoukan game) {
+		this.game = game;
+	}
+
+	@Override
+	public Account getAcc() {
+		return acc;
+	}
+
+	@Override
+	public void setAcc(Account acc) {
+		this.acc = acc;
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return available;
+	}
+
+	@Override
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+
 	public String getField() {
 		return card.getId();
 	}
@@ -172,51 +208,6 @@ public class Field implements Drawable, Cloneable {
 
 	public void setEffectOnly(boolean effectOnly) {
 		this.effectOnly = effectOnly;
-	}
-
-	@Override
-	public boolean isFlipped() {
-		return false;
-	}
-
-	@Override
-	public void setFlipped(boolean flipped) {
-	}
-
-	@Override
-	public boolean isAvailable() {
-		return available;
-	}
-
-	@Override
-	public void setAvailable(boolean available) {
-		this.available = available;
-	}
-
-	@Override
-	public Shoukan getGame() {
-		return game;
-	}
-
-	@Override
-	public void setGame(Shoukan game) {
-		this.game = game;
-	}
-
-	@Override
-	public Account getAcc() {
-		return acc;
-	}
-
-	@Override
-	public void setAcc(Account acc) {
-		this.acc = acc;
-	}
-
-	@Override
-	public void bind(Hand h) {
-		this.game = h.getGame();
-		this.acc = h.getAcc();
 	}
 
 	@Override
