@@ -1124,29 +1124,7 @@ public class CardDAO {
 	public static Set<String> getCollectedCardNames(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT kc.card_id
-				FROM kawaiponcard kc
-				WHERE kc.kawaipon_id = :id
-				UNION ALL
-				SELECT c.card_id
-				FROM deck d
-					  INNER JOIN deck_champion dc on d.id = dc.deck_id
-					  INNER JOIN champion c on c.id = dc.champions_id
-				WHERE d.kawaipon_id = :id
-				UNION ALL
-				SELECT e.card_id
-				FROM deck d
-					  INNER JOIN deck_equipment de on d.id = de.deck_id
-					  INNER JOIN equipment e on e.id = de.equipments_id
-				WHERE d.kawaipon_id = :id
-				UNION ALL
-				SELECT f.card_id
-				FROM deck d
-					  INNER JOIN deck_field df on d.id = df.deck_id
-					  INNER JOIN field f on f.id = df.fields_id
-				WHERE d.kawaipon_id = :id
-				""");
+		Query q = em.createNativeQuery("SELECT kc.card_id FROM kawaiponcard kc WHERE kc.kawaipon_id = :id");
 		q.setParameter("id", id);
 
 		try {
