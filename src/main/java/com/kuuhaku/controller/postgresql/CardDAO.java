@@ -33,6 +33,8 @@ import com.kuuhaku.model.records.CompletionState;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,7 +66,7 @@ public class CardDAO {
 		em.close();
 	}
 
-	public static long getTotalCards() {
+	public static long getCardCount() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT COUNT(c.id) FROM Card c");
@@ -153,7 +155,7 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 		q.setParameter("foil", foil);
 
-		long total = totalCards(anime);
+		long total = getTotalCards(anime);
 		try {
 			return total > 0 && ((Number) q.getSingleResult()).intValue() >= total;
 		} catch (NoResultException e) {
@@ -468,7 +470,7 @@ public class CardDAO {
 		}
 	}
 
-	public static long totalCards() {
+	public static long getTotalCards() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity NOT IN :blacklist AND anime.name IN :animes", Long.class);
@@ -482,7 +484,7 @@ public class CardDAO {
 		}
 	}
 
-	public static long totalCards(String anime) {
+	public static long getTotalCards(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity NOT IN :blacklist AND anime.name = :anime", Long.class);
@@ -496,7 +498,27 @@ public class CardDAO {
 		}
 	}
 
-	public static long totalCards(KawaiponRarity rarity) {
+	public static double getCollectionProgress(String id, String anime, boolean foil) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q;
+		if (foil)
+			q = em.createNativeQuery("SELECT * FROM \"GetNormalCompletionState\"(:id, :anime)");
+		else
+			q = em.createNativeQuery("SELECT * FROM \"GetFoilCompletionState\"(:id, :anime)");
+		q.setParameter("id", id);
+		q.setParameter("anime", anime);
+
+		try {
+			return ((BigDecimal) q.getSingleResult()).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+		} catch (NoResultException e) {
+			return 0;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static long getTotalCards(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime.name IN :animes", Long.class);

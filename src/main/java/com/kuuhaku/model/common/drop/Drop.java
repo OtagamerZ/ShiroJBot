@@ -51,9 +51,9 @@ public abstract class Drop<P> implements Prize<P> {
 		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];
 		ranked = RankedTier.values()[1 + Helper.rng(RankedTier.values().length - 1, true)];
 		values = new int[]{
-				1 + Helper.rng((int) CardDAO.totalCards(anime.getName()) - 1, false),
+				1 + Helper.rng((int) CardDAO.getTotalCards(anime.getName()) - 1, false),
 				1 + Helper.rng(6, false),
-				1 + Helper.rng((int) CardDAO.totalCards() / 2 - 1, false),
+				1 + Helper.rng((int) CardDAO.getTotalCards() / 2 - 1, false),
 				1 + Helper.rng(MemberDAO.getHighestLevel() / 2 - 1, false)
 		};
 		condition = new ArrayList<>() {{
