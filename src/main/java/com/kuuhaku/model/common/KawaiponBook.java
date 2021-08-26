@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
@@ -34,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -355,25 +353,21 @@ public class KawaiponBook {
 		}
 	}
 
-	public BufferedImage view(List<Drawable> cardList, Account acc, String title, boolean senshi) throws IOException, InterruptedException {
-		Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUid());
-		List<Drawable> cards;
-		if (senshi)
-			cards = cardList.stream()
-					.peek(d -> d.setAcc(acc))
-					.sorted(Comparator
-							.comparing(d -> ((Champion) d).getMana())
+	public BufferedImage view(List<Drawable> cardList, Account acc, String title) throws InterruptedException {
+		List<Drawable> cards = cardList.stream()
+				.peek(d -> d.setAcc(acc))
+				.sorted(Comparator
+						.comparing(d -> {
+							if (d instanceof Champion c) {
+								return c.getMana();
+							} else if (d instanceof Equipment e) {
+								return e.getTier();
+							} else {
+								return 1;
+							}
+						})
 							.reversed()
 							.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-					)
-					.collect(Collectors.toList());
-		else
-			cards = cardList.stream()
-					.peek(d -> d.setAcc(acc))
-					.sorted(Comparator
-							.comparing(d -> ((Equipment) d).getTier())
-							.reversed()
-							.thenComparing(c -> ((Equipment) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 					)
 					.collect(Collectors.toList());
 
