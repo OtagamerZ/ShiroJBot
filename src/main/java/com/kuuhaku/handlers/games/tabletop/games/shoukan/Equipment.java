@@ -86,6 +86,9 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Pair<Integer, Champion> linkedTo = null;
 	private transient int index = -1;
 
+	private transient String altDescription = null;
+	private transient String altEffect = null;
+
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient int altTier = -1;
@@ -316,8 +319,32 @@ public class Equipment implements Drawable, Cloneable {
 		this.parasite = parasite;
 	}
 
+	public String getDescription() {
+		return Helper.getOr(altDescription, description);
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setAltDescription(String altDescription) {
+		this.altDescription = altDescription;
+	}
+
 	public boolean hasEffect() {
-		return effect != null;
+		return Helper.getOr(altEffect, effect) != null;
+	}
+
+	public String getRawEffect() {
+		return effect;
+	}
+
+	public void setRawEffect(String effect) {
+		this.effect = effect;
+	}
+
+	public void setAltEffect(String altEffect) {
+		this.altEffect = altEffect;
 	}
 
 	public void getEffect(EffectParameters ep) {
@@ -325,7 +352,7 @@ public class Equipment implements Drawable, Cloneable {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
-			gs.evaluate(effect);
+			gs.evaluate(Helper.getOr(altEffect, effect));
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
@@ -340,14 +367,10 @@ public class Equipment implements Drawable, Cloneable {
 			gs.setVariable("allyPos", allyPos);
 			gs.setVariable("enemyPos", enemyPos);
 			gs.setVariable("self", this);
-			gs.evaluate(effect);
+			gs.evaluate(Helper.getOr(altEffect, effect));
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
-	}
-
-	public void setEffect(String effect) {
-		this.effect = effect;
 	}
 
 	public void reset() {
@@ -357,6 +380,8 @@ public class Equipment implements Drawable, Cloneable {
 		altAtk = -1;
 		altDef = -1;
 		altTier = -1;
+		altDescription = null;
+		altEffect = null;
 	}
 
 	@Override
