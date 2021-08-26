@@ -137,26 +137,34 @@ public class MemberDAO {
 			q = em.createNativeQuery("""
 					SELECT x.row
 					FROM (
-						SELECT m.uid
-							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row
-						FROM Member m
-						WHERE m.uid IS NOT NULL
-					) x
+							 SELECT m.uid
+								  , row_number() OVER (ORDER BY m.xp DESC) AS row
+							 FROM Member m
+									  INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+												  FROM logs l
+												  WHERE l.uid <> '') l ON l.uid = m.uid
+									  INNER JOIN guildconfig gc ON gc.guildid = m.sid
+							 WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = m.uid)
+						 ) x
 					WHERE x.uid = :mid
 					""");
 		else {
 			q = em.createNativeQuery("""
 					SELECT x.row
 					FROM (
-						SELECT m.uid
-							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row
-						FROM Member m
-						WHERE m.sid = :id
-						AND m.uid IS NOT NULL
-					) x
+							 SELECT m.uid
+								  , row_number() OVER (ORDER BY m.xp DESC) AS row
+							 FROM Member m
+									  INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+												  FROM logs l
+												  WHERE l.uid <> '') l ON l.uid = m.uid
+									  INNER JOIN guildconfig gc ON gc.guildid = m.sid
+							 WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = m.uid)
+							   AND m.sid = :guild
+						 ) x
 					WHERE x.uid = :mid
 					""");
-			q.setParameter("id", gid);
+			q.setParameter("guild", gid);
 		}
 		q.setParameter("mid", mid);
 		q.setMaxResults(1);
