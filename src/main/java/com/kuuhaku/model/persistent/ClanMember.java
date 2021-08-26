@@ -90,7 +90,7 @@ public class ClanMember {
 	}
 
 	public void removeScore(long score) {
-		this.score -= score;
+		this.score = Math.max(0, this.score - score);
 	}
 
 	@Override
