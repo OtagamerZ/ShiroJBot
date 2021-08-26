@@ -309,7 +309,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setMana(int mana) {
-		this.mana = mana;
+		this.bonus.setMana(mana);
 	}
 
 	public int getBlood() {
@@ -317,7 +317,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setBlood(int blood) {
-		this.blood = blood;
+		this.bonus.setBlood(blood);
 	}
 
 	public int getBaseAtk() {

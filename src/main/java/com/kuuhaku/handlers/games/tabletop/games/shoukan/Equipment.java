@@ -83,6 +83,7 @@ public class Equipment implements Drawable, Cloneable {
 
 	private transient Shoukan game = null;
 	private transient Account acc = null;
+	private transient Bonus bonus = new Bonus();
 	private transient Pair<Integer, Champion> linkedTo = null;
 	private transient int index = -1;
 
@@ -215,6 +216,10 @@ public class Equipment implements Drawable, Cloneable {
 		this.available = available;
 	}
 
+	public Bonus getBonus() {
+		return bonus;
+	}
+
 	public Pair<Integer, Champion> getLinkedTo() {
 		return linkedTo;
 	}
@@ -225,12 +230,28 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getAtk() {
 		if (altAtk == -1) altAtk = atk;
-		return altAtk;
+		return altAtk + bonus.getAtk();
 	}
 
 	public int getDef() {
 		if (altDef == -1) altDef = def;
-		return altDef;
+		return altDef + bonus.getDef();
+	}
+
+	public void addAtk(int atk) {
+		bonus.addAtk(atk);
+	}
+
+	public void addDef(int def) {
+		bonus.addDef(def);
+	}
+
+	public void removeAtk(int atk) {
+		bonus.removeAtk(atk);
+	}
+
+	public void removeDef(int def) {
+		bonus.removeDef(def);
 	}
 
 	public int getAltAtk() {
@@ -250,19 +271,19 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana;
+		return mana + bonus.getMana();
 	}
 
 	public void setMana(int mana) {
-		this.mana = mana;
+		this.bonus.setMana(mana);
 	}
 
 	public int getBlood() {
-		return blood;
+		return blood + bonus.getBlood();
 	}
 
 	public void setBlood(int blood) {
-		this.blood = blood;
+		this.bonus.setBlood(blood);
 	}
 
 	public int getTier() {
@@ -376,6 +397,7 @@ public class Equipment implements Drawable, Cloneable {
 	public void reset() {
 		flipped = false;
 		available = true;
+		bonus = new Bonus();
 		linkedTo = null;
 		altAtk = -1;
 		altDef = -1;
