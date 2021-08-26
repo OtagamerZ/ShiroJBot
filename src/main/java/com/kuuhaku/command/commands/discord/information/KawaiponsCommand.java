@@ -44,7 +44,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
@@ -119,7 +118,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis");
 
                                 send(author, channel, m, cards, "Cartas elegíveis", null);
                                 return;
@@ -127,7 +126,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos evogear", false);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos evogear");
 
                                 send(author, channel, m, cards, "Equipamentos evogear", null);
                                 return;
@@ -135,7 +134,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getAllFields().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Campos Shoukan", false);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Campos Shoukan");
 
                                 send(author, channel, m, cards, "Equipamentos evogear", null);
                                 return;
@@ -143,7 +142,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Fusões Senshi", true);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Fusões Senshi");
 
                                 send(author, channel, m, cards, "Fusões Senshi", null);
                                 return;
@@ -169,7 +168,7 @@ public class KawaiponsCommand implements Executable {
                         List<Drawable> cardList = CardDAO.getChampions(r).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                         KawaiponBook kb = new KawaiponBook();
-                        BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), r.getName(), true);
+                        BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), r.getName());
 
                         send(author, channel, m, cards, r, r.getName());
                         return;
@@ -178,7 +177,7 @@ public class KawaiponsCommand implements Executable {
                     List<Drawable> cardList = CardDAO.getChampions(c).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                     KawaiponBook kb = new KawaiponBook();
-                    BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), c.getName(), true);
+                    BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), c.getName());
 
                     send(author, channel, m, cards, c.getName(), c);
                 } else {
@@ -190,7 +189,7 @@ public class KawaiponsCommand implements Executable {
 
                     send(author, channel, m, collection, cards, rr.toString(), CardDAO.getTotalCards(rr));
                 }
-            } catch (IOException | InterruptedException e) {
+            } catch (InterruptedException e) {
                 m.editMessage(I18n.getString("err_collection-generation-error")).queue();
                 Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
             }
