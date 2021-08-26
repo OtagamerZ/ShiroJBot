@@ -357,7 +357,7 @@ public class KawaiponBook {
 		List<Drawable> cards = cardList.stream()
 				.peek(d -> d.setAcc(acc))
 				.sorted(Comparator
-						.comparing(d -> {
+						.<Drawable>comparingInt(d -> {
 							if (d instanceof Champion c) {
 								return c.getMana();
 							} else if (d instanceof Equipment e) {
@@ -366,8 +366,8 @@ public class KawaiponBook {
 								return 1;
 							}
 						})
-							.reversed()
-							.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+						.reversed()
+						.thenComparing(d -> d.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 					)
 					.collect(Collectors.toList());
 
