@@ -52,16 +52,14 @@ public class KawaiponBook {
 	private final BufferedImage row;
 	private final BufferedImage footer;
 	private final BufferedImage slot;
-	private final BufferedImage slotLock;
 
 	public KawaiponBook() {
 		header = Helper.getResourceAsImage(this.getClass(), "kawaipon/header.png");
 		row = Helper.getResourceAsImage(this.getClass(), "kawaipon/row.png");
 		footer = Helper.getResourceAsImage(this.getClass(), "kawaipon/footer.png");
 		slot = Helper.getResourceAsImage(this.getClass(), "kawaipon/slot.png");
-		slotLock = Helper.getResourceAsImage(this.getClass(), "shoukan/slot_lock.png");
 
-		assert Helper.notNull(header, row, footer, slot, slotLock);
+		assert Helper.notNull(header, row, footer, slot);
 	}
 
 	public BufferedImage view(String uid, String name) throws InterruptedException {
@@ -431,10 +429,6 @@ public class KawaiponBook {
 					g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getCard().getName(), 15), CARD_WIDTH, x, y + 274, g);
-
-					if (!has) {
-						g.drawImage(slotLock, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-					}
 				}
 
 				g.dispose();
