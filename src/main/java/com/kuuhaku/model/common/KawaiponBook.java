@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class KawaiponBook {
@@ -354,6 +355,7 @@ public class KawaiponBook {
 	}
 
 	public BufferedImage view(List<Drawable> cardList, Account acc, String title) throws InterruptedException {
+		AtomicBoolean showAvailable = new AtomicBoolean(true);
 		List<Drawable> cards = cardList.stream()
 				.peek(d -> d.setAcc(acc))
 				.sorted(Comparator
@@ -361,8 +363,10 @@ public class KawaiponBook {
 							if (d instanceof Champion c) {
 								return c.getMana();
 							} else if (d instanceof Equipment e) {
+								showAvailable.set(false);
 								return e.getTier();
 							} else {
+								showAvailable.set(false);
 								return 1;
 							}
 						})
@@ -407,7 +411,7 @@ public class KawaiponBook {
 				List<Drawable> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Drawable d = chunk.get(i);
-					boolean has = allCards.contains(d.getCard().getId());
+					boolean has = !showAvailable.get() || allCards.contains(d.getCard().getId());
 
 					BufferedImage card;
 					if (!has) d.setAvailable(false);
