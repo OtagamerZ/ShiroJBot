@@ -73,22 +73,17 @@ public class FaceoffCommand implements Executable {
 					.flatMap(s -> s.editMessage("Em suas marcas..."));
 
 
-			if (level > 2 && Helper.chance(25)) {
-				rst = rst.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS)
-						.flatMap(s -> s.editMessage("Ainda não..."))
-						.delay(500 + Helper.rng(1000, false), TimeUnit.MILLISECONDS)
-						.flatMap(s -> s.editMessage("AGUA! <:KEKW:837794089486254180>"))
-						.delay(500 + Helper.rng(2000, false), TimeUnit.MILLISECONDS)
-						.flatMap(s -> s.editMessage("**FOGO!**"));
-			} else if (level > 1 && Helper.chance(50)) {
-				rst = rst.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS)
-						.flatMap(s -> s.editMessage("Ainda não..."))
-						.delay(500 + Helper.rng(2500, false), TimeUnit.MILLISECONDS)
-						.flatMap(s -> s.editMessage("**FOGO!**"));
-			} else {
-				rst = rst.delay(500 + Helper.rng(4500, false), TimeUnit.MILLISECONDS)
-						.flatMap(s -> s.editMessage("**FOGO!**"));
-			}
+			rst = rst.delay(500 + Helper.rng(2500, false), TimeUnit.MILLISECONDS);
+
+			if (level > 2 && Helper.chance(25))
+				rst = rst.flatMap(s -> s.editMessage("AGUA! <:KEKW:837794089486254180>"))
+						.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS);
+
+			if (level > 1 && Helper.chance(50))
+				rst = rst.flatMap(s -> s.editMessage("Ainda não..."))
+						.delay(500 + Helper.rng(1000, false), TimeUnit.MILLISECONDS);
+
+			rst = rst.flatMap(s -> s.editMessage("**FOGO!**"));
 
 			rst.queue(t -> {
 				start.set(System.currentTimeMillis());
@@ -96,9 +91,9 @@ public class FaceoffCommand implements Executable {
 					private final Consumer<Void> success = s -> close();
 					private final AtomicBoolean win = new AtomicBoolean();
 					private ScheduledFuture<?> timeout = Main.getInfo().getScheduler().schedule(() -> {
-								if (!win.get()) {
-									win.set(true);
-									success.accept(null);
+						if (!win.get()) {
+							win.set(true);
+							success.accept(null);
 									channel.sendMessage(":gun: BANG! Você perdeu..").complete();
 								}
 							}, time, TimeUnit.MILLISECONDS
