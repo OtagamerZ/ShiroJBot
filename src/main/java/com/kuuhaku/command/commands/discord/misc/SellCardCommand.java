@@ -156,7 +156,7 @@ public class SellCardCommand implements Executable {
 			};
 			int max = switch (off.getLeft().getRarity()) {
 				case EQUIPMENT -> Helper.BASE_EQUIPMENT_PRICE * 25;
-				case FIELD -> Helper.BASE_FIELD_PRICE * 2;
+				case FIELD -> Helper.BASE_FIELD_PRICE * 25;
 				default -> off.getLeft().getRarity().getIndex() * (Helper.BASE_CARD_PRICE * 25) * (off.getRight() ? 2 : 1);
 			};
 
