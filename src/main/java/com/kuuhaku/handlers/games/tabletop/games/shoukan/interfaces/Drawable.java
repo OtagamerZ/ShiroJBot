@@ -74,7 +74,7 @@ public interface Drawable {
 		int y = hasDesc ? 220 : 287;
 
 		boolean drewDef = false;
-		if (def == 0) {
+		if (def != 0) {
 			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
 			g2d.drawImage(icon, 29, y, null);
 
@@ -84,7 +84,7 @@ public interface Drawable {
 			drewDef = true;
 		}
 
-		if (atk == 0) {
+		if (atk != 0) {
 			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
 			g2d.drawImage(icon, 29, y - (drewDef ? 25 : 0), null);
 
