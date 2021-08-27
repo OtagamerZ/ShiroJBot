@@ -89,7 +89,7 @@ public enum CreditItem {
 	),
 	CARD_STASH_SIZE(
 			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 5",
-			17500,
+			15000,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());
 
