@@ -22,7 +22,6 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.time.ZoneId;
@@ -144,13 +143,5 @@ public class Market implements com.kuuhaku.model.common.Market {
 
 	public CardType getType() {
 		return type;
-	}
-
-	public int getPriceLimit() {
-		return switch (card.getRarity()) {
-			case COMMON, UNCOMMON, RARE, ULTRA_RARE, LEGENDARY, FUSION, ULTIMATE -> card.getRarity().getIndex() * Helper.BASE_CARD_PRICE * 25 * (foil ? 2 : 1);
-			case EQUIPMENT -> Helper.BASE_EQUIPMENT_PRICE * 25;
-			case FIELD -> Helper.BASE_FIELD_PRICE;
-		};
 	}
 }

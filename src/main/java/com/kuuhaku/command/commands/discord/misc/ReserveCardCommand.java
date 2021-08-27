@@ -138,7 +138,7 @@ public class ReserveCardCommand implements Executable {
 					.setTitle(":scales: | Mercado de cartas")
 					.setDescription("""
 							Use `%scomprar ID` para comprar uma carta.
-							       
+
 							**Parâmetros de pesquisa:**
 							`-n` - Busca cartas por nome
 							`-r` - Busca cartas por raridade
@@ -150,8 +150,6 @@ public class ReserveCardCommand implements Executable {
 							`-m` - Busca apenas suas cartas anunciadas
 							`-min` - Define um preço mínimo
 							`-max` - Define um preço máximo
-							       
-							Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
 							""".formatted(prefix)
 					)
 					.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
@@ -184,8 +182,8 @@ public class ReserveCardCommand implements Executable {
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
 									blackfriday
-											? (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
-											: (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "**" + Helper.separate(m.getPrice()) + "**")
+											? ("~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
+											: ("**" + Helper.separate(m.getPrice()) + "**")
 							),
 							false
 					);
@@ -217,10 +215,7 @@ public class ReserveCardCommand implements Executable {
 
 		Account seller = AccountDAO.getAccount(m.getSeller());
 		if (!seller.getUid().equals(author.getId())) {
-			if (m.getPrice() > m.getPriceLimit()) {
-				channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
-				return;
-			} else if (buyer.getBalance() < (blackfriday ? m.getPrice() * 0.75 : m.getPrice())) {
+			if (buyer.getBalance() < (blackfriday ? m.getPrice() * 0.75 : m.getPrice())) {
 				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 				return;
 			}

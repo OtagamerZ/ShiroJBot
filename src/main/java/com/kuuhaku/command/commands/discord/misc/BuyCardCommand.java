@@ -182,8 +182,8 @@ public class BuyCardCommand implements Executable {
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
 									blackfriday
-											? (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
-											: (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "**" + Helper.separate(m.getPrice()) + "**")
+											? ("~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
+											: ("**" + Helper.separate(m.getPrice()) + "**")
 							),
 							false
 					);
