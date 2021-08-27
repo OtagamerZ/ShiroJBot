@@ -72,7 +72,15 @@ public class FaceoffCommand implements Executable {
 					.delay(3, TimeUnit.SECONDS)
 					.flatMap(s -> s.editMessage("Em suas marcas..."));
 
-			if (level > 1 && Helper.chance(50)) {
+
+			if (level > 2 && Helper.chance(25)) {
+				rst = rst.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS)
+						.flatMap(s -> s.editMessage("Ainda não..."))
+						.delay(500 + Helper.rng(1000, false), TimeUnit.MILLISECONDS)
+						.flatMap(s -> s.editMessage("AGUA! <:KEKW:837794089486254180>"))
+						.delay(500 + Helper.rng(2000, false), TimeUnit.MILLISECONDS)
+						.flatMap(s -> s.editMessage("**FOGO!**"));
+			} else if (level > 1 && Helper.chance(50)) {
 				rst = rst.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS)
 						.flatMap(s -> s.editMessage("Ainda não..."))
 						.delay(500 + Helper.rng(2500, false), TimeUnit.MILLISECONDS)
