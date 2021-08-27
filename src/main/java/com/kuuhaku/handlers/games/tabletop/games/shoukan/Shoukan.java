@@ -920,7 +920,7 @@ public class Shoukan extends GlobalGame {
 				if (yours.isDecoy()) {
 					reportEvent(null, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
 				} else if (his.isDecoy()) {
-					killCard(defr.getLeft(), defr.getRight());
+					killCard(defr.getLeft(), defr.getRight(), his.getId());
 					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 				}
 
@@ -950,7 +950,7 @@ public class Shoukan extends GlobalGame {
 					op.removeMana(toSteal);
 				}
 
-				killCard(defr.getLeft(), defr.getRight());
+				killCard(defr.getLeft(), defr.getRight(), his.getId());
 
 				if (applyPersistentEffects(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
@@ -989,7 +989,7 @@ public class Shoukan extends GlobalGame {
 				demonFac *= 1.33f;
 
 			if (yours.isDecoy()) {
-				killCard(atkr.getLeft(), atkr.getRight());
+				killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
 				reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " < " + hPower + ")", true, false);
 			} else if (his.isDecoy()) {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
@@ -1020,7 +1020,7 @@ public class Shoukan extends GlobalGame {
 				you.removeMana(toSteal);
 			}
 
-			killCard(atkr.getLeft(), atkr.getRight());
+			killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
 
 			if (!postCombat()) {
 				String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
@@ -1049,14 +1049,14 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(BEFORE_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 			if (yours.isDecoy() && his.isDecoy()) {
-				killCard(atkr.getLeft(), atkr.getRight());
-				killCard(defr.getLeft(), defr.getRight());
+				killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
+				killCard(defr.getLeft(), defr.getRight(), his.getId());
 				reportEvent(null, "As duas cartas eram iscas!", true, false);
 			} else if (yours.isDecoy()) {
-				killCard(atkr.getLeft(), atkr.getRight());
+				killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
 				reportEvent(null, "Ambas as cartas foram destruídas? (" + yPower + " = " + hPower + ")", true, false);
 			} else if (his.isDecoy()) {
-				killCard(defr.getLeft(), defr.getRight());
+				killCard(defr.getLeft(), defr.getRight(), his.getId());
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
@@ -1102,8 +1102,8 @@ public class Shoukan extends GlobalGame {
 
 			you.removeHp(Math.round(hDmg));
 
-			killCard(atkr.getLeft(), atkr.getRight());
-			killCard(defr.getLeft(), defr.getRight());
+			killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
+			killCard(defr.getLeft(), defr.getRight(), his.getId());
 
 			if (applyPersistentEffects(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
 			if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
@@ -1202,16 +1202,17 @@ public class Shoukan extends GlobalGame {
 		return false;
 	}
 
-	public void killCard(Side to, int target) {
+	public void killCard(Side to, int target, int id) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().hasFlag(Flag.NODEATH)) return;
+		if (ch == null || ch.getBonus().hasFlag(Flag.NODEATH) || ch.getId() != id) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i);
+			Champion c = sd.getTop();
+			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i, c.getId());
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
@@ -1260,8 +1261,9 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i);
+				Champion c = sd.getTop();
+				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					unequipCard(to, i, slts);
@@ -1302,8 +1304,9 @@ public class Shoukan extends GlobalGame {
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i);
+			Champion c = sd.getTop();
+			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i, c.getId());
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
@@ -1333,8 +1336,9 @@ public class Shoukan extends GlobalGame {
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i);
+			Champion c = sd.getTop();
+			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i, c.getId());
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
@@ -1383,8 +1387,9 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i);
+				Champion c = sd.getTop();
+				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					unequipCard(to, i, slts);
@@ -1425,8 +1430,9 @@ public class Shoukan extends GlobalGame {
 		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i);
+			Champion c = sd.getTop();
+			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i, c.getId());
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
@@ -1468,8 +1474,9 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i);
+				Champion c = sd.getTop();
+				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					banishCard(to, i, true);
@@ -1572,8 +1579,9 @@ public class Shoukan extends GlobalGame {
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
 					SlotColumn sd = slts.get(i);
-					if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-						killCard(to, i);
+					Champion c = sd.getTop();
+					if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+						killCard(to, i, c.getId());
 
 					if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 						unequipCard(to, i, slts);
@@ -1614,8 +1622,9 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i);
+				Champion c = sd.getTop();
+				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					unequipCard(to, i, slts);
@@ -1656,8 +1665,9 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i);
+				Champion c = sd.getTop();
+				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == source)
 					unequipCard(to, i, slts);
@@ -1679,8 +1689,9 @@ public class Shoukan extends GlobalGame {
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn sd = slots.get(i);
-				if (sd.getTop() != null && sd.getTop().isDecoy() && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
-					killCard(from, i);
+				Champion c = sd.getTop();
+				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					unequipCard(from, i, slots);
