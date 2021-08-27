@@ -1504,8 +1504,11 @@ public class Shoukan extends GlobalGame {
 		sd.setBottom(null);
 
 		eq.reset();
-		if (!eq.isParasite() || eq.isEffectOnly() || eq.getTier() >= 4)
-			arena.getGraveyard().get(s).add(eq.copy());
+		if (!eq.isParasite() || eq.isEffectOnly())
+			if (eq.getTier() >= 4)
+				arena.getBanished().add(eq.copy());
+			else
+				arena.getGraveyard().get(s).add(eq.copy());
 	}
 
 	public Arena getArena() {
