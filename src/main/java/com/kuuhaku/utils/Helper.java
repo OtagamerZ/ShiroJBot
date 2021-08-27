@@ -2750,7 +2750,7 @@ public class Helper {
 		if (m.getAttachments().size() > 0) {
 			Message.Attachment att = m.getAttachments().get(0);
 			if (att.isImage())
-				return att.getProxyUrl();
+				return att.getUrl();
 		} else if (m.getEmbeds().size() > 0) {
 			MessageEmbed emb = m.getEmbeds().get(0);
 			if (emb.getImage() != null)
