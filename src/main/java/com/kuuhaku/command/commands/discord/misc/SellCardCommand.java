@@ -154,12 +154,20 @@ public class SellCardCommand implements Executable {
 				case FIELD -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
 				default -> off.getLeft().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (off.getRight() ? 2 : 1);
 			};
+			int max = switch (off.getLeft().getRarity()) {
+				case EQUIPMENT -> Helper.BASE_EQUIPMENT_PRICE * 25;
+				case FIELD -> Helper.BASE_FIELD_PRICE * 2;
+				default -> off.getLeft().getRarity().getIndex() * (Helper.BASE_CARD_PRICE * 25) * (off.getRight() ? 2 : 1);
+			};
 
 			if (price < min) {
 				if (hasLoan)
 					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
 				else
 					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+				return;
+			} else if (price > max) {
+				channel.sendMessage("❌ | Você não pode vender essa carta por mais que " + Helper.separate(max) + " créditos.").queue();
 				return;
 			}
 
