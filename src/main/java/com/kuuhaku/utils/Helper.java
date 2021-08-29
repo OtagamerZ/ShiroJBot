@@ -57,6 +57,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.exceptions.MissingAccessException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.codec.binary.Hex;
@@ -681,7 +682,7 @@ public class Helper {
 						Message msg;
 						try {
 							msg = chn.retrieveMessageById(message.getId()).submit().get();
-						} catch (ExecutionException | InterruptedException e) {
+						} catch (MissingAccessException | ExecutionException | InterruptedException e) {
 							GuildConfig conf = GuildDAO.getGuildById(g.getId());
 							for (ButtonChannel bc : conf.getButtonConfigs()) {
 								if (bc.removeMessage(message)) break;
