@@ -515,6 +515,11 @@ public class Helper {
 		return Arrays.stream(value).allMatch(t -> ArrayUtils.contains(compareWith, t));
 	}
 
+	@SafeVarargs
+	public static <T> boolean containsAll(Collection<T> value, T... compareWith) {
+		return value.stream().allMatch(t -> ArrayUtils.contains(compareWith, t));
+	}
+
 	public static boolean containsAny(String[] string, String... compareWith) {
 		return Arrays.stream(string).map(String::toLowerCase).anyMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
@@ -522,6 +527,11 @@ public class Helper {
 	@SafeVarargs
 	public static <T> boolean containsAny(T[] value, T... compareWith) {
 		return Arrays.stream(value).anyMatch(s -> ArrayUtils.contains(compareWith, s));
+	}
+
+	@SafeVarargs
+	public static <T> boolean containsAny(Collection<T> value, T... compareWith) {
+		return value.stream().anyMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
 
 	public static boolean equalsAll(String string, String... compareWith) {
