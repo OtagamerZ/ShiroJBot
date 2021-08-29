@@ -2402,7 +2402,7 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			return postCombat();
+			if (postCombat()) return true;
 		}
 
 		return false;
