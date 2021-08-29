@@ -63,15 +63,12 @@ public class AnimeCommand implements Executable {
 
 				try {
 					Anime anime = JSONUtils.fromJSON(data.toString(), Anime.class);
-					if (anime == null) {
+					if (anime == null || anime.data() == null || anime.data().media() == null) {
 						m.editMessage(I18n.getString("err_anime-not-found")).queue();
 						return;
 					}
 
-					if (anime.data() == null) throw new IllegalStateException();
 					Media media = anime.data().media();
-
-					if (media == null) throw new IllegalStateException();
 					EmbedBuilder eb = new EmbedBuilder();
 					boolean hentai = media.genres().stream().anyMatch("hentai"::equalsIgnoreCase);
 					if (hentai && !message.getTextChannel().isNSFW()) {
