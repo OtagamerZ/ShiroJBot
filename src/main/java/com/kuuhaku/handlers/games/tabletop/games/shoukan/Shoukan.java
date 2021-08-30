@@ -2389,12 +2389,8 @@ public class Shoukan extends GlobalGame {
 							e.decreaseTurn();
 					}
 
-					if (e.getTriggers().contains(trigger)) {
-						if (e.getLimit() > 0)
-							e.decreaseLimit();
-
-						e.getEffect().accept(to, index, e.getTurns() == 0 || e.getLimit() == 0);
-					}
+					if (e.getTriggers().contains(trigger))
+						e.activate(to, index);
 				}
 
 				if (e.getTurns() == 0 || e.getLimit() == 0) {
