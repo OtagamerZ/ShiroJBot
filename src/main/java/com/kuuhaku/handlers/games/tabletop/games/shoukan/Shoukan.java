@@ -1955,7 +1955,11 @@ public class Shoukan extends GlobalGame {
 				reroll = false;
 				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
-			buttons.put("⏩", skip);
+			buttons.put("⏩", (mb, ms) -> {
+				draw = false;
+				reroll = false;
+				skip.accept(mb, ms);
+			});
 		}
 		if (phase == Phase.PLAN) {
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
