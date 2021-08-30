@@ -139,11 +139,24 @@ public class Shoukan extends GlobalGame {
 				Side.BOTTOM, hands.get(Side.BOTTOM).getCombo()
 		);
 
-		if (custom == null)
+		if (custom == null) {
 			getHistory().setPlayers(Map.of(
 					players[0].getId(), Side.TOP,
 					players[1].getId(), Side.BOTTOM
 			));
+		} else if (custom.has("test")) {
+			for (Object o : custom.getJSONArray("test")) {
+				String id = String.valueOf(o);
+				Drawable d;
+				d = CardDAO.getChampion(id);
+				if (d == null) d = CardDAO.getEquipment(id);
+				if (d == null) d = CardDAO.getField(id);
+				if (d == null) continue;
+
+				for (Hand h : hands.values())
+					h.getCards().add(d);
+			}
+		}
 
 		setActions(
 				s -> {
