@@ -2399,15 +2399,14 @@ public class Shoukan extends GlobalGame {
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
 		if (persistentEffects.size() > 0) {
 			Iterator<PersistentEffect> i = persistentEffects.iterator();
-			for (PersistentEffect e = i.next(); i.hasNext(); e = i.next()) {
+			while (i.hasNext()) {
+				PersistentEffect e = i.next();
 				if (e.getTarget() == null || e.getTarget() == to) {
 					if (trigger == AFTER_TURN && e.getTurns() > 0) {
-						System.out.println("Reduced " + e.getSource());
 						e.decreaseTurn();
 					}
 
 					if (e.getTriggers().contains(trigger)) {
-						System.out.println("Activated " + e.getSource());
 						e.activate(to, index);
 					}
 				}
