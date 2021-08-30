@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.BondedList;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -64,6 +65,7 @@ public class Hand {
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int nullTime = 0;
+	private Message old = null;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
 		this.game = game;
@@ -477,10 +479,11 @@ public class Hand {
 		g2d.dispose();
 
 		getUser().openPrivateChannel()
-				.flatMap(c -> c.sendMessage("Escolha uma carta para jogar (digite a posição da carta na mão, no campo e se ela posicionada em modo de ataque (`A`), defesa (`D`) ou virada para baixo (`B`). Ex: `0,0,a`), mude a postura de uma carta (digite apenas a posição da carta no campo) ou use os botões na mensagem enviada para avançar o turno, comprar uma carta ou render-se.")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
-				)
-				.queue(null, Helper::doNothing);
+				.flatMap(c -> c.sendMessage("Suas cartas:").addFile(Helper.writeAndGet(bi, "hand", "png")))
+				.queue(m -> {
+					if (old != null) old.delete().queue(null, Helper::doNothing);
+					old = m;
+				}, Helper::doNothing);
 	}
 
 	public void showEnemyHand() {
@@ -504,7 +507,7 @@ public class Hand {
 		g2d.dispose();
 
 		getUser().openPrivateChannel()
-				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente.")
+				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente:")
 						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
 				.queue(null, Helper::doNothing);
@@ -531,7 +534,7 @@ public class Hand {
 		g2d.dispose();
 
 		getUser().openPrivateChannel()
-				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente.")
+				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente:")
 						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
 				.queue(null, Helper::doNothing);
