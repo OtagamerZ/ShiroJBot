@@ -41,6 +41,7 @@ public class PersistentEffect {
 		this.effect = effect;
 		this.target = target;
 		this.turns = turns;
+		this.limit = limit;
 		this.debuff = debuff;
 	}
 
