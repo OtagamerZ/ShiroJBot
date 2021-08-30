@@ -2384,10 +2384,8 @@ public class Shoukan extends GlobalGame {
 			Iterator<PersistentEffect> i = persistentEffects.iterator();
 			for (PersistentEffect e = i.next(); i.hasNext(); e = i.next()) {
 				if (e.getTarget() == null || e.getTarget() == to) {
-					if (Helper.equalsAny(trigger, BEFORE_TURN, AFTER_TURN) && e.getTurns() > 0) {
-						if (Helper.containsAny(e.getTriggers(), BEFORE_TURN, AFTER_TURN) || trigger == AFTER_TURN)
-							e.decreaseTurn();
-					}
+					if (trigger == AFTER_TURN && e.getTurns() > 0)
+						e.decreaseTurn();
 
 					if (e.getTriggers().contains(trigger))
 						e.activate(to, index);
