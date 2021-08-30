@@ -24,7 +24,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.MarketDAO;
+import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -36,7 +36,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.model.persistent.Market;
+import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -85,32 +85,20 @@ public class ClearDeckCommand implements Executable {
 								Deck fdk = fkp.getDeck();
 
 								for (Champion c : fdk.getChampions()) {
-									Market mk = new Market(
-											author.getId(),
-											new KawaiponCard(c.getCard(), false),
-											9999999
-									);
-									MarketDAO.saveCard(mk);
+									Stash st = new Stash(author.getId(), new KawaiponCard(c.getCard(), false));
+									StashDAO.saveCard(st);
 								}
 								fdk.getChampions().clear();
 
 								for (Equipment e : fdk.getEquipments()) {
-									Market mk = new Market(
-											author.getId(),
-											e,
-											9999999
-									);
-									MarketDAO.saveCard(mk);
+									Stash st = new Stash(author.getId(), new KawaiponCard(e.getCard(), false));
+									StashDAO.saveCard(st);
 								}
 								fdk.getEquipments().clear();
 
 								for (Field fd : fdk.getFields()) {
-									Market mk = new Market(
-											author.getId(),
-											fd,
-											9999999
-									);
-									MarketDAO.saveCard(mk);
+									Stash st = new Stash(author.getId(), new KawaiponCard(fd.getCard(), false));
+									StashDAO.saveCard(st);
 								}
 								fdk.getFields().clear();
 
