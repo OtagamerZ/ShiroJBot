@@ -137,6 +137,11 @@ public class Equipment implements Drawable, Cloneable {
 
 			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), hasDesc);
 
+			if (linkedTo != null) {
+				Champion c = Helper.getOr(linkedTo.getRight().getFakeCard(), linkedTo.getRight());
+				g2d.drawImage(c.getCard().drawCardNoBorder(acc), 20, 52, 60, 93, null);
+			}
+
 			g2d.setColor(fc.getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
