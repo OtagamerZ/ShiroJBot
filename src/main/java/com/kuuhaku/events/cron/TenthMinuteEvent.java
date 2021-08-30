@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.quartz.Job;
@@ -89,13 +90,15 @@ public class TenthMinuteEvent implements Job {
 					Member m = guild.getMemberById(s);
 					if (m == null) continue;
 
-					if (!m.getRoles().contains(r)) {
-						TextChannel tc = gc.getLevelChannel();
-						acts.add(guild.removeRoleFromMember(m, r).flatMap(
-								p -> gc.isLevelNotif() && tc != null,
-								v -> tc.sendMessage(" O cargo **`" + r.getName() + "`** de " + m.getAsMention() + " expirou! :alarm_clock:")
-						));
-					}
+					if (!m.getRoles().contains(r))
+						try {
+							TextChannel tc = gc.getLevelChannel();
+							acts.add(guild.removeRoleFromMember(m, r).flatMap(
+									p -> gc.isLevelNotif() && tc != null,
+									v -> tc.sendMessage(" O cargo **`" + r.getName() + "`** de " + m.getAsMention() + " expirou! :alarm_clock:")
+							));
+						} catch (HierarchyException | InsufficientPermissionException ignore) {
+						}
 				}
 
 
@@ -158,13 +161,15 @@ public class TenthMinuteEvent implements Job {
 					Member m = guild.getMemberById(s);
 					if (m == null) continue;
 
-					if (!m.getRoles().contains(r)) {
-						TextChannel tc = gc.getLevelChannel();
-						acts.add(guild.addRoleToMember(m, r).flatMap(
-								p -> gc.isLevelNotif() && tc != null,
-								v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vr.getTime()) + " em call! :tada:")
-						));
-					}
+					if (!m.getRoles().contains(r))
+						try {
+							TextChannel tc = gc.getLevelChannel();
+							acts.add(guild.addRoleToMember(m, r).flatMap(
+									p -> gc.isLevelNotif() && tc != null,
+									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vr.getTime()) + " em call! :tada:")
+							));
+						} catch (HierarchyException | InsufficientPermissionException ignore) {
+						}
 				}
 
 				if (acts.isEmpty()) continue;
