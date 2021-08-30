@@ -56,6 +56,11 @@ public class PersistentEffect {
 		return effect;
 	}
 
+	public void activate(Side side, int index) {
+		if (limit > 0) limit--;
+		effect.accept(side, index, turns == 0 || limit == 0);
+	}
+
 	public Side getTarget() {
 		return target;
 	}
