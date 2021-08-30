@@ -1858,101 +1858,105 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
+		ThrowingBiConsumer<Member, Message> skip = (mb, ms) -> {
+			User u = getCurrent();
+
+			AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
+			h.get().getCards().removeIf(d -> !d.isAvailable());
+			List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
+
+			if (applyPersistentEffects(AFTER_TURN, getCurrentSide(), -1)) return;
+			for (int i = 0; i < slots.size(); i++) {
+				Champion c = slots.get(i).getTop();
+				if (c != null) {
+					c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
+					c.resetAttribs();
+					if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
+						|| makeFusion(h.get())
+					) return;
+				}
+			}
+
+			for (Drawable d : discardBatch) {
+				d.setAvailable(true);
+			}
+			if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
+				h.get().getDeque().addAll(
+						discardBatch.stream()
+								.map(Drawable::copy)
+								.collect(Collectors.toList())
+				);
+				Collections.shuffle(h.get().getDeque());
+			} else {
+				arena.getGraveyard().get(getCurrentSide()).addAll(
+						discardBatch.stream()
+								.map(Drawable::copy)
+								.collect(Collectors.toList())
+				);
+			}
+			discardBatch.clear();
+
+			if (getRound() > 0) reroll = false;
+			resetTimer(this);
+
+			phase = Phase.PLAN;
+			h.set(hands.get(getCurrentSide()));
+			h.get().decreaseSuppression();
+			h.get().decreaseLockTime();
+			h.get().decreaseNullTime();
+			slots = arena.getSlots().get(getCurrentSide());
+			decreaseSlotLockTime(getCurrentSide());
+
+			h.get().addMana(h.get().getManaPerTurn());
+			if (h.get().getCombo().getLeft() == Race.DEMON) {
+				Hand op = hands.get(getNextSide());
+				h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
+				if (h.get().getHp() < h.get().getBaseHp() / 3f)
+					h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
+			}
+
+			switch (h.get().getCombo().getRight()) {
+				case BESTIAL -> {
+					if (getRound() <= 1)
+						h.get().addMana(1);
+				}
+				case ELF -> {
+					if (getRound() > 1 && getRound() - (h.get().getSide() == Side.TOP ? 1 : 0) % 3 == 0)
+						h.get().addMana(1);
+				}
+			}
+
+			if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
+			for (int i = 0; i < slots.size(); i++) {
+				Champion c = slots.get(i).getTop();
+				if (c != null) {
+					if (c.isStasis()) c.reduceStasis();
+					else if (c.isStunned()) c.reduceStun();
+					else if (c.isSleeping()) c.reduceSleep();
+
+					if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
+						|| makeFusion(h.get())
+					) return;
+				}
+			}
+
+			String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
+
+			reportEvent(h.get(), msg, false, true);
+		};
+
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		if (getRound() < 1 || phase == Phase.ATTACK)
-			buttons.put("▶️", (mb, ms) -> {
-				User u = getCurrent();
-
-				AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
-				h.get().getCards().removeIf(d -> !d.isAvailable());
-				List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
-
-				if (applyPersistentEffects(AFTER_TURN, getCurrentSide(), -1)) return;
-				for (int i = 0; i < slots.size(); i++) {
-					Champion c = slots.get(i).getTop();
-					if (c != null) {
-						c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
-						c.resetAttribs();
-						if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
-							|| makeFusion(h.get())
-						) return;
-					}
-				}
-
-				for (Drawable d : discardBatch) {
-					d.setAvailable(true);
-				}
-				if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
-					h.get().getDeque().addAll(
-							discardBatch.stream()
-									.map(Drawable::copy)
-									.collect(Collectors.toList())
-					);
-					Collections.shuffle(h.get().getDeque());
-				} else {
-					arena.getGraveyard().get(getCurrentSide()).addAll(
-							discardBatch.stream()
-									.map(Drawable::copy)
-									.collect(Collectors.toList())
-					);
-				}
-				discardBatch.clear();
-
-				if (getRound() > 0) reroll = false;
-				resetTimer(this);
-
-				phase = Phase.PLAN;
-				h.set(hands.get(getCurrentSide()));
-				h.get().decreaseSuppression();
-				h.get().decreaseLockTime();
-				h.get().decreaseNullTime();
-				slots = arena.getSlots().get(getCurrentSide());
-				decreaseSlotLockTime(getCurrentSide());
-
-				h.get().addMana(h.get().getManaPerTurn());
-				if (h.get().getCombo().getLeft() == Race.DEMON) {
-					Hand op = hands.get(getNextSide());
-					h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
-					if (h.get().getHp() < h.get().getBaseHp() / 3f)
-						h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
-				}
-
-				switch (h.get().getCombo().getRight()) {
-					case BESTIAL -> {
-						if (getRound() <= 1)
-							h.get().addMana(1);
-					}
-					case ELF -> {
-						if (getRound() > 1 && getRound() - (h.get().getSide() == Side.TOP ? 1 : 0) % 3 == 0)
-							h.get().addMana(1);
-					}
-				}
-
-				if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
-				for (int i = 0; i < slots.size(); i++) {
-					Champion c = slots.get(i).getTop();
-					if (c != null) {
-						if (c.isStasis()) c.reduceStasis();
-						else if (c.isStunned()) c.reduceStun();
-						else if (c.isSleeping()) c.reduceSleep();
-
-						if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
-							|| makeFusion(h.get())
-						) return;
-					}
-				}
-
-				String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
-
-				reportEvent(h.get(), msg, false, true);
-			});
-		else
+			buttons.put("▶️", skip);
+		else {
 			buttons.put("▶️", (mb, ms) -> {
 				phase = Phase.ATTACK;
 				draw = false;
 				reroll = false;
 				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
+			buttons.put("⏩", skip);
+		}
 		if (phase == Phase.PLAN) {
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 				if (phase != Phase.PLAN) {
