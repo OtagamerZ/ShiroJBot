@@ -2662,8 +2662,12 @@ public class Helper {
 		}
 	}
 
+	public static int roundToBit(int value) {
+		return value << (int) log(value, 2);
+	}
+
 	public static int roundTrunc(int value, int mult) {
-		return mult * (Math.round((float) value / mult));
+		return mult * Math.round((float) value / mult);
 	}
 
 	public static File writeAndGet(BufferedImage bi, String name, String extension) {
@@ -3108,5 +3112,15 @@ public class Helper {
 		}
 
 		return false;
+	}
+
+	public static void drawSquareLine(Graphics2D g2d, int x1, int y1, int x2, int y2) {
+		int half = x1 + (x2 - x1) / 2;
+
+		g2d.drawPolygon(
+				new int[]{x1, half, half, x2},
+				new int[]{y1, y1, y2, y2},
+				4
+		);
 	}
 }
