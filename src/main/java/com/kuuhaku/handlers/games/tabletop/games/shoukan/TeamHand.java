@@ -141,17 +141,15 @@ public class TeamHand extends Hand {
 		combo = Race.getCombo(dks.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
 		if (combo.getLeft() == Race.DIVINITY) {
 			for (LinkedList<Drawable> deque : deques) {
-				deque.stream()
-						.distinct()
-						.forEach(d -> {
-							if (d instanceof Champion c) {
-								if (!c.hasEffect()) {
-									String[] de = CardDAO.getRandomEffect(c.getMana());
-									c.setDescription(de[0]);
-									c.setRawEffect(de[1]);
-								}
-							}
-						});
+				for (Drawable d : deque) {
+					if (d instanceof Champion c) {
+						if (!c.hasEffect()) {
+							String[] de = CardDAO.getRandomEffect(c.getMana());
+							c.setDescription(de[0]);
+							c.setRawEffect(de[1]);
+						}
+					}
+				}
 			}
 		}
 

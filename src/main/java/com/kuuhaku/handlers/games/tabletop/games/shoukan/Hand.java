@@ -168,17 +168,15 @@ public class Hand {
 
 		combo = Race.getCombo(champs);
 		if (combo.getLeft() == Race.DIVINITY) {
-			deque.stream()
-					.distinct()
-					.forEach(d -> {
-						if (d instanceof Champion c) {
-							if (!c.hasEffect()) {
-								String[] de = CardDAO.getRandomEffect(c.getMana());
-								c.setDescription(de[0]);
-								c.setRawEffect(de[1]);
-							}
-						}
-					});
+			for (Drawable d : deque) {
+				if (d instanceof Champion c) {
+					if (!c.hasEffect()) {
+						String[] de = CardDAO.getRandomEffect(c.getMana());
+						c.setDescription(de[0]);
+						c.setRawEffect(de[1]);
+					}
+				}
+			}
 		}
 
 		if (destinyDraw != null) {
