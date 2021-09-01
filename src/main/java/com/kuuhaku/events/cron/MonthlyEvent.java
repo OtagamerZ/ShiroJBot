@@ -45,10 +45,6 @@ public class MonthlyEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		call();
-	}
-
-	public static void call() {
 		ClanDAO.resetScores();
 
 		List<String> ns = List.of(
