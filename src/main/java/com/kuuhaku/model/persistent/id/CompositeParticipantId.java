@@ -16,73 +16,41 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.tournament;
+package com.kuuhaku.model.persistent.id;
 
-import com.kuuhaku.utils.Helper;
-
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Participant {
-	private final String id;
-	private int index = -1;
-	private int wins = 0;
-	private boolean third = false;
+public class CompositeParticipantId implements Serializable {
+	private String uid;
+	private int tournament;
 
-	public Participant(String id) {
-		this.id = id;
+	public CompositeParticipantId() {
 	}
 
-	public String getId() {
-		return id;
+	public CompositeParticipantId(String uid, int tournament) {
+		this.uid = uid;
+		this.tournament = tournament;
 	}
 
-	public int getIndex() {
-		return index;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public int getPoints() {
-		return wins;
-	}
-
-	public boolean isWinner(int phase) {
-		return (wins & 1 << phase) != 0;
-	}
-
-	public void won(int phase) {
-		this.wins |= 1 << phase;
-	}
-
-	public boolean isThird() {
-		return third;
-	}
-
-	public void setThird() {
-		this.third = true;
-	}
-
-	public boolean isBye() {
-		return id == null;
+	public int getTournament() {
+		return tournament;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Participant that = (Participant) o;
-		return Objects.equals(id, that.id);
+		CompositeParticipantId that = (CompositeParticipantId) o;
+		return Objects.equals(uid, that.uid) && Objects.equals(tournament, that.tournament);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public String toString() {
-		return isBye() ? "BYE" : Helper.getUsername(id);
+		return Objects.hash(uid, tournament);
 	}
 }
