@@ -56,5 +56,19 @@ public class Bracket {
 			phase.getParticipants().set(i, i >= participants.size() ? new Participant(null, t.getId()) : participants.get(i));
 		}
 		Collections.shuffle(phase.getParticipants());
+
+		for (int j = 0; j < phases.size(); j++) {
+			phase = phases.get(j);
+			for (int i = 0; i < phase.getSize(); i++) {
+				Participant p = phase.getParticipants().get(i);
+				if (p == null) continue;
+
+				if (p.getIndex() == -1) p.setIndex(i);
+				Participant op = phase.getOpponent(p);
+				if (op != null && op.isBye()) {
+					t.setResult(j, i, p);
+				}
+			}
+		}
 	}
 }
