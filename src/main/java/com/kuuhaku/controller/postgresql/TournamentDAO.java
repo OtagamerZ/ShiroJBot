@@ -18,31 +18,41 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Block;
+import com.kuuhaku.model.persistent.tournament.Tournament;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
-public class BlockDAO {
-	public static void block(Block p) {
+public class TournamentDAO {
+	public static void save(Tournament t) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(p);
+		em.merge(t);
 		em.getTransaction().commit();
 
 		em.close();
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<String> blockedList() {
+	public static List<Tournament> getTournaments() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT p.id FROM Block p", String.class);
+		Query q = em.createQuery("SELECT t FROM Tournament t", Tournament.class);
 
 		try {
 			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Tournament getTournament(int id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(Tournament.class, id);
 		} finally {
 			em.close();
 		}
