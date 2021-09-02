@@ -16,20 +16,50 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.tournament;
+package com.kuuhaku.model.persistent.tournament;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 
+@Entity
+@Table(name = "phase")
 public class Phase {
-	private final List<Participant> participants;
-	private final boolean last;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-	public Phase(int size, boolean last) {
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int phase;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "phase_id")
+	private List<Participant> participants;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean last;
+
+	public Phase() {
+	}
+
+	public Phase(int phase, int size, boolean last) {
+		this.phase = phase;
 		this.participants = Arrays.asList(new Participant[size]);
 		this.last = last;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public int getPhase() {
+		return phase;
+	}
+
+	public int getSize() {
+		return participants.size();
 	}
 
 	public List<Participant> getParticipants() {

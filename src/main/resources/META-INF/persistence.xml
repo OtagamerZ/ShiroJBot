@@ -84,6 +84,10 @@
         <class>com.kuuhaku.model.persistent.VoiceTime</class>
         <class>com.kuuhaku.model.persistent.Starboard</class>
         <class>com.kuuhaku.model.persistent.Stash</class>
+        <class>com.kuuhaku.model.persistent.tournament.Bracket</class>
+        <class>com.kuuhaku.model.persistent.tournament.Participant</class>
+        <class>com.kuuhaku.model.persistent.tournament.Phase</class>
+        <class>com.kuuhaku.model.persistent.tournament.Tournament</class>
 
         <properties>
             <!-- dados da conexao -->

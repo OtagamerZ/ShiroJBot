@@ -16,21 +16,33 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.tournament;
+package com.kuuhaku.model.persistent.tournament;
 
 import com.kuuhaku.utils.Helper;
 
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Entity
+@Table(name = "bracket")
 public class Bracket {
-	private final List<Phase> phases;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "bracket_id")
+	private List<Phase> phases;
+
+	public Bracket() {
+	}
 
 	public Bracket(int size) {
 		this.phases = Arrays.asList(new Phase[(int) Helper.log(size, 2) + 1]);
 		for (int i = 0; i < phases.size(); i++) {
-			phases.set(i, new Phase((int) (size / Math.pow(2, i)), i == phases.size() - 1));
+			phases.set(i, new Phase(i, (int) (size / Math.pow(2, i)), i == phases.size() - 1));
 		}
 	}
 
@@ -38,10 +50,10 @@ public class Bracket {
 		return phases;
 	}
 
-	public void populate(List<Participant> participants) {
+	public void populate(Tournament t, List<Participant> participants) {
 		Phase phase = phases.get(0);
-		for (int i = 0; i < phase.getParticipants().size(); i++) {
-			phase.getParticipants().set(i, i >= participants.size() ? new Participant(null) : participants.get(i));
+		for (int i = 0; i < phase.getSize(); i++) {
+			phase.getParticipants().set(i, i >= participants.size() ? new Participant(null, t.getId()) : participants.get(i, t.getId()));
 		}
 		Collections.shuffle(phase.getParticipants());
 	}
