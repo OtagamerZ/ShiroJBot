@@ -3117,10 +3117,16 @@ public class Helper {
 	public static void drawSquareLine(Graphics2D g2d, int x1, int y1, int x2, int y2) {
 		int half = x1 + (x2 - x1) / 2;
 
-		g2d.drawPolygon(
+		g2d.drawPolyline(
 				new int[]{x1, half, half, x2},
 				new int[]{y1, y1, y2, y2},
 				4
 		);
+	}
+
+	public static void drawCenteredString(Graphics2D g2d, String str, int x, int y, int width, int heigth) {
+		int xOffset = width / 2 - g2d.getFontMetrics().stringWidth(str) / 2;
+		int yOffset = heigth / 2 + g2d.getFont().getSize() / 2;
+		g2d.drawString(str, x + xOffset, y + yOffset);
 	}
 }
