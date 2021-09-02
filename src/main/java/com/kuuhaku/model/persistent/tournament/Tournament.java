@@ -57,7 +57,7 @@ public class Tournament {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "tournament")
-	private List<Participant> thirdPlace = Arrays.asList(null, null);
+	private List<Participant> thirdPlace = new ArrayList<>(Arrays.asList(null, null));
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.tournament;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class Phase {
 
 	public Phase(int phase, int size, boolean last) {
 		this.phase = phase;
-		this.participants = Arrays.asList(new Participant[size]);
+		this.participants = new ArrayList<>(Arrays.asList(new Participant[size]));
 		this.last = last;
 	}
 

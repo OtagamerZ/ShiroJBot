@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.tournament;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,7 @@ public class Bracket {
 	}
 
 	public Bracket(int size) {
-		this.phases = Arrays.asList(new Phase[(int) Helper.log(size, 2) + 1]);
+		this.phases = new ArrayList<>(Arrays.asList(new Phase[(int) Helper.log(size, 2) + 1]));
 		for (int i = 0; i < phases.size(); i++) {
 			phases.set(i, new Phase(i, (int) (size / Math.pow(2, i)), i == phases.size() - 1));
 		}
