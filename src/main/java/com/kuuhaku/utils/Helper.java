@@ -2663,7 +2663,7 @@ public class Helper {
 	}
 
 	public static int roundToBit(int value) {
-		return value << (int) log(value, 2);
+		return 1 << (int) Math.round(log(value, 2));
 	}
 
 	public static int roundTrunc(int value, int mult) {
