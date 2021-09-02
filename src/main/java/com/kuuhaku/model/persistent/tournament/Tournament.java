@@ -16,30 +16,61 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.tournament;
+package com.kuuhaku.model.persistent.tournament;
 
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
+import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 
+@Entity
+@Table(name = "tournament")
 public class Tournament {
-	private final String name;
-	private final TreeSet<Participant> ranking = new TreeSet<>(
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String name;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int seed = new Random().nextInt();
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "tournament_id")
+	private TreeSet<Participant> ranking = new TreeSet<>(
 			Comparator.comparingInt(Participant::getPoints).reversed()
 					.thenComparingInt(Participant::getIndex)
 					.thenComparing(Participant::isThird).reversed()
 	);
-	private final List<Participant> thirdPlace = Arrays.asList(null, null);
-	private final List<Participant> participants = new ArrayList<>();
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "tournament_id")
+	private List<Participant> thirdPlace = Arrays.asList(null, null);
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "tournament_id")
+	private List<Participant> participants = new ArrayList<>();
+
+	@OneToOne(fetch = FetchType.EAGER)
 	private Bracket bracket;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean closed = false;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size = 0;
 
 	private static final int H_MARGIN = 150;
@@ -51,8 +82,15 @@ public class Tournament {
 	private static final Color PRIMARY_COLOR = new Color(0x8e9297);
 	private static final Color SECONDARY_COLOR = new Color(0x40444b);
 
+	public Tournament() {
+	}
+
 	public Tournament(String name) {
 		this.name = name;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -84,7 +122,7 @@ public class Tournament {
 		List<Phase> phases = bracket.getPhases();
 		for (int j = 0; j < phases.size(); j++) {
 			Phase phase = phases.get(j);
-			for (int i = 0; i < phase.getParticipants().size(); i++) {
+			for (int i = 0; i < phase.getSize(); i++) {
 				Participant p = phase.getParticipants().get(i);
 				if (p == null) continue;
 
@@ -142,7 +180,7 @@ public class Tournament {
 			int mult = p.isLast() ? 2 : 1;
 
 			List<Participant> ps = p.getParticipants();
-			int pSize = p.getParticipants().size();
+			int pSize = p.getSize();
 			for (int k = 0; k < pSize; k++) {
 				Participant part = ps.size() > k ? ps.get(k) : null;
 
