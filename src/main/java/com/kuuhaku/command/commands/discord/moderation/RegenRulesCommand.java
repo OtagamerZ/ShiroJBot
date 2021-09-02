@@ -46,6 +46,11 @@ public class RegenRulesCommand implements Executable {
 		message.delete().complete();
 		try {
 			String[] rules = new String[gc.getRules().size()];
+			if (rules.length == 0) {
+				channel.sendMessage("❌ | Você não configurou nenhuma regra ainda.").queue();
+				return;
+			}
+
 			for (int i = 0; i < gc.getRules().size(); i++) {
 				String[] rule = gc.getRules().get(i).split(";");
 				rules[i] = "**%s - %s**\n%s".formatted(i + 1, rule[0], rule[1]);
