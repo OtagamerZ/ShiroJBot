@@ -64,7 +64,7 @@ public class Tournament {
 	@JoinColumn(name = "tournament")
 	private List<Participant> participants = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Bracket bracket;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
