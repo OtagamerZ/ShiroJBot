@@ -74,7 +74,9 @@ public class ClanDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(em.contains(clan) ? clan : em.merge(clan));
+		em.createQuery("DELETE FROM Clan c WHERE c.id = :id")
+				.setParameter("id", clan.getId())
+				.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
@@ -84,7 +86,7 @@ public class ClanDAO {
 	public static List<Clan> getUnpaidClans() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Clan c WHERE EXTRACT(MONTH FROM c.paidRent) <> EXTRACT(MONTH FROM CURRENT_DATE)", Clan.class);
+		Query q = em.createNativeQuery("SELECT c FROM Clan c WHERE EXTRACT(MONTH FROM c.paidRent) < EXTRACT(MONTH FROM CURRENT_DATE AT TIME ZONE 'GMT-3')", Clan.class);
 
 		try {
 			return (List<Clan>) q.getResultList();
