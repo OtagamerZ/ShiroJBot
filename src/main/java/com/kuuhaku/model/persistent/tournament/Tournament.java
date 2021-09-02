@@ -47,7 +47,7 @@ public class Tournament {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament_id")
+	@JoinColumn(name = "tournament")
 	private Set<Participant> ranking = new TreeSet<>(
 			Comparator.comparingInt(Participant::getPoints).reversed()
 					.thenComparingInt(Participant::getIndex)
@@ -56,12 +56,12 @@ public class Tournament {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament_id")
+	@JoinColumn(name = "tournament")
 	private List<Participant> thirdPlace = Arrays.asList(null, null);
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament_id")
+	@JoinColumn(name = "tournament")
 	private List<Participant> participants = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER)
@@ -118,21 +118,6 @@ public class Tournament {
 		size = Helper.roundToBit(participants.size());
 		bracket = new Bracket(size);
 		bracket.populate(this, participants);
-
-		List<Phase> phases = bracket.getPhases();
-		for (int j = 0; j < phases.size(); j++) {
-			Phase phase = phases.get(j);
-			for (int i = 0; i < phase.getSize(); i++) {
-				Participant p = phase.getParticipants().get(i);
-				if (p == null) continue;
-
-				if (p.getIndex() == -1) p.setIndex(i);
-				Participant op = phase.getOpponent(p);
-				if (op != null && op.isBye()) {
-					setResult(j, i, p);
-				}
-			}
-		}
 	}
 
 	public void setResult(int phase, int index, Participant winner) {
