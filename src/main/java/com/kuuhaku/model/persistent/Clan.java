@@ -239,7 +239,7 @@ public class Clan {
 			mb.addScore(amount / tier.getCapacity());
 		}
 
-		if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) < 8 && vault >= tier.getRent()) {
+		if (!hasPaidRent() && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) < 8 && vault >= tier.getRent()) {
 			payRent();
 		}
 	}
