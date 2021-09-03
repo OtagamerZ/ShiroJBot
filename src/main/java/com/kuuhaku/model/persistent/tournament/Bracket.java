@@ -57,7 +57,7 @@ public class Bracket {
 		if (participants.size() >= phase.getSize())
 			phase.getParticipants().addAll(participants.subList(0, phase.getSize()));
 		else
-			phase.getParticipants().addAll(ListUtils.union(participants, Collections.nCopies(phase.getSize() - participants.size(), new Participant(null, t.getId()))));
+			phase.getParticipants().addAll(ListUtils.union(participants, Collections.nCopies(phase.getSize() - participants.size(), new Participant(null))));
 		Collections.shuffle(phase.getParticipants());
 
 		for (int j = 0; j < phases.size(); j++) {
