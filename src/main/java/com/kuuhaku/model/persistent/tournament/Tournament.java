@@ -117,10 +117,13 @@ public class Tournament {
 		size = Helper.roundToBit(participants.size());
 		bracket = new Bracket(size);
 		bracket.populate(this, List.copyOf(participants));
+		participants.removeIf(p -> p.getIndex() == -1);
 	}
 
-	public void setResult(int phase, int index, Participant winner) {
+	public void setResult(int phase, int index) {
+		Participant winner = bracket.getPhases().get(phase).getParticipants().get(index);
 		winner.addPoints((int) (size / Math.pow(2, phase)));
+
 		Phase next = bracket.getPhases().get(phase + 1);
 		next.setMatch(index / 2, winner);
 	}
