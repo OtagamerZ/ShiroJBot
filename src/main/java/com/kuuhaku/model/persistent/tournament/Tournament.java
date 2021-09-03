@@ -140,7 +140,7 @@ public class Tournament {
 	public void setResult(int phase, int index) {
 		Phase p = bracket.getPhases().get(phase);
 		Participant winner = getLookup(p.getParticipants().get(index));
-		winner.addPoints((int) (size / Math.pow(2, phase)));
+		winner.addPoints((size / 2) >> phase);
 
 		Phase next = bracket.getPhases().get(phase + 1);
 		next.setMatch(index / 2, winner);
@@ -209,11 +209,12 @@ public class Tournament {
 				}
 			} else {
 				List<Participant> ps = p.getParticipants().stream()
-						.map(s -> partLookup.getOrDefault(s, new Participant(null)))
+						.map(this::getLookup)
 						.collect(Collectors.toList());
+
 				int pSize = ps.size();
 				for (int k = 0; k < pSize; k++) {
-					Participant part = ps.size() > k ? ps.get(k) : null;
+					Participant part = ps.get(k);
 
 					int y = (bi.getHeight() - 10) / pSize * k + 5;
 					int offset = (bi.getHeight() - 10) / pSize / 2 - HEIGHT / 2;
