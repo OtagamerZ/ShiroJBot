@@ -117,6 +117,7 @@ public class TenthSecondEvent implements Job {
 								false,
 								true,
 								false,
+								null,
 								p1Starts ? mmr1.getUser() : mmr2.getUser(),
 								p1Starts ? mmr2.getUser() : mmr1.getUser()
 						);
@@ -203,6 +204,7 @@ public class TenthSecondEvent implements Job {
 								false,
 								true,
 								false,
+								null,
 								p1Starts ?
 										leaderStarts ?
 												t1.p1().getUser() : t1.p2().getUser()

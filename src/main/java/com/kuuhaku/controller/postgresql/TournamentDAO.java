@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -43,6 +44,47 @@ public class TournamentDAO {
 
 		try {
 			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Tournament> getTournaments(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND NOT t.closed", Tournament.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Tournament> getOpenTournaments() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Tournament t WHERE NOT t.closed", Tournament.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Tournament getUserTournament(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed AND NOT t.finished", Tournament.class);
+		q.setParameter("id", id);
+
+		try {
+			return (Tournament) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
 		} finally {
 			em.close();
 		}
