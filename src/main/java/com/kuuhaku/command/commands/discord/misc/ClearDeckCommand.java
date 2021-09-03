@@ -91,13 +91,13 @@ public class ClearDeckCommand implements Executable {
 								fdk.getChampions().clear();
 
 								for (Equipment e : fdk.getEquipments()) {
-									Stash st = new Stash(author.getId(), new KawaiponCard(e.getCard(), false));
+									Stash st = new Stash(author.getId(), e);
 									StashDAO.saveCard(st);
 								}
 								fdk.getEquipments().clear();
 
 								for (Field fd : fdk.getFields()) {
-									Stash st = new Stash(author.getId(), new KawaiponCard(fd.getCard(), false));
+									Stash st = new Stash(author.getId(), fd);
 									StashDAO.saveCard(st);
 								}
 								fdk.getFields().clear();
