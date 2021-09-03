@@ -22,10 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
@@ -38,7 +35,9 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.model.records.RankedDuo;
+import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.Permission;
@@ -64,6 +63,7 @@ public class ShoukanCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
+		boolean tournament = args.length > 0 && Helper.equalsAny(args[0], "torneio", "tournament");
 
 		if (practice) {
 			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText), new JSONObject());
@@ -81,7 +81,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, false, author, author);
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, false, null, author, author);
 			t.start();
 		} else if (ranked) {
 			MatchMaking mm = Main.getInfo().getMatchMaking();
@@ -190,6 +190,40 @@ public class ShoukanCommand implements Executable {
 							));
 				}
 			}
+		} else if (tournament) {
+			Tournament tn = TournamentDAO.getUserTournament(author.getId());
+			if (tn == null) {
+				channel.sendMessage("❌ | Você não está registrado em nenhum torneio ou as chaves ainda não foram liberadas.").queue();
+				return;
+			}
+
+			int phase = tn.getCurrPhase(author.getId());
+			if (phase != -1) {
+				TournamentMatch match = tn.generateMatch(phase, author.getId());
+
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, null, false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
+				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar? (torneio)")
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+										Main.getInfo().getConfirmationPending().remove(author.getId());
+										if (Main.getInfo().gameInProgress(mb.getId())) {
+											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
+											return;
+										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
+											return;
+										}
+
+										//Main.getInfo().getGames().put(id, t);
+										s.delete().queue(null, Helper::doNothing);
+										t.start();
+									}
+								}), true, 1, TimeUnit.MINUTES,
+								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
+			}
 		} else {
 			if (message.getMentionedUsers().isEmpty()) {
 				channel.sendMessage(I18n.getString("err_no-user")).queue();
@@ -275,7 +309,7 @@ public class ShoukanCommand implements Executable {
 				for (User player : players) {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, players.toArray(User[]::new));
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, null, players.toArray(User[]::new));
 				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (players.contains(mb.getUser())) {
@@ -309,7 +343,7 @@ public class ShoukanCommand implements Executable {
 						));
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, author, message.getMentionedUsers().get(0));
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, null, author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {

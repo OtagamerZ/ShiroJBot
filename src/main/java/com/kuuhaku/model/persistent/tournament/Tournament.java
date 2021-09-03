@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.tournament;
 
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.LazyCollection;
@@ -41,6 +42,9 @@ public class Tournament {
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String name;
+
+	@Column(columnDefinition = "TEXT")
+	private String description = "";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int seed = new Random().nextInt();
@@ -88,8 +92,20 @@ public class Tournament {
 		return name;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public List<Participant> getParticipants() {
 		return List.copyOf(participants);
+	}
+
+	public int getSize() {
+		return size == 0 ? Math.max(4, Helper.roundToBit(participants.size())) : size;
 	}
 
 	public Map<String, Participant> getPartLookup() {
@@ -121,12 +137,72 @@ public class Tournament {
 		return bracket;
 	}
 
+	public Phase getPhase(int phase) {
+		return bracket.getPhases().get(phase);
+	}
+
+	public int getCurrPhase(String uid) {
+		return bracket.getPhases().stream()
+				.sorted(Comparator.comparingInt(Phase::getId))
+				.filter(p -> p.getParticipants().contains(uid))
+				.map(Phase::getPhase)
+				.reduce((f, s) -> s)
+				.orElse(-1);
+	}
+
+	public TournamentMatch generateMatch(int phase, String uid) {
+		Phase p = getPhase(phase);
+
+		List<String> parts = p.getParticipants();
+		for (int i = 0; i < parts.size(); i++) {
+			String s = parts.get(i);
+			if (s.equals(uid)) {
+				if (!p.isLast()) {
+					Phase next = getPhase(phase + 1);
+					if (next.getParticipants().get(i / 2) != null) return null;
+				}
+
+				int topIndex = i % 2 == 0 ? i : i - 1;
+				int botIndex = i % 2 == 0 ? i + 1 : i;
+
+				String top = parts.get(topIndex);
+				String bot = parts.get(botIndex);
+
+				TournamentMatch tm = new TournamentMatch(id, phase, topIndex, top, botIndex, bot);
+				if (Helper.notNull(top, bot)) {
+					return tm;
+				} else {
+					return null;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public void fillWithBye(int phase) {
+		Phase p = getPhase(phase);
+		List<String> parts = p.getParticipants();
+		for (int i = 0; i < parts.size(); i++) {
+			if (parts.get(i) == null) {
+				parts.set(i, "BYE");
+				setResult(phase, i % 2 == 0 ? i + 1 : i - 1);
+			}
+		}
+
+		p.setParticipants(parts);
+	}
+
 	public boolean isClosed() {
 		return closed;
 	}
 
 	public void register(String id) {
 		participants.add(new Participant(id));
+	}
+
+	public void leave(String id) {
+		participants.removeIf(p -> p.getUid().equals(id));
 	}
 
 	public void close() {
@@ -138,12 +214,21 @@ public class Tournament {
 	}
 
 	public void setResult(int phase, int index) {
-		Phase p = bracket.getPhases().get(phase);
+		Phase p = getPhase(phase);
+		if (!p.isLast()) {
+			Phase next = getPhase(phase + 1);
+			if (next.getParticipants().get(index / 2) != null) return;
+		}
+
 		Participant winner = getLookup(p.getParticipants().get(index));
 		winner.addPoints((size / 2) >> phase);
 
-		Phase next = bracket.getPhases().get(phase + 1);
+		Phase next = getPhase(phase + 1);
 		next.setMatch(index / 2, winner);
+
+		if (Helper.notNull(getFirstPlace(), getSecondPlace(), getThirdPlace())) {
+			finished = true;
+		}
 	}
 
 	public void setTPResult(int index) {
@@ -195,7 +280,7 @@ public class Tournament {
 		for (int i = 0; i < phases; i++) {
 			int x = (WIDTH + H_MARGIN) * i + 5;
 
-			Phase p = bracket.getPhases().get(i);
+			Phase p = getPhase(i);
 			if (p.isLast()) {
 				int y = bi.getHeight() / 2 - HEIGHT;
 
@@ -228,7 +313,7 @@ public class Tournament {
 
 					int y = (bi.getHeight() - 10) / pSize * k + 5;
 					int offset = (bi.getHeight() - 10) / pSize / 2 - HEIGHT / 2;
-					boolean winner = part != null && !part.isBye() && part.getUid().equals(bracket.getPhases().get(i + 1).getParticipants().get(k / 2));
+					boolean winner = part != null && !part.isBye() && part.getUid().equals(getPhase(i + 1).getParticipants().get(k / 2));
 
 					int y2 = (bi.getHeight() - 10) / (pSize / 2) * (k / 2);
 					int offset2 = (bi.getHeight() - 10) / (pSize / 2) / 2 - HEIGHT / 2;

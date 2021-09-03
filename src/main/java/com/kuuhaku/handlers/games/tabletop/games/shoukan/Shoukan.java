@@ -25,10 +25,7 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
@@ -42,6 +39,8 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.tournament.Tournament;
+import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
@@ -95,6 +94,7 @@ public class Shoukan extends GlobalGame {
 			Side.BOTTOM, new int[5]
 	);
 	private final Set<PersistentEffect> persistentEffects = new HashSet<>();
+	private final TournamentMatch tourMatch;
 
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
@@ -104,12 +104,14 @@ public class Shoukan extends GlobalGame {
 	private final List<Drawable> discardBatch = new ArrayList<>();
 	private boolean reroll = true;
 	private boolean moveLock = false;
+	private Side winner = null;
 
-	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, User... players) {
+	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
 		this.team = players.length == 4;
 		this.record = record;
+		this.tourMatch = match;
 
 		if (team) {
 			List<Deck> kps = daily ?
@@ -2054,7 +2056,7 @@ public class Shoukan extends GlobalGame {
 
 				reportEvent(h, getCurrent().getName() + " executou um saque do destino!", true, false);
 			});
-		if (phase == Phase.PLAN)
+		if (phase == Phase.PLAN && tourMatch == null)
 			buttons.put("\uD83E\uDD1D", (mb, ms) -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode pedir empate na fase de planejamento.").queue(null, Helper::doNothing);
@@ -2567,6 +2569,21 @@ public class Shoukan extends GlobalGame {
 					acc.setDailyProgress(pg);
 					AccountDAO.saveAccount(acc);
 				}
+			}
+
+			if (tourMatch != null) {
+				int winner = switch (getHistory().getWinner()) {
+					case TOP -> tourMatch.topIndex();
+					case BOTTOM -> tourMatch.botIndex();
+				};
+
+				Tournament t = TournamentDAO.getTournament(tourMatch.id());
+				if (t.getPhase(tourMatch.phase()).isLast())
+					t.setTPResult(winner);
+				else
+					t.setResult(tourMatch.phase(), winner);
+
+				TournamentDAO.save(t);
 			}
 		}
 
