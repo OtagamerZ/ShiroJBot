@@ -3124,9 +3124,9 @@ public class Helper {
 		);
 	}
 
-	public static void drawCenteredString(Graphics2D g2d, String str, int x, int y, int width, int heigth) {
+	public static void drawCenteredString(Graphics2D g2d, String str, int x, int y, int width, int height) {
 		int xOffset = width / 2 - g2d.getFontMetrics().stringWidth(str) / 2;
-		int yOffset = heigth / 2 + g2d.getFont().getSize() / 2;
+		int yOffset = height / 2 + g2d.getFont().getSize() / 2;
 		g2d.drawString(str, x + xOffset, y + yOffset);
 	}
 }
