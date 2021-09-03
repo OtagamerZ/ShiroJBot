@@ -245,7 +245,7 @@ public class Tournament {
 					if (i == 1 && k == 0) {
 						g2d.setColor(Color.white);
 						g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 200));
-						Helper.drawCenteredString(g2d, name, x, y + offset, bi.getWidth() - x, y);
+						Helper.drawCenteredString(g2d, name, x, y + offset, bi.getWidth() - x, y + offset);
 					}
 				}
 			}
