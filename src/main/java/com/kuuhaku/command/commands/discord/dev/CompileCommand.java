@@ -62,7 +62,7 @@ public class CompileCommand implements Executable {
 						t = t.getCause();
 					}
 
-					XStringBuilder sb = new XStringBuilder(t + ": " + t.getMessage());
+					XStringBuilder sb = new XStringBuilder(t.toString());
 					for (StackTraceElement element : t.getStackTrace()) {
 						if (element.toString().startsWith("com.kuuhaku")) {
 							sb.appendNewLine("at " + element);
