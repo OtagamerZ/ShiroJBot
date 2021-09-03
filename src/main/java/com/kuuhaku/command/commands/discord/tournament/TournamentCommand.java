@@ -56,7 +56,7 @@ public class TournamentCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle("Torneios pendentes");
+					.setTitle("Torneios");
 
 			for (List<Tournament> chunk : chunks) {
 				eb.clearFields();
