@@ -138,7 +138,8 @@ public class Tournament {
 	}
 
 	public void setResult(int phase, int index) {
-		Participant winner = partLookup.get(bracket.getPhases().get(phase).getParticipants().get(index));
+		Phase p = bracket.getPhases().get(phase);
+		Participant winner = getLookup(p.getParticipants().get(index));
 		winner.addPoints((int) (size / Math.pow(2, phase)));
 
 		Phase next = bracket.getPhases().get(phase + 1);
