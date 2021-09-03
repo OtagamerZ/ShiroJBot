@@ -386,6 +386,12 @@ public class ShiroInfo {
 		return Main.getShiroShards().getUserById(userID);
 	}
 
+	public User[] getUsersByID(String... userIDs) {
+		return Arrays.stream(userIDs)
+				.map(this::getUserByID)
+				.toArray(User[]::new);
+	}
+
 	public Member getMemberByID(String userID) {
 		User u = getUserByID(userID);
 		return u.getMutualGuilds().get(0).getMember(u);

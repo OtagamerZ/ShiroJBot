@@ -144,6 +144,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.CRC32;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -485,6 +486,12 @@ public class Helper {
 			sb.append(colorTable[clamp(new Random().nextInt(16), 0, 16)]);
 		}
 		return "#" + sb;
+	}
+
+	public static Color textToColor(String text) {
+		CRC32 crc = new CRC32();
+		crc.update(text.getBytes(StandardCharsets.UTF_8));
+		return Color.decode("#%06x".formatted(crc.getValue() & 0xFFFFFF));
 	}
 
 	public static Color getRandomColor() {
