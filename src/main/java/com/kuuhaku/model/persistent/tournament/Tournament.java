@@ -151,7 +151,7 @@ public class Tournament {
 		if (tp.size() != 2) return;
 
 		Participant winner = tp.get(index);
-		winner.addPoints((size / 2) >> getBracket().getPhases().size() - 1);
+		winner.addPoints(1);
 	}
 
 	public Participant getFirstPlace() {
@@ -178,6 +178,7 @@ public class Tournament {
 	public List<Participant> getTPMatch() {
 		return participants.stream()
 				.filter(p -> p.getPoints() == size - 4)
+				.sorted(Comparator.comparingInt(Participant::getIndex))
 				.collect(Collectors.toList());
 	}
 
