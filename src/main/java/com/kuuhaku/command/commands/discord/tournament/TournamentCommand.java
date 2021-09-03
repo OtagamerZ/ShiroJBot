@@ -98,7 +98,7 @@ public class TournamentCommand implements Executable {
 					.setDescription(t.getDescription())
 					.setColor(Helper.textToColor(t.getName()))
 					.addField("Jogadores: " + t.getParticipants().size(), "O tamanho do torneio pode variar de acordo com a quantidade de participantes", false)
-					.setImage("attachments://brackets.jpg");
+					.setImage("attachment://brackets.jpg");
 
 			if (t.isClosed())
 				channel.sendMessageEmbeds(eb.build())
