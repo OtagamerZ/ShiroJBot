@@ -18,12 +18,13 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
+import com.kuuhaku.utils.JSONUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "phase")
@@ -35,9 +36,11 @@ public class Phase {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int phase;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "phase_id")
-	private List<Participant> participants;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int size;
+
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String participants;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean last;
@@ -47,7 +50,8 @@ public class Phase {
 
 	public Phase(int phase, int size, boolean last) {
 		this.phase = phase;
-		this.participants = new ArrayList<>(Arrays.asList(new Participant[size]));
+		this.size = size;
+		this.participants = Arrays.toString(new Participant[size]);
 		this.last = last;
 	}
 
@@ -60,35 +64,46 @@ public class Phase {
 	}
 
 	public int getSize() {
-		return participants.size();
+		return size;
 	}
 
-	public List<Participant> getParticipants() {
-		return participants;
+	public List<String> getParticipants() {
+		return JSONUtils.toList(participants).stream()
+				.map(String::valueOf)
+				.collect(Collectors.toList());
 	}
 
-	public Pair<Participant, Participant> getMatch(int index) {
+	public void setParticipants(List<String> participants) {
+		this.participants = JSONUtils.toJSON(participants);
+	}
+
+	public Pair<String, String> getMatch(int index) {
+		List<String> parts = getParticipants();
 		boolean top = index % 2 == 0;
 
 		return Pair.of(
-				participants.get(top ? index : index - 1),
-				participants.get(top ? index + 1 : index)
+				parts.get(top ? index : index - 1),
+				parts.get(top ? index + 1 : index)
 		);
 	}
 
 	public void setMatch(int index, Participant p) {
+		List<String> parts = getParticipants();
+
 		p.setIndex(index);
-		participants.set(index, p);
+		parts.set(index, p.getUid());
+		participants = JSONUtils.toJSON(parts);
 	}
 
 	public boolean isLast() {
 		return last;
 	}
 
-	public Participant getOpponent(Participant p) {
+	public String getOpponent(Participant p) {
+		List<String> parts = getParticipants();
 		boolean top = p.getIndex() % 2 == 0;
 
 		if (last) return null;
-		return participants.get(top ? p.getIndex() + 1 : p.getIndex() - 1);
+		return parts.get(top ? p.getIndex() + 1 : p.getIndex() - 1);
 	}
 }
