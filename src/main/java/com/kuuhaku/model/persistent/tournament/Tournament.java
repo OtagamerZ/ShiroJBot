@@ -170,7 +170,7 @@ public class Tournament {
 	public BufferedImage view() {
 		int phases = bracket.getPhases().size();
 
-		BufferedImage bi = new BufferedImage((WIDTH + H_MARGIN) * phases + WIDTH - H_MARGIN + 10, Math.max((HEIGHT + V_MARGIN) * 6 - V_MARGIN + 2, (HEIGHT + V_MARGIN) * size - V_MARGIN + 10), BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage((WIDTH + H_MARGIN) * phases + WIDTH - H_MARGIN + 10, Math.max((HEIGHT * 2 + V_MARGIN) * 3 - V_MARGIN + 10, (HEIGHT + V_MARGIN) * size - V_MARGIN + 10), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(BG_COLOR);
 		g2d.clearRect(0, 0, bi.getWidth(), bi.getHeight());
@@ -189,8 +189,8 @@ public class Tournament {
 				int y = bi.getHeight() / 2 - HEIGHT;
 
 				drawNameBox(g2d, x, y, Color.orange, true);
-				drawNameBox(g2d, x, y + (HEIGHT + V_MARGIN) * 2, Color.lightGray, true);
-				drawNameBox(g2d, x, y + (HEIGHT + V_MARGIN) * 4, new Color(0x964B00), true);
+				drawNameBox(g2d, x, y + HEIGHT * 2 + V_MARGIN, Color.lightGray, true);
+				drawNameBox(g2d, x, y + (HEIGHT * 2 + V_MARGIN) * 2, new Color(0x964B00), true);
 
 				Participant first = getFirstPlace();
 				if (first != null) {
@@ -198,11 +198,11 @@ public class Tournament {
 
 					Participant second = getSecondPlace();
 					if (second != null) {
-						drawName(g2d, second, x, y + (HEIGHT + V_MARGIN) * 2, true, true);
+						drawName(g2d, second, x, y + HEIGHT * 2 + V_MARGIN, true, true);
 
 						Participant third = getThirdPlace();
 						if (third != null) {
-							drawName(g2d, third, x, y + (HEIGHT + V_MARGIN) * 4, true, true);
+							drawName(g2d, third, x, y + (HEIGHT * 2 + V_MARGIN) * 2, true, true);
 						}
 					}
 				}
