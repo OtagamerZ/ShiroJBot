@@ -46,7 +46,7 @@ public class Participant {
 	}
 
 	public Participant(String uid) {
-		if (uid == null) uid = "-" + System.currentTimeMillis();
+		if (uid == null) uid = "BYE";
 		this.uid = uid;
 	}
 
@@ -79,7 +79,7 @@ public class Participant {
 	}
 
 	public boolean isBye() {
-		return Long.parseLong(uid) < 0;
+		return uid.equals("BYE");
 	}
 
 	@Override

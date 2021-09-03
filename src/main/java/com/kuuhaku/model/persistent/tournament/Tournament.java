@@ -30,6 +30,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tournament")
@@ -61,6 +62,8 @@ public class Tournament {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size = 0;
 
+	private final transient Map<String, Participant> partLookup = new HashMap<>();
+
 	private static final int H_MARGIN = 150;
 	private static final int V_MARGIN = 25;
 	private static final int WIDTH = 400;
@@ -87,6 +90,20 @@ public class Tournament {
 
 	public List<Participant> getParticipants() {
 		return List.copyOf(participants);
+	}
+
+	public Map<String, Participant> getPartLookup() {
+		if (partLookup.isEmpty()) {
+			for (Participant p : participants) {
+				partLookup.put(p.getUid(), p);
+			}
+		}
+
+		return partLookup;
+	}
+
+	public Participant getLookup(String id) {
+		return getPartLookup().get(id);
 	}
 
 	public TreeSet<Participant> getRanking() {
@@ -121,7 +138,7 @@ public class Tournament {
 	}
 
 	public void setResult(int phase, int index) {
-		Participant winner = bracket.getPhases().get(phase).getParticipants().get(index);
+		Participant winner = partLookup.get(bracket.getPhases().get(phase).getParticipants().get(index));
 		winner.addPoints((int) (size / Math.pow(2, phase)));
 
 		Phase next = bracket.getPhases().get(phase + 1);
@@ -190,14 +207,16 @@ public class Tournament {
 					}
 				}
 			} else {
-				List<Participant> ps = p.getParticipants();
+				List<Participant> ps = p.getParticipants().stream()
+						.map(s -> partLookup.getOrDefault(s, new Participant(null)))
+						.collect(Collectors.toList());
 				int pSize = ps.size();
 				for (int k = 0; k < pSize; k++) {
 					Participant part = ps.size() > k ? ps.get(k) : null;
 
 					int y = (bi.getHeight() - 10) / pSize * k + 5;
 					int offset = (bi.getHeight() - 10) / pSize / 2 - HEIGHT / 2;
-					boolean winner = part != null && !part.isBye() && part.equals(bracket.getPhases().get(i + 1).getParticipants().get(k / 2));
+					boolean winner = part != null && !part.isBye() && part.getUid().equals(bracket.getPhases().get(i + 1).getParticipants().get(k / 2));
 
 					int y2 = (bi.getHeight() - 10) / (pSize / 2) * (k / 2);
 					int offset2 = (bi.getHeight() - 10) / (pSize / 2) / 2 - HEIGHT / 2;
