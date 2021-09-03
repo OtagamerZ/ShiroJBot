@@ -146,6 +146,14 @@ public class Tournament {
 		next.setMatch(index / 2, winner);
 	}
 
+	public void setTPResult(int index) {
+		List<Participant> tp = getTPMatch();
+		if (tp.size() != 2) return;
+
+		Participant winner = tp.get(index);
+		winner.addPoints((size / 2) >> getBracket().getPhases().size() - 1);
+	}
+
 	public Participant getFirstPlace() {
 		return participants.stream()
 				.filter(p -> p.getPoints() == size - 1)
@@ -167,10 +175,16 @@ public class Tournament {
 				.orElse(null);
 	}
 
+	public List<Participant> getTPMatch() {
+		return participants.stream()
+				.filter(p -> p.getPoints() == size - 4)
+				.collect(Collectors.toList());
+	}
+
 	public BufferedImage view() {
 		int phases = bracket.getPhases().size();
 
-		BufferedImage bi = new BufferedImage((WIDTH + H_MARGIN) * phases + WIDTH - H_MARGIN + 10, Math.max((HEIGHT * 2 + V_MARGIN) * 3 - V_MARGIN + 10, (HEIGHT + V_MARGIN) * size - V_MARGIN + 10), BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage((WIDTH + H_MARGIN) * phases + WIDTH - H_MARGIN + 10, Math.max((HEIGHT * 2 + V_MARGIN) * 5 - V_MARGIN + 10, (HEIGHT + V_MARGIN) * size - V_MARGIN + 10), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(BG_COLOR);
 		g2d.clearRect(0, 0, bi.getWidth(), bi.getHeight());
