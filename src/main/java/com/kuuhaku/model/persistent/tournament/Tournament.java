@@ -131,7 +131,7 @@ public class Tournament {
 
 	public void close() {
 		closed = true;
-		size = Helper.roundToBit(participants.size());
+		size = Math.max(4, Helper.roundToBit(participants.size()));
 		bracket = new Bracket(size);
 		bracket.populate(this, List.copyOf(participants));
 		participants.removeIf(p -> p.getIndex() == -1);
