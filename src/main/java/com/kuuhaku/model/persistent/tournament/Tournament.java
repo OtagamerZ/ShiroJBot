@@ -192,10 +192,6 @@ public class Tournament {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setStroke(new BasicStroke(8, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 
-		g2d.setColor(Color.white);
-		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 200));
-		Helper.drawCenteredString(g2d, name, WIDTH + H_MARGIN + 5, 205, bi.getWidth() - WIDTH + H_MARGIN + 5, (bi.getHeight() - 10) / size / 4 - HEIGHT / 2 + 5);
-
 		for (int i = 0; i < phases; i++) {
 			int x = (WIDTH + H_MARGIN) * i + 5;
 
@@ -245,6 +241,12 @@ public class Tournament {
 
 					drawNameBox(g2d, x, y + offset, winner ? Color.white : PRIMARY_COLOR, false);
 					drawName(g2d, part, x, y + offset, winner, false);
+
+					if (i == 1 && k == 0) {
+						g2d.setColor(Color.white);
+						g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 200));
+						Helper.drawCenteredString(g2d, name, x, y, bi.getWidth() - x, y);
+					}
 				}
 			}
 		}
