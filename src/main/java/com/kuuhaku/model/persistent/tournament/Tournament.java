@@ -194,7 +194,7 @@ public class Tournament {
 
 		g2d.setColor(Color.white);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 200));
-		Helper.drawCenteredString(g2d, name, WIDTH + H_MARGIN + 5, 5, bi.getWidth() - WIDTH + H_MARGIN + 5, (bi.getHeight() - 10) / size / 4 - HEIGHT / 2 + 5);
+		Helper.drawCenteredString(g2d, name, WIDTH + H_MARGIN + 5, 205, bi.getWidth() - WIDTH + H_MARGIN + 5, (bi.getHeight() - 10) / size / 4 - HEIGHT / 2 + 5);
 
 		for (int i = 0; i < phases; i++) {
 			int x = (WIDTH + H_MARGIN) * i + 5;
