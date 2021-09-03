@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.tournament;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.jdesktop.swingx.graphics.BlendComposite;
@@ -48,20 +47,6 @@ public class Tournament {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "tournament")
-	private Set<Participant> ranking = new TreeSet<>(
-			Comparator.comparingInt(Participant::getPoints).reversed()
-					.thenComparingInt(Participant::getIndex)
-					.thenComparing(Participant::isThird).reversed()
-	);
-
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament")
-	private List<Participant> thirdPlace = new ArrayList<>(Arrays.asList(null, null));
-
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament")
 	private List<Participant> participants = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -69,6 +54,9 @@ public class Tournament {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean closed = false;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean finished = false;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size = 0;
@@ -98,7 +86,18 @@ public class Tournament {
 	}
 
 	public List<Participant> getParticipants() {
-		return participants;
+		return List.copyOf(participants);
+	}
+
+	public TreeSet<Participant> getRanking() {
+		TreeSet<Participant> rank = new TreeSet<>(
+				Comparator.comparingInt(Participant::getPoints).reversed()
+						.thenComparingInt(Participant::getIndex)
+						.thenComparing(Participant::isThird).reversed()
+		);
+		rank.addAll(participants);
+
+		return rank;
 	}
 
 	public Bracket getBracket() {
@@ -117,31 +116,34 @@ public class Tournament {
 		closed = true;
 		size = Helper.roundToBit(participants.size());
 		bracket = new Bracket(size);
-		bracket.populate(this, participants);
+		bracket.populate(this, List.copyOf(participants));
 	}
 
 	public void setResult(int phase, int index, Participant winner) {
-		if (phase == bracket.getPhases().size()) {
-			winner.setThird();
-			ranking.addAll(participants);
-		} else {
-			Pair<Participant, Participant> mtch = bracket.getPhases().get(phase).getMatch(index);
-			Participant other = Objects.equals(mtch.getLeft(), winner) ? mtch.getRight() : mtch.getLeft();
+		winner.addPoints((int) (size / Math.pow(2, phase)));
+		Phase next = bracket.getPhases().get(phase + 1);
+		next.setMatch(index / 2, winner);
+	}
 
-			boolean top = winner.getIndex() % 2 == 0;
-			winner.won(phase);
-			Phase next = bracket.getPhases().get(phase + 1);
-			next.setMatch(index / 2, winner);
+	public Participant getFirstPlace() {
+		return participants.stream()
+				.filter(p -> p.getPoints() == size - 1)
+				.findFirst()
+				.orElse(null);
+	}
 
-			if (phase == bracket.getPhases().size() - 3) {
-				thirdPlace.set(top ? 1 : 0, other);
-			}
+	public Participant getSecondPlace() {
+		return participants.stream()
+				.filter(p -> p.getPoints() == size - 2)
+				.findFirst()
+				.orElse(null);
+	}
 
-			if (next.isLast()) {
-				ranking.add(winner);
-				ranking.add(other);
-			}
-		}
+	public Participant getThirdPlace() {
+		return participants.stream()
+				.filter(p -> p.getPoints() == size - 3)
+				.findFirst()
+				.orElse(null);
 	}
 
 	public BufferedImage view() {
@@ -162,84 +164,90 @@ public class Tournament {
 			int x = (WIDTH + H_MARGIN) * i + 5;
 
 			Phase p = bracket.getPhases().get(i);
-			int mult = p.isLast() ? 2 : 1;
+			if (p.isLast()) {
+				int y = 5;
+				int offset = (bi.getHeight() - 10) / 2 - HEIGHT / 2;
 
-			List<Participant> ps = p.getParticipants();
-			int pSize = p.getSize();
-			for (int k = 0; k < pSize; k++) {
-				Participant part = ps.size() > k ? ps.get(k) : null;
+				drawNameBox(g2d, x, y + offset, Color.orange, true);
+				drawNameBox(g2d, x, y + offset + (HEIGHT + V_MARGIN), Color.lightGray, true);
+				drawNameBox(g2d, x, y + offset + (HEIGHT + V_MARGIN) * 2, new Color(0x964B00), true);
 
-				int y = (bi.getHeight() - 10) / pSize * k + 5;
-				int offset = (bi.getHeight() - 10) / pSize / 2 - HEIGHT * mult / 2;
-				boolean winner = part != null && part.isWinner(i) && !part.isBye();
+				Participant first = getFirstPlace();
+				if (first != null) {
+					drawName(g2d, first, x, y + offset, true, true);
 
-				g2d.setColor(SECONDARY_COLOR);
-				g2d.fillRoundRect(x, y + offset, WIDTH * mult, HEIGHT * mult, 50, 50);
+					Participant second = getSecondPlace();
+					if (second != null) {
+						drawName(g2d, second, x, y + offset + (HEIGHT + V_MARGIN), true, true);
 
-				if (i < phases - 1) {
+						Participant third = getThirdPlace();
+						if (third != null) {
+							drawName(g2d, third, x, y + offset + (HEIGHT + V_MARGIN) * 2, true, true);
+						}
+					}
+				}
+			} else {
+				List<Participant> ps = p.getParticipants();
+				int pSize = ps.size();
+				for (int k = 0; k < pSize; k++) {
+					Participant part = ps.size() > k ? ps.get(k) : null;
+
+					int y = (bi.getHeight() - 10) / pSize * k + 5;
+					int offset = (bi.getHeight() - 10) / pSize / 2 - HEIGHT / 2;
+					boolean winner = part != null && !part.isBye() && part.equals(bracket.getPhases().get(i + 1).getParticipants().get(k / 2));
+
 					int y2 = (bi.getHeight() - 10) / (pSize / 2) * (k / 2);
-					int offset2 = (bi.getHeight() - 10) / (pSize / 2) / 2 - HEIGHT * mult / 2;
+					int offset2 = (bi.getHeight() - 10) / (pSize / 2) / 2 - HEIGHT / 2;
 
 					g2d.setColor(winner ? Color.white : SECONDARY_COLOR);
 					Composite comp = g2d.getComposite();
 					g2d.setComposite(BlendComposite.Lighten);
 					Helper.drawSquareLine(g2d, x + WIDTH, y + offset + HEIGHT / 2, (WIDTH + H_MARGIN) * (i + 1), y2 + offset2 + HEIGHT / 2);
 					g2d.setComposite(comp);
-				}
 
-				if (part != null) {
-					if (part.isBye()) {
-						g2d.setColor(PRIMARY_COLOR);
-						g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD | Font.ITALIC, 50));
-						Helper.drawCenteredString(g2d, "BYE", x, y + offset, WIDTH, (HEIGHT - 20));
-					} else {
-						g2d.setColor(winner ? Color.white : PRIMARY_COLOR);
-						g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 50 * mult));
-						Helper.drawCenteredString(g2d, StringUtils.abbreviate(part.toString(), 13), x, y + offset, WIDTH * mult, (HEIGHT - 20) * mult);
-					}
-				}
-
-				if (mult == 2) {
-					g2d.setColor(Color.orange);
-					g2d.drawRoundRect(x, y + offset, WIDTH * mult, HEIGHT * mult, 50, 50);
-
-					//SECOND PLACE
-					g2d.setColor(SECONDARY_COLOR);
-					g2d.fillRoundRect(x, y + offset + (HEIGHT + V_MARGIN) * mult, WIDTH * mult, HEIGHT * mult, 50, 50);
-
-					Participant second = ranking.isEmpty() ? null : ((TreeSet<Participant>) ranking).lower(((TreeSet<Participant>) ranking).first());
-					if (second != null) {
-						g2d.setColor(Color.white);
-						g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 50 * mult));
-						Helper.drawCenteredString(g2d, second.toString(), x, y + offset + (HEIGHT + V_MARGIN) * mult, WIDTH * mult, (HEIGHT - 20) * mult);
-					}
-
-					g2d.setColor(Color.lightGray);
-					g2d.drawRoundRect(x, y + offset + (HEIGHT + V_MARGIN) * mult, WIDTH * mult, HEIGHT * mult, 50, 50);
-					//SECOND PLACE
-
-					//THIRD PLACE
-					g2d.setColor(SECONDARY_COLOR);
-					g2d.fillRoundRect(x, y + offset + (HEIGHT + V_MARGIN) * mult * 2, WIDTH * mult, HEIGHT * mult, 50, 50);
-
-					Participant third = second == null ? null : ((TreeSet<Participant>) ranking).lower(second);
-					if (third != null) {
-						g2d.setColor(Color.white);
-						g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 50 * mult));
-						Helper.drawCenteredString(g2d, second.toString(), x, y + offset + (HEIGHT + V_MARGIN) * mult * 2, WIDTH * mult, (HEIGHT - 20) * mult);
-					}
-
-					g2d.setColor(new Color(0x7C3600));
-					g2d.drawRoundRect(x, y + offset + (HEIGHT + V_MARGIN) * mult * 2, WIDTH * mult, HEIGHT * mult, 50, 50);
-					//THIRD PLACE
-				} else {
-					g2d.setColor(winner ? Color.white : PRIMARY_COLOR);
-					g2d.drawRoundRect(x, y + offset, WIDTH * mult, HEIGHT * mult, 50, 50);
+					drawNameBox(g2d, x, y + offset, winner ? Color.white : PRIMARY_COLOR, false);
+					drawName(g2d, part, x, y + offset, winner, false);
 				}
 			}
 		}
 
 		g2d.dispose();
 		return bi;
+	}
+
+	private void drawNameBox(Graphics2D g2d, int x, int y, Color border, boolean bigger) {
+		int mult = bigger ? 2 : 1;
+
+		g2d.setColor(SECONDARY_COLOR);
+		g2d.fillRoundRect(x, y, WIDTH * mult, HEIGHT * mult, 50, 50);
+		g2d.setColor(border);
+		g2d.drawRoundRect(x, y, WIDTH * mult, HEIGHT * mult, 50, 50);
+	}
+
+	private void drawName(Graphics2D g2d, Participant part, int x, int y, boolean winner, boolean bigger) {
+		int mult = bigger ? 2 : 1;
+
+		if (part != null) {
+			String name;
+			if (part.isBye()) {
+				g2d.setColor(PRIMARY_COLOR);
+				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.ITALIC, 50 * mult));
+				name = "BYE";
+			} else {
+				g2d.setColor(winner ? Color.white : PRIMARY_COLOR);
+				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 50 * mult));
+				name = StringUtils.abbreviate(part.toString(), 13);
+			}
+
+			Helper.drawCenteredString(g2d, name, x, y, WIDTH * mult, (HEIGHT - 20) * mult);
+		}
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 }

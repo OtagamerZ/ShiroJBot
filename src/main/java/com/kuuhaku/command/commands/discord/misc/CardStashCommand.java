@@ -193,6 +193,7 @@ public class CardStashCommand implements Executable {
 			}
 		}
 		KawaiponDAO.saveKawaipon(kp);
+		StashDAO.removeCard(s);
 
 		channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
 	}
