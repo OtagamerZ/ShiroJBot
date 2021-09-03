@@ -130,6 +130,7 @@ public class SellCardCommand implements Executable {
 					));
 		} else if (matches.isEmpty()) {
 			channel.sendMessage("❌ | Você não pode vender uma carta que não possui!").queue();
+			Main.getInfo().getConfirmationPending().remove(author.getId());
 			return;
 		} else {
 			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
