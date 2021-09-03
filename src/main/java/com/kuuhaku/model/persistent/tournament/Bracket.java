@@ -69,7 +69,7 @@ public class Bracket {
 				if (p.getIndex() == -1) p.setIndex(i);
 				Participant op = phase.getOpponent(p);
 				if (op != null && op.isBye()) {
-					t.setResult(j, i, p);
+					t.setResult(j, i);
 				}
 			}
 		}
