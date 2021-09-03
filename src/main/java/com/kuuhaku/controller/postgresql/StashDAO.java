@@ -61,10 +61,7 @@ public class StashDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Stash s = em.find(Stash.class, id);
-			if (s != null) removeCard(s);
-
-			return s;
+			return em.find(Stash.class, id);
 		} finally {
 			em.close();
 		}

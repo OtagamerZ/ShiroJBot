@@ -40,7 +40,7 @@ public class Participant {
 	private int index = -1;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int wins = 0;
+	private int points = 0;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean third = false;
@@ -70,15 +70,11 @@ public class Participant {
 	}
 
 	public int getPoints() {
-		return wins;
+		return points;
 	}
 
-	public boolean isWinner(int phase) {
-		return (wins & 1 << phase) != 0;
-	}
-
-	public void won(int phase) {
-		this.wins |= 1 << phase;
+	public void addPoints(int pts) {
+		points += pts;
 	}
 
 	public boolean isThird() {

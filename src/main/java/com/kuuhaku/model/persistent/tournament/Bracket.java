@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.tournament;
 
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.collections4.ListUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -53,9 +54,10 @@ public class Bracket {
 
 	public void populate(Tournament t, List<Participant> participants) {
 		Phase phase = phases.get(0);
-		for (int i = 0; i < phase.getSize(); i++) {
-			phase.getParticipants().set(i, i >= participants.size() ? new Participant(null, t.getId()) : participants.get(i));
-		}
+		if (participants.size() >= phase.getSize())
+			phase.getParticipants().addAll(participants.subList(0, phase.getSize()));
+		else
+			phase.getParticipants().addAll(ListUtils.union(participants, Collections.nCopies(phase.getSize() - participants.size(), new Participant(null, t.getId()))));
 		Collections.shuffle(phase.getParticipants());
 
 		for (int j = 0; j < phases.size(); j++) {
