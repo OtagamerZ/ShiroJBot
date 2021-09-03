@@ -72,6 +72,7 @@ public class ManualResultCommand implements Executable {
 								t.setResult(p.getPhase(), index);
 								TournamentDAO.save(t);
 
+								s.delete().queue(null, Helper::doNothing);
 								channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();
 							}), true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())

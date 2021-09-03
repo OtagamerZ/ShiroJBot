@@ -109,6 +109,7 @@ public class CloseBracketsCommand implements Executable {
 									}
 								}
 
+								s.delete().queue(null, Helper::doNothing);
 								channel.sendMessage("✅ | Chaves liberadas com sucesso, os jogadores foram notificados (use `" + prefix + "torneio ID` para ver as chaves)!").queue();
 							}), true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())

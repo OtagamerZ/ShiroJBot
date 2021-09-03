@@ -53,6 +53,7 @@ public class CreateTournamentCommand implements Executable {
 				s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							TournamentDAO.save(t);
 
+							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage("✅ | Torneio criado com sucesso (para iniciá-lo use `" + prefix + "liberarchaves`)!").queue();
 						}), true, 1, TimeUnit.MINUTES
 						, u -> u.getId().equals(author.getId())

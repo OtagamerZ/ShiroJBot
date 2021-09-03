@@ -98,6 +98,7 @@ public class JoinTournamentCommand implements Executable {
 								t.register(author.getId());
 								TournamentDAO.save(t);
 
+								s.delete().queue(null, Helper::doNothing);
 								channel.sendMessage("✅ | Inscrição realizada com sucesso! Você será notificado quando as chaves forem liberadas.").queue();
 							}), true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
