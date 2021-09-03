@@ -361,6 +361,7 @@ public class KawaiponBook {
 				.sorted(Comparator
 						.<Drawable>comparingInt(d -> {
 							if (d instanceof Champion c) {
+								if (c.isFusion()) showAvailable.set(false);
 								return c.getMana();
 							} else if (d instanceof Equipment e) {
 								showAvailable.set(false);
