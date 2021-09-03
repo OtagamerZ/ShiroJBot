@@ -109,7 +109,7 @@ public class Tournament {
 	}
 
 	public void register(String id) {
-		participants.add(new Participant(id, this.id));
+		participants.add(new Participant(id));
 	}
 
 	public void close() {

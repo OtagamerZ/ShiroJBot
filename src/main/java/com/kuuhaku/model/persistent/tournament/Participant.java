@@ -18,23 +18,20 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
-import com.kuuhaku.model.persistent.id.CompositeParticipantId;
 import com.kuuhaku.utils.Helper;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
 @Table(name = "participant")
-@IdClass(CompositeParticipantId.class)
 public class Participant {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String uid;
-
-	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int tournament;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int index = -1;
@@ -48,17 +45,13 @@ public class Participant {
 	public Participant() {
 	}
 
-	public Participant(String uid, int tournament) {
+	public Participant(String uid) {
+		if (uid == null) uid = "-" + System.currentTimeMillis();
 		this.uid = uid;
-		this.tournament = tournament;
 	}
 
 	public String getUid() {
 		return uid;
-	}
-
-	public int getTournament() {
-		return tournament;
 	}
 
 	public int getIndex() {
@@ -86,7 +79,7 @@ public class Participant {
 	}
 
 	public boolean isBye() {
-		return uid == null;
+		return Long.parseLong(uid) < 0;
 	}
 
 	@Override
