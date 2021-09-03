@@ -186,11 +186,11 @@ public class Tournament {
 
 			Phase p = bracket.getPhases().get(i);
 			if (p.isLast()) {
-				int y = bi.getHeight() / 2 - HEIGHT / 2;
+				int y = bi.getHeight() / 2 - HEIGHT;
 
 				drawNameBox(g2d, x, y, Color.orange, true);
-				drawNameBox(g2d, x, y + HEIGHT + V_MARGIN, Color.lightGray, true);
-				drawNameBox(g2d, x, y + (HEIGHT + V_MARGIN) * 2, new Color(0x964B00), true);
+				drawNameBox(g2d, x, y + HEIGHT * 2 + V_MARGIN * 2, Color.lightGray, true);
+				drawNameBox(g2d, x, y + (HEIGHT * 2 + V_MARGIN * 2) * 2, new Color(0x964B00), true);
 
 				Participant first = getFirstPlace();
 				if (first != null) {
