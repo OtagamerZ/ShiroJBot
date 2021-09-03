@@ -97,7 +97,7 @@ public class TournamentCommand implements Executable {
 					.setTitle("Torneio " + t.getName() + " (Chave de " + t.getSize() + ")")
 					.setDescription(t.getDescription())
 					.setColor(Helper.textToColor(t.getName()))
-					.addField("Jogadores: " + t.getParticipants().size(), "O tamanho do torneio pode variar de acordo com a quantidade de participantes", false)
+					.addField("Jogadores: " + t.getParticipants().size(), t.isClosed() ? "" : "O tamanho do torneio pode variar de acordo com a quantidade de participantes", false)
 					.setImage("attachment://brackets.jpg");
 
 			if (t.isClosed())
