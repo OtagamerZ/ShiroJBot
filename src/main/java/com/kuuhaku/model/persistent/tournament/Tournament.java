@@ -189,8 +189,8 @@ public class Tournament {
 				int y = bi.getHeight() / 2 - HEIGHT;
 
 				drawNameBox(g2d, x, y, Color.orange, true);
-				drawNameBox(g2d, x, y + HEIGHT * 2 + V_MARGIN * 2, Color.lightGray, true);
-				drawNameBox(g2d, x, y + (HEIGHT * 2 + V_MARGIN * 2) * 2, new Color(0x964B00), true);
+				drawNameBox(g2d, x, y + (HEIGHT + V_MARGIN) * 2, Color.lightGray, true);
+				drawNameBox(g2d, x, y + (HEIGHT + V_MARGIN) * 4, new Color(0x964B00), true);
 
 				Participant first = getFirstPlace();
 				if (first != null) {
@@ -198,11 +198,11 @@ public class Tournament {
 
 					Participant second = getSecondPlace();
 					if (second != null) {
-						drawName(g2d, second, x, y + (HEIGHT + V_MARGIN), true, true);
+						drawName(g2d, second, x, y + (HEIGHT + V_MARGIN) * 2, true, true);
 
 						Participant third = getThirdPlace();
 						if (third != null) {
-							drawName(g2d, third, x, y + (HEIGHT + V_MARGIN) * 2, true, true);
+							drawName(g2d, third, x, y + (HEIGHT + V_MARGIN) * 4, true, true);
 						}
 					}
 				}
