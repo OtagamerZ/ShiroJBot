@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "bracket")
@@ -33,6 +34,9 @@ public class Bracket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int size;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "bracket_id")
@@ -42,10 +46,15 @@ public class Bracket {
 	}
 
 	public Bracket(int size) {
+		this.size = size;
 		this.phases = new ArrayList<>(Arrays.asList(new Phase[(int) Helper.log(size, 2) + 1]));
 		for (int i = 0; i < phases.size(); i++) {
 			phases.set(i, new Phase(i, (int) (size / Math.pow(2, i)), i == phases.size() - 1));
 		}
+	}
+
+	public int getSize() {
+		return size;
 	}
 
 	public List<Phase> getPhases() {
@@ -53,21 +62,26 @@ public class Bracket {
 	}
 
 	public void populate(Tournament t, List<Participant> participants) {
-		Phase phase = phases.get(0);
-		if (participants.size() >= phase.getSize())
-			phase.getParticipants().addAll(participants.subList(0, phase.getSize()));
+		List<String> ids = participants.stream()
+				.map(Participant::getUid)
+				.collect(Collectors.toList());
+
+		if (participants.size() >= size)
+			ids = ids.subList(0, size);
 		else
-			phase.getParticipants().addAll(ListUtils.union(participants, Collections.nCopies(phase.getSize() - participants.size(), new Participant(null))));
-		Collections.shuffle(phase.getParticipants());
+			ids.addAll(ListUtils.union(ids, Collections.nCopies(size - participants.size(), "BYE")));
+
+		Collections.shuffle(ids);
+		phases.get(0).setParticipants(ids);
 
 		for (int j = 0; j < phases.size(); j++) {
-			phase = phases.get(j);
+			Phase phase = phases.get(j);
 			for (int i = 0; i < phase.getSize(); i++) {
-				Participant p = phase.getParticipants().get(i);
+				Participant p = t.getLookup(phase.getParticipants().get(i));
 				if (p == null) continue;
 
 				if (p.getIndex() == -1) p.setIndex(i);
-				Participant op = phase.getOpponent(p);
+				Participant op = t.getLookup(phase.getOpponent(p));
 				if (op != null && op.isBye()) {
 					t.setResult(j, i);
 				}
