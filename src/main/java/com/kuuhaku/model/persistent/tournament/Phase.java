@@ -69,7 +69,7 @@ public class Phase {
 
 	public List<String> getParticipants() {
 		return JSONUtils.toList(participants).stream()
-				.map(String::valueOf)
+				.map(s -> s == null ? null : String.valueOf(s))
 				.collect(Collectors.toList());
 	}
 
