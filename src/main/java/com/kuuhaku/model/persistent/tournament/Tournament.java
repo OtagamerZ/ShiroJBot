@@ -236,10 +236,6 @@ public class Tournament {
 
 		Phase next = getPhase(phase + 1);
 		next.setMatch(index / 2, winner);
-
-		if (Helper.notNull(getFirstPlace(), getSecondPlace(), getThirdPlace())) {
-			finished = true;
-		}
 	}
 
 	public void setTPResult(int index) {
@@ -248,6 +244,8 @@ public class Tournament {
 
 		Participant winner = tp.get(index);
 		winner.addPoints(1);
+
+		finished = true;
 	}
 
 	public Participant getFirstPlace() {
