@@ -62,7 +62,7 @@ public class ManualResultCommand implements Executable {
 			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
 
 			int phase = Integer.parseInt(args[1]);
-			if (phase == t.getBracket().getPhases().size()) {
+			if (phase == t.getBracket().getPhases().size() - 1) {
 				int index = Integer.parseInt(args[2]);
 				List<Participant> match = t.getTPMatch();
 				User winner = Main.getInfo().getUserByID(match.get(index).getUid());
