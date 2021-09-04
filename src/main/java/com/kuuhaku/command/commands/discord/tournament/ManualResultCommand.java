@@ -78,9 +78,6 @@ public class ManualResultCommand implements Executable {
 							, u -> u.getId().equals(author.getId())
 					), Helper::doNothing
 			);
-			TournamentDAO.save(t);
-
-			channel.sendMessage("✅ | Descrição adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | ID inválido.").queue();
 		}
