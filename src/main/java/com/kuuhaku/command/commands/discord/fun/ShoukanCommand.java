@@ -200,6 +200,7 @@ public class ShoukanCommand implements Executable {
 			int phase = tn.getCurrPhase(author.getId());
 			if (phase != -1) {
 				TournamentMatch match = tn.generateMatch(phase, author.getId());
+				if (match == null) return;
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, null, false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
