@@ -93,7 +93,7 @@ public class JoinTournamentCommand implements Executable {
 				return;
 			}
 
-			channel.sendMessage("Você está prestes a inscrever-se no torneio `" + argsAsText + "`, deseja confirmar?").queue(
+			channel.sendMessage("Você está prestes a inscrever-se no torneio `" + t.getName() + "`, deseja confirmar?").queue(
 					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								t.register(author.getId());
 								TournamentDAO.save(t);

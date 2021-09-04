@@ -95,7 +95,7 @@ public class CloseBracketsCommand implements Executable {
 				return;
 			}
 
-			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + argsAsText + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
+			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + t.getName() + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
 					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								t.close();
 								TournamentDAO.save(t);
