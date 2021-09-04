@@ -53,7 +53,7 @@ public class TournamentDAO {
 	public static List<Tournament> getTournaments(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND NOT t.closed", Tournament.class);
+		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed = FALSE", Tournament.class);
 
 		try {
 			return q.getResultList();
@@ -66,7 +66,7 @@ public class TournamentDAO {
 	public static List<Tournament> getOpenTournaments() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tournament t WHERE NOT t.closed", Tournament.class);
+		Query q = em.createQuery("SELECT t FROM Tournament t WHERE t.closed = FALSE", Tournament.class);
 
 		try {
 			return q.getResultList();
@@ -78,7 +78,7 @@ public class TournamentDAO {
 	public static Tournament getUserTournament(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed AND NOT t.finished", Tournament.class);
+		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed = TRUE AND t.finished = FALSE", Tournament.class);
 		q.setParameter("id", id);
 
 		try {
