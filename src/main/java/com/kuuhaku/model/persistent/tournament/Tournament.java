@@ -142,6 +142,9 @@ public class Tournament {
 	}
 
 	public int getCurrPhase(String uid) {
+		if (Helper.notNull(getFirstPlace(), getSecondPlace()))
+			return getBracket().getSize();
+
 		return bracket.getPhases().stream()
 				.sorted(Comparator.comparingInt(Phase::getId))
 				.filter(p -> p.getParticipants().contains(uid))
@@ -151,6 +154,11 @@ public class Tournament {
 	}
 
 	public TournamentMatch generateMatch(int phase, String uid) {
+		if (phase == getBracket().getSize()) {
+			List<Participant> tp = getTPMatch();
+			return new TournamentMatch(id, phase, 0, tp.get(0).getUid(), 1, tp.get(1).getUid());
+		}
+
 		Phase p = getPhase(phase);
 
 		List<String> parts = p.getParticipants();
