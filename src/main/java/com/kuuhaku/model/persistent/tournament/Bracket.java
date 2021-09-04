@@ -48,6 +48,7 @@ public class Bracket {
 		for (int i = 0; i < phases.size(); i++) {
 			phases.set(i, new Phase(i, (int) (size / Math.pow(2, i)), i == phases.size() - 1));
 		}
+		this.phases.sort(Comparator.comparingInt(Phase::getPhase));
 	}
 
 	public int getSize() {
@@ -70,10 +71,10 @@ public class Bracket {
 			ids.addAll(ListUtils.union(ids, Collections.nCopies(size - participants.size(), "BYE")));
 
 		Collections.shuffle(ids);
-		phases.get(0).setParticipants(ids);
+		getPhases().get(0).setParticipants(ids);
 
 		for (int j = 0; j < phases.size(); j++) {
-			Phase phase = phases.get(j);
+			Phase phase = getPhases().get(j);
 			for (int i = 0; i < phase.getSize(); i++) {
 				Participant p = t.getLookup(phase.getParticipants().get(i));
 				if (p == null) continue;
