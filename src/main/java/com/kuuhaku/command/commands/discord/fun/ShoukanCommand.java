@@ -202,16 +202,38 @@ public class ShoukanCommand implements Executable {
 				TournamentMatch match = tn.generateMatch(phase, author.getId());
 				if (match == null) return;
 
+				User other = Main.getInfo().getUserByID(match.top().equals(author.getId()) ? match.bot() : match.top());
+				if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+					channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+					return;
+				} else if (Main.getInfo().getConfirmationPending().get(other.getId()) != null) {
+					channel.sendMessage("❌ | " + other.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
+					return;
+				}
+
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+				Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
+				if (kp.getDeck().hasInvalidDeck(channel)
+					|| Deck.hasInvalidDeck(target.getDeck(), other, channel)) return;
+
+				if (Main.getInfo().gameInProgress(author.getId())) {
+					channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
+					return;
+				} else if (Main.getInfo().gameInProgress(other.getId())) {
+					channel.sendMessage(I18n.getString("err_user-in-game")).queue();
+					return;
+				}
+
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, null, false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
-				channel.sendMessage("<@" + match.bot() + "> você foi desafiado a uma partida de Shoukan, deseja aceitar? (torneio)")
+				channel.sendMessage(other.getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar? (torneio)")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									if (mb.getId().equals(match.bot())) {
+									if (mb.getId().equals(other.getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
-										} else if (Main.getInfo().gameInProgress(match.bot())) {
+										} else if (Main.getInfo().gameInProgress(other.getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
 										}
@@ -221,7 +243,7 @@ public class ShoukanCommand implements Executable {
 										t.start();
 									}
 								}), true, 1, TimeUnit.MINUTES,
-								u -> Helper.equalsAny(u.getId(), match.top(), match.bot()),
+								u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			}
