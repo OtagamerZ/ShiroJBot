@@ -142,8 +142,11 @@ public class Tournament {
 	}
 
 	public int getCurrPhase(String uid) {
-		if (Helper.notNull(getFirstPlace(), getSecondPlace()))
-			return getBracket().getSize();
+		if (Helper.notNull(getFirstPlace(), getSecondPlace())) {
+			if (getLookup(uid).getPoints() == size - 4)
+				return getBracket().getSize();
+			else return -1;
+		}
 
 		return bracket.getPhases().stream()
 				.sorted(Comparator.comparingInt(Phase::getId))
