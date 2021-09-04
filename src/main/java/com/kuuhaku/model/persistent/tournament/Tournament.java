@@ -144,7 +144,7 @@ public class Tournament {
 	public int getCurrPhase(String uid) {
 		if (Helper.notNull(getFirstPlace(), getSecondPlace())) {
 			if (getLookup(uid).getPoints() == size - 4)
-				return getBracket().getSize();
+				return getBracket().getPhases().size();
 			else return -1;
 		}
 
@@ -157,7 +157,7 @@ public class Tournament {
 	}
 
 	public TournamentMatch generateMatch(int phase, String uid) {
-		if (phase == getBracket().getSize()) {
+		if (phase == getBracket().getPhases().size()) {
 			List<Participant> tp = getTPMatch();
 			return new TournamentMatch(id, phase, 0, tp.get(0).getUid(), 1, tp.get(1).getUid());
 		}
