@@ -206,12 +206,12 @@ public class ShoukanCommand implements Executable {
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, null, false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
 				channel.sendMessage("<@" + match.bot() + "> você foi desafiado a uma partida de Shoukan, deseja aceitar? (torneio)")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+									if (mb.getId().equals(match.bot())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
-										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+										} else if (Main.getInfo().gameInProgress(match.bot())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
 										}
@@ -221,7 +221,7 @@ public class ShoukanCommand implements Executable {
 										t.start();
 									}
 								}), true, 1, TimeUnit.MINUTES,
-								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+								u -> Helper.equalsAny(u.getId(), match.top(), match.bot()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			}
