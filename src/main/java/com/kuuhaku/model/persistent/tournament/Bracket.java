@@ -22,10 +22,7 @@ import com.kuuhaku.utils.Helper;
 import org.apache.commons.collections4.ListUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -58,6 +55,7 @@ public class Bracket {
 	}
 
 	public List<Phase> getPhases() {
+		phases.sort(Comparator.comparingInt(Phase::getPhase));
 		return phases;
 	}
 
