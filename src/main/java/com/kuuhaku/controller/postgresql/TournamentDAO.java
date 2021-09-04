@@ -54,6 +54,7 @@ public class TournamentDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed = FALSE", Tournament.class);
+		q.setParameter("id", id);
 
 		try {
 			return q.getResultList();
