@@ -65,6 +65,7 @@ public class Hand {
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int nullTime = 0;
+	private float healingMod = 1;
 	private Message old = null;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
@@ -607,7 +608,7 @@ public class Hand {
 	}
 
 	public void addHp(int value) {
-		hp += Math.max(0, value);
+		hp += Math.max(0, value * healingMod);
 	}
 
 	public void removeHp(int value) {
@@ -653,5 +654,13 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
+	}
+
+	public float getHealingMod() {
+		return healingMod;
+	}
+
+	public void setHealingMod(float healingMod) {
+		this.healingMod = healingMod;
 	}
 }
