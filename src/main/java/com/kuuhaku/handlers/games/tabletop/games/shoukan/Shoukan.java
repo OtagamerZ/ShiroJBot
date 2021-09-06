@@ -2407,6 +2407,24 @@ public class Shoukan extends GlobalGame {
 		return persistentEffects;
 	}
 
+	public void addPersistentEffect(PersistentEffect pe) {
+		if (pe == null) return;
+
+		Set<PersistentEffect> aux = Set.copyOf(persistentEffects);
+		for (PersistentEffect curr : aux) {
+			if (curr.equals(pe)) {
+				float bias = Helper.prcnt(pe.getTurns(), curr.getTurns()) * Helper.prcnt(pe.getLimit(), curr.getLimit());
+
+				if (bias > 1) {
+					persistentEffects.remove(curr);
+					persistentEffects.add(pe);
+				}
+
+				return;
+			}
+		}
+	}
+
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
 		if (persistentEffects.size() > 0) {
 			Iterator<PersistentEffect> i = persistentEffects.iterator();

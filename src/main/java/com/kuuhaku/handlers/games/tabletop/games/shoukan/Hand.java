@@ -618,6 +618,14 @@ public class Hand {
 		game.applyPersistentEffects(ON_HEAL, side, -1);
 	}
 
+	public void addHp(int value, boolean trigger) {
+		prevHp = hp;
+		hp += Math.max(0, value);
+
+		if (trigger)
+			game.applyPersistentEffects(ON_HEAL, side, -1);
+	}
+
 	public void removeHp(int value) {
 		prevHp = hp;
 		if (hp > baseHp / 3) crippleHp(value);
@@ -626,9 +634,28 @@ public class Hand {
 		game.applyPersistentEffects(ON_DAMAGE, side, -1);
 	}
 
+	public void removeHp(int value, boolean trigger) {
+		prevHp = hp;
+		if (hp > baseHp / 3) crippleHp(value);
+		else hp -= Math.max(0, value);
+
+		if (trigger)
+			game.applyPersistentEffects(ON_DAMAGE, side, -1);
+	}
+
 	public void crippleHp(int value) {
 		prevHp = hp;
 		hp = Math.max(1, hp - Math.max(0, value));
+
+		game.applyPersistentEffects(ON_DAMAGE, side, -1);
+	}
+
+	public void crippleHp(int value, boolean trigger) {
+		prevHp = hp;
+		hp = Math.max(1, hp - Math.max(0, value));
+
+		if (trigger)
+			game.applyPersistentEffects(ON_DAMAGE, side, -1);
 	}
 
 	public int getPrevHp() {
