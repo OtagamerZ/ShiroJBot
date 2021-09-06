@@ -31,6 +31,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +64,13 @@ public class TournamentCommand implements Executable {
 
 				for (Tournament tn : chunk) {
 					eb.addField(
-							"`ID: " + tn.getId() + "` | " + tn.getName() + (tn.isClosed() ? " (FECHADO)" : ""),
-							"Jogadores: %s | Chave de %s".formatted(
-									tn.getParticipants().size(),
+							"`ID: %d` | %s%s | Chave de %s".formatted(
+									tn.getId(),
+									tn.getName(),
+									tn.isFinished() ? " (ENCERRADO)" : tn.isClosed() ? " (FECHADO)" : "",
 									tn.getSize()
 							),
+							StringUtils.abbreviate(tn.getDescription(), 100),
 							false
 					);
 				}
@@ -76,7 +79,7 @@ public class TournamentCommand implements Executable {
 			}
 
 			if (pages.isEmpty()) {
-				channel.sendMessage("❌ | Não há nenhum torneio pendente.").queue();
+				channel.sendMessage("❌ | Não há nenhum torneio ainda.").queue();
 				return;
 			}
 
