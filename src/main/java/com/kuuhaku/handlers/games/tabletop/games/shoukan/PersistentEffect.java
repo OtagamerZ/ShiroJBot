@@ -98,11 +98,11 @@ public class PersistentEffect {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		PersistentEffect that = (PersistentEffect) o;
-		return Objects.equals(source, that.source);
+		return Objects.equals(source, that.source) && target == that.target;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source);
+		return Objects.hash(source, target);
 	}
 }
