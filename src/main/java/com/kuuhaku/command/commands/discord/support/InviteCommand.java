@@ -31,8 +31,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.List;
-
 @Command(
 		name = "convite",
 		aliases = {"invite"},
@@ -80,19 +78,7 @@ public class InviteCommand implements Executable {
 					.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " **(" + finalRole + ")**\nPor favor seja detalhado e lembre-se que ajudaremos apenas sobre assuntos relacionados à Shiro.\n\n**Atenção:** nossa equipe jamais pedirá informações confidenciais como senhas ou emais, nunca forneça-os!"))
 					.queue(null, Helper::doNothing);
 
-			Guild g = Main.getInfo().getGuildByID(t.getSid());
-			List<Invite> invs = g.retrieveInvites().complete();
-			Invite iv = invs.stream()
-					.filter(i -> i.getCode().equals(t.getInvite()))
-					.findFirst()
-					.orElse(null);
-
-			if (iv == null) {
-				channel.sendMessage("❌ | O convite desse ticket não é mais válido.").queue();
-				return;
-			}
-
-			channel.sendMessage("Aqui está!\n" + iv.getUrl()).queue();
+			channel.sendMessage("Aqui está!\nhttps://discord.gg/" + t.getInvite()).queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-ticket-id")).queue();
 		}
