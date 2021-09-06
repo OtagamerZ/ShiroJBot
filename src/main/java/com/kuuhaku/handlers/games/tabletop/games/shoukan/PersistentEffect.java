@@ -20,12 +20,14 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectConsumer;
 
 import java.util.Objects;
 import java.util.Set;
 
 public class PersistentEffect {
+	private final Drawable card;
 	private final String source;
 	private final Set<EffectTrigger> triggers;
 	private final EffectConsumer effect;
@@ -34,7 +36,8 @@ public class PersistentEffect {
 	private int turns;
 	private int limit;
 
-	public PersistentEffect(String source, EffectConsumer effect, Side target, boolean debuff, int turns, int limit, EffectTrigger... triggers) {
+	public PersistentEffect(Drawable card, String source, EffectConsumer effect, Side target, boolean debuff, int turns, int limit, EffectTrigger... triggers) {
+		this.card = card;
 		this.source = source;
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
@@ -42,6 +45,10 @@ public class PersistentEffect {
 		this.turns = turns;
 		this.limit = limit;
 		this.debuff = debuff;
+	}
+
+	public Drawable getCard() {
+		return card;
 	}
 
 	public String getSource() {
@@ -98,11 +105,11 @@ public class PersistentEffect {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		PersistentEffect that = (PersistentEffect) o;
-		return Objects.equals(source, that.source) && target == that.target;
+		return Objects.equals(card, that.card) && Objects.equals(source, that.source);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source, target);
+		return Objects.hash(card, source);
 	}
 }
