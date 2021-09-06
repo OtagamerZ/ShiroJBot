@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"dance", "tuts"},
 		category = Category.FUN
 )
-@Requires({Permission.MESSAGE_EMBED_LINKS})
+@Requires({Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES})
 public class DanceReaction extends Action implements Executable {
 
 	@Override
