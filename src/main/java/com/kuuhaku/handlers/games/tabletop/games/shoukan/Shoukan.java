@@ -104,7 +104,6 @@ public class Shoukan extends GlobalGame {
 	private final List<Drawable> discardBatch = new ArrayList<>();
 	private boolean reroll = true;
 	private boolean moveLock = false;
-	private Side winner = null;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -1913,8 +1912,11 @@ public class Shoukan extends GlobalGame {
 			if (h.get().getCombo().getLeft() == Race.DEMON) {
 				Hand op = hands.get(getNextSide());
 				h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
-				if (h.get().getHp() < h.get().getBaseHp() / 3f)
+				if (h.get().getHp() < h.get().getBaseHp() / 3f) {
 					h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
+
+					if (applyPersistentEffects(ON_HEAL, h.get().getSide(), -1)) return;
+				}
 			}
 
 			switch (h.get().getCombo().getRight()) {
@@ -2128,8 +2130,11 @@ public class Shoukan extends GlobalGame {
 					if (h.get().getCombo().getLeft() == Race.DEMON) {
 						Hand op = hands.get(getNextSide());
 						h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
-						if (h.get().getHp() < h.get().getBaseHp() / 3f)
+						if (h.get().getHp() < h.get().getBaseHp() / 3f) {
 							h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
+
+							if (applyPersistentEffects(ON_HEAL, h.get().getSide(), -1)) return;
+						}
 					}
 
 					switch (h.get().getCombo().getRight()) {
