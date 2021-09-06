@@ -720,9 +720,9 @@ public class Shoukan extends GlobalGame {
 										yPower,
 										getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
 										demonFac > 1
-												? " (efeito de raça: +" + Math.round(yPower * demonFac - yPower) + " dano direto causado)"
+												? " (efeito de raça: dano direto aumentado em " + Math.round(yPower * demonFac - yPower) + ")"
 												: demonFac < 1
-												? " (efeito de raça: " + Math.round(yPower * demonFac - yPower) + " dano direto causado)"
+												? " (efeito de raça: dano direto reduzido em " + Math.round(yPower * demonFac - yPower) + ")"
 												: ""
 								)
 								, true, false);
@@ -976,9 +976,9 @@ public class Shoukan extends GlobalGame {
 							yPower,
 							hPower,
 							demonFac > 1
-									? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto causado)"
+									? " (efeito de raça: dano direto aumentado em " + Math.round(dmg * demonFac - dmg) + ")"
 									: demonFac < 1
-									? " (efeito de raça: " + Math.round(dmg * demonFac - dmg) + " dano direto causado)"
+									? " (efeito de raça: dano direto reduzido em " + Math.round(dmg * demonFac - dmg) + ")"
 									: "",
 							his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 					);
@@ -1043,9 +1043,9 @@ public class Shoukan extends GlobalGame {
 						yPower,
 						hPower,
 						demonFac > 1
-								? " (efeito de raça: +" + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)"
+								? " (efeito de raça: dano direto aumentado em " + Math.round(dmg * demonFac - dmg) + ")"
 								: demonFac < 1
-								? " (efeito de raça: " + Math.round(dmg * demonFac - dmg) + " dano direto sofrido)"
+								? " (efeito de raça: dano direto reduzido em " + Math.round(dmg * demonFac - dmg) + ")"
 								: "",
 						his.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
 				);
