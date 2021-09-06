@@ -2423,6 +2423,8 @@ public class Shoukan extends GlobalGame {
 				return;
 			}
 		}
+
+		persistentEffects.add(pe);
 	}
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
