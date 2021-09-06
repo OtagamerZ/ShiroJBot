@@ -65,6 +65,7 @@ public class UnbanMemberCommand implements Executable {
 				users.add(u);
 			} catch (NumberFormatException e) {
 				channel.sendMessage(I18n.getString("err_invalid-id-value")).queue();
+				return;
 			}
 		}
 
@@ -82,7 +83,6 @@ public class UnbanMemberCommand implements Executable {
 		} else {
 			User u = users.stream().findFirst().orElse(null);
 
-			assert u != null;
 			guild.unban(u)
 					.flatMap(s -> channel.sendMessage("✅ | " + u.getName() + " desbanido com sucesso!"))
 					.queue(null, Helper::doNothing);
