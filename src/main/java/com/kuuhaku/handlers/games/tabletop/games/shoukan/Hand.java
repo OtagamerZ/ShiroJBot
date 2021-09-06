@@ -46,6 +46,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_DAMAGE;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_HEAL;
+
 public class Hand {
 	private final Shoukan game;
 	private final Account acc;
@@ -62,10 +65,10 @@ public class Hand {
 	private int manaPerTurn = 0;
 	private int mana = 0;
 	private int hp = 0;
+	private int prevHp = 0;
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int nullTime = 0;
-	private float healingMod = 1;
 	private Message old = null;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
@@ -604,20 +607,32 @@ public class Hand {
 	}
 
 	public void setHp(int value) {
+		prevHp = hp;
 		hp = value;
 	}
 
 	public void addHp(int value) {
-		hp += Math.max(0, value * healingMod);
+		prevHp = hp;
+		hp += Math.max(0, value);
+
+		game.applyPersistentEffects(ON_HEAL, side, -1);
 	}
 
 	public void removeHp(int value) {
+		prevHp = hp;
 		if (hp > baseHp / 3) crippleHp(value);
 		else hp -= Math.max(0, value);
+
+		game.applyPersistentEffects(ON_DAMAGE, side, -1);
 	}
 
 	public void crippleHp(int value) {
+		prevHp = hp;
 		hp = Math.max(1, hp - Math.max(0, value));
+	}
+
+	public int getPrevHp() {
+		return prevHp;
 	}
 
 	public boolean isSuppressed() {
@@ -654,13 +669,5 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
-	}
-
-	public float getHealingMod() {
-		return healingMod;
-	}
-
-	public void setHealingMod(float healingMod) {
-		this.healingMod = healingMod;
 	}
 }
