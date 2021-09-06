@@ -2413,7 +2413,7 @@ public class Shoukan extends GlobalGame {
 		Set<PersistentEffect> aux = Set.copyOf(persistentEffects);
 		for (PersistentEffect curr : aux) {
 			if (curr.equals(pe)) {
-				float bias = Helper.prcnt(pe.getTurns(), curr.getTurns()) * Helper.prcnt(pe.getLimit(), curr.getLimit());
+				float bias = Helper.prcnt(pe.getTurns(), Math.max(1, curr.getTurns())) * Helper.prcnt(pe.getLimit(), Math.max(1, curr.getLimit()));
 
 				if (bias > 1) {
 					persistentEffects.remove(curr);
