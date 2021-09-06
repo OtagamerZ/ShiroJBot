@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class PersistentEffect {
-	private final long stamp = System.currentTimeMillis();
 	private final String source;
 	private final Set<EffectTrigger> triggers;
 	private final EffectConsumer effect;
@@ -99,11 +98,11 @@ public class PersistentEffect {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		PersistentEffect that = (PersistentEffect) o;
-		return stamp == that.stamp;
+		return Objects.equals(source, that.source);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(stamp);
+		return Objects.hash(source);
 	}
 }
