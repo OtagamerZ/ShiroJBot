@@ -52,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 )
 @Requires({
 		Permission.MESSAGE_ADD_REACTION,
+		Permission.MANAGE_SERVER,
 		Permission.CREATE_INSTANT_INVITE
 })
 @SlashGroup("suporte")
