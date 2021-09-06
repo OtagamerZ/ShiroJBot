@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.*;
 )
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_ADD_REACTION
 })
 public class KissReaction extends Action implements Executable {

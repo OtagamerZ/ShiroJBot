@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"saisai", "run", "foge"},
 		category = Category.FUN
 )
-@Requires({Permission.MESSAGE_EMBED_LINKS})
+@Requires({Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES})
 public class RunReaction extends Action implements Executable {
 
 	@Override
