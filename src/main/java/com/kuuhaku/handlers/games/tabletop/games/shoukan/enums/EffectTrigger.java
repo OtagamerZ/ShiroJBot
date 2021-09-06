@@ -37,6 +37,8 @@ public enum EffectTrigger {
 	ON_DESTROY(false),
 	ON_LOSE(false),
 	ON_WIN(false),
+	ON_HEAL(false),
+	ON_DAMAGE(false),
 
 	BEFORE_DEATH(true),
 	AFTER_DEATH(true),
