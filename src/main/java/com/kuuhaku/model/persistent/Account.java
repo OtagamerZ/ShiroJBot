@@ -108,6 +108,9 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean started = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean collectedQueen = false;
+
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String ultimate = "";
 
@@ -390,6 +393,14 @@ public class Account {
 
 	public void setStarted(boolean started) {
 		this.started = started;
+	}
+
+	public boolean hasCollectedQueen() {
+		return collectedQueen;
+	}
+
+	public void setCollectedQueen(boolean collectedQueen) {
+		this.collectedQueen = collectedQueen;
 	}
 
 	public int getStreak() {

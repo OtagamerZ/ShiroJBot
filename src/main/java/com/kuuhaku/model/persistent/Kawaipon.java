@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.util.*;
@@ -99,15 +98,21 @@ public class Kawaipon implements Cloneable {
 			decks.add(new Deck());
 		} else {
 			Account acc = AccountDAO.getAccount(uid);
+			boolean update = false;
 			if (decks.size() < acc.getDeckStashCapacity()) {
 				for (int i = 0; i < acc.getDeckStashCapacity() - decks.size(); i++) {
 					decks.add(new Deck());
+					update = true;
 				}
 				KawaiponDAO.saveKawaipon(this);
 			}
+
+			if (update) {
+				decks = KawaiponDAO.getKawaipon(uid).getDecks();
+			}
 		}
 
-		decks.sort(Comparator.comparingInt(d -> Helper.getOr(d.getId(), 0)));
+		decks.sort(Comparator.comparingInt(Deck::getId));
 		return decks;
 	}
 
