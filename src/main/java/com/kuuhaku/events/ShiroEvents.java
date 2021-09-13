@@ -189,27 +189,14 @@ public class ShiroEvents extends ListenerAdapter {
 			}*/
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		if (gc.getNoSpamChannels().contains(channel.getId()) && Main.getSelfUser().getId().equals(author.getId())) {
-			if (message.getReactions().size() >= gc.getNoSpamAmount()) {
-				message.delete()
-						.flatMap(s -> channel.sendMessage(":warning: | Opa, sem spam meu amigo!"))
-						.queue(msg -> {
-							msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-							Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + channel.getAsMention(), guild, msg.getContentRaw());
-						}, Helper::doNothing);
-			} else if (gc.isHardAntispam()) {
-				channel.getHistory().retrievePast(20).queue(h -> {
-					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+		if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
+			channel.getHistory().retrievePast(20).queue(h -> {
+				h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+				if (!gc.isHardAntispam())
+					h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
 
-					countSpam(member, channel, guild, h);
-				});
-			} else {
-				channel.getHistory().retrievePast(20).queue(h -> {
-					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
-
-					countSpam(member, channel, guild, h);
-				});
-			}
+				countSpam(member, channel, guild, h);
+			});
 		}
 
 		if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
