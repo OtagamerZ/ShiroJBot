@@ -218,6 +218,8 @@ public class Board {
 
 	public BufferedImage render() {
 		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
 
 		for (int y = 0; y < size.getHeight(); y++) {
