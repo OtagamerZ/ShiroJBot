@@ -171,7 +171,7 @@ public class Reversi extends Game {
 			} else {
 				resetTimer();
 				draw = false;
-				channel.sendMessage("Turno de %s (%dB | %dP).".formatted(getCurrent().getAsMention(), whiteCount, blackCount))
+				channel.sendMessage("Turno de %s (:white_circle: %d | :black_circle: %d).".formatted(getCurrent().getAsMention(), whiteCount, blackCount))
 						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -230,7 +230,7 @@ public class Reversi extends Game {
 			User current = getCurrent();
 			resetTimer();
 			draw = true;
-			channel.sendMessage("%s passou a vez, agora é você %s (%dB | %dP).".formatted(current.getName(), getCurrent().getAsMention(), whiteCount, blackCount))
+			channel.sendMessage("%s passou a vez, agora é você %s (:white_circle: %d | :black_circle: %d).".formatted(current.getName(), getCurrent().getAsMention(), whiteCount, blackCount))
 					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
