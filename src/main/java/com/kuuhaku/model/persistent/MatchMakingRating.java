@@ -116,7 +116,7 @@ public class MatchMakingRating {
 
 	public void removeMMR(long lost, long opponent, boolean ranked) {
 		double score = Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
-		this.mmr -= score;
+		this.mmr = (long) Math.max(0, mmr - score);
 
 		ClanMember cm = ClanDAO.getClanMember(uid);
 		if (cm != null) {
@@ -138,12 +138,13 @@ public class MatchMakingRating {
 			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
 		double mmrModif = Helper.prcnt(mmr, Helper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
+
 		if (tier == RankedTier.UNRANKED) {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
 				tier = tier.getNext();
-				rankPoints = 0;
+				rankPoints = (int) (50 * Helper.prcnt(promWins, tier.getMd()));
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
@@ -158,7 +159,7 @@ public class MatchMakingRating {
 
 			if (promWins > tier.getMd() / 2f) {
 				tier = tier.getNext();
-				rankPoints = 0;
+				rankPoints = rpValue;
 				promWins = promLosses = 0;
 
 				if (StringUtils.isNumeric(master) && tier.getTier() > 1) {
@@ -204,7 +205,7 @@ public class MatchMakingRating {
 
 			if (promWins + promLosses == tier.getMd()) {
 				tier = tier.getNext();
-				rankPoints = 0;
+				rankPoints = (int) (50 * Helper.prcnt(promWins, tier.getMd()));
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
@@ -242,16 +243,14 @@ public class MatchMakingRating {
 			return;
 		}
 
-		if (rankPoints == 0 && tier != RankedTier.INITIATE_IV) {
+		rankPoints = Math.max(0, rankPoints - 25 * (tier.getTier() - 3));
+		if (rankPoints == 0) {
 			tier = tier.getPrevious();
 			rankPoints = 75;
 			Main.getInfo().getUserByID(uid).openPrivateChannel()
 					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s) por inatividade.".formatted(tier.getTier(), tier.getName())))
 					.queue(null, Helper::doNothing);
-			return;
 		}
-
-		rankPoints = Math.max(0, rankPoints - 25 * (tier.getTier() - 3));
 	}
 
 	public RankedTier getTier() {
