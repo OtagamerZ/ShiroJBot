@@ -171,7 +171,7 @@ public class Reversi extends Game {
 			} else {
 				resetTimer();
 				draw = false;
-				channel.sendMessage("Turno de " + getCurrent().getAsMention())
+				channel.sendMessage("Turno de %s (%dB | %dP).".formatted(getCurrent().getAsMention(), whiteCount, blackCount))
 						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -188,14 +188,14 @@ public class Reversi extends Game {
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
-			if (draw) {
-				int whiteCount = 0;
-				int blackCount = 0;
-				for (int i = 0; i < getBoard().getSize().getHeight(); i++) {
-					whiteCount += (int) Arrays.stream(getBoard().getRow(i)).filter(p -> p != null && p.isWhite()).count();
-					blackCount += (int) Arrays.stream(getBoard().getRow(i)).filter(p -> p != null && !p.isWhite()).count();
-				}
+			int whiteCount = 0;
+			int blackCount = 0;
+			for (int i = 0; i < getBoard().getSize().getHeight(); i++) {
+				whiteCount += (int) Arrays.stream(getBoard().getRow(i)).filter(p -> p != null && p.isWhite()).count();
+				blackCount += (int) Arrays.stream(getBoard().getRow(i)).filter(p -> p != null && !p.isWhite()).count();
+			}
 
+			if (draw) {
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
 					getBoard().awardWinner(this, winner.getId());
@@ -230,7 +230,7 @@ public class Reversi extends Game {
 			User current = getCurrent();
 			resetTimer();
 			draw = true;
-			channel.sendMessage(current.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
+			channel.sendMessage("%s passou a vez, agora é você %s (%dB | %dP).".formatted(current.getName(), getCurrent().getAsMention(), whiteCount, blackCount))
 					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
