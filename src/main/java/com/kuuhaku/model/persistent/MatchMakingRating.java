@@ -218,7 +218,7 @@ public class MatchMakingRating {
 			promLosses++;
 
 			if (promLosses > tier.getMd() / 2f) {
-				rankPoints -= rpValue * promLosses;
+				rankPoints -= rpValue;
 				promWins = promLosses = 0;
 				return;
 			}
@@ -227,7 +227,7 @@ public class MatchMakingRating {
 
 		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
 			tier = tier.getPrevious();
-			rankPoints -= rpValue;
+			rankPoints = Math.max(0, rankPoints - rpValue);
 			Main.getInfo().getUserByID(uid).openPrivateChannel()
 					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s).".formatted(tier.getTier(), tier.getName())))
 					.queue(null, Helper::doNothing);
