@@ -142,17 +142,13 @@ public class ShiroEvents extends ListenerAdapter {
 		TextChannel channel = message.getTextChannel();
 		Guild guild = message.getGuild();
 		String rawMessage = message.getContentRaw().replaceAll("\s+", " ");
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		String prefix = gc.getPrefix().toLowerCase(Locale.ROOT);
 
 		if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 			handleExchange(author, message);
-			return;
 		} else if (member == null || !channel.canTalk()) return;
-
-		String prefix = "";
-		try {
-			prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase(Locale.ROOT);
-		} catch (NoResultException | NullPointerException ignore) {
-		}
+		assert member != null;
 
 		if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId()) && rawMessage.length() > 1) {
 			try {
@@ -175,29 +171,20 @@ public class ShiroEvents extends ListenerAdapter {
 			return;
 		}
 
-		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+		if (!author.isBot()) {
+			if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
+				channel.getHistory().retrievePast(20).queue(h -> {
+					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+					if (!gc.isHardAntispam())
+						h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
 
-		if (!blacklisted) MemberDAO.getMember(author.getId(), guild.getId());
-
-			/*try {
-				MutedMember mm = MemberDAO.getMutedMemberById(author.getId());
-				if (mm != null && mm.isMuted()) {
-					message.delete().complete();
-					return;
-				}
-			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
-			}*/
-
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
-			channel.getHistory().retrievePast(20).queue(h -> {
-				h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
-				if (!gc.isHardAntispam())
-					h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
-
-				countSpam(member, channel, guild, h);
-			});
+					countSpam(member, channel, guild, h);
+				});
+			}
 		}
+
+		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+		if (!blacklisted) MemberDAO.getMember(author.getId(), guild.getId());
 
 		if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
 			channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue(null, Helper::doNothing);
@@ -238,10 +225,6 @@ public class ShiroEvents extends ListenerAdapter {
 				.toArray(String[]::new);
 
 		boolean found = false;
-		if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
-			return;
-		}
-
 		if (toHandle.containsKey(guild.getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(guild.getId());
 			for (SimpleMessageListener evt : evts) {
@@ -266,6 +249,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
+		if (author.isBot()) return;
 		PreparedCommand command = Main.getCommandManager().getCommand(commandName);
 		if (command != null && !Main.getInfo().getIgnore().contains(author.getId())) {
 			found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
@@ -273,9 +257,6 @@ public class ShiroEvents extends ListenerAdapter {
 			if (found) {
 				if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 					channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
-					return;
-				} else if (author.getId().equals(Main.getSelfUser().getId())) {
-					channel.sendMessage(I18n.getString("err_human-command")).queue();
 					return;
 				} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
 					try {
@@ -320,7 +301,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		if (!found && !author.isBot() && !blacklisted) {
+		if (!found && !blacklisted) {
 			if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 				Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + ": " + rawMessage);
 			}
@@ -333,7 +314,7 @@ public class ShiroEvents extends ListenerAdapter {
 				if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
 				if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
 			} catch (InsufficientPermissionException ignore) {
-			} 
+			}
 
 			Event ev = Event.getCurrent();
 			if (ev == Event.XMAS && gc.isDropSpawn())
@@ -344,7 +325,7 @@ public class ShiroEvents extends ListenerAdapter {
 			try {
 				if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 					message.delete().reason("Mensagem possui um URL").queue();
-					channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
+					channel.sendMessage(author.getAsMention() + ", é proibido postar links neste canal!").queue();
 					Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
 				}
 
