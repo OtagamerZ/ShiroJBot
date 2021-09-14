@@ -277,7 +277,7 @@ public class Clan {
 
 	public boolean hasPaidRent() {
 		Calendar c = Calendar.getInstance();
-		return paidRent.get(Calendar.MONTH) == c.get(Calendar.MONTH);
+		return paidRent.get(Calendar.MONTH) == c.get(Calendar.MONTH) || c.get(Calendar.DAY_OF_MONTH) > 8;
 	}
 
 	public void payRent(User u) {
