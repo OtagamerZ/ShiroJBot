@@ -267,12 +267,12 @@ public class Clan {
 			geo.increment(score);
 		}
 
-		return Math.round(geo.getResult() * switch (tier) {
-			case PARTY -> 0.25;
-			case FACTION -> 0.5;
-			case GUILD -> 0.75;
-			case DYNASTY -> 1;
-		});
+		return Math.round(geo.getResult() * (switch (tier) {
+			case PARTY -> 10;
+			case FACTION -> 50;
+			case GUILD -> 100;
+			case DYNASTY -> 500;
+		} / 500f));
 	}
 
 	public boolean hasPaidRent() {
