@@ -103,7 +103,10 @@ public class PersistentEffect {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		else if (o == null) return false;
+		else if (o instanceof Drawable) return card.equals(o);
+		else if (getClass() != o.getClass()) return false;
+
 		PersistentEffect that = (PersistentEffect) o;
 		return Objects.equals(card, that.card) && Objects.equals(source, that.source);
 	}
