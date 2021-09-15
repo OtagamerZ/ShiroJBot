@@ -204,7 +204,7 @@ public class KawaiponBook {
 				List<KawaiponCard> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					KawaiponCard kc = chunk.get(i);
-					BufferedImage card = kc.getCard().drawCard(false);
+					BufferedImage card = kc.getCard().drawCard(foil);
 
 					int width = 4026 / COLUMN_COUNT;
 					int actualWidth = width * chunk.size();
