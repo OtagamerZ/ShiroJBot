@@ -26,7 +26,6 @@ import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
-import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
@@ -35,8 +34,6 @@ import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -84,7 +81,6 @@ public class ShiroInfo {
 	private static final OperatingSystemMXBean systemInfo = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 	private static final String botToken = System.getenv("BOT_TOKEN");
-	private static final String youtubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String dblToken;
 	private static final String name = "Shiro J. Bot";
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
@@ -120,8 +116,6 @@ public class ShiroInfo {
 			"806892045327007794"  //Top level emotes
 	);
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
-	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
-	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final ShiroEvents shiroEvents = new ShiroEvents();
 	private static final CloseableHttpClient http = HttpClients.custom().setDefaultHeaders(List.of(
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
@@ -154,6 +148,7 @@ public class ShiroInfo {
 				Guild guild = Main.getShiroShards().getGuildById((String) k);
 				if (guild == null) return;
 
+				@SuppressWarnings("unchecked")
 				Pair<Long, Integer> p = (Pair<Long, Integer>) v;
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 				TextChannel chn = gc.getGeneralChannel();
@@ -217,10 +212,6 @@ public class ShiroInfo {
 		return botToken;
 	}
 
-	public static String getYoutubeToken() {
-		return youtubeToken;
-	}
-
 	public static String getDblToken() {
 		return dblToken;
 	}
@@ -247,18 +238,6 @@ public class ShiroInfo {
 
 	public static Map<String, Map<String, String>> getPolls() {
 		return polls;
-	}
-
-	public static AudioPlayerManager getApm() {
-		return apm;
-	}
-
-	public static Map<Long, GuildMusicManager> getGmms() {
-		return gmms;
-	}
-
-	public static void addGmm(long id, GuildMusicManager gmm) {
-		gmms.put(id, gmm);
 	}
 
 	public static CloseableHttpClient getHttp() {
