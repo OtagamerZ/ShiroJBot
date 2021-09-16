@@ -55,7 +55,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 public class Main implements Thread.UncaughtExceptionHandler {
-
 	private static ShiroInfo info;
 	private static CommandManager cmdManager;
 	private static TwitchCommandManager tCmdManager;
@@ -66,15 +65,17 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
 
-	public static void main(String[] args) throws Exception {
-		ImageIO.setUseCache(false);
-
+	static {
 		Helper.logger(Main.class).info("""
 				Shiro J. Bot  Copyright (C) 2019-%s Yago Gimenez (KuuHaKu)
 				This program comes with ABSOLUTELY NO WARRANTY
 				This is free software, and you are welcome to redistribute it under certain conditions
 				See license for more information regarding redistribution conditions
 				""".formatted(LocalDate.now().getYear()));
+	}
+
+	public static void main(String[] args) throws Exception {
+		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		cmdManager = new CommandManager();
