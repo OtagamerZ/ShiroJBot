@@ -62,8 +62,12 @@ public class UserInfoCommand implements Executable, Slashed {
 		else
 			m = member;
 
+		if (m == null) {
+			channel.sendMessage("❌ | Não achei esse usuário aqui, talvez ele ja tenha saído.").queue();
+			return;
+		}
+
 		String type = "";
-		assert m != null;
 		if (m.isOwner())
 			type = " <:Owner:852289952632799302>";
 		else if (m.getUser().isBot()) {
