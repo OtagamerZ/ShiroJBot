@@ -24,8 +24,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.Spot;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.framework.interfaces.Condition;
 
-import java.util.Arrays;
-
 import static com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor.*;
 
 public class Disk extends Piece implements Condition {
@@ -42,29 +40,30 @@ public class Disk extends Piece implements Condition {
 		for (Neighbor n : directions) {
 			Piece[] toCheck = board.getLine(from, n, false);
 
-			if (Arrays.stream(toCheck).noneMatch(p -> p != null && p.isWhite() != isWhite())) continue;
+			boolean check = false;
+			for (Piece p : toCheck) {
+				if (p != null && p.isWhite() != isWhite()) {
+					check = true;
+					break;
+				}
+			}
+			if (!check) continue;
 
-			boolean foundPair = Arrays.stream(toCheck).anyMatch(p -> p != null && p.isWhite() == isWhite());
 			int untilPair = -1;
-			if (foundPair) {
-				boolean startCounting = false;
-				for (int i = 0; i < toCheck.length; i++) {
-					Piece p = toCheck[i];
-					if (p == null) break;
-					if (startCounting) {
-						if (p.isWhite() == isWhite()) {
-							untilPair = i;
-							break;
-						}
-					} else if (p.isWhite() != isWhite()) {
-						startCounting = true;
-					}
-				}
+			for (int i = 0; i < toCheck.length; i++) {
+				Piece p = toCheck[i];
+				if (p == null) break;
+				else if (i == 0 && p.isWhite() == isWhite()) break;
 
-				if (untilPair > -1) {
-					board.fillLine(from, untilPair, this, n, false);
-					filled++;
+				if (p.isWhite() == isWhite()) {
+					untilPair = i;
+					break;
 				}
+			}
+
+			if (untilPair > -1) {
+				board.fillLine(from, untilPair, this, n, false);
+				filled++;
 			}
 		}
 
