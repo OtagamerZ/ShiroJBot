@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
@@ -43,26 +43,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PseudoMessage implements Message {
-	private final String content;
-	private final User author;
-	private final Member member;
-	private final TextChannel channel;
-	private final List<User> mentionedUsers;
-	private final List<Member> mentionedMembers;
-	private final List<Role> mentionedRoles;
-	private final List<TextChannel> mentionedChannels;
-
-	public PseudoMessage(String content, User author, Member member, TextChannel channel, List<User> mentionedUsers, List<Member> mentionedMembers, List<Role> mentionedRoles, List<TextChannel> mentionedChannels) {
-		this.content = content;
-		this.author = author;
-		this.member = member;
-		this.channel = channel;
-		this.mentionedUsers = mentionedUsers;
-		this.mentionedMembers = mentionedMembers;
-		this.mentionedRoles = mentionedRoles;
-		this.mentionedChannels = mentionedChannels;
-	}
+public record PseudoMessage(
+		String content, User author,
+		Member member,
+		TextChannel channel,
+		List<User> mentionedUsers,
+		List<Member> mentionedMembers,
+		List<Role> mentionedRoles,
+		List<TextChannel> mentionedChannels
+) implements Message {
 
 	@Nullable
 	@Override
@@ -333,12 +322,6 @@ public class PseudoMessage implements Message {
 
 	@NotNull
 	@Override
-	public MessageAction editMessage(@NotNull MessageEmbed newContent) {
-		throw new IllegalStateException();
-	}
-
-	@NotNull
-	@Override
 	public MessageAction editMessageEmbeds(@NotNull Collection<? extends MessageEmbed> embeds) {
 		throw new IllegalStateException();
 	}
@@ -376,12 +359,6 @@ public class PseudoMessage implements Message {
 	@NotNull
 	@Override
 	public MessageAction reply(@NotNull CharSequence content) {
-		throw new IllegalStateException();
-	}
-
-	@NotNull
-	@Override
-	public MessageAction reply(@NotNull MessageEmbed content) {
 		throw new IllegalStateException();
 	}
 
