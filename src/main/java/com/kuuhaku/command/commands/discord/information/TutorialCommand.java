@@ -119,7 +119,7 @@ public class TutorialCommand implements Executable {
 				msg.delete().queue(null, Helper::doNothing);
 			}
 
-			{
+			if (!acc.hasCollectedQueen()) {
 				Main.getInfo().getIgnore().add(author.getId());
 				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("QUEEN"), false);
 				EmbedBuilder eb = new EmbedBuilder()
@@ -140,6 +140,9 @@ public class TutorialCommand implements Executable {
 								Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 								kp.getCards().add(kc);
 								KawaiponDAO.saveKawaipon(kp);
+
+								acc.setCollectedQueen(true);
+								AccountDAO.saveAccount(acc);
 
 								channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
 								Executors.newSingleThreadScheduledExecutor().schedule(() -> next.get().complete(true), 1, TimeUnit.SECONDS);
