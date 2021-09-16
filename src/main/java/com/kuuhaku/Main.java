@@ -34,8 +34,6 @@ import com.kuuhaku.managers.TwitchCommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Emote;
@@ -88,7 +86,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
-				.setAudioSendFactory(new NativeAudioSendFactory())
 				.setEventPool(Executors.newFixedThreadPool(20), true)
 				.build();
 
@@ -120,9 +117,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		cmdManager.registerCommands();
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
-
-		AudioSourceManagers.registerRemoteSources(ShiroInfo.getApm());
-		AudioSourceManagers.registerLocalSource(ShiroInfo.getApm());
 
 		if (System.getenv().containsKey("TWITCH_TOKEN")) {
 			OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));

@@ -22,14 +22,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
-import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
 import com.kuuhaku.model.persistent.guild.VoiceRole;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -47,7 +45,6 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -60,16 +57,6 @@ public class TenthMinuteEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		for (Account account : AccountDAO.getNotifiableAccounts()) {
 			account.notifyVote();
-		}
-
-		for (Guild g : Main.getShiroShards().getGuilds()) {
-			GuildMusicManager gmm = Music.getGuildAudioPlayer(g, null);
-			if (g.getAudioManager().isConnected() && (Objects.requireNonNull(g.getAudioManager().getConnectedChannel()).getMembers().size() < 1)) {
-				g.getAudioManager().closeAudioConnection();
-				gmm.scheduler.channel.sendMessage("Me deixaram sozinha no chat de voz, então eu saí também!").queue();
-				gmm.scheduler.clear();
-				gmm.player.destroy();
-			}
 		}
 
 		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithPaidRoles();
