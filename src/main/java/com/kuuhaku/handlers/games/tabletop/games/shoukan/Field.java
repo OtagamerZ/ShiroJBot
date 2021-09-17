@@ -230,6 +230,11 @@ public class Field implements Drawable, Cloneable {
 		}
 	}
 
+	@Override
+	public Field deepCopy() {
+		return copy();
+	}
+
 	public String toString() {
 		return new JSONObject(card.toString()) {{
 			put("field", new JSONObject() {{

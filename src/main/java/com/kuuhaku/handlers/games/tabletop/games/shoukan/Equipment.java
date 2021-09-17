@@ -144,7 +144,7 @@ public class Equipment implements Drawable, Cloneable {
 
 			g2d.setColor(fc.getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
+			Profile.drawStringMultiLineNO(g2d, getDescription(), 205, 9, 277);
 		}
 
 		if (!available) {
@@ -431,6 +431,15 @@ public class Equipment implements Drawable, Cloneable {
 			Equipment e = (Equipment) clone();
 			e.reset();
 			return e;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Equipment deepCopy() {
+		try {
+			return (Equipment) clone();
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
