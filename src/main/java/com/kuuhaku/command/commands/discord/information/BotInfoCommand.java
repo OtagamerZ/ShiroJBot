@@ -68,7 +68,6 @@ public class BotInfoCommand implements Executable {
 								[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
 								[Reddit](https://www.reddit.com/r/ShiroJBot/)
 								[%s](https://top.gg/bot/572413282653306901/invite)
-								[%s](https://donatebot.io/checkout/421495229594730496)
 								[%s](https://forms.gle/KrPHLZcijpzCXDoh9)
 								"""
 								.formatted(
@@ -76,7 +75,6 @@ public class BotInfoCommand implements Executable {
 										I18n.getString("str_vote"),
 										I18n.getString("str_privacy-policy"),
 										I18n.getString("str_invite"),
-										I18n.getString("str_donate"),
 										I18n.getString("str_unblock-form")
 								)
 						, false
