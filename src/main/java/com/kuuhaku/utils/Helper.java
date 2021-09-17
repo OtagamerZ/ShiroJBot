@@ -989,10 +989,7 @@ public class Helper {
 			String[] newWords = new String[oldWords.length];
 			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
 				String old = oldWords[i];
-				if (!old.matches(":.+:")) {
-					newWords[i] = old;
-					continue;
-				} else if (!g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
+				if (!old.matches(":.+:") || !g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
 					newWords[i] = old;
 					continue;
 				}
