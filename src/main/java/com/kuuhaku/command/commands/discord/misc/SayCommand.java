@@ -60,7 +60,7 @@ public class SayCommand implements Executable {
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 		try {
 			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, Helper.replaceTags(argsAsText, author, guild), null);
+			Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, Helper.replaceTags(argsAsText, author, guild));
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 					.setAllowedMentions(AllowedMentions.none())
