@@ -118,7 +118,7 @@ public class ShoukanCommand implements Executable {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
-				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(mmr.getRemainingBlock())).queue();
+				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(Helper.separate(mmr.getRemainingBlock()))).queue();
 				return;
 			} else if (args.length < 2 || !Helper.equalsAny(args[1], "solo", "duo")) {
 				channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
@@ -149,7 +149,7 @@ public class ShoukanCommand implements Executable {
 					MatchMakingRating duo = MatchMakingRatingDAO.getMMR(u.getId());
 
 					if (duo.isBlocked()) {
-						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(mmr.getRemainingBlock())).queue();
+						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(Helper.separate(mmr.getRemainingBlock()))).queue();
 						return;
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
 						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();

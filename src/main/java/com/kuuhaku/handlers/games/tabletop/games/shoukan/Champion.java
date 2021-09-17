@@ -792,6 +792,15 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
+	@Override
+	public Champion deepCopy() {
+		try {
+			return (Champion) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
 	public String toString() {
 		return new JSONObject(card.toString()) {{
 			put("champion", new JSONObject() {{
