@@ -794,7 +794,7 @@ public class CardDAO {
 	public static String[] getRandomEffect(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.description, c.effect FROM Champion c WHERE c.fusion = FALSE AND c.mana = :mana AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL) ORDER BY RANDOM()");
+		Query q = em.createQuery("SELECT c.description, c.effect FROM Champion c WHERE c.fusion = FALSE AND c.effect IS NOT NULL AND c.mana = :mana AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL) ORDER BY RANDOM()");
 		q.setParameter("mana", mana);
 		q.setMaxResults(1);
 
