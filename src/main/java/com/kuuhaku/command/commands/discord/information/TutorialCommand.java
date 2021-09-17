@@ -235,7 +235,7 @@ public class TutorialCommand implements Executable {
 				Helper.awaitMessage(author,
 						channel,
 						m -> {
-							if (m.getContentRaw().equalsIgnoreCase(prefix + "see forest s")) {
+							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps campo")) {
 								next.get().complete(true);
 								return true;
 							} else return false;
