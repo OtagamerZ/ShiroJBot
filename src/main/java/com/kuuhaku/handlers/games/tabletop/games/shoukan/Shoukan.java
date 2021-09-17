@@ -158,7 +158,7 @@ public class Shoukan extends GlobalGame {
 				if (d == null) continue;
 
 				for (Hand h : hands.values())
-					h.getCards().add(d);
+					h.getCards().add(d.copy());
 			}
 		}
 
@@ -322,7 +322,7 @@ public class Shoukan extends GlobalGame {
 
 				String msg;
 				if (d instanceof Equipment) {
-					Equipment e = (Equipment) d.copy();
+					Equipment e = (Equipment) d.deepCopy();
 
 					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
 						if (!args[1].equalsIgnoreCase("s")) {
@@ -553,7 +553,7 @@ public class Shoukan extends GlobalGame {
 
 					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getName() + ".";
 				} else if (d instanceof Champion) {
-					Champion c = (Champion) d.copy();
+					Champion c = (Champion) d.deepCopy();
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
@@ -610,20 +610,7 @@ public class Shoukan extends GlobalGame {
 					summoned.get(getCurrentSide()).merge(c.getRace(), 1, Integer::sum);
 
 					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
-				} else {
-					if (!args[1].equalsIgnoreCase("f")) {
-						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
-						return;
-					}
 
-					reroll = false;
-					Field f = (Field) d.copy();
-					d.setAvailable(false);
-					arena.setField(f);
-					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
-				}
-
-				if (d instanceof Champion c) {
 					if (c.getMana() > 0) {
 						if (h.isNullMode())
 							h.removeHp(c.getBaseStats() / 2);
@@ -631,6 +618,17 @@ public class Shoukan extends GlobalGame {
 							h.removeMana(c.getMana());
 					} else
 						h.removeHp(c.getBlood());
+				} else {
+					Field f = (Field) d.deepCopy();
+					if (!args[1].equalsIgnoreCase("f")) {
+						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
+						return;
+					}
+
+					reroll = false;
+					d.setAvailable(false);
+					arena.setField(f);
+					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
 				}
 
 				if (makeFusion(h)) return;
@@ -2454,6 +2452,7 @@ public class Shoukan extends GlobalGame {
 		persistentEffects.add(pe);
 	}
 
+	@SuppressWarnings("SuspiciousMethodCalls")
 	public void removePersistentEffect(Drawable card) {
 		persistentEffects.remove(card);
 	}
