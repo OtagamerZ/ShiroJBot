@@ -27,6 +27,7 @@ import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
+import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
@@ -53,9 +54,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import javax.websocket.DeploymentException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
@@ -2654,8 +2657,9 @@ public class Shoukan extends GlobalGame {
 												.flatMap(m -> {
 													while (!Main.getInfo().isEncoderConnected()) {
 														try {
+															Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 															Thread.sleep(2000);
-														} catch (InterruptedException ignore) {
+														} catch (URISyntaxException | DeploymentException | IOException | InterruptedException ignore) {
 														}
 													}
 
