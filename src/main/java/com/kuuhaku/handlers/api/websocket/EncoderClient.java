@@ -125,7 +125,7 @@ public class EncoderClient extends Endpoint {
 
 	public void send(String msg) {
 		try {
-			while (!Main.getInfo().isEncoderConnected()) {
+			while (session == null || !session.isOpen()) {
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException ignore) {
