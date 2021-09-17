@@ -978,7 +978,7 @@ public class Helper {
 		return baos;
 	}
 
-	public static Pair<String, Runnable> sendEmotifiedString(Guild g, String text, Member mb) {
+	public static Pair<String, Runnable> sendEmotifiedString(Guild g, String text) {
 		String[] oldLines = text.split("\n");
 		String[] newLines = new String[oldLines.length];
 		List<Consumer<Void>> queue = new ArrayList<>();
@@ -989,7 +989,7 @@ public class Helper {
 			String[] newWords = new String[oldWords.length];
 			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
 				String old = oldWords[i];
-				if (!old.matches(":.+:")) {
+				if (!old.matches(":.+:") || !g.getEmotesByName(old.replace(":", ""), false).isEmpty()) {
 					newWords[i] = old;
 					continue;
 				}
@@ -998,11 +998,6 @@ public class Helper {
 				Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
 
 				if (e != null) {
-					if (mb != null && mb.canInteract(e)) {
-						newWords[i] = old;
-						continue;
-					}
-
 					try {
 						boolean animated = e.isAnimated();
 						if ((animated ? aSlots : slots) > 0) {
