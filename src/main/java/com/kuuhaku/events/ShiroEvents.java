@@ -402,7 +402,7 @@ public class ShiroEvents extends ListenerAdapter {
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
 					Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-					Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentRaw());
+					Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentRaw(), member);
 
 					WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 							.setAllowedMentions(AllowedMentions.none())
