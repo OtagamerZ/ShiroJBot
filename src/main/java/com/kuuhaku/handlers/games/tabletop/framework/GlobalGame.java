@@ -104,17 +104,10 @@ public abstract class GlobalGame {
 		if (round > 0)
 			timeout = executor.schedule(() ->
 					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-							.queue(s -> {
-								onWO.accept(s);
-								closed = true;
-								wo = true;
-							}), 3, TimeUnit.MINUTES);
+							.queue(onWO), 3, TimeUnit.MINUTES);
 		else timeout = executor.schedule(() ->
 				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-						.queue(s -> {
-							onExpiration.accept(s);
-							closed = true;
-						}), 3, TimeUnit.MINUTES);
+						.queue(onExpiration), 3, TimeUnit.MINUTES);
 	}
 
 	public void resetTimer(Shoukan shkn) {
@@ -174,17 +167,10 @@ public abstract class GlobalGame {
 		if (round > 0)
 			timeout = executor.schedule(() ->
 					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-							.queue(s -> {
-								onWO.accept(s);
-								closed = true;
-								wo = true;
-							}), 3, TimeUnit.MINUTES);
+							.queue(onWO), 3, TimeUnit.MINUTES);
 		else timeout = executor.schedule(() ->
 				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-						.queue(s -> {
-							onExpiration.accept(s);
-							closed = true;
-						}), 3, TimeUnit.MINUTES);
+						.queue(onExpiration), 3, TimeUnit.MINUTES);
 	}
 
 	public void resetTimerKeepTurn() {
@@ -193,17 +179,10 @@ public abstract class GlobalGame {
 		if (round > 0)
 			timeout = executor.schedule(() ->
 					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-							.queue(s -> {
-								onWO.accept(s);
-								closed = true;
-								wo = true;
-							}), 3, TimeUnit.MINUTES);
+							.queue(onWO), 3, TimeUnit.MINUTES);
 		else timeout = executor.schedule(() ->
 				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-						.queue(s -> {
-							onExpiration.accept(s);
-							closed = true;
-						}), 3, TimeUnit.MINUTES);
+						.queue(onExpiration), 3, TimeUnit.MINUTES);
 	}
 
 	public ShardManager getHandler() {
@@ -258,6 +237,10 @@ public abstract class GlobalGame {
 
 	public boolean isOpen() {
 		return !closed;
+	}
+
+	public void setWo() {
+		this.wo = true;
 	}
 
 	public void close() {
