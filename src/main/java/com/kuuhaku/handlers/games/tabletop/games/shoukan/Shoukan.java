@@ -1262,7 +1262,9 @@ public class Shoukan extends GlobalGame {
 			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
-			chance -= (sourceMana * 25d / targetMana) + (sourceChamp.getDodge() * 0.75);
+			chance -= sourceChamp.getDodge() * 0.75;
+			if (sourceMana <= targetMana)
+				chance -= Math.max(targetMana * 25d / sourceMana, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
@@ -1394,7 +1396,9 @@ public class Shoukan extends GlobalGame {
 			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
-			chance -= (sourceMana * 50d / targetMana) + (sourceChamp.getDodge() / 2);
+			chance -= sourceChamp.getDodge() * 0.75;
+			if (sourceMana <= targetMana)
+				chance -= Math.max(targetMana * 25d / sourceMana, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
@@ -1587,7 +1591,9 @@ public class Shoukan extends GlobalGame {
 			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
-			chance -= (sourceMana * 50d / targetMana) + (sourceChamp.getDodge() / 2);
+			chance -= sourceChamp.getDodge() * 0.75;
+			if (sourceMana <= targetMana)
+				chance -= Math.max(targetMana * 25d / sourceMana, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
@@ -1686,7 +1692,9 @@ public class Shoukan extends GlobalGame {
 			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
-			chance -= (sourceMana * 50d / targetMana) + (sourceChamp.getDodge() / 2);
+			chance -= sourceChamp.getDodge() * 0.75;
+			if (sourceMana <= targetMana)
+				chance -= Math.max(targetMana * 25d / sourceMana, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
