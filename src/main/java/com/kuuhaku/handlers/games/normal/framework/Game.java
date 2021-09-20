@@ -75,30 +75,18 @@ public abstract class Game {
 
 		if (round > 0)
 			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(time, TimeUnit.SECONDS, s -> {
-						onWO.accept(s);
-						closed = true;
-					});
+					.queueAfter(time, TimeUnit.SECONDS, onWO);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(time, TimeUnit.SECONDS, s -> {
-					onExpiration.accept(s);
-					closed = true;
-				});
+				.queueAfter(time, TimeUnit.SECONDS, onExpiration);
 	}
 
 	public void resetTimerKeepTurn() {
 		if (timeout != null) timeout.cancel(true);
 		if (round > 0)
 			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(time, TimeUnit.SECONDS, s -> {
-						onWO.accept(s);
-						closed = true;
-					});
+					.queueAfter(time, TimeUnit.SECONDS, onWO);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(time, TimeUnit.SECONDS, s -> {
-					onExpiration.accept(s);
-					closed = true;
-				});
+				.queueAfter(time, TimeUnit.SECONDS, onExpiration);
 	}
 
 	public ShardManager getHandler() {

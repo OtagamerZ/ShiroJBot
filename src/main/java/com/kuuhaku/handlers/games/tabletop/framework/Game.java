@@ -83,20 +83,14 @@ public abstract class Game {
 
 		if (round > 0)
 			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, s -> {
-						onWO.accept(s);
-						closed = true;
-					});
+					.queueAfter(3, TimeUnit.MINUTES, onWO);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, s -> {
-					onExpiration.accept(s);
-					closed = true;
-				});
+				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
 				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && getCurrent().equals(pc.getOwnerId()))
+				if (pc instanceof Decoy && getCurrent().getId().equals(pc.getOwnerId()))
 					board.setPieceAt(Spot.of(x, y), null);
 			}
 		}
@@ -106,15 +100,9 @@ public abstract class Game {
 		if (timeout != null) timeout.cancel(true);
 		if (round > 0)
 			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, s -> {
-						onWO.accept(s);
-						closed = true;
-					});
+					.queueAfter(3, TimeUnit.MINUTES, onWO);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, s -> {
-					onExpiration.accept(s);
-					closed = true;
-				});
+				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
 	}
 
 	public ShardManager getHandler() {
@@ -168,9 +156,9 @@ public abstract class Game {
 		if (o == null || getClass() != o.getClass()) return false;
 		Game game = (Game) o;
 		return handler.equals(game.handler) &&
-			   board.equals(game.board) &&
-			   channel.equals(game.channel) &&
-			   custom.equals(game.custom);
+				board.equals(game.board) &&
+				channel.equals(game.channel) &&
+				Objects.equals(custom, game.custom);
 	}
 
 	@Override
