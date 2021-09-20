@@ -2666,6 +2666,14 @@ public class Helper {
 		}
 	}
 
+	public static File getResourceAsFile(Class<?> klass, String path) {
+		try {
+			return new File(getResource(klass, path).toURI());
+		} catch (URISyntaxException e) {
+			return null;
+		}
+	}
+
 	public static int roundToBit(int value) {
 		return 1 << (int) Math.round(log(value, 2));
 	}
@@ -3132,5 +3140,21 @@ public class Helper {
 		int xOffset = width / 2 - g2d.getFontMetrics().stringWidth(str) / 2;
 		int yOffset = height / 2 + g2d.getFont().getSize() / 2;
 		g2d.drawString(str, x + xOffset, y + yOffset);
+	}
+
+	public static int findStringInFile(File f, String str) {
+		try (Scanner scanner = new Scanner(f, StandardCharsets.UTF_8)) {
+			int i = -1;
+			while (scanner.hasNextLine()) {
+				i++;
+				if (scanner.nextLine().equals(str)) {
+					return i;
+				}
+			}
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+
+		return -1;
 	}
 }

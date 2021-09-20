@@ -35,9 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -50,7 +47,7 @@ public class Shiritori extends Game {
 			if (canInteract(event)) play(event);
 		}
 	};
-	private final Set<String> available = new HashSet<>();
+	private final File list = Helper.getResourceAsFile(this.getClass(), "shiritori/ptBR_dict.txt");
 	private final Set<String> used = new HashSet<>();
 	private Message message = null;
 	private String word;
@@ -84,12 +81,6 @@ public class Shiritori extends Game {
 					}
 				}
 		);
-
-		try {
-			File f = new File(Helper.getResource(this.getClass(), "shiritori/ptBR_dict.txt").toURI());
-			available.addAll(Files.readAllLines(f.toPath()));
-		} catch (URISyntaxException | IOException ignore) {
-		}
 	}
 
 	@Override
@@ -141,8 +132,7 @@ public class Shiritori extends Game {
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
-		} else if (available.contains(command)) {
-			available.remove(command);
+		} else if (Helper.findStringInFile(list, command) > -1) {
 			used.add(command);
 			word = command;
 
