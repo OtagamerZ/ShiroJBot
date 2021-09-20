@@ -27,7 +27,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -48,18 +47,25 @@ public class WalletCommand implements Executable, Slashed {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
+
+		int prcnt = Helper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(I18n.getString("str_balance-title", author.getName()))
+				.setTitle("Saldo de " + author.getName())
 				.addField(
-						I18n.getString("str_balance-field-title", Helper.separate(acc.getBalance()), Helper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent())),
-						I18n.getString("str_balance-loan-bugs",
+						":moneybag: | Saldo: %s%s".formatted(Helper.separate(acc.getBalance()), acc.getBalance() > 100_000 && prcnt < 10 ? ("(" + prcnt + "%)") : ""),
+						"""
+								:money_with_wings: | Volátil: %s
+								:bank: | Dívida: %s
+								:diamonds: | Gemas: %s
+								""".formatted(
 								Helper.separate(acc.getVBalance()),
 								Helper.separate(acc.getLoan()),
 								Helper.separate(acc.getGems())
-						), true
+						)
+						, true
 				)
 				.addField(
-						I18n.getString("str_balance-last-voted"),
+						"Ultimo voto em:",
 						acc.getLastVoted() == null ? "Nunca" : Helper.fullDateFormat.format(acc.getLastVoted()),
 						true
 				)
