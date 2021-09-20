@@ -56,6 +56,7 @@ applicationDefaultJvmArgs = [
 
 repositories {
 	mavenCentral()
+	jcenter()
 	maven { url "https://jitpack.io" }
 	maven { url "https://m2.dv8tion.net/releases" }
 	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
