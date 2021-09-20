@@ -76,15 +76,15 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "4.3.0_299"
+	implementation group: "net.dv8tion", name: "JDA", version: "4.3.0_330"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "2.3.0"
 	implementation group: "club.minnced", name: "discord-webhooks", version: "0.5.8"
 
 	//Database
-	implementation group: "org.postgresql", name: "postgresql", version: '42.2.23.jre7'
-	implementation group: "org.hibernate", name: "hibernate-core", version: '5.5.7.Final'
-	implementation group: "com.mchange", name: "c3p0", version: '0.9.5.5'
-	implementation group: "org.hibernate", name: "hibernate-c3p0", version: '5.5.7.Final'
+	implementation group: "org.postgresql", name: "postgresql", version: "42.2.12"
+	implementation group: "org.hibernate", name: "hibernate-core", version: "5.4.2.Final"
+	implementation group: "com.mchange", name: "c3p0", version: "0.9.5.4"
+	implementation group: "org.hibernate", name: "hibernate-c3p0", version: "5.4.2.Final"
 
 	//Compiler
 	implementation group: "org.codehaus.groovy", name: "groovy", version: "3.0.8"
