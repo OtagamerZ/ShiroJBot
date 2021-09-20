@@ -1262,7 +1262,7 @@ public class Shoukan extends GlobalGame {
 			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
-			chance -= (sourceMana * 25d / targetMana) + (sourceChamp.getDodge() * 75 / 100);
+			chance -= (sourceMana * 25d / targetMana) + (sourceChamp.getDodge() * 0.75);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
