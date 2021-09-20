@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -129,41 +130,52 @@ public class TenthMinuteEvent implements Job {
 
 		guilds = GuildDAO.getAllGuildsWithVoiceRoles();
 		for (GuildConfig gc : guilds) {
-			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
-			if (guild == null) continue;
+            Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
+            if (guild == null) continue;
 
-			List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
+            List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
 
-			for (VoiceRole vr : gc.getVoiceRoles()) {
-				Role r = guild.getRoleById(vr.getId());
-				if (r == null) continue;
+            for (VoiceTime vt : vts) {
+                Set<VoiceRole> vroles = gc.getVoiceRoles().stream()
+                        .filter(vr -> vr.getTime() <= vt.getTime())
+                        .collect(Collectors.toSet());
 
-				Set<String> valid = vts.stream()
-						.filter(vt -> vt.getTime() >= vr.getTime())
-						.map(VoiceTime::getUid)
-						.collect(Collectors.toSet());
+                if (vroles.isEmpty()) continue;
 
-				List<RestAction<?>> acts = new ArrayList<>();
-				for (String s : valid) {
-					Member m = guild.getMemberById(s);
-					if (m == null) continue;
+                VoiceRole max = vroles.stream().max(Comparator.comparingLong(VoiceRole::getTime)).orElse(null);
 
-					if (!m.getRoles().contains(r))
-						try {
-							TextChannel tc = gc.getLevelChannel();
-							acts.add(guild.addRoleToMember(m, r).flatMap(
-									p -> gc.isLevelNotif() && tc != null,
-									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vr.getTime()) + " em call! :tada:")
-							));
-						} catch (HierarchyException | InsufficientPermissionException ignore) {
-						}
-				}
+                Member m = guild.getMemberById(vt.getUid());
+                if (m == null) continue;
 
-				if (acts.isEmpty()) continue;
-				RestAction.allOf(acts)
-						.mapToResult()
-						.queue();
-			}
+                List<RestAction<?>> acts = new ArrayList<>();
+                for (VoiceRole vrole : vroles) {
+                    Role r = guild.getRoleById(vrole.getId());
+                    if (r == null) continue;
+
+                    if (vrole.equals(max)) {
+                        if (!m.getRoles().contains(r))
+                            try {
+                                TextChannel tc = gc.getLevelChannel();
+                                acts.add(guild.addRoleToMember(m, r).flatMap(
+                                        p -> gc.isLevelNotif() && tc != null,
+                                        v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vrole.getTime()) + " em call! :tada:")
+                                ));
+                            } catch (HierarchyException | InsufficientPermissionException ignore) {
+                            }
+                    } else {
+                        if (m.getRoles().contains(r))
+                            try {
+                                acts.add(guild.removeRoleFromMember(m, r));
+                            } catch (HierarchyException | InsufficientPermissionException ignore) {
+                            }
+                    }
+                }
+
+                if (acts.isEmpty()) continue;
+                RestAction.allOf(acts)
+                        .mapToResult()
+                        .queue();
+            }
 		}
 
 		File[] temp = Main.getInfo().getTemporaryFolder().listFiles();
