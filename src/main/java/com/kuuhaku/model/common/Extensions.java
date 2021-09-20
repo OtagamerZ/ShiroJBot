@@ -33,7 +33,7 @@ public class Extensions {
 	private static final String[] list;
 
 	static {
-		String[] tldArr = null;
+		String[] tldArr = new String[0];
 
 		try {
 			HttpRequest iana = HttpRequest.get("http://data.iana.org/TLD/tlds-alpha-by-domain.txt", true)
