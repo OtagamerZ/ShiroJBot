@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +33,26 @@ public class Extensions {
 	private static final String[] list;
 
 	static {
-		HttpRequest iana = HttpRequest.get("http://data.iana.org/TLD/tlds-alpha-by-domain.txt", true)
-				.header("Content-Type", "application/json; charset=UTF-8")
-				.header("User-Agent", "Mozilla/5.0");
+		String[] tldArr = null;
 
-		List<String> tlds = new ArrayList<>();
-		LineIterator listIt = IOUtils.lineIterator(iana.stream(), StandardCharsets.UTF_8);
-		while (listIt.hasNext()) {
-			String line = listIt.next();
-			if (!line.startsWith("#"))
-				tlds.add("." + line.toLowerCase(Locale.ROOT));
+		try {
+			HttpRequest iana = HttpRequest.get("http://data.iana.org/TLD/tlds-alpha-by-domain.txt", true)
+					.header("Content-Type", "application/json; charset=UTF-8")
+					.header("User-Agent", "Mozilla/5.0");
+
+			List<String> tlds = new ArrayList<>();
+			LineIterator listIt = IOUtils.lineIterator(iana.stream(), StandardCharsets.UTF_8);
+			while (listIt.hasNext()) {
+				String line = listIt.next();
+				if (!line.startsWith("#"))
+					tlds.add("." + line.toLowerCase(Locale.ROOT));
+			}
+
+			tldArr = tlds.toArray(String[]::new);
+		} catch (IOException ignore) {
 		}
 
-		list = tlds.toArray(String[]::new);
+		list = tldArr;
 	}
 
 	public static boolean checkExtension(String str) {
