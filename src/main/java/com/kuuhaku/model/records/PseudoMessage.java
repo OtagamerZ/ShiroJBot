@@ -55,6 +55,12 @@ public record PseudoMessage(
 
 	@Nullable
 	@Override
+	public MessageReference getMessageReference() {
+		return null;
+	}
+
+	@Nullable
+	@Override
 	public Message getReferencedMessage() {
 		return null;
 	}
@@ -546,10 +552,26 @@ public record PseudoMessage(
 		return EnumSet.noneOf(MessageFlag.class);
 	}
 
+	@Override
+	public long getFlagsRaw() {
+		return 0;
+	}
+
+	@Override
+	public boolean isEphemeral() {
+		return false;
+	}
+
 	@NotNull
 	@Override
 	public MessageType getType() {
 		return MessageType.APPLICATION_COMMAND;
+	}
+
+	@Nullable
+	@Override
+	public Interaction getInteraction() {
+		return null;
 	}
 
 	@Override
