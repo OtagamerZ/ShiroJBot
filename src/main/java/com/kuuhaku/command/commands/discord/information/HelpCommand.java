@@ -37,10 +37,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -105,8 +102,9 @@ public class HelpCommand implements Executable {
 				}
 
 				String cmds = cat.getCommands().stream()
+						.sorted(Comparator.comparing(PreparedCommand::getName))
 						.map(cmd -> (gc.getDisabledCommands().contains(cmd.getCommand().getClass().getName()) ? "||~~`%s`~~||" : "`%s`").formatted(cmd.getName()))
-						.collect(Collectors.joining(" "));
+						.collect(Collectors.joining(" ◈ "));
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n\n" + cmds, false);
 				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
