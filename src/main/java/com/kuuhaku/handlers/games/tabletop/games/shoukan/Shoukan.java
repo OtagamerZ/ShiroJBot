@@ -900,8 +900,9 @@ public class Shoukan extends GlobalGame {
 			hPower = his.isDecoy() ? 0 : his.getFinAtk();
 		}
 
-		boolean yDodge = yours.getDodge() >= 100 || (yours.getDodge() > 0 && Helper.chance(yours.getDodge()));
-		boolean hDodge = his.getDodge() >= 100 || (his.getDodge() > 0 && Helper.chance(his.getDodge()));
+		int dodge = his.getDodge();
+		boolean dodged = dodge >= 100 || (dodge > 0 && Helper.chance(dodge));
+
 
 		yours.setAvailable(false);
 		yours.resetAttribs();
@@ -911,15 +912,15 @@ public class Shoukan extends GlobalGame {
 		Hand op = hands.get(defr.getLeft());
 
 		/* ATTACK SUCCESS */
-		if (yPower > hPower || (yPower == hPower && yDodge)) {
-			if (hDodge) {
+		if (yPower > hPower) {
+			if (dodged) {
 				if (applyPersistentEffects(ON_MISS, atkr.getLeft(), atkr.getRight())) return;
 				if (applyEffect(ON_MISS, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
 				if (applyPersistentEffects(ON_DODGE, defr.getLeft(), defr.getRight())) return;
 				if (applyEffect(ON_DODGE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
-				reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
+				reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(dodge, 1) + "%)", true, false);
 			} else {
 				if (applyPersistentEffects(POST_ATTACK, atkr.getLeft(), atkr.getRight())) return;
 				if (applyEffect(POST_ATTACK, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
@@ -991,7 +992,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		/* ATTACK FAILED */
-		else if (yPower < hPower || hDodge) {
+		else if (yPower < hPower) {
 			if (applyPersistentEffects(ON_SUICIDE, atkr.getLeft(), atkr.getRight())) return;
 			if (applyEffect(ON_SUICIDE, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
