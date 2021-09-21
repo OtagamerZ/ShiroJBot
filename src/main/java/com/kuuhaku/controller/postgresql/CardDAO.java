@@ -540,9 +540,9 @@ public class CardDAO {
 
 		Query q;
 		if (foil)
-			q = em.createNativeQuery("SELECT * FROM \"GetNormalCompletionState\"(:id, :anime)");
-		else
 			q = em.createNativeQuery("SELECT * FROM \"GetFoilCompletionState\"(:id, :anime)");
+		else
+			q = em.createNativeQuery("SELECT * FROM \"GetNormalCompletionState\"(:id, :anime)");
 		q.setParameter("id", id);
 		q.setParameter("anime", anime);
 
