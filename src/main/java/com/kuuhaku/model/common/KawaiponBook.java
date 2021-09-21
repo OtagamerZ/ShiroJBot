@@ -115,7 +115,7 @@ public class KawaiponBook {
 					g.drawImage(slot, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 
 					double prcnt = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
-					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT - CARD_HEIGHT * prcnt, CARD_WIDTH, CARD_HEIGHT * prcnt));
+					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT * (1 - prcnt), CARD_WIDTH, CARD_HEIGHT * prcnt));
 					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					g.setClip(null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
