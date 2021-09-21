@@ -285,6 +285,14 @@ public class Champion implements Drawable, Cloneable {
 		this.linkedTo.clear();
 	}
 
+	public void updateLinks(Shoukan game, Side s) {
+		List<SlotColumn> slots = game.getArena().getSlots().get(s);
+		for (int i = 0; i < linkedTo.size(); i++) {
+			Equipment e = linkedTo.get(i);
+			linkedTo.set(i, slots.get(e.getIndex()).getBottom());
+		}
+	}
+
 	public boolean isDefending() {
 		return !isDuelling() && (flipped || defending || isStasis() || isStunned() || isSleeping());
 	}
