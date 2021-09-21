@@ -2682,6 +2682,18 @@ public class Helper {
 		return mult * Math.round((float) value / mult);
 	}
 
+	public static long roundTrunc(long value, int mult) {
+		return mult * Math.round((double) value / mult);
+	}
+
+	public static float roundTrunc(float value, int mult) {
+		return mult * Math.round(value / mult);
+	}
+
+	public static double roundTrunc(double value, int mult) {
+		return mult * Math.round(value / mult);
+	}
+
 	public static File writeAndGet(BufferedImage bi, String name, String extension) {
 		File tempFolder = Main.getInfo().getTemporaryFolder();
 		File f = new File(tempFolder, name + "." + extension);
