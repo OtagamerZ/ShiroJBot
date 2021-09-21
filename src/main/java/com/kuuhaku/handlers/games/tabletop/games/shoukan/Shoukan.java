@@ -1308,6 +1308,8 @@ public class Shoukan extends GlobalGame {
 			targetChamp.reset();
 			if (targetChamp.canGoToGrave())
 				arena.getGraveyard().get(to).add(targetChamp.copy());
+		} else {
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
 		}
 	}
 
@@ -1442,6 +1444,8 @@ public class Shoukan extends GlobalGame {
 			targetChamp.reset();
 			if (!targetChamp.isFusion() || withFusion)
 				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp.copy());
+		} else {
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
 		}
 	}
 
@@ -1636,6 +1640,8 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDef(target, 0);
 				}
 			}
+		} else {
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
 		}
 	}
 
@@ -1756,6 +1762,8 @@ public class Shoukan extends GlobalGame {
 
 			slts.get(target).setTop(sourceChamp);
 			slots.get(source).setTop(targetChamp);
+		} else {
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
 		}
 	}
 
