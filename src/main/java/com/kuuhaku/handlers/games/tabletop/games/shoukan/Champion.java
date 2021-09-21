@@ -289,7 +289,9 @@ public class Champion implements Drawable, Cloneable {
 		List<SlotColumn> slots = game.getArena().getSlots().get(s);
 		for (int i = 0; i < linkedTo.size(); i++) {
 			Equipment e = linkedTo.get(i);
-			linkedTo.set(i, slots.get(e.getIndex()).getBottom());
+			Equipment ne = slots.get(e.getIndex()).getBottom();
+			linkedTo.set(i, ne);
+			ne.setLinkedTo(Pair.of(index, this));
 		}
 	}
 
