@@ -166,9 +166,11 @@ public class SellCardCommand implements Executable {
 					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
 				else
 					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+				Main.getInfo().getConfirmationPending().remove(author.getId());
 				return;
 			} else if (price > max) {
 				channel.sendMessage("❌ | Você não pode vender essa carta por mais que " + Helper.separate(max) + " créditos.").queue();
+				Main.getInfo().getConfirmationPending().remove(author.getId());
 				return;
 			}
 
