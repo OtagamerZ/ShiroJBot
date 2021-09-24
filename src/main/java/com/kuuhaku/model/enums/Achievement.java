@@ -23,12 +23,13 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 
+import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 
 public enum Achievement {
-	SPOOKY_NIGHTS("Noites de Arrepio", "Vença uma partida ranqueada onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
+	SPOOKY_NIGHTS("Noites de Arrepio", "Vença uma partida ranqueada em Outubro onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
 	UNTOUCHABLE("O Intocável", "Vença uma partida ranqueada sem levar nenhum dano direto.", false);
 
 	private final String title;
@@ -58,6 +59,9 @@ public enum Achievement {
 
 		return switch (this) {
 			case SPOOKY_NIGHTS -> {
+				Calendar c = Calendar.getInstance();
+				if (c.get(Calendar.MONTH) != Calendar.OCTOBER) yield false;
+
 				Set<Race> valid = EnumSet.of(Race.SPIRIT, Race.UNDEAD, Race.DEMON);
 				Map<Race, Long> races = h.getRaceCount();
 				for (Map.Entry<Race, Long> e : races.entrySet()) {
