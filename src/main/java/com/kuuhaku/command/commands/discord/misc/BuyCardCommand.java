@@ -167,7 +167,7 @@ public class BuyCardCommand implements Executable {
 					};
 					String rarity = switch (m.getType()) {
 						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Equipment) m.getCard()).getTier()) + ")";
-						case FIELD -> (((Field) m.getCard()).isDay() ? ":sunny: " : ":full_moon: ") + "Campo";
+						case FIELD -> (((Field) m.getCard()).isDay() ? ":sunny: " : ":crescent_moon: ") + "Campo";
 						default -> m.getRawCard().getRarity().getEmote() + m.getRawCard().getRarity().toString();
 					};
 					String anime = m.getRawCard().getAnime().toString();
