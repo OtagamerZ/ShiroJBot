@@ -633,7 +633,7 @@ public class Champion implements Drawable, Cloneable {
 				} else if (equip.contains(req)) {
 					out.put(req, Pair.of(equip.indexOf(req), true));
 					rem.remove(req);
-				} else if (req.equals(field)) {
+				} else if (field.equals(req)) {
 					rem.remove(req);
 				} else return Map.of();
 			}
