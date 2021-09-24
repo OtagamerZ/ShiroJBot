@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
@@ -52,11 +53,11 @@ public enum FrameColor {
 	RAINBOW("**(Complete 10 coleções cromadas)** Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
 			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
 
-	BLACK("**(???)** Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
-			acc -> false),
+	BLACK("**(Conquista \"O Intocável\")** Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
+			acc -> acc.getAchievements().contains(Achievement.UNTOUCHABLE)),
 
-	HALLOWEEN("**(???)** Muahaha, invoque os espíritos malígnos para atormentar seus oponentes!",
-			acc -> false);
+	HALLOWEEN("**(Conquista \"Noites de Arrepio\")** Muahaha, invoque os espíritos malígnos para atormentar seus oponentes!",
+			acc -> acc.getAchievements().contains(Achievement.SPOOKY_NIGHTS));
 
 	private final String description;
 	private final Function<Account, Boolean> req;

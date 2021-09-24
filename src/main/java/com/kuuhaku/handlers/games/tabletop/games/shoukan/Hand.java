@@ -54,6 +54,7 @@ public class Hand {
 	private final Account acc;
 	private final Side side;
 	private final String user;
+	private final Map<Race, Long> raceCount;
 	private final BondedList<Drawable> deque;
 	private final BondedList<Drawable> cards;
 	private final BondedList<Drawable> destinyDeck;
@@ -80,6 +81,7 @@ public class Hand {
 			this.deque = null;
 			this.cards = null;
 			this.destinyDeck = null;
+			raceCount = null;
 			return;
 		}
 
@@ -92,6 +94,9 @@ public class Hand {
 		this.destinyDeck = new BondedList<>(bonding);
 
 		game.getDivergence().put(user.getId(), dk.getAverageDivergence());
+
+		raceCount = dk.getChampions().stream()
+				.collect(Collectors.groupingBy(Champion::getRace, Collectors.counting()));
 
 		setData(
 				dk.getChampions(),
@@ -210,8 +215,8 @@ public class Hand {
 		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
 		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
 		this.mitigation = combo.getRight() == Race.HUMAN ? deque.stream()
-				.filter(d -> d instanceof Champion c && c.getMana() <= 2)
-				.count() * 0.01f : 0;
+																   .filter(d -> d instanceof Champion c && c.getMana() <= 2)
+																   .count() * 0.01f : 0;
 		this.maxCards = Math.max(maxCards
 								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
 								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
@@ -398,6 +403,10 @@ public class Hand {
 
 	public User getUser() {
 		return Main.getInfo().getUserByID(user);
+	}
+
+	public Map<Race, Long> getRaceCount() {
+		return raceCount;
 	}
 
 	public Pair<Race, Race> getCombo() {
