@@ -619,7 +619,7 @@ public class Champion implements Drawable, Cloneable {
 
 							if (found.size() == reqCombo) break;
 						}
-					} else if (req.equals(opt)) {
+					} else if (field.equals(opt)) {
 						if (found.add(opt) && found.size() == reqCombo) break;
 					}
 				}
