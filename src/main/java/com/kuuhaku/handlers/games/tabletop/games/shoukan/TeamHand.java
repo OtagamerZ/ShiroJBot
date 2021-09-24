@@ -100,7 +100,15 @@ public class TeamHand extends Hand {
 						}
 					}
 					case "blackrock" -> {
-						Field f = CardDAO.getField("OTHERWORLD");
+						Field f = switch (Helper.rng(5, true)) {
+							case 0 -> CardDAO.getField("THE_SKY_GATES");
+							case 1 -> CardDAO.getField("THE_CUBE");
+							case 2 -> CardDAO.getField("GREY_AREA");
+							case 3 -> CardDAO.getField("BLACK_ROCK_BATTLEFIELD");
+							case 4 -> CardDAO.getField("CHARIOTS_LAND");
+							case 5 -> CardDAO.getField("DEAD_MASTERS_LAIR");
+							default -> throw new IllegalStateException("Unexpected value: " + Helper.rng(5, true));
+						};
 						assert f != null;
 						game.getArena().setField(f);
 						deque.removeIf(d -> d instanceof Champion || d instanceof Field);
