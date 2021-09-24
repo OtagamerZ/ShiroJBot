@@ -30,7 +30,7 @@ import java.util.Set;
 
 public enum Achievement {
 	SPOOKY_NIGHTS("Noites de Arrepio", "Vença uma partida ranqueada em Outubro onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
-	UNTOUCHABLE("O Intocável", "Vença uma partida ranqueada sem levar nenhum dano direto.", false);
+	UNTOUCHABLE("O Intocável", "Vença uma partida ranqueada onde seu HP não fique abaixo do valor base.", false);
 
 	private final String title;
 	private final String description;
