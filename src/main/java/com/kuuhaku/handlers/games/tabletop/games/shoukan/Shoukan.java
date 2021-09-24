@@ -1176,7 +1176,7 @@ public class Shoukan extends GlobalGame {
 				.map(dr -> dr == null ? null : dr.getCard().getId())
 				.collect(Collectors.toList());
 
-		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : null;
+		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : "DEFAULT";
 
 		Champion aFusion = fusions
 				.parallelStream()
