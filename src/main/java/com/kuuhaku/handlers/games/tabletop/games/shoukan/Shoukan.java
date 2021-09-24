@@ -882,6 +882,7 @@ public class Shoukan extends GlobalGame {
 				if (applyEffect(POST_DEFENSE, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
 
 				reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
+				return;
 			}
 		}
 
