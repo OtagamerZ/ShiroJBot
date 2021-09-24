@@ -164,9 +164,10 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		for (Map.Entry<Side, Hand> e : hands.entrySet()) {
-			achievements.put(e.getKey(), EnumSet.complementOf(EnumSet.copyOf(e.getValue().getAcc().getAchievements())));
-		}
+		if (ranked)
+			for (Map.Entry<Side, Hand> e : hands.entrySet()) {
+				achievements.put(e.getKey(), EnumSet.complementOf(EnumSet.copyOf(e.getValue().getAcc().getAchievements())));
+			}
 
 		setActions(
 				s -> {
