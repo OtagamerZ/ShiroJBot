@@ -35,6 +35,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.DailyQuest;
+import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -88,6 +89,7 @@ public class Shoukan extends GlobalGame {
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean team;
 	private final boolean record;
+	private final Map<Side, EnumSet<Achievement>> achievements = new HashMap<>();
 	private final Map<Side, Map<Race, Integer>> summoned = Map.of(
 			Side.TOP, new HashMap<>(),
 			Side.BOTTOM, new HashMap<>()
@@ -160,6 +162,10 @@ public class Shoukan extends GlobalGame {
 				for (Hand h : hands.values())
 					h.getCards().add(d.copy());
 			}
+		}
+
+		for (Map.Entry<Side, Hand> e : hands.entrySet()) {
+			achievements.put(e.getKey(), EnumSet.complementOf(EnumSet.copyOf(e.getValue().getAcc().getAchievements())));
 		}
 
 		setActions(
@@ -2641,8 +2647,10 @@ public class Shoukan extends GlobalGame {
 					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
 					pg.merge(DailyTask.RACE_TASK, summons, Integer::sum);
 					acc.setDailyProgress(pg);
-					AccountDAO.saveAccount(acc);
 				}
+
+				acc.getAchievements().addAll(achievements.get(s));
+				AccountDAO.saveAccount(acc);
 			}
 
 			if (tourMatch != null) {
@@ -2721,6 +2729,10 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void resetTimer(Shoukan shkn) {
+		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
+			e.getValue().removeIf(a -> !a.isValid(this, e.getKey()));
+		}
+
 		getCurrRound().setSide(getCurrentSide());
 		decreaseFLockTime();
 		decreaseSLockTime();
