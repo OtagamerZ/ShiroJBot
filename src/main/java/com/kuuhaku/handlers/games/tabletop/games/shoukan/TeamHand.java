@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TeamHand extends Hand {
+	private final Map<Race, Long> raceCount;
 	private final Pair<Race, Race> combo;
 	private final InfiniteList<String> users = new InfiniteList<>();
 	private final InfiniteList<Account> accs = new InfiniteList<>();
@@ -146,7 +147,13 @@ public class TeamHand extends Hand {
 			this.cards.add(new BondedList<>(bonding));
 		}
 
-		combo = Race.getCombo(dks.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
+		raceCount = dks.stream()
+				.flatMap(kp -> kp.getChampions().stream())
+				.collect(Collectors.groupingBy(Champion::getRace, Collectors.counting()));
+
+		combo = Race.getCombo(dks.stream()
+				.flatMap(kp -> kp.getChampions().stream())
+				.collect(Collectors.toList()));
 		if (combo.getLeft() == Race.DIVINITY) {
 			for (LinkedList<Drawable> deque : deques) {
 				for (Drawable d : deque) {
@@ -483,6 +490,10 @@ public class TeamHand extends Hand {
 
 	public InfiniteList<Account> getAccs() {
 		return accs;
+	}
+
+	public Map<Race, Long> getRaceCount() {
+		return raceCount;
 	}
 
 	public Pair<Race, Race> getCombo() {
