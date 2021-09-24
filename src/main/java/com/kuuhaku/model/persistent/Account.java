@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.records.CompletionState;
@@ -37,9 +38,7 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -140,6 +139,10 @@ public class Account {
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastDaily = null;
+
+	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "account_id")
+	private Set<Achievement> achievements = EnumSet.noneOf(Achievement.class);
 
 	private transient Map<String, CompletionState> compState = null;
 	private transient FrameColor cachedFrame = null;
@@ -377,6 +380,10 @@ public class Account {
 				}
 			}
 		}
+	}
+
+	public Set<Achievement> getAchievements() {
+		return achievements;
 	}
 
 	public boolean isUsingFoil() {
