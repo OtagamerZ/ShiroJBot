@@ -911,7 +911,6 @@ public class Shoukan extends GlobalGame {
 		int dodge = his.getDodge();
 		boolean dodged = dodge >= 100 || (dodge > 0 && Helper.chance(dodge));
 
-
 		yours.setAvailable(false);
 		yours.resetAttribs();
 		his.resetAttribs();
@@ -1317,7 +1316,7 @@ public class Shoukan extends GlobalGame {
 			if (targetChamp.canGoToGrave())
 				arena.getGraveyard().get(to).add(targetChamp.copy());
 		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1453,7 +1452,7 @@ public class Shoukan extends GlobalGame {
 			if (!targetChamp.isFusion() || withFusion)
 				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp.copy());
 		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1649,7 +1648,7 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1771,7 +1770,7 @@ public class Shoukan extends GlobalGame {
 			slts.get(target).setTop(sourceChamp);
 			slots.get(source).setTop(targetChamp);
 		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + chance + "%)").queue();
+			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -2650,7 +2649,7 @@ public class Shoukan extends GlobalGame {
 					acc.setDailyProgress(pg);
 				}
 
-				acc.getAchievements().addAll(achievements.get(s));
+				acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
 				AccountDAO.saveAccount(acc);
 			}
 
