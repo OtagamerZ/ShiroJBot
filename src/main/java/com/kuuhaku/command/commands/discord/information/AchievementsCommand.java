@@ -62,7 +62,8 @@ public class AchievementsCommand implements Executable, Slashed {
 		List<List<Achievement>> achs = Helper.chunkify(List.of(Achievement.values()), 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Conquistas Shoukan");
+				.setTitle("Conquistas Shoukan (" + acc.getAchievements().size() + "/" + Achievement.values().length + ")")
+				.setFooter("As conquistas só podem ser desbloqueadas em partidas ranqueadas.");
 
 		for (List<Achievement> chunk : achs) {
 			for (Achievement a : chunk) {

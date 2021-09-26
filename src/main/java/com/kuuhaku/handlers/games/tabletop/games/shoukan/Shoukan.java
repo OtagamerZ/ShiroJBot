@@ -1938,6 +1938,11 @@ public class Shoukan extends GlobalGame {
             if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
                 h.get().getDeque().addAll(
                         discardBatch.stream()
+                                .filter(d -> {
+                                    if (d instanceof Champion c) return c.canGoToGrave();
+                                    else if (d instanceof Equipment e) return !e.isEffectOnly();
+                                    else return true;
+                                })
                                 .map(Drawable::copy)
                                 .collect(Collectors.toList())
                 );
@@ -1945,6 +1950,11 @@ public class Shoukan extends GlobalGame {
             } else {
                 arena.getGraveyard().get(getCurrentSide()).addAll(
                         discardBatch.stream()
+                                .filter(d -> {
+                                    if (d instanceof Champion c) return c.canGoToGrave();
+                                    else if (d instanceof Equipment e) return !e.isEffectOnly();
+                                    else return true;
+                                })
                                 .map(Drawable::copy)
                                 .collect(Collectors.toList())
                 );
@@ -2641,6 +2651,10 @@ public class Shoukan extends GlobalGame {
         recordLast();
         super.close();
 
+        for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
+            e.getValue().removeIf(a -> !a.isValid(this, e.getKey(), true));
+        }
+
         if (!draw && getCustom() == null) {
             for (Side s : Side.values()) {
                 Account acc = AccountDAO.getAccount(hands.get(s).getUser().getId());
@@ -2731,10 +2745,18 @@ public class Shoukan extends GlobalGame {
         return getCurrentSide() == Side.TOP ? Side.BOTTOM : Side.TOP;
     }
 
+    public boolean isTeam() {
+        return team;
+    }
+
+    public boolean isReroll() {
+        return reroll;
+    }
+
     @Override
     public void resetTimer(Shoukan shkn) {
         for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
-            e.getValue().removeIf(a -> !a.isValid(this, e.getKey()));
+            e.getValue().removeIf(a -> !a.isValid(this, e.getKey(), false));
         }
 
         getCurrRound().setSide(getCurrentSide());
