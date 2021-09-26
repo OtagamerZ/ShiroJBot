@@ -30,7 +30,7 @@ import java.util.Set;
 
 public enum Achievement {
 	SPOOKY_NIGHTS("Noites de Arrepio", "Vença uma partida em Outubro onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
-	UNTOUCHABLE("O Intocável", "Vença uma partida onde seu HP não fique abaixo do valor base.", false),
+	UNTOUCHABLE("Intocável", "Vença uma partida onde seu HP não fique abaixo do valor base.", false),
 	LAST_STAND("O Último Bastião", "Vença uma partida após sobreviver um ataque fatal.", false),
 	STAND_UNITED("Manter União", "Vença uma partida com um parceiro.", false),
 	COUP_DE_GRACE("Golpe de Misericórdia", "Vença uma partida após esvaziar o deck do oponente.", false),
