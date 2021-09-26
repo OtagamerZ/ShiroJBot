@@ -140,7 +140,8 @@ public class Account {
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastDaily = null;
 
-	@ElementCollection(fetch = FetchType.LAZY)
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Enumerated(EnumType.STRING)
 	@JoinColumn(name = "account_id")
 	private Set<Achievement> achievements = EnumSet.noneOf(Achievement.class);
 
