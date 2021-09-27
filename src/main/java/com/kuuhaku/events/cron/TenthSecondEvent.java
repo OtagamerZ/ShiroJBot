@@ -55,7 +55,7 @@ public class TenthSecondEvent implements Job {
 		if (lock) return;
 		lock = true;
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = List.copyOf(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
-		if (soloLobby.size() > 1) {
+		if (soloLobby.size() > 10) {
 			var toTry = Helper.getRandomN(soloLobby, 2, 1);
 			if (trySoloMatching(toTry.get(0), toTry.get(1))) {
 				lock = false;
