@@ -89,7 +89,9 @@ public class TenthSecondEvent implements Job {
 
 			if (!mmr1.equals(mmr2)
 				&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
-				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)) {
+				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)
+				&& !p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId())
+			) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
 
@@ -129,10 +131,10 @@ public class TenthSecondEvent implements Job {
 							if (p.getRight()) {
 								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
 										Pages.buttonize(s, Map.of(
-												Helper.CANCEL, (mb, ms) -> {
-													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
-													ms.delete().queue();
-												}), false, 30, TimeUnit.MINUTES
+														Helper.CANCEL, (mb, ms) -> {
+															Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+															ms.delete().queue();
+														}), false, 30, TimeUnit.MINUTES
 												, u -> u.getId().equals(mmr.getUid())
 												, ms -> {
 													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
@@ -226,10 +228,10 @@ public class TenthSecondEvent implements Job {
 							if (p.getRight()) {
 								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
 										Pages.buttonize(s, Map.of(
-												Helper.CANCEL, (mb, ms) -> {
-													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
-													ms.delete().queue();
-												}), false, 30, TimeUnit.MINUTES
+														Helper.CANCEL, (mb, ms) -> {
+															Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
+															ms.delete().queue();
+														}), false, 30, TimeUnit.MINUTES
 												, u -> Helper.equalsAny(u.getId(), rd.p1().getUid(), rd.p2().getUid())
 												, ms -> {
 													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
