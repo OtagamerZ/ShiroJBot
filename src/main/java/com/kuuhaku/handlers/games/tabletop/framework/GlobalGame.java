@@ -271,9 +271,8 @@ public abstract class GlobalGame {
 						double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
 						double damageEff = (double) -damageDealt / yourResult.size();
 						double expEff = 5000d / yourResult.size();
-						double sustainEff = 1 + yourResult.get("hp") / 5000f;
+						double sustainEff = 1 + yourResult.get("hp") / 5000d;
 						long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
-
 
 						yourMMR.addMMR(mmr / (wo ? 2 : 1), theirMMR, ranked);
 						yourMMR.addWin();
