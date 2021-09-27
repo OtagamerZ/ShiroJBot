@@ -56,34 +56,31 @@ public class TenthSecondEvent implements Job {
 		lock = true;
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = List.copyOf(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
 		if (soloLobby.size() > 1) {
-			var indexes = Helper.getRandomN(Helper.getNumericList(0, soloLobby.size()), 2, 1);
-			if (tryMatching(soloLobby, indexes.get(0), indexes.get(1))) {
+			var toTry = Helper.getRandomN(soloLobby, 2, 1);
+			if (trySoloMatching(toTry.get(0), toTry.get(1))) {
 				lock = false;
 				return;
 			}
 
-			Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(soloLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+			Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(toTry.get(0).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 
 		List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> duoLobby = List.copyOf(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
 		if (duoLobby.size() > 1) {
-			var indexes = Helper.getRandomN(Helper.getNumericList(0, duoLobby.size()), 4, 1);
-			if (tryMatching(duoLobby, indexes.get(0), indexes.get(1), indexes.get(2), indexes.get(3))) {
+			var toTry = Helper.getRandomN(duoLobby, 2, 1);
+			if (tryDuoMatching(toTry.get(0), toTry.get(1))) {
 				lock = false;
 				return;
 			}
 
-			Main.getInfo().getMatchMaking().getDuoLobby().computeIfPresent(duoLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+			Main.getInfo().getMatchMaking().getDuoLobby().computeIfPresent(toTry.get(0).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 
 		lock = false;
 	}
 
-	private boolean tryMatching(List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> lobby, int a, int b) {
+	private boolean trySoloMatching(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2) {
 		try {
-			Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 = lobby.get(a);
-			Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 = lobby.get(b);
-
 			MatchMakingRating mmr1 = p1.getKey();
 			MatchMakingRating mmr2 = p2.getKey();
 
@@ -163,17 +160,16 @@ public class TenthSecondEvent implements Job {
 		return false;
 	}
 
-	private boolean tryMatching(List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> lobby, int a, int b, int c, int d) {
+	private boolean tryDuoMatching(Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p1, Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p2) {
 		try {
-			Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p1 = lobby.get(a);
-			Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p2 = lobby.get(b);
-
 			RankedDuo t1 = p1.getKey();
 			RankedDuo t2 = p2.getKey();
 
 			if (!t1.equals(t2)
 				&& Helper.prcnt(t1.getAvgMMR(), t2.getAvgMMR() == 0 ? 1 : t2.getAvgMMR()) * 100 <= p1.getValue().getLeft() * 10
-				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < 2 || t2.getAvgTier() == 0)) {
+				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < 2 || t2.getAvgTier() == 0)
+				&& !p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId())
+			) {
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(t1);
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(t2);
 
