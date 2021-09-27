@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.Role;
 import org.jsoup.internal.StringUtil;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "button")
@@ -79,5 +80,18 @@ public class Button {
 
 	public boolean isEmote() {
 		return StringUtil.isNumeric(emote);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Button button = (Button) o;
+		return id == button.id && Objects.equals(parent, button.parent);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, parent);
 	}
 }
