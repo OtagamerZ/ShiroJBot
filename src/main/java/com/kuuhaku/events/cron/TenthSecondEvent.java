@@ -66,7 +66,7 @@ public class TenthSecondEvent implements Job {
 		}
 
 		List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> duoLobby = List.copyOf(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
-		if (duoLobby.size() > 1) {
+		if (duoLobby.size() >= 10) {
 			var toTry = Helper.getRandomN(duoLobby, 2, 1);
 			if (tryDuoMatching(toTry.get(0), toTry.get(1))) {
 				lock = false;
