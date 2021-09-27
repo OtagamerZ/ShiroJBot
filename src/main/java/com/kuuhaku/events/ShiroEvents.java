@@ -147,8 +147,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 		if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 			handleExchange(author, message);
-		} else if (member == null || !channel.canTalk()) return;
-		assert member != null;
+		}
+
+		if (member == null || !channel.canTalk()) return;
 
 		if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId()) && rawMessage.length() > 1) {
 			try {
