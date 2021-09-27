@@ -87,7 +87,7 @@ public class TenthSecondEvent implements Job {
 			if (!mmr1.equals(mmr2)
 				&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
 				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)
-				&& !p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId())
+				&& (!p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId()) || p1.getValue().getLeft() > 90)
 			) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
@@ -168,7 +168,7 @@ public class TenthSecondEvent implements Job {
 			if (!t1.equals(t2)
 				&& Helper.prcnt(t1.getAvgMMR(), t2.getAvgMMR() == 0 ? 1 : t2.getAvgMMR()) * 100 <= p1.getValue().getLeft() * 10
 				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < 2 || t2.getAvgTier() == 0)
-				&& !p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId())
+				&& (!p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId()) || p1.getValue().getLeft() > 90)
 			) {
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(t1);
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(t2);
