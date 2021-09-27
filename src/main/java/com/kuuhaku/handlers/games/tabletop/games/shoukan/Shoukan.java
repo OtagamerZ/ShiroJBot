@@ -192,10 +192,10 @@ public class Shoukan extends GlobalGame {
                             MatchMakingRatingDAO.saveMMR(mmr);
                         }
 
+                        setWo();
                         getHistory().setWinner(getNextSide());
                         getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
                         close();
-                        setWo();
                     }
                     channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
                             .queue(msg ->
