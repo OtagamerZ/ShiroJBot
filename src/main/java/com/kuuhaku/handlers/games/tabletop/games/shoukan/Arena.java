@@ -171,10 +171,18 @@ public class Arena {
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
 
 									if (!d.isFlipped()) {
-										if (d.isBuffed())
+										if (d.getHero() != null)
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/hero.png"), 489 + (257 * i), 377, null);
+										else if (d.isBuffed())
 											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 377, null);
 										else if (d.isNerfed())
 											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 377, null);
+									}
+
+									if (d.getHero() != null) {
+										g2d.setColor(Color.orange);
+										g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+										Profile.printCenteredString("HP: " + d.getHero().getHp(), 225, 489 + (257 * i), 374, g2d);
 									}
 								}
 								if (c.getBottom() != null) {
@@ -188,10 +196,18 @@ public class Arena {
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
 
 									if (!d.isFlipped()) {
+										if (d.getHero() != null)
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/hero.png"), 489 + (257 * i), 1003, null);
 										if (d.isBuffed())
 											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 1003, null);
 										else if (d.isNerfed())
 											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 1003, null);
+									}
+
+									if (d.getHero() != null) {
+										g2d.setColor(Color.orange);
+										g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+										Profile.printCenteredString("HP: " + d.getHero().getHp(), 225, 489 + (257 * i), 1000, g2d);
 									}
 								}
 								if (c.getBottom() != null) {
