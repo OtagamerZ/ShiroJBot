@@ -74,7 +74,7 @@ public class ShoukanDeck {
 			Champion c = champs.get(i);
 			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
 			if (dk.getDestinyDraw() != null && dk.getDestinyDraw().contains(i))
-				g2d.drawImage(destiny, 85 + 279 * (i - SENSHI_COLUMNS * y), 339 + 419 * y, null);
+				g2d.drawImage(destiny, 85 + 274 * (i - SENSHI_COLUMNS * y), 339 + 414 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
 
