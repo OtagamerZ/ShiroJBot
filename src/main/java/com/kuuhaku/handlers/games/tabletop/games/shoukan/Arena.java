@@ -173,11 +173,11 @@ public class Arena {
 									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 489 + (257 * i), 377, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 489 + (252 * i), 372, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (257 * i), 377, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (252 * i), 372, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (257 * i), 377, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (252 * i), 372, null);
 									}
 
 									if (d.getHero() != null) {
@@ -199,11 +199,11 @@ public class Arena {
 									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 489 + (257 * i), 1003, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 489 + (252 * i), 998, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (257 * i), 1003, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (252 * i), 998, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (257 * i), 1003, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (252 * i), 998, null);
 									}
 
 									if (d.getHero() != null) {
