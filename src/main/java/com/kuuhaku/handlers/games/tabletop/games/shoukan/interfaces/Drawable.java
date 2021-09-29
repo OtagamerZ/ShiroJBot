@@ -100,7 +100,7 @@ public interface Drawable {
 			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.orange);
-			Profile.drawOutlinedText(String.valueOf(dodge), 57, y + 21, g2d);
+			Profile.drawOutlinedText(dodge + "%", 57, y + 21, g2d);
 		}
 
 		y = 59;
