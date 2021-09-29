@@ -79,6 +79,7 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean fusion = false;
 
+	private transient Hero hero = null;
 	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Bonus bonus = new Bonus();
@@ -159,7 +160,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.setBackground(fc.getSecondaryColor());
 			}
 
-			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), true);
+			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(), true);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(fc.getSecondaryColor());
@@ -762,6 +763,14 @@ public class Champion implements Drawable, Cloneable {
 
 	public boolean isDecoy() {
 		return card.getId().equals("DECOY");
+	}
+
+	public Hero getHero() {
+		return hero;
+	}
+
+	public void setHero(Hero hero) {
+		this.hero = hero;
 	}
 
 	public void reset() {

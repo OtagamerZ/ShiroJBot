@@ -3178,4 +3178,8 @@ public class Helper {
 	public static long getFibonacci(int nth) {
 		return Math.round((Math.pow(GOLDEN_RATIO, nth) - Math.pow(GOLDEN_RATIO - 1, nth)) / Math.sqrt(5));
 	}
+
+	public static double getRatio(double w, double h) {
+		return w / h;
+	}
 }
