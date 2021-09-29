@@ -170,13 +170,14 @@ public class Arena {
 									Champion d = c.getTop();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
 
+									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
-										if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/hero.png"), 489 + (257 * i), 377, null);
-										else if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 377, null);
+										if (d.isBuffed())
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 489 + (257 * i), 377, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 377, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (257 * i), 377, null);
+										else if (d.getHero() != null)
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (257 * i), 377, null);
 									}
 
 									if (d.getHero() != null) {
@@ -195,13 +196,14 @@ public class Arena {
 									Champion d = c.getTop();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
 
+									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
-										if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/hero.png"), 489 + (257 * i), 1003, null);
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 1003, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 489 + (257 * i), 1003, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 1003, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (257 * i), 1003, null);
+										else if (d.getHero() != null)
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (257 * i), 1003, null);
 									}
 
 									if (d.getHero() != null) {

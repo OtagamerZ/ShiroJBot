@@ -61,8 +61,9 @@ public class ShoukanDeck {
 				.peek(f -> f.setAcc(acc))
 				.collect(Collectors.toList());
 
+		String path = acc.getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 		BufferedImage deck = Helper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
-		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/destiny.png");
+		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/destiny.png");
 
 		assert deck != null;
 		Graphics2D g2d = deck.createGraphics();
