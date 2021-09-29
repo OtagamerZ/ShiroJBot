@@ -50,6 +50,16 @@ public class Card {
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
 
+	public Card() {
+	}
+
+	public Card(String id, String name, AddedAnime anime, KawaiponRarity rarity) {
+		this.id = id;
+		this.name = name;
+		this.anime = anime;
+		this.rarity = rarity;
+	}
+
 	public String getId() {
 		return id;
 	}
