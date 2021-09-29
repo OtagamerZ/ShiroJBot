@@ -22,6 +22,8 @@ import com.kuuhaku.utils.Helper;
 
 import java.awt.*;
 import java.io.IOException;
+import java.text.AttributedCharacterIterator.Attribute;
+import java.util.Map;
 
 public enum Fonts {
 	DJB_GET_DIGITAL("font/DJBGetDigital.ttf"),
@@ -36,7 +38,7 @@ public enum Fonts {
 		try {
 			temp = Font.createFont(Font.TRUETYPE_FONT, Helper.getResourceAsStream(this.getClass(), path));
 		} catch (FontFormatException | IOException e) {
-			temp = new java.awt.Font("Arial", Font.PLAIN, 11);
+			temp = new Font("Arial", Font.PLAIN, 11);
 		}
 
 		this.font = temp;
@@ -48,5 +50,9 @@ public enum Fonts {
 
 	public Font deriveFont(int style, float size) {
 		return font.deriveFont(style, size);
+	}
+
+	public Font deriveFont(int style, float size, Map<? extends Attribute, ?> attributes) {
+		return deriveFont(style, size).deriveFont(attributes);
 	}
 }

@@ -135,7 +135,7 @@ public class Equipment implements Drawable, Cloneable {
 				for (int i = 0; i < getTier(); i++)
 					g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 53, null);
 
-			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), hasDesc);
+			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), 0, hasDesc);
 
 			if (linkedTo != null) {
 				Champion c = Helper.getOr(linkedTo.getRight().getFakeCard(), linkedTo.getRight());

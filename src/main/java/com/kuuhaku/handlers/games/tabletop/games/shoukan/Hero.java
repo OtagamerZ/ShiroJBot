@@ -70,6 +70,8 @@ public class Hero {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
+	private transient int hp = -1;
+
 	public Hero() {
 	}
 
@@ -142,6 +144,10 @@ public class Hero {
 		return getMaxStatPoints() - attrs.getUsedPoints();
 	}
 
+	public Set<Perk> getPerks() {
+		return perks;
+	}
+
 	public int getMaxPerks() {
 		return getLevel() / 5;
 	}
@@ -177,7 +183,7 @@ public class Hero {
 			};
 		}
 
-		return (int) Math.max(0, Helper.roundTrunc(attrs.calcMaxHp() * hpModif, 5) - dmg);
+		return hp = (int) Math.max(0, Helper.roundTrunc(attrs.calcMaxHp() * hpModif, 5) - dmg);
 	}
 
 	public int getMp() {
@@ -235,10 +241,13 @@ public class Hero {
 	}
 
 	public Champion toChampion() {
-		return new Champion(
+		Champion c = new Champion(
 				new Card(uid, name, new AddedAnime("HERO", true), KawaiponRarity.ULTIMATE, image),
 				race, getMp(), getBlood(), getAtk(), getDef(), description, effect
 		);
+		c.setHero(this);
+
+		return c;
 	}
 
 	@Override
