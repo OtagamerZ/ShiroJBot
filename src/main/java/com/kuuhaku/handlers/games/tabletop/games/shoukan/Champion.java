@@ -108,10 +108,11 @@ public class Champion implements Drawable, Cloneable {
 	private transient int stun = 0;
 	private transient int sleep = 0;
 
-	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
+	public Champion(Card card, Race race, int mana, int blood, int atk, int def, String description, String effect) {
 		this.card = card;
 		this.race = race;
 		this.mana = mana;
+		this.blood = blood;
 		this.atk = atk;
 		this.def = def;
 		this.description = description;
