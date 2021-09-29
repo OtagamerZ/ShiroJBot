@@ -36,6 +36,14 @@ public class AddedAnime {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean hidden = false;
 
+	public AddedAnime() {
+	}
+
+	public AddedAnime(String name, boolean hidden) {
+		this.name = name;
+		this.hidden = hidden;
+	}
+
 	public String getName() {
 		return name;
 	}

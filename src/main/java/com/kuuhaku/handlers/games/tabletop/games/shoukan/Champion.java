@@ -151,9 +151,11 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawImage(c.getRace().getIcon(), 11, 12, 23, 23, null);
 
 			if (bonus.getWrite() != null) {
+				g2d.setBackground(Color.black);
 				g2d.setColor(Color.yellow);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
 				Profile.drawOutlinedText(bonus.getWrite(), 29, 100, g2d);
+				g2d.setBackground(fc.getSecondaryColor());
 			}
 
 			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), true);
@@ -726,8 +728,10 @@ public class Champion implements Drawable, Cloneable {
 		if (slink) return false;
 
 		Field f = game.getArena().getField();
-		if (f != null)
-			return f.getModifiers().getFloat(getRace().name(), 1) > 1;
+		if (f != null) {
+			Champion c = Helper.getOr(fakeCard, this);
+			return f.getModifiers().getFloat(c.getRace().name(), 1) > 1;
+		}
 
 		return false;
 	}
@@ -739,8 +743,10 @@ public class Champion implements Drawable, Cloneable {
 		if (slink) return false;
 
 		Field f = game.getArena().getField();
-		if (f != null)
-			return f.getModifiers().getFloat(getRace().name(), 1) < 1;
+		if (f != null) {
+			Champion c = Helper.getOr(fakeCard, this);
+			return f.getModifiers().getFloat(c.getRace().name(), 1) < 1;
+		}
 
 		return false;
 	}
