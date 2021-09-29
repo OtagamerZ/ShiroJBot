@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.CardType;
@@ -1010,6 +1011,26 @@ public class CardDAO {
 		} finally {
 			em.close();
 		}
+	}
+
+	public static Hero getHero(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(Hero.class, id);
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveHero(Hero h) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(h);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 
 	public static double getCategoryMeta(Class cat) {

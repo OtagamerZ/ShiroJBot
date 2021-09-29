@@ -68,14 +68,13 @@ public interface Drawable {
 
 	Drawable deepCopy();
 
-	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, boolean hasDesc) {
+	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 		int y = hasDesc ? 220 : 287;
 
-		boolean drewDef = false;
 		if (def != 0) {
 			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
 			g2d.drawImage(icon, 29, y, null);
@@ -83,15 +82,25 @@ public interface Drawable {
 			g2d.setColor(Color.green);
 			Profile.drawOutlinedText(String.valueOf(def), 57, y + 21, g2d);
 
-			drewDef = true;
+			y -= 25;
 		}
 
 		if (atk != 0) {
 			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
-			g2d.drawImage(icon, 29, y - (drewDef ? 25 : 0), null);
+			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.red);
-			Profile.drawOutlinedText(String.valueOf(atk), 57, y + 21 - (drewDef ? 25 : 0), g2d);
+			Profile.drawOutlinedText(String.valueOf(atk), 57, y + 21, g2d);
+
+			y -= 25;
+		}
+
+		if (dodge != 0) {
+			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/dodge.png");
+			g2d.drawImage(icon, 29, y, null);
+
+			g2d.setColor(Color.orange);
+			Profile.drawOutlinedText(String.valueOf(dodge), 57, y + 21, g2d);
 		}
 
 		y = 59;

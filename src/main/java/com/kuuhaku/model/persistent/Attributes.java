@@ -38,12 +38,20 @@ public class Attributes {
 		this.str = Math.max(0, str);
 	}
 
+	public void addStr() {
+		this.str += 1;
+	}
+
 	public int getRes() {
 		return res;
 	}
 
 	public void setRes(int res) {
 		this.res = Math.max(0, res);
+	}
+
+	public void addRes() {
+		this.res += 1;
 	}
 
 	public int getAgi() {
@@ -54,12 +62,20 @@ public class Attributes {
 		this.agi = Math.max(0, agi);
 	}
 
+	public void addAgi() {
+		this.agi += 1;
+	}
+
 	public int getWis() {
 		return wis;
 	}
 
 	public void setWis(int wis) {
 		this.wis = Math.max(0, wis);
+	}
+
+	public void addWis() {
+		this.wis += 1;
 	}
 
 	public int getCon() {
@@ -70,8 +86,12 @@ public class Attributes {
 		this.con = Math.max(0, con);
 	}
 
+	public void addCon() {
+		this.con += 1;
+	}
+
 	public int calcMaxHp() {
-		return (int) Helper.roundTrunc(1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str)), 5);
+		return (int) Helper.roundTrunc(1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str + -0.015 * str)), 5);
 	}
 
 	public int calcMp() {
