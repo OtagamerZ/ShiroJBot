@@ -157,6 +157,7 @@ public class Helper {
 	public static final String ANTICOPY = "\uFFF8"; //or U+034F
 	public static final String MENTION = "<@\\d+>|<@!\\d+>";
 	public static final String TIMESTAMP = "<t:%s:R>";
+	public static final double GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
 	public static final int CANVAS_SIZE = 2049;
 	public static final DateTimeFormatter fullDateFormat = DateTimeFormatter.ofPattern(I18n.getString("full-date-format"));
 	public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(I18n.getString("date-format"));
@@ -2293,6 +2294,10 @@ public class Helper {
 		}
 	}
 
+	public static byte[] btoc(String b64) {
+		return Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8));
+	}
+
 	public static String separate(Object value) {
 		try {
 			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
@@ -2686,11 +2691,11 @@ public class Helper {
 		return mult * Math.round((double) value / mult);
 	}
 
-	public static float roundTrunc(float value, int mult) {
+	public static int roundTrunc(float value, int mult) {
 		return mult * Math.round(value / mult);
 	}
 
-	public static double roundTrunc(double value, int mult) {
+	public static long roundTrunc(double value, int mult) {
 		return mult * Math.round(value / mult);
 	}
 
@@ -3168,5 +3173,9 @@ public class Helper {
 		}
 
 		return -1;
+	}
+
+	public static long getFibonacci(int nth) {
+		return Math.round((Math.pow(GOLDEN_RATIO, nth) - Math.pow(GOLDEN_RATIO - 1, nth)) / Math.sqrt(5));
 	}
 }

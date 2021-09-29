@@ -18,14 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.Embeddable;
-import javax.persistence.Table;
 
 @Embeddable
-@Table(name = "attributes")
 public class Attributes {
 	private int str = 0;
-	private int def = 0;
+	private int res = 0;
 	private int agi = 0;
 	private int wis = 0;
 	private int con = 0;
@@ -35,15 +35,15 @@ public class Attributes {
 	}
 
 	public void setStr(int str) {
-		this.str = str;
+		this.str = Math.max(0, str);
 	}
 
-	public int getDef() {
-		return def;
+	public int getRes() {
+		return res;
 	}
 
-	public void setDef(int def) {
-		this.def = def;
+	public void setRes(int res) {
+		this.res = Math.max(0, res);
 	}
 
 	public int getAgi() {
@@ -51,7 +51,7 @@ public class Attributes {
 	}
 
 	public void setAgi(int agi) {
-		this.agi = agi;
+		this.agi = Math.max(0, agi);
 	}
 
 	public int getWis() {
@@ -59,7 +59,7 @@ public class Attributes {
 	}
 
 	public void setWis(int wis) {
-		this.wis = wis;
+		this.wis = Math.max(0, wis);
 	}
 
 	public int getCon() {
@@ -67,6 +67,36 @@ public class Attributes {
 	}
 
 	public void setCon(int con) {
-		this.con = con;
+		this.con = Math.max(0, con);
+	}
+
+	public int calcMaxHp() {
+		return (int) Helper.roundTrunc(1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str)), 5);
+	}
+
+	public int calcMp() {
+		return (int) (1 + Math.max(0,
+				str * 0.2
+				+ res * 0.1
+				+ agi * 0.02
+				+ wis * -0.15
+				+ con * 0.05
+		));
+	}
+
+	public int calcAtk() {
+		return (int) Helper.roundTrunc(100 + 3000 * (1 - Math.exp(-0.02 * str + -0.005 * agi)), 25);
+	}
+
+	public int calcDef() {
+		return (int) Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.03 * res + -0.0075 * agi)), 25);
+	}
+
+	public int calcDodge() {
+		return (int) Helper.roundTrunc(100 * (1 - Math.exp(-0.05 * agi + 0.025 * con)), 5);
+	}
+
+	public int getUsedPoints() {
+		return str + res + agi + wis + con;
 	}
 }
