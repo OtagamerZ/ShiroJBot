@@ -50,14 +50,17 @@ public class Card {
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
 
+	private transient String heroImg = null;
+
 	public Card() {
 	}
 
-	public Card(String id, String name, AddedAnime anime, KawaiponRarity rarity) {
+	public Card(String id, String name, AddedAnime anime, KawaiponRarity rarity, String image) {
 		this.id = id;
 		this.name = name;
 		this.anime = anime;
 		this.rarity = rarity;
+		this.heroImg = image;
 	}
 
 	public String getId() {
@@ -90,14 +93,14 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					return null;
 				}
-			});
+			}) : Helper.btoc(heroImg);
 
 			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
@@ -123,13 +126,14 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder() {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					return null;
 				}
-			});
+			}) : Helper.btoc(heroImg);
 
 			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
@@ -142,13 +146,14 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					return null;
 				}
-			});
+			}) : Helper.btoc(heroImg);
 
 			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
@@ -161,13 +166,14 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder(Account acc) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					return null;
 				}
-			});
+			}) : Helper.btoc(heroImg);
 
 			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {

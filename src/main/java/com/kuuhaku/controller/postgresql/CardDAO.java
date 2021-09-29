@@ -820,7 +820,8 @@ public class CardDAO {
 		Champion c = new Champion(
 				champs.get(0).getCard(),
 				champs.get(1).getRace(),
-				champs.get(2).getMana(),
+				champs.get(1).getMana(),
+				champs.get(2).getBlood(),
 				champs.get(2).getAtk(),
 				champs.get(2).getDef(),
 				champs.get(3).getDescription(),
