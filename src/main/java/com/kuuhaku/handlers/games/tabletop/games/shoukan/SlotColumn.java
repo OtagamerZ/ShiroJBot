@@ -19,18 +19,19 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 public class SlotColumn {
+	private final int index;
 	private Champion top = null;
 	private Equipment bottom = null;
-	private final int index;
+	private int unavailable = 0;
 
 	public SlotColumn(int index) {
 		this.index = index;
 	}
 
-	public SlotColumn(Champion top, Equipment bottom, int index) {
+	public SlotColumn(int index, Champion top, Equipment bottom) {
+		this.index = index;
 		this.top = top;
 		this.bottom = bottom;
-		this.index = index;
 	}
 
 	public Champion getTop() {
@@ -53,5 +54,13 @@ public class SlotColumn {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public void setUnavailable(int time) {
+		this.unavailable = Math.max(0, this.unavailable + time);
+	}
+
+	public boolean isUnavailable() {
+		return unavailable > 0;
 	}
 }
