@@ -170,6 +170,10 @@ public class Hero {
 		return CardDAO.getChampion(effect);
 	}
 
+	public int getDmg() {
+		return dmg;
+	}
+
 	public int getHp() {
 		double hpModif = 1;
 		for (Perk perk : perks) {
