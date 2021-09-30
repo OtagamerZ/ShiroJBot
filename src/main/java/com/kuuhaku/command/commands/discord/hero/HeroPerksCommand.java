@@ -89,22 +89,24 @@ public class HeroPerksCommand implements Executable {
 
 								choosePerk(h, s, perks.get(0));
 							});
-							put("2️⃣", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
-									channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
-									return;
-								}
+							if (perks.size() > 1)
+								put("2️⃣", (mb, ms) -> {
+									if (h.getAvailableStatPoints() <= 0) {
+										channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
+										return;
+									}
 
-								choosePerk(h, s, perks.get(1));
-							});
-							put("3️⃣", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
-									channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
-									return;
-								}
+									choosePerk(h, s, perks.get(1));
+								});
+							if (perks.size() > 2)
+								put("3️⃣", (mb, ms) -> {
+									if (h.getAvailableStatPoints() <= 0) {
+										channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
+										return;
+									}
 
-								choosePerk(h, s, perks.get(2));
-							});
+									choosePerk(h, s, perks.get(2));
+								});
 						}}, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId())
 				));
