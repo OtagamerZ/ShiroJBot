@@ -59,11 +59,6 @@ public class HeroImageCommand implements Executable {
 			}
 
 			BufferedImage bi = ImageIO.read(a.retrieveInputStream().get());
-			if (Helper.getRatio(bi.getWidth(), bi.getHeight()) != Helper.getRatio(225, 350)) {
-				channel.sendMessage("❌ | A proporção da imagem deve ser 225:350.").queue();
-				return;
-			}
-
 			h.setImage(bi);
 			CardDAO.saveHero(h);
 
