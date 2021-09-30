@@ -51,6 +51,11 @@ public class SummonHeroCommand implements Executable {
 
     @Override
     public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
+
         Hero h = CardDAO.getHero(author.getId());
 
         if (h != null) {
@@ -96,7 +101,8 @@ public class SummonHeroCommand implements Executable {
         }
 
         BufferedImage image = bi;
-        channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?.")
+        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+        channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             acc.removeGem(5);
                             AccountDAO.saveAccount(acc);
