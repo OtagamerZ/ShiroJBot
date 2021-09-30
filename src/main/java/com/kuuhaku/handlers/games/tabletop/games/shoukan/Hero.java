@@ -121,7 +121,7 @@ public class Hero {
 	}
 
 	public int getLevel() {
-		return (int) Math.max(1, Math.round(Math.log(xp * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
+		return Math.max(1, (int) Math.round(Math.log(xp * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
 	}
 
 	public int getXp() {
