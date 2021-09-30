@@ -18,9 +18,11 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -93,6 +95,12 @@ public class ShoukanDeck {
 			Field f = fields.get(i);
 			g2d.drawImage(f.drawCard(false), 1769, 769 + (419 * i), null);
 			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
+		}
+
+		Hero h = CardDAO.getHero(acc.getUid());
+		if (h != null) {
+			g2d.drawImage(h.toChampion().drawCard(false), 1769, 2444, null);
+			Profile.printCenteredString(StringUtils.abbreviate(h.getName(), 15), 225, 1769, 3683, g2d);
 		}
 
 		Pair<Race, Race> combo = dk.getCombo();
