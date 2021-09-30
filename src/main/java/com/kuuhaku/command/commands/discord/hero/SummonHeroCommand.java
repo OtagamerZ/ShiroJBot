@@ -87,6 +87,9 @@ public class SummonHeroCommand implements Executable {
 		if (name.isBlank()) {
 			channel.sendMessage("❌ | Você precisa digitar um nome.").queue();
 			return;
+		} else if (name.length() > 25) {
+			channel.sendMessage("❌ | Nome muito longo, o tamanho máximo é 25 caractéres.").queue();
+			return;
 		}
 
 		BufferedImage bi = null;
