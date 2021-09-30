@@ -58,6 +58,7 @@ public class Hand {
 	private final BondedList<Drawable> deque;
 	private final BondedList<Drawable> cards;
 	private final BondedList<Drawable> destinyDeck;
+	private final Hero hero;
 	private Pair<Race, Race> combo;
 	private int baseHp;
 	private int baseManaPerTurn;
@@ -81,12 +82,14 @@ public class Hand {
 			this.deque = null;
 			this.cards = null;
 			this.destinyDeck = null;
-			raceCount = null;
+			this.raceCount = null;
+			this.hero = null;
 			return;
 		}
 
 		this.user = user.getId();
 		this.acc = AccountDAO.getAccount(user.getId());
+		this.hero = CardDAO.getHero(user.getId());
 
 		Consumer<Drawable> bonding = d -> d.bind(this);
 		this.deque = new BondedList<>(bonding);
@@ -112,6 +115,7 @@ public class Hand {
 						.flatMap(List::stream)
 						.collect(Collectors.toList())
 		);
+		if (hero != null) deque.add(hero.toChampion());
 
 		int baseHp;
 		int baseManaPerTurn;
@@ -463,6 +467,10 @@ public class Hand {
 
 	public BondedList<Drawable> getDestinyDeck() {
 		return destinyDeck;
+	}
+
+	public Hero getHero() {
+		return hero;
 	}
 
 	public Side getSide() {
