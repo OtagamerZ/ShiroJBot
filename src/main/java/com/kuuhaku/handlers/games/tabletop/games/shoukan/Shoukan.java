@@ -788,7 +788,7 @@ public class Shoukan extends GlobalGame {
 				Champion c = slot.getTop();
 				if (applyEffect(GAME_TICK, c, i, s, Pair.of(c, i), null)) return;
 
-				if (c.getCard().getId().equals(h.getUser().getId()) && hd.getHero() != null && heroIndex == -1) {
+				if (c.getCard().getId().equals(hd.getUser().getId()) && hd.getHero() != null && heroIndex == -1) {
 					c.setHero(hd.getHero());
 				} else if (i != heroIndex) {
 					c.setHero(null);
