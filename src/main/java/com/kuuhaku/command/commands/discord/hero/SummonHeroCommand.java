@@ -32,15 +32,19 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang.WordUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Command(
         name = "invocarheroi",
         aliases = {"summonhero", "isekai"},
-        usage = "req_race-name",
+        usage = "req_race-name-image",
         category = Category.SUPPORT
 )
 public class SummonHeroCommand implements Executable {
@@ -54,6 +58,9 @@ public class SummonHeroCommand implements Executable {
             return;
         } else if (args.length < 2) {
             channel.sendMessage("❌ | Você precisa informar uma raça e um nome para seu novo herói.").queue();
+            return;
+        } else if (message.getAttachments().isEmpty()) {
+            channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
             return;
         }
 
@@ -75,12 +82,26 @@ public class SummonHeroCommand implements Executable {
             return;
         }
 
+        BufferedImage bi = null;
+        try {
+            Message.Attachment a = message.getAttachments().get(0);
+            if (!a.isImage()) {
+                channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
+                return;
+            }
+
+            bi = ImageIO.read(a.retrieveInputStream().get());
+        } catch (InterruptedException | ExecutionException | IOException e) {
+            channel.sendMessage("❌ | Imagem inválida.").queue();
+        }
+
+        BufferedImage image = bi;
         channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?.")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             acc.removeGem(5);
                             AccountDAO.saveAccount(acc);
 
-                            CardDAO.saveHero(new Hero(author, name, r));
+                            CardDAO.saveHero(new Hero(author, name, r, image));
 
                             s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
                         }), true, 1, TimeUnit.MINUTES,
