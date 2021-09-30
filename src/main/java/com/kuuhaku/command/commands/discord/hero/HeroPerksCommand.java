@@ -79,7 +79,6 @@ public class HeroPerksCommand implements Executable {
 			pool = EnumSet.complementOf(EnumSet.copyOf(h.getPerks()));
 
 		List<Perk> perks = Helper.getRandomN(List.copyOf(pool), 3, 1, author.getIdLong() + h.getLevel());
-		Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 		channel.sendMessageEmbeds(getEmbed(perks)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
 							put("1️⃣", (mb, ms) -> {
@@ -107,8 +106,7 @@ public class HeroPerksCommand implements Executable {
 								choosePerk(h, s, perks.get(2));
 							});
 						}}, true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId()),
-						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						u -> u.getId().equals(author.getId())
 				));
 	}
 
@@ -123,8 +121,7 @@ public class HeroPerksCommand implements Executable {
 									.flatMap(d -> msg.delete())
 									.queue();
 						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(h.getUid()),
-						ms -> Main.getInfo().getConfirmationPending().remove(h.getUid())
+						u -> u.getId().equals(h.getUid())
 				));
 	}
 
