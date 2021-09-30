@@ -54,6 +54,7 @@ public class TeamHand extends Hand {
 	private final InfiniteList<BondedList<Drawable>> deques = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
+	private final InfiniteList<Hero> heroes = new InfiniteList<>();
 
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
@@ -63,15 +64,19 @@ public class TeamHand extends Hand {
 			Deck dk = dks.get(i);
 			User user = users.get(i);
 			game.getDivergence().put(user.getId(), dk.getAverageDivergence());
+			Hero hero = CardDAO.getHero(user.getId());
 
 			Account acc = AccountDAO.getAccount(user.getId());
 			this.users.add(user.getId());
 			this.accs.add(acc);
+			this.heroes.add(hero);
 
 			Consumer<Drawable> bonding = d -> d.bind(this);
 			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)
 					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));
+			if (hero != null) deque.add(hero.toChampion());
+
 			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
 
 			if (game.getCustom() != null) {
@@ -553,6 +558,10 @@ public class TeamHand extends Hand {
 
 	public BondedList<Drawable> getDestinyDeck() {
 		return destinyDecks.getCurrent();
+	}
+
+	public Hero getHero() {
+		return heroes.getCurrent();
 	}
 
 	public BufferedImage render() {
