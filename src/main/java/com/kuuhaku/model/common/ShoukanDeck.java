@@ -100,7 +100,7 @@ public class ShoukanDeck {
 		Hero h = CardDAO.getHero(acc.getUid());
 		if (h != null) {
 			g2d.drawImage(h.toChampion().drawCard(false), 1769, 2444, null);
-			Profile.printCenteredString(StringUtils.abbreviate(h.getName(), 15), 225, 1769, 3683, g2d);
+			Profile.printCenteredString(StringUtils.abbreviate(h.getName(), 15), 225, 1769, 2834, g2d);
 		}
 
 		Pair<Race, Race> combo = dk.getCombo();
