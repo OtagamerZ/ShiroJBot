@@ -2704,22 +2704,45 @@ public class Shoukan extends GlobalGame {
 
 		if (!draw && getCustom() == null) {
 			for (Side s : Side.values()) {
-				Account acc = AccountDAO.getAccount(hands.get(s).getUser().getId());
+				Hand h = hands.get(s);
+				if (h instanceof TeamHand th) {
+					for (int i = 0; i < 2; i++) {
+						Account acc = AccountDAO.getAccount(h.getUser().getId());
 
-				if (acc.hasPendingQuest()) {
-					Map<DailyTask, Integer> pg = acc.getDailyProgress();
-					DailyQuest dq = DailyQuest.getQuest(Long.parseLong(acc.getUid()));
-					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
-					pg.merge(DailyTask.RACE_TASK, summons, Integer::sum);
-					acc.setDailyProgress(pg);
-				}
+						if (acc.hasPendingQuest()) {
+							Map<DailyTask, Integer> pg = acc.getDailyProgress();
+							DailyQuest dq = DailyQuest.getQuest(Long.parseLong(acc.getUid()));
+							int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
+							pg.merge(DailyTask.RACE_TASK, summons, Integer::sum);
+							acc.setDailyProgress(pg);
+						}
 
-				acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
-				AccountDAO.saveAccount(acc);
+						acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
+						AccountDAO.saveAccount(acc);
 
-				Hand h = getHands().get(s);
-				if (h.getHero() != null) {
-					CardDAO.saveHero(h.getHero());
+						if (h.getHero() != null) {
+							CardDAO.saveHero(h.getHero());
+						}
+
+						th.next();
+					}
+				} else {
+					Account acc = AccountDAO.getAccount(h.getUser().getId());
+
+					if (acc.hasPendingQuest()) {
+						Map<DailyTask, Integer> pg = acc.getDailyProgress();
+						DailyQuest dq = DailyQuest.getQuest(Long.parseLong(acc.getUid()));
+						int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
+						pg.merge(DailyTask.RACE_TASK, summons, Integer::sum);
+						acc.setDailyProgress(pg);
+					}
+
+					acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
+					AccountDAO.saveAccount(acc);
+
+					if (h.getHero() != null) {
+						CardDAO.saveHero(h.getHero());
+					}
 				}
 			}
 
