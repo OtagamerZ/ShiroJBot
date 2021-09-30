@@ -27,8 +27,10 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang.WordUtils;
 
@@ -42,78 +44,88 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-        name = "invocarheroi",
-        aliases = {"summonhero", "isekai"},
-        usage = "req_race-name-image",
-        category = Category.MISC
+		name = "invocarheroi",
+		aliases = {"summonhero", "isekai"},
+		usage = "req_race-name-image",
+		category = Category.MISC
 )
 public class SummonHeroCommand implements Executable {
 
-    @Override
-    public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	@Override
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
-        Hero h = CardDAO.getHero(author.getId());
+		Hero h = CardDAO.getHero(author.getId());
 
-        if (h != null) {
-            channel.sendMessage("❌ | Você já possui um herói.").queue();
-            return;
-        } else if (args.length < 2) {
-            channel.sendMessage("❌ | Você precisa informar uma raça e um nome para seu novo herói.").queue();
-            return;
-        } else if (message.getAttachments().isEmpty()) {
-            channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
-            return;
-        }
+		if (h != null) {
+			channel.sendMessage("❌ | Você já possui um herói.").queue();
+			return;
+		} else if (args.length < 2) {
+			channel.sendMessage("❌ | Você precisa informar uma raça e um nome para seu novo herói.").queue();
+			return;
+		} else if (message.getAttachments().isEmpty()) {
+			channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
+			return;
+		}
 
-        Account acc = AccountDAO.getAccount(author.getId());
-        if (acc.getGems() < 5) {
-            channel.sendMessage("❌ | Você não possui gemas suficientes para completar o feitiço de invocação.").queue();
-            return;
-        }
+		Account acc = AccountDAO.getAccount(author.getId());
+		if (acc.getGems() < 5) {
+			channel.sendMessage("❌ | Você não possui gemas suficientes para completar o feitiço de invocação.").queue();
+			return;
+		}
 
-        Race r = Race.getByName(args[0]);
-        if (r == null) {
-            channel.sendMessage("❌ | Raça inválida.").queue();
-            return;
-        }
+		Race r = Race.getByName(args[0]);
+		if (r == null) {
+			channel.sendMessage("❌ | Raça inválida.").queue();
+			return;
+		}
 
-        String name = WordUtils.capitalizeFully(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-        if (name.isBlank()) {
-            channel.sendMessage("❌ | Você precisa digitar um nome.").queue();
-            return;
-        }
+		String name = WordUtils.capitalizeFully(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
+		if (name.isBlank()) {
+			channel.sendMessage("❌ | Você precisa digitar um nome.").queue();
+			return;
+		}
 
-        BufferedImage bi = null;
-        try {
-            Message.Attachment a = message.getAttachments().get(0);
-            if (!a.isImage()) {
-                channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
-                return;
-            }
+		BufferedImage bi = null;
+		try {
+			Message.Attachment a = message.getAttachments().get(0);
+			if (!a.isImage()) {
+				channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
+				return;
+			}
 
-            bi = ImageIO.read(a.retrieveInputStream().get());
-        } catch (InterruptedException | ExecutionException | IOException e) {
-            channel.sendMessage("❌ | Imagem inválida.").queue();
-        }
+			bi = ImageIO.read(a.retrieveInputStream().get());
+		} catch (InterruptedException | ExecutionException | IOException e) {
+			channel.sendMessage("❌ | Imagem inválida.").queue();
+		}
 
-        BufferedImage image = bi;
-        Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?")
-                .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            acc.removeGem(5);
-                            AccountDAO.saveAccount(acc);
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.addField("Atributos iniciais de " + r.toString().toLowerCase(Locale.ROOT) + ":", """
+						STR: %s
+						RES: %s
+						AGI: %s
+						WIS: %s
+						CON: %s
+						""".formatted((Object[]) r.getStartingStats()), false);
 
-                            CardDAO.saveHero(new Hero(author, name, r, image));
+		BufferedImage image = bi;
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?")
+				.setEmbeds(eb.build())
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							acc.removeGem(5);
+							AccountDAO.saveAccount(acc);
 
-                            Main.getInfo().getConfirmationPending().remove(author.getId());
-                            s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
-                        }), true, 1, TimeUnit.MINUTES,
-                        u -> u.getId().equals(author.getId()),
-                        ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-                ));
-    }
+							CardDAO.saveHero(new Hero(author, name, r, image));
+
+							Main.getInfo().getConfirmationPending().remove(author.getId());
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
+						}), true, 1, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
+	}
 }
