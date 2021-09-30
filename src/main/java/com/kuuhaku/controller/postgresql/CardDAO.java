@@ -1054,6 +1054,19 @@ public class CardDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Hero> getHeroes() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT h FROM Hero h", Hero.class);
+
+		try {
+			return (List<Hero>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static void saveHero(Hero h) {
 		EntityManager em = Manager.getEntityManager();
 
