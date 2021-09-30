@@ -30,6 +30,18 @@ public class Attributes {
 	private int wis = 0;
 	private int con = 0;
 
+	public Attributes() {
+
+	}
+
+	public Attributes(int[] stats) {
+		str = stats[0];
+		res = stats[1];
+		agi = stats[2];
+		wis = stats[3];
+		con = stats[4];
+	}
+
 	public int getStr() {
 		return str;
 	}
@@ -114,6 +126,10 @@ public class Attributes {
 
 	public int calcDodge() {
 		return (int) Helper.roundTrunc(100 * (1 - Math.exp(-0.05 * agi + 0.025 * con)), 5);
+	}
+
+	public Integer[] getStats() {
+		return new Integer[]{str, res, agi, wis, con};
 	}
 
 	public int getUsedPoints() {

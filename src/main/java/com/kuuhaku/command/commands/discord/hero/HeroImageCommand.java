@@ -23,7 +23,6 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
@@ -32,10 +31,10 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 @Command(
-		name = "fotoheroi",
-		aliases = {"heroimage"},
-		usage = "req_file",
-		category = Category.SUPPORT
+        name = "fotoheroi",
+        aliases = {"heroimage", "heroimg"},
+        usage = "req_file",
+        category = Category.SUPPORT
 )
 public class HeroImageCommand implements Executable {
 

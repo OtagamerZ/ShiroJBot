@@ -18,13 +18,13 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Attributes;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
@@ -49,7 +49,7 @@ public class Hero {
 	private String image = null;
 
 	@Embedded
-	private Attributes attrs = new Attributes();
+	private Attributes stats;
 
 	@Enumerated(EnumType.STRING)
 	private Race race;
@@ -79,6 +79,7 @@ public class Hero {
 	public Hero(User user, String name, Race race) {
 		this.uid = user.getId();
 		this.name = name;
+		this.stats = new Attributes(race.getStartingStats());
 		this.race = race;
 		this.description = "Lendário herói " + race.toString().toLowerCase(Locale.ROOT) + " invocado por " + user.getName();
 	}
@@ -99,8 +100,8 @@ public class Hero {
 		this.image = Helper.atob(Helper.scaleAndCenterImage(image, 225, 350), "png");
 	}
 
-	public Attributes getAttrs() {
-		return attrs;
+	public Attributes getStats() {
+		return stats;
 	}
 
 	public Race getRace() {
@@ -108,11 +109,11 @@ public class Hero {
 	}
 
 	public void setDmg(int hp) {
-		this.dmg = attrs.calcMaxHp() - hp;
+		this.dmg = stats.calcMaxHp() - hp;
 	}
 
 	public void reduceDmg() {
-		this.dmg = (int) Math.max(0, this.dmg - attrs.calcMaxHp() * 0.1);
+		this.dmg = (int) Math.max(0, this.dmg - stats.calcMaxHp() * 0.1);
 	}
 
 	public void reduceDmg(int val) {
@@ -120,7 +121,7 @@ public class Hero {
 	}
 
 	public int getLevel() {
-		return (int) Math.round(Math.log(xp * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1;
+		return (int) Math.max(1, Math.round(Math.log(xp * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
 	}
 
 	public int getXp() {
@@ -142,7 +143,7 @@ public class Hero {
 	}
 
 	public int getAvailableStatPoints() {
-		return getMaxStatPoints() - attrs.getUsedPoints();
+		return getMaxStatPoints() - stats.getUsedPoints();
 	}
 
 	public Set<Perk> getPerks() {
@@ -184,7 +185,7 @@ public class Hero {
 			};
 		}
 
-		return hp = (int) Math.max(0, Helper.roundTrunc(attrs.calcMaxHp() * hpModif, 5) - dmg);
+		return hp = (int) Math.max(0, Helper.roundTrunc(stats.calcMaxHp() * hpModif, 5) - dmg);
 	}
 
 	public int getMp() {
@@ -197,14 +198,14 @@ public class Hero {
 			};
 		}
 
-		return (int) Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, attrs.calcMp() * mpModif);
+		return (int) Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp() * mpModif);
 	}
 
 	public int getBlood() {
 		int blood = 0;
 		for (Perk perk : perks) {
 			blood += switch (perk) {
-				case BLOODLUST -> attrs.calcMp() / 2 * 100;
+				case BLOODLUST -> stats.calcMp() / 2 * 100;
 				default -> 0;
 			};
 		}
@@ -224,7 +225,7 @@ public class Hero {
 			};
 		}
 
-		return (int) Math.max(0, Helper.roundTrunc(attrs.calcAtk() * atkModif, 25));
+		return (int) Math.max(0, Helper.roundTrunc(stats.calcAtk() * atkModif, 25));
 	}
 
 	public int getDef() {
@@ -238,7 +239,7 @@ public class Hero {
 			};
 		}
 
-		return (int) Math.max(0, Helper.roundTrunc(attrs.calcDef() * defModif, 25));
+		return (int) Math.max(0, Helper.roundTrunc(stats.calcDef() * defModif, 25));
 	}
 
 	public Champion toChampion() {
