@@ -79,7 +79,7 @@ public class Hero {
 		this.name = name;
 		this.stats = new Attributes(race.getStartingStats());
 		this.race = race;
-		this.image = Helper.atob(Helper.scaleAndCenterImage(image, 225, 350), "jpg");
+		this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
 	}
 
 	public String getUid() {
@@ -95,7 +95,7 @@ public class Hero {
 	}
 
 	public void setImage(BufferedImage image) {
-		this.image = Helper.atob(Helper.scaleAndCenterImage(image, 225, 350), "jpg");
+		this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
 	}
 
 	public Attributes getStats() {
