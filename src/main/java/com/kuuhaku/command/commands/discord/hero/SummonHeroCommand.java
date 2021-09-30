@@ -109,6 +109,7 @@ public class SummonHeroCommand implements Executable {
 
                             CardDAO.saveHero(new Hero(author, name, r, image));
 
+                            Main.getInfo().getConfirmationPending().remove(author.getId());
                             s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
                         }), true, 1, TimeUnit.MINUTES,
                         u -> u.getId().equals(author.getId()),
