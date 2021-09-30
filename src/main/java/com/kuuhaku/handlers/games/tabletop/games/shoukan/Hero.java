@@ -245,6 +245,7 @@ public class Hero {
 				new Card(uid, name, new AddedAnime("HERO", true), KawaiponRarity.ULTIMATE, image),
 				race, getMp(), getBlood(), getAtk(), getDef(), description, effect
 		);
+		c.setAcc(AccountDAO.getAccount(uid));
 		c.setHero(this);
 
 		return c;
