@@ -73,16 +73,20 @@ public class EffectShopCommand implements Executable {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
+			int cost = c.getMana() + (c.isFusion() ? 5 : 0);
 			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
 				Account acc = AccountDAO.getAccount(author.getId());
-				if (acc.getGems() < c.getMana()) {
+				if (acc.getGems() < cost) {
 					channel.sendMessage("❌ | Você não possui gemas suficientes para pagar o treinamento.").queue();
 					return;
 				}
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
-				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + " por " + c.getMana() + " gemas, deseja confirmar?")
+				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + " por " + cost + " gemas, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
+									acc.removeGem(cost);
+									AccountDAO.saveAccount(acc);
+
 									h.setReferenceChampion(c.getId());
 									CardDAO.saveHero(h);
 
@@ -123,7 +127,8 @@ public class EffectShopCommand implements Executable {
 
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
-			eb.addField(Helper.getFancyNumber(i + 1) + " :diamonds: " + c.getMana() + " | Mestre: " + c.getName(), c.getDescription(), false);
+			int cost = c.getMana() + (c.isFusion() ? 5 : 0);
+			eb.addField(Helper.getFancyNumber(i + 1) + " :diamonds: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
 		}
 
 		return eb.build();
