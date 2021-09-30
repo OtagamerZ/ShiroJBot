@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "perksheroi",
 		aliases = {"heroperks"},
-		category = Category.SUPPORT
+		category = Category.MISC
 )
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,

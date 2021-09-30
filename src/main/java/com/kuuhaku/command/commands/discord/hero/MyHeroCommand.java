@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "heroi",
 		aliases = {"hero"},
-		category = Category.SUPPORT
+		category = Category.MISC
 )
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
