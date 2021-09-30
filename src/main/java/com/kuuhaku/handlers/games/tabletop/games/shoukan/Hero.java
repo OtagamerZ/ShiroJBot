@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Attributes;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
