@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
         name = "invocarheroi",
         aliases = {"summonhero", "isekai"},
         usage = "req_race-name-image",
-        category = Category.SUPPORT
+        category = Category.MISC
 )
 public class SummonHeroCommand implements Executable {
 

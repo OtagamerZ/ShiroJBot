@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
         name = "fotoheroi",
         aliases = {"heroimage", "heroimg"},
         usage = "req_file",
-        category = Category.SUPPORT
+        category = Category.MISC
 )
 public class HeroImageCommand implements Executable {
 
