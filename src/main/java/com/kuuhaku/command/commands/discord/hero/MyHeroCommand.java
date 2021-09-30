@@ -60,21 +60,13 @@ public class MyHeroCommand implements Executable {
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), "XP: %s".formatted(h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext())), true)
 				.addField(":bar_chart: | Stats:", """
-								Pontos disponíveis: %s
-
 								STR: %s
 								RES: %s
 								AGI: %s
 								WIS: %s
 								CON: %s
 								"""
-								.formatted(h.getAvailableStatPoints(),
-										h.getAttrs().getStr(),
-										h.getAttrs().getRes(),
-										h.getAttrs().getAgi(),
-										h.getAttrs().getWis(),
-										h.getAttrs().getCon()
-								)
+								.formatted((Object[]) h.getStats().getStats())
 						, true)
 				.addField(":books: | Perks:", h.getPerks().stream().map(Perk::toString).collect(Collectors.joining("\n")), true)
 				.setImage("attachment://hero.png");

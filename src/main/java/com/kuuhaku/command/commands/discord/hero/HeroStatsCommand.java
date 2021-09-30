@@ -62,8 +62,8 @@ public class HeroStatsCommand implements Executable {
 								return;
 							}
 
-							h.getAttrs().addStr();
-							s.editMessageEmbeds(getEmbed(h)).queue();
+							h.getStats().addStr();
+                            s.editMessageEmbeds(getEmbed(h)).queue();
 						},
 						"\uD83C\uDDF7", (mb, ms) -> {
 							if (h.getAvailableStatPoints() <= 0) {
@@ -71,8 +71,8 @@ public class HeroStatsCommand implements Executable {
 								return;
 							}
 
-							h.getAttrs().addRes();
-							s.editMessageEmbeds(getEmbed(h)).queue();
+                            h.getStats().addRes();
+                            s.editMessageEmbeds(getEmbed(h)).queue();
 						},
 						"\uD83C\uDDE6", (mb, ms) -> {
 							if (h.getAvailableStatPoints() <= 0) {
@@ -80,8 +80,8 @@ public class HeroStatsCommand implements Executable {
 								return;
 							}
 
-							h.getAttrs().addAgi();
-							s.editMessageEmbeds(getEmbed(h)).queue();
+                            h.getStats().addAgi();
+                            s.editMessageEmbeds(getEmbed(h)).queue();
 						},
 						"\uD83C\uDDFC", (mb, ms) -> {
 							if (h.getAvailableStatPoints() <= 0) {
@@ -89,8 +89,8 @@ public class HeroStatsCommand implements Executable {
 								return;
 							}
 
-							h.getAttrs().addWis();
-							s.editMessageEmbeds(getEmbed(h)).queue();
+                            h.getStats().addWis();
+                            s.editMessageEmbeds(getEmbed(h)).queue();
 						},
 						"\uD83C\uDDE8", (mb, ms) -> {
 							if (h.getAvailableStatPoints() <= 0) {
@@ -98,8 +98,8 @@ public class HeroStatsCommand implements Executable {
 								return;
 							}
 
-							h.getAttrs().addCon();
-							s.editMessageEmbeds(getEmbed(h)).queue();
+                            h.getStats().addCon();
+                            s.editMessageEmbeds(getEmbed(h)).queue();
 						},
 						Helper.ACCEPT, (mb, ms) -> {
 							channel.sendMessage("Herói salvo com sucesso!").queue();
@@ -122,12 +122,12 @@ public class HeroStatsCommand implements Executable {
 						CON: %s | `Aumenta HP e custo e reduz esquiva`
 						"""
 						.formatted(h.getAvailableStatPoints(),
-								h.getAttrs().getStr(),
-								h.getAttrs().getRes(),
-								h.getAttrs().getAgi(),
-								h.getAttrs().getWis(),
-								h.getAttrs().getCon()
-						)
+                                h.getStats().getStr(),
+                                h.getStats().getRes(),
+                                h.getStats().getAgi(),
+                                h.getStats().getWis(),
+                                h.getStats().getCon()
+                        )
 				).build();
 	}
 }
