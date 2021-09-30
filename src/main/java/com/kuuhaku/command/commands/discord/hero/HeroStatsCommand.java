@@ -105,6 +105,8 @@ public class HeroStatsCommand implements Executable {
                         put(Helper.ACCEPT, (mb, ms) -> {
                             channel.sendMessage("Herói salvo com sucesso!").queue();
                             CardDAO.saveHero(h);
+
+                            s.delete().queue(null, Helper::doNothing);
                         });
                     }
                 }, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
