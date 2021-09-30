@@ -33,69 +33,82 @@ public enum Race {
 	HUMAN("Humano",
 			"**(SOLO)** +1 Limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
 			"(**SOLO** | -1%/**DUO** | -0,5%) dano direto sofrido para cada campeão com 1 ou 2 de custo em seu deck",
-			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
+			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia.",
+			new int[]{2, 2, 2, 2, 2}
 	),
 	ELF("Elfo",
 			"+1 Mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas",
 			"+1 Mana a cada 3 turnos",
-			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
+			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha.",
+			new int[]{1, 2, 3, 3, 1}
 	),
 	BESTIAL("Bestial",
 			"**(SOLO)** +1 Limite de cópias para evogears **(DUO)** Cartas descartadas voltam para o deck e o embaralham-no",
 			"Inicia com 1 ponto de mana extra",
-			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
+			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido.",
+			new int[]{3, 2, 3, 1, 1}
 	),
 	MACHINE("Máquina",
 			"**(SOLO)** -1 Peso de Equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
 			"Inicia com 1 equipamento extra",
-			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo."
+			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo.",
+			new int[]{1, 3, 1, 0, 4}
 	),
 	DIVINITY("Divindade",
 			"Cartas sem efeito em seu deck ganham um aleatório de mesmo custo (exceto fusões)",
 			"Inicia com 1 campeão extra",
-			"Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos."
+			"Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos.",
+			new int[]{3, 3, 0, 3, 1}
 	),
 	MYSTICAL("Místico",
 			"**(SOLO)** -1 Peso de Magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
 			"Inicia com 1 magia extra",
-			"Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos."
+			"Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos.",
+			new int[]{2, 1, 2, 4, 1}
 	),
 	CREATURE("Criatura",
 			"+2 Limite de cartas na mão",
 			"+1 Limite de cartas na mão",
-			"Criaturas sencientes que são capazes de raciocinar e comunicarem-se com os seres ao redor. Apesar disso, sua natureza selvagem ainda os torna perigosos e ferozes caso sejam intimidados."
+			"Criaturas sencientes que são capazes de raciocinar e comunicarem-se com os seres ao redor. Apesar disso, sua natureza selvagem ainda os torna perigosos e ferozes caso sejam intimidados.",
+			new int[]{3, 3, 3, 1, 0}
 	),
 	SPIRIT("Espírito",
 			"+2% Defesa por carta no cemitério",
 			"+1% Defesa por carta no cemitério",
-			"Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta."
+			"Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta.",
+			new int[]{2, 4, 2, 2, 0}
 	),
 	DEMON("Demônio",
 			"-1500 HP, +1 mana para cada 20% de HP perdido do oponente, cura 10% do HP perdido por turno enquanto abaixo de 33%",
 			"+25% dano direto causado, +33% dano direto sofrido",
-			"Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos."
+			"Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos.",
+			new int[]{4, 2, 2, 1, 1}
 	),
 	UNDEAD("Morto-vivo",
 			"+1% Dano por carta no cemitério",
 			"+0,5% Dano por carta no cemitério",
-			"Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate."
+			"Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate.",
+			new int[]{3, 3, 1, 0, 3}
 	),
 	NONE("Nenhum",
 			"Nenhum",
 			"Nenhum",
-			"Nenhum"
+			"Nenhum",
+			new int[0]
 	);
 
 	private final String name;
 	private final String majorDesc;
 	private final String minorDesc;
 	private final String description;
+	private final int[] startingStats;
 
-	Race(String name, String majorDesc, String minorDesc, String description) {
+	Race(String name, String majorDesc, String minorDesc, String description, int[] startingStats) {
 		this.name = name;
 		this.majorDesc = majorDesc;
 		this.minorDesc = minorDesc;
 		this.description = description;
+		this.startingStats = startingStats;
 	}
 
 	public String getName() {
@@ -114,17 +127,16 @@ public enum Race {
 		return description;
 	}
 
+	public int[] getStartingStats() {
+		return startingStats;
+	}
+
 	public BufferedImage getIcon() {
 		try {
 			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png")));
 		} catch (IOException e) {
 			return null;
 		}
-	}
-
-	@Override
-	public String toString() {
-		return name;
 	}
 
 	public static Race getByName(String name) {
@@ -164,5 +176,10 @@ public enum Race {
 
 	public static Race[] validValues() {
 		return Arrays.stream(values()).filter(r -> r != NONE).toArray(Race[]::new);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }
