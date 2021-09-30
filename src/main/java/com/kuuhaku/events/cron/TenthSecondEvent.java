@@ -55,7 +55,7 @@ public class TenthSecondEvent implements Job {
 		if (lock) return;
 		lock = true;
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = List.copyOf(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
-		if (soloLobby.size() >= 10) {
+		if (soloLobby.size() >= 5) {
 			var toTry = Helper.getRandomN(soloLobby, 2, 1);
 			if (trySoloMatching(toTry.get(0), toTry.get(1))) {
 				lock = false;
@@ -66,7 +66,7 @@ public class TenthSecondEvent implements Job {
 		}
 
 		List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> duoLobby = List.copyOf(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
-		if (duoLobby.size() >= 10) {
+		if (duoLobby.size() >= 5) {
 			var toTry = Helper.getRandomN(duoLobby, 2, 1);
 			if (tryDuoMatching(toTry.get(0), toTry.get(1))) {
 				lock = false;
