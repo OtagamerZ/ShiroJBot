@@ -477,6 +477,7 @@ public class TeamHand extends Hand {
 		deques.getNext();
 		if (combo.getLeft() != Race.HUMAN) cards.getNext();
 		destinyDecks.getNext();
+		heroes.getNext();
 	}
 
 	public User getUser() {
