@@ -25,6 +25,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
@@ -32,6 +33,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -64,8 +66,10 @@ public class EffectShopCommand implements Executable {
 			return;
 		}
 
+		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
+
 		Calendar cal = Calendar.getInstance();
-		List<Champion> pool = Helper.getRandomN(CardDAO.getAllChampionsWithEffect(), 5, 1, cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
+		List<Champion> pool = Helper.getRandomN(CardDAO.getAllChampionsWithEffect(mmr.getTier().getTier() >= 5, mmr.getTier().getTier() + 1), 5, 1, cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
@@ -114,7 +118,8 @@ public class EffectShopCommand implements Executable {
 
 	private MessageEmbed getEmbed(List<Champion> pool) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Mestres disponíveis");
+				.setTitle("Mestres disponíveis")
+				.setDescription("Seu tier no Shoukan ranqueado afetará quais mestres estão dispostos a treinar seu herói.");
 
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);

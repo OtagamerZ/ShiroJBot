@@ -398,10 +398,16 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Champion> getAllChampionsWithEffect() {
+	public static List<Champion> getAllChampionsWithEffect(boolean withFusion, int max) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE AND c.effect NOT LIKE '%//TODO%' AND c.effect IS NOT NULL", Champion.class);
+		Query q;
+		if (withFusion)
+			q = em.createQuery("SELECT c FROM Champion c WHERE c.mana <= :max AND c.effect NOT LIKE '%//TODO%' AND c.effect IS NOT NULL", Champion.class);
+		else
+			q = em.createQuery("SELECT c FROM Champion c WHERE c.mana <= :max AND c.fusion = FALSE AND c.effect NOT LIKE '%//TODO%' AND c.effect IS NOT NULL", Champion.class);
+
+		q.setParameter("max", max);
 
 		try {
 			return q.getResultList();

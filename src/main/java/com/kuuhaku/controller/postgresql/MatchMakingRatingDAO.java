@@ -34,15 +34,14 @@ public class MatchMakingRatingDAO {
 	public static MatchMakingRating getMMR(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr WHERE uid = :id", MatchMakingRating.class);
-		q.setParameter("id", id);
-
 		try {
-			return (MatchMakingRating) q.getSingleResult();
-		} catch (NoResultException e) {
-			User u = Main.getInfo().getUserByID(id);
-			MatchMakingRating mmr = new MatchMakingRating(u.getId());
-			saveMMR(mmr);
+			MatchMakingRating mmr = em.find(MatchMakingRating.class, id);
+			if (mmr == null) {
+				User u = Main.getInfo().getUserByID(id);
+				mmr = new MatchMakingRating(u.getId());
+				saveMMR(mmr);
+			}
+
 			return mmr;
 		} finally {
 			em.close();
