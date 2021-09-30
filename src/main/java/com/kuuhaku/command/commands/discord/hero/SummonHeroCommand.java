@@ -22,10 +22,12 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang.WordUtils;
@@ -55,6 +57,12 @@ public class SummonHeroCommand implements Executable {
             return;
         }
 
+        Account acc = AccountDAO.getAccount(author.getId());
+        if (acc.getGems() < 5) {
+            channel.sendMessage("❌ | Você não possui gemas suficientes para completar o feitiço de invocação.").queue();
+            return;
+        }
+
         Race r = Race.getByName(args[0]);
         if (r == null) {
             channel.sendMessage("❌ | Raça inválida.").queue();
@@ -67,8 +75,11 @@ public class SummonHeroCommand implements Executable {
             return;
         }
 
-        channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + ", deseja confirmar?.")
+        channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?.")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                            acc.removeGem(5);
+                            AccountDAO.saveAccount(acc);
+
                             CardDAO.saveHero(new Hero(author, name, r));
 
                             s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
