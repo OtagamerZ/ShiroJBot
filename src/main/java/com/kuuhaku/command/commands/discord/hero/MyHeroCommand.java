@@ -58,7 +58,15 @@ public class MyHeroCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
-				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), "XP: %s".formatted(h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext())), true)
+				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
+						XP: %s
+						HP: %s/%s%s
+						""".formatted(
+						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
+						h.getHp(),
+						h.getStats().calcMaxHp(),
+						h.getDmg() > 0 ? " (recuperação total em " + (int) Math.ceil(h.getDmg() * 10f / h.getStats().calcMaxHp()) + " dias)" : ""
+				), true)
 				.addField(":bar_chart: | Stats:", """
 								STR: %s
 								RES: %s
