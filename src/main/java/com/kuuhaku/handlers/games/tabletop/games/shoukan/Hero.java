@@ -64,7 +64,7 @@ public class Hero {
 	private String description;
 
 	@Column(columnDefinition = "TEXT")
-	private String effect = "";
+	private String effect = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
