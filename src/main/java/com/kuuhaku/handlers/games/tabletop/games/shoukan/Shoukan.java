@@ -2682,7 +2682,7 @@ public class Shoukan extends GlobalGame {
 		if (h.getHero() == null) return -1;
 
 		for (SlotColumn sc : arena.getSlots().get(s)) {
-			if (sc.getTop() != null && sc.getTop().getHero().equals(h.getHero()))
+			if (sc.getTop() != null && Objects.equals(sc.getTop().getHero(), h.getHero()))
 				return sc.getIndex();
 		}
 
