@@ -106,7 +106,7 @@ public class Hero {
 		return race;
 	}
 
-	public void setDmg(int hp) {
+	public void setDmg() {
 		this.dmg = stats.calcMaxHp() - hp;
 	}
 
@@ -181,7 +181,14 @@ public class Hero {
 			};
 		}
 
-		return hp = (int) Math.max(0, Helper.roundTrunc(stats.calcMaxHp() * hpModif, 5) - dmg);
+		if (hp == -1)
+			hp = (int) Math.max(0, Helper.roundTrunc(stats.calcMaxHp() * hpModif, 5) - dmg);
+
+		return hp;
+	}
+
+	public void setHp(int hp) {
+		this.hp = Math.max(0, hp);
 	}
 
 	public int getMp() {
