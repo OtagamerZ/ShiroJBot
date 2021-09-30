@@ -780,7 +780,7 @@ public class Shoukan extends GlobalGame {
 			List<SlotColumn> slts = arena.getSlots().get(s);
 			Hand hd = getHands().get(s);
 
-			boolean heroInField = isHeroInField(s);
+			int heroIndex = isHeroInField(s);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn slot = slts.get(i);
 				if (slot.getTop() == null) continue;
@@ -788,9 +788,9 @@ public class Shoukan extends GlobalGame {
 				Champion c = slot.getTop();
 				if (applyEffect(GAME_TICK, c, i, s, Pair.of(c, i), null)) return;
 
-				if (c.getCard().getId().equals(h.getUser().getId()) && hd.getHero() != null && !heroInField) {
+				if (c.getCard().getId().equals(h.getUser().getId()) && hd.getHero() != null && heroIndex == -1) {
 					c.setHero(hd.getHero());
-				} else {
+				} else if (i != heroIndex) {
 					c.setHero(null);
 				}
 			}
@@ -2679,16 +2679,16 @@ public class Shoukan extends GlobalGame {
 		return nc;
 	}
 
-	public boolean isHeroInField(Side s) {
+	public int isHeroInField(Side s) {
 		Hand h = getHands().get(s);
-		if (h.getHero() == null) return false;
+		if (h.getHero() == null) return -1;
 
 		for (SlotColumn sc : arena.getSlots().get(s)) {
 			if (sc.getTop() != null && sc.getTop().getHero().equals(h.getHero()))
-				return true;
+				return sc.getIndex();
 		}
 
-		return false;
+		return -1;
 	}
 
 	@Override
