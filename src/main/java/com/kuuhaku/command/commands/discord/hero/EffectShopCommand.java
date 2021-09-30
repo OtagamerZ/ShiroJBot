@@ -119,7 +119,7 @@ public class EffectShopCommand implements Executable {
 	private MessageEmbed getEmbed(List<Champion> pool) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Mestres disponíveis")
-				.setDescription("Seu tier no Shoukan ranqueado afetará quais mestres estão dispostos a treinar seu herói.");
+				.setDescription("Seu tier no Shoukan ranqueado afetará quais mestres estão dispostos a treinar seu herói. Rotaciona a cada semana.");
 
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
