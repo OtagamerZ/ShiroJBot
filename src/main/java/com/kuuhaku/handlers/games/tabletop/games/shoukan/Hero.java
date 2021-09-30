@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -60,11 +61,8 @@ public class Hero {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int xp = 0;
 
-	@Column(columnDefinition = "VARCHAR(140) NOT NULL DEFAULT ''")
-	private String description;
-
-	@Column(columnDefinition = "TEXT")
-	private String effect = null;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int effect = 0;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
@@ -81,7 +79,6 @@ public class Hero {
 		this.name = name;
 		this.stats = new Attributes(race.getStartingStats());
 		this.race = race;
-		this.description = "Lendário herói " + race.toString().toLowerCase(Locale.ROOT) + " invocado por " + user.getName();
 		this.image = Helper.atob(Helper.scaleAndCenterImage(image, 225, 350), "jpg");
 	}
 
@@ -140,7 +137,7 @@ public class Hero {
 	}
 
 	public int getMaxStatPoints() {
-		return getLevel() * 10;
+		return 5 + getLevel() * 5;
 	}
 
 	public int getAvailableStatPoints() {
@@ -160,19 +157,17 @@ public class Hero {
 	}
 
 	public String getDescription() {
-		return description;
+		Champion ref = CardDAO.getChampion(effect);
+
+		return ref == null ? "Lendário herói " + race.toString().toLowerCase(Locale.ROOT) + " invocado por " + Helper.getUsername(uid) : ref.getDescription();
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setReferenceChampion(int id) {
+		this.effect = id;
 	}
 
-	public String getEffect() {
-		return effect;
-	}
-
-	public void setEffect(String effect) {
-		this.effect = effect;
+	public Champion getReferenceChampion() {
+		return CardDAO.getChampion(effect);
 	}
 
 	public int getHp() {
@@ -199,7 +194,8 @@ public class Hero {
 			};
 		}
 
-		return (int) Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp() * mpModif);
+		Champion ref = getReferenceChampion();
+		return (int) Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp() * mpModif + (ref == null ? 0 : ref.getMana() / 2f));
 	}
 
 	public int getBlood() {
@@ -244,9 +240,10 @@ public class Hero {
 	}
 
 	public Champion toChampion() {
+		Champion ref = CardDAO.getChampion(effect);
 		Champion c = new Champion(
 				new Card(uid, name, new AddedAnime("HERO", true), KawaiponRarity.ULTIMATE, image),
-				race, getMp(), getBlood(), getAtk(), getDef(), description, effect
+				race, getMp(), getBlood(), getAtk(), getDef(), getDescription(), ref == null ? null : ref.getRawEffect()
 		);
 		c.setAcc(AccountDAO.getAccount(uid));
 		c.setHero(this);

@@ -398,6 +398,21 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<Champion> getAllChampionsWithEffect() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE AND c.effect NOT LIKE '%//TODO%' AND c.effect IS NOT NULL", Champion.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<String> getAllFieldNames() {
 		EntityManager em = Manager.getEntityManager();
 
@@ -658,6 +673,16 @@ public class CardDAO {
 			return (Champion) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Champion getChampion(int id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(Champion.class, id);
 		} finally {
 			em.close();
 		}
