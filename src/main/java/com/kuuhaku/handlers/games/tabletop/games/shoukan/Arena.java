@@ -164,7 +164,7 @@ public class Arena {
 						SlotColumn c = value.get(i);
 						switch (key) {
 							case TOP -> {
-								if (game.isSlotLocked(key, i)) {
+								if (game.isSlotDisabled(key, i)) {
 									g2d.drawImage(broken, 499 + (257 * i), 387, null);
 								} else if (c.getTop() != null) {
 									Champion d = c.getTop();

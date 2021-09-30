@@ -94,10 +94,6 @@ public class Shoukan extends GlobalGame {
             Side.TOP, new HashMap<>(),
             Side.BOTTOM, new HashMap<>()
     );
-    private final Map<Side, int[]> unavailable = Map.of(
-            Side.TOP, new int[5],
-            Side.BOTTOM, new int[5]
-    );
     private final Set<PersistentEffect> persistentEffects = new HashSet<>();
     private final TournamentMatch tourMatch;
 
@@ -588,7 +584,7 @@ public class Shoukan extends GlobalGame {
                     if (slot.getTop() != null) {
                         channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
                         return;
-                    } else if (isSlotLocked(getCurrentSide(), dest)) {
+                    } else if (isSlotDisabled(getCurrentSide(), dest)) {
                         channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
                         return;
                     }
@@ -1589,7 +1585,7 @@ public class Shoukan extends GlobalGame {
         List<SlotColumn> get = arena.getSlots().get(s);
         for (int i = 0; i < get.size(); i++) {
             SlotColumn slot = get.get(i);
-            if (top ? (slot.getTop() == null && !isSlotLocked(s, i)) : slot.getBottom() == null)
+            if (top ? (slot.getTop() == null && !isSlotDisabled(s, i)) : slot.getBottom() == null)
                 return slot;
         }
         return null;
@@ -1970,7 +1966,6 @@ public class Shoukan extends GlobalGame {
             h.get().decreaseLockTime();
             h.get().decreaseNullTime();
             slots = arena.getSlots().get(getCurrentSide());
-            decreaseSlotLockTime(getCurrentSide());
 
             h.get().addMana(h.get().getManaPerTurn());
             if (h.get().getCombo().getLeft() == Race.DEMON) {
@@ -1996,15 +1991,21 @@ public class Shoukan extends GlobalGame {
 
             if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
             for (int i = 0; i < slots.size(); i++) {
-                Champion c = slots.get(i).getTop();
+                SlotColumn sc = slots.get(i);
+
+                Champion c = sc.getTop();
                 if (c != null) {
                     if (c.isStasis()) c.reduceStasis();
                     else if (c.isStunned()) c.reduceStun();
                     else if (c.isSleeping()) c.reduceSleep();
 
                     if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
-                            || makeFusion(h.get())
+                        || makeFusion(h.get())
                     ) return;
+                }
+
+                if (sc.isUnavailable()) {
+                    sc.setUnavailable(-1);
                 }
             }
 
@@ -2188,7 +2189,6 @@ public class Shoukan extends GlobalGame {
                     h.get().decreaseLockTime();
                     h.get().decreaseNullTime();
                     slots = arena.getSlots().get(getCurrentSide());
-                    decreaseSlotLockTime(getCurrentSide());
 
                     h.get().addMana(h.get().getManaPerTurn());
                     if (h.get().getCombo().getLeft() == Race.DEMON) {
@@ -2214,15 +2214,21 @@ public class Shoukan extends GlobalGame {
 
                     if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
                     for (int i = 0; i < slots.size(); i++) {
-                        Champion c = slots.get(i).getTop();
+                        SlotColumn sc = slots.get(i);
+
+                        Champion c = sc.getTop();
                         if (c != null) {
                             if (c.isStasis()) c.reduceStasis();
                             else if (c.isStunned()) c.reduceStun();
                             else if (c.isSleeping()) c.reduceSleep();
 
                             if (applyEffect(BEFORE_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
-                                    || makeFusion(h.get())
+                                || makeFusion(h.get())
                             ) return;
+                        }
+
+                        if (sc.isUnavailable()) {
+                            sc.setUnavailable(-1);
                         }
                     }
 
@@ -2444,23 +2450,12 @@ public class Shoukan extends GlobalGame {
         effectLock = Math.max(0, effectLock - 1);
     }
 
-    public boolean isSlotLocked(Side side, int slot) {
-        return unavailable.get(side)[slot] > 0;
+    public boolean isSlotDisabled(Side side, int slot) {
+        return arena.getSlots().get(side).get(slot).isUnavailable();
     }
 
-    public void setSlotLock(Side side, int slot, int time) {
-        unavailable.get(side)[slot] = time;
-    }
-
-    public void addSlotLockTime(Side side, int slot, int time) {
-        unavailable.get(side)[slot] += time;
-    }
-
-    public void decreaseSlotLockTime(Side side) {
-        int[] locks = unavailable.get(side);
-        for (int i = 0; i < 5; i++) {
-            locks[i] = Math.max(locks[i] - 1, 0);
-        }
+    public void disableSlot(Side side, int slot, int time) {
+        arena.getSlots().get(side).get(slot).setUnavailable(time);
     }
 
     public List<Drawable> getDiscardBatch() {
