@@ -201,9 +201,9 @@ public class Arena {
 										if (d.isBuffed())
 											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 998, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 489 + (257 * i), 998, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 998, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 489 + (257 * i), 998, null);
+											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 998, null);
 									}
 
 									if (d.getHero() != null) {
