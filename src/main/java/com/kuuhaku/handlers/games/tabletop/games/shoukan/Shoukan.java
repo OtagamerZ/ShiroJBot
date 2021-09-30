@@ -1546,7 +1546,6 @@ public class Shoukan extends GlobalGame {
 
 			if (slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
 				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
-			eq.setLinkedTo(null);
 
 			SlotColumn sd = slts.get(target);
 			arena.getBanished().add(eq);
@@ -1589,7 +1588,6 @@ public class Shoukan extends GlobalGame {
 
 		if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
 			side.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
-		eq.setLinkedTo(null);
 
 		SlotColumn sd = side.get(index);
 		sd.setBottom(null);
