@@ -49,7 +49,7 @@ public class SummonHeroCommand implements Executable {
     public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
         Hero h = CardDAO.getHero(author.getId());
 
-        if (h == null) {
+        if (h != null) {
             channel.sendMessage("❌ | Você já possui um herói.").queue();
             return;
         } else if (args.length < 2) {
