@@ -34,7 +34,7 @@ public class Attributes {
 
 	}
 
-	public Attributes(int[] stats) {
+	public Attributes(Integer[] stats) {
 		str = stats[0];
 		res = stats[1];
 		agi = stats[2];
