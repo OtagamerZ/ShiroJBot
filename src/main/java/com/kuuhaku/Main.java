@@ -88,6 +88,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setEventPool(Executors.newFixedThreadPool(20), true)
+				.setAutoReconnect(false)
 				.build();
 
 		List<JDA> shards = shiroShards.getShards().stream()
