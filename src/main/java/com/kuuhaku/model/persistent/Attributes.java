@@ -117,11 +117,11 @@ public class Attributes {
 	}
 
 	public int calcAtk() {
-		return (int) Helper.roundTrunc(200 + 2800 * (1 - Math.exp(-0.02 * str + -0.005 * agi)), 25);
+		return (int) Helper.roundTrunc(100 + 3000 * (1 - Math.exp(-0.02 * str + -0.005 * agi)), 25);
 	}
 
 	public int calcDef() {
-		return (int) Helper.roundTrunc(250 + 2250 * (1 - Math.exp(-0.03 * res + -0.0075 * agi)), 25);
+		return (int) Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.03 * res + -0.0075 * agi)), 25);
 	}
 
 	public int calcDodge() {
