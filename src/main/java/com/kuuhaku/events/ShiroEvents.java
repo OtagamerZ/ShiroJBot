@@ -45,7 +45,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -99,11 +98,6 @@ import java.util.stream.Collectors;
 public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
-
-	@Override
-	public void onDisconnect(@NotNull DisconnectEvent event) {
-		Main.getShiroShards().restart(event.getJDA().getShardInfo().getShardId());
-	}
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
