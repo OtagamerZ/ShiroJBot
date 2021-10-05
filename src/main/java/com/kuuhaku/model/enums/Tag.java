@@ -94,7 +94,7 @@ public enum Tag {
 			}),
 
 	BUG_HUNTER(TagIcons.BUGHUNTER, "Você ajudou a corrigir muitos bugs na Shiro.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25);
+			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.SUPPORT) || AccountDAO.getAccount(user.getId()).getBugs() > 25);
 
 	private final TagIcons emote;
 	private final String description;
