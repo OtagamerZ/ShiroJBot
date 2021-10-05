@@ -44,7 +44,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
@@ -243,9 +242,9 @@ public class KawaiponsCommand implements Executable {
 
         String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
 		eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
-				.setDescription((r == null ? "" : r.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
-				.setImage(url)
-				.setThumbnail("attachment://thumb.png");
+                .setDescription((r == null ? "" : r.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
+                .setImage(url)
+                .setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/" + (r == null ? "shoukan.png" : "race/" + r.name().toLowerCase(Locale.ROOT) + ".png"));
 
 		if (r != null) {
 			eb.addField("Efeito primário", r.getMajorDesc(), true)
@@ -253,11 +252,6 @@ public class KawaiponsCommand implements Executable {
 		}
 		m.delete().queue();
 
-		File thumb = Helper.getResourceAsFile(this.getClass(), "shoukan/" + (r == null ? "shoukan.png" : "race/" + r.name().toLowerCase(Locale.ROOT) + ".png"));
-		assert thumb != null;
-
-		channel.sendMessageEmbeds(eb.build())
-				.addFile(thumb, "thumb.png")
-				.queue();
+        channel.sendMessageEmbeds(eb.build()).queue();
 	}
 }
