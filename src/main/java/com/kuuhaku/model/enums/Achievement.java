@@ -61,10 +61,10 @@ public enum Achievement {
 		return hidden;
 	}
 
-	public boolean isValid(Shoukan game, Side side, boolean last) {
+	public boolean isInvalid(Shoukan game, Side side, boolean last) {
 		Hand h = game.getHands().get(side);
 
-		return switch (this) {
+		return !switch (this) {
 			case SPOOKY_NIGHTS -> {
 				Calendar c = Calendar.getInstance();
 				if (c.get(Calendar.MONTH) != Calendar.OCTOBER) yield false;
