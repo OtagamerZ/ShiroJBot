@@ -73,6 +73,7 @@ public class StoreCardCommand implements Executable {
 
 		String name = args[0].toUpperCase(Locale.ROOT);
 		EnumSet<CardType> matches = EnumSet.noneOf(CardType.class);
+
 		kp.getCards().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.findFirst()
@@ -91,26 +92,26 @@ public class StoreCardCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Por favor escolha uma")
 					.setDescription(
-							(matches.contains(CardType.KAWAIPON) ? (Helper.getRegionalIndicator(10) + " -> Kawaipon\n") : "") +
-							(matches.contains(CardType.EVOGEAR) ? (Helper.getRegionalIndicator(4) + " -> Evogear\n") : "") +
-							(matches.contains(CardType.FIELD) ? (Helper.getRegionalIndicator(2) + " -> Campo\n") : "")
+							(matches.contains(CardType.KAWAIPON) ? (":regional_indicator_k: -> Kawaipon\n") : "") +
+							(matches.contains(CardType.EVOGEAR) ? (":regional_indicator_e: -> Evogear\n") : "") +
+							(matches.contains(CardType.FIELD) ? (":regional_indicator_f: -> Campo\n") : "")
 					);
 
 			Map<String, ThrowingBiConsumer<Member, Message>> btns = new LinkedHashMap<>();
 			if (matches.contains(CardType.KAWAIPON)) {
-				btns.put(Helper.getRegionalIndicator(10), (mb, ms) -> {
+				btns.put("\uD83C\uDDF0", (mb, ms) -> {
 					chooseVersion(author, channel, kp, name, chosen);
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.EVOGEAR)) {
-				btns.put(Helper.getRegionalIndicator(4), (mb, ms) -> {
+				btns.put("\uD83C\uDDEA", (mb, ms) -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.FIELD)) {
-				btns.put(Helper.getRegionalIndicator(2), (mb, ms) -> {
+				btns.put("\uD83C\uDDEB", (mb, ms) -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
@@ -145,8 +146,8 @@ public class StoreCardCommand implements Executable {
 				return;
 			}
 
-			String msg = switch (off.getLeft().getRarity()) {
-				case EQUIPMENT -> "Este equipamento sairá do seu deck. Deseja mesmo guardá-lo?";
+			String msg = switch (off.getMiddle()) {
+				case EVOGEAR -> "Este equipamento sairá do seu deck. Deseja mesmo guardá-lo?";
 				case FIELD -> "Este campo sairá do seu deck. Deseja mesmo guardá-lo?";
 				default -> "Esta carta sairá da sua coleção. Deseja mesmo guardá-la?";
 			};

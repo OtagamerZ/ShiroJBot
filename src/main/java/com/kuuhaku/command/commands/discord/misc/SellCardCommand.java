@@ -150,13 +150,13 @@ public class SellCardCommand implements Executable {
 
 			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 			int price = Integer.parseInt(args[1]);
-			int min = switch (off.getLeft().getRarity()) {
-				case EQUIPMENT -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
+			int min = switch (off.getMiddle()) {
+				case EVOGEAR -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
 				case FIELD -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
 				default -> off.getLeft().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (off.getRight() ? 2 : 1);
 			};
-			int max = switch (off.getLeft().getRarity()) {
-				case EQUIPMENT -> Helper.BASE_EQUIPMENT_PRICE * 25;
+			int max = switch (off.getMiddle()) {
+				case EVOGEAR -> Helper.BASE_EQUIPMENT_PRICE * 25;
 				case FIELD -> Helper.BASE_FIELD_PRICE * 25;
 				default -> off.getLeft().getRarity().getIndex() * (Helper.BASE_CARD_PRICE * 25) * (off.getRight() ? 2 : 1);
 			};
@@ -174,8 +174,8 @@ public class SellCardCommand implements Executable {
 				return;
 			}
 
-			String msg = switch (off.getLeft().getRarity()) {
-				case EQUIPMENT -> "Este equipamento sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
+			String msg = switch (off.getMiddle()) {
+				case EVOGEAR -> "Este equipamento sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				case FIELD -> "Este campo sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				default -> "Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?";
 			};
