@@ -2697,7 +2697,7 @@ public class Shoukan extends GlobalGame {
 		super.close();
 
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
-			e.getValue().removeIf(a -> !a.isValid(this, e.getKey(), true));
+			e.getValue().removeIf(a -> a.isInvalid(this, e.getKey(), true));
 		}
 
 		if (!draw && getCustom() == null) {
@@ -2829,7 +2829,7 @@ public class Shoukan extends GlobalGame {
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
-			e.getValue().removeIf(a -> !a.isValid(this, e.getKey(), false));
+			e.getValue().removeIf(a -> a.isInvalid(this, e.getKey(), false));
 		}
 
 		getCurrRound().setSide(getCurrentSide());
