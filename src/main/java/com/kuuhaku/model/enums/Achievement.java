@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.utils.Helper;
 
 import java.util.Calendar;
 import java.util.EnumSet;
@@ -35,7 +36,8 @@ public enum Achievement {
 	STAND_UNITED("Manter União", "Vença uma partida com um parceiro.", false),
 	COUP_DE_GRACE("Golpe de Misericórdia", "Vença uma partida após esvaziar o deck do oponente.", false),
 	GREED("Ganância", "Perca uma partida com mais de 20 de mana restante.", true),
-	SLOTH("Preguiça", "Enquanto no lado de baixo, encerre o primeiro turno sem fazer nada.", true);
+	SLOTH("Preguiça", "Enquanto no lado de baixo, encerre o primeiro turno sem fazer nada.", true),
+	TRUE_JUSTICE("A Verdadeira Justiça", "Vença uma partida com Kira ou L. Lawliet em campo.", false);
 
 	private final String title;
 	private final String description;
@@ -108,7 +110,7 @@ public enum Achievement {
 			case GREED -> {
 				if (!last) yield true;
 
-				if (game.getHistory().getWinner().equals(side)) {
+				if (!game.getHistory().getWinner().equals(side)) {
 					yield h.getMana() >= 20;
 				}
 
@@ -118,6 +120,15 @@ public enum Achievement {
 				if (side == Side.TOP) yield false;
 				else if (game.getRound() == 0 && side == Side.BOTTOM) yield game.isReroll();
 				else yield true;
+			}
+			case TRUE_JUSTICE -> {
+				if (!last) yield true;
+
+				if (game.getHistory().getWinner().equals(side)) {
+					yield game.getArena().getSlots().get(side).stream().anyMatch(sc -> sc.getTop() != null && Helper.equalsAny(sc.getTop().getId(), 279, 280));
+				}
+
+				yield false;
 			}
 		};
 	}
