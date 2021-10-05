@@ -18,8 +18,10 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.Achievement;
+import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
@@ -57,7 +59,11 @@ public enum FrameColor {
 			acc -> acc.getAchievements().contains(Achievement.UNTOUCHABLE)),
 
 	HALLOWEEN("**(Conquista \"Noites de Arrepio\")** Muahaha, invoque os espíritos malígnos para atormentar seus oponentes!",
-			acc -> acc.getAchievements().contains(Achievement.SPOOKY_NIGHTS));
+			acc -> acc.getAchievements().contains(Achievement.SPOOKY_NIGHTS)),
+
+	GLITCH("**(Emblema \"Bug hunter\")** Ę̶̄͛Ŗ̴̓R̸̩͉͗O̴̪͉͊:̸̻̗͗ ̶̧̤̋̕P̴̘̪͑R̶̳̭̈̂Ǫ̸͒̽T̷̡̗̈́̃Ǫ̶̨̈́̐C̸̯͛̂O̴̯̓L̶̲̱̾̌Ọ̸̗͑̓ ̷̰͓̅͌\"̶̝̈͝D̶̳̯̈́Ĕ̵͍Ŕ̴ͅR̶̮̹͛Õ̶̢̾T̶͓͆A̸͚̰͆\"̶̡̌̓ ̸̬̃̈́N̶̢͉̒Ã̸͍̀Ȍ̸̘ͅ ̵̥͒̈́E̵̤̹̽̅Ṅ̷̼̆C̸̞̒O̷͚̪̎Ň̵͎Ṱ̵̨̽R̸̘̍̆Ả̴̙̞͝D̵̜͍̈́̋O̵̯͆",
+			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
+	);
 
 	private final String description;
 	private final Function<Account, Boolean> req;
@@ -79,7 +85,7 @@ public enum FrameColor {
 			case RED, LEGACY_RED -> new Color(232, 116, 116);
 			case GRAY, LEGACY_GRAY -> new Color(190, 190, 190);
 
-			case RAINBOW -> Helper.getRandomColor();
+			case RAINBOW, GLITCH -> Helper.getRandomColor();
 			case BLACK -> Color.BLACK;
 			case HALLOWEEN -> new Color(220, 89, 16);
 		};
@@ -100,6 +106,7 @@ public enum FrameColor {
 			case RAINBOW -> Helper.getRandomColor();
 			case BLACK -> Color.BLACK;
 			case HALLOWEEN -> new Color(220, 89, 16);
+			case GLITCH -> Helper.reverseColor(getThemeColor());
 		};
 	}
 
@@ -116,7 +123,7 @@ public enum FrameColor {
 					GRAY, LEGACY_GRAY,
 					RAINBOW -> Color.BLACK;
 
-			case BLACK, HALLOWEEN -> Color.WHITE;
+			case BLACK, HALLOWEEN, GLITCH -> Color.WHITE;
 		};
 	}
 
@@ -178,6 +185,7 @@ public enum FrameColor {
 			case RAINBOW -> "Arco-iris";
 			case BLACK -> "Negro";
 			case HALLOWEEN -> "Halloween";
+			case GLITCH -> "Glitch";
 		} + " (`" + name().toLowerCase(Locale.ROOT) + "`)";
 	}
 }
