@@ -23,12 +23,13 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public record ArenaState(
 		Map<Side, List<SlotColumn>> slots,
-		Map<Side, List<Drawable>> graveyard,
+		Map<Side, LinkedList<Drawable>> graveyard,
 		List<Drawable> banished,
 		Field field
 ) {
