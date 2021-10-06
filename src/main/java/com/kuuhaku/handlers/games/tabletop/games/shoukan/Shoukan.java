@@ -816,7 +816,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					if (changeTurn) {
 						for (int i = 0; i < 5; i++) {
-							setSlotChanged(h.getSide(), i, true);
+							setSlotChanged(h.getSide(), i, false);
 						}
 					}
 				});
