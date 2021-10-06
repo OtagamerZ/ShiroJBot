@@ -156,7 +156,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (d == null) continue;
 
 				for (Hand h : hands.values())
-					h.getCards().add(d.copy());
+					h.getCards().add(d);
 			}
 		}
 
@@ -330,7 +330,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				String msg;
 				if (d instanceof Equipment) {
-					Equipment e = (Equipment) d.deepCopy();
+					Equipment e = (Equipment) d.clone();
 
 					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
 						if (!args[1].equalsIgnoreCase("s")) {
@@ -425,9 +425,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.removeHp(e.getBlood());
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 						if (e.getTier() >= 4)
-							arena.getBanished().add(e.copy());
+							arena.getBanished().add(e);
 						else
-							arena.getGraveyard().get(getCurrentSide()).add(e.copy());
+							arena.getGraveyard().get(getCurrentSide()).add(e);
 
 						if (makeFusion(h)) return;
 
@@ -546,8 +546,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 									t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
 									t.removeDef(Math.round(t.getAltDef() * 0.25f));
 
-									Champion dp = t.copy();
-									dp.setBonus(t.getBonus().copy());
+									Champion dp = t.clone();
 									dp.getBonus().removeMana(dp.getMana() / 2);
 									dp.setGravelocked(true);
 
@@ -561,7 +560,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getName() + ".";
 				} else if (d instanceof Champion) {
-					Champion c = (Champion) d.deepCopy();
+					Champion c = (Champion) d.clone();
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
@@ -627,7 +626,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					} else
 						h.removeHp(c.getBlood());
 				} else {
-					Field f = (Field) d.deepCopy();
+					Field f = (Field) d.clone();
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
 						return;
@@ -1236,7 +1235,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.getHp() > f.getBlood()
 				)
 				.findFirst()
-				.map(Champion::copy)
+				.map(Champion::clone)
 				.orElse(null);
 
 		if (aFusion != null) {
@@ -1296,9 +1295,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-		targetChamp.reset();
 		if (targetChamp.canGoToGrave())
-			arena.getGraveyard().get(to).add(targetChamp.deepCopy());
+			arena.getGraveyard().get(to).add(targetChamp);
 	}
 
 	public void destroyCard(Side to, int target, Side from, int source) {
@@ -1355,9 +1353,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-			targetChamp.reset();
 			if (targetChamp.canGoToGrave())
-				arena.getGraveyard().get(to).add(targetChamp.copy());
+				arena.getGraveyard().get(to).add(targetChamp);
 		} else {
 			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1400,9 +1397,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-		targetChamp.reset();
-		if (!targetChamp.isFusion())
-			arena.getGraveyard().get(to).add(targetChamp.copy());
+		if (targetChamp.canGoToGrave())
+			arena.getGraveyard().get(to).add(targetChamp);
 	}
 
 	public void dizimateCard(Side to, int target) {
@@ -1432,9 +1428,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-		targetChamp.reset();
-		if (!targetChamp.isFusion())
-			arena.getGraveyard().get(to).add(targetChamp.copy());
+		if (targetChamp.canGoToGrave())
+			arena.getGraveyard().get(to).add(targetChamp);
 	}
 
 	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
@@ -1491,9 +1486,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-			targetChamp.reset();
 			if (!targetChamp.isFusion() || withFusion)
-				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp.copy());
+				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
 		} else {
 			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1536,9 +1530,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 		if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-		targetChamp.reset();
 		if (!targetChamp.isFusion() || withFusion)
-			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp.copy());
+			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
 	}
 
 	public void banishCard(Side to, int target, boolean equipment) {
@@ -1579,9 +1572,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
 			if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
-			targetChamp.reset();
 			if (targetChamp.canGoToGrave())
-				arena.getBanished().add(targetChamp.copy());
+				arena.getBanished().add(targetChamp);
 		}
 	}
 
@@ -1598,9 +1590,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 		eq.reset();
 		if (!eq.isParasite() || eq.isEffectOnly())
 			if (eq.getTier() >= 4)
-				arena.getBanished().add(eq.copy());
+				arena.getBanished().add(eq);
 			else
-				arena.getGraveyard().get(s).add(eq.copy());
+				arena.getGraveyard().get(s).add(eq);
 	}
 
 	public Arena getArena() {
@@ -1980,7 +1972,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 									else if (d instanceof Equipment e) return !e.isEffectOnly();
 									else return true;
 								})
-								.map(Drawable::copy)
 								.collect(Collectors.toList())
 				);
 				Collections.shuffle(h.get().getDeque());
@@ -1992,7 +1983,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 									else if (d instanceof Equipment e) return !e.isEffectOnly();
 									else return true;
 								})
-								.map(Drawable::copy)
 								.collect(Collectors.toList())
 				);
 			}
@@ -2208,14 +2198,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
 						h.get().getDeque().addAll(
 								discardBatch.stream()
-										.map(Drawable::copy)
+										.map(Drawable::clone)
 										.collect(Collectors.toList())
 						);
 						Collections.shuffle(h.get().getDeque());
 					} else {
 						arena.getGraveyard().get(getCurrentSide()).addAll(
 								discardBatch.stream()
-										.map(Drawable::copy)
+										.map(Drawable::clone)
 										.collect(Collectors.toList())
 						);
 					}
@@ -2345,66 +2335,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				put("deck", bot.getDeque().size());
 			}});
 		}});
-	}
-
-	public void banishWeaklings(int threshold) {
-		for (int i = 0; i < 5; i++) {
-			Champion c = getArena().getSlots().get(Side.TOP).get(i).getTop();
-			if (c != null && c.getMana() <= threshold && !c.isFusion())
-				banishCard(
-						Side.TOP,
-						i,
-						false
-				);
-
-			c = getArena().getSlots().get(Side.BOTTOM).get(i).getTop();
-			if (c != null && c.getMana() <= threshold && !c.isFusion())
-				banishCard(
-						Side.BOTTOM,
-						i,
-						false
-				);
-		}
-
-		for (Map.Entry<Side, LinkedList<Drawable>> entry : getArena().getGraveyard().entrySet()) {
-			Hand h = hands.get(entry.getKey());
-			List<Champion> dead = entry.getValue().parallelStream()
-					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
-					.map(d -> (Champion) d)
-					.collect(Collectors.toList());
-
-			for (Champion c : dead) {
-				entry.getValue().remove(c);
-			}
-
-			List<Champion> inHand = h.getCards().parallelStream()
-					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
-					.map(d -> (Champion) d)
-					.collect(Collectors.toList());
-
-			for (Champion c : inHand) {
-				h.getCards().remove(c);
-			}
-
-			List<Champion> inDeck = h.getDeque().parallelStream()
-					.filter(d -> d instanceof Champion c && c.getMana() <= threshold)
-					.map(d -> (Champion) d)
-					.collect(Collectors.toList());
-
-			for (Champion c : inDeck) {
-				h.getDeque().remove(c);
-			}
-
-			getArena().getBanished().addAll(dead);
-			getArena().getBanished().addAll(inHand);
-			getArena().getBanished().addAll(inDeck);
-		}
-	}
-
-	public void dmUser(Hand h, String message) {
-		h.getUser().openPrivateChannel()
-				.flatMap(c -> c.sendMessage(message))
-				.queue(null, Helper::doNothing);
 	}
 
 	public Champion getChampionFromGrave(Side s) {

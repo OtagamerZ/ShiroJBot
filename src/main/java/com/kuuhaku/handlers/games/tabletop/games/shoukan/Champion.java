@@ -774,6 +774,7 @@ public class Champion implements Drawable, Cloneable {
 		this.hero = hero;
 	}
 
+	@Override
 	public void reset() {
 		flipped = false;
 		available = true;
@@ -811,26 +812,15 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
-	public Champion copy() {
+	public Champion clone() {
 		try {
-			Champion c = (Champion) clone();
-			c.reset();
-			return c;
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
-
-	@Override
-	public Champion deepCopy() {
-		try {
-			Champion c = (Champion) clone();
+			Champion c = (Champion) super.clone();
 			c.linkedTo = linkedTo.stream().map(Equipment::deepCopy).collect(Collectors.toList());
-			c.bonus = bonus.copy();
+			c.bonus = bonus.clone();
 			if (fakeCard != null)
-				c.fakeCard = fakeCard.deepCopy();
+				c.fakeCard = fakeCard.clone();
 			if (nemesis != null)
-				c.nemesis = nemesis.deepCopy();
+				c.nemesis = nemesis.clone();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;

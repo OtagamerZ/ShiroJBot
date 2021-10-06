@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.utils.BondedList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
@@ -39,8 +40,8 @@ import java.util.concurrent.Executors;
 
 public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
-	private final Map<Side, LinkedList<Drawable>> graveyard;
-	private final LinkedList<Drawable> banished;
+	private final Map<Side, BondedList<Drawable>> graveyard;
+	private final BondedList<Drawable> banished;
 	private final BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
 	private final BufferedImage front;
 	private Field field = null;
@@ -64,10 +65,10 @@ public class Arena {
 				)
 		);
 		this.graveyard = Map.of(
-				Side.TOP, new LinkedList<>(),
-				Side.BOTTOM, new LinkedList<>()
+				Side.TOP, new BondedList<>(Drawable::reset),
+				Side.BOTTOM, new BondedList<>(Drawable::reset)
 		);
-		this.banished = new LinkedList<>();
+		this.banished = new BondedList<>(Drawable::reset);
 
 		assert back != null;
 		front = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -77,11 +78,11 @@ public class Arena {
 		return slots;
 	}
 
-	public Map<Side, LinkedList<Drawable>> getGraveyard() {
+	public Map<Side, BondedList<Drawable>> getGraveyard() {
 		return graveyard;
 	}
 
-	public LinkedList<Drawable> getBanished() {
+	public BondedList<Drawable> getBanished() {
 		return banished;
 	}
 
