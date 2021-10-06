@@ -82,7 +82,7 @@ public class SellCardCommand implements Executable {
 		dk.getChampions().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.findFirst()
-				.ifPresent(kc -> matches.add(CardType.CHAMPION));
+				.ifPresent(kc -> matches.add(CardType.SENSHI));
 		dk.getEquipments().stream()
 				.filter(e -> e.getCard().getId().equals(name))
 				.findFirst()
@@ -98,7 +98,7 @@ public class SellCardCommand implements Executable {
 					.setTitle("Por favor escolha uma")
 					.setDescription(
 							(matches.contains(CardType.KAWAIPON) ? (":regional_indicator_k: -> Kawaipon\n") : "") +
-							(matches.contains(CardType.CHAMPION) ? (":regional_indicator_c: -> Campeão\n") : "") +
+							(matches.contains(CardType.SENSHI) ? (":regional_indicator_c: -> Campeão\n") : "") +
 							(matches.contains(CardType.EVOGEAR) ? (":regional_indicator_e: -> Evogear\n") : "") +
 							(matches.contains(CardType.FIELD) ? (":regional_indicator_f: -> Campo\n") : "")
 					);
@@ -110,9 +110,9 @@ public class SellCardCommand implements Executable {
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
-			if (matches.contains(CardType.CHAMPION)) {
-				btns.put("\uD83C\uDDF0", (mb, ms) -> {
-					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.CHAMPION, false));
+			if (matches.contains(CardType.SENSHI)) {
+				btns.put("\uD83C\uDDE8", (mb, ms) -> {
+					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
@@ -147,7 +147,7 @@ public class SellCardCommand implements Executable {
 			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 			switch (type) {
 				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-				case CHAMPION, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+				case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
 				case NONE -> chosen.complete(null);
 			}
 		}
@@ -186,7 +186,7 @@ public class SellCardCommand implements Executable {
 			}
 
 			String msg = switch (off.getMiddle()) {
-				case CHAMPION -> "Este campeão sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
+				case SENSHI -> "Este campeão sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				case EVOGEAR -> "Este equipamento sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				case FIELD -> "Este campo sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				default -> "Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?";
