@@ -26,6 +26,11 @@ import java.util.Set;
 public record ShoukanState(
 		ArenaState arena,
 		List<HandState> hands,
-		Set<PersistentEffect> persistentEffects
+		Set<PersistentEffect> persistentEffects,
+		int fusionLock,
+		int spellLock,
+		int effectLock,
+		boolean reroll,
+		boolean moveLock
 ) {
 }
