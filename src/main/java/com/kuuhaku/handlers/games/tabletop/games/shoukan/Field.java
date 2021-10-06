@@ -222,17 +222,12 @@ public class Field implements Drawable, Cloneable {
 	}
 
 	@Override
-	public Field copy() {
+	public Field clone() {
 		try {
-			return (Field) clone();
+			return (Field) super.clone();
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
-	}
-
-	@Override
-	public Field deepCopy() {
-		return copy();
 	}
 
 	public String toString() {

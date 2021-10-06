@@ -175,9 +175,10 @@ public class Bonus implements Cloneable {
 		this.write = write;
 	}
 
-	public Bonus copy() {
+	@Override
+	public Bonus clone() {
 		try {
-			Bonus b = (Bonus) clone();
+			Bonus b = (Bonus) super.clone();
 
 			return new Bonus(
 					b.getSpecialData(),

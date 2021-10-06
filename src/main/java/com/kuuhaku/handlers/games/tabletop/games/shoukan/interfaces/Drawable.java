@@ -64,9 +64,11 @@ public interface Drawable {
 
 	void setAvailable(boolean available);
 
-	Drawable copy();
+	default void reset() {
 
-	Drawable deepCopy();
+	}
+
+	Drawable clone();
 
 	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();

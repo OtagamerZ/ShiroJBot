@@ -400,6 +400,7 @@ public class Equipment implements Drawable, Cloneable {
 		}
 	}
 
+	@Override
 	public void reset() {
 		flipped = false;
 		available = true;
@@ -426,23 +427,12 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	@Override
-	public Equipment copy() {
+	public Equipment clone() {
 		try {
-			Equipment e = (Equipment) clone();
-			e.reset();
-			return e;
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
-
-	@Override
-	public Equipment deepCopy() {
-		try {
-			Equipment e = (Equipment) clone();
-			e.bonus = bonus.copy();
+			Equipment e = (Equipment) super.clone();
+			e.bonus = bonus.clone();
 			if (linkedTo != null)
-				e.linkedTo = Pair.of(linkedTo.getLeft(), linkedTo.getRight().deepCopy());
+				e.linkedTo = Pair.of(linkedTo.getLeft(), linkedTo.getRight().clone());
 			return e;
 		} catch (CloneNotSupportedException e) {
 			return null;
