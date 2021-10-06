@@ -34,8 +34,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.ArenaState;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.HandState;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.ShoukanState;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
@@ -2848,104 +2846,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public ShoukanState getInitialState() {
 		return initialState;
-	}
-
-	private void saveState() {
-		List<HandState> handStates = new ArrayList<>();
-		for (Hand h : hands.values()) {
-			handStates.add(new HandState(
-					h.getSide(),
-					h.getDeque().stream()
-							.map(Drawable::deepCopy)
-							.collect(Collectors.toList()),
-					h.getCards().stream()
-							.map(Drawable::deepCopy)
-							.collect(Collectors.toList()),
-					h.getDestinyDeck().stream()
-							.map(Drawable::deepCopy)
-							.collect(Collectors.toList()),
-					h.getBaseHp(),
-					h.getBaseManaPerTurn(),
-					h.getMitigation(),
-					h.getMaxCards(),
-					h.getManaPerTurn(),
-					h.getMana(),
-					h.getHp(),
-					h.getPrevHp(),
-					h.getSuppressTime(),
-					h.getLockTime(),
-					h.getNullTime()
-			));
-		}
-
-		ArenaState arenaState = new ArenaState(new HashMap<>(), new HashMap<>(), new ArrayList<>(), arena.getField());
-		for (Map.Entry<Side, List<SlotColumn>> slots : arena.getSlots().entrySet()) {
-			arenaState.slots().put(slots.getKey(), slots.getValue().stream().map(SlotColumn::copy).collect(Collectors.toList()));
-		}
-		for (Map.Entry<Side, LinkedList<Drawable>> grave : arena.getGraveyard().entrySet()) {
-			arenaState.graveyard().put(grave.getKey(), grave.getValue().stream().map(Drawable::deepCopy).collect(Collectors.toCollection(LinkedList::new)));
-		}
-		arenaState.banished().addAll(arena.getBanished().stream().map(Drawable::deepCopy).collect(Collectors.toList()));
-
-		initialState = new ShoukanState(
-				arenaState,
-				handStates,
-				persistentEffects.stream().map(PersistentEffect::copy).collect(Collectors.toSet()),
-				fusionLock,
-				spellLock,
-				effectLock,
-				reroll,
-				moveLock
-		);
-	}
-
-	public void revertState(ShoukanState ss) {
-		for (HandState old : ss.hands()) {
-			Hand h = hands.get(old.side());
-			Helper.replaceContent(old.deque(), h.getDeque());
-			Helper.replaceContent(old.cards(), h.getCards());
-			Helper.replaceContent(old.destiny(), h.getDestinyDeck());
-
-			h.setBaseHp(old.baseHp());
-			h.setBaseManaPerTurn(old.baseManaPerTurn());
-			h.setMitigation(old.mitigation());
-			h.setMaxCards(old.maxCards());
-			h.setManaPerTurn(old.manaPerTurn());
-			h.setMana(old.mana());
-			h.setHp(old.hp());
-			h.setPrevHp(old.prevHp());
-			h.setSuppressTime(old.suppressTime());
-			h.setLockTime(old.lockTime());
-			h.setNullTime(old.nullTime());
-		}
-
-		for (Map.Entry<Side, List<SlotColumn>> slots : ss.arena().slots().entrySet()) {
-			List<SlotColumn> slts = arena.getSlots().get(slots.getKey());
-			for (int i = 0; i < slots.getValue().size(); i++) {
-				SlotColumn curr = slts.get(i);
-				SlotColumn old = slots.getValue().get(i);
-
-				curr.setTop(old.getTop());
-				curr.setBottom(old.getBottom());
-				curr.setUnavailable(old.getUnavailableTime());
-				curr.setChanged(old.isChanged());
-			}
-		}
-		for (Side s : ss.arena().graveyard().keySet()) {
-			Helper.replaceContent(ss.arena().graveyard().get(s), arena.getGraveyard().get(s));
-		}
-		Helper.replaceContent(ss.arena().banished(), arena.getBanished());
-		Helper.replaceContent(ss.persistentEffects(), persistentEffects);
-
-		discardBatch.clear();
-		fusionLock = ss.fusionLock();
-		spellLock = ss.spellLock();
-		effectLock = ss.effectLock();
-		reroll = ss.reroll();
-		moveLock = ss.moveLock();
-		phase = Phase.PLAN;
-
-		saveState();
 	}
 
 	@Override
