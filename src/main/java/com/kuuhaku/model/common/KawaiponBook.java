@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ImageFilters;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
@@ -116,7 +117,7 @@ public class KawaiponBook {
 
 					double prcnt = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
 					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT * (1 - prcnt), CARD_WIDTH, CARD_HEIGHT * prcnt));
-					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+					g.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					g.setClip(null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 				}
