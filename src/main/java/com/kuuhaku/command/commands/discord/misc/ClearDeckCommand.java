@@ -63,6 +63,9 @@ public class ClearDeckCommand implements Executable {
 		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
+		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+			channel.sendMessage("❌ | Seu armazém está lotado, abra espaço nele antes de limpar seu deck.").queue();
+			return;
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
