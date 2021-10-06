@@ -3210,7 +3210,7 @@ public class Helper {
 	@SuppressWarnings("unchecked")
 	public static <T extends Cloneable> T clone(T orig) {
 		try {
-			return orig != null ? (T) Object.class.getMethod("clone").invoke(orig) : orig;
+			return orig != null ? (T) Object.class.getMethod("clone").invoke(orig) : null;
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			return orig;
 		}
