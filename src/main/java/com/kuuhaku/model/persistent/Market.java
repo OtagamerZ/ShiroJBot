@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
@@ -59,6 +60,14 @@ public class Market implements com.kuuhaku.model.common.Market {
 		this.seller = seller;
 		this.card = card.getCard();
 		this.foil = card.isFoil();
+		this.price = price;
+		this.type = CardType.KAWAIPON;
+	}
+
+	public Market(String seller, Champion card, int price) {
+		this.seller = seller;
+		this.card = card.getCard();
+		this.foil = false;
 		this.price = price;
 		this.type = CardType.KAWAIPON;
 	}
