@@ -3091,9 +3091,9 @@ public class Helper {
 		}
 	}
 
-	public static <T> T deserialize(Class<T> klass, byte[] bytes) throws IOException, ClassNotFoundException {
+	public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes); ObjectInputStream bis = new ObjectInputStream(bais)) {
-			return (T) bis.readObject();
+			return bis.readObject();
 		}
 	}
 

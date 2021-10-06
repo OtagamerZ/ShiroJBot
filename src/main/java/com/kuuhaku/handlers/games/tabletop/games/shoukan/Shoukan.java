@@ -34,6 +34,9 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.ArenaState;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.HandState;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.ShoukanState;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.DailyTask;
@@ -107,7 +110,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private boolean reroll = true;
 	private boolean moveLock = false;
 
-	private byte[] initialState = new byte[0];
+	private ShoukanState initialState = null;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -231,11 +234,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				});
 
-		try {
-			initialState = Helper.serialize(this);
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
+		saveState();
 	}
 
 	@Override
@@ -2728,6 +2727,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						AccountDAO.saveAccount(acc);
 
 						if (h.getHero() != null) {
+							h.getHero().setDmg();
 							CardDAO.saveHero(h.getHero());
 						}
 
@@ -2748,6 +2748,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					AccountDAO.saveAccount(acc);
 
 					if (h.getHero() != null) {
+						h.getHero().setDmg();
 						CardDAO.saveHero(h.getHero());
 					}
 				}
@@ -2835,13 +2836,49 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return reroll;
 	}
 
-	public Shoukan getInitialState() {
-		try {
-			return Helper.deserialize(this.getClass(), initialState);
-		} catch (IOException | ClassNotFoundException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			return null;
+	public ShoukanState getInitialState() {
+		return initialState;
+	}
+
+	private void saveState() {
+		List<HandState> handStates = new ArrayList<>();
+		for (Hand h : hands.values()) {
+			handStates.add(new HandState(
+					h.getSide(),
+					h.getDeque().stream()
+							.map(Drawable::deepCopy)
+							.collect(Collectors.toList()),
+					h.getCards().stream()
+							.map(Drawable::deepCopy)
+							.collect(Collectors.toList()),
+					h.getDestinyDeck().stream()
+							.map(Drawable::deepCopy)
+							.collect(Collectors.toList()),
+					h.getHero(),
+					h.getBaseHp(),
+					h.getBaseManaPerTurn(),
+					h.getMitigation(),
+					h.getMaxCards(),
+					h.getManaPerTurn(),
+					h.getMana(),
+					h.getHp(),
+					h.getPrevHp(),
+					h.getSuppressTime(),
+					h.getLockTime(),
+					h.getNullTime()
+			));
 		}
+
+		ArenaState arenaState = new ArenaState(new HashMap<>(), new HashMap<>(), new ArrayList<>(), arena.getField());
+		for (Map.Entry<Side, List<SlotColumn>> e : arena.getSlots().entrySet()) {
+			arenaState.slots().put(e.getKey(), e.getValue().stream().map(SlotColumn::copy).collect(Collectors.toList()));
+		}
+		for (Map.Entry<Side, LinkedList<Drawable>> e : arena.getGraveyard().entrySet()) {
+			arenaState.graveyard().put(e.getKey(), e.getValue().stream().map(Drawable::deepCopy).collect(Collectors.toList()));
+		}
+		arenaState.banished().addAll(arena.getBanished().stream().map(Drawable::deepCopy).collect(Collectors.toList()));
+
+		initialState = new ShoukanState(arenaState, handStates, persistentEffects.stream().map(PersistentEffect::copy).collect(Collectors.toSet()));
 	}
 
 	@Override
@@ -2858,10 +2895,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
 		super.resetTimer(shkn);
 
-		try {
-			initialState = Helper.serialize(this);
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
+		saveState();
 	}
 }
