@@ -136,10 +136,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
+import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -3208,5 +3205,46 @@ public class Helper {
 	public static <K, V> void replaceContent(Map<K, V> from, Map<K, V> to) {
 		to.clear();
 		to.putAll(from);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Cloneable> T clone(T orig) {
+		try {
+			return orig != null ? (T) Object.class.getMethod("clone").invoke(orig) : orig;
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			return orig;
+		}
+	}
+
+	public static <T> List<T> removeIf(Collection<T> col, Function<T, Boolean> cond) {
+		List<T> removed = new ArrayList<>();
+
+		Iterator<T> i = col.iterator();
+		while (i.hasNext()) {
+			T obj = i.next();
+
+			if (cond.apply(obj)) {
+				removed.add(obj);
+				i.remove();
+			}
+		}
+
+		return removed;
+	}
+
+	public static <K, V> Map<K, V> removeIf(Map<K, V> map, BiFunction<K, V, Boolean> cond) {
+		Map<K, V> removed = new HashMap<>();
+
+		Iterator<Map.Entry<K, V>> i = map.entrySet().iterator();
+		while (i.hasNext()) {
+			Map.Entry<K, V> entry = i.next();
+
+			if (cond.apply(entry.getKey(), entry.getValue())) {
+				removed.put(entry.getKey(), entry.getValue());
+				i.remove();
+			}
+		}
+
+		return removed;
 	}
 }
