@@ -161,19 +161,19 @@ public class StoreCardCommand implements Executable {
 
 								Stash m = switch (off.getMiddle()) {
 									case EVOGEAR -> {
-										Equipment e = CardDAO.getEquipment(off.getLeft());
+										Equipment e = fDk.getEquipment(off.getLeft());
 										fDk.removeEquipment(e);
 										assert e != null;
 										yield new Stash(author.getId(), e);
 									}
 									case FIELD -> {
-										Field f = CardDAO.getField(off.getLeft());
+										Field f = fDk.getField(off.getLeft());
 										fDk.removeField(f);
 										assert f != null;
 										yield new Stash(author.getId(), f);
 									}
 									default -> {
-										KawaiponCard kc = new KawaiponCard(off.getLeft(), off.getRight());
+										KawaiponCard kc = finalKp.getCard(off.getLeft(), off.getRight());
 										finalKp.removeCard(kc);
 										yield new Stash(author.getId(), kc);
 									}
