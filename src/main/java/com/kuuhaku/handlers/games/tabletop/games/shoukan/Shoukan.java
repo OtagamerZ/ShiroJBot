@@ -2854,7 +2854,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.getDestinyDeck().stream()
 							.map(Drawable::deepCopy)
 							.collect(Collectors.toList()),
-					h.getHero(),
 					h.getBaseHp(),
 					h.getBaseManaPerTurn(),
 					h.getMitigation(),
@@ -2870,15 +2869,43 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		ArenaState arenaState = new ArenaState(new HashMap<>(), new HashMap<>(), new ArrayList<>(), arena.getField());
-		for (Map.Entry<Side, List<SlotColumn>> e : arena.getSlots().entrySet()) {
-			arenaState.slots().put(e.getKey(), e.getValue().stream().map(SlotColumn::copy).collect(Collectors.toList()));
+		for (Map.Entry<Side, List<SlotColumn>> slots : arena.getSlots().entrySet()) {
+			arenaState.slots().put(slots.getKey(), slots.getValue().stream().map(SlotColumn::copy).collect(Collectors.toList()));
 		}
-		for (Map.Entry<Side, LinkedList<Drawable>> e : arena.getGraveyard().entrySet()) {
-			arenaState.graveyard().put(e.getKey(), e.getValue().stream().map(Drawable::deepCopy).collect(Collectors.toList()));
+		for (Map.Entry<Side, LinkedList<Drawable>> grave : arena.getGraveyard().entrySet()) {
+			arenaState.graveyard().put(grave.getKey(), grave.getValue().stream().map(Drawable::deepCopy).collect(Collectors.toCollection(LinkedList::new)));
 		}
 		arenaState.banished().addAll(arena.getBanished().stream().map(Drawable::deepCopy).collect(Collectors.toList()));
 
 		initialState = new ShoukanState(arenaState, handStates, persistentEffects.stream().map(PersistentEffect::copy).collect(Collectors.toSet()));
+	}
+
+	private void revertState(ShoukanState ss) {
+		for (HandState old : ss.hands()) {
+			Hand h = hands.get(old.side());
+			Helper.replaceContent(old.deque(), h.getDeque());
+			Helper.replaceContent(old.cards(), h.getCards());
+			Helper.replaceContent(old.destiny(), h.getDestinyDeck());
+
+			h.setBaseHp(old.baseHp());
+			h.setBaseManaPerTurn(old.baseManaPerTurn());
+			h.setMitigation(old.mitigation());
+			h.setMaxCards(old.maxCards());
+			h.setManaPerTurn(old.manaPerTurn());
+			h.setMana(old.mana());
+			h.setHp(old.hp());
+			h.setPrevHp(old.prevHp());
+			h.setSuppressTime(old.suppressTime());
+			h.setLockTime(old.lockTime());
+			h.setNullTime(old.nullTime());
+		}
+
+		Helper.replaceContent(ss.arena().slots(), arena.getSlots());
+		Helper.replaceContent(ss.arena().graveyard(), arena.getGraveyard());
+		Helper.replaceContent(ss.arena().banished(), arena.getBanished());
+		Helper.replaceContent(ss.persistentEffects(), persistentEffects);
+
+		saveState();
 	}
 
 	@Override

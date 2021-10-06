@@ -687,6 +687,10 @@ public class Hand {
 		return prevHp;
 	}
 
+	public void setPrevHp(int prevHp) {
+		this.prevHp = prevHp;
+	}
+
 	public int getSuppressTime() {
 		return suppressTime;
 	}
@@ -703,6 +707,14 @@ public class Hand {
 		suppressTime = Math.max(0, suppressTime - 1);
 	}
 
+	public int getLockTime() {
+		return lockTime;
+	}
+
+	public void setLockTime(int lockTime) {
+		this.lockTime = lockTime;
+	}
+
 	public void addLockTime(int time) {
 		lockTime += time;
 	}
@@ -711,16 +723,16 @@ public class Hand {
 		lockTime = Math.max(0, lockTime - 1);
 	}
 
-	public int getLockTime() {
-		return lockTime;
-	}
-
 	public int getNullTime() {
 		return nullTime;
 	}
 
 	public boolean isNullMode() {
 		return nullTime > 0;
+	}
+
+	public void setNullTime(int nullTime) {
+		this.nullTime = nullTime;
 	}
 
 	public void addNullTime(int time) {
