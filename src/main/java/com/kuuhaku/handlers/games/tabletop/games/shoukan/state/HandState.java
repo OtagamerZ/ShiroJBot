@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.state;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 
@@ -29,7 +28,6 @@ public record HandState(
 		List<Drawable> deque,
 		List<Drawable> cards,
 		List<Drawable> destiny,
-		Hero hero,
 		int baseHp,
 		int baseManaPerTurn,
 		float mitigation,
