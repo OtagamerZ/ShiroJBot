@@ -330,7 +330,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				String msg;
 				if (d instanceof Equipment) {
-					Equipment e = (Equipment) d.clone();
+					Equipment e = (Equipment) d.copy();
 
 					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
 						if (!args[1].equalsIgnoreCase("s")) {
@@ -546,7 +546,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 									t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
 									t.removeDef(Math.round(t.getAltDef() * 0.25f));
 
-									Champion dp = t.clone();
+									Champion dp = t.copy();
 									dp.getBonus().removeMana(dp.getMana() / 2);
 									dp.setGravelocked(true);
 
@@ -560,7 +560,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getName() + ".";
 				} else if (d instanceof Champion) {
-					Champion c = (Champion) d.clone();
+					Champion c = (Champion) d.copy();
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
@@ -626,7 +626,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					} else
 						h.removeHp(c.getBlood());
 				} else {
-					Field f = (Field) d.clone();
+					Field f = (Field) d.copy();
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
 						return;
@@ -1235,7 +1235,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.getHp() > f.getBlood()
 				)
 				.findFirst()
-				.map(Champion::clone)
+				.map(Champion::copy)
 				.orElse(null);
 
 		if (aFusion != null) {
@@ -2198,14 +2198,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
 						h.get().getDeque().addAll(
 								discardBatch.stream()
-										.map(Drawable::clone)
+										.map(Drawable::copy)
 										.collect(Collectors.toList())
 						);
 						Collections.shuffle(h.get().getDeque());
 					} else {
 						arena.getGraveyard().get(getCurrentSide()).addAll(
 								discardBatch.stream()
-										.map(Drawable::clone)
+										.map(Drawable::copy)
 										.collect(Collectors.toList())
 						);
 					}
