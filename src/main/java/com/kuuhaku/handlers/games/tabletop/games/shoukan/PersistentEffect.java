@@ -26,7 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectConsum
 import java.util.Objects;
 import java.util.Set;
 
-public class PersistentEffect {
+public class PersistentEffect implements Cloneable {
 	private final Drawable card;
 	private final String source;
 	private final Set<EffectTrigger> triggers;
@@ -98,6 +98,11 @@ public class PersistentEffect {
 
 	public void setLimit(int limit) {
 		this.limit = limit;
+	}
+
+	@Override
+	public PersistentEffect clone() {
+		return new PersistentEffect(card.copy(), source, effect, target, debuff, turns, limit, triggers.toArray(EffectTrigger[]::new));
 	}
 
 	@Override
