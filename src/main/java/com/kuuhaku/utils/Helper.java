@@ -3199,4 +3199,14 @@ public class Helper {
 	public static double getRatio(double w, double h) {
 		return w / h;
 	}
+
+	public static <T> void replaceContent(Collection<T> from, Collection<T> to) {
+		to.clear();
+		to.addAll(from);
+	}
+
+	public static <K, V> void replaceContent(Map<K, V> from, Map<K, V> to) {
+		to.clear();
+		to.putAll(from);
+	}
 }
