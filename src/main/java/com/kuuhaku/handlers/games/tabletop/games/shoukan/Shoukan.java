@@ -2919,8 +2919,21 @@ public class Shoukan extends GlobalGame implements Serializable {
 			h.setNullTime(old.nullTime());
 		}
 
-		Helper.replaceContent(ss.arena().slots(), arena.getSlots());
-		Helper.replaceContent(ss.arena().graveyard(), arena.getGraveyard());
+		for (Map.Entry<Side, List<SlotColumn>> slots : ss.arena().slots().entrySet()) {
+			List<SlotColumn> slts = arena.getSlots().get(slots.getKey());
+			for (int i = 0; i < slots.getValue().size(); i++) {
+				SlotColumn curr = slts.get(i);
+				SlotColumn old = slots.getValue().get(i);
+
+				curr.setTop(old.getTop());
+				curr.setBottom(old.getBottom());
+				curr.setUnavailable(old.getUnavailableTime());
+				curr.setChanged(old.isChanged());
+			}
+		}
+		for (Side s : ss.arena().graveyard().keySet()) {
+			Helper.replaceContent(ss.arena().graveyard().get(s), arena.getGraveyard().get(s));
+		}
 		Helper.replaceContent(ss.arena().banished(), arena.getBanished());
 		Helper.replaceContent(ss.persistentEffects(), persistentEffects);
 
