@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
@@ -48,6 +49,13 @@ public class Stash {
 		this.owner = owner;
 		this.card = card.getCard();
 		this.foil = card.isFoil();
+		this.type = CardType.KAWAIPON;
+	}
+
+	public Stash(String owner, Champion card) {
+		this.owner = owner;
+		this.card = card.getCard();
+		this.foil = false;
 		this.type = CardType.KAWAIPON;
 	}
 
