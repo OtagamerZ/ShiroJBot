@@ -23,9 +23,9 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.utils.BondedList;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class EffectParameters {
 	private final Side side;
 	private final Map<Side, Hand> hands;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final Map<Side, LinkedList<Drawable>> graveyard;
+	private final Map<Side, BondedList<Drawable>> graveyard;
 	private final Duelists duelists;
 	private final GameChannel channel;
 
@@ -92,7 +92,7 @@ public class EffectParameters {
 		return slots;
 	}
 
-	public Map<Side, LinkedList<Drawable>> getGraveyard() {
+	public Map<Side, BondedList<Drawable>> getGraveyard() {
 		return graveyard;
 	}
 
