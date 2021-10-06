@@ -64,6 +64,33 @@ public class DeckReorderCommand implements Executable {
 							return 0;
 						}
 					}).reversed();
+					case "atk", "ataque", "dano" -> Comparator.<Drawable>comparingInt(d -> {
+						if (d instanceof Champion c) {
+							return c.getAtk();
+						} else if (d instanceof Equipment e) {
+							return e.getAtk();
+						} else {
+							return 0;
+						}
+					}).reversed();
+					case "def", "defesa" -> Comparator.<Drawable>comparingInt(d -> {
+						if (d instanceof Champion c) {
+							return c.getDef();
+						} else if (d instanceof Equipment e) {
+							return e.getDef();
+						} else {
+							return 0;
+						}
+					}).reversed();
+					case "atributos", "stats" -> Comparator.<Drawable>comparingDouble(d -> {
+						if (d instanceof Champion c) {
+							return (double) (c.getAtk() + c.getDef()) / Math.max(1, c.getMana());
+						} else if (d instanceof Equipment e) {
+							return (double) (e.getAtk() + e.getDef()) / Math.max(1, e.getMana());
+						} else {
+							return 0;
+						}
+					}).reversed();
 					case "tier" -> Comparator.<Drawable>comparingInt(d -> {
 						if (d instanceof Equipment e) {
 							return e.getTier();
@@ -75,7 +102,7 @@ public class DeckReorderCommand implements Executable {
 				};
 
 				if (comp == null) {
-					channel.sendMessage("❌ | Você precisa informar um tipo válido de ordenação (`alfabetico`, `mana` ou `tier`).").queue();
+					channel.sendMessage("❌ | Você precisa informar um tipo válido de ordenação (`alfabetico`, `mana`, `ataque`, `defesa`, `stats` ou `tier`).").queue();
 					return;
 				}
 
