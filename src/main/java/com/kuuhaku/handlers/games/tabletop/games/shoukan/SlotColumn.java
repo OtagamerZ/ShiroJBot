@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-public class SlotColumn {
+public class SlotColumn implements Cloneable {
 	private final int index;
 	private Champion top = null;
 	private Equipment bottom = null;
@@ -75,5 +75,19 @@ public class SlotColumn {
 
 	public void setChanged(boolean changed) {
 		this.changed = changed;
+	}
+
+	@Override
+	public SlotColumn clone() {
+		try {
+			SlotColumn sc = (SlotColumn) super.clone();
+			if (top != null)
+				sc.top = top.copy();
+			if (bottom != null)
+				sc.bottom = bottom.copy();
+			return sc;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError();
+		}
 	}
 }
