@@ -59,6 +59,7 @@ import javax.websocket.DeploymentException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -73,7 +74,7 @@ import java.util.stream.Collectors;
 
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
-public class Shoukan extends GlobalGame {
+public class Shoukan extends GlobalGame implements Serializable {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
 	private final GameChannel channel;
@@ -105,6 +106,8 @@ public class Shoukan extends GlobalGame {
 	private final List<Drawable> discardBatch = new ArrayList<>();
 	private boolean reroll = true;
 	private boolean moveLock = false;
+
+	private byte[] initialState = new byte[0];
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -227,6 +230,12 @@ public class Shoukan extends GlobalGame {
 						h.showHand();
 					}
 				});
+
+		try {
+			initialState = Helper.serialize(this);
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 	@Override
@@ -2826,6 +2835,15 @@ public class Shoukan extends GlobalGame {
 		return reroll;
 	}
 
+	public Shoukan getInitialState() {
+		try {
+			return Helper.deserialize(this.getClass(), initialState);
+		} catch (IOException | ClassNotFoundException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
+	}
+
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
@@ -2839,5 +2857,11 @@ public class Shoukan extends GlobalGame {
 
 		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
 		super.resetTimer(shkn);
+
+		try {
+			initialState = Helper.serialize(this);
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 }
