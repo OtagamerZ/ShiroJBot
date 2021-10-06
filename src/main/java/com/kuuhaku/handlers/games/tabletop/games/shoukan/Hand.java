@@ -687,6 +687,10 @@ public class Hand {
 		return prevHp;
 	}
 
+	public int getSuppressTime() {
+		return suppressTime;
+	}
+
 	public boolean isSuppressed() {
 		return suppressTime > 0;
 	}
@@ -709,6 +713,10 @@ public class Hand {
 
 	public int getLockTime() {
 		return lockTime;
+	}
+
+	public int getNullTime() {
+		return nullTime;
 	}
 
 	public boolean isNullMode() {
