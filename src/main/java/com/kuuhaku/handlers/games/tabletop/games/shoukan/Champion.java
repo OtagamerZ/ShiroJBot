@@ -815,7 +815,7 @@ public class Champion implements Drawable, Cloneable {
 	public Champion clone() {
 		try {
 			Champion c = (Champion) super.clone();
-			c.linkedTo = linkedTo.stream().map(Equipment::deepCopy).collect(Collectors.toList());
+			c.linkedTo = linkedTo.stream().map(Equipment::clone).collect(Collectors.toList());
 			c.bonus = bonus.clone();
 			if (fakeCard != null)
 				c.fakeCard = fakeCard.clone();
