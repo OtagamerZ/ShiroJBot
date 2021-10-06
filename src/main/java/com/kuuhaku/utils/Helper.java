@@ -3080,6 +3080,23 @@ public class Helper {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
+	public static byte[] serialize(Object obj) throws IOException {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(obj);
+			oos.flush();
+			oos.close();
+
+			return baos.toByteArray();
+		}
+	}
+
+	public static <T> T deserialize(Class<T> klass, byte[] bytes) throws IOException, ClassNotFoundException {
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes); ObjectInputStream bis = new ObjectInputStream(bais)) {
+			return (T) bis.readObject();
+		}
+	}
+
 	public static byte[] compress(String data) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length());
 		GZIPOutputStream gzip = new GZIPOutputStream(bos);
