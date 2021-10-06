@@ -2880,7 +2880,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		initialState = new ShoukanState(arenaState, handStates, persistentEffects.stream().map(PersistentEffect::copy).collect(Collectors.toSet()));
 	}
 
-	private void revertState(ShoukanState ss) {
+	public void revertState(ShoukanState ss) {
 		for (HandState old : ss.hands()) {
 			Hand h = hands.get(old.side());
 			Helper.replaceContent(old.deque(), h.getDeque());
