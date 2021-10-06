@@ -61,6 +61,10 @@ public class SlotColumn implements Cloneable {
 		return unavailable > 0;
 	}
 
+	public int getUnavailableTime() {
+		return unavailable;
+	}
+
 	public void setUnavailable(int time) {
 		this.unavailable = Math.max(0, this.unavailable + time);
 	}
