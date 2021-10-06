@@ -78,6 +78,10 @@ public class StoreCardCommand implements Executable {
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.findFirst()
 				.ifPresent(kc -> matches.add(CardType.KAWAIPON));
+		dk.getChampions().stream()
+				.filter(kc -> kc.getCard().getId().equals(name))
+				.findFirst()
+				.ifPresent(kc -> matches.add(CardType.CHAMPION));
 		dk.getEquipments().stream()
 				.filter(e -> e.getCard().getId().equals(name))
 				.findFirst()
@@ -93,6 +97,7 @@ public class StoreCardCommand implements Executable {
 					.setTitle("Por favor escolha uma")
 					.setDescription(
 							(matches.contains(CardType.KAWAIPON) ? (":regional_indicator_k: -> Kawaipon\n") : "") +
+							(matches.contains(CardType.CHAMPION) ? (":regional_indicator_c: -> Campeão\n") : "") +
 							(matches.contains(CardType.EVOGEAR) ? (":regional_indicator_e: -> Evogear\n") : "") +
 							(matches.contains(CardType.FIELD) ? (":regional_indicator_f: -> Campo\n") : "")
 					);
@@ -101,6 +106,12 @@ public class StoreCardCommand implements Executable {
 			if (matches.contains(CardType.KAWAIPON)) {
 				btns.put("\uD83C\uDDF0", (mb, ms) -> {
 					chooseVersion(author, channel, kp, name, chosen);
+					ms.delete().queue(null, Helper::doNothing);
+				});
+			}
+			if (matches.contains(CardType.CHAMPION)) {
+				btns.put("\uD83C\uDDF0", (mb, ms) -> {
+					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.CHAMPION, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
@@ -134,7 +145,7 @@ public class StoreCardCommand implements Executable {
 			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 			switch (type) {
 				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-				case EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+				case CHAMPION, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
 				case NONE -> chosen.complete(null);
 			}
 		}
@@ -147,6 +158,7 @@ public class StoreCardCommand implements Executable {
 			}
 
 			String msg = switch (off.getMiddle()) {
+				case CHAMPION -> "Este campeão sairá do seu deck. Deseja mesmo guardá-lo?";
 				case EVOGEAR -> "Este equipamento sairá do seu deck. Deseja mesmo guardá-lo?";
 				case FIELD -> "Este campo sairá do seu deck. Deseja mesmo guardá-lo?";
 				default -> "Esta carta sairá da sua coleção. Deseja mesmo guardá-la?";

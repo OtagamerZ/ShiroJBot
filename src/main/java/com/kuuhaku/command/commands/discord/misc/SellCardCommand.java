@@ -79,6 +79,10 @@ public class SellCardCommand implements Executable {
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.findFirst()
 				.ifPresent(kc -> matches.add(CardType.KAWAIPON));
+		dk.getChampions().stream()
+				.filter(kc -> kc.getCard().getId().equals(name))
+				.findFirst()
+				.ifPresent(kc -> matches.add(CardType.CHAMPION));
 		dk.getEquipments().stream()
 				.filter(e -> e.getCard().getId().equals(name))
 				.findFirst()
@@ -93,26 +97,33 @@ public class SellCardCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Por favor escolha uma")
 					.setDescription(
-							(matches.contains(CardType.KAWAIPON) ? (Helper.getRegionalIndicator(10) + " -> Kawaipon\n") : "") +
-							(matches.contains(CardType.EVOGEAR) ? (Helper.getRegionalIndicator(4) + " -> Evogear\n") : "") +
-							(matches.contains(CardType.FIELD) ? (Helper.getRegionalIndicator(2) + " -> Campo\n") : "")
+							(matches.contains(CardType.KAWAIPON) ? (":regional_indicator_k: -> Kawaipon\n") : "") +
+							(matches.contains(CardType.CHAMPION) ? (":regional_indicator_c: -> Campeão\n") : "") +
+							(matches.contains(CardType.EVOGEAR) ? (":regional_indicator_e: -> Evogear\n") : "") +
+							(matches.contains(CardType.FIELD) ? (":regional_indicator_f: -> Campo\n") : "")
 					);
 
 			Map<String, ThrowingBiConsumer<Member, Message>> btns = new LinkedHashMap<>();
 			if (matches.contains(CardType.KAWAIPON)) {
-				btns.put(Helper.getRegionalIndicator(10), (mb, ms) -> {
+				btns.put("\uD83C\uDDF0", (mb, ms) -> {
 					chooseVersion(author, channel, kp, name, chosen);
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
+			if (matches.contains(CardType.CHAMPION)) {
+				btns.put("\uD83C\uDDF0", (mb, ms) -> {
+					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.CHAMPION, false));
+					ms.delete().queue(null, Helper::doNothing);
+				});
+			}
 			if (matches.contains(CardType.EVOGEAR)) {
-				btns.put(Helper.getRegionalIndicator(4), (mb, ms) -> {
+				btns.put("\uD83C\uDDEA", (mb, ms) -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.FIELD)) {
-				btns.put(Helper.getRegionalIndicator(2), (mb, ms) -> {
+				btns.put("\uD83C\uDDEB", (mb, ms) -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
@@ -136,7 +147,7 @@ public class SellCardCommand implements Executable {
 			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 			switch (type) {
 				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-				case EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+				case CHAMPION, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
 				case NONE -> chosen.complete(null);
 			}
 		}
@@ -175,6 +186,7 @@ public class SellCardCommand implements Executable {
 			}
 
 			String msg = switch (off.getMiddle()) {
+				case CHAMPION -> "Este campeão sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				case EVOGEAR -> "Este equipamento sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				case FIELD -> "Este campo sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
 				default -> "Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?";
