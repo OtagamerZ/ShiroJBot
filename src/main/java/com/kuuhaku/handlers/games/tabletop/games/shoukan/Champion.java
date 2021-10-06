@@ -812,15 +812,15 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
-	public Champion clone() {
+	public Champion copy() {
 		try {
 			Champion c = (Champion) super.clone();
-			c.linkedTo = linkedTo.stream().map(Equipment::clone).collect(Collectors.toList());
+			c.linkedTo = linkedTo.stream().map(Equipment::copy).collect(Collectors.toList());
 			c.bonus = bonus.clone();
 			if (fakeCard != null)
-				c.fakeCard = fakeCard.clone();
+				c.fakeCard = fakeCard.copy();
 			if (nemesis != null)
-				c.nemesis = nemesis.clone();
+				c.nemesis = nemesis.copy();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;

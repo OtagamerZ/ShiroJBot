@@ -231,7 +231,7 @@ public class Hand {
 		try {
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() >= 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
-			else cards.add(getDeque().removeFirst().clone());
+			else cards.add(getDeque().removeFirst().copy());
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -241,7 +241,7 @@ public class Hand {
 	public void destinyDraw() {
 		if (destinyDeck.size() > 0) {
 			Drawable dr = destinyDeck.remove(Helper.rng(destinyDeck.size(), true));
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
 		}
@@ -255,7 +255,7 @@ public class Hand {
 				dr = drawChampion();
 			else {
 				dr = getDeque().removeFirst();
-				cards.add(dr.clone());
+				cards.add(dr.copy());
 			}
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -268,7 +268,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -281,7 +281,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -293,7 +293,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -305,7 +305,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -316,7 +316,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -326,7 +326,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -338,7 +338,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -350,7 +350,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -362,7 +362,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -374,7 +374,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr.clone());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
