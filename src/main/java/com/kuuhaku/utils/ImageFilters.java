@@ -154,4 +154,22 @@ public class ImageFilters {
 
 		return out;
 	}
+
+	public static BufferedImage grayscale(BufferedImage in) {
+		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Helper.forEachPixel(source, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
+			int[] color = Helper.unpackRGB(rgb);
+
+			for (int i = 1; i < color.length; i++) {
+				color[i] = Helper.average(color[1], color[2], color[3]);
+			}
+
+			out.setRGB(x, y, color[0] << 24 | color[1] << 16 | color[2] << 8 | color[3]);
+		});
+
+		return out;
+	}
 }
