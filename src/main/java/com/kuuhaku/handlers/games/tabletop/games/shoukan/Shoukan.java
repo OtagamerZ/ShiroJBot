@@ -2943,6 +2943,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		effectLock = ss.effectLock();
 		reroll = ss.reroll();
 		moveLock = ss.moveLock();
+		phase = Phase.PLAN;
 
 		saveState();
 	}
