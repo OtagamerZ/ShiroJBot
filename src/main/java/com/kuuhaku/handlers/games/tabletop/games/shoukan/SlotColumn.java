@@ -23,6 +23,7 @@ public class SlotColumn implements Cloneable {
 	private Champion top = null;
 	private Equipment bottom = null;
 	private int unavailable = 0;
+	private boolean changed = false;
 
 	public SlotColumn(int index) {
 		this.index = index;
@@ -56,12 +57,20 @@ public class SlotColumn implements Cloneable {
 		return index;
 	}
 
+	public boolean isUnavailable() {
+		return unavailable > 0;
+	}
+
 	public void setUnavailable(int time) {
 		this.unavailable = Math.max(0, this.unavailable + time);
 	}
 
-	public boolean isUnavailable() {
-		return unavailable > 0;
+	public boolean isChanged() {
+		return changed;
+	}
+
+	public void setChanged(boolean changed) {
+		this.changed = changed;
 	}
 
 	public SlotColumn copy() {

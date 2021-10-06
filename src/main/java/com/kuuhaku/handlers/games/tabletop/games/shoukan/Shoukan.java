@@ -90,7 +90,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	};
 	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
-	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean team;
 	private final boolean record;
 	private final Map<Side, EnumSet<Achievement>> achievements = new HashMap<>();
@@ -99,6 +98,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Side.BOTTOM, new HashMap<>()
 	);
 	private final Set<PersistentEffect> persistentEffects = new HashSet<>();
+	private final List<Drawable> discardBatch = new ArrayList<>();
 	private final TournamentMatch tourMatch;
 
 	private Phase phase = Phase.PLAN;
@@ -106,7 +106,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private int fusionLock = 0;
 	private int spellLock = 0;
 	private int effectLock = 0;
-	private final List<Drawable> discardBatch = new ArrayList<>();
 	private boolean reroll = true;
 	private boolean moveLock = false;
 
@@ -284,7 +283,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (c == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
-					} else if (changed[index]) {
+					} else if (isSlotChanged(getCurrentSide(), index)) {
 						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
 						return;
 					} else if (c.isStasis()) {
@@ -314,7 +313,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						msg = "Carta trocada para modo de defesa.";
 					}
 
-					changed[index] = true;
+					setSlotChanged(getCurrentSide(), index, true);
 					reportEvent(h, msg, true, false);
 					return;
 				}
@@ -823,8 +822,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.showHand();
 					}
 
-					if (changeTurn)
-						for (int i = 0; i < 5; i++) changed[i] = false;
+					if (changeTurn) {
+						for (int i = 0; i < 5; i++) {
+							setSlotChanged(h.getSide(), i, true);
+						}
+					}
 				});
 
 		if (record) {
@@ -2504,6 +2506,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 		arena.getSlots().get(side).get(slot).setUnavailable(time);
 	}
 
+	public boolean isSlotChanged(Side side, int slot) {
+		return arena.getSlots().get(side).get(slot).isChanged();
+	}
+
+	public void setSlotChanged(Side side, int slot, boolean changed) {
+		arena.getSlots().get(side).get(slot).setChanged(changed);
+	}
+
 	public List<Drawable> getDiscardBatch() {
 		return discardBatch;
 	}
@@ -2877,7 +2887,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 		arenaState.banished().addAll(arena.getBanished().stream().map(Drawable::deepCopy).collect(Collectors.toList()));
 
-		initialState = new ShoukanState(arenaState, handStates, persistentEffects.stream().map(PersistentEffect::copy).collect(Collectors.toSet()));
+		initialState = new ShoukanState(
+				arenaState,
+				handStates,
+				persistentEffects.stream().map(PersistentEffect::copy).collect(Collectors.toSet()),
+				fusionLock,
+				spellLock,
+				effectLock,
+				reroll,
+				moveLock
+		);
 	}
 
 	public void revertState(ShoukanState ss) {
@@ -2904,6 +2923,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Helper.replaceContent(ss.arena().graveyard(), arena.getGraveyard());
 		Helper.replaceContent(ss.arena().banished(), arena.getBanished());
 		Helper.replaceContent(ss.persistentEffects(), persistentEffects);
+
+		discardBatch.clear();
+		fusionLock = ss.fusionLock();
+		spellLock = ss.spellLock();
+		effectLock = ss.effectLock();
+		reroll = ss.reroll();
+		moveLock = ss.moveLock();
 
 		saveState();
 	}
