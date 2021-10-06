@@ -37,6 +37,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "champion")
@@ -823,7 +824,14 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public Champion deepCopy() {
 		try {
-			return (Champion) clone();
+			Champion c = (Champion) clone();
+			c.linkedTo = linkedTo.stream().map(Equipment::deepCopy).collect(Collectors.toList());
+			c.bonus = bonus.copy();
+			if (fakeCard != null)
+				c.fakeCard = fakeCard.deepCopy();
+			if (nemesis != null)
+				c.nemesis = nemesis.deepCopy();
+			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}

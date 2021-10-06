@@ -100,6 +100,10 @@ public class PersistentEffect {
 		this.limit = limit;
 	}
 
+	public PersistentEffect copy() {
+		return new PersistentEffect(card, source, effect, target, debuff, turns, limit, triggers.toArray(EffectTrigger[]::new));
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
