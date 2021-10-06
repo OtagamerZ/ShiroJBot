@@ -34,7 +34,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.state.ShoukanState;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.DailyTask;
@@ -106,8 +105,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private int effectLock = 0;
 	private boolean reroll = true;
 	private boolean moveLock = false;
-
-	private ShoukanState initialState = null;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -230,8 +227,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.showHand();
 					}
 				});
-
-		saveState();
 	}
 
 	@Override
@@ -2844,10 +2839,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return reroll;
 	}
 
-	public ShoukanState getInitialState() {
-		return initialState;
-	}
-
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
@@ -2861,7 +2852,5 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
 		super.resetTimer(shkn);
-
-		saveState();
 	}
 }
