@@ -26,6 +26,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
@@ -183,6 +184,12 @@ public class StoreCardCommand implements Executable {
 										fDk.removeField(f);
 										assert f != null;
 										yield new Stash(author.getId(), f);
+									}
+									case SENSHI -> {
+										Champion c = fDk.getChampion(off.getLeft());
+										fDk.removeChampion(c);
+										assert c != null;
+										yield new Stash(author.getId(), c);
 									}
 									default -> {
 										KawaiponCard kc = finalKp.getCard(off.getLeft(), off.getRight());
