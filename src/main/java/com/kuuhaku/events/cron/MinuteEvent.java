@@ -21,17 +21,16 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BotStatsDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.TempRoleDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.persistent.MutedMember;
+import com.kuuhaku.model.persistent.TempRole;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PermissionOverride;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
@@ -98,6 +97,20 @@ public class MinuteEvent implements Job {
 				} catch (IllegalArgumentException | NullPointerException e) {
 					MemberDAO.removeMutedMember(m);
 				}
+			}
+		}
+
+		List<TempRole> tempRoles = TempRoleDAO.getExpiredRoles();
+		for (TempRole role : tempRoles) {
+			try {
+				Guild g = Main.getInfo().getGuildByID(role.getGid());
+				Role r = g.getRoleById(role.getRid());
+
+				if (r != null)
+					g.removeRoleFromMember(role.getUid(), r).queue();
+			} catch (Exception ignore) {
+			} finally {
+				TempRoleDAO.removeTempRole(role);
 			}
 		}
 	}
