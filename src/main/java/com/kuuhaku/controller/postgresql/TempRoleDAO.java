@@ -53,8 +53,8 @@ public class TempRoleDAO {
 	public static List<TempRole> getRolesByGuild(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT r FROM TempRole r WHERE gid = :gid", TempRole.class);
-		q.setParameter("gid", id);
+		Query q = em.createQuery("SELECT r FROM TempRole r WHERE sid = :sid", TempRole.class);
+		q.setParameter("sid", id);
 
 		try {
 			return q.getResultList();
@@ -81,9 +81,9 @@ public class TempRoleDAO {
 	public static List<TempRole> getRolesByGuildAndUser(String id, String guild) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT r FROM TempRole r WHERE uid = :uid AND gid = :gid", TempRole.class);
+		Query q = em.createQuery("SELECT r FROM TempRole r WHERE uid = :uid AND sid = :sid", TempRole.class);
 		q.setParameter("uid", id);
-		q.setParameter("gid", guild);
+		q.setParameter("sid", guild);
 
 		try {
 			return q.getResultList();
@@ -119,9 +119,9 @@ public class TempRoleDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.createQuery("DELETE FROM TempRole r WHERE uid = :uid AND gid = :gid AND rid = :rid")
+		em.createQuery("DELETE FROM TempRole r WHERE uid = :uid AND sid = :sid AND rid = :rid")
 				.setParameter("uid", tr.getUid())
-				.setParameter("gid", tr.getGid())
+				.setParameter("sid", tr.getSid())
 				.setParameter("rid", tr.getRid())
 				.executeUpdate();
 		em.getTransaction().commit();
