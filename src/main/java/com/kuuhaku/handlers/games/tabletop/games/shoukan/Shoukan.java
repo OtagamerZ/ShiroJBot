@@ -2051,6 +2051,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
 
 			reportEvent(h.get(), msg, false, true);
+			oldState = new GameState(this);
 		};
 
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
@@ -2273,6 +2274,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					draw = true;
 					reportEvent(h.get(), u.getName() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.", false, true);
+					oldState = new GameState(this);
 				}
 			});
 		if (getRound() > 8)
@@ -2806,7 +2808,5 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
 		super.resetTimer(shkn);
-
-		oldState = new GameState(this);
 	}
 }
