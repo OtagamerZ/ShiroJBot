@@ -38,7 +38,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "hero")
-public class Hero {
+public class Hero implements Cloneable {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
@@ -128,6 +128,10 @@ public class Hero {
 
 	public void addXp(int xp) {
 		this.xp += xp;
+	}
+
+	public void setXp(int xp) {
+		this.xp = xp;
 	}
 
 	public int getXpToNext() {
@@ -260,6 +264,17 @@ public class Hero {
 		c.setHero(this);
 
 		return c;
+	}
+
+	@Override
+	public Hero clone() {
+		try {
+			Hero h = (Hero) super.clone();
+			h.stats = new Attributes(stats.getStats());
+			return h;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError();
+		}
 	}
 
 	@Override
