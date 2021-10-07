@@ -2172,8 +2172,13 @@ public class Helper {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 		wmb.setUsername("Stephanie (Notificações Shiro)");
 
-		int v = 1; //1 = Normal | 2 = Halloween
-		wmb.setAvatarUrl(ShiroInfo.STEPHANIE_AVATAR.formatted(v)); //Normal
+		int v;
+		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER)
+			v = 2;
+		else
+			v = 1;
+
+		wmb.setAvatarUrl(ShiroInfo.STEPHANIE_AVATAR.formatted(v));
 		wmb.setContent(message);
 		WebhookCluster cluster = new WebhookCluster(clients);
 		cluster.broadcast(wmb.build());
