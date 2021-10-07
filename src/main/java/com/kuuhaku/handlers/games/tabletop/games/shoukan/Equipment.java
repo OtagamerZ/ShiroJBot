@@ -432,7 +432,7 @@ public class Equipment implements Drawable, Cloneable {
 			Equipment e = (Equipment) super.clone();
 			e.bonus = bonus.clone();
 			if (linkedTo != null)
-				e.linkedTo = Pair.of(linkedTo.getLeft(), linkedTo.getRight().copy());
+				e.linkedTo = Pair.of(linkedTo.getLeft(), linkedTo.getRight());
 			return e;
 		} catch (CloneNotSupportedException e) {
 			return null;
