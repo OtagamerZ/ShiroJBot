@@ -31,12 +31,13 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuilds() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		List<GuildConfig> gcs = gc.getResultList();
+		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 
-		em.close();
-
-		return gcs;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	public static GuildConfig getGuildById(String id) {
@@ -85,59 +86,64 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithPaidRoles() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.paidRoles) > 0", GuildConfig.class);
-		List<GuildConfig> gcs = gc.getResultList();
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.paidRoles) > 0", GuildConfig.class);
 
-		em.close();
-
-		return gcs;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithVoiceRoles() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.voiceRoles) > 0", GuildConfig.class);
-		List<GuildConfig> gcs = gc.getResultList();
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.voiceRoles) > 0", GuildConfig.class);
 
-		em.close();
-
-		return gcs;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithButtons() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.buttonConfigs) > 0", GuildConfig.class);
-		List<GuildConfig> gcs = gc.getResultList();
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(g.buttonConfigs) > 0", GuildConfig.class);
 
-		em.close();
-
-		return gcs;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithGeneralChannel() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE g.generalChannel <> ''", GuildConfig.class);
-		List<GuildConfig> gcs = gc.getResultList();
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE g.generalChannel <> ''", GuildConfig.class);
 
-		em.close();
-
-		return gcs;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAlertChannels() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE g.alertChannel <> ''", GuildConfig.class);
-		List<GuildConfig> gcs = gc.getResultList();
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE g.alertChannel <> ''", GuildConfig.class);
 
-		em.close();
-
-		return gcs;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 }
