@@ -400,6 +400,10 @@ public class Equipment implements Drawable, Cloneable {
 		}
 	}
 
+	public boolean canGoToGrave() {
+		return !parasite && !effectOnly;
+	}
+
 	@Override
 	public void reset() {
 		flipped = false;
