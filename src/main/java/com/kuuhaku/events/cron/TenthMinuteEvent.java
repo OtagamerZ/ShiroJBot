@@ -21,10 +21,8 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.postgresql.TempRoleDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.TempRole;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
@@ -177,20 +175,6 @@ public class TenthMinuteEvent implements Job {
 				RestAction.allOf(acts)
 						.mapToResult()
 						.queue();
-			}
-		}
-
-		List<TempRole> tempRoles = TempRoleDAO.getExpiredRoles();
-		for (TempRole role : tempRoles) {
-			try {
-				Guild g = Main.getInfo().getGuildByID(role.getGid());
-				Role r = g.getRoleById(role.getRid());
-
-				if (r != null)
-					g.removeRoleFromMember(role.getUid(), r).queue();
-			} catch (Exception ignore) {
-			} finally {
-				TempRoleDAO.removeTempRole(role);
 			}
 		}
 
