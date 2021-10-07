@@ -35,7 +35,7 @@ public class TempRole {
 
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String gid;
+	private String sid;
 
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
@@ -49,7 +49,7 @@ public class TempRole {
 
 	public TempRole(Member mb, Role role, ZonedDateTime until) {
 		this.uid = mb.getId();
-		this.gid = mb.getGuild().getId();
+		this.sid = mb.getGuild().getId();
 		this.rid = role.getId();
 		this.until = until;
 	}
@@ -58,8 +58,8 @@ public class TempRole {
 		return uid;
 	}
 
-	public String getGid() {
-		return gid;
+	public String getSid() {
+		return sid;
 	}
 
 	public String getRid() {

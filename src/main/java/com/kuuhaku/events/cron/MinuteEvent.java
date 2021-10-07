@@ -103,7 +103,7 @@ public class MinuteEvent implements Job {
 		List<TempRole> tempRoles = TempRoleDAO.getExpiredRoles();
 		for (TempRole role : tempRoles) {
 			try {
-				Guild g = Main.getInfo().getGuildByID(role.getGid());
+				Guild g = Main.getInfo().getGuildByID(role.getSid());
 				Role r = g.getRoleById(role.getRid());
 
 				if (r != null)
