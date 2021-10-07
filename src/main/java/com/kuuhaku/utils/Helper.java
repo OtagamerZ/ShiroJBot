@@ -2314,10 +2314,21 @@ public class Helper {
 	}
 
 	public static String replaceTags(String text, User author, Guild guild) {
-		return text.replace("%user%", author.getName())
-				.replace("%guild%", guild.getName())
-				.replace("%count%", String.valueOf(guild.getMemberCount()))
-				.replace("%created%", TIMESTAMP.formatted(author.getTimeCreated().toEpochSecond()));
+		Map<String, String> reps = new HashMap<>() {{
+			put("%user%", author.getAsMention());
+			put("%user.id%", author.getId());
+			put("%user.name%", author.getName());
+			put("%user.created%", TIMESTAMP.formatted(author.getTimeCreated().toEpochSecond()));
+
+			put("%guild%", guild.getName());
+			put("%guild.count%", String.valueOf(guild.getMemberCount()));
+		}};
+
+		for (Map.Entry<String, String> rep : reps.entrySet()) {
+			text = text.replace(rep.getKey(), rep.getValue());
+		}
+
+		return text;
 	}
 
 	public static boolean isPureMention(String msg) {
