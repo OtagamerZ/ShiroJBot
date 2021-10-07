@@ -424,10 +424,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.removeMana(e.getMana());
 						h.removeHp(e.getBlood());
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
-						if (e.getTier() >= 4)
-							arena.getBanished().add(e);
-						else
-							arena.getGraveyard().get(getCurrentSide()).add(e);
+						if (e.canGoToGrave()) {
+							if (e.getTier() >= 4)
+								arena.getBanished().add(e);
+							else
+								arena.getGraveyard().get(getCurrentSide()).add(e);
+						}
 
 						if (makeFusion(h)) return;
 
@@ -1588,11 +1590,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 		sd.setBottom(null);
 
 		eq.reset();
-		if (!eq.isParasite() || eq.isEffectOnly())
+		if (eq.canGoToGrave()) {
 			if (eq.getTier() >= 4)
 				arena.getBanished().add(eq);
 			else
 				arena.getGraveyard().get(s).add(eq);
+		}
 	}
 
 	public Arena getArena() {
@@ -1980,7 +1983,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						discardBatch.stream()
 								.filter(d -> {
 									if (d instanceof Champion c) return c.canGoToGrave();
-									else if (d instanceof Equipment e) return !e.isEffectOnly();
+									else if (d instanceof Equipment e) return e.canGoToGrave();
 									else return true;
 								})
 								.collect(Collectors.toList())
