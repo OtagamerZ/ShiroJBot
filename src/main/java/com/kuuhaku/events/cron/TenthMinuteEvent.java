@@ -21,8 +21,10 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
+import com.kuuhaku.controller.postgresql.TempRoleDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.TempRole;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
@@ -130,52 +132,66 @@ public class TenthMinuteEvent implements Job {
 
 		guilds = GuildDAO.getAllGuildsWithVoiceRoles();
 		for (GuildConfig gc : guilds) {
-            Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
-            if (guild == null) continue;
+			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
+			if (guild == null) continue;
 
-            List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
+			List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
 
-            for (VoiceTime vt : vts) {
-                Set<VoiceRole> vroles = gc.getVoiceRoles().stream()
-                        .filter(vr -> vr.getTime() <= vt.getTime())
-                        .collect(Collectors.toSet());
+			for (VoiceTime vt : vts) {
+				Set<VoiceRole> vroles = gc.getVoiceRoles().stream()
+						.filter(vr -> vr.getTime() <= vt.getTime())
+						.collect(Collectors.toSet());
 
-                if (vroles.isEmpty()) continue;
+				if (vroles.isEmpty()) continue;
 
-                VoiceRole max = vroles.stream().max(Comparator.comparingLong(VoiceRole::getTime)).orElse(null);
+				VoiceRole max = vroles.stream().max(Comparator.comparingLong(VoiceRole::getTime)).orElse(null);
 
-                Member m = guild.getMemberById(vt.getUid());
-                if (m == null) continue;
+				Member m = guild.getMemberById(vt.getUid());
+				if (m == null) continue;
 
-                List<RestAction<?>> acts = new ArrayList<>();
-                for (VoiceRole vrole : vroles) {
-                    Role r = guild.getRoleById(vrole.getId());
-                    if (r == null) continue;
+				List<RestAction<?>> acts = new ArrayList<>();
+				for (VoiceRole vrole : vroles) {
+					Role r = guild.getRoleById(vrole.getId());
+					if (r == null) continue;
 
-                    if (vrole.equals(max)) {
-                        if (!m.getRoles().contains(r))
-                            try {
-                                TextChannel tc = gc.getLevelChannel();
-                                acts.add(guild.addRoleToMember(m, r).flatMap(
-                                        p -> gc.isLevelNotif() && tc != null,
-                                        v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vrole.getTime()) + " em call! :tada:")
-                                ));
-                            } catch (HierarchyException | InsufficientPermissionException ignore) {
-                            }
-                    } else {
-                        if (m.getRoles().contains(r))
-                            try {
-                                acts.add(guild.removeRoleFromMember(m, r));
-                            } catch (HierarchyException | InsufficientPermissionException ignore) {
-                            }
-                    }
-                }
+					if (vrole.equals(max)) {
+						if (!m.getRoles().contains(r))
+							try {
+								TextChannel tc = gc.getLevelChannel();
+								acts.add(guild.addRoleToMember(m, r).flatMap(
+										p -> gc.isLevelNotif() && tc != null,
+										v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vrole.getTime()) + " em call! :tada:")
+								));
+							} catch (HierarchyException | InsufficientPermissionException ignore) {
+							}
+					} else {
+						if (m.getRoles().contains(r))
+							try {
+								acts.add(guild.removeRoleFromMember(m, r));
+							} catch (HierarchyException | InsufficientPermissionException ignore) {
+							}
+					}
+				}
 
-                if (acts.isEmpty()) continue;
-                RestAction.allOf(acts)
-                        .mapToResult()
-                        .queue();
-            }
+				if (acts.isEmpty()) continue;
+				RestAction.allOf(acts)
+						.mapToResult()
+						.queue();
+			}
+		}
+
+		List<TempRole> tempRoles = TempRoleDAO.getExpiredRoles();
+		for (TempRole role : tempRoles) {
+			try {
+				Guild g = Main.getInfo().getGuildByID(role.getGid());
+				Role r = g.getRoleById(role.getRid());
+
+				if (r != null)
+					g.removeRoleFromMember(role.getUid(), r).queue();
+			} catch (Exception ignore) {
+			} finally {
+				TempRoleDAO.removeTempRole(role);
+			}
 		}
 
 		File[] temp = Main.getInfo().getTemporaryFolder().listFiles();
