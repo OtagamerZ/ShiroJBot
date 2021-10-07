@@ -1312,8 +1312,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
 			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana <= targetMana)
-				chance -= Math.max(targetMana * 25d / sourceMana, 25);
+			if (sourceMana < targetMana)
+				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
@@ -1445,8 +1445,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
 			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana <= targetMana)
-				chance -= Math.max(targetMana * 25d / sourceMana, 25);
+			if (sourceMana < targetMana)
+				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
@@ -1637,8 +1637,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
 			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana <= targetMana)
-				chance -= Math.max(targetMana * 25d / sourceMana, 25);
+			if (sourceMana < targetMana)
+				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
@@ -1740,8 +1740,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
 
 			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana <= targetMana)
-				chance -= Math.max(targetMana * 25d / sourceMana, 25);
+			if (sourceMana < targetMana)
+				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
