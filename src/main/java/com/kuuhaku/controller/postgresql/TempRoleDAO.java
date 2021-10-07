@@ -23,6 +23,8 @@ import com.kuuhaku.model.persistent.id.CompositeRoleId;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class TempRoleDAO {
@@ -96,7 +98,8 @@ public class TempRoleDAO {
 	public static List<TempRole> getExpiredRoles() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT r FROM TempRole r WHERE until <= CURRENT_TIMESTAMP");
+		Query q = em.createQuery("SELECT r FROM TempRole r WHERE until <= :today", TempRole.class);
+		q.setParameter("today", ZonedDateTime.now(ZoneId.of("GMT-3")));
 
 		try {
 			return q.getResultList();
