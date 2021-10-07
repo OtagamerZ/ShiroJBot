@@ -159,7 +159,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (d == null) continue;
 
 				for (Hand h : hands.values())
-					h.getCards().add(d);
+					h.getCards().add(d.copy());
 			}
 		}
 
@@ -442,10 +442,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 							case NONE -> h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".";
 							case ALLY -> {
 								assert allyPos != null;
-								if (allyPos.getLeft().isFlipped()) {
-									allyPos.getLeft().setFlipped(false);
-									allyPos.getLeft().setDefending(true);
-								}
 
 								yield "%s usou o feitiço %s em %s.".formatted(
 										h.getUser().getName(),
@@ -455,10 +451,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 							}
 							case ENEMY -> {
 								assert enemyPos != null;
-								if (enemyPos.getLeft().isFlipped()) {
-									enemyPos.getLeft().setFlipped(false);
-									enemyPos.getLeft().setDefending(true);
-								}
 
 								yield "%s usou o feitiço %s em %s.".formatted(
 										h.getUser().getName(),
@@ -468,14 +460,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 							}
 							case BOTH -> {
 								assert allyPos != null && enemyPos != null;
-								if (allyPos.getLeft().isFlipped()) {
-									allyPos.getLeft().setFlipped(false);
-									allyPos.getLeft().setDefending(true);
-								}
-								if (enemyPos.getLeft().isFlipped()) {
-									enemyPos.getLeft().setFlipped(false);
-									enemyPos.getLeft().setDefending(true);
-								}
 
 								yield "%s usou o feitiço %s em %s e %s.".formatted(
 										h.getUser().getName(),
