@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Attributes;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.id.CompositeHeroId;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
@@ -38,7 +39,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "hero")
+@IdClass(CompositeHeroId.class)
 public class Hero implements Cloneable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
@@ -69,6 +75,9 @@ public class Hero implements Cloneable {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean returned = false;
+
 	private transient int hp = -1;
 
 	public Hero() {
@@ -80,6 +89,10 @@ public class Hero implements Cloneable {
 		this.stats = new Attributes(race.getStartingStats());
 		this.race = race;
 		this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getUid() {
@@ -254,6 +267,14 @@ public class Hero implements Cloneable {
 		c.setHero(this);
 
 		return c;
+	}
+
+	public boolean isReturned() {
+		return returned;
+	}
+
+	public void setReturned(boolean returned) {
+		this.returned = returned;
 	}
 
 	@Override

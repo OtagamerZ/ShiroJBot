@@ -1047,8 +1047,12 @@ public class CardDAO {
 	public static Hero getHero(String id) {
 		EntityManager em = Manager.getEntityManager();
 
+		Query q = em.createQuery("SELECT h FROM Hero h WHERE uid = :uid ORDER BY id DESC", Hero.class);
+		q.setMaxResults(1);
+		q.setParameter("uid", id);
+
 		try {
-			return em.find(Hero.class, id);
+			return (Hero) q.getSingleResult();
 		} finally {
 			em.close();
 		}
@@ -1059,6 +1063,20 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT h FROM Hero h", Hero.class);
+
+		try {
+			return (List<Hero>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Hero> getHeroes(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT h FROM Hero h WHERE uid = :uid", Hero.class);
+		q.setParameter("uid", id);
 
 		try {
 			return (List<Hero>) q.getResultList();
