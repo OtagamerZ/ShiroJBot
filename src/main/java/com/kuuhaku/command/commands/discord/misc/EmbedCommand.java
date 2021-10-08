@@ -26,11 +26,16 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.PrivilegeLevel;
+import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +61,20 @@ public class EmbedCommand implements Executable {
 			}
 
 			try {
-				AutoEmbedBuilder eb = new AutoEmbedBuilder(argsAsText);
+				AutoEmbedBuilder eb = null;
+				if (message.getAttachments().size() > 0) {
+					Message.Attachment att = message.getAttachments().get(0);
+					if (Helper.getOr(att.getFileExtension(), "").equals("txt") && StorageUnit.MB.convert(att.getSize(), StorageUnit.B) <= 2) {
+						try (InputStream is = att.retrieveInputStream().get()) {
+							eb = new AutoEmbedBuilder(IOUtils.toString(is, StandardCharsets.UTF_8));
+						}
+					} else {
+						m.editMessage("❌ | O arquivo deve set do tipo `.txt` e ser menor que 2MB.").queue();
+						return;
+					}
+				}
+
+				if (eb == null) eb = new AutoEmbedBuilder(argsAsText);
 
 				if (Helper.hasPermission(member, PrivilegeLevel.MOD))
 					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
@@ -81,8 +99,8 @@ public class EmbedCommand implements Executable {
 							);
 				else
 					channel.sendMessageEmbeds(eb.build()).flatMap(s -> m.delete()).queue();
-			} catch (IllegalStateException ex) {
-				m.editMessage("❌ | JSON em formato inválido, um exemplo da estrutura do embed pode ser encontrado em https://api.shirojbot.site/embedjson").queue();
+			} catch (IOException | IllegalStateException ex) {
+				m.editMessage("❌ | JSON em formato inválido, você pode usar minha ferramenta oficial para criar seus embeds em https://shirojbot.site/EmbedBuilder").queue();
 			} catch (Exception e) {
 				m.editMessage("❌ | Erro ao construir embed, talvez você não tenha passado nenhum argumento.").queue();
 			}
