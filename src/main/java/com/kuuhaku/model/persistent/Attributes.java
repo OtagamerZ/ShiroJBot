@@ -18,9 +18,11 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.Embeddable;
+import java.util.Set;
 
 @Embeddable
 public class Attributes {
@@ -102,8 +104,18 @@ public class Attributes {
 		this.con += 1;
 	}
 
-	public int calcMaxHp() {
-		return (int) Helper.roundTrunc(1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str + -0.015 * str)), 5);
+	public int calcMaxHp(Set<Perk> perks) {
+		double hpModif = 1;
+		for (Perk perk : perks) {
+			hpModif *= switch (perk) {
+				case VANGUARD -> 1.33;
+				case NIMBLE -> 0.75;
+				case MASOCHIST -> 0.5;
+				default -> 1;
+			};
+		}
+
+		return (int) Helper.roundTrunc(1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str + -0.015 * str)) * hpModif, 5);
 	}
 
 	public int calcMp() {
