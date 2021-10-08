@@ -64,12 +64,12 @@ public class EmbedCommand implements Executable {
 				AutoEmbedBuilder eb = null;
 				if (message.getAttachments().size() > 0) {
 					Message.Attachment att = message.getAttachments().get(0);
-					if (Helper.getOr(att.getFileExtension(), "").equals("txt") && StorageUnit.MB.convert(att.getSize(), StorageUnit.B) <= 2) {
+					if (Helper.getOr(att.getFileExtension(), "").equals("txt") && StorageUnit.KB.convert(att.getSize(), StorageUnit.B) <= 16) {
 						try (InputStream is = att.retrieveInputStream().get()) {
 							eb = new AutoEmbedBuilder(IOUtils.toString(is, StandardCharsets.UTF_8));
 						}
 					} else {
-						m.editMessage("❌ | O arquivo deve set do tipo `.txt` e ser menor que 2MB.").queue();
+						m.editMessage("❌ | O arquivo deve set do tipo `.txt` e ser menor que 16KB.").queue();
 						return;
 					}
 				}
