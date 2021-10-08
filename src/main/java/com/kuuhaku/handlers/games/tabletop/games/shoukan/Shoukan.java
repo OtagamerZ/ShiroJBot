@@ -65,7 +65,6 @@ import java.net.URISyntaxException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -96,7 +95,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Side.TOP, new HashMap<>(),
 			Side.BOTTOM, new HashMap<>()
 	);
-	private final Set<PersistentEffect> persistentEffects = new CopyOnWriteArraySet<>();
+	private final Set<PersistentEffect> persistentEffects = new HashSet<>();
 	private final List<Drawable> discardBatch = new ArrayList<>();
 	private final TournamentMatch tourMatch;
 
@@ -2466,27 +2465,29 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
-		if (persistentEffects.size() > 0) {
-			Iterator<PersistentEffect> i = persistentEffects.iterator();
-			while (i.hasNext()) {
-				PersistentEffect e = i.next();
-				if (e.getTarget() == null || e.getTarget() == to) {
-					if (trigger == AFTER_TURN && e.getTurns() > 0) {
-						e.decreaseTurn();
+		synchronized (this) {
+			if (persistentEffects.size() > 0) {
+				Iterator<PersistentEffect> i = persistentEffects.iterator();
+				while (i.hasNext()) {
+					PersistentEffect e = i.next();
+					if (e.getTarget() == null || e.getTarget() == to) {
+						if (trigger == AFTER_TURN && e.getTurns() > 0) {
+							e.decreaseTurn();
+						}
+
+						if (e.getTriggers().contains(trigger)) {
+							e.activate(to, index);
+						}
 					}
 
-					if (e.getTriggers().contains(trigger)) {
-						e.activate(to, index);
+					if (e.getTurns() == 0 || e.getLimit() == 0) {
+						channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
+						i.remove();
 					}
 				}
 
-				if (e.getTurns() == 0 || e.getLimit() == 0) {
-					channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
-					i.remove();
-				}
+				return postCombat();
 			}
-
-			return postCombat();
 		}
 
 		return false;
