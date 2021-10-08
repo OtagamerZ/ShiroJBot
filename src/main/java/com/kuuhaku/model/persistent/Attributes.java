@@ -110,12 +110,11 @@ public class Attributes {
 			hpModif *= switch (perk) {
 				case VANGUARD -> 1.33;
 				case NIMBLE -> 0.75;
-				case MASOCHIST -> 0.5;
 				default -> 1;
 			};
 		}
 
-		return (int) Helper.roundTrunc(1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str + -0.015 * str)) * hpModif, 5);
+		return (int) Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.05 * con + -0.01 * str + -0.015 * str))) * hpModif, 5);
 	}
 
 	public int calcMp() {
