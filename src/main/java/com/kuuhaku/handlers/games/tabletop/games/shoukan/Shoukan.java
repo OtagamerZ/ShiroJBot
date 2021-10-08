@@ -2466,8 +2466,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
 		if (persistentEffects.size() > 0) {
-			Set<PersistentEffect> efs = persistentEffects.stream()
-					.map(PersistentEffect::clone)
+			Set<PersistentEffect> efs = Set.copyOf(persistentEffects).stream()
 					.peek(e -> {
 						if (e.getTarget() == null || e.getTarget() == to) {
 							if (trigger == AFTER_TURN && e.getTurns() > (e.getTriggers().contains(BEFORE_TURN) ? -1 : 0)) {
