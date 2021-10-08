@@ -59,7 +59,7 @@ public class MyHeroCommand implements Executable {
 
 		List<String> perks = h.getPerks().stream().map(Perk::toString).collect(Collectors.toList());
 		for (int i = 0; i < h.getAvailablePerks(); i++) {
-			perks.add("Perk disponível");
+			perks.add("`Perk disponível`");
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
