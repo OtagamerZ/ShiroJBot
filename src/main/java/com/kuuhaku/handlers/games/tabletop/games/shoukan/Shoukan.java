@@ -65,6 +65,7 @@ import java.net.URISyntaxException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -95,7 +96,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Side.TOP, new HashMap<>(),
 			Side.BOTTOM, new HashMap<>()
 	);
-	private final Set<PersistentEffect> persistentEffects = new HashSet<>();
+	private final Set<PersistentEffect> persistentEffects = new CopyOnWriteArraySet<>();
 	private final List<Drawable> discardBatch = new ArrayList<>();
 	private final TournamentMatch tourMatch;
 
