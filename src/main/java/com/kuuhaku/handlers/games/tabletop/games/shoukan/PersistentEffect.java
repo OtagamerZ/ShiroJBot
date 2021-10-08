@@ -100,6 +100,10 @@ public class PersistentEffect implements Cloneable {
 		this.limit = limit;
 	}
 
+	public boolean isExpired() {
+		return limit <= 0 || turns <= (triggers.contains(EffectTrigger.BEFORE_TURN) ? -1 : 0);
+	}
+
 	@Override
 	public PersistentEffect clone() {
 		return new PersistentEffect(card.copy(), source, effect, target, debuff, turns, limit, triggers.toArray(EffectTrigger[]::new));
