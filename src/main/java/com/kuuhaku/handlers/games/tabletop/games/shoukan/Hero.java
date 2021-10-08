@@ -175,6 +175,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getDmg() {
+		if (dmg > stats.calcMaxHp()) dmg = stats.calcMaxHp();
 		return dmg;
 	}
 

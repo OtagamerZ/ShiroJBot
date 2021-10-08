@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Command(
@@ -56,6 +57,11 @@ public class MyHeroCommand implements Executable {
 			return;
 		}
 
+		List<String> perks = h.getPerks().stream().map(Perk::toString).collect(Collectors.toList());
+		for (int i = 0; i < h.getAvailablePerks(); i++) {
+			perks.add("Perk disponível");
+		}
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
@@ -65,7 +71,7 @@ public class MyHeroCommand implements Executable {
 						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
 						h.getHp(),
 						h.getStats().calcMaxHp(),
-						h.getDmg() > 0 ? " (recuperação total em " + (int) Math.ceil(h.getDmg() * 10f / h.getStats().calcMaxHp()) + " dias)" : ""
+						h.getDmg() > 0 ? "\n`recuperação total em " + (int) Math.ceil(h.getDmg() * 10f / h.getStats().calcMaxHp()) + " dias`" : ""
 				), true)
 				.addField(":bar_chart: | Stats:", """
 								STR: %s
@@ -76,7 +82,7 @@ public class MyHeroCommand implements Executable {
 								"""
 								.formatted((Object[]) h.getStats().getStats())
 						, true)
-				.addField(":books: | Perks:", h.getPerks().stream().map(Perk::toString).collect(Collectors.joining("\n")), true)
+				.addField(":books: | Perks:", String.join("\n", perks), true)
 				.setImage("attachment://hero.png");
 
 		channel.sendMessageEmbeds(eb.build())
