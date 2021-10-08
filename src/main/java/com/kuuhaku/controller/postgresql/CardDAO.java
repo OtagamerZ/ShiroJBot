@@ -1047,7 +1047,7 @@ public class CardDAO {
 	public static Hero getHero(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT h FROM Hero h WHERE uid = :uid AND NOT returned ORDER BY id DESC", Hero.class);
+		Query q = em.createQuery("SELECT h FROM Hero h WHERE uid = :uid AND returned = FALSE ORDER BY id DESC", Hero.class);
 		q.setMaxResults(1);
 		q.setParameter("uid", id);
 
