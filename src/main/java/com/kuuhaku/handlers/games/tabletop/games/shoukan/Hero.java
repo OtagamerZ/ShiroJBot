@@ -42,7 +42,7 @@ import java.util.Set;
 @IdClass(CompositeHeroId.class)
 public class Hero implements Cloneable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int id;
 
 	@Id
@@ -84,6 +84,7 @@ public class Hero implements Cloneable {
 	}
 
 	public Hero(User user, String name, Race race, BufferedImage image) {
+		this.id = CardDAO.getHeroes(user.getId()).size() + 1;
 		this.uid = user.getId();
 		this.name = name;
 		this.stats = new Attributes(race.getStartingStats());
