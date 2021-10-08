@@ -24,7 +24,7 @@ public enum Perk {
 	CARELESS("Descuidado", "Aumenta ataque em 25% mas reduz defesa em 33%."),
 	NIMBLE("Ágil", "Aumenta esquiva em 25% mas reduz HP em 25%."),
 	MANALESS("Sem mana", "Remove custo de MP, mas reduz ataque e defesa em 50%."),
-	MASOCHIST("Masoquista", "Aumenta seu ataque e reduz a defesa com base no dano sofrido acumulado (2% HP perdido = 1% ATK/-1% DEF).");
+	MASOCHIST("Masoquista", "Aumenta o ataque e reduz a defesa com base no dano acumulado (2% HP perdido = +1% ATK/-1% DEF).");
 
 	private final String name;
 	private final String description;
