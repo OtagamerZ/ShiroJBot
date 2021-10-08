@@ -2653,7 +2653,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
 						AccountDAO.saveAccount(acc);
 
-						if (h.getHero() != null) {
+						if (h.getHero() != null && tourMatch == null) {
 							h.getHero().setDmg();
 							CardDAO.saveHero(h.getHero());
 						}
@@ -2674,7 +2674,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
 					AccountDAO.saveAccount(acc);
 
-					if (h.getHero() != null) {
+					if (h.getHero() != null && tourMatch == null) {
 						h.getHero().setDmg();
 						CardDAO.saveHero(h.getHero());
 					}
