@@ -1053,6 +1053,8 @@ public class CardDAO {
 
 		try {
 			return (Hero) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
 		} finally {
 			em.close();
 		}
