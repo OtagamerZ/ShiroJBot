@@ -119,10 +119,10 @@ public class SummonHeroCommand implements Executable {
 		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?")
 				.setEmbeds(eb.build())
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							CardDAO.saveHero(new Hero(author, name, r, image));
+
 							acc.removeGem(5);
 							AccountDAO.saveAccount(acc);
-
-							CardDAO.saveHero(new Hero(author, name, r, image));
 
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
