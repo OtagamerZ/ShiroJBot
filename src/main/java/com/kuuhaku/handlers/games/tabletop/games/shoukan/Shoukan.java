@@ -2482,7 +2482,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 							channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
 						}
 					})
-					.filter(e -> e.getTurns() > 0 && e.getLimit() > 0)
+					.filter(e ->
+							(e.getTurns() > 0 || (e.getTriggers().contains(BEFORE_TURN) && e.getTurns() > -1))
+							&& e.getLimit() > 0
+					)
 					.collect(Collectors.toSet());
 
 			Helper.replaceContent(efs, persistentEffects);
