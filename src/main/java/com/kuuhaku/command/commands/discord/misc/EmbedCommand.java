@@ -76,13 +76,14 @@ public class EmbedCommand implements Executable {
 
 				if (eb == null) eb = new AutoEmbedBuilder(argsAsText);
 
-				if (Helper.hasPermission(member, PrivilegeLevel.MOD))
+				if (Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+					AutoEmbedBuilder finalEb = eb;
 					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
 							.setEmbeds(eb.build())
 							.queue(s ->
 									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-												gc.setEmbedTemplate(eb.getEmbed());
+												gc.setEmbedTemplate(finalEb.getEmbed());
 												GuildDAO.updateGuildSettings(gc);
 
 												channel.sendMessage("✅ | Embed de servidor definido com sucesso!")
@@ -91,12 +92,13 @@ public class EmbedCommand implements Executable {
 														.queue();
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
-											, ms -> channel.sendMessageEmbeds(eb.build())
+											, ms -> channel.sendMessageEmbeds(finalEb.build())
 													.flatMap(r -> m.delete())
 													.flatMap(r -> ms.delete())
 													.queue()
 									), Helper::doNothing
 							);
+				}
 				else
 					channel.sendMessageEmbeds(eb.build()).flatMap(s -> m.delete()).queue();
 			} catch (IOException | IllegalStateException ex) {
