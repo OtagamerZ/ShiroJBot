@@ -236,6 +236,7 @@ public class Hero implements Cloneable {
 				case VANGUARD -> 1.15;
 				case CARELESS -> 0.66;
 				case MANALESS -> 0.5;
+				case MASOCHIST -> 1 - Math.min(Helper.prcnt(getDmg(), stats.calcMaxHp(perks)) / 2, 0.5);
 				default -> 1;
 			};
 		}
