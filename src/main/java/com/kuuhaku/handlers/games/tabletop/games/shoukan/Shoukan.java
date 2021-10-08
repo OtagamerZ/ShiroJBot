@@ -2469,7 +2469,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Set<PersistentEffect> efs = persistentEffects.stream()
 					.peek(e -> {
 						if (e.getTarget() == null || e.getTarget() == to) {
-							if (trigger == AFTER_TURN) {
+							if (trigger == AFTER_TURN && e.getTurns() > (e.getTriggers().contains(BEFORE_TURN) ? -1 : 0)) {
 								e.decreaseTurn();
 							}
 

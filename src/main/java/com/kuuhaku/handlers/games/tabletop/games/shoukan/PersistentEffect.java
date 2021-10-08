@@ -101,7 +101,7 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public boolean isExpired() {
-		return limit <= 0 || turns <= (triggers.contains(EffectTrigger.BEFORE_TURN) ? -1 : 0);
+		return limit == 0 || turns == (triggers.contains(EffectTrigger.BEFORE_TURN) ? -1 : 0);
 	}
 
 	@Override
