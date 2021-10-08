@@ -2465,29 +2465,29 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
-		synchronized (this) {
-			if (persistentEffects.size() > 0) {
-				Iterator<PersistentEffect> i = persistentEffects.iterator();
-				while (i.hasNext()) {
-					PersistentEffect e = i.next();
-					if (e.getTarget() == null || e.getTarget() == to) {
-						if (trigger == AFTER_TURN && e.getTurns() > 0) {
-							e.decreaseTurn();
+		if (persistentEffects.size() > 0) {
+			Set<PersistentEffect> efs = persistentEffects.stream()
+					.peek(e -> {
+						if (e.getTarget() == null || e.getTarget() == to) {
+							if (trigger == AFTER_TURN && e.getTurns() > 0) {
+								e.decreaseTurn();
+							}
+
+							if (e.getTriggers().contains(trigger)) {
+								e.activate(to, index);
+							}
 						}
 
-						if (e.getTriggers().contains(trigger)) {
-							e.activate(to, index);
+						if (e.getTurns() == 0 || e.getLimit() == 0) {
+							channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
 						}
-					}
+					})
+					.filter(e -> e.getTurns() > 0 && e.getLimit() > 0)
+					.collect(Collectors.toSet());
 
-					if (e.getTurns() == 0 || e.getLimit() == 0) {
-						channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
-						i.remove();
-					}
-				}
+			Helper.replaceContent(efs, persistentEffects);
 
-				return postCombat();
-			}
+			return postCombat();
 		}
 
 		return false;
