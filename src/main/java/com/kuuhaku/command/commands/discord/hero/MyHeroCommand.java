@@ -70,8 +70,8 @@ public class MyHeroCommand implements Executable {
 						""".formatted(
 						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
 						h.getHp(),
-						h.getStats().calcMaxHp(),
-						h.getDmg() > 0 ? "\n`recuperação total em " + (int) Math.ceil(h.getDmg() * 10f / h.getStats().calcMaxHp()) + " dias`" : ""
+						h.getStats().calcMaxHp(h.getPerks()),
+						h.getDmg() > 0 ? "\n`recuperação total em " + (int) Math.ceil(h.getDmg() * 10f / h.getStats().calcMaxHp(h.getPerks())) + " dias`" : ""
 				), true)
 				.addField(":bar_chart: | Stats:", """
 								STR: %s
