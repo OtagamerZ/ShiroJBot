@@ -73,7 +73,8 @@ public class TeamHand extends Hand {
 
 			Consumer<Drawable> bonding = d -> d.bind(this);
 			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
-					.flatMap(List::stream)
+                    .flatMap(List::stream)
+                    .map(Drawable::copy)
 					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));
 			if (hero != null) deque.add(hero.toChampion());
 
