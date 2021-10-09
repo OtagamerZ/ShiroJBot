@@ -258,6 +258,18 @@ public class Hero implements Cloneable {
 		return (int) Math.max(0, Helper.roundTrunc(stats.calcDef() * defModif, 25));
 	}
 
+	public int getDodge() {
+		double ddgModif = 1;
+		for (Perk perk : perks) {
+			ddgModif *= switch (perk) {
+				case NIMBLE -> 1.25;
+				default -> 1;
+			};
+		}
+
+		return (int) Math.round(stats.calcDodge() * ddgModif);
+	}
+
 	public Champion toChampion() {
 		Champion ref = CardDAO.getChampion(effect);
 		Champion c = new Champion(
