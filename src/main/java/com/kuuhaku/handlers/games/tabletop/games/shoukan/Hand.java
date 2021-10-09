@@ -113,6 +113,7 @@ public class Hand {
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
+						.map(Drawable::copy)
 						.collect(Collectors.toList())
 		);
 		if (hero != null) deque.add(hero.toChampion());

@@ -409,13 +409,13 @@ public class ShiroEvents extends ListenerAdapter {
 							.setAllowedMentions(AllowedMentions.none())
 							.setContent(String.valueOf(s.getLeft()));
 
-					if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank()) {
-						wmb.setUsername(author.getName());
-						wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
-					} else try {
+					String avatar = Helper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
+					String name = Helper.getOr(m.getPseudoName(), author.getName());
+
+					try {
 						Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
-						wmb.setUsername(nii != null && m.getPseudoName().equals(nii.getEffectiveName()) ? m.getPseudoName() + " (FAKE)" : m.getPseudoName());
-						wmb.setAvatarUrl(m.getPseudoAvatar());
+						wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
+						wmb.setAvatarUrl(avatar);
 					} catch (RuntimeException e) {
 						m.setPseudoName("");
 						m.setPseudoAvatar("");
