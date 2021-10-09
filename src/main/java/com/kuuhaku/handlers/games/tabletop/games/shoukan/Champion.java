@@ -400,6 +400,18 @@ public class Champion implements Drawable, Cloneable {
 		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
 	}
 
+	public void setAtk(int atk) {
+		bonus.setAtk(atk);
+	}
+
+	public void setDef(int def) {
+		bonus.setDef(def);
+	}
+
+	public void setDodge(int dodge) {
+		bonus.setDodge(dodge);
+	}
+
 	public void addAtk(int atk) {
 		bonus.addAtk(atk);
 	}
@@ -408,12 +420,20 @@ public class Champion implements Drawable, Cloneable {
 		bonus.addDef(def);
 	}
 
+	public void addDodge(int dodge) {
+		bonus.addDodge(dodge);
+	}
+
 	public void removeAtk(int atk) {
 		bonus.removeAtk(atk);
 	}
 
 	public void removeDef(int def) {
 		bonus.removeDef(def);
+	}
+
+	public void removeDodge(int dodge) {
+		bonus.removeDodge(dodge);
 	}
 
 	public int getAltAtk() {
@@ -476,18 +496,6 @@ public class Champion implements Drawable, Cloneable {
 		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
 		double d = Helper.clamp(dodge + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0), 0, 100);
 		return (int) Helper.roundTrunc(d * 100, 5) / 100;
-	}
-
-	public void setDodge(double dodge) {
-		this.dodge = dodge;
-	}
-
-	public void addDodge(double dodge) {
-		this.dodge += dodge;
-	}
-
-	public void removeDodge(double dodge) {
-		this.dodge -= dodge;
 	}
 
 	public double getModDodge() {
