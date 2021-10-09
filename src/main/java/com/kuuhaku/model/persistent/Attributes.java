@@ -114,7 +114,7 @@ public class Attributes {
 			};
 		}
 
-		return (int) Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.04 * con + -0.01 * str + -0.015 * str))) * hpModif, 5);
+		return (int) Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res))) * hpModif, 5);
 	}
 
 	public int calcMp() {
