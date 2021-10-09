@@ -30,6 +30,7 @@ public class Bonus implements Cloneable {
 	private final Set<Flag> flags;
 	private final int[] atk = new int[6];
 	private final int[] def = new int[6];
+	private final int[] ddg = new int[6];
 	private int mana = 0;
 	private int blood = 0;
 	private String write = null;
@@ -133,6 +134,34 @@ public class Bonus implements Cloneable {
 
 	public void removeDef(int index, int def) {
 		this.def[index + 1] -= def;
+	}
+
+	public int getDodge() {
+		return IntStream.of(ddg).sum();
+	}
+
+	public void setDodge(int ddg) {
+		this.ddg[0] = ddg;
+	}
+
+	public void setDodge(int index, int ddg) {
+		this.ddg[index + 1] = ddg;
+	}
+
+	public void addDodge(int ddg) {
+		this.ddg[0] += ddg;
+	}
+
+	public void addDodge(int index, int ddg) {
+		this.ddg[index + 1] += ddg;
+	}
+
+	public void removeDodge(int ddg) {
+		this.ddg[0] -= ddg;
+	}
+
+	public void removeDodge(int index, int ddg) {
+		this.ddg[index + 1] -= ddg;
 	}
 
 	public int getMana() {

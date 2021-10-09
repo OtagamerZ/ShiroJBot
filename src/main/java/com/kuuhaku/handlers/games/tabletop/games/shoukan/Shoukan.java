@@ -1281,6 +1281,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Champion c = slot.getTop();
 			c.getBonus().setAtk(target, 0);
 			c.getBonus().setDef(target, 0);
+			c.getBonus().setDodge(target, 0);
 		}
 
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1339,6 +1340,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Champion c = slot.getTop();
 				c.getBonus().setAtk(target, 0);
 				c.getBonus().setDef(target, 0);
+				c.getBonus().setDodge(target, 0);
 			}
 
 			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1383,6 +1385,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Champion c = slot.getTop();
 			c.getBonus().setAtk(target, 0);
 			c.getBonus().setDef(target, 0);
+			c.getBonus().setDodge(target, 0);
 		}
 
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1414,6 +1417,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Champion c = slot.getTop();
 			c.getBonus().setAtk(target, 0);
 			c.getBonus().setDef(target, 0);
+			c.getBonus().setDodge(target, 0);
 		}
 
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1472,6 +1476,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Champion c = slot.getTop();
 				c.getBonus().setAtk(target, 0);
 				c.getBonus().setDef(target, 0);
+				c.getBonus().setDodge(target, 0);
 			}
 
 			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1516,6 +1521,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Champion c = slot.getTop();
 			c.getBonus().setAtk(target, 0);
 			c.getBonus().setDef(target, 0);
+			c.getBonus().setDodge(target, 0);
 		}
 
 		if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1558,6 +1564,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Champion c = slot.getTop();
 				c.getBonus().setAtk(target, 0);
 				c.getBonus().setDef(target, 0);
+				c.getBonus().setDodge(target, 0);
 			}
 
 			if (applyPersistentEffects(ON_DESTROY, to, target)) return;
@@ -1670,6 +1677,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					Champion c = slot.getTop();
 					c.getBonus().setAtk(target, 0);
 					c.getBonus().setDef(target, 0);
+					c.getBonus().setDodge(target, 0);
 				}
 			}
 		} else {
@@ -1715,6 +1723,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Champion c = slot.getTop();
 				c.getBonus().setAtk(target, 0);
 				c.getBonus().setDef(target, 0);
+				c.getBonus().setDodge(target, 0);
 			}
 		}
 	}
@@ -1766,6 +1775,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Champion c = slot.getTop();
 				c.getBonus().setAtk(target, 0);
 				c.getBonus().setDef(target, 0);
+				c.getBonus().setDodge(target, 0);
 			}
 
 			if (sourceChamp == null) return;
@@ -1790,6 +1800,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Champion c = slot.getTop();
 				c.getBonus().setAtk(target, 0);
 				c.getBonus().setDef(target, 0);
+				c.getBonus().setDodge(target, 0);
 			}
 
 			slts.get(target).setTop(sourceChamp);
