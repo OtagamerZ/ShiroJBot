@@ -136,7 +136,7 @@ public class Attributes {
 	}
 
 	public int calcDodge() {
-		return (int) Helper.roundTrunc(100 * (1 - Math.exp(-0.05 * agi + 0.025 * con)), 5);
+		return (int) Helper.roundTrunc(50 * (1 - Math.exp(-0.05 * agi + 0.025 * con)), 5);
 	}
 
 	public Integer[] getStats() {
