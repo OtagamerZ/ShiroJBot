@@ -109,7 +109,7 @@ public class Attributes {
 		for (Perk perk : perks) {
 			hpModif *= switch (perk) {
 				case VANGUARD -> 1.33;
-				case NIMBLE -> 0.75;
+				case NIMBLE, VAMPIRE -> 0.75;
 				default -> 1;
 			};
 		}

@@ -212,6 +212,7 @@ public class Hero implements Cloneable {
 			mpModif *= switch (perk) {
 				case BLOODLUST -> 0.5;
 				case MANALESS -> 0;
+				case MINDSHIELD -> 2;
 				default -> 1;
 			};
 		}
@@ -255,6 +256,7 @@ public class Hero implements Cloneable {
 				case CARELESS -> 0.66;
 				case MANALESS -> 0.5;
 				case MASOCHIST -> 1 - Math.min(Helper.prcnt(getDmg(), getMaxHp()) / 2, 0.5);
+				case ARMORED -> 1 + stats.calcDodge() * 0.01;
 				default -> 1;
 			};
 		}
@@ -267,6 +269,7 @@ public class Hero implements Cloneable {
 		for (Perk perk : perks) {
 			ddgModif *= switch (perk) {
 				case NIMBLE -> 1.25;
+				case ARMORED -> 0;
 				default -> 1;
 			};
 		}
