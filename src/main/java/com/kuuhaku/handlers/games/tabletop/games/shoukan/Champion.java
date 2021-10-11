@@ -156,7 +156,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.setBackground(Color.black);
 				g2d.setColor(Color.yellow);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
-				Profile.printCenteredString(bonus.getWrite(), 205, 10, 39, g2d);
+				Profile.printCenteredString(bonus.getWrite(), 205, 10, 57, g2d);
 				g2d.setBackground(fc.getSecondaryColor());
 			}
 
