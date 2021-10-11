@@ -55,7 +55,7 @@ public class ButtonChannel {
 
 	public boolean removeMessage(ButtonMessage bm) {
 		bm.setParent(null);
-		return messages.remove(bm);
+		return messages.contains(bm);
 	}
 
 	@Override
