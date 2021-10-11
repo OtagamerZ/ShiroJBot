@@ -127,23 +127,23 @@ public class HeroStatsCommand implements Executable {
 				.addField(
 						"Pontos disponíveis: " + h.getAvailableStatPoints(),
 						"""
-								**STR:** %s
-								**RES:** %s
-								**AGI:** %s
-								**WIS:** %s
-								**CON:** %s
+								**S**TR: %s
+								**R**ES: %s
+								**A**GI: %s
+								**W**IS: %s
+								**C**ON: %s
 								""".formatted((Object[]) h.getStats().getStats()),
 						true
 				)
 				.addField(
 						"Atributos:",
 						"""
-								**\\🗡️ ATK:** %s
-								**\\🛡️ DEF:** %s
-								**\\⚡ DDG:** %s%%
+								\\🗡️ Ataque: %s
+								\\🛡️ Defesa: %s
+								\\⚡ Esquiva: %s%%
 
-								**\\🩸 HP:** %s
-								**\\🧪 MP:** %s
+								\\🩸 HP: %s
+								\\🧪 MP: %s
 								""".formatted(
 								h.getAtk(),
 								h.getDef(),
