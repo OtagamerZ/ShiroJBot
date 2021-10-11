@@ -91,7 +91,7 @@ public class HeroPerksCommand implements Executable {
 							});
 							if (perks.size() > 1)
 								put("2️⃣", (mb, ms) -> {
-									if (h.getAvailableStatPoints() <= 0) {
+									if (h.getAvailablePerks() <= 0) {
 										channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
 										return;
 									}
@@ -100,7 +100,7 @@ public class HeroPerksCommand implements Executable {
 								});
 							if (perks.size() > 2)
 								put("3️⃣", (mb, ms) -> {
-									if (h.getAvailableStatPoints() <= 0) {
+									if (h.getAvailablePerks() <= 0) {
 										channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
 										return;
 									}

@@ -124,12 +124,35 @@ public class HeroStatsCommand implements Executable {
 	private MessageEmbed getEmbed(Hero h) {
 		return new ColorlessEmbedBuilder()
 				.setTitle("Atributos de " + h.getName())
-				.setDescription("Pontos disponíveis: " + h.getAvailableStatPoints())
-				.addField("STR: " + h.getStats().getStr(), "Aumenta ataque, HP e custo", false)
-				.addField("RES: " + h.getStats().getRes(), "Aumenta defesa, HP e custo", false)
-				.addField("AGI: " + h.getStats().getAgi(), "Aumenta esquiva, ataque, defesa e custo", false)
-				.addField("WIS: " + h.getStats().getWis(), "Reduz custo", false)
-				.addField("CON: " + h.getStats().getCon(), "Aumenta HP e custo e reduz esquiva", false)
+				.addField(
+						"Pontos disponíveis: " + h.getAvailableStatPoints(),
+						"""
+								**STR:** %s
+								**RES:** %s
+								**AGI:** %s
+								**WIS:** %s
+								**CON:** %s
+								""".formatted((Object[]) h.getStats().getStats()),
+						true
+				)
+				.addField(
+						"Atributos:",
+						"""
+								**ATK:** %s
+								**DEF:** %s
+								**DDG:** %s%%
+
+								**HP:** %s
+								**MP:** %s
+								""".formatted(
+								h.getAtk(),
+								h.getDef(),
+								h.getDodge(),
+								h.getMaxHp(),
+								h.getMp()
+						),
+						true
+				)
 				.build();
 	}
 }
