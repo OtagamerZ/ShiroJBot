@@ -568,6 +568,30 @@ public class Hand {
 				.queue(null, Helper::doNothing);
 	}
 
+	public void showCards(Drawable... cards) {
+		BufferedImage bi = new BufferedImage(Math.max(5, cards.length) * 300, 450, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
+
+		for (int i = 0; i < cards.length; i++) {
+			g2d.drawImage(cards[i].drawCard(false), bi.getWidth() / (cards.length + 1) * (i + 1) - (225 / 2), 100, null);
+			try {
+				BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
+				g2d.drawImage(so, bi.getWidth() / (cards.length + 1) * (i + 1) - (225 / 2), 100, null);
+			} catch (IOException ignore) {
+			}
+		}
+
+		g2d.dispose();
+
+		getUser().openPrivateChannel()
+				.flatMap(c -> c.sendMessage("Visualizando as cartas:")
+						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+				)
+				.queue(null, Helper::doNothing);
+	}
+
 	public void sendDM(String message) {
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage(message))
