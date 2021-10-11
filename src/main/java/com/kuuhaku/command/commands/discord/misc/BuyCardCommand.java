@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
 		name = "comprar",
-		aliases = {"buy"},
+		aliases = {"buy", "loja"},
 		usage = "req_id",
 		category = Category.MISC
 )
