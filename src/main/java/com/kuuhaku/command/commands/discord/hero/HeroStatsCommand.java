@@ -138,12 +138,12 @@ public class HeroStatsCommand implements Executable {
 				.addField(
 						"Atributos:",
 						"""
-								**ATK:** %s
-								**DEF:** %s
-								**DDG:** %s%%
+								**\\🗡️ ATK:** %s
+								**\\🛡️ DEF:** %s
+								**\\⚡ DDG:** %s%%
 
-								**HP:** %s
-								**MP:** %s
+								**\\🩸 HP:** %s
+								**\\🧪 MP:** %s
 								""".formatted(
 								h.getAtk(),
 								h.getDef(),
