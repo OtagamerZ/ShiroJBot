@@ -320,7 +320,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana + bonus.getMana();
+		return Math.max(0, mana + bonus.getMana());
 	}
 
 	public void setMana(int mana) {
