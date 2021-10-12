@@ -2706,6 +2706,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				if (h.getHero() != null && tourMatch == null) {
 					Hero hr = CardDAO.getHero(h.getAcc().getUid());
+
+					assert hr != null;
 					hr.setHp(h.getHero().getHp());
 					hr.setDmg();
 					hr.setXp(h.getHero().getXp());
