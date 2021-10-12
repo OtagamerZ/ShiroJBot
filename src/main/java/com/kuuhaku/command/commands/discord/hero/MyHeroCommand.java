@@ -62,6 +62,7 @@ public class MyHeroCommand implements Executable {
 			perks.add("`Perk disponível`");
 		}
 
+		int days = (int) Math.ceil(h.getDmg() * 10f / h.getMaxHp());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
@@ -71,7 +72,7 @@ public class MyHeroCommand implements Executable {
 						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
 						h.getHp(),
 						h.getMaxHp(),
-						h.getDmg() > 0 ? "\n`recuperação total em " + (int) Math.ceil(h.getDmg() * 10f / h.getMaxHp()) + " dias`" : ""
+						h.getDmg() > 0 ? "\n`recuperação total em " + days + " dia" + (days != 1 ? "s" : "") + "`" : ""
 				), true)
 				.addField(":bar_chart: | Stats:", """
 								STR: %s
