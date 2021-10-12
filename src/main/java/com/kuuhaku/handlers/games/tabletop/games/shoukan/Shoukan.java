@@ -990,6 +990,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					Hero y = yours.getHero();
 					if (y != null) {
 						y.addXp(1);
+						if (y.getPerks().contains(Perk.VAMPIRE)) {
+							y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
+						}
 					}
 				}
 
@@ -1076,6 +1079,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Hero y = his.getHero();
 				if (y != null) {
 					y.addXp(1);
+					if (y.getPerks().contains(Perk.VAMPIRE)) {
+						y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
+					}
 				}
 			}
 
@@ -1309,13 +1315,18 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
+			Charm charm = targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (charm == Charm.SPELLSHIELD || charm == Charm.SPELLMIRROR || (targetChamp.getHero() != null && targetChamp.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+				return;
+			}
+
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if ((eq.getCharm() == Charm.SPELLMIRROR || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLMIRROR) && sourceChamp != null) {
+					} else if (eq.getCharm() == Charm.SPELLMIRROR && sourceChamp != null) {
 						destroyCard(from, source, to, target);
 						unequipCard(to, i, slts);
 						return;
@@ -1445,13 +1456,18 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
+			Charm charm = targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (charm == Charm.SPELLSHIELD || charm == Charm.SPELLMIRROR || (targetChamp.getHero() != null && targetChamp.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+				return;
+			}
+
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if ((eq.getCharm() == Charm.SPELLMIRROR || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLMIRROR)) {
+					} else if (eq.getCharm() == Charm.SPELLMIRROR) {
 						captureCard(from, source, to, target, withFusion);
 						unequipCard(to, i, slts);
 						return;
@@ -1641,13 +1657,18 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (chance == 100 || Helper.chance(chance)) {
+			Charm charm = targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (charm == Charm.SPELLSHIELD || charm == Charm.SPELLMIRROR || (targetChamp.getHero() != null && targetChamp.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+				return;
+			}
+
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if (eq.getCharm() == Charm.SPELLMIRROR || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLMIRROR) {
+					} else if (eq.getCharm() == Charm.SPELLMIRROR) {
 						convertCard(from, source, to, target);
 						unequipCard(to, i, slts);
 						return;

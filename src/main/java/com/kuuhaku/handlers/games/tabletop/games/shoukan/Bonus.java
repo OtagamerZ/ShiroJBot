@@ -21,21 +21,21 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Flag;
 import com.kuuhaku.utils.JSONObject;
 
+import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 public class Bonus implements Cloneable {
-	private final JSONObject specialData;
-	private final Set<Flag> flags;
-	private final int[] atk = new int[6];
-	private final int[] def = new int[6];
-	private final int[] ddg = new int[6];
+	private JSONObject specialData;
+	private EnumSet<Flag> flags;
+	private int[] atk = new int[6];
+	private int[] def = new int[6];
+	private int[] ddg = new int[6];
 	private int mana = 0;
 	private int blood = 0;
 	private String write = null;
 
-	public Bonus(JSONObject specialData, Set<Flag> flags, int atk, int def, int mana, int blood, String write) {
+	public Bonus(JSONObject specialData, EnumSet<Flag> flags, int atk, int def, int mana, int blood, String write) {
 		this.specialData = specialData;
 		this.flags = flags;
 		this.atk[0] = atk;
@@ -63,7 +63,7 @@ public class Bonus implements Cloneable {
 		specialData.put(key, value);
 	}
 
-	public Set<Flag> getFlags() {
+	public EnumSet<Flag> getFlags() {
 		return flags;
 	}
 
@@ -208,6 +208,11 @@ public class Bonus implements Cloneable {
 	public Bonus clone() {
 		try {
 			Bonus b = (Bonus) super.clone();
+			b.specialData = new JSONObject(specialData);
+			b.flags = EnumSet.copyOf(flags);
+			b.atk = Arrays.copyOf(atk, 6);
+			b.def = Arrays.copyOf(def, 6);
+			b.ddg = Arrays.copyOf(ddg, 6);
 
 			return new Bonus(
 					b.getSpecialData(),
