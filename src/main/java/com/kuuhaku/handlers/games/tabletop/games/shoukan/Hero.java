@@ -121,11 +121,11 @@ public class Hero implements Cloneable {
 	}
 
 	public void setDmg() {
-		this.dmg = stats.calcMaxHp(perks) - hp;
+		this.dmg = getMaxHp() - hp;
 	}
 
 	public void reduceDmg() {
-		this.dmg = (int) Math.max(0, this.dmg - stats.calcMaxHp(perks) * 0.1);
+		this.dmg = (int) Math.max(0, this.dmg - getMaxHp() * 0.1);
 	}
 
 	public void reduceDmg(int val) {
@@ -189,12 +189,16 @@ public class Hero implements Cloneable {
 	}
 
 	public int getDmg() {
-		if (dmg > stats.calcMaxHp(perks)) dmg = stats.calcMaxHp(perks);
+		if (dmg > getMaxHp()) dmg = getMaxHp();
 		return dmg;
 	}
 
+	public int getMaxHp() {
+		return stats.calcMaxHp(perks);
+	}
+
 	public int getHp() {
-		if (hp == -1) hp = Math.max(0, stats.calcMaxHp(perks) - dmg);
+		if (hp == -1) hp = Math.max(0, getMaxHp() - dmg);
 		return hp;
 	}
 
@@ -208,6 +212,7 @@ public class Hero implements Cloneable {
 			mpModif *= switch (perk) {
 				case BLOODLUST -> 0.5;
 				case MANALESS -> 0;
+				case MINDSHIELD -> 2;
 				default -> 1;
 			};
 		}
@@ -235,7 +240,7 @@ public class Hero implements Cloneable {
 				case VANGUARD -> 0.75;
 				case CARELESS -> 1.25;
 				case MANALESS -> 0.5;
-				case MASOCHIST -> 1 + Math.min(Helper.prcnt(getDmg(), stats.calcMaxHp(perks)) / 2, 0.5);
+				case MASOCHIST -> 1 + Math.min(Helper.prcnt(getDmg(), getMaxHp()) / 2, 0.5);
 				default -> 1;
 			};
 		}
@@ -250,7 +255,8 @@ public class Hero implements Cloneable {
 				case VANGUARD -> 1.15;
 				case CARELESS -> 0.66;
 				case MANALESS -> 0.5;
-				case MASOCHIST -> 1 - Math.min(Helper.prcnt(getDmg(), stats.calcMaxHp(perks)) / 2, 0.5);
+				case MASOCHIST -> 1 - Math.min(Helper.prcnt(getDmg(), getMaxHp()) / 2, 0.5);
+				case ARMORED -> 1 + stats.calcDodge() * 0.01;
 				default -> 1;
 			};
 		}
@@ -263,6 +269,7 @@ public class Hero implements Cloneable {
 		for (Perk perk : perks) {
 			ddgModif *= switch (perk) {
 				case NIMBLE -> 1.25;
+				case ARMORED -> 0;
 				default -> 1;
 			};
 		}
