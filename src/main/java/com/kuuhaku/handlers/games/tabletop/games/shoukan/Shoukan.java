@@ -2667,8 +2667,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 						AccountDAO.saveAccount(acc);
 
 						if (h.getHero() != null && tourMatch == null) {
-							h.getHero().setDmg();
-							CardDAO.saveHero(h.getHero());
+							Hero hr = CardDAO.getHero(h.getAcc().getUid());
+							hr.setHp(h.getHero().getHp());
+							hr.setDmg();
+							hr.setXp(h.getHero().getXp());
+							CardDAO.saveHero(hr);
 						}
 
 						th.next();
@@ -2688,8 +2691,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 					AccountDAO.saveAccount(acc);
 
 					if (h.getHero() != null && tourMatch == null) {
-						h.getHero().setDmg();
-						CardDAO.saveHero(h.getHero());
+						Hero hr = CardDAO.getHero(h.getAcc().getUid());
+						hr.setHp(h.getHero().getHp());
+						hr.setDmg();
+						hr.setXp(h.getHero().getXp());
+						CardDAO.saveHero(hr);
 					}
 				}
 			}
