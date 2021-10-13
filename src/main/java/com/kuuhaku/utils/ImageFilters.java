@@ -162,12 +162,9 @@ public class ImageFilters {
 			int x = coords[0];
 			int y = coords[1];
 			int[] color = Helper.unpackRGB(rgb);
+			int luma = (int) (0.2126 * color[1] + 0.7152 * color[2] + 0.0722 * color[3]);
 
-			for (int i = 1; i < color.length; i++) {
-				color[i] = (int) (0.2126 * color[1] + 0.7152 * color[2] + 0.0722 * color[3]);
-			}
-
-			out.setRGB(x, y, Helper.packRGB(color));
+			out.setRGB(x, y, Helper.packRGB(color[0], luma, luma, luma));
 		});
 
 		return out;
