@@ -167,14 +167,15 @@ public class TenthMinuteEvent implements Job {
 
 				TextChannel tc = gc.getLevelChannel();
 				try {
+					if (gc.getGuildId().equals("614904136437334044"))
+						Helper.logger(this.getClass()).info("Adding role " + role.getLeft() + " to " + m.getEffectiveName() + " | Removing " + prev);
 					guild.modifyMemberRoles(m, role != null ? List.of(role.getLeft()) : null, prev)
 							.flatMap(
 									p -> gc.isLevelNotif() && tc != null && finalRole != null,
 									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + finalRole.getLeft().getName() + "`** por acumular " + Helper.toStringDuration(finalRole.getRight().getTime()) + " em call! :tada:")
 							)
 							.queue();
-				} catch (HierarchyException | InsufficientPermissionException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 			}
 		}
