@@ -145,11 +145,11 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.setColor(fc.getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, getDescription(), 205, 9, 277);
-		}
 
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+			if (!available) {
+				g2d.setColor(new Color(0, 0, 0, 150));
+				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+			}
 		}
 
 		g2d.dispose();
