@@ -40,7 +40,7 @@ import java.util.Locale;
 
 @RestController
 public class CommonHandler {
-	@RequestMapping(value = "/collection", method = RequestMethod.GET)
+	@RequestMapping(value = "/collection.jpg", method = RequestMethod.GET)
 	public @ResponseBody
 	HttpEntity<byte[]> serveCollectionImage(@RequestParam(value = "id") String id, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
 		File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
