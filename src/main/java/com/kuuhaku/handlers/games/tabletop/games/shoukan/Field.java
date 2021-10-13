@@ -118,16 +118,16 @@ public class Field implements Drawable, Cloneable {
 				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0) + "%", 57, y + 21 - (25 * i), g2d);
 				i++;
 			}
-		}
 
-		if (day)
-			g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/day.png"), 135, 58, null);
-		else
-			g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/night.png"), 135, 58, null);
+			if (day)
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/day.png"), 135, 58, null);
+			else
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/night.png"), 135, 58, null);
 
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+			if (!available) {
+				g2d.setColor(new Color(0, 0, 0, 150));
+				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+			}
 		}
 
 		g2d.dispose();
