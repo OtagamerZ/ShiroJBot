@@ -844,7 +844,7 @@ public class CardDAO {
 	public static Champion getFakeChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL) AND NOT c.fusion ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL) AND c.fusion = FALSE ORDER BY RANDOM()", Champion.class);
 		q.setParameter("animes", getValidAnimeNames());
 		q.setMaxResults(4);
 

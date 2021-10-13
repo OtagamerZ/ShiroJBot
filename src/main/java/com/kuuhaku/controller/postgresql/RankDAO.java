@@ -114,7 +114,7 @@ public class RankDAO {
 					            FROM logs l
 					            WHERE l.uid <> '') l ON l.uid = k.uid
 					INNER JOIN (SELECT kc.kawaipon_id
-					                 , count(1) FILTER (WHERE NOT kc.foil) AS normal
+					                 , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
 					                 , count(1) FILTER (WHERE kc.foil)     AS foil
 					            FROM kawaiponcard kc
 					            GROUP BY kc.kawaipon_id) kc on k.uid = kc.kawaipon_id
