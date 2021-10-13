@@ -52,6 +52,18 @@ public class VoiceTimeDAO {
 		}
 	}
 
+	public static void resetVoiceTimes(String guild) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("DELETE FROM VoiceTime vt WHERE vt.sid = :guild")
+				.setParameter("guild", guild)
+				.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static void saveVoiceTime(VoiceTime vt) {
 		EntityManager em = Manager.getEntityManager();
 
