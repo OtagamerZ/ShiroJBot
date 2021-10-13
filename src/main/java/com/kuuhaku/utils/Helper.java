@@ -2219,6 +2219,10 @@ public class Helper {
 		return a << 24 | r << 16 | g << 8 | b;
 	}
 
+	public static int packRGB(int[] argb) {
+		return argb[0] << 24 | argb[1] << 16 | argb[2] << 8 | argb[3];
+	}
+
 	public static BufferedImage toColorSpace(BufferedImage in, int type) {
 		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
 		Graphics2D g2d = out.createGraphics();
