@@ -172,8 +172,9 @@ public class TenthMinuteEvent implements Job {
 									p -> gc.isLevelNotif() && tc != null && finalRole != null,
 									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + finalRole.getLeft().getName() + "`** por acumular " + Helper.toStringDuration(finalRole.getRight().getTime()) + " em call! :tada:")
 							)
-							.queue(null, Helper::doNothing);
-				} catch (HierarchyException | InsufficientPermissionException ignore) {
+							.queue();
+				} catch (HierarchyException | InsufficientPermissionException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
 		}
