@@ -614,8 +614,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 							h.removeHp(c.getBaseStats() / 2);
 						else
 							h.removeMana(c.getMana());
-					} else
-						h.removeHp(c.getBlood());
+					}
+					h.removeHp(c.getBlood());
 				} else {
 					Field f = (Field) d.copy();
 					if (!args[1].equalsIgnoreCase("f")) {
@@ -1255,9 +1255,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					else
 						h.removeMana(aFusion.getMana());
 				}
-
-				if (aFusion.getBlood() > 0)
-					h.removeHp(aFusion.getBlood());
+				h.removeHp(aFusion.getBlood());
 			}
 
 			return makeFusion(h);
@@ -2626,9 +2624,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			else
 				h.removeMana(nc.getMana());
 		}
-
-		if (nc.getBlood() > 0)
-			h.removeHp(nc.getBlood());
+		h.removeHp(nc.getBlood());
 
 		nc.bind(h);
 		nc.setLinkedTo(from.getLinkedTo());
