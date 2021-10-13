@@ -207,7 +207,7 @@ public class KawaiponsCommand implements Executable {
 
         String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
         eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")")
-                .setDescription("[Clique para abrir a imagem no navegador](" + url + ")")
+                .setDescription("[Clique aqui](%s) para abrir a imagem no navegador\nSe estiver borrada, [clique aqui](%s)".formatted(url, url + "&m=file"))
                 .addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true)
                 .addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true)
                 .setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%")
@@ -226,7 +226,7 @@ public class KawaiponsCommand implements Executable {
 
         String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
         eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
-                .setDescription((c == null ? "" : c.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
+                .setDescription("%s[Clique aqui](%s) para abrir a imagem no navegador\nSe estiver borrada, [clique aqui](%s)".formatted(c == null ? "" : c.getDescription() + "\n\n", url, url + "&m=file"))
                 .setImage(url);
         m.delete().queue();
 
@@ -241,8 +241,8 @@ public class KawaiponsCommand implements Executable {
         EmbedBuilder eb = new ColorlessEmbedBuilder();
 
         String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
-		eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
-                .setDescription((r == null ? "" : r.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
+        eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
+                .setDescription("%s[Clique aqui](%s) para abrir a imagem no navegador\nSe estiver borrada, [clique aqui](%s)".formatted(r == null ? "" : r.getDescription() + "\n\n", url, url + "&m=file"))
                 .setImage(url)
                 .setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/" + (r == null ? "shoukan.png" : "race/" + r.name().toLowerCase(Locale.ROOT) + ".png"));
 
