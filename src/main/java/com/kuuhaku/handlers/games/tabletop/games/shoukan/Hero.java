@@ -225,7 +225,7 @@ public class Hero implements Cloneable {
 		int blood = 0;
 		for (Perk perk : perks) {
 			blood += switch (perk) {
-				case BLOODLUST -> stats.calcMp() / 2f * 100;
+				case BLOODLUST -> stats.calcMp() / 2 * 100;
 				default -> 0;
 			};
 		}
