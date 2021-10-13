@@ -131,26 +131,29 @@ public class TenthMinuteEvent implements Job {
 		for (GuildConfig gc : guilds) {
 			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (guild == null) continue;
+			if (gc.getGuildId().equals("614904136437334044")) System.out.println("01");
 
 			List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
-
 			for (VoiceTime vt : vts) {
 				Set<VoiceRole> vroles = gc.getVoiceRoles().stream()
 						.filter(vr -> vr.getTime() <= vt.getTime())
 						.collect(Collectors.toSet());
 
 				if (vroles.isEmpty()) continue;
+				if (gc.getGuildId().equals("614904136437334044")) System.out.println("02");
 
 				VoiceRole max = vroles.stream().max(Comparator.comparingLong(VoiceRole::getTime)).orElse(null);
 
 				Member m = guild.getMemberById(vt.getUid());
 				if (m == null) continue;
+				if (gc.getGuildId().equals("614904136437334044")) System.out.println("03");
 
 				Pair<Role, VoiceRole> role = null;
 				List<Role> prev = new ArrayList<>();
 				for (VoiceRole vrole : vroles) {
 					Role r = guild.getRoleById(vrole.getId());
 					if (r == null) continue;
+					if (gc.getGuildId().equals("614904136437334044")) System.out.println("04");
 
 					if (vrole.equals(max)) {
 						if (!m.getRoles().contains(r)) {
@@ -163,12 +166,11 @@ public class TenthMinuteEvent implements Job {
 				}
 
 				if (role == null && prev.isEmpty()) continue;
+				if (gc.getGuildId().equals("614904136437334044")) System.out.println("05");
 				Pair<Role, VoiceRole> finalRole = role;
 
 				TextChannel tc = gc.getLevelChannel();
 				try {
-					if (gc.getGuildId().equals("614904136437334044"))
-						Helper.logger(this.getClass()).info("Adding role " + role.getLeft() + " to " + m.getEffectiveName() + " | Removing " + prev);
 					guild.modifyMemberRoles(m, role != null ? List.of(role.getLeft()) : null, prev)
 							.flatMap(
 									p -> gc.isLevelNotif() && tc != null && finalRole != null,
