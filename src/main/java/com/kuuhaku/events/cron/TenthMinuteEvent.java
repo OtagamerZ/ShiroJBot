@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
+import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -98,9 +99,7 @@ public class TenthMinuteEvent implements Job {
 				}
 
 				if (acts.isEmpty()) continue;
-				RestAction.allOf(acts)
-						.mapToResult()
-						.queue();
+				RestAction.allOf(acts).mapToResult().queue();
 			}
 		}
 
@@ -147,34 +146,35 @@ public class TenthMinuteEvent implements Job {
 				Member m = guild.getMemberById(vt.getUid());
 				if (m == null) continue;
 
-				List<RestAction<?>> acts = new ArrayList<>();
+				Pair<Role, VoiceRole> role = null;
+				List<Role> prev = new ArrayList<>();
 				for (VoiceRole vrole : vroles) {
 					Role r = guild.getRoleById(vrole.getId());
 					if (r == null) continue;
 
 					if (vrole.equals(max)) {
-						if (!m.getRoles().contains(r))
-							try {
-								TextChannel tc = gc.getLevelChannel();
-								acts.add(guild.addRoleToMember(m, r).flatMap(
-										p -> gc.isLevelNotif() && tc != null,
-										v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + r.getName() + "`** por acumular " + Helper.toStringDuration(vrole.getTime()) + " em call! :tada:")
-								));
-							} catch (HierarchyException | InsufficientPermissionException ignore) {
-							}
+						if (!m.getRoles().contains(r)) {
+							role = Pair.of(r, vrole);
+						}
 					} else {
 						if (m.getRoles().contains(r))
-							try {
-								acts.add(guild.removeRoleFromMember(m, r));
-							} catch (HierarchyException | InsufficientPermissionException ignore) {
-							}
+							prev.add(r);
 					}
 				}
 
-				if (acts.isEmpty()) continue;
-				RestAction.allOf(acts)
-						.mapToResult()
-						.queue();
+				if (role == null && prev.isEmpty()) continue;
+				Pair<Role, VoiceRole> finalRole = role;
+
+				TextChannel tc = gc.getLevelChannel();
+				try {
+					guild.modifyMemberRoles(m, role != null ? List.of(role.getLeft()) : null, prev)
+							.flatMap(
+									p -> gc.isLevelNotif() && tc != null && finalRole != null,
+									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + finalRole.getLeft().getName() + "`** por acumular " + Helper.toStringDuration(finalRole.getRight().getTime()) + " em call! :tada:")
+							)
+							.queue(null, Helper::doNothing);
+				} catch (HierarchyException | InsufficientPermissionException ignore) {
+				}
 			}
 		}
 
