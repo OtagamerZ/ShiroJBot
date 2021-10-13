@@ -66,7 +66,7 @@ public class ConfigVoiceRoleCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(":dna: | Cargos de voz configurados no servidor");
+					.setTitle(":loudspeaker: | Cargos de voz configurados no servidor");
 
 			List<VoiceRole> roles = List.copyOf(gc.getVoiceRoles());
 			if (roles.size() == 0) {
