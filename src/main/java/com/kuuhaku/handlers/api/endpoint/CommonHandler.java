@@ -42,13 +42,13 @@ import java.util.Locale;
 public class CommonHandler {
 	@RequestMapping(value = "/collection", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<byte[]> serveCollectionImage(@RequestParam(value = "id") String id) throws IOException {
+	HttpEntity<byte[]> serveCollectionImage(@RequestParam(value = "id") String id, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
 		File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
 		if (!f.exists()) throw new FileNotFoundException();
 		byte[] bytes = FileUtils.readFileToByteArray(f);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
+		headers.setContentType(method.equals("file") ? MediaType.APPLICATION_OCTET_STREAM : MediaType.IMAGE_JPEG);
 		headers.setContentLength(bytes.length);
 
 		return new HttpEntity<>(bytes, headers);
