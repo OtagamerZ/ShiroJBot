@@ -44,12 +44,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class TenthMinuteEvent implements Job {
 	public static JobDetail tenthMinute;
@@ -66,9 +62,13 @@ public class TenthMinuteEvent implements Job {
 			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (guild == null) continue;
 
+			Set<String> invalid = new HashSet<>();
 			for (PaidRole pr : gc.getPaidRoles()) {
 				Role r = guild.getRoleById(pr.getId());
-				if (r == null) continue;
+				if (r == null) {
+					invalid.add(pr.getId());
+					continue;
+				}
 
 				Set<String> valid = pr.getUsers().keySet();
 				Set<String> toExpire = pr.getExpiredUsers();
@@ -101,6 +101,14 @@ public class TenthMinuteEvent implements Job {
 				if (acts.isEmpty()) continue;
 				RestAction.allOf(acts).mapToResult().queue();
 			}
+
+			if (!invalid.isEmpty()) {
+				for (String s : invalid) {
+					gc.removePaidRole(s);
+				}
+
+				GuildDAO.updateGuildSettings(gc);
+			}
 		}
 
 		guilds = GuildDAO.getAllGuildsWithGeneralChannel();
@@ -132,24 +140,29 @@ public class TenthMinuteEvent implements Job {
 			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (guild == null) continue;
 
+			Set<String> invalid = new HashSet<>();
 			List<VoiceTime> vts = VoiceTimeDAO.getAllVoiceTimes(guild.getId());
 			for (VoiceTime vt : vts) {
-				Set<VoiceRole> vroles = gc.getVoiceRoles().stream()
-						.filter(vr -> vr.getTime() <= vt.getTime())
-						.collect(Collectors.toSet());
+				Set<VoiceRole> vroles = gc.getVoiceRoles();
 
 				if (vroles.isEmpty()) continue;
 
-				VoiceRole max = vroles.stream().max(Comparator.comparingLong(VoiceRole::getTime)).orElse(null);
+				VoiceRole max = vroles.stream()
+						.filter(vr -> vr.getTime() <= vt.getTime())
+						.max(Comparator.comparingLong(VoiceRole::getTime))
+						.orElse(null);
 
 				Member m = guild.getMemberById(vt.getUid());
 				if (m == null) continue;
 
 				Pair<Role, VoiceRole> role = null;
-				List<Role> prev = new ArrayList<>();
+				Set<Role> prev = new HashSet<>();
 				for (VoiceRole vrole : vroles) {
 					Role r = guild.getRoleById(vrole.getId());
-					if (r == null) continue;
+					if (r == null) {
+						invalid.add(vrole.getId());
+						continue;
+					}
 
 					if (vrole.equals(max)) {
 						if (!m.getRoles().contains(r)) {
@@ -161,9 +174,7 @@ public class TenthMinuteEvent implements Job {
 					}
 				}
 
-				if (gc.getGuildId().equals("614904136437334044")) {
-					System.out.println(role + " | " + prev);
-				}
+				System.out.println(max + " | " + role + " | " + prev);
 				if (role == null && prev.isEmpty()) continue;
 				Pair<Role, VoiceRole> finalRole = role;
 
@@ -177,6 +188,14 @@ public class TenthMinuteEvent implements Job {
 							.queue();
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
+			}
+
+			if (!invalid.isEmpty()) {
+				for (String s : invalid) {
+					gc.removeVoiceRole(s);
+				}
+
+				GuildDAO.updateGuildSettings(gc);
 			}
 		}
 
