@@ -356,6 +356,7 @@ public class ShiroEvents extends ListenerAdapter {
 						channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 				}
 
+				Set<String> invalid = new HashSet<>();
 				Set<LevelRole> roles = gc.getLevelRoles()
 						.stream()
 						.filter(e -> m.getLevel() >= e.getLevel())
@@ -368,7 +369,7 @@ public class ShiroEvents extends ListenerAdapter {
 					for (LevelRole role : roles) {
 						Role r = guild.getRoleById(role.getId());
 						if (r == null) {
-							gc.removeLevelRole(role.getId());
+							invalid.add(role.getId());
 							continue;
 						}
 
@@ -378,7 +379,6 @@ public class ShiroEvents extends ListenerAdapter {
 							rols.add(r);
 						}
 					}
-					GuildDAO.updateGuildSettings(gc);
 
 					rols.removeIf(member.getRoles()::contains);
 					if (!rols.isEmpty()) {
@@ -392,6 +392,14 @@ public class ShiroEvents extends ListenerAdapter {
 								chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
 						}
 					}
+				}
+
+				if (!invalid.isEmpty()) {
+					for (String s : invalid) {
+						gc.removeLevelRole(s);
+					}
+
+					GuildDAO.updateGuildSettings(gc);
 				}
 			} catch (ErrorResponseException | NullPointerException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
