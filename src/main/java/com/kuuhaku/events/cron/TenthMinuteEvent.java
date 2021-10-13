@@ -174,7 +174,6 @@ public class TenthMinuteEvent implements Job {
 					}
 				}
 
-				System.out.println(max + " | " + role + " | " + prev);
 				if (role == null && prev.isEmpty()) continue;
 				Pair<Role, VoiceRole> finalRole = role;
 
