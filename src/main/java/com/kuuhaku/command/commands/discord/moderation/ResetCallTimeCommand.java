@@ -18,11 +18,16 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "zerarcall",
@@ -35,14 +40,25 @@ public class ResetCallTimeCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
-			VoiceTimeDAO.resetVoiceTimes(guild.getId());
-
-			channel.sendMessage("✅ | Tempos de call reiniciados com sucesso!").queue();
+			channel.sendMessage("Isso vai limpar o tempo de call acumulado de todos os membros neste servidor, tem certeza?").queue(
+					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								VoiceTimeDAO.resetVoiceTimes(guild.getId());
+								channel.sendMessage("✅ | Tempos de call reiniciados com sucesso!").queue();
+							}), true, 1, TimeUnit.MINUTES
+							, u -> u.getId().equals(author.getId())
+					), Helper::doNothing
+			);
 		} else {
-			User u = message.getMentionedUsers().get(0);
+			User tgt = message.getMentionedUsers().get(0);
 
-			VoiceTimeDAO.removeVoiceTime(VoiceTimeDAO.getVoiceTime(u.getId(), guild.getId()));
-			channel.sendMessage("✅ | Tempo de call de " + u.getAsMention() + " reiniciado com sucesso!").queue();
+			channel.sendMessage("Isso vai limpar o tempo de call acumulado de " + tgt.getName() + ", tem certeza?").queue(
+					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								VoiceTimeDAO.removeVoiceTime(VoiceTimeDAO.getVoiceTime(tgt.getId(), guild.getId()));
+								channel.sendMessage("✅ | Tempo de call de " + tgt.getAsMention() + " reiniciado com sucesso!").queue();
+							}), true, 1, TimeUnit.MINUTES
+							, u -> u.getId().equals(author.getId())
+					), Helper::doNothing
+			);
 		}
 	}
 }
