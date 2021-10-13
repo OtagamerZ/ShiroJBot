@@ -33,8 +33,15 @@ public class ResetCallTimeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		VoiceTimeDAO.resetVoiceTimes(guild.getId());
+		if (message.getMentionedUsers().isEmpty()) {
+			VoiceTimeDAO.resetVoiceTimes(guild.getId());
 
-		channel.sendMessage("✅ | Tempos de call reiniciados com sucesso!").queue();
+			channel.sendMessage("✅ | Tempos de call reiniciados com sucesso!").queue();
+		} else {
+			User u = message.getMentionedUsers().get(0);
+
+			VoiceTimeDAO.removeVoiceTime(VoiceTimeDAO.getVoiceTime(u.getId(), guild.getId()));
+			channel.sendMessage("✅ | Tempo de call de " + u.getAsMention() + " reiniciado com sucesso!").queue();
+		}
 	}
 }
