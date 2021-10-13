@@ -164,7 +164,7 @@ public class ImageFilters {
 			int[] color = Helper.unpackRGB(rgb);
 
 			for (int i = 1; i < color.length; i++) {
-				color[i] = Helper.average(color[1], color[2], color[3]);
+				color[i] = (int) (0.2126 * color[1] + 0.7152 * color[2] + 0.0722 * color[3]);
 			}
 
 			out.setRGB(x, y, color[0] << 24 | color[1] << 16 | color[2] << 8 | color[3]);
