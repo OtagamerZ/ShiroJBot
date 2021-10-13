@@ -27,6 +27,7 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "zerarcall",
 		aliases = {"resetcall", "zerartempo"},
+		usage = "req_mention-opt",
 		category = Category.MODERATION
 )
 public class ResetCallTimeCommand implements Executable {
