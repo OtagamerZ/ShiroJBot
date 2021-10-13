@@ -121,7 +121,7 @@ public class ImageFilters {
 				color[k] = (c >> (16 - k * 8)) & 0xFF;
 			}
 
-			out.setRGB(x, y, 0xFF << 24 | color[0] << 16 | color[1] << 8 | color[2]);
+			out.setRGB(x, y, Helper.packRGB(0xFF, color[0], color[1], color[2]));
 		});
 
 		return out;
@@ -149,7 +149,7 @@ public class ImageFilters {
 				}
 			}
 
-			out.setRGB(x, y, color[0] << 24 | color[1] << 16 | color[2] << 8 | color[3]);
+			out.setRGB(x, y, Helper.packRGB(color));
 		});
 
 		return out;
@@ -167,7 +167,7 @@ public class ImageFilters {
 				color[i] = (int) (0.2126 * color[1] + 0.7152 * color[2] + 0.0722 * color[3]);
 			}
 
-			out.setRGB(x, y, color[0] << 24 | color[1] << 16 | color[2] << 8 | color[3]);
+			out.setRGB(x, y, Helper.packRGB(color));
 		});
 
 		return out;
