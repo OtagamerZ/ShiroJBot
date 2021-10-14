@@ -60,8 +60,8 @@ public class SummonHeroCommand implements Executable {
 
 		Hero h = CardDAO.getHero(author.getId());
 
-		if (h != null) {
-			channel.sendMessage("❌ | Você já possui um herói.").queue();
+		if (h != null && h.getLevel() < 10) {
+			channel.sendMessage("❌ | Você só pode invocar outro herói após ele alcançar o nível 10.").queue();
 			return;
 		} else if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma raça e um nome para seu novo herói.").queue();
@@ -72,7 +72,7 @@ public class SummonHeroCommand implements Executable {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		if (acc.getGems() < 5) {
+		if (h == null && acc.getGems() < 5) {
 			channel.sendMessage("❌ | Você não possui gemas suficientes para completar o feitiço de invocação.").queue();
 			return;
 		}
@@ -116,19 +116,37 @@ public class SummonHeroCommand implements Executable {
 
 		BufferedImage image = bi;
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?")
-				.setEmbeds(eb.build())
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							CardDAO.saveHero(new Hero(author, name, r, image));
+		if (h != null) {
+			channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " e enviar " + h.getName() + " de volta ao seu mundo de origem, deseja confirmar?")
+					.setEmbeds(eb.build())
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								CardDAO.saveHero(new Hero(author, name, r, image));
 
-							acc.removeGem(5);
-							AccountDAO.saveAccount(acc);
+								int gems = h.getLevel() - 10;
+								acc.addGem(gems);
+								AccountDAO.saveAccount(acc);
 
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
-						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId()),
-						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-				));
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso, você recebeu " + gems + " de " + h.getName() + " antes de retornar!")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		} else {
+			channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por 5 gemas, deseja confirmar?")
+					.setEmbeds(eb.build())
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								CardDAO.saveHero(new Hero(author, name, r, image));
+
+								acc.removeGem(5);
+								AccountDAO.saveAccount(acc);
+
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		}
 	}
 }
