@@ -101,7 +101,6 @@ public class Champion implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
-	private transient double dodge = 0;
 	private transient double mDodge = 0;
 	private transient boolean gravelocked = false;
 
@@ -501,7 +500,7 @@ public class Champion implements Drawable, Cloneable {
 		}
 
 		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
-		double d = Helper.clamp((dodge + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0)) * heroMod, 0, 100);
+		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0)) * heroMod, 0, 100);
 		return (int) Helper.roundTrunc(d * 100, 5) / 100;
 	}
 
@@ -808,7 +807,6 @@ public class Champion implements Drawable, Cloneable {
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
-		dodge = 0;
 		mDodge = 0;
 	}
 
