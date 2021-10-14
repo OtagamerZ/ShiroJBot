@@ -281,6 +281,7 @@ public class Hero implements Cloneable {
 			ddgModif *= switch (perk) {
 				case NIMBLE -> 1.25;
 				case ARMORED -> 0;
+				case MANALESS -> 0.5;
 				default -> 1;
 			};
 		}
