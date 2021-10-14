@@ -127,7 +127,7 @@ public class SummonHeroCommand implements Executable {
 								AccountDAO.saveAccount(acc);
 
 								Main.getInfo().getConfirmationPending().remove(author.getId());
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso, você recebeu " + gems + " de " + h.getName() + " antes de retornar!")).queue();
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso, você recebeu " + gems + " gemas de " + h.getName() + " antes de retornar!")).queue();
 							}), true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
