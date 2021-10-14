@@ -72,7 +72,7 @@ public class EffectShopCommand implements Executable {
 		masters.removeIf(c -> c.equals(h.getReferenceChampion()));
 
 		Calendar cal = Calendar.getInstance();
-		List<Champion> pool = Helper.getRandomN(masters, 5, 1, author.getIdLong() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
+		List<Champion> pool = Helper.getRandomN(masters, 5, 1, author.getIdLong() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
