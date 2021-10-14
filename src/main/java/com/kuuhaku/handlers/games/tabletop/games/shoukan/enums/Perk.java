@@ -23,7 +23,7 @@ public enum Perk {
 	BLOODLUST("Sede de sangue", "Converte metade do custo de MP em custo de HP (1 MP = 100 HP)."),
 	CARELESS("Descuidado", "Aumenta ataque em 25% mas reduz defesa em 33%."),
 	NIMBLE("Ágil", "Aumenta esquiva em 25% mas reduz o HP máximo em 25%."),
-	MANALESS("Sem mana", "Remove custo de MP, mas reduz ataque e defesa em 50%."),
+	MANALESS("Sem mana", "Remove custo de MP, mas reduz todos os atributos em 50%."),
 	MASOCHIST("Masoquista", "Aumenta o ataque e reduz a defesa com base no dano acumulado (2% HP perdido = +1% ATK/-1% DEF)."),
 	NIGHTCAT("Gato Noturno", "Dobra a chance de esquiva em campos noturnos, mas divide pela metade em campos diurnos."),
 	VAMPIRE("Vampiro", "Derrotar cartas restaura 10% do HP perdido, mas reduz o HP máximo em 25%."),
