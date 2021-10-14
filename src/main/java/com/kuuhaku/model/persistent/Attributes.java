@@ -110,6 +110,7 @@ public class Attributes {
 			hpModif *= switch (perk) {
 				case VANGUARD -> 1.33;
 				case NIMBLE, VAMPIRE -> 0.75;
+				case MANALESS -> 0.5;
 				default -> 1;
 			};
 		}
