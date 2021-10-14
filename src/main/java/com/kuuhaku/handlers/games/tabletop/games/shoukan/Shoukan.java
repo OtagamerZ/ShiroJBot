@@ -2704,6 +2704,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 					Hero hr = CardDAO.getHero(h.getAcc().getUid());
 
 					assert hr != null;
+					if (isRanked() && Helper.chance(h.getHero().getXp())) {
+						h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
+						hr.addBonusPoints(2);
+					}
+
 					hr.setHp(h.getHero().getHp());
 					hr.setDmg();
 					hr.setXp(h.getHero().getXp());

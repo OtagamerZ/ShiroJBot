@@ -78,7 +78,7 @@ public class HeroPerksCommand implements Executable {
 		else
 			pool = EnumSet.complementOf(EnumSet.copyOf(h.getPerks()));
 
-		List<Perk> perks = Helper.getRandomN(List.copyOf(pool), 3, 1, author.getIdLong() + h.getLevel());
+		List<Perk> perks = Helper.getRandomN(List.copyOf(pool), 3, 1, author.getIdLong() + h.getId() + h.getLevel());
 		channel.sendMessageEmbeds(getEmbed(perks)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
 							put("1️⃣", (mb, ms) -> {
