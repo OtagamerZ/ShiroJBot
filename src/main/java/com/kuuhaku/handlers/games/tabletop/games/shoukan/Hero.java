@@ -70,6 +70,9 @@ public class Hero implements Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int effect = 0;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int bonusPoints = 0;
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	@JoinColumn(name = "hero_id")
@@ -154,8 +157,16 @@ public class Hero implements Cloneable {
 		else return -1;
 	}
 
+	public int getBonusPoints() {
+		return bonusPoints;
+	}
+
+	public void addBonusPoints(int bonusPoints) {
+		this.bonusPoints += Hero.this.bonusPoints;
+	}
+
 	public int getMaxStatPoints() {
-		return 5 + getLevel() * 5;
+		return 5 + getLevel() * 5 + bonusPoints;
 	}
 
 	public int getAvailableStatPoints() {
