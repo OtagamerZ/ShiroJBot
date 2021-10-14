@@ -119,11 +119,11 @@ public class Attributes {
 
 	public int calcMp() {
 		return (int) (1 + Math.max(0,
-				str * 0.2
+				str * 0.25
 				+ res * 0.1
-				+ agi * 0.02
-				+ wis * -0.15
-				+ con * 0.05
+				+ agi * 0.0175
+				+ wis * -0.125
+				+ con * 0.075
 		));
 	}
 
