@@ -668,6 +668,8 @@ public class Hand {
 	}
 
 	public void addHp(int value) {
+		if (value <= 0) return;
+
 		prevHp = hp;
 		hp += Math.max(0, value);
 
@@ -675,6 +677,8 @@ public class Hand {
 	}
 
 	public void addHp(int value, boolean trigger) {
+		if (value <= 0) return;
+
 		prevHp = hp;
 		hp += Math.max(0, value);
 
@@ -683,6 +687,8 @@ public class Hand {
 	}
 
 	public void removeHp(int value) {
+		if (value <= 0) return;
+
 		prevHp = hp;
 		if (hp > baseHp / 3) crippleHp(value);
 		else hp -= Math.max(0, value);
@@ -691,6 +697,8 @@ public class Hand {
 	}
 
 	public void removeHp(int value, boolean trigger) {
+		if (value <= 0) return;
+
 		prevHp = hp;
 		if (hp > baseHp / 3) crippleHp(value);
 		else hp -= Math.max(0, value);
@@ -700,6 +708,8 @@ public class Hand {
 	}
 
 	public void crippleHp(int value) {
+		if (value <= 0) return;
+
 		prevHp = hp;
 		hp = Math.max(1, hp - Math.max(0, value));
 
@@ -707,6 +717,8 @@ public class Hand {
 	}
 
 	public void crippleHp(int value, boolean trigger) {
+		if (value <= 0) return;
+
 		prevHp = hp;
 		hp = Math.max(1, hp - Math.max(0, value));
 
