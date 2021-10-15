@@ -1551,7 +1551,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Equipment eq = slts.get(target).getBottom();
 			if (eq == null) return;
 
-			if (slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
+			if (eq.getLinkedTo().getLeft() > -1 && slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
 				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 
 			SlotColumn sd = slts.get(target);
@@ -1589,14 +1589,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 	}
 
-	public void unequipCard(Side s, int index, List<SlotColumn> side) {
-		Equipment eq = side.get(index).getBottom();
+	public void unequipCard(Side s, int index, List<SlotColumn> slts) {
+		Equipment eq = slts.get(index).getBottom();
 		if (eq == null) return;
 
-		if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
-			side.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
+		if (eq.getLinkedTo().getLeft() > -1 && slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
+			slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 
-		SlotColumn sd = side.get(index);
+		SlotColumn sd = slts.get(index);
 		sd.setBottom(null);
 
 		eq.reset();
