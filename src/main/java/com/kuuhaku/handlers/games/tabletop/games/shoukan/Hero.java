@@ -162,7 +162,7 @@ public class Hero implements Cloneable {
 	}
 
 	public void addBonusPoints(int bonusPoints) {
-		this.bonusPoints += Hero.this.bonusPoints;
+		this.bonusPoints += bonusPoints;
 	}
 
 	public int getMaxStatPoints() {
