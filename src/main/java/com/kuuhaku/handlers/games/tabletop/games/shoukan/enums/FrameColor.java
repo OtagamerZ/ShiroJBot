@@ -104,8 +104,7 @@ public enum FrameColor {
 					GRAY, LEGACY_GRAY -> Color.WHITE;
 
 			case RAINBOW, GLITCH -> Helper.getRandomColor();
-			case BLACK -> Color.BLACK;
-			case HALLOWEEN -> new Color(220, 89, 16);
+			case BLACK, HALLOWEEN -> Color.BLACK;
 		};
 	}
 
@@ -119,12 +118,11 @@ public enum FrameColor {
 					YELLOW, LEGACY_YELLOW,
 					ORANGE,
 					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY,
-					HALLOWEEN -> Color.BLACK;
+					GRAY, LEGACY_GRAY -> Color.BLACK;
 
-			case BLACK -> Color.WHITE;
-			case RAINBOW -> Helper.toLuma(getPrimaryColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
-			case GLITCH -> Helper.reverseColor(getPrimaryColor());
+			case BLACK, HALLOWEEN -> Color.WHITE;
+			case RAINBOW -> Helper.toLuma(getThemeColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
+			case GLITCH -> Helper.reverseColor(getThemeColor());
 		};
 	}
 

@@ -145,7 +145,7 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.drawImage(fc.getFront(true), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-			g2d.setColor(fc.getPrimaryColor());
+			g2d.setColor(fc.getThemeColor());
 			g2d.setBackground(fc.getSecondaryColor());
 
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 181, 38, 32, g2d);
@@ -162,7 +162,7 @@ public class Champion implements Drawable, Cloneable {
 			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(), true);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
-			g2d.setColor(fc.getSecondaryColor());
+			g2d.setColor(fc.getPrimaryColor());
 			g2d.drawString("[" + c.getRace().toString().toUpperCase(Locale.ROOT) + (c.hasEffect() ? "/EFEITO" : "") + "]", 9, 277);
 
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
