@@ -333,7 +333,7 @@ public class ShoukanCommand implements Executable {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, null, players.toArray(User[]::new));
-				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
+				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (players.contains(mb.getUser())) {
 										if (Main.getInfo().gameInProgress(mb.getId())) {
@@ -367,7 +367,7 @@ public class ShoukanCommand implements Executable {
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, null, author, message.getMentionedUsers().get(0));
-				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
