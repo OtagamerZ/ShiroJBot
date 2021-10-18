@@ -194,8 +194,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 						setWo();
 						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
-						close();
 					}
+
+					close();
 					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
