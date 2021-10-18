@@ -204,27 +204,37 @@ public class SellCardCommand implements Executable {
 									case EVOGEAR -> {
 										Equipment e = fDk.getEquipment(off.getLeft());
 										fDk.removeEquipment(e);
-										assert e != null;
+										if (e == null) yield null;
+
 										yield new Market(author.getId(), e, price);
 									}
 									case FIELD -> {
 										Field f = fDk.getField(off.getLeft());
 										fDk.removeField(f);
-										assert f != null;
+										if (f == null) yield null;
+
 										yield new Market(author.getId(), f, price);
 									}
 									case SENSHI -> {
 										Champion c = fDk.getChampion(off.getLeft());
 										fDk.removeChampion(c);
-										assert c != null;
+										if (c == null) yield null;
+
 										yield new Market(author.getId(), c, price);
 									}
 									default -> {
 										KawaiponCard kc = finalKp.getCard(off.getLeft(), off.getRight());
 										finalKp.removeCard(kc);
+										if (kc == null) yield null;
+
 										yield new Market(author.getId(), kc, price);
 									}
 								};
+								if (m == null) {
+									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode vender uma carta que não possui!")).queue();
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									return;
+								}
 
 								MarketDAO.saveCard(m);
 								KawaiponDAO.saveKawaipon(finalKp);
