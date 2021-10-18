@@ -147,7 +147,7 @@ public class Arena {
 						FrameColor fc = h.getAcc().getFrame();
 
 						g2d.setColor(fc.getThemeColor());
-						g2d.setBackground(fc.getSecondaryColor());
+						g2d.setBackground(fc.getBackgroundColor());
 
 						name = ">>> " + name + " <<<";
 					} else {
