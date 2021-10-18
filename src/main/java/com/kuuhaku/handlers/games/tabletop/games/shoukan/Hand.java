@@ -116,7 +116,7 @@ public class Hand {
 						.map(Drawable::copy)
 						.collect(Collectors.toList())
 		);
-		if (hero != null) deque.add(hero.toChampion());
+		if (hero != null && hero.getHp() > 0) deque.add(hero.toChampion());
 
 		int baseHp;
 		int baseManaPerTurn;
