@@ -21,6 +21,7 @@ package com.kuuhaku.model.enums;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -123,6 +124,38 @@ public enum GemItem {
 
 				acc.setCardStashCapacity(acc.getCardStashCapacity() + 15);
 				AccountDAO.saveAccount(acc);
+
+				return true;
+			}
+	),
+	STATS_REROLL(
+			"Resetar atributos", "Zera os atributos do seu herói, permitindo realocá-los",
+			3,
+			(mb, chn, args) -> {
+				Hero h = CardDAO.getHero(mb.getId());
+				if (h == null) {
+					chn.sendMessage("❌ | Você não possui um herói.").queue();
+					return false;
+				}
+
+				h.resetStats();
+				CardDAO.saveHero(h);
+
+				return true;
+			}
+	),
+	PERK_REROLL(
+			"Resetar perks", "Zera as perks selecionadas, permitindo realocá-las",
+			3,
+			(mb, chn, args) -> {
+				Hero h = CardDAO.getHero(mb.getId());
+				if (h == null) {
+					chn.sendMessage("❌ | Você não possui um herói.").queue();
+					return false;
+				}
+
+				h.getPerks().clear();
+				CardDAO.saveHero(h);
 
 				return true;
 			}

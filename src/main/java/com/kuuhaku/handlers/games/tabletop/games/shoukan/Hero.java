@@ -119,6 +119,10 @@ public class Hero implements Cloneable {
 		return stats;
 	}
 
+	public void resetStats() {
+		stats = new Attributes(race.getStartingStats());
+	}
+
 	public Race getRace() {
 		return race;
 	}
@@ -128,7 +132,16 @@ public class Hero implements Cloneable {
 	}
 
 	public void reduceDmg() {
-		this.dmg = (int) Math.max(0, this.dmg - getMaxHp() * 0.1);
+		double healModif = 1;
+		for (Perk perk : perks) {
+			healModif *= switch (perk) {
+				case OPTIMISTIC -> 1.5;
+				case PESSIMISTIC -> 0.5;
+				default -> 1;
+			};
+		}
+
+		this.dmg = (int) Math.max(0, this.dmg - getMaxHp() * 0.1 * healModif);
 	}
 
 	public void reduceDmg(int val) {

@@ -120,8 +120,8 @@ public class Attributes {
 
 	public int calcMp() {
 		return (int) (1 + Math.max(0,
-				str * 0.25
-				+ res * 0.1
+				str * 0.275
+				+ res * 0.15
 				+ agi * 0.0175
 				+ wis * -0.15
 				+ con * 0.075
@@ -129,11 +129,11 @@ public class Attributes {
 	}
 
 	public int calcAtk() {
-		return (int) Helper.roundTrunc(100 + 3000 * (1 - Math.exp(-0.018 * str + -0.005 * agi)), 25);
+		return (int) Helper.roundTrunc(100 + 2750 * (1 - Math.exp(-0.017 * str + -0.005 * agi)), 25);
 	}
 
 	public int calcDef() {
-		return (int) Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.025 * res + -0.0075 * agi)), 25);
+		return (int) Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.022 * res + -0.0075 * agi)), 25);
 	}
 
 	public int calcDodge() {

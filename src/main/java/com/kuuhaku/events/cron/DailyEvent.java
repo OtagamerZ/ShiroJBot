@@ -20,10 +20,8 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
@@ -103,12 +101,6 @@ public class DailyEvent implements Job {
 
 				MatchMakingRatingDAO.saveMMR(mmr);
 			}
-		}
-
-		List<Hero> heroes = CardDAO.getHeroes();
-		for (Hero hero : heroes) {
-			hero.reduceDmg();
-			CardDAO.saveHero(hero);
 		}
 	}
 }
