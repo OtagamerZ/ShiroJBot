@@ -176,27 +176,37 @@ public class StoreCardCommand implements Executable {
 									case EVOGEAR -> {
 										Equipment e = fDk.getEquipment(off.getLeft());
 										fDk.removeEquipment(e);
-										assert e != null;
+										if (e == null) yield null;
+
 										yield new Stash(author.getId(), e);
 									}
 									case FIELD -> {
 										Field f = fDk.getField(off.getLeft());
 										fDk.removeField(f);
-										assert f != null;
+										if (f == null) yield null;
+
 										yield new Stash(author.getId(), f);
 									}
 									case SENSHI -> {
 										Champion c = fDk.getChampion(off.getLeft());
 										fDk.removeChampion(c);
-										assert c != null;
+										if (c == null) yield null;
+
 										yield new Stash(author.getId(), c);
 									}
 									default -> {
 										KawaiponCard kc = finalKp.getCard(off.getLeft(), off.getRight());
 										finalKp.removeCard(kc);
+										if (kc == null) yield null;
+
 										yield new Stash(author.getId(), kc);
 									}
 								};
+								if (m == null) {
+									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode armazenar uma carta que não possui!")).queue();
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									return;
+								}
 
 								StashDAO.saveCard(m);
 								KawaiponDAO.saveKawaipon(finalKp);

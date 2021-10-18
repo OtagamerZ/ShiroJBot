@@ -106,7 +106,7 @@ public class StashDAO {
 				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				rarity != null ? "AND c.rarity LIKE UPPER(:rarity)" : "",
 				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
-				foil ? "AND m.foil = :foil" : "",
+				foil ? "AND s.foil = :foil" : "",
 				onlyKp ? "AND c.rarity <> 'EQUIPMENT' AND c.rarity <> 'FIELD'" : "",
 				onlyEq ? "AND c.rarity = 'EQUIPMENT'" : "",
 				onlyFd ? "AND c.rarity = 'FIELD'" : "",
