@@ -3273,4 +3273,16 @@ public class Helper {
 
 		return removed;
 	}
+
+	public static int toLuma(int r, int g, int b) {
+		return (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
+	}
+
+	public static int toLuma(int[] rgb) {
+		return (int) (0.2126 * rgb[1] + 0.7152 * rgb[2] + 0.0722 * rgb[3]);
+	}
+
+	public static int toLuma(int rgb) {
+		return (int) (0.2126 * ((rgb >> 16) & 0xFF) + 0.7152 * ((rgb >> 8) & 0xFF) + 0.0722 * (rgb & 0xFF));
+	}
 }
