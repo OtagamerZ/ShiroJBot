@@ -76,11 +76,15 @@ public class UnmuteMemberCommand implements Executable {
 				act.add(po.delete());
 		}
 
-		RestAction.allOf(act)
-				.flatMap(s -> channel.sendMessage("✅ | Usuário dessilenciado com sucesso!"))
-				.queue(s -> {
-					Helper.logToChannel(author, false, null, mb.getAsMention() + " foi dessilenciado por " + author.getAsMention(), guild);
-					MemberDAO.removeMutedMember(m);
-				}, Helper::doNothing);
+		if (act.isEmpty()) {
+			channel.sendMessage("Nenhum usuário foi dessilenciado.").queue();
+		} else {
+			RestAction.allOf(act)
+					.flatMap(s -> channel.sendMessage("✅ | Usuário dessilenciado com sucesso!"))
+					.queue(s -> {
+						Helper.logToChannel(author, false, null, mb.getAsMention() + " foi dessilenciado por " + author.getAsMention(), guild);
+						MemberDAO.removeMutedMember(m);
+					}, Helper::doNothing);
+		}
 	}
 }
