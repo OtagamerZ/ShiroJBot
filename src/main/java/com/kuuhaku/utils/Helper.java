@@ -1463,6 +1463,7 @@ public class Helper {
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildId())) return;
+
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff cardBuff = gb.getBuffs().stream()
 				.filter(b -> b.getType() == BuffType.CARD)
@@ -1520,8 +1521,10 @@ public class Helper {
 								.queue(null, Helper::doNothing);
 					}
 				}
+
 				Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-				Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
+				if (!cbUltimate)
+					Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 			} catch (IllegalStateException ignore) {
 			}
 		}
@@ -1595,14 +1598,15 @@ public class Helper {
 							.queue(null, Helper::doNothing);
 				}
 			}
+
 			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-			Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 		} catch (IllegalStateException ignore) {
 		}
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildId())) return;
+
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff dropBuff = gb.getBuffs().stream()
 				.filter(b -> b.getType() == BuffType.DROP)
@@ -1652,8 +1656,10 @@ public class Helper {
 								.queue(null, Helper::doNothing);
 					}
 				}
+
 				Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
-				Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
+				if (!dbUltimate)
+					Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
 			} catch (IllegalStateException ignore) {
 			}
 		}
