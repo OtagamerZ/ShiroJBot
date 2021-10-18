@@ -113,7 +113,7 @@ public class HeroPerksCommand implements Executable {
 	}
 
 	private void choosePerk(Hero h, Message msg, Perk perk) {
-		msg.getChannel().sendMessage("Você selecionou a perk `" + perk + "`, deseja confirmar (a escolha é permanente)?")
+		msg.getChannel().sendMessage("Você selecionou a perk `" + perk + "`, deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							h.getPerks().add(perk);
 							CardDAO.saveHero(h);

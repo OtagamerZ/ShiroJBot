@@ -28,7 +28,10 @@ public enum Perk {
 	NIGHTCAT("Gato Noturno", "Dobra a chance de esquiva em campos noturnos, mas divide pela metade em campos diurnos."),
 	VAMPIRE("Vampiro", "Derrotar cartas restaura 10% do HP perdido, mas reduz o HP máximo em 25%."),
 	ARMORED("Encouraçado", "O atributo AGI deixa de conceder esquiva e passa a aumentar a defesa."),
-	MINDSHIELD("Escudo Psíquico", "Ganha permanentemente um escudo de feitiços, mas dobra o custo de mana.");
+	MINDSHIELD("Escudo Psíquico", "Ganha permanentemente um escudo de feitiços, mas dobra o custo de mana."),
+	OPTIMISTIC("Otimista", "Aumenta a taxa de regeneração em 50%."),
+	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50%."),
+	;
 
 	private final String name;
 	private final String description;

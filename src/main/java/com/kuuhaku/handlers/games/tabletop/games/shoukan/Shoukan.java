@@ -949,12 +949,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 				}
 
+				boolean isHero = his.getHero() != null;
 				boolean noDmg = (his.isDefending() && !(his.isSleeping() || his.isStunned()))
 								|| his.getBonus().popFlag(Flag.NODAMAGE)
 								|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 				int dmg;
-				if (noDmg)
+				if (noDmg && !isHero)
 					dmg = Math.round(
 							yours.getLinkedTo().parallelStream()
 									.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
@@ -977,14 +978,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Hero h = his.getHero();
-				if (h != null) {
+				if (isHero) {
 					int aux = dmg - h.getHp();
 					h.setHp(h.getHp() - dmg);
 					dmg = aux;
 				}
 
 				if (h == null || h.getHp() == 0) {
-					op.removeHp(dmg);
+					if (!noDmg || !isHero) op.removeHp(dmg);
 					killCard(defr.getLeft(), defr.getRight(), his.getId());
 
 					Hero y = yours.getHero();
@@ -1039,11 +1040,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
 
+			boolean isHero = yours.getHero() != null;
 			boolean noDmg = yours.getBonus().popFlag(Flag.NODAMAGE)
 							|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 			int dmg;
-			if (noDmg)
+			if (noDmg && !isHero)
 				dmg = Math.round(
 						his.getLinkedTo().parallelStream()
 								.filter(e -> e.getCharm() == Charm.ARMORPIERCING)
@@ -1066,14 +1068,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			Hero h = yours.getHero();
-			if (h != null) {
+			if (isHero) {
 				int aux = dmg - h.getHp();
 				h.setHp(h.getHp() - dmg);
 				dmg = aux;
 			}
 
 			if (h == null || h.getHp() == 0) {
-				you.removeHp(dmg);
+				if (!noDmg || !isHero) op.removeHp(dmg);
 				killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
 
 				Hero y = his.getHero();
