@@ -209,11 +209,20 @@ public class Tournament {
 	}
 
 	public void register(String id) {
-		participants.add(new Participant(id));
+		participants.add(new Participant(id, this));
 	}
 
 	public void leave(String id) {
-		participants.removeIf(p -> p.getUid().equals(id));
+		Participant p = null;
+		for (Participant part : participants) {
+			if (part.getUid().equals(id)) {
+				p = part;
+				break;
+			}
+		}
+		if (p == null) return;
+
+		participants.remove(p);
 	}
 
 	public void close() {
