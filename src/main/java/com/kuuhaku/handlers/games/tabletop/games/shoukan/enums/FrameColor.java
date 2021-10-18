@@ -120,9 +120,10 @@ public enum FrameColor {
 					YELLOW, LEGACY_YELLOW,
 					ORANGE,
 					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY -> Color.WHITE;
+					GRAY, LEGACY_GRAY,
+					HALLOWEEN -> Color.WHITE;
 
-			case HALLOWEEN, BLACK -> Color.BLACK;
+			case BLACK -> Color.BLACK;
 			case RAINBOW, GLITCH -> getThemeColor();
 		};
 	}
