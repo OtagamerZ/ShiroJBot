@@ -493,7 +493,7 @@ public class Champion implements Drawable, Cloneable {
 
 	public int getDodge() {
 		double heroMod = 1;
-		if (hero != null) {
+		if (hero != null && game != null) {
 			if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
 				heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
 			}
