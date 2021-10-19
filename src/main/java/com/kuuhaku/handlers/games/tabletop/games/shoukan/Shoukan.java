@@ -2023,14 +2023,21 @@ public class Shoukan extends GlobalGame implements Serializable {
 			h.get().decreaseNullTime();
 			slots = arena.getSlots().get(getCurrentSide());
 
+			if (getRound() >= 75) {
+				if (Helper.equalsAny(getRound(), 75, 100)) {
+					channel.sendMessage(":warning: | ALERTA: Morte-súbita ativada, os jogadores perderão " + (getRound() >= 100 ? "25%" : "10%") + " do HP atual a cada turno!").queue();
+				}
+
+				h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
+				if (postCombat()) return;
+			}
+
 			h.get().addMana(h.get().getManaPerTurn());
 			if (h.get().getCombo().getLeft() == Race.DEMON) {
 				Hand op = hands.get(getNextSide());
 				h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
 				if (h.get().getHp() < h.get().getBaseHp() / 3f) {
 					h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
-
-					if (applyPersistentEffects(ON_HEAL, h.get().getSide(), -1)) return;
 				}
 			}
 
@@ -2247,14 +2254,17 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.get().decreaseNullTime();
 					slots = arena.getSlots().get(getCurrentSide());
 
+					if (getRound() >= 75) {
+						h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
+						if (postCombat()) return;
+					}
+
 					h.get().addMana(h.get().getManaPerTurn());
 					if (h.get().getCombo().getLeft() == Race.DEMON) {
 						Hand op = hands.get(getNextSide());
 						h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
 						if (h.get().getHp() < h.get().getBaseHp() / 3f) {
 							h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
-
-							if (applyPersistentEffects(ON_HEAL, h.get().getSide(), -1)) return;
 						}
 					}
 
