@@ -66,7 +66,7 @@ public class ColorNameCommand implements Executable {
 			"roxo", 0x7D3CFF,
 			"rosa", 0xE53CFF,
 			"marrom", 0x803C1F,
-			"branco", 0xFFFFF
+			"branco", 0xFFFFFF
 	));
 
 	@Override
