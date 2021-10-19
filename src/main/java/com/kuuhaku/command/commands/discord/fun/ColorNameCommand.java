@@ -94,14 +94,14 @@ public class ColorNameCommand implements Executable {
 				.delay(5, TimeUnit.SECONDS)
 				.flatMap(s -> s.editMessage("VALENDO!"))
 				.queue(t -> {
-					BufferedImage bi = new BufferedImage(500, 250, BufferedImage.TYPE_INT_ARGB);
-					Font font = Fonts.DOREKING.deriveFont(Font.BOLD, 200);
+					BufferedImage bi = new BufferedImage(500, 150, BufferedImage.TYPE_INT_ARGB);
+					Font font = Fonts.DOREKING.deriveFont(Font.BOLD, 100);
 
 					Pair<String, Integer> next = sequence.get(0);
 					Graphics2D g2d = bi.createGraphics();
 					g2d.setColor(new Color(next.getRight()));
 					g2d.setFont(font);
-					Profile.printCenteredString(next.getLeft(), 500, 0, 225, g2d);
+					Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
 					g2d.dispose();
 
 					t.editMessage("VALENDO! (0/" + (int) Math.pow(colors.size(), 2) + ")")
@@ -165,10 +165,10 @@ public class ColorNameCommand implements Executable {
 
 								next = sequence.get(hit);
 								Graphics2D g2d = bi.createGraphics();
-								g2d.clearRect(0, 0, 500, 250);
+								g2d.clearRect(0, 0, 500, 150);
 								g2d.setColor(new Color(next.getRight()));
 								g2d.setFont(font);
-								Profile.printCenteredString(next.getLeft(), 500, 0, 225, g2d);
+								Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
 								g2d.dispose();
 
 								msg.delete().queue(null, Helper::doNothing);
