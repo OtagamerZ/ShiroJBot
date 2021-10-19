@@ -124,7 +124,7 @@ public class ReserveCardCommand implements Executable {
 					byName.get(),
 					minPrice.get(),
 					maxPrice.get(),
-					byRarity.get() == null ? null : KawaiponRarity.getByFragment(byRarity.get()),
+					byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
 					byAnime.get(),
 					onlyFoil.get(),
 					onlyKawaipon.get(),
