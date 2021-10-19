@@ -671,19 +671,34 @@ public class Hand {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp += Math.max(0, value);
+		hp += value;
 
+		List<SlotColumn> slots = game.getArena().getSlots().get(side);
 		game.applyPersistentEffects(ON_HEAL, side, -1);
+		for (int i = 0; i < slots.size(); i++) {
+			Champion c = slots.get(i).getTop();
+			if (c != null) {
+				game.applyEffect(ON_HEAL, c, i, side, Pair.of(c, i), null);
+			}
+		}
 	}
 
 	public void addHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp += Math.max(0, value);
+		hp += value;
 
-		if (trigger)
+		if (trigger) {
+			List<SlotColumn> slots = game.getArena().getSlots().get(side);
 			game.applyPersistentEffects(ON_HEAL, side, -1);
+			for (int i = 0; i < slots.size(); i++) {
+				Champion c = slots.get(i).getTop();
+				if (c != null) {
+					game.applyEffect(ON_HEAL, c, i, side, Pair.of(c, i), null);
+				}
+			}
+		}
 	}
 
 	public void removeHp(int value) {
@@ -691,9 +706,16 @@ public class Hand {
 
 		prevHp = hp;
 		if (hp > baseHp / 3) crippleHp(value);
-		else hp -= Math.max(0, value);
+		else hp -= value;
 
+		List<SlotColumn> slots = game.getArena().getSlots().get(side);
 		game.applyPersistentEffects(ON_DAMAGE, side, -1);
+		for (int i = 0; i < slots.size(); i++) {
+			Champion c = slots.get(i).getTop();
+			if (c != null) {
+				game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+			}
+		}
 	}
 
 	public void removeHp(int value, boolean trigger) {
@@ -701,29 +723,52 @@ public class Hand {
 
 		prevHp = hp;
 		if (hp > baseHp / 3) crippleHp(value);
-		else hp -= Math.max(0, value);
+		else hp -= value;
 
-		if (trigger)
+		if (trigger) {
+			List<SlotColumn> slots = game.getArena().getSlots().get(side);
 			game.applyPersistentEffects(ON_DAMAGE, side, -1);
+			for (int i = 0; i < slots.size(); i++) {
+				Champion c = slots.get(i).getTop();
+				if (c != null) {
+					game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+				}
+			}
+		}
 	}
 
 	public void crippleHp(int value) {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp = Math.max(1, hp - Math.max(0, value));
+		hp = Math.max(1, hp - value);
 
+		List<SlotColumn> slots = game.getArena().getSlots().get(side);
 		game.applyPersistentEffects(ON_DAMAGE, side, -1);
+		for (int i = 0; i < slots.size(); i++) {
+			Champion c = slots.get(i).getTop();
+			if (c != null) {
+				game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+			}
+		}
 	}
 
 	public void crippleHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp = Math.max(1, hp - Math.max(0, value));
+		hp = Math.max(1, hp - value);
 
-		if (trigger)
+		if (trigger) {
+			List<SlotColumn> slots = game.getArena().getSlots().get(side);
 			game.applyPersistentEffects(ON_DAMAGE, side, -1);
+			for (int i = 0; i < slots.size(); i++) {
+				Champion c = slots.get(i).getTop();
+				if (c != null) {
+					game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+				}
+			}
+		}
 	}
 
 	public int getPrevHp() {
