@@ -95,7 +95,7 @@ public class ColorNameCommand implements Executable {
 				.flatMap(s -> s.editMessage("VALENDO!"))
 				.queue(t -> {
 					BufferedImage bi = new BufferedImage(500, 150, BufferedImage.TYPE_INT_ARGB);
-					Font font = Fonts.DOREKING.deriveFont(Font.BOLD, 100);
+					Font font = Fonts.DOREKING.deriveFont(Font.PLAIN, 100);
 
 					Pair<String, Integer> next = sequence.get(0);
 					Graphics2D g2d = bi.createGraphics();
