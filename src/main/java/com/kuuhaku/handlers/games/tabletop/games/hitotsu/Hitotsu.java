@@ -344,8 +344,11 @@ public class Hitotsu extends Game {
 		Collections.shuffle(deque);
 
 		Graphics2D g2d = mount.createGraphics();
-		g2d.setBackground(new Color(0, 0, 0, 0));
-		g2d.clearRect(0, 0, mount.getWidth(), mount.getHeight());
+
+		g2d.setComposite(AlphaComposite.Clear);
+		g2d.fillRect(0, 0, mount.getWidth(), mount.getHeight());
+		g2d.setComposite(AlphaComposite.SrcOver);
+
 		g2d.dispose();
 	}
 

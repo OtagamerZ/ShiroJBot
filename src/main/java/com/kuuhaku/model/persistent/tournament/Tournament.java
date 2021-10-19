@@ -291,7 +291,7 @@ public class Tournament {
 		BufferedImage bi = new BufferedImage((WIDTH + H_MARGIN) * phases + WIDTH - H_MARGIN + 10, Math.max((HEIGHT * 2 + V_MARGIN) * 5 - V_MARGIN + 10, (HEIGHT + V_MARGIN) * size - V_MARGIN + 10), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(BG_COLOR);
-		g2d.clearRect(0, 0, bi.getWidth(), bi.getHeight());
+		g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setStroke(new BasicStroke(8, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 
