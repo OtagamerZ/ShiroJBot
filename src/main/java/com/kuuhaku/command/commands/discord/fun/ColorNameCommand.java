@@ -187,7 +187,6 @@ public class ColorNameCommand implements Executable {
 								timeout = null;
 
 								int prize = (int) (hit * Math.pow(1.03, hit));
-								msg.delete().queue(null, Helper::doNothing);
 								channel.sendMessage("Você errou! Seu prêmio é de " + prize + " créditos.").queue();
 
 								Account acc = AccountDAO.getAccount(author.getId());
