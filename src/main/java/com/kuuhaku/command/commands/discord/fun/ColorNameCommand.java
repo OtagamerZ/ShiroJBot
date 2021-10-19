@@ -90,7 +90,7 @@ public class ColorNameCommand implements Executable {
 		}
 		Collections.shuffle(sequence);
 
-		channel.sendMessage("Prepare-se, o jogo começará em 5 segundos (você deve digitar **O NOME** da cor (não a cor em si))!")
+		channel.sendMessage("Prepare-se, o jogo começará em 5 segundos (você deve digitar **O NOME** da cor, não o texto escrito)!")
 				.delay(5, TimeUnit.SECONDS)
 				.flatMap(s -> s.editMessage("VALENDO!"))
 				.queue(t -> {
