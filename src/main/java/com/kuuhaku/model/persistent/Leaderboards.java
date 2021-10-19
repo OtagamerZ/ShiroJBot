@@ -47,6 +47,14 @@ public class Leaderboards {
 		this.score = score;
 	}
 
+	public Leaderboards(Integer id, String uid, String usr, String minigame, Long score) {
+		this.id = id;
+		this.uid = uid;
+		this.usr = usr;
+		this.minigame = minigame;
+		this.score = score.intValue();
+	}
+
 	public Leaderboards(String uid, String usr, String minigame, int score) {
 		this.uid = uid;
 		this.usr = usr;
