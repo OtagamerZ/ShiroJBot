@@ -67,11 +67,11 @@ public class LoanCommand implements Executable {
 					     
 					Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.
 					""");
-			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest() * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2.500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest() * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest() * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_4.getInterest() * 100 - 100, 1) + "%)", false);
-			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest() * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1.000 créditos (juros de " + (int) (CreditLoan.LOAN_1.getInterest() * 100 - 100) + "%)", false);
+			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2.500 créditos (juros de " + (int) (CreditLoan.LOAN_2.getInterest() * 100 - 100) + "%)", false);
+			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5.000 créditos (juros de " + (int) (CreditLoan.LOAN_3.getInterest() * 100 - 100) + "%)", false);
+			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10.000 créditos (juros de " + (int) (CreditLoan.LOAN_4.getInterest() * 100 - 100) + "%)", false);
+			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 créditos (juros de " + (int) (CreditLoan.LOAN_5.getInterest() * 100 - 100) + "%)", false);
 			eb.setFooter("Não há prazo para debitar a dívida, todo crédito que você ganhar reduzirá a dívida.");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
