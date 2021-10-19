@@ -190,7 +190,7 @@ public class ColorNameCommand implements Executable {
 												acc.addCredit(prize, this.getClass());
 												AccountDAO.saveAccount(acc);
 											}
-										}, 20_000 - (hit * 15_000L / 100), TimeUnit.MILLISECONDS
+										}, 20_000 - (hit * 17_500L / 100), TimeUnit.MILLISECONDS
 								);
 
 								msg.delete().queue(null, Helper::doNothing);
