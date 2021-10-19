@@ -55,6 +55,7 @@ public class TutorialCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.hasStarted()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
+			return;
 		}
 
 		Runnable r = () -> {
