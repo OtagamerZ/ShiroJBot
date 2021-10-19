@@ -58,8 +58,8 @@ import java.util.function.Consumer;
 public class ColorNameCommand implements Executable {
 	private static final BidiMap<String, Integer> colors = new TreeBidiMap<>(Map.of(
 			"azul", 0x3C63FF,
-			"vermelho", 0x3CFF3F,
-			"verde", 0xFF3C3C,
+			"verde", 0x3CFF3F,
+			"vermelho", 0xFF3C3C,
 			"amarelo", 0xFFD83C,
 			"ciano", 0x3CFFE2,
 			"laranja", 0xFF943C,
@@ -144,7 +144,6 @@ public class ColorNameCommand implements Executable {
 							String value = event.getMessage().getContentRaw();
 
 							String correct = colors.getKey(next.getRight());
-							System.out.println(correct);
 
 							lastMillis = System.currentTimeMillis();
 							if (value.equalsIgnoreCase(correct)) {
