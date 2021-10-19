@@ -90,7 +90,7 @@ public class ColorNameCommand implements Executable {
 		}
 		Collections.shuffle(sequence);
 
-		channel.sendMessage("Prepare-se, o jogo começará em 5 segundos (você deve digitar **O NOME** da cor, não o texto escrito)!")
+		channel.sendMessage("Prepare-se, o jogo começará em 5 segundos!")
 				.delay(5, TimeUnit.SECONDS)
 				.flatMap(s -> s.editMessage("VALENDO!"))
 				.queue(t -> {
@@ -105,7 +105,7 @@ public class ColorNameCommand implements Executable {
 					Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
 					g2d.dispose();
 
-					t.editMessage("VALENDO! (0/" + (int) Math.pow(colors.size(), 2) + ")")
+					t.editMessage("VALENDO: O nome da cor é...? (0/" + (int) Math.pow(colors.size(), 2) + ")")
 							.clearFiles()
 							.addFile(Helper.getBytes(bi, "png"), "colors.png")
 							.queue();
@@ -119,7 +119,7 @@ public class ColorNameCommand implements Executable {
 										win.set(true);
 										success.accept(null);
 
-										int prize = (int) (hit * Math.pow(1.03, hit));
+										int prize = (int) (hit * Math.pow(1.035, hit));
 										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + (int) Math.pow(colors.size(), 2) + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
 
 										Account acc = AccountDAO.getAccount(author.getId());
@@ -144,7 +144,9 @@ public class ColorNameCommand implements Executable {
 							Pair<String, Integer> next = sequence.get(hit);
 							String value = event.getMessage().getContentRaw();
 
-							String correct = colors.getKey(next.getRight());
+							boolean name = hit == 0 || Helper.chance(50);
+
+							String correct = name ? colors.getKey(next.getRight()) : next.getLeft();
 
 							lastMillis = System.currentTimeMillis();
 							if (value.equalsIgnoreCase(correct)) {
@@ -196,7 +198,7 @@ public class ColorNameCommand implements Executable {
 
 								msg.delete().queue(null, Helper::doNothing);
 								try {
-									msg = channel.sendMessage("PRÓXIMO! (" + hit + "/" + (int) Math.pow(colors.size(), 2) + ")")
+									msg = channel.sendMessage("**PRÓXIMO:** O " + (name ? "nome da cor" : "texto escrito") + " é...? (" + hit + "/" + (int) Math.pow(colors.size(), 2) + ")")
 											.clearFiles()
 											.addFile(Helper.getBytes(bi, "png"), "colors.png")
 											.submit().get();
