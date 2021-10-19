@@ -58,7 +58,6 @@ public class FaceoffCommand implements Executable {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
 		try {
 			int level = Integer.parseInt(args[0]);
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
@@ -94,7 +93,7 @@ public class FaceoffCommand implements Executable {
 						if (!win.get()) {
 							win.set(true);
 							success.accept(null);
-									channel.sendMessage(":gun: BANG! Você perdeu..").complete();
+							channel.sendMessage(":gun: | BANG! Você perdeu.").complete();
 								}
 							}, time, TimeUnit.MILLISECONDS
 					);
@@ -122,6 +121,8 @@ public class FaceoffCommand implements Executable {
 							long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
 							int prize = (int) Math.round(100f * (level + 1) + (min * Helper.rng(250f * (level + 1)) / react));
 							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
+
+							Account acc = AccountDAO.getAccount(author.getId());
 							acc.addCredit(prize, this.getClass());
 							AccountDAO.saveAccount(acc);
 

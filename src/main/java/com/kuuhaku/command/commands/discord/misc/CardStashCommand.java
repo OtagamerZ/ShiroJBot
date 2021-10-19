@@ -98,7 +98,7 @@ public class CardStashCommand implements Executable {
 
 			List<Stash> cards = StashDAO.getStashedCards(
 					byName.get(),
-					byRarity.get() == null ? null : KawaiponRarity.getByFragment(byRarity.get()),
+					byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
 					byAnime.get(),
 					onlyFoil.get(),
 					onlyKawaipon.get(),
