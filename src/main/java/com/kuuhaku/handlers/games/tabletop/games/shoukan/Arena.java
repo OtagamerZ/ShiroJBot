@@ -113,8 +113,10 @@ public class Arena {
 				Graphics2D g2d = front.createGraphics();
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
-				g2d.setBackground(new Color(0, 0, 0, 0));
-				g2d.clearRect(0, 0, front.getWidth(), front.getHeight());
+				g2d.setComposite(AlphaComposite.Clear);
+				g2d.fillRect(0, 0, front.getWidth(), front.getHeight());
+				g2d.setComposite(AlphaComposite.SrcOver);
+
 				for (BufferedImage img : imgs) {
 					g2d.drawImage(img, 0, 0, null);
 				}
