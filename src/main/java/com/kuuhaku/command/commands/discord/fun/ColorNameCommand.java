@@ -144,6 +144,7 @@ public class ColorNameCommand implements Executable {
 							String value = event.getMessage().getContentRaw();
 
 							String correct = colors.getKey(next.getRight());
+							System.out.println(correct);
 
 							lastMillis = System.currentTimeMillis();
 							if (value.equalsIgnoreCase(correct)) {
@@ -176,6 +177,22 @@ public class ColorNameCommand implements Executable {
 								g2d.setFont(font);
 								Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
 								g2d.dispose();
+
+								timeout.cancel(true);
+								timeout = Main.getInfo().getScheduler().schedule(() -> {
+											if (!win.get()) {
+												win.set(true);
+												success.accept(null);
+
+												int prize = (int) (hit * Math.pow(1.03, hit));
+												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + (int) Math.pow(colors.size(), 2) + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
+
+												Account acc = AccountDAO.getAccount(author.getId());
+												acc.addCredit(prize, this.getClass());
+												AccountDAO.saveAccount(acc);
+											}
+										}, 30_000, TimeUnit.MILLISECONDS
+								);
 
 								msg.delete().queue(null, Helper::doNothing);
 								try {
