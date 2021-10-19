@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
+import com.kuuhaku.command.commands.discord.fun.ColorNameCommand;
 import com.kuuhaku.command.commands.discord.fun.GuessTheCardsCommand;
 import com.kuuhaku.command.commands.discord.fun.GuessTheNumberCommand;
 import com.kuuhaku.command.commands.discord.fun.JankenponCommand;
@@ -69,6 +70,7 @@ public class LeaderboardsCommand implements Executable {
 					case "GuessTheCardsCommand" -> LeaderboardsDAO.getCommonLeaderboards(GuessTheCardsCommand.class);
 					case "GuessTheNumberCommand" -> LeaderboardsDAO.getCommonLeaderboards(GuessTheNumberCommand.class);
 					case "JankenponCommand" -> LeaderboardsDAO.getCommonLeaderboards(JankenponCommand.class);
+					case "ColorNameCommand" -> LeaderboardsDAO.getCommonLeaderboards(ColorNameCommand.class);
 					default -> null;
 				}, channel);
 	}
@@ -85,7 +87,7 @@ public class LeaderboardsCommand implements Executable {
 			String unit = switch (cmd.getCommand().getClass().getSimpleName()) {
 				case "FaceoffCommand" -> "ms";
 				case "SlotsCommand" -> "crédito" + (l.getScore() == 1 ? "" : "s");
-				case "GuessTheCardsCommand", "JankenponCommand", "GuessTheNumberCommand" -> "ponto" + (l.getScore() == 1 ? "" : "s");
+				case "GuessTheCardsCommand", "JankenponCommand", "GuessTheNumberCommand", "ColorNameCommand" -> "ponto" + (l.getScore() == 1 ? "" : "s");
 				default -> "";
 			};
 
@@ -102,6 +104,7 @@ public class LeaderboardsCommand implements Executable {
 					case "GuessTheCardsCommand" -> "adivinhe as cartas";
 					case "GuessTheNumberCommand" -> "adivinhe o número";
 					case "JankenponCommand" -> "pedra-papel-tesoura";
+					case "ColorNameCommand" -> "acerte-a-cor";
 					default -> "";
 				})
 				.setDescription(sb.toString());
