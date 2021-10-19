@@ -2024,12 +2024,35 @@ public class Shoukan extends GlobalGame implements Serializable {
 			slots = arena.getSlots().get(getCurrentSide());
 
 			if (getRound() >= 75) {
-				if (Helper.equalsAny(getRound(), 75, 100)) {
-					channel.sendMessage(":warning: | ALERTA: Morte-súbita ativada, os jogadores perderão " + (getRound() >= 100 ? "25%" : "10%") + " do HP atual a cada turno!").queue();
+				if (Helper.equalsAny(getRound(), 75, 100, 125)) {
+					if (getRound() == 75) {
+						channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
+					} else if (getRound() == 100) {
+						channel.sendMessage(":warning: | ALERTA: Morte-súbita II ativada, os jogadores perderão 25% do HP atual a cada turno!").queue();
+					} else {
+						channel.sendMessage(":warning: | ALERTA: Morte-súbita III ativada, se a partida não acabar neste turno será declarado empate!").queue();
+					}
 				}
 
-				h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
-				if (postCombat()) return;
+				if (Helper.between(getRound(), 75, 125)) {
+					h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
+					if (postCombat()) return;
+				} else {
+					if (draw) {
+						String msg = "Declaro empate! (" + getRound() + " turnos)";
+
+						close();
+						channel.sendMessage(msg)
+								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+								.queue(mm ->
+										this.message.compute(mm.getChannel().getId(), (id, m) -> {
+											if (m != null)
+												m.delete().queue(null, Helper::doNothing);
+											return mm;
+										}));
+						return;
+					} else draw = true;
+				}
 			}
 
 			h.get().addMana(h.get().getManaPerTurn());
