@@ -126,7 +126,7 @@ public class ColorNameCommand implements Executable {
 										acc.addCredit(prize, this.getClass());
 										AccountDAO.saveAccount(acc);
 									}
-								}, 20_000, TimeUnit.MILLISECONDS
+								}, 10_000, TimeUnit.MILLISECONDS
 						);
 						private Message msg = t;
 
@@ -135,7 +135,8 @@ public class ColorNameCommand implements Executable {
 							if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 								return;
 
-							if (System.currentTimeMillis() - lastMillis < 1000) {
+							if (!win.get()) return;
+							else if (System.currentTimeMillis() - lastMillis < 1000) {
 								channel.sendMessage("Calma, você está muito apressado!").queue();
 								return;
 							}
@@ -190,7 +191,7 @@ public class ColorNameCommand implements Executable {
 												acc.addCredit(prize, this.getClass());
 												AccountDAO.saveAccount(acc);
 											}
-										}, 20_000 - (hit * 17_500L / 99), TimeUnit.MILLISECONDS
+										}, 10_000 - (hit * 8_000L / 99), TimeUnit.MILLISECONDS
 								);
 
 								msg.delete().queue(null, Helper::doNothing);
