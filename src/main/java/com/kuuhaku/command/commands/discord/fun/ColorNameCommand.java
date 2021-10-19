@@ -99,6 +99,7 @@ public class ColorNameCommand implements Executable {
 
 					Pair<String, Integer> next = sequence.get(0);
 					Graphics2D g2d = bi.createGraphics();
+					g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 					g2d.setColor(new Color(next.getRight()));
 					g2d.setFont(font);
 					Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
@@ -165,8 +166,12 @@ public class ColorNameCommand implements Executable {
 
 								next = sequence.get(hit);
 								Graphics2D g2d = bi.createGraphics();
-								g2d.setBackground(new Color(0x0000000, true));
-								g2d.clearRect(0, 0, 500, 150);
+								g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+
+								g2d.setComposite(AlphaComposite.Clear);
+								g2d.fillRect(0, 0, 500, 150);
+								g2d.setComposite(AlphaComposite.SrcOver);
+
 								g2d.setColor(new Color(next.getRight()));
 								g2d.setFont(font);
 								Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
