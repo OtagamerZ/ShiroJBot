@@ -98,7 +98,7 @@ public class LoanCommand implements Executable {
 		CreditLoan cl = CreditLoan.getById(loan);
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + Helper.round(cl.getInterest() * 100 - 100, 1) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest())) + " de dívida**__), deseja confirmar?")
+		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + (int) (cl.getInterest() * 100 - 100) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest())) + " de dívida**__), deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							Account finalAcc = AccountDAO.getAccount(author.getId());
