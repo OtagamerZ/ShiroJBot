@@ -32,7 +32,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 @Command(
 		name = "quecor",
@@ -51,9 +53,11 @@ public class ColorTesterCommand implements Executable {
 		}
 
 		try {
+			String tone = args[0].toUpperCase(Locale.ROOT);
+
 			BufferedImage bi = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();
-			g2d.setColor(Color.decode(args[0]));
+			g2d.setColor(Color.decode(tone));
 
 			g2d.fillRect(0, 0, 128, 128);
 			g2d.dispose();
@@ -61,10 +65,18 @@ public class ColorTesterCommand implements Executable {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bi, "png", baos);
 
-			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.decode(args[0]));
-			eb.setTitle(I18n.getString("str_color", args[0]));
-			eb.setThumbnail("attachment://color.png");
+			File colors = Helper.getResourceAsFile(this.getClass(), "colors.txt");
+			int line = Helper.findStringInFile(colors, tone);
+			String name = Helper.getLineFromFile(colors, line);
+			Color color = Color.decode(args[0]);
+
+			EmbedBuilder eb = new EmbedBuilder()
+					.setColor(color)
+					.setTitle(I18n.getString("str_color", line > -1 && name != null ? name.split(",")[1] : tone))
+					.addField("Vermelho (R)", (color.getRed() * 100 / 255) + "% (" + color.getRed() + ")", true)
+					.addField("Verde (G)", (color.getGreen() * 100 / 255) + "% (" + color.getRed() + ")", true)
+					.addField("Azul (B)", (color.getBlue() * 100 / 255) + "% (" + color.getRed() + ")", true)
+					.setThumbnail("attachment://color.png");
 
 			channel.sendMessageEmbeds(eb.build()).addFile(baos.toByteArray(), "color.png").queue();
 
