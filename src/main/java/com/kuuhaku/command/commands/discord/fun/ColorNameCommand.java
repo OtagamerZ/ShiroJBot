@@ -135,7 +135,7 @@ public class ColorNameCommand implements Executable {
 							if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 								return;
 
-							if (!win.get()) return;
+							if (win.get()) return;
 							else if (System.currentTimeMillis() - lastMillis < 1000) {
 								channel.sendMessage("Calma, você está muito apressado!").queue();
 								return;
