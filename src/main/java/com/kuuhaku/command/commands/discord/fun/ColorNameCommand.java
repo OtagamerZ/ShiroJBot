@@ -158,7 +158,7 @@ public class ColorNameCommand implements Executable {
 									timeout.cancel(true);
 									timeout = null;
 
-									int prize = (int) (hit * Math.pow(1.025, hit));
+									int prize = (int) (hit * Math.pow(1.075, hit));
 									msg.delete().queue(null, Helper::doNothing);
 									channel.sendMessage(":confetti_ball: | Você acertou todas as cores! Seu prêmio é de " + prize + " créditos.").queue();
 
@@ -189,14 +189,14 @@ public class ColorNameCommand implements Executable {
 												win.set(true);
 												success.accept(null);
 
-												int prize = (int) (hit * Math.pow(1.025, hit));
+												int prize = (int) (hit * Math.pow(1.075, hit));
 												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
 
 												Account acc = AccountDAO.getAccount(author.getId());
 												acc.addCredit(prize, this.getClass());
 												AccountDAO.saveAccount(acc);
 											}
-										}, 10_000 - (hit * 8_000L / 99), TimeUnit.MILLISECONDS
+										}, 10_000 - (hit * 8_000L / 49), TimeUnit.MILLISECONDS
 								);
 
 								msg.delete().queue(null, Helper::doNothing);
@@ -213,7 +213,7 @@ public class ColorNameCommand implements Executable {
 								timeout.cancel(true);
 								timeout = null;
 
-								int prize = (int) (hit * Math.pow(1.025, hit));
+								int prize = (int) (hit * Math.pow(1.075, hit));
 								channel.sendMessage("Você errou! Seu prêmio é de " + prize + " créditos.").queue();
 
 								Account acc = AccountDAO.getAccount(author.getId());
