@@ -67,12 +67,12 @@ public class ColorTesterCommand implements Executable {
 
 			File colors = Helper.getResourceAsFile(this.getClass(), "colors.txt");
 			int line = Helper.findStringInFile(colors, tone);
-			String name = Helper.getLineFromFile(colors, line);
+			String name = line > -1 ? Helper.getLineFromFile(colors, line) : null;
 			Color color = Color.decode(args[0]);
 
 			EmbedBuilder eb = new EmbedBuilder()
 					.setColor(color)
-					.setTitle(I18n.getString("str_color", line > -1 && name != null ? name.split(",")[1] : tone))
+					.setTitle(I18n.getString("str_color", name != null ? name.split(",")[1] : tone))
 					.addField("Vermelho (R)", (color.getRed() * 100 / 255) + "% (" + color.getRed() + ")", true)
 					.addField("Verde (G)", (color.getGreen() * 100 / 255) + "% (" + color.getRed() + ")", true)
 					.addField("Azul (B)", (color.getBlue() * 100 / 255) + "% (" + color.getRed() + ")", true)
