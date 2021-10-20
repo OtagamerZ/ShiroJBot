@@ -144,7 +144,7 @@ public class ColorNameCommand implements Executable {
 							Pair<String, Integer> next = sequence.get(hit);
 							String value = event.getMessage().getContentRaw();
 
-							boolean name = hit == 0 || Helper.chance(50);
+							boolean name = msg.getContentRaw().contains("nome da cor");
 
 							String correct = name ? colors.getKey(next.getRight()) : next.getLeft();
 
@@ -168,6 +168,8 @@ public class ColorNameCommand implements Executable {
 								}
 
 								next = sequence.get(hit);
+								name = Helper.chance(50);
+
 								Graphics2D g2d = bi.createGraphics();
 								g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
