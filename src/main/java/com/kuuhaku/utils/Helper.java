@@ -3215,6 +3215,32 @@ public class Helper {
 		return -1;
 	}
 
+	public static int findStringInFile(File f, String str, Function<String, String> mapper) {
+		try (Scanner scanner = new Scanner(f, StandardCharsets.UTF_8)) {
+			int i = -1;
+			while (scanner.hasNextLine()) {
+				i++;
+				if (mapper.apply(scanner.nextLine()).equals(str)) {
+					return i;
+				}
+			}
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+
+		return -1;
+	}
+
+	public static String getLineFromFile(File f, int line) {
+		try (Stream<String> stream = Files.lines(f.toPath(), StandardCharsets.UTF_8)) {
+			return stream.skip(line).findFirst().orElse("");
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+
+		return null;
+	}
+
 	public static long getFibonacci(int nth) {
 		return Math.round((Math.pow(GOLDEN_RATIO, nth) - Math.pow(GOLDEN_RATIO - 1, nth)) / Math.sqrt(5));
 	}
