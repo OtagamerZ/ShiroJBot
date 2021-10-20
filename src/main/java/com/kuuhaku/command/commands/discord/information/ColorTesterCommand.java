@@ -66,7 +66,7 @@ public class ColorTesterCommand implements Executable {
 			ImageIO.write(bi, "png", baos);
 
 			File colors = Helper.getResourceAsFile(this.getClass(), "colors.txt");
-			int line = Helper.findStringInFile(colors, tone);
+			int line = Helper.findStringInFile(colors, tone, s -> s.split(",")[0]);
 			String name = line > -1 ? Helper.getLineFromFile(colors, line) : null;
 			Color color = Color.decode(args[0]);
 
