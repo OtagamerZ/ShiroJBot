@@ -296,9 +296,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                         return;
                     }
 
-                    if (applyPersistentEffects(ON_SWITCH, getCurrentSide(), index)) return;
-                    if (applyEffect(ON_SWITCH, c, index, getCurrentSide(), Pair.of(c, index), null)) return;
-
                     String msg;
                     if (c.isFlipped()) {
                         c.setFlipped(false);
@@ -311,6 +308,9 @@ public class Shoukan extends GlobalGame implements Serializable {
                         c.setDefending(true);
                         msg = "Carta trocada para modo de defesa.";
                     }
+
+                    if (applyPersistentEffects(ON_SWITCH, getCurrentSide(), index)) return;
+                    if (applyEffect(ON_SWITCH, c, index, getCurrentSide(), Pair.of(c, index), null)) return;
 
                     setSlotChanged(getCurrentSide(), index, true);
                     reportEvent(h, msg, true, false);
