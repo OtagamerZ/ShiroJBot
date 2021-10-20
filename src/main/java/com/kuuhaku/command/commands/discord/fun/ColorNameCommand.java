@@ -89,6 +89,7 @@ public class ColorNameCommand implements Executable {
 			}
 		}
 		Collections.shuffle(sequence);
+		sequence.subList(sequence.size() / 2, sequence.size()).clear();
 
 		channel.sendMessage("Prepare-se, o jogo começará em 5 segundos!")
 				.delay(5, TimeUnit.SECONDS)
@@ -105,7 +106,7 @@ public class ColorNameCommand implements Executable {
 					Profile.printCenteredString(next.getLeft(), 500, 0, 125, g2d);
 					g2d.dispose();
 
-					t.editMessage("VALENDO: O nome da cor é...? (0/" + (int) Math.pow(colors.size(), 2) + ")")
+					t.editMessage("VALENDO: O nome da cor é...? (0/" + (int) Math.pow(sequence.size(), 2) + ")")
 							.clearFiles()
 							.addFile(Helper.getBytes(bi, "png"), "colors.png")
 							.queue();
@@ -120,7 +121,7 @@ public class ColorNameCommand implements Executable {
 										success.accept(null);
 
 										int prize = (int) (hit * Math.pow(1.035, hit));
-										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + (int) Math.pow(colors.size(), 2) + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
+										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + (int) Math.pow(sequence.size(), 2) + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
 
 										Account acc = AccountDAO.getAccount(author.getId());
 										acc.addCredit(prize, this.getClass());
@@ -151,13 +152,13 @@ public class ColorNameCommand implements Executable {
 							lastMillis = System.currentTimeMillis();
 							if (value.equalsIgnoreCase(correct)) {
 								hit++;
-								if (hit == (int) Math.pow(colors.size(), 2)) {
+								if (hit == (int) Math.pow(sequence.size(), 2)) {
 									win.set(true);
 									success.accept(null);
 									timeout.cancel(true);
 									timeout = null;
 
-									int prize = (int) (hit * Math.pow(1.03, hit));
+									int prize = (int) (hit * Math.pow(1.025, hit));
 									msg.delete().queue(null, Helper::doNothing);
 									channel.sendMessage(":confetti_ball: | Você acertou todas as cores! Seu prêmio é de " + prize + " créditos.").queue();
 
@@ -188,8 +189,8 @@ public class ColorNameCommand implements Executable {
 												win.set(true);
 												success.accept(null);
 
-												int prize = (int) (hit * Math.pow(1.03, hit));
-												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + (int) Math.pow(colors.size(), 2) + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
+												int prize = (int) (hit * Math.pow(1.025, hit));
+												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + (int) Math.pow(sequence.size(), 2) + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
 
 												Account acc = AccountDAO.getAccount(author.getId());
 												acc.addCredit(prize, this.getClass());
@@ -200,7 +201,7 @@ public class ColorNameCommand implements Executable {
 
 								msg.delete().queue(null, Helper::doNothing);
 								try {
-									msg = channel.sendMessage("**PRÓXIMO:** O " + (name ? "nome da cor" : "texto escrito") + " é...? (" + hit + "/" + (int) Math.pow(colors.size(), 2) + ")")
+									msg = channel.sendMessage("**PRÓXIMO:** O " + (name ? "nome da cor" : "texto escrito") + " é...? (" + hit + "/" + (int) Math.pow(sequence.size(), 2) + ")")
 											.clearFiles()
 											.addFile(Helper.getBytes(bi, "png"), "colors.png")
 											.submit().get();
@@ -212,7 +213,7 @@ public class ColorNameCommand implements Executable {
 								timeout.cancel(true);
 								timeout = null;
 
-								int prize = (int) (hit * Math.pow(1.03, hit));
+								int prize = (int) (hit * Math.pow(1.025, hit));
 								channel.sendMessage("Você errou! Seu prêmio é de " + prize + " créditos.").queue();
 
 								Account acc = AccountDAO.getAccount(author.getId());
