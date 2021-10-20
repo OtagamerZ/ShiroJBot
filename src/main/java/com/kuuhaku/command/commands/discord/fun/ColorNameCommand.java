@@ -144,7 +144,7 @@ public class ColorNameCommand implements Executable {
 							Pair<String, Integer> next = sequence.get(hit);
 							String value = event.getMessage().getContentRaw();
 
-							boolean name = msg.getContentRaw().contains("nome da cor");
+							boolean name = !msg.getContentRaw().contains("texto escrito");
 
 							String correct = name ? colors.getKey(next.getRight()) : next.getLeft();
 
