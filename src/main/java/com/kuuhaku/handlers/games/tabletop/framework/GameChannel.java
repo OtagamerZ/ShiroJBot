@@ -18,83 +18,58 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.tabletop.ClusterAction;
+import com.kuuhaku.model.records.ChannelReference;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.io.File;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GameChannel {
-	private final Set<String> channels = new HashSet<>();
+	private final Set<ChannelReference> channels = new HashSet<>();
 
 	public GameChannel(TextChannel... channel) {
 		for (TextChannel chn : channel)
-			channels.add(chn.getGuild().getId() + "." + chn.getId());
+			channels.add(new ChannelReference(chn.getGuild(), chn));
 	}
 
 	public List<Guild> getGuilds() {
 		return channels.stream()
-				.map(ids -> ids.split(Pattern.quote("."))[0])
-				.map(id -> Main.getInfo().getGuildByID(id))
+				.map(ChannelReference::guild)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 	}
 
 	public List<TextChannel> getChannels() {
 		return channels.stream()
-				.map(ids -> ids.split(Pattern.quote(".")))
-				.map(ids -> Main.getInfo().getGuildByID(ids[0]).getTextChannelById(ids[1]))
+				.map(ChannelReference::channel)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 	}
 
 	public ClusterAction sendFile(File f) {
 		List<MessageAction> acts = new ArrayList<>();
-		for (String chn : channels) {
-			String[] ids = chn.split(Pattern.quote("."));
-			try {
-				acts.add(Objects.requireNonNull(Main.getInfo()
-						.getGuildByID(ids[0])
-						.getTextChannelById(ids[1]))
-						.sendFile(f)
-				);
-			} catch (NullPointerException ignore) {
-			}
+		for (TextChannel chn : getChannels()) {
+			acts.add(chn.sendFile(f));
 		}
 		return new ClusterAction(acts);
 	}
 
 	public ClusterAction sendFile(byte[] bytes, String filename) {
 		List<MessageAction> acts = new ArrayList<>();
-		for (String chn : channels) {
-			String[] ids = chn.split(Pattern.quote("."));
-			try {
-				acts.add(Objects.requireNonNull(Main.getInfo()
-						.getGuildByID(ids[0])
-						.getTextChannelById(ids[1]))
-						.sendFile(bytes, filename)
-				);
-			} catch (NullPointerException ignore) {
-			}
+		for (TextChannel chn : getChannels()) {
+			acts.add(chn.sendFile(bytes, filename));
 		}
 		return new ClusterAction(acts);
 	}
 
 	public ClusterAction sendMessage(String message) {
 		List<MessageAction> acts = new ArrayList<>();
-		for (String chn : channels) {
-			String[] ids = chn.split(Pattern.quote("."));
-			try {
-				acts.add(Objects.requireNonNull(Main.getInfo()
-						.getGuildByID(ids[0])
-						.getTextChannelById(ids[1]))
-						.sendMessage(message)
-				);
-			} catch (NullPointerException ignore) {
-			}
+		for (TextChannel chn : getChannels()) {
+			acts.add(chn.sendMessage(message));
 		}
 		return new ClusterAction(acts);
 	}
