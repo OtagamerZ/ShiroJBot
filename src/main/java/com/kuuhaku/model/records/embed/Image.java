@@ -24,7 +24,10 @@ import java.util.List;
 
 public record Image(List<String> image, List<String> join, List<String> leave) {
 	public String getRandomImage() {
-		return Helper.getRandomEntry(Helper.getOr(image, List.of()));
+		List<String> imgs = Helper.getOr(image, List.of());
+		if (imgs.isEmpty()) return null;
+
+		return Helper.getRandomEntry();
 	}
 
 	public String getRandomJoin() {
