@@ -63,15 +63,15 @@ public class AchievementsCommand implements Executable, Slashed {
 		List<List<Achievement>> achs = Helper.chunkify(List.of(Achievement.values()), 10);
 
 		Bag<Achievement.Medal> totalMedals = Achievement.getMedalBag();
-		Bag<Achievement.Medal> yourMedals = Achievement.getMedalBag();
+		Bag<Achievement.Medal> yourMedals = acc.getMedalBag();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Conquistas Shoukan (" + acc.getAchievements().size() + "/" + Achievement.values().length + ")")
 				.setDescription("""
-						<:platinum_trophy:901161662294409346> - %s/%s (5 gemas/t)
-						<:gold_trophy:901161662265040966> - %s/%s (3 gemas/t)
-						<:silver_trophy:901161662365716520> - %s/%s (2 gemas/t)
-						<:bronze_trophy:901161662298619934> - %s/%s (1 gema/t)
+						<:platinum_trophy:901161662294409346> - %s/%s (5 :diamonds:)
+						<:gold_trophy:901161662265040966> - %s/%s (3 :diamonds:)
+						<:silver_trophy:901161662365716520> - %s/%s (2 :diamonds:)
+						<:bronze_trophy:901161662298619934> - %s/%s (1 :diamonds:)
 						""".formatted(
 						yourMedals.getCount(Achievement.Medal.PLATINUM), totalMedals.getCount(Achievement.Medal.PLATINUM),
 						yourMedals.getCount(Achievement.Medal.GOLD), totalMedals.getCount(Achievement.Medal.GOLD),
