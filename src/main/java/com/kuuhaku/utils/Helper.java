@@ -1376,6 +1376,21 @@ public class Helper {
 		return list.get(rng(list.size() - 1));
 	}
 
+	public static <T> T getRandomEntry(Random random, Collection<T> col) {
+		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
+		List<T> list = List.copyOf(col);
+
+		return list.get(rng(list.size() - 1, random));
+	}
+
+	@SafeVarargs
+	public static <T> T getRandomEntry(Random random, T... array) {
+		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
+		List<T> list = List.of(array);
+
+		return list.get(rng(list.size() - 1, random));
+	}
+
 	public static <T> List<T> getRandomN(List<T> array, int elements) {
 		List<T> aux = new ArrayList<>(array);
 		List<T> out = new ArrayList<>();
