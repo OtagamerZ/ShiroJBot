@@ -65,7 +65,7 @@ public class Slots {
 	}
 
 	public static Slot getSlot() {
-		return slots[Helper.rng(slots.length, true)];
+		return Helper.getRandomEntry(slots);
 	}
 
 	public static Slot[] getSlots() {

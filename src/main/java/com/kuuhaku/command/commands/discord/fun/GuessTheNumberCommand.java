@@ -54,7 +54,7 @@ public class GuessTheNumberCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		int theValue = Helper.rng(100, false);
+		int theValue = Helper.rng(100);
 
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
@@ -96,7 +96,7 @@ public class GuessTheNumberCommand implements Executable {
 
 
 				if (guess == theValue) {
-					int prize = Helper.clamp(Helper.rng(750, false), 350, 750);
+					int prize = Helper.rng(350, 1000);
 					channel.sendMessage("Você acertou! Como prêmio você receberá **" + Helper.separate(prize) + "** créditos.").queue();
 					acc.addCredit(prize, this.getClass());
 					AccountDAO.saveAccount(acc);

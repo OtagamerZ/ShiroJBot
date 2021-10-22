@@ -27,6 +27,7 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -47,14 +48,14 @@ public abstract class Drop<P> implements Prize<P> {
 
 	protected Drop(P prize) {
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
-		anime = animes.get(Helper.rng(animes.size(), true));
-		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];
-		ranked = RankedTier.values()[1 + Helper.rng(RankedTier.values().length - 1, true)];
+		anime = Helper.getRandomEntry(animes);
+		tier = Helper.getRandomEntry(ClanTier.values());
+		ranked = Helper.getRandomEntry(ArrayUtils.subarray(RankedTier.values(), 1, RankedTier.values().length));
 		values = new int[]{
-				1 + Helper.rng((int) CardDAO.getTotalCards(anime.getName()) - 1, false),
-				1 + Helper.rng(6, false),
-				1 + Helper.rng((int) CardDAO.getTotalCards() / 2 - 1, false),
-				1 + Helper.rng(MemberDAO.getHighestLevel() / 2 - 1, false)
+				Helper.rng(1, (int) CardDAO.getTotalCards(anime.getName())),
+				Helper.rng(1, 7),
+				Helper.rng(1, (int) CardDAO.getTotalCards() / 2),
+				Helper.rng(1, MemberDAO.getHighestLevel() / 2)
 		};
 		condition = new ArrayList<>() {{
 			add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais",
@@ -88,7 +89,7 @@ public abstract class Drop<P> implements Prize<P> {
 			add(Pair.of("Possuir ranking " + ranked.getName() + " no Shoukan ou superior",
 					u -> MatchMakingRatingDAO.getMMR(u.getId()).getTier().ordinal() >= ranked.ordinal()));
 		}};
-		chosen = condition.get(Helper.rng(condition.size(), true));
+		chosen = Helper.getRandomEntry(condition);
 		this.prize = prize;
 	}
 

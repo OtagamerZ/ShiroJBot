@@ -63,7 +63,7 @@ public class FaceoffCommand implements Executable {
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
 
 			int min = 100 + ((3 - level) * 75);
-			int max = Helper.rng(700 - (level * 100), false);
+			int max = Helper.rng(700 - (level * 100));
 			int time = min + max;
 			AtomicLong start = new AtomicLong(0);
 
@@ -72,15 +72,15 @@ public class FaceoffCommand implements Executable {
 					.flatMap(s -> s.editMessage("Em suas marcas..."));
 
 
-			rst = rst.delay(500 + Helper.rng(2500, false), TimeUnit.MILLISECONDS);
+			rst = rst.delay(Helper.rng(500, 3000), TimeUnit.MILLISECONDS);
 
 			if (level > 2 && Helper.chance(25))
 				rst = rst.flatMap(s -> s.editMessage("AGUA! <:KEKW:837794089486254180>"))
-						.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS);
+						.delay(Helper.rng(500, 2000), TimeUnit.MILLISECONDS);
 
 			if (level > 1 && Helper.chance(50))
 				rst = rst.flatMap(s -> s.editMessage("Ainda não..."))
-						.delay(500 + Helper.rng(1000, false), TimeUnit.MILLISECONDS);
+						.delay(Helper.rng(500, 1500), TimeUnit.MILLISECONDS);
 
 			rst = rst.flatMap(s -> s.editMessage("**FOGO!**"));
 

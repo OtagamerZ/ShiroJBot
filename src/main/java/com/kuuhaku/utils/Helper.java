@@ -283,24 +283,52 @@ public class Helper {
 				.queue(null, Helper::doNothing);
 	}
 
-	public static int rng(int maxValue, boolean exclusive) {
-		return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
+	public static int rng(int max) {
+		return rng(0, max, new Random());
 	}
 
-	public static double rng(double maxValue) {
-		return Math.abs(new Random().nextDouble() * maxValue);
+	public static int rng(int max, long seed) {
+		return rng(0, max, new Random(seed));
 	}
 
-	public static double rng(double maxValue, Random random) {
-		return Math.abs(random.nextDouble() * maxValue);
+	public static int rng(int max, Random random) {
+		return rng(0, max, random);
 	}
 
-	public static int rng(int maxValue, Random random, boolean exclusive) {
-		return Math.abs(random.nextInt(maxValue + (exclusive ? 0 : 1)));
+	public static int rng(int min, int max) {
+		return rng(min, max, new Random());
 	}
 
-	public static int rng(int maxValue, long seed, boolean exclusive) {
-		return Math.abs(new Random(seed).nextInt(maxValue + (exclusive ? 0 : 1)));
+	public static int rng(int min, int max, long seed) {
+		return rng(min, max, new Random(seed));
+	}
+
+	public static int rng(int min, int max, Random random) {
+		return (int) Math.round(min + random.nextDouble() * (max - min));
+	}
+
+	public static double rng(double max) {
+		return rng(0, max, new Random());
+	}
+
+	public static double rng(double max, long seed) {
+		return rng(0, max, new Random(seed));
+	}
+
+	public static double rng(double max, Random random) {
+		return rng(0, max, random);
+	}
+
+	public static double rng(double min, double max) {
+		return rng(min, max, new Random());
+	}
+
+	public static double rng(double min, double max, long seed) {
+		return rng(min, max, new Random(seed));
+	}
+
+	public static double rng(double min, double max, Random random) {
+		return min + random.nextDouble() * (max - min);
 	}
 
 	public static Color colorThief(String url) throws IOException {
@@ -321,15 +349,9 @@ public class Helper {
 	}
 
 	public static void spawnAd(MessageChannel channel) {
-		if (rng(1000, false) > 990) {
+		if (chance(1)) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901").queue();
 		}
-	}
-
-	public static String getAd() {
-		if (rng(1000, false) > 990) {
-			return "Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901";
-		} else return null;
 	}
 
 	public static Logger logger(Class<?> source) {
@@ -493,11 +515,11 @@ public class Helper {
 	}
 
 	public static Color getRandomColor() {
-		return Color.decode("#%06x".formatted(rng(0xFFFFFF, false)));
+		return Color.decode("#%06x".formatted(rng(0xFFFFFF)));
 	}
 
 	public static Color getRandomColor(long seed) {
-		return Color.decode("#%06x".formatted(rng(0xFFFFFF, seed, false)));
+		return Color.decode("#%06x".formatted(rng(0xFFFFFF, seed)));
 	}
 
 	public static boolean compareWithValues(int value, int... compareWith) {
@@ -1339,9 +1361,19 @@ public class Helper {
 		});
 	}
 
-	public static <T> T getRandomEntry(List<T> array) {
-		if (array.isEmpty()) return null;
-		return array.get(rng(array.size(), true));
+	public static <T> T getRandomEntry(Collection<T> col) {
+		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
+		List<T> list = List.copyOf(col);
+
+		return list.get(rng(list.size() - 1));
+	}
+
+	@SafeVarargs
+	public static <T> T getRandomEntry(T... array) {
+		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
+		List<T> list = List.of(array);
+
+		return list.get(rng(list.size() - 1));
 	}
 
 	public static <T> List<T> getRandomN(List<T> array, int elements) {
@@ -1350,7 +1382,7 @@ public class Helper {
 		Random random = new Random(System.currentTimeMillis());
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
-			int index = rng(aux.size(), random, true);
+			int index = rng(aux.size() - 1, random);
 
 			out.add(aux.get(index));
 			Collections.shuffle(aux, random);
@@ -1365,7 +1397,7 @@ public class Helper {
 		Random random = new Random(System.currentTimeMillis());
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
-			int index = rng(aux.size(), random, true);
+			int index = rng(aux.size() - 1, random);
 
 			T inst = aux.get(index);
 			if (Collections.frequency(out, inst) < maxInstances)
@@ -1386,7 +1418,7 @@ public class Helper {
 		Random random = new Random(seed);
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
-			int index = rng(aux.size(), random, true);
+			int index = rng(aux.size() - 1, random);
 
 			T inst = aux.get(index);
 			if (Collections.frequency(out, inst) < maxInstances)
@@ -1482,7 +1514,7 @@ public class Helper {
 			);
 
 			List<Card> cards = CardDAO.getCardsByRarity(kr);
-			Card c = cards.get(rng(cards.size(), true));
+			Card c = getRandomEntry(cards);
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 			KawaiponCard kc = new KawaiponCard(c, foil);
 			BufferedImage img = c.drawCard(foil);
@@ -1559,7 +1591,7 @@ public class Helper {
 			cards = CardDAO.getCardsByRarity(kr);
 		}
 
-		Card c = cards.get(rng(cards.size(), true));
+		Card c = getRandomEntry(cards);
 		foil = foil || fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 		KawaiponCard kc = new KawaiponCard(c, foil);
 		BufferedImage img = c.drawCard(foil);
@@ -1615,7 +1647,7 @@ public class Helper {
 
 		if (dbUltimate || chance((2.5 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			Prize<?> drop;
-			int type = rng(1000, false);
+			int type = rng(1000);
 
 			if (type >= 995)
 				drop = new FieldDrop();
@@ -1681,7 +1713,7 @@ public class Helper {
 
 				List<Prize<?>> prizes = new ArrayList<>();
 				for (int i = 0; i < 6; i++) {
-					int type = rng(1000, false);
+					int type = rng(1000);
 
 					if (type >= 995)
 						prizes.add(new FieldDrop());
@@ -1726,7 +1758,7 @@ public class Helper {
 				Consumer<Message> act = msg -> {
 					if (users.size() > 0) {
 						List<String> ids = List.copyOf(users);
-						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+						User u = Main.getInfo().getUserByID(getRandomEntry(ids));
 
 						Account acc = AccountDAO.getAccount(u.getId());
 
@@ -1792,7 +1824,7 @@ public class Helper {
 
 				List<Prize<?>> prizes = new ArrayList<>();
 				for (int i = 0; i < 6; i++) {
-					int type = rng(1000, false);
+					int type = rng(1000);
 
 					if (type >= 995)
 						prizes.add(new FieldDrop());
@@ -1833,7 +1865,7 @@ public class Helper {
 
 				if (hist.size() == 0) return;
 
-				Message m = hist.get(rng(hist.size(), true));
+				Message m = getRandomEntry(hist);
 				Pages.buttonize(m, Collections.singletonMap(
 						egg.getId(), (mb, ms) -> {
 							if (finished.get()) return;
