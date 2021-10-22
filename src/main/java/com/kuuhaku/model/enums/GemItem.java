@@ -107,7 +107,7 @@ public enum GemItem {
 						.filter(cd -> !kp.getCards().contains(new KawaiponCard(cd, foil)))
 						.collect(Collectors.toList());
 
-				Card chosen = cards.get(Helper.rng(cards.size(), true));
+				Card chosen = Helper.getRandomEntry(cards);
 
 				card.setCard(chosen);
 				KawaiponDAO.saveKawaipon(kp);
