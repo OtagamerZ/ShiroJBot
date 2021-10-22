@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Couple;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -263,8 +264,9 @@ public enum Achievement {
 				.collect(Collectors.toCollection(HashBag::new));
 	}
 
-	@Override
-	public String toString() {
+	public String toString(Account acc) {
+		if (!acc.getAchievements().contains(this)) return "<:no_trophy:901193752406794280> - " + title;
+
 		return switch (medal) {
 			case PLATINUM -> "<:platinum_trophy:901161662294409346> - " + title;
 			case GOLD -> "<:gold_trophy:901161662265040966> - " + title;
