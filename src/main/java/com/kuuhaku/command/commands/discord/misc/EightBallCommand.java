@@ -24,7 +24,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 @Command(
@@ -44,7 +43,7 @@ public class EightBallCommand implements Executable {
 		String[] res = new String[]{"Sim", "Não", "Provavelmente sim", "Provavelmente não", "Talvez", "Prefiro não responder"};
 		String question = String.join(" ", args);
 
-		String preSeed = Helper.hash((question + author.getId()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+		String preSeed = Helper.hash(question + author.getId(), "SHA-1");
 		long seed = 0;
 		for (char c : preSeed.toCharArray()) {
 			seed += (int) c;

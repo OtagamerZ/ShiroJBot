@@ -22,7 +22,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 
 import javax.persistence.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @Entity
@@ -39,9 +38,7 @@ public class KawaiponCard {
 	private boolean foil = false;
 
 	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
-	private String hash = Helper.hash(
-			Helper.generateToken(String.valueOf(System.currentTimeMillis() * Math.random()), 256)
-					.getBytes(StandardCharsets.UTF_8), "SHA-256");
+	private String hash = Helper.hash(Helper.generateToken("" + System.currentTimeMillis(), 256), "SHA-256");
 
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;

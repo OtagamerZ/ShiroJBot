@@ -1911,7 +1911,7 @@ public class Helper {
 	}
 
 	public static boolean chance(double percentage) {
-		return Math.round(Math.random() * 100) < percentage;
+		return rng(100d) < percentage;
 	}
 
 	public static void drawRotated(Graphics2D g2d, BufferedImage bi, int x, int y, double deg) {
@@ -2011,6 +2011,15 @@ public class Helper {
 	public static String hash(byte[] bytes, String encoding) {
 		try {
 			return Hex.encodeHexString(MessageDigest.getInstance(encoding).digest(bytes));
+		} catch (NoSuchAlgorithmException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			return "";
+		}
+	}
+
+	public static String hash(String value, String encoding) {
+		try {
+			return Hex.encodeHexString(MessageDigest.getInstance(encoding).digest(value.getBytes(StandardCharsets.UTF_8)));
 		} catch (NoSuchAlgorithmException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return "";
@@ -2462,7 +2471,7 @@ public class Helper {
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String serveImage(byte[] bytes) {
-		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
+		String hash = hash(System.currentTimeMillis() + hash(bytes, "MD5"), "MD5");
 		File f = new File(Main.getInfo().getTemporaryFolder(), hash);
 
 		try {

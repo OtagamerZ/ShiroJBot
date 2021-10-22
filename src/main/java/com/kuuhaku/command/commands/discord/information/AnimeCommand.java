@@ -90,12 +90,12 @@ public class AnimeCommand implements Executable {
 						if (hentai) {
 							link = "[Mega Hentais](https://www.megahentais.com/?page_id=%s&ref=%s)".formatted(
 									namh.id(),
-									Helper.hash(System.getenv("MEGAHENTAIS_TOKEN").getBytes(StandardCharsets.UTF_8), "SHA-1")
+									Helper.hash(System.getenv("MEGAHENTAIS_TOKEN"), "SHA-1")
 							);
 						} else {
 							link = "[Now Animes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
 									namh.id(),
-									Helper.hash(System.getenv("NOWANIMES_TOKEN").getBytes(StandardCharsets.UTF_8), "SHA-1")
+									Helper.hash(System.getenv("NOWANIMES_TOKEN"), "SHA-1")
 							);
 						}
 					} else {

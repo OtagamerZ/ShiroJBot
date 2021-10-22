@@ -91,6 +91,7 @@ public class TeamHand extends Hand {
 						for (Drawable d : deque) {
 							if (d instanceof Champion c) {
 								c.setRawEffect("""
+																		%s
 										if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
 											int rng = Math.round(Math.random() * 100);
 											if (rng < 25) {
@@ -101,7 +102,6 @@ public class TeamHand extends Hand {
 												h.setHp(h.getHp() / 2);
 											}
 										}
-										%s
 										""".formatted(Helper.getOr(c.getRawEffect(), "")));
 							}
 						}
