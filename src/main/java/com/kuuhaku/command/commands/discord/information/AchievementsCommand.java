@@ -68,10 +68,10 @@ public class AchievementsCommand implements Executable, Slashed {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Conquistas Shoukan (" + acc.getAchievements().size() + "/" + Achievement.values().length + ")")
 				.setDescription("""
-						<:platinum_trophy:901161662294409346> - %s/%s (5 :diamonds:)
-						<:gold_trophy:901161662265040966> - %s/%s (3 :diamonds:)
-						<:silver_trophy:901161662365716520> - %s/%s (2 :diamonds:)
-						<:bronze_trophy:901161662298619934> - %s/%s (1 :diamonds:)
+						<:platinum_trophy:901161662294409346> - %s/%s
+						<:gold_trophy:901161662265040966> - %s/%s
+						<:silver_trophy:901161662365716520> - %s/%s
+						<:bronze_trophy:901161662298619934> - %s/%s
 						""".formatted(
 						yourMedals.getCount(Achievement.Medal.PLATINUM), totalMedals.getCount(Achievement.Medal.PLATINUM),
 						yourMedals.getCount(Achievement.Medal.GOLD), totalMedals.getCount(Achievement.Medal.GOLD),
@@ -84,8 +84,6 @@ public class AchievementsCommand implements Executable, Slashed {
 			for (Achievement a : chunk) {
 				if (a.isHidden() && !acc.getAchievements().contains(a))
 					eb.addField("???", "Desbloqueie a conquista para poder vê-la.", false);
-				else if (acc.getAchievements().contains(a))
-					eb.addField("✅ " + a, a.getDescription(), false);
 				else
 					eb.addField(a.toString(), a.getDescription(), false);
 			}
