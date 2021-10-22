@@ -82,10 +82,7 @@ public class AchievementsCommand implements Executable, Slashed {
 
 		for (List<Achievement> chunk : achs) {
 			for (Achievement a : chunk) {
-				if (a.isHidden() && !acc.getAchievements().contains(a))
-					eb.addField("???", "Desbloqueie a conquista para poder vê-la.", false);
-				else
-					eb.addField(a.toString(), a.getDescription(), false);
+				eb.addField(a.toString(acc), a.isHidden() ? "Desbloqueie a conquista para poder vê-la." : a.getDescription(), false);
 			}
 
 			pages.add(new Page(eb.build()));
