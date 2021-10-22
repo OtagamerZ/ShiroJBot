@@ -39,8 +39,8 @@ public class DailyQuest {
 
 		Random r = new Random(seed);
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
-		this.chosenAnime = Helper.getRandomEntry(animes);
-		this.chosenRace = Helper.getRandomEntry(Race.validValues());
+		this.chosenAnime = Helper.getRandomEntry(r, animes);
+		this.chosenRace = Helper.getRandomEntry(r, Race.validValues());
 		this.divergence = Helper.round(Helper.rng(0.2, 0.5, r), 3);
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
