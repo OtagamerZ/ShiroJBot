@@ -200,7 +200,7 @@ public enum Achievement {
 				if (!last) yield false;
 
 				if (game.getHistory().getWinner().equals(side)) {
-					yield !game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP).getDeque().isEmpty();
+					yield (!game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP).getDeque().isEmpty());
 				}
 
 				yield true;
@@ -209,7 +209,7 @@ public enum Achievement {
 				if (!last) yield false;
 
 				if (game.getHistory().getWinner().equals(side)) {
-					yield !game.isTeam();
+					yield (!game.isTeam());
 				}
 
 				yield true;
@@ -231,7 +231,7 @@ public enum Achievement {
 					data.put("completed", game.isReroll());
 				}
 
-				yield !data.getBoolean("completed");
+				yield (!data.getBoolean("completed"));
 			}
 			case LOVERS -> {
 				if (!last) yield false;
@@ -241,9 +241,9 @@ public enum Achievement {
 						Couple c = WaifuDAO.getCouple(h.getUser().getId());
 
 						if (c != null)
-							yield !th.getUsers().stream()
+							yield (!th.getUsers().stream()
 									.map(User::getId)
-									.allMatch(id -> Helper.equalsAny(id, c.getHusbando(), c.getWaifu()));
+									.allMatch(id -> Helper.equalsAny(id, c.getHusbando(), c.getWaifu())));
 					}
 				}
 
@@ -252,7 +252,7 @@ public enum Achievement {
 			case JOURNEYS_BEGIN -> {
 				if (!last) yield false;
 
-				yield !game.getHistory().getWinner().equals(side);
+				yield (!game.getHistory().getWinner().equals(side));
 			}
 		};
 	}
