@@ -91,6 +91,7 @@ public class Shoukan extends GlobalGame implements Serializable {
     private final boolean team;
     private final boolean record;
     private final Map<Side, EnumSet<Achievement>> achievements = new HashMap<>();
+    private final Map<Achievement, JSONObject> achData = new HashMap<>();
     private final Map<Side, Map<Race, Integer>> summoned = Map.of(
             Side.TOP, new HashMap<>(),
             Side.BOTTOM, new HashMap<>()
@@ -2036,7 +2037,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                     }
                 }
 
-                if (Helper.between(getRound(), 75, 125)) {
+                if (Helper.between(getRound(), 75, 126)) {
                     h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
                     if (postCombat()) return;
                 } else {
@@ -2718,7 +2719,12 @@ public class Shoukan extends GlobalGame implements Serializable {
                             acc.setDailyProgress(pg);
                         }
 
-                        acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
+                        EnumSet<Achievement> achs = achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class));
+                        acc.getAchievements().addAll(achs);
+
+                        if (!achs.isEmpty())
+                            acc.addGem(achs.stream().mapToInt(Achievement::getValue).sum());
+
                         AccountDAO.saveAccount(acc);
 
                         if (h.getHero() != null && tourMatch == null) {
@@ -2750,7 +2756,12 @@ public class Shoukan extends GlobalGame implements Serializable {
                         acc.setDailyProgress(pg);
                     }
 
-                    acc.getAchievements().addAll(achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class)));
+                    EnumSet<Achievement> achs = achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class));
+                    acc.getAchievements().addAll(achs);
+
+                    if (!achs.isEmpty())
+                        acc.addGem(achs.stream().mapToInt(Achievement::getValue).sum());
+
                     AccountDAO.saveAccount(acc);
 
                     if (h.getHero() != null && tourMatch == null) {
@@ -2846,6 +2857,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
     public boolean isTeam() {
         return team;
+    }
+
+    public Map<Achievement, JSONObject> getAchData() {
+        return achData;
     }
 
     public boolean isReroll() {
