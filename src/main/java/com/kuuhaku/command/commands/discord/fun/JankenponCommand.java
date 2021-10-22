@@ -47,7 +47,7 @@ public class JankenponCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		int pcOption = Helper.rng(2, false);
+		int pcOption = Helper.rng(2);
 		int win = 2;
 
 		switch (args[0].toLowerCase(Locale.ROOT)) {
@@ -89,7 +89,7 @@ public class JankenponCommand implements Executable {
 						yield "\nVocê perdeu!";
 					}
 					case 1 -> {
-						int crd = Math.max(10, Helper.rng(50, false));
+						int crd = Helper.rng(15, 75);
 						acc.addCredit(crd, this.getClass());
 						AccountDAO.saveAccount(acc);
 						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);

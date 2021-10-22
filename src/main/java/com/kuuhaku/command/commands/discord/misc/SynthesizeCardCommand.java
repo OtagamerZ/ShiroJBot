@@ -102,7 +102,7 @@ public class SynthesizeCardCommand implements Executable {
 		if (foilSynth) {
 			int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
 			List<Field> fs = CardDAO.getAllAvailableFields();
-			Field f = fs.get(Helper.rng(fs.size(), true));
+			Field f = Helper.getRandomEntry(fs);
 
 			DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 			int freeRolls = NumberUtils.toInt(dp.getValue());
@@ -174,7 +174,7 @@ public class SynthesizeCardCommand implements Executable {
 					Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
 			));
 
-			Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));
+			Equipment e = Helper.getRandomEntry(chosenTier);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Possíveis resultados")
