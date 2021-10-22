@@ -266,6 +266,7 @@ public enum Achievement {
 
 	public String toString(Account acc) {
 		if (!acc.getAchievements().contains(this)) return "<:no_trophy:901193752406794280> - " + title;
+		else if (hidden) return "<:no_trophy:901193752406794280> - ???";
 
 		return switch (medal) {
 			case PLATINUM -> "<:platinum_trophy:901161662294409346> - " + title;
