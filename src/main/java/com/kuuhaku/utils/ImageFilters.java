@@ -31,7 +31,7 @@ public class ImageFilters {
 			int x = coords[0];
 			int y = coords[1];
 
-			out.setRGB(x, y, PixelOp.MULTIPLY.get(rgb, 0xFF000000 | (int) (Math.random() * 0xFFFFFF)));
+			out.setRGB(x, y, PixelOp.MULTIPLY.get(rgb, 0xFF000000 | Helper.rng(0, 0xFFFFFF)));
 		});
 
 		return out;

@@ -44,7 +44,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -197,7 +196,7 @@ public class KawaiponsCommand implements Executable {
     }
 
     private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) {
-        String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+        String hash = Helper.hash(author.getId() + System.currentTimeMillis(), "SHA-1");
         Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
 
@@ -218,7 +217,7 @@ public class KawaiponsCommand implements Executable {
     }
 
     private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) {
-        String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+        String hash = Helper.hash(author.getId() + System.currentTimeMillis(), "SHA-1");
         Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
 
@@ -234,7 +233,7 @@ public class KawaiponsCommand implements Executable {
     }
 
     private void send(User author, MessageChannel channel, Message m, BufferedImage cards, Race r, String s) {
-        String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+        String hash = Helper.hash(author.getId() + System.currentTimeMillis(), "SHA-1");
         Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
 

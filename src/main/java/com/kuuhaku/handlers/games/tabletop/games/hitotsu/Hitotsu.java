@@ -308,7 +308,7 @@ public class Hitotsu extends Game {
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
+		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Helper.rng(-45, 45));
 
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
@@ -330,7 +330,7 @@ public class Hitotsu extends Game {
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
+		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Helper.rng(-45, 45));
 
 		g2d.dispose();
 	}
