@@ -27,7 +27,7 @@ public record Image(List<String> image, List<String> join, List<String> leave) {
 		List<String> imgs = Helper.getOr(image, List.of());
 		if (imgs.isEmpty()) return null;
 
-		return Helper.getRandomEntry();
+		return Helper.getRandomEntry(imgs);
 	}
 
 	public String getRandomJoin() {
