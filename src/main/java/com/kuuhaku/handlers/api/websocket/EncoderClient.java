@@ -30,7 +30,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -60,7 +59,7 @@ public class EncoderClient extends Endpoint {
 				.configurator(new ClientEndpointConfig.Configurator() {
 					@Override
 					public void beforeRequest(Map<String, List<String>> headers) {
-						headers.put("Authentication", List.of(Helper.hash(ShiroInfo.getBotToken().getBytes(StandardCharsets.UTF_8), "SHA-256")));
+						headers.put("Authentication", List.of(Helper.hash(ShiroInfo.getBotToken(), "SHA-256")));
 					}
 				})
 				.build();
