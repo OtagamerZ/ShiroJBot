@@ -276,7 +276,7 @@ public class ShiroEvents extends ListenerAdapter {
 					return;
 				} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 					channel.sendMessage(I18n.getString("err_user-ratelimited")).queue();
-					Main.getInfo().getRatelimit().put(author.getId(), true, 3 + Helper.rng(4, false), TimeUnit.SECONDS);
+					Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(3, 6), TimeUnit.SECONDS);
 					return;
 				} else if (command.getMissingPerms(channel).length > 0) {
 					channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
@@ -288,7 +288,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 
 				if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-					Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
+					Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(2, 4), TimeUnit.SECONDS);
 
 				try {
 					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
@@ -505,7 +505,7 @@ public class ShiroEvents extends ListenerAdapter {
 			error = I18n.getString("err_not-enough-permission");
 		} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 			error = I18n.getString("err_user-ratelimited");
-			Main.getInfo().getRatelimit().put(author.getId(), true, 3 + Helper.rng(4, false), TimeUnit.SECONDS);
+			Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(3, 6), TimeUnit.SECONDS);
 		} else if (command.getMissingPerms(channel).length > 0) {
 			error = "❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
 					Arrays.stream(command.getPermissions())
@@ -563,7 +563,7 @@ public class ShiroEvents extends ListenerAdapter {
 		);
 
 		if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-			Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
+			Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(2, 4), TimeUnit.SECONDS);
 
 		hook.deleteOriginal().queue();
 		command.execute(author, member, commandLine, args, msg, channel, guild, gc.getPrefix());
@@ -708,7 +708,7 @@ public class ShiroEvents extends ListenerAdapter {
 		if (!name.equals(member.getEffectiveName())) {
 			if (name.length() < 2) {
 				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
-				name = names[Helper.rng(names.length, true)];
+				name = Helper.getRandomEntry(names);
 			}
 
 			try {
@@ -734,7 +734,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Embed e = gc.getEmbedTemplate();
 					eb = new AutoEmbedBuilder(e)
 							.setTitle(
-									switch (Helper.rng(5, true)) {
+									switch (Helper.rng(4)) {
 										case 0 -> "Opa, parece que temos um novo membro?";
 										case 1 -> "Mais um membro para nosso lindo servidor!";
 										case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
@@ -765,7 +765,7 @@ public class ShiroEvents extends ListenerAdapter {
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
-									switch (Helper.rng(5, true)) {
+									switch (Helper.rng(4)) {
 										case 0 -> "Opa, parece que temos um novo membro?";
 										case 1 -> "Mais um membro para nosso lindo servidor!";
 										case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
@@ -813,7 +813,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Embed e = gc.getEmbedTemplate();
 					eb = new AutoEmbedBuilder(e)
 							.setTitle(
-									switch (Helper.rng(5, true)) {
+									switch (Helper.rng(4)) {
 										case 0 -> "Nãããoo...um membro deixou este servidor!";
 										case 1 -> "O quê? Temos um membro a menos neste servidor!";
 										case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
@@ -844,7 +844,7 @@ public class ShiroEvents extends ListenerAdapter {
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
-									switch (Helper.rng(5, true)) {
+									switch (Helper.rng(4)) {
 										case 0 -> "Nãããoo...um membro deixou este servidor!";
 										case 1 -> "O quê? Temos um membro a menos neste servidor!";
 										case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
@@ -1108,7 +1108,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (!name.equals(event.getNewNickname())) {
 				if (name.length() < 2) {
 					String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
-					name = names[Helper.rng(names.length, true)];
+					name = Helper.getRandomEntry(names);
 				}
 
 				try {

@@ -69,7 +69,7 @@ public class GuessTheCardsCommand implements Executable {
 			File[] masks = new File(Helper.getResource(this.getClass(), "assets/masks").toURI()).listFiles();
 			assert masks != null;
 
-			BufferedImage mask = Helper.toColorSpace(ImageIO.read(masks[Helper.rng(masks.length, true)]), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage mask = Helper.toColorSpace(ImageIO.read(Helper.getRandomEntry(masks)), BufferedImage.TYPE_INT_ARGB);
 
 			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
 			List<String> names = c.stream().map(Card::getId).collect(Collectors.toList());
@@ -137,7 +137,7 @@ public class GuessTheCardsCommand implements Executable {
 							for (String s : answers)
 								points += names.remove(s.toUpperCase(Locale.ROOT)) ? 1 : 0;
 
-							int reward = 50 * points + Helper.rng(150, false) * points;
+							int reward = 50 * points + Helper.rng(150) * points;
 
 							Account acc = AccountDAO.getAccount(author.getId());
 							acc.addCredit(reward, GuessTheCardsCommand.class);

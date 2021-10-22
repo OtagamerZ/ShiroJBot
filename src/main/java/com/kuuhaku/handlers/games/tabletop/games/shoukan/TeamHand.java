@@ -107,14 +107,14 @@ public class TeamHand extends Hand {
 						}
 					}
 					case "blackrock" -> {
-						Field f = switch (Helper.rng(5, true)) {
+						Field f = switch (Helper.rng(5)) {
 							case 0 -> CardDAO.getField("THE_SKY_GATES");
 							case 1 -> CardDAO.getField("THE_CUBE");
 							case 2 -> CardDAO.getField("GREY_AREA");
 							case 3 -> CardDAO.getField("BLACK_ROCK_BATTLEFIELD");
 							case 4 -> CardDAO.getField("CHARIOTS_LAND");
 							case 5 -> CardDAO.getField("DEAD_MASTERS_LAIR");
-							default -> throw new IllegalStateException("Unexpected value: " + Helper.rng(5, true));
+							default -> throw new IllegalStateException("Unexpected value: " + Helper.rng(5));
 						};
 						assert f != null;
 						game.getArena().setField(f);
@@ -248,7 +248,8 @@ public class TeamHand extends Hand {
 		List<Drawable> cards = getCards();
 
 		if (destinyDeck.size() > 0) {
-			Drawable dr = destinyDeck.remove(Helper.rng(destinyDeck.size(), true));
+			Drawable dr = Helper.getRandomEntry(destinyDeck);
+			destinyDeck.remove(dr);
 			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();

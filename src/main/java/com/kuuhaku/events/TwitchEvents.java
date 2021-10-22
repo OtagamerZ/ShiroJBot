@@ -49,7 +49,6 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class TwitchEvents {
 	private final SimpleEventHandler handler;
@@ -94,19 +93,9 @@ public class TwitchEvents {
 			} else if (BlacklistDAO.isBlacklisted(author)) {
 				client.getChat().sendMessage(channel.getName(), I18n.getString("err_user-blacklisted"));
 				return;
-			} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
-				client.getChat().sendMessage(channel.getName(), I18n.getString("err_user-ratelimited"));
-				return;
 			}
-
-			Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
 			command.execute(author, acc, commandName, rawMsgNoCommand, args, message, channel, client.getChat(), message.getPermissions());
-
-			String ad = Helper.getAd();
-			if (ad != null) {
-				client.getChat().sendMessage(channel.getName(), ad);
-			}
 		} else if (acc != null && Main.getInfo().isLive()) {
 			try {
 				User u = Main.getInfo().getUserByID(acc.getUid());
