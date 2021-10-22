@@ -87,7 +87,7 @@ public class AchievementsCommand implements Executable, Slashed {
 				else if (acc.getAchievements().contains(a))
 					eb.addField("✅ " + a, a.getDescription(), false);
 				else
-					eb.addField(a.getTitle(), a.getDescription(), false);
+					eb.addField(a.toString(), a.getDescription(), false);
 			}
 
 			pages.add(new Page(eb.build()));
