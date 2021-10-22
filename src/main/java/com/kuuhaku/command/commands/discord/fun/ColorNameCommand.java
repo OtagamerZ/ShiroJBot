@@ -120,7 +120,7 @@ public class ColorNameCommand implements Executable {
 										win.set(true);
 										success.accept(null);
 
-										int prize = (int) (hit * Math.pow(1.035, hit));
+										int prize = (int) (hit * Math.pow(1.075, hit));
 										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
 
 										Account acc = AccountDAO.getAccount(author.getId());
