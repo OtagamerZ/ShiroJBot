@@ -32,6 +32,7 @@ import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.collections4.bag.HashBag;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Entity
 @DynamicUpdate
@@ -385,6 +387,12 @@ public class Account {
 
 	public Set<Achievement> getAchievements() {
 		return achievements;
+	}
+
+	public HashBag<Achievement.Medal> getMedalBag() {
+		return achievements.stream()
+				.map(Achievement::getMedal)
+				.collect(Collectors.toCollection(HashBag::new));
 	}
 
 	public boolean isUsingFoil() {
