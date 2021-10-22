@@ -35,6 +35,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.collections4.Bag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +62,22 @@ public class AchievementsCommand implements Executable, Slashed {
 
 		List<List<Achievement>> achs = Helper.chunkify(List.of(Achievement.values()), 10);
 
+		Bag<Achievement.Medal> totalMedals = Achievement.getMedalBag();
+		Bag<Achievement.Medal> yourMedals = Achievement.getMedalBag();
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Conquistas Shoukan (" + acc.getAchievements().size() + "/" + Achievement.values().length + ")")
+				.setDescription("""
+						<:platinum_trophy:901161662294409346> - %s/%s (5 gemas/t)
+						<:gold_trophy:901161662265040966> - %s/%s (3 gemas/t)
+						<:silver_trophy:901161662365716520> - %s/%s (2 gemas/t)
+						<:bronze_trophy:901161662298619934> - %s/%s (1 gema/t)
+						""".formatted(
+						yourMedals.getCount(Achievement.Medal.PLATINUM), totalMedals.getCount(Achievement.Medal.PLATINUM),
+						yourMedals.getCount(Achievement.Medal.GOLD), totalMedals.getCount(Achievement.Medal.GOLD),
+						yourMedals.getCount(Achievement.Medal.SILVER), totalMedals.getCount(Achievement.Medal.SILVER),
+						yourMedals.getCount(Achievement.Medal.BRONZE), totalMedals.getCount(Achievement.Medal.BRONZE)
+				))
 				.setFooter("As conquistas só podem ser desbloqueadas em partidas ranqueadas.");
 
 		for (List<Achievement> chunk : achs) {
@@ -70,7 +85,7 @@ public class AchievementsCommand implements Executable, Slashed {
 				if (a.isHidden() && !acc.getAchievements().contains(a))
 					eb.addField("???", "Desbloqueie a conquista para poder vê-la.", false);
 				else if (acc.getAchievements().contains(a))
-					eb.addField("✅ " + a.getTitle(), a.getDescription(), false);
+					eb.addField("✅ " + a, a.getDescription(), false);
 				else
 					eb.addField(a.getTitle(), a.getDescription(), false);
 			}
