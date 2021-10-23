@@ -832,11 +832,11 @@ public class Shoukan extends GlobalGame implements Serializable {
         if (his.isStasis()) {
             channel.sendMessage("❌ | Você não pode atacar cartas inalvejáveis.").queue();
             return;
-        } else if (yours.isDuelling()) {
-            channel.sendMessage("❌ | " + yours.getName() + " só pode atacar " + his.getName() + " (DUELO).").queue();
+        } else if (yours.isDuelling() && !yours.getNemesis().equals(his)) {
+            channel.sendMessage("❌ | " + yours.getName() + " só pode atacar " + yours.getNemesis() + " (DUELO).").queue();
             return;
-        } else if (his.isDuelling()) {
-            channel.sendMessage("❌ | " + his.getName() + " só pode ser atacado por " + yours.getName() + " (DUELO).").queue();
+        } else if (his.isDuelling() && !his.getNemesis().equals(yours)) {
+            channel.sendMessage("❌ | " + his.getName() + " só pode ser atacado por " + his.getNemesis() + " (DUELO).").queue();
             return;
         }
 
