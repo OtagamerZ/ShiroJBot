@@ -60,7 +60,7 @@ public class HeroPerksCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui um herói.").queue();
 			return;
-		} else if (h.getAvailablePerks() == 0) {
+		} else if (h.getAvailablePerks() <= 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Perks de " + h.getName());
 
@@ -79,6 +79,7 @@ public class HeroPerksCommand implements Executable {
 			pool = EnumSet.complementOf(EnumSet.copyOf(h.getPerks()));
 
 		List<Perk> perks = Helper.getRandomN(List.copyOf(pool), 3, 1, author.getIdLong() + h.getId() + h.getLevel());
+		Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 		channel.sendMessageEmbeds(getEmbed(perks)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
 							put("1️⃣", (mb, ms) -> {
@@ -108,7 +109,8 @@ public class HeroPerksCommand implements Executable {
 									choosePerk(h, s, perks.get(2));
 								});
 						}}, true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId())
+						u -> u.getId().equals(author.getId()),
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));
 	}
 
@@ -122,8 +124,10 @@ public class HeroPerksCommand implements Executable {
 									.flatMap(d -> msg.getChannel().sendMessage("✅ | Perk selecionada com sucesso!"))
 									.flatMap(d -> msg.delete())
 									.queue();
+							Main.getInfo().getConfirmationPending().remove(h.getUid());
 						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(h.getUid())
+						u -> u.getId().equals(h.getUid()),
+						ms -> Main.getInfo().getConfirmationPending().remove(h.getUid())
 				));
 	}
 
