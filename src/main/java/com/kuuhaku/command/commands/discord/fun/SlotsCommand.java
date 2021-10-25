@@ -233,14 +233,14 @@ public class SlotsCommand implements Executable {
 				%s%s%s -> JACKPOT!
 				"""
 				.formatted(
-						LEMON, LEMON, LEMON, LEMON.getMultiplier(),
-						WATERMELON, WATERMELON, WATERMELON, WATERMELON.getMultiplier(),
-						CHERRY, CHERRY, CHERRY, CHERRY.getMultiplier(),
-						HEART, HEART, HEART, HEART.getMultiplier(),
-						BELL, BELL, BELL, BELL.getMultiplier(),
+						LEMON, LEMON, LEMON, Helper.roundToString(LEMON.getMultiplier(), 2),
+						WATERMELON, WATERMELON, WATERMELON, Helper.roundToString(WATERMELON.getMultiplier(), 2),
+						CHERRY, CHERRY, CHERRY, Helper.roundToString(CHERRY.getMultiplier(), 2),
+						HEART, HEART, HEART, Helper.roundToString(HEART.getMultiplier(), 2),
+						BELL, BELL, BELL, Helper.roundToString(BELL.getMultiplier(), 2),
 						BAR, BAR, BAR, BAR.getMultiplier(),
-						HORSESHOE, HORSESHOE, HORSESHOE, HORSESHOE.getMultiplier(),
-						DIAMOND, DIAMOND, DIAMOND, DIAMOND.getMultiplier(),
+						HORSESHOE, HORSESHOE, HORSESHOE, Helper.roundToString(HORSESHOE.getMultiplier(), 2),
+						DIAMOND, DIAMOND, DIAMOND, Helper.roundToString(DIAMOND.getMultiplier(), 2),
 						JACKPOT, JACKPOT, JACKPOT
 				);
 	}
