@@ -549,7 +549,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getRawEffect() {
-		return sealed ? null : effect;
+		return sealed ? null : Helper.getOr(altEffect, effect);
 	}
 
 	public void setRawEffect(String effect) {
