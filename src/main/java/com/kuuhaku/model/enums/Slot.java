@@ -26,51 +26,49 @@ import java.util.Set;
 public enum Slot {
 	JACKPOT(
 			"<:7_s:680405919057969155>", "Impossível, acabaram de detonar a loteria. **JACKPOT**!!!",
-			0, 150
+			0
 	),
 	DIAMOND(
 			"<:diamond_s:680405919317753877>", "Assalto ao banco da sorte, saque de diamantes!",
-			25, 80
+			20
 	),
 	HORSESHOE(
 			"<:horseshoe_s:680405919213158525>", "Alguém sequestrou um duende, baú de ferraduras de ouro!",
-			18, 65
+			15
 	),
 	BAR(
 			"<:bar_s:680405918667898910>", "Chamem a polícia, temos um sortudo!",
-			10, 45
+			8.5
 	),
 	BELL(
 			"<:bell_s:680405919732990017>", "Toquem os sinos!",
-			7, 16
+			7
 	),
 	HEART(
 			"<:heart_s:680405919183405086>", "O amor está no ar!",
-			5.75, 6
+			5.75
 	),
 	CHERRY(
 			"<:cherry_s:680448442832912419>", "Cerejas para o bolo!",
-			2.2, 4
+			2.2
 	),
 	WATERMELON(
 			"<:watermelon_s:680405919548440587>", "Festa das melancias!",
-			1.5, 2
+			1.5
 	),
 	LEMON(
 			"<:lemon_s:680405919901024284>", "Eita, parece que você está azedo hoje!",
-			0.8, 1
+			0.8
 	);
 
 	private final String emote;
 	private final String message;
 	private final double multiplier;
-	private final int influence;
 
-	Slot(String emote, String message, double multiplier, int influence) {
+	Slot(String emote, String message, double multiplier) {
 		this.emote = emote;
 		this.message = message;
 		this.multiplier = multiplier;
-		this.influence = influence;
 	}
 
 	public String getEmote() {
@@ -83,10 +81,6 @@ public enum Slot {
 
 	public double getMultiplier() {
 		return multiplier;
-	}
-
-	public int getInfluence() {
-		return influence;
 	}
 
 	@Override
