@@ -68,7 +68,9 @@ public class EffectShopCommand implements Executable {
 
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 
-		List<Champion> masters = CardDAO.getAllChampionsWithEffect(mmr.getTier().getTier() >= 5, mmr.getTier().getTier() + 1);
+		int max = mmr.getTier().getTier() + 1;
+
+		List<Champion> masters = CardDAO.getAllChampionsWithEffect(mmr.getTier().getTier() >= 5, Math.min(h.getPerks().contains(Perk.MANALESS) ? 4 : max, max));
 		masters.removeIf(c -> c.equals(h.getReferenceChampion()));
 
 		Calendar cal = Calendar.getInstance();
