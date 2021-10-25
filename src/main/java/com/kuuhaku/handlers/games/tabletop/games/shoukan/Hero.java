@@ -73,8 +73,8 @@ public class Hero implements Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int bonusPoints = 0;
 
-	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
@@ -250,7 +250,7 @@ public class Hero implements Cloneable {
 			double mpModif = 1;
 			for (Perk p : perks) {
 				if (!p.equals(perk))
-					mpModif *= switch (perk) {
+					mpModif *= switch (p) {
 						case BLOODLUST -> 0.5;
 						case MANALESS -> 0;
 						case MINDSHIELD -> 2;
