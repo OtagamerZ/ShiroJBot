@@ -2537,18 +2537,20 @@ public class Shoukan extends GlobalGame implements Serializable {
         if (persistentEffects.size() > 0) {
             Set<PersistentEffect> efs = Set.copyOf(persistentEffects).stream()
                     .peek(e -> {
-                        if (e.getTarget() == null || e.getTarget() == to) {
-                            if (trigger == AFTER_TURN && e.getTurns() > (e.getTriggers().contains(BEFORE_TURN) ? -1 : 0)) {
-                                e.decreaseTurn();
+                        if (!e.isExpired()) {
+                            if (e.getTarget() == null || e.getTarget() == to) {
+                                if (trigger == AFTER_TURN && e.getTurns() > (e.getTriggers().contains(BEFORE_TURN) ? -1 : 0)) {
+                                    e.decreaseTurn();
+                                }
+
+                                if (e.getTriggers().contains(trigger)) {
+                                    e.activate(to, index);
+                                }
                             }
 
-                            if (e.getTriggers().contains(trigger)) {
-                                e.activate(to, index);
+                            if (e.isExpired()) {
+                                channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
                             }
-                        }
-
-                        if (e.isExpired()) {
-                            channel.sendMessage(":timer: | O efeito " + e.getSource() + " expirou!").queue();
                         }
                     })
                     .filter(e -> !e.isExpired())
