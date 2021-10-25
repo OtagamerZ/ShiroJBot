@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.utils.Helper;
 
@@ -118,8 +119,8 @@ public class Attributes {
 		return (int) Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res))) * hpModif, 5);
 	}
 
-	public int calcMp() {
-		return (int) (1 + Math.max(0,
+	public int calcMp(Champion ref) {
+		return (int) (1 + (ref == null ? 0 : ref.getMana() / 2) + Math.max(0,
 				str * 0.275
 				+ res * 0.15
 				+ agi * 0.0175
