@@ -1282,6 +1282,7 @@ public class Helper {
 					.map(e -> new BasicHeader(e.getKey(), e.getValue()))
 					.toArray(Header[]::new)
 			);
+			req.addHeader(HttpHeaders.AUTHORIZATION, token);
 			req.setURI(uri);
 
 			try (CloseableHttpResponse res = ShiroInfo.getHttp().execute(req)) {
