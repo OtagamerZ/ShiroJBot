@@ -363,7 +363,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public String getRawEffect() {
-		return effect;
+		return Helper.getOr(altEffect, effect);
 	}
 
 	public void setRawEffect(String effect) {
