@@ -35,7 +35,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.states.GameState;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.DailyTask;
@@ -100,10 +99,6 @@ public class Shoukan extends GlobalGame implements Serializable {
     private final Set<PersistentEffect> persistentEffects = new HashSet<>();
     private final List<Drawable> discardBatch = new ArrayList<>();
     private final TournamentMatch tourMatch;
-    private final Map<Side, List<Double>> intingRatings = Map.of(
-            Side.TOP, new ArrayList<>(),
-            Side.BOTTOM, new ArrayList<>()
-    );
 
     private Phase phase = Phase.PLAN;
     private boolean draw = false;
@@ -2021,8 +2016,6 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
             discardBatch.clear();
 
-            intingRatings.get(getCurrentSide()).add(getIntingRating(getCurrentSide()));
-
             if (getRound() > 0) reroll = false;
             resetTimer(this);
 
@@ -2276,8 +2269,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                         );
                     }
                     discardBatch.clear();
-
-                    intingRatings.get(getCurrentSide()).add(getIntingRating(getCurrentSide()));
 
                     if (getRound() > 0) reroll = false;
                     resetTimer(this);
@@ -2740,62 +2731,6 @@ public class Shoukan extends GlobalGame implements Serializable {
         this.phase = phase;
     }
 
-    public double getIntingRating(Side s) {
-        Hand h = hands.get(s);
-        List<SlotColumn> yourSide = arena.getSlots().get(s);
-        List<SlotColumn> otherSide = arena.getSlots().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
-
-        List<Pair<Champion, Integer>> opCards = new ArrayList<>();
-        for (SlotColumn sc : otherSide) {
-            Champion defender = sc.getTop();
-            if (defender != null) {
-                int atr = defender.isDefending() ? defender.getFinDef() : defender.getFinAtk();
-                opCards.add(Pair.of(defender, atr));
-            }
-        }
-
-        int max = 0;
-        int sus = 0;
-        for (SlotColumn sc : yourSide) {
-            Champion attacker = sc.getTop();
-            if (attacker != null) {
-                for (Pair<Champion, Integer> opCard : opCards) {
-                    if (attacker.getFinAtk() > opCard.getRight() && attacker.isDefending()) {
-                        sus++;
-                    }
-
-                    max++;
-                }
-            }
-        }
-
-        for (Drawable d : h.getCards()) {
-            if (d instanceof Champion c) {
-                for (Pair<Champion, Integer> opCard : opCards) {
-                    if (c.getAtk() > opCard.getRight() && h.getMana() >= c.getMana() && h.getHp() > c.getBlood()) {
-                        sus++;
-                    }
-
-                    max++;
-                }
-            } else if (d instanceof Equipment e) {
-                if (h.getMana() >= e.getMana() && h.getHp() > e.getBlood()) {
-                    sus++;
-                }
-            }
-
-            max++;
-        }
-
-        return (double) sus / max;
-    }
-
-    public boolean isInting(List<Double> ratings) {
-        if (ratings.size() < 5) return false;
-
-        return ratings.stream().mapToDouble(d -> d).average().orElse(0) > 0.75;
-    }
-
     @Override
     public void resetTimer(Shoukan shkn) {
         for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
@@ -2823,21 +2758,6 @@ public class Shoukan extends GlobalGame implements Serializable {
         }
 
         if (!draw && getCustom() == null) {
-            EmbedBuilder eb = new ColorlessEmbedBuilder()
-                    .setTitle(hands.get(Side.TOP).getUser().getName() + " VS " + hands.get(Side.BOTTOM).getUser().getName())
-                    .addField(
-                            "Inting level TOP",
-                            intingRatings.get(Side.TOP) + " -> " + isInting(intingRatings.get(Side.TOP)),
-                            true
-                    )
-                    .addField(
-                            "Inting level BOTTOM",
-                            intingRatings.get(Side.BOTTOM) + " -> " + isInting(intingRatings.get(Side.BOTTOM)),
-                            true
-                    );
-
-            Main.getInfo().getGuildByID("421495229594730496").getTextChannelById("902564469144690718").sendMessageEmbeds(eb.build()).queue();
-
             for (Side s : Side.values()) {
                 Hand h = hands.get(s);
                 if (h instanceof TeamHand th) {
