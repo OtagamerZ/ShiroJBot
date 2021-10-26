@@ -2791,7 +2791,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
                                 hr.setHp(h.getHero().getHp());
                                 hr.setDmg();
-                                hr.setXp(h.getHero().getXp());
+                                //hr.setXp(h.getHero().getXp());
                                 CardDAO.saveHero(hr);
                             }
                         }
@@ -2828,7 +2828,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
                         hr.setHp(h.getHero().getHp());
                         hr.setDmg();
-                        hr.setXp(h.getHero().getXp());
+                        //hr.setXp(h.getHero().getXp());
                         CardDAO.saveHero(hr);
                     }
                 }
