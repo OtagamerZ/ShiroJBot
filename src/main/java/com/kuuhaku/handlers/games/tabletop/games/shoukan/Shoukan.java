@@ -100,7 +100,7 @@ public class Shoukan extends GlobalGame implements Serializable {
     private final Set<PersistentEffect> persistentEffects = new HashSet<>();
     private final List<Drawable> discardBatch = new ArrayList<>();
     private final TournamentMatch tourMatch;
-    private final Map<Side, List<Integer>> intingRatings = Map.of(
+    private final Map<Side, List<Double>> intingRatings = Map.of(
             Side.TOP, new ArrayList<>(),
             Side.BOTTOM, new ArrayList<>()
     );
@@ -2740,7 +2740,7 @@ public class Shoukan extends GlobalGame implements Serializable {
         this.phase = phase;
     }
 
-    public int getIntingRating(Side s) {
+    public double getIntingRating(Side s) {
         Hand h = hands.get(s);
         List<SlotColumn> yourSide = arena.getSlots().get(s);
         List<SlotColumn> otherSide = arena.getSlots().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
@@ -2754,6 +2754,7 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
         }
 
+        int max = 0;
         int sus = 0;
         for (SlotColumn sc : yourSide) {
             Champion attacker = sc.getTop();
@@ -2762,6 +2763,8 @@ public class Shoukan extends GlobalGame implements Serializable {
                     if (attacker.getFinAtk() > opCard.getRight() && attacker.isDefending()) {
                         sus++;
                     }
+
+                    max++;
                 }
             }
         }
@@ -2772,26 +2775,25 @@ public class Shoukan extends GlobalGame implements Serializable {
                     if (c.getAtk() > opCard.getRight() && h.getMana() >= c.getMana() && h.getHp() > c.getBlood()) {
                         sus++;
                     }
+
+                    max++;
                 }
             } else if (d instanceof Equipment e) {
                 if (h.getMana() >= e.getMana() && h.getHp() > e.getBlood()) {
                     sus++;
                 }
             }
+
+            max++;
         }
 
-        return sus;
+        return (double) sus / max;
     }
 
-    public boolean isInting(List<Integer> ratings) {
+    public boolean isInting(List<Double> ratings) {
         if (ratings.size() < 5) return false;
 
-        List<Integer> sorted = ratings.stream().sorted().toList();
-
-        int max = sorted.get(sorted.size() - 1);
-        double avg = ratings.stream().mapToInt(i -> i).average().orElse(0);
-
-        return avg / max > 0.75;
+        return ratings.stream().mapToDouble(d -> d).average().orElse(0) > 0.75;
     }
 
     @Override
