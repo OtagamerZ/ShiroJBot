@@ -109,7 +109,7 @@ public class Field implements Drawable, Cloneable {
 			g2d.setBackground(Color.BLACK);
 			for (Map.Entry<String, Object> entry : races) {
 				Race r = Race.valueOf(entry.getKey());
-				double modif = ((double) entry.getValue()) - 1;
+				double modif = ((double) entry.getValue());
 				BufferedImage icon = r.getIcon();
 				if (icon == null) continue;
 

@@ -348,7 +348,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null) {
-					fBonus = f.getModifiers().getFloat(getRace().name(), 1);
+					fBonus = 1 + f.getModifiers().getFloat(getRace().name(), 1);
 
 					if (combos.getLeft() == Race.ELF) {
 						if (fBonus < 1) fBonus /= 2;
@@ -372,14 +372,21 @@ public class Champion implements Drawable, Cloneable {
 		float cBonus = 1;
 
 		if (game != null) {
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
-				Field f = game.getArena().getField();
-				if (f != null)
-					fBonus = f.getModifiers().getFloat(getRace().name(), 1);
-			}
-
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
+
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
+				Field f = game.getArena().getField();
+				if (f != null) {
+					fBonus = 1 + f.getModifiers().getFloat(getRace().name(), 1);
+
+					if (combos.getLeft() == Race.ELF) {
+						if (fBonus < 1) fBonus /= 2;
+						else if (fBonus > 1) fBonus *= 1.25;
+					}
+				}
+			}
+
 			if (combos.getLeft() == Race.SPIRIT) {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 50f;
 			} else if (combos.getRight() == Race.SPIRIT)
@@ -736,7 +743,7 @@ public class Champion implements Drawable, Cloneable {
 		Field f = game.getArena().getField();
 		if (f != null) {
 			Champion c = Helper.getOr(fakeCard, this);
-			return f.getModifiers().getFloat(c.getRace().name(), 1) > 1;
+			return f.getModifiers().getFloat(c.getRace().name(), 1) > 0;
 		}
 
 		return false;
@@ -751,7 +758,7 @@ public class Champion implements Drawable, Cloneable {
 		Field f = game.getArena().getField();
 		if (f != null) {
 			Champion c = Helper.getOr(fakeCard, this);
-			return f.getModifiers().getFloat(c.getRace().name(), 1) < 1;
+			return f.getModifiers().getFloat(c.getRace().name(), 1) < 0;
 		}
 
 		return false;
