@@ -348,7 +348,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null) {
-					fBonus = 1 + f.getModifiers().getFloat(getRace().name(), 1);
+					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
 
 					if (combos.getLeft() == Race.ELF) {
 						if (fBonus < 1) fBonus /= 2;
@@ -378,7 +378,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null) {
-					fBonus = 1 + f.getModifiers().getFloat(getRace().name(), 1);
+					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
 
 					if (combos.getLeft() == Race.ELF) {
 						if (fBonus < 1) fBonus /= 2;
@@ -743,7 +743,7 @@ public class Champion implements Drawable, Cloneable {
 		Field f = game.getArena().getField();
 		if (f != null) {
 			Champion c = Helper.getOr(fakeCard, this);
-			return f.getModifiers().getFloat(c.getRace().name(), 1) > 0;
+			return f.getModifiers().getFloat(c.getRace().name()) > 0;
 		}
 
 		return false;
@@ -758,7 +758,7 @@ public class Champion implements Drawable, Cloneable {
 		Field f = game.getArena().getField();
 		if (f != null) {
 			Champion c = Helper.getOr(fakeCard, this);
-			return f.getModifiers().getFloat(c.getRace().name(), 1) < 0;
+			return f.getModifiers().getFloat(c.getRace().name()) < 0;
 		}
 
 		return false;
