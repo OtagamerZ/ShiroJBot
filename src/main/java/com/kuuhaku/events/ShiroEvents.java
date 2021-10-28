@@ -256,7 +256,10 @@ public class ShiroEvents extends ListenerAdapter {
 			found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
 			if (found) {
-				if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+				if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+					channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+					return;
+				} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 					channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
 					return;
 				} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {

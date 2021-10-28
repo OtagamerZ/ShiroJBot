@@ -23,8 +23,8 @@ import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
@@ -32,7 +32,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -59,7 +58,7 @@ public class EffectShopCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Hero h = CardDAO.getHero(author.getId());
+		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui um herói.").queue();
@@ -72,29 +71,18 @@ public class EffectShopCommand implements Executable {
 		boolean manaless = h.getPerks().contains(Perk.MANALESS);
 
 		List<Champion> masters = CardDAO.getAllChampionsWithEffect(!manaless && mmr.getTier().getTier() >= 5, Math.min(manaless ? 4 : max, max));
-		masters.removeIf(c -> c.equals(h.getReferenceChampion()));
-
 		Calendar cal = Calendar.getInstance();
-		List<Champion> pool = Helper.getRandomN(masters, 5, 1, author.getIdLong() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
+		List<Champion> pool = Helper.getRandomN(masters, 5, 1, author.getIdLong() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR));
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
 			int cost = c.getMana() + (c.isFusion() ? 5 : 0);
 			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
-				Account acc = AccountDAO.getAccount(author.getId());
-				if (acc.getGems() < cost) {
-					channel.sendMessage("❌ | Você não possui gemas suficientes para pagar o treinamento.").queue();
-					return;
-				}
-
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
-				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + " por " + cost + " gemas, deseja confirmar?")
+				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + ", deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
-									acc.removeGem(cost);
-									AccountDAO.saveAccount(acc);
-
 									h.setReferenceChampion(c.getId());
-									CardDAO.saveHero(h);
+									KawaiponDAO.saveHero(h);
 
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									s.delete().flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!")).queue();
@@ -111,21 +99,6 @@ public class EffectShopCommand implements Executable {
 		);
 	}
 
-	private void choosePerk(Hero h, Message msg, Perk perk) {
-		msg.getChannel().sendMessage("Você selecionou a perk `" + perk + "`, deseja confirmar (a escolha é permanente)?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							h.getPerks().add(perk);
-							CardDAO.saveHero(h);
-
-							s.delete()
-									.flatMap(d -> msg.getChannel().sendMessage("✅ | Perk selecionada com sucesso!"))
-									.flatMap(d -> msg.delete())
-									.queue();
-						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(h.getUid())
-				));
-	}
-
 	private MessageEmbed getEmbed(List<Champion> pool) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Mestres disponíveis")
@@ -134,7 +107,7 @@ public class EffectShopCommand implements Executable {
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
 			int cost = c.getMana() + (c.isFusion() ? 5 : 0);
-			eb.addField(Helper.getFancyNumber(i + 1) + " :diamonds: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
+			eb.addField(Helper.getFancyNumber(i + 1) + " :droplet: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
 		}
 
 		return eb.build();

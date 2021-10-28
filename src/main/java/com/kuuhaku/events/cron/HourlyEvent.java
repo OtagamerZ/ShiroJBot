@@ -20,7 +20,7 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Account;
@@ -81,10 +81,10 @@ public class HourlyEvent implements Job {
 
 		MatchDAO.cleanHistory();
 
-		List<Hero> heroes = CardDAO.getHeroes();
+		List<Hero> heroes = KawaiponDAO.getHeroes();
 		for (Hero hero : heroes) {
 			hero.reduceDmg();
-			CardDAO.saveHero(hero);
+			KawaiponDAO.saveHero(hero);
 		}
 	}
 }

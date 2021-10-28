@@ -18,10 +18,13 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -62,10 +65,144 @@ public class KawaiponDAO {
 
 		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetKawaiponRanking\" k");
 
-		List<Object[]> kps = q.getResultList();
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Deck getDeck(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT d
+				FROM Kawaipon kp
+				JOIN kp.decks d
+				WHERE kp.uid = :uid
+				AND d.id = kp.activeDeck
+				""", Deck.class);
+		q.setParameter("uid", id);
+
+		try {
+			return (Deck) q.getSingleResult();
+		} catch (NoResultException e) {
+			return getKawaipon(id).getDeck();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Deck> getDecks(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT d
+				FROM Kawaipon kp
+				JOIN kp.decks d
+				WHERE kp.uid = :uid
+				""", Deck.class);
+		q.setParameter("uid", id);
+
+		try {
+			return (List<Deck>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Deck> getDecks() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT d
+				FROM Kawaipon kp
+				JOIN kp.decks d
+				""", Deck.class);
+
+		try {
+			return (List<Deck>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveDeck(Deck d) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(d);
+		em.getTransaction().commit();
 
 		em.close();
+	}
 
-		return kps;
+	public static Hero getHero(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT h
+				FROM Kawaipon kp
+				JOIN kp.heroes h
+				WHERE kp.uid = :uid
+				AND h.id = kp.activeHero
+				""", Hero.class);
+		q.setParameter("uid", id);
+
+		try {
+			return (Hero) q.getSingleResult();
+		} catch (NoResultException e) {
+			return getKawaipon(id).getHero();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Hero> getHeroes(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT h
+				FROM Kawaipon kp
+				JOIN kp.heroes h
+				WHERE kp.uid = :uid
+				""", Hero.class);
+		q.setParameter("uid", id);
+
+		try {
+			return (List<Hero>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Hero> getHeroes() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT h
+				FROM Kawaipon kp
+				JOIN kp.heroes h
+				""", Hero.class);
+
+		try {
+			return (List<Hero>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveHero(Hero h) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(h);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }

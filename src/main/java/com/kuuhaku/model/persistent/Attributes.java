@@ -57,6 +57,10 @@ public class Attributes {
 		this.str += 1;
 	}
 
+	public void addStr(int value) {
+		this.str += value;
+	}
+
 	public int getRes() {
 		return res;
 	}
@@ -67,6 +71,10 @@ public class Attributes {
 
 	public void addRes() {
 		this.res += 1;
+	}
+
+	public void addRes(int value) {
+		this.res += value;
 	}
 
 	public int getAgi() {
@@ -81,6 +89,10 @@ public class Attributes {
 		this.agi += 1;
 	}
 
+	public void addAgi(int value) {
+		this.agi += value;
+	}
+
 	public int getWis() {
 		return wis;
 	}
@@ -93,6 +105,10 @@ public class Attributes {
 		this.wis += 1;
 	}
 
+	public void addWis(int value) {
+		this.wis += value;
+	}
+
 	public int getCon() {
 		return con;
 	}
@@ -103,6 +119,10 @@ public class Attributes {
 
 	public void addCon() {
 		this.con += 1;
+	}
+
+	public void addCon(int value) {
+		this.con += value;
 	}
 
 	public int calcMaxHp(Set<Perk> perks) {

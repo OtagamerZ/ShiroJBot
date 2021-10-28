@@ -26,7 +26,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Collections;
@@ -43,8 +42,7 @@ public class DeckReorderCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Deck dk = kp.getDeck();
+		Deck dk = KawaiponDAO.getDeck(author.getId());
 
 		switch (args.length) {
 			case 0 -> {
@@ -154,7 +152,7 @@ public class DeckReorderCommand implements Executable {
 			}
 		}
 
-		KawaiponDAO.saveKawaipon(kp);
+		KawaiponDAO.saveDeck(dk);
 		channel.sendMessage("Deck reorganizado com sucesso!").queue();
 	}
 }

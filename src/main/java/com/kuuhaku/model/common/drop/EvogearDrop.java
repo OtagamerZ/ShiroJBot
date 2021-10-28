@@ -25,7 +25,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
@@ -40,8 +39,7 @@ public class EvogearDrop extends Drop<Equipment> {
 
 	@Override
 	public void award(User u) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		Deck dk = kp.getDeck();
+		Deck dk = KawaiponDAO.getDeck(u.getId());
 		if (dk.getEvoWeight() + getPrize().getWeight(dk) <= 24 && dk.getEquipmentCopies(getPrize().getCard()) < dk.getEquipmentMaxCopies(getPrize()) && !(dk.hasTierFour() && getPrize().getTier() == 4)) {
 			dk.addEquipment(getPrize());
 		} else {
@@ -49,7 +47,7 @@ public class EvogearDrop extends Drop<Equipment> {
 			mainPrize = false;
 			return;
 		}
-		KawaiponDAO.saveKawaipon(kp);
+		KawaiponDAO.saveDeck(dk);
 
 		Account acc = AccountDAO.getAccount(u.getId());
 		if (acc.hasPendingQuest()) {

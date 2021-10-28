@@ -25,7 +25,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
@@ -40,8 +39,7 @@ public class ChampionDrop extends Drop<Champion> {
 
 	@Override
 	public void award(User u) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		Deck dk = kp.getDeck();
+		Deck dk = KawaiponDAO.getDeck(u.getId());
 		if (dk.getChampions().size() < 36 && dk.getChampionCopies(getPrize().getCard()) < dk.getChampionMaxCopies()) {
 			dk.addChampion(getPrize());
 		} else {
@@ -49,7 +47,7 @@ public class ChampionDrop extends Drop<Champion> {
 			mainPrize = false;
 			return;
 		}
-		KawaiponDAO.saveKawaipon(kp);
+		KawaiponDAO.saveDeck(dk);
 
 		Account acc = AccountDAO.getAccount(u.getId());
 		if (acc.hasPendingQuest()) {
