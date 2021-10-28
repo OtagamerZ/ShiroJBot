@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.ExpeditionDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
@@ -198,8 +199,8 @@ public class Hero implements Cloneable {
 		return getMaxPerks() - perks.size();
 	}
 
-	public String getExpedition() {
-		return expedition;
+	public Expedition getExpedition() {
+		return ExpeditionDAO.getExpedition(Helper.getOr(expedition, ""));
 	}
 
 	public void setExpedition(Expedition expedition) {
@@ -213,6 +214,12 @@ public class Hero implements Cloneable {
 
 	public boolean hasArrived() {
 		return System.currentTimeMillis() >= expEnd;
+	}
+
+	public void arrive() {
+		setEnergy(this.energy - 1);
+		this.expedition = null;
+		this.expEnd = 0;
 	}
 
 	public String getDescription() {

@@ -34,6 +34,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,9 +82,13 @@ public class HourlyEvent implements Job {
 
 		MatchDAO.cleanHistory();
 
+		LocalDateTime time = LocalDateTime.now();
 		List<Hero> heroes = KawaiponDAO.getHeroes();
 		for (Hero hero : heroes) {
+			if (!hero.hasArrived()) continue;
+
 			hero.heal();
+			if (time.getHour() % 6 == 0) hero.rest();
 			KawaiponDAO.saveHero(hero);
 		}
 	}

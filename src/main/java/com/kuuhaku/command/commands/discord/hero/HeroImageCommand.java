@@ -45,6 +45,9 @@ public class HeroImageCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
+		} else if (!h.hasArrived()) {
+			channel.sendMessage("❌ | Este herói está em uma espedição.").queue();
+			return;
 		} else if (message.getAttachments().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
 			return;
