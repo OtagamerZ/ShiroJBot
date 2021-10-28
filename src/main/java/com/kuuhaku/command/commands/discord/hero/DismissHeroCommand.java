@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_id-opt",
 		category = Category.MISC
 )
-public class DismisssHeroCommand implements Executable {
+public class DismissHeroCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
