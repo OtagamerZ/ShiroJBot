@@ -22,7 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
@@ -50,12 +50,7 @@ public class HeroPerksCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
-
-		Hero h = CardDAO.getHero(author.getId());
+		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui um herói.").queue();
@@ -118,7 +113,7 @@ public class HeroPerksCommand implements Executable {
 		msg.getChannel().sendMessage("Você selecionou a perk `" + perk + "`, deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							h.getPerks().add(perk);
-							CardDAO.saveHero(h);
+							KawaiponDAO.saveHero(h);
 
 							s.delete()
 									.flatMap(d -> msg.getChannel().sendMessage("✅ | Perk selecionada com sucesso!"))

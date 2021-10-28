@@ -34,7 +34,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
@@ -60,16 +59,12 @@ public class ClearDeckCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+		if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 			channel.sendMessage("❌ | Seu armazém está lotado, abra espaço nele antes de limpar seu deck.").queue();
 			return;
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Deck dk = kp.getDeck();
+		Deck dk = KawaiponDAO.getDeck(author.getId());
 		ShoukanDeck sd = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -84,28 +79,25 @@ public class ClearDeckCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
-								Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
-								Deck fdk = fkp.getDeck();
-
-								for (Champion c : fdk.getChampions()) {
+								for (Champion c : dk.getChampions()) {
 									Stash st = new Stash(author.getId(), new KawaiponCard(c.getCard(), false));
 									StashDAO.saveCard(st);
 								}
-								fdk.getChampions().clear();
+								dk.getChampions().clear();
 
-								for (Equipment e : fdk.getEquipments()) {
+								for (Equipment e : dk.getEquipments()) {
 									Stash st = new Stash(author.getId(), e);
 									StashDAO.saveCard(st);
 								}
-								fdk.getEquipments().clear();
+								dk.getEquipments().clear();
 
-								for (Field fd : fdk.getFields()) {
+								for (Field fd : dk.getFields()) {
 									Stash st = new Stash(author.getId(), fd);
 									StashDAO.saveCard(st);
 								}
-								fdk.getFields().clear();
+								dk.getFields().clear();
 
-								KawaiponDAO.saveKawaipon(fkp);
+								KawaiponDAO.saveDeck(dk);
 								s.delete().queue();
 								channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
 							}), true, 1, TimeUnit.MINUTES,

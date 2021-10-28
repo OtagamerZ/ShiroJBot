@@ -73,9 +73,6 @@ public class TradeCommand implements Executable {
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
 			channel.sendMessage("❌ | Você não pode trocar cartas com você mesmo.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
 		} else if (Main.getInfo().getConfirmationPending().get(message.getMentionedUsers().get(0).getId()) != null) {
 			channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 			return;

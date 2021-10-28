@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -87,7 +88,7 @@ public class Hero implements Cloneable {
 	}
 
 	public Hero(User user, String name, Race race, BufferedImage image) {
-		this.id = CardDAO.getHeroes(user.getId()).size() + 1;
+		this.id = KawaiponDAO.getKawaipon(user.getId()).getHeroes().size();
 		this.uid = user.getId();
 		this.name = name;
 		this.stats = new Attributes(race.getStartingStats());

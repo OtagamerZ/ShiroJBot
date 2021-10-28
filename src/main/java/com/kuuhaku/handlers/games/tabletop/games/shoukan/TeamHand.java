@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -51,7 +52,7 @@ public class TeamHand extends Hand {
 	private final Pair<Race, Race> combo;
 	private final InfiniteList<String> users = new InfiniteList<>();
 	private final InfiniteList<Account> accs = new InfiniteList<>();
-	private final InfiniteList<BondedList<Drawable>> deques = new InfiniteList<>();
+	private final InfiniteList<BondedList<Drawable>> decks = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
 	private final InfiniteList<Hero> heroes = new InfiniteList<>();
@@ -64,7 +65,7 @@ public class TeamHand extends Hand {
 			Deck dk = dks.get(i);
 			User user = users.get(i);
 			game.getDivergence().put(user.getId(), dk.getAverageDivergence());
-			Hero hero = CardDAO.getHero(user.getId());
+			Hero hero = KawaiponDAO.getHero(user.getId());
 
 			Account acc = AccountDAO.getAccount(user.getId());
 			this.users.add(user.getId());
@@ -148,7 +149,7 @@ public class TeamHand extends Hand {
 				deque.remove(drawable);
 			}
 
-			this.deques.add(deque);
+			this.decks.add(deque);
 			this.destinyDecks.add(destinyDeck);
 			this.cards.add(new BondedList<>(bonding));
 		}
@@ -161,7 +162,7 @@ public class TeamHand extends Hand {
 				.flatMap(kp -> kp.getChampions().stream())
 				.collect(Collectors.toList()));
 		if (combo.getLeft() == Race.DIVINITY) {
-			for (LinkedList<Drawable> deque : deques) {
+			for (LinkedList<Drawable> deque : decks) {
 				for (Drawable d : deque) {
 					if (d instanceof Champion c) {
 						if (!c.hasEffect()) {
@@ -207,7 +208,7 @@ public class TeamHand extends Hand {
 							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
 		);
 		setMitigation(combo.getRight() == Race.HUMAN
-				? deques.stream()
+				? decks.stream()
 						  .flatMap(List::stream)
 						  .filter(d -> d instanceof Champion c && c.getMana() <= 2)
 						  .count() * 0.005f : 0
@@ -476,7 +477,7 @@ public class TeamHand extends Hand {
 
 	public void next() {
 		users.getNext();
-		deques.getNext();
+		decks.getNext();
 		if (combo.getLeft() != Race.HUMAN) cards.getNext();
 		destinyDecks.getNext();
 		heroes.getNext();
@@ -509,7 +510,7 @@ public class TeamHand extends Hand {
 	}
 
 	public BondedList<Drawable> getDeque() {
-		BondedList<Drawable> deque = deques.getCurrent();
+		BondedList<Drawable> deque = decks.getCurrent();
 		BondedList<Drawable> destinyDeck = getDestinyDeck();
 
 		if (deque.isEmpty()) {

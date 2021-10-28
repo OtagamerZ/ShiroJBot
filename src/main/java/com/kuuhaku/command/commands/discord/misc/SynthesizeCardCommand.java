@@ -66,9 +66,6 @@ public class SynthesizeCardCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
 		} else if (!Helper.equalsAny(args[1], "n", "c")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
 			return;

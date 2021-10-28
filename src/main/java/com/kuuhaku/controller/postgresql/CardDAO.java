@@ -21,7 +21,6 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.CardType;
@@ -1042,59 +1041,6 @@ public class CardDAO {
 		} finally {
 			em.close();
 		}
-	}
-
-	public static Hero getHero(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT h FROM Hero h WHERE uid = :uid AND returned = FALSE ORDER BY id DESC", Hero.class);
-		q.setMaxResults(1);
-		q.setParameter("uid", id);
-
-		try {
-			return (Hero) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Hero> getHeroes() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT h FROM Hero h", Hero.class);
-
-		try {
-			return (List<Hero>) q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Hero> getHeroes(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT h FROM Hero h WHERE uid = :uid", Hero.class);
-		q.setParameter("uid", id);
-
-		try {
-			return (List<Hero>) q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	public static void saveHero(Hero h) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(h);
-		em.getTransaction().commit();
-
-		em.close();
 	}
 
 	public static double getCategoryMeta(Class cat) {

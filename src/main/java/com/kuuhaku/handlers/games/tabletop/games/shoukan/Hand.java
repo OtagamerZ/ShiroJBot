@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -89,7 +90,7 @@ public class Hand {
 
 		this.user = user.getId();
 		this.acc = AccountDAO.getAccount(user.getId());
-		this.hero = CardDAO.getHero(user.getId());
+		this.hero = KawaiponDAO.getHero(user.getId());
 
 		Consumer<Drawable> bonding = d -> d.bind(this);
 		this.deque = new BondedList<>(bonding);

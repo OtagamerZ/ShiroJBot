@@ -27,7 +27,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.RankedTier;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.utils.Helper;
@@ -284,8 +283,7 @@ public class TenthSecondEvent implements Job {
 				if (!msg.getAuthor().getId().equals(mmr1.getUid()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
 					return;
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
-				if (kp.getDeck().hasInvalidDeck(p1Channel)) return;
+				if (KawaiponDAO.getDeck(msg.getAuthor().getId()).hasInvalidDeck(p1Channel)) return;
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
 					msg.addReaction(Helper.ACCEPT)
@@ -349,8 +347,7 @@ public class TenthSecondEvent implements Job {
 				if (!msg.getContentRaw().equalsIgnoreCase("aschente") || confirmations.remove(msg.getAuthor().getId()))
 					return;
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
-				if (kp.getDeck().hasInvalidDeck(p1Channel)) return;
+				if (KawaiponDAO.getDeck(msg.getAuthor().getId()).hasInvalidDeck(p1Channel)) return;
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
 					msg.addReaction(Helper.ACCEPT)

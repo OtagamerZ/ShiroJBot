@@ -140,6 +140,7 @@ import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
 import java.util.zip.GZIPInputStream;
@@ -3367,5 +3368,21 @@ public class Helper {
 
 	public static int toLuma(int rgb) {
 		return (int) (0.2126 * ((rgb >> 16) & 0xFF) + 0.7152 * ((rgb >> 8) & 0xFF) + 0.0722 * (rgb & 0xFF));
+	}
+
+	public static Integer[] mergeArrays(Integer[]... arr) {
+		List<Integer[]> in = new ArrayList<>(List.of(arr));
+		int max = in.stream().map(a -> a.length).max(Integer::compareTo).orElse(0);
+
+		return IntStream.range(0, max)
+				.mapToObj(i -> {
+					int n = 0;
+
+					for (Integer[] ts : in) {
+						if (i < ts.length) n += ts[i];
+					}
+
+					return n;
+				}).toArray(Integer[]::new);
 	}
 }
