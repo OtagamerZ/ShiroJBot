@@ -108,7 +108,7 @@ public class SummonHeroCommand implements Executable {
 
 		BufferedImage image = bi;
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por " + Math.pow(2, heroes) + " gemas, deseja confirmar?")
+		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por " + (int) Math.pow(2, heroes) + " gemas, deseja confirmar?")
 				.setEmbeds(eb.build())
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
