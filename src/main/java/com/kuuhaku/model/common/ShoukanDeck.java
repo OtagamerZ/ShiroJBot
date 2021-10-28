@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -97,7 +97,7 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
-		Hero h = CardDAO.getHero(acc.getUid());
+		Hero h = KawaiponDAO.getHero(acc.getUid());
 		if (h != null) {
 			g2d.drawImage(h.toChampion().drawCard(false), 1769, 2444, null);
 			Profile.printCenteredString(StringUtils.abbreviate(h.getName(), 15), 225, 1769, 2834, g2d);
