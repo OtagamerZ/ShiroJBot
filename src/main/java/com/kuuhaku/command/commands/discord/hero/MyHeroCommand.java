@@ -71,7 +71,7 @@ public class MyHeroCommand implements Executable {
 				default -> 1;
 			};
 		}
-		int hours = (int) Math.ceil(h.getDmg() * 10f * healModif / h.getMaxHp());
+		int hours = (int) ((10 - Helper.prcnt(h.getHp(), h.getMaxHp()) * 10) * healModif);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
@@ -81,7 +81,7 @@ public class MyHeroCommand implements Executable {
 						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
 						h.getHp(),
 						h.getMaxHp(),
-						h.getDmg() > 0 ? "\n`recuperação total em " + hours + " hora" + (hours != 1 ? "s" : "") + "`" : ""
+						h.getHp() < h.getMaxHp() ? "\n`recuperação total em " + hours + " hora" + (hours != 1 ? "s" : "") + "`" : ""
 				), true)
 				.addField(":bar_chart: | Stats:", """
 								STR: %s
