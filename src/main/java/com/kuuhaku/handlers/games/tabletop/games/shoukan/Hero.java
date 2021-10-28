@@ -85,7 +85,8 @@ public class Hero implements Cloneable {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "expedition_id")
 	private Expedition expedition = null;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
