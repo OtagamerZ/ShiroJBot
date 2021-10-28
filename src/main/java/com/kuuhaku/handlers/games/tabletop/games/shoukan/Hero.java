@@ -85,9 +85,8 @@ public class Hero implements Cloneable {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(columnDefinition = "VARCHAR(255)")
-	private Expedition expedition = null;
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String expedition;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long expEnd = 0;
@@ -199,12 +198,12 @@ public class Hero implements Cloneable {
 		return getMaxPerks() - perks.size();
 	}
 
-	public Expedition getExpedition() {
+	public String getExpedition() {
 		return expedition;
 	}
 
 	public void setExpedition(Expedition expedition) {
-		this.expedition = expedition;
+		this.expedition = expedition.getId();
 		this.expEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expedition.getTime(), TimeUnit.MINUTES);
 	}
 
