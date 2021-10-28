@@ -149,7 +149,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getLevel() {
-		return Math.max(1, (int) Math.round(Math.log(xp * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
+		return Math.max(1, (int) Math.round(Math.log(xp / 10d * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
 	}
 
 	public int getXp() {
@@ -166,7 +166,7 @@ public class Hero implements Cloneable {
 
 	public int getXpToNext() {
 		int level = getLevel();
-		if (level < 20) return (int) Helper.getFibonacci(level + 2);
+		if (level < 20) return (int) Helper.getFibonacci(level + 2) * 10;
 		else return -1;
 	}
 

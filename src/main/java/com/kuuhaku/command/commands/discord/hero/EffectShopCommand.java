@@ -106,7 +106,7 @@ public class EffectShopCommand implements Executable {
 
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
-			int cost = c.getMana() + (c.isFusion() ? 5 : 0);
+			int cost = (c.getMana() + (c.isFusion() ? 5 : 0)) / 2;
 			eb.addField(Helper.getFancyNumber(i + 1) + " :droplet: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
 		}
 
