@@ -37,6 +37,7 @@ import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "hero")
@@ -85,7 +86,20 @@ public class Hero implements Cloneable {
 	}
 
 	public Hero(User user, String name, Race race, BufferedImage image) {
-		this.id = KawaiponDAO.getHeroes(user.getId()).size();
+		Set<Integer> ids = KawaiponDAO.getHeroes(user.getId()).stream()
+				.map(Hero::getId)
+				.collect(Collectors.toSet());
+
+		int i = 0;
+		this.id = -1;
+		while (id == -1) {
+			if (!ids.contains(i)) {
+				this.id = i;
+			}
+
+			i++;
+		}
+
 		this.uid = user.getId();
 		this.name = name;
 		this.stats = new Attributes(race.getStartingStats());
@@ -338,11 +352,11 @@ public class Hero implements Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Hero hero = (Hero) o;
-		return Objects.equals(uid, hero.uid) && race == hero.race;
+		return id == hero.id && Objects.equals(uid, hero.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid, race);
+		return Objects.hash(id, uid);
 	}
 }
