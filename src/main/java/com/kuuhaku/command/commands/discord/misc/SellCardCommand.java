@@ -63,10 +63,7 @@ public class SellCardCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
-		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (args.length < 2) {
+		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma carta e o preço dela.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {

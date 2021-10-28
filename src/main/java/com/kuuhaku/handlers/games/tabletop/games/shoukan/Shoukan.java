@@ -121,10 +121,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<Deck> kps = daily ?
 					Collections.nCopies(4, Helper.getDailyDeck()) :
 					List.of(
-							KawaiponDAO.getKawaipon(players[2].getId()).getDeck(),
-							KawaiponDAO.getKawaipon(players[0].getId()).getDeck(),
-							KawaiponDAO.getKawaipon(players[3].getId()).getDeck(),
-							KawaiponDAO.getKawaipon(players[1].getId()).getDeck()
+							KawaiponDAO.getDeck(players[2].getId()),
+							KawaiponDAO.getDeck(players[0].getId()),
+							KawaiponDAO.getDeck(players[3].getId()),
+							KawaiponDAO.getDeck(players[1].getId())
 					);
 
 			this.hands = Map.of(
@@ -132,8 +132,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 					Side.BOTTOM, new TeamHand(this, List.of(players[3], players[1]), kps.subList(2, 4), Side.BOTTOM)
 			);
 		} else {
-			Deck p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId()).getDeck();
-			Deck p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId()).getDeck();
+			Deck p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getDeck(players[0].getId());
+			Deck p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getDeck(players[1].getId());
 
 			this.hands = Map.of(
 					Side.TOP, new Hand(this, players[0], p1, Side.TOP),
@@ -2572,9 +2572,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (activator.hasEffect() && effectLock == 0) {
-			if ((defender != null && (defender.getLeft().isDuelling() || defender.getLeft().getBonus().popFlag(Flag.NOEFFECT)))
-				|| (attacker != null && (attacker.getLeft().isDuelling() || attacker.getLeft().getBonus().popFlag(Flag.NOEFFECT)))
-			) return false;
+			if (defender != null) {
+				Champion c = defender.getLeft();
+
+				if (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+			} else if (attacker != null) {
+				Champion c = attacker.getLeft();
+
+				if (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+			}
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
 			for (Equipment e : activator.getLinkedTo()) {
@@ -2770,18 +2776,17 @@ public class Shoukan extends GlobalGame implements Serializable {
 						AccountDAO.saveAccount(acc);
 
 						if (h.getHero() != null && tourMatch == null) {
-							Hero hr = CardDAO.getHero(h.getAcc().getUid());
+							Hero hr = KawaiponDAO.getHero(h.getAcc().getUid());
 
 							if (hr != null) {
-								if (isRanked() && Helper.chance(h.getHero().getXp())) {
+								if (isRanked() && Helper.chance(5)) {
 									h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
 									hr.addBonusPoints(2);
 								}
 
 								hr.setHp(h.getHero().getHp());
 								hr.setDmg();
-								//hr.setXp(h.getHero().getXp());
-								CardDAO.saveHero(hr);
+								KawaiponDAO.saveHero(hr);
 							}
 						}
 
@@ -2807,18 +2812,18 @@ public class Shoukan extends GlobalGame implements Serializable {
 					AccountDAO.saveAccount(acc);
 
 					if (h.getHero() != null && tourMatch == null) {
-						Hero hr = CardDAO.getHero(h.getAcc().getUid());
+						Hero hr = KawaiponDAO.getHero(h.getAcc().getUid());
 
-						assert hr != null;
-						if (isRanked() && Helper.chance(h.getHero().getXp())) {
-							h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
-							hr.addBonusPoints(2);
+						if (hr != null) {
+							if (isRanked() && Helper.chance(5)) {
+								h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
+								hr.addBonusPoints(2);
+							}
+
+							hr.setHp(h.getHero().getHp());
+							hr.setDmg();
+							KawaiponDAO.saveHero(hr);
 						}
-
-						hr.setHp(h.getHero().getHp());
-						hr.setDmg();
-						//hr.setXp(h.getHero().getXp());
-						CardDAO.saveHero(hr);
 					}
 				}
 			}

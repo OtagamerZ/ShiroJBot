@@ -33,7 +33,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.model.records.RankedDuo;
@@ -64,15 +63,13 @@ public class ShoukanCommand implements Executable {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
 		boolean tournament = args.length > 0 && Helper.equalsAny(args[0], "torneio", "tournament");
+		Deck d = KawaiponDAO.getDeck(author.getId());
 
 		if (practice) {
 			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText), new JSONObject());
 			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
 
-			if (!daily) {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-				if (kp.getDeck().hasInvalidDeck(channel)) return;
-			}
+			if (!daily && d.hasInvalidDeck(channel)) return;
 
 			String id = author.getId() + "." + 0 + "." + guild.getId();
 
@@ -101,8 +98,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			if (kp.getDeck().hasInvalidDeck(channel)) return;
+			if (d.hasInvalidDeck(channel)) return;
 
 			String id = author.getId() + "." + 0 + "." + guild.getId();
 
@@ -203,18 +199,13 @@ public class ShoukanCommand implements Executable {
 				if (match == null) return;
 
 				User other = Main.getInfo().getUserByID(match.top().equals(author.getId()) ? match.bot() : match.top());
-				if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-					channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-					return;
-				} else if (Main.getInfo().getConfirmationPending().get(other.getId()) != null) {
+				if (Main.getInfo().getConfirmationPending().get(other.getId()) != null) {
 					channel.sendMessage("❌ | " + other.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 					return;
 				}
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-				Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
-				if (kp.getDeck().hasInvalidDeck(channel)
-					|| Deck.hasInvalidDeck(target.getDeck(), other, channel)) return;
+				if (d.hasInvalidDeck(channel) || Deck.hasInvalidDeck(KawaiponDAO.getDeck(other.getId()), other, channel))
+					return;
 
 				if (Main.getInfo().gameInProgress(author.getId())) {
 					channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
@@ -254,9 +245,6 @@ public class ShoukanCommand implements Executable {
 			} else if (message.getMentionedUsers().size() != 1 && message.getMentionedUsers().size() != 3) {
 				channel.sendMessage("❌ | Você precisa mencionar 1 usuário para jogar solo, ou 3 para jogar em equipes (1º e 3º equipe 1, você e o 2º equipe 2).").queue();
 				return;
-			} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-				channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-				return;
 			}
 
 			List<User> users = message.getMentionedUsers();
@@ -292,10 +280,9 @@ public class ShoukanCommand implements Executable {
 			}
 
 			if (!daily) {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-				Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
-				if (kp.getDeck().hasInvalidDeck(channel)
-					|| Deck.hasInvalidDeck(target.getDeck(), message.getMentionedUsers().get(0), channel)) return;
+				User other = message.getMentionedUsers().get(0);
+				if (d.hasInvalidDeck(channel) || Deck.hasInvalidDeck(KawaiponDAO.getDeck(other.getId()), other, channel))
+					return;
 			}
 
 			String id = author.getId() + "." + users.get(0).getId() + "." + guild.getId();
@@ -315,9 +302,8 @@ public class ShoukanCommand implements Executable {
 				if (!daily)
 					for (int i = 0; i < 3; i++) {
 						User u = message.getMentionedUsers().get(i);
-						Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
 
-						if (Deck.hasInvalidDeck(k.getDeck(), u, channel)) return;
+						if (Deck.hasInvalidDeck(KawaiponDAO.getDeck(u.getId()), u, channel)) return;
 					}
 
 				List<User> players = new ArrayList<>() {{

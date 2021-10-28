@@ -57,9 +57,6 @@ public class HitotsuCommand implements Executable {
 		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
