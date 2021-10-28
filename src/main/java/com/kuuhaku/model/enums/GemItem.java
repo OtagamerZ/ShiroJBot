@@ -134,7 +134,7 @@ public enum GemItem {
 			(mb, chn, args) -> {
 				Hero h = KawaiponDAO.getHero(mb.getId());
 				if (h == null) {
-					chn.sendMessage("❌ | Você não possui um herói.").queue();
+					chn.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 					return false;
 				}
 
@@ -150,7 +150,7 @@ public enum GemItem {
 			(mb, chn, args) -> {
 				Hero h = KawaiponDAO.getHero(mb.getId());
 				if (h == null) {
-					chn.sendMessage("❌ | Você não possui um herói.").queue();
+					chn.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 					return false;
 				}
 

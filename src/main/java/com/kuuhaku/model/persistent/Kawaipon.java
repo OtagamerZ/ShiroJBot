@@ -142,19 +142,12 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public int getActiveHero() {
-		return Math.min(activeHero, getHeroes().size() - 1);
+		return activeHero;
 	}
 
 	public List<Hero> getHeroes() {
 		heroes.sort(Comparator.comparingInt(Hero::getId));
 		return heroes;
-	}
-
-	public Hero getHero() {
-		List<Hero> heroes = getHeroes();
-		if (heroes.isEmpty()) return null;
-
-		return heroes.get(getActiveHero());
 	}
 
 	public void setHero(int i) {

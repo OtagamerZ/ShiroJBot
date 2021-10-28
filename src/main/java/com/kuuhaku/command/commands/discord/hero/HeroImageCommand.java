@@ -43,7 +43,7 @@ public class HeroImageCommand implements Executable {
 		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
-			channel.sendMessage("❌ | Você não possui um herói.").queue();
+			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
 		} else if (message.getAttachments().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
