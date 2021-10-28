@@ -62,7 +62,7 @@ public class SummonHeroCommand implements Executable {
 			return;
 		}
 
-		int heroes = KawaiponDAO.getKawaipon(author.getId()).getHeroes().size() + 1;
+		int heroes = KawaiponDAO.getHeroes(author.getId()).size() + 1;
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.getGems() < Math.pow(2, heroes)) {
 			channel.sendMessage("❌ | Você não possui gemas suficientes para completar o feitiço de invocação.").queue();
