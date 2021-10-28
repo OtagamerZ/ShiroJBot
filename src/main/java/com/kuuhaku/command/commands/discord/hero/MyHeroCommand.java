@@ -98,6 +98,9 @@ public class MyHeroCommand implements Executable {
 				.addField(":books: | Perks:", String.join("\n", perks), true)
 				.setImage("attachment://hero.png");
 
+		if (!h.hasArrived())
+			eb.setFooter("\uD83E\uDDED | " + h.getExpedition() + ": " + Helper.toStringDuration(h.getExpeditionEnd()));
+
 		Champion c = h.toChampion();
 		if (h.getHp() == 0) c.setStun(1);
 
