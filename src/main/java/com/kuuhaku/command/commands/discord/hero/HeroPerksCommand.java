@@ -56,7 +56,7 @@ public class HeroPerksCommand implements Executable {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
 		} else if (!h.hasArrived()) {
-			channel.sendMessage("❌ | Este herói está em uma espedição.").queue();
+			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
 		} else if (h.getAvailablePerks() <= 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()

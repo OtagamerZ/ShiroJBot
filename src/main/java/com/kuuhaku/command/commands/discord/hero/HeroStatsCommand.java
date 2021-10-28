@@ -54,7 +54,7 @@ public class HeroStatsCommand implements Executable {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
 		} else if (!h.hasArrived()) {
-			channel.sendMessage("❌ | Este herói está em uma espedição.").queue();
+			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
 		}
 
@@ -62,7 +62,7 @@ public class HeroStatsCommand implements Executable {
 		channel.sendMessageEmbeds(getEmbed(h)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
 							put("\uD83C\uDDF8", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
+								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
 								}
@@ -71,7 +71,7 @@ public class HeroStatsCommand implements Executable {
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDF7", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
+								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
 								}
@@ -80,7 +80,7 @@ public class HeroStatsCommand implements Executable {
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDE6", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
+								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
 								}
@@ -89,7 +89,7 @@ public class HeroStatsCommand implements Executable {
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDFC", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
+								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
 								}
@@ -98,7 +98,7 @@ public class HeroStatsCommand implements Executable {
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDE8", (mb, ms) -> {
-								if (h.getAvailableStatPoints() <= 0) {
+								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
 								}
