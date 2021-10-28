@@ -90,7 +90,7 @@ public class ReversiCommand implements Executable {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		Game t = new Reversi(Main.getShiroShards(), channel, bet, author, message.getMentionedUsers().get(0));
+		int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Reversi, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
@@ -104,6 +104,7 @@ public class ReversiCommand implements Executable {
 								}
 
 								//Main.getInfo().getGames().put(id, t);
+								Game t = new Reversi(Main.getShiroShards(), channel, finalBet, author, message.getMentionedUsers().get(0));
 								s.delete().queue(null, Helper::doNothing);
 								t.start();
 							}

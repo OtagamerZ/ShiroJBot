@@ -25,6 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.Expedition;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -33,73 +34,78 @@ import java.awt.*;
 import java.util.Map;
 
 @Command(
-		name = "espolios",
-		aliases = {"spoils", "loot"},
-		category = Category.MISC
+        name = "espolios",
+        aliases = {"spoils", "loot"},
+        category = Category.MISC
 )
 public class CollectSpoilsCommand implements Executable {
 
-	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Hero h = KawaiponDAO.getHero(author.getId());
+    @Override
+    public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        Hero h = KawaiponDAO.getHero(author.getId());
 
-		if (h == null) {
-			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
-			return;
-		} else if (h.getExpedition() == null || !h.hasArrived()) {
-			channel.sendMessage("❌ | Seu herói não retornou de uma expedição ainda.").queue();
-			return;
-		}
+        if (h == null) {
+            channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
+            return;
+        } else if (h.getExpedition() == null || !h.hasArrived()) {
+            channel.sendMessage("❌ | Seu herói não retornou de uma expedição ainda.").queue();
+            return;
+        }
 
-		Expedition e = h.getExpedition();
+        Expedition e = h.getExpedition();
 
-		int chance = e.getSuccessChance(h);
-		if (Helper.chance(chance)) {
-			EmbedBuilder eb = new EmbedBuilder()
-					.setColor(Color.green)
-					.setTitle("Espólios da expedição para " + e);
+        int chance = e.getSuccessChance(h);
+        if (Helper.chance(chance)) {
+            EmbedBuilder eb = new EmbedBuilder()
+                    .setColor(Color.green)
+                    .setTitle("Espólios da expedição para " + e);
 
-			for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
-				Reward rew = Reward.valueOf(entry.getKey());
-				int val = (int) (double) entry.getValue();
+            for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
+                Reward rew = Reward.valueOf(entry.getKey());
+                int val = (int) (double) entry.getValue();
 
-				eb.addField(rew.toString(),
-						switch (rew) {
-							case XP, CREDIT, GEM -> Helper.separate(rew.reward(h, val));
-							case EQUIPMENT -> String.valueOf(rew.reward(h, val));
-						}, true);
-			}
+                eb.addField(rew.toString(),
+                        switch (rew) {
+                            case XP, CREDIT, GEM -> Helper.separate(rew.reward(h, val));
+                            case EQUIPMENT -> String.valueOf(rew.reward(h, val));
+                        }, true);
+            }
 
-			h = KawaiponDAO.getHero(author.getId());
-			assert h != null;
+            h = KawaiponDAO.getHero(author.getId());
+            assert h != null;
 
-			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-					.setEmbeds(eb.build())
-					.queue();
-		} else {
-			EmbedBuilder eb = new EmbedBuilder()
-					.setColor(Color.red)
-					.setTitle("A expedição para " + e + " fracassou");
+            channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
+                    .setEmbeds(eb.build())
+                    .queue();
+        } else {
+            EmbedBuilder eb = new EmbedBuilder()
+                    .setColor(Color.red)
+                    .setTitle("A expedição para " + e + " fracassou");
 
-			if (chance < 33 && Helper.chance(50)) {
-				int max = h.getXp();
-				int penalty = Helper.rng(max / 10, max / 8);
-				h.setXp(h.getXp() - penalty);
-				eb.addField("Penalidade de XP", "-" + penalty, true);
-			}
-			if (chance < 66 && Helper.chance(50)) {
-				int max = h.getMaxHp();
-				int penalty = Helper.rng(max / 5, max / 3);
-				h.setHp(h.getHp() - penalty);
-				eb.addField("Penalidade de HP", "-" + penalty, true);
-			}
+            if (chance < 15 && Helper.chance(50)) {
+                Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+                kp.getHeroes().remove(h);
+                eb.addField("Morte", "Seu herói morreu durante a espedição", true);
+            }
+            if (chance < 33 && Helper.chance(50)) {
+                int max = h.getXp();
+                int penalty = Helper.rng(max / 10, max / 8);
+                h.setXp(h.getXp() - penalty);
+                eb.addField("Penalidade de XP", "-" + penalty, true);
+            }
+            if (chance < 66 && Helper.chance(50)) {
+                int max = h.getMaxHp();
+                int penalty = Helper.rng(max / 5, max / 3);
+                h.setHp(h.getHp() - penalty);
+                eb.addField("Penalidade de HP", "-" + penalty, true);
+            }
 
-			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-					.setEmbeds(eb.build())
-					.queue();
-		}
+            channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
+                    .setEmbeds(eb.build())
+                    .queue();
+        }
 
-		h.arrive();
-		KawaiponDAO.saveHero(h);
-	}
+        h.arrive();
+        KawaiponDAO.saveHero(h);
+    }
 }
