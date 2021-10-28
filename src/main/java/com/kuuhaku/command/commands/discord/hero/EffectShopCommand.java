@@ -88,7 +88,10 @@ public class EffectShopCommand implements Executable {
 									KawaiponDAO.saveHero(h);
 
 									Main.getInfo().getConfirmationPending().remove(author.getId());
-									s.delete().flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!")).queue();
+									s.delete()
+											.flatMap(d -> ms.delete())
+											.flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!"))
+											.queue();
 								}), true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(h.getUid()),
 								m -> Main.getInfo().getConfirmationPending().remove(author.getId())
