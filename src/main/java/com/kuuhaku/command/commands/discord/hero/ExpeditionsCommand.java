@@ -62,7 +62,7 @@ public class ExpeditionsCommand implements Executable {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
 		} else if (!h.hasArrived()) {
-			channel.sendMessage("❌ | Este herói está em uma espedição.").queue();
+			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
 		}
 
@@ -129,7 +129,9 @@ public class ExpeditionsCommand implements Executable {
 			Expedition e = pool.get(i);
 			int chance = e.getSuccessChance(h);
 			String diff;
-			if (chance < 15)
+			if (chance < 5)
+				diff = "Tem mais chance de cuspir pro alto e matar uma mosca";
+			else if (chance < 15)
 				diff = "**SUICIDIO!**";
 			else if (chance < 25)
 				diff = "Muito difícil";
