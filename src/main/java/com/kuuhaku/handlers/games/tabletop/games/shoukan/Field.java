@@ -188,8 +188,8 @@ public class Field implements Drawable, Cloneable {
 		return new JSONObject(modifiers);
 	}
 
-	public void setModifiers(String modifiers) {
-		this.modifiers = modifiers;
+	public void setModifiers(JSONObject modifiers) {
+		this.modifiers = modifiers.toString();
 	}
 
 	public boolean isDay() {

@@ -139,6 +139,10 @@ public class Attributes {
 		return (int) Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res))) * hpModif, 5);
 	}
 
+	public int calcMaxEnergy() {
+		return (int) Math.round(10 * (1 - Math.exp(-0.06 * res + -0.03 * con)));
+	}
+
 	public int calcMp(Champion ref) {
 		return (int) (1 + (ref == null ? 0 : ref.getMana() * 0.75) + Math.max(0,
 				str * 0.275
