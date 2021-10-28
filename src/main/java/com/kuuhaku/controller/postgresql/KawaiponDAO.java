@@ -154,7 +154,7 @@ public class KawaiponDAO {
 		try {
 			return (Hero) q.getSingleResult();
 		} catch (NoResultException e) {
-			return getKawaipon(id).getHero();
+			return null;
 		} finally {
 			em.close();
 		}

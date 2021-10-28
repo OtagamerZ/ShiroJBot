@@ -18,32 +18,30 @@
 
 package com.kuuhaku.command.commands.discord.hero;
 
+import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "selecionarheroi",
-		aliases = {"selecthero", "sh"},
+		name = "retornarheroi",
+		aliases = {"returnhero"},
 		usage = "req_id-opt",
 		category = Category.MISC
 )
-@Requires({
-		Permission.MESSAGE_ATTACH_FILES,
-		Permission.MESSAGE_EMBED_LINKS
-})
-public class SelectHeroCommand implements Executable {
+public class DismisssHeroCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -79,19 +77,31 @@ public class SelectHeroCommand implements Executable {
 
 		try {
 			int id = Integer.parseInt(args[0]);
+			Hero chosen = heroes.stream()
+					.filter(h -> h.getId() == id)
+					.findFirst().orElse(null);
 
-			if (!Helper.between(id, 0, heroes.size())) {
+			if (chosen == null) {
 				channel.sendMessage("❌ | Herói inválido.").queue();
 				return;
 			} else if (id == kp.getActiveHero()) {
-				channel.sendMessage("❌ | Este já é seu herói atual.").queue();
+				channel.sendMessage("❌ | Você não pode retornar seu herói atual.").queue();
 				return;
 			}
 
-			kp.setHero(id);
-			KawaiponDAO.saveKawaipon(kp);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Você está prestes a retornar " + chosen.getName() + " ao seu mundo de origem, deseja confirmar?")
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								Kawaipon fKp = KawaiponDAO.getKawaipon(author.getId());
+								fKp.getHeroes().remove(chosen);
+								KawaiponDAO.saveKawaipon(fKp);
 
-			channel.sendMessage("✅ | Herói alternado com sucesso.").queue();
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói retornado com sucesso!")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | Herói inválido.").queue();
 		}

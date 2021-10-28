@@ -53,7 +53,7 @@ public class HeroPerksCommand implements Executable {
 		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
-			channel.sendMessage("❌ | Você não possui um herói.").queue();
+			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
 		} else if (h.getAvailablePerks() <= 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
