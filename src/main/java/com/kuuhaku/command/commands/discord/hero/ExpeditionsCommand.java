@@ -97,6 +97,7 @@ public class ExpeditionsCommand implements Executable {
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " irá em uma expedição para " + e + " por " + Helper.toStringDuration(e.getTime()) + ", deseja confirmar?")
+						.setEmbeds(eb.build())
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
 									h.setExpedition(e);
 									KawaiponDAO.saveHero(h);
