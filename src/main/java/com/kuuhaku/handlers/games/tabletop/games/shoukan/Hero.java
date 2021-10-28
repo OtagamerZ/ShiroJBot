@@ -186,7 +186,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getAvailableStatPoints() {
-		return getMaxStatPoints() - stats.getUsedPoints();
+		return Math.max(0, getMaxStatPoints() - stats.getUsedPoints());
 	}
 
 	public Set<Perk> getPerks() {

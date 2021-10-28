@@ -57,7 +57,7 @@ public class CollectSpoilsCommand implements Executable {
 		if (Helper.chance(chance)) {
 			EmbedBuilder eb = new EmbedBuilder()
 					.setColor(Color.green)
-					.setTitle("Espólios da espedição para " + e);
+					.setTitle("Espólios da expedição para " + e);
 
 			for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
 				Reward rew = Reward.valueOf(entry.getKey());
