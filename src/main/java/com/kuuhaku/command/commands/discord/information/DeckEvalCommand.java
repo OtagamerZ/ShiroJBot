@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -41,8 +40,7 @@ public class DeckEvalCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Deck dk = kp.getDeck();
+		Deck dk = KawaiponDAO.getDeck(author.getId());
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Análise do deck de " + author.getName())

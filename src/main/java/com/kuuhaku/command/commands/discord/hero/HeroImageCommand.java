@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
@@ -40,7 +40,7 @@ public class HeroImageCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Hero h = CardDAO.getHero(author.getId());
+		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui um herói.").queue();
@@ -59,7 +59,7 @@ public class HeroImageCommand implements Executable {
 
 			BufferedImage bi = ImageIO.read(a.retrieveInputStream().get());
 			h.setImage(bi);
-			CardDAO.saveHero(h);
+			KawaiponDAO.saveHero(h);
 
 			channel.sendMessage("✅ | Imagem alterada com sucesso.").queue();
 		} catch (InterruptedException | ExecutionException | IOException e) {

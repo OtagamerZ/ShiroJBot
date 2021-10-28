@@ -55,9 +55,6 @@ public class LotteryCommand implements Executable {
 		} else if (args[0].split(",").length != 6 || args[0].length() != 17) {
 			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());

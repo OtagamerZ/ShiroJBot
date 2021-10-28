@@ -67,9 +67,6 @@ public class AuctionCommand implements Executable {
 		} else if (!StringUtils.isNumeric(args[2])) {
 			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
 		}
 
 		int type = switch (args[1].toUpperCase(Locale.ROOT)) {

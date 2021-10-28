@@ -33,7 +33,6 @@ import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -108,8 +107,7 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 							.queue();
 				}
 			} else {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-				Deck dk = kp.getDeck();
+				Deck dk = KawaiponDAO.getDeck(author.getId());
 
 				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
 				BufferedImage cards = kb.view(dk);

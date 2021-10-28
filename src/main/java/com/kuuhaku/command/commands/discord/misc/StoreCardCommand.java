@@ -61,10 +61,7 @@ public class StoreCardCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
-		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+		if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
 			return;
 		} else if (args.length < 1) {

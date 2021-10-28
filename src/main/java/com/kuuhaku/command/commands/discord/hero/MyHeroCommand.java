@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
@@ -48,7 +48,7 @@ public class MyHeroCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Hero h = CardDAO.getHero(author.getId());
+		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui um herói.").queue();

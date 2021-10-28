@@ -23,7 +23,6 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
@@ -40,8 +39,7 @@ public class DestinyCardsCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Deck dk = kp.getDeck();
+		Deck dk = KawaiponDAO.getDeck(author.getId());
 
 		if (args.length == 0) {
 			dk.setDestinyDraw(null);
@@ -73,6 +71,6 @@ public class DestinyCardsCommand implements Executable {
 			}
 		}
 
-		KawaiponDAO.saveKawaipon(kp);
+		KawaiponDAO.saveDeck(dk);
 	}
 }

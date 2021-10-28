@@ -55,9 +55,6 @@ public class CrissCrossCommand implements Executable {
 		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
 		} else if (Main.getInfo().getConfirmationPending().get(message.getMentionedUsers().get(0).getId()) != null) {
 			channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 			return;

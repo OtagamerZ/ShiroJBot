@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 
 import javax.persistence.*;
 import java.util.*;
@@ -41,6 +42,13 @@ public class Kawaipon implements Cloneable {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "kawaipon_id")
 	private List<Deck> decks = new ArrayList<>();
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int activeHero = 0;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "kawaipon_id")
+	private List<Hero> heroes = new ArrayList<>();
 
 	public Kawaipon() {
 	}
@@ -125,10 +133,32 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public boolean hasCard(Card c, boolean foil) {
+		Deck d = getDeck();
+
 		return getCard(c, foil) != null
-			   || getDeck().getChampion(c) != null
-			   || getDeck().getEquipment(c) != null
-			   || getDeck().getField(c) != null;
+			   || d.getChampion(c) != null
+			   || d.getEquipment(c) != null
+			   || d.getField(c) != null;
+	}
+
+	public int getActiveHero() {
+		return Math.min(activeHero, getHeroes().size() - 1);
+	}
+
+	public List<Hero> getHeroes() {
+		heroes.sort(Comparator.comparingInt(Hero::getId));
+		return heroes;
+	}
+
+	public Hero getHero() {
+		List<Hero> heroes = getHeroes();
+		if (heroes.isEmpty()) return null;
+
+		return heroes.get(activeHero);
+	}
+
+	public void setHero(int i) {
+		this.activeHero = i;
 	}
 
 	public Kawaipon copy() {
