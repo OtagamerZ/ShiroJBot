@@ -123,10 +123,26 @@ public class ExpeditionsCommand implements Executable {
 
 		for (int i = 0; i < pool.size(); i++) {
 			Expedition e = pool.get(i);
+			int chance = e.getSuccessChance(h);
+			String diff;
+			if (chance < 15)
+				diff = "**SUICIDIO!**";
+			else if (chance < 25)
+				diff = "Muito difícil";
+			else if (chance < 33)
+				diff = "Difícil";
+			else if (chance < 60)
+				diff = "Médio";
+			else if (chance < 85)
+				diff = "Fácil";
+			else
+				diff = "Muito fácil";
+
+
 			eb.addField(Helper.getFancyNumber(i + 1) + " | " + e
 					, "Dificuldade: %s (Sucesso: %s%%)\nDuração: %s".formatted(
-							e.getDifficulty(),
-							e.getSuccessChance(h),
+							diff,
+							chance,
 							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(e.getTime(), TimeUnit.MINUTES))
 					), false
 			);
