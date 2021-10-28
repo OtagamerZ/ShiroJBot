@@ -127,7 +127,7 @@ public class ExpeditionsCommand implements Executable {
 					, "Dificuldade: %s (Sucesso: %s%%)\nDuração: %s".formatted(
 							e.getDifficulty(),
 							e.getSuccessChance(h),
-							Helper.toStringDuration(e.getTime())
+							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(e.getTime(), TimeUnit.MINUTES))
 					), false
 			);
 		}
