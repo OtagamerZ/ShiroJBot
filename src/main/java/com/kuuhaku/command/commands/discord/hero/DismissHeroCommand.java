@@ -67,7 +67,7 @@ public class DismissHeroCommand implements Executable {
 								prefix,
 								String.valueOf(j)
 						),
-						h.getName() + " - " + h.getRace() + " - Level " + h.getLevel(),
+						(!h.hasArrived() ? "**(EXPEDIÇÃO)** " : "") + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
 						true);
 			}
 
