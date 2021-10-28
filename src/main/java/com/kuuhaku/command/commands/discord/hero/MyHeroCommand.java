@@ -77,11 +77,14 @@ public class MyHeroCommand implements Executable {
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
 						XP: %s
 						HP: %s/%s%s
+						EP: %s/%s
 						""".formatted(
 						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
 						h.getHp(),
 						h.getMaxHp(),
-						h.getHp() < h.getMaxHp() ? "\n`recuperação total em " + hours + " hora" + (hours != 1 ? "s" : "") + "`" : ""
+						h.getHp() < h.getMaxHp() ? "\n`recuperação total em " + hours + " hora" + (hours != 1 ? "s" : "") + "`" : "",
+						h.getEnergy(),
+						h.getMaxEnergy()
 				), true)
 				.addField(":bar_chart: | Stats:", """
 								STR: %s
