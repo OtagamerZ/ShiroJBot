@@ -33,9 +33,8 @@ import java.awt.*;
 import java.util.Map;
 
 @Command(
-		name = "fotoheroi",
-		aliases = {"heroimage", "heroimg"},
-		usage = "req_file",
+		name = "espolios",
+		aliases = {"spoils", "loot"},
 		category = Category.MISC
 )
 public class CollectSpoilsCommand implements Executable {
