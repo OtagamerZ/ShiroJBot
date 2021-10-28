@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.persistent.Expedition;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -98,8 +99,10 @@ public class MyHeroCommand implements Executable {
 				.addField(":books: | Perks:", String.join("\n", perks), true)
 				.setImage("attachment://hero.png");
 
-		if (!h.hasArrived())
-			eb.setFooter("\uD83E\uDDED | " + h.getExpedition() + ": " + Helper.toStringDuration(h.getExpeditionEnd()));
+		if (!h.hasArrived()) {
+			Expedition e = h.getExpedition();
+			eb.setFooter("\uD83E\uDDED | " + e + ": " + Helper.toStringDuration(e.getTime()));
+		}
 
 		Champion c = h.toChampion();
 		if (h.getHp() == 0) c.setStun(1);
