@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.awt.*;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,19 +73,31 @@ public class ExpeditionsCommand implements Executable {
 		for (int i = 0; i < pool.size(); i++) {
 			Expedition e = pool.get(i);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
+			EmbedBuilder loot = new ColorlessEmbedBuilder()
 					.setTitle("Possíveis espólios");
 
 			for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
 				Reward rew = Reward.valueOf(entry.getKey());
 				int val = (int) (double) entry.getValue();
 
-				eb.addField(rew.toString(),
+				loot.addField(rew.toString(),
 						switch (rew) {
 							case XP, CREDIT, GEM -> "Até " + Helper.separate(val);
 							case EQUIPMENT -> val + "% de chance";
 						}, true);
 			}
+
+			int chance = e.getSuccessChance(h);
+			EmbedBuilder penalties = new EmbedBuilder()
+					.setColor(Color.red)
+					.setTitle("Possíveis penalidades");
+
+			if (chance < 15)
+				penalties.addField("Morte", Helper.VOID, true);
+			if (chance < 33)
+				penalties.addField("Penalidade de XP", Helper.VOID, true);
+			if (chance < 66)
+				penalties.addField("Penalidade de HP", Helper.VOID, true);
 
 			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
 				if (h.getEnergy() < 1) {
@@ -97,7 +110,7 @@ public class ExpeditionsCommand implements Executable {
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " irá em uma expedição para " + e + " por " + Helper.toStringDuration(e.getTime()) + ", deseja confirmar?")
-						.setEmbeds(eb.build())
+						.setEmbeds(loot.build(), penalties.build())
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
 									h.setExpedition(e);
 									KawaiponDAO.saveHero(h);
