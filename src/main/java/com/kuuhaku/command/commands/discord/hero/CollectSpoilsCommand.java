@@ -61,7 +61,7 @@ public class CollectSpoilsCommand implements Executable {
 
 			for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
 				Reward rew = Reward.valueOf(entry.getKey());
-				int val = (int) entry.getValue();
+				int val = (int) (double) entry.getValue();
 
 				eb.addField(rew.toString(),
 						switch (rew) {
