@@ -2575,11 +2575,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (defender != null) {
 				Champion c = defender.getLeft();
 
-				if (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+				if (c != null && (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT))) return false;
 			} else if (attacker != null) {
 				Champion c = attacker.getLeft();
 
-				if (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+				if (c != null && (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT))) return false;
 			}
 
 			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
@@ -2785,8 +2785,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 								}
 
 								hr.setHp(h.getHero().getHp());
-								hr.setDmg();
-								KawaiponDAO.saveHero(hr);
+								KawaiponDAO.saveHero(h.getHero());
 							}
 						}
 
@@ -2821,7 +2820,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 							}
 
 							hr.setHp(h.getHero().getHp());
-							hr.setDmg();
 							KawaiponDAO.saveHero(hr);
 						}
 					}

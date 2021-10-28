@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Attributes;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Expedition;
 import com.kuuhaku.model.persistent.id.CompositeHeroId;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -37,6 +38,7 @@ import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Entity
@@ -64,7 +66,10 @@ public class Hero implements Cloneable {
 	private Race race;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int dmg = 0;
+	private int hp = 0;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int energy = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int xp = 0;
@@ -80,7 +85,11 @@ public class Hero implements Cloneable {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
-	private transient int hp = -1;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Expedition expedition = null;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long expEnd = 0;
 
 	public Hero() {
 	}
@@ -139,27 +148,6 @@ public class Hero implements Cloneable {
 		return race;
 	}
 
-	public void setDmg() {
-		this.dmg = getMaxHp() - hp;
-	}
-
-	public void reduceDmg() {
-		double healModif = 1;
-		for (Perk perk : perks) {
-			healModif *= switch (perk) {
-				case OPTIMISTIC -> 1.5;
-				case PESSIMISTIC -> 0.5;
-				default -> 1;
-			};
-		}
-
-		this.dmg = (int) Math.max(0, this.dmg - getMaxHp() * 0.1 * healModif);
-	}
-
-	public void reduceDmg(int val) {
-		this.dmg = Math.max(0, this.dmg - val);
-	}
-
 	public int getLevel() {
 		return Math.max(1, (int) Math.round(Math.log(xp * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
 	}
@@ -210,6 +198,23 @@ public class Hero implements Cloneable {
 		return getMaxPerks() - perks.size();
 	}
 
+	public Expedition getExpedition() {
+		return expedition;
+	}
+
+	public void setExpedition(Expedition expedition) {
+		this.expedition = expedition;
+		this.expEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expedition.getTime(), TimeUnit.MINUTES);
+	}
+
+	public long getExpeditionEnd() {
+		return expEnd;
+	}
+
+	public boolean hasArrived() {
+		return System.currentTimeMillis() >= expEnd;
+	}
+
 	public String getDescription() {
 		Champion ref = CardDAO.getChampion(effect);
 
@@ -224,22 +229,53 @@ public class Hero implements Cloneable {
 		return CardDAO.getChampion(effect);
 	}
 
-	public int getDmg() {
-		if (dmg > getMaxHp()) dmg = getMaxHp();
-		return dmg;
-	}
-
 	public int getMaxHp() {
 		return stats.calcMaxHp(perks);
 	}
 
 	public int getHp() {
-		if (hp == -1) hp = Math.max(0, getMaxHp() - dmg);
-		return hp;
+		return Helper.clamp(hp, 0, getMaxHp());
 	}
 
 	public void setHp(int hp) {
-		this.hp = Math.max(0, hp);
+		this.hp = Helper.clamp(hp, 0, getMaxHp());
+	}
+
+	public void heal() {
+		double healModif = 1;
+		for (Perk perk : perks) {
+			healModif *= switch (perk) {
+				case OPTIMISTIC -> 1.5;
+				case PESSIMISTIC -> 0.5;
+				default -> 1;
+			};
+		}
+
+		setHp(hp + (int) (getMaxHp() * (0.1 * healModif)));
+	}
+
+	public void heal(int val) {
+		setHp(hp + val);
+	}
+
+	public int getMaxEnergy() {
+		return stats.calcMaxEnergy();
+	}
+
+	public int getEnergy() {
+		return Helper.clamp(energy, 0, getMaxEnergy());
+	}
+
+	public void setEnergy(int energy) {
+		this.energy = Helper.clamp(energy, 0, getMaxEnergy());
+	}
+
+	public void rest() {
+		setHp(energy + 1);
+	}
+
+	public void rest(int val) {
+		setHp(energy + val);
 	}
 
 	public int getMp() {
@@ -286,7 +322,7 @@ public class Hero implements Cloneable {
 				case VANGUARD -> 0.75;
 				case CARELESS -> 1.25;
 				case MANALESS -> 0.5;
-				case MASOCHIST -> 1 + Math.min(Helper.prcnt(getDmg(), getMaxHp()) / 2, 0.5);
+				case MASOCHIST -> 1 + (1 - Helper.prcnt(getHp(), getMaxHp())) / 2;
 				default -> 1;
 			};
 		}
@@ -301,7 +337,7 @@ public class Hero implements Cloneable {
 				case VANGUARD -> 1.15;
 				case CARELESS -> 0.66;
 				case MANALESS -> 0.5;
-				case MASOCHIST -> 1 - Math.min(Helper.prcnt(getDmg(), getMaxHp()) / 2, 0.5);
+				case MASOCHIST -> 1 - (1 - Helper.prcnt(getHp(), getMaxHp())) / 2;
 				case ARMORED -> 1 + stats.calcDodge() * 0.01;
 				default -> 1;
 			};
