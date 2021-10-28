@@ -707,7 +707,7 @@ public class Hand {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		if (hp > baseHp / 3) crippleHp(value);
+		if (hp > baseHp / 3 && hp > 1) crippleHp(value);
 		else hp -= value;
 
 		List<SlotColumn> slots = game.getArena().getSlots().get(side);
@@ -724,7 +724,7 @@ public class Hand {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		if (hp > baseHp / 3) crippleHp(value);
+		if (hp > baseHp / 3 && hp > 1) crippleHp(value);
 		else hp -= value;
 
 		if (trigger) {
