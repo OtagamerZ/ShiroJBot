@@ -154,7 +154,7 @@ public class Kawaipon implements Cloneable {
 		List<Hero> heroes = getHeroes();
 		if (heroes.isEmpty()) return null;
 
-		return heroes.get(activeHero);
+		return heroes.get(getActiveHero());
 	}
 
 	public void setHero(int i) {

@@ -79,16 +79,13 @@ public class Hero implements Cloneable {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean returned = false;
-
 	private transient int hp = -1;
 
 	public Hero() {
 	}
 
 	public Hero(User user, String name, Race race, BufferedImage image) {
-		this.id = KawaiponDAO.getKawaipon(user.getId()).getHeroes().size();
+		this.id = KawaiponDAO.getHeroes(user.getId()).size();
 		this.uid = user.getId();
 		this.name = name;
 		this.stats = new Attributes(race.getStartingStats());
@@ -323,14 +320,6 @@ public class Hero implements Cloneable {
 		c.setHero(this);
 
 		return c;
-	}
-
-	public boolean isReturned() {
-		return returned;
-	}
-
-	public void setReturned(boolean returned) {
-		this.returned = returned;
 	}
 
 	@Override

@@ -49,6 +49,11 @@ public class SelectHeroCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		List<Hero> heroes = kp.getHeroes();
 
+		if (heroes.isEmpty()) {
+			channel.sendMessage("❌ | Você ainda não invocou nenhum herói.").queue();
+			return;
+		}
+
 		if (args.length == 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Heróis");
