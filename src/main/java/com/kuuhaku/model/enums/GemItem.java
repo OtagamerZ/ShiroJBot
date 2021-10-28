@@ -132,14 +132,14 @@ public enum GemItem {
 			"Resetar atributos", "Zera os atributos do seu herói, permitindo realocá-los",
 			3,
 			(mb, chn, args) -> {
-				Hero h = CardDAO.getHero(mb.getId());
+				Hero h = KawaiponDAO.getHero(mb.getId());
 				if (h == null) {
 					chn.sendMessage("❌ | Você não possui um herói.").queue();
 					return false;
 				}
 
 				h.resetStats();
-				CardDAO.saveHero(h);
+				KawaiponDAO.saveHero(h);
 
 				return true;
 			}
@@ -148,14 +148,14 @@ public enum GemItem {
 			"Resetar perks", "Zera as perks selecionadas, permitindo realocá-las",
 			3,
 			(mb, chn, args) -> {
-				Hero h = CardDAO.getHero(mb.getId());
+				Hero h = KawaiponDAO.getHero(mb.getId());
 				if (h == null) {
 					chn.sendMessage("❌ | Você não possui um herói.").queue();
 					return false;
 				}
 
 				h.getPerks().clear();
-				CardDAO.saveHero(h);
+				KawaiponDAO.saveHero(h);
 
 				return true;
 			}
