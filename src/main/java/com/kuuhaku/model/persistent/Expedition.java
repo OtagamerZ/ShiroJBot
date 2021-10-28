@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 
 import javax.persistence.Column;
@@ -66,5 +68,9 @@ public class Expedition {
 
 	public void setRewards(JSONObject rewards) {
 		this.rewards = rewards.toString();
+	}
+
+	public int getSuccessChance(Hero h) {
+		return (int) Helper.clamp(difficulty * 100 / Math.max(1, h.getLevel() / 2f), 0, 100);
 	}
 }

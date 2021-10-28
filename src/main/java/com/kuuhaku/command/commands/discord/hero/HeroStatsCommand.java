@@ -53,6 +53,9 @@ public class HeroStatsCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
+		} else if (!h.hasArrived()) {
+			channel.sendMessage("❌ | Este herói está em uma espedição.").queue();
+			return;
 		}
 
 		Main.getInfo().getConfirmationPending().put(h.getUid(), true);
