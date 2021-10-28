@@ -83,7 +83,7 @@ public class HourlyEvent implements Job {
 
 		List<Hero> heroes = KawaiponDAO.getHeroes();
 		for (Hero hero : heroes) {
-			hero.reduceDmg();
+			hero.heal();
 			KawaiponDAO.saveHero(hero);
 		}
 	}
