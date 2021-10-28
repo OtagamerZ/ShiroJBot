@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.InfiniteList;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -152,7 +153,16 @@ public class Board {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());
+		wacc.addCredit(
+				losers.stream()
+						.mapToLong(p -> {
+							Account from = AccountDAO.getAccount(p.getId());
+
+							double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
+							return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
+						})
+						.sum(), game.getClass()
+		);
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
@@ -169,7 +179,16 @@ public class Board {
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, game.getClass());
+			wacc.addCredit(
+					losers.stream()
+							.mapToLong(p -> {
+								Account from = AccountDAO.getAccount(p.getId());
+
+								double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
+								return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
+							})
+							.sum() / ids.length, game.getClass()
+			);
 			AccountDAO.saveAccount(wacc);
 		}
 
@@ -186,7 +205,16 @@ public class Board {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());
+		wacc.addCredit(
+				losers.stream()
+						.mapToLong(p -> {
+							Account from = AccountDAO.getAccount(p.getId());
+
+							double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
+							return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
+						})
+						.sum(), game.getClass()
+		);
 		AccountDAO.saveAccount(wacc);
 
 		for (Player l : losers) {
@@ -203,7 +231,16 @@ public class Board {
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, game.getClass());
+			wacc.addCredit(
+					losers.stream()
+							.mapToLong(p -> {
+								Account from = AccountDAO.getAccount(p.getId());
+
+								double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
+								return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
+							})
+							.sum() / ids.length, game.getClass()
+			);
 			AccountDAO.saveAccount(wacc);
 		}
 

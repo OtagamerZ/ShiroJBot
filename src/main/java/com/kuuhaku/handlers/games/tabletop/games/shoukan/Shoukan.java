@@ -1139,6 +1139,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                     .mapToInt(Equipment::getAtk)
                     .sum();
 
+            you.removeHp(Math.round(hDmg));
             op.removeHp(Math.round(yDmg));
             if (op.getMana() > 0 || you.getMana() > 0) {
                 int yToSteal = (int) Math.min(
@@ -1169,10 +1170,46 @@ public class Shoukan extends GlobalGame implements Serializable {
                 }
             }
 
-            you.removeHp(Math.round(hDmg));
+            boolean isHero = yours.getHero() != null;
 
-            killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
-            killCard(defr.getLeft(), defr.getRight(), his.getId());
+            Hero h = yours.getHero();
+            if (isHero) {
+                h.setHp(h.getHp() - hPower);
+            }
+
+            if (h == null || h.getHp() == 0) {
+                killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
+
+                Hero y = his.getHero();
+                if (y != null) {
+                    y.addXp(1);
+                    if (y.getPerks().contains(Perk.VAMPIRE)) {
+                        y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
+                    }
+                }
+            }
+
+            isHero = his.getHero() != null;
+
+            h = his.getHero();
+            if (isHero) {
+                h.setHp(h.getHp() - hPower);
+            }
+
+            if (h == null || h.getHp() == 0) {
+                killCard(defr.getLeft(), defr.getRight(), his.getId());
+
+                Hero y = yours.getHero();
+                if (y != null) {
+                    y.addXp(1);
+                    if (y.getPerks().contains(Perk.VAMPIRE)) {
+                        y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
+                    }
+                }
+            }
+
+            if (applyPersistentEffects(AFTER_DEATH, atkr.getLeft(), atkr.getRight())) return;
+            if (applyEffect(AFTER_DEATH, yours, atkr.getRight(), atkr.getLeft(), attacker, defender)) return;
 
             if (applyPersistentEffects(AFTER_DEATH, defr.getLeft(), defr.getRight())) return;
             if (applyEffect(AFTER_DEATH, his, defr.getRight(), defr.getLeft(), attacker, defender)) return;
