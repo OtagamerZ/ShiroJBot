@@ -70,6 +70,9 @@ public class CollectSpoilsCommand implements Executable {
 						}, true);
 			}
 
+			h = KawaiponDAO.getHero(author.getId());
+			assert h != null;
+
 			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
 					.setEmbeds(eb.build())
 					.queue();
@@ -96,8 +99,6 @@ public class CollectSpoilsCommand implements Executable {
 					.queue();
 		}
 
-		h = KawaiponDAO.getHero(author.getId());
-		assert h != null;
 		h.arrive();
 		KawaiponDAO.saveHero(h);
 	}
