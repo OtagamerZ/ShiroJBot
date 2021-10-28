@@ -101,7 +101,6 @@ public class ShiritoriCommand implements Executable {
 			add(author.getId());
 		}};
 
-		Game t = new Shiritori(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
 		String msg;
 		if (players.size() > 2)
 			msg = Helper.parseAndJoin(message.getMentionedUsers(), IMentionable::getAsMention) + ", vocês foram desafiados a uma partida de Shiritori, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
@@ -111,6 +110,7 @@ public class ShiritoriCommand implements Executable {
 		for (User player : players) {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);
 		}
+		int finalBet = bet;
 		channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (players.contains(mb.getUser())) {
 						if (Main.getInfo().gameInProgress(mb.getId())) {
@@ -129,6 +129,7 @@ public class ShiritoriCommand implements Executable {
 						if (accepted.size() == players.size()) {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							//Main.getInfo().getGames().put(id, t);
+							Game t = new Shiritori(Main.getShiroShards(), channel, finalBet, players.toArray(User[]::new));
 							s.delete().queue(null, Helper::doNothing);
 							t.start();
 						}
