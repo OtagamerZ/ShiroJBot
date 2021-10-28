@@ -139,12 +139,14 @@ public class HeroStatsCommand implements Executable {
 								\\⚡ Esquiva: %s%%
 
 								\\🩸 HP: %s
+								\\🧭 EP: %s
 								\\🧪 MP: %s
 								""".formatted(
 								h.getAtk(),
 								h.getDef(),
 								h.getDodge(),
 								h.getMaxHp(),
+								h.getMaxEnergy(),
 								h.getMp()
 						),
 						true
