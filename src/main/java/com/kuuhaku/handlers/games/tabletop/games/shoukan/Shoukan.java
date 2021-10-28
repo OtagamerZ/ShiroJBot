@@ -2565,10 +2565,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Pair<Champion, Integer> attacker, Pair<Champion, Integer> defender) {
+		boolean lastTick = trigger == ON_WIN || trigger == ON_LOSE;
+
 		if (trigger.isIndividual()) {
 			applyPersistentEffects(trigger, side, index);
 
-			if (postCombat()) return true;
+			if (!lastTick && postCombat()) return true;
 		}
 
 		if (activator.hasEffect() && effectLock == 0) {
@@ -2588,7 +2590,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					applyEffect(trigger, e, index, side);
 			}
 
-			return postCombat();
+			return !lastTick && postCombat();
 		}
 
 		return false;
