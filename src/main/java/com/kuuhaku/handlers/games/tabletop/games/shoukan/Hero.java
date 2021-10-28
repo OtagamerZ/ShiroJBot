@@ -115,6 +115,8 @@ public class Hero implements Cloneable {
 		this.stats = new Attributes(race.getStartingStats());
 		this.race = race;
 		this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
+		this.hp = getMaxHp();
+		this.energy = getMaxEnergy();
 	}
 
 	public int getId() {
