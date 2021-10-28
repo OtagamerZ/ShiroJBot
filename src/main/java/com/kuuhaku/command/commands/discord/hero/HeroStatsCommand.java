@@ -110,6 +110,7 @@ public class HeroStatsCommand implements Executable {
 								KawaiponDAO.saveHero(h);
 
 								s.delete()
+										.flatMap(d -> ms.delete())
 										.flatMap(m -> channel.sendMessage("Herói salvo com sucesso!"))
 										.queue(null, Helper::doNothing);
 								Main.getInfo().getConfirmationPending().remove(author.getId());
