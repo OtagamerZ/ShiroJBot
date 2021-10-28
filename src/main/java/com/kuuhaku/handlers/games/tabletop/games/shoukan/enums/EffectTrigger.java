@@ -19,41 +19,47 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum EffectTrigger {
-	NONE(false),
-	ON_FLIP(false),
-	ON_ATTACK(false),
-	ON_SUMMON(false),
-	BEFORE_TURN(false),
-	AFTER_TURN(false),
-	ON_SWITCH(false),
-	ON_SUICIDE(false),
-	ON_EQUIP(false),
-	POST_ATTACK(false),
-	ATTACK_ASSIST(false),
-	POST_DEFENSE_ASSIST(false),
-	POST_ATTACK_ASSIST(false),
-	ON_MISS(false),
-	GAME_TICK(false),
-	ON_DESTROY(false),
-	ON_LOSE(false),
-	ON_WIN(false),
-	ON_HEAL(false),
-	ON_DAMAGE(false),
+	NONE(false, false),
+	ON_FLIP(false, true),
+	ON_ATTACK(false, true),
+	ON_SUMMON(false, true),
+	BEFORE_TURN(false, false),
+	AFTER_TURN(false, false),
+	ON_SWITCH(false, true),
+	ON_SUICIDE(false, true),
+	ON_EQUIP(false, true),
+	POST_ATTACK(false, true),
+	ATTACK_ASSIST(false, true),
+	POST_DEFENSE_ASSIST(false, true),
+	POST_ATTACK_ASSIST(false, true),
+	ON_MISS(false, true),
+	GAME_TICK(false, false),
+	ON_DESTROY(false, true),
+	ON_LOSE(false, false),
+	ON_WIN(false, false),
+	ON_HEAL(false, false),
+	ON_DAMAGE(false, false),
 
-	BEFORE_DEATH(true),
-	AFTER_DEATH(true),
-	ON_DEFEND(true),
-	POST_DEFENSE(true),
-	DEFENSE_ASSIST(true),
-	ON_DODGE(true);
+	BEFORE_DEATH(true, true),
+	AFTER_DEATH(true, true),
+	ON_DEFEND(true, true),
+	POST_DEFENSE(true, true),
+	DEFENSE_ASSIST(true, true),
+	ON_DODGE(true, true);
 
 	private final boolean defensive;
+	private final boolean individual;
 
-	EffectTrigger(boolean defensive) {
+	EffectTrigger(boolean defensive, boolean individual) {
 		this.defensive = defensive;
+		this.individual = individual;
 	}
 
 	public boolean isDefensive() {
 		return defensive;
+	}
+
+	public boolean isIndividual() {
+		return individual;
 	}
 }
