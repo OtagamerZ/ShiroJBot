@@ -35,7 +35,7 @@ public class Expedition {
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String name = "{}";
+	private String name;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
 	private int difficulty = 1;
@@ -71,6 +71,11 @@ public class Expedition {
 	}
 
 	public int getSuccessChance(Hero h) {
-		return (int) Helper.clamp(difficulty * 100 / Math.max(1, h.getLevel() / 2f), 0, 100);
+		return (int) Helper.clamp(Math.max(1, h.getLevel() / 2f) * 100 / difficulty, 0, 100);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }
