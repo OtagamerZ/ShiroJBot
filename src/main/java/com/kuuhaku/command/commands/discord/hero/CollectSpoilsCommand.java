@@ -66,7 +66,9 @@ public class CollectSpoilsCommand implements Executable {
 
                 eb.addField(rew.toString(),
                         switch (rew) {
-                            case XP, CREDIT, GEM -> Helper.separate(rew.reward(h, val));
+                            case XP -> "+" + Helper.separate(rew.reward(h, val)) + " XP";
+                            case CREDIT -> "+" + Helper.separate(rew.reward(h, val)) + " CR";
+                            case GEM -> "+" + Helper.separate(rew.reward(h, val)) + " gemas";
                             case EQUIPMENT -> String.valueOf(rew.reward(h, val));
                         }, true);
             }
@@ -82,6 +84,13 @@ public class CollectSpoilsCommand implements Executable {
                     .setColor(Color.red)
                     .setTitle("A expedição para " + e + " fracassou");
 
+            int expXp = e.getRewards().getInt("XP") / 10;
+            if (expXp > 0 && Helper.chance(66)) {
+                expXp = Helper.rng(expXp);
+                h.setXp(h.getXp() + expXp);
+                eb.addField("Bônus de exploração", "+" + expXp + " XP", true);
+            }
+
             if (chance < 15 && Helper.chance(50)) {
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
                 kp.getHeroes().remove(h);
@@ -91,13 +100,13 @@ public class CollectSpoilsCommand implements Executable {
                 int max = h.getXp();
                 int penalty = Helper.rng(max / 10, max / 8);
                 h.setXp(h.getXp() - penalty);
-                eb.addField("Penalidade de XP", "-" + penalty, true);
+                eb.addField("Penalidade de XP", "-" + penalty + " XP", true);
             }
             if (chance < 66 && Helper.chance(50)) {
                 int max = h.getMaxHp();
                 int penalty = Helper.rng(max / 5, max / 3);
                 h.setHp(h.getHp() - penalty);
-                eb.addField("Penalidade de HP", "-" + penalty, true);
+                eb.addField("Penalidade de HP", "-" + penalty + " HP", true);
             }
 
             channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
