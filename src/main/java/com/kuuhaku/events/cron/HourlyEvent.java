@@ -88,7 +88,7 @@ public class HourlyEvent implements Job {
 			if (!hero.hasArrived()) continue;
 
 			hero.heal();
-			if (time.getHour() % 6 == 0) hero.rest();
+			if (time.getHour() % 6 == 0) hero.setEnergy(hero.getMaxEnergy());
 			KawaiponDAO.saveHero(hero);
 		}
 	}
