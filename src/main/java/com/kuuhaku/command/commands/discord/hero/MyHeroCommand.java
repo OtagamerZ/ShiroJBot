@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,11 @@ public class MyHeroCommand implements Executable {
 			perks.add("`Perk disponível`");
 		}
 
+		List<String> equips = new ArrayList<>(h.getInventoryNames());
+		for (int i = 0; i < h.getInventoryCap(); i++) {
+			equips.add("`Slot disponível (tier " + h.getStats().calcEvoTierCap() + ")`");
+		}
+
 		double healModif = 1;
 		for (Perk perk : h.getPerks()) {
 			healModif *= switch (perk) {
@@ -71,6 +77,31 @@ public class MyHeroCommand implements Executable {
 				default -> 1;
 			};
 		}
+
+		Integer[] raw = h.getRawStats().getStats();
+		Integer[] equip = h.getEquipStats().getStats();
+
+		StringBuilder stats = new StringBuilder();
+		for (int i = 0; i < 5; i++) {
+			switch (i) {
+				case 0 -> stats.append("**S**TR: %s%s\n".formatted(
+						raw[0], equip[0] != 0 ? (" (" + Helper.sign(equip[0]) + ")") : ""
+				));
+				case 1 -> stats.append("**R**ES: %s%s\n".formatted(
+						raw[1], equip[1] != 0 ? (" (" + Helper.sign(equip[1]) + ")") : ""
+				));
+				case 2 -> stats.append("**A**GI: %s%s\n".formatted(
+						raw[2], equip[2] != 0 ? (" (" + Helper.sign(equip[2]) + ")") : ""
+				));
+				case 3 -> stats.append("**W**IS: %s%s\n".formatted(
+						raw[3], equip[3] != 0 ? (" (" + Helper.sign(equip[3]) + ")") : ""
+				));
+				case 4 -> stats.append("**C**ON: %s%s\n".formatted(
+						raw[4], equip[4] != 0 ? (" (" + Helper.sign(equip[4]) + ")") : ""
+				));
+			}
+		}
+
 		int hours = (int) ((10 - Helper.prcnt(h.getHp(), h.getMaxHp()) * 10) * healModif);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
@@ -86,19 +117,12 @@ public class MyHeroCommand implements Executable {
 						h.getEnergy(),
 						h.getMaxEnergy()
 				), true)
-				.addField(":bar_chart: | Stats:", """
-								STR: %s
-								RES: %s
-								AGI: %s
-								WIS: %s
-								CON: %s
-								"""
-								.formatted((Object[]) h.getStats().getStats())
-						, true)
+				.addField(":bar_chart: | Atributos:", stats.toString(), true)
 				.addField(":books: | Perks:", String.join("\n", perks), true)
+				.addField(":books: | Equipamentos:", String.join("\n", equips), true)
 				.setImage("attachment://hero.png");
 
-		if (!h.hasArrived())
+		if (h.isInExpedition())
 			eb.setFooter("\uD83E\uDDED | " + h.getExpedition() + ": " + Helper.toStringDuration(h.getExpeditionEnd() - System.currentTimeMillis()));
 
 		Champion c = h.toChampion();

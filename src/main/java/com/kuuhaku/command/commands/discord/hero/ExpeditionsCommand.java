@@ -62,13 +62,15 @@ public class ExpeditionsCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
-		} else if (!h.hasArrived()) {
+		} else if (h.isInExpedition()) {
 			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
 		}
 
 		Calendar cal = Calendar.getInstance();
-		List<Expedition> pool = Helper.getRandomN(ExpeditionDAO.getExpeditions(), 3, 1, author.getIdLong() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
+		List<Expedition> pool = Helper.getRandomN(ExpeditionDAO.getExpeditions(), 3, 1, Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR)));
+		pool.add(ExpeditionDAO.getExpedition("DOJO"));
+
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Expedition e = pool.get(i);
@@ -83,7 +85,11 @@ public class ExpeditionsCommand implements Executable {
 
 				loot.addField(rew.toString(),
 						switch (rew) {
-							case XP, CREDIT, GEM -> "Até " + Helper.separate(val);
+							case XP -> "Até " + Helper.separate(val) + " XP";
+							case HP -> "Até " + Helper.separate(val) + " HP";
+							case EP -> "Até " + Helper.separate(val) + " EP";
+							case CREDIT -> "Até " + Helper.separate(val) + " CR";
+							case GEM -> "Até " + Helper.separate(val) + " gemas";
 							case EQUIPMENT -> val + "% de chance";
 						}, true);
 			}

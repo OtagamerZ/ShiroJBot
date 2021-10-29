@@ -53,7 +53,7 @@ public class HeroStatsCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
-		} else if (!h.hasArrived()) {
+		} else if (h.isInExpedition()) {
 			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
 		}
@@ -122,19 +122,33 @@ public class HeroStatsCommand implements Executable {
 	}
 
 	private MessageEmbed getEmbed(Hero h) {
+		Integer[] raw = h.getRawStats().getStats();
+		Integer[] equip = h.getEquipStats().getStats();
+
+		StringBuilder stats = new StringBuilder();
+		for (int i = 0; i < 5; i++) {
+			switch (i) {
+				case 0 -> stats.append("**S**TR: %s%s\n".formatted(
+						raw[0], equip[0] != 0 ? (" (" + Helper.sign(equip[0]) + ")") : ""
+				));
+				case 1 -> stats.append("**R**ES: %s%s\n".formatted(
+						raw[1], equip[1] != 0 ? (" (" + Helper.sign(equip[1]) + ")") : ""
+				));
+				case 2 -> stats.append("**A**GI: %s%s\n".formatted(
+						raw[2], equip[2] != 0 ? (" (" + Helper.sign(equip[2]) + ")") : ""
+				));
+				case 3 -> stats.append("**W**IS: %s%s\n".formatted(
+						raw[3], equip[3] != 0 ? (" (" + Helper.sign(equip[3]) + ")") : ""
+				));
+				case 4 -> stats.append("**C**ON: %s%s\n".formatted(
+						raw[4], equip[4] != 0 ? (" (" + Helper.sign(equip[4]) + ")") : ""
+				));
+			}
+		}
+
 		return new ColorlessEmbedBuilder()
 				.setTitle("Atributos de " + h.getName())
-				.addField(
-						"Pontos disponíveis: " + h.getAvailableStatPoints(),
-						"""
-								**S**TR: %s
-								**R**ES: %s
-								**A**GI: %s
-								**W**IS: %s
-								**C**ON: %s
-								""".formatted((Object[]) h.getStats().getStats()),
-						true
-				)
+				.addField("Pontos disponíveis: " + h.getAvailableStatPoints(), stats.toString(), true)
 				.addField(
 						"Atributos:",
 						"""
@@ -145,13 +159,18 @@ public class HeroStatsCommand implements Executable {
 								\\🩸 HP: %s
 								\\🧭 EP: %s
 								\\🧪 MP: %s
+																
+								\\🎒 Equipamentos: %s
+								\\⭐ Tier: %s
 								""".formatted(
 								h.getAtk(),
 								h.getDef(),
 								h.getDodge(),
 								h.getMaxHp(),
 								h.getMaxEnergy(),
-								h.getMp()
+								h.getMp(),
+								h.getStats().calcInventoryCap(),
+								h.getStats().calcEvoTierCap()
 						),
 						true
 				)

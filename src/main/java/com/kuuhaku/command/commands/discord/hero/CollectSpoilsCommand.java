@@ -54,6 +54,7 @@ public class CollectSpoilsCommand implements Executable {
 
         Expedition e = h.getExpedition();
 
+        boolean died = false;
         int chance = e.getSuccessChance(h);
         if (Helper.chance(chance)) {
             EmbedBuilder eb = new EmbedBuilder()
@@ -66,9 +67,11 @@ public class CollectSpoilsCommand implements Executable {
 
                 eb.addField(rew.toString(),
                         switch (rew) {
-                            case XP -> "+" + Helper.separate(rew.reward(h, val)) + " XP";
-                            case CREDIT -> "+" + Helper.separate(rew.reward(h, val)) + " CR";
-                            case GEM -> "+" + Helper.separate(rew.reward(h, val)) + " gemas";
+                            case XP -> Helper.separate(rew.reward(h, val)) + " XP";
+                            case HP -> Helper.separate(rew.reward(h, val)) + " HP";
+                            case EP -> Helper.separate(rew.reward(h, val)) + " EP";
+                            case CREDIT -> Helper.separate(rew.reward(h, val)) + " CR";
+                            case GEM -> Helper.separate(rew.reward(h, val)) + " gemas";
                             case EQUIPMENT -> String.valueOf(rew.reward(h, val));
                         }, true);
             }
@@ -94,7 +97,9 @@ public class CollectSpoilsCommand implements Executable {
             if (chance < 15 && Helper.chance(50)) {
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
                 kp.getHeroes().remove(h);
-                eb.addField("Morte", "Seu herói morreu durante a espedição", true);
+                KawaiponDAO.saveKawaipon(kp);
+                eb.addField("Morte", "Seu herói morreu durante a expedição", true);
+                died = true;
             }
             if (chance < 33 && Helper.chance(50)) {
                 int max = h.getXp();
@@ -115,6 +120,6 @@ public class CollectSpoilsCommand implements Executable {
         }
 
         h.arrive();
-        KawaiponDAO.saveHero(h);
+        if (!died) KawaiponDAO.saveHero(h);
     }
 }

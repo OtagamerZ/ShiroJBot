@@ -20,27 +20,27 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-
 @Command(
-        name = "fotoheroi",
-        aliases = {"heroimage", "heroimg"},
-        usage = "req_file",
-        category = Category.MISC
+		name = "desequiparheroi",
+		aliases = {"unequiphero"},
+		usage = "req_card",
+		category = Category.MISC
 )
-public class HeroImageCommand implements Executable {
+public class UnequipHeroCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Hero h = KawaiponDAO.getHero(author.getId());
+		Deck dk = KawaiponDAO.getDeck(author.getId());
 
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
@@ -48,25 +48,27 @@ public class HeroImageCommand implements Executable {
 		} else if (h.isInExpedition()) {
 			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
-		} else if (message.getAttachments().isEmpty()) {
-			channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
+		} else if (args.length < 1) {
+			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
 			return;
 		}
 
-		try {
-			Message.Attachment a = message.getAttachments().get(0);
-			if (!a.isImage()) {
-				channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
-				return;
-			}
+		String name = args[0];
+		Equipment e = CardDAO.getEquipment(name);
+		if (e == null) {
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(name, CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
+			return;
+		} else if (!h.getInventory().contains(e)) {
+			channel.sendMessage("❌ | Você não pode desequipar uma carta que não possui!").queue();
+			return;
+		} else if (dk.checkEquipment(e, channel)) return;
 
-			BufferedImage bi = ImageIO.read(a.retrieveInputStream().get());
-			h.setImage(bi);
-			KawaiponDAO.saveHero(h);
+		dk.addEquipment(e);
+		h.getInventory().remove(e);
 
-			channel.sendMessage("✅ | Imagem alterada com sucesso.").queue();
-		} catch (InterruptedException | ExecutionException | IOException e) {
-			channel.sendMessage("❌ | Imagem inválida.").queue();
-		}
+		KawaiponDAO.saveDeck(dk);
+		KawaiponDAO.saveHero(h);
+
+		channel.sendMessage("Desequipado com sucesso!").queue();
 	}
 }
