@@ -159,13 +159,18 @@ public class HeroStatsCommand implements Executable {
 								\\🩸 HP: %s
 								\\🧭 EP: %s
 								\\🧪 MP: %s
+																
+								\\🎒 Equipamentos: %s
+								\\⭐ Tier: %s
 								""".formatted(
 								h.getAtk(),
 								h.getDef(),
 								h.getDodge(),
 								h.getMaxHp(),
 								h.getMaxEnergy(),
-								h.getMp()
+								h.getMp(),
+								h.getStats().calcInventoryCap(),
+								h.getStats().calcEvoTierCap()
 						),
 						true
 				)
