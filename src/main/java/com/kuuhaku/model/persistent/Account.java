@@ -247,6 +247,12 @@ public class Account {
 	public void removeCredit(long credit, Class<?> from) {
 		this.spent += credit;
 		this.balance -= credit;
+
+		if (balance < 0) {
+			this.loan += Math.abs(balance);
+			this.balance = 0;
+		}
+
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
 
@@ -265,6 +271,11 @@ public class Account {
 
 			if (credit > 0) {
 				balance -= credit;
+
+				if (balance < 0) {
+					this.loan += Math.abs(balance);
+					this.balance = 0;
+				}
 			}
 		}
 	}
@@ -447,11 +458,11 @@ public class Account {
 	}
 
 	public void removeGem() {
-		this.gems--;
+		this.gems = Math.max(0, this.gems - 1);
 	}
 
 	public void removeGem(int qtd) {
-		gems -= qtd;
+		gems = Math.max(0, this.gems - qtd);
 	}
 
 	public boolean shouldRemind() {
