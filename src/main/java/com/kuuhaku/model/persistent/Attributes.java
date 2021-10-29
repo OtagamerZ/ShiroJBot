@@ -165,6 +165,14 @@ public class Attributes {
 		return (int) Math.round(25 * (1 - Math.exp(-0.05 * agi + 0.025 * con)));
 	}
 
+	public int calcInventoryCap() {
+		return (int) Math.round(3 * (1 - Math.exp(-0.015 * str + -0.0075 * con)));
+	}
+
+	public int calcEvoTierCap() {
+		return (int) Math.round(4 * (1 - Math.exp(-0.01 * wis + -0.0085 * res + -0.008 * str)));
+	}
+
 	public Integer[] getStats() {
 		return new Integer[]{str, res, agi, wis, con};
 	}
