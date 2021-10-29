@@ -122,7 +122,7 @@ public class MyHeroCommand implements Executable {
 				.addField(":books: | Equipamentos:", String.join("\n", equips), true)
 				.setImage("attachment://hero.png");
 
-		if (!h.hasArrived())
+		if (h.isInExpedition())
 			eb.setFooter("\uD83E\uDDED | " + h.getExpedition() + ": " + Helper.toStringDuration(h.getExpeditionEnd() - System.currentTimeMillis()));
 
 		Champion c = h.toChampion();

@@ -189,7 +189,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/defense_mode.png"), 0, 0, null);
 			} else if (hero != null) {
 				if (hero.getExpedition() != null) {
-					if (!hero.hasArrived()) {
+					if (hero.isInExpedition()) {
 						g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/expedition.png"), 0, 0, null);
 					} else {
 						g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/arrived.png"), 0, 0, null);
