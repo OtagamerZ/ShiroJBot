@@ -22,7 +22,7 @@ public enum Perk {
 	VANGUARD("Vanguarda", "Aumenta o HP em 33% e a defesa em 15%, mas reduz ataque em 25%."),
 	BLOODLUST("Sede de sangue", "Converte metade do custo de MP em custo de HP (1 MP = 100 HP)."),
 	CARELESS("Descuidado", "Aumenta ataque em 25% mas reduz defesa em 33%."),
-	NIMBLE("Ágil", "Aumenta esquiva em 25% mas reduz o HP máximo em 25%."),
+	NIMBLE("Ágil", "Aumenta esquiva em 25% e reduz o tempo de expedição em 10%, mas reduz o HP máximo em 25%."),
 	MANALESS("Sem mana", "Remove custo de MP, mas reduz todos os atributos em 50%."),
 	MASOCHIST("Masoquista", "Aumenta o ataque e reduz a defesa com base no dano acumulado (2% HP perdido = +1% ATK/-1% DEF)."),
 	NIGHTCAT("Gato Noturno", "Dobra a chance de esquiva em campos noturnos, mas divide pela metade em campos diurnos."),

@@ -257,7 +257,16 @@ public class Hero implements Cloneable {
 
 	public void setExpedition(Expedition expedition) {
 		this.expedition = expedition.getId();
-		this.expEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expedition.getTime(), TimeUnit.MINUTES);
+
+		double expModif = 1;
+		for (Perk perk : perks) {
+			expModif *= switch (perk) {
+				case NIMBLE -> 0.9;
+				default -> 1;
+			};
+		}
+
+		this.expEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(Math.round(expedition.getTime() * expModif), TimeUnit.MINUTES);
 	}
 
 	public long getExpeditionEnd() {
