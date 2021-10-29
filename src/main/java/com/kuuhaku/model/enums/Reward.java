@@ -39,7 +39,7 @@ public enum Reward {
 		else h.removeXp(r);
 		KawaiponDAO.saveHero(h);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	HP("HP", (h, v) -> {
 		int r = Helper.rng(Math.abs(v));
@@ -48,7 +48,7 @@ public enum Reward {
 		else h.removeHp(r);
 		KawaiponDAO.saveHero(h);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	EP("EP", (h, v) -> {
 		int r = Helper.rng(Math.abs(v));
@@ -57,7 +57,7 @@ public enum Reward {
 		else h.removeEnergy(r);
 		KawaiponDAO.saveHero(h);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	CREDIT("Créditos", (h, v) -> {
 		int r = Helper.rng(Math.abs(v));
@@ -67,7 +67,7 @@ public enum Reward {
 		else acc.removeCredit(Helper.rng(v), Reward.class);
 		AccountDAO.saveAccount(acc);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	GEM("Gemas", (h, v) -> {
 		int r = Helper.rng(Math.abs(v));
@@ -77,7 +77,7 @@ public enum Reward {
 		else acc.removeGem(Helper.rng(v));
 		AccountDAO.saveAccount(acc);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	EQUIPMENT("Evogear", (h, v) -> {
 		String r = "Nenhum";
