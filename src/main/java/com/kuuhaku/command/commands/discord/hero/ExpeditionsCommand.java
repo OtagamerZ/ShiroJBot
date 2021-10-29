@@ -68,7 +68,7 @@ public class ExpeditionsCommand implements Executable {
 		}
 
 		Calendar cal = Calendar.getInstance();
-		List<Expedition> pool = Helper.getRandomN(ExpeditionDAO.getExpeditions(), 3, 1, author.getIdLong() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
+		List<Expedition> pool = Helper.getRandomN(ExpeditionDAO.getExpeditions(), 3, 1, Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR)));
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Expedition e = pool.get(i);
