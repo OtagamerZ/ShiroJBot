@@ -63,10 +63,10 @@ public class SelectHeroCommand implements Executable {
 
 				eb.addField(
 						"`Herói %s%s | %ssh %s`".formatted(
-								j,
+								h.getId(),
 								heroes.indexOf(h) == kp.getActiveHero() ? " (ATUAL)" : "",
 								prefix,
-								String.valueOf(j)
+								h.getId()
 						),
 						(!h.hasArrived() ? "**(EXPEDIÇÃO)** " : "") + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
 						true);

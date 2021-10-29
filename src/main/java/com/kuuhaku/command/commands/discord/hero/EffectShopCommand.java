@@ -75,7 +75,7 @@ public class EffectShopCommand implements Executable {
 
 		List<Champion> masters = CardDAO.getAllChampionsWithEffect(!manaless && mmr.getTier().getTier() >= 5, Math.min(manaless ? 4 : max, max));
 		Calendar cal = Calendar.getInstance();
-		List<Champion> pool = Helper.getRandomN(masters, 5, 1, author.getIdLong() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR));
+		List<Champion> pool = Helper.getRandomN(masters, 5, 1, Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)));
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);

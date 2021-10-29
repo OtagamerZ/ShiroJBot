@@ -54,6 +54,7 @@ public class CollectSpoilsCommand implements Executable {
 
         Expedition e = h.getExpedition();
 
+        boolean died = false;
         int chance = e.getSuccessChance(h);
         if (Helper.chance(chance)) {
             EmbedBuilder eb = new EmbedBuilder()
@@ -94,7 +95,9 @@ public class CollectSpoilsCommand implements Executable {
             if (chance < 15 && Helper.chance(50)) {
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
                 kp.getHeroes().remove(h);
+                KawaiponDAO.saveKawaipon(kp);
                 eb.addField("Morte", "Seu herói morreu durante a espedição", true);
+                died = true;
             }
             if (chance < 33 && Helper.chance(50)) {
                 int max = h.getXp();
@@ -115,6 +118,6 @@ public class CollectSpoilsCommand implements Executable {
         }
 
         h.arrive();
-        KawaiponDAO.saveHero(h);
+        if (!died) KawaiponDAO.saveHero(h);
     }
 }
