@@ -98,7 +98,7 @@ public class CollectSpoilsCommand implements Executable {
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
                 kp.getHeroes().remove(h);
                 KawaiponDAO.saveKawaipon(kp);
-                eb.addField("Morte", "Seu herói morreu durante a espedição", true);
+                eb.addField("Morte", "Seu herói morreu durante a expedição", true);
                 died = true;
             }
             if (chance < 33 && Helper.chance(50)) {
