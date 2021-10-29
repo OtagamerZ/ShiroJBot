@@ -65,6 +65,9 @@ public class EquipHeroCommand implements Executable {
 		} else if (!dk.getEquipments().contains(e)) {
 			channel.sendMessage("❌ | Você não pode equipar uma carta que não possui!").queue();
 			return;
+		} else if (h.getInventory().contains(e)) {
+			channel.sendMessage("❌ | Seu herói já possui esse equipamento!").queue();
+			return;
 		} else if (e.getCharm() == Charm.SPELL) {
 			channel.sendMessage("❌ | Você não pode equipar magias!").queue();
 			return;
