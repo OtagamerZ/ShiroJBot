@@ -198,6 +198,10 @@ public class Hero implements Cloneable {
 		this.xp += xp;
 	}
 
+	public void removeXp(int xp) {
+		this.xp = Math.max(0, this.xp - xp);
+	}
+
 	public void setXp(int xp) {
 		this.xp = xp;
 	}
@@ -326,6 +330,10 @@ public class Hero implements Cloneable {
 		setHp(hp + val);
 	}
 
+	public void removeHp(int val) {
+		setHp(hp - val);
+	}
+
 	public int getMaxEnergy() {
 		return getStats().calcMaxEnergy();
 	}
@@ -344,6 +352,10 @@ public class Hero implements Cloneable {
 
 	public void rest(int val) {
 		setEnergy(energy + val);
+	}
+
+	public void removeEnergy(int val) {
+		setEnergy(energy - val);
 	}
 
 	public int getMp() {
