@@ -39,7 +39,7 @@ public class ExpeditionDAO {
 	public static List<Expedition> getExpeditions() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM Expedition e");
+		Query q = em.createQuery("SELECT e FROM Expedition e WHERE e.id <> 'DOJO'");
 
 		try {
 			return (List<Expedition>) q.getResultList();

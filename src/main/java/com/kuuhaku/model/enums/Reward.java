@@ -33,30 +33,51 @@ import java.util.function.BiFunction;
 
 public enum Reward {
 	XP("XP", (h, v) -> {
-		int r = Helper.rng(v);
+		int r = Helper.rng(Math.abs(v));
 
-		h.addXp(r);
+		if (v >= 0) h.addXp(r);
+		else h.removeXp(r);
 		KawaiponDAO.saveHero(h);
 
-		return r;
+		return v < 0 ? -r : r;
+	}),
+	HP("HP", (h, v) -> {
+		int r = Helper.rng(Math.abs(v));
+
+		if (v >= 0) h.heal(r);
+		else h.removeHp(r);
+		KawaiponDAO.saveHero(h);
+
+		return v < 0 ? -r : r;
+	}),
+	EP("EP", (h, v) -> {
+		int r = Helper.rng(Math.abs(v));
+
+		if (v >= 0) h.rest(r);
+		else h.removeEnergy(r);
+		KawaiponDAO.saveHero(h);
+
+		return v < 0 ? -r : r;
 	}),
 	CREDIT("Créditos", (h, v) -> {
-		int r = Helper.rng(v);
+		int r = Helper.rng(Math.abs(v));
 
 		Account acc = AccountDAO.getAccount(h.getUid());
-		acc.addCredit(Helper.rng(v), Reward.class);
+		if (v >= 0) acc.addCredit(Helper.rng(v), Reward.class);
+		else acc.removeCredit(Helper.rng(v), Reward.class);
 		AccountDAO.saveAccount(acc);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	GEM("Gemas", (h, v) -> {
-		int r = Helper.rng(v);
+		int r = Helper.rng(Math.abs(v));
 
 		Account acc = AccountDAO.getAccount(h.getUid());
-		acc.addGem(Helper.rng(v));
+		if (v >= 0) acc.addGem(Helper.rng(v));
+		else acc.removeGem(Helper.rng(v));
 		AccountDAO.saveAccount(acc);
 
-		return r;
+		return v < 0 ? -r : r;
 	}),
 	EQUIPMENT("Evogear", (h, v) -> {
 		String r = "Nenhum";
