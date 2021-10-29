@@ -280,11 +280,11 @@ public class Hero implements Cloneable {
 	}
 
 	public void rest() {
-		setHp(energy + 1);
+		setEnergy(energy + 1);
 	}
 
 	public void rest(int val) {
-		setHp(energy + val);
+		setEnergy(energy + val);
 	}
 
 	public int getMp() {
