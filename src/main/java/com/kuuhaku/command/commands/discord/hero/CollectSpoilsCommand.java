@@ -67,11 +67,11 @@ public class CollectSpoilsCommand implements Executable {
 
                 eb.addField(rew.toString(),
                         switch (rew) {
-                            case XP -> "+" + Helper.separate(rew.reward(h, val)) + " XP";
-                            case HP -> "+" + Helper.separate(rew.reward(h, val)) + " HP";
-                            case EP -> "+" + Helper.separate(rew.reward(h, val)) + " EP";
-                            case CREDIT -> "+" + Helper.separate(rew.reward(h, val)) + " CR";
-                            case GEM -> "+" + Helper.separate(rew.reward(h, val)) + " gemas";
+                            case XP -> Helper.separate(rew.reward(h, val)) + " XP";
+                            case HP -> Helper.separate(rew.reward(h, val)) + " HP";
+                            case EP -> Helper.separate(rew.reward(h, val)) + " EP";
+                            case CREDIT -> Helper.separate(rew.reward(h, val)) + " CR";
+                            case GEM -> Helper.separate(rew.reward(h, val)) + " gemas";
                             case EQUIPMENT -> String.valueOf(rew.reward(h, val));
                         }, true);
             }
