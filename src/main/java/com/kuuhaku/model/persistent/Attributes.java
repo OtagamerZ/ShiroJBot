@@ -136,11 +136,11 @@ public class Attributes {
 			};
 		}
 
-		return (int) Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res))) * hpModif, 5);
+		return (int) Math.max(500, Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res))) * hpModif, 5));
 	}
 
 	public int calcMaxEnergy() {
-		return (int) Math.round(1 + 10 * (1 - Math.exp(-0.06 * res + -0.03 * con)));
+		return (int) Math.max(1, Math.round(1 + 10 * (1 - Math.exp(-0.06 * res + -0.03 * con))));
 	}
 
 	public int calcMp(Champion ref) {
@@ -154,15 +154,23 @@ public class Attributes {
 	}
 
 	public int calcAtk() {
-		return (int) Helper.roundTrunc(100 + 2750 * (1 - Math.exp(-0.017 * str + -0.005 * agi)), 25);
+		return (int) Math.max(0, Helper.roundTrunc(100 + 2750 * (1 - Math.exp(-0.017 * str + -0.005 * agi)), 25));
 	}
 
 	public int calcDef() {
-		return (int) Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.022 * res + -0.0075 * agi)), 25);
+		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.022 * res + -0.0075 * agi)), 25));
 	}
 
 	public int calcDodge() {
-		return (int) Math.round(25 * (1 - Math.exp(-0.05 * agi + 0.025 * con)));
+		return (int) Math.max(0, Math.round(25 * (1 - Math.exp(-0.05 * agi + 0.025 * con))));
+	}
+
+	public int calcInventoryCap() {
+		return (int) Math.max(1, Math.round(1 + 3 * (1 - Math.exp(-0.015 * str + -0.0075 * con))));
+	}
+
+	public int calcEvoTierCap() {
+		return (int) Math.max(1, Math.round(1 + 3 * (1 - Math.exp(-0.01 * wis + -0.0085 * res + -0.008 * str))));
 	}
 
 	public Integer[] getStats() {
