@@ -82,7 +82,10 @@ public class ExpeditionsCommand implements Executable {
 
 				loot.addField(rew.toString(),
 						switch (rew) {
-							case XP, CREDIT, GEM -> "Até " + Helper.separate(val);
+							case XP -> "Até +" + Helper.separate(val) + " XP";
+							case HP -> "Até +" + Helper.separate(val) + " HP";
+							case CREDIT -> "Até +" + Helper.separate(val) + " CR";
+							case GEM -> "Até +" + Helper.separate(val) + " gemas";
 							case EQUIPMENT -> val + "% de chance";
 						}, true);
 			}
