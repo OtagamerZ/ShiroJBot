@@ -114,6 +114,7 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -3384,5 +3385,10 @@ public class Helper {
 
 					return n;
 				}).toArray(Integer[]::new);
+	}
+
+	public static long stringToLong(String in) {
+		String hash = hash(in, "SHA-1");
+		return new BigInteger(hash.getBytes(StandardCharsets.UTF_8)).longValue();
 	}
 }
