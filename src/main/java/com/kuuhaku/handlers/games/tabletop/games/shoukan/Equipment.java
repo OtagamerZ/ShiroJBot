@@ -421,8 +421,8 @@ public class Equipment implements Drawable, Cloneable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Equipment champion = (Equipment) o;
-		return id == champion.id;
+		Equipment equipment = (Equipment) o;
+		return id == equipment.id;
 	}
 
 	@Override

@@ -77,7 +77,7 @@ public class TeamHand extends Hand {
                     .flatMap(List::stream)
                     .map(Drawable::copy)
 					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));
-			if (hero != null && hero.getHp() > 0 && hero.hasArrived()) deque.add(hero.toChampion());
+			if (hero != null && hero.getHp() > 0 && !hero.isInExpedition()) deque.add(hero.toChampion());
 
 			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
 
