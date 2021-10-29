@@ -73,7 +73,8 @@ public class ExpeditionsCommand implements Executable {
 		for (int i = 0; i < pool.size(); i++) {
 			Expedition e = pool.get(i);
 
-			EmbedBuilder loot = new ColorlessEmbedBuilder()
+			EmbedBuilder loot = new EmbedBuilder()
+					.setColor(Color.green)
 					.setTitle("Possíveis espólios");
 
 			for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
@@ -135,8 +136,8 @@ public class ExpeditionsCommand implements Executable {
 
 	private MessageEmbed getEmbed(Hero h, List<Expedition> pool) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Mestres disponíveis")
-				.setDescription("Seu tier no Shoukan ranqueado afetará quais mestres estão dispostos a treinar seu herói. Rotaciona a cada dia.");
+				.setTitle("Expedições disponíveis")
+				.setDescription("Para ganhar XP (e outras coisas) você pode enviar seu herói em uma aventura, consumindo 1 EP. Mas cuidado, existem riscos na jornada, e dependendo do nível de seu herói pode até resultar na morte dele. Rotaciona a cada semana.");
 
 		for (int i = 0; i < pool.size(); i++) {
 			Expedition e = pool.get(i);
