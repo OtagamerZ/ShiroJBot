@@ -79,7 +79,6 @@ public class EffectShopCommand implements Executable {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
-			int cost = c.getMana() + (c.isFusion() ? 5 : 0);
 			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + ", deseja confirmar?")
