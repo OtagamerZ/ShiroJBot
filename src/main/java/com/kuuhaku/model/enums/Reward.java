@@ -40,6 +40,14 @@ public enum Reward {
 
 		return r;
 	}),
+	HP("HP", (h, v) -> {
+		int r = Helper.rng(v);
+
+		h.heal(r);
+		KawaiponDAO.saveHero(h);
+
+		return r;
+	}),
 	CREDIT("Créditos", (h, v) -> {
 		int r = Helper.rng(v);
 
