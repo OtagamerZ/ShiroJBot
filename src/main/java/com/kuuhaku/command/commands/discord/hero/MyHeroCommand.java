@@ -66,7 +66,7 @@ public class MyHeroCommand implements Executable {
 
 		List<String> equips = new ArrayList<>(h.getInventoryNames());
 		for (int i = 0; i < h.getInventoryCap(); i++) {
-			equips.add("`Slot disponível`");
+			equips.add("`Slot disponível (tier " + h.getStats().calcEvoTierCap() + ")`");
 		}
 
 		double healModif = 1;
