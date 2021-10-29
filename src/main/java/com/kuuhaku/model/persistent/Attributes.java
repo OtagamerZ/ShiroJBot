@@ -140,7 +140,7 @@ public class Attributes {
 	}
 
 	public int calcMaxEnergy() {
-		return (int) Math.round(10 * (1 - Math.exp(-0.06 * res + -0.03 * con)));
+		return (int) Math.round(1 + 10 * (1 - Math.exp(-0.06 * res + -0.03 * con)));
 	}
 
 	public int calcMp(Champion ref) {
