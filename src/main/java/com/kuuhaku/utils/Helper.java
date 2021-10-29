@@ -3391,4 +3391,8 @@ public class Helper {
 		String hash = hash(in, "SHA-1");
 		return new BigInteger(hash.getBytes(StandardCharsets.UTF_8)).longValue();
 	}
+
+	public static String sign(int value) {
+		return value > 0 ? ("+" + value) : String.valueOf(value);
+	}
 }

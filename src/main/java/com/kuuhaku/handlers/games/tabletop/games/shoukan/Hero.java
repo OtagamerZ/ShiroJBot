@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExpeditionDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -32,13 +33,12 @@ import com.kuuhaku.model.persistent.Expedition;
 import com.kuuhaku.model.persistent.id.CompositeHeroId;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -86,11 +86,17 @@ public class Hero implements Cloneable {
 	@JoinColumn(name = "hero_id")
 	private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	private Set<Equipment> inventory = new HashSet<>();
+
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String expedition;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long expEnd = 0;
+
+	private transient Attributes statsCache = null;
 
 	public Hero() {
 	}
@@ -139,8 +145,37 @@ public class Hero implements Cloneable {
 		this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
 	}
 
-	public Attributes getStats() {
+	public Attributes getRawStats() {
 		return stats;
+	}
+
+	public Attributes getEquipStats() {
+		Integer[] out = new Integer[]{0, 0, 0, 0, 0};
+
+		for (Equipment e : inventory) {
+			out[0] += e.getAtk() / 100;
+			out[1] += e.getDef() / 100;
+
+			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
+		}
+
+		return new Attributes(out);
+	}
+
+	public Attributes getStats() {
+		if (statsCache != null) return statsCache;
+
+		Integer[] out = new Integer[]{0, 0, 0, 0, 0};
+
+		for (Equipment e : inventory) {
+			out[0] += e.getAtk() / 100;
+			out[1] += e.getDef() / 100;
+
+			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
+		}
+
+		statsCache = new Attributes(Helper.mergeArrays(stats.getStats(), out));
+		return statsCache;
 	}
 
 	public void resetStats() {
@@ -198,7 +233,22 @@ public class Hero implements Cloneable {
 	}
 
 	public int getAvailablePerks() {
-		return getMaxPerks() - perks.size();
+		return Math.max(0, getMaxPerks() - perks.size());
+	}
+
+	public Set<Equipment> getInventory() {
+		return inventory;
+	}
+
+	public Set<String> getInventoryNames() {
+		return inventory.stream()
+				.map(Equipment::getCard)
+				.map(Card::getName)
+				.collect(Collectors.toSet());
+	}
+
+	public int getInventoryCap() {
+		return Math.max(0, stats.calcInventoryCap() - inventory.size());
 	}
 
 	public Expedition getExpedition() {
@@ -239,7 +289,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getMaxHp() {
-		return stats.calcMaxHp(perks);
+		return getStats().calcMaxHp(perks);
 	}
 
 	public int getHp() {
@@ -268,7 +318,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getMaxEnergy() {
-		return stats.calcMaxEnergy();
+		return getStats().calcMaxEnergy();
 	}
 
 	public int getEnergy() {
@@ -298,7 +348,7 @@ public class Hero implements Cloneable {
 			};
 		}
 
-		return (int) Math.ceil(Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp(getReferenceChampion()) * mpModif));
+		return (int) Math.ceil(Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, getStats().calcMp(getReferenceChampion()) * mpModif));
 	}
 
 	public int getBlood() {
@@ -316,7 +366,7 @@ public class Hero implements Cloneable {
 			}
 
 			blood += switch (perk) {
-				case BLOODLUST -> stats.calcMp(getReferenceChampion()) * mpModif / 2 * 100;
+				case BLOODLUST -> getStats().calcMp(getReferenceChampion()) * mpModif / 2 * 100;
 				default -> 0;
 			};
 		}
@@ -336,7 +386,7 @@ public class Hero implements Cloneable {
 			};
 		}
 
-		return (int) Math.max(0, Helper.roundTrunc(stats.calcAtk() * atkModif, 25));
+		return (int) Math.max(0, Helper.roundTrunc(getStats().calcAtk() * atkModif, 25));
 	}
 
 	public int getDef() {
@@ -347,12 +397,12 @@ public class Hero implements Cloneable {
 				case CARELESS -> 0.66;
 				case MANALESS -> 0.5;
 				case MASOCHIST -> 1 - (1 - Helper.prcnt(getHp(), getMaxHp())) / 2;
-				case ARMORED -> 1 + stats.calcDodge() * 0.01;
+				case ARMORED -> 1 + getStats().calcDodge() * 0.01;
 				default -> 1;
 			};
 		}
 
-		return (int) Math.max(0, Helper.roundTrunc(stats.calcDef() * defModif, 25));
+		return (int) Math.max(0, Helper.roundTrunc(getStats().calcDef() * defModif, 25));
 	}
 
 	public int getDodge() {
@@ -366,7 +416,7 @@ public class Hero implements Cloneable {
 			};
 		}
 
-		return (int) Math.round(stats.calcDodge() * ddgModif);
+		return (int) Math.round(getStats().calcDodge() * ddgModif);
 	}
 
 	public Champion toChampion() {
