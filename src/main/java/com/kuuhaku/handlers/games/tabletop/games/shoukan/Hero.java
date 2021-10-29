@@ -277,6 +277,10 @@ public class Hero implements Cloneable {
 		return expEnd;
 	}
 
+	public boolean isInExpedition() {
+		return expedition != null && !hasArrived();
+	}
+
 	public boolean hasArrived() {
 		return System.currentTimeMillis() >= expEnd;
 	}

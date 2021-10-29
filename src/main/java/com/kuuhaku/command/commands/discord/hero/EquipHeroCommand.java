@@ -46,7 +46,7 @@ public class EquipHeroCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
-		} else if (!h.hasArrived()) {
+		} else if (h.isInExpedition()) {
 			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
 			return;
 		} else if (args.length < 1) {
