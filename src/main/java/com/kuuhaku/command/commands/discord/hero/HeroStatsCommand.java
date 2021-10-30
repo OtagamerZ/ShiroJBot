@@ -67,7 +67,7 @@ public class HeroStatsCommand implements Executable {
 									return;
 								}
 
-								h.getStats().addStr();
+								h.getRawStats().addStr();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDF7", (mb, ms) -> {
@@ -76,7 +76,7 @@ public class HeroStatsCommand implements Executable {
 									return;
 								}
 
-								h.getStats().addRes();
+								h.getRawStats().addRes();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDE6", (mb, ms) -> {
@@ -85,7 +85,7 @@ public class HeroStatsCommand implements Executable {
 									return;
 								}
 
-								h.getStats().addAgi();
+								h.getRawStats().addAgi();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDFC", (mb, ms) -> {
@@ -94,7 +94,7 @@ public class HeroStatsCommand implements Executable {
 									return;
 								}
 
-								h.getStats().addWis();
+								h.getRawStats().addWis();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put("\uD83C\uDDE8", (mb, ms) -> {
@@ -103,7 +103,7 @@ public class HeroStatsCommand implements Executable {
 									return;
 								}
 
-								h.getStats().addCon();
+								h.getRawStats().addCon();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put(Helper.ACCEPT, (mb, ms) -> {
