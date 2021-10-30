@@ -179,10 +179,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, Helper::doNothing);
 										return msg;
-									}));
+									})
+							);
 				},
 				s -> {
 					if (custom == null) {
@@ -201,10 +201,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, Helper::doNothing);
 										return msg;
-									}));
+									})
+							);
 				}
 		);
 	}
@@ -793,8 +793,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				.addFile(Helper.writeAndGet(bi, String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message.compute(s.getChannel().getId(), (id, m) -> {
-						if (m != null)
-							m.delete().queue(null, Helper::doNothing);
+						if (m != null) m.delete().queue(null, Helper::doNothing);
 						return s;
 					});
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -1953,10 +1952,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 						.queue(ms ->
 								this.message.compute(ms.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
+									if (m != null) m.delete().queue(null, Helper::doNothing);
 									return ms;
-								}));
+								})
+						);
 				break;
 			}
 		}
@@ -2045,10 +2044,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 								.queue(mm ->
 										this.message.compute(mm.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
+											if (m != null) m.delete().queue(null, Helper::doNothing);
 											return mm;
-										}));
+										})
+								);
 						return;
 					} else draw = true;
 				}
@@ -2148,10 +2147,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, Helper::doNothing);
 										return mm;
-									}));
+									})
+							);
 
 					return;
 				}
@@ -2224,10 +2223,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, Helper::doNothing);
 										return mm;
-									}));
+									})
+							);
 				} else {
 					User u = getCurrent();
 
@@ -2340,10 +2339,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 						.queue(mm ->
 								this.message.compute(mm.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
+									if (m != null) m.delete().queue(null, Helper::doNothing);
 									return mm;
-								}));
+								})
+						);
 			});
 
 		return buttons;
