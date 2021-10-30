@@ -279,6 +279,11 @@ public class TenthSecondEvent implements Job {
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (!match.isEmpty() && !match.get(0).getRight()) {
+					close();
+					return;
+				}
+
 				Message msg = event.getMessage();
 				if (!msg.getAuthor().getId().equals(mmr1.getUid()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
 					return;
@@ -343,6 +348,11 @@ public class TenthSecondEvent implements Job {
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (!match.isEmpty() && !match.get(0).getRight()) {
+					close();
+					return;
+				}
+
 				Message msg = event.getMessage();
 				if (!msg.getContentRaw().equalsIgnoreCase("aschente") || confirmations.remove(msg.getAuthor().getId()))
 					return;
@@ -365,12 +375,12 @@ public class TenthSecondEvent implements Job {
 				if (msg.getAuthor().getId().equals(rd.p1().getUid())) {
 					p1Timeout.cancel(true);
 					p1Timeout = null;
-					close();
 				} else {
 					p2Timeout.cancel(true);
 					p2Timeout = null;
-					close();
 				}
+
+				close();
 				if (match.size() == 2) result.run();
 			}
 		});
