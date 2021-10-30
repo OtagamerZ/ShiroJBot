@@ -51,26 +51,29 @@ public class GameChannel {
 	}
 
 	public ClusterAction sendFile(File f) {
-		List<MessageAction> acts = new ArrayList<>();
+		Map<String, MessageAction> acts = new HashMap<>();
 		for (TextChannel chn : getChannels()) {
-			acts.add(chn.sendFile(f));
+			acts.put(chn.getId(), chn.sendFile(f));
 		}
+
 		return new ClusterAction(acts);
 	}
 
 	public ClusterAction sendFile(byte[] bytes, String filename) {
-		List<MessageAction> acts = new ArrayList<>();
+		Map<String, MessageAction> acts = new HashMap<>();
 		for (TextChannel chn : getChannels()) {
-			acts.add(chn.sendFile(bytes, filename));
+			acts.put(chn.getId(), chn.sendFile(bytes, filename));
 		}
+
 		return new ClusterAction(acts);
 	}
 
 	public ClusterAction sendMessage(String message) {
-		List<MessageAction> acts = new ArrayList<>();
+		Map<String, MessageAction> acts = new HashMap<>();
 		for (TextChannel chn : getChannels()) {
-			acts.add(chn.sendMessage(message));
+			acts.put(chn.getId(), chn.sendMessage(message));
 		}
+
 		return new ClusterAction(acts);
 	}
 }
