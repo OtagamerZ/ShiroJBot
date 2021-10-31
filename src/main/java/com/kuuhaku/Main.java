@@ -234,8 +234,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
-		if (e.getMessage().startsWith("Description may not be longer than 50 characters!")) return;
-
 		Helper.logger(this.getClass()).error(e, e);
 		e.printStackTrace();
 	}
