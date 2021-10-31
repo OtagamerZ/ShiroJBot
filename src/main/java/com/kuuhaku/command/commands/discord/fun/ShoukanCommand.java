@@ -125,15 +125,7 @@ public class ShoukanCommand implements Executable {
 			switch (rq) {
 				case SOLO -> {
 					mm.joinLobby(mmr, null, rq, channel);
-					channel.sendMessage("Você entrou no saguão **SOLO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue(s ->
-							Pages.buttonize(s, Collections.emptyMap(), true, 1, TimeUnit.HOURS
-									, u -> u.getId().equals(author.getId())
-									, ms -> {
-										mm.getSoloLobby().remove(mmr);
-										ms.delete().queue();
-									}
-							)
-					);
+					channel.sendMessage("Você entrou no saguão **SOLO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue();
 				}
 				case DUO -> {
 					if (message.getMentionedUsers().isEmpty()) {
@@ -170,15 +162,7 @@ public class ShoukanCommand implements Executable {
 
 											RankedDuo rd = new RankedDuo(mmr, duo);
 											mm.joinLobby(rd, rq, channel);
-											channel.sendMessage("Você e " + u.getAsMention() + " entraram no saguão **DUO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue(su ->
-													Pages.buttonize(s, Collections.emptyMap(), true, 1, TimeUnit.HOURS
-															, usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId())
-															, msg -> {
-																mm.getDuoLobby().remove(rd);
-																msg.delete().queue();
-															}
-													)
-											);
+											channel.sendMessage("Você e " + u.getAsMention() + " entraram no saguão **DUO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue();
 										}
 									}), true, 1, TimeUnit.MINUTES,
 									usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId()),
