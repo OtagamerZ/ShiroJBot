@@ -96,8 +96,6 @@ public class Hero implements Cloneable {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long expEnd = 0;
 
-	private transient Attributes statsCache = null;
-
 	public Hero() {
 	}
 
@@ -163,8 +161,6 @@ public class Hero implements Cloneable {
 	}
 
 	public Attributes getStats() {
-		if (statsCache != null) return statsCache;
-
 		Integer[] out = new Integer[]{0, 0, 0, 0, 0};
 
 		for (Equipment e : inventory) {
@@ -174,8 +170,7 @@ public class Hero implements Cloneable {
 			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
 		}
 
-		statsCache = new Attributes(Helper.mergeArrays(stats.getStats(), out));
-		return statsCache;
+		return new Attributes(Helper.mergeArrays(stats.getStats(), out));
 	}
 
 	public void resetStats() {
