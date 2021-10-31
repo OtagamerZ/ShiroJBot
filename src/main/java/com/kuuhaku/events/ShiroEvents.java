@@ -199,7 +199,7 @@ public class ShiroEvents extends ListenerAdapter {
 		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
 			String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 			commandName = rawMsgNoPrefix.split(" ")[0].trim();
-			rawMsgNoCommand = rawMessage.substring(prefix.length() + commandName.length()).trim();
+			rawMsgNoCommand = rawMsgNoPrefix.substring(commandName.length()).trim();
 		}
 
 		CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());

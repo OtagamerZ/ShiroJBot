@@ -161,10 +161,10 @@ public class CardStashCommand implements Executable {
 		}
 
 		Stash s = StashDAO.getCard(Integer.parseInt(args[0]));
-		if (s == null) {
-			channel.sendMessage("❌ | ID inválido ou a carta já foi retirada.").queue();
-			return;
-		}
+		if (s == null || !s.getOwner().equals(author.getId())) {
+            channel.sendMessage("❌ | ID inválido ou a carta já foi retirada.").queue();
+            return;
+        }
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		switch (s.getType()) {
