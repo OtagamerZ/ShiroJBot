@@ -837,6 +837,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (yours.isDefending()) return;
+		yours.setAvailable(false);
 
 		/* PRE-ATTACK */
 		{
@@ -905,7 +906,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		int dodge = his.getDodge();
 		boolean dodged = dodge >= 100 || (dodge > 0 && Helper.chance(dodge));
 
-		yours.setAvailable(false);
 		yours.resetAttribs();
 		his.resetAttribs();
 
