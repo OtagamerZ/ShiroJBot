@@ -23,6 +23,9 @@ import com.kuuhaku.model.persistent.BountyQuest;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Set;
+
+import static com.kuuhaku.model.enums.BountyDifficulty.*;
 
 public class BountyQuestDAO {
 	public static BountyQuest getBounty(String id) {
@@ -39,7 +42,8 @@ public class BountyQuestDAO {
 	public static List<BountyQuest> getBounties() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM BountyQuest b WHERE b.maxDiff > 0");
+		Query q = em.createQuery("SELECT b FROM BountyQuest b WHERE b.difficulty IN :allowed");
+		q.setParameter("allowed", Set.of(VERY_EASY, EASY, MEDIUM, HARD, VERY_HARD));
 
 		try {
 			return (List<BountyQuest>) q.getResultList();
@@ -52,7 +56,7 @@ public class BountyQuestDAO {
 	public static List<BountyQuest> getTraining() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM BountyQuest b WHERE b.maxDiff <= 0");
+		Query q = em.createQuery("SELECT b FROM BountyQuest b WHERE b.difficulty = 'NONE'");
 
 		try {
 			return (List<BountyQuest>) q.getResultList();
