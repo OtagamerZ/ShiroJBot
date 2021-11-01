@@ -255,6 +255,8 @@ public class Hero implements Cloneable {
 	}
 
 	public BountyInfo getQuest() {
+		if (quest == null) return null;
+
 		return BountyQuestDAO.getBounty(quest).getInfo(this, questSeed);
 	}
 
