@@ -55,7 +55,7 @@ public enum BountyDifficulty {
 	@Override
 	public String toString() {
 		return switch (this) {
-			case NONE -> "Nenhum";
+			case NONE -> "Nenhuma";
 			case VERY_EASY -> "Muito fácil";
 			case EASY -> "Fácil";
 			case MEDIUM -> "Médio";

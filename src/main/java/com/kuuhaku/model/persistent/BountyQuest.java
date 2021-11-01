@@ -126,7 +126,7 @@ public class BountyQuest {
 		return new BountyInfo(
 				id,
 				(int) Math.round(baseTime * diff),
-				modDiff,
+				Helper.round(modDiff, 1),
 				new Attributes(Arrays.stream(baseStats)
 						.map(i -> (int) Math.round(i * diff))
 						.toArray(Integer[]::new)
