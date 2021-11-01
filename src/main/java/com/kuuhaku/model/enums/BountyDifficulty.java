@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
-
 public enum BountyDifficulty {
 	NONE(0),
 	VERY_EASY(2),
@@ -43,8 +41,8 @@ public enum BountyDifficulty {
 		BountyDifficulty out = null;
 
 		for (BountyDifficulty bd : values()) {
-			if (diff <= bd.difficulty) out = bd;
-			else return Helper.getOr(out, NONE);
+			if (diff >= bd.difficulty) out = bd;
+			else break;
 		}
 
 		return out;
