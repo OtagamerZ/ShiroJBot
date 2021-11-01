@@ -125,7 +125,7 @@ public class BountyBoardCommand implements Executable {
 				}
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
-				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(info.time()) + ")")
+				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES)) + ")")
 						.setEmbeds(eb.build())
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
 									h.setQuest(q, seed);
@@ -158,11 +158,12 @@ public class BountyBoardCommand implements Executable {
 			BountyQuest q = pool.get(i);
 			BountyInfo info = q.getInfo(h, seed);
 
+			int diff = q.getDifficulty().getDifficulty();
 			eb.addField(Helper.getFancyNumber(i + 1) + " | " + q
 					, "%s\n\nDificuldade: %s (Sucesso: %s%%) | Duração: %s".formatted(
 							q.getDescription(),
 							BountyDifficulty.valueOf(info.diff()),
-							info.diff() == 0 ? "100" : Helper.roundToString(100 / info.diff(), 1),
+							info.diff() == 0 ? "100" : Helper.roundToString(100 * Helper.prcnt(diff - info.diff(), diff), 1),
 							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
 					), false
 			);
