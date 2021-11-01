@@ -23,14 +23,17 @@ import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.ExpeditionDAO;
+import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.BountyDifficulty;
+import com.kuuhaku.model.enums.Danger;
 import com.kuuhaku.model.enums.Reward;
-import com.kuuhaku.model.persistent.Expedition;
+import com.kuuhaku.model.persistent.BountyQuest;
+import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -44,16 +47,15 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "expedicoes",
-		aliases = {"expeditions"},
+		name = "muraldemissoes",
+		aliases = {"bountyboard", "bb"},
 		category = Category.MISC
 )
 @Requires({
-		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION
 })
-public class ExpeditionsCommand implements Executable {
+public class BountyBoardCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -62,64 +64,63 @@ public class ExpeditionsCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
-		} else if (h.isInExpedition()) {
-			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
+		} else if (h.isQuesting()) {
+			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
 		}
 
 		Calendar cal = Calendar.getInstance();
-		List<Expedition> pool = Helper.getRandomN(ExpeditionDAO.getExpeditions(), 3, 1, Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR)));
-		pool.add(ExpeditionDAO.getExpedition("DOJO"));
+		long seed = Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.WEEK_OF_YEAR) + cal.get(Calendar.YEAR));
+
+		List<BountyQuest> pool = Helper.getRandomN(BountyQuestDAO.getBounties(), 3, 1, seed);
+		pool.add(Helper.getRandomEntry(BountyQuestDAO.getTraining()));
 
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
-			Expedition e = pool.get(i);
+			BountyQuest q = pool.get(i);
 
 			EmbedBuilder loot = new EmbedBuilder()
 					.setColor(Color.green)
-					.setTitle("Possíveis espólios");
+					.setTitle("Possíveis recompensas");
 
-			for (Map.Entry<String, Object> entry : e.getRewards().entrySet()) {
-				Reward rew = Reward.valueOf(entry.getKey());
-				int val = (int) (double) entry.getValue();
+			for (Map.Entry<Reward, Integer> entry : q.getRewards().entrySet()) {
+				Reward rew = entry.getKey();
+				int val = entry.getValue();
 
 				loot.addField(rew.toString(),
 						switch (rew) {
-							case XP -> "Até " + Helper.separate(val) + " XP";
-							case HP -> "Até " + Helper.separate(val) + " HP";
-							case EP -> "Até " + Helper.separate(val) + " EP";
-							case CREDIT -> "Até " + Helper.separate(val) + " CR";
-							case GEM -> "Até " + Helper.separate(val) + " gemas";
+							case XP -> Helper.separate(val) + " XP";
+							case HP -> Helper.separate(val) + " HP";
+							case EP -> Helper.separate(val) + " EP";
+							case CREDIT -> Helper.separate(val) + " CR";
+							case GEM -> Helper.separate(val) + " gemas";
 							case EQUIPMENT -> val + "% de chance";
 						}, true);
 			}
 
-			int chance = e.getSuccessChance(h);
+			BountyInfo info = q.getInfo(h, seed);
 			EmbedBuilder penalties = new EmbedBuilder()
 					.setColor(Color.red)
 					.setTitle("Possíveis penalidades");
 
-			if (chance < 15)
-				penalties.addField("Morte", Helper.VOID, true);
-			if (chance < 33)
-				penalties.addField("Penalidade de XP", Helper.VOID, true);
-			if (chance < 66)
-				penalties.addField("Penalidade de HP", Helper.VOID, true);
+			for (Danger danger : q.getDangers()) {
+				penalties.addField(danger.toString(), Helper.VOID, true);
+			}
 
 			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
 				if (h.getEnergy() < 1) {
 					channel.sendMessage("❌ | Seu herói está cansado (sem energia suficiente).").queue();
 					return;
 				} else if (h.getHp() < h.getMaxHp() / 4) {
-					channel.sendMessage("❌ | Seu herói está muito ferido para ir em uma expedição (HP muito baixo).").queue();
+					channel.sendMessage("❌ | Seu herói está muito ferido para ir em uma missão (HP muito baixo).").queue();
 					return;
 				}
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
-				channel.sendMessage(h.getName() + " irá em uma expedição para " + e + " por " + Helper.toStringDuration(e.getTime()) + ", deseja confirmar?")
+				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(info.time()) + ")")
 						.setEmbeds(loot.build(), penalties.build())
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
-									h.setExpedition(e);
+									h.setQuest(q, seed);
 									KawaiponDAO.saveHero(h);
 
 									Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -135,41 +136,26 @@ public class ExpeditionsCommand implements Executable {
 		}
 
 
-		channel.sendMessageEmbeds(getEmbed(h, pool)).queue(s ->
+		channel.sendMessageEmbeds(getEmbed(h, pool, seed)).queue(s ->
 				Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 
-	private MessageEmbed getEmbed(Hero h, List<Expedition> pool) {
+	private MessageEmbed getEmbed(Hero h, List<BountyQuest> pool, long seed) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Expedições disponíveis")
-				.setDescription("Para ganhar XP (e outras coisas) você pode enviar seu herói em uma aventura, consumindo 1 EP. Mas cuidado, existem riscos na jornada, e dependendo do nível de seu herói pode até resultar na morte dele. Rotaciona a cada semana.");
+				.setTitle("Missões disponíveis")
+				.setDescription("Para ganhar XP (e outras coisas) você pode enviar seu herói em uma missão, consumindo 1 EP. Mas cuidado, existem riscos na jornada, e dependendo da dificuldade da missão pode resultar até na morte. Rotaciona a cada semana.");
 
 		for (int i = 0; i < pool.size(); i++) {
-			Expedition e = pool.get(i);
-			int chance = e.getSuccessChance(h);
-			String diff;
-			if (chance < 5)
-				diff = "Tem mais chance de cuspir pro alto e matar uma mosca";
-			else if (chance < 15)
-				diff = "**SUICIDIO!**";
-			else if (chance < 25)
-				diff = "Muito difícil";
-			else if (chance < 33)
-				diff = "Difícil";
-			else if (chance < 60)
-				diff = "Médio";
-			else if (chance < 85)
-				diff = "Fácil";
-			else
-				diff = "Muito fácil";
+			BountyQuest q = pool.get(i);
+			BountyInfo info = q.getInfo(h, seed);
 
-
-			eb.addField(Helper.getFancyNumber(i + 1) + " | " + e
-					, "Dificuldade: %s (Sucesso: %s%%)\nDuração: %s".formatted(
-							diff,
-							chance,
-							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(e.getTime(), TimeUnit.MINUTES))
+			eb.addField(Helper.getFancyNumber(i + 1) + " | " + q
+					, "%s\n\nDificuldade: %s (Sucesso: %s%%) | Duração: %s".formatted(
+							q.getDescription(),
+							BountyDifficulty.valueOf(info.diff()),
+							100 / info.diff(),
+							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
 					), false
 			);
 		}
