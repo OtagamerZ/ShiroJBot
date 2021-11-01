@@ -45,6 +45,14 @@ public class Attributes {
 		con = stats[4];
 	}
 
+	public Attributes(int str, int res, int agi, int wis, int con) {
+		this.str = str;
+		this.res = res;
+		this.agi = agi;
+		this.wis = wis;
+		this.con = con;
+	}
+
 	public int getStr() {
 		return str;
 	}
