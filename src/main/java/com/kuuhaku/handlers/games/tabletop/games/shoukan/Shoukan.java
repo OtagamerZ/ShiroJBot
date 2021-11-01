@@ -34,6 +34,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.FusionMaterial;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.states.GameState;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
@@ -432,7 +433,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 						if (e.canGoToGrave()) {
 							if (e.getTier() >= 4)
-								arena.getBanished().add(e);
+								arena.getBanned().add(e);
 							else
 								arena.getGraveyard().get(getCurrentSide()).add(e);
 						}
@@ -1241,38 +1242,37 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : "DEFAULT";
 
-		Champion aFusion = fusions
+		Champion fusion = fusions
 				.parallelStream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
-						((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
-						h.getHp() > f.getBlood()
+								!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
+								((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
+								h.getHp() > f.getBlood()
 				)
 				.findFirst()
 				.map(Champion::copy)
 				.orElse(null);
 
-		if (aFusion != null) {
-			for (Map.Entry<String, Pair<Integer, Boolean>> material : aFusion.canFuse(champsInField, equipsInField, field).entrySet()) {
-				Pair<Integer, Boolean> p = material.getValue();
-				banishCard(getCurrentSide(), p.getLeft(), p.getRight());
+		if (fusion != null) {
+			for (FusionMaterial material : fusion.canFuse(champsInField, equipsInField, field)) {
+				banCard(h.getSide(), material.index(), material.equipment());
 			}
 
 			SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 			if (sc != null) {
-				aFusion.bind(h);
-				sc.setTop(aFusion);
-				if (applyEffect(ON_SUMMON, aFusion, sc.getIndex(), getCurrentSide(), Pair.of(aFusion, sc.getIndex()), null))
+				fusion.bind(h);
+				sc.setTop(fusion);
+				if (applyEffect(ON_SUMMON, fusion, sc.getIndex(), getCurrentSide(), Pair.of(fusion, sc.getIndex()), null))
 					return true;
 
-				if (aFusion.getMana() > 0) {
+				if (fusion.getMana() > 0) {
 					if (h.isNullMode())
-						h.removeHp(aFusion.getBaseStats() / 2);
+						h.removeHp(fusion.getBaseStats() / 2);
 					else
-						h.removeMana(aFusion.getMana());
+						h.removeMana(fusion.getMana());
 				}
-				h.removeHp(aFusion.getBlood());
+				h.removeHp(fusion.getBlood());
 			}
 
 			return makeFusion(h);
@@ -1556,7 +1556,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
 	}
 
-	public void banishCard(Side to, int target, boolean equipment) {
+	public void banCard(Side to, int target, boolean equipment) {
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 		if (equipment) {
 			Equipment eq = slts.get(target).getBottom();
@@ -1566,7 +1566,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 
 			SlotColumn sd = slts.get(target);
-			arena.getBanished().add(eq);
+			arena.getBanned().add(eq);
 			sd.setBottom(null);
 		} else {
 			Champion targetChamp = slts.get(target).getTop();
@@ -1580,7 +1580,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					killCard(to, i, c.getId());
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-					banishCard(to, i, true);
+					banCard(to, i, true);
 			}
 
 			for (SlotColumn slot : slts) {
@@ -1595,7 +1595,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
 
 			if (targetChamp.canGoToGrave())
-				arena.getBanished().add(targetChamp);
+				arena.getBanned().add(targetChamp);
 		}
 	}
 
@@ -1612,7 +1612,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		eq.reset();
 		if (eq.canGoToGrave()) {
 			if (eq.getTier() >= 4)
-				arena.getBanished().add(eq);
+				arena.getBanned().add(eq);
 			else
 				arena.getGraveyard().get(s).add(eq);
 		}
@@ -2413,8 +2413,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return null;
 	}
 
-	public Champion getChampionFromBanished() {
-		LinkedList<Drawable> grv = getArena().getBanished();
+	public Champion getChampionFromBanned() {
+		LinkedList<Drawable> grv = getArena().getBanned();
 		for (int i = grv.size() - 1; i >= 0; i--)
 			if (grv.get(i) instanceof Champion)
 				return (Champion) grv.remove(i);
@@ -2422,8 +2422,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return null;
 	}
 
-	public Equipment getEquipmentFromBanished() {
-		LinkedList<Drawable> grv = getArena().getBanished();
+	public Equipment getEquipmentFromBanned() {
+		LinkedList<Drawable> grv = getArena().getBanned();
 		for (int i = grv.size() - 1; i >= 0; i--)
 			if (grv.get(i) instanceof Equipment)
 				return (Equipment) grv.remove(i);
@@ -2650,11 +2650,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public Champion evolveTo(Champion from, String to, EffectParameters ep) {
+		if (fusionLock > 0) return from;
+
 		Hand h = hands.get(ep.getSide());
 		Champion nc = CardDAO.getChampion(to);
-		assert nc != null;
-		if (((h.isNullMode() && !(h.getHp() <= nc.getBaseStats() / 2)) || h.getMana() < nc.getMana()) || h.getHp() <= nc.getBlood())
-			return from;
+		if (nc == null) return from;
+
+		if (h.isNullMode() && h.getHp() <= nc.getBaseStats() / 2) return from;
+		else if (h.getMana() < nc.getMana() || h.getHp() <= nc.getBlood()) return from;
 
 		if (nc.getMana() > 0) {
 			if (h.isNullMode())
@@ -2665,7 +2668,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		h.removeHp(nc.getBlood());
 
 		nc.bind(h);
-		nc.setLinkedTo(from.getLinkedTo());
 		nc.setDefending(from.isDefending());
 		nc.setFlipped(from.isFlipped());
 
@@ -2673,7 +2675,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				? ep.getDuelists().getDefenderPos()
 				: ep.getDuelists().getAttackerPos();
 
-		banishCard(ep.getSide(), index, false);
+		banCard(ep.getSide(), index, false);
 		arena.getSlots().get(ep.getSide()).get(index).setTop(nc);
 		applyEffect(ON_SUMMON, nc, index, ep.getSide(), ep.getDuelists());
 		return nc;
