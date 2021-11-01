@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.enums.BountyDifficulty;
+import com.kuuhaku.model.enums.Danger;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
@@ -30,6 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -56,6 +58,9 @@ public class BountyQuest {
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
 	private String rewards = "{}";
+
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
+	private String dangers = "[]";
 
 	public String getId() {
 		return id;
@@ -87,6 +92,13 @@ public class BountyQuest {
 		return new JSONObject(rewards).entrySet().stream()
 				.map(e -> Pair.of(Reward.valueOf(e.getKey()), (int) (double) e.getValue()))
 				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+	}
+
+	public Set<Danger> getDangers() {
+		return new JSONArray(dangers).stream()
+				.map(String::valueOf)
+				.map(Danger::valueOf)
+				.collect(Collectors.toSet());
 	}
 
 	public BountyInfo getInfo(Hero h, long seed) {
