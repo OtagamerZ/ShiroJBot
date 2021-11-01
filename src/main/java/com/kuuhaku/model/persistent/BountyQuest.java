@@ -46,7 +46,7 @@ public class BountyQuest {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
-	private BountyDifficulty difficulty = BountyDifficulty.VERY_EASY;
+	private BountyDifficulty difficulty = BountyDifficulty.NONE;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int baseTime = 5;
