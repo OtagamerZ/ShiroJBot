@@ -162,7 +162,7 @@ public class BountyBoardCommand implements Executable {
 					, "%s\n\nDificuldade: %s (Sucesso: %s%%) | Duração: %s".formatted(
 							q.getDescription(),
 							BountyDifficulty.valueOf(info.diff()),
-							100 / info.diff(),
+							info.diff() == 0 ? "100" : Helper.roundToString(100 / info.diff(), 1),
 							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
 					), false
 			);
