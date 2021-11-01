@@ -92,7 +92,7 @@ public class BountyBoardCommand implements Executable {
 
 			StringBuilder sb = new StringBuilder();
 
-			for (Map.Entry<Reward, Integer> entry : q.getRewards().entrySet()) {
+			for (Map.Entry<Reward, Integer> entry : info.rewards().entrySet()) {
 				Reward rew = entry.getKey();
 				int val = entry.getValue();
 
@@ -159,11 +159,13 @@ public class BountyBoardCommand implements Executable {
 			BountyInfo info = q.getInfo(h, seed);
 
 			int diff = q.getDifficulty().getDifficulty();
+			double modDiff = Helper.prcnt(diff - info.diff(), diff);
+
 			eb.addField(Helper.getFancyNumber(i + 1) + " | " + q
 					, "%s\n\nDificuldade: %s (Sucesso: %s%%) | Duração: %s".formatted(
 							q.getDescription(),
-							BountyDifficulty.valueOf(info.diff()),
-							info.diff() == 0 ? "100" : Helper.roundToString(100 * Helper.prcnt(diff - info.diff(), diff), 1),
+							BountyDifficulty.valueOf(modDiff),
+							info.diff() == 0 ? "100" : Helper.roundToString(100 * modDiff, 1),
 							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
 					), false
 			);

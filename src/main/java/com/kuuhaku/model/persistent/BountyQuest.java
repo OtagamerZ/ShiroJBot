@@ -107,14 +107,16 @@ public class BountyQuest {
 		}
 
 		double diff = Helper.round(Helper.rng(Math.max(1, difficulty.getDifficulty() / 4d), difficulty.getDifficulty(), seed), 1);
-		Integer[] baseStats = getBaseStats();
+		Integer[] baseStats = Arrays.stream(getBaseStats())
+				.map(i -> (int) Math.round(i * diff))
+				.toArray(Integer[]::new);
 		Integer[] heroStats = h.getStats().getStats();
 		Map<Reward, Integer> rewards = getRewards();
 
 		double modDiff = diff;
-		int statSum = Arrays.stream(baseStats).mapToInt(i -> (int) Math.round(i * diff)).sum();
+		int statSum = Arrays.stream(baseStats).mapToInt(i -> i).sum();
 		for (int i = 0; i < baseStats.length; i++) {
-			int base = (int) Math.round(baseStats[i] * diff);
+			int base = baseStats[i];
 			if (base <= 0) continue;
 
 			double share = base * diff / statSum;
