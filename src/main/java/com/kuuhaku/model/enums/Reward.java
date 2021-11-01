@@ -79,11 +79,24 @@ public enum Reward {
 
 		return v < 0 ? -r : r;
 	}),
-	EQUIPMENT("Evogear", (h, v) -> {
+	EQUIPMENT("Equipamento", (h, v) -> {
 		String r = "Nenhum";
 
 		if (Helper.chance(v)) {
-			Equipment e = CardDAO.getRandomEquipment();
+			Equipment e = CardDAO.getRandomEquipment(false);
+			assert e != null;
+			StashDAO.saveCard(new Stash(h.getUid(), e));
+
+			r = e.getCard().getName() + " (" + StringUtils.repeat("\uD83D\uDFCA", e.getTier()) + ")";
+		}
+
+		return r;
+	}),
+	SPELL("Magia", (h, v) -> {
+		String r = "Nenhum";
+
+		if (Helper.chance(v)) {
+			Equipment e = CardDAO.getRandomEquipment(true);
 			assert e != null;
 			StashDAO.saveCard(new Stash(h.getUid(), e));
 
