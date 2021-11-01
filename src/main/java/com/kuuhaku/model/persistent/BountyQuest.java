@@ -115,14 +115,17 @@ public class BountyQuest {
 
 		double modDiff = diff;
 		int statSum = Arrays.stream(baseStats).mapToInt(i -> i).sum();
-		for (int i = 0; i < baseStats.length; i++) {
-			int base = baseStats[i];
-			if (base <= 0) continue;
+		if (statSum == 0) modDiff = 0;
+		else {
+			for (int i = 0; i < baseStats.length; i++) {
+				int base = baseStats[i];
+				if (base <= 0) continue;
 
-			double share = base * diff / statSum;
-			int hero = heroStats[i];
+				double share = (double) base / statSum;
+				int hero = heroStats[i];
 
-			modDiff -= Helper.clamp(hero * share / base, 0, share);
+				modDiff -= Helper.clamp(hero * share / base, 0, share);
+			}
 		}
 
 		return new BountyInfo(
