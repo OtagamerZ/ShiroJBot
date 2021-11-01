@@ -42,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 		category = Category.MISC
 )
 @Requires({
-		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION
 })
@@ -55,8 +54,8 @@ public class HeroPerksCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
-		} else if (h.isInExpedition()) {
-			channel.sendMessage("❌ | Este herói está em uma expedição.").queue();
+		} else if (h.isQuesting()) {
+			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
 		} else if (h.getAvailablePerks() <= 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
