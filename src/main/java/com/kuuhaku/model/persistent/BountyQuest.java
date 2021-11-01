@@ -27,10 +27,7 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +45,7 @@ public class BountyQuest {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String description;
 
+	@Enumerated(EnumType.STRING)
 	private BountyDifficulty difficulty = BountyDifficulty.VERY_EASY;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
