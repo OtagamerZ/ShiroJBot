@@ -34,7 +34,7 @@ public class GameState {
 	private final Map<Side, HandState> hands;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, List<Drawable>> graveyard;
-	private final List<Drawable> banished;
+	private final List<Drawable> banned;
 	private final List<Drawable> discardBatch;
 	private final Set<PersistentEffect> persistentEffects;
 	private final Field field;
@@ -60,7 +60,7 @@ public class GameState {
 						Map.Entry::getKey,
 						e -> e.getValue().stream().map(Drawable::copy).toList()
 				));
-		this.banished = game.getArena().getBanished().stream()
+		this.banned = game.getArena().getBanned().stream()
 				.map(Drawable::copy)
 				.toList();
 		this.discardBatch = game.getDiscardBatch().stream()
@@ -130,8 +130,8 @@ public class GameState {
 		}
 
 		Helper.replaceContent(
-				banished.stream().map(Drawable::copy).toList(),
-				game.getArena().getBanished()
+				banned.stream().map(Drawable::copy).toList(),
+				game.getArena().getBanned()
 		);
 		Helper.replaceContent(
 				discardBatch.stream().map(Drawable::copy).toList(),
@@ -157,8 +157,8 @@ public class GameState {
 		return slots;
 	}
 
-	public List<Drawable> getBanished() {
-		return banished;
+	public List<Drawable> getBanned() {
+		return banned;
 	}
 
 	public List<Drawable> getDiscardBatch() {
