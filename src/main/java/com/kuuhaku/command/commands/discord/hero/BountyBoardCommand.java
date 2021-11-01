@@ -39,7 +39,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.awt.*;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -78,34 +77,43 @@ public class BountyBoardCommand implements Executable {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			BountyQuest q = pool.get(i);
+			BountyInfo info = q.getInfo(h, seed);
 
-			EmbedBuilder loot = new EmbedBuilder()
-					.setColor(Color.green)
-					.setTitle("Possíveis recompensas");
+			EmbedBuilder eb = new EmbedBuilder()
+					.setTitle("Informações da missão \"" + q + "\"")
+					.setDescription(q.getDescription())
+					.addField("Atributos recomendados", """
+							STR: %s
+							RES: %s
+							AGI: %s
+							WIS: %s
+							CON: %s
+							""".formatted((Object[]) info.reqStats().getStats()), true);
+
+			StringBuilder sb = new StringBuilder();
 
 			for (Map.Entry<Reward, Integer> entry : q.getRewards().entrySet()) {
 				Reward rew = entry.getKey();
 				int val = entry.getValue();
 
-				loot.addField(rew.toString(),
-						switch (rew) {
-							case XP -> Helper.separate(val) + " XP";
-							case HP -> Helper.separate(val) + " HP";
-							case EP -> Helper.separate(val) + " EP";
-							case CREDIT -> Helper.separate(val) + " CR";
-							case GEM -> Helper.separate(val) + " gemas";
-							case EQUIPMENT -> val + "% de chance";
-						}, true);
+				sb.append(rew).append(" - ").append(switch (rew) {
+					case XP -> Helper.separate(val) + " XP";
+					case HP -> Helper.separate(val) + " HP";
+					case EP -> Helper.separate(val) + " EP";
+					case CREDIT -> Helper.separate(val) + " CR";
+					case GEM -> Helper.separate(val) + " gemas";
+					case EQUIPMENT -> val + "% de chance";
+				}).append("\n");
 			}
 
-			BountyInfo info = q.getInfo(h, seed);
-			EmbedBuilder penalties = new EmbedBuilder()
-					.setColor(Color.red)
-					.setTitle("Possíveis penalidades");
+			eb.addField("Recompensas", sb.toString(), true);
 
+			sb.setLength(0);
 			for (Danger danger : q.getDangers()) {
-				penalties.addField(danger.toString(), Helper.VOID, true);
+				sb.append(danger.toString()).append("\n");
 			}
+
+			eb.addField("Possíveis perigos", sb.toString(), true);
 
 			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
 				if (h.getEnergy() < 1) {
@@ -118,7 +126,7 @@ public class BountyBoardCommand implements Executable {
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(info.time()) + ")")
-						.setEmbeds(loot.build(), penalties.build())
+						.setEmbeds(eb.build())
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
 									h.setQuest(q, seed);
 									KawaiponDAO.saveHero(h);
