@@ -112,7 +112,7 @@ public class BountyQuest {
 		Map<Reward, Integer> rewards = getRewards();
 
 		double modDiff = diff;
-		int statSum = Arrays.stream(baseStats).mapToInt(i -> i).sum();
+		int statSum = Arrays.stream(baseStats).mapToInt(i -> (int) Math.round(i * diff)).sum();
 		for (int i = 0; i < baseStats.length; i++) {
 			int base = (int) Math.round(baseStats[i] * diff);
 			if (base <= 0) continue;
