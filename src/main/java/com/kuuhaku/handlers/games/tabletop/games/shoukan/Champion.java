@@ -663,8 +663,11 @@ public class Champion implements Drawable, Cloneable {
 			}
 		}
 
-		if (rem.isEmpty()) return out;
-		else return List.of();
+		if (rem.isEmpty()) {
+			out.sort(Comparator.comparingInt(fm -> fm.equipment() ? 0 : 1));
+
+			return out;
+		} else return List.of();
 	}
 
 	public void setRequiredCards(Set<String> requiredCards) {
