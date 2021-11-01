@@ -59,7 +59,7 @@ public class BountyQuest {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
 	private String rewards = "{}";
 
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '[]'")
 	private String dangers = "[]";
 
 	public String getId() {
