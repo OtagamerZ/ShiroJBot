@@ -81,8 +81,7 @@ public class BountyQuest {
 
 	public Integer[] getBaseStats() {
 		return new JSONArray(baseStats).stream()
-				.map(String::valueOf)
-				.map(Integer::valueOf)
+				.map(v -> (int) (double) v)
 				.toArray(Integer[]::new);
 	}
 
