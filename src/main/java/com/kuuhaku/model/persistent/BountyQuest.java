@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
+import com.kuuhaku.model.enums.BountyDifficulty;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
@@ -47,8 +48,7 @@ public class BountyQuest {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String description;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
-	private int maxDiff = 1;
+	private BountyDifficulty difficulty = BountyDifficulty.VERY_EASY;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int baseTime = 5;
@@ -71,8 +71,8 @@ public class BountyQuest {
 		return description;
 	}
 
-	public int getMaxDiff() {
-		return maxDiff;
+	public BountyDifficulty getDifficulty() {
+		return difficulty;
 	}
 
 	public int getBaseTime() {
@@ -92,11 +92,11 @@ public class BountyQuest {
 	}
 
 	public BountyInfo getInfo(Hero h, long seed) {
-		if (maxDiff <= 0) {
+		if (difficulty == BountyDifficulty.NONE) {
 			return new BountyInfo(id, baseTime, 0, new Attributes(getBaseStats()), getRewards());
 		}
 
-		double diff = Helper.round(Helper.rng(Math.max(1, maxDiff / 4d), maxDiff, seed), 1);
+		double diff = Helper.round(Helper.rng(Math.max(1, difficulty.getDifficulty() / 4d), difficulty.getDifficulty(), seed), 1);
 		Integer[] baseStats = getBaseStats();
 		Integer[] heroStats = h.getStats().getStats();
 		Map<Reward, Integer> rewards = getRewards();
