@@ -59,8 +59,10 @@ public class BountyRewardCommand implements Executable {
         BountyQuest q = BountyQuestDAO.getBounty(info.id());
 
         int diff = q.getDifficulty().getDifficulty();
+        double modDiff = Helper.prcnt(diff - info.diff(), diff);
+
         boolean died = false;
-        if (info.diff() == 0 || Helper.chance(100 * Helper.prcnt(diff - info.diff(), diff))) {
+        if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
             EmbedBuilder eb = new EmbedBuilder()
                     .setColor(Color.green)
                     .setTitle("Recompensas da missão \"" + info + "\"");
