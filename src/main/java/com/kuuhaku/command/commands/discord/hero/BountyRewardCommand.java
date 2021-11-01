@@ -74,7 +74,7 @@ public class BountyRewardCommand implements Executable {
                             case EP -> Helper.separate(rew.apply(h, val)) + " EP";
                             case CREDIT -> Helper.separate(rew.apply(h, val)) + " CR";
                             case GEM -> Helper.separate(rew.apply(h, val)) + " gemas";
-                            case EQUIPMENT -> String.valueOf(rew.apply(h, val));
+                            case EQUIPMENT, SPELL -> String.valueOf(rew.apply(h, val));
                         }, true);
             }
 
