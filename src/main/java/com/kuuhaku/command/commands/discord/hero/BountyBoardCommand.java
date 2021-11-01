@@ -97,7 +97,7 @@ public class BountyBoardCommand implements Executable {
 				int val = entry.getValue();
 				if (val == 0) continue;
 
-				sb.append(rew).append(" - ").append(switch (rew) {
+				sb.append(rew).append(" | ").append(switch (rew) {
 					case XP -> Helper.separate(val) + " XP";
 					case HP -> Helper.separate(val) + " HP";
 					case EP -> Helper.separate(val) + " EP";
