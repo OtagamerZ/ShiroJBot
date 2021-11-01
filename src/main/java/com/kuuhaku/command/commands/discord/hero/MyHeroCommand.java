@@ -41,10 +41,7 @@ import java.util.stream.Collectors;
 		aliases = {"hero"},
 		category = Category.MISC
 )
-@Requires({
-		Permission.MESSAGE_ATTACH_FILES,
-		Permission.MESSAGE_EMBED_LINKS
-})
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class MyHeroCommand implements Executable {
 
 	@Override
@@ -122,8 +119,8 @@ public class MyHeroCommand implements Executable {
 				.addField(":books: | Equipamentos:", String.join("\n", equips), true)
 				.setImage("attachment://hero.png");
 
-		if (h.isInExpedition())
-			eb.setFooter("\uD83E\uDDED | " + h.getExpedition() + ": " + Helper.toStringDuration(h.getExpeditionEnd() - System.currentTimeMillis()));
+		if (h.isQuesting())
+			eb.setFooter("\uD83E\uDDED | " + h.getQuest() + ": " + Helper.toStringDuration(h.getQuestEnd() - System.currentTimeMillis()));
 
 		Champion c = h.toChampion();
 		if (h.getHp() == 0) c.setStun(1);

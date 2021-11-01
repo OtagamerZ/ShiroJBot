@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
 
 public enum Reward {
 	XP("XP", (h, v) -> {
-		int r = Helper.rng(Math.abs(v));
+		int r = Math.abs(v);
 
 		if (v >= 0) h.addXp(r);
 		else h.removeXp(r);
@@ -42,7 +42,7 @@ public enum Reward {
 		return v < 0 ? -r : r;
 	}),
 	HP("HP", (h, v) -> {
-		int r = Helper.rng(Math.abs(v));
+		int r = Math.abs(v);
 
 		if (v >= 0) h.heal(r);
 		else h.removeHp(r);
@@ -51,7 +51,7 @@ public enum Reward {
 		return v < 0 ? -r : r;
 	}),
 	EP("EP", (h, v) -> {
-		int r = Helper.rng(Math.abs(v));
+		int r = Math.abs(v);
 
 		if (v >= 0) h.rest(r);
 		else h.removeEnergy(r);
@@ -60,7 +60,7 @@ public enum Reward {
 		return v < 0 ? -r : r;
 	}),
 	CREDIT("Créditos", (h, v) -> {
-		int r = Helper.rng(Math.abs(v));
+		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
 		if (v >= 0) acc.addCredit(Helper.rng(v), Reward.class);
@@ -70,7 +70,7 @@ public enum Reward {
 		return v < 0 ? -r : r;
 	}),
 	GEM("Gemas", (h, v) -> {
-		int r = Helper.rng(Math.abs(v));
+		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
 		if (v >= 0) acc.addGem(Helper.rng(v));
@@ -101,7 +101,7 @@ public enum Reward {
 		this.evt = evt;
 	}
 
-	public Object reward(Hero h, int value) {
+	public Object apply(Hero h, int value) {
 		return evt.apply(h, value);
 	}
 

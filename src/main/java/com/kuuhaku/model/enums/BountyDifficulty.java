@@ -50,6 +50,10 @@ public enum BountyDifficulty {
 		return out;
 	}
 
+	public static BountyDifficulty valueOf(double diff) {
+		return valueOf((int) Math.round(diff));
+	}
+
 	@Override
 	public String toString() {
 		return switch (this) {
