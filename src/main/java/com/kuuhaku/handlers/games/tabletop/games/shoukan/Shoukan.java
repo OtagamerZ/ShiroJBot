@@ -1562,40 +1562,39 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Equipment eq = slts.get(target).getBottom();
 			if (eq == null) return;
 
-			if (eq.getLinkedTo().getLeft() > -1 && slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
-				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
+			Champion link = slts.get(eq.getLinkedTo().getLeft()).getTop();
+			if (eq.getLinkedTo().getLeft() > -1 && link != null)
+				link.removeLinkedTo(eq);
 
-			SlotColumn sd = slts.get(target);
 			arena.getBanned().add(eq);
-			sd.setBottom(null);
+			slts.get(target).setBottom(null);
 		} else {
-			Champion targetChamp = slts.get(target).getTop();
-			if (targetChamp == null) return;
+			Champion ch = slts.get(target).getTop();
+			if (ch == null) return;
 
+			for (Equipment link : ch.getLinkedTo()) {
+				arena.getBanned().add(link);
+				slts.get(link.getIndex()).setBottom(null);
+			}
+
+			for (SlotColumn slt : slts) {
+				Champion c = slt.getTop();
+				if (c == null) continue;
+
+				if (c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target) {
+					killCard(to, slt.getIndex(), c.getId());
+				} else {
+					c.getBonus().setAtk(target, 0);
+					c.getBonus().setDef(target, 0);
+					c.getBonus().setDodge(target, 0);
+				}
+			}
+
+			if (applyEffect(ON_DESTROY, ch, target, to, null, null)) return;
+
+			if (ch.canGoToGrave())
+				arena.getBanned().add(ch);
 			slts.get(target).setTop(null);
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn sd = slts.get(i);
-				Champion c = sd.getTop();
-				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i, c.getId());
-
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-					banCard(to, i, true);
-			}
-
-			for (SlotColumn slot : slts) {
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.getBonus().setAtk(target, 0);
-				c.getBonus().setDef(target, 0);
-				c.getBonus().setDodge(target, 0);
-			}
-
-			if (applyEffect(ON_DESTROY, targetChamp, target, to, null, null)) return;
-
-			if (targetChamp.canGoToGrave())
-				arena.getBanned().add(targetChamp);
 		}
 	}
 
