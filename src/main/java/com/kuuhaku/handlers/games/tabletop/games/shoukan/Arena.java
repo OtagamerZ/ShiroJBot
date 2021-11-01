@@ -41,7 +41,7 @@ import java.util.concurrent.Executors;
 public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, BondedList<Drawable>> graveyard;
-	private final BondedList<Drawable> banished;
+	private final BondedList<Drawable> banned;
 	private final BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
 	private final BufferedImage front;
 	private Field field = null;
@@ -68,7 +68,7 @@ public class Arena {
 				Side.TOP, new BondedList<>(Drawable::reset),
 				Side.BOTTOM, new BondedList<>(Drawable::reset)
 		);
-		this.banished = new BondedList<>(Drawable::reset);
+		this.banned = new BondedList<>(Drawable::reset);
 
 		assert back != null;
 		front = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -82,8 +82,8 @@ public class Arena {
 		return graveyard;
 	}
 
-	public BondedList<Drawable> getBanished() {
-		return banished;
+	public BondedList<Drawable> getBanned() {
+		return banned;
 	}
 
 	public Field getField() {
@@ -294,8 +294,8 @@ public class Arena {
 				g2d.drawImage(field.drawCard(false), 1889, 700, null);
 			}
 
-			if (banished.peekLast() != null) {
-				Drawable d = banished.peekLast();
+			if (banned.peekLast() != null) {
+				Drawable d = banned.peekLast();
 				g2d.drawImage(d.drawCard(false), 137, 700, null);
 			}
 

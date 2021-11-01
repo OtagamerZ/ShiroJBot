@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.FusionMaterial;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -618,9 +619,9 @@ public class Champion implements Drawable, Cloneable {
 		return requiredCards;
 	}
 
-	public Map<String, Pair<Integer, Boolean>> canFuse(List<String> champ, List<String> equip, String field) {
+	public List<FusionMaterial> canFuse(List<String> champ, List<String> equip, String field) {
 		Set<String> rem = new HashSet<>(requiredCards);
-		Map<String, Pair<Integer, Boolean>> out = new HashMap<>();
+		List<FusionMaterial> out = new ArrayList<>();
 
 		for (String req : requiredCards) {
 			if (req.contains(",")) {
@@ -632,13 +633,13 @@ public class Champion implements Drawable, Cloneable {
 				for (String opt : opts) {
 					if (champ.contains(opt)) {
 						if (found.add(opt)) {
-							out.put(opt, Pair.of(champ.indexOf(opt), false));
+							out.add(new FusionMaterial(opt, champ.indexOf(opt), false));
 
 							if (found.size() == reqCombo) break;
 						}
 					} else if (equip.contains(opt)) {
 						if (found.add(opt)) {
-							out.put(opt, Pair.of(equip.indexOf(opt), true));
+							out.add(new FusionMaterial(opt, equip.indexOf(opt), true));
 
 							if (found.size() == reqCombo) break;
 						}
@@ -647,23 +648,23 @@ public class Champion implements Drawable, Cloneable {
 					}
 				}
 
-				if (found.size() != reqCombo) return Map.of();
+				if (found.size() != reqCombo) return List.of();
 				else rem.remove(req);
 			} else {
 				if (champ.contains(req)) {
-					out.put(req, Pair.of(champ.indexOf(req), false));
+					out.add(new FusionMaterial(req, champ.indexOf(req), false));
 					rem.remove(req);
 				} else if (equip.contains(req)) {
-					out.put(req, Pair.of(equip.indexOf(req), true));
+					out.add(new FusionMaterial(req, equip.indexOf(req), true));
 					rem.remove(req);
 				} else if (field.equals(req)) {
 					rem.remove(req);
-				} else return Map.of();
+				} else return List.of();
 			}
 		}
 
 		if (rem.isEmpty()) return out;
-		else return Map.of();
+		else return List.of();
 	}
 
 	public void setRequiredCards(Set<String> requiredCards) {
