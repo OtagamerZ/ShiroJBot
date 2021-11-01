@@ -1975,7 +1975,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (int i = 0; i < slots.size(); i++) {
 				Champion c = slots.get(i).getTop();
 				if (c != null) {
-					c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
+					c.setAvailable(!c.isStunned() && !c.isSleeping());
 					c.resetAttribs();
 					if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 						|| makeFusion(h.get())
@@ -2237,7 +2237,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
+							c.setAvailable(!c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 								|| makeFusion(h.get())
