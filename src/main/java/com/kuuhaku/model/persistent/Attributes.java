@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.Embeddable;
+import java.util.Arrays;
 import java.util.Set;
 
 @Embeddable
@@ -187,5 +188,10 @@ public class Attributes {
 
 	public int getUsedPoints() {
 		return str + res + agi + wis + con;
+	}
+
+	@Override
+	public String toString() {
+		return Arrays.toString(getStats());
 	}
 }
