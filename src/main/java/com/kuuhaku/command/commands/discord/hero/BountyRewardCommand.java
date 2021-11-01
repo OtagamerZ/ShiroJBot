@@ -58,7 +58,7 @@ public class BountyRewardCommand implements Executable {
         BountyInfo info = h.getQuest();
 
         boolean died = false;
-        if (Helper.chance(100 / info.diff())) {
+        if (info.diff() == 0 || Helper.chance(100 / info.diff())) {
             EmbedBuilder eb = new EmbedBuilder()
                     .setColor(Color.green)
                     .setTitle("Recompensas da missão \"" + info + "\"");
