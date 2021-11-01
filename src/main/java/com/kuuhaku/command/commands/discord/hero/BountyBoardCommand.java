@@ -164,7 +164,7 @@ public class BountyBoardCommand implements Executable {
 			eb.addField(Helper.getFancyNumber(i + 1) + " | " + q
 					, "%s\n\nDificuldade: %s (Sucesso: %s%%) | Duração: %s".formatted(
 							q.getDescription(),
-							BountyDifficulty.valueOf(modDiff),
+							BountyDifficulty.valueOf(10 * modDiff),
 							info.diff() == 0 ? "100" : Helper.roundToString(100 * modDiff, 1),
 							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
 					), false
