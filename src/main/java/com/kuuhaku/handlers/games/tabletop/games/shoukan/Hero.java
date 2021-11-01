@@ -22,7 +22,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -158,23 +157,20 @@ public class Hero implements Cloneable {
 			out[0] += e.getAtk() / 100;
 			out[1] += e.getDef() / 100;
 
-			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
+			switch (e.getCharm()) {
+				case ARMORPIERCING, DRAIN -> out[0] += e.getTier();
+				case SPELLSHIELD, SPELLMIRROR -> out[1] += e.getTier();
+				case AGILITY -> out[2] += e.getTier() * 2;
+				case TIMEWARP, DOUBLETAP -> out[3] += e.getTier() * 2;
+				case DOPPELGANGER, SOULLINK -> out[4] += e.getTier() * 2;
+			}
 		}
 
 		return new Attributes(out);
 	}
 
 	public Attributes getStats() {
-		Integer[] out = new Integer[]{0, 0, 0, 0, 0};
-
-		for (Equipment e : inventory) {
-			out[0] += e.getAtk() / 100;
-			out[1] += e.getDef() / 100;
-
-			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
-		}
-
-		return new Attributes(Helper.mergeArrays(stats.getStats(), out));
+		return new Attributes(Helper.mergeArrays(stats.getStats(), getEquipStats().getStats()));
 	}
 
 	public void resetStats() {
