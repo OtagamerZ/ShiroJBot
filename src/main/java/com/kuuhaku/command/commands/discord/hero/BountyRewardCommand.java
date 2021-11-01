@@ -37,116 +37,117 @@ import java.awt.*;
 import java.util.Map;
 
 @Command(
-        name = "recompensa",
-        aliases = {"reward"},
-        category = Category.MISC
+		name = "recompensa",
+		aliases = {"reward"},
+		category = Category.MISC
 )
 public class BountyRewardCommand implements Executable {
 
-    @Override
-    public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        Hero h = KawaiponDAO.getHero(author.getId());
+	@Override
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		Hero h = KawaiponDAO.getHero(author.getId());
 
-        if (h == null) {
-            channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
-            return;
-        } else if (h.getQuest() == null || !h.hasArrived()) {
-            channel.sendMessage("❌ | Seu herói não retornou de uma missão ainda.").queue();
-            return;
-        }
+		if (h == null) {
+			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
+			return;
+		} else if (h.getQuest() == null || !h.hasArrived()) {
+			channel.sendMessage("❌ | Seu herói não retornou de uma missão ainda.").queue();
+			return;
+		}
 
-        BountyInfo info = h.getQuest();
-        BountyQuest q = BountyQuestDAO.getBounty(info.id());
+		BountyInfo info = h.getQuest();
+		BountyQuest q = BountyQuestDAO.getBounty(info.id());
 
-        int diff = q.getDifficulty().getDifficulty();
-        double modDiff = Helper.prcnt(diff - info.diff(), diff);
+		int diff = q.getDifficulty().getDifficulty();
+		double modDiff = Helper.prcnt(diff - info.diff(), diff);
 
-        boolean died = false;
-        if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
-            EmbedBuilder eb = new EmbedBuilder()
-                    .setColor(Color.green)
-                    .setTitle("Recompensas da missão \"" + info + "\"");
+		boolean died = false;
+		if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
+			EmbedBuilder eb = new EmbedBuilder()
+					.setColor(Color.green)
+					.setTitle("Recompensas da missão \"" + info + "\"");
 
-            for (Map.Entry<Reward, Integer> e : info.rewards().entrySet()) {
-                Reward rew = e.getKey();
-                int val = e.getValue();
+			for (Map.Entry<Reward, Integer> e : info.rewards().entrySet()) {
+				Reward rew = e.getKey();
+				int val = e.getValue();
+				if (val == 0) continue;
 
-                eb.addField(rew.toString(),
-                        switch (rew) {
-                            case XP -> Helper.separate(rew.apply(h, val)) + " XP";
-                            case HP -> Helper.separate(rew.apply(h, val)) + " HP";
-                            case EP -> Helper.separate(rew.apply(h, val)) + " EP";
-                            case CREDIT -> Helper.separate(rew.apply(h, val)) + " CR";
-                            case GEM -> Helper.separate(rew.apply(h, val)) + " gemas";
-                            case EQUIPMENT, SPELL -> String.valueOf(rew.apply(h, val));
-                        }, true);
-            }
+				eb.addField(rew.toString(),
+						switch (rew) {
+							case XP -> Helper.separate(rew.apply(h, val)) + " XP";
+							case HP -> Helper.separate(rew.apply(h, val)) + " HP";
+							case EP -> Helper.separate(rew.apply(h, val)) + " EP";
+							case CREDIT -> Helper.separate(rew.apply(h, val)) + " CR";
+							case GEM -> Helper.separate(rew.apply(h, val)) + " gemas";
+							case EQUIPMENT, SPELL -> String.valueOf(rew.apply(h, Helper.clamp(val, 0, 100)));
+						}, true);
+			}
 
-            h = KawaiponDAO.getHero(author.getId());
-            assert h != null;
+			h = KawaiponDAO.getHero(author.getId());
+			assert h != null;
 
-            channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-                    .setEmbeds(eb.build())
-                    .queue();
-        } else {
-            EmbedBuilder eb = new EmbedBuilder()
-                    .setColor(Color.red)
-                    .setTitle("A missão \"" + info + "\" fracassou");
+			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
+					.setEmbeds(eb.build())
+					.queue();
+		} else {
+			EmbedBuilder eb = new EmbedBuilder()
+					.setColor(Color.red)
+					.setTitle("A missão \"" + info + "\" fracassou");
 
-            int expXp = info.rewards().get(Reward.XP) / 2;
-            if (expXp > 0 && Helper.chance(66)) {
-                expXp = Helper.rng(expXp);
+			int expXp = info.rewards().get(Reward.XP) / 2;
+			if (expXp > 0 && Helper.chance(66)) {
+				expXp = Helper.rng(expXp);
 
-                if (expXp > 0) {
-                    h.setXp(h.getXp() + expXp);
-                    eb.addField("Bônus de experiência", "+" + expXp + " XP", true);
-                }
-            }
+				if (expXp > 0) {
+					h.setXp(h.getXp() + expXp);
+					eb.addField("Bônus de experiência", "+" + expXp + " XP", true);
+				}
+			}
 
-            for (Danger danger : q.getDangers()) {
-                if (Helper.chance(50)) {
-                    switch (danger) {
-                        case HP -> {
-                            int max = h.getMaxHp();
-                            int penalty = Helper.rng(max / 5, max / 3);
-                            h.setHp(h.getHp() - penalty);
-                            eb.addField(danger.toString(), "-" + penalty + " HP", true);
-                        }
-                        case EP -> {
-                            if (h.getEnergy() <= 1) continue;
+			for (Danger danger : q.getDangers()) {
+				if (Helper.chance(50)) {
+					switch (danger) {
+						case HP -> {
+							int max = h.getMaxHp();
+							int penalty = Helper.rng(max / 5, max / 3);
+							h.setHp(h.getHp() - penalty);
+							eb.addField(danger.toString(), "-" + penalty + " HP", true);
+						}
+						case EP -> {
+							if (h.getEnergy() <= 1) continue;
 
-                            h.removeEnergy(1);
-                            eb.addField(danger.toString(), "-1 EP", true);
-                        }
-                        case XP -> {
-                            int max = h.getXp();
-                            int penalty = Helper.rng(max / 10, max / 8);
-                            h.setXp(h.getXp() - penalty);
-                            eb.addField(danger.toString(), "-" + penalty + " XP", true);
-                        }
-                        case DEATH -> {
-                            Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-                            kp.getHeroes().remove(h);
-                            KawaiponDAO.saveKawaipon(kp);
-                            eb.addField(danger.toString(), "Seu herói morreu durante a missão", true);
-                            died = true;
-                        }
-                        case EQUIPMENT -> {
-                            if (h.getInventory().isEmpty()) continue;
+							h.removeEnergy(1);
+							eb.addField(danger.toString(), "-1 EP", true);
+						}
+						case XP -> {
+							int max = h.getXp();
+							int penalty = Helper.rng(max / 10, max / 8);
+							h.setXp(h.getXp() - penalty);
+							eb.addField(danger.toString(), "-" + penalty + " XP", true);
+						}
+						case DEATH -> {
+							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+							kp.getHeroes().remove(h);
+							KawaiponDAO.saveKawaipon(kp);
+							eb.addField(danger.toString(), "Seu herói morreu durante a missão", true);
+							died = true;
+						}
+						case EQUIPMENT -> {
+							if (h.getInventory().isEmpty()) continue;
 
-                            h.getInventory().remove(Helper.getRandomEntry(h.getInventory()));
-                            eb.addField(danger.toString(), "Seu herói perdeu um dos equipamentos durante a missão", true);
-                        }
-                    }
-                }
-            }
+							h.getInventory().remove(Helper.getRandomEntry(h.getInventory()));
+							eb.addField(danger.toString(), "Seu herói perdeu um dos equipamentos durante a missão", true);
+						}
+					}
+				}
+			}
 
-            channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-                    .setEmbeds(eb.build())
-                    .queue();
-        }
+			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
+					.setEmbeds(eb.build())
+					.queue();
+		}
 
-        h.arrive();
-        if (!died) KawaiponDAO.saveHero(h);
-    }
+		h.arrive();
+		if (!died) KawaiponDAO.saveHero(h);
+	}
 }

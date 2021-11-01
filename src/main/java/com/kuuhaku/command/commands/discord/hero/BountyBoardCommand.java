@@ -95,6 +95,7 @@ public class BountyBoardCommand implements Executable {
 			for (Map.Entry<Reward, Integer> entry : info.rewards().entrySet()) {
 				Reward rew = entry.getKey();
 				int val = entry.getValue();
+				if (val == 0) continue;
 
 				sb.append(rew).append(" - ").append(switch (rew) {
 					case XP -> Helper.separate(val) + " XP";
@@ -102,7 +103,7 @@ public class BountyBoardCommand implements Executable {
 					case EP -> Helper.separate(val) + " EP";
 					case CREDIT -> Helper.separate(val) + " CR";
 					case GEM -> Helper.separate(val) + " gemas";
-					case EQUIPMENT, SPELL -> val + "% de chance";
+					case EQUIPMENT, SPELL -> Helper.clamp(val, 0, 100) + "% de chance";
 				}).append("\n");
 			}
 
