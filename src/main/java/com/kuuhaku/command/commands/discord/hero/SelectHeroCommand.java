@@ -38,10 +38,7 @@ import java.util.List;
 		usage = "req_id-opt",
 		category = Category.MISC
 )
-@Requires({
-		Permission.MESSAGE_ATTACH_FILES,
-		Permission.MESSAGE_EMBED_LINKS
-})
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class SelectHeroCommand implements Executable {
 
 	@Override
@@ -68,7 +65,7 @@ public class SelectHeroCommand implements Executable {
 								prefix,
 								h.getId()
 						),
-						(h.hasArrived() ? h.getExpedition() != null ? "**(ESPÓLIO)** " : "" : "**(EXPEDIÇÃO)** ") + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
+						(h.hasArrived() ? h.getQuest() != null ? "**(RETORNOU)** " : "" : "**(MISSÃO)** ") + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
 						true);
 			}
 

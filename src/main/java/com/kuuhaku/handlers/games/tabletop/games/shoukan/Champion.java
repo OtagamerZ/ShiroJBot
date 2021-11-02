@@ -169,7 +169,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, c.getDescription(), 205, 9, 293);
 
-			if (isStasis() || isStunned() || isSleeping() || (hero != null && hero.getExpedition() != null)) {
+			if (isStunned() || isSleeping() || (hero != null && hero.getQuest() != null)) {
 				available = false;
 			}
 
@@ -189,8 +189,8 @@ public class Champion implements Drawable, Cloneable {
 			} else if (isDefending()) {
 				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/defense_mode.png"), 0, 0, null);
 			} else if (hero != null) {
-				if (hero.getExpedition() != null) {
-					if (hero.isInExpedition()) {
+				if (hero.getQuest() != null) {
+					if (hero.isQuesting()) {
 						g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/expedition.png"), 0, 0, null);
 					} else {
 						g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/arrived.png"), 0, 0, null);
