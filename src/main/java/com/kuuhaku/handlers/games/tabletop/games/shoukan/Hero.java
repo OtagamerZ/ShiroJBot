@@ -182,7 +182,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getLevel() {
-		return Math.max(1, (int) Math.round(Math.log(xp / 10d * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO)) - 1);
+		return Helper.clamp((int) Math.round(Math.log(xp / 10d * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO) - 1), 1, 20);
 	}
 
 	public int getXp() {
