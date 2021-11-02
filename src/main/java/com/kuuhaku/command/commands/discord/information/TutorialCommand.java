@@ -418,7 +418,7 @@ public class TutorialCommand implements Executable {
 				.setDescription("""
 						**Evogear**
 
-						Equipamentos e feitiços para adicionar um "tempero" às suas cartas.
+						Equipamentos e magias para adicionar um "tempero" às suas cartas.
 						Eles são obtidos através de sínteses ou drops e são essenciais em qualquer deck, seja ele de um guerreiro ou de um mago.
 
 						Você possui 24 espaços para adicionar evogears, mas eles consomem espaços de acordo com o tier:

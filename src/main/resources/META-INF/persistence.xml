@@ -83,6 +83,7 @@
         <class>com.kuuhaku.model.persistent.Stash</class>
         <class>com.kuuhaku.model.persistent.TempRole</class>
         <class>com.kuuhaku.model.persistent.Expedition</class>
+        <class>com.kuuhaku.model.persistent.BountyQuest</class>
         <class>com.kuuhaku.model.persistent.tournament.Bracket</class>
         <class>com.kuuhaku.model.persistent.tournament.Participant</class>
         <class>com.kuuhaku.model.persistent.tournament.Phase</class>
