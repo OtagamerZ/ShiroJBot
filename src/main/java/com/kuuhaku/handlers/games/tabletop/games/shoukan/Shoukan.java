@@ -341,10 +341,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
 						if (!args[1].equalsIgnoreCase("s")) {
-							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de feitiço.").queue(null, Helper::doNothing);
+							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
 							return;
 						} else if (spellLock > 0) {
-							channel.sendMessage("❌ | Feitiços estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
+							channel.sendMessage("❌ | Magias estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
 							return;
 						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
 							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
@@ -355,9 +355,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 						} else if (args.length - 2 < e.getArgType().getArgs()) {
 							channel.sendMessage(
 									switch (e.getArgType()) {
-										case ALLY -> "❌ | Este feitiço requer um alvo aliado.";
-										case ENEMY -> "❌ | Este feitiço requer um alvo inimigo.";
-										case BOTH -> "❌ | Este feitiço requer um alvo aliado e um inimigo.";
+										case ALLY -> "❌ | Esta magia requer um alvo aliado.";
+										case ENEMY -> "❌ | Esta magia requer um alvo inimigo.";
+										case BOTH -> "❌ | Esta magia requer um alvo aliado e um inimigo.";
 										default -> "";
 									}
 							).queue(null, Helper::doNothing);
@@ -370,7 +370,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						switch (e.getArgType()) {
 							case ALLY -> {
 								if (!StringUtils.isNumeric(args[2])) {
-									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para usar este feitiço.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
 								int pos = Integer.parseInt(args[2]) - 1;
@@ -385,7 +385,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							}
 							case ENEMY -> {
 								if (!StringUtils.isNumeric(args[2])) {
-									channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para usar este feitiço.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
 								int pos = Integer.parseInt(args[2]) - 1;
@@ -401,7 +401,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							}
 							case BOTH -> {
 								if (!StringUtils.isNumeric(args[2]) || !StringUtils.isNumeric(args[3])) {
-									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada e uma inimiga para usar este feitiço.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada e uma inimiga para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
 								int pos1 = Integer.parseInt(args[2]) - 1;
@@ -441,11 +441,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 						if (makeFusion(h)) return;
 
 						String result = switch (e.getArgType()) {
-							case NONE -> h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".";
+							case NONE -> h.getUser().getName() + " usou a magia " + d.getCard().getName() + ".";
 							case ALLY -> {
 								assert allyPos != null;
 
-								yield "%s usou o feitiço %s em %s.".formatted(
+								yield "%s usou a magia %s em %s.".formatted(
 										h.getUser().getName(),
 										d.getCard().getName(),
 										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName()
@@ -454,7 +454,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							case ENEMY -> {
 								assert enemyPos != null;
 
-								yield "%s usou o feitiço %s em %s.".formatted(
+								yield "%s usou a magia %s em %s.".formatted(
 										h.getUser().getName(),
 										d.getCard().getName(),
 										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
@@ -463,7 +463,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							case BOTH -> {
 								assert allyPos != null && enemyPos != null;
 
-								yield "%s usou o feitiço %s em %s e %s.".formatted(
+								yield "%s usou a magia %s em %s e %s.".formatted(
 										h.getUser().getName(),
 										d.getCard().getName(),
 										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName(),
@@ -1975,7 +1975,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (int i = 0; i < slots.size(); i++) {
 				Champion c = slots.get(i).getTop();
 				if (c != null) {
-					c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
+					c.setAvailable(!c.isStunned() && !c.isSleeping());
 					c.resetAttribs();
 					if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 						|| makeFusion(h.get())
@@ -2237,7 +2237,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
+							c.setAvailable(!c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, i, getCurrentSide(), Pair.of(c, i), null)
 								|| makeFusion(h.get())

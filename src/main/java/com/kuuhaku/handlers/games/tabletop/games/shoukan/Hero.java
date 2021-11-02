@@ -19,18 +19,18 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.ExpeditionDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Attributes;
+import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Expedition;
 import com.kuuhaku.model.persistent.id.CompositeHeroId;
+import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.LazyCollection;
@@ -91,10 +91,13 @@ public class Hero implements Cloneable {
 	private Set<Equipment> inventory = new HashSet<>();
 
 	@Column(columnDefinition = "VARCHAR(255)")
-	private String expedition;
+	private String quest;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long expEnd = 0;
+	private long questEnd = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long questSeed = 0;
 
 	public Hero() {
 	}
@@ -154,23 +157,21 @@ public class Hero implements Cloneable {
 			out[0] += e.getAtk() / 100;
 			out[1] += e.getDef() / 100;
 
-			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
+			if (e.getCharm() != null)
+				switch (e.getCharm()) {
+					case ARMORPIERCING, DRAIN -> out[0] += e.getTier();
+					case SPELLSHIELD, SPELLMIRROR -> out[1] += e.getTier();
+					case AGILITY -> out[2] += e.getTier() * 2;
+					case TIMEWARP, DOUBLETAP -> out[3] += e.getTier() * 2;
+					case DOPPELGANGER, SOULLINK -> out[4] += e.getTier() * 2;
+				}
 		}
 
 		return new Attributes(out);
 	}
 
 	public Attributes getStats() {
-		Integer[] out = new Integer[]{0, 0, 0, 0, 0};
-
-		for (Equipment e : inventory) {
-			out[0] += e.getAtk() / 100;
-			out[1] += e.getDef() / 100;
-
-			if (e.getCharm() == Charm.AGILITY) out[2] += e.getTier() * 2;
-		}
-
-		return new Attributes(Helper.mergeArrays(stats.getStats(), out));
+		return new Attributes(Helper.mergeArrays(stats.getStats(), getEquipStats().getStats()));
 	}
 
 	public void resetStats() {
@@ -250,12 +251,15 @@ public class Hero implements Cloneable {
 		return Math.max(0, stats.calcInventoryCap() - inventory.size());
 	}
 
-	public Expedition getExpedition() {
-		return ExpeditionDAO.getExpedition(Helper.getOr(expedition, ""));
+	public BountyInfo getQuest() {
+		if (quest == null) return null;
+
+		return BountyQuestDAO.getBounty(quest).getInfo(this, questSeed);
 	}
 
-	public void setExpedition(Expedition expedition) {
-		this.expedition = expedition.getId();
+	public void setQuest(BountyQuest quest, long seed) {
+		this.quest = quest.getId();
+		this.questSeed = seed;
 
 		double expModif = 1;
 		for (Perk perk : perks) {
@@ -265,25 +269,26 @@ public class Hero implements Cloneable {
 			};
 		}
 
-		this.expEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(Math.round(expedition.getTime() * expModif), TimeUnit.MINUTES);
+		this.questEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(Math.round(getQuest().time() * expModif), TimeUnit.MINUTES);
 	}
 
-	public long getExpeditionEnd() {
-		return expEnd;
+	public long getQuestEnd() {
+		return questEnd;
 	}
 
-	public boolean isInExpedition() {
-		return expedition != null && !hasArrived();
+	public boolean isQuesting() {
+		return quest != null && !hasArrived();
 	}
 
 	public boolean hasArrived() {
-		return System.currentTimeMillis() >= expEnd;
+		return System.currentTimeMillis() >= questEnd;
 	}
 
 	public void arrive() {
 		setEnergy(this.energy - 1);
-		this.expedition = null;
-		this.expEnd = 0;
+		this.quest = null;
+		this.questSeed = 0;
+		this.questEnd = 0;
 	}
 
 	public String getDescription() {
