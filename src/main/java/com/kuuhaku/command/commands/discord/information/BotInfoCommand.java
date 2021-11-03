@@ -66,7 +66,7 @@ public class BotInfoCommand implements Executable {
 								[%s](https://top.gg/bot/572413282653306901/vote)
 								[GitHub](https://github.com/OtagamerZ/ShiroJBot)
 								[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
-								[Reddit](https://www.reddit.com/r/ShiroJBot/)
+								[Wiki](https://github.com/OtagamerZ/ShiroJBot/wiki)
 								[%s](https://top.gg/bot/572413282653306901/invite)
 								[%s](https://forms.gle/KrPHLZcijpzCXDoh9)
 								"""
