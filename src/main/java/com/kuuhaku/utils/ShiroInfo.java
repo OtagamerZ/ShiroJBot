@@ -100,8 +100,9 @@ public class ShiroInfo {
 
 	);
 	private static final Map<String, SupportTier> supports = Map.of(
-			"656542716108472340", SupportTier.SENIOR, //Fenyx
-			"666488799835979786", SupportTier.NORMAL  //Lucas
+			"656542716108472340", SupportTier.NORMAL, //Lazuli
+			"666488799835979786", SupportTier.NORMAL, //Lucas
+			"553244700258336825", SupportTier.NORMAL  //The Caos
 	);
 	private static final List<String> emoteRepo = List.of(
 			"666619034103447642", //Shiro Emote Repository 1
