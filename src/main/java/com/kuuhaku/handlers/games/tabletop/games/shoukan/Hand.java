@@ -130,7 +130,7 @@ public class Hand {
 
 			if (game.getCustom().getBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
-			if (game.getCustom().getBoolean("semfield"))
+			if (game.getCustom().getBoolean("semcampo"))
 				getDeque().removeIf(d -> d instanceof Field);
 
 			switch (game.getCustom().getString("arcade")) {
