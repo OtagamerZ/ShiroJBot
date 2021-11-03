@@ -33,7 +33,7 @@ public enum BountyDifficulty {
 		this.difficulty = difficulty;
 	}
 
-	public int getDifficulty() {
+	public int getValue() {
 		return difficulty;
 	}
 
