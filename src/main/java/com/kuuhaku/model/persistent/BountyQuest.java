@@ -106,7 +106,7 @@ public class BountyQuest {
 			return new BountyInfo(id, baseTime, 0, new Attributes(getBaseStats()), getRewards());
 		}
 
-		double diff = Helper.round(Helper.rng(Math.max(1, difficulty.getValue() / 4d), difficulty.getValue(), seed), 2) / difficulty.getValue();
+		double diff = Helper.round(Helper.rng(Math.max(1, difficulty.getValue() / 4d), difficulty.getValue(), seed) / difficulty.getValue(), 2);
 		Integer[] baseStats = Arrays.stream(getBaseStats())
 				.map(i -> (int) Math.round(i * diff * difficulty.getValue()))
 				.toArray(Integer[]::new);
