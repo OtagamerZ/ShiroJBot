@@ -159,7 +159,7 @@ public class BountyBoardCommand implements Executable {
 			BountyQuest q = pool.get(i);
 			BountyInfo info = q.getInfo(h, seed);
 
-			int diff = q.getDifficulty().getDifficulty();
+			int diff = q.getDifficulty().getValue();
 			double modDiff = Helper.prcnt(diff - info.diff(), diff);
 
 			eb.addField(Helper.getFancyNumber(i + 1) + " | " + q
