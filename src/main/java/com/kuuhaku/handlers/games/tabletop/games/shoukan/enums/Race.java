@@ -31,25 +31,25 @@ import java.util.stream.Collectors;
 
 public enum Race {
 	HUMAN("Humano",
-			"**(SOLO)** +1 limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
+			"**(SOLO)** +1 Limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
 			"(**SOLO** | -1%/**DUO** | -0,5%) dano direto sofrido para cada campeão com 1 ou 2 de custo em seu deck",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia.",
 			new Integer[]{2, 2, 2, 2, 2}
 	),
 	ELF("Elfo",
-			"+1 mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas",
-			"+1 mana a cada 3 turnos",
+			"+1 Mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas",
+			"+1 Mana a cada 3 turnos",
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha.",
 			new Integer[]{1, 2, 3, 3, 1}
 	),
 	BESTIAL("Bestial",
-			"**(SOLO)** +1 limite de cópias para evogears **(DUO)** Cartas descartadas voltam para o deck e embaralham-no",
+			"**(SOLO)** +1 Limite de cópias para evogears **(DUO)** Cartas descartadas voltam para o deck e embaralham-no",
 			"Inicia com 1 ponto de mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido.",
 			new Integer[]{3, 2, 3, 1, 1}
 	),
 	MACHINE("Máquina",
-			"**(SOLO)** -1 peso de Equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
+			"**(SOLO)** -1 Peso de equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
 			"Inicia com 1 equipamento extra",
 			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo.",
 			new Integer[]{1, 3, 1, 0, 4}
@@ -61,20 +61,20 @@ public enum Race {
 			new Integer[]{3, 3, 0, 3, 1}
 	),
 	MYSTICAL("Místico",
-			"**(SOLO)** -1 peso de Magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
+			"**(SOLO)** -1 Peso de magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
 			"Inicia com 1 magia extra",
 			"Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos.",
 			new Integer[]{2, 1, 2, 4, 1}
 	),
 	CREATURE("Criatura",
-			"+2 limite de cartas na mão",
-			"+1 limite de cartas na mão",
+			"+2 Limite de cartas na mão",
+			"+1 Limite de cartas na mão",
 			"Criaturas sencientes que são capazes de raciocinar e comunicarem-se com os seres ao redor. Apesar disso, sua natureza selvagem ainda os torna perigosos e ferozes caso sejam intimidados.",
 			new Integer[]{3, 3, 3, 1, 0}
 	),
 	SPIRIT("Espírito",
-			"+2% defesa por carta no cemitério",
-			"+1% defesa por carta no cemitério",
+			"+2% Defesa por carta no cemitério",
+			"+1% Defesa por carta no cemitério",
 			"Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta.",
 			new Integer[]{2, 4, 2, 2, 0}
 	),
@@ -85,8 +85,8 @@ public enum Race {
 			new Integer[]{4, 2, 2, 1, 1}
 	),
 	UNDEAD("Morto-vivo",
-			"+1% dano por carta no cemitério",
-			"+0,5% dano por carta no cemitério",
+			"+1% Dano por carta no cemitério",
+			"+0,5% Dano por carta no cemitério",
 			"Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate.",
 			new Integer[]{3, 3, 1, 0, 3}
 	),
