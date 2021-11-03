@@ -84,7 +84,7 @@ public class TeamHand extends Hand {
 			if (game.getCustom() != null) {
 				if (game.getCustom().getBoolean("semequip"))
 					deque.removeIf(d -> d instanceof Equipment);
-				if (game.getCustom().getBoolean("semfield"))
+				if (game.getCustom().getBoolean("semcampo"))
 					deque.removeIf(d -> d instanceof Field);
 
 				switch (game.getCustom().getString("arcade")) {
