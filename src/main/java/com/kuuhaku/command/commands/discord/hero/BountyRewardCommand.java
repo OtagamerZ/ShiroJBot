@@ -58,7 +58,7 @@ public class BountyRewardCommand implements Executable {
 		BountyInfo info = h.getQuest();
 		BountyQuest q = BountyQuestDAO.getBounty(info.id());
 
-		int diff = q.getDifficulty().getDifficulty();
+		int diff = q.getDifficulty().getValue();
 		double modDiff = Helper.prcnt(diff - info.diff(), diff);
 
 		boolean died = false;
