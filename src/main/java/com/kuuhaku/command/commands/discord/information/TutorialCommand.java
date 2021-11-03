@@ -380,7 +380,7 @@ public class TutorialCommand implements Executable {
 	private MessageEmbed seventhStep(String prefix) {
 		return new ColorlessEmbedBuilder()
 				.setDescription("""
-						Sobre o Shoukan, recomendo ler [este guia](https://www.reddit.com/r/ShiroJBot/comments/jkbjtd/shoukan_o_duelo_entre_invocadores/) quando tiver um tempo, ele foi escrito por meu Nii-chan e contém informações muito úteis sobre como jogar!
+						Sobre o Shoukan, recomendo ler [este guia](https://github.com/OtagamerZ/ShiroJBot/wiki/Shoukan---O-duelo-entre-invocadores) quando tiver um tempo, ele foi escrito por meu Nii-chan e contém informações muito úteis sobre como jogar!
 						Você sabia? Jogadores que leem o guia têm 99%% de chance de não passar vergonha na primeira partida!
 
 						Para poder jogar, você vai precisar montar um deck:
