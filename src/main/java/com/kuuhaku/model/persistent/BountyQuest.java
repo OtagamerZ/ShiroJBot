@@ -108,7 +108,7 @@ public class BountyQuest {
 
 		double diff = Helper.round(Helper.rng(Math.max(1, difficulty.getValue() / 4d), difficulty.getValue(), seed), 2) / difficulty.getValue();
 		Integer[] baseStats = Arrays.stream(getBaseStats())
-				.map(i -> (int) Math.round(i * diff))
+				.map(i -> (int) Math.round(i * diff * difficulty.getValue()))
 				.toArray(Integer[]::new);
 		Integer[] heroStats = h.getStats().getStats();
 		Map<Reward, Integer> rewards = getRewards();
@@ -132,10 +132,7 @@ public class BountyQuest {
 				id,
 				(int) Math.round(baseTime * diff),
 				Helper.round(modDiff, 1),
-				new Attributes(Arrays.stream(baseStats)
-						.map(i -> (int) Math.round(i * diff))
-						.toArray(Integer[]::new)
-				),
+				new Attributes(baseStats),
 				rewards.entrySet().stream()
 						.map(e -> Pair.of(e.getKey(), (int) Math.round(e.getValue() * diff)))
 						.collect(Collectors.toMap(Pair::getLeft, Pair::getRight))
