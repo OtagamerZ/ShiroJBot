@@ -49,7 +49,7 @@ public enum Race {
 			new Integer[]{3, 2, 3, 1, 1}
 	),
 	MACHINE("Máquina",
-			"**(SOLO)** -1 Peso de Equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
+			"**(SOLO)** -1 Peso de equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
 			"Inicia com 1 equipamento extra",
 			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo.",
 			new Integer[]{1, 3, 1, 0, 4}
@@ -61,7 +61,7 @@ public enum Race {
 			new Integer[]{3, 3, 0, 3, 1}
 	),
 	MYSTICAL("Místico",
-			"**(SOLO)** -1 Peso de Magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
+			"**(SOLO)** -1 Peso de magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
 			"Inicia com 1 magia extra",
 			"Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos.",
 			new Integer[]{2, 1, 2, 4, 1}
