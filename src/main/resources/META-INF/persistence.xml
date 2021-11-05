@@ -30,6 +30,7 @@
 
         <!-- entidade mapeada -->
         <class>com.kuuhaku.model.persistent.Member</class>
+        <class>com.kuuhaku.model.persistent.Username</class>
         <class>com.kuuhaku.model.persistent.CustomAnswer</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.Block</class>
