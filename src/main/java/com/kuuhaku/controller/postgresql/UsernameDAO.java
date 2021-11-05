@@ -18,10 +18,11 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Username;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public class UsernameDAO {
 	public static String getUsername(String uid) {
@@ -31,14 +32,25 @@ public class UsernameDAO {
 			Username u = em.find(Username.class, uid);
 
 			if (u == null) {
-				setUsername(uid, Main.getInfo().getUserByID(uid).getName());
-				return getUsername(uid);
+				Query q = em.createNativeQuery("SELECT uid, name FROM \"GetUsername\"(:id)");
+				q.setParameter("id", uid);
+				u = Helper.map(Username.class, (Object[]) q.getSingleResult());
 			}
 
 			return u.getName();
 		} finally {
 			em.close();
 		}
+	}
+
+	public static void setUsername(Username u) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(u);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 
 	public static void setUsername(String uid, String name) {
