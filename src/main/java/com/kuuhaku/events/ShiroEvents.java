@@ -185,7 +185,10 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 
 		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
-		if (!blacklisted) MemberDAO.getMember(author.getId(), guild.getId());
+		if (!blacklisted && !author.isBot()) {
+			MemberDAO.getMember(author.getId(), guild.getId());
+			UsernameDAO.setUsername(author.getId(), author.getName());
+		}
 
 		if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
 			channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!\nSe quiser me convidar, basta acessar https://shirojbot.site e clicar em \"Convide-me!\".").queue(null, Helper::doNothing);
