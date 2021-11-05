@@ -77,7 +77,7 @@ public class ClanDepositCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Tem certeza que deseja depositar " + Helper.separate(amount) + " créditos no cofre do clã?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							acc.removeCredit(amount, this.getClass());

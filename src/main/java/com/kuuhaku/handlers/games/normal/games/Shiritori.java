@@ -188,6 +188,8 @@ public class Shiritori extends Game {
 	}
 
 	private String getHighlightedWord() {
+		if (word == null) return "nenhuma";
+
 		return word.substring(0, word.length() - 2) + "**" + word.substring(word.length() - 2) + "**";
 	}
 
