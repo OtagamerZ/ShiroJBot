@@ -30,6 +30,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -92,10 +93,10 @@ public class ReversiCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Reversi, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
-								if (Main.getInfo().gameInProgress(mb.getId())) {
+								if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 									channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 									return;
 								} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
@@ -108,7 +109,7 @@ public class ReversiCommand implements Executable {
 								s.delete().queue(null, Helper::doNothing);
 								t.start();
 							}
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

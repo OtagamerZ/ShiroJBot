@@ -80,8 +80,8 @@ public class TradeCommand implements Executable {
 
 		User tgt = message.getMentionedUsers().get(0);
 		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja negociar com você, deseja aceitar?").queue(s ->
-				Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-							if (!mb.getId().equals(tgt.getId())) return;
+				Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							if (!wrapper.getUser().getId().equals(tgt.getId())) return;
 							s.delete().queue(null, Helper::doNothing);
 							Map<String, TradeContent> offers = Map.of(
 									author.getId(), new TradeContent(author.getId()),
@@ -99,7 +99,7 @@ public class TradeCommand implements Executable {
 									.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
 							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 						ms -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -219,8 +219,8 @@ public class TradeCommand implements Executable {
 				}
 			};
 
-			Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (_mb, _ms) -> {
-						offers.get(_mb.getId()).setClosed(true);
+			Pages.buttonize(msg, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+						offers.get(wrapper.getUser().getId()).setClosed(true);
 
 						if (offers.values().stream().allMatch(TradeContent::isClosed)) {
 							int code = 0;
@@ -246,8 +246,7 @@ public class TradeCommand implements Executable {
 										.findFirst()
 										.orElseThrow();
 
-								if (offer.canReceive(oT.getKawaipon())) code = 0;
-								else {
+								if (!offer.canReceive(oT.getKawaipon())) {
 									inv = oT.getUid().equals(author.getId()) ? author : tgt;
 									code = 2;
 								}
@@ -291,7 +290,7 @@ public class TradeCommand implements Executable {
 							msg.delete().queue(null, Helper::doNothing);
 							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
 						});
-					}), true, 5, TimeUnit.MINUTES,
+					}), ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 					u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 					_ms -> {
 						msg.editMessage("Transação cancelada.")

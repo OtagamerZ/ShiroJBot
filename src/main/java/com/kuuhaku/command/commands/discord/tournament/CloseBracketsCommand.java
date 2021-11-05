@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.tournament;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -30,6 +31,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -74,7 +76,7 @@ public class CloseBracketsCommand implements Executable {
 					);
 				}
 
-				pages.add(new Page(eb.build()));
+				pages.add(new InteractPage(eb.build()));
 			}
 
 			if (pages.isEmpty()) {
@@ -83,7 +85,7 @@ public class CloseBracketsCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(
-					s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES)
+					s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
 			);
 			return;
 		}
@@ -96,7 +98,7 @@ public class CloseBracketsCommand implements Executable {
 			}
 
 			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + t.getName() + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
-					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								t.close();
 								TournamentDAO.save(t);
 
@@ -111,7 +113,7 @@ public class CloseBracketsCommand implements Executable {
 
 								s.delete().queue(null, Helper::doNothing);
 								channel.sendMessage("✅ | Chaves liberadas com sucesso, os jogadores foram notificados (use `" + prefix + "torneio ID` para ver as chaves)!").queue();
-							}), true, 1, TimeUnit.MINUTES
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
 					), Helper::doNothing
 			);

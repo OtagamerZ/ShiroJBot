@@ -19,7 +19,8 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -36,6 +37,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -101,36 +103,36 @@ public class SellCardCommand implements Executable {
 							(matches.contains(CardType.FIELD) ? (":regional_indicator_f: -> Campo\n") : "")
 					);
 
-			Map<String, ThrowingBiConsumer<Member, Message>> btns = new LinkedHashMap<>();
+			Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
 			if (matches.contains(CardType.KAWAIPON)) {
-				btns.put("\uD83C\uDDF0", (mb, ms) -> {
+				btns.put(Helper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
 					chooseVersion(author, channel, kp, name, chosen);
-					ms.delete().queue(null, Helper::doNothing);
+					wrapper.getMessage().delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.SENSHI)) {
-				btns.put("\uD83C\uDDE8", (mb, ms) -> {
+				btns.put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
-					ms.delete().queue(null, Helper::doNothing);
+					wrapper.getMessage().delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.EVOGEAR)) {
-				btns.put("\uD83C\uDDEA", (mb, ms) -> {
+				btns.put(Helper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
-					ms.delete().queue(null, Helper::doNothing);
+					wrapper.getMessage().delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.FIELD)) {
-				btns.put("\uD83C\uDDEB", (mb, ms) -> {
+				btns.put(Helper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
 					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
-					ms.delete().queue(null, Helper::doNothing);
+					wrapper.getMessage().delete().queue(null, Helper::doNothing);
 				});
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessageEmbeds(eb.build())
 					.queue(s -> Pages.buttonize(s, btns, true,
-							1, TimeUnit.MINUTES,
+							ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -192,7 +194,7 @@ public class SellCardCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(msg)
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
@@ -237,7 +239,7 @@ public class SellCardCommand implements Executable {
 								KawaiponDAO.saveKawaipon(finalKp);
 
 								s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
@@ -258,15 +260,15 @@ public class SellCardCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
-								put(Helper.getNumericEmoji(1), (mb, ms) -> {
+								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
 									chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, false));
-									ms.delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, Helper::doNothing);
 								});
-								put(Helper.getNumericEmoji(2), (mb, ms) -> {
+								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
 									chosen.complete(Triple.of(kcs.get(1).getCard(), CardType.KAWAIPON, true));
-									ms.delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, Helper::doNothing);
 								});
-							}}, true, 1, TimeUnit.MINUTES,
+							}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());

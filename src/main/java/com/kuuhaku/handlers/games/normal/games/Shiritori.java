@@ -19,13 +19,14 @@
 package com.kuuhaku.handlers.games.normal.games;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.normal.framework.Game;
 import com.kuuhaku.handlers.games.normal.framework.Table;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -76,7 +77,7 @@ public class Shiritori extends Game {
 								.queue(msg -> {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = msg;
-									Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}
@@ -89,7 +90,7 @@ public class Shiritori extends Game {
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -129,7 +130,7 @@ public class Shiritori extends Game {
 						.queue(s -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		} else if (Helper.findStringInFile(list, command) > -1) {
@@ -141,7 +142,7 @@ public class Shiritori extends Game {
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
-						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
 		} else {
 			channel.sendMessage("❌ | Palavra inválida, veja se escreveu-a corretamente.").queue();
@@ -159,9 +160,9 @@ public class Shiritori extends Game {
 	}
 
 	@Override
-	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
+		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, Helper::doNothing);
 			getTable().leaveGame();
 			resetTimer();
@@ -178,7 +179,7 @@ public class Shiritori extends Game {
 						.queue(s -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		});

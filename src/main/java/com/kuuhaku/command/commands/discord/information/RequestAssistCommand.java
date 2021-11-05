@@ -63,7 +63,7 @@ public class RequestAssistCommand implements Executable, Slashed {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							int number = TicketDAO.openTicket("Requisição de suporte presencial.", member);
@@ -113,7 +113,7 @@ public class RequestAssistCommand implements Executable, Slashed {
 
 							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage(I18n.getString("str_successfully-requested-assist")).queue();
-						}), true, 60, TimeUnit.SECONDS,
+						}), ShiroInfo.USE_BUTTONS, true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

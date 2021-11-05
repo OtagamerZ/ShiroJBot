@@ -19,7 +19,8 @@
 package com.kuuhaku.handlers.games.tabletop.games.crisscross;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
@@ -31,7 +32,7 @@ import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Cross;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -91,7 +92,7 @@ public class CrissCross extends Game {
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -165,7 +166,7 @@ public class CrissCross extends Game {
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = msg;
-							Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
@@ -174,9 +175,9 @@ public class CrissCross extends Game {
 	}
 
 	@Override
-	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
+		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")

@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -66,7 +67,7 @@ public class MyStatsCommand implements Executable, Slashed {
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		Set<Tag> tags = Tag.getTags(member);
-		Map<String, Page> categories = new LinkedHashMap<>();
+		Map<Emoji, Page> categories = new LinkedHashMap<>();
 
 		{
 			VoiceTime vt = Helper.getOr(ShiroInfo.getShiroEvents().getVoiceTimes().get(mb.getUid() + mb.getSid()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
@@ -82,7 +83,7 @@ public class MyStatsCommand implements Executable, Slashed {
 			if (mb.getLevel() >= 5)
 				eb.setThumbnail(TagIcons.getLevelEmote(mb.getLevel()).getImageUrl());
 
-			categories.put("\uD83D\uDD23", new Page(eb.build()));
+			categories.put(Emoji.fromMarkdown("\uD83D\uDD23"), new InteractPage(eb.build()));
 		}
 
 		eb.clear();
@@ -117,7 +118,7 @@ public class MyStatsCommand implements Executable, Slashed {
 			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false)
 					.setThumbnail(author.getEffectiveAvatarUrl());
 
-			categories.put("\uD83D\uDCC8", new Page(eb.build()));
+			categories.put(Emoji.fromMarkdown("\uD83D\uDCC8"), new InteractPage(eb.build()));
 		}
 
 		eb.clear();
@@ -153,11 +154,11 @@ public class MyStatsCommand implements Executable, Slashed {
 
 			eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png");
 
-			categories.put("\uD83D\uDCCB", new Page(eb.build()));
+			categories.put(Emoji.fromMarkdown("\uD83D\uDCCB"), new InteractPage(eb.build()));
 		}
 
-		channel.sendMessageEmbeds((MessageEmbed) categories.get("\uD83D\uDD23").getContent()).queue(s ->
-				Pages.categorize(s, categories, 1, TimeUnit.MINUTES)
+		channel.sendMessageEmbeds((MessageEmbed) categories.get(Emoji.fromMarkdown("\uD83D\uDD23")).getContent()).queue(s ->
+				Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
 		);
 	}
 }

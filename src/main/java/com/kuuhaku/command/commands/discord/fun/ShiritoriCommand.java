@@ -29,6 +29,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -111,9 +112,9 @@ public class ShiritoriCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);
 		}
 		int finalBet = bet;
-		channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (players.contains(mb.getUser())) {
-						if (Main.getInfo().gameInProgress(mb.getId())) {
+		channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					if (players.contains(wrapper.getUser())) {
+						if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 							channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 							return;
 						} else if (Main.getInfo().gameInProgress(author.getId())) {
@@ -121,9 +122,9 @@ public class ShiritoriCommand implements Executable {
 							return;
 						}
 
-						if (!accepted.contains(mb.getId())) {
-							channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
-							accepted.add(mb.getId());
+						if (!accepted.contains(wrapper.getUser().getId())) {
+							channel.sendMessage(wrapper.getUser().getAsMention() + " aceitou a partida.").queue();
+							accepted.add(wrapper.getUser().getId());
 						}
 
 						if (accepted.size() == players.size()) {
@@ -134,7 +135,7 @@ public class ShiritoriCommand implements Executable {
 							t.start();
 						}
 					}
-				}), true, 1, TimeUnit.MINUTES,
+				}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 				u -> players.parallelStream().map(User::getId).anyMatch(i -> i.equals(u.getId())),
 				ms -> {
 					for (User player : players) {

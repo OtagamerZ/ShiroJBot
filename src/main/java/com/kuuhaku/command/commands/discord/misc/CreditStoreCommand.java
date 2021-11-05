@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.CreditItem;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -79,10 +80,10 @@ public class CreditStoreCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar?").queue(s ->
-					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+					Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
-								if (ci.getEffect().apply(mb, channel, args)) {
+								if (ci.getEffect().apply(wrapper.getMember(), channel, args)) {
 									Account facc = AccountDAO.getAccount(author.getId());
 									facc.consumeCredit(ci.getPrice(), CreditStoreCommand.class);
 									AccountDAO.saveAccount(facc);
@@ -90,7 +91,7 @@ public class CreditStoreCommand implements Executable {
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Item comprado com sucesso!").queue();
 								}
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId()))
 			);

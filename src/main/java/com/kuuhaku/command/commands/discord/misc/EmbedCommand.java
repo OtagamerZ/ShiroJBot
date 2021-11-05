@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
@@ -81,7 +82,7 @@ public class EmbedCommand implements Executable {
 					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
 							.setEmbeds(eb.build())
 							.queue(s ->
-									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 												gc.setEmbedTemplate(finalEb.getEmbed());
 												GuildDAO.updateGuildSettings(gc);
@@ -90,7 +91,7 @@ public class EmbedCommand implements Executable {
 														.flatMap(r -> m.delete())
 														.flatMap(r -> s.delete())
 														.queue();
-											}), true, 1, TimeUnit.MINUTES
+											}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
 											, ms -> channel.sendMessageEmbeds(finalEb.build())
 													.flatMap(r -> m.delete())

@@ -27,6 +27,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -58,7 +59,7 @@ public class LeaveClanCommand implements Executable {
 								ClanDAO.removeClan(c);
 
 								s.delete().flatMap(d -> channel.sendMessage("✅ | O clã " + c.getName() + " foi desfeito com sucesso.")).queue();
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
@@ -71,7 +72,7 @@ public class LeaveClanCommand implements Executable {
 								ClanDAO.saveClan(c);
 
 								s.delete().flatMap(d -> channel.sendMessage("✅ | Você saiu do clã " + c.getName() + " com sucesso.")).queue();
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

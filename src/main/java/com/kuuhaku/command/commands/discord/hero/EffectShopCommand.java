@@ -19,7 +19,8 @@
 package com.kuuhaku.command.commands.discord.hero;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -34,6 +35,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -75,31 +77,30 @@ public class EffectShopCommand implements Executable {
 		List<Champion> masters = CardDAO.getAllChampionsWithEffect(!manaless && mmr.getTier().getTier() >= 5, Math.min(manaless ? 4 : max, max));
 		Calendar cal = Calendar.getInstance();
 		List<Champion> pool = Helper.getRandomN(masters, 5, 1, Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)));
-		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
-			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
+			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + ", deseja confirmar?")
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
 									h.setReferenceChampion(c.getId());
 									KawaiponDAO.saveHero(h);
 
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									s.delete()
-											.flatMap(d -> ms.delete())
+											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!"))
 											.queue();
-								}), true, 1, TimeUnit.MINUTES,
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(h.getUid()),
 								m -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			});
 		}
 
-
 		channel.sendMessageEmbeds(getEmbed(pool)).queue(s ->
-				Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 

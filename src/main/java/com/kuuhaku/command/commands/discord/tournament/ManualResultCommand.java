@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Phase;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -72,13 +73,13 @@ public class ManualResultCommand implements Executable {
 						.collect(Collectors.joining(" VS "));
 
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									t.setTPResult(index);
 									TournamentDAO.save(t);
 
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);
@@ -93,13 +94,13 @@ public class ManualResultCommand implements Executable {
 						.collect(Collectors.joining(" VS "));
 
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									t.setResult(phase, index);
 									TournamentDAO.save(t);
 
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 						), Helper::doNothing
 				);

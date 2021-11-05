@@ -28,6 +28,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -91,14 +92,14 @@ public class DismissHeroCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prestes a retornar " + chosen.getName() + " ao seu mundo de origem, deseja confirmar?")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Kawaipon fKp = KawaiponDAO.getKawaipon(author.getId());
 								fKp.getHeroes().remove(chosen);
 								KawaiponDAO.saveKawaipon(fKp);
 
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói retornado com sucesso!")).queue();
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

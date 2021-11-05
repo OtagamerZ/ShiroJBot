@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -149,9 +150,7 @@ public class ClanPermissionCommand implements Executable {
 							refreshPermField(eb, ch, p);
 							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
-					}},
-					true,
-					1, TimeUnit.MINUTES,
+					}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 					u -> u.getId().equals(author.getId()),
 					ms -> {
 						ClanDAO.saveClan(c);

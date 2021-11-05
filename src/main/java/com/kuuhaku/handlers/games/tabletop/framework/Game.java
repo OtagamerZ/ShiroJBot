@@ -18,11 +18,12 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
 import com.kuuhaku.utils.JSONObject;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -133,7 +134,7 @@ public abstract class Game {
 		return history;
 	}
 
-	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
+	public abstract Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons();
 
 	public MatchRound getCurrRound() {
 		return history.getRound(round);
