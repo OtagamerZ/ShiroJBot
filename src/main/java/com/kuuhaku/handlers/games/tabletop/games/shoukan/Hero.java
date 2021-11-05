@@ -248,7 +248,7 @@ public class Hero implements Cloneable {
 	}
 
 	public int getInventoryCap() {
-		return Math.max(0, stats.calcInventoryCap() - inventory.size());
+		return Math.max(0, getStats().calcInventoryCap() - inventory.size());
 	}
 
 	public BountyInfo getQuest() {
@@ -461,6 +461,8 @@ public class Hero implements Cloneable {
 		try {
 			Hero h = (Hero) super.clone();
 			h.stats = new Attributes(stats.getStats());
+			h.perks = new HashSet<>(perks);
+			h.inventory = new HashSet<>(inventory);
 			return h;
 		} catch (CloneNotSupportedException e) {
 			throw new AssertionError();
