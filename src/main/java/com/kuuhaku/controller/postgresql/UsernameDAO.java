@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Username;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 
@@ -45,7 +46,10 @@ public class UsernameDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(new Username(uid, name));
+		Username u = Helper.getOr(em.find(Username.class, uid), new Username(uid, name));
+		u.setName(name);
+
+		em.merge(name);
 		em.getTransaction().commit();
 
 		em.close();
