@@ -85,7 +85,7 @@ public class HelpCommand implements Executable {
 			eb.setFooter(ShiroInfo.getFullName(), null);
 			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
 
-			categories.put(Emoji.fromMarkdown(Helper.HOME), new InteractPage(eb.build()));
+			categories.put(Helper.parseEmoji(Helper.HOME), new InteractPage(eb.build()));
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new ColorlessEmbedBuilder();
@@ -109,7 +109,7 @@ public class HelpCommand implements Executable {
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n\n" + cmds, false);
 				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
-				categories.put(Emoji.fromMarkdown(cat.getEmoteId()), new InteractPage(ceb.build()));
+				categories.put(Helper.parseEmoji(cat.getEmoteId()), new InteractPage(ceb.build()));
 			}
 
 			EmbedBuilder ceb = new ColorlessEmbedBuilder()
@@ -124,7 +124,7 @@ public class HelpCommand implements Executable {
 					.addField(Helper.VOID, I18n.getString("str_loan-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_placeholder-tip", prefix), false);
 
-			categories.put(Emoji.fromMarkdown("684039810079522846"), new InteractPage(ceb.build()));
+			categories.put(Helper.parseEmoji("684039810079522846"), new InteractPage(ceb.build()));
 
 			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
 			return;
