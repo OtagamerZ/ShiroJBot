@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.RankDAO;
@@ -33,7 +32,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,25 +51,17 @@ public class RankCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
-			ArrayList<Page> pages = new ArrayList<>();
-
 			int type;
-			List<String> data;
 			if (args.length > 0 && args[0].equalsIgnoreCase("global")) {
 				type = 0;
-				data = RankDAO.getLevelRanking(null);
 			} else if (Helper.findParam(args, "credit", "creditos", "créditos")) {
 				type = 1;
-				data = RankDAO.getCreditRanking();
 			} else if (Helper.findParam(args, "card", "kawaipon", "cartas")) {
 				type = 2;
-				data = RankDAO.getCardRanking();
 			} else if (Helper.findParam(args, "call", "voice", "voz")) {
 				type = 3;
-				data = RankDAO.getVoiceRanking(guild.getId());
 			} else {
 				type = -1;
-				data = RankDAO.getLevelRanking(guild.getId());
 			}
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -84,28 +74,47 @@ public class RankCommand implements Executable {
 					} + ")")
 					.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
-			List<List<String>> chunks = Helper.chunkify(data, 15);
-			for (int i = 0; i < chunks.size(); i++) {
-				eb.clearFields();
-				List<String> chunk = chunks.get(i);
+			List<String> d = switch (type) {
+				default -> RankDAO.getLevelRanking(guild.getId(), 0);
+				case 0 -> RankDAO.getLevelRanking(null, 0);
+				case 1 -> RankDAO.getCreditRanking(0);
+				case 2 -> RankDAO.getCardRanking(0);
+				case 3 -> RankDAO.getVoiceRanking(guild.getId(), 0);
+			};
 
-				if (i == 0) {
-					eb.addField(chunk.get(0), String.join("\n", chunk.subList(1, chunk.size())), false);
-				} else {
-					eb.addField(Helper.VOID, String.join("\n", chunk), false);
-				}
-
-				pages.add(new InteractPage(eb.build()));
+			if (d.isEmpty()) {
+				channel.sendMessage("❌ | Não há dados para exibir ainda.").queue();
+				return;
 			}
+			fillData(d, 0, eb);
 
 			m.delete().queue();
-			if (pages.isEmpty()) {
-				channel.sendMessage("❌ | Não há dados para exibir ainda.").queue();
-			} else {
-				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
-				);
-			}
+			channel.sendMessageEmbeds(eb.build()).queue(s ->
+					Pages.lazyPaginate(s, i -> {
+						List<String> data = switch (type) {
+							default -> RankDAO.getLevelRanking(guild.getId(), i);
+							case 0 -> RankDAO.getLevelRanking(null, i);
+							case 1 -> RankDAO.getCreditRanking(i);
+							case 2 -> RankDAO.getCardRanking(i);
+							case 3 -> RankDAO.getVoiceRanking(guild.getId(), i);
+						};
+
+						if (data.isEmpty()) return null;
+						fillData(data, i, eb);
+
+						return new InteractPage(eb.build());
+					}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+			);
 		});
+	}
+
+	private void fillData(List<String> data, int page, EmbedBuilder eb) {
+		eb.clearFields();
+
+		if (page == 0) {
+			eb.addField(data.get(0), String.join("\n", data.subList(1, data.size())), false);
+		} else {
+			eb.addField(Helper.VOID, String.join("\n", data), false);
+		}
 	}
 }
