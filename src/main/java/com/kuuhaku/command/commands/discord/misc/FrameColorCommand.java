@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -66,10 +67,10 @@ public class FrameColorCommand implements Executable {
 						.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/front/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
 						.setColor(fc.getThemeColor());
 
-				pages.add(new Page(eb.build()));
+				pages.add(new InteractPage(eb.build()));
 			}
 
-			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
+			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
 			return;
 		}
 

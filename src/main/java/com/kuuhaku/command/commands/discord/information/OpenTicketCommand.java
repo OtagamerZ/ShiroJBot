@@ -78,8 +78,8 @@ public class OpenTicketCommand implements Executable, Slashed {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `" + StringUtils.abbreviate(mensagem, 20) + "`?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `" + StringUtils.abbreviate(mensagem, 20) + "` (ele será enviado ao suporte)?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							int number = TicketDAO.openTicket(mensagem, member);
@@ -117,7 +117,7 @@ public class OpenTicketCommand implements Executable, Slashed {
 
 							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage(I18n.getString("str_successfully-opened-ticket")).queue();
-						}), true, 60, TimeUnit.SECONDS,
+						}), ShiroInfo.USE_BUTTONS, true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

@@ -29,6 +29,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -128,13 +129,13 @@ public class SweepCommand implements Executable {
 				String mText = memberTrashBin.size() > 0 ? memberTrashBin.size() == 1 ? memberTrashBin.size() + " membro" : memberTrashBin.size() + " membros" : "";
 
 				s.editMessage(":warning: | " + (guildTrashBin.size() + memberTrashBin.size() > 1 ? "Foram encontrados " : "Foi encontrado ") + gText + (!gText.isBlank() && !mText.isBlank() ? " e " : "") + mText + (guildTrashBin.size() + memberTrashBin.size() > 1 ? " inexistentes" : " inexistente") + ", deseja executar a limpeza?")
-						.queue(m -> Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						.queue(m -> Pages.buttonize(m, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									Sweeper.sweep(guildTrashBin, memberTrashBin);
 
 									m.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES,
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));

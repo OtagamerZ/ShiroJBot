@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -71,8 +72,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(firstStep()).complete();
 				Pages.buttonize(
 						msg,
-						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
-						true, 2, TimeUnit.MINUTES,
+						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -107,8 +108,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(thirdStep()).complete();
 				Pages.buttonize(
 						msg,
-						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
-						true, 2, TimeUnit.MINUTES,
+						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -181,8 +182,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
 				Pages.buttonize(
 						msg,
-						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
-						true, 2, TimeUnit.MINUTES,
+						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -253,8 +254,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(tenthStep(prefix)).complete();
 				Pages.buttonize(
 						msg,
-						Map.of("▶️", (mb, ms) -> next.get().complete(true)),
-						true, 2, TimeUnit.MINUTES,
+						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -271,8 +272,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(finalStep(prefix)).complete();
 				Pages.buttonize(
 						msg,
-						Map.of("✅", (mb, ms) -> next.get().complete(true)),
-						true, 2, TimeUnit.MINUTES,
+						Map.of(Helper.parseEmoji("✅"), wrapper -> next.get().complete(true)),
+						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);

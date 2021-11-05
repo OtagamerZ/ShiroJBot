@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -94,13 +95,13 @@ public class LoanCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + (int) (cl.getInterest() * 100 - 100) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest())) + " de dívida**__), deseja confirmar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							Account finalAcc = AccountDAO.getAccount(author.getId());
 							cl.sign(finalAcc);
 
 							s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar sua dívida.")).queue();
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

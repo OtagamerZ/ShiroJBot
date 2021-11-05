@@ -24,6 +24,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -41,10 +42,10 @@ public class ResetCallTimeCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage("Isso vai limpar o tempo de call acumulado de todos os membros neste servidor, tem certeza?").queue(
-					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								VoiceTimeDAO.resetVoiceTimes(guild.getId());
 								channel.sendMessage("✅ | Tempos de call reiniciados com sucesso!").queue();
-							}), true, 1, TimeUnit.MINUTES
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
 					), Helper::doNothing
 			);
@@ -52,10 +53,10 @@ public class ResetCallTimeCommand implements Executable {
 			User tgt = message.getMentionedUsers().get(0);
 
 			channel.sendMessage("Isso vai limpar o tempo de call acumulado de " + tgt.getName() + ", tem certeza?").queue(
-					s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								VoiceTimeDAO.removeVoiceTime(VoiceTimeDAO.getVoiceTime(tgt.getId(), guild.getId()));
 								channel.sendMessage("✅ | Tempo de call de " + tgt.getAsMention() + " reiniciado com sucesso!").queue();
-							}), true, 1, TimeUnit.MINUTES
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
 					), Helper::doNothing
 			);

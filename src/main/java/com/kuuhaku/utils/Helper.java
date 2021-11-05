@@ -23,10 +23,11 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
-import com.coder4.emoji.EmojiUtils;
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
@@ -690,7 +691,7 @@ public class Helper {
 		eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
 		eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
-		pages.add(new Page(eb.build()));
+		pages.add(new InteractPage(eb.build()));
 	}
 
 	public static void refreshButtons(GuildConfig gc) {
@@ -707,7 +708,7 @@ public class Helper {
 					GuildDAO.updateGuildSettings(gc);
 				} else {
 					for (ButtonMessage message : channel.getMessages()) {
-						Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+						Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 						Message msg;
 						try {
 							msg = chn.retrieveMessageById(message.getId()).submit().get();
@@ -730,19 +731,19 @@ public class Helper {
 
 							gatekeep(msg, r);
 						} else {
-							buttons.put(CANCEL, (m, ms) -> {
-								if (m.getId().equals(message.getAuthor())) {
+							buttons.put(Emoji.fromMarkdown(CANCEL), wrapper -> {
+								if (wrapper.getUser().getId().equals(message.getAuthor())) {
 									GuildConfig conf = GuildDAO.getGuildById(g.getId());
 									for (ButtonChannel bc : conf.getButtonConfigs()) {
 										if (bc.removeMessage(message)) break;
 									}
 
 									GuildDAO.updateGuildSettings(conf);
-									ms.clearReactions().queue();
+									wrapper.getMessage().clearReactions().queue();
 								}
 							});
 
-							Pages.buttonize(msg, buttons, true);
+							Pages.buttonize(msg, buttons, ShiroInfo.USE_BUTTONS, true);
 						}
 					}
 				}
@@ -750,23 +751,24 @@ public class Helper {
 		}
 	}
 
-	public static void resolveButton(Guild g, List<Button> jo, Map<String, ThrowingBiConsumer<Member, Message>> buttons) {
+	public static void resolveButton(Guild g, List<Button> jo, Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons) {
 		for (Button b : jo) {
 			Role role = b.getRole(g);
 
-			buttons.put(b.getEmote(), (m, ms) -> {
+			buttons.put(Emoji.fromMarkdown(b.getEmote()), wrapper -> {
 				if (role != null) {
 					try {
+						Member m = wrapper.getMember();
 						if (m.getRoles().contains(role)) {
 							g.removeRoleFromMember(m, role).queue(null, Helper::doNothing);
 						} else {
-							g.addRoleToMember(m, role).queue(null, Helper::doNothing);
+							g.addRoleToMember(wrapper.getMember(), role).queue(null, Helper::doNothing);
 						}
 					} catch (InsufficientPermissionException | HierarchyException ignore) {
 					}
 				} else {
-					ms.clearReactions().queue(s -> {
-						ms.getChannel().sendMessage(":warning: | Botão removido devido a cargo inexistente.").queue();
+					wrapper.getMessage().clearReactions().queue(s -> {
+						wrapper.getChannel().sendMessage(":warning: | Botão removido devido a cargo inexistente.").queue();
 						GuildConfig gc = GuildDAO.getGuildById(g.getId());
 
 						b.getParent().removeButton(b);
@@ -780,19 +782,19 @@ public class Helper {
 
 	public static void gatekeep(Message m, Role r) {
 		Pages.buttonize(m, new LinkedHashMap<>() {{
-			put("☑", (mb, ms) -> {
+			put(parseEmoji("☑"), wrapper -> {
 				try {
-					mb.getGuild().addRoleToMember(mb, r).queue();
+					wrapper.getMessage().getGuild().addRoleToMember(wrapper.getMember(), r).queue();
 				} catch (InsufficientPermissionException | HierarchyException ignore) {
 				}
 			});
-			put("\uD83D\uDEAA", (mb, ms) -> {
+			put(parseEmoji("\uD83D\uDEAA"), wrapper -> {
 				try {
-					mb.kick("Não aceitou as regras.").queue();
+					wrapper.getMember().kick("Não aceitou as regras.").queue();
 				} catch (InsufficientPermissionException | HierarchyException ignore) {
 				}
 			});
-		}}, false);
+		}}, ShiroInfo.USE_BUTTONS, false);
 	}
 
 	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2, boolean gatekeeper) {
@@ -837,7 +839,7 @@ public class Helper {
 
 		if (!gatekeeper) {
 			String id;
-			if (EmojiUtils.containsEmoji(s2)) {
+			if (parseEmoji(s2).isUnicode()) {
 				id = s2;
 			} else {
 				Emote e = Main.getShiroShards().getEmoteById(s2);
@@ -1885,25 +1887,25 @@ public class Helper {
 
 				Message m = getRandomEntry(hist);
 				Pages.buttonize(m, Collections.singletonMap(
-						egg.getId(), (mb, ms) -> {
+						parseEmoji(egg.getId()), wrapper -> {
 							if (finished.get()) return;
 
 							ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
 							for (int i = 0; i < prizes.size(); i++) {
 								Prize<?> prize = prizes.get(i);
-								neb.addField("Ovo " + (i + 1) + ":", prize.toString(mb.getUser()), true);
-								prize.award(mb.getUser());
+								neb.addField("Ovo " + (i + 1) + ":", prize.toString(wrapper.getUser()), true);
+								prize.award(wrapper.getUser());
 							}
 
 							wc.send(wmb.resetEmbeds()
-									.setContent(mb.getAsMention() + " encontrou o ovo de páscoa!")
+									.setContent(wrapper.getUser().getAsMention() + " encontrou o ovo de páscoa!")
 									.addEmbeds(neb.build())
 									.build());
 							wc.close();
 							found.set(true);
 							finished.set(true);
 						}
-				), false, 2, TimeUnit.MINUTES);
+				), ShiroInfo.USE_BUTTONS, false, 2, TimeUnit.MINUTES);
 
 				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 				if (gc.getDropChannel() == null) {
@@ -3394,5 +3396,16 @@ public class Helper {
 
 	public static String sign(int value) {
 		return value > 0 ? ("+" + value) : String.valueOf(value);
+	}
+
+	public static Emoji parseEmoji(String in) {
+		if (StringUtils.isNumeric(in)) {
+			Emote e = Main.getShiroShards().getEmoteById(in);
+			if (e == null) return Emoji.fromMarkdown("❓");
+
+			return Emoji.fromEmote(e);
+		}
+
+		return Emoji.fromMarkdown(in);
 	}
 }

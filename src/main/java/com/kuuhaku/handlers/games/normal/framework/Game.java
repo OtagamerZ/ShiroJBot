@@ -18,8 +18,9 @@
 
 package com.kuuhaku.handlers.games.normal.framework;
 
-import com.github.ygimenez.model.ThrowingBiConsumer;
-import net.dv8tion.jda.api.entities.Member;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -109,7 +110,7 @@ public abstract class Game {
 		return handler.getUserById(id);
 	}
 
-	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
+	public abstract Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons();
 
 	public boolean isOpen() {
 		return !closed;

@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Lottery;
 import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -77,7 +78,7 @@ public class LotteryCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + Helper.separate(cost) + " créditos, deseja confirmar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							acc.consumeCredit(cost, this.getClass());
 							AccountDAO.saveAccount(acc);
@@ -88,7 +89,7 @@ public class LotteryCommand implements Executable {
 							LotteryDAO.saveLotteryValue(lv);
 
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Bilhete comprado com sucesso!")).queue();
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

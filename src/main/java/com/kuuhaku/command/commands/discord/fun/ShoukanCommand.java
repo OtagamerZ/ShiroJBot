@@ -39,6 +39,7 @@ import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -150,8 +151,8 @@ public class ShoukanCommand implements Executable {
 
 					Main.getInfo().getConfirmationPending().put(author.getId(), true);
 					channel.sendMessage(u.getAsMention() + " você foi convidado a entrar no saguão DUO com " + author.getAsMention() + ", deseja aceitar?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-										if (mb.getId().equals(u.getId())) {
+							.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+										if (wrapper.getUser().getId().equals(u.getId())) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
@@ -164,7 +165,7 @@ public class ShoukanCommand implements Executable {
 											mm.joinLobby(rd, rq, channel);
 											channel.sendMessage("Você e " + u.getAsMention() + " entraram no saguão **DUO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue();
 										}
-									}), true, 1, TimeUnit.MINUTES,
+									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 									usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId()),
 									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 							));
@@ -201,10 +202,10 @@ public class ShoukanCommand implements Executable {
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage(other.getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar? (torneio)")
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									if (mb.getId().equals(other.getId())) {
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									if (wrapper.getUser().getId().equals(other.getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
-										if (Main.getInfo().gameInProgress(mb.getId())) {
+										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
 										} else if (Main.getInfo().gameInProgress(other.getId())) {
@@ -217,7 +218,7 @@ public class ShoukanCommand implements Executable {
 										s.delete().queue(null, Helper::doNothing);
 										t.start();
 									}
-								}), true, 1, TimeUnit.MINUTES,
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
@@ -304,9 +305,9 @@ public class ShoukanCommand implements Executable {
 				}
 				int finalBet = bet;
 				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									if (players.contains(mb.getUser())) {
-										if (Main.getInfo().gameInProgress(mb.getId())) {
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									if (players.contains(wrapper.getUser())) {
+										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
 										} else if (Main.getInfo().gameInProgress(author.getId())) {
@@ -314,9 +315,9 @@ public class ShoukanCommand implements Executable {
 											return;
 										}
 
-										if (!accepted.contains(mb.getId())) {
-											channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
-											accepted.add(mb.getId());
+										if (!accepted.contains(wrapper.getUser().getId())) {
+											channel.sendMessage(wrapper.getUser().getAsMention() + " aceitou a partida.").queue();
+											accepted.add(wrapper.getUser().getId());
 										}
 
 										if (accepted.size() == players.size()) {
@@ -327,7 +328,7 @@ public class ShoukanCommand implements Executable {
 											t.start();
 										}
 									}
-								}), true, 1, TimeUnit.MINUTES,
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> players.parallelStream().map(User::getId).anyMatch(i -> i.equals(u.getId())),
 								ms -> {
 									for (User player : players) {
@@ -339,10 +340,10 @@ public class ShoukanCommand implements Executable {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				int finalBet = bet;
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
-										if (Main.getInfo().gameInProgress(mb.getId())) {
+										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
 										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
@@ -355,7 +356,7 @@ public class ShoukanCommand implements Executable {
 										s.delete().queue(null, Helper::doNothing);
 										t.start();
 									}
-								}), true, 1, TimeUnit.MINUTES,
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));

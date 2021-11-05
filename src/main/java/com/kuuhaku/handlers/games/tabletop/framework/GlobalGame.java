@@ -18,7 +18,8 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -35,7 +36,7 @@ import com.kuuhaku.model.persistent.MatchRound;
 import com.kuuhaku.model.records.MatchInfo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -225,7 +226,7 @@ public abstract class GlobalGame {
 		return frames;
 	}
 
-	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
+	public abstract Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons();
 
 	public GameChannel getChannel() {
 		return channel;

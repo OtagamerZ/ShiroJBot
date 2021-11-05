@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.tournament;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -28,6 +29,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -75,7 +77,7 @@ public class TournamentCommand implements Executable {
 					);
 				}
 
-				pages.add(new Page(eb.build()));
+				pages.add(new InteractPage(eb.build()));
 			}
 
 			if (pages.isEmpty()) {
@@ -84,7 +86,7 @@ public class TournamentCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(
-					s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES)
+					s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
 			);
 			return;
 		}

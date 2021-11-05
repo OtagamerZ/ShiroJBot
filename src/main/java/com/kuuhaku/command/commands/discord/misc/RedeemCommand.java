@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -49,8 +50,8 @@ public class RedeemCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
-							if (m.getId().equals(author.getId())) {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							if (wrapper.getMember().getId().equals(author.getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								acc.setStreak(0);
 								acc.addGem();
@@ -59,7 +60,7 @@ public class RedeemCommand implements Executable {
 								s.delete().queue();
 								channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "shopg` para ver a loja de gemas.").queue();
 							}
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));
