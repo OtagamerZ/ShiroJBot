@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.ClanMember;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -75,7 +76,7 @@ public class DemoteClanMemberCommand implements Executable {
 								ClanDAO.saveClan(c);
 
 								s.delete().flatMap(d -> channel.sendMessage("✅ | Membro rebaixado com sucesso.")).queue();
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

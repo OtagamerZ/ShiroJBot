@@ -19,7 +19,8 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -92,26 +93,26 @@ public class PollCommand implements Executable {
 		eb.setFooter("Clique nas reações abaixo para votar", null);
 		eb.setColor(Color.decode("#2195f2"));
 
-		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> opts = null;
+		Function<Message, Map<Emoji, ThrowingConsumer<ButtonWrapper>>> opts = null;
 		if (options != null && options.size() > 10) {
 			channel.sendMessage(I18n.getString("err_poll-too-many-options")).queue();
 			return;
 		} else if (options != null) {
 			JSONArray finalOptions = options;
 			opts = m -> {
-				Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+				Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 				for (int i = 0; i < finalOptions.size(); i++) {
 					String emote = Helper.getRegionalIndicator(i);
-					buttons.put(emote, (mb, msg) -> {
-						if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
-						ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), emote);
+					buttons.put(Helper.parseEmoji(emote), wrapper -> {
+						if (ShiroInfo.getPolls().get(m.getId()).containsKey(wrapper.getUser().getId())) return;
+						ShiroInfo.getPolls().get(m.getId()).put(wrapper.getUser().getId(), emote);
 						eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
 						m.editMessageEmbeds(eb.build()).queue();
 					});
 				}
-				buttons.put("❌", (mb, msg) -> {
-					if (mb.getId().equals(author.getId())) msg.delete().queue();
-					ShiroInfo.getPolls().remove(msg.getId());
+				buttons.put(Helper.parseEmoji("❌"), (wrapper) -> {
+					if (wrapper.getUser().getId().equals(author.getId())) wrapper.getMessage().delete().queue();
+					ShiroInfo.getPolls().remove(wrapper.getMessage().getId());
 				});
 				return buttons;
 			};
@@ -127,33 +128,33 @@ public class PollCommand implements Executable {
 
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
-				put("\uD83D\uDC4D", (mb, msg) -> {
-					if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
-					ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D");
+				put(Helper.parseEmoji("\uD83D\uDC4D"), wrapper -> {
+					if (ShiroInfo.getPolls().get(m.getId()).containsKey(wrapper.getUser().getId())) return;
+					ShiroInfo.getPolls().get(m.getId()).put(wrapper.getUser().getId(), "\uD83D\uDC4D");
 					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
 					m.editMessageEmbeds(eb.build()).queue();
 				});
-				put("\uD83D\uDC4E", (mb, msg) -> {
-					if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
-					ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E");
+				put(Helper.parseEmoji("\uD83D\uDC4E"), wrapper -> {
+					if (ShiroInfo.getPolls().get(m.getId()).containsKey(wrapper.getUser().getId())) return;
+					ShiroInfo.getPolls().get(m.getId()).put(wrapper.getUser().getId(), "\uD83D\uDC4E");
 					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
 					m.editMessageEmbeds(eb.build()).queue();
 				});
-				put("❌", (mb, msg) -> {
-					if (mb.getId().equals(author.getId())) {
-						msg.delete().queue();
-						ShiroInfo.getPolls().remove(msg.getId());
+				put(Helper.parseEmoji("❌"), wrapper -> {
+					if (wrapper.getUser().getId().equals(author.getId())) {
+						wrapper.getMessage().delete().queue();
+						ShiroInfo.getPolls().remove(wrapper.getMessage().getId());
 					}
 				});
-			}}, false, (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
+			}}, ShiroInfo.USE_BUTTONS, false, (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 			ShiroInfo.getPolls().put(m.getId(), new HashMap<>());
 			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 		};
 
-		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> finalOpts = opts;
+		Function<Message, Map<Emoji, ThrowingConsumer<ButtonWrapper>>> finalOpts = opts;
 		Consumer<Message> sendOptions = m -> {
 			assert finalOpts != null;
-			Pages.buttonize(m, finalOpts.apply(m), false, (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
+			Pages.buttonize(m, finalOpts.apply(m), ShiroInfo.USE_BUTTONS, false, (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 			ShiroInfo.getPolls().put(m.getId(), new HashMap<>());
 			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), (int) gc.getPollTime(), TimeUnit.MILLISECONDS);
 		};

@@ -37,6 +37,7 @@ import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -76,7 +77,7 @@ public class ClearDeckCommand implements Executable {
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			File f = Helper.writeAndGet(sd.view(dk), "deque", "jpg");
 			channel.sendMessageEmbeds(eb.build()).addFile(f)
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								for (Champion c : dk.getChampions()) {
@@ -100,7 +101,7 @@ public class ClearDeckCommand implements Executable {
 								KawaiponDAO.saveDeck(dk);
 								s.delete().queue();
 								channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

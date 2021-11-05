@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -60,7 +61,7 @@ public class TierRankCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Map<String, Page> categories = new LinkedHashMap<>();
+		Map<Emoji, Page> categories = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		StringBuilder sb = new StringBuilder();
@@ -100,7 +101,7 @@ public class TierRankCommand implements Executable, Slashed {
 			eb.addField("Promoção de tier", prom.toString(), false)
 					.addField(Helper.VOID, sb.toString(), false)
 					.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
-			categories.put(Helper.getNumericEmoji(rt.getTier()), new Page(eb.build()));
+			categories.put(Emoji.fromMarkdown(Helper.getNumericEmoji(rt.getTier())), new InteractPage(eb.build()));
 		}
 
 		sb.setLength(0);
@@ -115,7 +116,7 @@ public class TierRankCommand implements Executable, Slashed {
 		eb.setDescription(sb.toString());
 
 		channel.sendMessageEmbeds(eb.build()).queue(s ->
-				Pages.categorize(s, categories, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -86,7 +87,7 @@ public class ClanDepositCommand implements Executable {
 							AccountDAO.saveAccount(acc);
 
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor depositado com sucesso.")).queue();
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -27,6 +28,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -74,11 +76,11 @@ public class SnipeCommand implements Executable {
 				eb.addField("(" + Helper.TIMESTAMP.formatted(msg.getTimeCreated().toEpochSecond()) + ") " + msg.getAuthor().getAsTag() + " disse:", StringUtils.abbreviate(msg.getContentRaw(), 100), false);
 			}
 
-			pages.add(new Page(eb.build()));
+			pages.add(new InteractPage(eb.build()));
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

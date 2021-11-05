@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
-import com.coder4.emoji.EmojiUtils;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
@@ -64,7 +63,7 @@ public class RoleButtonCommand implements Executable {
 		} else if (args[1].equals(Helper.CANCEL)) {
 			channel.sendMessage(I18n.getString("err_role-chooser-cannot-assign-role", Helper.CANCEL)).queue();
 			return;
-		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().isEmpty()) {
+		} else if (!Helper.parseEmoji(args[1]).isUnicode() && message.getEmotes().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_role-chooser-invalid emote")).queue();
 			return;
 		}

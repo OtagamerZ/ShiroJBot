@@ -62,6 +62,8 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
+	public static final boolean USE_BUTTONS = false;
+
 	//PUBLIC CONSTANTS
 	public static final String RESOURCES_URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources";
 	public static final String SHIRO_AVATAR = RESOURCES_URL + "/avatar/shiro/%s.png";

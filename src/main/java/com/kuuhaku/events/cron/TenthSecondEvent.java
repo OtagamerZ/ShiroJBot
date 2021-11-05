@@ -18,7 +18,6 @@
 
 package com.kuuhaku.events.cron;
 
-import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -125,19 +124,7 @@ public class TenthSecondEvent implements Job {
 						for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
 							MatchMakingRating mmr = p.getLeft().getKey();
 							if (p.getRight()) {
-								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
-										Pages.buttonize(s, Map.of(
-														Helper.CANCEL, (mb, ms) -> {
-															Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
-															ms.delete().queue();
-														}), false, 30, TimeUnit.MINUTES
-												, u -> u.getId().equals(mmr.getUid())
-												, ms -> {
-													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
-													ms.delete().queue();
-												}
-										)
-								);
+								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
 								Pair<Integer, TextChannel> newPair = Pair.of(
 										p.getLeft().getValue().getLeft() + 1,
 										p.getLeft().getValue().getRight()
@@ -221,19 +208,7 @@ public class TenthSecondEvent implements Job {
 						for (Pair<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>, Boolean> p : match) {
 							RankedDuo rd = p.getLeft().getKey();
 							if (p.getRight()) {
-								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
-										Pages.buttonize(s, Map.of(
-														Helper.CANCEL, (mb, ms) -> {
-															Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
-															ms.delete().queue();
-														}), false, 30, TimeUnit.MINUTES
-												, u -> Helper.equalsAny(u.getId(), rd.p1().getUid(), rd.p2().getUid())
-												, ms -> {
-													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
-													ms.delete().queue();
-												}
-										)
-								);
+								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
 								Pair<Integer, TextChannel> newPair = Pair.of(
 										p.getLeft().getValue().getLeft() + 1,
 										p.getLeft().getValue().getRight()
