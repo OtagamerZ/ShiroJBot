@@ -83,7 +83,7 @@ public class MyStatsCommand implements Executable, Slashed {
 			if (mb.getLevel() >= 5)
 				eb.setThumbnail(TagIcons.getLevelEmote(mb.getLevel()).getImageUrl());
 
-			categories.put(Emoji.fromMarkdown("\uD83D\uDD23"), new InteractPage(eb.build()));
+			categories.put(Helper.parseEmoji("\uD83D\uDD23"), new InteractPage(eb.build()));
 		}
 
 		eb.clear();
@@ -118,7 +118,7 @@ public class MyStatsCommand implements Executable, Slashed {
 			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false)
 					.setThumbnail(author.getEffectiveAvatarUrl());
 
-			categories.put(Emoji.fromMarkdown("\uD83D\uDCC8"), new InteractPage(eb.build()));
+			categories.put(Helper.parseEmoji("\uD83D\uDCC8"), new InteractPage(eb.build()));
 		}
 
 		eb.clear();
@@ -154,10 +154,10 @@ public class MyStatsCommand implements Executable, Slashed {
 
 			eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png");
 
-			categories.put(Emoji.fromMarkdown("\uD83D\uDCCB"), new InteractPage(eb.build()));
+			categories.put(Helper.parseEmoji("\uD83D\uDCCB"), new InteractPage(eb.build()));
 		}
 
-		channel.sendMessageEmbeds((MessageEmbed) categories.get(Emoji.fromMarkdown("\uD83D\uDD23")).getContent()).queue(s ->
+		channel.sendMessageEmbeds((MessageEmbed) categories.get(Helper.parseEmoji("\uD83D\uDD23")).getContent()).queue(s ->
 				Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
 		);
 	}

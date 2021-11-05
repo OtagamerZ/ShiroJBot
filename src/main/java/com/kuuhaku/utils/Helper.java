@@ -731,7 +731,7 @@ public class Helper {
 
 							gatekeep(msg, r);
 						} else {
-							buttons.put(Emoji.fromMarkdown(CANCEL), wrapper -> {
+							buttons.put(Helper.parseEmoji(CANCEL), wrapper -> {
 								if (wrapper.getUser().getId().equals(message.getAuthor())) {
 									GuildConfig conf = GuildDAO.getGuildById(g.getId());
 									for (ButtonChannel bc : conf.getButtonConfigs()) {
@@ -755,7 +755,7 @@ public class Helper {
 		for (Button b : jo) {
 			Role role = b.getRole(g);
 
-			buttons.put(Emoji.fromMarkdown(b.getEmote()), wrapper -> {
+			buttons.put(Helper.parseEmoji(b.getEmote()), wrapper -> {
 				if (role != null) {
 					try {
 						Member m = wrapper.getMember();
