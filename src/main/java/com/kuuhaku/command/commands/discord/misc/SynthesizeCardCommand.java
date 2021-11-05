@@ -19,7 +19,8 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -35,6 +36,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -107,18 +109,18 @@ public class SynthesizeCardCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.queue(s -> {
-								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
-								buttons.put(Helper.ACCEPT, (ms, mb) -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
+						Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
+						buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-									if (dk.getFields().size() == 3) {
-										int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
+							if (dk.getFields().size() == 3) {
+								int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
-										Account acc = AccountDAO.getAccount(author.getId());
-										acc.addCredit(change, this.getClass());
-										AccountDAO.saveAccount(acc);
+								Account acc = AccountDAO.getAccount(author.getId());
+								acc.addCredit(change, this.getClass());
+								AccountDAO.saveAccount(acc);
 
-										if (dk.getFields().size() == 3)
+								if (dk.getFields().size() == 3)
 											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
 
 										if (dp.getValue().isBlank()) {
@@ -150,10 +152,10 @@ public class SynthesizeCardCommand implements Executable {
 									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
 								});
 
-								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES,
-										u -> u.getId().equals(author.getId()),
-										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-								);
+						Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								u -> u.getId().equals(author.getId()),
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						);
 							}
 					);
 		} else {
@@ -187,8 +189,8 @@ public class SynthesizeCardCommand implements Executable {
 			channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.setEmbeds(eb.build())
 					.queue(s -> {
-								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
-								buttons.put(Helper.ACCEPT, (ms, mb) -> {
+								Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
+								buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
@@ -236,7 +238,8 @@ public class SynthesizeCardCommand implements Executable {
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 								});
-								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES,
+
+								Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 										u -> u.getId().equals(author.getId()),
 										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 								);

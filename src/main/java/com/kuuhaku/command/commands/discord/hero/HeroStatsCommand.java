@@ -28,6 +28,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -60,7 +61,7 @@ public class HeroStatsCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 		channel.sendMessageEmbeds(getEmbed(h)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
-							put("\uD83C\uDDF8", (mb, ms) -> {
+							put(Helper.parseEmoji("\uD83C\uDDF8"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -69,7 +70,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addStr();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put("\uD83C\uDDF7", (mb, ms) -> {
+							put(Helper.parseEmoji("\uD83C\uDDF7"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -78,7 +79,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addRes();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put("\uD83C\uDDE6", (mb, ms) -> {
+							put(Helper.parseEmoji("\uD83C\uDDE6"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -87,7 +88,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addAgi();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put("\uD83C\uDDFC", (mb, ms) -> {
+							put(Helper.parseEmoji("\uD83C\uDDFC"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -96,7 +97,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addWis();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put("\uD83C\uDDE8", (mb, ms) -> {
+							put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -105,16 +106,16 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addCon();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put(Helper.ACCEPT, (mb, ms) -> {
+							put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								KawaiponDAO.saveHero(h);
 
 								s.delete()
-										.flatMap(d -> ms.delete())
+										.flatMap(d -> wrapper.getMessage().delete())
 										.flatMap(m -> channel.sendMessage("Herói salvo com sucesso!"))
 										.queue(null, Helper::doNothing);
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 							});
-						}}, true, 1, TimeUnit.MINUTES,
+						}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

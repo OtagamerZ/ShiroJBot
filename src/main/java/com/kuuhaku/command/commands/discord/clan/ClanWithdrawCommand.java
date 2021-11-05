@@ -33,6 +33,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -93,7 +94,7 @@ public class ClanWithdrawCommand implements Executable {
 							boolean taxed = rawAmount != liquidAmount;
 							String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso." + taxMsg)).queue();
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

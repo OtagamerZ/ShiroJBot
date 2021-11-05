@@ -131,7 +131,7 @@ public class PruneCommand implements Executable {
 
 				if (p.size() > 0)
 					channel.sendMessage("Há " + p.size() + " mensage" + (p.size() == 1 ? "m fixada " : "ns fixadas ") + "neste canal, tem certeza que deseja limpá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+							.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										channel.createCopy()
 												.setPosition(channel.getPosition())
@@ -143,13 +143,13 @@ public class PruneCommand implements Executable {
 														channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, Helper::doNothing);
 													}
 												});
-									}), true, 1, TimeUnit.MINUTES,
+									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 									u -> u.getId().equals(author.getId()),
 									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 							));
 				else
 					channel.sendMessage("O canal será recriado, tem certeza que deseja limpá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+							.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										channel.createCopy()
 												.setPosition(channel.getPosition())
@@ -161,7 +161,7 @@ public class PruneCommand implements Executable {
 														channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, Helper::doNothing);
 													}
 												});
-									}), true, 1, TimeUnit.MINUTES,
+									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 									u -> u.getId().equals(author.getId()),
 									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 							));

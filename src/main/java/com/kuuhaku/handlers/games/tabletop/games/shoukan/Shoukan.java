@@ -23,7 +23,8 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
@@ -227,7 +228,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						previous.set(s.getGuild().getId());
 						ShiroInfo.getShiroEvents().addHandler(s.getGuild(), listener);
 					}
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					if (!shownHand.get()) {
 						shownHand.set(true);
 						h.showHand();
@@ -797,7 +798,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						if (m != null) m.delete().queue(null, Helper::doNothing);
 						return s;
 					});
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					moveLock = false;
 					if (!shownHand.get() && h != null) {
 						shownHand.set(true);
@@ -1963,8 +1964,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	@Override
-	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		ThrowingBiConsumer<Member, Message> skip = (mb, ms) -> {
+	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
+		ThrowingConsumer<ButtonWrapper> skip = wrapper -> {
 			User u = getCurrent();
 
 			AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
@@ -2098,24 +2099,24 @@ public class Shoukan extends GlobalGame implements Serializable {
 			oldState = new GameState(this);
 		};
 
-		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		if (getRound() < 1 || phase == Phase.ATTACK)
-			buttons.put("▶️", skip);
+			buttons.put(Helper.parseEmoji("▶️"), skip);
 		else {
-			buttons.put("▶️", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("▶️"), wrapper -> {
 				phase = Phase.ATTACK;
 				draw = false;
 				reroll = false;
 				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
-			buttons.put("⏩", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("⏩"), wrapper -> {
 				draw = false;
 				reroll = false;
-				skip.accept(mb, ms);
+				skip.accept(wrapper);
 			});
 		}
 		if (phase == Phase.PLAN) {
-			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
@@ -2157,7 +2158,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				remaining = h.getMaxCards() - h.getCards().size();
 				reportEvent(h, getCurrent().getName() + " puxou uma carta. (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")", true, false);
 			});
-			buttons.put("\uD83D\uDCE6", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("\uD83D\uDCE6"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
@@ -2183,7 +2184,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			});
 		}
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
-			buttons.put("\uD83D\uDD04", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("\uD83D\uDD04"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
@@ -2196,7 +2197,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				reportEvent(h, getCurrent().getName() + " rolou novamente as cartas na mão!", true, false);
 			});
 		if (hands.get(getCurrentSide()).getHp() < hands.get(getCurrentSide()).getBaseHp() / 3 && hands.get(getCurrentSide()).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
-			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("\uD83E\uDDE7"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
@@ -2208,7 +2209,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				reportEvent(h, getCurrent().getName() + " executou um saque do destino!", true, false);
 			});
 		if (phase == Phase.PLAN && tourMatch == null)
-			buttons.put("\uD83E\uDD1D", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("\uD83E\uDD1D"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode pedir empate na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
@@ -2325,7 +2326,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			});
 		if (getRound() > 8)
-			buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+			buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 				if (getCustom() == null) {
 					getHistory().setWinner(getNextSide());
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
@@ -2852,9 +2853,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			channel.sendMessage("Deseja baixar o replay desta partida?")
 					.queue(s -> Pages.buttonize(s, Map.of(
-									Helper.ACCEPT, (mb, ms) -> {
-										ms.delete().queue(null, Helper::doNothing);
-										ms.getChannel().sendMessage("<a:loading:697879726630502401> Aguardando conexão com API...")
+									Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+										wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										wrapper.getChannel().sendMessage("<a:loading:697879726630502401> Aguardando conexão com API...")
 												.flatMap(m -> {
 													while (!Main.getInfo().isEncoderConnected()) {
 														try {
@@ -2884,11 +2885,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 																.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
 													}
 
-													m.editMessage(mb.getUser().getAsMention())
+													m.editMessage(wrapper.getUser().getAsMention())
 															.setEmbeds(eb.build())
 															.queue(null, Helper::doNothing);
 												});
-									}), true, 1, TimeUnit.MINUTES,
+									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> hands.values().parallelStream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
 					));
 		}

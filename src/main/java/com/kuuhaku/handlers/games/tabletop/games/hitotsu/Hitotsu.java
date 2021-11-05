@@ -19,8 +19,10 @@
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -94,7 +96,7 @@ public class Hitotsu extends Game {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = msg;
 									seats.get(getCurrent().getId()).showHand();
-									Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}
@@ -137,7 +139,7 @@ public class Hitotsu extends Game {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
 					seats.get(getCurrent().getId()).showHand();
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -295,7 +297,7 @@ public class Hitotsu extends Game {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 		return false;
 	}
@@ -316,7 +318,7 @@ public class Hitotsu extends Game {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
-					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 
 		g2d.dispose();
@@ -377,9 +379,9 @@ public class Hitotsu extends Game {
 	}
 
 	@Override
-	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-		buttons.put("\uD83D\uDCCB", (mb, ms) -> {
+	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
+		buttons.put(Helper.parseEmoji("\uD83D\uDCCB"), wrapper -> {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Suas cartas");
 
@@ -405,14 +407,14 @@ public class Hitotsu extends Game {
 				}
 
 				eb.setDescription(sb.toString());
-				pages.add(new Page(eb.build()));
+				pages.add(new InteractPage(eb.build()));
 			}
 
-			mb.getUser().openPrivateChannel()
+			wrapper.getUser().openPrivateChannel()
 					.flatMap(s -> s.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
-					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));
+					.queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES));
 		});
-		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
+		buttons.put(Helper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
 
 			User u = getCurrent();
@@ -423,10 +425,10 @@ public class Hitotsu extends Game {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						seats.get(getCurrent().getId()).showHand();
-						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
 		});
-		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, Helper::doNothing);
 			getBoard().leaveGame();
 			resetTimer();
@@ -446,7 +448,7 @@ public class Hitotsu extends Game {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							seats.get(getCurrent().getId()).showHand();
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		});

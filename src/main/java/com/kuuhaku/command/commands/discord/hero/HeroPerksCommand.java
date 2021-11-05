@@ -29,6 +29,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -79,7 +80,7 @@ public class HeroPerksCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 		channel.sendMessageEmbeds(getEmbed(perks)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
-							put("1️⃣", (mb, ms) -> {
+							put(Helper.parseEmoji("1️⃣"), wrapper -> {
 								if (h.getAvailablePerks() <= 0) {
 									channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
 									return;
@@ -88,7 +89,7 @@ public class HeroPerksCommand implements Executable {
 								choosePerk(h, s, perks.get(0));
 							});
 							if (perks.size() > 1)
-								put("2️⃣", (mb, ms) -> {
+								put(Helper.parseEmoji("2️⃣"), wrapper -> {
 									if (h.getAvailablePerks() <= 0) {
 										channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
 										return;
@@ -97,7 +98,7 @@ public class HeroPerksCommand implements Executable {
 									choosePerk(h, s, perks.get(1));
 								});
 							if (perks.size() > 2)
-								put("3️⃣", (mb, ms) -> {
+								put(Helper.parseEmoji("3️⃣"), wrapper -> {
 									if (h.getAvailablePerks() <= 0) {
 										channel.sendMessage("❌ | Você não tem mais espaço para perks.").queue();
 										return;
@@ -105,7 +106,7 @@ public class HeroPerksCommand implements Executable {
 
 									choosePerk(h, s, perks.get(2));
 								});
-						}}, true, 1, TimeUnit.MINUTES,
+						}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));
@@ -113,7 +114,7 @@ public class HeroPerksCommand implements Executable {
 
 	private void choosePerk(Hero h, Message msg, Perk perk) {
 		msg.getChannel().sendMessage("Você selecionou a perk `" + perk + "`, deseja confirmar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							h.getPerks().add(perk);
 							KawaiponDAO.saveHero(h);
 
@@ -122,7 +123,7 @@ public class HeroPerksCommand implements Executable {
 									.flatMap(d -> msg.delete())
 									.queue();
 							Main.getInfo().getConfirmationPending().remove(h.getUid());
-						}), true, 1, TimeUnit.MINUTES,
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(h.getUid()),
 						ms -> Main.getInfo().getConfirmationPending().remove(h.getUid())
 				));

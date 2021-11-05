@@ -26,6 +26,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -50,12 +51,12 @@ public class CreateTournamentCommand implements Executable {
 
 		Tournament t = new Tournament(argsAsText);
 		channel.sendMessage("Você está prestes a criar um novo torneio chamado `" + argsAsText + "`, deseja confirmar?").queue(
-				s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							TournamentDAO.save(t);
 
 							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage("✅ | Torneio criado com sucesso (para iniciá-lo use `" + prefix + "liberarchaves`)!").queue();
-						}), true, 1, TimeUnit.MINUTES
+						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 						, u -> u.getId().equals(author.getId())
 				), Helper::doNothing
 		);

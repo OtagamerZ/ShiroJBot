@@ -261,8 +261,8 @@ public class AuctionCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Esta carta será vendida para quem oferecer o maior valor. Deseja mesmo leiloá-la?")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-								if (mb.getId().equals(author.getId())) {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+								if (wrapper.getUser().getId().equals(author.getId())) {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
 												Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -273,7 +273,7 @@ public class AuctionCommand implements Executable {
 									s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
 									ShiroInfo.getShiroEvents().addHandler(guild, listener);
 								}
-							}), true, 1, TimeUnit.MINUTES,
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

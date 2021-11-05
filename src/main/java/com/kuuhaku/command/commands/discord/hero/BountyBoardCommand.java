@@ -19,7 +19,8 @@
 package com.kuuhaku.command.commands.discord.hero;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -35,6 +36,7 @@ import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -74,7 +76,7 @@ public class BountyBoardCommand implements Executable {
 		List<BountyQuest> pool = Helper.getRandomN(BountyQuestDAO.getBounties(), 3, 1, seed);
 		pool.add(Helper.getRandomEntry(BountyQuestDAO.getTraining()));
 
-		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			BountyQuest q = pool.get(i);
 			BountyInfo info = q.getInfo(h, seed);
@@ -116,7 +118,7 @@ public class BountyBoardCommand implements Executable {
 
 			eb.addField("Possíveis perigos", sb.toString(), true);
 
-			buttons.put(Helper.getFancyNumber(i + 1), (mb, ms) -> {
+			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
 				if (h.getEnergy() < 1) {
 					channel.sendMessage("❌ | Seu herói está cansado (sem energia suficiente).").queue();
 					return;
@@ -128,25 +130,24 @@ public class BountyBoardCommand implements Executable {
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES)) + ")")
 						.setEmbeds(eb.build())
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mem, msg) -> {
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
 									h.setQuest(q, seed);
 									KawaiponDAO.saveHero(h);
 
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									s.delete()
-											.flatMap(d -> ms.delete())
+											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Herói enviado com sucesso!"))
 											.queue();
-								}), true, 1, TimeUnit.MINUTES,
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(h.getUid()),
 								m -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			});
 		}
 
-
 		channel.sendMessageEmbeds(getEmbed(h, pool, seed)).queue(s ->
-				Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 

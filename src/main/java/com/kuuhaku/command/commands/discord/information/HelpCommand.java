@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -60,7 +61,7 @@ public class HelpCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		Map<String, Page> pages = new LinkedHashMap<>();
+		Map<Emoji, Page> categories = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -84,7 +85,7 @@ public class HelpCommand implements Executable {
 			eb.setFooter(ShiroInfo.getFullName(), null);
 			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
 
-			pages.put(Helper.HOME, new Page(eb.build()));
+			categories.put(Emoji.fromMarkdown(Helper.HOME), new InteractPage(eb.build()));
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new ColorlessEmbedBuilder();
@@ -108,7 +109,7 @@ public class HelpCommand implements Executable {
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n\n" + cmds, false);
 				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
-				pages.put(cat.getEmoteId(), new Page(ceb.build()));
+				categories.put(Emoji.fromMarkdown(cat.getEmoteId()), new InteractPage(ceb.build()));
 			}
 
 			EmbedBuilder ceb = new ColorlessEmbedBuilder()
@@ -123,9 +124,9 @@ public class HelpCommand implements Executable {
 					.addField(Helper.VOID, I18n.getString("str_loan-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_placeholder-tip", prefix), false);
 
-			pages.put("684039810079522846", new Page(ceb.build()));
+			categories.put(Emoji.fromMarkdown("684039810079522846"), new InteractPage(ceb.build()));
 
-			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
+			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
 			return;
 		} else if (args.length == 0) {
 			eb.setTitle(I18n.getString(STR_COMMAND_LIST_TITLE));
