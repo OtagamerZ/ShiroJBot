@@ -53,7 +53,7 @@ public class LeaveClanCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		if (c.getMembers().size() == 1) {
 			channel.sendMessage("Tem certeza que deseja abandonar o clã? (ele será desfeito por você ser o último membro)")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								ClanDAO.removeClan(c);
@@ -65,7 +65,7 @@ public class LeaveClanCommand implements Executable {
 					));
 		} else {
 			channel.sendMessage("Tem certeza que deseja abandonar o clã? (caso seja líder, o membro com posto mais alto assumirá a liderança)")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								c.leave(author.getId());

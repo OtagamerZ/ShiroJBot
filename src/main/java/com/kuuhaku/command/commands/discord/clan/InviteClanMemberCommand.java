@@ -68,7 +68,7 @@ public class InviteClanMemberCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(usr.getAsMention() + ", você foi convidado(a) a juntar-se ao clã " + c.getName() + ", deseja aceitar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							c.invite(usr, author);

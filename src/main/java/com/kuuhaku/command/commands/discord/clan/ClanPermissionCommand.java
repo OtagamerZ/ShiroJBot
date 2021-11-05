@@ -110,7 +110,7 @@ public class ClanPermissionCommand implements Executable {
 			if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
 			ma.queue(s -> Pages.buttonize(s,
 					new LinkedHashMap<>() {{
-						put(Helper.getNumericEmoji(1), (mb, ms) -> {
+						put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.ALTER_HIERARCHY);
 							if (!enabled) p.add(ClanPermission.ALTER_HIERARCHY);
@@ -118,9 +118,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
-						put(Helper.getNumericEmoji(2), (mb, ms) -> {
+						put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.KICK);
 							if (!enabled) p.add(ClanPermission.KICK);
@@ -128,9 +128,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
-						put(Helper.getNumericEmoji(3), (mb, ms) -> {
+						put(Helper.parseEmoji(Helper.getNumericEmoji(3)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.WITHDRAW);
 							if (!enabled) p.add(ClanPermission.WITHDRAW);
@@ -138,9 +138,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
-						put(Helper.getNumericEmoji(4), (mb, ms) -> {
+						put(Helper.parseEmoji(Helper.getNumericEmoji(4)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.INVITE);
 							if (!enabled) p.add(ClanPermission.INVITE);
@@ -148,7 +148,7 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							ms.editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 						});
 					}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 					u -> u.getId().equals(author.getId()),
