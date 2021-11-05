@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class RankDAO {
 
 	@SuppressWarnings("unchecked")
-	public static List<String> getLevelRanking(String guild) {
+	public static List<String> getLevelRanking(String guild, int page) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q;
@@ -44,6 +44,7 @@ public class RankDAO {
 						WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
 					) x
 					ORDER BY index
+					LIMIT 15 OFFSET 15 * :page
 					""");
 		} else {
 			q = em.createNativeQuery("""
@@ -60,8 +61,10 @@ public class RankDAO {
 						AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
 					) x
 					ORDER BY index
+					LIMIT 15 OFFSET 15 * :page
 					""");
 			q.setParameter("guild", guild);
+			q.setParameter("page", page);
 		}
 
 		try {
@@ -74,7 +77,7 @@ public class RankDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<String> getCreditRanking() {
+	public static List<String> getCreditRanking(int page) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
@@ -89,7 +92,9 @@ public class RankDAO {
 					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
 				) x
 				ORDER BY index
+				LIMIT 15 OFFSET 15 * :page
 				""");
+		q.setParameter("page", page);
 
 		try {
 			return ((List<Object[]>) q.getResultList())
@@ -101,7 +106,7 @@ public class RankDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<String> getCardRanking() {
+	public static List<String> getCardRanking(int page) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
@@ -121,7 +126,9 @@ public class RankDAO {
 					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
 				) x
 				ORDER BY index
+				LIMIT 15 OFFSET 15 * :page
 				""");
+		q.setParameter("page", page);
 
 		try {
 			return ((List<Object[]>) q.getResultList())
@@ -133,7 +140,7 @@ public class RankDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<String> getVoiceRanking(String guild) {
+	public static List<String> getVoiceRanking(String guild, int page) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
@@ -149,8 +156,10 @@ public class RankDAO {
 				     AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
 				) x
 				ORDER BY index
+				LIMIT 15 OFFSET 15 * :page
 				""");
 		q.setParameter("guild", guild);
+		q.setParameter("page", page);
 
 		try {
 			return ((List<Object[]>) q.getResultList())
