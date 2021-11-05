@@ -3228,7 +3228,7 @@ public class Helper {
 	public static String getUsername(String id) {
 		User u = Main.getInfo().getUserByID(id);
 
-		return u == null ? LogDAO.getUsername(id) : u.getName();
+		return u == null ? UsernameDAO.getUsername(id) : u.getName();
 	}
 
 	public static boolean notNull(Object... objs) {

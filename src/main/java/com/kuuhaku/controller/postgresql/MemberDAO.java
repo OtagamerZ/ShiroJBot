@@ -140,10 +140,7 @@ public class MemberDAO {
 							 SELECT m.uid
 								  , row_number() OVER (ORDER BY m.xp DESC) AS row
 							 FROM Member m
-									  INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-												  FROM logs l
-												  WHERE l.uid <> '') l ON l.uid = m.uid
-									  INNER JOIN guildconfig gc ON gc.guildid = m.sid
+							 INNER JOIN guildconfig gc ON gc.guildid = m.sid
 							 WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = m.uid)
 						 ) x
 					WHERE x.uid = :mid
@@ -155,10 +152,7 @@ public class MemberDAO {
 							 SELECT m.uid
 								  , row_number() OVER (ORDER BY m.xp DESC) AS row
 							 FROM Member m
-									  INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-												  FROM logs l
-												  WHERE l.uid <> '') l ON l.uid = m.uid
-									  INNER JOIN guildconfig gc ON gc.guildid = m.sid
+							 INNER JOIN guildconfig gc ON gc.guildid = m.sid
 							 WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = m.uid)
 							   AND m.sid = :guild
 						 ) x
