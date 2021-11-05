@@ -101,7 +101,7 @@ public class TierRankCommand implements Executable, Slashed {
 			eb.addField("Promoção de tier", prom.toString(), false)
 					.addField(Helper.VOID, sb.toString(), false)
 					.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
-			categories.put(Emoji.fromMarkdown(Helper.getNumericEmoji(rt.getTier())), new InteractPage(eb.build()));
+			categories.put(Helper.parseEmoji(Helper.getNumericEmoji(rt.getTier())), new InteractPage(eb.build()));
 		}
 
 		sb.setLength(0);
