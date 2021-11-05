@@ -35,11 +35,9 @@ public class RankDAO {
 					SELECT x.v
 					     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 					FROM (
-						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
+						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || u.name || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
 						FROM member mb
-						INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-						            FROM logs l
-						            WHERE l.uid <> '') l ON l.uid = mb.uid
+						INNER JOIN "GetUsername"(mb.uid) u ON u.uid = mb.uid
 						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 						WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
 					) x
@@ -51,11 +49,9 @@ public class RankDAO {
 					SELECT x.v
 					     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 					FROM (
-						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ')' AS v
+						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || u.name || ' (Level ' || mb.level || ')' AS v
 						FROM member mb
-						INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-						            FROM logs l
-						            WHERE l.uid <> '') l ON l.uid = mb.uid
+						INNER JOIN "GetUsername"(mb.uid) u ON u.uid = mb.uid
 						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 						WHERE gc.guildid = :guild
 						AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
@@ -64,8 +60,8 @@ public class RankDAO {
 					LIMIT 15 OFFSET 15 * :page
 					""");
 			q.setParameter("guild", guild);
-			q.setParameter("page", page);
 		}
+		q.setParameter("page", page);
 
 		try {
 			return ((List<Object[]>) q.getResultList())
@@ -84,11 +80,9 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-					SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
+					SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || u.name || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
 					FROM account a
-					INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-					            FROM logs l
-					            WHERE l.uid <> '') l ON l.uid = a.uid
+					INNER JOIN "GetUsername"(a.uid) u ON u.uid = a.uid
 					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
 				) x
 				ORDER BY index
@@ -113,11 +107,9 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-					SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)' AS v
+					SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || u.name || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)' AS v
 					FROM kawaipon k
-					INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-					            FROM logs l
-					            WHERE l.uid <> '') l ON l.uid = k.uid
+					INNER JOIN "GetUsername"(k.uid) u ON u.uid = k.uid
 					INNER JOIN (SELECT kc.kawaipon_id
 					                 , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
 					                 , count(1) FILTER (WHERE kc.foil)     AS foil
@@ -147,11 +139,9 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-				     SELECT row_number() OVER (ORDER BY vt.time DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(vt.time) || ')' AS v
+				     SELECT row_number() OVER (ORDER BY vt.time DESC) || ' - ' || u.name || ' (' || to_duration(vt.time) || ')' AS v
 				     FROM voicetime vt
-				     INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-				                 FROM logs l
-				                 WHERE l.uid <> '') l ON l.uid = vt.uid
+				     INNER JOIN "GetUsername"(vt.uid) u ON u.uid = vt.uid
 				     WHERE vt.sid = :guild
 				     AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
 				) x
