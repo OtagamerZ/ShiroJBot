@@ -69,7 +69,7 @@ public class PromoteClanMemberCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Tem certeza que deseja promover o membro " + Helper.getUsername(cm.getUid()) + "?")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								c.promote(cm.getUid(), author);
