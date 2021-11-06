@@ -32,7 +32,7 @@ public class RankDAO {
         Query q;
         if (guild == null) {
             q = em.createNativeQuery("""
-                    SELECT row_number() OVER () || x.v AS v
+                    SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                     FROM (
                              SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
                              FROM member mb
@@ -44,7 +44,7 @@ public class RankDAO {
                     """);
         } else {
             q = em.createNativeQuery("""
-                    SELECT row_number() OVER () || x.v AS v
+                    SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                     FROM (
                              SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
                              FROM member mb
@@ -73,7 +73,7 @@ public class RankDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createNativeQuery("""
-                SELECT row_number() OVER () || x.v AS v
+                SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                 FROM (
                          SELECT ' - ' || "GetUsername"(a.uid) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
                          FROM account a
@@ -98,7 +98,7 @@ public class RankDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createNativeQuery("""
-                SELECT row_number() OVER () || x.v AS v
+                SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                 FROM (
                          SELECT ' - ' || "GetUsername"(k.uid) || ' (' || kc.foil || ' cromadas e ' || kc.normal || ' normais)' AS v
                          FROM kawaipon k
