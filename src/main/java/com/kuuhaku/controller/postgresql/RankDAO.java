@@ -35,9 +35,8 @@ public class RankDAO {
 					SELECT x.v
 					     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 					FROM (
-						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || u.name || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
+						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || "GetUsername"(mb.uid).name || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
 						FROM member mb
-						INNER JOIN "GetUsername"(mb.uid) u ON u.uid = mb.uid
 						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 						WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
 					) x
@@ -49,9 +48,8 @@ public class RankDAO {
 					SELECT x.v
 					     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 					FROM (
-						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || u.name || ' (Level ' || mb.level || ')' AS v
+						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || "GetUsername"(mb.uid).name || ' (Level ' || mb.level || ')' AS v
 						FROM member mb
-						INNER JOIN "GetUsername"(mb.uid) u ON u.uid = mb.uid
 						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 						WHERE gc.guildid = :guild
 						AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
@@ -80,10 +78,9 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-					SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || u.name || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
+					SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || "GetUsername"(a.uid).name || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
 					FROM account a
-					INNER JOIN "GetUsername"(a.uid) u ON u.uid = a.uid
-					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
+					WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
 				) x
 				ORDER BY index
 				LIMIT 15 OFFSET 15 * :page
@@ -107,9 +104,8 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-					SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || u.name || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)' AS v
+					SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || "GetUsername"(k.uid).name || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)' AS v
 					FROM kawaipon k
-					INNER JOIN "GetUsername"(k.uid) u ON u.uid = k.uid
 					INNER JOIN (SELECT kc.kawaipon_id
 					                 , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
 					                 , count(1) FILTER (WHERE kc.foil)     AS foil
@@ -139,9 +135,8 @@ public class RankDAO {
 				SELECT x.v
 				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
 				FROM (
-				     SELECT row_number() OVER (ORDER BY vt.time DESC) || ' - ' || u.name || ' (' || to_duration(vt.time) || ')' AS v
+				     SELECT row_number() OVER (ORDER BY vt.time DESC) || ' - ' || "GetUsername"(vt.uid).name || ' (' || to_duration(vt.time) || ')' AS v
 				     FROM voicetime vt
-				     INNER JOIN "GetUsername"(vt.uid) u ON u.uid = vt.uid
 				     WHERE vt.sid = :guild
 				     AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
 				) x
