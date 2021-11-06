@@ -34,11 +34,15 @@ public class RankDAO {
             q = em.createNativeQuery("""
                     SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                     FROM (
-                             SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
-                             FROM member mb
-                                      INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-                             WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
-                             ORDER BY mb.xp DESC
+                             SELECT *
+                             FROM (
+                                      SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
+                                      FROM member mb
+                                               INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+                                      WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
+                                      ORDER BY mb.xp DESC
+                                  ) x
+                             WHERE x.v IS NOT NULL
                              LIMIT 15 OFFSET 15 * :page
                          ) x
                     """);
@@ -46,12 +50,16 @@ public class RankDAO {
             q = em.createNativeQuery("""
                     SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                     FROM (
-                             SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
-                             FROM member mb
-                                      INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-                             WHERE gc.guildid = :guild
-                               AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
-                             ORDER BY mb.xp DESC
+                             SELECT *
+                             FROM (
+                                      SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
+                                      FROM member mb
+                                               INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+                                      WHERE gc.guildid = :guild
+                                        AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
+                                      ORDER BY mb.xp DESC
+                                  ) x
+                             WHERE x.v IS NOT NULL
                              LIMIT 15 OFFSET 15 * :page
                          ) x
                     """);
@@ -75,10 +83,14 @@ public class RankDAO {
         Query q = em.createNativeQuery("""
                 SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                 FROM (
-                         SELECT ' - ' || "GetUsername"(a.uid) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
-                         FROM account a
-                         WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
-                         ORDER BY a.balance DESC
+                         SELECT *
+                         FROM (
+                                  SELECT ' - ' || "GetUsername"(a.uid) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
+                                  FROM account a
+                                  WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
+                                  ORDER BY a.balance DESC
+                              ) x
+                         WHERE x.v IS NOT NULL
                          LIMIT 15 OFFSET 15 * :page
                      ) x
                 """);
@@ -100,15 +112,20 @@ public class RankDAO {
         Query q = em.createNativeQuery("""
                 SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                 FROM (
-                         SELECT ' - ' || "GetUsername"(k.uid) || ' (' || kc.foil || ' cromadas e ' || kc.normal || ' normais)' AS v
-                         FROM kawaipon k
-                                  INNER JOIN (SELECT kc.kawaipon_id
-                                                   , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
-                                                   , count(1) FILTER (WHERE kc.foil)         AS foil
-                                              FROM kawaiponcard kc
-                                              GROUP BY kc.kawaipon_id) kc on k.uid = kc.kawaipon_id
-                             AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
-                         ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
+                         SELECT *
+                         FROM (
+                                  SELECT ' - ' || "GetUsername"(k.uid) || ' (' || kc.foil || ' cromadas e ' || kc.normal ||
+                                         ' normais)' AS v
+                                  FROM kawaipon k
+                                           INNER JOIN (SELECT kc.kawaipon_id
+                                                            , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
+                                                            , count(1) FILTER (WHERE kc.foil)         AS foil
+                                                       FROM kawaiponcard kc
+                                                       GROUP BY kc.kawaipon_id) kc on k.uid = kc.kawaipon_id
+                                      AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
+                                  ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
+                              ) x
+                         WHERE x.v IS NOT NULL
                          LIMIT 15 OFFSET 15 * :page
                      ) x
                 """);
@@ -130,11 +147,15 @@ public class RankDAO {
         Query q = em.createNativeQuery("""
                 SELECT (row_number() OVER () + 15 * :page) || x.v AS v
                 FROM (
-                         SELECT ' - ' || "GetUsername"(vt.uid) || ' (' || to_duration(vt.time) || ')' AS v
-                         FROM voicetime vt
-                         WHERE vt.sid = :guild
-                           AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
-                         ORDER BY vt.time DESC
+                         SELECT *
+                         FROM (
+                                  SELECT ' - ' || "GetUsername"(vt.uid) || ' (' || to_duration(vt.time) || ')' AS v
+                                  FROM voicetime vt
+                                  WHERE vt.sid = :guild
+                                    AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
+                                  ORDER BY vt.time DESC
+                              ) x
+                         WHERE x.v IS NOT NULL
                          LIMIT 15 OFFSET 15 * :page
                      ) x
                 """);
