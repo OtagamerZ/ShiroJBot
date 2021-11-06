@@ -25,133 +25,128 @@ import java.util.stream.Collectors;
 
 public class RankDAO {
 
-	@SuppressWarnings("unchecked")
-	public static List<String> getLevelRanking(String guild, int page) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<String> getLevelRanking(String guild, int page) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q;
-		if (guild == null) {
-			q = em.createNativeQuery("""
-					SELECT x.v
-					     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
-					FROM (
-						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || "GetUsername"(mb.uid).name || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
-						FROM member mb
-						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-						WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
-					) x
-					ORDER BY index
-					LIMIT 15 OFFSET 15 * :page
-					""");
-		} else {
-			q = em.createNativeQuery("""
-					SELECT x.v
-					     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
-					FROM (
-						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || "GetUsername"(mb.uid).name || ' (Level ' || mb.level || ')' AS v
-						FROM member mb
-						INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-						WHERE gc.guildid = :guild
-						AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
-					) x
-					ORDER BY index
-					LIMIT 15 OFFSET 15 * :page
-					""");
-			q.setParameter("guild", guild);
-		}
-		q.setParameter("page", page);
+        Query q;
+        if (guild == null) {
+            q = em.createNativeQuery("""
+                    SELECT row_number() OVER () || x.v AS v
+                    FROM (
+                             SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
+                             FROM member mb
+                                      INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+                             WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
+                             ORDER BY mb.xp DESC
+                             LIMIT 15 OFFSET 15 * :page
+                         ) x
+                    """);
+        } else {
+            q = em.createNativeQuery("""
+                    SELECT row_number() OVER () || x.v AS v
+                    FROM (
+                             SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || mb.level || ')' AS v
+                             FROM member mb
+                                      INNER JOIN guildconfig gc ON gc.guildid = mb.sid
+                             WHERE gc.guildid = :guild
+                               AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
+                             ORDER BY mb.xp DESC
+                             LIMIT 15 OFFSET 15 * :page
+                         ) x
+                    """);
+            q.setParameter("guild", guild);
+        }
+        q.setParameter("page", page);
 
-		try {
-			return ((List<Object[]>) q.getResultList())
-					.stream().map(o -> (String) o[0])
-					.collect(Collectors.toList());
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return ((List<Object>) q.getResultList()).stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.toList());
+        } finally {
+            em.close();
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public static List<String> getCreditRanking(int page) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<String> getCreditRanking(int page) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT x.v
-				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
-				FROM (
-					SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || "GetUsername"(a.uid).name || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
-					FROM account a
-					WHERE NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
-				) x
-				ORDER BY index
-				LIMIT 15 OFFSET 15 * :page
-				""");
-		q.setParameter("page", page);
+        Query q = em.createNativeQuery("""
+                SELECT row_number() OVER () || x.v AS v
+                FROM (
+                         SELECT ' - ' || "GetUsername"(a.uid) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
+                         FROM account a
+                         WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
+                         ORDER BY a.balance DESC
+                         LIMIT 15 OFFSET 15 * :page
+                     ) x
+                """);
+        q.setParameter("page", page);
 
-		try {
-			return ((List<Object[]>) q.getResultList())
-					.stream().map(o -> (String) o[0])
-					.collect(Collectors.toList());
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return ((List<Object>) q.getResultList()).stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.toList());
+        } finally {
+            em.close();
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public static List<String> getCardRanking(int page) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<String> getCardRanking(int page) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT x.v
-				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
-				FROM (
-					SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || "GetUsername"(k.uid).name || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)' AS v
-					FROM kawaipon k
-					INNER JOIN (SELECT kc.kawaipon_id
-					                 , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
-					                 , count(1) FILTER (WHERE kc.foil)     AS foil
-					            FROM kawaiponcard kc
-					            GROUP BY kc.kawaipon_id) kc on k.uid = kc.kawaipon_id
-					AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
-				) x
-				ORDER BY index
-				LIMIT 15 OFFSET 15 * :page
-				""");
-		q.setParameter("page", page);
+        Query q = em.createNativeQuery("""
+                SELECT row_number() OVER () || x.v AS v
+                FROM (
+                         SELECT ' - ' || "GetUsername"(k.uid) || ' (' || kc.foil || ' cromadas e ' || kc.normal || ' normais)' AS v
+                         FROM kawaipon k
+                                  INNER JOIN (SELECT kc.kawaipon_id
+                                                   , count(1) FILTER (WHERE kc.foil = FALSE) AS normal
+                                                   , count(1) FILTER (WHERE kc.foil)         AS foil
+                                              FROM kawaiponcard kc
+                                              GROUP BY kc.kawaipon_id) kc on k.uid = kc.kawaipon_id
+                             AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = k.uid)
+                         ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
+                         LIMIT 15 OFFSET 15 * :page
+                     ) x
+                """);
+        q.setParameter("page", page);
 
-		try {
-			return ((List<Object[]>) q.getResultList())
-					.stream().map(o -> (String) o[0])
-					.collect(Collectors.toList());
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return ((List<Object>) q.getResultList()).stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.toList());
+        } finally {
+            em.close();
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public static List<String> getVoiceRanking(String guild, int page) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<String> getVoiceRanking(String guild, int page) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT x.v
-				     , CAST(split_part(x.v, ' - ', 1) AS INT) AS index
-				FROM (
-				     SELECT row_number() OVER (ORDER BY vt.time DESC) || ' - ' || "GetUsername"(vt.uid).name || ' (' || to_duration(vt.time) || ')' AS v
-				     FROM voicetime vt
-				     WHERE vt.sid = :guild
-				     AND NOT EXISTS (SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
-				) x
-				ORDER BY index
-				LIMIT 15 OFFSET 15 * :page
-				""");
-		q.setParameter("guild", guild);
-		q.setParameter("page", page);
+        Query q = em.createNativeQuery("""
+                SELECT (row_number() OVER () + 15 * :page) || x.v AS v
+                FROM (
+                         SELECT ' - ' || "GetUsername"(vt.uid) || ' (' || to_duration(vt.time) || ')' AS v
+                         FROM voicetime vt
+                         WHERE vt.sid = :guild
+                           AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = vt.uid)
+                         ORDER BY vt.time DESC
+                         LIMIT 15 OFFSET 15 * :page
+                     ) x
+                """);
+        q.setParameter("guild", guild);
+        q.setParameter("page", page);
 
-		try {
-			return ((List<Object[]>) q.getResultList())
-					.stream().map(o -> (String) o[0])
-					.collect(Collectors.toList());
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return ((List<Object>) q.getResultList()).stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.toList());
+        } finally {
+            em.close();
+        }
+    }
 }
