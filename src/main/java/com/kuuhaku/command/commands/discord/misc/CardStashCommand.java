@@ -105,7 +105,7 @@ public class CardStashCommand implements Executable {
 			}
 
 			ThrowingFunction<Integer, Page> load = i -> {
-				List<Stash> cards = StashDAO.getStashedCards(0,
+				List<Stash> cards = StashDAO.getStashedCards(i,
 						byName.get(),
 						byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
 						byAnime.get(),
@@ -117,7 +117,7 @@ public class CardStashCommand implements Executable {
 				);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setAuthor("Cartas armazenadas: " + Helper.separate(total) + "/" + Helper.separate(acc.getCardStashCapacity()))
+						.setAuthor("Cartas armazenadas: " + Helper.separate(total) + "/" + Helper.separate(acc.getCardStashCapacity()) + " | Página " + (i + 1))
 						.setTitle(":package: | Armazém de cartas");
 
 				if (i == 0) {
