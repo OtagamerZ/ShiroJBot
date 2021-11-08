@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -41,7 +42,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -98,22 +98,30 @@ public class CardStashCommand implements Executable {
 				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
 			}
 
-			List<Stash> cards = StashDAO.getStashedCards(
-					byName.get(),
-					byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
-					byAnime.get(),
-					onlyFoil.get(),
-					onlyKawaipon.get(),
-					onlyEquip.get(),
-					onlyField.get(),
-					author.getId()
-			);
+			int total = acc.getCardStashCapacity() - StashDAO.getRemainingSpace(author.getId());
+			if (total == 0) {
+				channel.sendMessage("Ainda não há nenhuma carta armazenada.").queue();
+				return;
+			}
 
+			ThrowingFunction<Integer, Page> load = i -> {
+				List<Stash> cards = StashDAO.getStashedCards(0,
+						byName.get(),
+						byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
+						byAnime.get(),
+						onlyFoil.get(),
+						onlyKawaipon.get(),
+						onlyEquip.get(),
+						onlyField.get(),
+						author.getId()
+				);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setAuthor("Cartas armazenadas: " + Helper.separate(cards.size()) + "/" + Helper.separate(acc.getCardStashCapacity()))
-					.setTitle(":package: | Armazém de cartas")
-					.setDescription("""
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setAuthor("Cartas armazenadas: " + Helper.separate(total) + "/" + Helper.separate(acc.getCardStashCapacity()))
+						.setTitle(":package: | Armazém de cartas");
+
+				if (i == 0) {
+					eb.setDescription("""
 							Use `%sretirar ID` para retirar a carta do armazém.
 							       
 							**Parâmetros de pesquisa:**
@@ -126,13 +134,9 @@ public class CardStashCommand implements Executable {
 							`-f` - Busca apenas cartas de campo
 							""".formatted(prefix)
 					);
+				}
 
-			List<Page> pages = new ArrayList<>();
-			List<List<Stash>> chunks = Helper.chunkify(cards, 6);
-			for (List<Stash> chunk : chunks) {
-				eb.clearFields();
-
-				for (Stash s : chunk) {
+				for (Stash s : cards) {
 					String name = switch (s.getType()) {
 						case EVOGEAR, FIELD -> s.getRawCard().getName();
 						default -> ((KawaiponCard) s.getCard()).getName();
@@ -150,15 +154,12 @@ public class CardStashCommand implements Executable {
 					);
 				}
 
-				pages.add(new InteractPage(eb.build()));
-			}
+				return new InteractPage(eb.build());
+			};
 
-			if (pages.isEmpty()) {
-				channel.sendMessage("Ainda não há nenhuma carta armazenada.").queue();
-			} else
-				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
-				);
+			channel.sendMessageEmbeds((MessageEmbed) load.apply(0).getContent()).queue(s ->
+					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+			);
 			return;
 		}
 

@@ -236,7 +236,7 @@ public class DashboardSocket extends WebSocketServer {
 					}
 				}
 				case "store" -> {
-					List<Market> cards = MarketDAO.getOffers(null, -1, -1, null, null, false, false, false, false, null);
+					List<Market> cards = MarketDAO.getOffers(-1, null, -1, -1, null, null, false, false, false, false, null);
 
 					JSONObject data = new JSONObject();
 					for (Market offer : cards) {
