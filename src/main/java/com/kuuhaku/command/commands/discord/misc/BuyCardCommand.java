@@ -129,7 +129,7 @@ public class BuyCardCommand implements Executable {
 			}
 
 			ThrowingFunction<Integer, Page> load = i -> {
-				List<Market> cards = MarketDAO.getOffers(0,
+				List<Market> cards = MarketDAO.getOffers(i,
 						byName.get(),
 						minPrice.get(),
 						maxPrice.get(),
@@ -143,7 +143,7 @@ public class BuyCardCommand implements Executable {
 				);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setAuthor("Cartas anunciadas: " + Helper.separate(total))
+						.setAuthor("Cartas anunciadas: " + Helper.separate(total) + " | Página " + (i + 1))
 						.setTitle(":scales: | Mercado de cartas")
 						.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
