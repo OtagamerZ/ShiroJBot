@@ -90,7 +90,7 @@ public class StashDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Stash> getStashedCards(String name, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String owner) {
+	public static List<Stash> getStashedCards(int page, String name, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String owner) {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
@@ -115,6 +115,10 @@ public class StashDAO {
 
 		Query q = em.createQuery(query.formatted(String.join("\n", params)), Stash.class);
 		q.setParameter("owner", owner);
+		if (page > -1) {
+			q.setFirstResult(6 * page);
+			q.setMaxResults(6);
+		}
 
 		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
 		if (!params[1].isBlank()) q.setParameter("rarity", rarity.name());
