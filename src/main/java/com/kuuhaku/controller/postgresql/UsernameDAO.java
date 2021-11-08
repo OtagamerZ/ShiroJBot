@@ -19,7 +19,6 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Username;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -32,9 +31,11 @@ public class UsernameDAO {
 			Username u = em.find(Username.class, uid);
 
 			if (u == null) {
-				Query q = em.createNativeQuery("SELECT uid, name FROM \"GetUsername\"(:id)");
+				Query q = em.createNativeQuery("SELECT u FROM \"GetUsername\"(:id) u");
 				q.setParameter("id", uid);
-				u = Helper.map(Username.class, (Object[]) q.getSingleResult());
+
+				u = new Username(uid, String.valueOf(q.getSingleResult()));
+				setUsername(u);
 			}
 
 			return u.getName();

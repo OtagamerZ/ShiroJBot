@@ -25,14 +25,12 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Action {
@@ -62,34 +60,40 @@ public abstract class Action {
 	public abstract void answer(TextChannel chn);
 
 	public void sendReaction(String type, TextChannel channel, User target, String message, boolean allowReact) {
-		Message msg = channel.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/loading.gif")).getPath())).complete();
-		try {
-			JSONObject resposta = Helper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
-				put("type", type);
-			}}, null);
+		File loading = Helper.getResourceAsFile(this.getClass(), "assets/loading.gif");
+		assert loading != null;
 
-			Helper.logger(this.getClass()).debug(resposta);
+		channel.sendMessage("Conectando à API...")
+				.addFile(loading)
+				.queue(msg -> {
+					try {
+						JSONObject resposta = Helper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
+							put("type", type);
+						}}, null);
 
-			String url = resposta.getString("url");
+						Helper.logger(this.getClass()).debug(resposta);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			eb.setImage(url);
-			if (allowReact) {
-				eb.setFooter("↪ | Clique para retribuir");
-				channel.sendMessage(message)
-						.setEmbeds(eb.build())
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji("↪"), wrapper -> {
-									if (wrapper.getUser().getId().equals(target.getId())) {
-										answer(channel);
-										s.clearReactions().queue();
-									}
-								}), ShiroInfo.USE_BUTTONS, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
-						);
-			} else {
-				channel.sendMessage(message).setEmbeds(eb.build()).queue();
-			}
-		} finally {
-			msg.delete().queue(null, Helper::doNothing);
-		}
+						String url = resposta.getString("url");
+
+						EmbedBuilder eb = new ColorlessEmbedBuilder();
+						eb.setImage(url);
+						if (allowReact) {
+							eb.setFooter("↪ | Clique para retribuir");
+							channel.sendMessage(message)
+									.setEmbeds(eb.build())
+									.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji("↪"), wrapper -> {
+												if (wrapper.getUser().getId().equals(target.getId())) {
+													answer(channel);
+													s.clearReactions().queue();
+												}
+											}), ShiroInfo.USE_BUTTONS, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
+									);
+						} else {
+							channel.sendMessage(message).setEmbeds(eb.build()).queue();
+						}
+					} finally {
+						msg.delete().queue(null, Helper::doNothing);
+					}
+				});
 	}
 }
