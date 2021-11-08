@@ -62,8 +62,20 @@ public class MarketDAO {
 		em.close();
 	}
 
+	public static int getTotalOffers() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(*) FROM Market m WHERE buyer = ''");
+
+		try {
+			return ((Number) q.getSingleResult()).intValue();
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
-	public static List<Market> getOffers(String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String seller) {
+	public static List<Market> getOffers(int page, String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String seller) {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
@@ -112,6 +124,10 @@ public class MarketDAO {
 		};
 
 		Query q = em.createQuery(query.formatted(String.join("\n", params)), Market.class);
+		if (page > -1) {
+			q.setFirstResult(6 * page);
+			q.setMaxResults(6);
+		}
 
 		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
 		if (!params[1].isBlank()) q.setParameter("min", min);
