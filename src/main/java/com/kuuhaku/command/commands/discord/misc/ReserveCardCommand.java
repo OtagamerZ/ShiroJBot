@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -45,7 +46,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -122,23 +122,33 @@ public class ReserveCardCommand implements Executable {
 				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
 			}
 
-			List<Market> cards = MarketDAO.getOffers(
-					byName.get(),
-					minPrice.get(),
-					maxPrice.get(),
-					byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
-					byAnime.get(),
-					onlyFoil.get(),
-					onlyKawaipon.get(),
-					onlyEquip.get(),
-					onlyField.get(),
-					onlyMine.get() ? author.getId() : null
-			);
+			int total = MarketDAO.getTotalOffers();
+			if (total == 0) {
+				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
+				return;
+			}
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setAuthor("Cartas anunciadas: " + Helper.separate(cards.size()))
-					.setTitle(":scales: | Mercado de cartas")
-					.setDescription("""
+			ThrowingFunction<Integer, Page> load = i -> {
+				List<Market> cards = MarketDAO.getOffers(0,
+						byName.get(),
+						minPrice.get(),
+						maxPrice.get(),
+						byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
+						byAnime.get(),
+						onlyFoil.get(),
+						onlyKawaipon.get(),
+						onlyEquip.get(),
+						onlyField.get(),
+						onlyMine.get() ? author.getId() : null
+				);
+
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setAuthor("Cartas anunciadas: " + Helper.separate(total))
+						.setTitle(":scales: | Mercado de cartas")
+						.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+
+				if (i == 0) {
+					eb.setDescription("""
 							Use `%scomprar ID` para comprar uma carta.
 
 							**Parâmetros de pesquisa:**
@@ -153,15 +163,10 @@ public class ReserveCardCommand implements Executable {
 							`-min` - Define um preço mínimo
 							`-max` - Define um preço máximo
 							""".formatted(prefix)
-					)
-					.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+					);
+				}
 
-			List<Page> pages = new ArrayList<>();
-			List<List<Market>> chunks = Helper.chunkify(cards, 6);
-			for (List<Market> chunk : chunks) {
-				eb.clearFields();
-
-				for (Market m : chunk) {
+				for (Market m : cards) {
 					User seller = Main.getInfo().getUserByID(m.getSeller());
 					String name = switch (m.getType()) {
 						case EVOGEAR, FIELD -> m.getRawCard().getName();
@@ -169,7 +174,7 @@ public class ReserveCardCommand implements Executable {
 					};
 					String rarity = switch (m.getType()) {
 						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Equipment) m.getCard()).getTier()) + ")";
-						case FIELD -> (((Field) m.getCard()).isDay() ? ":sunny: " : ":full_moon: ") + "Campo";
+						case FIELD -> (((Field) m.getCard()).isDay() ? ":sunny: " : ":crescent_moon: ") + "Campo";
 						default -> m.getRawCard().getRarity().getEmote() + m.getRawCard().getRarity().toString();
 					};
 					String anime = m.getRawCard().getAnime().toString();
@@ -191,15 +196,12 @@ public class ReserveCardCommand implements Executable {
 					);
 				}
 
-				pages.add(new InteractPage(eb.build()));
-			}
+				return new InteractPage(eb.build());
+			};
 
-			if (pages.isEmpty()) {
-				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
-			} else
-				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
-				);
+			channel.sendMessageEmbeds((MessageEmbed) load.apply(0).getContent()).queue(s ->
+					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+			);
 			return;
 		}
 
