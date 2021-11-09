@@ -781,6 +781,8 @@ public class Helper {
 	}
 
 	public static void gatekeep(Message m, Role r) {
+		if (m == null) return;
+
 		Pages.buttonize(m, new LinkedHashMap<>() {{
 			put(parseEmoji("☑"), wrapper -> {
 				try {
