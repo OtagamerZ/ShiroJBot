@@ -963,15 +963,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                                     .mapToInt(Equipment::getAtk)
                                     .sum() * demonFac
                     );
-
-                    int bleed = Math.round(
-                            yours.getLinkedTo().parallelStream()
-                                    .filter(e -> e.getCharm() == Charm.BLEEDING)
-                                    .mapToInt(Equipment::getAtk)
-                                    .sum() * demonFac
-                    );
-
-                    if (bleed > 0) op.addBleeding(bleed);
                 }
 
                 if (op.getMana() > 0) {
@@ -994,6 +985,14 @@ public class Shoukan extends GlobalGame implements Serializable {
                 }
 
                 if (h == null || h.getHp() == 0) {
+                    int bleed = Math.round(
+                            yours.getLinkedTo().parallelStream()
+                                    .filter(e -> e.getCharm() == Charm.BLEEDING)
+                                    .mapToInt(Equipment::getAtk)
+                                    .sum() * demonFac
+                    );
+
+                    if (bleed > 0) op.addBleeding(bleed);
                     op.removeHp(dmg);
                     killCard(defr.getLeft(), defr.getRight(), his.getId());
 
@@ -1059,15 +1058,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                                 .mapToInt(Equipment::getAtk)
                                 .sum() * demonFac
                 );
-
-                int bleed = Math.round(
-                        his.getLinkedTo().parallelStream()
-                                .filter(e -> e.getCharm() == Charm.BLEEDING)
-                                .mapToInt(Equipment::getAtk)
-                                .sum() * demonFac
-                );
-
-                if (bleed > 0) you.addBleeding(bleed);
             }
 
             if (you.getMana() > 0) {
@@ -1090,6 +1080,14 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             if (h == null || h.getHp() == 0) {
+                int bleed = Math.round(
+                        his.getLinkedTo().parallelStream()
+                                .filter(e -> e.getCharm() == Charm.BLEEDING)
+                                .mapToInt(Equipment::getAtk)
+                                .sum() * demonFac
+                );
+
+                if (bleed > 0) you.addBleeding(bleed);
                 you.removeHp(dmg);
                 killCard(atkr.getLeft(), atkr.getRight(), yours.getId());
 
