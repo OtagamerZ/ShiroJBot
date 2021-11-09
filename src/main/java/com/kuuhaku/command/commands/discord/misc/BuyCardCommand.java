@@ -123,11 +123,6 @@ public class BuyCardCommand implements Executable {
 			}
 
 			int total = MarketDAO.getTotalOffers();
-			if (total == 0) {
-				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
-				return;
-			}
-
 			ThrowingFunction<Integer, Page> load = i -> {
 				List<Market> cards = MarketDAO.getOffers(i,
 						byName.get(),
@@ -141,6 +136,8 @@ public class BuyCardCommand implements Executable {
 						onlyField.get(),
 						onlyMine.get() ? author.getId() : null
 				);
+
+				if (cards.isEmpty()) return null;
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setAuthor("Cartas anunciadas: " + Helper.separate(total) + " | Página " + (i + 1))
@@ -199,7 +196,13 @@ public class BuyCardCommand implements Executable {
 				return new InteractPage(eb.build());
 			};
 
-			channel.sendMessageEmbeds((MessageEmbed) load.apply(0).getContent()).queue(s ->
+			Page p = load.apply(0);
+			if (p == null) {
+				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
+				return;
+			}
+
+			channel.sendMessageEmbeds((MessageEmbed) p.getContent()).queue(s ->
 					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
