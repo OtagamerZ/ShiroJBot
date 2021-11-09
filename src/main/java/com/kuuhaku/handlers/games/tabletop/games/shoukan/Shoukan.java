@@ -2169,7 +2169,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
                 Hand h = hands.get(getCurrentSide());
 
-                int remaining = h.getMaxCards() - h.getCards().size();
+                int remaining = h.getMaxCards() - h.getCardCount();
                 if (remaining <= 0) {
                     channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, Helper::doNothing);
                     return;
@@ -2200,7 +2200,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                     return;
                 }
 
-                remaining = h.getMaxCards() - h.getCards().size();
+                remaining = h.getMaxCards() - h.getCardCount();
                 reportEvent(h, getCurrent().getName() + " puxou uma carta. (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")", true, false);
             });
             buttons.put(Helper.parseEmoji("\uD83D\uDCE6"), wrapper -> {
@@ -2211,7 +2211,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
                 Hand h = hands.get(getCurrentSide());
 
-                int remaining = h.getMaxCards() - h.getCards().size();
+                int remaining = h.getMaxCards() - h.getCardCount();
                 if (remaining <= 0) {
                     channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, Helper::doNothing);
                     return;

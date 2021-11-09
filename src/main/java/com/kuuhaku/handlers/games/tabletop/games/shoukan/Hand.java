@@ -392,7 +392,7 @@ public class Hand {
 		cards.removeIf(Drawable::isAvailable);
 
 		Collections.shuffle(deque);
-		int toDraw = Math.max(0, maxCards - cards.size());
+		int toDraw = Math.max(0, maxCards - getCardCount());
 		for (int i = 0; i < toDraw; i++) manualDraw();
 
 		switch (combo.getRight()) {
@@ -616,6 +616,12 @@ public class Hand {
 
 	public int getMaxCards() {
 		return maxCards;
+	}
+
+	public int getCardCount() {
+		return (int) cards.stream()
+				.filter(d -> !(d instanceof Equipment e) || !e.isEffectOnly())
+				.count();
 	}
 
 	public void setMaxCards(int maxCards) {
