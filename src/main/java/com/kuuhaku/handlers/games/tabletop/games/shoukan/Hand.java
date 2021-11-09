@@ -623,7 +623,7 @@ public class Hand {
 	}
 
 	public int getMana() {
-		return isSuppressed() ? 0 : mana;
+		return isSuppressed() ? 0 : Math.min(mana, 99);
 	}
 
 	public int getBaseManaPerTurn() {
@@ -643,11 +643,11 @@ public class Hand {
 	}
 
 	public void setMana(int value) {
-		mana = value;
+		mana = Math.min(value, 99);
 	}
 
 	public void addMana(int value) {
-		mana += isSuppressed() ? 0 : value;
+		mana = Math.min(mana + (isSuppressed() ? 0 : value), 99);
 	}
 
 	public void removeMana(int value) {
@@ -655,27 +655,27 @@ public class Hand {
 	}
 
 	public int getBaseHp() {
-		return baseHp;
+		return Math.min(baseHp, 9999);
 	}
 
 	public void setBaseHp(int baseHp) {
-		this.baseHp = baseHp;
+		this.baseHp = Math.min(baseHp, 9999);
 	}
 
 	public int getHp() {
-		return hp;
+		return Math.min(hp, 9999);
 	}
 
 	public void setHp(int value) {
 		prevHp = hp;
-		hp = value;
+		hp = Math.min(value, 9999);
 	}
 
 	public void addHp(int value) {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp += value * getHealingFac();
+		hp = (int) Math.min(hp + value * getHealingFac(), 9999);
 
 		List<SlotColumn> slots = game.getArena().getSlots().get(side);
 		game.applyPersistentEffects(ON_HEAL, side, -1);
@@ -691,7 +691,7 @@ public class Hand {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp += value * getHealingFac();
+		hp = (int) Math.min(hp + value * getHealingFac(), 9999);
 
 		if (trigger) {
 			List<SlotColumn> slots = game.getArena().getSlots().get(side);
