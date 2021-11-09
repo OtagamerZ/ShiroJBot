@@ -26,8 +26,8 @@ import java.util.Locale;
 public enum Charm {
     SHIELD("Escudo", "Bloqueia efeitos de destruição ou conversão"),
     MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
-    TIMEWARP("Salto temporal", "Ativa efeitos por turno instantâneamente"),
-    DOUBLETAP("Toque duplo", "Ativa novamente efeitos de invocação."),
+    TIMEWARP("Salto temporal", "Ativa efeitos por turno instantaneamente"),
+    DOUBLETAP("Toque duplo", "Ativa novamente efeitos de invocação"),
     CLONE("Clone", "Cria um clone com 75% dos atributos"),
     LINK("Vínculo", "Bloqueia modificadores de campo"),
     SPELL("Magia", null),
