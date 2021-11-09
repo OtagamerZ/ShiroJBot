@@ -237,7 +237,7 @@ public class Arena {
 						);
 
 						if (h.getBleeding() > 0) {
-							g2d.setColor(new Color(80, 0, 0));
+							g2d.setColor(new Color(153, 0, 0));
 							Profile.drawOutlinedText(
 									"(-" + h.getBleeding() + ")",
 									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(-" + h.getBleeding() + ")"),
