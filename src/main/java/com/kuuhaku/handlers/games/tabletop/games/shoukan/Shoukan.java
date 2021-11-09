@@ -697,18 +697,28 @@ public class Shoukan extends GlobalGame implements Serializable {
 
                     if (!c.isDecoy()) {
                         op.removeHp(Math.round(yPower * demonFac));
-                        if (op.getMana() > 0) {
-                            int toSteal = (int) Math.min(
-                                    op.getMana(),
-                                    c.getLinkedTo().parallelStream()
-                                            .filter(e -> e.getCharm() == Charm.DRAIN)
-                                            .count()
-                            );
-
-                            you.addMana(toSteal);
-                            op.removeMana(toSteal);
-                        }
                     }
+
+                    if (op.getMana() > 0) {
+                        int toSteal = (int) Math.min(
+                                op.getMana(),
+                                c.getLinkedTo().parallelStream()
+                                        .filter(e -> e.getCharm() == Charm.DRAIN)
+                                        .count()
+                        );
+
+                        you.addMana(toSteal);
+                        op.removeMana(toSteal);
+                    }
+
+                    int bleed = Math.round(
+                            c.getLinkedTo().parallelStream()
+                                    .filter(e -> e.getCharm() == Charm.BLEEDING)
+                                    .mapToInt(Equipment::getAtk)
+                                    .sum() * demonFac
+                    );
+
+                    if (bleed > 0) op.addBleeding(bleed);
 
                     c.setAvailable(false);
 
