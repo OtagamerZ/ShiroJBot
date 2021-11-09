@@ -18,40 +18,42 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
-import javax.imageio.ImageIO;
+import com.kuuhaku.utils.Helper;
+
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Locale;
-import java.util.Objects;
 
 public enum Charm {
-	SPELLSHIELD("Escudo de feitiços"),
-	SPELLMIRROR("Reflexo de feitiços"),
-	TIMEWARP("Salto temporal"),
-	DOUBLETAP("Toque duplo"),
-	DOPPELGANGER("Clone"),
-	SOULLINK("Vínculo espiritual"),
-	SPELL("Magia"),
-	ARMORPIERCING("Penetração de armadura"),
-	AGILITY("Agilidade"),
-	DRAIN("Dreno");
+    SPELLSHIELD("Escudo de feitiços", "Bloqueia efeitos de destruição ou conversão"),
+    SPELLMIRROR("Reflexo de feitiços", "Reflete efeitos de destruição ou conversão"),
+    TIMEWARP("Salto temporal", "Ativa efeitos por turno instantâneamente"),
+    DOUBLETAP("Toque duplo", "Ativa novamente efeitos de invocação."),
+    DOPPELGANGER("Clone", "Cria um clone com 75% dos atributos"),
+    SOULLINK("Vínculo espiritual", "Bloqueia modificadores de campo"),
+    SPELL("Magia", "Não pode ser equipado, mas pode ser ativado"),
+    ARMORPIERCING("Penetração de armadura", "Causa dano direto ao atacar"),
+    AGILITY("Agilidade", "Aumenta a chance de esquiva em 10%"),
+    DRAIN("Dreno", "Rouba 1 de mana ao atacar"),
+    BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar");
 
-	private final String name;
+    private final String name;
+    private final String description;
 
-	Charm(String name) {
-		this.name = name;
-	}
+    Charm(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public BufferedImage getIcon() {
-		if (this == SPELL) return null;
-		try {
-			return ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png")));
-		} catch (IOException e) {
-			return null;
-		}
-	}
+    public String getDescription() {
+        return description;
+    }
+
+    public BufferedImage getIcon() {
+        if (this == SPELL) return null;
+        return Helper.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
+    }
 }

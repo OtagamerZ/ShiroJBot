@@ -72,6 +72,8 @@ public class Hand {
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int nullTime = 0;
+	private float healingFac = 1;
+	private int bleeding = 0;
 	private Message old = null;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
@@ -673,7 +675,7 @@ public class Hand {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp += value;
+		hp += value * getHealingFac();
 
 		List<SlotColumn> slots = game.getArena().getSlots().get(side);
 		game.applyPersistentEffects(ON_HEAL, side, -1);
@@ -689,7 +691,7 @@ public class Hand {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		hp += value;
+		hp += value * getHealingFac();
 
 		if (trigger) {
 			List<SlotColumn> slots = game.getArena().getSlots().get(side);
@@ -831,5 +833,29 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
+	}
+
+	public float getHealingFac() {
+		return healingFac - (bleeding > 0 ? (healingFac / 2) : 0);
+	}
+
+	public void setHealingFac(float healingFac) {
+		this.healingFac = healingFac;
+	}
+
+	public int getBleeding() {
+		return bleeding;
+	}
+
+	public void setBleeding(int bleeding) {
+		this.bleeding = bleeding;
+	}
+
+	public void addBleeding(int bleeding) {
+		this.bleeding += bleeding;
+	}
+
+	public void decreaseBleeding() {
+		bleeding = Math.max(0, (int) (bleeding * 0.9));
 	}
 }
