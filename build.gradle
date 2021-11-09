@@ -83,7 +83,7 @@ tasks.withType(JavaCompile) {
 dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "4.3.0_334"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: '3.0.3'
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: '3.0.4'
 	implementation group: "club.minnced", name: "discord-webhooks", version: "0.3.1"
 
 	//Database
