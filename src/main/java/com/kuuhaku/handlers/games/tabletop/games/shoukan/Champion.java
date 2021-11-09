@@ -675,6 +675,8 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void duel(Champion nemesis, BiConsumer<Side, Shoukan> onDuelEnd) {
+		if (this.nemesis != null) return;
+
 		this.nemesis = nemesis;
 		this.onDuelEnd = onDuelEnd;
 		nemesis.duel(this, onDuelEnd);
