@@ -24,14 +24,14 @@ import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 public enum Charm {
-    SPELLSHIELD("Escudo de feitiços", "Bloqueia efeitos de destruição ou conversão"),
-    SPELLMIRROR("Reflexo de feitiços", "Reflete efeitos de destruição ou conversão"),
+    SHIELD("Escudo", "Bloqueia efeitos de destruição ou conversão"),
+    MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
     TIMEWARP("Salto temporal", "Ativa efeitos por turno instantâneamente"),
     DOUBLETAP("Toque duplo", "Ativa novamente efeitos de invocação."),
-    DOPPELGANGER("Clone", "Cria um clone com 75% dos atributos"),
-    SOULLINK("Vínculo espiritual", "Bloqueia modificadores de campo"),
+    CLONE("Clone", "Cria um clone com 75% dos atributos"),
+    LINK("Vínculo", "Bloqueia modificadores de campo"),
     SPELL("Magia", "Não pode ser equipado, mas pode ser ativado"),
-    ARMORPIERCING("Penetração de armadura", "Causa dano direto ao atacar"),
+    PIERCING("Penetração", "Causa dano direto ao atacar"),
     AGILITY("Agilidade", "Aumenta a chance de esquiva em 10%"),
     DRAIN("Dreno", "Rouba 1 de mana ao atacar"),
     BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar");
