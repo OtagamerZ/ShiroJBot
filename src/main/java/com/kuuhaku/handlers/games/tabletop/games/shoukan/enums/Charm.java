@@ -30,7 +30,7 @@ public enum Charm {
     DOUBLETAP("Toque duplo", "Ativa novamente efeitos de invocação."),
     CLONE("Clone", "Cria um clone com 75% dos atributos"),
     LINK("Vínculo", "Bloqueia modificadores de campo"),
-    SPELL("Magia", "Não pode ser equipado, mas pode ser ativado"),
+    SPELL("Magia", null),
     PIERCING("Penetração", "Causa dano direto ao atacar"),
     AGILITY("Agilidade", "Aumenta a chance de esquiva em 10%"),
     DRAIN("Dreno", "Rouba 1 de mana ao atacar"),
