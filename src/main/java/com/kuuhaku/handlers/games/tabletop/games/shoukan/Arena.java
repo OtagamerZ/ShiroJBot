@@ -224,21 +224,32 @@ public class Arena {
 
 						float prcnt = (float) h.getHp() / h.getBaseHp();
 						g2d.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
-						g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
+						g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
 
 						String hp = String.format("%04d", Math.max(0, h.getHp()));
 						String mp = h.isNullMode() ? "--" : String.format("%02d", Math.max(0, h.getMana()));
 
+						int hpWidth = g2d.getFontMetrics().stringWidth("HP: " + hp);
 						Profile.drawOutlinedText(
 								"HP: " + hp,
-								key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + hp),
+								key == Side.TOP ? 10 : 2240 - hpWidth,
 								key == Side.TOP ? 82 : 1638, g2d
 						);
+
+						if (h.getBleeding() > 0) {
+							g2d.setColor(new Color(80, 0, 0));
+							Profile.drawOutlinedText(
+									"(-" + h.getBleeding() + ")",
+									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(-" + h.getBleeding() + ")"),
+									key == Side.TOP ? 82 : 1638, g2d
+							);
+						}
+
 						g2d.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);
 						Profile.drawOutlinedText(
 								"MP: " + mp,
 								key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + mp),
-								key == Side.TOP ? 178 : 1735, g2d
+								key == Side.TOP ? 168 : 1725, g2d
 						);
 
 						g2d.setColor(Color.white);
