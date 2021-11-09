@@ -24,19 +24,21 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import net.dv8tion.jda.api.entities.*;
 
+import java.nio.charset.StandardCharsets;
+
 @Command(
-		name = "bin",
-		usage = "req_text",
-		category = Category.MISC
+        name = "bin",
+        usage = "req_text",
+        category = Category.MISC
 )
 public class BinaryCommand implements Executable {
 
-	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+    @Override
+    public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		String text = String.join(" ", args);
 		try {
-			byte[] bytes = text.getBytes();
-			StringBuilder binary = new StringBuilder();
+            byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+            StringBuilder binary = new StringBuilder();
 			for (byte b : bytes) {
 				int val = b;
 				for (int i = 0; i < 8; i++) {

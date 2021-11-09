@@ -99,11 +99,6 @@ public class CardStashCommand implements Executable {
 			}
 
 			int total = acc.getCardStashCapacity() - StashDAO.getRemainingSpace(author.getId());
-			if (total == 0) {
-				channel.sendMessage("Ainda não há nenhuma carta armazenada.").queue();
-				return;
-			}
-
 			ThrowingFunction<Integer, Page> load = i -> {
 				List<Stash> cards = StashDAO.getStashedCards(i,
 						byName.get(),
@@ -115,6 +110,8 @@ public class CardStashCommand implements Executable {
 						onlyField.get(),
 						author.getId()
 				);
+
+				if (cards.isEmpty()) return null;
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setAuthor("Cartas armazenadas: " + Helper.separate(total) + "/" + Helper.separate(acc.getCardStashCapacity()) + " | Página " + (i + 1))
@@ -157,7 +154,13 @@ public class CardStashCommand implements Executable {
 				return new InteractPage(eb.build());
 			};
 
-			channel.sendMessageEmbeds((MessageEmbed) load.apply(0).getContent()).queue(s ->
+			Page p = load.apply(0);
+			if (p == null) {
+				channel.sendMessage("Ainda não há nenhuma carta armazenada.").queue();
+				return;
+			}
+
+			channel.sendMessageEmbeds((MessageEmbed) p.getContent()).queue(s ->
 					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
