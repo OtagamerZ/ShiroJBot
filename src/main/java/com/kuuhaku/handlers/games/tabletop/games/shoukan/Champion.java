@@ -354,7 +354,7 @@ public class Champion implements Drawable, Cloneable {
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK)) {
 				Field f = game.getArena().getField();
 				if (f != null) {
 					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
@@ -384,7 +384,7 @@ public class Champion implements Drawable, Cloneable {
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK)) {
 				Field f = game.getArena().getField();
 				if (f != null) {
 					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
@@ -749,7 +749,7 @@ public class Champion implements Drawable, Cloneable {
 	public boolean isBuffed() {
 		if (game == null) return false;
 
-		boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK);
+		boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.LINK);
 		if (slink) return false;
 
 		Field f = game.getArena().getField();
@@ -764,7 +764,7 @@ public class Champion implements Drawable, Cloneable {
 	public boolean isNerfed() {
 		if (game == null) return false;
 
-		boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK);
+		boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.LINK);
 		if (slink) return false;
 
 		Field f = game.getArena().getField();
