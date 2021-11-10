@@ -101,6 +101,12 @@ fabric.properties
 **/build/
 !src/**/build/
 
+# Ignore IDEA settings files
+*.iws
+*.iml
+*.ipr
+*.ids
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
