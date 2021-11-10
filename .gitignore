@@ -7,6 +7,12 @@ target/
 workspace.xml
 start
 
+# Ignore IDEA settings files
+*.iws
+*.iml
+*.ipr
+*.ids
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
