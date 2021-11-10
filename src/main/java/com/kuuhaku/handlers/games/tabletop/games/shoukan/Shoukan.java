@@ -1967,9 +1967,10 @@ public class Shoukan extends GlobalGame implements Serializable {
     }
 
     public boolean postCombat() {
+        if (!isOpen()) return true;
+
         boolean finished = false;
-        for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
-            Hand h = entry.getValue();
+        for (Hand h : hands.values()) {
             Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 
             if (h.getHp() <= 0) {
