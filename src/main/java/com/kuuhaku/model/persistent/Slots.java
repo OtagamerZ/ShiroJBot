@@ -37,7 +37,7 @@ public class Slots {
 		GamblePool gp = new GamblePool();
 		Slot[] icon = {LEMON, WATERMELON, CHERRY, HEART, BELL, BAR, HORSESHOE, DIAMOND, JACKPOT};
 		for (Slot s : icon) {
-			gp.addGamble(new GamblePool.Gamble(s, 9 - s.ordinal()));
+			gp.addGamble(new GamblePool.Gamble(s, s.ordinal() + 1));
 		}
 		slots = gp.getPool();
 	}
