@@ -20,27 +20,26 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.persistent.Kawaipon;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "desequiparheroi",
-		aliases = {"unequiphero"},
-		usage = "req_card",
-		category = Category.MISC
+		name = "descancarheroi",
+		aliases = {"herorest", "rest"},
+		category = Category.MODERATION
 )
-public class UnequipHeroCommand implements Executable {
+@Requires({Permission.NICKNAME_MANAGE})
+public class HeroRestCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Hero h = KawaiponDAO.getHero(author.getId());
-		Deck dk = KawaiponDAO.getDeck(author.getId());
 
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
@@ -48,27 +47,13 @@ public class UnequipHeroCommand implements Executable {
 		} else if (h.isUnavailable()) {
 			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
-		} else if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
-			return;
 		}
 
-		String name = args[0];
-		Equipment e = CardDAO.getEquipment(name);
-		if (e == null) {
-			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(name, CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
-			return;
-		} else if (!h.getInventory().contains(e)) {
-			channel.sendMessage("❌ | Você não pode desequipar uma carta que não possui!").queue();
-			return;
-		} else if (dk.checkEquipment(e, channel)) return;
+		kp.setHero(-1);
+		h.setResting(true);
+		channel.sendMessage(":beach: | Seu herói estará descansando até você chamá-lo novamente.").queue();
 
-		dk.addEquipment(e);
-		h.getInventory().remove(e);
-
-		KawaiponDAO.saveDeck(dk);
+		KawaiponDAO.saveKawaipon(kp);
 		KawaiponDAO.saveHero(h);
-
-		channel.sendMessage("Desequipado com sucesso!").queue();
 	}
 }

@@ -99,6 +99,9 @@ public class Hero implements Cloneable {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long questSeed = 0;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean resting = false;
+
 	public Hero() {
 	}
 
@@ -276,8 +279,8 @@ public class Hero implements Cloneable {
 		return questEnd;
 	}
 
-	public boolean isQuesting() {
-		return quest != null && !hasArrived();
+	public boolean isUnavailable() {
+		return (quest != null && !hasArrived()) || resting;
 	}
 
 	public boolean hasArrived() {
@@ -289,6 +292,18 @@ public class Hero implements Cloneable {
 		this.quest = null;
 		this.questSeed = 0;
 		this.questEnd = 0;
+	}
+
+	public boolean isResting() {
+		return resting;
+	}
+
+	public void setResting(boolean sleeping) {
+		this.resting = sleeping;
+	}
+
+	public void toggleResting() {
+		this.resting = !this.resting;
 	}
 
 	public String getDescription() {

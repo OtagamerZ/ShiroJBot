@@ -61,6 +61,15 @@ public class DismissHeroCommand implements Executable {
 			for (int j = 0; j < heroes.size(); j++) {
 				Hero h = heroes.get(j);
 
+				String status = "";
+				if (h.hasArrived()) {
+					if (h.getQuest() != null)
+						status = "**(RETORNOU)** ";
+					else
+						status = "**(MISSÃO)** ";
+				} else if (h.isResting())
+					status = "**(DESCANSANDO)** ";
+
 				eb.addField(
 						"`Herói %s%s | %ssh %s`".formatted(
 								j,
@@ -68,7 +77,7 @@ public class DismissHeroCommand implements Executable {
 								prefix,
 								String.valueOf(j)
 						),
-						(h.hasArrived() ? h.getQuest() != null ? "**(RETORNOU)** " : "" : "**(MISSÃO)** ") + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
+						status + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
 						true);
 			}
 
