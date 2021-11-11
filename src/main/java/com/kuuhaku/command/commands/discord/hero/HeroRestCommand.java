@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "descancarheroi",
+		name = "descansarheroi",
 		aliases = {"herorest", "rest"},
 		category = Category.MODERATION
 )
