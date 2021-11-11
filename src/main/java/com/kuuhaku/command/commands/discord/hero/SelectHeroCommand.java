@@ -58,6 +58,15 @@ public class SelectHeroCommand implements Executable {
 			for (int j = 0; j < heroes.size(); j++) {
 				Hero h = heroes.get(j);
 
+				String status = "";
+				if (h.hasArrived()) {
+					if (h.getQuest() != null)
+						status = "**(RETORNOU)** ";
+					else
+						status = "**(MISSÃO)** ";
+				} else if (h.isResting())
+					status = "**(DESCANSANDO)** ";
+
 				eb.addField(
 						"`Herói %s%s | %ssh %s`".formatted(
 								h.getId(),
@@ -65,7 +74,7 @@ public class SelectHeroCommand implements Executable {
 								prefix,
 								h.getId()
 						),
-						(h.hasArrived() ? h.getQuest() != null ? "**(RETORNOU)** " : "" : "**(MISSÃO)** ") + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
+						status + h.getName() + "\n" + h.getRace() + "\nLevel " + h.getLevel(),
 						true);
 			}
 
@@ -87,6 +96,7 @@ public class SelectHeroCommand implements Executable {
 				return;
 			}
 
+			chosen.setResting(false);
 			kp.setHero(id);
 			KawaiponDAO.saveKawaipon(kp);
 

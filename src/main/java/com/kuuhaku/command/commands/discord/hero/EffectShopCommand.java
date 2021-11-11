@@ -64,7 +64,7 @@ public class EffectShopCommand implements Executable {
 		if (h == null) {
 			channel.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
 			return;
-		} else if (h.isQuesting()) {
+		} else if (h.isUnavailable()) {
 			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
 		}
