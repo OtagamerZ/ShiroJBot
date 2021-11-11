@@ -64,9 +64,9 @@ public class BackgroundCommand implements Executable {
 			}
 
 			Account acc = AccountDAO.getAccount(author.getId());
-			acc.setBackground(argsAsText);
+			acc.setBackground(img);
 			AccountDAO.saveAccount(acc);
-			if (argsAsText.contains("discord"))
+			if (img.contains("discord"))
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
 			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
