@@ -22,7 +22,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.InfiniteList;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -155,12 +154,7 @@ public class Board {
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(
 				losers.stream()
-						.mapToLong(p -> {
-							Account from = AccountDAO.getAccount(p.getId());
-
-							double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
-							return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
-						})
+						.mapToLong(Player::getBet)
 						.sum(), game.getClass()
 		);
 		AccountDAO.saveAccount(wacc);
@@ -181,12 +175,7 @@ public class Board {
 			Account wacc = AccountDAO.getAccount(id);
 			wacc.addCredit(
 					losers.stream()
-							.mapToLong(p -> {
-								Account from = AccountDAO.getAccount(p.getId());
-
-								double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
-								return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
-							})
+							.mapToLong(Player::getBet)
 							.sum() / ids.length, game.getClass()
 			);
 			AccountDAO.saveAccount(wacc);
@@ -207,12 +196,7 @@ public class Board {
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(
 				losers.stream()
-						.mapToLong(p -> {
-							Account from = AccountDAO.getAccount(p.getId());
-
-							double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
-							return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
-						})
+						.mapToLong(Player::getBet)
 						.sum(), game.getClass()
 		);
 		AccountDAO.saveAccount(wacc);
@@ -233,12 +217,7 @@ public class Board {
 			Account wacc = AccountDAO.getAccount(id);
 			wacc.addCredit(
 					losers.stream()
-							.mapToLong(p -> {
-								Account from = AccountDAO.getAccount(p.getId());
-
-								double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
-								return Helper.applyTax(p.getId(), (int) p.getBet(), tax);
-							})
+							.mapToLong(Player::getBet)
 							.sum() / ids.length, game.getClass()
 			);
 			AccountDAO.saveAccount(wacc);
