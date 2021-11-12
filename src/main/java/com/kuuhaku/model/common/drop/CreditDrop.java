@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class CreditDrop extends Drop<Integer> {
 	public CreditDrop() {
-		super(Helper.rng(500, 1200));
+		super(Helper.rng(300, 800));
 	}
 
 	@Override
