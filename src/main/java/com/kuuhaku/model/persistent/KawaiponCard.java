@@ -38,11 +38,12 @@ public class KawaiponCard {
 	private boolean foil = false;
 
 	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
-	private String hash = Helper.hash(Helper.generateToken("" + System.currentTimeMillis(), 256), "SHA-256");
+	private String hash;
 
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
 		this.foil = foil;
+		this.hash = Helper.hash(Helper.generateToken((foil ? "*" : "") + card.getId() + "_" + System.currentTimeMillis(), 256), "SHA-256");
 	}
 
 	public KawaiponCard() {
