@@ -24,14 +24,12 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -68,32 +66,25 @@ public class ClanWithdrawCommand implements Executable {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		int rawAmount = Integer.parseInt(args[0]);
-		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, 0.05);
+		int value = Integer.parseInt(args[0]);
 
-		if (c.getVault() < rawAmount) {
+		if (c.getVault() < value) {
 			channel.sendMessage("❌ | O cofre do clã não possui CR suficientes.").queue();
 			return;
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(rawAmount) + " CR do cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(value) + " CR do cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							acc.addCredit(liquidAmount, this.getClass());
-							c.withdraw(rawAmount, author);
+							acc.addCredit(value, this.getClass());
+							c.withdraw(value, author);
 
 							ClanDAO.saveClan(c);
 							AccountDAO.saveAccount(acc);
 
-							LotteryValue lv = LotteryDAO.getLotteryValue();
-							lv.addValue(rawAmount - liquidAmount);
-							LotteryDAO.saveLotteryValue(lv);
-
-							boolean taxed = rawAmount != liquidAmount;
-							String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso." + taxMsg)).queue();
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso.")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

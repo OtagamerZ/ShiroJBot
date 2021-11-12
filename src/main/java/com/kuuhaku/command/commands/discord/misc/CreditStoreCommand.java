@@ -23,13 +23,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.CreditItem;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -80,27 +78,14 @@ public class CreditStoreCommand implements Executable {
 				return;
 			}
 
-			int tax;
-			if (acc.getTotalBalance() > 500_000) {
-				tax = Helper.getTax(author.getId(), (int) acc.getTotalBalance(), 0.01);
-			} else if (acc.getTotalBalance() > 100_000) {
-				tax = Helper.getTax(author.getId(), (int) acc.getTotalBalance(), 0.005);
-			} else {
-				tax = 0;
-			}
-
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar" + (tax > 0 ? (" (Taxa: " + Helper.separate(tax) + " CR)") : "") + "?").queue(s ->
+			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar?").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								if (ci.getEffect().apply(wrapper.getMember(), channel, args)) {
-									LotteryValue lv = LotteryDAO.getLotteryValue();
-									lv.addValue(tax);
-									LotteryDAO.saveLotteryValue(lv);
-
 									Account facc = AccountDAO.getAccount(author.getId());
-									facc.consumeCredit(ci.getPrice() + tax, CreditStoreCommand.class);
+									facc.consumeCredit(ci.getPrice(), CreditStoreCommand.class);
 									AccountDAO.saveAccount(facc);
 
 									s.delete().queue(null, Helper::doNothing);

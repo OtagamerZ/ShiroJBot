@@ -21,11 +21,9 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -54,18 +52,15 @@ public class TransferCommand implements Executable {
 			return;
 		}
 
-
 		Account from = AccountDAO.getAccount(author.getId());
 		Account to = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
-		int rawAmount = Integer.parseInt(args[1]);
-		double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
-		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, tax);
+		int value = Integer.parseInt(args[1]);
 
-		if (from.getBalance() < rawAmount) {
+		if (from.getBalance() < value) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
-		} else if (rawAmount <= 0) {
+		} else if (value <= 0) {
 			channel.sendMessage(I18n.getString("err_cannot-transfer-negative-or-zero")).queue();
 			return;
 		} else if (from.getLoan() > 0) {
@@ -73,18 +68,12 @@ public class TransferCommand implements Executable {
 			return;
 		}
 
-		to.addCredit(liquidAmount, this.getClass());
-		from.removeCredit(rawAmount, this.getClass());
-
-		LotteryValue lv = LotteryDAO.getLotteryValue();
-		lv.addValue(rawAmount - liquidAmount);
-		LotteryDAO.saveLotteryValue(lv);
+		to.addCredit(value, this.getClass());
+		from.removeCredit(value, this.getClass());
 
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);
 
-		boolean taxed = rawAmount != liquidAmount;
-		String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
-		channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** CR transferidos com sucesso!" + taxMsg).queue();
+		channel.sendMessage("✅ | **" + Helper.separate(value) + "** CR transferidos com sucesso!").queue();
 	}
 }

@@ -24,22 +24,13 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class WebSocketConfig {
-	private final DashboardSocket dashboard;
 	private final CanvasSocket canvas;
 
 	public WebSocketConfig() {
-		dashboard = new DashboardSocket(new InetSocketAddress(8001));
 		canvas = new CanvasSocket(new InetSocketAddress(8002));
-
-		dashboard.setReuseAddr(true);
 		canvas.setReuseAddr(true);
 
-		dashboard.start();
 		canvas.start();
-	}
-
-	public DashboardSocket getDashboard() {
-		return dashboard;
 	}
 
 	public CanvasSocket getCanvas() {
@@ -48,7 +39,6 @@ public class WebSocketConfig {
 
 	public void shutdown() {
 		try {
-			dashboard.stop();
 			canvas.stop();
 		} catch (InterruptedException | IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
