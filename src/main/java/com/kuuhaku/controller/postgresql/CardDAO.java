@@ -85,7 +85,7 @@ public class CardDAO {
 	public static boolean checkHash(String hash) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT kc FROM KawaiponCard kc WHERE kc.hash = :hash");
+		Query q = em.createQuery("SELECT 1 FROM KawaiponCard kc WHERE kc.hash = :hash");
 		q.setParameter("hash", hash);
 
 		try {
