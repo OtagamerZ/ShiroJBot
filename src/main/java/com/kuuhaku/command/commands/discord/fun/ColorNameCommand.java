@@ -121,7 +121,7 @@ public class ColorNameCommand implements Executable {
 										success.accept(null);
 
 										int prize = (int) (hit * Math.pow(1.075, hit));
-										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
+										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " CR!").complete();
 
 										Account acc = AccountDAO.getAccount(author.getId());
 										acc.addCredit(prize, this.getClass());
@@ -160,7 +160,7 @@ public class ColorNameCommand implements Executable {
 
 									int prize = (int) (hit * Math.pow(1.075, hit));
 									msg.delete().queue(null, Helper::doNothing);
-									channel.sendMessage(":confetti_ball: | Você acertou todas as cores! Seu prêmio é de " + prize + " créditos.").queue();
+									channel.sendMessage(":confetti_ball: | Você acertou todas as cores! Seu prêmio é de " + prize + " CR.").queue();
 
 									Account acc = AccountDAO.getAccount(author.getId());
 									acc.addCredit(prize, this.getClass());
@@ -190,7 +190,7 @@ public class ColorNameCommand implements Executable {
 												success.accept(null);
 
 												int prize = (int) (hit * Math.pow(1.075, hit));
-												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " créditos!").complete();
+												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " CR!").complete();
 
 												Account acc = AccountDAO.getAccount(author.getId());
 												acc.addCredit(prize, this.getClass());
@@ -214,7 +214,7 @@ public class ColorNameCommand implements Executable {
 								timeout = null;
 
 								int prize = (int) (hit * Math.pow(1.075, hit));
-								channel.sendMessage("Você errou! Seu prêmio é de " + prize + " créditos.").queue();
+								channel.sendMessage("Você errou! Seu prêmio é de " + prize + " CR.").queue();
 
 								Account acc = AccountDAO.getAccount(author.getId());
 								acc.addCredit(prize, this.getClass());

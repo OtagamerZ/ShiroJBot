@@ -95,7 +95,7 @@ public class ConfigPaidRoleCommand implements Executable {
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
 				for (int value : chunk)
-					eb.addField("Valor: " + Helper.separate(value) + " créditos", fields.get(value), false);
+					eb.addField("Valor: " + Helper.separate(value) + " CR", fields.get(value), false);
 
 				pages.add(new InteractPage(eb.build()));
 			}
@@ -128,9 +128,9 @@ public class ConfigPaidRoleCommand implements Executable {
 			gc.addPaidRole(r.getId(), value, time);
 
 			if (time > -1)
-				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**! (" + Helper.toStringDuration(time) + ")").queue();
+				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " CR**! (" + Helper.toStringDuration(time) + ")").queue();
 			else
-				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**!").queue();
+				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " CR**!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-price")).queue();

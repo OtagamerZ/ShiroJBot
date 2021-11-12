@@ -93,7 +93,7 @@ public class TradeCommand implements Executable {
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
-									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para definir uma quantia de créditos digite apenas `+ valor`.")
+									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para definir uma quantia de CR digite apenas `+ valor`.")
 									.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
 									.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 									.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
@@ -137,13 +137,13 @@ public class TradeCommand implements Executable {
 									channel.sendMessage("❌ | O valor deve ser maior ou igual a 0.").queue();
 									return;
 								} else if (tc.getAcc().getBalance() < c) {
-									channel.sendMessage("❌ | Você não possui créditos suficientes.").queue();
+									channel.sendMessage("❌ | Você não possui CR suficientes.").queue();
 									return;
 								}
 
 								tc.setCredits(c);
 							} catch (NumberFormatException e) {
-								channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+								channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
 								return;
 							}
 						} else {
@@ -272,7 +272,7 @@ public class TradeCommand implements Executable {
 								}
 							} else {
 								switch (code) {
-									case 1 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " não possui todos os itens oferecidos ou não possui créditos suficientes.").queue();
+									case 1 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " não possui todos os itens oferecidos ou não possui CR suficientes.").queue();
 									case 2 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " possui um dos itens oferecidos.").queue();
 								}
 								for (TradeContent offer : offers.values()) {

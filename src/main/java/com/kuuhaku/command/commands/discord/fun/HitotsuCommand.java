@@ -124,9 +124,9 @@ public class HitotsuCommand implements Executable {
 
 		String msg;
 		if (players.size() > 2)
-			msg = Helper.parseAndJoin(message.getMentionedUsers(), IMentionable::getAsMention) + ", vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
+			msg = Helper.parseAndJoin(message.getMentionedUsers(), IMentionable::getAsMention) + ", vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : "");
 		else
-			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
+			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : "");
 
 		for (User player : players) {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);

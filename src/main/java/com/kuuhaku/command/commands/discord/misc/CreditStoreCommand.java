@@ -55,11 +55,11 @@ public class CreditStoreCommand implements Executable {
 			Helper.generateStore(
 					author,
 					channel,
-					":coin: | Loja de créditos",
+					":coin: | Loja de CR",
 					"Esta loja possui vários artefatos que podem lhe dar uma vantagem rápida em certas coisas, a um preço justo claro!",
 					Color.orange,
 					List.of(CreditItem.values()),
-					ci -> new MessageEmbed.Field("`ID: %s` | %s (%s créditos)".formatted(ci.ordinal(), ci.getName(), Helper.separate(ci.getPrice())), ci.getDesc(), true)
+					ci -> new MessageEmbed.Field("`ID: %s` | %s (%s CR)".formatted(ci.ordinal(), ci.getName(), Helper.separate(ci.getPrice())), ci.getDesc(), true)
 			).queue();
 			return;
 		}
@@ -78,14 +78,15 @@ public class CreditStoreCommand implements Executable {
 				return;
 			}
 
+			int tax = (int) acc.getTotalBalance() / 100;
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar?").queue(s ->
+			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar" + (tax > 0 ? (" (Taxa: " + Helper.separate(tax) + " CR)") : "") + "?").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								if (ci.getEffect().apply(wrapper.getMember(), channel, args)) {
 									Account facc = AccountDAO.getAccount(author.getId());
-									facc.consumeCredit(ci.getPrice(), CreditStoreCommand.class);
+									facc.consumeCredit(ci.getPrice() + tax, CreditStoreCommand.class);
 									AccountDAO.saveAccount(facc);
 
 									s.delete().queue(null, Helper::doNothing);

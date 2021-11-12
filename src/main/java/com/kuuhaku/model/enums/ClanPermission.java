@@ -23,7 +23,7 @@ import java.util.EnumSet;
 public enum ClanPermission {
 	ALTER_HIERARCHY("Promover/rebaixar membros", 0x1),
 	KICK("Expulsar membros", 0x2),
-	WITHDRAW("Sacar créditos do cofre", 0x4),
+	WITHDRAW("Sacar CR do cofre", 0x4),
 	INVITE("Convidar membros", 0x8);
 
 	private final String name;

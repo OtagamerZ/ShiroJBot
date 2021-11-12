@@ -381,7 +381,7 @@ public class Account {
 				try {
 					EmbedBuilder eb = new ColorlessEmbedBuilder();
 					eb.setTitle("Opa, você já pode votar novamente!");
-					eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
+					eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de CR!");
 					eb.setFooter("Data do último voto: " + lastVoted);
 
 					Main.getInfo().getUserByID(uid).openPrivateChannel()

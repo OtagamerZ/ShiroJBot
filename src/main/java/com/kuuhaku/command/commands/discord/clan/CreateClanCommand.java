@@ -60,7 +60,7 @@ public class CreateClanCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.getBalance() + acc.getVBalance() < 10000) {
-			channel.sendMessage("❌ | Você precisa de 10.000 créditos para poder criar um clã.").queue();
+			channel.sendMessage("❌ | Você precisa de 10.000 CR para poder criar um clã.").queue();
 			return;
 		}
 
@@ -77,7 +77,7 @@ public class CreateClanCommand implements Executable {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 créditos?")
+		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 CR?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 

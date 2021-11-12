@@ -57,9 +57,9 @@ public class PurchaseBuffCommand implements Executable {
 			eb.setTitle(":level_slider: | Melhorias de servidor");
 			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
 			eb.addField("Melhoria de XP (`" + prefix + "up xp TIER`)", """
-							**Tier 1** (%s créditos): `+30%% XP ganho` (15 dias)
-							**Tier 2** (%s créditos): `+60%% XP ganho` (11 dias)
-							**Tier 3** (%s créditos): `+90%% XP ganho` (7 dias)
+							**Tier 1** (%s CR): `+30%% XP ganho` (15 dias)
+							**Tier 2** (%s CR): `+60%% XP ganho` (11 dias)
+							**Tier 3** (%s CR): `+90%% XP ganho` (7 dias)
 							"""
 							.formatted(
 									Helper.separate(new ServerBuff(BuffType.XP, 1).getPrice()),
@@ -69,10 +69,10 @@ public class PurchaseBuffCommand implements Executable {
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas (`" + prefix + "up carta TIER`)", """
-							**Tier 1** (%s créditos): `+20%% chance de aparecer cartas` (15 dias)
-							**Tier 2** (%s créditos): `+30%% chance de aparecer cartas` (11 dias)
-							**Tier 3** (%s créditos): `+40%% chance de aparecer cartas` (7 dias)
-							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
+							**Tier 1** (%s CR): `+20%% chance de aparecer cartas` (15 dias)
+							**Tier 2** (%s CR): `+30%% chance de aparecer cartas` (11 dias)
+							**Tier 3** (%s CR): `+40%% chance de aparecer cartas` (7 dias)
+							**:warning: Tier Ultimate** (%s CR): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
 							"""
 							.formatted(
 									Helper.separate(new ServerBuff(BuffType.CARD, 1).getPrice()),
@@ -83,10 +83,10 @@ public class PurchaseBuffCommand implements Executable {
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de drops (`" + prefix + "up drop TIER`)", """
-							**Tier 1** (%s créditos): `+20%% chance de aparecer drops` (15 dias)
-							**Tier 2** (%s créditos): `+30%% chance de aparecer drops` (11 dias)
-							**Tier 3** (%s créditos): `+40%% chance de aparecer drops` (7 dias)
-							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
+							**Tier 1** (%s CR): `+20%% chance de aparecer drops` (15 dias)
+							**Tier 2** (%s CR): `+30%% chance de aparecer drops` (11 dias)
+							**Tier 3** (%s CR): `+40%% chance de aparecer drops` (7 dias)
+							**:warning: Tier Ultimate** (%s CR): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
 							"""
 							.formatted(
 									Helper.separate(new ServerBuff(BuffType.DROP, 1).getPrice()),
@@ -97,10 +97,10 @@ public class PurchaseBuffCommand implements Executable {
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas cromadas (`" + prefix + "up cromada TIER`)", """
-							**Tier 1** (%s créditos): `+25%% chance de aparecer cartas cromadas` (15 dias)
-							**Tier 2** (%s créditos): `+50%% chance de aparecer cartas cromadas` (11 dias)
-							**Tier 3** (%s créditos): `+75%% chance de aparecer cartas cromadas` (7 dias)
-							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
+							**Tier 1** (%s CR): `+25%% chance de aparecer cartas cromadas` (15 dias)
+							**Tier 2** (%s CR): `+50%% chance de aparecer cartas cromadas` (11 dias)
+							**Tier 3** (%s CR): `+75%% chance de aparecer cartas cromadas` (7 dias)
+							**:warning: Tier Ultimate** (%s CR): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
 							"""
 							.formatted(
 									Helper.separate(new ServerBuff(BuffType.FOIL, 1).getPrice()),
@@ -109,7 +109,7 @@ public class PurchaseBuffCommand implements Executable {
 									Helper.separate(new ServerBuff(BuffType.FOIL, 4).getPrice())
 							)
 					, false);
-			eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+			eb.setFooter("Seus CR: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;

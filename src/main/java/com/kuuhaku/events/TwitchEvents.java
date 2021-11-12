@@ -132,8 +132,8 @@ public class TwitchEvents {
 
 				eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
 				eb.setTitle("Opa, obrigada por seguir o canal do meu nii-chan!");
-				eb.setDescription("Como agradecimento, aqui estão 5.000 créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
-				eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance() + 5000), "https://i.imgur.com/U0nPjLx.gif");
+				eb.setDescription("Como agradecimento, aqui estão 5.000 CR para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
+				eb.setFooter("Seus CR: " + Helper.separate(acc.getBalance() + 5000), "https://i.imgur.com/U0nPjLx.gif");
 				eb.setColor(Color.cyan);
 
 				acc.addCredit(5000, this.getClass());

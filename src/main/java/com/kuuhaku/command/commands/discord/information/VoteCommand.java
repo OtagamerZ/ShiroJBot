@@ -50,7 +50,7 @@ public class VoteCommand implements Executable {
 					.queue();
 		} else {
 			channel.sendMessage("""
-					Vote em mim para receber créditos e acúmulos de voto!
+					Vote em mim para receber CR e acúmulos de voto!
 					https://top.gg/bot/572413282653306901/vote
 										
 					Se você votar e não receber a notificação, basta usar este comando novamente para eu verificar seu voto.

@@ -60,7 +60,7 @@ public class ClanWithdrawCommand implements Executable {
 			channel.sendMessage("❌ | Você não tem permissão para sacar do cofre do clã.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa especificar uma quantia de créditos para serem sacados.").queue();
+			channel.sendMessage("❌ | Você precisa especificar uma quantia de CR para serem sacados.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
@@ -72,12 +72,12 @@ public class ClanWithdrawCommand implements Executable {
 		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, 0.05);
 
 		if (c.getVault() < rawAmount) {
-			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
+			channel.sendMessage("❌ | O cofre do clã não possui CR suficientes.").queue();
 			return;
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(rawAmount) + " créditos do cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(rawAmount) + " CR do cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 

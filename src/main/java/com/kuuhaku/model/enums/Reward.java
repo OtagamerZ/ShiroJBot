@@ -59,7 +59,7 @@ public enum Reward {
 
 		return v < 0 ? -r : r;
 	}),
-	CREDIT("Créditos", (h, v) -> {
+	CREDIT("CR", (h, v) -> {
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
