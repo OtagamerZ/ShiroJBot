@@ -36,7 +36,7 @@ import java.util.Locale;
 public enum CreditItem {
 	XP_BOOST(
 			"XP Boost", "Ganha 3500 de XP instantâneamente (valor reduzido se você ganhou XP em menos de 10 segundos)",
-			5000,
+			6500,
 			(mb, chn, args) -> {
 				com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 				int lvl = m.getLevel();
@@ -59,7 +59,7 @@ public enum CreditItem {
 	),
 	SPAWN_CARD(
 			"Invocar Carta", "Invoca uma carta aleatória (possui chance de ser cromada)",
-			1000,
+			5000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, false);
@@ -69,7 +69,7 @@ public enum CreditItem {
 	),
 	SPAWN_ANIME(
 			"Invocar Anime", "Invoca uma carta aleatória de um anime específico (possui chance de ser cromada)",
-			6000,
+			8500,
 			(mb, chn, args) -> {
 				if (args.length < 2) {
 					chn.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
@@ -101,7 +101,7 @@ public enum CreditItem {
 	),
 	SPAWN_CARD_FOIL(
 			"Invocar Carta Cromada", "Invoca uma carta cromada aleatória",
-			100000,
+			85000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, true);
@@ -110,7 +110,7 @@ public enum CreditItem {
 	),
 	SPAWN_ANIME_FOIL(
 			"Invocar Anime Cromado", "Invoca uma carta cromada aleatória de um anime específico",
-			250000,
+			175000,
 			(mb, chn, args) -> {
 				if (args.length < 2) {
 					chn.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
