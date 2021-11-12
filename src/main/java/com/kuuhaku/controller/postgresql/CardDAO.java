@@ -82,6 +82,21 @@ public class CardDAO {
 		}
 	}
 
+	public static boolean checkHash(String hash) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT 1 FROM KawaiponCard kc WHERE kc.hash = :hash");
+		q.setParameter("hash", hash);
+
+		try {
+			return q.getSingleResult() != null;
+		} catch (NoResultException e) {
+			return false;
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Set<AddedAnime> getValidAnime() {
 		EntityManager em = Manager.getEntityManager();
