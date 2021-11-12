@@ -37,7 +37,7 @@ public class KawaiponCard {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean foil = false;
 
-	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
+	@Column(columnDefinition = "CHAR(64) UNIQUE NOT NULL")
 	private String hash;
 
 	public KawaiponCard(Card card, boolean foil) {
