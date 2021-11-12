@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
@@ -67,6 +68,9 @@ public class CatchKawaiponCommand implements Executable {
 			return;
 		} else if (kp.getCards().contains(kc)) {
 			channel.sendMessage(I18n.getString("err_card-owned")).queue();
+			return;
+		} else if (CardDAO.checkHash(kc.getHash())) {
+			channel.sendMessage("❌ | Essa carta já foi coletada por alguém.").queue();
 			return;
 		}
 
