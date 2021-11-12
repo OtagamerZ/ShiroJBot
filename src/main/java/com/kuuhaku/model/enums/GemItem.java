@@ -20,12 +20,10 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TriFunction;
 import net.dv8tion.jda.api.entities.Member;
@@ -197,6 +195,22 @@ public enum GemItem {
 				return true;
 			}
 	),
+	GODS_BLESSING(
+			"Bênção dos deuses", "Sua próxima síntese terá 35% de chance extra de vir um evogear tier 3 e 15% de vir um tier 4",
+			6,
+			(mb, chn, args) -> {
+				DynamicParameter dp = DynamicParameterDAO.getParam(mb.getId() + "_blessing");
+
+				if (!dp.getValue().isBlank()) {
+					chn.sendMessage("❌ | Você já possui uma bênção ativa.").queue();
+					return false;
+				}
+
+				DynamicParameterDAO.setParam(mb.getId() + "_blessing", "gods");
+
+				return true;
+			}
+	),
 	ANIMATED_BACKGROUND(
 			"Fundo de perfil animado", "Permite usar GIFs como fundo de perfil",
 			10,
@@ -216,7 +230,7 @@ public enum GemItem {
 	),
 	DECK_STASH_SLOT(
 			"Aumentar capacidade de decks reserva", "Libera 1 espaço extra nos seus decks reserva (máximo 10 slots)",
-			20,
+			15,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());
 
