@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
@@ -28,6 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -287,6 +289,17 @@ public class Account {
 	public void addLoan(long loan) {
 		this.loan += loan;
 		AccountDAO.saveAccount(this);
+	}
+
+	public double getTax() {
+		long total = getTotalBalance();
+		if (total <= 100_000) return 0;
+
+		Clan c = ClanDAO.getUserClan(uid);
+		ClanRanking cr = ClanDAO.getClanChampion();
+		boolean victorious = c != null && cr != null && cr.id() == c.getId();
+
+		return victorious ? 0 : 500 / (1 + Math.exp(-0.000001 * (total - 5_100_000))) - 3.346;
 	}
 
 	public ZonedDateTime getLastVoted() {
