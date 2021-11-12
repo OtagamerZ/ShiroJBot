@@ -75,8 +75,8 @@ public class CatchKawaiponCommand implements Executable {
 			return;
 		}
 
+		Main.getInfo().getCurrentCard().remove(guild.getId());
 		try {
-			Main.getInfo().getCurrentCard().remove(guild.getId());
 			kp.addCard(kc);
 			KawaiponDAO.saveKawaipon(kp);
 
