@@ -80,11 +80,13 @@ public class CreditStoreCommand implements Executable {
 				return;
 			}
 
-			int tax = 0;
+			int tax;
 			if (acc.getTotalBalance() > 500_000) {
 				tax = (int) acc.getTotalBalance() / 100;
 			} else if (acc.getTotalBalance() > 100_000) {
 				tax = (int) acc.getTotalBalance() / 200;
+			} else {
+				tax = 0;
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
