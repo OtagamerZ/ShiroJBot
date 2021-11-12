@@ -35,6 +35,7 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.Map;
 
@@ -74,23 +75,29 @@ public class CatchKawaiponCommand implements Executable {
 			return;
 		}
 
-		Main.getInfo().getCurrentCard().remove(guild.getId());
-		kp.addCard(kc);
-		acc.consumeCredit(cost, this.getClass());
+		try {
+			Main.getInfo().getCurrentCard().remove(guild.getId());
+			kp.addCard(kc);
+			KawaiponDAO.saveKawaipon(kp);
 
-		if (acc.hasPendingQuest()) {
-			Map<DailyTask, Integer> pg = acc.getDailyProgress();
-			DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
+			acc.consumeCredit(cost, this.getClass());
 
-			pg.merge(DailyTask.CARD_TASK, 1, Integer::sum);
-			if (kc.getCard().getAnime().equals(dq.getChosenAnime()))
-				pg.merge(DailyTask.ANIME_TASK, 1, Integer::sum);
+			if (acc.hasPendingQuest()) {
+				Map<DailyTask, Integer> pg = acc.getDailyProgress();
+				DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
 
-			acc.setDailyProgress(pg);
+				pg.merge(DailyTask.CARD_TASK, 1, Integer::sum);
+				if (kc.getCard().getAnime().equals(dq.getChosenAnime()))
+					pg.merge(DailyTask.ANIME_TASK, 1, Integer::sum);
+
+				acc.setDailyProgress(pg);
+			}
+
+			AccountDAO.saveAccount(acc);
+		} catch (ConstraintViolationException e) {
+			channel.sendMessage("❌ | Essa carta já foi coletada por alguém.").queue();
+			return;
 		}
-
-		KawaiponDAO.saveKawaipon(kp);
-		AccountDAO.saveAccount(acc);
 
 		channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
 	}
