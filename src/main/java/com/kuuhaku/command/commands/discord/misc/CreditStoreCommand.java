@@ -82,9 +82,9 @@ public class CreditStoreCommand implements Executable {
 
 			int tax;
 			if (acc.getTotalBalance() > 500_000) {
-				tax = (int) acc.getTotalBalance() / 100;
+				tax = Helper.getTax(author.getId(), (int) acc.getTotalBalance(), 0.01);
 			} else if (acc.getTotalBalance() > 100_000) {
-				tax = (int) acc.getTotalBalance() / 200;
+				tax = Helper.getTax(author.getId(), (int) acc.getTotalBalance(), 0.005);
 			} else {
 				tax = 0;
 			}
