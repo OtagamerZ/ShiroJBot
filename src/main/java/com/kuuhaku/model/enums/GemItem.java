@@ -199,14 +199,14 @@ public enum GemItem {
 			"Bênção dos deuses", "Sua próxima síntese terá 35% de chance extra de vir um evogear tier 3 e 15% de vir um tier 4",
 			6,
 			(mb, chn, args) -> {
-				DynamicParameter dp = DynamicParameterDAO.getParam(mb.getId() + "_blessing");
+				DynamicParameter dp = DynamicParameterDAO.getParam("blessing_" + mb.getId());
 
 				if (!dp.getValue().isBlank()) {
 					chn.sendMessage("❌ | Você já possui uma bênção ativa.").queue();
 					return false;
 				}
 
-				DynamicParameterDAO.setParam(mb.getId() + "_blessing", "gods");
+				DynamicParameterDAO.setParam("blessing_" + mb.getId(), "gods");
 
 				return true;
 			}
