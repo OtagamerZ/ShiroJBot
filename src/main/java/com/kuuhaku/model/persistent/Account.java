@@ -299,7 +299,7 @@ public class Account {
 		ClanRanking cr = ClanDAO.getClanChampion();
 		boolean victorious = c != null && cr != null && cr.id() == c.getId();
 
-		return victorious ? 0 : 500 / (1 + Math.exp(-0.000001 * (total - 5_100_000))) - 3.346;
+		return victorious ? 0 : 5 / (1 + Math.exp(-0.000001 * (total - 5_100_000))) - 3.346;
 	}
 
 	public ZonedDateTime getLastVoted() {
