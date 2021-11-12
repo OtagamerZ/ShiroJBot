@@ -2526,6 +2526,14 @@ public class Helper {
 		return raw - (victorious ? 0 : (int) (raw * tax));
 	}
 
+	public static int getTax(String id, int raw, double tax) {
+		Clan c = ClanDAO.getUserClan(id);
+		ClanRanking cr = ClanDAO.getClanChampion();
+		boolean victorious = c != null && cr != null && cr.id() == c.getId();
+
+		return victorious ? 0 : (int) (raw * tax);
+	}
+
 	public static <T> MessageAction generateStore(User u, TextChannel chn, String title, String desc, List<T> items, Function<T, MessageEmbed.Field> fieldExtractor) {
 		Account acc = AccountDAO.getAccount(u.getId());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
