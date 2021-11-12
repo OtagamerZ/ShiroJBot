@@ -54,7 +54,7 @@ public class RankCommand implements Executable {
 			int type;
 			if (args.length > 0 && args[0].equalsIgnoreCase("global")) {
 				type = 0;
-			} else if (Helper.findParam(args, "credit", "creditos", "créditos")) {
+			} else if (Helper.findParam(args, "credit", "creditos", "CR")) {
 				type = 1;
 			} else if (Helper.findParam(args, "card", "kawaipon", "cartas")) {
 				type = 2;
@@ -68,7 +68,7 @@ public class RankCommand implements Executable {
 					.setTitle("Ranking de usuários (" + switch (type) {
 						default -> "Level - LOCAL";
 						case 0 -> "Level - GLOBAL";
-						case 1 -> "Créditos";
+						case 1 -> "CR";
 						case 2 -> "Cartas";
 						case 3 -> "Tempo em call";
 					} + ")")

@@ -142,9 +142,9 @@ public class AuctionCommand implements Executable {
 
 			if (price < min) {
 				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " créditos.").queue();
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " CR.").queue();
 				else
-					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " créditos.").queue();
+					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " CR.").queue();
 				return;
 			}
 
@@ -185,19 +185,19 @@ public class AuctionCommand implements Executable {
 								}
 
 								if (oacc.get().getBalance() < offer) {
-									channel.sendMessage("❌ | Você não possui créditos suficientes!").queue();
+									channel.sendMessage("❌ | Você não possui CR suficientes!").queue();
 									return;
 								}
 
 								highest.set(Pair.of(evt.getAuthor(), offer));
 								phase.set(1);
 
-								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " créditos**!").queue();
+								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " CR**!").queue();
 
 								event.get().cancel(true);
 								event.set(exec.scheduleWithFixedDelay(() -> {
 									if (phase.get() == 4 && highest.get() != null) {
-										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + Helper.separate(highest.get().getRight()) + "** créditos!").queue();
+										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + Helper.separate(highest.get().getRight()) + "** CR!").queue();
 
 										if (!author.getId().equals(highest.get().getLeft().getId())) {
 											Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
@@ -253,7 +253,7 @@ public class AuctionCommand implements Executable {
 								}, 5, 5, TimeUnit.SECONDS));
 							}
 						} catch (NumberFormatException e) {
-							channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+							channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
 						}
 					}
 				}
@@ -278,7 +278,7 @@ public class AuctionCommand implements Executable {
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
 		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
 		}
 	}
 }

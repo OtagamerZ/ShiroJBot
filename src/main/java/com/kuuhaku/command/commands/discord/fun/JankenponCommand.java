@@ -93,7 +93,7 @@ public class JankenponCommand implements Executable {
 						acc.addCredit(crd, this.getClass());
 						AccountDAO.saveAccount(acc);
 						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);
-						yield "\nVocê ganhou! Aqui, " + Helper.separate(crd) + " créditos por ter jogado comigo!";
+						yield "\nVocê ganhou! Aqui, " + Helper.separate(crd) + " CR por ter jogado comigo!";
 					}
 					case 2 -> "\nEmpate!";
 					default -> throw new IllegalStateException("Unexpected value: " + finalWin);

@@ -85,6 +85,6 @@ public class TransferCommand implements Executable {
 
 		boolean taxed = rawAmount != liquidAmount;
 		String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
-		channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso!" + taxMsg).queue();
+		channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** CR transferidos com sucesso!" + taxMsg).queue();
 	}
 }

@@ -86,7 +86,7 @@ public class LeaderboardsCommand implements Executable {
 			Leaderboards l = lb.get(i);
 			String unit = switch (cmd.getCommand().getClass().getSimpleName()) {
 				case "FaceoffCommand" -> "ms";
-				case "SlotsCommand" -> "crédito" + (l.getScore() == 1 ? "" : "s");
+				case "SlotsCommand" -> "CR";
 				case "GuessTheCardsCommand", "JankenponCommand", "GuessTheNumberCommand", "ColorNameCommand" -> "ponto" + (l.getScore() == 1 ? "" : "s");
 				default -> "";
 			};

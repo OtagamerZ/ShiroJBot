@@ -157,7 +157,7 @@ public class GuessTheCardsCommand implements Executable {
 								}
 								case 1 -> {
 									channel.sendMessage(
-											"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
+											"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s CR)."
 													.formatted(
 															names.get(0),
 															names.get(1),
@@ -168,7 +168,7 @@ public class GuessTheCardsCommand implements Executable {
 								}
 								case 2 -> {
 									channel.sendMessage(
-											"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
+											"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s CR)."
 													.formatted(
 															names.get(0),
 															Helper.separate(reward)
@@ -178,7 +178,7 @@ public class GuessTheCardsCommand implements Executable {
 								}
 								case 3 -> {
 									channel.sendMessage(
-											"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
+											"Você acertou todos os nomes, parabéns! (Recebeu %s CR)."
 													.formatted(Helper.separate(reward))).queue();
 									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 3);
 								}

@@ -74,17 +74,17 @@ public class MonthlyEvent implements Job {
 		if (winners.isEmpty())
 			msg = """
 					As dezenas sorteadas foram `%s`.
-					Como não houveram vencedores, o prêmio de %s créditos será acumulado para o próximo mês!
+					Como não houveram vencedores, o prêmio de %s CR será acumulado para o próximo mês!
 					""".formatted(String.join(" ", dozens), Helper.separate(value.getValue()));
 		else if (winners.size() == 1)
 			msg = """
 					As dezenas sorteadas foram `%s`.
-					O vencedor de %s créditos foi %s, parabéns!
+					O vencedor de %s CR foi %s, parabéns!
 					""".formatted(String.join(" ", dozens), Helper.separate(value.getValue()), Main.getInfo().getUserByID(winners.get(0).getUid()).getName());
 		else
 			msg = """
 					As dezenas sorteadas foram `%s`.
-					Os %s vencedores dividirão em partes iguais o prêmio de %s créditos, parabéns!!
+					Os %s vencedores dividirão em partes iguais o prêmio de %s CR, parabéns!!
 					""".formatted(String.join(" ", dozens), winners.size(), Helper.separate(value.getValue()));
 
 		chn.sendMessage(msg).queue();
@@ -95,7 +95,7 @@ public class MonthlyEvent implements Job {
 			acc.addCredit(value.getValue() / winners.size(), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
 
-			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> c.sendMessage("Você ganhou " + Helper.separate(value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing), Helper::doNothing);
+			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> c.sendMessage("Você ganhou " + Helper.separate(value.getValue() / winners.size()) + " CR na loteria, parabéns!").queue(null, Helper::doNothing), Helper::doNothing);
 		}
 
 		LotteryDAO.closeLotteries();

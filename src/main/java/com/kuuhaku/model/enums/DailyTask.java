@@ -19,7 +19,7 @@
 package com.kuuhaku.model.enums;
 
 public enum DailyTask {
-	CREDIT_TASK("Consiga %s créditos"),
+	CREDIT_TASK("Consiga %s CR"),
 	CARD_TASK("Colete %s cartas"),
 	DROP_TASK("Abra %s drops"),
 	WINS_TASK("Ganhe %s partidas de Shoukan"),

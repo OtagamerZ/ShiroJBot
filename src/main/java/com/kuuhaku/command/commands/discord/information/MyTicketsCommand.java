@@ -70,7 +70,7 @@ public class MyTicketsCommand implements Executable, Slashed {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(":tickets: | Seus bilhetes da loteria")
 				.setDescription(sb.toString())
-				.setFooter("Prêmio atual: %s créditos".formatted(Helper.separate(LotteryDAO.getLotteryValue().getValue())));
+				.setFooter("Prêmio atual: %s CR".formatted(Helper.separate(LotteryDAO.getLotteryValue().getValue())));
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}
