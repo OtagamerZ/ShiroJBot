@@ -219,7 +219,7 @@ public class BuyCardCommand implements Executable {
 
 		Account seller = AccountDAO.getAccount(m.getSeller());
 		if (!seller.getUid().equals(author.getId())) {
-			if (buyer.getBalance() < (blackfriday ? m.getPrice() * 0.75 : m.getPrice())) {
+			if (buyer.getBalance() < m.getPrice() * (blackfriday ? 0.75 : 1)) {
 				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 				return;
 			}
@@ -252,11 +252,11 @@ public class BuyCardCommand implements Executable {
 			}
 			KawaiponDAO.saveKawaipon(kp);
 
-			int rawAmount = m.getPrice();
+			int rawAmount = (int) Math.round(m.getPrice() * (blackfriday ? 0.75 : 1));
 			int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
 
 			seller.addCredit(liquidAmount, this.getClass());
-			buyer.removeCredit(blackfriday ? Math.round(m.getPrice() * 0.75) : m.getPrice(), this.getClass());
+			buyer.removeCredit(rawAmount, this.getClass());
 
 			LotteryValue lv = LotteryDAO.getLotteryValue();
 			lv.addValue(rawAmount - liquidAmount);
@@ -279,7 +279,7 @@ public class BuyCardCommand implements Executable {
 			boolean taxed = rawAmount != liquidAmount;
 			String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
 			if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " CR!" + taxMsg).queue(null, Helper::doNothing),
+							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(rawAmount) + " CR!" + taxMsg).queue(null, Helper::doNothing),
 					Helper::doNothing
 			);
 
