@@ -80,7 +80,13 @@ public class CreditStoreCommand implements Executable {
 				return;
 			}
 
-			int tax = acc.getTotalBalance() > 100000 ? (int) acc.getTotalBalance() / 200 : 0;
+			int tax = 0;
+			if (acc.getTotalBalance() > 500_000) {
+				tax = (int) acc.getTotalBalance() / 100;
+			} else if (acc.getTotalBalance() > 100_000) {
+				tax = (int) acc.getTotalBalance() / 200;
+			}
+
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar" + (tax > 0 ? (" (Taxa: " + Helper.separate(tax) + " CR)") : "") + "?").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
