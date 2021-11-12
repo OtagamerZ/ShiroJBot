@@ -139,11 +139,8 @@ public class BuyRoleCommand implements Executable {
 											Account facc = AccountDAO.getAccount(author.getId());
 											Account oacc = AccountDAO.getAccount(guild.getOwnerId());
 
-											int rawAmount = pr.getPrice();
-											int liquidAmount = Helper.applyTax(guild.getOwnerId(), rawAmount, 0.1);
-
 											facc.removeCredit(pr.getPrice(), BuyRoleCommand.class);
-											oacc.addCredit(liquidAmount, BuyRoleCommand.class);
+											oacc.addCredit(pr.getPrice(), BuyRoleCommand.class);
 
 											AccountDAO.saveAccount(facc);
 											AccountDAO.saveAccount(oacc);

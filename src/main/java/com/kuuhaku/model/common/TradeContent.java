@@ -156,8 +156,7 @@ public class TradeContent {
 			Kawaipon kp = tc.getKawaipon();
 			Deck dk = kp.getDeck();
 
-			int liquidAmount = Helper.applyTax(other.uid, other.credits, 0.1);
-			acc.addCredit(liquidAmount, TradeContent.class);
+			acc.addCredit(other.credits, TradeContent.class);
 
 			kp.addCards(other.cards);
 			dk.addEquipments(other.equipments);
@@ -172,10 +171,6 @@ public class TradeContent {
 			oKp.removeCards(other.cards);
 			oDk.removeEquipments(other.equipments);
 			oDk.removeFields(other.fields);
-
-			LotteryValue lv = LotteryDAO.getLotteryValue();
-			lv.addValue((tc.credits - liquidAmount));
-			LotteryDAO.saveLotteryValue(lv);
 
 			KawaiponDAO.saveKawaipon(kp);
 			AccountDAO.saveAccount(acc);
@@ -193,10 +188,7 @@ public class TradeContent {
 			sb.appendNewLine("Nada");
 		} else {
 			if (credits > 0) {
-				int liquidAmount = Helper.applyTax(uid, credits, 0.1);
-				boolean taxed = credits != liquidAmount;
-				String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, credits) * 100, 1) + "%)" : "";
-				sb.appendNewLine(Helper.separate(credits) + " .CR" + taxMsg);
+				sb.appendNewLine(Helper.separate(credits) + " .CR");
 			}
 
 			if (cards.size() > 0) sb.appendNewLine("[ Kawaipon ]");
