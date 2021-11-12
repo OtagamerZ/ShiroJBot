@@ -109,18 +109,18 @@ public class SynthesizeCardCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.queue(s -> {
-						Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
-						buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-							Main.getInfo().getConfirmationPending().remove(author.getId());
+								Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
+								buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							if (dk.getFields().size() == 3) {
-								int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
+									if (dk.getFields().size() == 3) {
+										int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
-								Account acc = AccountDAO.getAccount(author.getId());
-								acc.addCredit(change, this.getClass());
-								AccountDAO.saveAccount(acc);
+										Account acc = AccountDAO.getAccount(author.getId());
+										acc.addCredit(change, this.getClass());
+										AccountDAO.saveAccount(acc);
 
-								if (dk.getFields().size() == 3)
+										if (dk.getFields().size() == 3)
 											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
 
 										if (dp.getValue().isBlank()) {
@@ -152,18 +152,20 @@ public class SynthesizeCardCommand implements Executable {
 									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
 								});
 
-						Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-								u -> u.getId().equals(author.getId()),
-								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-						);
+								Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+										u -> u.getId().equals(author.getId()),
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								);
 							}
 					);
 		} else {
+			boolean blessed = !DynamicParameterDAO.getParam(author.getId() + "_blessing").getValue().isBlank();
+
 			int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
 			double tier1 = (15 - score) * 0.75 / 12;
 			double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
-			double tier3 = Math.max(0, 0.65 - tier1);
-			double tier4 = tier3 * 0.1 / 0.65;
+			double tier3 = Math.max(0, 0.65 - tier1) + (blessed ? 0.35 : 0);
+			double tier4 = tier3 * 0.1 / 0.65 + (blessed ? 0.15 : 0);
 
 			List<Equipment> equips = CardDAO.getAllAvailableEquipments();
 			List<Equipment> chosenTier = Helper.getRandom(List.of(
@@ -219,6 +221,10 @@ public class SynthesizeCardCommand implements Executable {
 										else
 											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 
+										if (blessed) {
+											DynamicParameterDAO.clearParam("blessing_" + author.getId());
+										}
+
 										KawaiponDAO.saveKawaipon(kp);
 										s.delete().queue(null, Helper::doNothing);
 										return;
@@ -232,6 +238,10 @@ public class SynthesizeCardCommand implements Executable {
 										}
 									} else
 										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
+									if (blessed) {
+										DynamicParameterDAO.clearParam("blessing_" + author.getId());
+									}
 
 									KawaiponDAO.saveKawaipon(kp);
 
