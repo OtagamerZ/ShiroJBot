@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "descansarheroi",
 		aliases = {"herorest", "rest"},
-		category = Category.MODERATION
+		category = Category.MISC
 )
 @Requires({Permission.NICKNAME_MANAGE})
 public class HeroRestCommand implements Executable {
