@@ -128,7 +128,7 @@ public class TutorialCommand implements Executable {
 						.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 						.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")
 						.setColor(Color.orange)
-						.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " créditos).", null)
+						.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " CR).", null)
 						.setImage("attachment://kawaipon.png");
 
 				next.set(new CompletableFuture<>());
@@ -287,7 +287,7 @@ public class TutorialCommand implements Executable {
 				acc.addSCredit(25000, this.getClass());
 				acc.setStarted(true);
 				AccountDAO.saveAccount(acc);
-				channel.sendMessage(author.getAsMention() + " recebeu **25.000** créditos de iniciante!").queue();
+				channel.sendMessage(author.getAsMention() + " recebeu **25.000** CR de iniciante!").queue();
 			}
 		} catch (ExecutionException | InterruptedException ignore) {
 		}
@@ -308,10 +308,10 @@ public class TutorialCommand implements Executable {
 	private MessageEmbed secondStep(String prefix) {
 		return new ColorlessEmbedBuilder()
 				.setDescription("""
-						Ok, vamos começar falando sobre os **créditos** (CR).
+						Ok, vamos começar falando sobre os **CR** (CR).
 
-						Crédito é a principal moeda usada em meus módulos, eles são necessários para várias coisas como coletar cartas, apostar em jogos, comprar melhorias, comprar itens na loja, etc.
-						Existem muitas formas de conseguir créditos, as mais populares são:
+						CR é a principal moeda usada em meus módulos, eles são necessários para várias coisas como coletar cartas, apostar em jogos, comprar melhorias, comprar itens na loja, etc.
+						Existem muitas formas de conseguir CR, as mais populares são:
 						- Votando em mim
 						- Completando tarefas diárias
 						- Abrindo drops
@@ -328,9 +328,9 @@ public class TutorialCommand implements Executable {
 				.setDescription("""
 						Muito bem!
 
-						Com este comando você pode ver quantos créditos você possui, além dos créditos voláteis, dívida, gemas acumuladas e a data do seu último voto.
-						- **Créditos voláteis:** São iguais aos créditos normais, mas só podem ser usados para transações comigo além de perder 25% a cada hora.
-						- **Dívidas:** Caso você faça um empréstimo de créditos (ou seja pego abusando de algum comando) você receberá um valor de dívida, fazendo com que você não receba mais créditos até terminar de pagá-la.
+						Com este comando você pode ver quantos CR você possui, além dos CR voláteis, dívida, gemas acumuladas e a data do seu último voto.
+						- **CR voláteis:** São iguais aos CR normais, mas só podem ser usados para transações comigo além de perder 25% a cada hora.
+						- **Dívidas:** Caso você faça um empréstimo de CR (ou seja pego abusando de algum comando) você receberá um valor de dívida, fazendo com que você não receba mais CR até terminar de pagá-la.
 						- **Gemas:** A moeda VIP para quem vota frequentemente em mim, com ela você consegue comprar melhorias exóticas na loja exclusiva.
 
 						Para continuar, clique em ▶️.
@@ -344,7 +344,7 @@ public class TutorialCommand implements Executable {
 						Olha só!
 
 						Essa é uma carta kawaipon, elas aparecem conforme o movimento nos chats do servidor e podem ser coletadas para adicionar à sua coleção.
-						Para coletá-las você precisa de créditos (conforme escrito abaixo da imagem), mas como estamos em um tutorial esta carta sairá de graça.
+						Para coletá-las você precisa de CR (conforme escrito abaixo da imagem), mas como estamos em um tutorial esta carta sairá de graça.
 
 						Pegue-a, rápido!
 						Para continuar, digite `%scoletar`.
@@ -459,8 +459,8 @@ public class TutorialCommand implements Executable {
 						Para fazer um, use o comando `%stutor` e mencione o usuário disposto a treinar você para tornar-se um mestre invocador!
 
 						**Mas espere, é perigoso ir sozinho!**
-						Aqui, como recompensa por completar o tutorial e para lhe ajudar a começar sua jornada, vou te dar **25.000** créditos de iniciante.
-						Eles são iguais aos créditos voláteis mas não expiram com o tempo.
+						Aqui, como recompensa por completar o tutorial e para lhe ajudar a começar sua jornada, vou te dar **25.000** CR de iniciante.
+						Eles são iguais aos CR voláteis mas não expiram com o tempo.
 
 						Boa sorte jogador, esperarei seu sucesso nos campos de invocação!
 

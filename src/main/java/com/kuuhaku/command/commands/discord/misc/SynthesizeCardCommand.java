@@ -121,7 +121,7 @@ public class SynthesizeCardCommand implements Executable {
 										AccountDAO.saveAccount(acc);
 
 										if (dk.getFields().size() == 3)
-											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
+											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.").queue();
 
 										if (dp.getValue().isBlank()) {
 											for (Card t : tributes) {
@@ -205,9 +205,9 @@ public class SynthesizeCardCommand implements Executable {
 
 										channel.sendMessage(
 												switch (dk.checkEquipmentError(e)) {
-													case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.";
-													case 2 -> "❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.";
-													case 3 -> "❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.";
+													case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
+													case 2 -> "❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
+													case 3 -> "❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.";
 													default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
 												}
 										).queue();

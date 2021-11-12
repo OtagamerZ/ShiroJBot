@@ -142,7 +142,7 @@ public class BuyCardCommand implements Executable {
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setAuthor("Cartas anunciadas: " + Helper.separate(total) + " | Página " + (i + 1))
 						.setTitle(":scales: | Mercado de cartas")
-						.setFooter("Seus créditos: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+						.setFooter("Seus CR: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 				if (i == 0) {
 					eb.setDescription("""
@@ -181,7 +181,7 @@ public class BuyCardCommand implements Executable {
 							"""
 									%s
 									Por %s
-									Preço %s créditos
+									Preço %s CR
 									""".formatted(
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
@@ -279,7 +279,7 @@ public class BuyCardCommand implements Executable {
 			boolean taxed = rawAmount != liquidAmount;
 			String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
 			if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!" + taxMsg).queue(null, Helper::doNothing),
+							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " CR!" + taxMsg).queue(null, Helper::doNothing),
 					Helper::doNothing
 			);
 

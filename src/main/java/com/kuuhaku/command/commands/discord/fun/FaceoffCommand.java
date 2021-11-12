@@ -120,7 +120,7 @@ public class FaceoffCommand implements Executable {
 
 							long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
 							int prize = (int) Math.round(100f * (level + 1) + (min * Helper.rng(250f * (level + 1)) / react));
-							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
+							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " CR**!").queue();
 
 							Account acc = AccountDAO.getAccount(author.getId());
 							acc.addCredit(prize, this.getClass());

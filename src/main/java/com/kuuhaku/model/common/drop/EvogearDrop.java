@@ -68,7 +68,7 @@ public class EvogearDrop extends Drop<Equipment> {
 		if (mainPrize)
 			return "Evogear " + getPrize().getCard().getName();
 		else
-			return "~~Evogear %s~~\n(convertido em %s créditos)".formatted(
+			return "~~Evogear %s~~\n(convertido em %s CR)".formatted(
 					getPrize().getCard().getName(),
 					Helper.separate(Helper.BASE_EQUIPMENT_PRICE)
 			);

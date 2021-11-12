@@ -52,7 +52,7 @@ public class ClanPayRentCommand implements Executable {
 			channel.sendMessage("❌ | Apenas o líder pode pagar o aluguel do clã.").queue();
 			return;
 		} else if (c.getVault() < c.getTier().getRent()) {
-			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
+			channel.sendMessage("❌ | O cofre do clã não possui CR suficientes.").queue();
 			return;
 		} else if (c.hasPaidRent()) {
 			channel.sendMessage("❌ | O aluguel deste mês já foi pago.").queue();

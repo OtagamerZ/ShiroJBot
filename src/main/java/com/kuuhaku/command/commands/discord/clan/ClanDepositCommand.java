@@ -54,7 +54,7 @@ public class ClanDepositCommand implements Executable {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa especificar uma quantia de créditos para serem depositados.").queue();
+			channel.sendMessage("❌ | Você precisa especificar uma quantia de CR para serem depositados.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
@@ -76,7 +76,7 @@ public class ClanDepositCommand implements Executable {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja depositar " + Helper.separate(amount) + " créditos no cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja depositar " + Helper.separate(amount) + " CR no cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
