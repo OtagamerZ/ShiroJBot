@@ -74,7 +74,7 @@ public class ClanPermissionCommand implements Executable {
 				eb.addField(ch.getName(), """
 						Promover/rebaixar membros: %s
 						Expulsar membros: %s
-						Sacar créditos do cofre: %s
+						Sacar CR do cofre: %s
 						Convidar membros: %s
 						""".formatted(
 						perms.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
@@ -166,7 +166,7 @@ public class ClanPermissionCommand implements Executable {
 				.addField(ch.getName(), """
 						Promover/rebaixar membros: %s
 						Expulsar membros: %s
-						Sacar créditos do cofre: %s
+						Sacar CR do cofre: %s
 						Convidar membros: %s
 						""".formatted(
 						p.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",

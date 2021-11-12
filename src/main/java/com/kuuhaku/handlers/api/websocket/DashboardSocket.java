@@ -378,7 +378,7 @@ public class DashboardSocket extends WebSocketServer {
 									if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
 												boolean taxed = rawAmount != liquidAmount;
 												String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
-												chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!" + taxMsg).queue(null, Helper::doNothing);
+												chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " CR!" + taxMsg).queue(null, Helper::doNothing);
 											},
 											Helper::doNothing
 									);

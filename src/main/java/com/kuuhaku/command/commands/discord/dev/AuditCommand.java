@@ -83,7 +83,7 @@ public class AuditCommand implements Executable {
 			sb.setLength(0);
 			if (args[0].equalsIgnoreCase("T"))
 				for (Object[] entry : chunk)
-					sb.append("`%s`: %s créditos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), Helper.separate(entry[1])));
+					sb.append("`%s`: %s CR\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), Helper.separate(entry[1])));
 			else
 				for (Object[] entry : chunk)
 					sb.append("`%s`: %s usos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), entry[1]));

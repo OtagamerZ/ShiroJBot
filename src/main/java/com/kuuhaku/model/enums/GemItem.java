@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 public enum GemItem {
 	CONVERT_CREDITS(
-			"Converter para créditos", "Converte N gemas em 10.000 créditos cada",
+			"Converter para CR", "Converte N gemas em 10.000 CR cada",
 			1,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());

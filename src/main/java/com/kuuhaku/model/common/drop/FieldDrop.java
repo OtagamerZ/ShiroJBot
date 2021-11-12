@@ -68,7 +68,7 @@ public class FieldDrop extends Drop<Field> {
 		if (mainPrize)
 			return "Campo " + getPrize().getCard().getName();
 		else
-			return "~~Campo %s~~\n(convertido em %s créditos)".formatted(
+			return "~~Campo %s~~\n(convertido em %s CR)".formatted(
 					getPrize().getCard().getName(),
 					Helper.separate(Helper.BASE_FIELD_PRICE)
 			);

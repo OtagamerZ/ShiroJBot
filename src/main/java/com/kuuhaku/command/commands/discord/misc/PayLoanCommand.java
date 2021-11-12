@@ -38,7 +38,7 @@ public class PayLoanCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (acc.getBalance() <= 0 && acc.getLoan() > 0) {
-			channel.sendMessage("❌ | Você não têm créditos suficientes para reduzir sua dívida (não é possível pagar com créditos voláteis).").queue();
+			channel.sendMessage("❌ | Você não têm CR suficientes para reduzir sua dívida (não é possível pagar com CR voláteis).").queue();
 			return;
 		} else if (acc.getLoan() == 0) {
 			channel.sendMessage("❌ | Você não está devendo nada (ao menos não para mim :wink:).").queue();
@@ -48,6 +48,6 @@ public class PayLoanCommand implements Executable {
 		long toPay = acc.debitLoan();
 		AccountDAO.saveAccount(acc);
 
-		channel.sendMessage("Você debitou " + Helper.separate(toPay) + " créditos da sua dívida.").queue();
+		channel.sendMessage("Você debitou " + Helper.separate(toPay) + " CR da sua dívida.").queue();
 	}
 }

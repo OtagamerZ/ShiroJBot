@@ -47,7 +47,7 @@ public class CreditDrop extends Drop<Integer> {
 
 	@Override
 	public String toString() {
-		return Helper.separate(getPrize()) + " créditos";
+		return Helper.separate(getPrize()) + " CR";
 	}
 
 	@Override

@@ -1545,7 +1545,7 @@ public class Helper {
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
-					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " CR).", null);
 
 			if (gc.isSmallCards())
 				eb.setThumbnail("attachment://kawaipon.png");
@@ -1622,7 +1622,7 @@ public class Helper {
 				.setAuthor(user.getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
-				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " CR).", null);
 
 		if (gc.isSmallCards())
 			eb.setThumbnail("attachment://kawaipon.png");
@@ -2532,7 +2532,7 @@ public class Helper {
 				.setTitle(title)
 				.setDescription(desc)
 				.setFooter("""
-						:coin: Créditos: %s
+						:coin: CR: %s
 						:diamonds: Gemas: %s
 						""".formatted(acc.getBalance(), acc.getGems()));
 
@@ -2550,7 +2550,7 @@ public class Helper {
 				.setDescription(desc)
 				.setColor(color)
 				.setFooter("""
-						💰 Créditos: %s
+						💰 CR: %s
 						💎 Gemas: %s
 						""".formatted(separate(acc.getBalance()), separate(acc.getGems())));
 

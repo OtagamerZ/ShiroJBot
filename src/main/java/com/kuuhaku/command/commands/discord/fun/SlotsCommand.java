@@ -66,7 +66,7 @@ public class SlotsCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setDescription(prizeTable());
 			eb.setTitle("Tabela de prêmios");
-			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 750 créditos)");
+			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 750 CR)");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
@@ -112,7 +112,7 @@ public class SlotsCommand implements Executable {
 									%s
 									         
 									<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>
-									Seu prêmio é de __**%s créditos**__!
+									Seu prêmio é de __**%s CR**__!
 									<a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360>
 									""".formatted(combo.getMessage(), Helper.separate(prize))
 					).queue();
@@ -126,7 +126,7 @@ public class SlotsCommand implements Executable {
 
 					channel.sendMessage("""
 							%s
-							Seu prêmio é de __**%s créditos**__!
+							Seu prêmio é de __**%s CR**__!
 							""".formatted(combo.getMessage(), Helper.separate(prize))).queue();
 					LeaderboardsDAO.submit(author, SlotsCommand.class, (int) prize);
 				}

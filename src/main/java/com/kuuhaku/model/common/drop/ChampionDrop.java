@@ -68,7 +68,7 @@ public class ChampionDrop extends Drop<Champion> {
 		if (mainPrize)
 			return "Campeão " + getPrize().getCard().getName();
 		else
-			return "~~Campeão %s~~\n(convertido em %s créditos)".formatted(
+			return "~~Campeão %s~~\n(convertido em %s CR)".formatted(
 					getPrize().getCard().getName(),
 					Helper.separate(getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE)
 			);

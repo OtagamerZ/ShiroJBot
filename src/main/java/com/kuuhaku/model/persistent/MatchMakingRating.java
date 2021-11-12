@@ -169,7 +169,7 @@ public class MatchMakingRating {
 					u.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratuitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
 							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de " + tier.getName() + ", você recebeu **50.000 créditos**!"))
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de " + tier.getName() + ", você recebeu **50.000 CR**!"))
 							.queue(null, Helper::doNothing);
 
 					acc.addCredit(30000, this.getClass());

@@ -78,7 +78,7 @@ public class Clan {
 	public Clan(String name, String leader) {
 		this.name = name;
 		members.add(new ClanMember(leader, ClanHierarchy.LEADER));
-		transactions.add(Helper.getUsername(leader) + " criou o clã por 10.000 créditos.");
+		transactions.add(Helper.getUsername(leader) + " criou o clã por 10.000 CR.");
 	}
 
 	public Clan() {
@@ -233,7 +233,7 @@ public class Clan {
 
 	public void deposit(long amount, User u) {
 		this.vault += amount;
-		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " créditos.");
+		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " CR.");
 
 		for (ClanMember mb : members) {
 			mb.addScore(amount / tier.getCapacity());
@@ -246,7 +246,7 @@ public class Clan {
 
 	public void withdraw(long amount, User u) {
 		this.vault -= amount;
-		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " créditos.");
+		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " CR.");
 
 		for (ClanMember mb : members) {
 			mb.removeScore(amount / tier.getCapacity());
@@ -256,7 +256,7 @@ public class Clan {
 	public void upgrade(User u) {
 		this.vault -= tier.getNext().getCost();
 		this.tier = this.tier.getNext();
-		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier.getCost()) + " créditos.");
+		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier.getCost()) + " CR.");
 	}
 
 	public long getScore() {
@@ -283,19 +283,19 @@ public class Clan {
 	public void payRent(User u) {
 		this.vault -= tier.getRent();
 		this.paidRent = Calendar.getInstance();
-		transactions.add(u.getAsTag() + " pagou o aluguel de " + Helper.separate(tier.getRent()) + " créditos.");
+		transactions.add(u.getAsTag() + " pagou o aluguel de " + Helper.separate(tier.getRent()) + " CR.");
 	}
 
 	public void payRent() {
 		this.vault -= tier.getRent();
 		this.paidRent = Calendar.getInstance();
-		transactions.add("Aluguel pago de " + Helper.separate(tier.getRent()) + " créditos pago automaticamente.");
+		transactions.add("Aluguel pago de " + Helper.separate(tier.getRent()) + " CR pago automaticamente.");
 	}
 
 	public void changeName(User u, String name) {
 		this.vault -= 100000;
 		this.name = name;
-		transactions.add(u.getAsTag() + " trocou o nome do clã por 100.000 créditos.");
+		transactions.add(u.getAsTag() + " trocou o nome do clã por 100.000 CR.");
 
 		for (ClanMember mb : members) {
 			mb.removeScore(mb.getScore() / 3);

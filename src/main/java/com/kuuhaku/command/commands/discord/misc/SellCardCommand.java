@@ -174,13 +174,13 @@ public class SellCardCommand implements Executable {
 
 			if (price < min) {
 				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " CR.").queue();
 				else
-					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " CR.").queue();
 				Main.getInfo().getConfirmationPending().remove(author.getId());
 				return;
 			} else if (price > max) {
-				channel.sendMessage("❌ | Você não pode vender essa carta por mais que " + Helper.separate(max) + " créditos.").queue();
+				channel.sendMessage("❌ | Você não pode vender essa carta por mais que " + Helper.separate(max) + " CR.").queue();
 				Main.getInfo().getConfirmationPending().remove(author.getId());
 				return;
 			}
@@ -246,7 +246,7 @@ public class SellCardCommand implements Executable {
 		} catch (InterruptedException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
 		}
 	}
 

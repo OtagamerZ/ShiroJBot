@@ -68,14 +68,14 @@ public class ClanCommand implements Executable {
 				.setThumbnail("attachment://icon.png")
 				.setImage("attachment://banner.png")
 				.setDescription(c.getMotd())
-				.addField("Cofre", ":coin: | %s/%s créditos".formatted(Helper.separate(c.getVault()), Helper.separate(c.getTier().getVaultSize())), false)
-				.addField("Aluguel", ":receipt: | %s créditos/mês (%s)".formatted(Helper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false)
+				.addField("Cofre", ":coin: | %s/%s CR".formatted(Helper.separate(c.getVault()), Helper.separate(c.getTier().getVaultSize())), false)
+				.addField("Aluguel", ":receipt: | %s CR/mês (%s)".formatted(Helper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false)
 				.addField("Ranking", ":bar_chart: | %sº lugar (%s pontos)".formatted(ClanDAO.getClanPosition(c.getId()).rank(), Helper.separate(c.getScore())), false);
 
 		if (c.getTier() != ClanTier.DYNASTY)
 			eb.addField("Metas para promoção", """
 					Membros: %s/%s
-					Créditos: %s/%s
+					CR: %s/%s
 										
 					**Desbloqueia**
 					%s

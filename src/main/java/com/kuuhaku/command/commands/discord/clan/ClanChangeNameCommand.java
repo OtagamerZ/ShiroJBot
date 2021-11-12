@@ -54,7 +54,7 @@ public class ClanChangeNameCommand implements Executable {
 			channel.sendMessage("❌ | Apenas o líder pode mudar o nome do clã.").queue();
 			return;
 		} else if (c.getVault() < 100000) {
-			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
+			channel.sendMessage("❌ | O cofre do clã não possui CR suficientes.").queue();
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class ClanChangeNameCommand implements Executable {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja mudar o nome do clã de `" + c.getName() + "` para `" + name + "` por 100.000 créditos?")
+		channel.sendMessage("Tem certeza que deseja mudar o nome do clã de `" + c.getName() + "` para `" + name + "` por 100.000 CR?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 

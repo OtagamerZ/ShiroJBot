@@ -96,7 +96,7 @@ public class ShoukanMasterCommand implements Executable {
 
 	private void secondStep(BiContract<Boolean, Boolean> contract, Guild guild, User author, User target, MessageChannel channel) {
 		Main.getInfo().getConfirmationPending().put(target.getId(), true);
-		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **30.000 créditos** caso ele(a) alcance o ranking de Iniciado. Deseja aceitar?")
+		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **30.000 CR** caso ele(a) alcance o ranking de Iniciado. Deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (wrapper.getUser().getId().equals(target.getId())) {
 								Main.getInfo().getConfirmationPending().remove(target.getId());
