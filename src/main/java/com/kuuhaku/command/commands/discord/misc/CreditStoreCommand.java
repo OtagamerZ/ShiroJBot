@@ -23,11 +23,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.CreditItem;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -85,6 +87,10 @@ public class CreditStoreCommand implements Executable {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								if (ci.getEffect().apply(wrapper.getMember(), channel, args)) {
+									LotteryValue lv = LotteryDAO.getLotteryValue();
+									lv.addValue(tax);
+									LotteryDAO.saveLotteryValue(lv);
+
 									Account facc = AccountDAO.getAccount(author.getId());
 									facc.consumeCredit(ci.getPrice() + tax, CreditStoreCommand.class);
 									AccountDAO.saveAccount(facc);
