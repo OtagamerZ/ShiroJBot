@@ -62,8 +62,8 @@ public class DismissHeroCommand implements Executable {
 				Hero h = heroes.get(j);
 
 				String status = "";
-				if (h.hasArrived()) {
-					if (h.getQuest() != null)
+				if (h.getQuest() != null) {
+					if (h.hasArrived())
 						status = "**(RETORNOU)** ";
 					else
 						status = "**(MISSÃO)** ";
