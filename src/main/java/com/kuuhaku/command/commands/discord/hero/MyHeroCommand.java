@@ -119,7 +119,7 @@ public class MyHeroCommand implements Executable {
 				.addField(":books: | Equipamentos:", String.join("\n", equips), true)
 				.setImage("attachment://hero.png");
 
-		if (h.isUnavailable())
+		if (h.isQuesting())
 			eb.setFooter("\uD83E\uDDED | " + h.getQuest() + ": " + Helper.toStringDuration(h.getQuestEnd() - System.currentTimeMillis()));
 
 		Champion c = h.toChampion();
