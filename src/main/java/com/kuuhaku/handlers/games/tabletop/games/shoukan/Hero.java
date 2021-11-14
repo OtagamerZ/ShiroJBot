@@ -280,7 +280,11 @@ public class Hero implements Cloneable {
 	}
 
 	public boolean isUnavailable() {
-		return (quest != null && !hasArrived()) || resting;
+		return isQuesting() || resting;
+	}
+
+	public boolean isQuesting() {
+		return quest != null && !hasArrived();
 	}
 
 	public boolean hasArrived() {
