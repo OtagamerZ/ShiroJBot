@@ -19,9 +19,9 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Username;
-import org.hibernate.exception.ConstraintViolationException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 public class UsernameDAO {
@@ -75,7 +75,7 @@ public class UsernameDAO {
 		try {
 			em.merge(u);
 			em.getTransaction().commit();
-		} catch (ConstraintViolationException e) {
+		} catch (PersistenceException e) {
 			em.getTransaction().rollback();
 		} finally {
 			em.close();

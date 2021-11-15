@@ -37,6 +37,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.hibernate.exception.ConstraintViolationException;
 
+import javax.persistence.PersistenceException;
 import java.util.Map;
 
 @Command(
@@ -94,7 +95,7 @@ public class CatchKawaiponCommand implements Executable {
 			}
 
 			AccountDAO.saveAccount(acc);
-		} catch (ConstraintViolationException e) {
+		} catch (PersistenceException e) {
 			channel.sendMessage("❌ | Essa carta já foi coletada por alguém.").queue();
 			return;
 		}
