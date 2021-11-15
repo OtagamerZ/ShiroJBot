@@ -2869,15 +2869,15 @@ public class Helper {
 	}
 
 	public static String getImageFrom(Message m) {
-		if (m.getAttachments().size() > 0) {
+		if (!m.getAttachments().isEmpty()) {
 			Message.Attachment att = m.getAttachments().get(0);
 			if (att.isImage())
 				return att.getUrl();
-		} else if (m.getEmbeds().size() > 0) {
+		} else if (!m.getEmbeds().isEmpty()) {
 			MessageEmbed emb = m.getEmbeds().get(0);
 			if (emb.getImage() != null)
 				return emb.getImage().getProxyUrl();
-		} else if (m.getEmotes().size() > 0) {
+		} else if (!m.getEmotes().isEmpty()) {
 			Emote e = m.getEmotes().stream().findFirst().orElse(null);
 			if (e != null)
 				return m.getEmotes().get(0).getImageUrl();
