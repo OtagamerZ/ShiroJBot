@@ -33,10 +33,10 @@ public class PersistentEffect implements Cloneable {
 	private final EffectConsumer effect;
 	private final Side target;
 	private final boolean debuff;
-	private int turns;
-	private int limit;
+	private Integer turns;
+	private Integer limit;
 
-	public PersistentEffect(Drawable card, String source, EffectConsumer effect, Side target, boolean debuff, int turns, int limit, EffectTrigger... triggers) {
+	public PersistentEffect(Drawable card, String source, EffectConsumer effect, Side target, boolean debuff, Integer turns, Integer limit, EffectTrigger... triggers) {
 		this.card = card;
 		this.source = source;
 		this.triggers = Set.of(triggers);
@@ -101,7 +101,8 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public boolean isExpired() {
-		return limit == 0 || turns == (triggers.contains(EffectTrigger.BEFORE_TURN) ? -1 : 0);
+		if (limit != null && limit <= 0) return true;
+		else return turns != null && turns <= 0;
 	}
 
 	@Override
