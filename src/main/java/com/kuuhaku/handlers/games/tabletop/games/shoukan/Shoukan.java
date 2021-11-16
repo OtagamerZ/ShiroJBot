@@ -2612,7 +2612,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                     .peek(e -> {
                         if (!e.isExpired()) {
                             if (e.getTarget() == null || e.getTarget() == to) {
-                                if (trigger == AFTER_TURN && e.getTurns() > (e.getTriggers().contains(BEFORE_TURN) ? -1 : 0)) {
+                                if (trigger == AFTER_TURN) {
                                     e.decreaseTurn();
                                 }
 
