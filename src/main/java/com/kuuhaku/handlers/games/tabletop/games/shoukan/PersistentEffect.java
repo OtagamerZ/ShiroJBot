@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectConsumer;
+import com.kuuhaku.utils.Helper;
 
 import java.util.Objects;
 import java.util.Set;
@@ -77,7 +78,7 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public int getTurns() {
-		return turns;
+		return Helper.getOr(turns, -1);
 	}
 
 	public void decreaseTurn() {
@@ -90,7 +91,7 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public int getLimit() {
-		return limit;
+		return Helper.getOr(limit, -1);
 	}
 
 	public void decreaseLimit() {
