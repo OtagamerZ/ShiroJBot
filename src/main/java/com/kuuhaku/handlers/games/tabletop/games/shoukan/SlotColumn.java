@@ -40,7 +40,9 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setTop(Champion top) {
+		if (this.top != null) this.top.setIndex(-1);
 		if (top != null) top.setIndex(index);
+
 		this.top = top;
 	}
 
@@ -49,7 +51,9 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setBottom(Equipment bottom) {
+		if (this.bottom != null) this.bottom.setIndex(-1);
 		if (bottom != null) bottom.setIndex(index);
+
 		this.bottom = bottom;
 	}
 
