@@ -45,7 +45,6 @@ import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.model.persistent.guild.buttons.Button;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
-import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.model.records.MatchInfo;
 import com.squareup.moshi.JsonDataException;
 import de.androidpit.colorthief.ColorThief;
@@ -2524,9 +2523,9 @@ public class Helper {
 				.setTitle(title)
 				.setDescription(desc)
 				.setFooter("""
-						:coin: CR: %s
-						:diamonds: Gemas: %s
-						""".formatted(acc.getBalance(), acc.getGems()));
+						💰 CR: %s
+						♦️ Gemas: %s
+						""".formatted(separate(acc.getBalance()), separate(acc.getGems())));
 
 		for (T item : items) {
 			eb.addField(fieldExtractor.apply(item));
@@ -2543,7 +2542,7 @@ public class Helper {
 				.setColor(color)
 				.setFooter("""
 						💰 CR: %s
-						💎 Gemas: %s
+						♦️ Gemas: %s
 						""".formatted(separate(acc.getBalance()), separate(acc.getGems())));
 
 		for (T item : items) {
