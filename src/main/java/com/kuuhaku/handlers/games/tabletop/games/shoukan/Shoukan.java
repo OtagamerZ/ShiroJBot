@@ -2825,6 +2825,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		this.phase = phase;
 	}
 
+	public SlotColumn getSlot(Side s, int index) {
+		return arena.getSlots().get(s).get(index);
+	}
+
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
