@@ -81,7 +81,8 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public void decreaseTurn() {
-		this.turns--;
+		if (this.turns != null)
+			this.turns--;
 	}
 
 	public void setTurns(int turns) {
@@ -93,7 +94,8 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public void decreaseLimit() {
-		this.limit--;
+		if (this.limit != null)
+			this.limit--;
 	}
 
 	public void setLimit(int limit) {
