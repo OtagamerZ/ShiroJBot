@@ -769,7 +769,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					return;
 				}
 
-				attack(new Source(yours, getCurrentSide(), is[0]), new Target(his, getCurrentSide(), is[1]));
+				attack(new Source(yours, getCurrentSide(), is[0]), new Target(his, getNextSide(), is[1]));
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
 
@@ -1328,7 +1328,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void killCard(Side to, int target, int id) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NODEATH) || targetChamp.getId() != id) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
@@ -1359,11 +1359,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void destroyCard(Side to, int target, Side from, int source) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
-		Champion sourceChamp = getArena().getSlots().get(from).get(source).getTop();
+		Champion sourceChamp = getSlot(from, source).getTop();
 
 		double chance = 100;
 		if (sourceChamp != null) {
@@ -1425,7 +1425,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void destroyCard(Side to, int target) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
@@ -1466,7 +1466,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void dizimateCard(Side to, int target) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
@@ -1497,11 +1497,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
-		Champion sourceChamp = getArena().getSlots().get(from).get(source).getTop();
+		Champion sourceChamp = getSlot(from, source).getTop();
 
 		double chance = 100;
 		if (sourceChamp != null) {
@@ -1563,7 +1563,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void captureCard(Side to, int target, boolean withFusion) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
@@ -1694,11 +1694,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void convertCard(Side to, int target, Side from, int source) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
-		Champion sourceChamp = getArena().getSlots().get(from).get(source).getTop();
+		Champion sourceChamp = getSlot(from, source).getTop();
 
 		double chance = 100;
 		if (sourceChamp != null) {
@@ -1762,7 +1762,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public void convertCard(Side to, int target) {
 		Side from = to == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
@@ -1804,11 +1804,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void switchCards(Side to, int target, Side from, int source) {
-		Champion targetChamp = getArena().getSlots().get(to).get(target).getTop();
+		Champion targetChamp = getSlot(to, target).getTop();
 		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
-		Champion sourceChamp = getArena().getSlots().get(from).get(source).getTop();
+		Champion sourceChamp = getSlot(from, source).getTop();
 
 		double chance = 100;
 		if (sourceChamp != null) {
