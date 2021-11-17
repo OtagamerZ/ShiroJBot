@@ -763,7 +763,7 @@ public class Champion implements Drawable, Cloneable {
 		if (isDefending())
 			return Status.DEFENDING;
 
-		return null;
+		return Status.NONE;
 	}
 
 	public boolean isBuffed() {
