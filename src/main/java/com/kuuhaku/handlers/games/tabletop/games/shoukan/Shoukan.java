@@ -2646,14 +2646,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				if (c != null) {
 					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-					else if (c.isDuelling() && c.getNemesis().equals(duelists.getDefender())) return false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) return false;
 				}
 			} else if (duelists.getDefender() != null) {
 				Champion c = duelists.getDefender();
 
 				if (c != null) {
 					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-					else if (c.isDuelling() && c.getNemesis().equals(duelists.getAttacker())) return false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) return false;
 				}
 			}
 
