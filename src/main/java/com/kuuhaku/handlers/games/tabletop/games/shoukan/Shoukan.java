@@ -853,9 +853,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* PRE-ATTACK */
 		{
-			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index(), source, target))
+			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index() - 1, source, target))
 				return;
-			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index(), source, target))
+			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index() + 1, source, target))
 				return;
 			if (applyEffect(ON_ATTACK, atkr, source.side(), source.index(), source, target)) return;
 
@@ -872,9 +872,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* PRE-DEFENSE */
 		{
-			if (applyEffect(DEFENSE_ASSIST, defr.getAdjacent(Neighbor.LEFT), target.side(), target.index(), source, target))
+			if (applyEffect(DEFENSE_ASSIST, defr.getAdjacent(Neighbor.LEFT), target.side(), target.index() - 1, source, target))
 				return;
-			if (applyEffect(DEFENSE_ASSIST, defr.getAdjacent(Neighbor.RIGHT), target.side(), target.index(), source, target))
+			if (applyEffect(DEFENSE_ASSIST, defr.getAdjacent(Neighbor.RIGHT), target.side(), target.index() + 1, source, target))
 				return;
 			if (applyEffect(ON_DEFEND, defr, target.side(), target.index(), source, target)) return;
 
@@ -1232,13 +1232,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 			} else return;
 		}
 
-		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index(), source, target))
+		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index() - 1, source, target))
 			return;
-		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index(), source, target))
+		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index() + 1, source, target))
 			return;
-		if (applyEffect(POST_DEFENSE_ASSIST, defr.getAdjacent(Neighbor.LEFT), target.side(), target.index(), source, target))
+		if (applyEffect(POST_DEFENSE_ASSIST, defr.getAdjacent(Neighbor.LEFT), target.side(), target.index() - 1, source, target))
 			return;
-		if (applyEffect(POST_DEFENSE_ASSIST, defr.getAdjacent(Neighbor.RIGHT), target.side(), target.index(), source, target))
+		if (applyEffect(POST_DEFENSE_ASSIST, defr.getAdjacent(Neighbor.RIGHT), target.side(), target.index() + 1, source, target))
 			return;
 
 		postCombat();
@@ -2644,17 +2644,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (duelists.getAttacker() != null) {
 				Champion c = duelists.getAttacker();
 
-				if (c != null) {
-					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) return false;
-				}
+				if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+				else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) return false;
 			} else if (duelists.getDefender() != null) {
 				Champion c = duelists.getDefender();
 
-				if (c != null) {
-					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) return false;
-				}
+				if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+				else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) return false;
 			}
 
 			activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
@@ -2745,9 +2741,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 		nc.setDefending(from.isDefending());
 		nc.setFlipped(from.isFlipped());
 
-		int index = ep.getTrigger().isDefensive()
-				? ep.getDuelists().getDefenderPos()
-				: ep.getDuelists().getAttackerPos();
+		int index;
+		if (Helper.equalsAny(ep.getTrigger(), ATTACK_ASSIST, POST_ATTACK_ASSIST, DEFENSE_ASSIST, POST_DEFENSE_ASSIST)) {
+			index = ep.getIndex();
+		} else {
+			index = ep.getTrigger().isDefensive()
+					? ep.getDuelists().getDefenderPos()
+					: ep.getDuelists().getAttackerPos();
+		}
 
 		banCard(ep.getSide(), index, false);
 		arena.getSlots().get(ep.getSide()).get(index).setTop(nc);
