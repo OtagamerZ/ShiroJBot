@@ -26,6 +26,8 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Target;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -688,7 +690,7 @@ public class Hand {
 		for (int i = 0; i < slots.size(); i++) {
 			Champion c = slots.get(i).getTop();
 			if (c != null) {
-				game.applyEffect(ON_HEAL, c, i, side, Pair.of(c, i), null);
+				game.applyEffect(ON_HEAL, c, side, i, new Source(c, side, i));
 			}
 		}
 	}
@@ -705,7 +707,7 @@ public class Hand {
 			for (int i = 0; i < slots.size(); i++) {
 				Champion c = slots.get(i).getTop();
 				if (c != null) {
-					game.applyEffect(ON_HEAL, c, i, side, Pair.of(c, i), null);
+					game.applyEffect(ON_HEAL, c, side, i, new Source(c, side, i));
 				}
 			}
 		}
@@ -723,7 +725,7 @@ public class Hand {
 		for (int i = 0; i < slots.size(); i++) {
 			Champion c = slots.get(i).getTop();
 			if (c != null) {
-				game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+				game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
 			}
 		}
 	}
@@ -741,7 +743,7 @@ public class Hand {
 			for (int i = 0; i < slots.size(); i++) {
 				Champion c = slots.get(i).getTop();
 				if (c != null) {
-					game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+					game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
 				}
 			}
 		}
@@ -758,7 +760,7 @@ public class Hand {
 		for (int i = 0; i < slots.size(); i++) {
 			Champion c = slots.get(i).getTop();
 			if (c != null) {
-				game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+				game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
 			}
 		}
 	}
@@ -775,7 +777,7 @@ public class Hand {
 			for (int i = 0; i < slots.size(); i++) {
 				Champion c = slots.get(i).getTop();
 				if (c != null) {
-					game.applyEffect(ON_DAMAGE, c, i, side, null, Pair.of(c, i));
+					game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
 				}
 			}
 		}
