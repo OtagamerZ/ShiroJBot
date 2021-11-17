@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -748,6 +749,23 @@ public class Champion implements Drawable, Cloneable {
 		this.sleep = Math.max(sleep - 1, 0);
 	}
 
+	public Status getStatus() {
+		if (isFlipped())
+			return Status.FLIPPED;
+		if (isStasis())
+			return Status.STASIS;
+		if (isStunned())
+			return Status.STUNNED;
+		if (isSleeping())
+			return Status.SLEEPING;
+		if (!isAvailable())
+			return Status.UNAVAILABLE;
+		if (isDefending())
+			return Status.DEFENDING;
+
+		return null;
+	}
+
 	public boolean isBuffed() {
 		if (game == null) return false;
 
@@ -796,6 +814,16 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setHero(Hero hero) {
 		this.hero = hero;
+	}
+
+	public Champion getAdjacent(Neighbor side) {
+		Side s = game.getSideById(acc.getUid());
+
+		return switch (side) {
+			case LEFT -> index > 0 ? game.getArena().getSlots().get(s).get(index - 1).getTop() : null;
+			case RIGHT -> index < 4 ? game.getArena().getSlots().get(s).get(index + 1).getTop() : null;
+			default -> null;
+		};
 	}
 
 	@Override

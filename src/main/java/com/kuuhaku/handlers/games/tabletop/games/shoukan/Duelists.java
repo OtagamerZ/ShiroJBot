@@ -18,6 +18,8 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Target;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Duelists {
@@ -27,6 +29,10 @@ public class Duelists {
 	private Duelists(Champion attacker, int yourPos, Champion defender, int hisPos) {
 		this.duelists = Pair.of(attacker, defender);
 		this.positions = Pair.of(yourPos, hisPos);
+	}
+
+	public static Duelists of() {
+		return new Duelists(null, -1, null, -1);
 	}
 
 	public static Duelists of(Champion attacker, int yourPos, Champion defender, int hisPos) {
@@ -40,6 +46,18 @@ public class Duelists {
 				defender == null ? null : defender.getLeft(),
 				defender == null ? -1 : defender.getRight()
 		);
+	}
+
+	public static Duelists of(Source source) {
+		return new Duelists(source.card(), source.index(), null, -1);
+	}
+
+	public static Duelists of(Target target) {
+		return new Duelists(null, -1, target.card(), target.index());
+	}
+
+	public static Duelists of(Source source, Target target) {
+		return new Duelists(source.card(), source.index(), target.card(), target.index());
 	}
 
 	public Champion getAttacker() {
