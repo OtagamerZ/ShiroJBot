@@ -155,7 +155,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					players[0].getId(), Side.TOP,
 					players[1].getId(), Side.BOTTOM
 			));
-		} else if (custom.has("test")) {
+		} else if (custom.has("test") && ShiroInfo.getStaff().contains(players[0].getId())) {
 			for (Object o : custom.getJSONArray("test")) {
 				String id = String.valueOf(o);
 				Drawable d;
@@ -853,16 +853,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* PRE-ATTACK */
 		{
-			Champion left = atkr.getAdjacent(Neighbor.LEFT);
-			if (left != null) {
-				if (applyEffect(ATTACK_ASSIST, left, source.side(), source.index() - 1, source, target))
-					return;
-			}
-			Champion right = atkr.getAdjacent(Neighbor.RIGHT);
-			if (right != null) {
-				if (applyEffect(ATTACK_ASSIST, right, source.side(), source.index() + 1, source, target))
-					return;
-			}
+			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index(), source, target))
+				return;
+			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index(), source, target))
+				return;
 			if (applyEffect(ON_ATTACK, atkr, source.side(), source.index(), source, target)) return;
 
 			if (atkr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
@@ -878,16 +872,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* PRE-DEFENSE */
 		{
-			Champion left = defr.getAdjacent(Neighbor.LEFT);
-			if (left != null) {
-				if (applyEffect(DEFENSE_ASSIST, left, source.side(), source.index() - 1, source, target))
-					return;
-			}
-			Champion right = defr.getAdjacent(Neighbor.RIGHT);
-			if (right != null) {
-				if (applyEffect(DEFENSE_ASSIST, right, source.side(), source.index() + 1, source, target))
-					return;
-			}
+			if (applyEffect(DEFENSE_ASSIST, defr.getAdjacent(Neighbor.LEFT), target.side(), target.index(), source, target))
+				return;
+			if (applyEffect(DEFENSE_ASSIST, defr.getAdjacent(Neighbor.RIGHT), target.side(), target.index(), source, target))
+				return;
 			if (applyEffect(ON_DEFEND, defr, target.side(), target.index(), source, target)) return;
 
 			if (defr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
@@ -1244,31 +1232,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 			} else return;
 		}
 
-		{
-			Champion left = atkr.getAdjacent(Neighbor.LEFT);
-			if (left != null) {
-				if (applyEffect(POST_ATTACK_ASSIST, left, source.side(), source.index() - 1, source, target))
-					return;
-			}
-			Champion right = atkr.getAdjacent(Neighbor.RIGHT);
-			if (right != null) {
-				if (applyEffect(POST_ATTACK_ASSIST, right, source.side(), source.index() + 1, source, target))
-					return;
-			}
-		}
-
-		{
-			Champion left = defr.getAdjacent(Neighbor.LEFT);
-			if (left != null) {
-				if (applyEffect(POST_DEFENSE_ASSIST, left, source.side(), source.index() - 1, source, target))
-					return;
-			}
-			Champion right = defr.getAdjacent(Neighbor.RIGHT);
-			if (right != null) {
-				if (applyEffect(POST_DEFENSE_ASSIST, right, source.side(), source.index() + 1, source, target))
-					return;
-			}
-		}
+		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index(), source, target))
+			return;
+		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index(), source, target))
+			return;
+		if (applyEffect(POST_DEFENSE_ASSIST, defr.getAdjacent(Neighbor.LEFT), target.side(), target.index(), source, target))
+			return;
+		if (applyEffect(POST_DEFENSE_ASSIST, defr.getAdjacent(Neighbor.RIGHT), target.side(), target.index(), source, target))
+			return;
 
 		postCombat();
 	}
@@ -2660,6 +2631,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, Side side, int index, Duelists duelists) {
+		if (activator == null) return false;
 		boolean lastTick = trigger == ON_WIN || trigger == ON_LOSE;
 
 		if (trigger.isIndividual()) {
@@ -2669,14 +2641,20 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (activator.hasEffect() && effectLock == 0) {
-			if (duelists.getDefender() != null) {
-				Champion c = duelists.getDefender();
-
-				if (c != null && (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT))) return false;
-			} else if (duelists.getAttacker() != null) {
+			if (duelists.getAttacker() != null) {
 				Champion c = duelists.getAttacker();
 
-				if (c != null && (c.isDuelling() || c.getBonus().popFlag(Flag.NOEFFECT))) return false;
+				if (c != null) {
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+					else if (c.isDuelling() && c.getNemesis().equals(duelists.getDefender())) return false;
+				}
+			} else if (duelists.getDefender() != null) {
+				Champion c = duelists.getDefender();
+
+				if (c != null) {
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+					else if (c.isDuelling() && c.getNemesis().equals(duelists.getAttacker())) return false;
+				}
 			}
 
 			activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
