@@ -32,19 +32,19 @@ import java.util.Map;
 public class EffectParameters {
 	private final EffectTrigger trigger;
 	private final Shoukan shoukan;
-	private final int index;
 	private final Side side;
+	private final int index;
 	private final Map<Side, Hand> hands;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, BondedList<Drawable>> graveyard;
 	private final Duelists duelists;
 	private final GameChannel channel;
 
-	public EffectParameters(EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, GameChannel channel) {
+	public EffectParameters(EffectTrigger trigger, Shoukan shoukan, Side side, int index, Duelists duelists, GameChannel channel) {
 		this.trigger = trigger;
 		this.shoukan = shoukan;
-		this.index = index;
 		this.side = side;
+		this.index = index;
 		this.hands = shoukan.getHands();
 		this.slots = shoukan.getArena().getSlots();
 		this.graveyard = shoukan.getArena().getGraveyard();
@@ -72,12 +72,12 @@ public class EffectParameters {
 		return shoukan;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
 	public Side getSide() {
 		return side;
+	}
+
+	public int getIndex() {
+		return index;
 	}
 
 	public Side getOtherSide() {
