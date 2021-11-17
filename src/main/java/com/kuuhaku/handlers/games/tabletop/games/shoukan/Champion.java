@@ -835,6 +835,7 @@ public class Champion implements Drawable, Cloneable {
 		bonus = new Bonus();
 		fakeCard = null;
 		nemesis = null;
+		onDuelEnd = null;
 		index = -1;
 		altAtk = -1;
 		altDef = -1;
@@ -868,6 +869,8 @@ public class Champion implements Drawable, Cloneable {
 			Champion c = (Champion) super.clone();
 			c.linkedTo = new ArrayList<>();
 			c.bonus = bonus.clone();
+			c.nemesis = null;
+			c.onDuelEnd = null;
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;
