@@ -97,10 +97,10 @@ public class SellCardCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Por favor escolha uma")
 					.setDescription(
-							(matches.contains(CardType.KAWAIPON) ? (":regional_indicator_k: -> Kawaipon\n") : "") +
-							(matches.contains(CardType.SENSHI) ? (":regional_indicator_c: -> Campeão\n") : "") +
-							(matches.contains(CardType.EVOGEAR) ? (":regional_indicator_e: -> Evogear\n") : "") +
-							(matches.contains(CardType.FIELD) ? (":regional_indicator_f: -> Campo\n") : "")
+							(matches.contains(CardType.KAWAIPON) ? ":regional_indicator_k: -> Kawaipon\n" : "") +
+							(matches.contains(CardType.SENSHI) ? ":regional_indicator_c: -> Campeão\n" : "") +
+							(matches.contains(CardType.EVOGEAR) ? ":regional_indicator_e: -> Evogear\n" : "") +
+							(matches.contains(CardType.FIELD) ? ":regional_indicator_f: -> Campo\n" : "")
 					);
 
 			Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();

@@ -76,7 +76,7 @@ public class CustomAnswerCommand implements Executable {
 
 				for (CustomAnswer ca : chunk) {
 					eb.addField(
-							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? (" | " + ca.getChance() + "%") : "") + "`) " + ca.getTrigger(),
+							"`" + ca.getId() + "` - (`" + (ca.isAnywhere() ? "QUALQUER" : "EXATO") + (ca.getChance() != 100 ? " | " + ca.getChance() + "%" : "") + "`) " + ca.getTrigger(),
 							StringUtils.abbreviate(ca.getAnswer(), 100),
 							false
 					);

@@ -52,7 +52,7 @@ public class WalletCommand implements Executable, Slashed {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Saldo de " + author.getName())
 				.addField(
-						":moneybag: | Saldo: %s%s".formatted(Helper.separate(acc.getBalance()), acc.getBalance() > 100_000 && prcnt < 10 ? (" (" + prcnt + "%)") : ""),
+						":moneybag: | Saldo: %s%s".formatted(Helper.separate(acc.getBalance()), acc.getBalance() > 100_000 && prcnt < 10 ? " (" + prcnt + "%)" : ""),
 						"""
 								:money_with_wings: | Volátil: %s
 								:bank: | Dívida: %s

@@ -3388,7 +3388,7 @@ public class Helper {
 	}
 
 	public static String sign(int value) {
-		return value > 0 ? ("+" + value) : String.valueOf(value);
+		return value > 0 ? "+" + value : String.valueOf(value);
 	}
 
 	public static Emoji parseEmoji(String in) {
