@@ -27,7 +27,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -186,8 +185,8 @@ public class BuyCardCommand implements Executable {
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
 									blackfriday
-											? ("~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
-											: ("**" + Helper.separate(m.getPrice()) + "**")
+											? "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**"
+											: "**" + Helper.separate(m.getPrice()) + "**"
 							),
 							false
 					);

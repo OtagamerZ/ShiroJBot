@@ -26,7 +26,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
@@ -37,12 +36,14 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Event;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.Market;
+import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -186,8 +187,8 @@ public class ReserveCardCommand implements Executable {
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
 									blackfriday
-											? ("~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**")
-											: ("**" + Helper.separate(m.getPrice()) + "**")
+											? "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**"
+											: "**" + Helper.separate(m.getPrice()) + "**"
 							),
 							false
 					);
