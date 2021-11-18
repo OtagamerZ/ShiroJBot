@@ -20,17 +20,20 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 public class SlotColumn implements Cloneable {
 	private final int index;
+	private final Hand hand;
 	private Champion top = null;
 	private Equipment bottom = null;
 	private int unavailable = 0;
 	private boolean changed = false;
 
-	public SlotColumn(int index) {
+	public SlotColumn(int index, Hand hand) {
 		this.index = index;
+		this.hand = hand;
 	}
 
-	public SlotColumn(int index, Champion top, Equipment bottom) {
+	public SlotColumn(int index, Hand hand, Champion top, Equipment bottom) {
 		this.index = index;
+		this.hand = hand;
 		this.top = top;
 		this.bottom = bottom;
 	}
@@ -41,7 +44,10 @@ public class SlotColumn implements Cloneable {
 
 	public void setTop(Champion top) {
 		if (this.top != null) this.top.setIndex(-1);
-		if (top != null) top.setIndex(index);
+		if (top != null) {
+			top.setIndex(index);
+			top.bind(hand);
+		}
 
 		this.top = top;
 	}
@@ -52,7 +58,10 @@ public class SlotColumn implements Cloneable {
 
 	public void setBottom(Equipment bottom) {
 		if (this.bottom != null) this.bottom.setIndex(-1);
-		if (bottom != null) bottom.setIndex(index);
+		if (bottom != null) {
+			bottom.setIndex(index);
+			bottom.bind(hand);
+		}
 
 		this.bottom = bottom;
 	}
@@ -79,6 +88,10 @@ public class SlotColumn implements Cloneable {
 
 	public void setChanged(boolean changed) {
 		this.changed = changed;
+	}
+
+	public Hand getHand() {
+		return hand;
 	}
 
 	@Override
