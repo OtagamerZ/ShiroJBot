@@ -2076,14 +2076,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 				h.get().decreaseBleeding();
 			}
 
-			h.get().addMana(h.get().getManaPerTurn());
+			int mpt = h.get().getManaPerTurn();
 			if (h.get().getCombo().getLeft() == Race.DEMON) {
 				Hand op = hands.get(getNextSide());
-				h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
+				mpt += Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5;
 				if (h.get().getHp() < h.get().getBaseHp() / 3f) {
 					h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 				}
 			}
+			h.get().addMana(mpt);
 
 			switch (h.get().getCombo().getRight()) {
 				case BESTIAL -> {
@@ -2335,14 +2336,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.get().decreaseBleeding();
 					}
 
-					h.get().addMana(h.get().getManaPerTurn());
+					int mpt = h.get().getManaPerTurn();
 					if (h.get().getCombo().getLeft() == Race.DEMON) {
 						Hand op = hands.get(getNextSide());
-						h.get().addMana((int) (Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5));
+						mpt += Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5;
 						if (h.get().getHp() < h.get().getBaseHp() / 3f) {
 							h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
 						}
 					}
+					h.get().addMana(mpt);
 
 					switch (h.get().getCombo().getRight()) {
 						case BESTIAL -> {
