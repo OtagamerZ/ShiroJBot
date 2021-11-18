@@ -47,21 +47,24 @@ public class Arena {
 	private Field field = null;
 	private boolean updateField = true;
 
-	public Arena() {
+	public Arena(Shoukan game) {
+		Hand top = game.getHands().get(Side.TOP);
+		Hand bot = game.getHands().get(Side.BOTTOM);
+
 		this.slots = Map.of(
 				Side.TOP, List.of(
-						new SlotColumn(0),
-						new SlotColumn(1),
-						new SlotColumn(2),
-						new SlotColumn(3),
-						new SlotColumn(4)
+						new SlotColumn(0, top),
+						new SlotColumn(1, top),
+						new SlotColumn(2, top),
+						new SlotColumn(3, top),
+						new SlotColumn(4, top)
 				),
 				Side.BOTTOM, List.of(
-						new SlotColumn(0),
-						new SlotColumn(1),
-						new SlotColumn(2),
-						new SlotColumn(3),
-						new SlotColumn(4)
+						new SlotColumn(0, bot),
+						new SlotColumn(1, bot),
+						new SlotColumn(2, bot),
+						new SlotColumn(3, bot),
+						new SlotColumn(4, bot)
 				)
 		);
 		this.graveyard = Map.of(
