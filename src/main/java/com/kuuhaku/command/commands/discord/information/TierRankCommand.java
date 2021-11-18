@@ -81,6 +81,9 @@ public class TierRankCommand implements Executable, Slashed {
 			for (MatchMakingRating mm : top10) {
 				User u = mm.getUser();
 				if (u == null) continue;
+
+				String tier = mm.getTier().getTier() < 5 ? "(" + mm.getTier().getName().split(" ")[1] + ")" : "";
+
 				if (mm.getRankPoints() == mm.getTier().getPromRP()) {
 					StringBuilder md = new StringBuilder();
 
@@ -93,9 +96,9 @@ public class TierRankCommand implements Executable, Slashed {
 					for (int i = 0; i < mm.getTier().getMd() - (mm.getPromWins() + mm.getPromLosses()); i++)
 						md.append(TagIcons.RANKED_PENDING.getTag(0).trim());
 
-					prom.append("**%s - %s** (%s)\n".formatted(u.getName(), md.toString(), mm.getTier()));
+					prom.append("**%s - %s**%s\n".formatted(u.getName(), md.toString(), tier));
 				} else
-					sb.append("%s - %s PDR (%s)\n".formatted(u.getName(), mm.getRankPoints(), mm.getTier()));
+					sb.append("%s - %s PDR%s\n".formatted(u.getName(), mm.getRankPoints(), tier));
 			}
 
 			eb.addField("Promoção de tier", prom.toString(), false)
