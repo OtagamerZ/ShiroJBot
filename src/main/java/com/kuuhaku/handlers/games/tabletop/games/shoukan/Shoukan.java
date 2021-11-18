@@ -857,13 +857,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index() + 1, source, target))
 				return;
-			if (applyEffect(ON_ATTACK, atkr, source.side(), source.index(), source, target)) return;
+			if (applyEffect(ON_ATTACK, atkr, source.side(), target.index(), source, target)) return;
 
 			if (atkr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
 				atkr.resetAttribs();
 				defr.resetAttribs();
 
-				if (applyEffect(POST_ATTACK, atkr, source.side(), source.index(), source, target)) return;
+				if (applyEffect(POST_ATTACK, atkr, source.side(), target.index(), source, target)) return;
 
 				reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
 				return;
@@ -920,7 +920,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				reportEvent(null, defr.getName() + " esquivou do ataque de " + atkr.getName() + "! (" + Helper.roundToString(dodge, 1) + "%)", true, false);
 			} else {
-				if (applyEffect(POST_ATTACK, atkr, source.side(), source.index(), source, target)) return;
+				if (applyEffect(POST_ATTACK, atkr, source.side(), target.index(), source, target)) return;
 				if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 				float demonFac = 1 - op.getMitigation();
@@ -1017,7 +1017,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* ATTACK FAILED */
 		else if (yPower < hPower) {
-			if (applyEffect(ON_SUICIDE, atkr, source.side(), source.index(), source, target)) return;
+			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(POST_DEFENSE, defr, target.side(), target.index(), source, target)) return;
 
 			float demonFac = 1 - you.getMitigation();
@@ -1110,7 +1110,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* ATTACK CLASHED */
 		else {
-			if (applyEffect(ON_SUICIDE, atkr, source.side(), source.index(), source, target)) return;
+			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			if (atkr.isDecoy() && defr.isDecoy()) {
