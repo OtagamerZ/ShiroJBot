@@ -196,7 +196,7 @@ public enum GemItem {
 			}
 	),
 	GODS_BLESSING(
-			"Bênção dos deuses", "Sua próxima síntese estará garantida de ser um dos últimos 10 equipamentos adicionados.",
+			"Bênção dos deuses", "Sua próxima síntese normal estará garantida de ser uma das últimas 10 cartas adicionados.",
 			6,
 			(mb, chn, args) -> {
 				DynamicParameter dp = DynamicParameterDAO.getParam("blessing_" + mb.getId());
