@@ -150,10 +150,12 @@ public class SynthesizeCardCommand implements Executable {
             int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
             double tier1 = (15 - score) * 0.75 / 12;
             double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
-            double tier3 = Math.max(0, 0.65 - tier1) + (blessed ? 0.35 : 0);
-            double tier4 = tier3 * 0.1 / 0.65 + (blessed ? 0.15 : 0);
+            double tier3 = Math.max(0, 0.65 - tier1);
+            double tier4 = tier3 * 0.1 / 0.65;
 
             List<Equipment> equips = CardDAO.getAllAvailableEquipments();
+            if (blessed) equips = equips.subList(equips.size() - 10, equips.size());
+
             List<Equipment> chosenTier = Helper.getRandom(List.of(
                     Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
                     Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),

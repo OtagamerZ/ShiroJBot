@@ -196,7 +196,7 @@ public enum GemItem {
 			}
 	),
 	GODS_BLESSING(
-			"Bênção dos deuses", "Sua próxima síntese terá 35% de chance extra de vir um evogear tier 3 e 15% de vir um tier 4",
+			"Bênção dos deuses", "Sua próxima síntese estará garantida de ser um dos últimos 10 equipamentos adicionados.",
 			6,
 			(mb, chn, args) -> {
 				DynamicParameter dp = DynamicParameterDAO.getParam("blessing_" + mb.getId());
