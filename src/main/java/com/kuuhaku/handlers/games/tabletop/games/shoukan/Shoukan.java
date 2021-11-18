@@ -84,7 +84,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
 	private final GameChannel channel;
-	private final Arena arena = new Arena();
+	private final Arena arena;
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -178,6 +178,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					achievements.put(e.getKey(), EnumSet.allOf(Achievement.class));
 			}
 
+		this.arena = new Arena(this);
 		setActions(
 				s -> {
 					close();
@@ -1279,7 +1280,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 			if (sc != null) {
-				fusion.bind(h);
 				sc.setTop(fusion);
 				if (applyEffect(ON_SUMMON, fusion, getCurrentSide(), sc.getIndex(), new Source(fusion, getCurrentSide(), sc.getIndex())))
 					return true;
@@ -1704,7 +1704,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			SlotColumn sc = getFirstAvailableSlot(from, true);
 			if (sc != null) {
 				targetChamp.clearLinkedTo();
-				targetChamp.bind(hands.get(from));
 				sc.setTop(targetChamp);
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
@@ -1750,7 +1749,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		SlotColumn sc = getFirstAvailableSlot(from, true);
 		if (sc != null) {
 			targetChamp.clearLinkedTo();
-			targetChamp.bind(hands.get(from));
 			sc.setTop(targetChamp);
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
@@ -1803,7 +1801,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			targetChamp.clearLinkedTo();
-			targetChamp.bind(hands.get(from));
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn sd = slts.get(i);
@@ -1828,7 +1825,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<SlotColumn> slots = getArena().getSlots().get(from);
 
 			sourceChamp.clearLinkedTo();
-			targetChamp.bind(hands.get(to));
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn sd = slots.get(i);
@@ -1882,7 +1878,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
-					targetChamp.bind(hands.get(to));
 					sc.setBottom(eq);
 				} else return;
 
@@ -1917,7 +1912,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
-					targetChamp.bind(hands.get(to));
 					sc.setBottom(eq);
 				} else return;
 			}
@@ -2739,7 +2733,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 		h.removeHp(nc.getBlood());
 
-		nc.bind(h);
 		nc.setDefending(from.isDefending());
 		nc.setFlipped(from.isFlipped());
 
