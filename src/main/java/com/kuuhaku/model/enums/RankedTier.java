@@ -113,4 +113,9 @@ public enum RankedTier {
 				.orElseThrow()
 				.replaceFirst("\\s(IV|III|II|I)", "");
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
