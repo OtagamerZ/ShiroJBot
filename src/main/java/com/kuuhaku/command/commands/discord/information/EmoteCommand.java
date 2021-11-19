@@ -52,7 +52,7 @@ public class EmoteCommand implements Executable {
 			if (!message.getEmotes().isEmpty())
 				id = message.getEmotes().get(0).getId();
 			else
-				id = ShiroInfo.getEmoteLookup().getOrDefault(args[0].replace(":", ""), "1");
+				id = ShiroInfo.getEmoteLookup().getOrDefault(args[0], "1");
 
 			Emote emt = Main.getShiroShards().getEmoteById(id);
 
