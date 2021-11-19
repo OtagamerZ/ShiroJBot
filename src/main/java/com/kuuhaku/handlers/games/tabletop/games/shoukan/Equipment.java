@@ -130,10 +130,10 @@ public class Equipment implements Drawable, Cloneable {
 			BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
 			if (star != null)
 				for (int i = 0; i < getTier(); i++)
-					g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * getTier() / 2) + star.getWidth() * i, 53, null);
+					g2d.drawImage(star, (bi.getWidth() / 2) - (16 * getTier() / 2) + 16 * i, 41, 16, 16, null);
 
 			if (charm != null)
-				g2d.drawImage(charm.getIcon(), 135, 58, null);
+				g2d.drawImage(charm.getIcon(), 135, 223, null);
 
 			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), 0, hasDesc);
 
