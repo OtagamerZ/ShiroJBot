@@ -356,10 +356,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 							channel.sendMessage("❌ | Magias estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
 							return;
 						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
-							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 							return;
 						} else if (h.getHp() <= e.getBlood()) {
-							channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+							channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 							return;
 						} else if (args.length - 2 < e.getArgType().getArgs()) {
 							channel.sendMessage(
@@ -488,6 +488,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
 						return;
+					} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
+						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+						return;
+					} else if (h.getHp() <= e.getBlood()) {
+						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+						return;
 					}
 
 					if (!StringUtils.isNumeric(args[1])) {
@@ -518,6 +524,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					reroll = false;
 					d.setAvailable(false);
+					h.removeMana(e.getMana());
+					h.removeHp(e.getBlood());
 					slot.setBottom(e);
 					Champion t = target.getTop();
 					if (t.isFlipped()) {
@@ -567,10 +575,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
 					} else if (!h.isNullMode() && (h.getMana() < c.getMana())) {
-						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 						return;
 					} else if ((h.isNullMode() && h.getHp() <= c.getBaseStats() / 2) || h.getHp() <= c.getBlood()) {
-						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 						return;
 					}
 
