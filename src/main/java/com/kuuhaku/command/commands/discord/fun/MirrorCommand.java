@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "espelhar",
 		aliases = {"mirror"},
-		usage = "req_intensity",
+		usage = "req_mode",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_HISTORY})
