@@ -84,7 +84,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
 	private final GameChannel channel;
-	private final Arena arena = new Arena(this);
+	private final Arena arena;
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -145,6 +145,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
 			);
 		}
+
+		this.arena = new Arena(this);
 		this.combos = Map.of(
 				Side.TOP, hands.get(Side.TOP).getCombo(),
 				Side.BOTTOM, hands.get(Side.BOTTOM).getCombo()
@@ -546,7 +548,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						t.setDefending(true);
 					}
 					t.link(e);
-					e.setLinkedTo(Pair.of(toEquip, t));
+					e.link(toEquip, t);
 					if (applyEffect(ON_EQUIP, t, getCurrentSide(), toEquip, new Source(t, getCurrentSide(), toEquip)))
 						return;
 
@@ -1898,7 +1900,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					slts.get(i).setBottom(null);
 
 					target.link(eq);
-					eq.setLinkedTo(Pair.of(pos, target));
+					eq.link(pos, target);
 					sc.setBottom(eq);
 				} else return;
 
@@ -1932,7 +1934,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					slts.get(i).setBottom(null);
 
 					target.link(eq);
-					eq.setLinkedTo(Pair.of(pos, target));
+					eq.link(pos, target);
 					sc.setBottom(eq);
 				} else return;
 			}
