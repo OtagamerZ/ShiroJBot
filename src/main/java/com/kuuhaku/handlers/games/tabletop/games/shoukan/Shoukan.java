@@ -545,7 +545,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						t.setFlipped(false);
 						t.setDefending(true);
 					}
-					t.addLinkedTo(e);
+					t.link(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
 					if (applyEffect(ON_EQUIP, t, getCurrentSide(), toEquip, new Source(t, getCurrentSide(), toEquip)))
 						return;
@@ -1603,7 +1603,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			Champion link = slts.get(eq.getLinkedTo().getLeft()).getTop();
 			if (eq.getLinkedTo().getLeft() > -1 && link != null)
-				link.removeLinkedTo(eq);
+				link.unlink(eq);
 
 			arena.getBanned().add(eq);
 			slts.get(target).setBottom(null);
@@ -1642,7 +1642,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (eq == null) return;
 
 		if (eq.getLinkedTo().getLeft() > -1 && slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
-			slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
+			slts.get(eq.getLinkedTo().getLeft()).getTop().unlink(eq);
 
 		SlotColumn sd = slts.get(index);
 		sd.setBottom(null);
@@ -1894,10 +1894,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
 				SlotColumn sc = getFirstAvailableSlot(to, false);
 				if (sc != null) {
-					targetChamp.removeLinkedTo(eq);
+					targetChamp.unlink(eq);
 					slts.get(i).setBottom(null);
 
-					target.addLinkedTo(eq);
+					target.link(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
 					sc.setBottom(eq);
 				} else return;
@@ -1928,10 +1928,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
 				SlotColumn sc = getFirstAvailableSlot(to, false);
 				if (sc != null) {
-					targetChamp.removeLinkedTo(eq);
+					targetChamp.unlink(eq);
 					slts.get(i).setBottom(null);
 
-					target.addLinkedTo(eq);
+					target.link(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
 					sc.setBottom(eq);
 				} else return;
