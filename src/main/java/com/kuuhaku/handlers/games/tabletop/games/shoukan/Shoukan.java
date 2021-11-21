@@ -84,7 +84,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
 	private final GameChannel channel;
-	private final Arena arena;
+	private final Arena arena = new Arena(this);
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -178,7 +178,20 @@ public class Shoukan extends GlobalGame implements Serializable {
 					achievements.put(e.getKey(), EnumSet.allOf(Achievement.class));
 			}
 
-		this.arena = new Arena(this);
+		if ("blackrock".equals(custom.getString("arcade"))) {
+			Field f = switch (Helper.rng(5)) {
+				case 0 -> CardDAO.getField("THE_SKY_GATES");
+				case 1 -> CardDAO.getField("THE_CUBE");
+				case 2 -> CardDAO.getField("GREY_AREA");
+				case 3 -> CardDAO.getField("BLACK_ROCK_BATTLEFIELD");
+				case 4 -> CardDAO.getField("CHARIOTS_LAND");
+				case 5 -> CardDAO.getField("DEAD_MASTERS_LAIR");
+				default -> throw new IllegalStateException("Unexpected value: " + Helper.rng(5));
+			};
+			assert f != null;
+			arena.setField(f);
+		}
+
 		setActions(
 				s -> {
 					close();
