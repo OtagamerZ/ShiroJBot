@@ -234,6 +234,14 @@ public class Equipment implements Drawable, Cloneable {
 		this.linkedTo = linkedTo;
 	}
 
+	public void link(int index, Champion linkedTo) {
+		this.linkedTo = Pair.of(index, linkedTo);
+	}
+
+	public void unlink() {
+		this.linkedTo = null;
+	}
+
 	public int getAtk() {
 		if (altAtk == -1) altAtk = atk;
 		return altAtk + bonus.getAtk();
