@@ -230,10 +230,6 @@ public class Equipment implements Drawable, Cloneable {
 		return linkedTo;
 	}
 
-	public void setLinkedTo(Pair<Integer, Champion> linkedTo) {
-		this.linkedTo = linkedTo;
-	}
-
 	public void link(int index, Champion linkedTo) {
 		this.linkedTo = Pair.of(index, linkedTo);
 	}
