@@ -2657,20 +2657,23 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!lastTick && postCombat()) return true;
 		}
 
-		if (activator.hasEffect() && effectLock == 0) {
-			if (duelists.getAttacker() != null) {
-				Champion c = duelists.getAttacker();
+		if (effectLock == 0) {
+			if (activator.hasEffect()) {
+				if (duelists.getAttacker() != null) {
+					Champion c = duelists.getAttacker();
 
-				if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-				else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) return false;
-			} else if (duelists.getDefender() != null) {
-				Champion c = duelists.getDefender();
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) return false;
+				} else if (duelists.getDefender() != null) {
+					Champion c = duelists.getDefender();
 
-				if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-				else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) return false;
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) return false;
+				}
+
+				activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 			}
 
-			activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 			for (Equipment e : activator.getLinkedTo()) {
 				if (e.isParasite() && e.hasEffect())
 					applyEffect(trigger, e, index, side);
@@ -2683,7 +2686,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side) {
-		if (activator.hasEffect() && effectLock == 0) {
+		if (effectLock == 0) {
 			activator.getEffect(new EffectParameters(trigger, this, side, index, Duelists.of(), channel));
 		}
 	}
