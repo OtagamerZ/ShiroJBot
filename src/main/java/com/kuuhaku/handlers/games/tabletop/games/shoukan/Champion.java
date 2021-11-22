@@ -272,9 +272,13 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setLinkedTo(List<Equipment> linkedTo) {
+		for (Equipment e : this.linkedTo) {
+			e.unlink();
+		}
+
 		this.linkedTo = Helper.getOr(linkedTo, new ArrayList<>());
 		for (Equipment e : this.linkedTo) {
-			e.setLinkedTo(Pair.of(index, this));
+			e.link(index, this);
 		}
 	}
 
@@ -282,12 +286,14 @@ public class Champion implements Drawable, Cloneable {
 		return linkedTo;
 	}
 
-	public void addLinkedTo(Equipment linkedTo) {
+	public void link(Equipment linkedTo) {
 		this.linkedTo.add(linkedTo);
+		linkedTo.link(index, this);
 	}
 
-	public void removeLinkedTo(Equipment linkedTo) {
+	public void unlink(Equipment linkedTo) {
 		this.linkedTo.remove(linkedTo);
+		linkedTo.unlink();
 	}
 
 	public boolean isLinkedTo(String name) {

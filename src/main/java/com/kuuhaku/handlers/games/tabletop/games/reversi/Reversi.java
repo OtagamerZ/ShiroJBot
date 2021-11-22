@@ -111,6 +111,7 @@ public class Reversi extends Game {
 		Predicate<GuildMessageReceivedEvent> condition = e -> e.getChannel().getId().equals(channel.getId());
 
 		return condition
+				.and(e -> getCurrent() != null)
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
 				.and(e -> e.getMessage().getContentRaw().length() == 2)
 				.and(e -> {

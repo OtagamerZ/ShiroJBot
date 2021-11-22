@@ -24,6 +24,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -33,6 +34,7 @@ import java.io.IOException;
 @Command(
 		name = "emote",
 		aliases = {"emoji", "emt", "emj"},
+		usage = "req_id-emote",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
@@ -40,34 +42,36 @@ public class EmoteCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getEmotes().size() < 1) {
+		if (args.length == 0 && message.getEmotes().size() < 1) {
 			channel.sendMessage("❌ | Você precisa informar um emote.").queue();
 			return;
 		}
 
 		try {
-			Emote emt = message.getEmotes().get(0);
-			Emote cached = Main.getShiroShards().getEmoteById(emt.getId());
+			String id;
+			if (!message.getEmotes().isEmpty())
+				id = message.getEmotes().get(0).getId();
+			else
+				id = ShiroInfo.getEmoteLookup().getOrDefault(args[0], "1");
+
+			Emote emt = Main.getShiroShards().getEmoteById(id);
+
+			if (emt == null) {
+				channel.sendMessage("❌ | Não conheço esse emote.").queue();
+				return;
+			}
+
 			EmbedBuilder eb = new EmbedBuilder()
 					.setTitle(emt.getName(), emt.getImageUrl())
 					.setThumbnail(emt.getImageUrl())
 					.setColor(Helper.colorThief(emt.getImageUrl()));
 
-			if (cached == null) {
-				eb.addField(
-						"Servidor: desconhecido",
-						"**ID:** " + emt.getId(),
-						true
-				);
-			} else {
-				Guild g = cached.getGuild();
-
-				eb.addField(
-						"Servidor: " + (g == null ? "desconhecido" : cached.getGuild().getName()),
-						"**ID:** " + emt.getId(),
-						true
-				);
-			}
+			Guild g = emt.getGuild();
+			eb.addField(
+					"Servidor: " + (g == null ? "desconhecido" : emt.getGuild().getName()),
+					"**ID:** " + emt.getId(),
+					true
+			);
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 		} catch (IOException e) {
