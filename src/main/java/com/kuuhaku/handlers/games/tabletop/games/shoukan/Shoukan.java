@@ -476,14 +476,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 						String result = switch (e.getArgType()) {
 							case NONE -> "%s usou %s.".formatted(
 									h.getUser().getName(),
-									d.isFlipped() ? "uma magia virada para baixo" : "a magia " + d.getCard().getName()
+									e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName()
 							);
 							case ALLY -> {
 								assert allyPos != null;
 
 								yield "%s usou %s em %s.".formatted(
 										h.getUser().getName(),
-										d.isFlipped() ? "uma magia virada para baixo" : "a magia " + d.getCard().getName(),
+										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
 										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName()
 								);
 							}
@@ -492,7 +492,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 								yield "%s usou %s em %s.".formatted(
 										h.getUser().getName(),
-										d.isFlipped() ? "uma magia virada para baixo" : "a magia " + d.getCard().getName(),
+										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
 										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
 								);
 							}
@@ -501,7 +501,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 								yield "%s usou %s em %s e %s.".formatted(
 										h.getUser().getName(),
-										d.isFlipped() ? "uma magia virada para baixo" : "a magia " + d.getCard().getName(),
+										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
 										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName(),
 										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
 								);
