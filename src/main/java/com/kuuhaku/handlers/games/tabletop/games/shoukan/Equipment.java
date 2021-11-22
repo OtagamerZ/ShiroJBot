@@ -394,7 +394,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public boolean canGoToGrave() {
-		return !effectOnly || !Helper.equalsAny(charm, Charm.ENCHANTMENT, Charm.TRAP);
+		return !effectOnly;
 	}
 
 	@Override
