@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
@@ -68,7 +67,7 @@ public class EquipHeroCommand implements Executable {
 		} else if (h.getInventory().contains(e)) {
 			channel.sendMessage("❌ | Seu herói já possui esse equipamento!").queue();
 			return;
-		} else if (e.getCharm() == Charm.SPELL) {
+		} else if (e.hasEffect()) {
 			channel.sendMessage("❌ | Você não pode equipar magias!").queue();
 			return;
 		} else if (e.getTier() > h.getStats().calcEvoTierCap()) {
