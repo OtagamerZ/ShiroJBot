@@ -365,7 +365,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
 
-					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
+					if (e.hasEffect()) {
 						if (!args[1].equalsIgnoreCase("s")) {
 							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
 							return;
