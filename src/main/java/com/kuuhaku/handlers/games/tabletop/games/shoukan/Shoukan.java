@@ -2725,9 +2725,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side) {
 		if (effectLock == 0) {
-			if (activator.getCharm() == Charm.TRAP) {
-				channel.sendMessage(":bangbang: | Você ativou a carta-armadilha " + activator.getCard().getName()).queue();
-			}
 			activator.getEffect(new EffectParameters(trigger, this, side, index, Duelists.of(), channel));
 		}
 	}
