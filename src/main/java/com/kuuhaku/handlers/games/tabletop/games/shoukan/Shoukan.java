@@ -464,7 +464,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.removeHp(e.getBlood());
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 
-						if (e.canGoToGrave()) {
+						if (e.canGoToGrave() && !Helper.equalsAny(e.getCharm(), Charm.ENCHANTMENT, Charm.TRAP)) {
 							if (e.getTier() >= 4)
 								arena.getBanned().add(e);
 							else
