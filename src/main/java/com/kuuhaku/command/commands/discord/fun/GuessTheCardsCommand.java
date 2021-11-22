@@ -107,7 +107,7 @@ public class GuessTheCardsCommand implements Executable {
 								return;
 
 							String value = event.getMessage().getContentRaw();
-							if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.toLowerCase(Locale.ROOT).split(" ")[0].replaceFirst(prefix, ""), getClass().getDeclaredAnnotation(Command.class).aliases())) {
+							if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.toLowerCase(Locale.ROOT).split(" ")[0].replaceFirst(prefix, ""), GuessTheCardsCommand.class.getDeclaredAnnotation(Command.class).aliases())) {
 								channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
 										names.get(0),
 										names.get(1),
