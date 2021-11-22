@@ -87,8 +87,7 @@ public class SeeCardCommand implements Executable {
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
 			} else if (d instanceof Equipment e && e.getCharm() != null) {
 				Charm c = e.getCharm();
-				if (c != Charm.SPELL || e.isParasite())
-					eb.addField("Amuleto: " + (e.isParasite() ? "Parasita" : c.getName()), Helper.getOr(c.getDescription(), "Prende-se à uma carta, aplicando efeitos negativos"), true);
+				eb.addField("Amuleto: " + c.getName(), c.getDescription(), true);
 			}
 			eb.setImage("attachment://kawaipon.png");
 

@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -165,7 +164,7 @@ public class Hand {
 					}
 				}
 				case "instakill" -> {
-					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
+					deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
 					baseHp = 1;
 				}
 				case "cardmaster" -> {
@@ -320,7 +319,7 @@ public class Hand {
 	public Drawable drawEquipment() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).findFirst().orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
@@ -332,7 +331,7 @@ public class Hand {
 	public Drawable drawSpell() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
