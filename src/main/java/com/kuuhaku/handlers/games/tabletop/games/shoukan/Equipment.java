@@ -78,9 +78,6 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean effectOnly = false;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean parasite = false;
-
 	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Bonus bonus = new Bonus();
@@ -312,8 +309,8 @@ public class Equipment implements Drawable, Cloneable {
 	public int getWeight(Deck d) {
 		return Math.max(
 				switch (d.getCombo().getLeft()) {
-					case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
-					case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
+					case MACHINE -> !hasEffect() ? tier - 1 : tier;
+					case MYSTICAL -> hasEffect() ? tier - 1 : tier;
 					default -> tier;
 				}, 1);
 	}
@@ -340,14 +337,6 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void setEffectOnly(boolean effectOnly) {
 		this.effectOnly = effectOnly;
-	}
-
-	public boolean isParasite() {
-		return parasite;
-	}
-
-	public void setParasite(boolean parasite) {
-		this.parasite = parasite;
 	}
 
 	public String getDescription() {
@@ -405,7 +394,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public boolean canGoToGrave() {
-		return !parasite && !effectOnly;
+		return !effectOnly || !Helper.equalsAny(charm, Charm.ENCHANTMENT, Charm.TRAP);
 	}
 
 	@Override
@@ -455,7 +444,7 @@ public class Equipment implements Drawable, Cloneable {
 				if (charm != null)
 					put("charm", new JSONObject() {{
 						put("id", charm);
-						put("image", charm == Charm.SPELL ? "" : Helper.atob(charm.getIcon(), "png"));
+						put("image", hasEffect() ? "" : Helper.atob(charm.getIcon(), "png"));
 					}});
 				put("attack", atk);
 				put("defense", def);

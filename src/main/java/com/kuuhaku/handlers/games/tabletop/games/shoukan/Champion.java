@@ -598,9 +598,9 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
-	public void activateParasites(EffectParameters ep) {
+	public void triggerSpells(EffectParameters ep) {
 		for (Equipment e : linkedTo) {
-			if (e.getCharm() != Charm.SPELL || !e.isParasite()) continue;
+			if (!e.hasEffect()) continue;
 
 			e.getEffect(ep);
 		}
