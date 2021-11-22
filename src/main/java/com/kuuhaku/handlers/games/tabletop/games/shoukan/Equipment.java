@@ -107,7 +107,7 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			FrameColor fc = acc.getFrame();
-			boolean hasDesc = charm != null && charm.equals(Charm.SPELL);
+			boolean hasDesc = hasEffect();
 
 			g2d.setClip(new Polygon(
 					new int[]{13, 212, 223, 223, 212, 13, 2, 2},
