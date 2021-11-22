@@ -2714,7 +2714,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			for (Equipment e : activator.getLinkedTo()) {
-				if (e.hasEffect()) applyEffect(trigger, e, index, side);
+				if (e.hasEffect()) applyEffect(trigger, e, index, side, duelists);
 			}
 
 			return !lastTick && postCombat();
@@ -2723,9 +2723,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return false;
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side) {
+	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side, Duelists duelists) {
 		if (effectLock == 0) {
-			activator.getEffect(new EffectParameters(trigger, this, side, index, Duelists.of(), channel));
+			activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 		}
 	}
 
