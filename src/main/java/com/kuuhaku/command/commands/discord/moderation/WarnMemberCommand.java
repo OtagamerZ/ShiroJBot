@@ -18,11 +18,15 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -33,6 +37,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "alertar",
@@ -78,7 +85,30 @@ public class WarnMemberCommand implements Executable {
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), guild.getId());
 
 		if (reason.isBlank()) {
-			channel.sendMessage("❌ | Você precisa informar uma razão.").queue();
+			List<List<String>> chunks = Helper.chunkify(m.getWarns(), 10);
+			if (chunks.isEmpty()) {
+				channel.sendMessage("❌ | Não há nenhum alerta para esse usuário.").queue();
+				return;
+			}
+
+			List<Page> pages = new ArrayList<>();
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setTitle(":tickets: | Alertas de " + mb.getEffectiveName());
+			int i = 0;
+			for (List<String> chunk : chunks) {
+				eb.clearFields();
+
+				for (String warn : chunk) {
+					eb.addField("`ID: " + i + "`", warn, false);
+					i++;
+				}
+
+				pages.add(new InteractPage(eb.build()));
+			}
+
+			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+			);
 			return;
 		}
 
