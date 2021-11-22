@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -114,7 +113,7 @@ public class TeamHand extends Hand {
 							deque.addAll(Collections.nCopies(6, c));
 						}
 					}
-					case "instakill" -> deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
+					case "instakill" -> deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
 					case "cardmaster" -> {
 						deque.clear();
 						deque.addAll(CardDAO.getAllChampions(false));
@@ -219,9 +218,9 @@ public class TeamHand extends Hand {
 				cards.add(dr);
 
 				if (dr instanceof Equipment e) {
-					if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+					if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
-					else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+					else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
 						addHp(250);
 				}
 			}
@@ -259,9 +258,9 @@ public class TeamHand extends Hand {
 				cards.add(dr.copy());
 
 				if (dr instanceof Equipment e) {
-					if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+					if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
-					else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+					else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
 						addHp(250);
 				}
 			}
@@ -281,9 +280,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -304,9 +303,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -326,9 +325,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -368,7 +367,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).findFirst().orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -386,7 +385,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -404,7 +403,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 
