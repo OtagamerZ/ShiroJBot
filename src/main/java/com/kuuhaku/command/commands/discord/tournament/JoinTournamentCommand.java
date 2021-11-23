@@ -93,6 +93,9 @@ public class JoinTournamentCommand implements Executable {
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
+			} else if (t.getPartLookup().containsKey(author.getId())) {
+				channel.sendMessage("❌ | Você já se inscreveu nesse torneio.").queue();
+				return;
 			}
 
 			channel.sendMessage("Você está prestes a inscrever-se no torneio `" + t.getName() + "`, deseja confirmar?").queue(

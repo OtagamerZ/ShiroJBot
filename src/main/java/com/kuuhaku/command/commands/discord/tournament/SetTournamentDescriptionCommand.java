@@ -46,6 +46,11 @@ public class SetTournamentDescriptionCommand implements Executable {
 			String[] r = argsAsText.split(";");
 
 			Tournament t = TournamentDAO.getTournament(Integer.parseInt(r[0]));
+			if (t == null) {
+				channel.sendMessage("❌ | Torneio inexistente.").queue();
+				return;
+			}
+
 			t.setDescription(r[1]);
 			TournamentDAO.save(t);
 
