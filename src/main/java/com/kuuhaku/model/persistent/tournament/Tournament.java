@@ -22,8 +22,6 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.persistence.*;
@@ -49,10 +47,9 @@ public class Tournament {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int seed = new Random().nextInt();
 
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "tournament")
-	private List<Participant> participants = new ArrayList<>();
+	private Set<Participant> participants = new HashSet<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Bracket bracket;
