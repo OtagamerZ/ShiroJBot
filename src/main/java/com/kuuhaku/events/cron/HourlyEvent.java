@@ -85,7 +85,7 @@ public class HourlyEvent implements Job {
 		LocalDateTime time = LocalDateTime.now();
 		List<Hero> heroes = KawaiponDAO.getHeroes();
 		for (Hero hero : heroes) {
-			if (hero.isUnavailable()) continue;
+			if (hero.isQuesting()) continue;
 
 			hero.heal();
 			if (hero.isResting()) {
