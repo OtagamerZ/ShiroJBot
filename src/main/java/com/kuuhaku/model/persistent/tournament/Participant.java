@@ -18,23 +18,20 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
-import com.kuuhaku.model.persistent.id.CompositeTournamentId;
 import com.kuuhaku.utils.Helper;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
 @Table(name = "participant")
-@IdClass(CompositeTournamentId.class)
 public class Participant {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String uid;
-
-	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int tournament;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int index = -1;
@@ -51,15 +48,10 @@ public class Participant {
 	public Participant(String uid, Tournament t) {
 		if (uid == null) uid = "BYE";
 		this.uid = uid;
-		this.tournament = t.getId();
 	}
 
 	public String getUid() {
 		return uid;
-	}
-
-	public int getTournament() {
-		return tournament;
 	}
 
 	public int getIndex() {
@@ -95,12 +87,12 @@ public class Participant {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Participant that = (Participant) o;
-		return tournament == that.tournament && Objects.equals(uid, that.uid);
+		return Objects.equals(uid, that.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid, tournament);
+		return Objects.hash(uid);
 	}
 
 	@Override
