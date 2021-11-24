@@ -1335,7 +1335,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public void killCard(Side to, int target, int id) {
 		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NODEATH) || targetChamp.getId() != id) return;
+		if (targetChamp == null || targetChamp.getBonus().popFlag(Flag.NODEATH) || targetChamp.getId() != id) return;
 		List<SlotColumn> slts = getArena().getSlots().get(to);
 
 		slts.get(target).setTop(null);
