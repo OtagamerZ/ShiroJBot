@@ -26,7 +26,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public class AutoEmbedBuilder extends EmbedBuilder {
@@ -54,7 +55,7 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		if (e.image() != null)
 			setImage(e.image().getRandomImage());
 		if (e.showDate())
-			setTimestamp(LocalDateTime.now());
+			setTimestamp(OffsetDateTime.now(ZoneId.of("GMT-3")));
 
 		if (e.footer() != null)
 			setFooter(
