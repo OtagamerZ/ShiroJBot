@@ -65,6 +65,14 @@ public class MinuteEvent implements Job {
 			VoiceTimeDAO.saveVoiceTime(vt);
 		}
 
+		for (Guild g : Main.getShiroShards().getGuilds()) {
+			for (Emote e : g.getEmotes()) {
+				if (e.getName().startsWith("%TEMP%")) {
+					e.delete().queue();
+				}
+			}
+		}
+
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 
