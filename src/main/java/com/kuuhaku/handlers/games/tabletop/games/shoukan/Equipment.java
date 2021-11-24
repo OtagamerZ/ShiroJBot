@@ -137,7 +137,11 @@ public class Equipment implements Drawable, Cloneable {
 
 			if (linkedTo != null) {
 				Champion c = Helper.getOr(linkedTo.getRight().getFakeCard(), linkedTo.getRight());
-				g2d.drawImage(c.getCard().drawCardNoBorder(acc), 20, 52, 60, 93, null);
+				BufferedImage linked = c.isFlipped()
+						? Helper.getResourceAsImage(this.getClass(), "kawaipon/missing.jpg")
+						: c.getCard().drawCardNoBorder(acc);
+
+				g2d.drawImage(linked, 20, 52, 60, 93, null);
 			}
 
 			g2d.setColor(fc.getSecondaryColor());

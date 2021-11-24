@@ -417,11 +417,11 @@ public class ShiroEvents extends ListenerAdapter {
                     com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
                     Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-                    Pair<String, Runnable> s = Helper.sendEmotifiedString(guild, message.getContentRaw());
+                    String s = Helper.sendEmotifiedString(guild, message.getContentRaw());
 
                     WebhookMessageBuilder wmb = new WebhookMessageBuilder()
                             .setAllowedMentions(AllowedMentions.none())
-                            .setContent(String.valueOf(s.getLeft()));
+                            .setContent(String.valueOf(s));
 
                     String avatar = Helper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
                     String name = Helper.getOr(m.getPseudoName(), author.getName());
@@ -440,9 +440,7 @@ public class ShiroEvents extends ListenerAdapter {
                     WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
                     message.delete().queue(d -> {
                         try {
-                            wc.send(wmb.build())
-                                    .thenRun(s.getRight())
-                                    .get();
+                            wc.send(wmb.build()).get();
                         } catch (InterruptedException | ExecutionException e) {
                             Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
                         }
