@@ -1003,11 +1003,15 @@ public class Helper {
 		return baos;
 	}
 
-	public static Pair<String, Runnable> sendEmotifiedString(Guild g, String text) {
+	public static String sendEmotifiedString(Guild g, String text) {
+		for (Emote e : g.getEmotes()) {
+			if (e.getName().startsWith("%TEMP%")) {
+				e.delete().queue();
+			}
+		}
+
 		String[] oldLines = text.split("\n");
 		String[] newLines = new String[oldLines.length];
-		List<Consumer<Void>> queue = new ArrayList<>();
-		Consumer<Emote> after = e -> e.delete().queue();
 
 		for (int l = 0; l < oldLines.length; l++) {
 			String[] oldWords = oldLines[l].split(" ");
@@ -1026,17 +1030,21 @@ public class Helper {
 					try {
 						boolean animated = e.isAnimated();
 						if ((animated ? aSlots : slots) > 0) {
-							e = g.createEmote(e.getName(), Icon.from(getImage(e.getImageUrl())), g.getSelfMember().getRoles().get(0)).complete();
-							Emote finalE = e;
-							queue.add(aVoid -> after.accept(finalE));
+							e = Pages.subGet(g.createEmote(
+									"%TEMP%_" + e.getName(),
+									Icon.from(getImage(e.getImageUrl())),
+									g.getSelfMember().getRoles().get(0)
+							));
 
 							if (animated) aSlots--;
 							else slots--;
 						}
+
 						newWords[i] = e.getAsMention();
 					} catch (IOException ex) {
 						logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
 					}
+
 					emotes++;
 				} else newWords[i] = old;
 			}
@@ -1044,14 +1052,7 @@ public class Helper {
 			newLines[l] = String.join(" ", newWords);
 		}
 
-		return Pair.of(
-				String.join("\n", newLines),
-				() -> {
-					for (Consumer<Void> q : queue) {
-						q.accept(null);
-					}
-				}
-		);
+		return String.join("\n", newLines);
 	}
 
 	public static boolean isEmpty(String... values) {
