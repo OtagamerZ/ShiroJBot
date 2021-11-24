@@ -1005,7 +1005,7 @@ public class Helper {
 
 	public static String sendEmotifiedString(Guild g, String text) {
 		for (Emote e : g.getEmotes()) {
-			if (e.getName().startsWith("%TEMP%")) {
+			if (e.getName().startsWith("TEMP_")) {
 				e.delete().queue();
 			}
 		}
@@ -1031,7 +1031,7 @@ public class Helper {
 						boolean animated = e.isAnimated();
 						if ((animated ? aSlots : slots) > 0) {
 							e = Pages.subGet(g.createEmote(
-									"%TEMP%_" + e.getName(),
+									"TEMP_" + e.getName(),
 									Icon.from(getImage(e.getImageUrl())),
 									g.getSelfMember().getRoles().get(0)
 							));
@@ -1041,11 +1041,10 @@ public class Helper {
 						}
 
 						newWords[i] = e.getAsMention();
+						emotes++;
 					} catch (IOException ex) {
 						logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
 					}
-
-					emotes++;
 				} else newWords[i] = old;
 			}
 
