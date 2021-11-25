@@ -96,7 +96,12 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						5, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, () -> {
+							{
+								next.get().complete(false);
+								r.run();
+							}
+						}
 				);
 
 				if (!next.get().get()) return;
@@ -151,7 +156,10 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						5, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, () -> {
+							next.get().complete(false);
+							r.run();
+						}
 				);
 
 				if (!next.get().get()) return;
@@ -170,7 +178,10 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						5, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, () -> {
+							next.get().complete(false);
+							r.run();
+						}
 				);
 
 				if (!next.get().get()) return;
@@ -206,7 +217,10 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						5, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, () -> {
+							next.get().complete(false);
+							r.run();
+						}
 				);
 
 				if (!next.get().get()) return;
@@ -224,7 +238,10 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						5, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, () -> {
+							next.get().complete(false);
+							r.run();
+						}
 				);
 
 				if (!next.get().get()) return;
@@ -242,7 +259,10 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						5, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, () -> {
+							next.get().complete(false);
+							r.run();
+						}
 				);
 
 				if (!next.get().get()) return;
