@@ -110,12 +110,4 @@ public class AsciiCommand implements Executable {
 
 		return sb.toString();
 	}
-
-	public int getGrayScale(int rgb) {
-		int r = (rgb >> 16) & 0xff;
-		int g = (rgb >> 8) & 0xff;
-		int b = (rgb) & 0xff;
-
-		return (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
-	}
 }
