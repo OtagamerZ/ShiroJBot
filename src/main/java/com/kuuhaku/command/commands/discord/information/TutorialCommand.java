@@ -73,7 +73,7 @@ public class TutorialCommand implements Executable {
 				Pages.buttonize(
 						msg,
 						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
+						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -96,7 +96,7 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						2, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, r
 				);
 
 				if (!next.get().get()) return;
@@ -109,7 +109,7 @@ public class TutorialCommand implements Executable {
 				Pages.buttonize(
 						msg,
 						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
+						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -151,7 +151,7 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						2, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, r
 				);
 
 				if (!next.get().get()) return;
@@ -170,7 +170,7 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						2, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, r
 				);
 
 				if (!next.get().get()) return;
@@ -183,7 +183,7 @@ public class TutorialCommand implements Executable {
 				Pages.buttonize(
 						msg,
 						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
+						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -206,7 +206,7 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						2, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, r
 				);
 
 				if (!next.get().get()) return;
@@ -224,7 +224,7 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						2, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, r
 				);
 
 				if (!next.get().get()) return;
@@ -242,7 +242,7 @@ public class TutorialCommand implements Executable {
 								return true;
 							} else return false;
 						},
-						2, TimeUnit.MINUTES, r
+						5, TimeUnit.MINUTES, r
 				);
 
 				if (!next.get().get()) return;
@@ -255,7 +255,7 @@ public class TutorialCommand implements Executable {
 				Pages.buttonize(
 						msg,
 						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
+						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -273,7 +273,7 @@ public class TutorialCommand implements Executable {
 				Pages.buttonize(
 						msg,
 						Map.of(Helper.parseEmoji("✅"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 2, TimeUnit.MINUTES,
+						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
