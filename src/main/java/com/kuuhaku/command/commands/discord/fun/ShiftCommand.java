@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "polarizar",
 		aliases = {"polarize", "shift"},
+		usage = "req_mode",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_HISTORY})
@@ -73,11 +74,22 @@ public class ShiftCommand implements Executable {
 						String url = Helper.getImageFrom(msg);
 						File f;
 
+						int mode = 0;
+						if (args.length > 0) {
+							mode = Integer.parseInt(args[0]);
+							if (!Helper.between(mode, 0, 4)) {
+								ms.get().delete().queue(null, Helper::doNothing);
+								channel.sendMessage("❌ | A direção deve ser 0 (horizontal), 1 (vertical) ou 2 (ambos).").queue();
+								return;
+							}
+						}
+
 						if (url.contains(".gif")) {
+							int finalMode = mode;
 							f = File.createTempFile("shifted", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
-									ImageFilters.shift(frame.getAdjustedFrame()),
+									ImageFilters.shift(frame.getAdjustedFrame(), finalMode),
 									frame.getDisposal(),
 									frame.getWidth(),
 									frame.getHeight(),
@@ -90,7 +102,7 @@ public class ShiftCommand implements Executable {
 						} else {
 							BufferedImage bi = ImageIO.read(Helper.getImage(url));
 
-							f = Helper.writeAndGet(ImageFilters.shift(bi), "shifted", "png");
+							f = Helper.writeAndGet(ImageFilters.shift(bi, mode), "shifted", "png");
 						}
 
 						ms.get().delete().queue(null, Helper::doNothing);

@@ -37,7 +37,7 @@ public class ImageFilters {
 		return out;
 	}
 
-	public static BufferedImage shift(BufferedImage in) {
+	public static BufferedImage shift(BufferedImage in, int type) {
 		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Helper.forEachPixel(source, (coords, rgb) -> {
@@ -45,7 +45,7 @@ public class ImageFilters {
 			int y = coords[1];
 
 			try {
-				if (y % 2 == 0) out.setRGB(x, y, 0);
+				if ((type == 0 ? y : type == 1 ? x : y + x) % 2 == 0) out.setRGB(x, y, 0);
 				else out.setRGB(x, y, rgb);
 			} catch (ArrayIndexOutOfBoundsException ignore) {
 			}
