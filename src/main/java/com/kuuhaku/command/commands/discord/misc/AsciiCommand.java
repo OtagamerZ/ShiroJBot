@@ -33,7 +33,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "ascii",
@@ -86,19 +85,10 @@ public class AsciiCommand implements Executable {
 	}
 
 	private String asciify(BufferedImage bi) {
-		final char base = '\u2800';
-
 		BufferedImage in = new BufferedImage(40, 40, BufferedImage.TYPE_BYTE_GRAY);
 		Graphics2D g2d = in.createGraphics();
 		g2d.drawImage(bi, 0, 0, 40, 40, null);
 		g2d.dispose();
-
-		AtomicInteger threshold = new AtomicInteger(in.getRGB(0, 0));
-		Helper.forEachPixel(in, (coords, rgb) -> {
-			if (rgb != 0xFFFFFF && rgb != 0x000000) {
-				threshold.set(Helper.average(threshold.get(), rgb));
-			}
-		});
 
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < in.getHeight(); y++) {
