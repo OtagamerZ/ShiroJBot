@@ -94,7 +94,7 @@ public class BountyRewardCommand implements Executable {
 					.setColor(Color.red)
 					.setTitle("A missão \"" + info + "\" fracassou");
 
-			int expXp = info.rewards().get(Reward.XP) / 2;
+			int expXp = info.rewards().getOrDefault(Reward.XP, 0) / 2;
 			if (expXp > 0 && Helper.chance(66)) {
 				expXp = Helper.rng(expXp);
 
