@@ -308,7 +308,7 @@ public class TutorialCommand implements Executable {
 	private MessageEmbed secondStep(String prefix) {
 		return new ColorlessEmbedBuilder()
 				.setDescription("""
-						Ok, vamos começar falando sobre os **CR** (CR).
+						Ok, vamos começar falando sobre os **CR**.
 
 						CR é a principal moeda usada em meus módulos, eles são necessários para várias coisas como coletar cartas, apostar em jogos, comprar melhorias, comprar itens na loja, etc.
 						Existem muitas formas de conseguir CR, as mais populares são:
