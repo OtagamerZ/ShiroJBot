@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
@@ -40,6 +41,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 		category = Category.MISC
 )
 public class AsciiCommand implements Executable {
+	private final Map<Integer, Character> tones = Map.of(
+			0, '⠂',
+			20, '⠌',
+			40, '⠕',
+			60, '⠞',
+			80, '⠟',
+			100, '⠿'
+	);
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -79,36 +88,22 @@ public class AsciiCommand implements Executable {
 	private String asciify(BufferedImage bi) {
 		final char base = '\u2800';
 
-		BufferedImage in = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+		BufferedImage in = new BufferedImage(50, 50, BufferedImage.TYPE_BYTE_GRAY);
 		Graphics2D g2d = in.createGraphics();
-		g2d.drawImage(bi, 0, 0, 100, 100, null);
+		g2d.drawImage(bi, 0, 0, 50, 50, null);
 		g2d.dispose();
 
-		AtomicInteger threshold = new AtomicInteger(getGrayScale(in.getRGB(0, 0)));
+		AtomicInteger threshold = new AtomicInteger(in.getRGB(0, 0));
 		Helper.forEachPixel(in, (coords, rgb) -> {
 			if (rgb != 0xFFFFFF && rgb != 0x000000) {
-				threshold.set(Helper.average(threshold.get(), getGrayScale(rgb)));
+				threshold.set(Helper.average(threshold.get(), rgb));
 			}
 		});
 
 		StringBuilder sb = new StringBuilder();
-		for (int y = 0; y < in.getHeight(); y += 4) {
-			for (int x = 0; x < in.getWidth(); x += 2) {
-				int bytes = 0;
-
-				if (getGrayScale(in.getRGB(x, y)) >= threshold.get()) bytes += 1;
-				if (getGrayScale(in.getRGB(x, y + 1)) >= threshold.get()) bytes += 2;
-				if (getGrayScale(in.getRGB(x, y + 2)) >= threshold.get()) bytes += 4;
-
-				if (getGrayScale(in.getRGB(x + 1, y)) >= threshold.get()) bytes += 8;
-				if (getGrayScale(in.getRGB(x + 1, y + 1)) >= threshold.get()) bytes += 16;
-				if (getGrayScale(in.getRGB(x + 1, y + 2)) >= threshold.get()) bytes += 32;
-
-				if (getGrayScale(in.getRGB(x, y + 3)) >= threshold.get()) bytes += 64;
-				if (getGrayScale(in.getRGB(x + 1, y + 3)) >= threshold.get()) bytes += 128;
-
-				if (bytes > 0) sb.append(Character.toString(base + bytes));
-				else sb.append("⡀");
+		for (int y = 0; y < in.getHeight(); y++) {
+			for (int x = 0; x < in.getWidth(); x++) {
+				sb.append(tones.get(Helper.roundTrunc(Helper.toLuma(in.getRGB(x, y)) * 100, 20)));
 			}
 			sb.append('\n');
 		}
