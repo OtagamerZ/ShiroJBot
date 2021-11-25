@@ -736,18 +736,32 @@ public class ShiroEvents extends ListenerAdapter {
                 EmbedBuilder eb;
                 if (!temp.isEmpty()) {
                     Embed e = gc.getEmbedTemplate();
-                    eb = new AutoEmbedBuilder(e)
-                            .setTitle(
-                                    switch (Helper.rng(4)) {
-                                        case 0 -> "Opa, parece que temos um novo membro?";
-                                        case 1 -> "Mais um membro para nosso lindo servidor!";
-                                        case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
-                                        case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
-                                        case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
-                                        default -> "";
-                                    },
-                                    e.title() != null ? e.title().url() : null
-                            );
+                    try {
+                        eb = new AutoEmbedBuilder(e)
+                                .setTitle(
+                                        switch (Helper.rng(4)) {
+                                            case 0 -> "Opa, parece que temos um novo membro?";
+                                            case 1 -> "Mais um membro para nosso lindo servidor!";
+                                            case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+                                            case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+                                            case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+                                            default -> "";
+                                        },
+                                        e.title() != null ? e.title().url() : null
+                                );
+                    } catch (IllegalArgumentException ex) {
+                        eb = new AutoEmbedBuilder(e)
+                                .setTitle(
+                                        switch (Helper.rng(4)) {
+                                            case 0 -> "Opa, parece que temos um novo membro?";
+                                            case 1 -> "Mais um membro para nosso lindo servidor!";
+                                            case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+                                            case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+                                            case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+                                            default -> "";
+                                        }
+                                );
+                    }
 
                     if (e.color() != null) eb.setColor(e.getParsedColor());
                     else eb.setColor(Helper.colorThief(image));
@@ -818,18 +832,32 @@ public class ShiroEvents extends ListenerAdapter {
                 EmbedBuilder eb;
                 if (!temp.isEmpty()) {
                     Embed e = gc.getEmbedTemplate();
-                    eb = new AutoEmbedBuilder(e)
-                            .setTitle(
-                                    switch (Helper.rng(4)) {
-                                        case 0 -> "Nãããoo...um membro deixou este servidor!";
-                                        case 1 -> "O quê? Temos um membro a menos neste servidor!";
-                                        case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
-                                        case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
-                                        case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
-                                        default -> "";
-                                    },
-                                    e.title() != null ? e.title().url() : null
-                            );
+                    try {
+                        eb = new AutoEmbedBuilder(e)
+                                .setTitle(
+                                        switch (Helper.rng(4)) {
+                                            case 0 -> "Nãããoo...um membro deixou este servidor!";
+                                            case 1 -> "O quê? Temos um membro a menos neste servidor!";
+                                            case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+                                            case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+                                            case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+                                            default -> "";
+                                        },
+                                        e.title() != null ? e.title().url() : null
+                                );
+                    } catch (IllegalArgumentException ex) {
+                        eb = new AutoEmbedBuilder(e)
+                                .setTitle(
+                                        switch (Helper.rng(4)) {
+                                            case 0 -> "Nãããoo...um membro deixou este servidor!";
+                                            case 1 -> "O quê? Temos um membro a menos neste servidor!";
+                                            case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+                                            case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+                                            case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+                                            default -> "";
+                                        }
+                                );
+                    }
 
                     if (e.color() != null) eb.setColor(e.getParsedColor());
                     else eb.setColor(Helper.colorThief(image));
