@@ -88,9 +88,9 @@ public class AsciiCommand implements Executable {
 	private String asciify(BufferedImage bi) {
 		final char base = '\u2800';
 
-		BufferedImage in = new BufferedImage(50, 50, BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage in = new BufferedImage(40, 40, BufferedImage.TYPE_BYTE_GRAY);
 		Graphics2D g2d = in.createGraphics();
-		g2d.drawImage(bi, 0, 0, 50, 50, null);
+		g2d.drawImage(bi, 0, 0, 40, 40, null);
 		g2d.dispose();
 
 		AtomicInteger threshold = new AtomicInteger(in.getRGB(0, 0));
