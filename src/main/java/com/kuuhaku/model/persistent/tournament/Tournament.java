@@ -101,7 +101,7 @@ public class Tournament {
 	}
 
 	public int getSize() {
-		return size == 0 ? Math.max(4, Helper.roundToBit(participants.size())) : size;
+		return size == 0 ? Math.max(8, Helper.roundToBit(participants.size())) : size;
 	}
 
 	public Map<String, Participant> getPartLookup() {
