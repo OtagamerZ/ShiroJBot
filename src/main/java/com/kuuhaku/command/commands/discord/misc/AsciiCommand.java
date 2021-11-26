@@ -93,7 +93,7 @@ public class AsciiCommand implements Executable {
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < in.getHeight(); y++) {
 			for (int x = 0; x < in.getWidth(); x++) {
-				sb.append(tones.get(Helper.roundTrunc(Helper.toLuma(in.getRGB(x, y)) * 100, 20)));
+				sb.append(tones.get(Helper.roundTrunc(Helper.toLuma(in.getRGB(x, y)) / 255 * 100, 20)));
 			}
 			sb.append('\n');
 		}
