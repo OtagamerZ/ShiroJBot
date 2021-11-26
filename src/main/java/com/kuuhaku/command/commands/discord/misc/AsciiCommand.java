@@ -94,7 +94,7 @@ public class AsciiCommand implements Executable {
 			for (int x = 0; x < in.getWidth(); x += 2) {
 
 				int tl = Helper.toLuma(in.getRGB(x, y));
-				int tr = Helper.toLuma(in.getRGB(x + 2, y));
+				int tr = Helper.toLuma(in.getRGB(x + 1, y));
 				int bl = Helper.toLuma(in.getRGB(x, y + 1));
 				int br = Helper.toLuma(in.getRGB(x + 1, y + 1));
 
