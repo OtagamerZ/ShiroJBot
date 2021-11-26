@@ -56,6 +56,11 @@ public class TournamentPlayersCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (args.length < 1) {
+			channel.sendMessage("❌ | É necessário informar o ID do torneio.").queue();
+			return;
+		}
+
 		try {
 			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
 			if (t == null) {
