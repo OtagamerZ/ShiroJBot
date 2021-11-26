@@ -42,10 +42,9 @@ import java.util.Map;
 public class AsciiCommand implements Executable {
 	private final Map<Integer, Character> tones = Map.of(
 			0, '⠂',
-			20, '⠌',
-			40, '⠕',
-			60, '⠞',
-			80, '⠟',
+			25, '⠌',
+			50, '⠕',
+			75, '⠞',
 			100, '⠿'
 	);
 
@@ -58,7 +57,7 @@ public class AsciiCommand implements Executable {
 			}
 
 			try {
-				channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n\n" + asciify(ImageIO.read(Helper.getImage(message.getAttachments().get(0).getUrl())))).queue();
+				channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + asciify(ImageIO.read(Helper.getImage(message.getAttachments().get(0).getUrl()))) + "\n```").queue();
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				channel.sendMessage(I18n.getString("err_image-error")).queue();
@@ -85,15 +84,21 @@ public class AsciiCommand implements Executable {
 	}
 
 	private String asciify(BufferedImage bi) {
-		BufferedImage in = new BufferedImage(50, 25, BufferedImage.TYPE_INT_RGB);
+		BufferedImage in = new BufferedImage(100, 50, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = in.createGraphics();
-		g2d.drawImage(bi, 0, 0, 50, 25, null);
+		g2d.drawImage(bi, 0, 0, 100, 50, null);
 		g2d.dispose();
 
 		StringBuilder sb = new StringBuilder();
-		for (int y = 0; y < in.getHeight(); y++) {
-			for (int x = 0; x < in.getWidth(); x++) {
-				sb.append(tones.get(Helper.roundTrunc(Helper.toLuma(in.getRGB(x, y)) / 255f * 100, 20)));
+		for (int y = 0; y < in.getHeight(); y += 2) {
+			for (int x = 0; x < in.getWidth(); x += 2) {
+
+				int tl = Helper.toLuma(in.getRGB(x, y));
+				int tr = Helper.toLuma(in.getRGB(x + 2, y));
+				int bl = Helper.toLuma(in.getRGB(x, y + 1));
+				int br = Helper.toLuma(in.getRGB(x + 1, y + 1));
+
+				sb.append(tones.get(Helper.roundTrunc(Helper.average(tl, tr, bl, br) / 255f * 100, 25)));
 			}
 			sb.append('\n');
 		}
