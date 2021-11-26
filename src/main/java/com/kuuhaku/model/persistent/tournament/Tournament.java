@@ -48,7 +48,7 @@ public class Tournament {
 	private int seed = new Random().nextInt();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
-	private Set<Participant> participants = new HashSet<>();
+	private Set<Participant> participants = new LinkedHashSet<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Bracket bracket;
