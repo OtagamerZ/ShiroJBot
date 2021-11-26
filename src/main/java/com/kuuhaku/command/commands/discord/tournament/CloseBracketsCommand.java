@@ -95,6 +95,9 @@ public class CloseBracketsCommand implements Executable {
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
+			} else if (Helper.prcnt(t.getParticipants().size(), t.getSize()) < 0.75) {
+				channel.sendMessage("❌ | É necessário ter no mínimo 75% das vagas preenchidas para poder fechar as chaves.").queue();
+				return;
 			}
 
 			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + t.getName() + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
