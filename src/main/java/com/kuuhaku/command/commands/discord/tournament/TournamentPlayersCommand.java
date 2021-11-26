@@ -69,7 +69,7 @@ public class TournamentPlayersCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Torneio " + t.getName() + " (Chave de " + t.getSize() + ")")
 					.setColor(Helper.textToColor(t.getName()))
-					.setFooter("Jogadores: " + t.getParticipants().size(), t.isClosed() ? "" : "O tamanho do torneio pode variar de acordo com a quantidade de participantes");
+					.setFooter("Jogadores: " + t.getParticipants().size() + (t.isClosed() ? "" : " (O tamanho do torneio pode variar de acordo com a quantidade de participantes)"));
 
 			List<List<Participant>> chunks = Helper.chunkify(t.getParticipants(), 10);
 			List<Page> pages = new ArrayList<>();
