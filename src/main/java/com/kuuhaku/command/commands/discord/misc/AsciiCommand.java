@@ -58,7 +58,7 @@ public class AsciiCommand implements Executable {
 			}
 
 			try {
-				channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n\n" + asciify(ImageIO.read(Helper.getImage(message.getAttachments().get(0).getUrl()))) + "").queue();
+				channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n\n" + asciify(ImageIO.read(Helper.getImage(message.getAttachments().get(0).getUrl())))).queue();
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				channel.sendMessage(I18n.getString("err_image-error")).queue();
@@ -98,6 +98,7 @@ public class AsciiCommand implements Executable {
 			sb.append('\n');
 		}
 
+		System.out.println(sb.length());
 		return sb.toString();
 	}
 }
