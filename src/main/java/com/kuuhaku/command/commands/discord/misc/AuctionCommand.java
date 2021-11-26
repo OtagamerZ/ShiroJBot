@@ -142,9 +142,9 @@ public class AuctionCommand implements Executable {
 
 			if (price < min) {
 				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " CR.").queue();
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
 				else
-					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " CR.").queue();
+					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
 				return;
 			}
 
@@ -270,7 +270,7 @@ public class AuctionCommand implements Executable {
 											}
 									));
 
-									s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
+									s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que **" + Helper.separate(price) + " CR** dentro de 30 segundos irei fechá-lo!")).queue();
 									ShiroInfo.getShiroEvents().addHandler(guild, listener);
 								}
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
