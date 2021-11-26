@@ -90,8 +90,8 @@ public class AsciiCommand implements Executable {
 		g2d.dispose();
 
 		StringBuilder sb = new StringBuilder();
-		for (int y = 0; y < in.getHeight(); y += 2) {
-			for (int x = 0; x < in.getWidth(); x += 2) {
+		for (int y = 0; y < in.getHeight(); y++) {
+			for (int x = 0; x < in.getWidth(); x++) {
 				sb.append(tones.get(Helper.roundTrunc(Helper.toLuma(in.getRGB(x, y)) / 255f * 100, 25)));
 			}
 			sb.append('\n');
