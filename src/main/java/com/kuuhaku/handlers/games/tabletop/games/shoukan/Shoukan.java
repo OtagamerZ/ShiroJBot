@@ -1561,6 +1561,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
 
+			targetChamp.reset();
 			if (!targetChamp.isFusion() || withFusion)
 				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
 		} else {
@@ -1605,6 +1606,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
 
+		targetChamp.reset();
 		if (!targetChamp.isFusion() || withFusion)
 			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
 	}
