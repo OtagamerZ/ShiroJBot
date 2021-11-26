@@ -85,9 +85,9 @@ public class AsciiCommand implements Executable {
 	}
 
 	private String asciify(BufferedImage bi) {
-		BufferedImage in = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage in = new BufferedImage(50, 25, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = in.createGraphics();
-		g2d.drawImage(bi, 0, 0, 32, 32, null);
+		g2d.drawImage(bi, 0, 0, 50, 25, null);
 		g2d.dispose();
 
 		StringBuilder sb = new StringBuilder();
@@ -98,7 +98,6 @@ public class AsciiCommand implements Executable {
 			sb.append('\n');
 		}
 
-		System.out.println(sb.length());
 		return sb.toString();
 	}
 }
