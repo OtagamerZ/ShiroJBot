@@ -380,7 +380,17 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+		float extraFac = 1f;
+		if (!hasEffect() && !fusion) {
+			extraFac *= 1.1f;
+		}
+		if (game != null && acc != null && !fusion) {
+			if (game.getCombos().get(game.getSideById(acc.getUid())).getLeft() == Race.HUMAN && mana <= 2) {
+				extraFac *= 1.25f;
+			}
+		}
+
+		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * extraFac)), 25);
 	}
 
 	public int getDef() {
@@ -410,7 +420,17 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+		float extraFac = 1f;
+		if (!hasEffect() && !fusion) {
+			extraFac *= 1.1f;
+		}
+		if (game != null && acc != null && !fusion) {
+			if (game.getCombos().get(game.getSideById(acc.getUid())).getLeft() == Race.HUMAN && mana <= 2) {
+				extraFac *= 1.25f;
+			}
+		}
+
+		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * extraFac)), 25);
 	}
 
 	public void setAtk(int atk) {
