@@ -70,7 +70,7 @@ public class ClearDeckCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Por favor confirme!");
-		eb.setDescription("Seu deck será limpo e todas as cartas nele serão colocadas na loja (oculto para os outros), por favor clique no botão abaixo para confirmar.");
+		eb.setDescription("Seu deck será limpo e todas as cartas nele serão colocadas no armazém, por favor clique no botão abaixo para confirmar.");
 		eb.setImage("attachment://deque.jpg");
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
