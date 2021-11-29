@@ -96,7 +96,7 @@ public class GuessTheNumberCommand implements Executable {
 
 
 				if (guess == theValue) {
-					int prize = Helper.rng(350, 700);
+					int prize = Helper.rng(400, 800);
 					channel.sendMessage("Você acertou! Como prêmio você receberá **" + Helper.separate(prize) + "** CR.").queue();
 					acc.addCredit(prize, this.getClass());
 					AccountDAO.saveAccount(acc);
