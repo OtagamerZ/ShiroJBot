@@ -198,6 +198,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		setActions(
 				s -> {
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false);
+						}
+					}
+
 					close();
 					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
@@ -218,6 +228,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 						setWo();
 						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+					}
+
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false);
+						}
 					}
 
 					close();
@@ -1995,6 +2015,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 				else
 					msg = op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)";
 
+				for (List<SlotColumn> sides : arena.getSlots().values()) {
+					for (SlotColumn slts : sides) {
+						if (slts.getTop() != null)
+							slts.getTop().setFlipped(false);
+
+						if (slts.getBottom() != null)
+							slts.getBottom().setFlipped(false);
+					}
+				}
+
 				close();
 				finished = true;
 				channel.sendMessage(msg)
@@ -2087,6 +2117,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 				} else {
 					if (draw) {
 						String msg = "Declaro empate! (" + getRound() + " turnos)";
+
+						for (List<SlotColumn> sides : arena.getSlots().values()) {
+							for (SlotColumn slts : sides) {
+								if (slts.getTop() != null)
+									slts.getTop().setFlipped(false);
+
+								if (slts.getBottom() != null)
+									slts.getBottom().setFlipped(false);
+							}
+						}
 
 						close();
 						channel.sendMessage(msg)
@@ -2197,6 +2237,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 					else
 						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(getNextSide()).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
 
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false);
+						}
+					}
+
 					close();
 					channel.sendMessage(msg)
 							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
@@ -2239,6 +2289,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) hands.get(getNextSide())).getMentions() + " venceram! (" + getRound() + " turnos)";
 					else
 						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(getNextSide()).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
+
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false);
+						}
+					}
 
 					close();
 					channel.sendMessage(msg)
@@ -2297,6 +2357,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				if (draw) {
 					String msg = "Por acordo mútuo, declaro empate! (" + getRound() + " turnos)";
+
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false);
+						}
+					}
 
 					close();
 					channel.sendMessage(msg)
@@ -2373,6 +2443,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 							if (draw) {
 								String msg = "Declaro empate! (" + getRound() + " turnos)";
 
+								for (List<SlotColumn> sides : arena.getSlots().values()) {
+									for (SlotColumn slts : sides) {
+										if (slts.getTop() != null)
+											slts.getTop().setFlipped(false);
+
+										if (slts.getBottom() != null)
+											slts.getBottom().setFlipped(false);
+									}
+								}
+
 								close();
 								channel.sendMessage(msg)
 										.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
@@ -2446,6 +2526,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				String msg = getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)";
+
+				for (List<SlotColumn> sides : arena.getSlots().values()) {
+					for (SlotColumn slts : sides) {
+						if (slts.getTop() != null)
+							slts.getTop().setFlipped(false);
+
+						if (slts.getBottom() != null)
+							slts.getBottom().setFlipped(false);
+					}
+				}
 
 				close();
 				channel.sendMessage(msg)
