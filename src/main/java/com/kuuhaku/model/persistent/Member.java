@@ -61,9 +61,6 @@ public class Member implements Hashable {
 	private String pseudoAvatar = "";
 
 	//NUMBERS
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
-	private int level = 1;
-
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long xp = 0;
 
@@ -139,6 +136,7 @@ public class Member implements Hashable {
 				.findAny()
 				.ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
 
+		int level = getLevel();
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 1000f, 1));
 		xp += 15 * mult.get() * spamModif;
 		lastEarntXp = System.currentTimeMillis();
@@ -157,9 +155,8 @@ public class Member implements Hashable {
 			ClanDAO.saveMember(cm);
 		}
 
-		if (xp >= (long) Math.pow(level, 2) * 100) {
-			level++;
-			acc.addCredit(75 + (8L * level), this.getClass());
+		if (getLevel() > level) {
+			acc.addCredit(75 + (8L * getLevel()), this.getClass());
 			AccountDAO.saveAccount(acc);
 			return true;
 		}
@@ -167,6 +164,7 @@ public class Member implements Hashable {
 	}
 
 	public synchronized long addXp(int amount) {
+		int level = getLevel();
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 10000f, 1));
 		xp += amount * spamModif;
 		lastEarntXp = System.currentTimeMillis();
@@ -185,34 +183,23 @@ public class Member implements Hashable {
 			AccountDAO.saveAccount(acc);
 		}
 
-		if (xp >= (long) Math.pow(level, 2) * 100) {
-			level++;
-			acc.addCredit(75 + (8L * level), this.getClass());
+		if (getLevel() > level) {
+			acc.addCredit(75 + (8L * getLevel()), this.getClass());
 			AccountDAO.saveAccount(acc);
 		}
 		return (long) (amount * spamModif);
 	}
 
-	public void recalculateLevel() {
-		level = (int) Math.ceil(Math.sqrt(xp / 100f));
-	}
-
 	public void halfXp() {
-		xp /= 2;
-		recalculateLevel();
-	}
-
-	public void halfXpKeepLevel() {
 		xp /= 2;
 	}
 
 	public void resetXp() {
-		level = 1;
 		xp = 0;
 	}
 
 	public int getLevel() {
-		return level;
+		return (int) Math.ceil(Math.sqrt(xp / 100f));
 	}
 
 	public long getXp() {
@@ -290,7 +277,7 @@ public class Member implements Hashable {
 			put("bg", acc.getBg());
 			put("bio", acc.getBio());
 			put("pseudoAvatar", pseudoAvatar);
-			put("level", level);
+			put("level", getLevel());
 			put("xp", xp);
 			put("lastVoted", lastVoted);
 			put("rulesSent", rulesSent);
