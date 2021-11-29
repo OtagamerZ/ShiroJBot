@@ -98,7 +98,7 @@ public class GuessTheCardsCommand implements Executable {
 								names.get(0),
 								names.get(1),
 								names.get(2))
-						).queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
+						).queueAfter(2, TimeUnit.MINUTES, msg -> success.accept(null));
 						int chances = 2;
 
 						@Override
@@ -137,7 +137,7 @@ public class GuessTheCardsCommand implements Executable {
 							for (String s : answers)
 								points += names.remove(s.toUpperCase(Locale.ROOT)) ? 1 : 0;
 
-							int reward = 50 * points + Helper.rng(150) * points;
+							int reward = (int) (50 * Math.pow(2 + Helper.rng(0.2, 0.5), points));
 
 							Account acc = AccountDAO.getAccount(author.getId());
 							acc.addCredit(reward, GuessTheCardsCommand.class);
