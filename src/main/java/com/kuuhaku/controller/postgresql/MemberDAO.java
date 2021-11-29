@@ -119,10 +119,10 @@ public class MemberDAO {
 	public static int getHighestLevel() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT MAX(xp) FROM Member m", Integer.class);
+		Query q = em.createQuery("SELECT MAX(xp) FROM Member m");
 
 		try {
-			return (int) q.getSingleResult();
+			return (int) Math.ceil(Math.sqrt((long) q.getSingleResult()));
 		} finally {
 			em.close();
 		}
