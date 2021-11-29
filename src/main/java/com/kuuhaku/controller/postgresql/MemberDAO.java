@@ -106,7 +106,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 		Member m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE uid = :id ORDER BY level DESC", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE uid = :id ORDER BY xp DESC", Member.class);
 		q.setMaxResults(1);
 		q.setParameter("id", id);
 		m = (Member) q.getSingleResult();
@@ -119,7 +119,7 @@ public class MemberDAO {
 	public static int getHighestLevel() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT MAX(level) FROM Member m", Integer.class);
+		Query q = em.createQuery("SELECT MAX(xp) FROM Member m", Integer.class);
 
 		try {
 			return (int) q.getSingleResult();
