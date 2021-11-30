@@ -73,7 +73,7 @@ public enum Race {
 			new Integer[]{3, 3, 3, 1, 0}
 	),
 	SPIRIT("Espírito",
-			"+2% defesa por carta no cemitério",
+			"Adiciona a habilidade de consumir as últimas 3 cartas do cemitério para sintetizar um evogear aleatório (tempo de recarga: 5 turnos)",
 			"+1% defesa por carta no cemitério",
 			"Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta.",
 			new Integer[]{2, 4, 2, 2, 0}
@@ -85,8 +85,8 @@ public enum Race {
 			new Integer[]{4, 2, 2, 1, 1}
 	),
 	UNDEAD("Morto-vivo",
+			"Possui 5% de chance de receber uma cópia quando uma carta sua for enviada ao cemitério",
 			"+1% dano por carta no cemitério",
-			"+0,5% dano por carta no cemitério",
 			"Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate.",
 			new Integer[]{3, 3, 1, 0, 3}
 	),
