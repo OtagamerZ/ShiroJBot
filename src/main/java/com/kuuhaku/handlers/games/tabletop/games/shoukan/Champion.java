@@ -374,9 +374,7 @@ public class Champion implements Drawable, Cloneable {
 				}
 			}
 
-			if (combos.getLeft() == Race.UNDEAD) {
-				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
-			} else if (combos.getRight() == Race.UNDEAD)
+			if (combos.getRight() == Race.UNDEAD)
 				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
 		}
 
@@ -409,9 +407,7 @@ public class Champion implements Drawable, Cloneable {
 				}
 			}
 
-			if (combos.getLeft() == Race.SPIRIT) {
-				cBonus += game.getArena().getGraveyard().get(s).size() / 50f;
-			} else if (combos.getRight() == Race.SPIRIT)
+			if (combos.getRight() == Race.SPIRIT)
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 		}
 
