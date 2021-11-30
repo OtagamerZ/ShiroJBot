@@ -122,7 +122,7 @@ public class MemberDAO {
 		Query q = em.createQuery("SELECT MAX(xp) FROM Member m");
 
 		try {
-			return (int) Math.ceil(Math.sqrt((long) q.getSingleResult()));
+			return (int) Math.sqrt((long) q.getSingleResult() / 100d);
 		} finally {
 			em.close();
 		}
