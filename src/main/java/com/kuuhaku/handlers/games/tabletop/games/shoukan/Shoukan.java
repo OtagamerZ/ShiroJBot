@@ -112,6 +112,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private int effectLock = 0;
 	private boolean reroll = true;
 	private boolean moveLock = false;
+	private int[] synthCd = {0, 0};
 
 	private GameState oldState = null;
 
@@ -1876,6 +1877,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 			h.get().decreaseSuppression();
 			h.get().decreaseLockTime();
 			h.get().decreaseNullTime();
+			if (synthCd[getCurrentSide() == Side.TOP ? 1 : 0] > 0) {
+				synthCd[getCurrentSide() == Side.TOP ? 1 : 0]--;
+			}
 			slots = arena.getSlots().get(getCurrentSide());
 
 			if (getRound() >= 75) {
@@ -2100,6 +2104,51 @@ public class Shoukan extends GlobalGame implements Serializable {
 				else
 					reportEvent(h, getCurrent().getName() + " puxou " + toDraw + " cartas.", true, false);
 			});
+			if (combos.get(getCurrentSide()).getLeft() == Race.SPIRIT && synthCd[getCurrentSide() == Side.TOP ? 1 : 0] == 0) {
+				buttons.put(Helper.parseEmoji("\uD83C\uDF00"), wrapper -> {
+					if (phase != Phase.PLAN) {
+						channel.sendMessage("❌ | Você só pode sintetizar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+						return;
+					}
+
+					List<Drawable> grv = arena.getGraveyard().get(getCurrentSide());
+					if (grv.size() < 3) {
+						channel.sendMessage("❌ | Você não possui almas suficiente para sintetizar.").queue(null, Helper::doNothing);
+						return;
+					}
+					grv = grv.subList(0, 3);
+
+					Hand h = hands.get(getCurrentSide());
+
+					int score = grv.stream()
+							.mapToInt(c -> switch (c.getCard().getRarity()) {
+										case FIELD -> 5;
+										case EQUIPMENT -> ((Equipment) c).getTier();
+										case COMMON, UNCOMMON, RARE, ULTRA_RARE, LEGENDARY -> c.getCard().getRarity().getIndex();
+										default -> 0;
+									}
+							)
+							.sum();
+					double tier1 = (15 - score) * 0.75 / 12;
+					double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
+					double tier3 = Math.max(0, 0.65 - tier1);
+					double tier4 = tier3 * 0.1 / 0.65;
+
+					List<Equipment> equips = CardDAO.getAllAvailableEquipments();
+
+					List<Equipment> chosenTier = Helper.getRandom(List.of(
+							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
+							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
+							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
+							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
+					));
+
+					h.getCards().add(Helper.getRandomEntry(chosenTier));
+
+					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
+					synthCd[getCurrentSide() == Side.TOP ? 1 : 0] = 5;
+				});
+			}
 		}
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
 			buttons.put(Helper.parseEmoji("\uD83D\uDD04"), wrapper -> {
@@ -2201,6 +2250,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.get().decreaseSuppression();
 					h.get().decreaseLockTime();
 					h.get().decreaseNullTime();
+					if (synthCd[getCurrentSide() == Side.TOP ? 1 : 0] > 0) {
+						synthCd[getCurrentSide() == Side.TOP ? 1 : 0]--;
+					}
 					slots = arena.getSlots().get(getCurrentSide());
 
 					if (getRound() >= 75) {
