@@ -105,8 +105,8 @@ public class ManualResultCommand implements Executable {
 						), Helper::doNothing
 				);
 			}
-		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | ID inválido.").queue();
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
+			channel.sendMessage("❌ | Índice inválido.").queue();
 		}
 	}
 }
