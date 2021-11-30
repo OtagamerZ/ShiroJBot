@@ -1364,7 +1364,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		List<SlotColumn> slts = getArena().getSlots().get(side);
 		for (SlotColumn slt : slts) {
 			Champion c = slt.getTop();
-			if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+			if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == index) {
 				killCard(side, slt.getIndex(), c.getId());
 			} else if (c != null) {
 				c.getBonus().setAtk(index, 0);
@@ -1422,7 +1422,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<SlotColumn> slts = getArena().getSlots().get(side);
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
-				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+				if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == index) {
 					killCard(side, slt.getIndex(), c.getId());
 				} else if (c != null) {
 					c.getBonus().setAtk(index, 0);
@@ -1489,7 +1489,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<SlotColumn> slts = getArena().getSlots().get(side);
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
-				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+				if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == index) {
 					killCard(side, slt.getIndex(), c.getId());
 				} else if (c != null) {
 					c.getBonus().setAtk(index, 0);
@@ -1552,7 +1552,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<SlotColumn> slts = getArena().getSlots().get(side);
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
-				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+				if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == index) {
 					killCard(side, slt.getIndex(), c.getId());
 				} else if (c != null) {
 					c.getBonus().setAtk(index, 0);
@@ -1580,7 +1580,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			slts = getArena().getSlots().get(caster);
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
-				if (c != null && c.getBonus().getSpecialData().getInt("original") == source) {
+				if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == source) {
 					killCard(caster, slt.getIndex(), c.getId());
 				} else if (c != null) {
 					c.getBonus().setAtk(source, 0);
@@ -1638,7 +1638,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<SlotColumn> slts = getArena().getSlots().get(side);
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
-				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+				if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == index) {
 					killCard(side, slt.getIndex(), c.getId());
 				} else if (c != null) {
 					c.getBonus().setAtk(index, 0);
@@ -1685,7 +1685,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
-				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+				if (c != null && c.getBonus().getSpecialData().getInt("original", -1) == index) {
 					killCard(side, slt.getIndex(), c.getId());
 				} else if (c != null) {
 					c.getBonus().setAtk(index, 0);
