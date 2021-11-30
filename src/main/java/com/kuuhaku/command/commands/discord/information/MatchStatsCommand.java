@@ -244,7 +244,7 @@ public class MatchStatsCommand implements Executable {
 		JSONObject out = new JSONObject();
 		Map<Side, List<MatchInfo>> result = MatchMakingRating.calcMMR(history);
 		for (Side s : Side.values()) {
-			Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
+			Side other = s.getOther();
 
 			for (MatchInfo info : result.get(s)) {
 				Map<String, Integer> yourResult = info.info();

@@ -19,5 +19,9 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum Side {
-	TOP, BOTTOM
+	TOP, BOTTOM;
+
+	public Side getOther() {
+		return this == TOP ? BOTTOM : TOP;
+	}
 }

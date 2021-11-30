@@ -1353,342 +1353,383 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return false;
 	}
 
-	public void killCard(Side to, int target, int id) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null || targetChamp.getBonus().popFlag(Flag.NODEATH) || targetChamp.getId() != id) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		slts.get(target).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn sd = slts.get(i);
-			Champion c = sd.getTop();
-			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i, c.getId());
-
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-				unequipCard(to, i, slts);
+	public void killCard(Side side, int index, int id) {
+		Champion target = getSlot(side, index).getTop();
+		if (id > -1) {
+			if (target == null || target.getId() != id || target.getBonus().popFlag(Flag.NODEATH)) return;
+		} else {
+			if (target == null) return;
 		}
 
-		for (SlotColumn slot : slts) {
-			if (slot.getTop() == null) continue;
+		List<SlotColumn> slts = getArena().getSlots().get(side);
+		for (SlotColumn slt : slts) {
+			if (slt.getIndex() == index) slt.setTop(null);
 
-			Champion c = slot.getTop();
-			c.getBonus().setAtk(target, 0);
-			c.getBonus().setDef(target, 0);
-			c.getBonus().setDodge(target, 0);
+			Champion c = slt.getTop();
+			if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+				killCard(side, slt.getIndex(), c.getId());
+			} else if (c != null) {
+				c.getBonus().setAtk(index, 0);
+				c.getBonus().setDef(index, 0);
+				c.getBonus().setDodge(index, 0);
+			}
+
+			Equipment e = slt.getBottom();
+			if (e != null && e.getLinkedTo().getLeft() == index) {
+				unequipCard(side, slt.getIndex());
+			}
 		}
 
-		if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
+		if (applyEffect(ON_DESTROY, target, side, index)) return;
 
-		if (targetChamp.canGoToGrave())
-			arena.getGraveyard().get(to).add(targetChamp);
+		if (target.canGoToGrave())
+			arena.getGraveyard().get(side).add(target);
 	}
 
-	public void destroyCard(Side to, int target, Side from, int source) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		Champion sourceChamp = getSlot(from, source).getTop();
+	public void destroyCard(Side side, int index, Side caster, int source) {
+		Champion target = getSlot(side, index).getTop();
+		if (target == null || target.getBonus().popFlag(Flag.NODEATH)) return;
 
 		double chance = 100;
-		if (sourceChamp != null) {
-			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
-			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
+		Champion activator = null;
+		if (caster != null && source > -1) {
+			activator = getSlot(caster, source).getTop();
+			if (activator != null) {
+				int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
+				int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
 
-			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana < targetMana)
-				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+				chance -= target.getDodge() * 0.75;
+				if (sourceMana < targetMana)
+					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+			}
 		}
 
-		if (chance == 100 || Helper.chance(chance)) {
-			Charm charm = targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (charm == Charm.SHIELD || charm == Charm.MIRROR || (targetChamp.getHero() != null && targetChamp.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
-			for (int i = 0; i < slts.size(); i++) {
-				Equipment eq = slts.get(i).getBottom();
-				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SHIELD) {
-						unequipCard(to, i, slts);
-						return;
-					} else if (eq.getCharm() == Charm.MIRROR && sourceChamp != null) {
-						destroyCard(from, source, to, target);
-						unequipCard(to, i, slts);
-						return;
+			for (Equipment e : target.getLinkedTo()) {
+				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
+					unequipCard(side, e.getIndex());
+
+					if (e.getCharm() == Charm.MIRROR && activator != null) {
+						destroyCard(caster, source, side, index);
 					}
 				}
 			}
 
-			slts.get(target).setTop(null);
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn sd = slts.get(i);
-				Champion c = sd.getTop();
-				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i, c.getId());
+			List<SlotColumn> slts = getArena().getSlots().get(side);
+			for (SlotColumn slt : slts) {
+				if (slt.getIndex() == index) slt.setTop(null);
 
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-					unequipCard(to, i, slts);
-			}
+				Champion c = slt.getTop();
+				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+					killCard(side, slt.getIndex(), c.getId());
+				} else if (c != null) {
+					c.getBonus().setAtk(index, 0);
+					c.getBonus().setDef(index, 0);
+					c.getBonus().setDodge(index, 0);
+				}
 
-			for (SlotColumn slot : slts) {
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.getBonus().setAtk(target, 0);
-				c.getBonus().setDef(target, 0);
-				c.getBonus().setDodge(target, 0);
-			}
-
-			if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
-
-			if (targetChamp.canGoToGrave())
-				arena.getGraveyard().get(to).add(targetChamp);
-		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
-		}
-	}
-
-	public void destroyCard(Side to, int target) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == target) {
-				if (eq.getCharm() == Charm.SHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SHIELD) {
-					unequipCard(to, i, slts);
-					return;
+				Equipment e = slt.getBottom();
+				if (e != null && e.getLinkedTo().getLeft() == index) {
+					unequipCard(side, slt.getIndex());
 				}
 			}
+
+			if (applyEffect(ON_DESTROY, target, side, index)) return;
+
+			if (target.canGoToGrave())
+				arena.getGraveyard().get(side).add(target);
+		} else if (activator != null) {
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
-
-		slts.get(target).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn sd = slts.get(i);
-			Champion c = sd.getTop();
-			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i, c.getId());
-
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-				unequipCard(to, i, slts);
-		}
-
-		for (SlotColumn slot : slts) {
-			if (slot.getTop() == null) continue;
-
-			Champion c = slot.getTop();
-			c.getBonus().setAtk(target, 0);
-			c.getBonus().setDef(target, 0);
-			c.getBonus().setDodge(target, 0);
-		}
-
-		if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
-
-		if (targetChamp.canGoToGrave())
-			arena.getGraveyard().get(to).add(targetChamp);
 	}
 
-	public void dizimateCard(Side to, int target) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		slts.get(target).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn sd = slts.get(i);
-			Champion c = sd.getTop();
-			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i, c.getId());
-
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-				unequipCard(to, i, slts);
-		}
-
-		for (SlotColumn slot : slts) {
-			if (slot.getTop() == null) continue;
-
-			Champion c = slot.getTop();
-			c.getBonus().setAtk(target, 0);
-			c.getBonus().setDef(target, 0);
-			c.getBonus().setDodge(target, 0);
-		}
-
-		if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
-
-		if (targetChamp.canGoToGrave())
-			arena.getGraveyard().get(to).add(targetChamp);
+	public void destroyCard(Side side, int index) {
+		destroyCard(side, index, null, -1);
 	}
 
-	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
+	public void convertCard(Side side, int index, Side caster, int source) {
+		if (caster == null) caster = side.getOther();
 
-		Champion sourceChamp = getSlot(from, source).getTop();
+		Champion target = getSlot(side, index).getTop();
+		if (target == null || target.getBonus().popFlag(Flag.NOCONVERT)) return;
 
 		double chance = 100;
-		if (sourceChamp != null) {
-			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
-			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
+		Champion activator = null;
+		if (source > -1) {
+			activator = getSlot(caster, source).getTop();
+			if (activator != null) {
+				int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
+				int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
 
-			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana < targetMana)
-				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+				chance -= target.getDodge() * 0.75;
+				if (sourceMana < targetMana)
+					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+			}
 		}
 
-		if (chance == 100 || Helper.chance(chance)) {
-			Charm charm = targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (charm == Charm.SHIELD || charm == Charm.MIRROR || (targetChamp.getHero() != null && targetChamp.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
-			for (int i = 0; i < slts.size(); i++) {
-				Equipment eq = slts.get(i).getBottom();
-				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SHIELD) {
-						unequipCard(to, i, slts);
-						return;
-					} else if (eq.getCharm() == Charm.MIRROR) {
-						captureCard(from, source, to, target, withFusion);
-						unequipCard(to, i, slts);
-						return;
+			for (Equipment e : target.getLinkedTo()) {
+				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
+					unequipCard(side, e.getIndex());
+
+					if (e.getCharm() == Charm.MIRROR && activator != null) {
+						convertCard(caster, source, side, index);
 					}
 				}
 			}
 
-			slts.get(target).setTop(null);
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn sd = slts.get(i);
-				Champion c = sd.getTop();
-				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i, c.getId());
+			List<SlotColumn> slts = getArena().getSlots().get(side);
+			for (SlotColumn slt : slts) {
+				if (slt.getIndex() == index) slt.setTop(null);
 
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-					unequipCard(to, i, slts);
-			}
+				Champion c = slt.getTop();
+				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+					killCard(side, slt.getIndex(), c.getId());
+				} else if (c != null) {
+					c.getBonus().setAtk(index, 0);
+					c.getBonus().setDef(index, 0);
+					c.getBonus().setDodge(index, 0);
+				}
 
-			for (SlotColumn slot : slts) {
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.getBonus().setAtk(target, 0);
-				c.getBonus().setDef(target, 0);
-				c.getBonus().setDodge(target, 0);
-			}
-
-			if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
-
-			targetChamp.reset();
-			if (!targetChamp.isFusion() || withFusion)
-				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
-		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
-		}
-	}
-
-	public void captureCard(Side to, int target, boolean withFusion) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == target) {
-				if (eq.getCharm() == Charm.SHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SHIELD) {
-					unequipCard(to, i, slts);
-					return;
+				Equipment e = slt.getBottom();
+				if (e != null && e.getLinkedTo().getLeft() == index) {
+					unequipCard(side, slt.getIndex());
 				}
 			}
+
+			if (applyEffect(ON_DESTROY, target, side, index)) return;
+
+			SlotColumn sc = getFirstAvailableSlot(caster, true);
+			if (sc == null) {
+				if (target.canGoToGrave())
+					arena.getGraveyard().get(caster).add(target);
+			} else {
+				sc.setTop(target);
+			}
+		} else if (activator != null) {
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
-
-		slts.get(target).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn sd = slts.get(i);
-			Champion c = sd.getTop();
-			if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-				killCard(to, i, c.getId());
-
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-				unequipCard(to, i, slts);
-		}
-
-		for (SlotColumn slot : slts) {
-			if (slot.getTop() == null) continue;
-
-			Champion c = slot.getTop();
-			c.getBonus().setAtk(target, 0);
-			c.getBonus().setDef(target, 0);
-			c.getBonus().setDodge(target, 0);
-		}
-
-		if (applyEffect(ON_DESTROY, targetChamp, to, target)) return;
-
-		targetChamp.reset();
-		if (!targetChamp.isFusion() || withFusion)
-			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(targetChamp);
 	}
 
-	public void banCard(Side to, int target, boolean equipment) {
-		List<SlotColumn> slts = getArena().getSlots().get(to);
+	public void convertCard(Side side, int index) {
+		convertCard(side, index, null, -1);
+	}
+
+	public void switchCards(Side side, int index, Side caster, int source) {
+		Champion target = getSlot(side, index).getTop();
+		if (target == null || target.getBonus().popFlag(Flag.NOCONVERT)) return;
+
+		double chance = 100;
+		Champion activator = getSlot(caster, source).getTop();
+		if (activator == null || activator.getBonus().popFlag(Flag.NOCONVERT)) return;
+
+		int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
+		int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
+
+		chance -= target.getDodge() * 0.75;
+		if (sourceMana < targetMana)
+			chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+
+		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+				return;
+			}
+
+			for (Equipment e : target.getLinkedTo()) {
+				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
+					unequipCard(side, e.getIndex());
+				}
+			}
+
+			List<SlotColumn> slts = getArena().getSlots().get(side);
+			for (SlotColumn slt : slts) {
+				if (slt.getIndex() == index) slt.setTop(null);
+
+				Champion c = slt.getTop();
+				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+					killCard(side, slt.getIndex(), c.getId());
+				} else if (c != null) {
+					c.getBonus().setAtk(index, 0);
+					c.getBonus().setDef(index, 0);
+					c.getBonus().setDodge(index, 0);
+				}
+
+				Equipment e = slt.getBottom();
+				if (e != null && e.getLinkedTo().getLeft() == index) {
+					unequipCard(side, slt.getIndex());
+				}
+			}
+
+			charm = activator.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (activator.getHero() != null && activator.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+				return;
+			}
+
+			for (Equipment e : activator.getLinkedTo()) {
+				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
+					unequipCard(caster, e.getIndex());
+				}
+			}
+
+			slts = getArena().getSlots().get(caster);
+			for (SlotColumn slt : slts) {
+				if (slt.getIndex() == source) slt.setTop(null);
+
+				Champion c = slt.getTop();
+				if (c != null && c.getBonus().getSpecialData().getInt("original") == source) {
+					killCard(caster, slt.getIndex(), c.getId());
+				} else if (c != null) {
+					c.getBonus().setAtk(source, 0);
+					c.getBonus().setDef(source, 0);
+					c.getBonus().setDodge(source, 0);
+				}
+
+				Equipment e = slt.getBottom();
+				if (e != null && e.getLinkedTo().getLeft() == source) {
+					unequipCard(caster, slt.getIndex());
+				}
+			}
+
+			getSlot(side, index).setTop(activator);
+			getSlot(caster, source).setTop(target);
+		} else {
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
+		}
+	}
+
+	public void captureCard(Side side, int index, Side caster, int source, boolean withFusion) {
+		Champion target = getSlot(side, index).getTop();
+		if (target == null) return;
+
+		double chance = 100;
+		Champion activator = null;
+		if (caster != null && source > -1) {
+			activator = getSlot(caster, source).getTop();
+			if (activator != null) {
+				int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
+				int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
+
+				chance -= target.getDodge() * 0.75;
+				if (sourceMana < targetMana)
+					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+			}
+		}
+
+		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+				return;
+			}
+
+			for (Equipment e : target.getLinkedTo()) {
+				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
+					unequipCard(side, e.getIndex());
+
+					if (e.getCharm() == Charm.MIRROR && activator != null) {
+						captureCard(caster, source, side, index, withFusion);
+					}
+				}
+			}
+
+			List<SlotColumn> slts = getArena().getSlots().get(side);
+			for (SlotColumn slt : slts) {
+				if (slt.getIndex() == index) slt.setTop(null);
+
+				Champion c = slt.getTop();
+				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+					killCard(side, slt.getIndex(), c.getId());
+				} else if (c != null) {
+					c.getBonus().setAtk(index, 0);
+					c.getBonus().setDef(index, 0);
+					c.getBonus().setDodge(index, 0);
+				}
+
+				Equipment e = slt.getBottom();
+				if (e != null && e.getLinkedTo().getLeft() == index) {
+					unequipCard(side, slt.getIndex());
+				}
+			}
+
+			if (applyEffect(ON_DESTROY, target, side, index)) return;
+
+			target.reset();
+			if (!target.isFusion() || withFusion)
+				hands.get(side.getOther()).getCards().add(target);
+		} else if (activator != null) {
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
+		}
+	}
+
+	public void captureCard(Side side, int index, boolean withFusion) {
+		captureCard(side, index, null, -1, withFusion);
+	}
+
+	public void banCard(Side side, int index, boolean equipment) {
+		List<SlotColumn> slts = getArena().getSlots().get(side);
 		if (equipment) {
-			Equipment eq = slts.get(target).getBottom();
-			if (eq == null) return;
+			Equipment target = slts.get(index).getBottom();
+			if (target == null) return;
 
-			Champion link = slts.get(eq.getLinkedTo().getLeft()).getTop();
-			if (eq.getLinkedTo().getLeft() > -1 && link != null)
-				link.unlink(eq);
+			Champion link = target.getLinkedTo().getRight();
+			if (link != null)
+				link.unlink(target);
 
-			arena.getBanned().add(eq);
-			slts.get(target).setBottom(null);
+			slts.get(index).setBottom(null);
+			arena.getBanned().add(target);
 		} else {
-			Champion ch = slts.get(target).getTop();
-			if (ch == null) return;
-
-			for (Equipment link : ch.getLinkedTo()) {
-				arena.getBanned().add(link);
-				slts.get(link.getIndex()).setBottom(null);
-			}
+			Champion target = slts.get(index).getTop();
+			if (target == null) return;
 
 			for (SlotColumn slt : slts) {
-				Champion c = slt.getTop();
-				if (c == null) continue;
+				if (slt.getIndex() == index) slt.setTop(null);
 
-				if (c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target) {
-					killCard(to, slt.getIndex(), c.getId());
-				} else {
-					c.getBonus().setAtk(target, 0);
-					c.getBonus().setDef(target, 0);
-					c.getBonus().setDodge(target, 0);
+				Champion c = slt.getTop();
+				if (c != null && c.getBonus().getSpecialData().getInt("original") == index) {
+					killCard(side, slt.getIndex(), c.getId());
+				} else if (c != null) {
+					c.getBonus().setAtk(index, 0);
+					c.getBonus().setDef(index, 0);
+					c.getBonus().setDodge(index, 0);
+				}
+
+				Equipment e = slt.getBottom();
+				if (e != null && e.getLinkedTo().getLeft() == index) {
+					banCard(side, slt.getIndex(), true);
 				}
 			}
 
-			if (applyEffect(ON_DESTROY, ch, to, target)) return;
+			if (applyEffect(ON_DESTROY, target, side, index)) return;
 
-			if (ch.canGoToGrave())
-				arena.getBanned().add(ch);
-			slts.get(target).setTop(null);
+			if (target.canGoToGrave())
+				arena.getBanned().add(target);
 		}
 	}
 
-	public void unequipCard(Side s, int index, List<SlotColumn> slts) {
-		Equipment eq = slts.get(index).getBottom();
-		if (eq == null) return;
+	public void unequipCard(Side side, int index) {
+		Equipment target = getSlot(side, index).getBottom();
+		if (target == null) return;
 
-		if (eq.getLinkedTo().getLeft() > -1 && slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
-			slts.get(eq.getLinkedTo().getLeft()).getTop().unlink(eq);
+		Champion link = target.getLinkedTo().getRight();
+		if (link != null)
+			link.unlink(target);
 
-		SlotColumn sd = slts.get(index);
-		sd.setBottom(null);
-
-		eq.reset();
-		if (eq.canGoToGrave()) {
-			if (eq.getTier() >= 4)
-				arena.getBanned().add(eq);
+		getSlot(side, index).setBottom(null);
+		if (target.canGoToGrave()) {
+			if (target.getTier() >= 4)
+				arena.getBanned().add(target);
 			else
-				arena.getGraveyard().get(s).add(eq);
+				arena.getGraveyard().get(side).add(target);
 		}
 	}
 
@@ -1721,264 +1762,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return null;
 	}
 
-	public void convertCard(Side to, int target, Side from, int source) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		Champion sourceChamp = getSlot(from, source).getTop();
-
-		double chance = 100;
-		if (sourceChamp != null) {
-			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
-			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
-
-			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana < targetMana)
-				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
-		}
-
-		if (chance == 100 || Helper.chance(chance)) {
-			Charm charm = targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (charm == Charm.SHIELD || charm == Charm.MIRROR || (targetChamp.getHero() != null && targetChamp.getHero().getPerks().contains(Perk.MINDSHIELD))) {
-				return;
-			}
-
-			for (int i = 0; i < slts.size(); i++) {
-				Equipment eq = slts.get(i).getBottom();
-				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SHIELD) {
-						unequipCard(to, i, slts);
-						return;
-					} else if (eq.getCharm() == Charm.MIRROR) {
-						convertCard(from, source, to, target);
-						unequipCard(to, i, slts);
-						return;
-					}
-				}
-			}
-
-			SlotColumn sc = getFirstAvailableSlot(from, true);
-			if (sc != null) {
-				targetChamp.clearLinkedTo();
-				sc.setTop(targetChamp);
-				slts.get(target).setTop(null);
-				for (int i = 0; i < slts.size(); i++) {
-					SlotColumn sd = slts.get(i);
-					Champion c = sd.getTop();
-					if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-						killCard(to, i, c.getId());
-
-					if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-						unequipCard(to, i, slts);
-				}
-
-				for (SlotColumn slot : slts) {
-					if (slot.getTop() == null) continue;
-
-					Champion c = slot.getTop();
-					c.getBonus().setAtk(target, 0);
-					c.getBonus().setDef(target, 0);
-					c.getBonus().setDodge(target, 0);
-				}
-			}
-		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
-		}
-	}
-
-	public void convertCard(Side to, int target) {
-		Side from = to == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == target) {
-				if (eq.getCharm() == Charm.SHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SHIELD) {
-					unequipCard(to, i, slts);
-					return;
-				}
-			}
-		}
-
-		SlotColumn sc = getFirstAvailableSlot(from, true);
-		if (sc != null) {
-			targetChamp.clearLinkedTo();
-			sc.setTop(targetChamp);
-			slts.get(target).setTop(null);
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn sd = slts.get(i);
-				Champion c = sd.getTop();
-				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i, c.getId());
-
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-					unequipCard(to, i, slts);
-			}
-
-			for (SlotColumn slot : slts) {
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.getBonus().setAtk(target, 0);
-				c.getBonus().setDef(target, 0);
-				c.getBonus().setDodge(target, 0);
-			}
-		}
-	}
-
-	public void switchCards(Side to, int target, Side from, int source) {
-		Champion targetChamp = getSlot(to, target).getTop();
-		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
-		List<SlotColumn> slts = getArena().getSlots().get(to);
-
-		Champion sourceChamp = getSlot(from, source).getTop();
-
-		double chance = 100;
-		if (sourceChamp != null) {
-			int sourceMana = sourceChamp.getMana() + (sourceChamp.isFusion() ? 5 : 0);
-			int targetMana = targetChamp.getMana() + (targetChamp.isFusion() ? 5 : 0);
-
-			chance -= sourceChamp.getDodge() * 0.75;
-			if (sourceMana < targetMana)
-				chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
-		}
-
-		if (chance == 100 || Helper.chance(chance)) {
-			for (int i = 0; i < slts.size(); i++) {
-				Equipment eq = slts.get(i).getBottom();
-				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SHIELD) {
-						unequipCard(to, i, slts);
-						return;
-					}
-				}
-			}
-
-			targetChamp.clearLinkedTo();
-			slts.get(target).setTop(null);
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn sd = slts.get(i);
-				Champion c = sd.getTop();
-				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i, c.getId());
-
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == source)
-					unequipCard(to, i, slts);
-			}
-
-			for (SlotColumn slot : slts) {
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.getBonus().setAtk(target, 0);
-				c.getBonus().setDef(target, 0);
-				c.getBonus().setDodge(target, 0);
-			}
-
-			if (sourceChamp == null) return;
-			List<SlotColumn> slots = getArena().getSlots().get(from);
-
-			sourceChamp.clearLinkedTo();
-			slots.get(source).setTop(null);
-			for (int i = 0; i < slots.size(); i++) {
-				SlotColumn sd = slots.get(i);
-				Champion c = sd.getTop();
-				if (c != null && c.isDecoy() && c.getBonus().getSpecialData().getInt("original") == target)
-					killCard(to, i, c.getId());
-
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
-					unequipCard(from, i, slots);
-			}
-
-			for (SlotColumn slot : slts) {
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.getBonus().setAtk(target, 0);
-				c.getBonus().setDef(target, 0);
-				c.getBonus().setDodge(target, 0);
-			}
-
-			slts.get(target).setTop(sourceChamp);
-			slots.get(source).setTop(targetChamp);
-		} else {
-			channel.sendMessage("Efeito de " + sourceChamp.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
-		}
-	}
-
-	public void convertEquipment(Champion target, int pos, Side to, int index) {
-		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion targetChamp = getArena().getSlots().get(his).get(index).getTop();
-		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
-		List<SlotColumn> slts = getArena().getSlots().get(his);
-
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				if (eq.getCharm() == Charm.SHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SHIELD) {
-					unequipCard(his, i, slts);
-					return;
-				}
-			}
-		}
-
-		for (int i = 0; i < 5; i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				SlotColumn sc = getFirstAvailableSlot(to, false);
-				if (sc != null) {
-					targetChamp.unlink(eq);
-					slts.get(i).setBottom(null);
-
-					target.link(eq);
-					eq.link(pos, target);
-					sc.setBottom(eq);
-				} else return;
-
-				break;
-			}
-		}
-	}
-
-	public void convertEquipments(Champion target, int pos, Side to, int index) {
-		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion targetChamp = getArena().getSlots().get(his).get(index).getTop();
-		if (targetChamp == null || targetChamp.getBonus().hasFlag(Flag.NOCONVERT)) return;
-		List<SlotColumn> slts = getArena().getSlots().get(his);
-
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				if (eq.getCharm() == Charm.SHIELD || targetChamp.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SHIELD) {
-					unequipCard(his, i, slts);
-					return;
-				}
-			}
-		}
-
-		for (int i = 0; i < 5; i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				SlotColumn sc = getFirstAvailableSlot(to, false);
-				if (sc != null) {
-					targetChamp.unlink(eq);
-					slts.get(i).setBottom(null);
-
-					target.link(eq);
-					eq.link(pos, target);
-					sc.setBottom(eq);
-				} else return;
-			}
-		}
-	}
-
 	public boolean lastTick() {
 		for (Side s : Side.values()) {
 			Hand h = hands.get(s);
-			Hand op = hands.get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
+			Hand op = hands.get(s.getOther());
 			List<SlotColumn> slts = arena.getSlots().get(s);
 
 			for (int i = 0; i < 5; i++) {
@@ -1999,7 +1786,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		boolean finished = false;
 		for (Hand h : hands.values()) {
-			Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+			Hand op = hands.get(h.getSide().getOther());
 
 			if (h.getHp() <= 0) {
 				if (lastTick()) return false;
@@ -2922,7 +2709,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public Side getNextSide() {
-		return getCurrentSide() == Side.TOP ? Side.BOTTOM : Side.TOP;
+		return getCurrentSide().getOther();
 	}
 
 	public boolean isTeam() {
