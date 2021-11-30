@@ -173,14 +173,17 @@ public class ShiroEvents extends ListenerAdapter {
         }
 
         if (!author.isBot()) {
-            if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
-                channel.getHistory().retrievePast(20).queue(h -> {
-                    h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
-                    if (!gc.isHardAntispam())
-                        h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
+            try {
+                if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
+                    channel.getHistory().retrievePast(20).queue(h -> {
+                        h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+                        if (!gc.isHardAntispam())
+                            h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
 
-                    countSpam(member, channel, guild, h);
-                });
+                        countSpam(member, channel, guild, h);
+                    });
+                }
+            } catch (ErrorResponseException ignore) {
             }
         }
 
