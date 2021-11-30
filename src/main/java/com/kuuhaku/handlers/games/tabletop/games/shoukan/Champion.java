@@ -384,11 +384,6 @@ public class Champion implements Drawable, Cloneable {
 		if (!hasEffect() && !fusion) {
 			extraFac *= 1.1f;
 		}
-		if (game != null && acc != null && !fusion) {
-			if (game.getCombos().get(game.getSideById(acc.getUid())).getLeft() == Race.HUMAN && mana <= 2) {
-				extraFac *= 1.25f;
-			}
-		}
 
 		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * extraFac)), 25);
 	}
@@ -423,11 +418,6 @@ public class Champion implements Drawable, Cloneable {
 		float extraFac = 1f;
 		if (!hasEffect() && !fusion) {
 			extraFac *= 1.1f;
-		}
-		if (game != null && acc != null && !fusion) {
-			if (game.getCombos().get(game.getSideById(acc.getUid())).getLeft() == Race.HUMAN && mana <= 2) {
-				extraFac *= 1.25f;
-			}
 		}
 
 		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * extraFac)), 25);
@@ -533,8 +523,13 @@ public class Champion implements Drawable, Cloneable {
 			}
 		}
 
+		double extra = 0;
+		if (game != null && acc != null) {
+			extra += game.getHands().get(game.getSideById(acc.getUid())).getMitigation() * 100;
+		}
+
 		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
-		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0)) * heroMod, 0, 100);
+		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0) + extra) * heroMod, 0, 100);
 		return (int) Helper.roundTrunc(d * 100, 5) / 100;
 	}
 
