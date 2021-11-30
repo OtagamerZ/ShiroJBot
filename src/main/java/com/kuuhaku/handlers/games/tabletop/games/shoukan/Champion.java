@@ -375,7 +375,7 @@ public class Champion implements Drawable, Cloneable {
 			}
 
 			if (combos.getRight() == Race.UNDEAD)
-				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
+				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 		}
 
 		float extraFac = 1f;
