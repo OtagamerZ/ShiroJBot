@@ -148,7 +148,7 @@ public class Hand {
 											Hand h = ep.getHands().get(ep.getSide());
 											h.setHp(h.getHp() / 2);
 										} else if (rng < 50) {
-											Hand h = ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+											Hand h = ep.getHands().get(ep.getSide().getOther());
 											h.setHp(h.getHp() / 2);
 										}
 									}
@@ -509,7 +509,7 @@ public class Hand {
 	}
 
 	public void showEnemyHand() {
-		Hand enemy = game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP);
+		Hand enemy = game.getHands().get(side.getOther());
 		BufferedImage bi = new BufferedImage(Math.max(5, enemy.getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -536,7 +536,7 @@ public class Hand {
 	}
 
 	public void showEnemyDeck(int amount) {
-		Hand op = game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP);
+		Hand op = game.getHands().get(side.getOther());
 		BufferedImage bi = new BufferedImage(Math.max(5, amount) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);

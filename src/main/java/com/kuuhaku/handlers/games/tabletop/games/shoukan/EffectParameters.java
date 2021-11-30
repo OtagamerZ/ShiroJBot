@@ -81,7 +81,7 @@ public class EffectParameters {
 	}
 
 	public Side getOtherSide() {
-		return side == Side.TOP ? Side.BOTTOM : Side.TOP;
+		return side.getOther();
 	}
 
 	public Map<Side, Hand> getHands() {

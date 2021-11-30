@@ -98,7 +98,7 @@ public class TeamHand extends Hand {
 												Hand h = ep.getHands().get(ep.getSide());
 												h.setHp(h.getHp() / 2);
 											} else if (rng < 50) {
-												Hand h = ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+												Hand h = ep.getHands().get(ep.getSide().getOther());
 												h.setHp(h.getHp() / 2);
 											}
 										}
@@ -594,7 +594,7 @@ public class TeamHand extends Hand {
 	}
 
 	public void showEnemyHand() {
-		TeamHand op = (TeamHand) getGame().getHands().get(getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+		TeamHand op = (TeamHand) getGame().getHands().get(getSide().getOther());
 		BufferedImage bi = new BufferedImage(Math.max(5, op.getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -621,7 +621,7 @@ public class TeamHand extends Hand {
 	}
 
 	public void showEnemyDeck(int amount) {
-		TeamHand op = (TeamHand) getGame().getHands().get(getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+		TeamHand op = (TeamHand) getGame().getHands().get(getSide().getOther());
 		BufferedImage bi = new BufferedImage(Math.max(5, amount) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
