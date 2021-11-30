@@ -2147,8 +2147,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					arena.getBanned().addAll(grv);
 					grv.clear();
-					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 					synthCd[getCurrentSide() == Side.TOP ? 1 : 0] = 5;
+					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
 		}
