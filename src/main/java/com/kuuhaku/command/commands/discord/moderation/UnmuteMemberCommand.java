@@ -77,7 +77,7 @@ public class UnmuteMemberCommand implements Executable {
 		}
 
 		if (act.isEmpty()) {
-			channel.sendMessage("Nenhum usuário foi dessilenciado.").queue();
+			channel.sendMessage("Não foi encontrado nenhum canal onde esse usuário estivesse silenciado.").queue();
 		} else {
 			RestAction.allOf(act)
 					.flatMap(s -> channel.sendMessage("✅ | Usuário dessilenciado com sucesso!"))

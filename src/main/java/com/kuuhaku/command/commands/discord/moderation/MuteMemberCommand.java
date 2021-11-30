@@ -122,6 +122,11 @@ public class MuteMemberCommand implements Executable {
 			}
 		}
 
+		if (act.isEmpty()) {
+			channel.sendMessage("❌ | Não possuo permissão suficiente para silenciar esse usuário ou ele já não pode ver nenhum canal.").queue();
+			return;
+		}
+
 		RestAction.allOf(act)
 				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + reason + "`"))
 				.queue(s -> {
