@@ -2621,19 +2621,22 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (effectLock == 0) {
 			if (activator.hasEffect()) {
+				boolean activate = true;
+
 				if (duelists.getAttacker() != null) {
 					Champion c = duelists.getAttacker();
 
-					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) return false;
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) activate = false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) activate = false;
 				} else if (duelists.getDefender() != null) {
 					Champion c = duelists.getDefender();
 
-					if (c.getBonus().popFlag(Flag.NOEFFECT)) return false;
-					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) return false;
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) activate = false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) activate = false;
 				}
 
-				activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
+				if (activate)
+					activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 			}
 
 			for (Equipment e : List.copyOf(activator.getLinkedTo())) {
