@@ -2138,19 +2138,29 @@ public class Shoukan extends GlobalGame implements Serializable {
 									}
 							)
 							.sum();
-					double tier1 = (15 - score) * 0.75 / 12;
-					double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
-					double tier3 = Math.max(0, 0.65 - tier1);
-					double tier4 = tier3 * 0.1 / 0.65;
+					int max = 15;
+					double base = (max - score) / 0.75 / (max - 3);
 
-					List<Equipment> equips = CardDAO.getAllAvailableEquipments();
+					double t3 = Math.max(0, 0.65 - base);
+					double t4 = Math.max(0, (t3 * 15) / 65 - 0.05);
+					double t1 = Math.max(0, base - t4 * 10);
+					double t2 = Math.max(0, 0.85 - Math.abs(0.105 - t1 / 3) * 5 - t3);
 
-					List<Equipment> chosenTier = Helper.getRandom(List.of(
-							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
-							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
-							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
-							org.apache.commons.math3.util.Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
-					));
+					List<Equipment> pool = CardDAO.getAllAvailableEquipments();
+
+					List<Equipment> chosenTier = Helper.getRandom(pool.stream()
+							.collect(Collectors.groupingBy(Equipment::getTier))
+							.entrySet()
+							.stream()
+							.map(e -> org.apache.commons.math3.util.Pair.create(e.getValue(), switch (e.getKey()) {
+										case 1 -> t1;
+										case 2 -> t2;
+										case 3 -> t3;
+										case 4 -> t4;
+										default -> 0d;
+									})
+							).toList()
+					);
 
 					h.getCards().add(Helper.getRandomEntry(chosenTier));
 
