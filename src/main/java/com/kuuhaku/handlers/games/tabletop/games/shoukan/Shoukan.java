@@ -1964,6 +1964,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 					) return;
 				}
 
+				Equipment e = sc.getBottom();
+				if (e != null) {
+					Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getLeft()).getTop();
+					if (link == null || !link.equals(e.getLinkedTo().getRight())) {
+						unequipCard(getCurrentSide(), e.getIndex());
+					} else if (link.getLinkedTo().stream().noneMatch(eq -> eq.equals(e) && eq.getIndex() == e.getIndex())) {
+						link.link(e);
+					}
+				}
+
 				if (sc.isUnavailable()) {
 					sc.setUnavailable(-1);
 				}
@@ -2337,6 +2347,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 							if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
 								|| makeFusion(h.get())
 							) return;
+						}
+
+						Equipment e = sc.getBottom();
+						if (e != null) {
+							Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getLeft()).getTop();
+							if (link == null || !link.equals(e.getLinkedTo().getRight())) {
+								unequipCard(getCurrentSide(), e.getIndex());
+							} else if (link.getLinkedTo().stream().noneMatch(eq -> eq.equals(e) && eq.getIndex() == e.getIndex())) {
+								link.link(e);
+							}
 						}
 
 						if (sc.isUnavailable()) {
