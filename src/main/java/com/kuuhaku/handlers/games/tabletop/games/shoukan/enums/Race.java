@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public enum Race {
 	HUMAN("Humano",
 			"**(SOLO)** +1 limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
-			"Campeões com 1 ou 2 de custo no deck reduzem o dano sofrido em (**SOLO** | 1%/**DUO** | 0,5%), metade disso adicionado à esquiva de suas cartas",
+			"Campeões com 1 ou 2 de custo no deck reduzem o dano sofrido em (**SOLO** | 1%/**DUO** | 0,5%), 3/4 disso adicionado à esquiva de suas cartas",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia.",
 			new Integer[]{2, 2, 2, 2, 2}
 	),
