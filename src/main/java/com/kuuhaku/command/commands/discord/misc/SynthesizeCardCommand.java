@@ -33,6 +33,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
@@ -41,6 +42,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.math3.util.Pair;
@@ -51,181 +54,298 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Command(
-        name = "sintetizar",
-        aliases = {"synthesize", "synth"},
-        usage = "req_cards-type",
-        category = Category.MISC
+		name = "sintetizar",
+		aliases = {"synthesize", "synth"},
+		usage = "req_cards-type",
+		category = Category.MISC
 )
 @Requires({
-        Permission.MESSAGE_EMBED_LINKS,
-        Permission.MESSAGE_ADD_REACTION,
-        Permission.MESSAGE_EXT_EMOJI
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_EXT_EMOJI
 })
 public class SynthesizeCardCommand implements Executable {
 
-    @Override
-    public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        if (args.length < 2) {
-            channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
-            return;
-        } else if (!Helper.equalsAny(args[1], "n", "c")) {
-            channel.sendMessage("❌ | Você precisa informar o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
-            return;
-        }
+	@Override
+	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (args.length < 2) {
+			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
+			return;
+		} else if (!Helper.equalsAny(args[1], "n", "c", "r")) {
+			channel.sendMessage("❌ | Você precisa informar o tipo da síntese (`n` = síntese normal, `c` = síntese cromada e `r` = resintetizar).").queue();
+			return;
+		}
 
-        String[] names = args[0].split(";");
-        boolean foilSynth = args[1].equalsIgnoreCase("c");
-        Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-        Deck dk = kp.getDeck();
+		String[] names = args[0].split(";");
+		CardType type = switch (args[1].toLowerCase(Locale.ROOT)) {
+			case "c" -> CardType.FIELD;
+			case "r" -> CardType.EVOGEAR;
+			default -> CardType.KAWAIPON;
+		};
 
-        if (names.length < 3) {
-            channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um" + (foilSynth ? "a arena" : " equipamento") + ".").queue();
-            return;
-        }
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
-        List<Card> tributes = new ArrayList<>();
-        for (String name : names) {
-            name = name.trim();
-            Card c = CardDAO.getCard(name, false);
-            if (c == null) {
-                channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe, você não quis dizer `" + Helper.didYouMean(name, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
-                return;
-            } else if (foilSynth ? !kp.getCards().contains(new KawaiponCard(c, true)) : !kp.getCards().contains(new KawaiponCard(c, false))) {
-                channel.sendMessage("❌ | Você só pode usar na síntese cartas que você tenha na coleção kawaipon.").queue();
-                return;
-            }
+		if (names.length < 3) {
+			channel.sendMessage(switch (type) {
+				case FIELD -> "❌ | Você precisa informar 3 cartas para sintetizar um campo.";
+				case EVOGEAR -> "❌ | Você precisa informar 3 cartas para resintetizar um evogear.";
+				default -> "❌ | Você precisa informar 3 cartas para sintetizar um evogear.";
+			}).queue();
+			return;
+		}
 
-            tributes.add(c);
-        }
+		List<Card> tributes = new ArrayList<>();
+		for (String name : names) {
+			name = name.trim();
+			Card c = CardDAO.getCard(name, false);
+			if (c == null) {
+				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe, você não quis dizer `" + Helper.didYouMean(name, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
+				return;
+			} else if (switch (type) {
+				case FIELD -> kp.getCards().contains(new KawaiponCard(c, true));
+				case EVOGEAR -> dk.getEquipment(c) != null;
+				default -> kp.getCards().contains(new KawaiponCard(c, false));
+			}) {
+				channel.sendMessage("❌ | Você só pode usar na síntese cartas que você possua.").queue();
+				return;
+			}
 
-        if (foilSynth) {
-            int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
-            List<Field> fs = CardDAO.getAllAvailableFields();
-            Field f = Helper.getRandomEntry(fs);
+			tributes.add(c);
+		}
 
-            DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
-            int freeRolls = NumberUtils.toInt(dp.getValue());
+		int score = switch (type) {
+			case FIELD -> tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
+			case EVOGEAR -> tributes.stream().mapToInt(c -> dk.getEquipment(c).getTier()).sum();
+			default -> tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
+		};
 
-            Main.getInfo().getConfirmationPending().put(author.getId(), true);
-            channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
-                    .queue(s -> {
-                                Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
-                                buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-                                    Main.getInfo().getConfirmationPending().remove(author.getId());
+		DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
+		int freeRolls = NumberUtils.toInt(dp.getValue());
+		boolean blessed = !DynamicParameterDAO.getParam(author.getId() + "_blessing").getValue().isBlank();
 
-                                    if (dk.getFields().size() == 3) {
-                                        int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		switch (type) {
+			case FIELD -> {
+				List<Field> pool = CardDAO.getAllAvailableFields();
+				if (blessed) {
+					pool = pool.subList(0, Math.min(10, pool.size()));
+				}
 
-                                        Account acc = AccountDAO.getAccount(author.getId());
-                                        acc.addCredit(change, this.getClass());
-                                        AccountDAO.saveAccount(acc);
+				Field f = Helper.getRandomEntry(pool);
 
-                                        channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.").queue();
-                                    } else {
-                                        dk.addField(f);
-                                        channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
-                                    }
+				channel.sendMessage("Você está prester a sintetizar um campo usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
+						.queue(s -> {
+									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
+									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+										Main.getInfo().getConfirmationPending().remove(author.getId());
 
-                                    if (dp.getValue().isBlank()) {
-                                        for (Card t : tributes) {
-                                            kp.removeCard(new KawaiponCard(t, true));
-                                        }
-                                    } else
-                                        DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+										if (dp.getValue().isBlank()) {
+											for (Card t : tributes) {
+												kp.removeCard(new KawaiponCard(t, true));
+											}
+										} else {
+											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+										}
 
-                                    KawaiponDAO.saveKawaipon(kp);
+										if (dk.checkFieldError(f) > 0) {
+											int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
-                                    s.delete().queue(null, Helper::doNothing);
-                                });
+											Account acc = AccountDAO.getAccount(author.getId());
+											acc.addCredit(change, this.getClass());
+											AccountDAO.saveAccount(acc);
 
-                                Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-                                        u -> u.getId().equals(author.getId()),
-                                        ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-                                );
-                            }
-                    );
-        } else {
-            boolean blessed = !DynamicParameterDAO.getParam(author.getId() + "_blessing").getValue().isBlank();
+											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.").queue();
+										} else {
+											dk.addField(f);
+											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o campo **" + f.getCard().getName() + "**!").queue();
+										}
 
-            int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
-            double tier1 = (15 - score) * 0.75 / 12;
-            double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
-            double tier3 = Math.max(0, 0.65 - tier1);
-            double tier4 = tier3 * 0.1 / 0.65;
+										if (blessed) {
+											DynamicParameterDAO.clearParam("blessing_" + author.getId());
+										}
 
-            List<Equipment> equips = CardDAO.getAllAvailableEquipments();
-            if (blessed) equips = equips.subList(equips.size() - 10, equips.size());
+										KawaiponDAO.saveKawaipon(kp);
 
-            List<Equipment> chosenTier = Helper.getRandom(List.of(
-                    Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
-                    Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
-                    Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
-                    Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
-            ));
+										s.delete().queue(null, Helper::doNothing);
+									});
 
-            Equipment e = Helper.getRandomEntry(chosenTier);
+									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+											u -> u.getId().equals(author.getId()),
+											ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+									);
+								}
+						);
+			}
+			case EVOGEAR -> {
+				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
+				if (blessed) {
+					pool = pool.subList(0, Math.min(10, pool.size()));
+				}
 
-            EmbedBuilder eb = new ColorlessEmbedBuilder()
-                    .setTitle("Possíveis resultados")
-                    .addField(KawaiponRarity.COMMON.getEmote() + " | Equipamento tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tier1 * 100, 1)) + "%", false)
-                    .addField(KawaiponRarity.RARE.getEmote() + " | Equipamento tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier2 * 100, 1)) + "%", false)
-                    .addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false)
-                    .addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier4 * 100, 1)) + "%", false);
+				Bag<Integer> bag = tributes.stream()
+						.map(c -> dk.getEquipment(c).getTier())
+						.collect(Collectors.toCollection(HashBag::new));
+				List<Equipment> chosenTier = Helper.getRandom(pool.stream()
+						.collect(Collectors.groupingBy(Equipment::getTier))
+						.entrySet()
+						.stream()
+						.map(e -> Pair.create(e.getValue(), bag.getCount(e.getKey()) / 3d)
+						).toList()
+				);
 
-            DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
-            int freeRolls = NumberUtils.toInt(dp.getValue());
+				Equipment e = Helper.getRandomEntry(chosenTier);
 
-            Main.getInfo().getConfirmationPending().put(author.getId(), true);
-            channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
-                    .setEmbeds(eb.build())
-                    .queue(s -> {
-                                Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
-                                buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-                                    Main.getInfo().getConfirmationPending().remove(author.getId());
-                                    String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle("Possíveis resultados")
+						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(1) * 100 / 3d, 1)) + "%", false)
+						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(2) * 100 / 3d, 1)) + "%", false)
+						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(3) * 100 / 3d, 1)) + "%", false)
+						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(4) * 100 / 3d, 1)) + "%", false);
 
-                                    if (dk.checkEquipmentError(e) != 0) {
-                                        int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+				channel.sendMessage("Você está prester a resintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
+						.setEmbeds(eb.build())
+						.queue(s -> {
+									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
+									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+										Main.getInfo().getConfirmationPending().remove(author.getId());
+										String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-                                        Account acc = AccountDAO.getAccount(author.getId());
-                                        acc.addCredit(change, this.getClass());
-                                        AccountDAO.saveAccount(acc);
+										if (dp.getValue().isBlank()) {
+											for (Card t : tributes) {
+												dk.removeEquipment(dk.getEquipment(t));
+											}
+										} else {
+											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+										}
 
-                                        channel.sendMessage(
-                                                switch (dk.checkEquipmentError(e)) {
-                                                    case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
-                                                    case 2 -> "❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
-                                                    case 3 -> "❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.";
-                                                    default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
-                                                }
-                                        ).queue();
-                                    } else {
-                                        dk.addEquipment(e);
-                                        channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
-                                    }
+										if (dk.checkEquipmentError(e) != 0) {
+											int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
-                                    if (dp.getValue().isBlank()) {
-                                        for (Card t : tributes) {
-                                            kp.removeCard(new KawaiponCard(t, false));
-                                        }
-                                    } else
-                                        DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											Account acc = AccountDAO.getAccount(author.getId());
+											acc.addCredit(change, this.getClass());
+											AccountDAO.saveAccount(acc);
 
-                                    if (blessed) {
-                                        DynamicParameterDAO.clearParam("blessing_" + author.getId());
-                                    }
+											channel.sendMessage(
+													switch (dk.checkEquipmentError(e)) {
+														case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
+														case 2 -> "❌ | Você já possui 1 evogear tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
+														case 3 -> "❌ | Você não possui mais espaços para evogears, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.";
+														default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
+													}
+											).queue();
+										} else {
+											dk.addEquipment(e);
+											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o evogear **" + e.getCard().getName() + "**! (" + tier + ")").queue();
+										}
 
-                                    KawaiponDAO.saveKawaipon(kp);
+										if (blessed) {
+											DynamicParameterDAO.clearParam("blessing_" + author.getId());
+										}
 
-                                    s.delete().queue(null, Helper::doNothing);
-                                });
+										KawaiponDAO.saveKawaipon(kp);
 
-                                Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-                                        u -> u.getId().equals(author.getId()),
-                                        ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-                                );
-                            }
-                    );
-        }
-    }
+										s.delete().queue(null, Helper::doNothing);
+									});
+
+									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+											u -> u.getId().equals(author.getId()),
+											ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+									);
+								}
+						);
+			}
+			default -> {
+				int max = 15;
+				double base = (max - score) / 0.75 / (max - 3);
+
+				double t3 = Math.max(0, 0.65 - base);
+				double t4 = Math.max(0, (t3 * 15) / 65 - 0.05);
+				double t1 = Math.max(0, base - t4 * 10);
+				double t2 = Math.max(0, 0.85 - Math.abs(0.105 - t1 / 3) * 5 - t3);
+
+				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
+				if (blessed) {
+					pool = pool.subList(0, Math.min(10, pool.size()));
+				}
+
+				List<Equipment> chosenTier = Helper.getRandom(pool.stream()
+						.collect(Collectors.groupingBy(Equipment::getTier))
+						.entrySet()
+						.stream()
+						.map(e -> Pair.create(e.getValue(), switch (e.getKey()) {
+									case 1 -> t1;
+									case 2 -> t2;
+									case 3 -> t3;
+									case 4 -> t4;
+									default -> 0d;
+								})
+						).toList()
+				);
+
+				Equipment e = Helper.getRandomEntry(chosenTier);
+
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle("Possíveis resultados")
+						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(t1 * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(t2 * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(t3 * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(t4 * 100, 1)) + "%", false);
+
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+				channel.sendMessage("Você está prester a sintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
+						.setEmbeds(eb.build())
+						.queue(s -> {
+									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
+									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+										Main.getInfo().getConfirmationPending().remove(author.getId());
+										String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+
+										if (dp.getValue().isBlank()) {
+											for (Card t : tributes) {
+												kp.removeCard(new KawaiponCard(t, false));
+											}
+										} else {
+											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+										}
+
+										if (dk.checkEquipmentError(e) != 0) {
+											int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
+
+											Account acc = AccountDAO.getAccount(author.getId());
+											acc.addCredit(change, this.getClass());
+											AccountDAO.saveAccount(acc);
+
+											channel.sendMessage(
+													switch (dk.checkEquipmentError(e)) {
+														case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
+														case 2 -> "❌ | Você já possui 1 evogear tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
+														case 3 -> "❌ | Você não possui mais espaços para evogears, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.";
+														default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
+													}
+											).queue();
+										} else {
+											dk.addEquipment(e);
+											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o evogear **" + e.getCard().getName() + "**! (" + tier + ")").queue();
+										}
+
+										if (blessed) {
+											DynamicParameterDAO.clearParam("blessing_" + author.getId());
+										}
+
+										KawaiponDAO.saveKawaipon(kp);
+
+										s.delete().queue(null, Helper::doNothing);
+									});
+
+									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+											u -> u.getId().equals(author.getId()),
+											ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+									);
+								}
+						);
+			}
+		}
+	}
 }
