@@ -34,7 +34,7 @@ public enum Charm {
     ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
     TRAP("Armadilha", "Prende-se à uma carta mas virada para baixo, adicionando um efeito de uso único à ela"),
     PIERCING("Penetração", "Causa dano direto ao atacar"),
-    AGILITY("Agilidade", "Aumenta a chance de esquiva em 10%"),
+    AGILITY("Agilidade", "Aumenta a chance de esquiva em 15%"),
     DRAIN("Dreno", "Rouba 1 de mana ao atacar"),
     BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar");
 

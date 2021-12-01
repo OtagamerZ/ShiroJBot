@@ -521,7 +521,7 @@ public class Champion implements Drawable, Cloneable {
 
 		double extra = 0;
 		if (game != null && acc != null) {
-			extra += game.getHands().get(game.getSideById(acc.getUid())).getMitigation() * 100;
+			extra += game.getHands().get(game.getSideById(acc.getUid())).getMitigation() * 200;
 		}
 
 		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
