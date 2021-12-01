@@ -98,16 +98,20 @@ public class SynthesizeCardCommand implements Executable {
 		List<Card> tributes = new ArrayList<>();
 		for (String name : names) {
 			name = name.trim();
-			Card c = CardDAO.getCard(name, false);
+			Card c = CardDAO.getRawCard(name);
+
 			if (c == null) {
 				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe, você não quis dizer `" + Helper.didYouMean(name, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
 				return;
 			} else if (switch (type) {
-				case FIELD -> kp.getCards().contains(new KawaiponCard(c, true));
-				case EVOGEAR -> dk.getEquipment(c) != null;
-				default -> kp.getCards().contains(new KawaiponCard(c, false));
+				case FIELD -> !kp.getCards().contains(new KawaiponCard(c, true));
+				case EVOGEAR -> dk.getEquipment(c) == null;
+				default -> !kp.getCards().contains(new KawaiponCard(c, false));
 			}) {
 				channel.sendMessage("❌ | Você só pode usar na síntese cartas que você possua.").queue();
+				return;
+			} else if (Helper.equalsAny(c.getRarity(), KawaiponRarity.FIELD, KawaiponRarity.FUSION, KawaiponRarity.ULTIMATE)) {
+				channel.sendMessage("❌ | Carta inválida para síntese.").queue();
 				return;
 			}
 
