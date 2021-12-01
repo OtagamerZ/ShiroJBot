@@ -55,7 +55,6 @@ public class Hand {
 	private final Shoukan game;
 	private final Account acc;
 	private final Side side;
-	private final String user;
 	private final Map<Race, Long> raceCount;
 	private final BondedList<Drawable> deque;
 	private final BondedList<Drawable> cards;
@@ -81,7 +80,6 @@ public class Hand {
 		this.game = game;
 		this.side = side;
 		if (user == null) {
-			this.user = null;
 			this.acc = null;
 			this.deque = null;
 			this.cards = null;
@@ -91,7 +89,6 @@ public class Hand {
 			return;
 		}
 
-		this.user = user.getId();
 		this.acc = AccountDAO.getAccount(user.getId());
 		this.hero = KawaiponDAO.getHero(user.getId());
 
@@ -401,7 +398,7 @@ public class Hand {
 	}
 
 	public User getUser() {
-		return Main.getInfo().getUserByID(user);
+		return Main.getInfo().getUserByID(acc.getUid());
 	}
 
 	public Map<Race, Long> getRaceCount() {
