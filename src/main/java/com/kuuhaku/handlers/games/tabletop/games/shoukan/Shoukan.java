@@ -2639,10 +2639,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			for (Equipment e : List.copyOf(activator.getLinkedTo())) {
-				if (e.hasEffect()) {
-					applyEffect(trigger, e, index, side, duelists);
-					System.out.println("Event: " + trigger);
-				}
+				System.out.println(e.getCard().getName());
+				if (e.hasEffect()) applyEffect(trigger, e, index, side, duelists);
 			}
 
 			return !lastTick && postCombat();
