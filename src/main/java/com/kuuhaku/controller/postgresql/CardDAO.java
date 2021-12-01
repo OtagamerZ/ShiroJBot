@@ -963,9 +963,9 @@ public class CardDAO {
 
 		Query q;
 		if (spell)
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NOT NULL AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		else
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NULL AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setMaxResults(1);
 
 		try {
@@ -982,9 +982,9 @@ public class CardDAO {
 
 		Query q;
 		if (spell)
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NOT NULL AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		else
-			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NULL AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setParameter("tier", tier);
 		q.setMaxResults(1);
 
