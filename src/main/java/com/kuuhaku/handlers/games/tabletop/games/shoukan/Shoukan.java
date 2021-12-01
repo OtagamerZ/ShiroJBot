@@ -1757,7 +1757,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	public boolean lastTick() {
 		for (Side s : Side.values()) {
 			Hand h = hands.get(s);
-			Hand op = hands.get(s.getOther());
 			List<SlotColumn> slts = arena.getSlots().get(s);
 
 			for (int i = 0; i < 5; i++) {
@@ -1765,9 +1764,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (c == null) continue;
 
 				applyEffect(h.getHp() <= 0 ? ON_LOSE : ON_WIN, c, s, i);
-				System.out.println("Event: " + (h.getHp() <= 0 ? ON_LOSE : ON_WIN));
 			}
 
+			h = hands.get(s);
+			Hand op = hands.get(s.getOther());
 			if (h.getHp() > 0 && op.getHp() > 0) return true;
 		}
 
@@ -2639,7 +2639,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			for (Equipment e : List.copyOf(activator.getLinkedTo())) {
-				if (e.hasEffect()) applyEffect(trigger, e, index, side, duelists);
+				if (e.hasEffect()) {
+					applyEffect(trigger, e, index, side, duelists);
+					System.out.println("Event: " + trigger);
+				}
 			}
 
 			return !lastTick && postCombat();
