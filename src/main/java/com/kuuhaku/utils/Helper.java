@@ -1793,11 +1793,14 @@ public class Helper {
 						}
 
 						AccountDAO.saveAccount(acc);
-						wc.send(wmb.setContent("Decidi que " + u.getAsMention() + " merece os presentes!")
+						wc.send(wmb.resetEmbeds()
+								.setContent("Decidi que " + u.getAsMention() + " merece os presentes!")
 								.addEmbeds(neb.build())
 								.build());
 					} else {
-						wc.send(wmb.setContent("Decidi que ninguém merece os presentes!").build());
+						wc.send(wmb.resetEmbeds()
+								.setContent("Decidi que ninguém merece os presentes!")
+								.build());
 					}
 
 					wc.close();
