@@ -1755,7 +1755,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public boolean lastTick() {
-		boolean finished = false;
 		for (Side s : Side.values()) {
 			Hand h = hands.get(s);
 			Hand op = hands.get(s.getOther());
@@ -1766,12 +1765,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (c == null) continue;
 
 				applyEffect(h.getHp() <= 0 ? ON_LOSE : ON_WIN, c, s, i);
+				System.out.println("Event: " + (h.getHp() <= 0 ? ON_LOSE : ON_WIN));
 			}
 
-			if (h.getHp() > 0 && op.getHp() > 0) finished = true;
+			if (h.getHp() > 0 && op.getHp() > 0) return true;
 		}
 
-		return finished;
+		return false;
 	}
 
 	public boolean postCombat() {
