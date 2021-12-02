@@ -34,6 +34,7 @@ public enum EffectTrigger {
 	POST_ATTACK_ASSIST(false, true),
 	ON_MISS(false, true),
 	GAME_TICK(false, false),
+	GLOBAL_TICK(false, true),
 	ON_DESTROY(false, true),
 	ON_LOSE(false, false),
 	ON_WIN(false, false),
