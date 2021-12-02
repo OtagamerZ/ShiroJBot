@@ -61,6 +61,11 @@ public class ShoukanCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+			channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
+			return;
+		}
+
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
 		boolean tournament = args.length > 0 && Helper.equalsAny(args[0], "torneio", "tournament");
