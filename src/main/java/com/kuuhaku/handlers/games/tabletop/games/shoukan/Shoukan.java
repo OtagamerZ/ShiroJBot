@@ -841,6 +841,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			List<SlotColumn> slts = arena.getSlots().get(s);
 			Hand hd = getHands().get(s);
 
+			applyEffect(GLOBAL_TICK, null, s, -1);
 			int heroIndex = isHeroInField(s);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn slot = slts.get(i);
@@ -2642,7 +2643,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, Side side, int index, Duelists duelists) {
-		if (activator == null) return false;
 		boolean lastTick = trigger == ON_WIN || trigger == ON_LOSE;
 
 		if (trigger.isIndividual()) {
@@ -2651,6 +2651,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!lastTick && postCombat()) return true;
 		}
 
+		if (activator == null) return false;
 		if (effectLock == 0) {
 			if (activator.hasEffect()) {
 				boolean activate = true;
