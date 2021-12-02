@@ -837,8 +837,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
-		applyEffect(GLOBAL_TICK, null, getCurrentSide(), -1);
-
 		for (Side s : Side.values()) {
 			List<SlotColumn> slts = arena.getSlots().get(s);
 			Hand hd = getHands().get(s);
@@ -860,7 +858,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		BufferedImage bi = arena.render(this, hands);
-		if (resetTimer) resetTimerKeepTurn();
+		if (resetTimer) {
+			resetTimerKeepTurn();
+			applyEffect(GLOBAL_TICK, null, getCurrentSide(), -1);
+		}
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
 		channel.sendMessage(msg)
