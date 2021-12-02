@@ -1716,6 +1716,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (link != null)
 			link.unlink(target);
 
+		applyEffect(ON_DESTROY, target, side, index, Duelists.of());
+
 		getSlot(side, index).setBottom(null);
 		if (target.canGoToGrave()) {
 			if (target.getTier() >= 4)
@@ -2671,7 +2673,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			for (Equipment e : List.copyOf(activator.getLinkedTo())) {
-				if (e.hasEffect()) applyEffect(trigger, e, index, side, duelists);
+				if (e.hasEffect()) applyEffect(trigger, e, side, index, duelists);
 			}
 
 			return !lastTick && postCombat();
@@ -2680,9 +2682,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return false;
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, int index, Side side, Duelists duelists) {
+	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Duelists duelists) {
 		if (effectLock == 0) {
-			activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
+			if (activator.hasEffect()) {
+				activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
+			}
 		}
 	}
 
