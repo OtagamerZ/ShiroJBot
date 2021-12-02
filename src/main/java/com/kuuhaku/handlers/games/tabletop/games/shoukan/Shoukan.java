@@ -1420,6 +1420,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (e.getCharm() == Charm.MIRROR && activator != null) {
 						destroyCard(caster, source, side, index);
 					}
+
+					return;
 				}
 			}
 
@@ -1487,6 +1489,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (e.getCharm() == Charm.MIRROR && activator != null) {
 						convertCard(caster, source, side, index);
 					}
+
+					return;
 				}
 			}
 
@@ -1550,6 +1554,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (Equipment e : List.copyOf(target.getLinkedTo())) {
 				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
 					unequipCard(side, e.getIndex());
+					return;
 				}
 			}
 
@@ -1636,6 +1641,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (e.getCharm() == Charm.MIRROR && activator != null) {
 						captureCard(caster, source, side, index, withFusion);
 					}
+
+					return;
 				}
 			}
 
