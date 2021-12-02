@@ -1413,7 +1413,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (Equipment e : target.getLinkedTo()) {
+			for (Equipment e : List.copyOf(target.getLinkedTo())) {
 				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
 					unequipCard(side, e.getIndex());
 
@@ -1480,7 +1480,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (Equipment e : target.getLinkedTo()) {
+			for (Equipment e : List.copyOf(target.getLinkedTo())) {
 				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
 					unequipCard(side, e.getIndex());
 
@@ -1547,7 +1547,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (Equipment e : target.getLinkedTo()) {
+			for (Equipment e : List.copyOf(target.getLinkedTo())) {
 				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
 					unequipCard(side, e.getIndex());
 				}
@@ -1629,7 +1629,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (Equipment e : target.getLinkedTo()) {
+			for (Equipment e : List.copyOf(target.getLinkedTo())) {
 				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
 					unequipCard(side, e.getIndex());
 
@@ -2847,6 +2847,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 	@Override
 	public void close() {
 		if (!isOpen()) return;
+		for (TextChannel chn : getChannel().getChannels()) {
+			Main.getInfo().getShoukanSlot().remove(chn.getId());
+		}
+
 		listener.close();
 		recordLast();
 		super.close();

@@ -185,6 +185,7 @@ public class ShiroInfo {
 	private final ConcurrentMap<String, ExpiringMap<Long, String>> antiRaidCache = new ConcurrentHashMap<>();
 	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private final ExpiringMap<String, Boolean> confirmationPending = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
+	private final ExpiringMap<String, Boolean> shoukanSlot = ExpiringMap.builder().expiration(3, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, KawaiponCard> currentCard = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Prize<?>> currentDrop = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
@@ -483,6 +484,10 @@ public class ShiroInfo {
 
 	public ExpiringMap<String, Boolean> getConfirmationPending() {
 		return confirmationPending;
+	}
+
+	public ExpiringMap<String, Boolean> getShoukanSlot() {
+		return shoukanSlot;
 	}
 
 	public Set<String> getGameLock() {
