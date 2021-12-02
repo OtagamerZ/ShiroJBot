@@ -837,11 +837,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
+		applyEffect(GLOBAL_TICK, null, getCurrentSide(), -1);
+
 		for (Side s : Side.values()) {
 			List<SlotColumn> slts = arena.getSlots().get(s);
 			Hand hd = getHands().get(s);
 
-			applyEffect(GLOBAL_TICK, null, s, -1);
 			int heroIndex = isHeroInField(s);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn slot = slts.get(i);
