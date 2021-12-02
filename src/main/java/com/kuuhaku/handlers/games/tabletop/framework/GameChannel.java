@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.tabletop.ClusterAction;
 import com.kuuhaku.model.records.ChannelReference;
 import net.dv8tion.jda.api.entities.Guild;
@@ -32,8 +33,10 @@ public class GameChannel {
 	private final Set<ChannelReference> channels = new HashSet<>();
 
 	public GameChannel(TextChannel... channel) {
-		for (TextChannel chn : channel)
+		for (TextChannel chn : channel) {
 			channels.add(new ChannelReference(chn.getGuild(), chn));
+			Main.getInfo().getShoukanSlot().put(chn.getId(), true);
+		}
 	}
 
 	public List<Guild> getGuilds() {
