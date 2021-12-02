@@ -72,6 +72,7 @@ public class Hand {
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int nullTime = 0;
+	private int hideMana = 0;
 	private float healingFac = 1;
 	private int bleeding = 0;
 	private Message old = null;
@@ -826,6 +827,26 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
+	}
+
+	public int getHiddenMana() {
+		return hideMana;
+	}
+
+	public boolean isHidingMana() {
+		return hideMana > 0 || isNullMode();
+	}
+
+	public void setHiddenMana(int hideMana) {
+		this.hideMana = hideMana;
+	}
+
+	public void addHiddenMana(int time) {
+		hideMana += time;
+	}
+
+	public void decreaseHiddenMana() {
+		hideMana = Math.max(0, hideMana - 1);
 	}
 
 	public float getHealingFac() {
