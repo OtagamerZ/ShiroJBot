@@ -512,6 +512,8 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getDodge() {
+		if (isStasis() || isStunned() || isSleeping()) return 0;
+
 		double heroMod = 1;
 		if (hero != null && game != null) {
 			if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
@@ -526,7 +528,8 @@ public class Champion implements Drawable, Cloneable {
 
 		int agiEquips = (int) getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count();
 		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips * 15 + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0) + extra) * heroMod, 0, 100);
-		return (int) Helper.roundTrunc(d * 100, 5) / 100;
+		double parFac = !isAvailable() ? 0.75 : 1;
+		return (int) Helper.roundTrunc(d * parFac * 100, 5) / 100;
 	}
 
 	public double getModDodge() {
