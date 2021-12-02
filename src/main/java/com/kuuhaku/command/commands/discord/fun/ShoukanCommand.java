@@ -216,6 +216,9 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().gameInProgress(other.getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
+										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
+											return;
 										}
 
 										//Main.getInfo().getGames().put(id, t);
@@ -318,6 +321,9 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().gameInProgress(author.getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
+										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
+											return;
 										}
 
 										if (!accepted.contains(wrapper.getUser().getId())) {
@@ -353,6 +359,9 @@ public class ShoukanCommand implements Executable {
 											return;
 										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
+											return;
+										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
 										}
 
