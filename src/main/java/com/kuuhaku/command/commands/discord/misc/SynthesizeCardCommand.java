@@ -77,6 +77,11 @@ public class SynthesizeCardCommand implements Executable {
 		}
 
 		String[] names = args[0].split(";");
+		if (names.length > 3) {
+			channel.sendMessage("❌ | Você não pode usar mais que 3 cartas na síntese.").queue();
+			return;
+		}
+
 		CardType type = switch (args[1].toLowerCase(Locale.ROOT)) {
 			case "c" -> CardType.FIELD;
 			case "r" -> CardType.EVOGEAR;
