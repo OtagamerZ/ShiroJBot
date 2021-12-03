@@ -157,12 +157,12 @@ public class Hero implements Cloneable {
 		Integer[] out = new Integer[]{0, 0, 0, 0, 0};
 
 		for (Equipment e : inventory) {
-			out[0] += e.getAtk() / 100;
-			out[1] += e.getDef() / 100;
+			out[0] += e.getAtk() / (e.getCharm() == null ? 100 : 125);
+			out[1] += e.getDef() / (e.getCharm() == null ? 100 : 125);
 
 			if (e.getCharm() != null)
 				switch (e.getCharm()) {
-					case PIERCING, DRAIN -> out[0] += e.getTier();
+					case PIERCING, DRAIN, BLEEDING -> out[0] += e.getTier();
 					case SHIELD, MIRROR -> out[1] += e.getTier();
 					case AGILITY -> out[2] += e.getTier() * 2;
 					case TIMEWARP, DOUBLETAP -> out[3] += e.getTier() * 2;
@@ -392,7 +392,7 @@ public class Hero implements Cloneable {
 			};
 		}
 
-		return (int) Math.ceil(Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, getStats().calcMp(getReferenceChampion()) * mpModif));
+		return (int) Math.ceil(Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp(getReferenceChampion()) * mpModif));
 	}
 
 	public int getBlood() {
