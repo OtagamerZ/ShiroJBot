@@ -990,7 +990,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					demonFac *= 1.33f;
 
 				if (atkr.isDecoy()) {
-					reportEvent(null, atkr.getName() + " derrotou " + defr.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
+					reportEvent(null, atkr.getName() + " derrotou " + defr.getName() + "? (" + yPower + " > " + hPower + ")", true, false);
 				} else if (defr.isDecoy()) {
 					killCard(target.side(), target.index(), defr.getId());
 					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
@@ -1088,7 +1088,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (atkr.isDecoy()) {
 				killCard(source.side(), source.index(), atkr.getId());
-				reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getCard().getName() + "? (" + yPower + " < " + hPower + ")", true, false);
+				reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getName() + "? (" + yPower + " < " + hPower + ")", true, false);
 			} else if (defr.isDecoy()) {
 				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 			}
@@ -1153,7 +1153,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int extra = Math.round(dmg * demonFac - dmg);
 				String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
 						atkr.getName(),
-						defr.getCard().getName(),
+						defr.getName(),
 						yPower,
 						hPower,
 						extra > 0
