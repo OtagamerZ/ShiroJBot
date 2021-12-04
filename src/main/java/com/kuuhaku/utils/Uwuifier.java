@@ -76,7 +76,7 @@ public class Uwuifier {
         }
 
         String out = String.join(" ", split).replace("!", Helper.getRandomEntry(punctuation));
-        while (out.matches(" [A-z]]")) {
+        while (out.matches(" [A-z]")) {
             out = out.replaceFirst(" ([A-z])", replaceSpace());
         }
 
