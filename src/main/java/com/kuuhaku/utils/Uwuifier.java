@@ -41,9 +41,8 @@ public class Uwuifier {
     private static final List<Pair<String, String>> exp = List.of(
             Pair.of("[rl]", "w"),
             Pair.of("[RL]", "W"),
-            Pair.of("n([aeiou])", "ny$1"),
-            Pair.of("N([aeiou])", "Ny$1"),
-            Pair.of("N([AEIOU])", "Ny$1"),
+            Pair.of("n([AEIOUaeiou])", "ny$1"),
+            Pair.of("N([AEIOUaeiou])", "Ny$1"),
             Pair.of("ove", "uv")
     );
 
@@ -66,7 +65,7 @@ public class Uwuifier {
 
         for (int i = 0; i < split.length; i++) {
             String word = split[i];
-            if (Helper.isUrl(word) || !StringUtils.isAlpha(word)) continue;
+            if (Helper.isUrl(word)) continue;
 
             for (Pair<String, String> p : exp) {
                 word = word.replaceAll(p.getLeft(), p.getRight());
