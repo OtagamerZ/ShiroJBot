@@ -75,9 +75,12 @@ public class Uwuifier {
             split[i] = word;
         }
 
-        return String.join(" ", split)
-                .replace("!", Helper.getRandomEntry(punctuation))
-                .replaceAll(" ([A-z])", replaceSpace());
+        String out = String.join(" ", split).replace("!", Helper.getRandomEntry(punctuation));
+        while (out.matches(" [A-z]]")) {
+            out = out.replaceFirst("§([A-z])", replaceSpace());
+        }
+
+        return out.replace("§", " ");
     }
 
     private String replaceSpace() {
