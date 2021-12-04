@@ -26,24 +26,23 @@ public class Uwuifier {
             "(✿◡‿◡)"
     };
     private static final String[] actions = {
-            "\\*cora\\*",
-            "\\*murmura\\*",
-            "\\*chora\\*",
-            "\\*grita\\*",
-            "\\*com vergonha\\*",
-            "\\*foge\\*",
-            "\\*gritinhos\\*",
-            "\\*indo embora\\*",
-            "\\*olha pra você\\*",
-            "\\*abraça\\*",
-            "\\*ri\\*"
+            "\\\\*cora\\\\*",
+            "\\\\*murmura\\\\*",
+            "\\\\*chora\\\\*",
+            "\\\\*grita\\\\*",
+            "\\\\*com vergonha\\\\*",
+            "\\\\*foge\\\\*",
+            "\\\\*gritinhos\\\\*",
+            "\\\\*indo embora\\\\*",
+            "\\\\*observa\\\\*",
+            "\\\\*abraça\\\\*",
+            "\\\\*ri\\\\*"
     };
     private static final List<Pair<String, String>> exp = List.of(
             Pair.of("[rl]", "w"),
             Pair.of("[RL]", "W"),
-            Pair.of("n([aeiou])", "ny$1"),
-            Pair.of("N([aeiou])", "Ny$1"),
-            Pair.of("N([AEIOU])", "Ny$1"),
+            Pair.of("n([AEIOUaeiou])", "ny$1"),
+            Pair.of("N([AEIOUaeiou])", "Ny$1"),
             Pair.of("ove", "uv")
     );
 
@@ -66,7 +65,7 @@ public class Uwuifier {
 
         for (int i = 0; i < split.length; i++) {
             String word = split[i];
-            if (Helper.isUrl(word) || !StringUtils.isAlpha(word)) continue;
+            if (Helper.isUrl(word)) continue;
 
             for (Pair<String, String> p : exp) {
                 word = word.replaceAll(p.getLeft(), p.getRight());
@@ -76,8 +75,8 @@ public class Uwuifier {
         }
 
         String out = String.join(" ", split).replace("!", Helper.getRandomEntry(punctuation));
-        while (out.matches(" [A-z]]")) {
-            out = out.replaceFirst("§([A-z])", replaceSpace());
+        while (Helper.regex(out, " [A-z]").find()) {
+            out = out.replaceFirst(" ([A-z])", replaceSpace());
         }
 
         return out.replace("§", " ");
@@ -85,13 +84,13 @@ public class Uwuifier {
 
     private String replaceSpace() {
         if (Helper.chance(faceFac * 100)) {
-            return " " + Helper.getRandomEntry(faces) + " ";
+            return "§" + Helper.getRandomEntry(faces) + "§$1";
         } else if (Helper.chance(actionFac * 100)) {
-            return " " + Helper.getRandomEntry(actions) + " ";
+            return "§" + Helper.getRandomEntry(actions) + "§$1";
         } else if (Helper.chance(stutterFac * 100)) {
-            return " " + ("$1" + "-").repeat(Helper.rng(2));
+            return "§" + ("$1" + "-").repeat(Helper.rng(2)) + "$1";
         }
 
-        return " $1";
+        return "§$1";
     }
 }
