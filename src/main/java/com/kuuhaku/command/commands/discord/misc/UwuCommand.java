@@ -22,24 +22,25 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Uwuifier;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "inverter",
-		aliases = {"reverse", "invert", "reverso"},
+		name = "uwu",
+		aliases = {"owo"},
 		usage = "req_text",
 		category = Category.MISC
 )
-public class ReverseCommand implements Executable {
+public class UwuCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa indicar o texto que deseja inverter.").queue();
+			channel.sendMessage("❌ | Você pwecisa indicaw o texto que deseja townyaw uwu.").queue();
 			return;
 		}
 
-		String txt = new StringBuilder(argsAsText.trim()).reverse().toString();
+		String txt = new Uwuifier().uwu(argsAsText);
 		channel.sendMessage(Helper.makeEmoteFromMention(txt)).queue();
 	}
 }
