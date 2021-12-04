@@ -77,7 +77,7 @@ public class Uwuifier {
 
         String out = String.join(" ", split).replace("!", Helper.getRandomEntry(punctuation));
         while (out.matches(" [A-z]]")) {
-            out = out.replaceFirst("§([A-z])", replaceSpace());
+            out = out.replaceFirst(" ([A-z])", replaceSpace());
         }
 
         return out.replace("§", " ");
@@ -85,13 +85,13 @@ public class Uwuifier {
 
     private String replaceSpace() {
         if (Helper.chance(faceFac * 100)) {
-            return " " + Helper.getRandomEntry(faces) + " ";
+            return "§" + Helper.getRandomEntry(faces) + "§";
         } else if (Helper.chance(actionFac * 100)) {
-            return " " + Helper.getRandomEntry(actions) + " ";
+            return "§" + Helper.getRandomEntry(actions) + "§";
         } else if (Helper.chance(stutterFac * 100)) {
-            return " " + ("$1" + "-").repeat(Helper.rng(2));
+            return "§" + ("$1" + "-").repeat(Helper.rng(2));
         }
 
-        return " $1";
+        return "§$1";
     }
 }
