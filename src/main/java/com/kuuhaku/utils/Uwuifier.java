@@ -30,10 +30,9 @@ public class Uwuifier {
             "\\\\*murmura\\\\*",
             "\\\\*chora\\\\*",
             "\\\\*grita\\\\*",
-            "\\\\*com vergonha\\\\*",
+            "\\\\*vergonha\\\\*",
             "\\\\*foge\\\\*",
             "\\\\*gritinhos\\\\*",
-            "\\\\*indo embora\\\\*",
             "\\\\*observa\\\\*",
             "\\\\*abraça\\\\*",
             "\\\\*ri\\\\*"
