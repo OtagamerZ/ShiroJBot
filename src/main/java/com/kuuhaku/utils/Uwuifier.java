@@ -26,17 +26,17 @@ public class Uwuifier {
             "(✿◡‿◡)"
     };
     private static final String[] actions = {
-            "\\*cora\\*",
-            "\\*murmura\\*",
-            "\\*chora\\*",
-            "\\*grita\\*",
-            "\\*com vergonha\\*",
-            "\\*foge\\*",
-            "\\*gritinhos\\*",
-            "\\*indo embora\\*",
-            "\\*olha pra você\\*",
-            "\\*abraça\\*",
-            "\\*ri\\*"
+            "\\\\*cora\\\\*",
+            "\\\\*murmura\\\\*",
+            "\\\\*chora\\\\*",
+            "\\\\*grita\\\\*",
+            "\\\\*com vergonha\\\\*",
+            "\\\\*foge\\\\*",
+            "\\\\*gritinhos\\\\*",
+            "\\\\*indo embora\\\\*",
+            "\\\\*observa\\\\*",
+            "\\\\*abraça\\\\*",
+            "\\\\*ri\\\\*"
     };
     private static final List<Pair<String, String>> exp = List.of(
             Pair.of("[rl]", "w"),
