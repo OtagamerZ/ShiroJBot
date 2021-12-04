@@ -89,7 +89,7 @@ public class Uwuifier {
         } else if (Helper.chance(actionFac * 100)) {
             return "§" + Helper.getRandomEntry(actions) + "§";
         } else if (Helper.chance(stutterFac * 100)) {
-            return "§" + ("$1" + "-").repeat(Helper.rng(2));
+            return "§" + ("$1" + "-").repeat(Helper.rng(2)) + "$1";
         }
 
         return "§$1";
