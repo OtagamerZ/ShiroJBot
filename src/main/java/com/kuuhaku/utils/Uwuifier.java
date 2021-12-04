@@ -75,21 +75,20 @@ public class Uwuifier {
             split[i] = word;
         }
 
-        return String.join("", split)
+        return String.join(" ", split)
                 .replace("!", Helper.getRandomEntry(punctuation))
-                .replaceAll(" ([A-z])", replaceSpace())
-		.replace("¶", " ");
+                .replaceAll(" ([A-z])", replaceSpace());
     }
 
     private String replaceSpace() {
         if (Helper.chance(faceFac * 100)) {
-            return "¶" + Helper.getRandomEntry(faces) + "¶";
+            return " " + Helper.getRandomEntry(faces) + " ";
         } else if (Helper.chance(actionFac * 100)) {
-            return "¶" + Helper.getRandomEntry(actions) + "¶";
+            return " " + Helper.getRandomEntry(actions) + " ";
         } else if (Helper.chance(stutterFac * 100)) {
-            return "¶" + ("$1" + "-").repeat(Helper.rng(2));
+            return " " + ("$1" + "-").repeat(Helper.rng(2));
         }
 
-        return "¶$1";
+        return " $1";
     }
 }
