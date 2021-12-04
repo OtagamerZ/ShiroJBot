@@ -117,6 +117,7 @@ dependencies {
 	implementation group: "org.apache.commons", name: "commons-text", version: "1.9"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
 	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0-alpha2"
+	implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
 	implementation group: "commons-codec", name: "commons-codec", version: "1.15"
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
