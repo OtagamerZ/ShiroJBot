@@ -84,11 +84,11 @@ public class Uwuifier {
         if (Helper.chance(faceFac * 100)) {
             return " " + Helper.getRandomEntry(faces) + " ";
         } else if (Helper.chance(actionFac * 100)) {
-            return " " + Helper.getRandomEntry() + " ";
+            return " " + Helper.getRandomEntry(actions) + " ";
         } else if (Helper.chance(stutterFac * 100)) {
             return " " + ("$1" + "-").repeat(Helper.rng(2));
         }
 
-        return " ";
+        return " $1";
     }
 }
