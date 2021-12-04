@@ -861,6 +861,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (resetTimer) {
 			resetTimerKeepTurn();
 			applyEffect(GLOBAL_TICK, null, getCurrentSide(), -1);
+			for (TextChannel chn : getChannel().getChannels()) {
+				Main.getInfo().getShoukanSlot().put(chn.getId(), true);
+			}
 		}
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
@@ -2838,6 +2841,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	@Override
 	public void resetTimer(Shoukan shkn) {
+		for (TextChannel chn : getChannel().getChannels()) {
+			Main.getInfo().getShoukanSlot().put(chn.getId(), true);
+		}
+
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
 			e.getValue().removeIf(a -> a.isInvalid(this, e.getKey(), false));
 		}
