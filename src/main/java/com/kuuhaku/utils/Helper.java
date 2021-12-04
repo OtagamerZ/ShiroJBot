@@ -77,6 +77,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Precision;
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -141,6 +142,7 @@ import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
@@ -258,6 +260,10 @@ public class Helper {
 
 		final Matcher msg = urlPattern.matcher(text.toLowerCase(Locale.ROOT));
 		return msg.find() && Extensions.checkExtension(text);
+	}
+
+	public static boolean isUrl(String text) {
+		return new UrlValidator().isValid(text);
 	}
 
 	public static boolean findMentions(String text) {
@@ -2581,24 +2587,15 @@ public class Helper {
 		return sb.toString();
 	}
 
-	public static double[] normalize(double[] vector) {
-		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
-		return new double[]{vector[0] / length, vector[1] / length};
-	}
+	public static double[] normalize(double... values) {
+		if (values.length < 2) return values;
 
-	public static float[] normalize(float[] vector) {
-		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
-		return new float[]{(float) (vector[0] / length), (float) (vector[1] / length)};
-	}
+		double max = DoubleStream.of(values).max().orElse(0);
+		double min = DoubleStream.of(values).min().orElse(0);
 
-	public static int[] normalize(int[] vector, RoundingMode roundingMode) {
-		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
-		return switch (roundingMode) {
-			case UP, CEILING, HALF_UP -> new int[]{(int) mirroredCeil(vector[0] / length), (int) mirroredCeil(vector[1] / length)};
-			case DOWN, FLOOR, HALF_DOWN -> new int[]{(int) mirroredFloor(vector[0] / length), (int) mirroredFloor(vector[1] / length)};
-			case HALF_EVEN -> new int[]{(int) Math.round(vector[0] / length), (int) Math.round(vector[1] / length)};
-			default -> throw new IllegalArgumentException();
-		};
+		return DoubleStream.of(values)
+				.map(d -> (d - min) / (max - min))
+				.toArray();
 	}
 
 	public static double mirroredCeil(double value) {
