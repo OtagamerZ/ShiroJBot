@@ -647,6 +647,12 @@ public class TeamHand extends Hand {
 				.queue(null, Helper::doNothing);
 	}
 
+	public int getCardCount() {
+		return (int) getCards().stream()
+				.filter(d -> !(d instanceof Equipment e) || !e.isEffectOnly())
+				.count();
+	}
+
 	public int sumAttack() {
 		return getCards().stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
 	}
