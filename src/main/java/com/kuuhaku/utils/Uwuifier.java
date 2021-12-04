@@ -85,9 +85,9 @@ public class Uwuifier {
 
     private String replaceSpace() {
         if (Helper.chance(faceFac * 100)) {
-            return "§" + Helper.getRandomEntry(faces) + "§";
+            return "§" + Helper.getRandomEntry(faces) + "§$1";
         } else if (Helper.chance(actionFac * 100)) {
-            return "§" + Helper.getRandomEntry(actions) + "§";
+            return "§" + Helper.getRandomEntry(actions) + "§$1";
         } else if (Helper.chance(stutterFac * 100)) {
             return "§" + ("$1" + "-").repeat(Helper.rng(2)) + "$1";
         }
