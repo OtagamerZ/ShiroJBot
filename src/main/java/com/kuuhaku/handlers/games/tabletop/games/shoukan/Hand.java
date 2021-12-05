@@ -25,8 +25,6 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Target;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -675,10 +673,9 @@ public class Hand {
         if (arena != null) {
             List<SlotColumn> slots = arena.getSlots().get(side);
             game.applyPersistentEffects(ON_HEAL, side, -1);
-            for (int i = 0; i < slots.size(); i++) {
-                Champion c = slots.get(i).getTop();
-                if (c != null) {
-                    game.applyEffect(ON_HEAL, c, side, i, new Source(c, side, i));
+            for (SlotColumn slt : slots) {
+                if (slt.getTop() != null) {
+                    game.applyEffect(ON_HEAL, slt.getTop(), side, slt.getIndex());
                 }
             }
         }
@@ -695,12 +692,11 @@ public class Hand {
 			if (arena != null) {
 				List<SlotColumn> slots = arena.getSlots().get(side);
 				game.applyPersistentEffects(ON_HEAL, side, -1);
-				for (int i = 0; i < slots.size(); i++) {
-					Champion c = slots.get(i).getTop();
-					if (c != null) {
-						game.applyEffect(ON_HEAL, c, side, i, new Source(c, side, i));
-					}
-				}
+                for (SlotColumn slt : slots) {
+                    if (slt.getTop() != null) {
+                        game.applyEffect(ON_HEAL, slt.getTop(), side, slt.getIndex());
+                    }
+                }
 			}
         }
     }
@@ -709,19 +705,20 @@ public class Hand {
         if (value <= 0) return;
 
         prevHp = hp;
-        if (hp > baseHp / 3 && hp > 1) crippleHp(value);
-        else hp -= value;
+        if (hp > baseHp / 3 && hp > 1) {
+            crippleHp(value);
+            return;
+        } else hp -= value;
 
 		Arena arena = game.getArena();
 		if (arena != null) {
 			List<SlotColumn> slots = arena.getSlots().get(side);
 			game.applyPersistentEffects(ON_DAMAGE, side, -1);
-			for (int i = 0; i < slots.size(); i++) {
-				Champion c = slots.get(i).getTop();
-				if (c != null) {
-					game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
-				}
-			}
+            for (SlotColumn slt : slots) {
+                if (slt.getTop() != null) {
+                    game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
+                }
+            }
 		}
     }
 
@@ -729,20 +726,21 @@ public class Hand {
         if (value <= 0) return;
 
         prevHp = hp;
-        if (hp > baseHp / 3 && hp > 1) crippleHp(value);
-        else hp -= value;
+        if (hp > baseHp / 3 && hp > 1) {
+            crippleHp(value);
+            return;
+        } else hp -= value;
 
         if (trigger) {
 			Arena arena = game.getArena();
 			if (arena != null) {
 				List<SlotColumn> slots = arena.getSlots().get(side);
 				game.applyPersistentEffects(ON_DAMAGE, side, -1);
-				for (int i = 0; i < slots.size(); i++) {
-					Champion c = slots.get(i).getTop();
-					if (c != null) {
-						game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
-					}
-				}
+                for (SlotColumn slt : slots) {
+                    if (slt.getTop() != null) {
+                        game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
+                    }
+                }
 			}
         }
     }
@@ -757,12 +755,11 @@ public class Hand {
 		if (arena != null) {
 			List<SlotColumn> slots = arena.getSlots().get(side);
 			game.applyPersistentEffects(ON_DAMAGE, side, -1);
-			for (int i = 0; i < slots.size(); i++) {
-				Champion c = slots.get(i).getTop();
-				if (c != null) {
-					game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
-				}
-			}
+            for (SlotColumn slt : slots) {
+                if (slt.getTop() != null) {
+                    game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
+                }
+            }
 		}
     }
 
@@ -777,12 +774,11 @@ public class Hand {
 			if (arena != null) {
 				List<SlotColumn> slots = arena.getSlots().get(side);
 				game.applyPersistentEffects(ON_DAMAGE, side, -1);
-				for (int i = 0; i < slots.size(); i++) {
-					Champion c = slots.get(i).getTop();
-					if (c != null) {
-						game.applyEffect(ON_DAMAGE, c, side, i, new Target(c, side, i));
-					}
-				}
+                for (SlotColumn slt : slots) {
+                    if (slt.getTop() != null) {
+                        game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
+                    }
+                }
 			}
         }
     }
