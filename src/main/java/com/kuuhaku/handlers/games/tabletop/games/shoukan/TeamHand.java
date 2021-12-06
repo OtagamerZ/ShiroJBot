@@ -211,10 +211,10 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
 			else {
-				Drawable dr = getDeque().removeFirst().copy();
+				Drawable dr = getRealDeque().removeFirst().copy();
 				cards.add(dr);
 
 				if (dr instanceof Equipment e) {
@@ -232,7 +232,7 @@ public class TeamHand extends Hand {
 	}
 
 	public void destinyDraw() {
-		LinkedList<Drawable> deque = getDeque();
+		LinkedList<Drawable> deque = getRealDeque();
 		List<Drawable> destinyDeck = getDestinyDeck();
 		List<Drawable> cards = getCards();
 
@@ -251,10 +251,10 @@ public class TeamHand extends Hand {
 			List<Drawable> cards = getCards();
 
 			Drawable dr;
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				dr = drawChampion();
 			else {
-				dr = getDeque().removeFirst();
+				dr = getRealDeque().removeFirst();
 				cards.add(dr.copy());
 
 				if (dr instanceof Equipment e) {
@@ -275,8 +275,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
@@ -298,8 +298,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
@@ -320,8 +320,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
@@ -342,8 +342,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -355,8 +355,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
@@ -367,8 +367,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
 			if (combo.getLeft() == Race.MACHINE)
@@ -385,8 +385,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
 			if (combo.getLeft() == Race.MYSTICAL)
@@ -403,8 +403,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
 			if (combo.getLeft() == Race.MACHINE)
@@ -421,8 +421,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -435,8 +435,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
-			getDeque().remove(dr);
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -445,7 +445,7 @@ public class TeamHand extends Hand {
 	}
 
 	public void redrawHand() {
-		LinkedList<Drawable> deque = getDeque();
+		LinkedList<Drawable> deque = getRealDeque();
 		List<Drawable> cards = getCards();
 
 		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
@@ -498,6 +498,11 @@ public class TeamHand extends Hand {
 	}
 
 	public BondedList<Drawable> getDeque() {
+		if (getLockTime() > 0) return new BondedList<>(getRealDeque().getBonding());
+		else return getRealDeque();
+	}
+
+	public BondedList<Drawable> getRealDeque() {
 		BondedList<Drawable> deque = decks.getCurrent();
 		BondedList<Drawable> destinyDeck = getDestinyDeck();
 
@@ -627,7 +632,7 @@ public class TeamHand extends Hand {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
-		List<Drawable> cards = op.getDeque();
+		List<Drawable> cards = op.getRealDeque();
 
 		for (int i = 0; i < amount; i++) {
 			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);

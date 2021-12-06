@@ -81,7 +81,7 @@ public class GameState {
 			HandState old = hands.get(h.getSide());
 			Helper.replaceContent(
 					old.getDeque().stream().map(Drawable::copy).toList(),
-					h.getDeque()
+					h.getRealDeque()
 			);
 			Helper.replaceContent(
 					old.getCards().stream().map(Drawable::copy).toList(),

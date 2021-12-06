@@ -36,6 +36,10 @@ public class BondedList<T> extends LinkedList<T> {
 		this.bonding = bonding;
 	}
 
+	public Consumer<T> getBonding() {
+		return bonding;
+	}
+
 	@Override
 	public void addFirst(T t) {
 		bonding.accept(t);

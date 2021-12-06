@@ -135,7 +135,7 @@ public abstract class GlobalGame {
 						.count()
 				);
 				put("inHand", top.getCards().size());
-				put("deck", top.getDeque().size());
+				put("deck", top.getRealDeque().size());
 			}});
 
 			put("bottom", new JSONObject() {{
@@ -155,7 +155,7 @@ public abstract class GlobalGame {
 						.count()
 				);
 				put("inHand", bot.getCards().size());
-				put("deck", bot.getDeque().size());
+				put("deck", bot.getRealDeque().size());
 			}});
 		}});
 

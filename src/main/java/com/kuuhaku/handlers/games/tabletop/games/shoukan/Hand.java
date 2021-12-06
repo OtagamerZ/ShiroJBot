@@ -128,9 +128,9 @@ public class Hand {
             baseManaPerTurn = Helper.clamp(game.getCustom().getInt("manapt", 5), 1, 20);
 
             if (game.getCustom().getBoolean("semequip"))
-                getDeque().removeIf(d -> d instanceof Equipment);
+                getRealDeque().removeIf(d -> d instanceof Equipment);
             if (game.getCustom().getBoolean("semcampo"))
-                getDeque().removeIf(d -> d instanceof Field);
+                getRealDeque().removeIf(d -> d instanceof Field);
 
             switch (game.getCustom().getString("arcade")) {
                 case "roleta" -> {
@@ -219,9 +219,9 @@ public class Hand {
 
     public boolean manualDraw() {
         try {
-            if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() >= 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+            if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() >= 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
                 manualDrawChampion();
-            else cards.add(getDeque().removeFirst().copy());
+            else cards.add(getRealDeque().removeFirst().copy());
             return true;
         } catch (NoSuchElementException e) {
             return false;
@@ -242,10 +242,10 @@ public class Hand {
         if (lockTime > 0) return null;
         try {
             Drawable dr;
-            if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+            if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
                 dr = drawChampion();
             else {
-                dr = getDeque().removeFirst();
+                dr = getRealDeque().removeFirst();
                 cards.add(dr.copy());
             }
             return dr;
@@ -257,8 +257,8 @@ public class Hand {
     public Drawable draw(Card card) {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -270,8 +270,8 @@ public class Hand {
         if (lockTime > 0) return null;
         Card card = drawable.getCard();
         try {
-            Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -282,8 +282,8 @@ public class Hand {
     public Drawable draw(String name) {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -294,8 +294,8 @@ public class Hand {
     public Drawable drawChampion() {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -305,8 +305,8 @@ public class Hand {
 
     public void manualDrawChampion() {
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
         } catch (NoSuchElementException ignore) {
         }
@@ -315,8 +315,8 @@ public class Hand {
     public Drawable drawEquipment() {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -327,8 +327,8 @@ public class Hand {
     public Drawable drawSpell() {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -339,8 +339,8 @@ public class Hand {
     public Drawable drawHighest(boolean attack) {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -351,8 +351,8 @@ public class Hand {
     public Drawable drawField() {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -363,8 +363,8 @@ public class Hand {
     public Drawable drawRace(Race race) {
         if (lockTime > 0) return null;
         try {
-            Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
-            getDeque().remove(dr);
+            Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
+            getRealDeque().remove(dr);
             cards.add(dr.copy());
             return dr;
         } catch (NoSuchElementException ignore) {
@@ -408,12 +408,17 @@ public class Hand {
         return combo;
     }
 
-    public BondedList<Drawable> getDeque() {
+    public BondedList<Drawable> getRealDeque() {
         if (deque.isEmpty()) {
             deque.addAll(destinyDeck);
             destinyDeck.clear();
         }
         return deque;
+    }
+
+    public BondedList<Drawable> getDeque() {
+        if (lockTime > 0) return new BondedList<>(deque.getBonding());
+        else return getRealDeque();
     }
 
     public BondedList<Drawable> getCards() {
@@ -538,7 +543,7 @@ public class Hand {
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
-        List<Drawable> cards = op.getDeque().subList(0, amount);
+        List<Drawable> cards = op.getRealDeque().subList(0, amount);
 
         for (int i = 0; i < cards.size(); i++) {
             g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
