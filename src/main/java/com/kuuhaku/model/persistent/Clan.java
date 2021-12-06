@@ -263,7 +263,7 @@ public class Clan {
 		GeometricMean geo = new GeometricMean();
 		for (int i = 0; i < tier.getCapacity(); i++) {
 			ClanMember mb = i >= members.size() ? null : members.get(i);
-			long score = mb == null || mb.getScore() <= 0 ? 1 : mb.getScore();
+			long score = mb == null || mb.getScore() <= 0 ? 1 : mb.getScore() * (1 + tier.ordinal() / 2);
 			geo.increment(score);
 		}
 
