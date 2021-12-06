@@ -52,8 +52,8 @@ public enum Charm {
 
 	public String getDescription(int tier) {
 		return switch (this) {
-			case SHIELD, TIMEWARP, DOUBLETAP -> description.formatted(Helper.getFibonacci(tier), tier == 1 ? "" : "s");
-			case CLONE, DRAIN -> description.formatted(Helper.getFibonacci(tier));
+			case SHIELD, TIMEWARP, DOUBLETAP, CLONE -> description.formatted(Helper.getFibonacci(tier), tier == 1 ? "" : "s");
+			case DRAIN -> description.formatted(Helper.getFibonacci(tier));
 			case AGILITY -> description.formatted(10 * Helper.getFibonacci(tier));
 			default -> description;
 		};
