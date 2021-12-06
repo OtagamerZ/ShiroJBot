@@ -24,11 +24,11 @@ import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 public enum Charm {
-	SHIELD("Escudo", "Bloqueia %s efeitos de destruição ou conversão"),
+	SHIELD("Escudo", "Bloqueia %s efeito%s de destruição ou conversão"),
 	MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
-	TIMEWARP("Salto temporal", "Ativa %s efeitos por turno instantaneamente"),
-	DOUBLETAP("Toque duplo", "Ativa novamente %s efeitos de invocação"),
-	CLONE("Clone", "Cria %s clone com 75% dos atributos"),
+	TIMEWARP("Salto temporal", "Ativa %s efeito%s por turno instantaneamente"),
+	DOUBLETAP("Toque duplo", "Ativa novamente %s efeito%s de invocação"),
+	CLONE("Clone", "Cria %s clone%s com 75% dos atributos"),
 	LINK("Vínculo", "Bloqueia modificadores de campo"),
 	SPELL("Magia", "Executa um efeito ao ativar"),
 	ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
@@ -52,7 +52,8 @@ public enum Charm {
 
 	public String getDescription(int tier) {
 		return switch (this) {
-			case SHIELD, TIMEWARP, DOUBLETAP, CLONE, DRAIN -> description.formatted(Helper.getFibonacci(tier));
+			case SHIELD, TIMEWARP, DOUBLETAP -> description.formatted(Helper.getFibonacci(tier), tier == 1 ? "" : "s");
+			case CLONE, DRAIN -> description.formatted(Helper.getFibonacci(tier));
 			case AGILITY -> description.formatted(10 * Helper.getFibonacci(tier));
 			default -> description;
 		};
