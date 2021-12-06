@@ -1393,11 +1393,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 		}
 
-		if (applyEffect(ON_DESTROY, target, side, index)) return;
-
 		getSlot(side, index).setTop(null);
 		if (target.canGoToGrave())
 			arena.getGraveyard().get(side).add(target);
+
+		applyEffect(ON_DESTROY, target, side, index);
 	}
 
 	public void destroyCard(Side side, int index, Side caster, int source) {
@@ -1457,11 +1457,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			if (applyEffect(ON_DESTROY, target, side, index)) return;
-
 			getSlot(side, index).setTop(null);
 			if (target.canGoToGrave())
 				arena.getGraveyard().get(side).add(target);
+
+			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1530,8 +1530,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			if (applyEffect(ON_DESTROY, target, side, index)) return;
-
 			getSlot(side, index).setTop(null);
 			SlotColumn sc = getFirstAvailableSlot(caster, true);
 			if (sc == null) {
@@ -1540,6 +1538,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			} else {
 				sc.setTop(target);
 			}
+
+			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1635,6 +1635,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			getSlot(side, index).setTop(activator);
 			getSlot(caster, source).setTop(target);
+
+			applyEffect(ON_DESTROY, target, side, index);
+			applyEffect(ON_DESTROY, activator, caster, source);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1697,12 +1700,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			if (applyEffect(ON_DESTROY, target, side, index)) return;
-
 			target.reset();
 			getSlot(side, index).setTop(null);
 			if (!target.isFusion() || withFusion)
 				hands.get(side.getOther()).getCards().add(target);
+
+			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1744,11 +1747,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			if (applyEffect(ON_DESTROY, target, side, index)) return;
-
 			getSlot(side, index).setTop(null);
 			if (target.canGoToGrave())
 				arena.getBanned().add(target);
+
+			applyEffect(ON_DESTROY, target, side, index);
 		}
 	}
 
@@ -1760,8 +1763,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (link != null)
 			link.unlink(target);
 
-		applyEffect(ON_DESTROY, target, side, index, Duelists.of());
-
 		getSlot(side, index).setBottom(null);
 		if (target.canGoToGrave()) {
 			if (target.getTier() >= 4)
@@ -1769,6 +1770,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			else
 				arena.getGraveyard().get(side).add(target);
 		}
+
+		applyEffect(ON_DESTROY, target, side, index, Duelists.of());
 	}
 
 	public Arena getArena() {
