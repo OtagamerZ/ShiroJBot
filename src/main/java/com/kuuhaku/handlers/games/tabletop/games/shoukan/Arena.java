@@ -281,8 +281,8 @@ public class Arena {
 							Profile.printCenteredString("%02d/%02d/%02d".formatted((Object[]) count), 225, key == Side.TOP ? 1889 : 137, key == Side.TOP ? 178 : 1638, g2d);
 						}
 
-						if (h.getDeque().size() > 0) {
-							Drawable d = h.getDeque().peek();
+						if (h.getRealDeque().size() > 0) {
+							Drawable d = h.getRealDeque().peek();
 							assert d != null;
 							g2d.drawImage(d.drawCard(true),
 									key == Side.TOP ? 137 : 1889,
