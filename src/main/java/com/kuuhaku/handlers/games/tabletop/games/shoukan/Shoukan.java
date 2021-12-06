@@ -1891,7 +1891,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				d.setAvailable(true);
 			}
 			if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
-				h.get().getDeque().addAll(
+				h.get().getRealDeque().addAll(
 						discardBatch.stream()
 								.filter(d -> {
 									if (d instanceof Champion c) return c.canGoToGrave();
@@ -1900,7 +1900,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 								})
 								.collect(Collectors.toList())
 				);
-				Collections.shuffle(h.get().getDeque());
+				Collections.shuffle(h.get().getRealDeque());
 			} else {
 				arena.getGraveyard().get(getCurrentSide()).addAll(
 						discardBatch.stream()
@@ -2114,7 +2114,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					return;
 				}
 
-				int toDraw = Math.min(remaining, h.getDeque().size());
+				int toDraw = Math.min(remaining, h.getRealDeque().size());
 				if (toDraw == 0) {
 					if (getCustom() == null) {
 						getHistory().setWinner(getNextSide());
@@ -2294,12 +2294,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 						d.setAvailable(true);
 					}
 					if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
-						h.get().getDeque().addAll(
+						h.get().getRealDeque().addAll(
 								discardBatch.stream()
 										.map(Drawable::copy)
 										.collect(Collectors.toList())
 						);
-						Collections.shuffle(h.get().getDeque());
+						Collections.shuffle(h.get().getRealDeque());
 					} else {
 						arena.getGraveyard().get(getCurrentSide()).addAll(
 								discardBatch.stream()
@@ -2480,7 +2480,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						.count()
 				);
 				put("inHand", top.getCards().size());
-				put("deck", top.getDeque().size());
+				put("deck", top.getRealDeque().size());
 			}});
 
 			put("bottom", new JSONObject() {{
@@ -2500,7 +2500,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						.count()
 				);
 				put("inHand", bot.getCards().size());
-				put("deck", bot.getDeque().size());
+				put("deck", bot.getRealDeque().size());
 			}});
 		}});
 	}

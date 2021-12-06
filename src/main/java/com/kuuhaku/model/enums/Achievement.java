@@ -201,7 +201,7 @@ public enum Achievement {
 				if (!last) yield false;
 
 				if (game.getHistory().getWinner().equals(side)) {
-					yield (!game.getHands().get(side.getOther()).getDeque().isEmpty());
+					yield (!game.getHands().get(side.getOther()).getRealDeque().isEmpty());
 				}
 
 				yield true;

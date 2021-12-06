@@ -43,7 +43,7 @@ public class HandState {
 	private final int nullTime;
 
 	public HandState(Hand h) {
-		this.deque = h.getDeque().stream().map(Drawable::copy).collect(Collectors.toList());
+		this.deque = h.getRealDeque().stream().map(Drawable::copy).collect(Collectors.toList());
 		this.cards = h.getCards().stream().map(Drawable::copy).collect(Collectors.toList());
 		this.destinyDeck = h.getDestinyDeck().stream().map(Drawable::copy).collect(Collectors.toList());
 		if (h.getHero() != null)
