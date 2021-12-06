@@ -87,7 +87,7 @@ public class SeeCardCommand implements Executable {
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
 			} else if (d instanceof Equipment e && e.getCharm() != null) {
 				Charm c = e.getCharm();
-				eb.addField("Amuleto: " + c.getName(), c.getDescription(), true);
+				eb.addField("Amuleto: " + c.getName(), c.getDescription(e.getTier()), true);
 			}
 			eb.setImage("attachment://kawaipon.png");
 

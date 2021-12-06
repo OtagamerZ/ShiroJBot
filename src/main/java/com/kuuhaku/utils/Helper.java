@@ -3299,6 +3299,8 @@ public class Helper {
 	}
 
 	public static long getFibonacci(int nth) {
+		if (Math.abs(nth) == 1) return nth;
+
 		return Math.round((Math.pow(GOLDEN_RATIO, nth) - Math.pow(GOLDEN_RATIO - 1, nth)) / Math.sqrt(5));
 	}
 
