@@ -112,7 +112,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private int effectLock = 0;
 	private boolean reroll = true;
 	private boolean moveLock = false;
-	private int[] synthCd = {0, 0};
+	private final int[] synthCd = {0, 0};
 
 	private GameState oldState = null;
 
@@ -586,29 +586,32 @@ public class Shoukan extends GlobalGame implements Serializable {
 						return;
 
 					if (e.getCharm() != null) {
-						switch (e.getCharm()) {
-							case TIMEWARP -> {
-								if (t.hasEffect()) {
-									t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-									t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+						int uses = (int) Helper.getFibonacci(e.getTier());
+						for (int i = 0; i < uses; i++) {
+							switch (e.getCharm()) {
+								case TIMEWARP -> {
+									if (t.hasEffect()) {
+										t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+										t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+									}
 								}
-							}
-							case DOUBLETAP -> {
-								if (t.hasEffect())
-									t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-							}
-							case CLONE -> {
-								SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
+								case DOUBLETAP -> {
+									if (t.hasEffect())
+										t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+								}
+								case CLONE -> {
+									SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 
-								if (sc != null) {
-									t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
-									t.removeDef(Math.round(t.getAltDef() * 0.25f));
+									if (sc != null) {
+										t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
+										t.removeDef(Math.round(t.getAltDef() * 0.25f));
 
-									Champion dp = t.copy();
-									dp.getBonus().removeMana(dp.getMana() / 2);
-									dp.setGravelocked(true);
+										Champion dp = t.copy();
+										dp.getBonus().removeMana(dp.getMana() / 2);
+										dp.setGravelocked(true);
 
-									sc.setTop(dp);
+										sc.setTop(dp);
+									}
 								}
 							}
 						}
@@ -766,6 +769,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 								op.getMana(),
 								c.getLinkedTo().parallelStream()
 										.filter(e -> e.getCharm() == Charm.DRAIN)
+										.map(e -> Helper.getFibonacci(e.getTier()))
 										.count()
 						);
 
@@ -1021,6 +1025,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							op.getMana(),
 							atkr.getLinkedTo().parallelStream()
 									.filter(e -> e.getCharm() == Charm.DRAIN)
+									.map(e -> Helper.getFibonacci(e.getTier()))
 									.count()
 					);
 
@@ -1117,6 +1122,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						you.getMana(),
 						defr.getLinkedTo().parallelStream()
 								.filter(e -> e.getCharm() == Charm.DRAIN)
+								.map(e -> Helper.getFibonacci(e.getTier()))
 								.count()
 				);
 
@@ -1193,12 +1199,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 						op.getMana(),
 						atkr.getLinkedTo().parallelStream()
 								.filter(e -> e.getCharm() == Charm.DRAIN)
+								.map(e -> Helper.getFibonacci(e.getTier()))
 								.count()
 				);
 				int hToSteal = (int) Math.min(
 						you.getMana(),
 						defr.getLinkedTo().parallelStream()
 								.filter(e -> e.getCharm() == Charm.DRAIN)
+								.map(e -> Helper.getFibonacci(e.getTier()))
 								.count()
 				);
 
@@ -1412,19 +1420,23 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
 			for (Equipment e : List.copyOf(target.getLinkedTo())) {
-				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
-					unequipCard(side, e.getIndex());
-
-					if (e.getCharm() == Charm.MIRROR && activator != null) {
-						destroyCard(caster, source, side, index);
+				if (e.getCharm() == Charm.SHIELD) {
+					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
+					if (uses >= Helper.getFibonacci(e.getTier())) {
+						unequipCard(side, e.getIndex());
+					} else {
+						e.getBonus().getSpecialData().put("uses", uses);
 					}
-
 					return;
+				}
+
+				if (e.getCharm() == Charm.MIRROR && activator != null) {
+					destroyCard(caster, source, side, index);
 				}
 			}
 
@@ -1481,19 +1493,23 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
 			for (Equipment e : List.copyOf(target.getLinkedTo())) {
-				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
-					unequipCard(side, e.getIndex());
-
-					if (e.getCharm() == Charm.MIRROR && activator != null) {
-						convertCard(caster, source, side, index);
+				if (e.getCharm() == Charm.SHIELD) {
+					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
+					if (uses >= Helper.getFibonacci(e.getTier())) {
+						unequipCard(side, e.getIndex());
+					} else {
+						e.getBonus().getSpecialData().put("uses", uses);
 					}
-
 					return;
+				}
+
+				if (e.getCharm() == Charm.MIRROR && activator != null) {
+					convertCard(caster, source, side, index);
 				}
 			}
 
@@ -1550,13 +1566,18 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
 			for (Equipment e : List.copyOf(target.getLinkedTo())) {
-				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
-					unequipCard(side, e.getIndex());
+				if (e.getCharm() == Charm.SHIELD) {
+					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
+					if (uses >= Helper.getFibonacci(e.getTier())) {
+						unequipCard(side, e.getIndex());
+					} else {
+						e.getBonus().getSpecialData().put("uses", uses);
+					}
 					return;
 				}
 			}
@@ -1579,13 +1600,19 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			charm = activator.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (activator.getHero() != null && activator.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
-			for (Equipment e : activator.getLinkedTo()) {
-				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
-					unequipCard(caster, e.getIndex());
+			for (Equipment e : List.copyOf(target.getLinkedTo())) {
+				if (e.getCharm() == Charm.SHIELD) {
+					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
+					if (uses >= Helper.getFibonacci(e.getTier())) {
+						unequipCard(side, e.getIndex());
+					} else {
+						e.getBonus().getSpecialData().put("uses", uses);
+					}
+					return;
 				}
 			}
 
@@ -1633,19 +1660,23 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
-			if (Helper.equalsAny(charm, Charm.SHIELD, Charm.MIRROR) || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
 			for (Equipment e : List.copyOf(target.getLinkedTo())) {
-				if (Helper.equalsAny(e.getCharm(), Charm.SHIELD, Charm.MIRROR)) {
-					unequipCard(side, e.getIndex());
-
-					if (e.getCharm() == Charm.MIRROR && activator != null) {
-						captureCard(caster, source, side, index, withFusion);
+				if (e.getCharm() == Charm.SHIELD) {
+					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
+					if (uses >= Helper.getFibonacci(e.getTier())) {
+						unequipCard(side, e.getIndex());
+					} else {
+						e.getBonus().getSpecialData().put("uses", uses);
 					}
-
 					return;
+				}
+
+				if (e.getCharm() == Charm.MIRROR && activator != null) {
+					captureCard(caster, source, side, index, withFusion);
 				}
 			}
 
