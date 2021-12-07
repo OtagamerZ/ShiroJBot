@@ -1798,7 +1798,6 @@ public class Helper {
 							prize.award(u);
 						}
 
-						AccountDAO.saveAccount(acc);
 						wc.send(wmb.resetEmbeds()
 								.setContent("Decidi que " + u.getAsMention() + " merece os presentes!")
 								.addEmbeds(neb.build())
