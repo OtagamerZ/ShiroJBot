@@ -18,7 +18,8 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
-import com.expression.parser.Parser;
+import com.expression.parser.exception.CalculatorException;
+import com.expression.parser.function.FunctionX;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
@@ -41,8 +42,9 @@ public class MathCommand implements Executable {
 		}
 
 		try {
-			channel.sendMessage("x = " + Helper.roundToString(Parser.simpleEval(argsAsText), 5)).queue();
-		} catch (RuntimeException e) {
+			FunctionX func = new FunctionX(argsAsText);
+			channel.sendMessage("x = " + Helper.roundToString(func.getF_xo(0), 5)).queue();
+		} catch (CalculatorException e) {
 			channel.sendMessage("❌ | Equação inválida.").queue();
 		}
 	}
