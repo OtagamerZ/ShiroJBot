@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.expression.parser.Parser;
+import com.expression.parser.exception.CalculatorException;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
@@ -40,6 +41,10 @@ public class MathCommand implements Executable {
 			return;
 		}
 
-		channel.sendMessage("x = " + Helper.roundToString(Parser.simpleEval(argsAsText), 5)).queue();
+		try {
+			channel.sendMessage("x = " + Helper.roundToString(Parser.simpleEval(argsAsText), 5)).queue();
+		} catch (CalculatorException e) {
+			channel.sendMessage("❌ | Equação inválida.").queue();
+		}
 	}
 }
