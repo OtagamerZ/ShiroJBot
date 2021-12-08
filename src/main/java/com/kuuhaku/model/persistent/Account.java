@@ -318,11 +318,15 @@ public class Account {
 		if (lastVoted == null) streak = 1;
 		else try {
 			Helper.logger(this.getClass()).info("""
-															
-					Voto anterior: %s
-					Hoje: %s
-					Acumula? %s
-					""".formatted(Helper.fullDateFormat.format(lastVoted), today.format(Helper.fullDateFormat), today.isBefore(lastVoted.plusHours(24)))
+																	
+							Voto anterior: %s
+							Hoje: %s
+							Acumula? %s
+							""".formatted(
+							lastVoted.format(Helper.fullDateFormat),
+							today.format(Helper.fullDateFormat),
+							today.isBefore(lastVoted.plusHours(24))
+					)
 			);
 
 			if (today.isBefore(lastVoted.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
@@ -439,7 +443,7 @@ public class Account {
 		try {
 			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-			if (lastVoted != null && today.isAfter(lastVoted.plusHours(24))) streak = 0;
+			if (lastVoted == null || !today.isBefore(lastVoted.plusHours(24))) streak = 0;
 		} catch (DateTimeParseException ignore) {
 		}
 
