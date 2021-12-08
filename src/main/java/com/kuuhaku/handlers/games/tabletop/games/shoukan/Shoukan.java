@@ -2806,9 +2806,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		nc.setDefending(from.isDefending());
 		nc.setFlipped(from.isFlipped());
 
-		banCard(ep.getSide(), from.getIndex(), false);
-		arena.getSlots().get(ep.getSide()).get(from.getIndex()).setTop(nc);
-		applyEffect(ON_SUMMON, nc, ep.getSide(), from.getIndex(), ep.getDuelists());
+		int i = from.getIndex();
+		banCard(ep.getSide(), i, false);
+		arena.getSlots().get(ep.getSide()).get(i).setTop(nc);
+		applyEffect(ON_SUMMON, nc, ep.getSide(), i, ep.getDuelists());
 		return nc;
 	}
 
