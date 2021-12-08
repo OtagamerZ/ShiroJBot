@@ -35,6 +35,16 @@ public class DynamicParameterDAO {
 		}
 	}
 
+	public static String getValue(String param) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param)).getValue();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static void setParam(String param, String value) {
 		EntityManager em = Manager.getEntityManager();
 		DynamicParameter dp = Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
