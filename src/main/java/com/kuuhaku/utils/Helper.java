@@ -1728,7 +1728,7 @@ public class Helper {
 		String padoru = ShiroInfo.RESOURCES_URL + "/assets/padoru_padoru.gif";
 		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
 
-		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09, 5000), 0, 0.09))) {
+		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.08, 5000), 0, 0.08))) {
 			try {
 				TextChannel tc = getOr(gc.getDropChannel(), channel);
 				Webhook wh = getOrCreateWebhook(tc, "Shiro");
@@ -1742,7 +1742,9 @@ public class Helper {
 				for (int i = 0; i < 6; i++) {
 					int type = rng(1000);
 
-					if (type >= 995)
+					if (type >= 995 && prizes.stream().noneMatch(p -> p.getClass() == PadoruDrop.class))
+						prizes.add(new PadoruDrop());
+					else if (type >= 990)
 						prizes.add(new FieldDrop());
 					else if (type >= 975)
 						prizes.add(new EvogearDrop());
