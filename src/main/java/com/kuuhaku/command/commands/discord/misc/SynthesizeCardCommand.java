@@ -131,7 +131,7 @@ public class SynthesizeCardCommand implements Executable {
 
 		DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 		int freeRolls = NumberUtils.toInt(dp.getValue());
-		boolean blessed = !DynamicParameterDAO.getParam(author.getId() + "_blessing").getValue().isBlank();
+		boolean blessed = !DynamicParameterDAO.getValue(author.getId() + "_blessing").isBlank();
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		switch (type) {

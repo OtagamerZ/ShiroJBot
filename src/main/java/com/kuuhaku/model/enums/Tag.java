@@ -94,7 +94,10 @@ public enum Tag {
 			}),
 
 	BUG_HUNTER(TagIcons.BUGHUNTER, "Você ajudou a corrigir muitos bugs na Shiro.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25);
+			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25),
+
+	PADORU_PADORU(TagIcons.PADORU, "Você cantou tão bem que Nero te deu um emblema.",
+			(user, member) -> !DynamicParameterDAO.getValue("padoru_" + user.getId()).isBlank());
 
 	private final TagIcons emote;
 	private final String description;
