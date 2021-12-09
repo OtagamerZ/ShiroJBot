@@ -23,10 +23,7 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
@@ -42,7 +39,10 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -115,49 +115,10 @@ public abstract class GlobalGame {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
 
-		Hand top = shkn.getHands().get(Side.TOP);
-		Hand bot = shkn.getHands().get(Side.BOTTOM);
-		getCurrRound().setScript(new JSONObject() {{
-			put("top", new JSONObject() {{
-				put("id", top.getUser().getId());
-				put("hp", top.getHp());
-				put("mana", top.getMana());
-				put("champions", shkn.getArena().getSlots().get(Side.TOP)
-						.stream()
-						.map(SlotColumn::getTop)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("equipments", shkn.getArena().getSlots().get(Side.TOP)
-						.stream()
-						.map(SlotColumn::getBottom)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("inHand", top.getCards().size());
-				put("deck", top.getRealDeque().size());
-			}});
-
-			put("bottom", new JSONObject() {{
-				put("id", bot.getUser().getId());
-				put("hp", bot.getHp());
-				put("mana", bot.getMana());
-				put("champions", shkn.getArena().getSlots().get(Side.BOTTOM)
-						.stream()
-						.map(SlotColumn::getTop)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("equipments", shkn.getArena().getSlots().get(Side.BOTTOM)
-						.stream()
-						.map(SlotColumn::getBottom)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("inHand", bot.getCards().size());
-				put("deck", bot.getRealDeque().size());
-			}});
-		}});
+		getCurrRound().setData(
+				shkn.getHands().get(shkn.getCurrentSide()),
+				shkn.getArena().getSlots().get(shkn.getCurrentSide())
+		);
 
 		round++;
 		Player p = null;
@@ -256,57 +217,48 @@ public abstract class GlobalGame {
 			history.setWo(wo);
 			MatchDAO.saveMatch(history);
 
-			Map<Side, List<MatchInfo>> result = MatchMakingRating.calcMMR(history);
-			for (Side s : Side.values()) {
-				Side other = s.getOther();
+			List<MatchInfo> stats = List.copyOf(history.getStats().values());
+			for (MatchInfo stat : stats) {
+				MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(stat.id());
+				long theirMMR = Helper.getAverageMMR(
+						stats.stream()
+								.filter(mi -> mi.side() != stat.side())
+								.map(MatchInfo::id)
+								.toArray(String[]::new)
+				);
 
-				for (MatchInfo info : result.get(s)) {
-					Map<String, Integer> yourResult = info.info();
-					Map<String, Integer> theirResult = Helper.mergeInfo(result.get(other)).info();
-					MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(info.id());
-					long theirMMR = Helper.getAverageMMR(result.get(other).stream().map(MatchInfo::id).toArray(String[]::new));
-					int spentMana = yourResult.get("mana");
-					int damageDealt = theirResult.get("hp");
+				long mmr = Math.round(250 * stat.manaEff() + (125 * stat.damageEff() + 125 * stat.sustainEff()));
 
-					if (history.getWinner() == s) {
-						double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
-						double damageEff = (double) -damageDealt / yourResult.size();
-						double expEff = 5000d / yourResult.size();
-						double sustainEff = 1 + yourResult.get("hp") / 5000d;
-						long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
+				if (stat.winner()) {
+					mmr *= Helper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
 
-						yourMMR.addMMR(mmr / (wo ? 2 : 1), theirMMR, ranked);
-						yourMMR.addWin();
-						if (ranked) yourMMR.increaseRankPoints(theirMMR);
+					yourMMR.addMMR(mmr / (wo ? 2 : 1), theirMMR, ranked);
+					yourMMR.addWin();
+					if (ranked) yourMMR.increaseRankPoints(theirMMR);
 
-						Account acc = AccountDAO.getAccount(yourMMR.getUid());
-						if (acc.hasPendingQuest()) {
-							Map<DailyTask, Integer> pg = acc.getDailyProgress();
-							pg.merge(DailyTask.WINS_TASK, 1, Integer::sum);
+					Account acc = AccountDAO.getAccount(yourMMR.getUid());
+					if (acc.hasPendingQuest()) {
+						Map<DailyTask, Integer> pg = acc.getDailyProgress();
+						pg.merge(DailyTask.WINS_TASK, 1, Integer::sum);
 
-							double div = divergence.getOrDefault(yourMMR.getUid(), -1d);
-							if (div > -1) {
-								DailyQuest dq = DailyQuest.getQuest(Long.parseLong(yourMMR.getUid()));
-								if (div >= dq.getDivergence()) pg.merge(DailyTask.OFFMETA_TASK, 1, Integer::sum);
-							}
-
-							acc.setDailyProgress(pg);
-							AccountDAO.saveAccount(acc);
+						double div = divergence.getOrDefault(yourMMR.getUid(), -1d);
+						if (div > -1) {
+							DailyQuest dq = DailyQuest.getQuest(Long.parseLong(yourMMR.getUid()));
+							if (div >= dq.getDivergence()) pg.merge(DailyTask.OFFMETA_TASK, 1, Integer::sum);
 						}
-					} else if (history.getWinner() == other) {
-						double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
-						double damageEff = (double) -damageDealt / yourResult.size();
-						double expEff = 5000d / yourResult.size();
-						double sustainEff = 1 + yourResult.get("hp") / 5000d;
-						long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
 
-						yourMMR.removeMMR(mmr * (wo ? 2 : 1), theirMMR, ranked);
-						yourMMR.addLoss();
-						if (ranked) yourMMR.decreaseRankPoints(theirMMR);
+						acc.setDailyProgress(pg);
+						AccountDAO.saveAccount(acc);
 					}
+				} else {
+					mmr /= Helper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
 
-					MatchMakingRatingDAO.saveMMR(yourMMR);
+					yourMMR.removeMMR(mmr * (wo ? 2 : 1), theirMMR, ranked);
+					yourMMR.addLoss();
+					if (ranked) yourMMR.decreaseRankPoints(theirMMR);
 				}
+
+				MatchMakingRatingDAO.saveMMR(yourMMR);
 			}
 		}
 	}
