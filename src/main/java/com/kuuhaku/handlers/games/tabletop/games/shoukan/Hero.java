@@ -410,7 +410,7 @@ public class Hero implements Cloneable {
 			}
 
 			blood += switch (perk) {
-				case BLOODLUST -> getStats().calcMp(getReferenceChampion()) * mpModif / 2 * 100;
+				case BLOODLUST -> stats.calcMp(getReferenceChampion()) * mpModif / 2 * 100;
 				default -> 0;
 			};
 		}
