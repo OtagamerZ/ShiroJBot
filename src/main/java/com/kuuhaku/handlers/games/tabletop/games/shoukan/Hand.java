@@ -712,8 +712,9 @@ public class Hand {
 				crippleHp(value);
 				return;
 			}
-		} else hp -= value;
+		}
 
+		hp -= value;
 		if (trigger) {
 			Arena arena = game.getArena();
 			if (arena != null) {
