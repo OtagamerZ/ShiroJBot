@@ -164,7 +164,17 @@ public class MatchHistory {
 						.mapToInt(r -> r.getBaseHp() - r.getHp())
 						.sum();
 
-				double manaEff = spentMana > 0 ? baseMana / spentMana : 0;
+				int summons = (int) yours.stream()
+						.map(MatchRound::getChampions)
+						.flatMap(List::stream)
+						.distinct()
+						.count();
+
+				double manaEff = 0;
+				if (spentMana != 0) {
+					manaEff = (baseMana + summons) / spentMana;
+				}
+
 				double damageEff = (double) damageDealt / yours.size();
 				double expEff = baseOpHp / yours.size();
 				double sustainEff = 1 - damageSustained / baseHp;
