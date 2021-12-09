@@ -23,11 +23,8 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.enums.RankedTier;
-import com.kuuhaku.model.records.MatchInfo;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,9 +33,8 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalUnit;
-import java.util.*;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "matchmakingrating")
@@ -325,46 +321,6 @@ public class MatchMakingRating {
 
 	public void setMaster(String master) {
 		this.master = master;
-	}
-
-	public static Map<Side, List<MatchInfo>> calcMMR(MatchHistory mh) {
-		Map<Side, List<MatchInfo>> data = new HashMap<>();
-		for (Side s : Side.values()) {
-			List<MatchRound> rounds = mh.getRounds().entrySet().stream()
-					.sorted(Comparator.comparingInt(Map.Entry::getKey))
-					.map(Map.Entry::getValue)
-					.filter(mr -> mr.getSide() == s)
-					.collect(Collectors.toList());
-
-			Set<String> ids = new HashSet<>();
-			for (MatchRound round : rounds) {
-				String id = round.getScript()
-						.getJSONObject(s.name().toLowerCase(Locale.ROOT), new JSONObject())
-						.getString("id");
-
-				ids.add(id);
-			}
-
-			for (String id : ids) {
-				MatchInfo info = new MatchInfo(id);
-
-				for (MatchRound round : rounds) {
-					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
-
-					for (Map.Entry<String, Object> entry : jo.entrySet()) {
-						String key = entry.getKey();
-						if (!key.equals("id")) {
-							int val = (int) (double) entry.getValue();
-							info.info().merge(key, val, Helper::subtract);
-						}
-					}
-				}
-
-				data.computeIfAbsent(s, k -> new ArrayList<>()).add(info);
-			}
-		}
-
-		return data;
 	}
 
 	@Override

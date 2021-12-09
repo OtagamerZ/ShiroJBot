@@ -2464,53 +2464,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return buttons;
 	}
 
-	private void recordLast() {
-		Hand top = hands.get(Side.TOP);
-		Hand bot = hands.get(Side.BOTTOM);
-		getHistory().getRound(getRound() + 1).setSide(getCurrentSide());
-		getHistory().getRound(getRound() + 1).setScript(new JSONObject() {{
-			put("top", new JSONObject() {{
-				put("id", top.getUser().getId());
-				put("hp", top.getHp());
-				put("mana", top.getMana());
-				put("champions", getArena().getSlots().get(Side.TOP)
-						.stream()
-						.map(SlotColumn::getTop)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("equipments", getArena().getSlots().get(Side.TOP)
-						.stream()
-						.map(SlotColumn::getBottom)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("inHand", top.getCards().size());
-				put("deck", top.getRealDeque().size());
-			}});
-
-			put("bottom", new JSONObject() {{
-				put("id", bot.getUser().getId());
-				put("hp", bot.getHp());
-				put("mana", bot.getMana());
-				put("champions", getArena().getSlots().get(Side.BOTTOM)
-						.stream()
-						.map(SlotColumn::getTop)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("equipments", getArena().getSlots().get(Side.BOTTOM)
-						.stream()
-						.map(SlotColumn::getBottom)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("inHand", bot.getCards().size());
-				put("deck", bot.getRealDeque().size());
-			}});
-		}});
-	}
-
 	public Champion getChampionFromGrave(Side s) {
 		LinkedList<Drawable> grv = getArena().getGraveyard().get(s);
 		for (int i = grv.size() - 1; i >= 0; i--)
@@ -2878,7 +2831,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			e.getValue().removeIf(a -> a.isInvalid(this, e.getKey(), false));
 		}
 
-		getCurrRound().setSide(getCurrentSide());
 		decreaseFLockTime();
 		decreaseSLockTime();
 		decreaseELockTime();
@@ -2895,7 +2847,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		listener.close();
-		recordLast();
+		getHistory().getRound(getRound() + 1).setData(
+				hands.get(getCurrentSide()),
+				arena.getSlots().get(getCurrentSide())
+		);
 		super.close();
 
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
