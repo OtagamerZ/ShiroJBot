@@ -2597,6 +2597,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void disableSlot(Side side, int slot, int time) {
+		if (time > 0) {
+			boolean lock = effectLock > 0;
+
+			if (!lock) effectLock = 1;
+			killCard(side, slot, -1);
+			if (!lock) effectLock = 0;
+		}
+
 		arena.getSlots().get(side).get(slot).setUnavailable(time);
 	}
 
