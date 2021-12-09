@@ -286,6 +286,8 @@ public class CardDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Card> getCards(List<String> ids) {
+		if (ids.isEmpty()) return new ArrayList<>();
+
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE c.id IN :ids", Card.class);
@@ -635,6 +637,8 @@ public class CardDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Champion> getChampions(List<String> ids) {
+		if (ids.isEmpty()) return new ArrayList<>();
+
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)", Champion.class);
@@ -896,6 +900,8 @@ public class CardDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Equipment> getEquipments(List<String> ids) {
+		if (ids.isEmpty()) return new ArrayList<>();
+
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id IN :ids", Equipment.class);
@@ -1012,6 +1018,8 @@ public class CardDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Field> getFields(List<String> ids) {
+		if (ids.isEmpty()) return new ArrayList<>();
+
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT f FROM Field f WHERE card.id IN :ids", Field.class);
