@@ -555,6 +555,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (slot.getBottom() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
+					} else if (slot.isUnavailable()) {
+						channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
+						return;
 					}
 
 					if (!StringUtils.isNumeric(args[2])) {
@@ -644,7 +647,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (slot.getTop() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
-					} else if (isSlotDisabled(getCurrentSide(), dest)) {
+					} else if (slot.isUnavailable()) {
 						channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
 						return;
 					}
@@ -1794,12 +1797,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public SlotColumn getFirstAvailableSlot(Side s, boolean top) {
-		List<SlotColumn> get = arena.getSlots().get(s);
-		for (int i = 0; i < get.size(); i++) {
-			SlotColumn slot = get.get(i);
-			if (top ? (slot.getTop() == null && !isSlotDisabled(s, i)) : slot.getBottom() == null)
-				return slot;
+		List<SlotColumn> slots = arena.getSlots().get(s);
+		for (SlotColumn slt : slots) {
+			if (!slt.isUnavailable() && (top ? slt.getTop() == null : slt.getBottom() == null))
+				return slt;
 		}
+
 		return null;
 	}
 
@@ -2597,14 +2600,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public void disableSlot(Side side, int slot, int time) {
-		if (time > 0) {
-			boolean lock = effectLock > 0;
-
-			if (!lock) effectLock = 1;
-			killCard(side, slot, -1);
-			if (!lock) effectLock = 0;
-		}
-
 		arena.getSlots().get(side).get(slot).setUnavailable(time);
 	}
 
