@@ -1742,9 +1742,9 @@ public class Helper {
 				for (int i = 0; i < 6; i++) {
 					int type = rng(1000);
 
-					if (type >= 995 && prizes.stream().noneMatch(p -> p.getClass() == PadoruDrop.class))
+					if (type >= 996 && prizes.stream().noneMatch(p -> p.getClass() == PadoruDrop.class))
 						prizes.add(new PadoruDrop());
-					else if (type >= 990)
+					else if (type >= 995)
 						prizes.add(new FieldDrop());
 					else if (type >= 975)
 						prizes.add(new EvogearDrop());
