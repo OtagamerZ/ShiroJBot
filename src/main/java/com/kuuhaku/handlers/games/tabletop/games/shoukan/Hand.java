@@ -708,7 +708,7 @@ public class Hand {
 			if (hp > baseHp / 3) {
 				crippleHp(value);
 				return;
-			} else if (hp > baseHp / 6 && Helper.chance(50)) {
+			} else if (hp > baseHp / 6 && Helper.chance(hp * 100d / baseHp)) {
 				crippleHp(value);
 				return;
 			}
