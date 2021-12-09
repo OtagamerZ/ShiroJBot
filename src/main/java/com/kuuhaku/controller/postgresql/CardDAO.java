@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
@@ -38,6 +39,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CardDAO {
 	public static void setCardName(String o, String n) {
@@ -618,6 +620,17 @@ public class CardDAO {
 		} finally {
 			em.close();
 		}
+	}
+
+	public static List<Drawable> getDrawables(List<String> ids) {
+		List<Champion> c = getChampions(ids);
+		List<Equipment> e = getEquipments(ids);
+		List<Field> f = getFields(ids);
+
+		return Stream.of(c, e, f)
+				.flatMap(List::stream)
+				.sorted(Comparator.comparing(d -> ids.indexOf(d.getCard().getId())))
+				.collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("unchecked")

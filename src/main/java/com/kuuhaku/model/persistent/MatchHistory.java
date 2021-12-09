@@ -19,11 +19,14 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.model.records.MatchInfo;
 
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -70,6 +73,22 @@ public class MatchHistory {
 		return rounds;
 	}
 
+	public List<MatchRound> getRounds(Side s) {
+		return rounds.entrySet().stream()
+				.sorted(Comparator.comparingInt(Map.Entry::getKey))
+				.map(Map.Entry::getValue)
+				.filter(r -> r.getSide() == s)
+				.toList();
+	}
+
+	public List<MatchRound> getRounds(Side s, String uid) {
+		return rounds.entrySet().stream()
+				.sorted(Comparator.comparingInt(Map.Entry::getKey))
+				.map(Map.Entry::getValue)
+				.filter(r -> r.getSide() == s && r.getUid().equals(uid))
+				.toList();
+	}
+
 	public MatchRound getRound(int round) {
 		return rounds.computeIfAbsent(round, k -> new MatchRound());
 	}
@@ -108,5 +127,56 @@ public class MatchHistory {
 
 	public void setWo(boolean wo) {
 		this.wo = wo;
+	}
+
+	public Map<String, MatchInfo> getStats() {
+		Map<String, MatchInfo> out = new HashMap<>();
+
+		for (Side s : Side.values()) {
+			for (String uid : players.keySet()) {
+				List<MatchRound> yours = getRounds(s, uid);
+				List<MatchRound> his = getRounds(s.getOther());
+
+				double baseMana = yours.stream()
+						.mapToInt(MatchRound::getBaseMp)
+						.average()
+						.orElse(0);
+				int spentMana = yours.stream()
+						.mapToInt(r -> r.getBaseMp() - r.getMp())
+						.sum();
+
+				double baseHp = yours.stream()
+						.mapToInt(MatchRound::getBaseHp)
+						.average()
+						.orElse(0);
+				int damageSustained = yours.stream()
+						.mapToInt(r -> r.getBaseHp() - r.getHp())
+						.sum();
+
+				double baseOpHp = his.stream()
+						.mapToInt(MatchRound::getBaseHp)
+						.average()
+						.orElse(0);
+				int damageDealt = his.stream()
+						.mapToInt(r -> r.getBaseHp() - r.getHp())
+						.sum();
+
+				double manaEff = spentMana > 0 ? baseMana / spentMana : 0;
+				double damageEff = (double) damageDealt / yours.size();
+				double expEff = baseOpHp / yours.size();
+				double sustainEff = 1 - damageSustained / baseHp;
+
+				out.put(uid, new MatchInfo(
+						uid,
+						s,
+						winner == s,
+						manaEff,
+						damageEff / expEff,
+						sustainEff
+				));
+			}
+		}
+
+		return out;
 	}
 }

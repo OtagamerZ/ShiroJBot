@@ -106,12 +106,4 @@ public class TierCommand implements Executable, Slashed {
 				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
-
-	private static String checkUser(User u) {
-		try {
-			return u.getName();
-		} catch (Exception e) {
-			return "`Desconhecido`";
-		}
-	}
 }

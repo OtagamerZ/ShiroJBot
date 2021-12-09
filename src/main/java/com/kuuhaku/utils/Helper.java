@@ -45,7 +45,6 @@ import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.model.persistent.guild.buttons.Button;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
-import com.kuuhaku.model.records.MatchInfo;
 import com.squareup.moshi.JsonDataException;
 import de.androidpit.colorthief.ColorThief;
 import io.github.furstenheim.CopyDown;
@@ -2473,18 +2472,6 @@ public class Helper {
 		}
 
 		return Triple.of(firstGroup.getLeft(), Math.abs(firstGroup.getRight() - secondGroup.getRight()) / (double) (firstGroup.getRight() + secondGroup.getRight()), secondGroup.getLeft());
-	}
-
-	public static MatchInfo mergeInfo(List<MatchInfo> infos) {
-		MatchInfo mi = new MatchInfo("");
-
-		for (MatchInfo info : infos) {
-			for (Map.Entry<String, Integer> entry : info.info().entrySet()) {
-				mi.info().merge(entry.getKey(), entry.getValue(), Helper::average);
-			}
-		}
-
-		return mi;
 	}
 
 	public static long getAverageMMR(String... ids) {
