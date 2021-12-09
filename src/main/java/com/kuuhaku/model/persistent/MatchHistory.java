@@ -26,6 +26,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "matchhistory")
@@ -165,7 +166,7 @@ public class MatchHistory {
 						.sum();
 
 				int summons = (int) yours.stream()
-						.map(MatchRound::getChampions)
+						.flatMap(r -> Stream.of(r.getChampions(), r.getEvogears()))
 						.flatMap(List::stream)
 						.distinct()
 						.count();
