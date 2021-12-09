@@ -75,7 +75,7 @@ public enum TagIcons {
 			case RANKED_LOSE -> "<:ranked_lose:789231689820930048> ";
 			case RANKED_PENDING -> "<:ranked_pending:789231687950663691> ";
 			case EASTER_EGG -> "<:easteregg:828634002197970955> ";
-			case PADORU -> "<:padoru:918243790148472862> ";
+			case PADORU -> "<:padoru:918481732536258580> ";
 		};
 	}
 
@@ -104,7 +104,7 @@ public enum TagIcons {
 			case RANKED_LOSE -> "789231689820930048";
 			case RANKED_PENDING -> "789231687950663691";
 			case EASTER_EGG -> "828634002197970955";
-			case PADORU -> "918243790148472862";
+			case PADORU -> "918481732536258580";
 		};
 	}
 
