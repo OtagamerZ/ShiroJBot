@@ -673,21 +673,7 @@ public class Hand {
 	}
 
 	public void addHp(int value) {
-		if (value <= 0) return;
-
-		prevHp = hp;
-		hp = (int) Math.min(hp + value * getHealingFac(), 9999);
-
-		Arena arena = game.getArena();
-		if (arena != null) {
-			List<SlotColumn> slots = arena.getSlots().get(side);
-			game.applyPersistentEffects(ON_HEAL, side, -1);
-			for (SlotColumn slt : slots) {
-				if (slt.getTop() != null) {
-					game.applyEffect(ON_HEAL, slt.getTop(), side, slt.getIndex());
-				}
-			}
-		}
+		addHp(value, true);
 	}
 
 	public void addHp(int value, boolean trigger) {
@@ -711,33 +697,21 @@ public class Hand {
 	}
 
 	public void removeHp(int value) {
-		if (value <= 0) return;
-
-		prevHp = hp;
-		if (hp > baseHp / 3 && hp > 1) {
-			crippleHp(value);
-			return;
-		} else hp -= value;
-
-		Arena arena = game.getArena();
-		if (arena != null) {
-			List<SlotColumn> slots = arena.getSlots().get(side);
-			game.applyPersistentEffects(ON_DAMAGE, side, -1);
-			for (SlotColumn slt : slots) {
-				if (slt.getTop() != null) {
-					game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
-				}
-			}
-		}
+		removeHp(value, true);
 	}
 
 	public void removeHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
 		prevHp = hp;
-		if (hp > baseHp / 3 && hp > 1) {
-			crippleHp(value);
-			return;
+		if (hp > 1) {
+			if (hp > baseHp / 3) {
+				crippleHp(value);
+				return;
+			} else if (hp > baseHp / 6 && Helper.chance(50)) {
+				crippleHp(value);
+				return;
+			}
 		} else hp -= value;
 
 		if (trigger) {
@@ -755,21 +729,7 @@ public class Hand {
 	}
 
 	public void crippleHp(int value) {
-		if (value <= 0) return;
-
-		prevHp = hp;
-		hp = Math.max(1, hp - value);
-
-		Arena arena = game.getArena();
-		if (arena != null) {
-			List<SlotColumn> slots = arena.getSlots().get(side);
-			game.applyPersistentEffects(ON_DAMAGE, side, -1);
-			for (SlotColumn slt : slots) {
-				if (slt.getTop() != null) {
-					game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
-				}
-			}
-		}
+		crippleHp(value, true);
 	}
 
 	public void crippleHp(int value, boolean trigger) {
