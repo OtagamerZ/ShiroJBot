@@ -24,10 +24,8 @@ import com.kuuhaku.model.records.MatchInfo;
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "matchhistory")
@@ -133,7 +131,12 @@ public class MatchHistory {
 		Map<String, MatchInfo> out = new HashMap<>();
 
 		for (Side s : Side.values()) {
-			for (String uid : players.keySet()) {
+			Set<String> players = this.players.entrySet().stream()
+					.filter(e -> e.getValue() == s)
+					.map(Map.Entry::getKey)
+					.collect(Collectors.toSet());
+
+			for (String uid : players) {
 				List<MatchRound> yours = getRounds(s, uid);
 				List<MatchRound> his = getRounds(s.getOther());
 
