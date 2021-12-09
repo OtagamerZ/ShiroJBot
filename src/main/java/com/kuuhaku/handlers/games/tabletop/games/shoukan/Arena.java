@@ -180,7 +180,7 @@ public class Arena {
 						SlotColumn c = value.get(i);
 						switch (key) {
 							case TOP -> {
-								if (game.isSlotDisabled(key, i)) {
+								if (c.isUnavailable()) {
 									g2d.drawImage(broken, 499 + (257 * i), 387, null);
 								} else if (c.getTop() != null) {
 									Champion d = c.getTop();
@@ -202,13 +202,18 @@ public class Arena {
 										Profile.printCenteredString("HP: " + d.getHero().getHp(), 257, 484 + (257 * i), 377, g2d);
 									}
 								}
-								if (c.getBottom() != null) {
+
+								if (c.isUnavailable()) {
+									g2d.drawImage(broken, 499 + (257 * i), 0, null);
+								} else if (c.getBottom() != null) {
 									Equipment d = c.getBottom();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 								}
 							}
 							case BOTTOM -> {
-								if (c.getTop() != null) {
+								if (c.isUnavailable()) {
+									g2d.drawImage(broken, 499 + (257 * i), 1013, null);
+								} else if (c.getTop() != null) {
 									Champion d = c.getTop();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
 
@@ -228,7 +233,10 @@ public class Arena {
 										Profile.printCenteredString("HP: " + d.getHero().getHp(), 257, 484 + (257 * i), 1390, g2d);
 									}
 								}
-								if (c.getBottom() != null) {
+
+								if (c.isUnavailable()) {
+									g2d.drawImage(broken, 499 + (257 * i), 1400, null);
+								} else if (c.getBottom() != null) {
 									Equipment d = c.getBottom();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
 								}
