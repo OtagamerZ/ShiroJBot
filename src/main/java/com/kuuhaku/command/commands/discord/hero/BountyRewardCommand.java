@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.Danger;
+import com.kuuhaku.model.enums.Event;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -64,12 +65,17 @@ public class BountyRewardCommand implements Executable {
 		boolean died = false;
 		if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
 			EmbedBuilder eb = new EmbedBuilder()
-					.setColor(Color.green)
-					.setTitle("Recompensas da missão \"" + info + "\"");
+					.setColor(Color.green);
+
+			boolean padoru = Event.getCurrent() == Event.XMAS;
+			if (padoru)
+				eb.setTitle("Recompensas da missão \"" + info + "\" (Bônus padoru)");
+			else
+				eb.setTitle("Recompensas da missão \"" + info + "\"");
 
 			for (Map.Entry<Reward, Integer> e : info.rewards().entrySet()) {
 				Reward rew = e.getKey();
-				int val = e.getValue();
+				int val = Math.round(e.getValue() * (padoru ? 1.5f : 1));
 				if (val == 0) continue;
 
 				eb.addField(rew.toString(),

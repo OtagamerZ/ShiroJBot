@@ -47,7 +47,7 @@ public class PadoruDrop extends Drop<Integer> {
 
 	@Override
 	public String toString() {
-		return "Emblema PADORU";
+		return "Emblema padoru";
 	}
 
 	@Override
