@@ -223,7 +223,7 @@ public class Account {
 
 	public void addSCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
-		vBalance += credit;
+		sBalance += credit;
 		TransactionDAO.register(uid, from, credit);
 	}
 
