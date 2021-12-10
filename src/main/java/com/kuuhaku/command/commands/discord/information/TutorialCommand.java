@@ -54,7 +54,7 @@ public class TutorialCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
-		if (acc.hasStarted()) {
+		if (acc.hasCompletedTutorial()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
 			return;
 		}
@@ -338,7 +338,7 @@ public class TutorialCommand implements Executable {
 				msg.delete().queue(null, Helper::doNothing);
 
 				acc.addSCredit(25000, this.getClass());
-				acc.setStarted(true);
+				acc.completeTutorial();
 				AccountDAO.saveAccount(acc);
 				channel.sendMessage(author.getAsMention() + " recebeu **25.000** CR de iniciante!").queue();
 			}
@@ -514,11 +514,12 @@ public class TutorialCommand implements Executable {
 						**Mas espere, é perigoso ir sozinho!**
 						Aqui, como recompensa por completar o tutorial e para lhe ajudar a começar sua jornada, vou te dar **25.000** CR de iniciante.
 						Eles são iguais aos CR voláteis mas não expiram com o tempo.
+						Também vou te dar um deck muuuuito especial que permite que você teste os campeões sem precisar coletar, dê uma olhadinha nos seus `%sdecks`!
 
 						Boa sorte jogador, esperarei seu sucesso nos campos de invocação!
 
 						Para terminar, clique em ✅.
-						""".formatted(prefix))
+						""".formatted(prefix, prefix))
 				.setImage("https://c.tenor.com/kDAUCWniovoAAAAC/no-game-no-life-thumbs-up.gif")
 				.build();
 	}
