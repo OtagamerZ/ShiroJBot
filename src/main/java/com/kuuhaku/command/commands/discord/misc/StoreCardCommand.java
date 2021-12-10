@@ -64,7 +64,7 @@ public class StoreCardCommand implements Executable {
 		Deck dk = kp.getDeck();
 
 		if (dk.isNovice()) {
-			channel.sendMessage("❌ | Você não pode fazer esta operação com um deck de iniciante!").queue();
+			channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!").queue();
 			return;
 		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
@@ -175,7 +175,7 @@ public class StoreCardCommand implements Executable {
 								Deck fDk = finalKp.getDeck();
 
 								if (fDk.isNovice()) {
-									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com um deck de iniciante!")).queue();
+									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!")).queue();
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									return;
 								}
