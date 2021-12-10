@@ -391,7 +391,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
 							return;
 						} else if (spellLock > 0) {
-							channel.sendMessage("❌ | Magias estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
+							channel.sendMessage("❌ | Magias estão bloqueadas por mais " + fusionLock + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
 							return;
 						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
 							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
