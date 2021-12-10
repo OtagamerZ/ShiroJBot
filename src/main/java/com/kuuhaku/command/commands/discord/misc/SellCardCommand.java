@@ -65,7 +65,10 @@ public class SellCardCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
-		if (args.length < 2) {
+		if (dk.isNovice()) {
+			channel.sendMessage("❌ | Você não pode fazer esta operação com um deck de iniciante!").queue();
+			return;
+		} else if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma carta e o preço dela.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
@@ -198,6 +201,12 @@ public class SellCardCommand implements Executable {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
+
+								if (fDk.isNovice()) {
+									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com um deck de iniciante!")).queue();
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									return;
+								}
 
 								Market m = switch (off.getMiddle()) {
 									case EVOGEAR -> {

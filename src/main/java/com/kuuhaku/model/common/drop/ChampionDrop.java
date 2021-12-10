@@ -21,10 +21,12 @@ package com.kuuhaku.model.common.drop;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
@@ -41,7 +43,11 @@ public class ChampionDrop extends Drop<Champion> {
 	public void award(User u) {
 		Deck dk = KawaiponDAO.getDeck(u.getId());
 		if (dk.getChampions().size() < 36 && dk.getChampionCopies(getPrize().getCard()) < dk.getChampionMaxCopies()) {
-			dk.addChampion(getPrize());
+			if (dk.isNovice()) {
+				StashDAO.saveCard(new Stash(u.getId(), getPrize()));
+			} else {
+				dk.addChampion(getPrize());
+			}
 		} else {
 			awardInstead(u, getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE);
 			mainPrize = false;

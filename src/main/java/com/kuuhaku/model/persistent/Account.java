@@ -108,9 +108,6 @@ public class Account {
 	private boolean useFoil = false;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean started = false;
-
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean collectedQueen = false;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
@@ -142,6 +139,9 @@ public class Account {
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastDaily = null;
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private ZonedDateTime tutorial = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
@@ -313,15 +313,30 @@ public class Account {
 		this.lastDaily = ZonedDateTime.now(ZoneId.of("GMT-3"));
 	}
 
+	public void completeTutorial() {
+		this.tutorial = ZonedDateTime.now(ZoneId.of("GMT-3"));
+	}
+
+	public boolean hasCompletedTutorial() {
+		return tutorial != null;
+	}
+
+	public boolean hasNoviceDeck() {
+		if (this.tutorial == null) return false;
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
+		return today.isBefore(tutorial.plusMonths(1));
+	}
+
 	public void voted() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		if (lastVoted == null) streak = 1;
 		else try {
 			Helper.logger(this.getClass()).info("""
-																	
-							Voto anterior: %s
-							Hoje: %s
-							Acumula? %s
+															
+					Voto anterior: %s
+					Hoje: %s
+					Acumula? %s
 							""".formatted(
 							lastVoted.format(Helper.fullDateFormat),
 							today.format(Helper.fullDateFormat),
@@ -421,14 +436,6 @@ public class Account {
 
 	public void setUseFoil(boolean useFoil) {
 		this.useFoil = useFoil;
-	}
-
-	public boolean hasStarted() {
-		return started;
-	}
-
-	public void setStarted(boolean started) {
-		this.started = started;
 	}
 
 	public boolean hasCollectedQueen() {
