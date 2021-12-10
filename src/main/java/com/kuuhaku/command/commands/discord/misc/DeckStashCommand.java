@@ -75,7 +75,7 @@ public class DeckStashCommand implements Executable {
 		try {
 			int slot = Integer.parseInt(args[0]);
 
-			if (!Helper.between(slot, 0, acc.getDeckStashCapacity())) {
+			if (!Helper.between(slot, 0, decks.size())) {
 				channel.sendMessage("❌ | Slot inválido.").queue();
 				return;
 			} else if (slot == kp.getActiveDeck()) {
