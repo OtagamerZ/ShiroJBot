@@ -86,6 +86,9 @@ public class Account {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 50")
 	private int cardStashCapacity = 50;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int tutorialStage = 0;
+
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
 
@@ -106,9 +109,6 @@ public class Account {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean useFoil = false;
-
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean collectedQueen = false;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String ultimate = "";
@@ -313,6 +313,14 @@ public class Account {
 		this.lastDaily = ZonedDateTime.now(ZoneId.of("GMT-3"));
 	}
 
+	public int getTutorialStage() {
+		return tutorialStage;
+	}
+
+	public void setTutorialStage(int tutorialStage) {
+		this.tutorialStage = tutorialStage;
+	}
+
 	public void completeTutorial() {
 		this.tutorial = ZonedDateTime.now(ZoneId.of("GMT-3"));
 	}
@@ -436,14 +444,6 @@ public class Account {
 
 	public void setUseFoil(boolean useFoil) {
 		this.useFoil = useFoil;
-	}
-
-	public boolean hasCollectedQueen() {
-		return collectedQueen;
-	}
-
-	public void setCollectedQueen(boolean collectedQueen) {
-		this.collectedQueen = collectedQueen;
 	}
 
 	public int getStreak() {
