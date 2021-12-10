@@ -344,6 +344,7 @@ public class Arena {
 			};
 
 			g2d.setColor(Color.red);
+			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
 			for (int i = 0; i < lockNames.length; i++) {
 				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
 				BufferedImage icon;
