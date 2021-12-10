@@ -63,7 +63,10 @@ public class StoreCardCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
-		if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+		if (dk.isNovice()) {
+			channel.sendMessage("❌ | Você não pode fazer esta operação com um deck de iniciante!").queue();
+			return;
+		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
 			return;
 		} else if (args.length < 1) {
@@ -170,6 +173,12 @@ public class StoreCardCommand implements Executable {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
+
+								if (fDk.isNovice()) {
+									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com um deck de iniciante!")).queue();
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									return;
+								}
 
 								Stash m = switch (off.getMiddle()) {
 									case EVOGEAR -> {

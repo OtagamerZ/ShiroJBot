@@ -61,7 +61,14 @@ public class Deck {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String destinyDraw = "";
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean novice = false;
+
 	public Deck() {
+	}
+
+	public Deck(boolean novice) {
+		this.novice = novice;
 	}
 
 	public Deck(List<Champion> champions, List<Equipment> equipments, List<Field> fields) {
@@ -219,6 +226,10 @@ public class Deck {
 
 	public Pair<Race, Race> getCombo() {
 		return Race.getCombo(champions);
+	}
+
+	public boolean isNovice() {
+		return novice;
 	}
 
 	public int getChampionMaxCopies() {

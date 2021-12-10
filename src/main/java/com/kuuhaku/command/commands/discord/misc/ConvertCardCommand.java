@@ -75,7 +75,7 @@ public class ConvertCardCommand implements Executable {
 
 		KawaiponCard kc = new KawaiponCard(tc, false);
 
-		if (!kp.getCards().contains(kc)) {
+		if (!kp.getCards().contains(kc) && !dk.isNovice()) {
 			channel.sendMessage("❌ | Você não possui essa carta.").queue();
 			return;
 		}
@@ -86,7 +86,11 @@ public class ConvertCardCommand implements Executable {
 		assert c != null;
 		c.setAcc(acc);
 
-		if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
+		if (dk.isNovice()) {
+			dk.addChampion(c);
+			KawaiponDAO.saveKawaipon(kp);
+			channel.sendMessage("✅ | Carta adicionada com sucesso!").queue();
+		} else if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 			kp.removeCard(kc);
 			dk.addChampion(c);
 			KawaiponDAO.saveKawaipon(kp);

@@ -85,12 +85,16 @@ public class RevertCardCommand implements Executable {
 
 		KawaiponCard kc = new KawaiponCard(tc, false);
 
-		if (kp.getCards().contains(kc)) {
+		if (kp.getCards().contains(kc) && !dk.isNovice()) {
 			channel.sendMessage("❌ | Você já possui essa carta.").queue();
 			return;
 		}
 
-		if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
+		if (dk.isNovice()) {
+			dk.removeChampion(c);
+			KawaiponDAO.saveKawaipon(kp);
+			channel.sendMessage("✅ | Carta removida com sucesso!").queue();
+		} else if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 			kp.addCard(kc);
 			dk.removeChampion(c);
 			KawaiponDAO.saveKawaipon(kp);

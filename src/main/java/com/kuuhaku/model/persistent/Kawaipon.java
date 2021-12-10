@@ -20,7 +20,11 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.StashDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.util.*;
@@ -112,10 +116,34 @@ public class Kawaipon implements Cloneable {
 					decks.add(new Deck());
 					update = true;
 				}
-				KawaiponDAO.saveKawaipon(this);
+			}
+
+			boolean novice = acc.hasNoviceDeck();
+			if (decks.stream().noneMatch(Deck::isNovice)) {
+				if (novice) {
+					decks.add(new Deck(true));
+					update = true;
+				}
+			} else {
+				if (!novice) {
+					List<Deck> dks = Helper.removeIf(decks, Deck::isNovice);
+					if (!dks.isEmpty()) {
+						Deck d = dks.get(0);
+						for (Equipment e : d.getEquipments()) {
+							StashDAO.saveCard(new Stash(uid, e));
+						}
+
+						for (Field f : d.getFields()) {
+							StashDAO.saveCard(new Stash(uid, f));
+						}
+					}
+
+					update = true;
+				}
 			}
 
 			if (update) {
+				KawaiponDAO.saveKawaipon(this);
 				decks = KawaiponDAO.getKawaipon(uid).getDecks();
 			}
 		}

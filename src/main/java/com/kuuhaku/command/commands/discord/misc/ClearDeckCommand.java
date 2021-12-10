@@ -80,9 +80,11 @@ public class ClearDeckCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
-								for (Champion c : dk.getChampions()) {
-									Stash st = new Stash(author.getId(), new KawaiponCard(c.getCard(), false));
-									StashDAO.saveCard(st);
+								if (!dk.isNovice()) {
+									for (Champion c : dk.getChampions()) {
+										Stash st = new Stash(author.getId(), new KawaiponCard(c.getCard(), false));
+										StashDAO.saveCard(st);
+									}
 								}
 								dk.getChampions().clear();
 
