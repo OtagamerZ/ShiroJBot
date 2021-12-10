@@ -171,7 +171,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, c.getDescription(), 205, 9, 293);
 
-			if (isStunned() || isSleeping() || (hero != null && hero.getQuest() != null)) {
+			if (isStunned() || isSleeping() || (hero != null && hero.isUnavailable())) {
 				available = false;
 			}
 
