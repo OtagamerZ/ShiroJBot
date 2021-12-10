@@ -154,9 +154,8 @@ public class Kawaipon implements Cloneable {
 
 	public Deck getDeck() {
 		List<Deck> dk = getDecks();
-		if (activeDeck <= dk.size()) activeDeck = dk.size() - 1;
 
-		return dk.get(activeDeck);
+		return dk.get(Math.min(activeDeck, dk.size()));
 	}
 
 	public void setDeck(int i) {
