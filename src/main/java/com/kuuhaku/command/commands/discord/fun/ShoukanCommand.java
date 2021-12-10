@@ -92,6 +92,9 @@ public class ShoukanCommand implements Executable {
 			if (mm.isLocked()) {
 				channel.sendMessage("❌ | A fila ranqueada está bloqueada temporariamente para minha reinicialização, por favor aguarde.").queue();
 				return;
+			} else if (d.isNovice()) {
+				channel.sendMessage("❌ | Você não pode jogar partidas ranqueadas com o deck de iniciante.").queue();
+				return;
 			}
 
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
