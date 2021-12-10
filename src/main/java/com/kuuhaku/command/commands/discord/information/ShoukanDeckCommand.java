@@ -113,10 +113,17 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 				BufferedImage cards = kb.view(dk);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setTitle(":beginner: | Deck de " + author.getName())
+						.setTitle(":beginner: | Deck de " + author.getName() + (dk.isNovice() ? " (INICIANTE)" : ""))
 						.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
 						.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
 						.setImage("attachment://deck.jpg");
+
+				if (dk.isNovice()) {
+					eb.setFooter("""
+							O deck de iniciante dura 1 mês após completar o tutorial, nele você pode adicionar qualquer campeão que quiser mesmo que não tenha (não afeta as cartas obtidas) para ir testando as combinações.
+							Ao expirar, equipamentos e campos serão transferidos para seu armazém automaticamente.
+							""");
+				}
 
 				if (showPrivate) {
 					author.openPrivateChannel()
