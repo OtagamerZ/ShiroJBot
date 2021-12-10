@@ -64,8 +64,6 @@ public class TutorialCommand implements Executable {
 		AtomicReference<Runnable> r = new AtomicReference<>(() -> {
 			acc.setTutorialStage(stage.get());
 			AccountDAO.saveAccount(acc);
-
-			channel.sendMessage("❌ | Tempo expirado, por favor use o comando novamente.").queue();
 			Main.getInfo().getIgnore().remove(author.getId());
 		});
 		try {
