@@ -42,6 +42,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
@@ -59,7 +60,11 @@ public class TutorialCommand implements Executable {
 			return;
 		}
 
+		AtomicInteger stage = new AtomicInteger(acc.getTutorialStage());
 		AtomicReference<Runnable> r = new AtomicReference<>(() -> {
+			acc.setTutorialStage(stage.get());
+			AccountDAO.saveAccount(acc);
+
 			channel.sendMessage("❌ | Tempo expirado, por favor use o comando novamente.").queue();
 			Main.getInfo().getIgnore().remove(author.getId());
 		});
@@ -67,7 +72,7 @@ public class TutorialCommand implements Executable {
 			AtomicReference<CompletableFuture<Boolean>> next = new AtomicReference<>();
 			Message msg;
 
-			{
+			if (stage.get() < 1) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(firstStep()).complete();
 				Pages.buttonize(
@@ -86,9 +91,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 2) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(secondStep(prefix)).complete();
 				Helper.awaitMessage(author,
@@ -112,9 +118,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 3) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(thirdStep()).complete();
 				Pages.buttonize(
@@ -133,9 +140,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			if (!acc.hasCollectedQueen()) {
+			if (stage.get() < 4) {
 				Main.getInfo().getIgnore().add(author.getId());
 				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("QUEEN"), false);
 				EmbedBuilder eb = new EmbedBuilder()
@@ -157,7 +165,6 @@ public class TutorialCommand implements Executable {
 								kp.getCards().add(kc);
 								KawaiponDAO.saveKawaipon(kp);
 
-								acc.setCollectedQueen(true);
 								AccountDAO.saveAccount(acc);
 
 								channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
@@ -177,9 +184,10 @@ public class TutorialCommand implements Executable {
 				if (!next.get().get()) return;
 				Main.getInfo().getIgnore().remove(author.getId());
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 5) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(fifthStep(prefix)).complete();
 				Helper.awaitMessage(author,
@@ -201,9 +209,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 6) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
 				Pages.buttonize(
@@ -222,9 +231,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 7) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(seventhStep(prefix)).complete();
 				Helper.awaitMessage(author,
@@ -246,9 +256,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 8) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(eightStep(prefix)).complete();
 				Helper.awaitMessage(author,
@@ -270,9 +281,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 9) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(ninethStep(prefix)).complete();
 				Helper.awaitMessage(author,
@@ -294,9 +306,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 10) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(tenthStep(prefix)).complete();
 				Pages.buttonize(
@@ -315,9 +328,10 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 			}
 
-			{
+			if (stage.get() < 11) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(finalStep(prefix)).complete();
 				Pages.buttonize(
@@ -336,9 +350,11 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
+				stage.getAndIncrement();
 
 				acc.addSCredit(25000, this.getClass());
 				acc.completeTutorial();
+				acc.setTutorialStage(stage.get());
 				AccountDAO.saveAccount(acc);
 				channel.sendMessage(author.getAsMention() + " recebeu **25.000** CR de iniciante!").queue();
 			}
