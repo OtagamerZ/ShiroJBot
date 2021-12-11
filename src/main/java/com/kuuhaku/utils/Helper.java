@@ -54,6 +54,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.exceptions.MissingAccessException;
@@ -1011,7 +1012,10 @@ public class Helper {
 	public static String sendEmotifiedString(Guild g, String text) {
 		for (Emote e : g.getEmotes()) {
 			if (e.getName().startsWith("TEMP_")) {
-				e.delete().queue();
+				try {
+					e.delete().queue(null, Helper::doNothing);
+				} catch (ErrorResponseException ignore) {
+				}
 			}
 		}
 
