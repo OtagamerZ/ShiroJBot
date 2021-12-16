@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 @Command(
@@ -76,7 +77,7 @@ public class MyBuffsCommand implements Executable, Slashed {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		if (!gc.getBuffs().isEmpty()) {
 			for (Buff b : gc.getBuffs()) {
-				String until = Helper.TIMESTAMP.formatted((b.getAcquiredAt().toEpochSecond()));
+				String until = Helper.TIMESTAMP.formatted((b.getAcquiredAt().plus(b.getTime(), ChronoUnit.MILLIS).toEpochSecond()));
 				String chance = Helper.roundToString(b.getMultiplier() * 100 - 100, 0) + "%";
 				switch (b.getType()) {
 					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " ganho de XP (expira " + until + ")", false);
