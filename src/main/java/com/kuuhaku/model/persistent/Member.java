@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 
 @Entity
@@ -114,7 +115,8 @@ public class Member implements Hashable {
 	public synchronized boolean addXp(Guild g, double buff) {
 		AtomicReference<Double> mult = new AtomicReference<>(buff);
 
-		if (g.getMembers().stream().anyMatch(m -> m.getId().equals(Member.getWaifu(uid))))
+		boolean waifu = g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(uid));
+		if (waifu)
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(uid);
