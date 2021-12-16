@@ -20,9 +20,9 @@ package com.kuuhaku.model.enums;
 
 public enum BuffType {
     XP(5000, 0.75, 0.3),
-    CARD(4000, 0.8, 0.275),
-    DROP(3250, 0.65, 0.275),
-    FOIL(7500, 0.9, 0.325);
+    CARD(4000, 0.8, 0.25),
+    DROP(3250, 0.65, 0.25),
+    FOIL(7500, 0.9, 1 / 3d);
 
     private final int basePrice;
     private final double priceMult;
