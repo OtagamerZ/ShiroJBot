@@ -62,9 +62,17 @@ public class BugHuntCommand implements Executable {
 		Account acc = AccountDAO.getAccount(args[0]);
 
 		acc.addBug();
-		acc.addCredit(1000, this.getClass());
+
+		if (acc.getBugs() % 5 == 0) {
+			acc.addCredit(2500, this.getClass());
+			acc.setCardStashCapacity(acc.getCardStashCapacity() + 10);
+			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+2.500 CR e +10 espaços no armazém)").queue();
+		} else {
+			acc.addCredit(1000, this.getClass());
+			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+1.000 CR)").queue();
+		}
+
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (Ganhou 1.000 CR)").queue();
 	}
 
 	private void resolveBugHuntByMention(Message message, MessageChannel channel) {
