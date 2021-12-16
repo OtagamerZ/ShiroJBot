@@ -48,6 +48,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "eu",
@@ -90,7 +91,7 @@ public class MyStatsCommand implements Executable, Slashed {
 		eb.clear();
 
 		{
-			boolean waifu = guild.getMembers().stream().anyMatch(m -> m.getId().equals(com.kuuhaku.model.persistent.Member.getWaifu(author.getId())));
+			boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 			int xp = (int) (15
 							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
