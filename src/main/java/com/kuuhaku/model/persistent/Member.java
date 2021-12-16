@@ -21,10 +21,8 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
 import com.kuuhaku.model.common.Hashable;
-import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
-import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.model.persistent.id.CompositeMemberId;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.Guild;
@@ -38,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 
 @Entity
@@ -114,10 +111,10 @@ public class Member implements Hashable {
 		return c.getHusbando().equals(id) ? c.getWaifu() : c.getHusbando();
 	}
 
-	public synchronized boolean addXp(Guild g) {
-		AtomicReference<Double> mult = new AtomicReference<>(1d);
+	public synchronized boolean addXp(Guild g, double buff) {
+		AtomicReference<Double> mult = new AtomicReference<>(buff);
 
-		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(uid)))
+		if (g.getMembers().stream().anyMatch(m -> m.getId().equals(Member.getWaifu(uid))))
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(uid);
@@ -129,12 +126,6 @@ public class Member implements Hashable {
 			mult.updateAndGet(v -> v * 1.25f);
 		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.25)
 			mult.updateAndGet(v -> v * 1.12f);
-
-		GuildBuff gb = GuildBuffDAO.getBuffs(g.getId());
-		gb.getBuffs().stream()
-				.filter(b -> b.getType() == BuffType.XP)
-				.findAny()
-				.ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
 
 		int level = getLevel();
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 1000f, 1));

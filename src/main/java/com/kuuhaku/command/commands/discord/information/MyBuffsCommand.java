@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.GuildBuffDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.model.annotations.Command;
@@ -31,14 +31,12 @@ import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.guild.GuildBuff;
-import com.kuuhaku.model.persistent.guild.ServerBuff;
+import com.kuuhaku.model.persistent.guild.Buff;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-
-import java.util.stream.Collectors;
 
 @Command(
 		name = "buffs",
@@ -52,57 +50,43 @@ public class MyBuffsCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(":level_slider: Modificadores ativos")
+				.setColor(Helper.getRandomColor());
 
-		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
-
-		eb.setTitle(":level_slider: Modificadores ativos");
+		boolean waifu = guild.getMembers().stream().anyMatch(m -> m.getId().equals(com.kuuhaku.model.persistent.Member.getWaifu(author.getId())));
 
 		if (waifu)
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + Helper.roundToString(WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100, 0) + "% XP ganho", false);
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 1)
+		float progress = kp.getCards().size() / (CardDAO.getTotalCards() * 2f);
+
+		if (progress >= 1)
 			eb.addField("Coleção de cartas (100%)", "+100% XP ganho", false);
-		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.75)
+		else if (progress >= 0.75)
 			eb.addField("Coleção de cartas (75%)", "+75% XP ganho", false);
-		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.5)
+		else if (progress >= 0.5)
 			eb.addField("Coleção de cartas (50%)", "+50% XP ganho", false);
-		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.25)
+		else if (progress >= 0.25)
 			eb.addField("Coleção de cartas (25%)", "+25% XP ganho", false);
 
-		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
-		if (gb.getBuffs().size() > 0) {
-			for (ServerBuff b : gb.getBuffs()) {
-				boolean isUltimate = b.getTier() == 4;
-				String until = Helper.TIMESTAMP.formatted((b.getAcquiredAt() + b.getTime()) / 1000);
-
-				String chance = Helper.roundToString(b.getMult() * 100 - 100, 0) + "%";
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		if (!gc.getBuffs().isEmpty()) {
+			for (Buff b : gc.getBuffs()) {
+				String until = Helper.TIMESTAMP.formatted((b.getAcquiredAt().toEpochSecond()));
+				String chance = Helper.roundToString(b.getMultiplier() * 100 - 100, 0) + "%";
 				switch (b.getType()) {
-					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " XP ganho (expira " + until + ")", false);
-					case CARD -> {
-						if (isUltimate)
-							eb.addField("Melhoria de servidor (cartas)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de cartas (1 minuto)", false);
-						else
-							eb.addField("Melhoria de servidor (cartas)", "+" + chance + " chance de spawn de cartas (expira " + until + ")", false);
-					}
-					case DROP -> {
-						if (isUltimate)
-							eb.addField("Melhoria de servidor (drops)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de drops (1 minuto)", false);
-						else
-							eb.addField("Melhoria de servidor (drops)", "+" + chance + " chance de spawn de drops (expira " + until + ")", false);
-					}
-					case FOIL -> {
-						if (isUltimate)
-							eb.addField("Melhoria de servidor (cromadas)", "Bônus ultimate, todas as cartas tem 100% de chance de serem cromadas (1 minuto)", false);
-						else
-							eb.addField("Melhoria de servidor (cromadas)", "+" + chance + " chance de spawn de cartas cromadas (expira " + until + ")", false);
-					}
+					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " ganho de XP (expira " + until + ")", false);
+					case CARD -> eb.addField("Melhoria de servidor (cartas)", "+" + chance + " chance de aparecer cartas (expira " + until + ")", false);
+					case DROP -> eb.addField("Melhoria de servidor (drops)", "+" + chance + " chance de aparecer drops (expira " + until + ")", false);
+					case FOIL -> eb.addField("Melhoria de servidor (cromadas)", "+" + chance + " chance de cartas serem cromadas (expira " + until + ")", false);
 				}
 			}
 		}
 
-		eb.setColor(Helper.getRandomColor());
+		if (gc.isPartner())
+			eb.addField("Servidor parceiro", "+20% buff global (XP/cartas/drops/cromadas)", false);
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

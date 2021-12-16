@@ -21,16 +21,17 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.GuildBuffDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.guild.GuildBuff;
-import com.kuuhaku.model.persistent.guild.ServerBuff;
+import com.kuuhaku.model.persistent.guild.Buff;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -39,113 +40,82 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "melhorar",
-		aliases = {"upgrade", "up"},
-		usage = "req_type-tier",
-		category = Category.MODERATION
+        name = "melhorar",
+        aliases = {"upgrade", "up"},
+        usage = "req_type-tier",
+        category = Category.MODERATION
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
 public class PurchaseBuffCommand implements Executable {
 
-	@Override
-	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+    @Override
+    public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        Account acc = AccountDAO.getAccount(author.getId());
 
-		if (args.length < 2) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+        if (args.length < 2) {
+            EmbedBuilder eb = new ColorlessEmbedBuilder()
+                    .setTitle(":level_slider: | Melhorias de servidor")
+                    .setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.")
+                    .setFooter("Seus CR: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
-			eb.setTitle(":level_slider: | Melhorias de servidor");
-			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
-			eb.addField("Melhoria de XP (`" + prefix + "up xp TIER`)", """
-							**Tier 1** (%s CR): `+30%% XP ganho` (15 dias)
-							**Tier 2** (%s CR): `+60%% XP ganho` (11 dias)
-							**Tier 3** (%s CR): `+90%% XP ganho` (7 dias)
-							"""
-							.formatted(
-									Helper.separate(new ServerBuff(BuffType.XP, 1).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.XP, 2).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.XP, 3).getPrice())
-							)
-					, false);
-			eb.addBlankField(false);
-			eb.addField("Melhoria de cartas (`" + prefix + "up carta TIER`)", """
-							**Tier 1** (%s CR): `+20%% chance de aparecer cartas` (15 dias)
-							**Tier 2** (%s CR): `+30%% chance de aparecer cartas` (11 dias)
-							**Tier 3** (%s CR): `+40%% chance de aparecer cartas` (7 dias)
-							**:warning: Tier Ultimate** (%s CR): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
-							"""
-							.formatted(
-									Helper.separate(new ServerBuff(BuffType.CARD, 1).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.CARD, 2).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.CARD, 3).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.CARD, 4).getPrice())
-							)
-					, false);
-			eb.addBlankField(false);
-			eb.addField("Melhoria de drops (`" + prefix + "up drop TIER`)", """
-							**Tier 1** (%s CR): `+20%% chance de aparecer drops` (15 dias)
-							**Tier 2** (%s CR): `+30%% chance de aparecer drops` (11 dias)
-							**Tier 3** (%s CR): `+40%% chance de aparecer drops` (7 dias)
-							**:warning: Tier Ultimate** (%s CR): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
-							"""
-							.formatted(
-									Helper.separate(new ServerBuff(BuffType.DROP, 1).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.DROP, 2).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.DROP, 3).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.DROP, 4).getPrice())
-							)
-					, false);
-			eb.addBlankField(false);
-			eb.addField("Melhoria de cartas cromadas (`" + prefix + "up cromada TIER`)", """
-							**Tier 1** (%s CR): `+25%% chance de aparecer cartas cromadas` (15 dias)
-							**Tier 2** (%s CR): `+50%% chance de aparecer cartas cromadas` (11 dias)
-							**Tier 3** (%s CR): `+75%% chance de aparecer cartas cromadas` (7 dias)
-							**:warning: Tier Ultimate** (%s CR): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
-							"""
-							.formatted(
-									Helper.separate(new ServerBuff(BuffType.FOIL, 1).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.FOIL, 2).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.FOIL, 3).getPrice()),
-									Helper.separate(new ServerBuff(BuffType.FOIL, 4).getPrice())
-							)
-					, false);
-			eb.setFooter("Seus CR: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+            for (BuffType type : BuffType.values()) {
+                XStringBuilder sb = new XStringBuilder();
+                for (int i = 1; i < 4; i++) {
+                    sb.appendNewLine("**Tier %s** (%s CR): `+%s%% %s` (%s dias)".formatted(
+                            i,
+                            (int) Math.round(type.getBasePrice() * (type.getPriceMult() * i)),
+                            Helper.roundToString(type.getPowerMult() * i * 100, 2),
+                            switch (type) {
+                                case XP -> "ganho de XP";
+                                case CARD -> "chance de aparecer cartas";
+                                case DROP -> "chance de aparecer drops";
+                                case FOIL -> "chance de cartas serem cromadas";
+                            },
+                            switch (i) {
+                                case 1 -> 15;
+                                case 2 -> 11;
+                                case 3 -> 7;
+                                default -> throw new IllegalStateException("Unexpected value: " + i);
+                            }
+                    ));
+                }
 
-			channel.sendMessageEmbeds(eb.build()).queue();
-			return;
-		} else if (!Helper.equalsAny(args[0], "xp", "carta", "drop", "cromada")) {
-			channel.sendMessage("❌ | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromada`.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[1]) && !args[1].equalsIgnoreCase("ultimate")) {
-			channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
-			return;
-		}
+                eb.addField(type + " (`" + prefix + "up " + type.name() + " 1/2/3`)", sb.toString(), false);
+            }
 
-		int tier = args[1].equalsIgnoreCase("ultimate") ? 4 : Integer.parseInt(args[1]);
-		if (!Helper.between(tier, 1, 5)) {
-			channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
-			return;
-		}
+            channel.sendMessageEmbeds(eb.build()).queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[1])) {
+            channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3.").queue();
+            return;
+        }
 
-		ServerBuff sb = new ServerBuff(BuffType.of(args[0]), tier);
+        try {
+            int tier = Integer.parseInt(args[1]);
+            if (!Helper.between(tier, 1, 4)) {
+                channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3.").queue();
+                return;
+            }
 
-		if (acc.getTotalBalance() < sb.getPrice()) {
-			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
-			return;
-		}
+            Buff sb = new Buff(BuffType.valueOf(args[0]), tier);
+            if (acc.getTotalBalance() < sb.getPrice()) {
+                channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
+                return;
+            }
 
-		acc.consumeCredit(sb.getPrice(), this.getClass());
-		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
-		if (!gb.addBuff(sb)) {
-			channel.sendMessage("❌ | Este servidor já possui uma melhoria de tier superior nessa categoria.").queue();
-			return;
-		}
+            acc.consumeCredit(sb.getPrice(), this.getClass());
 
-		GuildBuffDAO.saveBuffs(gb);
-		AccountDAO.saveAccount(acc);
-		if (tier != 4)
-			channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + TimeUnit.DAYS.convert(sb.getTime(), TimeUnit.MILLISECONDS) + " dias).").queue();
-		else
-			channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + TimeUnit.MINUTES.convert(sb.getTime(), TimeUnit.MILLISECONDS) + " minuto). CORRA!!!").queue();
-	}
+            GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+            if (!gc.addBuff(sb.getType(), sb.getTier())) {
+                channel.sendMessage("❌ | Este servidor já possui uma melhoria de tier superior nessa categoria.").queue();
+                return;
+            }
+
+            GuildDAO.updateGuildSettings(gc);
+            AccountDAO.saveAccount(acc);
+            channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + TimeUnit.DAYS.convert(sb.getTime(), TimeUnit.MILLISECONDS) + " dias).").queue();
+        } catch (IllegalArgumentException e) {
+            channel.sendMessage("❌ | O tipo da melhoria deve ser `xp`, `card`, `drop` ou `foil`.").queue();
+        }
+    }
 }

@@ -69,8 +69,7 @@
         <class>com.kuuhaku.model.persistent.AddedAnime</class>
         <class>com.kuuhaku.model.persistent.BotStats</class>
         <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
-        <class>com.kuuhaku.model.persistent.guild.GuildBuff</class>
-        <class>com.kuuhaku.model.persistent.guild.ServerBuff</class>
+        <class>com.kuuhaku.model.persistent.guild.Buff</class>
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
         <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
@@ -88,6 +87,8 @@
         <class>com.kuuhaku.model.persistent.tournament.Participant</class>
         <class>com.kuuhaku.model.persistent.tournament.Phase</class>
         <class>com.kuuhaku.model.persistent.tournament.Tournament</class>
+        <class>com.kuuhaku.model.persistent.Trade</class>
+        <class>com.kuuhaku.model.persistent.TradeOffer</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>

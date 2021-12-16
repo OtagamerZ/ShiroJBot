@@ -19,6 +19,8 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.utils.Helper;
@@ -30,6 +32,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.persistence.*;
 import java.awt.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -187,10 +192,14 @@ public class GuildConfig {
 	@JoinColumn(name = "guildconfig_guildid")
 	private Set<String> disabledCommands = new HashSet<>();
 
-	//LAZY
+	//MISC
 	@ElementCollection(fetch = FetchType.LAZY)
 	@JoinColumn(name = "guildconfig_guildid")
 	private List<String> rules = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "guildconfig_guildid")
+	private Set<Buff> buffs = new HashSet<>();
 
 	public GuildConfig(String guildId, String name) {
 		this.guildId = guildId;
@@ -663,6 +672,22 @@ public class GuildConfig {
 		this.noCommandChannels = noCommandChannels;
 	}
 
+	public Set<String> getDisabledCommands() {
+		return disabledCommands;
+	}
+
+	public void disableCommand(Class<?> klass) {
+		disabledCommands.add(klass.getName());
+	}
+
+	public void enableCommand(Class<?> klass) {
+		disabledCommands.remove(klass.getName());
+	}
+
+	public void setDisabledCommands(Set<Class<?>> classes) {
+		disabledCommands = classes.stream().map(Class::getName).collect(Collectors.toSet());
+	}
+
 	public List<String> getRules() {
 		return rules;
 	}
@@ -683,19 +708,23 @@ public class GuildConfig {
 		this.rules = rules;
 	}
 
-	public Set<String> getDisabledCommands() {
-		return disabledCommands;
+	public Set<Buff> getBuffs() {
+		return buffs.stream()
+				.filter(b -> b.getAcquiredAt().plus(b.getTime(), ChronoUnit.MILLIS).isAfter(ZonedDateTime.now(ZoneId.of("GMT-3"))))
+				.collect(Collectors.toSet());
 	}
 
-	public void disableCommand(Class<?> klass) {
-		disabledCommands.add(klass.getName());
+	public boolean addBuff(BuffType type, int tier) {
+		if (buffs.stream().anyMatch(b -> b.getType() == type && b.getTier() >= tier)) return false;
+
+		Buff b = new Buff(type, tier);
+		buffs.remove(b);
+		buffs.add(b);
+
+		return true;
 	}
 
-	public void enableCommand(Class<?> klass) {
-		disabledCommands.remove(klass.getName());
-	}
-
-	public void setDisabledCommands(Set<Class<?>> classes) {
-		disabledCommands = classes.stream().map(Class::getName).collect(Collectors.toSet());
+	public boolean isPartner() {
+		return TagDAO.getTagById(Main.getInfo().getGuildByID(guildId).getOwnerId()).isBeta();
 	}
 }
