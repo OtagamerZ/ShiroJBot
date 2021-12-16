@@ -63,7 +63,7 @@ public class PurchaseBuffCommand implements Executable {
                 for (int i = 1; i < 4; i++) {
                     sb.appendNewLine("**Tier %s** (%s CR): `+%s%% %s` (%s dias)".formatted(
                             i,
-                            (int) Math.round(type.getBasePrice() * (type.getPriceMult() * i)),
+                            type.getPrice(i),
                             Helper.roundToString(type.getPowerMult() * i * 100, 2),
                             switch (type) {
                                 case XP -> "ganho de XP";

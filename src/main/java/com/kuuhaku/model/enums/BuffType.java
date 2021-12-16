@@ -42,6 +42,10 @@ public enum BuffType {
         return priceMult;
     }
 
+    public int getPrice(int tier) {
+        return (int) Math.round(basePrice + (basePrice * priceMult * tier));
+    }
+
     public double getPowerMult() {
         return powerMult;
     }

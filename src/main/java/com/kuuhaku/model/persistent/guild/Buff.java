@@ -76,7 +76,7 @@ public class Buff {
 	}
 
 	public int getPrice() {
-		return (int) Math.round(type.getBasePrice() * type.getPriceMult());
+		return type.getPrice(tier);
 	}
 
 	public double getMultiplier() {
