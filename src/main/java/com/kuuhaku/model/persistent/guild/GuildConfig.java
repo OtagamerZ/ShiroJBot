@@ -198,11 +198,9 @@ public class GuildConfig {
     @JoinColumn(name = "guildconfig_guildid")
     private List<String> rules = new ArrayList<>();
 
-    /*
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "guildconfig_guildid")
     private Set<Buff> buffs = new HashSet<>();
-     */
 
     public GuildConfig(String guildId, String name) {
         this.guildId = guildId;
@@ -712,7 +710,6 @@ public class GuildConfig {
     }
 
     public Set<Buff> getBuffs() {
-        Set<Buff> buffs = new HashSet<>();
         List<Buff> removed = Helper.removeIf(
                 buffs,
                 b -> b.getAcquiredAt().plus(b.getTime(), ChronoUnit.MILLIS).isBefore(ZonedDateTime.now(ZoneId.of("GMT-3")))
@@ -725,7 +722,6 @@ public class GuildConfig {
     }
 
     public boolean addBuff(BuffType type, int tier) {
-        Set<Buff> buffs = new HashSet<>();
         if (buffs.stream().anyMatch(b -> b.getType() == type && b.getTier() >= tier)) return false;
 
         Buff b = new Buff(type, tier);
