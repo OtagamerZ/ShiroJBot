@@ -345,7 +345,7 @@ public class ShiroEvents extends ListenerAdapter {
                     m.setSid(guild.getId());
                 }
 
-                boolean lvlUp = m.addXp(guild);
+                boolean lvlUp = m.addXp(guild, Helper.getBuffMult(gc, BuffType.XP));
                 MemberDAO.saveMember(m);
                 try {
                     if (lvlUp && gc.isLevelNotif()) {

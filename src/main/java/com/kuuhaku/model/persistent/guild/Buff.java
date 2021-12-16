@@ -21,12 +21,14 @@ package com.kuuhaku.model.persistent.guild;
 import com.kuuhaku.model.enums.BuffType;
 
 import javax.persistence.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Entity
-@Table(name = "serverbuff")
-public class ServerBuff {
+@Table(name = "buff")
+public class Buff {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -37,13 +39,13 @@ public class ServerBuff {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
 	private int tier;
 
-	@Column(columnDefinition = "BIGINT NOT NULL")
-	private long acquiredAt = System.currentTimeMillis();
+	@Column(columnDefinition = "TIMESTAMP")
+	private ZonedDateTime acquiredAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-	public ServerBuff() {
+	public Buff() {
 	}
 
-	public ServerBuff(BuffType type, int tier) {
+	public Buff(BuffType type, int tier) {
 		this.type = type;
 		this.tier = tier;
 	}
@@ -52,66 +54,40 @@ public class ServerBuff {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public BuffType getType() {
 		return type;
-	}
-
-	public void setType(BuffType type) {
-		this.type = type;
 	}
 
 	public int getTier() {
 		return tier;
 	}
 
-	public void setTier(int tier) {
-		this.tier = tier;
-	}
-
-	public long getAcquiredAt() {
+	public ZonedDateTime getAcquiredAt() {
 		return acquiredAt;
 	}
 
-	public void setAcquiredAt(long acquiredAt) {
-		this.acquiredAt = acquiredAt;
-	}
-
 	public long getTime() {
-		return switch (tier) {
-			case 1 -> TimeUnit.MILLISECONDS.convert(15, TimeUnit.DAYS);
-			case 2 -> TimeUnit.MILLISECONDS.convert(11, TimeUnit.DAYS);
-			case 3 -> TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS);
-			case 4 -> TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
+		return TimeUnit.MILLISECONDS.convert(switch (tier) {
+			case 1 -> 15;
+			case 2 -> 11;
+			case 3 -> 7;
 			default -> throw new IllegalStateException("Unexpected value: " + tier);
-		};
+		}, TimeUnit.DAYS);
 	}
 
 	public int getPrice() {
-		return (int) (switch (type) {
-			case XP -> 5000;
-			case CARD -> 4000;
-			case DROP -> 3250;
-			case FOIL -> 7500;
-		} * Math.pow(2, tier - 1) * (tier == 4 ? 10 : 1));
+		return (int) Math.round(type.getBasePrice() * type.getPriceMult());
 	}
 
-	public double getMult() {
-		return 1 + switch (type) {
-			case XP -> 0.3 * tier;
-			case CARD, DROP -> 0.2 * tier;
-			case FOIL -> 0.25 * tier;
-		};
+	public double getMultiplier() {
+		return 1 + type.getPowerMult() * tier;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		ServerBuff that = (ServerBuff) o;
+		Buff that = (Buff) o;
 		return type == that.type;
 	}
 

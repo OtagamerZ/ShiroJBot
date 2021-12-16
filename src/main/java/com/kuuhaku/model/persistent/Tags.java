@@ -42,9 +42,6 @@ public class Tags {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean reader = false;
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean sponsor = false;
-
     public Tags(String uid) {
         this.uid = uid;
     }
@@ -95,13 +92,5 @@ public class Tags {
 
     public void setReader(boolean reader) {
         this.reader = reader;
-    }
-
-    public boolean isSponsor() {
-        return sponsor;
-    }
-
-    public void setSponsor(boolean sponsor) {
-        this.sponsor = sponsor;
     }
 }
