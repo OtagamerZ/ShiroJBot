@@ -21,42 +21,45 @@ package com.kuuhaku.utils;
 import org.apache.commons.lang3.StringUtils;
 
 public class XStringBuilder {
-	private final StringBuilder sb;
+    private final StringBuilder sb;
 
-	public XStringBuilder() {
-		sb = new StringBuilder();
-	}
+    public XStringBuilder() {
+        sb = new StringBuilder();
+    }
 
-	public XStringBuilder(String value) {
-		sb = new StringBuilder(value);
-	}
+    public XStringBuilder(String value) {
+        sb = new StringBuilder(value);
+    }
 
-	public XStringBuilder append(String value) {
-		sb.append(value);
-		return this;
-	}
+    public XStringBuilder append(String value) {
+        sb.append(value);
+        return this;
+    }
 
-	public XStringBuilder appendNewLine(String value) {
-		sb.append("\n").append(value);
-		return this;
-	}
+    public XStringBuilder appendNewLine(String value) {
+        if (sb.length() > 0)
+            sb.append("\n").append(value);
+        else
+            sb.append(value);
+        return this;
+    }
 
-	public XStringBuilder appendIndent(String value, int indent) {
-		sb.append(StringUtils.repeat("\t", indent)).append(value);
-		return this;
-	}
+    public XStringBuilder appendIndent(String value, int indent) {
+        sb.append(StringUtils.repeat("\t", indent)).append(value);
+        return this;
+    }
 
-	public XStringBuilder appendIndentNewLine(String value, int indent) {
-		sb.append("\n").append(StringUtils.repeat("\t", indent)).append(value);
-		return this;
-	}
+    public XStringBuilder appendIndentNewLine(String value, int indent) {
+        sb.append("\n").append(StringUtils.repeat("\t", indent)).append(value);
+        return this;
+    }
 
-	public void clear() {
-		sb.setLength(0);
-	}
+    public void clear() {
+        sb.setLength(0);
+    }
 
-	@Override
-	public String toString() {
-		return sb.toString();
-	}
+    @Override
+    public String toString() {
+        return sb.toString();
+    }
 }

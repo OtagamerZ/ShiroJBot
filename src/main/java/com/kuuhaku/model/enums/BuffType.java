@@ -18,18 +18,41 @@
 
 package com.kuuhaku.model.enums;
 
-import java.util.Locale;
-
 public enum BuffType {
-	XP, CARD, DROP, FOIL;
+    XP(5000, 0.75, 0.3),
+    CARD(4000, 0.8, 0.275),
+    DROP(3250, 0.65, 0.275),
+    FOIL(7500, 0.9, 0.325);
 
-	public static BuffType of(String name) {
-		return switch (name.toUpperCase(Locale.ROOT)) {
-			case "XP" -> XP;
-			case "CARTA" -> CARD;
-			case "DROP" -> DROP;
-			case "CROMADA" -> FOIL;
-			default -> throw new IllegalStateException("Unexpected value: " + name);
-		};
-	}
+    private final int basePrice;
+    private final double priceMult;
+    private final double powerMult;
+
+    BuffType(int basePrice, double priceMult, double powerMult) {
+        this.basePrice = basePrice;
+        this.priceMult = priceMult;
+        this.powerMult = powerMult;
+    }
+
+    public int getBasePrice() {
+        return basePrice;
+    }
+
+    public double getPriceMult() {
+        return priceMult;
+    }
+
+    public double getPowerMult() {
+        return powerMult;
+    }
+
+    @Override
+    public String toString() {
+        return "Melhoria de " + switch (this) {
+            case XP -> "XP";
+            case CARD -> "cartas";
+            case DROP -> "drops";
+            case FOIL -> "cromadas";
+        };
+    }
 }
