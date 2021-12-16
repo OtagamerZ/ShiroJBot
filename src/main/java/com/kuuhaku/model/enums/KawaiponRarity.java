@@ -53,7 +53,9 @@ public enum KawaiponRarity {
 	}
 
 	public static KawaiponRarity[] validValues() {
-		return Arrays.stream(values()).filter(kr -> kr.index > 0).toArray(KawaiponRarity[]::new);
+		return Arrays.stream(values())
+				.filter(kr -> !kr.emote.isBlank())
+				.toArray(KawaiponRarity[]::new);
 	}
 
 	@Override

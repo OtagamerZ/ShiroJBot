@@ -30,13 +30,14 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.VoiceTime;
-import com.kuuhaku.model.persistent.guild.GuildBuff;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -47,7 +48,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "eu",
@@ -61,13 +61,14 @@ public class MyStatsCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
-		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		Set<Tag> tags = Tag.getTags(member);
+
 		Map<Emoji, Page> categories = new LinkedHashMap<>();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		{
 			VoiceTime vt = Helper.getOr(ShiroInfo.getShiroEvents().getVoiceTimes().get(mb.getUid() + mb.getSid()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
@@ -89,11 +90,11 @@ public class MyStatsCommand implements Executable, Slashed {
 		eb.clear();
 
 		{
-			boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+			boolean waifu = guild.getMembers().stream().anyMatch(m -> m.getId().equals(com.kuuhaku.model.persistent.Member.getWaifu(author.getId())));
 
 			int xp = (int) (15
 							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
-							* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
+							* Helper.getBuffMult(gc, BuffType.XP)
 			);
 
 			float collection = Helper.prcnt(kp.getCards().size(), CardDAO.getTotalCards() * 2);
@@ -110,9 +111,9 @@ public class MyStatsCommand implements Executable, Slashed {
 					"""
 					.formatted(
 							xp,
-							Helper.round((3 - Helper.clamp(Helper.prcnt(guild.getMemberCount(), 5000), 0, 1)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
-							Helper.round((2.5 - Helper.clamp(Helper.prcnt(guild.getMemberCount() * 0.75f, 5000), 0, 0.75)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
-							Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
+							Helper.roundToString((3 - Helper.clamp(guild.getMemberCount() / 5000, 0, 1)) * Helper.getBuffMult(gc, BuffType.CARD), 1),
+							Helper.roundToString((2.5 - Helper.clamp(guild.getMemberCount() * 0.75f / 5000, 0, 0.75)) * Helper.getBuffMult(gc, BuffType.DROP), 1),
+							Helper.roundToString(0.5 * Helper.getBuffMult(gc, BuffType.FOIL), 1)
 					);
 
 			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false)
