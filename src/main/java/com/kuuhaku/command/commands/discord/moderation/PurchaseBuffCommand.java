@@ -37,6 +37,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -97,7 +98,7 @@ public class PurchaseBuffCommand implements Executable {
                 return;
             }
 
-            Buff sb = new Buff(BuffType.valueOf(args[0]), tier);
+            Buff sb = new Buff(BuffType.valueOf(args[0].toUpperCase(Locale.ROOT)), tier);
             if (acc.getTotalBalance() < sb.getPrice()) {
                 channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
                 return;
