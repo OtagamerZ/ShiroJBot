@@ -732,6 +732,8 @@ public class GuildConfig {
     }
 
     public boolean isPartner() {
-        return TagDAO.getTagById(Main.getInfo().getGuildByID(guildId).getOwnerId()).isBeta();
+        String owner = Main.getInfo().getGuildByID(guildId).getOwnerId();
+
+        return ShiroInfo.getStaff().contains(owner) || TagDAO.getTagById(owner).isBeta();
     }
 }
