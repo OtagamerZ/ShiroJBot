@@ -124,7 +124,7 @@ public class Hand {
 		int maxCards;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().getInt("mana", 0), 0, 20);
-			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 25000);
+			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 9999);
 			maxCards = Helper.clamp(game.getCustom().getInt("cartasmax", 5), 1, 10);
 			baseManaPerTurn = Helper.clamp(game.getCustom().getInt("manapt", 5), 1, 20);
 
@@ -665,12 +665,12 @@ public class Hand {
 	}
 
 	public int getHp() {
-		return Math.min(hp, 9999);
+		return hp;
 	}
 
 	public void setHp(int value) {
 		prevHp = hp;
-		hp = Math.min(value, 9999);
+		hp = Helper.clamp(value, 0, 9999);
 	}
 
 	public void addHp(int value) {
@@ -680,9 +680,7 @@ public class Hand {
 	public void addHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
-		prevHp = hp;
-		hp = (int) Math.min(hp + value * getHealingFac(), 9999);
-
+		setHp((int) (hp + value * getHealingFac()));
 		if (trigger) {
 			Arena arena = game.getArena();
 			if (arena != null) {
@@ -704,7 +702,6 @@ public class Hand {
 	public void removeHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
-		prevHp = hp;
 		if (hp > 1) {
 			if (hp > baseHp / 3) {
 				crippleHp(value);
@@ -715,7 +712,7 @@ public class Hand {
 			}
 		}
 
-		hp -= value;
+		setHp(hp - value);
 		if (trigger) {
 			Arena arena = game.getArena();
 			if (arena != null) {
@@ -737,9 +734,7 @@ public class Hand {
 	public void crippleHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
-		prevHp = hp;
-		hp = Math.max(1, hp - value);
-
+		setHp(Math.max(1, hp - value));
 		if (trigger) {
 			Arena arena = game.getArena();
 			if (arena != null) {
