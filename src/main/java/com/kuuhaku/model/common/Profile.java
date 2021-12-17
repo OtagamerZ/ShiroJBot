@@ -296,6 +296,8 @@ public class Profile {
 	}
 
 	public static void drawStringMultiLineNO(Graphics2D g, String text, int lineWidth, int x, int y) {
+		if (text == null) return;
+
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
 			g.drawString(text, x, y);
