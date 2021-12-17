@@ -269,7 +269,7 @@ public class Arena {
                         g2d.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);
                         Profile.drawOutlinedText(
                                 mp,
-                                key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + mp),
+                                key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth(mp),
                                 key == Side.TOP ? 168 : 1725, g2d
                         );
 
