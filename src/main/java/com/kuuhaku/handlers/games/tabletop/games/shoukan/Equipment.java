@@ -441,6 +441,11 @@ public class Equipment implements Drawable, Cloneable {
 		}
 	}
 
+	@Override
+	public Equipment deepCopy() {
+		return copy();
+	}
+
 	public String toString() {
 		return new JSONObject(card.toString()) {{
 			put("equipment", new JSONObject() {{
