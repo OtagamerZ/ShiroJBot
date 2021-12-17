@@ -362,7 +362,7 @@ public class Champion implements Drawable, Cloneable {
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK)) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
 				Field f = game.getArena().getField();
 				if (f != null) {
 					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
@@ -395,7 +395,7 @@ public class Champion implements Drawable, Cloneable {
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK)) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
 				Field f = game.getArena().getField();
 				if (f != null) {
 					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
