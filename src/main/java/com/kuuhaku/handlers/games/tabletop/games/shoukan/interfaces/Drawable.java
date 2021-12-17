@@ -70,6 +70,8 @@ public interface Drawable {
 
 	Drawable copy();
 
+	Drawable deepCopy();
+
 	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

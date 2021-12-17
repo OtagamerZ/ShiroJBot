@@ -106,9 +106,9 @@ public class SlotColumn implements Cloneable {
 		try {
 			SlotColumn sc = (SlotColumn) super.clone();
 			if (top != null)
-				sc.top = top.copy();
+				sc.top = top.deepCopy();
 			if (bottom != null)
-				sc.bottom = bottom.copy();
+				sc.bottom = bottom.deepCopy();
 			return sc;
 		} catch (CloneNotSupportedException e) {
 			throw new AssertionError();
