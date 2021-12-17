@@ -169,7 +169,7 @@ public class TeamHand extends Hand {
 		int maxCards;
 		if (game.getCustom() != null) {
 			setMana(Helper.clamp(game.getCustom().getInt("mana", 0), 0, 20));
-			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 25000);
+			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 9999);
 			maxCards = Helper.clamp(game.getCustom().getInt("cartasmax", 5), 1, 10);
 			baseManaPerTurn = Helper.clamp(game.getCustom().getInt("manapt", 5), 1, 20);
 
