@@ -154,7 +154,6 @@ public class GuildConfig {
     private boolean makeMentionable = false;
 
     //COLLECTIONS
-    //ROLES
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "guildconfig_id")
     private Set<LevelRole> levelRoles = new HashSet<>();
@@ -174,6 +173,10 @@ public class GuildConfig {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "guildconfig_id")
     private Set<ButtonChannel> buttonConfigs = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "guildconfig_id")
+    private Set<Buff> buffs = new HashSet<>();
 
     //CHANNELS
     @ElementCollection(fetch = FetchType.EAGER)
@@ -197,10 +200,6 @@ public class GuildConfig {
     @ElementCollection(fetch = FetchType.LAZY)
     @JoinColumn(name = "guildconfig_guildid")
     private List<String> rules = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_guildid")
-    private Set<Buff> buffs = new HashSet<>();
 
     public GuildConfig(String guildId, String name) {
         this.guildId = guildId;
