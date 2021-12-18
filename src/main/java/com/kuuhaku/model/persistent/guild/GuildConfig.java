@@ -730,6 +730,10 @@ public class GuildConfig {
         return true;
     }
 
+    public void setBuffs(Set<Buff> buffs) {
+        this.buffs = buffs;
+    }
+
     public boolean isPartner() {
         String owner = Main.getInfo().getGuildByID(guildId).getOwnerId();
 

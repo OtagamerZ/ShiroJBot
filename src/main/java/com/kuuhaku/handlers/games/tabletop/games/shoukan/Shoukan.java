@@ -2431,7 +2431,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                     oldState = new GameState(this);
                 }
             });
-        if (getCustom() != null || getRound() > 8)
+        if (phase == Phase.PLAN && (getCustom() != null || getRound() > 8))
             buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
                 if (getCustom() == null) {
                     getHistory().setWinner(getNextSide());
