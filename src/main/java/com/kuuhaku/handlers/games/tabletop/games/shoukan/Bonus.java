@@ -31,15 +31,18 @@ public class Bonus implements Cloneable {
 	private int[] atk = new int[6];
 	private int[] def = new int[6];
 	private int[] ddg = new int[6];
+	private int[] blk = new int[6];
 	private int mana = 0;
 	private int blood = 0;
 	private String write = null;
 
-	public Bonus(JSONObject specialData, EnumSet<Flag> flags, int atk, int def, int mana, int blood, String write) {
+	public Bonus(JSONObject specialData, EnumSet<Flag> flags, int atk, int def, int ddg, int blk, int mana, int blood, String write) {
 		this.specialData = specialData;
 		this.flags = flags;
 		this.atk[0] = atk;
 		this.def[0] = def;
+		this.ddg[0] = ddg;
+		this.blk[0] = blk;
 		this.mana = mana;
 		this.blood = blood;
 		this.write = write;
@@ -164,6 +167,34 @@ public class Bonus implements Cloneable {
 		this.ddg[index + 1] -= ddg;
 	}
 
+	public int getBlock() {
+		return IntStream.of(blk).sum();
+	}
+
+	public void setBlock(int blk) {
+		this.blk[0] = blk;
+	}
+
+	public void setBlock(int index, int blk) {
+		this.blk[index + 1] = blk;
+	}
+
+	public void addBlock(int blk) {
+		this.blk[0] += blk;
+	}
+
+	public void addBlock(int index, int blk) {
+		this.blk[index + 1] += blk;
+	}
+
+	public void removeBlock(int blk) {
+		this.blk[0] -= blk;
+	}
+
+	public void removeBlock(int index, int blk) {
+		this.blk[index + 1] -= blk;
+	}
+
 	public int getMana() {
 		return mana;
 	}
@@ -217,8 +248,10 @@ public class Bonus implements Cloneable {
 			return new Bonus(
 					b.getSpecialData(),
 					b.getFlags(),
-					b.getAtk(),
-					b.getDef(),
+					atk[0],
+					def[0],
+					ddg[0],
+					blk[0],
 					b.getMana(),
 					b.getBlood(),
 					b.getWrite()
