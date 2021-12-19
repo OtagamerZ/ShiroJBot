@@ -72,7 +72,7 @@ public interface Drawable {
 
 	Drawable deepCopy();
 
-	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, boolean hasDesc) {
+	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, int block, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
@@ -104,6 +104,16 @@ public interface Drawable {
 			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.orange);
+			Profile.drawOutlinedText(dodge + "%", 57, y + 21, g2d);
+
+			y -= 25;
+		}
+
+		if (block != 0) {
+			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/block.png");
+			g2d.drawImage(icon, 29, y, null);
+
+			g2d.setColor(new Color(155, 155, 190));
 			Profile.drawOutlinedText(dodge + "%", 57, y + 21, g2d);
 		}
 
