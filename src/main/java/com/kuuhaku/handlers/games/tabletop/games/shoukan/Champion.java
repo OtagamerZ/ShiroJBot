@@ -363,7 +363,7 @@ public class Champion implements Drawable, Cloneable {
             Side s = game.getSideById(acc.getUid());
             Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-            if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
+            if (linkedTo.stream().noneMatch(e -> e.getCharms().contains(Charm.LINK)) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
                 Field f = game.getArena().getField();
                 if (f != null) {
                     fBonus = 1 + f.getModifiers().getFloat(getRace().name());
@@ -396,7 +396,7 @@ public class Champion implements Drawable, Cloneable {
             Side s = game.getSideById(acc.getUid());
             Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-            if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.LINK) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
+            if (linkedTo.stream().noneMatch(e -> e.getCharms().contains(Charm.LINK)) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
                 Field f = game.getArena().getField();
                 if (f != null) {
                     fBonus = 1 + f.getModifiers().getFloat(getRace().name());
@@ -528,7 +528,7 @@ public class Champion implements Drawable, Cloneable {
         }
 
         int agiEquips = getLinkedTo().stream()
-                .filter(e -> e.getCharm() == Charm.AGILITY)
+                .filter(e -> e.getCharms().contains(Charm.AGILITY))
                 .mapToInt(e -> 10 * (int) Helper.getFibonacci(e.getTier()))
                 .sum();
         double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0) + extra) * heroMod, 0, 100);
@@ -562,7 +562,7 @@ public class Champion implements Drawable, Cloneable {
         }
 
         int blockEquips = getLinkedTo().stream()
-                .filter(e -> e.getCharm() == Charm.FORTIFY)
+                .filter(e -> e.getCharms().contains(Charm.FORTIFY))
                 .mapToInt(e -> 5 * (int) Helper.getFibonacci(e.getTier()))
                 .sum();
         double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
@@ -840,7 +840,7 @@ public class Champion implements Drawable, Cloneable {
     public boolean isBuffed() {
         if (game == null) return false;
 
-        boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.LINK);
+        boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharms().contains(Charm.LINK));
         if (slink) return false;
 
         Field f = game.getArena().getField();
@@ -855,7 +855,7 @@ public class Champion implements Drawable, Cloneable {
     public boolean isNerfed() {
         if (game == null) return false;
 
-        boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharm() == Charm.LINK);
+        boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharms().contains(Charm.LINK));
         if (slink) return false;
 
         Field f = game.getArena().getField();
