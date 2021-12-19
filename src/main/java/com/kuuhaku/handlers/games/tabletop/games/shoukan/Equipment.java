@@ -235,8 +235,8 @@ public class Equipment implements Drawable, Cloneable {
 		return linkedTo;
 	}
 
-	public void link(int index, Champion linkedTo) {
-		this.linkedTo = Pair.of(index, linkedTo);
+	public void link(int index, Champion link) {
+		this.linkedTo = Pair.of(index, link);
 	}
 
 	public void unlink() {
