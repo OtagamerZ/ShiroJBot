@@ -556,18 +556,12 @@ public class Champion implements Drawable, Cloneable {
 		}
 		 */
 
-        double extra = 0;
-        if (game != null && acc != null) {
-            extra += game.getHands().get(game.getSideById(acc.getUid())).getMitigation() * 75;
-        }
-
         int blockEquips = getLinkedTo().stream()
                 .filter(e -> e.getCharms().contains(Charm.FORTIFY))
                 .mapToInt(e -> 5 * (int) Helper.getFibonacci(e.getTier()))
                 .sum();
-        double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
-        double parFac = !isAvailable() ? 0.75 : 1;
-        return (int) Helper.roundTrunc(d * parFac * 100, 5) / 100;
+        double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips) * heroMod * (isDefending() ? 2 : 1), 0, 100);
+        return (int) Helper.roundTrunc(d * 100, 1) / 100;
     }
 
     public double getModBlock() {
