@@ -2278,9 +2278,9 @@ public class Helper {
                 int[] rgb = unpackRGB(source.getRGB(x, y));
 
                 int fac;
-                if (hasAlpha)
-                    fac = (rgb[0] + unpackRGB(newMask.getRGB(x, y))[channel]) / 2;
-                else
+                if (hasAlpha) {
+                    fac = Math.min(rgb[0], unpackRGB(newMask.getRGB(x, y))[channel]);
+                } else
                     fac = unpackRGB(newMask.getRGB(x, y))[channel];
                 source.setRGB(
                         x,
