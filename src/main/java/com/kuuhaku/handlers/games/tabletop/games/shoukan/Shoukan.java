@@ -474,7 +474,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                         }
 
                         SlotColumn free = getFirstAvailableSlot(getCurrentSide(), false);
-                        if (free == null && Helper.equalsAny(e.getCharm(), Charm.ENCHANTMENT, Charm.TRAP)) {
+                        if (free == null && Helper.equalsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP)) {
                             channel.sendMessage("❌ | Não há espaço suficiente no campo para invocar essa magia.").queue(null, Helper::doNothing);
                             return;
                         }
@@ -485,7 +485,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                         h.removeHp(e.getBlood());
                         e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 
-                        if (e.canGoToGrave() && !Helper.equalsAny(e.getCharm(), Charm.ENCHANTMENT, Charm.TRAP)) {
+                        if (e.canGoToGrave() && !Helper.equalsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP)) {
                             if (e.getTier() >= 4)
                                 arena.getBanned().add(e);
                             else
@@ -588,32 +588,34 @@ public class Shoukan extends GlobalGame implements Serializable {
                     if (applyEffect(ON_EQUIP, t, getCurrentSide(), toEquip, new Source(t, getCurrentSide(), toEquip)))
                         return;
 
-                    if (e.getCharm() != null) {
+                    if (e.getCharms() != null) {
                         int uses = (int) Helper.getFibonacci(e.getTier());
                         for (int i = 0; i < uses; i++) {
-                            switch (e.getCharm()) {
-                                case TIMEWARP -> {
-                                    if (t.hasEffect()) {
-                                        t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-                                        t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+                            for (Charm charm : e.getCharms()) {
+                                switch (charm) {
+                                    case TIMEWARP -> {
+                                        if (t.hasEffect()) {
+                                            t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+                                            t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+                                        }
                                     }
-                                }
-                                case DOUBLETAP -> {
-                                    if (t.hasEffect())
-                                        t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-                                }
-                                case CLONE -> {
-                                    SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
+                                    case DOUBLETAP -> {
+                                        if (t.hasEffect())
+                                            t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+                                    }
+                                    case CLONE -> {
+                                        SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 
-                                    if (sc != null) {
-                                        t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
-                                        t.removeDef(Math.round(t.getAltDef() * 0.25f));
+                                        if (sc != null) {
+                                            t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
+                                            t.removeDef(Math.round(t.getAltDef() * 0.25f));
 
-                                        Champion dp = t.copy();
-                                        dp.getBonus().removeMana(dp.getMana() / 2);
-                                        dp.setGravelocked(true);
+                                            Champion dp = t.copy();
+                                            dp.getBonus().removeMana(dp.getMana() / 2);
+                                            dp.setGravelocked(true);
 
-                                        sc.setTop(dp);
+                                            sc.setTop(dp);
+                                        }
                                     }
                                 }
                             }
@@ -771,7 +773,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                         int toSteal = Math.min(
                                 op.getMana(),
                                 c.getLinkedTo().parallelStream()
-                                        .filter(e -> e.getCharm() == Charm.DRAIN)
+                                        .filter(e -> e.getCharms().contains(Charm.DRAIN))
                                         .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
                                         .sum()
                         );
@@ -782,7 +784,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
                     int bleed = Math.round(
                             c.getLinkedTo().parallelStream()
-                                    .filter(e -> e.getCharm() == Charm.BLEEDING)
+                                    .filter(e -> e.getCharms().contains(Charm.BLEEDING))
                                     .mapToInt(Equipment::getAtk)
                                     .sum() * demonFac
                     );
@@ -1019,7 +1021,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                 } else {
                     dmg = Math.round(
                             atkr.getLinkedTo().parallelStream()
-                                    .filter(e -> e.getCharm() == Charm.PIERCING)
+                                    .filter(e -> e.getCharms().contains(Charm.PIERCING))
                                     .mapToInt(Equipment::getAtk)
                                     .sum() * demonFac
                     );
@@ -1029,7 +1031,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                     int toSteal = Math.min(
                             op.getMana(),
                             atkr.getLinkedTo().parallelStream()
-                                    .filter(e -> e.getCharm() == Charm.DRAIN)
+                                    .filter(e -> e.getCharms().contains(Charm.DRAIN))
                                     .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
                                     .sum()
                     );
@@ -1048,7 +1050,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                 if (h == null || h.getHp() == 0) {
                     int bleed = Math.round(
                             atkr.getLinkedTo().parallelStream()
-                                    .filter(e -> e.getCharm() == Charm.BLEEDING)
+                                    .filter(e -> e.getCharms().contains(Charm.BLEEDING))
                                     .mapToInt(Equipment::getAtk)
                                     .sum() * demonFac
                     );
@@ -1119,7 +1121,7 @@ public class Shoukan extends GlobalGame implements Serializable {
             } else {
                 dmg = Math.round(
                         defr.getLinkedTo().parallelStream()
-                                .filter(e -> e.getCharm() == Charm.PIERCING)
+                                .filter(e -> e.getCharms().contains(Charm.PIERCING))
                                 .mapToInt(Equipment::getAtk)
                                 .sum() * demonFac
                 );
@@ -1129,7 +1131,7 @@ public class Shoukan extends GlobalGame implements Serializable {
                 int toSteal = Math.min(
                         you.getMana(),
                         defr.getLinkedTo().parallelStream()
-                                .filter(e -> e.getCharm() == Charm.DRAIN)
+                                .filter(e -> e.getCharms().contains(Charm.DRAIN))
                                 .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
                                 .sum()
                 );
@@ -1148,7 +1150,7 @@ public class Shoukan extends GlobalGame implements Serializable {
             if (h == null || h.getHp() == 0) {
                 int bleed = Math.round(
                         defr.getLinkedTo().parallelStream()
-                                .filter(e -> e.getCharm() == Charm.BLEEDING)
+                                .filter(e -> e.getCharms().contains(Charm.BLEEDING))
                                 .mapToInt(Equipment::getAtk)
                                 .sum() * demonFac
                 );
@@ -1219,14 +1221,14 @@ public class Shoukan extends GlobalGame implements Serializable {
                 int yToSteal = Math.min(
                         op.getMana(),
                         atkr.getLinkedTo().parallelStream()
-                                .filter(e -> e.getCharm() == Charm.DRAIN)
+                                .filter(e -> e.getCharms().contains(Charm.DRAIN))
                                 .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
                                 .sum()
                 );
                 int hToSteal = Math.min(
                         you.getMana(),
                         defr.getLinkedTo().parallelStream()
-                                .filter(e -> e.getCharm() == Charm.DRAIN)
+                                .filter(e -> e.getCharms().contains(Charm.DRAIN))
                                 .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
                                 .sum()
                 );
@@ -1255,12 +1257,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 
             if (h == null || h.getHp() == 0) {
                 float hDmg = defr.getLinkedTo().parallelStream()
-                        .filter(e -> e.getCharm() == Charm.PIERCING)
+                        .filter(e -> e.getCharms().contains(Charm.PIERCING))
                         .mapToInt(Equipment::getAtk)
                         .sum();
 
                 int bleed = defr.getLinkedTo().parallelStream()
-                        .filter(e -> e.getCharm() == Charm.BLEEDING)
+                        .filter(e -> e.getCharms().contains(Charm.BLEEDING))
                         .mapToInt(Equipment::getAtk)
                         .sum();
 
@@ -1285,12 +1287,12 @@ public class Shoukan extends GlobalGame implements Serializable {
                 h.setHp(h.getHp() - hPower);
             } else {
                 float yDmg = atkr.getLinkedTo().parallelStream()
-                        .filter(e -> e.getCharm() == Charm.PIERCING)
+                        .filter(e -> e.getCharms().contains(Charm.PIERCING))
                         .mapToInt(Equipment::getAtk)
                         .sum();
 
                 int bleed = atkr.getLinkedTo().parallelStream()
-                        .filter(e -> e.getCharm() == Charm.BLEEDING)
+                        .filter(e -> e.getCharms().contains(Charm.BLEEDING))
                         .mapToInt(Equipment::getAtk)
                         .sum();
 
@@ -1446,7 +1448,11 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             for (Equipment e : List.copyOf(target.getLinkedTo())) {
-                if (e.getCharm() == Charm.SHIELD) {
+                if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
+                    destroyCard(caster, source, side, index);
+                }
+
+                if (e.getCharms().contains(Charm.SHIELD)) {
                     int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
                     if (uses >= Helper.getFibonacci(e.getTier())) {
                         unequipCard(side, e.getIndex());
@@ -1515,7 +1521,11 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             for (Equipment e : List.copyOf(target.getLinkedTo())) {
-                if (e.getCharm() == Charm.SHIELD) {
+                if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
+                    convertCard(caster, source, side, index);
+                }
+
+                if (e.getCharms().contains(Charm.SHIELD)) {
                     int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
                     if (uses >= Helper.getFibonacci(e.getTier())) {
                         unequipCard(side, e.getIndex());
@@ -1584,7 +1594,7 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             for (Equipment e : List.copyOf(target.getLinkedTo())) {
-                if (e.getCharm() == Charm.SHIELD) {
+                if (e.getCharms().contains(Charm.SHIELD)) {
                     int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
                     if (uses >= Helper.getFibonacci(e.getTier())) {
                         unequipCard(side, e.getIndex());
@@ -1618,7 +1628,7 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             for (Equipment e : List.copyOf(target.getLinkedTo())) {
-                if (e.getCharm() == Charm.SHIELD) {
+                if (e.getCharms().contains(Charm.SHIELD)) {
                     int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
                     if (uses >= Helper.getFibonacci(e.getTier())) {
                         unequipCard(side, e.getIndex());
@@ -1681,7 +1691,11 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             for (Equipment e : List.copyOf(target.getLinkedTo())) {
-                if (e.getCharm() == Charm.SHIELD) {
+                if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
+                    captureCard(caster, source, side, index, withFusion);
+                }
+
+                if (e.getCharms().contains(Charm.SHIELD)) {
                     int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
                     if (uses >= Helper.getFibonacci(e.getTier())) {
                         unequipCard(side, e.getIndex());

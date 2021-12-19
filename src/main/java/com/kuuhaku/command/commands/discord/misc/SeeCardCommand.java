@@ -44,6 +44,7 @@ import org.apache.commons.collections4.ListUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -85,9 +86,11 @@ public class SeeCardCommand implements Executable {
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
 			if (d instanceof Champion c) {
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
-			} else if (d instanceof Equipment e && e.getCharm() != null) {
-				Charm c = e.getCharm();
-				eb.addField("Amuleto: " + c.getName(), c.getDescription(e.getTier()), true);
+			} else if (d instanceof Equipment e && !e.getCharms().isEmpty()) {
+				List<Charm> charms = e.getCharms();
+				for (Charm c : charms) {
+					eb.addField("Amuleto: " + c.getName(), c.getDescription(e.getTier()), true);
+				}
 			}
 			eb.setImage("attachment://kawaipon.png");
 
