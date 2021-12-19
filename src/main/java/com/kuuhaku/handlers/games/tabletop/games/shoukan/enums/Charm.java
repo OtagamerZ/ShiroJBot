@@ -91,7 +91,7 @@ public enum Charm {
 		for (int i = 0; i < icons.size(); i++) {
 			BufferedImage icon = icons.get(i);
 			Helper.applyMask(icon, mask, i);
-			g2d.drawImage(bi, 0, 0, null);
+			g2d.drawImage(icon, 0, 0, null);
 		}
 		g2d.drawImage(Helper.getResourceAsImage(Charm.class, "shoukan/charm/div.png"), 0, 0, null);
 		g2d.dispose();
