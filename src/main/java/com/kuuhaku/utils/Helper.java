@@ -2267,6 +2267,30 @@ public class Helper {
         }
     }
 
+    public static void applyMask(BufferedImage source, BufferedImage mask, int channel, boolean hasAlpha) {
+        BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = newMask.createGraphics();
+        g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
+        g2d.dispose();
+
+        for (int y = 0; y < source.getHeight(); y++) {
+            for (int x = 0; x < source.getWidth(); x++) {
+                int[] rgb = unpackRGB(source.getRGB(x, y));
+
+                int fac;
+                if (hasAlpha)
+                    fac = (rgb[0] + unpackRGB(newMask.getRGB(x, y))[channel]) / 2;
+                else
+                    fac = unpackRGB(newMask.getRGB(x, y))[channel];
+                source.setRGB(
+                        x,
+                        y,
+                        packRGB(fac, rgb[1], rgb[2], rgb[3])
+                );
+            }
+        }
+    }
+
     public static int[] unpackRGB(int rgb) {
         return new int[]{
                 (rgb >> 24) & 0xFF,
