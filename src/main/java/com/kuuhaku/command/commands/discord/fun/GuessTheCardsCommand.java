@@ -82,7 +82,7 @@ public class GuessTheCardsCommand implements Executable {
 			Graphics2D g2d = img.createGraphics();
 			for (int i = 0; i < imgs.size(); i++) {
 				BufferedImage bi = imgs.get(i);
-				Helper.applyMask(bi, mask, i + 1);
+				Helper.applyMask(bi, mask, i);
 				g2d.drawImage(bi, 0, 0, null);
 			}
 			g2d.dispose();
