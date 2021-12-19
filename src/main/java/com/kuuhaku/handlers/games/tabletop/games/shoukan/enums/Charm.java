@@ -83,7 +83,7 @@ public enum Charm {
 		if (icons.isEmpty()) return null;
 		else if (icons.size() == 1) return icons.get(0);
 
-		BufferedImage mask = Helper.getResourceAsImage(Charm.class, "shoukan/charm/mask.jpeg");
+		BufferedImage mask = Helper.getResourceAsImage(Charm.class, "shoukan/charm/mask.png");
         assert mask != null;
 
         BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
