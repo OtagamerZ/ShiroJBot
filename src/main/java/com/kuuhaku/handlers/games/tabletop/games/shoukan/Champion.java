@@ -561,7 +561,7 @@ public class Champion implements Drawable, Cloneable {
                 .mapToInt(e -> 5 * (int) Helper.getFibonacci(e.getTier()))
                 .sum();
         double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips) * heroMod * (isDefending() ? 2 : 1), 0, 100);
-        return (int) Helper.roundTrunc(d * 100, 1) / 100;
+        return (int) d;
     }
 
     public double getModBlock() {
