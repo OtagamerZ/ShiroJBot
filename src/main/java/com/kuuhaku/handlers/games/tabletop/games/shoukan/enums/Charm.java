@@ -20,52 +20,82 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.utils.Helper;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public enum Charm {
-	SHIELD("Escudo", "Bloqueia %s efeito%s de destruição ou conversão"),
-	MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
-	TIMEWARP("Salto temporal", "Ativa %s efeito%s por turno instantaneamente"),
-	DOUBLETAP("Toque duplo", "Ativa novamente %s efeito%s de invocação"),
-	CLONE("Clone", "Cria %s clone%s com 75%% dos atributos"),
-	LINK("Vínculo", "Bloqueia modificadores de campo"),
-	SPELL("Magia", "Executa um efeito ao ativar"),
-	ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
-	TRAP("Armadilha", "Prende-se à uma carta mas virada para baixo, adicionando um efeito de uso único à ela"),
-	PIERCING("Penetração", "Causa dano direto ao atacar"),
-	AGILITY("Agilidade", "Aumenta a chance de esquiva em %s%%"),
-	DRAIN("Dreno", "Rouba %s de mana ao atacar"),
-	BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar"),
-	FORTIFY("Fortificar", "Aumenta a chance de bloqueio em %s%%");
+    SHIELD("Escudo", "Bloqueia %s efeito%s de destruição ou conversão"),
+    MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
+    TIMEWARP("Salto temporal", "Ativa %s efeito%s por turno instantaneamente"),
+    DOUBLETAP("Toque duplo", "Ativa novamente %s efeito%s de invocação"),
+    CLONE("Clone", "Cria %s clone%s com 75%% dos atributos"),
+    LINK("Vínculo", "Bloqueia modificadores de campo"),
+    SPELL("Magia", "Executa um efeito ao ativar"),
+    ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
+    TRAP("Armadilha", "Prende-se à uma carta mas virada para baixo, adicionando um efeito de uso único à ela"),
+    PIERCING("Penetração", "Causa dano direto ao atacar"),
+    AGILITY("Agilidade", "Aumenta a chance de esquiva em %s%%"),
+    DRAIN("Dreno", "Rouba %s de mana ao atacar"),
+    BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar"),
+    FORTIFY("Fortificar", "Aumenta a chance de bloqueio em %s%%");
 
-	private final String name;
-	private final String description;
+    private final String name;
+    private final String description;
 
-	Charm(String name, String description) {
-		this.name = name;
-		this.description = description;
-	}
+    Charm(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescription(int tier) {
-		return switch (this) {
-			case SHIELD, TIMEWARP, DOUBLETAP, CLONE -> description.formatted(
-					Helper.getFibonacci(tier),
-					Helper.equalsAny(tier, 1, 2) ? "" : "s"
-			);
-			case DRAIN -> description.formatted(Helper.getFibonacci(tier));
-			case AGILITY -> description.formatted(10 * Helper.getFibonacci(tier));
-			case FORTIFY -> description.formatted(5 * Helper.getFibonacci(tier));
-			default -> description;
-		};
-	}
+    public String getDescription(int tier) {
+        return switch (this) {
+            case SHIELD, TIMEWARP, DOUBLETAP, CLONE -> description.formatted(
+                    Helper.getFibonacci(tier),
+                    Helper.equalsAny(tier, 1, 2) ? "" : "s"
+            );
+            case DRAIN -> description.formatted(Helper.getFibonacci(tier));
+            case AGILITY -> description.formatted(10 * Helper.getFibonacci(tier));
+            case FORTIFY -> description.formatted(5 * Helper.getFibonacci(tier));
+            default -> description;
+        };
+    }
 
-	public BufferedImage getIcon() {
-		if (Helper.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
-	}
+    public BufferedImage getIcon() {
+        if (Helper.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
+        return Helper.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
+    }
+
+    public static BufferedImage getIcon(List<Charm> charms) {
+		List<BufferedImage> icons = charms.stream()
+				.map(Charm::getIcon)
+				.filter(Objects::nonNull)
+				.limit(2)
+				.collect(Collectors.toList());
+
+		if (icons.isEmpty()) return null;
+		else if (icons.size() == 1) return icons.get(0);
+
+		BufferedImage mask = Helper.getResourceAsImage(Charm.class, "shoukan/charm/mask.jpeg");
+        assert mask != null;
+
+        BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		for (int i = 0; i < icons.size(); i++) {
+			BufferedImage icon = icons.get(i);
+			Helper.applyMask(icon, mask, i + 1);
+			g2d.drawImage(bi, 0, 0, null);
+		}
+		g2d.drawImage(Helper.getResourceAsImage(Charm.class, "shoukan/charm/div.png"), 0, 0, null);
+		g2d.dispose();
+
+        return bi;
+    }
 }

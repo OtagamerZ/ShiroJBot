@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +37,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "equipment")
@@ -69,8 +72,8 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tier;
 
-	@Enumerated(value = EnumType.STRING)
-	private Charm charm = null;
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String charms = null;
 
 	@Enumerated(value = EnumType.STRING)
 	private Arguments argType = Arguments.NONE;
@@ -130,8 +133,8 @@ public class Equipment implements Drawable, Cloneable {
 				for (int i = 0; i < getTier(); i++)
 					g2d.drawImage(star, (bi.getWidth() / 2) - (24 * getTier() / 2) + 24 * i, 41, 24, 24, null);
 
-			if (charm != null)
-				g2d.drawImage(charm.getIcon(), 135, 255, null);
+			if (charms != null)
+				g2d.drawImage(Charm.getIcon(getCharms()), 135, 255, null);
 
 			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), 0, 0, hasDesc);
 
@@ -320,12 +323,16 @@ public class Equipment implements Drawable, Cloneable {
 				}, 1);
 	}
 
-	public Charm getCharm() {
-		return charm;
+	public List<Charm> getCharms() {
+		if (charms == null) return List.of();
+
+		return new JSONArray(charms).stream()
+				.map(o -> Charm.valueOf(String.valueOf(o)))
+				.collect(Collectors.toList());
 	}
 
-	public void setCharm(Charm charm) {
-		this.charm = charm;
+	public void setCharms(List<Charm> charm) {
+		this.charms = new JSONArray(charm).toString();
 	}
 
 	public Arguments getArgType() {
@@ -451,10 +458,10 @@ public class Equipment implements Drawable, Cloneable {
 			put("equipment", new JSONObject() {{
 				put("id", id);
 				put("tier", tier);
-				if (charm != null)
+				if (charms != null)
 					put("charm", new JSONObject() {{
-						put("id", charm);
-						put("image", hasEffect() ? "" : Helper.atob(charm.getIcon(), "png"));
+						put("id", charms);
+						put("image", hasEffect() ? "" : Helper.atob(Charm.getIcon(getCharms()), "png"));
 					}});
 				put("attack", atk);
 				put("defense", def);
