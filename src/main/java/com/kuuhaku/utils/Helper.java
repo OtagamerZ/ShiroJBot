@@ -2248,7 +2248,7 @@ public class Helper {
     }
 
     public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
-        BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), mask.getType());
+        BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
         Graphics2D g2d = newMask.createGraphics();
         g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
         g2d.dispose();
