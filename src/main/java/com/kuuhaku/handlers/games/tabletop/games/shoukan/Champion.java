@@ -163,7 +163,7 @@ public class Champion implements Drawable, Cloneable {
                 g2d.setBackground(fc.getBackgroundColor());
             }
 
-            Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(), true);
+            Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(), c.getBlock(), true);
 
             g2d.setFont(new Font("Arial", Font.BOLD, 11));
             g2d.setColor(fc.getSecondaryColor());
@@ -565,7 +565,7 @@ public class Champion implements Drawable, Cloneable {
                 .filter(e -> e.getCharm() == Charm.FORTIFY)
                 .mapToInt(e -> 5 * (int) Helper.getFibonacci(e.getTier()))
                 .sum();
-        double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod, 0, 100);
+        double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
         double parFac = !isAvailable() ? 0.75 : 1;
         return (int) Helper.roundTrunc(d * parFac * 100, 5) / 100;
     }
