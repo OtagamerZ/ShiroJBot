@@ -768,12 +768,12 @@ public class Shoukan extends GlobalGame implements Serializable {
                     }
 
                     if (op.getMana() > 0) {
-                        int toSteal = (int) Math.min(
+                        int toSteal = Math.min(
                                 op.getMana(),
                                 c.getLinkedTo().parallelStream()
                                         .filter(e -> e.getCharm() == Charm.DRAIN)
-                                        .map(e -> Helper.getFibonacci(e.getTier()))
-                                        .count()
+                                        .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
+                                        .sum()
                         );
 
                         you.addMana(toSteal);
@@ -974,7 +974,9 @@ public class Shoukan extends GlobalGame implements Serializable {
         }
 
         int dodge = defr.getDodge();
+        int block = defr.getBlock();
         boolean dodged = dodge >= 100 || (dodge > 0 && Helper.chance(dodge));
+        boolean blocked = block >= 100 || (block > 0 && Helper.chance(block));
 
         atkr.resetAttribs();
         defr.resetAttribs();
@@ -983,7 +985,7 @@ public class Shoukan extends GlobalGame implements Serializable {
         Hand op = hands.get(target.side());
 
         /* ATTACK SUCCESS */
-        if (yPower > hPower) {
+        if (yPower > hPower && !blocked) {
             if (dodged) {
                 if (applyEffect(ON_MISS, atkr, source.side(), source.index(), source, target)) return;
                 if (applyEffect(ON_DODGE, defr, target.side(), target.index(), source, target)) return;
@@ -1024,12 +1026,12 @@ public class Shoukan extends GlobalGame implements Serializable {
                 }
 
                 if (op.getMana() > 0) {
-                    int toSteal = (int) Math.min(
+                    int toSteal = Math.min(
                             op.getMana(),
                             atkr.getLinkedTo().parallelStream()
                                     .filter(e -> e.getCharm() == Charm.DRAIN)
-                                    .map(e -> Helper.getFibonacci(e.getTier()))
-                                    .count()
+                                    .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
+                                    .sum()
                     );
 
                     you.addMana(toSteal);
@@ -1087,7 +1089,7 @@ public class Shoukan extends GlobalGame implements Serializable {
         }
 
         /* ATTACK FAILED */
-        else if (yPower < hPower) {
+        else if (yPower < hPower || blocked) {
             if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
             if (applyEffect(POST_DEFENSE, defr, target.side(), target.index(), source, target)) return;
 
@@ -1099,7 +1101,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
             if (atkr.isDecoy()) {
                 killCard(source.side(), source.index(), atkr.getId());
-                reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getName() + "? (" + yPower + " < " + hPower + ")", true, false);
+                if (yPower > hPower)
+                    reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getName() + "? (BLOQUEADO)", true, false);
+                else
+                    reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getName() + "? (" + yPower + " < " + hPower + ")", true, false);
             } else if (defr.isDecoy()) {
                 reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
             }
@@ -1121,12 +1126,12 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             if (you.getMana() > 0) {
-                int toSteal = (int) Math.min(
+                int toSteal = Math.min(
                         you.getMana(),
                         defr.getLinkedTo().parallelStream()
                                 .filter(e -> e.getCharm() == Charm.DRAIN)
-                                .map(e -> Helper.getFibonacci(e.getTier()))
-                                .count()
+                                .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
+                                .sum()
                 );
 
                 op.addMana(toSteal);
@@ -1163,18 +1168,31 @@ public class Shoukan extends GlobalGame implements Serializable {
 
             if (!postCombat()) {
                 int extra = Math.round(dmg * demonFac - dmg);
-                String msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
-                        atkr.getName(),
-                        defr.getName(),
-                        yPower,
-                        hPower,
-                        extra > 0
-                                ? " (efeito de raça: dano direto aumentado em " + extra + ")"
-                                : extra < 0
-                                ? " (efeito de raça: dano direto reduzido em " + extra + ")"
-                                : "",
-                        defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
-                );
+                String msg;
+                if (yPower > hPower)
+                    msg = "%s não conseguiu derrotar %s! (BLOQUEADO)%s%s".formatted(
+                            atkr.getName(),
+                            defr.getName(),
+                            extra > 0
+                                    ? " (efeito de raça: dano direto aumentado em " + extra + ")"
+                                    : extra < 0
+                                    ? " (efeito de raça: dano direto reduzido em " + extra + ")"
+                                    : "",
+                            defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+                    );
+                else
+                    msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
+                            atkr.getName(),
+                            defr.getName(),
+                            yPower,
+                            hPower,
+                            extra > 0
+                                    ? " (efeito de raça: dano direto aumentado em " + extra + ")"
+                                    : extra < 0
+                                    ? " (efeito de raça: dano direto reduzido em " + extra + ")"
+                                    : "",
+                            defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+                    );
 
                 reportEvent(null, msg, true, false);
             } else return;
@@ -1198,19 +1216,19 @@ public class Shoukan extends GlobalGame implements Serializable {
             }
 
             if (op.getMana() > 0 || you.getMana() > 0) {
-                int yToSteal = (int) Math.min(
+                int yToSteal = Math.min(
                         op.getMana(),
                         atkr.getLinkedTo().parallelStream()
                                 .filter(e -> e.getCharm() == Charm.DRAIN)
-                                .map(e -> Helper.getFibonacci(e.getTier()))
-                                .count()
+                                .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
+                                .sum()
                 );
-                int hToSteal = (int) Math.min(
+                int hToSteal = Math.min(
                         you.getMana(),
                         defr.getLinkedTo().parallelStream()
                                 .filter(e -> e.getCharm() == Charm.DRAIN)
-                                .map(e -> Helper.getFibonacci(e.getTier()))
-                                .count()
+                                .mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
+                                .sum()
                 );
 
 
@@ -1437,10 +1455,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                     }
                     return;
                 }
-
-                if (e.getCharm() == Charm.MIRROR && activator != null) {
-                    destroyCard(caster, source, side, index);
-                }
             }
 
             List<SlotColumn> slts = getArena().getSlots().get(side);
@@ -1509,10 +1523,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                         e.getBonus().getSpecialData().put("uses", uses);
                     }
                     return;
-                }
-
-                if (e.getCharm() == Charm.MIRROR && activator != null) {
-                    convertCard(caster, source, side, index);
                 }
             }
 
@@ -1679,10 +1689,6 @@ public class Shoukan extends GlobalGame implements Serializable {
                         e.getBonus().getSpecialData().put("uses", uses);
                     }
                     return;
-                }
-
-                if (e.getCharm() == Charm.MIRROR && activator != null) {
-                    captureCard(caster, source, side, index, withFusion);
                 }
             }
 

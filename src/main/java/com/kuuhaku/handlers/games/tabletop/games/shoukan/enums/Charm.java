@@ -36,7 +36,8 @@ public enum Charm {
 	PIERCING("Penetração", "Causa dano direto ao atacar"),
 	AGILITY("Agilidade", "Aumenta a chance de esquiva em %s%%"),
 	DRAIN("Dreno", "Rouba %s de mana ao atacar"),
-	BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar");
+	BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar"),
+	FORTIFY("Fortificar", "Aumenta a chance de bloqueio em %s%%");
 
 	private final String name;
 	private final String description;
@@ -58,12 +59,13 @@ public enum Charm {
 			);
 			case DRAIN -> description.formatted(Helper.getFibonacci(tier));
 			case AGILITY -> description.formatted(10 * Helper.getFibonacci(tier));
+			case FORTIFY -> description.formatted(5 * Helper.getFibonacci(tier));
 			default -> description;
 		};
 	}
 
 	public BufferedImage getIcon() {
-		if (this == SPELL) return null;
+		if (Helper.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
 		return Helper.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 }
