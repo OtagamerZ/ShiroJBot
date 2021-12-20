@@ -1812,7 +1812,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		try {
 			Champion link = target.getLinkedTo().getRight();
 			if (link != null)
-				link.tunlink(target);
+				link.unlink(target);
 		} catch (NullPointerException ignore) {
 		}
 
