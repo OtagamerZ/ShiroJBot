@@ -155,6 +155,7 @@ public class HeroStatsCommand implements Executable {
 								\\🗡️ Ataque: %s
 								\\🛡️ Defesa: %s
 								\\⚡ Esquiva: %s%%
+								\\🪖 Bloqueio: %s%%
 
 								\\🩸 HP: %s
 								\\🧭 EP: %s
@@ -166,6 +167,7 @@ public class HeroStatsCommand implements Executable {
 								h.getAtk(),
 								h.getDef(),
 								h.getDodge(),
+								h.getBlock(),
 								h.getMaxHp(),
 								h.getMaxEnergy(),
 								h.getMp(),
