@@ -2064,14 +2064,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				Equipment e = sc.getBottom();
 				if (e != null) {
-					if (e.getLinkedTo() == null)
+					if (e.getLinkedTo() == null) {
 						unequipCard(getCurrentSide(), e.getIndex());
-
-					Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getLeft()).getTop();
-					if (link == null || !link.equals(e.getLinkedTo().getRight())) {
-						unequipCard(getCurrentSide(), e.getIndex());
-					} else if (link.getLinkedTo().stream().noneMatch(eq -> eq.equals(e) && eq.getIndex() == e.getIndex())) {
-						link.link(e);
+					} else {
+						Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getLeft()).getTop();
+						if (link == null || !link.equals(e.getLinkedTo().getRight())) {
+							unequipCard(getCurrentSide(), e.getIndex());
+						} else if (link.getLinkedTo().stream().noneMatch(eq -> eq.equals(e) && eq.getIndex() == e.getIndex())) {
+							link.link(e);
+						}
 					}
 				}
 
