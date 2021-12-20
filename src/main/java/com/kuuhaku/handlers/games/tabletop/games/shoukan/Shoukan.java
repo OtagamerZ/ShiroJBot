@@ -493,6 +493,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.removeHp(e.getBlood());
 
 						if (free != null) {
+							if (e.getCharms().contains(Charm.TRAP))
+								e.setFlipped(true);
 							free.setBottom(e);
 							Champion t;
 							if (e.getArgType() == Arguments.ALLY) {
