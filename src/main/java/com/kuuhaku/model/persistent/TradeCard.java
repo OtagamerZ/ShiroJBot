@@ -18,59 +18,40 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.model.enums.CardType;
+
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "trade")
-public class Trade {
+@Table(name = "tradecard")
+public class TradeCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private TradeOffer left = null;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Card card;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private TradeOffer right = null;
+	@Enumerated(EnumType.STRING)
+	private CardType type = CardType.NONE;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean finished = false;
-
-	public Trade() {
+	public TradeCard() {
 	}
 
-	public Trade(TradeOffer left, TradeOffer right) {
-		this.left = left;
-		this.right = right;
+	public TradeCard(Card card, CardType type) {
+		this.card = card;
+		this.type = type;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public TradeOffer getOffer(String uid) {
-		if (left.getUid().equals(uid)) return left;
-		return right;
+	public Card getCard() {
+		return card;
 	}
 
-	public List<TradeOffer> getOffers() {
-		return List.of(left, right);
-	}
-
-	public TradeOffer getLeft() {
-		return left;
-	}
-
-	public TradeOffer getRight() {
-		return right;
-	}
-
-	public boolean isFinished() {
-		return finished;
-	}
-
-	public void setFinished(boolean finished) {
-		this.finished = finished;
+	public CardType getType() {
+		return type;
 	}
 }
