@@ -496,6 +496,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							if (e.getCharms().contains(Charm.TRAP))
 								e.setFlipped(true);
 							free.setBottom(e);
+
 							Champion t;
 							if (e.getArgType() == Arguments.ALLY) {
 								assert allyPos != null;
@@ -512,7 +513,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 
-						if (e.canGoToGrave() && e.getArgType() != Arguments.ENEMY) {
+						if (e.canGoToGrave() && !Helper.containsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP)) {
 							if (e.getTier() >= 4)
 								arena.getBanned().add(e);
 							else
@@ -1808,9 +1809,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Equipment target = getSlot(side, index).getBottom();
 		if (target == null) return;
 
-		Champion link = target.getLinkedTo().getRight();
-		if (link != null)
-			link.unlink(target);
+		try {
+			Champion link = target.getLinkedTo().getRight();
+			if (link != null)
+				link.unlink(target);
+		} catch (NullPointerException ignore) {
+		}
 
 		getSlot(side, index).setBottom(null);
 		if (target.canGoToGrave()) {
