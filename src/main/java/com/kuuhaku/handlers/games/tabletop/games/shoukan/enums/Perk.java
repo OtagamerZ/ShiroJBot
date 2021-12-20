@@ -27,7 +27,7 @@ public enum Perk {
 	MASOCHIST("Masoquista", "Aumenta o ataque e reduz a defesa com base no dano acumulado (2% HP perdido = +1% ATK/-1% DEF)."),
 	NIGHTCAT("Gato Noturno", "Dobra a chance de esquiva em campos noturnos, mas divide pela metade em campos diurnos."),
 	VAMPIRE("Vampiro", "Derrotar cartas restaura 10% do HP perdido, mas reduz o HP máximo em 25%."),
-	ARMORED("Encouraçado", "O atributo AGI deixa de conceder esquiva e passa a aumentar a defesa."),
+	ARMORED("Encouraçado", "O atributo AGI passa a conceder chance de bloqueio ao invés de esquiva."),
 	MINDSHIELD("Escudo Psíquico", "Ganha permanentemente um escudo de feitiços, mas dobra o custo de mana."),
 	OPTIMISTIC("Otimista", "Aumenta a taxa de regeneração em 50%."),
 	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50%."),
