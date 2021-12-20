@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.RankedTier;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.utils.Helper;
@@ -263,7 +264,12 @@ public class TenthSecondEvent implements Job {
 				if (!msg.getAuthor().getId().equals(mmr1.getUid()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
 					return;
 
-				if (KawaiponDAO.getDeck(msg.getAuthor().getId()).hasInvalidDeck(p1Channel)) return;
+				Deck d = KawaiponDAO.getDeck(msg.getAuthor().getId());
+				if (d.hasInvalidDeck(p1Channel)) return;
+				else if (d.isNovice()) {
+					p1Channel.sendMessage("❌ | Você não pode jogar partidas ranqueadas com o deck de iniciante.").queue();
+					return;
+				}
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
 					msg.addReaction(Helper.ACCEPT)
@@ -332,7 +338,12 @@ public class TenthSecondEvent implements Job {
 				if (!msg.getContentRaw().equalsIgnoreCase("aschente") || confirmations.remove(msg.getAuthor().getId()))
 					return;
 
-				if (KawaiponDAO.getDeck(msg.getAuthor().getId()).hasInvalidDeck(p1Channel)) return;
+				Deck d = KawaiponDAO.getDeck(msg.getAuthor().getId());
+				if (d.hasInvalidDeck(p1Channel)) return;
+				else if (d.isNovice()) {
+					p1Channel.sendMessage("❌ | Você não pode jogar partidas ranqueadas com o deck de iniciante.").queue();
+					return;
+				}
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
 					msg.addReaction(Helper.ACCEPT)
