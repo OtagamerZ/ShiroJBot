@@ -474,7 +474,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						}
 
 						SlotColumn free = null;
-						if (Helper.equalsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP) && Helper.equalsAny(e.getArgType(), Arguments.ALLY, Arguments.ENEMY)) {
+						if (Helper.containsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP) && Helper.equalsAny(e.getArgType(), Arguments.ALLY, Arguments.ENEMY)) {
 							if (e.getArgType() == Arguments.ALLY) {
 								free = getFirstAvailableSlot(getCurrentSide(), false);
 							} else if (e.getArgType() == Arguments.ENEMY) {
