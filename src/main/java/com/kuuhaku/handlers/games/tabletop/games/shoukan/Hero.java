@@ -444,7 +444,6 @@ public class Hero implements Cloneable {
                 case CARELESS -> 0.66;
                 case MANALESS -> 0.5;
                 case MASOCHIST -> 1 - (1 - Helper.prcnt(getHp(), getMaxHp())) / 2;
-                case ARMORED -> 1 + getStats().calcDodge() * 0.01;
                 default -> 1;
             };
         }
@@ -464,6 +463,18 @@ public class Hero implements Cloneable {
         }
 
         return (int) Math.round(getStats().calcDodge() * ddgModif);
+    }
+
+    public int getBlock() {
+        int block = 0;
+        for (Perk perk : perks) {
+            block += switch (perk) {
+                case ARMORED -> getStats().calcDodge() / 2;
+                default -> 0;
+            };
+        }
+
+        return Math.max(0, block);
     }
 
     public Champion toChampion() {

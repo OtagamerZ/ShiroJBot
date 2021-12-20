@@ -418,6 +418,10 @@ public class Helper {
         return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
     }
 
+    public static String unmention(String text) {
+        return text.replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
+    }
+
     public static String makeEmoteFromMention(String[] source) {
         String[] chkdSrc = new String[source.length];
         for (int i = 0; i < source.length; i++) {
@@ -425,7 +429,8 @@ public class Helper {
                 chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
             else chkdSrc[i] = source[i];
         }
-        return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
+
+        return unmention(String.join(" ", chkdSrc).trim());
     }
 
     public static String makeEmoteFromMention(String sourceNoSplit) {
@@ -436,7 +441,8 @@ public class Helper {
                 chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
             else chkdSrc[i] = source[i];
         }
-        return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
+
+        return unmention(String.join(" ", chkdSrc).trim());
     }
 
     public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {

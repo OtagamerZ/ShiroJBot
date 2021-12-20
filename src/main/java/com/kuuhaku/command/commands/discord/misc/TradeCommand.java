@@ -22,21 +22,14 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.TradeDAO;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.TradeContent;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.Trade;
+import com.kuuhaku.model.persistent.TradeOffer;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -46,11 +39,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 @Command(
 		name = "trocar",
@@ -80,26 +70,38 @@ public class TradeCommand implements Executable {
 		}
 
 		User tgt = message.getMentionedUsers().get(0);
-		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja negociar com você, deseja aceitar?").queue(s ->
+		Trade t = TradeDAO.getTrade(author.getId());
+		if (t != null) {
+			String other = t.getLeft().getUid().equals(author.getId()) ? t.getRight().getUid() : t.getLeft().getUid();
+			String name = Helper.getUsername(other);
+			if (!tgt.getId().equals(other)) {
+				channel.sendMessage("❌ | Você possui uma troca pendente com " + Helper.unmention(name) + ".").queue();
+				return;
+			}
+		}
+
+		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja" + (t == null ? "" : " continuar a") + " negociar com você, deseja aceitar?").queue(s ->
 				Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (!wrapper.getUser().getId().equals(tgt.getId())) return;
 							s.delete().queue(null, Helper::doNothing);
-							Map<String, TradeContent> offers = Map.of(
-									author.getId(), new TradeContent(author.getId()),
-									tgt.getId(), new TradeContent(tgt.getId())
-							);
-
-							Account acc = AccountDAO.getAccount(author.getId());
-							Account tacc = AccountDAO.getAccount(tgt.getId());
+							Trade trade = Helper.getOr(t, new Trade(
+									new TradeOffer(author.getId()),
+									new TradeOffer(tgt.getId())
+							));
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
-									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para definir uma quantia de CR digite apenas `+ valor`.")
-									.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
-									.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
-									.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
+									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para adicionar/remover uma quantia de CR digite `+/- valor`.")
+									.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
+									.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
+									.setFooter("%s: %s CR\n%s: %s CR".formatted(
+											author.getName(),
+											Helper.separate(trade.getLeft().getAccount().getBalance()),
+											tgt.getName(),
+											Helper.separate(trade.getRight().getAccount().getBalance())
+									));
 
-							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
+							sendTradeWindow(author, channel, guild, tgt, trade, eb);
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 						ms -> {
@@ -110,7 +112,7 @@ public class TradeCommand implements Executable {
 		);
 	}
 
-	private void sendTradeWindow(User author, TextChannel channel, Guild guild, User tgt, Map<String, TradeContent> offers, Account acc, Account tacc, EmbedBuilder eb) {
+	private void sendTradeWindow(User author, TextChannel channel, Guild guild, User tgt, Trade trade, EmbedBuilder eb) {
 		channel.sendMessageEmbeds(eb.build()).queue(msg -> {
 			SimpleMessageListener sml = new SimpleMessageListener() {
 				@Override
@@ -123,10 +125,11 @@ public class TradeCommand implements Executable {
 						String[] rawOffer = content.replaceFirst("[+\\-]", "").trim().split(" ");
 						if (rawOffer.length < 1) return;
 
-						boolean foil = Helper.equalsAny("c", rawOffer);
+						boolean foil = rawOffer.length > 1 && rawOffer[1].equalsIgnoreCase("C");
 						String offer = rawOffer[0];
-						TradeContent tc = offers.get(usr.getId());
-						if (tc.isClosed()) {
+
+						TradeOffer to = trade.getOffer(usr.getId());
+						if (to.hasAccepted()) {
 							channel.sendMessage("❌ | Você já confirmou sua oferta.").queue();
 							return;
 						}
@@ -137,82 +140,47 @@ public class TradeCommand implements Executable {
 								if (c < 0) {
 									channel.sendMessage("❌ | O valor deve ser maior ou igual a 0.").queue();
 									return;
-								} else if (tc.getAcc().getBalance() < c) {
-									channel.sendMessage("❌ | Você não possui CR suficientes.").queue();
-									return;
 								}
 
-								tc.setCredits(c);
+								if (add) {
+									if (to.getAccount().getBalance() < to.getValue() + c) {
+										channel.sendMessage("❌ | Você não possui CR suficientes.").queue();
+										return;
+									}
+
+									to.addValue(c);
+								} else {
+									if (to.getValue() - c < 0) {
+										channel.sendMessage("❌ | Você não pode reduzir o CR oferecido para menos que 0.").queue();
+										return;
+									}
+
+									to.removeValue(c);
+								}
 							} catch (NumberFormatException e) {
 								channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
 								return;
 							}
 						} else {
-							CardType ct = CardDAO.identifyType(offer);
-							switch (ct) {
-								case KAWAIPON -> {
-									KawaiponCard kc = new KawaiponCard(CardDAO.getCard(offer), foil);
-									if (!tc.getKawaipon().getCards().contains(kc)) {
-										channel.sendMessage("❌ | Você não possui essa carta.").queue();
-										return;
-									}
 
-									if (add) {
-										tc.getCards().add(kc);
-										tc.getKp().removeCard(kc);
-									} else {
-										tc.getCards().remove(kc);
-										tc.getKp().addCard(kc);
-									}
-								}
-								case EVOGEAR -> {
-									Equipment e = CardDAO.getEquipment(offer);
-									if (!tc.getDeck().getEquipments().contains(e)) {
-										channel.sendMessage("❌ | Você não possui essa carta.").queue();
-										return;
-									}
-
-									if (add) {
-										tc.getEquipments().add(e);
-										tc.getDk().removeEquipment(e);
-									} else {
-										tc.getEquipments().remove(e);
-										tc.getDk().addEquipment(e);
-									}
-								}
-								case FIELD -> {
-									Field f = CardDAO.getField(offer);
-									if (!tc.getDeck().getFields().contains(f)) {
-										channel.sendMessage("❌ | Você não possui essa carta.").queue();
-										return;
-									}
-
-									if (add) {
-										tc.getFields().add(f);
-										tc.getDk().removeField(f);
-									} else {
-										tc.getFields().remove(f);
-										tc.getDk().addField(f);
-									}
-								}
-								case NONE -> {
-									channel.sendMessage("❌ | Carta inexistente, você não quis dizer `" + Helper.didYouMean(offer, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
-									return;
-								}
-							}
 						}
 
-						for (TradeContent of : offers.values()) {
-							of.setClosed(false);
+						for (TradeOffer of : trade.getOffers()) {
+							of.setAccepted(false);
 						}
 						eb.clearFields()
-								.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
-								.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
-								.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
+								.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
+								.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
+								.setFooter("%s: %s CR\n%s: %s CR".formatted(
+										author.getName(),
+										Helper.separate(trade.getLeft().getAccount().getBalance()),
+										tgt.getName(),
+										Helper.separate(trade.getRight().getAccount().getBalance())
+								));
 
 						msg.editMessageEmbeds(eb.build()).queue(null, t -> {
 							msg.delete().queue(null, Helper::doNothing);
-							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
+							sendTradeWindow(author, channel, guild, tgt, trade, eb);
 						});
 
 						event.getMessage().delete().queue(null, Helper::doNothing);
@@ -221,76 +189,28 @@ public class TradeCommand implements Executable {
 			};
 
 			Pages.buttonize(msg, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-						offers.get(wrapper.getUser().getId()).setClosed(true);
+						if (trade.getOffers().stream().anyMatch(o -> o.getUid().equals(wrapper.getUser().getId()))) {
+							trade.getOffer(wrapper.getUser().getId()).setAccepted(true);
 
-						if (offers.values().stream().allMatch(TradeContent::isClosed)) {
-							int code = 0;
-							User inv = null;
+							if (trade.getOffers().stream().allMatch(TradeOffer::hasAccepted)) {
 
-							for (TradeContent offer : offers.values()) {
-								Account oAcc = offer.getAccount();
-								Kawaipon oKp = offer.getKawaipon();
-								Deck oDk = oKp.getDeck();
-
-								code = oAcc.getBalance() >= offer.getCredits()
-									   && oKp.getCards().containsAll(offer.getCards())
-									   && oDk.getEquipments().containsAll(offer.getEquipments())
-									   && oDk.getFields().containsAll(offer.getFields()) ? 0 : 1;
-
-								if (code != 0) {
-									inv = offer.getUid().equals(author.getId()) ? author : tgt;
-									break;
-								}
-
-								TradeContent oT = offers.values().stream()
-										.filter(t -> !t.equals(offer))
-										.findFirst()
-										.orElseThrow();
-
-								if (!offer.canReceive(oT.getKawaipon())) {
-									inv = oT.getUid().equals(author.getId()) ? author : tgt;
-									code = 2;
-								}
 							}
 
-							if (code == 0) {
-								if (offers.values().stream().mapToInt(t -> t.getCards().size() + t.getEquipments().size() + t.getFields().size()).sum() == 0) {
-									channel.sendMessage("❌ | Transação inválida, você não pode realizar uma troca sem itens.").queue();
-									for (TradeContent offer : offers.values()) {
-										offer.setClosed(false);
-									}
-								} else if (TradeContent.isValidTrade(offers.values())) {
-									msg.delete().queue(null, Helper::doNothing);
-									sml.close();
-									channel.sendMessage("Transação realizada com sucesso!").queue();
-									TradeContent.trade(offers.values());
-									return;
-								} else {
-									channel.sendMessage("❌ | Transação inválida, o valor entre as ofertas é injusto.").queue();
-									for (TradeContent offer : offers.values()) {
-										offer.setClosed(false);
-									}
-								}
-							} else {
-								switch (code) {
-									case 1 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " não possui todos os itens oferecidos ou não possui CR suficientes.").queue();
-									case 2 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " possui um dos itens oferecidos.").queue();
-								}
-								for (TradeContent offer : offers.values()) {
-									offer.setClosed(false);
-								}
-							}
+							eb.clearFields()
+									.addField((trade.getLeft().hasAccepted() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
+									.addField((trade.getRight().hasAccepted() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
+									.setFooter("%s: %s CR\n%s: %s CR".formatted(
+											author.getName(),
+											Helper.separate(trade.getLeft().getAccount().getBalance()),
+											tgt.getName(),
+											Helper.separate(trade.getRight().getAccount().getBalance())
+									));
+
+							msg.editMessageEmbeds(eb.build()).queue(null, t -> {
+								msg.delete().queue(null, Helper::doNothing);
+								sendTradeWindow(author, channel, guild, tgt, trade, eb);
+							});
 						}
-
-						eb.clearFields()
-								.addField((offers.get(author.getId()).isClosed() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
-								.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
-								.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
-
-						msg.editMessageEmbeds(eb.build()).queue(null, t -> {
-							msg.delete().queue(null, Helper::doNothing);
-							sendTradeWindow(author, channel, guild, tgt, offers, acc, tacc, eb);
-						});
 					}), ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 					u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 					_ms -> {
