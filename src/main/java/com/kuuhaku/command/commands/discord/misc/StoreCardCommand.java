@@ -174,7 +174,7 @@ public class StoreCardCommand implements Executable {
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
 
-								if (fDk.isNovice()) {
+								if (fDk.isNovice() && off.getMiddle() == CardType.SENSHI) {
 									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!")).queue();
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									return;
