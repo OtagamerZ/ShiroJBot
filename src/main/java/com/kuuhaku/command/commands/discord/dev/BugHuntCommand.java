@@ -26,6 +26,8 @@ import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;
@@ -63,13 +65,19 @@ public class BugHuntCommand implements Executable {
 
 		acc.addBug();
 
+		boolean staff = ShiroInfo.getStaff().contains(acc.getUid());
+		int cr = 1000 * (staff ? 2 : 1);
+
 		if (acc.getBugs() % 5 == 0) {
-			acc.addCredit(2500, this.getClass());
-			acc.setCardStashCapacity(acc.getCardStashCapacity() + 10);
-			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+2.500 CR e +10 espaços no armazém)").queue();
+			cr *= 2.5;
+			int slots = 10 * (staff ? 2 : 1);
+
+			acc.addCredit(cr, this.getClass());
+			acc.setCardStashCapacity(acc.getCardStashCapacity() + slots);
+			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR e +" + slots + " espaços no armazém)").queue();
 		} else {
-			acc.addCredit(1000, this.getClass());
-			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+1.000 CR)").queue();
+			acc.addCredit(cr, this.getClass());
+			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR)").queue();
 		}
 
 		AccountDAO.saveAccount(acc);
@@ -79,8 +87,22 @@ public class BugHuntCommand implements Executable {
 		Account acc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
 		acc.addBug();
-		acc.addCredit(1000, this.getClass());
+
+		boolean staff = ShiroInfo.getStaff().contains(acc.getUid());
+		int cr = 1000 * (staff ? 2 : 1);
+
+		if (acc.getBugs() % 5 == 0) {
+			cr *= 2.5;
+			int slots = 10 * (staff ? 2 : 1);
+
+			acc.addCredit(cr, this.getClass());
+			acc.setCardStashCapacity(acc.getCardStashCapacity() + slots);
+			channel.sendMessage("<@" + acc.getUid() + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR e +" + slots + " espaços no armazém)").queue();
+		} else {
+			acc.addCredit(cr, this.getClass());
+			channel.sendMessage("<@" + acc.getUid() + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR)").queue();
+		}
+
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " ajudou a matar um bug! (Ganhou 1.000 CR)").queue();
 	}
 }
