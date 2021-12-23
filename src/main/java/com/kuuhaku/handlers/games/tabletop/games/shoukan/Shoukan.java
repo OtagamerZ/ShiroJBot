@@ -885,7 +885,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (applyEffect(GAME_TICK, c, s, i, new Source(c, s, i))) return;
 
 				int heroIndex = isHeroInField(s);
-				if (c.getCard().getId().equals(hd.getUser().getId()) && hd.getHero() != null && heroIndex == -1) {
+				if (heroIndex == -1 && hd.getHero() != null && c.getCard().getId().equals(hd.getUser().getId()) && c.getCard().getName().equals(hd.getHero().getName())) {
 					c.setHero(hd.getHero());
 				} else if (i != heroIndex) {
 					c.setHero(null);

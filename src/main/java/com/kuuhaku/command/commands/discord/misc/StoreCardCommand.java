@@ -176,7 +176,6 @@ public class StoreCardCommand implements Executable {
 
 								if (fDk.isNovice() && off.getMiddle() == CardType.SENSHI) {
 									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!")).queue();
-									Main.getInfo().getConfirmationPending().remove(author.getId());
 									return;
 								}
 
@@ -212,7 +211,6 @@ public class StoreCardCommand implements Executable {
 								};
 								if (m == null) {
 									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode armazenar uma carta que não possui!")).queue();
-									Main.getInfo().getConfirmationPending().remove(author.getId());
 									return;
 								}
 
