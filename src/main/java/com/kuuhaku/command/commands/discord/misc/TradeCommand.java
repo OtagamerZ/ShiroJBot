@@ -19,34 +19,44 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TradeDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Trade;
-import com.kuuhaku.model.persistent.TradeOffer;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "trocar",
 		aliases = {"trade"},
 		usage = "req_mention",
-		category = Category.MISC
+		category = Category.SUPPORT
 )
 @Requires({
 		Permission.MESSAGE_MANAGE,
@@ -57,7 +67,6 @@ public class TradeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (true) return;
 		if (message.getMentionedUsers().size() < 1) {
 			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
@@ -91,7 +100,7 @@ public class TradeCommand implements Executable {
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
-									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para adicionar/remover uma quantia de CR digite `+/- valor`.")
+									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta`, para adicionar/remover uma quantia de CR digite `+/- valor`.")
 									.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
 									.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
 									.setFooter("%s: %s CR\n%s: %s CR".formatted(
@@ -103,11 +112,7 @@ public class TradeCommand implements Executable {
 
 							sendTradeWindow(author, channel, guild, tgt, trade, eb);
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
-						ms -> {
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-							Main.getInfo().getConfirmationPending().remove(tgt.getId());
-						}
+						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId())
 				)
 		);
 	}
@@ -125,7 +130,6 @@ public class TradeCommand implements Executable {
 						String[] rawOffer = content.replaceFirst("[+\\-]", "").trim().split(" ");
 						if (rawOffer.length < 1) return;
 
-						boolean foil = rawOffer.length > 1 && rawOffer[1].equalsIgnoreCase("C");
 						String offer = rawOffer[0];
 
 						TradeOffer to = trade.getOffer(usr.getId());
@@ -149,6 +153,10 @@ public class TradeCommand implements Executable {
 									}
 
 									to.addValue(c);
+
+									Account acc = to.getAccount();
+									acc.removeCredit(c, this.getClass());
+									AccountDAO.saveAccount(acc);
 								} else {
 									if (to.getValue() - c < 0) {
 										channel.sendMessage("❌ | Você não pode reduzir o CR oferecido para menos que 0.").queue();
@@ -156,18 +164,251 @@ public class TradeCommand implements Executable {
 									}
 
 									to.removeValue(c);
+
+									Account acc = to.getAccount();
+									acc.addCredit(c, this.getClass());
+									AccountDAO.saveAccount(acc);
 								}
 							} catch (NumberFormatException e) {
 								channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
 								return;
 							}
 						} else {
+							if (add) {
+								Kawaipon kp = to.getKawaipon();
+								Deck dk = kp.getDeck();
 
+								String name = offer.toUpperCase(Locale.ROOT);
+								EnumSet<CardType> matches = EnumSet.noneOf(CardType.class);
+								kp.getCards().stream()
+										.filter(kc -> kc.getCard().getId().equals(name))
+										.findFirst()
+										.ifPresent(kc -> matches.add(CardType.KAWAIPON));
+								dk.getChampions().stream()
+										.filter(kc -> kc.getCard().getId().equals(name))
+										.findFirst()
+										.ifPresent(kc -> matches.add(CardType.SENSHI));
+								dk.getEquipments().stream()
+										.filter(e -> e.getCard().getId().equals(name))
+										.findFirst()
+										.ifPresent(e -> matches.add(CardType.EVOGEAR));
+								dk.getFields().stream()
+										.filter(f -> f.getCard().getId().equals(name))
+										.findFirst()
+										.ifPresent(f -> matches.add(CardType.FIELD));
+
+								CompletableFuture<Triple<Card, CardType, Boolean>> chosen = new CompletableFuture<>();
+								if (matches.size() > 1) {
+									EmbedBuilder eb = new ColorlessEmbedBuilder()
+											.setTitle("Por favor escolha uma")
+											.setDescription(
+													(matches.contains(CardType.KAWAIPON) ? ":regional_indicator_k: -> Kawaipon\n" : "") +
+															(matches.contains(CardType.SENSHI) ? ":regional_indicator_c: -> Campeão\n" : "") +
+															(matches.contains(CardType.EVOGEAR) ? ":regional_indicator_e: -> Evogear\n" : "") +
+															(matches.contains(CardType.FIELD) ? ":regional_indicator_f: -> Campo\n" : "")
+											);
+
+									Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
+									if (matches.contains(CardType.KAWAIPON)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
+											chooseVersion(author, channel, kp, name, chosen);
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+									if (matches.contains(CardType.SENSHI)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
+											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+									if (matches.contains(CardType.EVOGEAR)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
+											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+									if (matches.contains(CardType.FIELD)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
+											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+
+									Main.getInfo().getConfirmationPending().put(author.getId(), true);
+									channel.sendMessageEmbeds(eb.build())
+											.queue(s -> Pages.buttonize(s, btns, true,
+													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
+													u -> u.getId().equals(author.getId()),
+													ms -> {
+														Main.getInfo().getConfirmationPending().remove(author.getId());
+														chosen.complete(null);
+													}
+											));
+								} else if (matches.isEmpty()) {
+									channel.sendMessage("❌ | Você não pode oferecer uma carta que não possui!").queue();
+									return;
+								} else {
+									CardType type = matches.stream().findFirst().orElse(CardType.NONE);
+									switch (type) {
+										case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
+										case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+										case NONE -> chosen.complete(null);
+									}
+								}
+
+								try {
+									Triple<Card, CardType, Boolean> off = chosen.get();
+									if (off == null) {
+										channel.sendMessage("Seleção cancelada.").queue();
+										return;
+									}
+
+									Kawaipon finalKp = to.getKawaipon();
+									Deck fDk = finalKp.getDeck();
+
+									if (fDk.isNovice() && off.getMiddle() == CardType.SENSHI) {
+										channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!").queue();
+										return;
+									}
+
+									TradeCard tc = switch (off.getMiddle()) {
+										case EVOGEAR -> {
+											Equipment e = fDk.getEquipment(off.getLeft());
+											fDk.removeEquipment(e);
+											if (e == null) yield null;
+
+											yield new TradeCard(off.getLeft(), off.getMiddle());
+										}
+										case FIELD -> {
+											Field f = fDk.getField(off.getLeft());
+											fDk.removeField(f);
+											if (f == null) yield null;
+
+											yield new TradeCard(off.getLeft(), off.getMiddle());
+										}
+										case SENSHI -> {
+											Champion c = fDk.getChampion(off.getLeft());
+											fDk.removeChampion(c);
+											if (c == null) yield null;
+
+											yield new TradeCard(off.getLeft(), off.getMiddle());
+										}
+										default -> {
+											KawaiponCard kc = finalKp.getCard(off.getLeft(), off.getRight());
+											finalKp.removeCard(kc);
+											if (kc == null) yield null;
+
+											yield new TradeCard(off.getLeft(), off.getMiddle(), off.getRight());
+										}
+									};
+									if (tc == null) {
+										channel.sendMessage("❌ | Você não pode oferecer uma carta que não possui!").queue();
+										return;
+									}
+
+									KawaiponDAO.saveKawaipon(finalKp);
+								} catch (InterruptedException | ExecutionException e) {
+									Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+								}
+							} else {
+								String name = offer.toUpperCase(Locale.ROOT);
+								EnumSet<CardType> matches = EnumSet.noneOf(CardType.class);
+								to.getCards().stream()
+										.filter(c -> c.getCard().getId().equals(name))
+										.map(TradeCard::getType)
+										.forEach(matches::add);
+
+								CompletableFuture<Triple<Card, CardType, Boolean>> chosen = new CompletableFuture<>();
+								if (matches.size() > 1) {
+									EmbedBuilder eb = new ColorlessEmbedBuilder()
+											.setTitle("Por favor escolha uma")
+											.setDescription(
+													(matches.contains(CardType.KAWAIPON) ? ":regional_indicator_k: -> Kawaipon\n" : "") +
+															(matches.contains(CardType.SENSHI) ? ":regional_indicator_c: -> Campeão\n" : "") +
+															(matches.contains(CardType.EVOGEAR) ? ":regional_indicator_e: -> Evogear\n" : "") +
+															(matches.contains(CardType.FIELD) ? ":regional_indicator_f: -> Campo\n" : "")
+											);
+
+									Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
+									if (matches.contains(CardType.KAWAIPON)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
+											chooseVersion(author, channel, to, name, chosen);
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+									if (matches.contains(CardType.SENSHI)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
+											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+									if (matches.contains(CardType.EVOGEAR)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
+											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+									if (matches.contains(CardType.FIELD)) {
+										btns.put(Helper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
+											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
+											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										});
+									}
+
+									Main.getInfo().getConfirmationPending().put(author.getId(), true);
+									channel.sendMessageEmbeds(eb.build())
+											.queue(s -> Pages.buttonize(s, btns, true,
+													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
+													u -> u.getId().equals(author.getId()),
+													ms -> {
+														Main.getInfo().getConfirmationPending().remove(author.getId());
+														chosen.complete(null);
+													}
+											));
+								} else if (matches.isEmpty()) {
+									channel.sendMessage("❌ | Você não pode retornar uma carta que não ofereceu!").queue();
+									return;
+								} else {
+									CardType type = matches.stream().findFirst().orElse(CardType.NONE);
+									switch (type) {
+										case KAWAIPON -> chooseVersion(author, channel, to, name, chosen);
+										case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+										case NONE -> chosen.complete(null);
+									}
+								}
+
+								try {
+									Triple<Card, CardType, Boolean> off = chosen.get();
+									if (off == null) {
+										channel.sendMessage("Seleção cancelada.").queue();
+										return;
+									}
+
+									TradeCard card = to.getCards().stream()
+											.filter(c ->
+													c.getCard().equals(off.getLeft())
+															&& c.getType() == off.getMiddle()
+															&& c.isFoil() == off.getRight()
+											)
+											.findFirst()
+											.orElse(null);
+									if (card == null) {
+										channel.sendMessage("❌ | Você não pode retornar uma carta que não ofereceu!").queue();
+										return;
+									}
+
+									to.rollback(card);
+								} catch (InterruptedException | ExecutionException e) {
+									Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+								}
+							}
 						}
 
 						for (TradeOffer of : trade.getOffers()) {
 							of.setAccepted(false);
 						}
+						TradeDAO.saveTrade(trade);
+
 						eb.clearFields()
 								.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
 								.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
@@ -193,7 +434,15 @@ public class TradeCommand implements Executable {
 							trade.getOffer(wrapper.getUser().getId()).setAccepted(true);
 
 							if (trade.getOffers().stream().allMatch(TradeOffer::hasAccepted)) {
+								trade.getLeft().commit(trade.getRight().getUid());
+								trade.getRight().commit(trade.getLeft().getUid());
+								trade.setFinished(true);
 
+								msg.delete().queue(null, Helper::doNothing);
+								sml.close();
+								channel.sendMessage("Transação realizada com sucesso!").queue();
+								TradeDAO.saveTrade(trade);
+								return;
 							}
 
 							eb.clearFields()
@@ -218,12 +467,76 @@ public class TradeCommand implements Executable {
 								.flatMap(m -> m.suppressEmbeds(true))
 								.queue(null, Helper::doNothing);
 						sml.close();
-						Main.getInfo().getConfirmationPending().remove(author.getId());
-						Main.getInfo().getConfirmationPending().remove(tgt.getId());
+
+						for (TradeOffer offer : trade.getOffers()) {
+							offer.rollback();
+						}
+
+						TradeDAO.removeTrade(trade);
 					}
 			);
 
 			ShiroInfo.getShiroEvents().addHandler(guild, sml);
 		});
+	}
+
+	private void chooseVersion(User author, TextChannel channel, Kawaipon kp, String name, CompletableFuture<Triple<Card, CardType, Boolean>> chosen) {
+		List<KawaiponCard> kcs = kp.getCards().stream()
+				.filter(kc -> kc.getCard().getId().equals(name))
+				.sorted(Comparator.comparing(KawaiponCard::isFoil))
+				.collect(Collectors.toList());
+
+		if (kcs.size() > 1) {
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
+					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
+								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+									chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, false));
+									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+								});
+								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+									chosen.complete(Triple.of(kcs.get(1).getCard(), CardType.KAWAIPON, true));
+									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+								});
+							}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								chosen.complete(null);
+							}
+					));
+		} else {
+			chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, kcs.get(0).isFoil()));
+		}
+	}
+
+	private void chooseVersion(User author, TextChannel channel, TradeOffer to, String name, CompletableFuture<Triple<Card, CardType, Boolean>> chosen) {
+		List<TradeCard> tcs = to.getCards().stream()
+				.filter(kc -> kc.getCard().getId().equals(name))
+				.sorted(Comparator.comparing(TradeCard::isFoil))
+				.collect(Collectors.toList());
+
+		if (tcs.size() > 1) {
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
+					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
+								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+									chosen.complete(Triple.of(tcs.get(0).getCard(), CardType.KAWAIPON, false));
+									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+								});
+								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+									chosen.complete(Triple.of(tcs.get(1).getCard(), CardType.KAWAIPON, true));
+									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+								});
+							}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								chosen.complete(null);
+							}
+					));
+		} else {
+			chosen.complete(Triple.of(tcs.get(0).getCard(), CardType.KAWAIPON, tcs.get(0).isFoil()));
+		}
 	}
 }
