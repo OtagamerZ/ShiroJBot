@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.model.enums.CardType;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tradecard")
@@ -35,12 +36,21 @@ public class TradeCard {
 	@Enumerated(EnumType.STRING)
 	private CardType type = CardType.NONE;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL")
+	private boolean foil = false;
+
 	public TradeCard() {
 	}
 
 	public TradeCard(Card card, CardType type) {
 		this.card = card;
 		this.type = type;
+	}
+
+	public TradeCard(Card card, CardType type, boolean foil) {
+		this.card = card;
+		this.type = type;
+		this.foil = true;
 	}
 
 	public int getId() {
@@ -53,5 +63,22 @@ public class TradeCard {
 
 	public CardType getType() {
 		return type;
+	}
+
+	public boolean isFoil() {
+		return foil;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TradeCard tradeCard = (TradeCard) o;
+		return id == tradeCard.id && foil == tradeCard.foil && Objects.equals(card, tradeCard.card) && type == tradeCard.type;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, card, type, foil);
 	}
 }

@@ -19,7 +19,12 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.StashDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
 
@@ -85,6 +90,112 @@ public class TradeOffer {
 
 	public Account getAccount() {
 		return AccountDAO.getAccount(uid);
+	}
+
+	public void rollback() {
+		Account acc = getAccount();
+		acc.addCredit(value, this.getClass());
+		AccountDAO.saveAccount(acc);
+
+		Kawaipon kp = getKawaipon();
+		Deck dk = kp.getDeck();
+
+		for (TradeCard card : cards) {
+			switch (card.getType()) {
+				case KAWAIPON -> {
+					KawaiponCard kc = new KawaiponCard(card.getCard(), card.isFoil());
+
+					if (kp.getCards().contains(kc)) {
+						StashDAO.saveCard(new Stash(uid, kc));
+					} else {
+						kp.addCard(kc);
+					}
+				}
+				case SENSHI -> {
+					Champion c = CardDAO.getChampion(card.getCard());
+
+					if (dk.checkChampionError(c) != 0) {
+						StashDAO.saveCard(new Stash(uid, c));
+					} else {
+						dk.addChampion(c);
+					}
+				}
+				case EVOGEAR -> {
+					Equipment e = CardDAO.getEquipment(card.getCard());
+
+					if (dk.checkEquipmentError(e) != 0) {
+						StashDAO.saveCard(new Stash(uid, e));
+					} else {
+						dk.addEquipment(e);
+					}
+				}
+				case FIELD -> {
+					Field f = CardDAO.getField(card.getCard());
+
+					if (dk.checkFieldError(f) != 0) {
+						StashDAO.saveCard(new Stash(uid, f));
+					} else {
+						dk.addField(f);
+					}
+				}
+			}
+		}
+
+		KawaiponDAO.saveKawaipon(kp);
+	}
+
+	public void rollback(TradeCard card) {
+		Kawaipon kp = getKawaipon();
+		Deck dk = kp.getDeck();
+
+		switch (card.getType()) {
+			case KAWAIPON -> {
+				KawaiponCard kc = new KawaiponCard(card.getCard(), card.isFoil());
+
+				if (kp.getCards().contains(kc)) {
+					StashDAO.saveCard(new Stash(uid, kc));
+				} else {
+					kp.addCard(kc);
+				}
+			}
+			case SENSHI -> {
+				Champion c = CardDAO.getChampion(card.getCard());
+
+				if (dk.checkChampionError(c) != 0) {
+					StashDAO.saveCard(new Stash(uid, c));
+				} else {
+					dk.addChampion(c);
+				}
+			}
+			case EVOGEAR -> {
+				Equipment e = CardDAO.getEquipment(card.getCard());
+
+				if (dk.checkEquipmentError(e) != 0) {
+					StashDAO.saveCard(new Stash(uid, e));
+				} else {
+					dk.addEquipment(e);
+				}
+			}
+			case FIELD -> {
+				Field f = CardDAO.getField(card.getCard());
+
+				if (dk.checkFieldError(f) != 0) {
+					StashDAO.saveCard(new Stash(uid, f));
+				} else {
+					dk.addField(f);
+				}
+			}
+		}
+
+		cards.remove(card);
+		KawaiponDAO.saveKawaipon(kp);
+	}
+
+	public void commit(String uid) {
+		TradeOffer to = new TradeOffer(uid);
+		to.addValue(value);
+		to.getCards().addAll(cards);
+		to.rollback();
 	}
 
 	@Override
