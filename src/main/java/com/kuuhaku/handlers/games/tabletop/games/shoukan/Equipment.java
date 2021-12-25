@@ -134,7 +134,7 @@ public class Equipment implements Drawable, Cloneable {
 					g2d.drawImage(star, (bi.getWidth() / 2) - (24 * getTier() / 2) + 24 * i, 41, 24, 24, null);
 
 			if (charms != null) {
-				if (Helper.equalsAny(charms, Charm.ENCHANTMENT, Charm.TRAP))
+				if (Helper.containsAny(charms, Charm.ENCHANTMENT, Charm.TRAP))
 					g2d.drawImage(Charm.getIcon(getCharms()), 135, 188, null);
 				else
 					g2d.drawImage(Charm.getIcon(getCharms()), 135, 255, null);
