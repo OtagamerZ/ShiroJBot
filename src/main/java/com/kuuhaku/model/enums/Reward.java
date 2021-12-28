@@ -63,8 +63,8 @@ public enum Reward {
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
-		if (v >= 0) acc.addCredit(Helper.rng(v), Reward.class);
-		else acc.removeCredit(Helper.rng(v), Reward.class);
+		if (v >= 0) acc.addCredit(v, Reward.class);
+		else acc.removeCredit(v, Reward.class);
 		AccountDAO.saveAccount(acc);
 
 		return v < 0 ? -r : r;
@@ -73,8 +73,8 @@ public enum Reward {
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
-		if (v >= 0) acc.addGem(Helper.rng(v));
-		else acc.removeGem(Helper.rng(v));
+		if (v >= 0) acc.addGem(v);
+		else acc.removeGem(v);
 		AccountDAO.saveAccount(acc);
 
 		return v < 0 ? -r : r;
