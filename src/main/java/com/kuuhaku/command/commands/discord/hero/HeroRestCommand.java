@@ -33,7 +33,6 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"herorest", "rest"},
 		category = Category.MISC
 )
-@Requires({Permission.NICKNAME_MANAGE})
 public class HeroRestCommand implements Executable {
 
 	@Override
