@@ -145,7 +145,9 @@ public class Attributes {
 			};
 		}
 
-		return (int) Math.max(500, Helper.roundTrunc((1000 + 3000 * (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res))) * hpModif, 5));
+		double fac = (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res));
+
+		return (int) Math.max(500, Helper.roundTrunc((1000 + 3000 * fac + (100 * fac) * con) * hpModif, 5));
 	}
 
 	public int calcMaxEnergy() {
@@ -163,11 +165,15 @@ public class Attributes {
 	}
 
 	public int calcAtk() {
-		return (int) Math.max(0, Helper.roundTrunc(100 + 2750 * (1 - Math.exp(-0.017 * str + -0.005 * agi)), 25));
+		double fac = (1 - Math.exp(-0.017 * str + -0.005 * agi));
+
+		return (int) Math.max(0, Helper.roundTrunc(100 + 2750 * fac + (10 * fac) * str, 25));
 	}
 
 	public int calcDef() {
-		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * (1 - Math.exp(-0.022 * res + -0.0075 * agi)), 25));
+		double fac = (1 - Math.exp(-0.022 * res + -0.0075 * agi));
+
+		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (10 * fac) * agi, 25));
 	}
 
 	public int calcDodge() {
