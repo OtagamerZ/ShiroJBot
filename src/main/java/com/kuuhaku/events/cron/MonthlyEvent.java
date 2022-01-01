@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.postgresql.util.PSQLException;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -102,8 +103,10 @@ public class MonthlyEvent implements Job {
 
 		List<Blacklist> blacklist = BlacklistDAO.getBlacklist();
 		for (Blacklist bl : blacklist) {
-			if (bl.canClear())
+			if (bl.canClear()) try {
 				BlacklistDAO.purgeData(bl);
+			} catch (Exception ignore) {
+			}
 		}
 
 		for (Map.Entry<String, SupportTier> entry : ShiroInfo.getSupports().entrySet()) {
