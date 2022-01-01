@@ -39,6 +39,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -74,6 +75,9 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String charms = null;
+
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String tags = null;
 
 	@Enumerated(value = EnumType.STRING)
 	private Arguments argType = Arguments.NONE;
@@ -344,8 +348,16 @@ public class Equipment implements Drawable, Cloneable {
 				.collect(Collectors.toList());
 	}
 
-	public void setCharms(List<Charm> charm) {
-		this.charms = new JSONArray(charm).toString();
+	public Set<String> getTags() {
+		if (tags == null) return Set.of();
+
+		return new JSONArray(tags).stream()
+				.map(String::valueOf)
+				.collect(Collectors.toSet());
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = new JSONArray(tags).toString();
 	}
 
 	public Arguments getArgType() {
