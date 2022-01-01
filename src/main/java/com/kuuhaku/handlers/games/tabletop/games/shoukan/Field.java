@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,6 +35,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "field")
@@ -47,6 +49,9 @@ public class Field implements Drawable, Cloneable {
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
 	private String modifiers = "{}";
+
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String tags = null;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean day = false;
@@ -207,6 +212,14 @@ public class Field implements Drawable, Cloneable {
 
 	public void setEffectOnly(boolean effectOnly) {
 		this.effectOnly = effectOnly;
+	}
+
+	public Set<String> getTags() {
+		if (tags == null) return Set.of();
+
+		return new JSONArray(tags).stream()
+				.map(String::valueOf)
+				.collect(Collectors.toSet());
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import com.kuuhaku.utils.Helper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Set;
 
 public interface Drawable {
 	BufferedImage drawCard(boolean flipped);
@@ -63,6 +64,8 @@ public interface Drawable {
 	boolean isAvailable();
 
 	void setAvailable(boolean available);
+
+	Set<String> getTags();
 
 	default void reset() {
 
