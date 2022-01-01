@@ -675,10 +675,6 @@ public class Champion implements Drawable, Cloneable {
                 .collect(Collectors.toSet());
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = new JSONArray(tags).toString();
-    }
-
     public Champion getFakeCard() {
         return fakeCard;
     }
