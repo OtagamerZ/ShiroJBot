@@ -59,7 +59,7 @@ public class MyTicketsCommand implements Executable, Slashed {
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < l.size(); i++) {
-			sb.append("**%s -** `%s`".formatted(
+			sb.append("**%s -** `%s`\n".formatted(
 					i + 1,
 					Arrays.stream(l.get(i).getDozens().split(","))
 							.sorted(Comparator.comparingInt(Integer::parseInt))
