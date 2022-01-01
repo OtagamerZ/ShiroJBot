@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "champion")
@@ -70,6 +72,9 @@ public class Champion implements Drawable, Cloneable {
 
     @Column(columnDefinition = "TEXT")
     private String effect = "";
+
+    @Column(columnDefinition = "VARCHAR(255)")
+    private String tags = null;
 
     @Enumerated(EnumType.STRING)
     private Class category = null;
@@ -660,6 +665,18 @@ public class Champion implements Drawable, Cloneable {
 
     public void setCategory(Class category) {
         this.category = category;
+    }
+
+    public Set<String> getTags() {
+        if (tags == null) return Set.of();
+
+        return new JSONArray(tags).stream()
+                .map(String::valueOf)
+                .collect(Collectors.toSet());
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = new JSONArray(tags).toString();
     }
 
     public Champion getFakeCard() {
