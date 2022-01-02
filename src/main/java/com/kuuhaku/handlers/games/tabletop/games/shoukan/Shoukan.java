@@ -956,7 +956,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			if (applyEffect(ATTACK_ASSIST, atkr.getAdjacent(Neighbor.RIGHT), source.side(), source.index() + 1, source, target))
 				return;
-			if (applyEffect(ON_ATTACK, atkr, source.side(), target.index(), source, target)) return;
+			if (applyEffect(ON_ATTACK, atkr, source.side(), source.index(), source, target)) return;
 
 			if (atkr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
 				atkr.resetAttribs();
