@@ -28,7 +28,7 @@ public class TradeDAO {
 	public static Trade getTrade(String uid) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Trade t WHERE NOT t.finished AND (t.left.uid = :uid OR t.right.uid = :uid)", Trade.class);
+		Query q = em.createQuery("SELECT t FROM Trade t WHERE t.finished = FALSE AND (t.left.uid = :uid OR t.right.uid = :uid)", Trade.class);
 		q.setParameter("uid", uid);
 
 		try {
