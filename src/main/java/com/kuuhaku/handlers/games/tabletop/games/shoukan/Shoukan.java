@@ -42,6 +42,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Target;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.states.GameState;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -160,15 +161,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 			));
 		} else {
 			if (custom.getString("arcade").equals("blackrock")) {
-				Field f = switch (Helper.rng(5)) {
-					case 0 -> CardDAO.getField("THE_SKY_GATES");
-					case 1 -> CardDAO.getField("THE_CUBE");
-					case 2 -> CardDAO.getField("GREY_AREA");
-					case 3 -> CardDAO.getField("BLACK_ROCK_BATTLEFIELD");
-					case 4 -> CardDAO.getField("CHARIOTS_LAND");
-					case 5 -> CardDAO.getField("DEAD_MASTERS_LAIR");
+				Field f = CardDAO.getField(switch (Helper.rng(5)) {
+					case 0 -> "THE_SKY_GATES";
+					case 1 -> "THE_CUBE";
+					case 2 -> "GREY_AREA";
+					case 3 -> "BLACK_ROCK_BATTLEFIELD";
+					case 4 -> "CHARIOTS_LAND";
+					case 5 -> "DEAD_MASTERS_LAIR";
 					default -> throw new IllegalStateException("Unexpected value: " + Helper.rng(5));
-				};
+				});
 				assert f != null;
 				arena.setField(f);
 			}
@@ -176,11 +177,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (custom.has("test") && ShiroInfo.getStaff().contains(players[0].getId())) {
 				for (Object o : custom.getJSONArray("test")) {
 					String id = String.valueOf(o);
-					Drawable d;
-					d = CardDAO.getChampion(id);
-					if (d == null) d = CardDAO.getEquipment(id);
-					if (d == null) d = CardDAO.getField(id);
-					if (d == null) continue;
+					CardType type = CardDAO.identifyType(id);
+
+					Drawable d = switch (type) {
+						case SENSHI -> CardDAO.getChampion(id);
+						case EVOGEAR -> CardDAO.getEquipment(id);
+						case FIELD -> CardDAO.getField(id);
+						default -> null;
+					};
+					if (d == null) return;
 
 					for (Hand h : hands.values())
 						h.getCards().add(d.copy());

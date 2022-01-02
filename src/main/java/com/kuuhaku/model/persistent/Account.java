@@ -150,6 +150,7 @@ public class Account {
 
 	private transient Map<String, CompletionState> compState = null;
 	private transient FrameColor cachedFrame = null;
+	private transient Card ultimateCard = null;
 
 	public String getUid() {
 		return uid;
@@ -518,16 +519,21 @@ public class Account {
 		this.frame = frame;
 	}
 
-	public String getUltimate() {
+	public Card getUltimate() {
 		if (ultimate != null && !ultimate.isBlank()) {
 			try {
 				AddedAnime an = CardDAO.verifyAnime(ultimate);
-				if (getCompletion(an).any()) return ultimate;
+				if (getCompletion(an).any()) {
+					if (ultimateCard == null)
+						ultimateCard = CardDAO.getUltimate(ultimate);
+
+					return ultimateCard;
+				}
 			} catch (IllegalArgumentException e) {
-				return "";
+				return null;
 			}
 		}
-		return "";
+		return null;
 	}
 
 	public void setUltimate(String ultimate) {

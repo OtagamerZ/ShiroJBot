@@ -19,7 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.persistent.Account;
@@ -150,7 +149,7 @@ public enum FrameColor {
 	}
 
 	public BufferedImage getBack(Account acc) {
-		boolean trans = !acc.getUltimate().isBlank() && acc.getCompletion(acc.getUltimate()).any();
+		boolean trans = acc.getUltimate() != null;
 		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (trans ? "_t" : "") + ".png");
 		assert cover != null;
 
@@ -158,7 +157,7 @@ public enum FrameColor {
 		Graphics2D g2d = canvas.createGraphics();
 
 		if (trans) {
-			g2d.drawImage(CardDAO.getUltimate(acc.getUltimate()).drawCardNoBorder(), 15, 16, 195, 318, null);
+			g2d.drawImage(acc.getUltimate().drawCardNoBorder(), 15, 16, 195, 318, null);
 		}
 
 		g2d.drawImage(cover, 0, 0, null);
