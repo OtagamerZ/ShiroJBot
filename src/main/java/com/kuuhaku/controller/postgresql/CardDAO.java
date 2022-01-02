@@ -1202,11 +1202,16 @@ public class CardDAO {
 		}
 	}
 
-	public static CardType identifyType(String name) {
-		if (getField(name) != null) return CardType.FIELD;
-		else if (getEquipment(name) != null) return CardType.EVOGEAR;
-		else if (getChampion(name) != null) return CardType.SENSHI;
-		else if (getCard(name) != null) return CardType.KAWAIPON;
-		else return CardType.NONE;
+	public static CardType identifyType(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT \"GetCardType\"(:id)", CardType.class);
+		q.setParameter("id", id);
+
+		try {
+			return (CardType) q.getSingleResult();
+		} finally {
+			em.close();
+		}
 	}
 }
