@@ -229,10 +229,10 @@ public abstract class GlobalGame {
 
 				long mmr = Math.round(250 * stat.manaEff() + (125 * stat.damageEff() + 125 * stat.sustainEff()));
 
-				if (stat.winner()) {
+				if (stat.winner() && !wo) {
 					mmr *= Helper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
 
-					yourMMR.addMMR(mmr / (wo ? 2 : 1), theirMMR, ranked);
+					yourMMR.addMMR(mmr, theirMMR, ranked);
 					yourMMR.addWin();
 					if (ranked) yourMMR.increaseRankPoints(theirMMR);
 
