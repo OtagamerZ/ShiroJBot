@@ -1205,11 +1205,11 @@ public class CardDAO {
 	public static CardType identifyType(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT \"GetCardType\"(:id)", CardType.class);
+		Query q = em.createNativeQuery("SELECT \"GetCardType\"(:id)");
 		q.setParameter("id", id);
 
 		try {
-			return (CardType) q.getSingleResult();
+			return CardType.valueOf((String) q.getSingleResult());
 		} finally {
 			em.close();
 		}
