@@ -129,7 +129,7 @@ dependencies {
 	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.17.1"
 	implementation group: "org.apache.logging.log4j", name: "log4j-jcl", version: "2.17.1"
 	implementation group: "org.springframework.boot", name: "spring-boot-starter-log4j2", version: "2.5.1"
-	implementation group: 'com.lmax', name: 'disruptor', version: '4.0.0.RC1'
+	implementation group: 'com.lmax', name: 'disruptor', version: '3.4.4'
 
 	//Util
 	implementation group: "com.github.SvenWoltmann", name: "color-thief-java", version: "v1.1.2"
