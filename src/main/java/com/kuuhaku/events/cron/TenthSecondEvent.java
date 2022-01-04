@@ -28,7 +28,9 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
+import com.kuuhaku.model.records.SoloLobby;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
@@ -44,6 +46,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class TenthSecondEvent implements Job {
 	public static JobDetail tenthSecond;
@@ -53,51 +56,68 @@ public class TenthSecondEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		if (lock) return;
 		lock = true;
-		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = List.copyOf(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
-		if (soloLobby.size() >= 5) {
-			var toTry = Helper.getRandomN(soloLobby, 2, 1);
-			if (trySoloMatching(toTry.get(0), toTry.get(1))) {
-				lock = false;
-				return;
-			}
 
-			Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(toTry.get(0).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+		if (Main.getInfo().getMatchMaking().getSoloLobby().size() >= 5) {
+			for (SoloLobby lobby : Main.getInfo().getMatchMaking().getSoloLobby()) {
+				lobby.unlocked().set(true);
+			}
 		}
 
-		List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> duoLobby = List.copyOf(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
-		if (duoLobby.size() >= 5) {
-			var toTry = Helper.getRandomN(duoLobby, 2, 1);
-			if (tryDuoMatching(toTry.get(0), toTry.get(1))) {
-				lock = false;
-				return;
-			}
+		List<SoloLobby> soloLobby = Main.getInfo().getMatchMaking().getSoloLobby().stream()
+				.filter(sl -> sl.unlocked().get())
+				.collect(Collectors.toList());
+		if (soloLobby.size() >= 2) {
+			Collections.shuffle(soloLobby);
+			List<List<SoloLobby>> chunks = Helper.chunkify(soloLobby, 2);
 
-			Main.getInfo().getMatchMaking().getDuoLobby().computeIfPresent(toTry.get(0).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+			for (List<SoloLobby> toTry : chunks) {
+				SoloLobby first = toTry.get(0);
+				SoloLobby second = toTry.get(1);
+
+				if (!trySoloMatching(first, second)) {
+					first.threshold().getAndIncrement();
+				}
+			}
+		}
+
+		List<DuoLobby> duoLobby = Main.getInfo().getMatchMaking().getDuoLobby().stream()
+				.filter(dl -> dl.unlocked().get())
+				.collect(Collectors.toList());
+		if (duoLobby.size() >= 2) {
+			Collections.shuffle(duoLobby);
+			List<List<DuoLobby>> chunks = Helper.chunkify(duoLobby, 2);
+
+			for (List<DuoLobby> toTry : chunks) {
+				DuoLobby first = toTry.get(0);
+				DuoLobby second = toTry.get(1);
+
+				if (!tryDuoMatching(first, second)) {
+					first.threshold().getAndIncrement();
+				}
+			}
 		}
 
 		lock = false;
 	}
 
-	private boolean trySoloMatching(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2) {
+	private boolean trySoloMatching(SoloLobby p1, SoloLobby p2) {
 		try {
-			MatchMakingRating mmr1 = p1.getKey();
-			MatchMakingRating mmr2 = p2.getKey();
+			MatchMakingRating mmr1 = p1.mmr();
+			MatchMakingRating mmr2 = p2.mmr();
 
 			if (!mmr1.equals(mmr2)
-				&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
+				&& Helper.prcntToInt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.threshold().get() * 10
 				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)
-				&& (!p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId()) || p1.getValue().getLeft() > 90)
+				&& (!p1.channel().getGuild().getId().equals(p2.channel().getGuild().getId()) || p1.threshold().get() > 90)
 			) {
-				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
-				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
+				Main.getInfo().getMatchMaking().getSoloLobby().remove(p1);
+				Main.getInfo().getMatchMaking().getSoloLobby().remove(p2);
 
-				TextChannel p1Channel = p1.getValue().getRight();
-				TextChannel p2Channel = p2.getValue().getRight();
-				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
+				List<Pair<SoloLobby, Boolean>> match = new ArrayList<>();
 
 				Runnable result = () -> {
-					Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
-					Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
+					Main.getInfo().getMatchMaking().getSoloLobby().remove(p1);
+					Main.getInfo().getMatchMaking().getSoloLobby().remove(p2);
 
 					mmr1.setEvades(0);
 					mmr2.setEvades(0);
@@ -109,7 +129,7 @@ public class TenthSecondEvent implements Job {
 					if (match.stream().allMatch(Pair::getRight)) {
 						GlobalGame g = new Shoukan(
 								Main.getShiroShards(),
-								new GameChannel(p1Channel, p2Channel),
+								new GameChannel(p1.channel(), p2.channel()),
 								0,
 								null,
 								false,
@@ -122,22 +142,17 @@ public class TenthSecondEvent implements Job {
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
-						for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
-							MatchMakingRating mmr = p.getLeft().getKey();
+						for (Pair<SoloLobby, Boolean> p : match) {
 							if (p.getRight()) {
-								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
-								Pair<Integer, TextChannel> newPair = Pair.of(
-										p.getLeft().getValue().getLeft() + 1,
-										p.getLeft().getValue().getRight()
-								);
-								Main.getInfo().getMatchMaking().getSoloLobby().put(mmr, newPair);
+								p.getLeft().channel().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
+								Main.getInfo().getMatchMaking().getSoloLobby().add(p.getLeft());
 							}
 						}
 					}
 				};
 
-				sendSoloConfirmation(p1, p1Channel, p2Channel, match, result);
-				sendSoloConfirmation(p2, p2Channel, p1Channel, match, result);
+				sendSoloConfirmation(p1, p1.channel(), p2.channel(), match, result);
+				sendSoloConfirmation(p2, p2.channel(), p1.channel(), match, result);
 
 				return true;
 			}
@@ -147,26 +162,24 @@ public class TenthSecondEvent implements Job {
 		return false;
 	}
 
-	private boolean tryDuoMatching(Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p1, Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p2) {
+	private boolean tryDuoMatching(DuoLobby p1, DuoLobby p2) {
 		try {
-			RankedDuo t1 = p1.getKey();
-			RankedDuo t2 = p2.getKey();
+			RankedDuo t1 = p1.duo();
+			RankedDuo t2 = p2.duo();
 
 			if (!t1.equals(t2)
-				&& Helper.prcnt(t1.getAvgMMR(), t2.getAvgMMR() == 0 ? 1 : t2.getAvgMMR()) * 100 <= p1.getValue().getLeft() * 10
+				&& Helper.prcnt(t1.getAvgMMR(), t2.getAvgMMR() == 0 ? 1 : t2.getAvgMMR()) * 100 <= p1.threshold().get() * 10
 				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < 2 || t2.getAvgTier() == 0)
-				&& (!p1.getValue().getRight().getGuild().getId().equals(p2.getValue().getRight().getGuild().getId()) || p1.getValue().getLeft() > 90)
+				&& (!p1.channel().getGuild().getId().equals(p2.channel().getGuild().getId()) || p1.threshold().get() > 90)
 			) {
-				Main.getInfo().getMatchMaking().getDuoLobby().remove(t1);
-				Main.getInfo().getMatchMaking().getDuoLobby().remove(t2);
+				Main.getInfo().getMatchMaking().getDuoLobby().remove(p1);
+				Main.getInfo().getMatchMaking().getDuoLobby().remove(p2);
 
-				TextChannel p1Channel = p1.getValue().getRight();
-				TextChannel p2Channel = p2.getValue().getRight();
-				List<Pair<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
+				List<Pair<DuoLobby, Boolean>> match = new ArrayList<>();
 
 				Runnable result = () -> {
-					Main.getInfo().getMatchMaking().getDuoLobby().remove(t1);
-					Main.getInfo().getMatchMaking().getDuoLobby().remove(t2);
+					Main.getInfo().getMatchMaking().getDuoLobby().remove(p1);
+					Main.getInfo().getMatchMaking().getDuoLobby().remove(p2);
 
 					t1.p1().setEvades(0);
 					t1.p2().setEvades(0);
@@ -183,7 +196,7 @@ public class TenthSecondEvent implements Job {
 					if (match.stream().allMatch(Pair::getRight)) {
 						GlobalGame g = new Shoukan(
 								Main.getShiroShards(),
-								new GameChannel(p1Channel, p2Channel),
+								new GameChannel(p1.channel(), p2.channel()),
 								0,
 								null,
 								false,
@@ -206,22 +219,17 @@ public class TenthSecondEvent implements Job {
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
-						for (Pair<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>, Boolean> p : match) {
-							RankedDuo rd = p.getLeft().getKey();
+						for (Pair<DuoLobby, Boolean> p : match) {
 							if (p.getRight()) {
-								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
-								Pair<Integer, TextChannel> newPair = Pair.of(
-										p.getLeft().getValue().getLeft() + 1,
-										p.getLeft().getValue().getRight()
-								);
-								Main.getInfo().getMatchMaking().getDuoLobby().put(rd, newPair);
+								p.getLeft().channel().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
+								Main.getInfo().getMatchMaking().getDuoLobby().add(p.getLeft());
 							}
 						}
 					}
 				};
 
-				sendDuoConfirmation(p1, p1Channel, p2Channel, match, result);
-				sendDuoConfirmation(p2, p2Channel, p1Channel, match, result);
+				sendDuoConfirmation(p1, p1.channel(), p2.channel(), match, result);
+				sendDuoConfirmation(p2, p2.channel(), p1.channel(), match, result);
 
 				return true;
 			}
@@ -231,15 +239,15 @@ public class TenthSecondEvent implements Job {
 		return false;
 	}
 
-	private void sendSoloConfirmation(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
-		MatchMakingRating mmr1 = p1.getKey();
+	private void sendSoloConfirmation(SoloLobby p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<SoloLobby, Boolean>> match, Runnable result) {
+		MatchMakingRating mmr = p1.mmr();
 
 		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
-			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr1.getEvades() + 1)) + " minutos.")
+			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr.getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
-						mmr1.setEvades(mmr1.getEvades() + 1);
-						mmr1.block(10 * mmr1.getEvades(), ChronoUnit.MINUTES);
-						MatchMakingRatingDAO.saveMMR(mmr1);
+						mmr.setEvades(mmr.getEvades() + 1);
+						mmr.block(10 * mmr.getEvades(), ChronoUnit.MINUTES);
+						MatchMakingRatingDAO.saveMMR(mmr);
 						match.add(Pair.of(p1, false));
 						close();
 						if (match.size() == 2) result.run();
@@ -250,7 +258,10 @@ public class TenthSecondEvent implements Job {
 						%s
 						Partida encontrada, digite `aschente` para confirmar a partida.
 						Demorar para responder resultará em um bloqueio de saguão de 10 minutos.
-						""".formatted(mmr1.getUser().getAsMention())).queue();
+						""".formatted(mmr.getUser().getAsMention())).queue();
+				mmr.getUser().openPrivateChannel()
+						.flatMap(c -> c.sendMessage("**Partida encontrada**: vá para o canal " + p1Channel.getAsMention() + " para confirmar."))
+						.queue(null, Helper::doNothing);
 			}
 
 			@Override
@@ -261,7 +272,7 @@ public class TenthSecondEvent implements Job {
 				}
 
 				Message msg = event.getMessage();
-				if (!msg.getAuthor().getId().equals(mmr1.getUid()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
+				if (!msg.getAuthor().getId().equals(mmr.getUid()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
 					return;
 
 				Deck d = KawaiponDAO.getDeck(msg.getAuthor().getId());
@@ -290,8 +301,8 @@ public class TenthSecondEvent implements Job {
 		});
 	}
 
-	private void sendDuoConfirmation(Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
-		RankedDuo rd = p1.getKey();
+	private void sendDuoConfirmation(DuoLobby p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<DuoLobby, Boolean>> match, Runnable result) {
+		RankedDuo rd = p1.duo();
 		Set<String> confirmations = new HashSet<>() {{
 			add(rd.p1().getUid());
 			add(rd.p2().getUid());
@@ -325,6 +336,12 @@ public class TenthSecondEvent implements Job {
 						Partida encontrada, digite `aschente` para confirmar a partida.
 						Demorar para responder resultará em um bloqueio de saguão de 10 minutos.
 						""".formatted(rd.p1().getUser().getAsMention(), rd.p2().getUser().getAsMention())).queue();
+				rd.p1().getUser().openPrivateChannel()
+						.flatMap(c -> c.sendMessage("**Partida encontrada**: vá para o canal " + p1Channel.getAsMention() + " para confirmar."))
+						.queue(null, Helper::doNothing);
+				rd.p2().getUser().openPrivateChannel()
+						.flatMap(c -> c.sendMessage("**Partida encontrada**: vá para o canal " + p1Channel.getAsMention() + " para confirmar."))
+						.queue(null, Helper::doNothing);
 			}
 
 			@Override

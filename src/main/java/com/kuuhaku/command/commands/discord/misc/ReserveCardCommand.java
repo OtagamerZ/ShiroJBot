@@ -229,6 +229,18 @@ public class ReserveCardCommand implements Executable {
 				return;
 			}
 
+			m = MarketDAO.getCard(Integer.parseInt(args[0]));
+			if (m == null) {
+				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+				return;
+			} else if (buyer.getLoan() > 0) {
+				channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
+				return;
+			} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+				channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
+				return;
+			}
+
 			StashDAO.saveCard(switch (m.getType()) {
 				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
 				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
@@ -259,6 +271,18 @@ public class ReserveCardCommand implements Executable {
 
 			channel.sendMessage("✅ | Carta comprada e reservada com sucesso!").queue();
 		} else {
+			m = MarketDAO.getCard(Integer.parseInt(args[0]));
+			if (m == null) {
+				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+				return;
+			} else if (buyer.getLoan() > 0) {
+				channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
+				return;
+			} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+				channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
+				return;
+			}
+
 			StashDAO.saveCard(switch (m.getType()) {
 				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
 				case FIELD -> new Stash(author.getId(), (Field) m.getCard());

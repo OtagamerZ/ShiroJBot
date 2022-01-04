@@ -229,15 +229,15 @@ public abstract class GlobalGame {
 
 				long mmr = Math.round(250 * stat.manaEff() + (125 * stat.damageEff() + 125 * stat.sustainEff()));
 
-				if (stat.winner() && !wo) {
+				if (stat.winner()) {
 					mmr *= Helper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
 
-					yourMMR.addMMR(mmr, theirMMR, ranked);
+					yourMMR.addMMR(mmr / (wo ? 2 : 1), theirMMR, ranked);
 					yourMMR.addWin();
 					if (ranked) yourMMR.increaseRankPoints(theirMMR);
 
 					Account acc = AccountDAO.getAccount(yourMMR.getUid());
-					if (acc.hasPendingQuest()) {
+					if (acc.hasPendingQuest() && !wo) {
 						Map<DailyTask, Integer> pg = acc.getDailyProgress();
 						pg.merge(DailyTask.WINS_TASK, 1, Integer::sum);
 

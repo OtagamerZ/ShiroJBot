@@ -36,7 +36,8 @@ import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.MatchMakingRating;
-import com.kuuhaku.model.records.RankedDuo;
+import com.kuuhaku.model.records.DuoLobby;
+import com.kuuhaku.model.records.SoloLobby;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -73,11 +74,11 @@ public class LobbyCommand implements Executable, Slashed {
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 			MatchMaking mm = Main.getInfo().getMatchMaking();
 
-			if (mm.getSoloLobby().containsKey(mmr)) {
+			if (mm.getSoloLobby().contains(mmr)) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 				channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
-			} else if (mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(mmr) || rd.p2().equals(mmr))) {
-				Main.getInfo().getMatchMaking().getDuoLobby().entrySet().removeIf(e -> e.getKey().p1().equals(mmr) || e.getKey().p2().equals(mmr));
+			} else if (mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
+				Main.getInfo().getMatchMaking().getDuoLobby().removeIf(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr));
 				channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
 			} else {
 				channel.sendMessage("❌ | Você não está em nenhum saguão.").queue();
@@ -94,7 +95,7 @@ public class LobbyCommand implements Executable, Slashed {
 
 		switch (rq) {
 			case SOLO -> {
-				List<List<MatchMakingRating>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby().keySet(), 10);
+				List<List<SoloLobby>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby(), 10);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(),
@@ -102,10 +103,10 @@ public class LobbyCommand implements Executable, Slashed {
 						));
 
 				StringBuilder sb = new StringBuilder();
-				for (List<MatchMakingRating> chunk : lobby) {
+				for (List<SoloLobby> chunk : lobby) {
 					sb.setLength(0);
-					for (MatchMakingRating mmr : chunk)
-						sb.append("%s (%s)\n".formatted(mmr.getUser().getName(), mmr.getTier().getName()));
+					for (SoloLobby sl : chunk)
+						sb.append("%s (%s)\n".formatted(sl.mmr().getUser().getName(), sl.mmr().getTier().getName()));
 
 					eb.setDescription(sb.toString());
 					pages.add(new InteractPage(eb.build()));
@@ -121,7 +122,7 @@ public class LobbyCommand implements Executable, Slashed {
 				);
 			}
 			case DUO -> {
-				List<List<RankedDuo>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby().keySet(), 10);
+				List<List<DuoLobby>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby(), 10);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Saguão do Shoukan ranqueado (%s | %s equipes)".formatted(rq.name(),
@@ -129,10 +130,10 @@ public class LobbyCommand implements Executable, Slashed {
 						));
 
 				StringBuilder sb = new StringBuilder();
-				for (List<RankedDuo> chunk : lobby) {
+				for (List<DuoLobby> chunk : lobby) {
 					sb.setLength(0);
-					for (RankedDuo duo : chunk)
-						sb.append("%s (%s)\n".formatted(duo.p1().getUser().getName() + " | " + duo.p2().getUser().getName(), RankedTier.getTierName(duo.getAvgTier(), false)));
+					for (DuoLobby dl : chunk)
+						sb.append("%s (%s)\n".formatted(dl.duo().p1().getUser().getName() + " | " + dl.duo().p2().getUser().getName(), RankedTier.getTierName(dl.duo().getAvgTier(), false)));
 
 					eb.setDescription(sb.toString());
 					pages.add(new InteractPage(eb.build()));
