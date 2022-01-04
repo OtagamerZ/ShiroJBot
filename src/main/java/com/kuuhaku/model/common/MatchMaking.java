@@ -22,27 +22,28 @@ import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
+import com.kuuhaku.model.records.SoloLobby;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class MatchMaking {
-	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> soloLobby = new LinkedHashMap<>();
-	private final Map<RankedDuo, Pair<Integer, TextChannel>> duoLobby = new LinkedHashMap<>();
+	private final Set<SoloLobby> soloLobby = new LinkedHashSet<>();
+	private final Set<DuoLobby> duoLobby = new LinkedHashSet<>();
 	private final List<GlobalGame> games = new ArrayList<>();
 	private boolean locked = false;
 
-	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getSoloLobby() {
+	public Set<SoloLobby> getSoloLobby() {
 		return soloLobby;
 	}
 
-	public Map<RankedDuo, Pair<Integer, TextChannel>> getDuoLobby() {
+	public Set<DuoLobby> getDuoLobby() {
 		return duoLobby;
 	}
 
@@ -50,21 +51,21 @@ public class MatchMaking {
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(user.getId());
 
 		switch (queue) {
-			case SOLO -> soloLobby.put(mmr, Pair.of(0, channel));
-			case DUO -> duoLobby.put(new RankedDuo(user, duo), Pair.of(0, channel));
+			case SOLO -> soloLobby.add(new SoloLobby(mmr, channel));
+			case DUO -> duoLobby.add(new DuoLobby(new RankedDuo(user, duo), channel));
 		}
 	}
 
 	public void joinLobby(MatchMakingRating mmr, MatchMakingRating duo, RankedQueue queue, TextChannel channel) {
 		switch (queue) {
-			case SOLO -> soloLobby.put(mmr, Pair.of(0, channel));
-			case DUO -> duoLobby.put(new RankedDuo(mmr, duo), Pair.of(0, channel));
+			case SOLO -> soloLobby.add(new SoloLobby(mmr, channel));
+			case DUO -> duoLobby.add(new DuoLobby(new RankedDuo(mmr, duo), channel));
 		}
 	}
 
 	public void joinLobby(RankedDuo duo, RankedQueue queue, TextChannel channel) {
 		if (queue == RankedQueue.DUO) {
-			duoLobby.put(duo, Pair.of(0, channel));
+			duoLobby.add(new DuoLobby(duo, channel));
 		}
 	}
 
