@@ -45,10 +45,10 @@
     </Appenders>
 
     <Loggers>
-        <Root level="debug" includeLocation="true">
-            <AppenderRef ref="Console" level="info"/>
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="Console"/>
 
-            <AppenderRef ref="InfoLog" level="info"/>
+            <AppenderRef ref="InfoLog"/>
             <AppenderRef ref="ErrorLog" level="error"/>
             <AppenderRef ref="CrashLog" level="fatal"/>
         </Root>
