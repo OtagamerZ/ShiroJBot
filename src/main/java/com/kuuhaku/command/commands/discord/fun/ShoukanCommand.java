@@ -35,7 +35,9 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.tournament.Tournament;
+import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
+import com.kuuhaku.model.records.SoloLobby;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
@@ -119,7 +121,7 @@ public class ShoukanCommand implements Executable {
 			if (mm.inGame(author.getId())) {
 				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
-			} else if (mm.getSoloLobby().containsKey(mmr) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(mmr) || rd.p2().equals(mmr))) {
+			} else if (mm.getSoloLobby().contains(mmr) || mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
@@ -133,6 +135,12 @@ public class ShoukanCommand implements Executable {
 			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase(Locale.ROOT));
 			switch (rq) {
 				case SOLO -> {
+					for (SoloLobby sl : mm.getSoloLobby()) {
+						sl.mmr().getUser().openPrivateChannel()
+								.flatMap(c -> c.sendMessage(author.getName() + " entrou no saguão."))
+								.queue(null, Helper::doNothing);
+					}
+
 					mm.joinLobby(mmr, null, rq, channel);
 					channel.sendMessage("Você entrou no saguão **SOLO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue();
 				}
@@ -151,7 +159,7 @@ public class ShoukanCommand implements Executable {
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
 						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();
 						return;
-					} else if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(duo) || rd.p2().equals(duo))) {
+					} else if (mm.getSoloLobby().contains(mmr) || mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
 						channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
 						return;
 					}
@@ -164,9 +172,18 @@ public class ShoukanCommand implements Executable {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
-											if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.p1().equals(duo) || rd.p2().equals(duo))) {
+											if (mm.getSoloLobby().contains(mmr) || mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
 												channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
 												return;
+											}
+
+											for (DuoLobby sl : mm.getDuoLobby()) {
+												sl.duo().p1().getUser().openPrivateChannel()
+														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão."))
+														.queue(null, Helper::doNothing);
+												sl.duo().p2().getUser().openPrivateChannel()
+														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão."))
+														.queue(null, Helper::doNothing);
 											}
 
 											RankedDuo rd = new RankedDuo(mmr, duo);

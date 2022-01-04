@@ -26,32 +26,32 @@
                     disableAnsi="false"/>
         </Console>
 
-        <File name="InfoLog" fileName="logs/stacktrace.log" append="false">
+        <RandomAccessFile name="InfoLog" fileName="logs/stacktrace.log" immediateFlush="false" append="false">
             <PatternLayout
                     pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg%n%n"
                     disableAnsi="false"/>
-        </File>
+        </RandomAccessFile>
 
-        <File name="ErrorLog" fileName="logs/error.log" append="false">
+        <RandomAccessFile name="ErrorLog" fileName="logs/error.log" immediateFlush="false" append="false">
             <PatternLayout
                     pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg%n%n"
                     disableAnsi="false"/>
-        </File>
+        </RandomAccessFile>
 
-        <File name="CrashLog" fileName="logs/crash.log" append="false">
+        <RandomAccessFile name="CrashLog" fileName="logs/crash.log" immediateFlush="false" append="false">
             <PatternLayout
                     pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg%n%n"
                     disableAnsi="false"/>
-        </File>
+        </RandomAccessFile>
     </Appenders>
 
     <Loggers>
-        <root level="debug">
-            <AppenderRef ref="Console" level="info"/>
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="Console"/>
 
-            <AppenderRef ref="InfoLog" level="info"/>
+            <AppenderRef ref="InfoLog"/>
             <AppenderRef ref="ErrorLog" level="error"/>
             <AppenderRef ref="CrashLog" level="fatal"/>
-        </root>
+        </Root>
     </Loggers>
 </Configuration>

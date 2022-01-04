@@ -224,6 +224,15 @@ public class BuyCardCommand implements Executable {
 				return;
 			}
 
+			m = MarketDAO.getCard(Integer.parseInt(args[0]));
+			if (m == null) {
+				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+				return;
+			} else if (buyer.getLoan() > 0) {
+				channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
+				return;
+			}
+
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (m.getType()) {
 				case EVOGEAR -> {
@@ -276,6 +285,15 @@ public class BuyCardCommand implements Executable {
 
 			channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
 		} else {
+			m = MarketDAO.getCard(Integer.parseInt(args[0]));
+			if (m == null) {
+				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+				return;
+			} else if (buyer.getLoan() > 0) {
+				channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
+				return;
+			}
+
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (m.getType()) {
 				case EVOGEAR -> {

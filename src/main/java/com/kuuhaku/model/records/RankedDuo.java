@@ -22,6 +22,8 @@ import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.Objects;
+
 public record RankedDuo(MatchMakingRating p1, MatchMakingRating p2) {
 
 	public RankedDuo(User p1, User p2) {
@@ -34,5 +36,18 @@ public record RankedDuo(MatchMakingRating p1, MatchMakingRating p2) {
 
 	public int getAvgTier() {
 		return (int) (Math.ceil(p1.getTier().getTier() + p2.getTier().getTier()) / 2d);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		RankedDuo rankedDuo = (RankedDuo) o;
+		return Objects.equals(p1, rankedDuo.p1) && Objects.equals(p2, rankedDuo.p2);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(p1, p2);
 	}
 }
