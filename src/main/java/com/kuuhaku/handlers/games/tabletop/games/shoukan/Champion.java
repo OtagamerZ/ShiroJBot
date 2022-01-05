@@ -368,10 +368,12 @@ public class Champion implements Drawable, Cloneable {
             Side s = game.getSideById(acc.getUid());
             Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-            if (linkedTo.stream().noneMatch(e -> e.getCharms().contains(Charm.LINK)) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
+            if (linkedTo.stream().noneMatch(e -> e.getCharms().contains(Charm.LINK)) && bonus.getCharm() != Charm.LINK) {
                 Field f = game.getArena().getField();
                 if (f != null) {
+                    boolean capped = hero != null && hero.getPerks().contains(Perk.REAPER);
                     fBonus = 1 + f.getModifiers().getFloat(getRace().name());
+                    if (capped) fBonus = Math.min(fBonus, 1);
 
                     if (combos.getLeft() == Race.ELF) {
                         if (fBonus < 1) fBonus /= 2;
@@ -401,10 +403,12 @@ public class Champion implements Drawable, Cloneable {
             Side s = game.getSideById(acc.getUid());
             Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-            if (linkedTo.stream().noneMatch(e -> e.getCharms().contains(Charm.LINK)) && bonus.getSpecialData().getEnum(Charm.class, "charm") != Charm.LINK) {
+            if (linkedTo.stream().noneMatch(e -> e.getCharms().contains(Charm.LINK)) && bonus.getCharm() != Charm.LINK) {
                 Field f = game.getArena().getField();
                 if (f != null) {
+                    boolean capped = hero != null && hero.getPerks().contains(Perk.REAPER);
                     fBonus = 1 + f.getModifiers().getFloat(getRace().name());
+                    if (capped) fBonus = Math.min(fBonus, 1);
 
                     if (combos.getLeft() == Race.ELF) {
                         if (fBonus < 1) fBonus /= 2;
@@ -521,13 +525,20 @@ public class Champion implements Drawable, Cloneable {
         if (isStasis() || isStunned() || isSleeping()) return 0;
 
         double heroMod = 1;
+        int extra = 0;
         if (hero != null && game != null) {
             if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
                 heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
             }
+
+            if (hero.getPerks().contains(Perk.ADAPTIVE)) {
+                if (isDefending())
+                    extra += getBlock();
+                else
+                    heroMod = 0;
+            }
         }
 
-        double extra = 0;
         if (game != null && acc != null) {
             extra += game.getHands().get(game.getSideById(acc.getUid())).getMitigation() * 75;
         }
@@ -553,19 +564,21 @@ public class Champion implements Drawable, Cloneable {
         if (isStasis() || isStunned() || isSleeping()) return 0;
 
 		double heroMod = 1;
-        /*
+        int extra = 0;
 		if (hero != null && game != null) {
-			if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
-				heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
-			}
+            if (hero.getPerks().contains(Perk.ADAPTIVE)) {
+                if (isDefending())
+                    extra += getDodge();
+                else
+                    heroMod = 0;
+            }
 		}
-		 */
 
         int blockEquips = getLinkedTo().stream()
                 .filter(e -> e.getCharms().contains(Charm.FORTIFY))
                 .mapToInt(e -> 5 * (int) Helper.getFibonacci(e.getTier()))
                 .sum();
-        double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips) * heroMod * (isDefending() ? 2 : 1), 0, 100);
+        double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
         return (int) d;
     }
 
@@ -847,8 +860,10 @@ public class Champion implements Drawable, Cloneable {
     public boolean isBuffed() {
         if (game == null) return false;
 
-        boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharms().contains(Charm.LINK));
+        boolean slink = getBonus().getCharm() == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharms().contains(Charm.LINK));
         if (slink) return false;
+
+        if (hero != null && hero.getPerks().contains(Perk.REAPER)) return false;
 
         Field f = game.getArena().getField();
         if (f != null) {
@@ -862,7 +877,7 @@ public class Champion implements Drawable, Cloneable {
     public boolean isNerfed() {
         if (game == null) return false;
 
-        boolean slink = getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharms().contains(Charm.LINK));
+        boolean slink = getBonus().getCharm() == Charm.LINK || linkedTo.stream().anyMatch(e -> e.getCharms().contains(Charm.LINK));
         if (slink) return false;
 
         Field f = game.getArena().getField();

@@ -1089,6 +1089,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					if (bleed > 0) op.addBleeding(bleed);
 					op.removeHp(dmg);
+
+					if (atkr.getHero() != null && atkr.getHero().getPerks().contains(Perk.REAPER)) {
+						defr.setSealed(true);
+					}
 					killCard(target.side(), target.index(), defr.getId());
 
 					Hero y = atkr.getHero();
@@ -1474,7 +1478,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
-			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			Charm charm = target.getBonus().getCharm();
 			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
@@ -1547,7 +1551,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
-			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			Charm charm = target.getBonus().getCharm();
 			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
@@ -1620,7 +1624,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
-			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			Charm charm = target.getBonus().getCharm();
 			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
@@ -1654,7 +1658,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			charm = activator.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			charm = activator.getBonus().getCharm();
 			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
@@ -1717,7 +1721,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
-			Charm charm = target.getBonus().getSpecialData().getEnum(Charm.class, "charm");
+			Charm charm = target.getBonus().getCharm();
 			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}

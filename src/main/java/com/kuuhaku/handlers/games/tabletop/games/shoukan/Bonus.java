@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Flag;
 import com.kuuhaku.utils.JSONObject;
 
@@ -35,8 +36,9 @@ public class Bonus implements Cloneable {
 	private int mana = 0;
 	private int blood = 0;
 	private String write = null;
+	private Charm charm = null;
 
-	public Bonus(JSONObject specialData, EnumSet<Flag> flags, int atk, int def, int ddg, int blk, int mana, int blood, String write) {
+	public Bonus(JSONObject specialData, EnumSet<Flag> flags, int atk, int def, int ddg, int blk, int mana, int blood, String write, Charm charm) {
 		this.specialData = specialData;
 		this.flags = flags;
 		this.atk[0] = atk;
@@ -46,6 +48,7 @@ public class Bonus implements Cloneable {
 		this.mana = mana;
 		this.blood = blood;
 		this.write = write;
+		this.charm = charm;
 	}
 
 	public Bonus(JSONObject specialData) {
@@ -235,6 +238,14 @@ public class Bonus implements Cloneable {
 		this.write = write;
 	}
 
+	public Charm getCharm() {
+		return charm;
+	}
+
+	public void setCharm(Charm charm) {
+		this.charm = charm;
+	}
+
 	@Override
 	public Bonus clone() {
 		try {
@@ -244,6 +255,7 @@ public class Bonus implements Cloneable {
 			b.atk = Arrays.copyOf(atk, 6);
 			b.def = Arrays.copyOf(def, 6);
 			b.ddg = Arrays.copyOf(ddg, 6);
+			b.blk = Arrays.copyOf(blk, 6);
 
 			return new Bonus(
 					b.getSpecialData(),
@@ -254,7 +266,8 @@ public class Bonus implements Cloneable {
 					blk[0],
 					b.getMana(),
 					b.getBlood(),
-					b.getWrite()
+					b.getWrite(),
+					b.getCharm()
 			);
 		} catch (CloneNotSupportedException e) {
 			return null;
