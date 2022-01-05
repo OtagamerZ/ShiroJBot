@@ -185,7 +185,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						case FIELD -> CardDAO.getField(id);
 						default -> null;
 					};
-					if (d == null) return;
+					if (d == null) continue;
 
 					for (Hand h : hands.values())
 						h.getCards().add(d.copy());
@@ -2869,6 +2869,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public GameState getOldState() {
 		return oldState;
+	}
+
+	public void setState(GameState oldState) {
+		this.oldState = oldState;
 	}
 
 	public Phase getPhase() {
