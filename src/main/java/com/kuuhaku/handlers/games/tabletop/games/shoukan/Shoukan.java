@@ -176,7 +176,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (custom.has("test") && ShiroInfo.getStaff().contains(players[0].getId())) {
 				for (Object o : custom.getJSONArray("test")) {
-					String id = String.valueOf(o);
+					String id = String.valueOf(o).toUpperCase(Locale.ROOT);
 					CardType type = CardDAO.identifyType(id);
 
 					Drawable d = switch (type) {
