@@ -147,6 +147,7 @@ public class GameState {
 		game.setEffectLock(effectLock);
 		game.setReroll(reroll);
 		game.setPhase(Phase.PLAN);
+		game.setState(this);
 	}
 
 	public Map<Side, HandState> getHands() {
