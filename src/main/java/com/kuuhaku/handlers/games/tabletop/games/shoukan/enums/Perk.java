@@ -31,6 +31,8 @@ public enum Perk {
 	MINDSHIELD("Escudo Psíquico", "Ganha permanentemente um escudo de feitiços, mas dobra o custo de mana."),
 	OPTIMISTIC("Otimista", "Aumenta a taxa de regeneração em 50%."),
 	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50%."),
+	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
+	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva, ocorrendo o inverso em modo de defesa."),
 	;
 
 	private final String name;
