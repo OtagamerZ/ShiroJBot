@@ -115,24 +115,25 @@ public class BountyQuest {
 		Map<Reward, Integer> rewards = getRewards();
 
 		double modDiff = difficulty.getValue();
+		double finDiff = modDiff;
 		int statSum = Arrays.stream(baseStats).mapToInt(i -> i).sum();
-		if (statSum == 0) modDiff = 0;
+		if (statSum == 0) finDiff = 0;
 		else {
 			for (int i = 0; i < baseStats.length; i++) {
 				int base = baseStats[i];
 				if (base <= 0) continue;
 
-				double share = (double) base / statSum;
+				double share = modDiff * ((double) base / statSum);
 				int hero = heroStats[i];
 
-				modDiff -= Helper.clamp(hero * share / base, 0, share);
+				finDiff -= Helper.clamp(hero * share / base, 0, share);
 			}
 		}
 
 		return new BountyInfo(
 				id,
 				(int) Math.round(baseTime * diff),
-				Helper.round(modDiff, 1),
+				Helper.round(finDiff, 1),
 				new Attributes(baseStats),
 				rewards.entrySet().stream()
 						.map(e -> Pair.of(e.getKey(), (int) Math.round(e.getValue() * diff)))
