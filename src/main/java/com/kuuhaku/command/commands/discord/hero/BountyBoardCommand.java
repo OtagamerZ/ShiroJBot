@@ -71,7 +71,7 @@ public class BountyBoardCommand implements Executable {
 		}
 
 		Calendar cal = Calendar.getInstance();
-		long seed = Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR));
+		long seed = Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)) + h.getSeed();
 
 		List<BountyQuest> pool = Helper.getRandomN(BountyQuestDAO.getBounties(), 3, 1, seed);
 		pool.add(Helper.getRandomEntry(BountyQuestDAO.getTraining()));

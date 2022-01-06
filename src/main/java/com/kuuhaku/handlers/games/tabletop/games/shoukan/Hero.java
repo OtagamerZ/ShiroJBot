@@ -100,6 +100,9 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
     private long questSeed = 0;
 
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+    private long seed = 0;
+
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
@@ -311,6 +314,14 @@ public class Hero implements Cloneable {
 
     public void toggleResting() {
         this.resting = !this.resting;
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+
+    public void randomizeSeed() {
+        this.seed = (long) Helper.rng(System.currentTimeMillis());
     }
 
     public String getDescription() {

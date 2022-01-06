@@ -114,6 +114,22 @@ public enum GemItem {
 				return true;
 			}
 	),
+	SEED_REROLL(
+			"Aleatorizar seed", "Aleatoriza a seed do seu herói atual (altera missões, efeitos e perks disponíveis)",
+			1,
+			(mb, chn, args) -> {
+				Hero h = KawaiponDAO.getHero(mb.getId());
+				if (h == null) {
+					chn.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
+					return false;
+				}
+
+				h.randomizeSeed();
+				KawaiponDAO.saveHero(h);
+
+				return true;
+			}
+	),
 	CARD_STASH_SIZE(
 			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 15",
 			2,
