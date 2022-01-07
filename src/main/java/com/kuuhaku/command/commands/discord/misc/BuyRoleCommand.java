@@ -136,14 +136,16 @@ public class BuyRoleCommand implements Executable {
 								guild.addRoleToMember(member, r)
 										.flatMap(m -> channel.sendMessage("✅ | Cargo comprado com sucesso!"))
 										.queue(m -> {
-											Account facc = AccountDAO.getAccount(author.getId());
-											Account oacc = AccountDAO.getAccount(guild.getOwnerId());
+											if (!author.getId().equals(guild.getOwnerId())) {
+												Account facc = AccountDAO.getAccount(author.getId());
+												Account oacc = AccountDAO.getAccount(guild.getOwnerId());
 
-											facc.removeCredit(pr.getPrice(), BuyRoleCommand.class);
-											oacc.addCredit(pr.getPrice(), BuyRoleCommand.class);
+												facc.removeCredit(pr.getPrice(), BuyRoleCommand.class);
+												oacc.addCredit(pr.getPrice(), BuyRoleCommand.class);
 
-											AccountDAO.saveAccount(facc);
-											AccountDAO.saveAccount(oacc);
+												AccountDAO.saveAccount(facc);
+												AccountDAO.saveAccount(oacc);
+											}
 
 											GuildConfig fgc = GuildDAO.getGuildById(guild.getId());
 											for (PaidRole role : fgc.getPaidRoles()) {
