@@ -15,6 +15,7 @@ public record SoloLobby(MatchMakingRating mmr, TextChannel channel, AtomicIntege
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
+		if (o instanceof MatchMakingRating) return Objects.equals(mmr, o);
 		if (o == null || getClass() != o.getClass()) return false;
 		SoloLobby soloLobby = (SoloLobby) o;
 		return Objects.equals(mmr, soloLobby.mmr);
