@@ -14,6 +14,7 @@ public record DuoLobby(RankedDuo duo, TextChannel channel, AtomicInteger thresho
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
+		if (o instanceof RankedDuo) return Objects.equals(duo, o);
 		if (o == null || getClass() != o.getClass()) return false;
 		DuoLobby soloLobby = (DuoLobby) o;
 		return Objects.equals(duo, soloLobby.duo);
