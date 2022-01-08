@@ -68,14 +68,15 @@ public class TenthSecondEvent implements Job {
 				.collect(Collectors.toList());
 		if (soloLobby.size() >= 2) {
 			Collections.shuffle(soloLobby);
-			List<List<SoloLobby>> chunks = Helper.chunkify(soloLobby, 2);
 
-			for (List<SoloLobby> toTry : chunks) {
-				SoloLobby first = toTry.get(0);
-				SoloLobby second = toTry.get(1);
+			for (int x = 0; x < soloLobby.size(); x++) {
+				for (int y = x + 1; y < soloLobby.size(); y++) {
+					SoloLobby first = soloLobby.get(x);
+					SoloLobby second = soloLobby.get(y);
 
-				if (!trySoloMatching(first, second)) {
-					first.threshold().getAndIncrement();
+					if (!trySoloMatching(first, second)) {
+						first.threshold().getAndIncrement();
+					}
 				}
 			}
 		}
@@ -85,14 +86,15 @@ public class TenthSecondEvent implements Job {
 				.collect(Collectors.toList());
 		if (duoLobby.size() >= 2) {
 			Collections.shuffle(duoLobby);
-			List<List<DuoLobby>> chunks = Helper.chunkify(duoLobby, 2);
 
-			for (List<DuoLobby> toTry : chunks) {
-				DuoLobby first = toTry.get(0);
-				DuoLobby second = toTry.get(1);
+			for (int x = 0; x < duoLobby.size(); x++) {
+				for (int y = x + 1; y < duoLobby.size(); y++) {
+					DuoLobby first = duoLobby.get(x);
+					DuoLobby second = duoLobby.get(y);
 
-				if (!tryDuoMatching(first, second)) {
-					first.threshold().getAndIncrement();
+					if (!tryDuoMatching(first, second)) {
+						first.threshold().getAndIncrement();
+					}
 				}
 			}
 		}
