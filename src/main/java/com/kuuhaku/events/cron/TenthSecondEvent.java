@@ -70,11 +70,17 @@ public class TenthSecondEvent implements Job {
 			Collections.shuffle(soloLobby);
 
 			for (int x = 0; x < soloLobby.size(); x++) {
-				for (int y = x + 1; y < soloLobby.size(); y++) {
-					SoloLobby first = soloLobby.get(x);
-					SoloLobby second = soloLobby.get(y);
+				SoloLobby first = soloLobby.get(x);
+				if (!first.unlocked().get()) continue;
 
-					if (!trySoloMatching(first, second)) {
+				for (int y = x + 1; y < soloLobby.size(); y++) {
+					SoloLobby second = soloLobby.get(y);
+					if (!second.unlocked().get()) continue;
+
+					if (trySoloMatching(first, second)) {
+						first.unlocked().set(false);
+						second.unlocked().set(false);
+					} else {
 						first.threshold().getAndIncrement();
 					}
 				}
@@ -88,11 +94,17 @@ public class TenthSecondEvent implements Job {
 			Collections.shuffle(duoLobby);
 
 			for (int x = 0; x < duoLobby.size(); x++) {
-				for (int y = x + 1; y < duoLobby.size(); y++) {
-					DuoLobby first = duoLobby.get(x);
-					DuoLobby second = duoLobby.get(y);
+				DuoLobby first = duoLobby.get(x);
+				if (!first.unlocked().get()) continue;
 
-					if (!tryDuoMatching(first, second)) {
+				for (int y = x + 1; y < duoLobby.size(); y++) {
+					DuoLobby second = duoLobby.get(y);
+					if (!second.unlocked().get()) continue;
+
+					if (tryDuoMatching(first, second)) {
+						first.unlocked().set(false);
+						second.unlocked().set(false);
+					} else {
 						first.threshold().getAndIncrement();
 					}
 				}
