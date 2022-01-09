@@ -134,7 +134,9 @@ public class TenthSecondEvent implements Job {
 					Main.getInfo().getMatchMaking().getSoloLobby().remove(p2);
 
 					mmr1.setEvades(0);
+					mmr1.setJoins(0);
 					mmr2.setEvades(0);
+					mmr2.setJoins(0);
 
 					MatchMakingRatingDAO.saveMMR(mmr1);
 					MatchMakingRatingDAO.saveMMR(mmr2);
@@ -196,9 +198,13 @@ public class TenthSecondEvent implements Job {
 					Main.getInfo().getMatchMaking().getDuoLobby().remove(p2);
 
 					t1.p1().setEvades(0);
+					t1.p1().setJoins(0);
 					t1.p2().setEvades(0);
+					t1.p2().setJoins(0);
 					t2.p1().setEvades(0);
+					t2.p1().setJoins(0);
 					t2.p2().setEvades(0);
+					t2.p2().setJoins(0);
 
 					MatchMakingRatingDAO.saveMMR(t1.p1());
 					MatchMakingRatingDAO.saveMMR(t1.p2());
