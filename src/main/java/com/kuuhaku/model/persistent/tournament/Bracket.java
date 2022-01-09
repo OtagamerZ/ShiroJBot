@@ -32,7 +32,6 @@ public class Bracket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Id
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tournament;
 
