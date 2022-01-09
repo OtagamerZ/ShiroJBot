@@ -81,6 +81,21 @@ public class MatchMakingRatingDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<MatchMakingRating> getRetrialMMRs() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr WHERE mmr.joins > 0 AND mmr.blockedUntil IS NULL", MatchMakingRating.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<MatchMakingRating> getMMRRank() {
 		EntityManager em = Manager.getEntityManager();
 

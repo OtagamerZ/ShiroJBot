@@ -34,7 +34,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table(name = "matchmakingrating")
@@ -69,6 +68,9 @@ public class MatchMakingRating {
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime blockedUntil = null;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int joins = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int evades = 0;
@@ -295,16 +297,24 @@ public class MatchMakingRating {
 		} else return true;
 	}
 
-	public int getRemainingBlock() {
+	public long getRemainingBlock() {
 		if (blockedUntil == null) return 0;
 
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-		return (int) TimeUnit.SECONDS.convert(Math.max(0, blockedUntil.toInstant().toEpochMilli() - today.toInstant().toEpochMilli()), TimeUnit.MILLISECONDS);
+		return Math.max(0, blockedUntil.toInstant().toEpochMilli() - today.toInstant().toEpochMilli());
 	}
 
 	public void block(int time, TemporalUnit unit) {
 		blockedUntil = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(time, unit);
+	}
+
+	public int getJoins() {
+		return joins;
+	}
+
+	public void setJoins(int joins) {
+		this.joins = joins;
 	}
 
 	public int getEvades() {

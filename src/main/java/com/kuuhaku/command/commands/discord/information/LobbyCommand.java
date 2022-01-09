@@ -46,6 +46,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -76,10 +77,30 @@ public class LobbyCommand implements Executable, Slashed {
 
 			if (mm.getSoloLobby().contains(mmr)) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
-				channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
+
+				if (mmr.getJoins() >= 3) {
+					mmr.block((int) Math.pow(2, mmr.getJoins() - 2), ChronoUnit.MINUTES);
+					MatchMakingRatingDAO.saveMMR(mmr);
+
+					channel.sendMessage("Você saiu do saguão SOLO com sucesso.\n:no_entry_sign: | Devido a cancelamentos frequentes, você está bloqueado de entrar no saguão por %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
+				} else if (mmr.getJoins() == 2) {
+					channel.sendMessage("Você saiu do saguão SOLO com sucesso.\n:warning: | O próximo cancelamento de fila resultará em bloqueio de saguão.").queue();
+				} else {
+					channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
+				}
 			} else if (mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
 				Main.getInfo().getMatchMaking().getDuoLobby().removeIf(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr));
-				channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
+
+				if (mmr.getJoins() >= 3) {
+					mmr.block((int) Math.pow(2, mmr.getJoins() - 2), ChronoUnit.MINUTES);
+					MatchMakingRatingDAO.saveMMR(mmr);
+
+					channel.sendMessage("Você saiu do saguão DUO com sucesso.\n:no_entry_sign: | Devido a cancelamentos frequentes, você está bloqueado de entrar no saguão por %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
+				} else if (mmr.getJoins() == 2) {
+					channel.sendMessage("Você saiu do saguão DUO com sucesso.\n:warning: | O próximo cancelamento de fila resultará em bloqueio de saguão.").queue();
+				} else {
+					channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
+				}
 			} else {
 				channel.sendMessage("❌ | Você não está em nenhum saguão.").queue();
 				return;
