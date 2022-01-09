@@ -644,7 +644,7 @@ public class ShiroEvents extends ListenerAdapter {
         Member member = event.getMember();
         User author = event.getUser();
 
-        if (Main.getInfo().getAntiRaidStreak().get(guild.getId()) != null) {
+        if (Main.getInfo().getAntiRaidStreak().containsKey(guild.getId())) {
             Main.getInfo().getAntiRaidStreak().computeIfPresent(guild.getId(), (k, p) -> Pair.of(p.getLeft(), p.getRight() + 1));
             guild.ban(member, 7, "Detectada tentativa de raid").queue();
             return;
@@ -658,6 +658,8 @@ public class ShiroEvents extends ListenerAdapter {
 
             arc.put(System.currentTimeMillis(), author.getId());
             if (arc.size() >= gc.getAntiRaidLimit()) {
+                Main.getInfo().getAntiRaidStreak().put(guild.getId(), Pair.of(System.currentTimeMillis(), arc.size()));
+
                 TextChannel chn = gc.getGeneralChannel();
                 if (chn != null) {
                     EmbedBuilder eb = new EmbedBuilder()
@@ -682,8 +684,6 @@ public class ShiroEvents extends ListenerAdapter {
                             .flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
                             .queue(null, Helper::doNothing);
                 }
-
-                Main.getInfo().getAntiRaidStreak().put(guild.getId(), Pair.of(System.currentTimeMillis(), arc.size()));
 
                 for (TextChannel tc : guild.getTextChannels()) {
                     if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
