@@ -125,7 +125,7 @@ public class ShoukanCommand implements Executable {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
-				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(Helper.separate(mmr.getRemainingBlock()))).queue();
+				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado por mais %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
 				return;
 			} else if (args.length < 2 || !Helper.equalsAny(args[1], "solo", "duo")) {
 				channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
@@ -135,14 +135,17 @@ public class ShoukanCommand implements Executable {
 			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase(Locale.ROOT));
 			switch (rq) {
 				case SOLO -> {
+					mm.joinLobby(mmr, null, rq, channel);
+					channel.sendMessage("Você entrou no saguão **SOLO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " na fila).").queue();
+
+					mmr.setJoins(mmr.getJoins() + 1);
+					MatchMakingRatingDAO.saveMMR(mmr);
+
 					for (SoloLobby sl : mm.getSoloLobby()) {
 						sl.mmr().getUser().openPrivateChannel()
-								.flatMap(c -> c.sendMessage(author.getName() + " entrou no saguão."))
+								.flatMap(c -> c.sendMessage(author.getName() + " entrou no saguão (" + (mm.getSoloLobby().size() - 1) + " na fila)."))
 								.queue(null, Helper::doNothing);
 					}
-
-					mm.joinLobby(mmr, null, rq, channel);
-					channel.sendMessage("Você entrou no saguão **SOLO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue();
 				}
 				case DUO -> {
 					if (message.getMentionedUsers().isEmpty()) {
@@ -154,7 +157,7 @@ public class ShoukanCommand implements Executable {
 					MatchMakingRating duo = MatchMakingRatingDAO.getMMR(u.getId());
 
 					if (duo.isBlocked()) {
-						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(Helper.separate(mmr.getRemainingBlock()))).queue();
+						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado por mais %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
 						return;
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
 						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();
@@ -177,18 +180,24 @@ public class ShoukanCommand implements Executable {
 												return;
 											}
 
-											for (DuoLobby sl : mm.getDuoLobby()) {
-												sl.duo().p1().getUser().openPrivateChannel()
-														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão."))
-														.queue(null, Helper::doNothing);
-												sl.duo().p2().getUser().openPrivateChannel()
-														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão."))
-														.queue(null, Helper::doNothing);
-											}
-
 											RankedDuo rd = new RankedDuo(mmr, duo);
 											mm.joinLobby(rd, rq, channel);
-											channel.sendMessage("Você e " + u.getAsMention() + " entraram no saguão **DUO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue();
+											channel.sendMessage("Você e " + u.getAsMention() + " entraram no saguão **DUO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " na fila).").queue();
+
+											mmr.setJoins(mmr.getJoins() + 1);
+											MatchMakingRatingDAO.saveMMR(mmr);
+
+											duo.setJoins(mmr.getJoins() + 1);
+											MatchMakingRatingDAO.saveMMR(duo);
+
+											for (DuoLobby sl : mm.getDuoLobby()) {
+												sl.duo().p1().getUser().openPrivateChannel()
+														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão (" + (mm.getDuoLobby().size() - 1) + " na fila)."))
+														.queue(null, Helper::doNothing);
+												sl.duo().p2().getUser().openPrivateChannel()
+														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão (" + (mm.getDuoLobby().size() - 1) + " na fila)."))
+														.queue(null, Helper::doNothing);
+											}
 										}
 									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 									usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId()),

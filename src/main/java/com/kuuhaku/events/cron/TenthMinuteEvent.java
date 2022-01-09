@@ -21,8 +21,10 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
@@ -196,6 +198,12 @@ public class TenthMinuteEvent implements Job {
 
 				GuildDAO.updateGuildSettings(gc);
 			}
+		}
+
+		List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getRetrialMMRs();
+		for (MatchMakingRating mmr : mmrs) {
+			mmr.setJoins(mmr.getJoins() - 1);
+			MatchMakingRatingDAO.saveMMR(mmr);
 		}
 
 		File[] temp = Main.getInfo().getTemporaryFolder().listFiles();
