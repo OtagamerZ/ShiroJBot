@@ -50,8 +50,8 @@ public class Tournament {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Set<Participant> participants = new LinkedHashSet<>();
 
-	@PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(referencedColumnName = "tournament_id")
 	private Bracket bracket;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
