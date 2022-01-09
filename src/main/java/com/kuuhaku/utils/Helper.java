@@ -1530,7 +1530,7 @@ public class Helper {
 
     public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildId())) return;
-        Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
+        Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
 
         double cardBuff = getBuffMult(gc, BuffType.CARD);
         double foilBuff = getBuffMult(gc, BuffType.FOIL);
@@ -1658,7 +1658,7 @@ public class Helper {
 
     public static void spawnDrop(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildId())) return;
-        Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
+        Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
 
         double dropBuff = getBuffMult(gc, BuffType.DROP);
 
