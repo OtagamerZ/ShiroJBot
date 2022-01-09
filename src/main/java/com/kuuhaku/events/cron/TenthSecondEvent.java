@@ -133,16 +133,14 @@ public class TenthSecondEvent implements Job {
 					Main.getInfo().getMatchMaking().getSoloLobby().remove(p1);
 					Main.getInfo().getMatchMaking().getSoloLobby().remove(p2);
 
-					mmr1.setEvades(0);
 					mmr1.setJoins(0);
-					mmr2.setEvades(0);
 					mmr2.setJoins(0);
-
-					MatchMakingRatingDAO.saveMMR(mmr1);
-					MatchMakingRatingDAO.saveMMR(mmr2);
 
 					boolean p1Starts = Helper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
+						mmr1.setEvades(0);
+						mmr2.setEvades(0);
+
 						GlobalGame g = new Shoukan(
 								Main.getShiroShards(),
 								new GameChannel(p1.channel(), p2.channel()),
@@ -158,6 +156,8 @@ public class TenthSecondEvent implements Job {
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
+						mmr1.setEvades(0);
+
 						for (Pair<SoloLobby, Boolean> p : match) {
 							if (p.getRight()) {
 								p.getLeft().channel().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
@@ -165,6 +165,9 @@ public class TenthSecondEvent implements Job {
 							}
 						}
 					}
+
+					MatchMakingRatingDAO.saveMMR(mmr1);
+					MatchMakingRatingDAO.saveMMR(mmr2);
 				};
 
 				sendSoloConfirmation(p1, p1.channel(), p2.channel(), match, result);
@@ -197,23 +200,19 @@ public class TenthSecondEvent implements Job {
 					Main.getInfo().getMatchMaking().getDuoLobby().remove(p1);
 					Main.getInfo().getMatchMaking().getDuoLobby().remove(p2);
 
-					t1.p1().setEvades(0);
 					t1.p1().setJoins(0);
-					t1.p2().setEvades(0);
 					t1.p2().setJoins(0);
-					t2.p1().setEvades(0);
 					t2.p1().setJoins(0);
-					t2.p2().setEvades(0);
 					t2.p2().setJoins(0);
-
-					MatchMakingRatingDAO.saveMMR(t1.p1());
-					MatchMakingRatingDAO.saveMMR(t1.p2());
-					MatchMakingRatingDAO.saveMMR(t2.p1());
-					MatchMakingRatingDAO.saveMMR(t2.p2());
 
 					boolean p1Starts = Helper.chance(50);
 					boolean leaderStarts = Helper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
+						t1.p1().setEvades(0);
+						t1.p2().setEvades(0);
+						t2.p1().setEvades(0);
+						t2.p2().setEvades(0);
+
 						GlobalGame g = new Shoukan(
 								Main.getShiroShards(),
 								new GameChannel(p1.channel(), p2.channel()),
@@ -239,6 +238,9 @@ public class TenthSecondEvent implements Job {
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
+						t1.p1().setEvades(0);
+						t1.p2().setEvades(0);
+
 						for (Pair<DuoLobby, Boolean> p : match) {
 							if (p.getRight()) {
 								p.getLeft().channel().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
@@ -246,6 +248,11 @@ public class TenthSecondEvent implements Job {
 							}
 						}
 					}
+
+					MatchMakingRatingDAO.saveMMR(t1.p1());
+					MatchMakingRatingDAO.saveMMR(t1.p2());
+					MatchMakingRatingDAO.saveMMR(t2.p1());
+					MatchMakingRatingDAO.saveMMR(t2.p2());
 				};
 
 				sendDuoConfirmation(p1, p1.channel(), p2.channel(), match, result);
