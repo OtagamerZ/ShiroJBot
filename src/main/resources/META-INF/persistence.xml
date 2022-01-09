@@ -87,9 +87,9 @@
         <class>com.kuuhaku.model.persistent.tournament.Participant</class>
         <class>com.kuuhaku.model.persistent.tournament.Phase</class>
         <class>com.kuuhaku.model.persistent.tournament.Tournament</class>
-        <!-- class>com.kuuhaku.model.persistent.Trade</class>
+        <class>com.kuuhaku.model.persistent.Trade</class>
         <class>com.kuuhaku.model.persistent.TradeOffer</class>
-        <class>com.kuuhaku.model.persistent.TradeCard</class -->
+        <class>com.kuuhaku.model.persistent.TradeCard</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>

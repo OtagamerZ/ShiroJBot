@@ -28,12 +28,10 @@ public class Trade {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@PrimaryKeyJoinColumn
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "trade")
 	private TradeOffer left = null;
 
-	@PrimaryKeyJoinColumn
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "trade")
 	private TradeOffer right = null;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -42,9 +40,9 @@ public class Trade {
 	public Trade() {
 	}
 
-	public Trade(TradeOffer left, TradeOffer right) {
-		this.left = left;
-		this.right = right;
+	public Trade(String left, String right) {
+		this.left = new TradeOffer(left, this);
+		this.right = new TradeOffer(right, this);
 	}
 
 	public int getId() {
