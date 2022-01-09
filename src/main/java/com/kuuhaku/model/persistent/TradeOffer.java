@@ -50,7 +50,10 @@ public class TradeOffer {
 	private Trade trade;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumns(value = {@JoinColumn(name = "tradeoffer_id"), @JoinColumn(name = "tradeoffer_uid")})
+	@JoinColumns(value = {
+			@JoinColumn(name = "tradeoffer_id", referencedColumnName = "id"),
+			@JoinColumn(name = "tradeoffer_uid", referencedColumnName = "uid")
+	})
 	private List<TradeCard> cards = new ArrayList<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
