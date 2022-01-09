@@ -33,9 +33,6 @@ public class Bracket {
 	private int id;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int tournament;
-
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -45,22 +42,13 @@ public class Bracket {
 	public Bracket() {
 	}
 
-	public Bracket(int size, Tournament t) {
-		this.tournament = t.getId();
+	public Bracket(int size) {
 		this.size = size;
 		this.phases = new ArrayList<>(Arrays.asList(new Phase[(int) Helper.log(size, 2) + 1]));
 		for (int i = 0; i < phases.size(); i++) {
 			phases.set(i, new Phase(i, (int) (size / Math.pow(2, i)), i == phases.size() - 1));
 		}
 		this.phases.sort(Comparator.comparingInt(Phase::getPhase));
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public int getTournament() {
-		return tournament;
 	}
 
 	public int getSize() {
