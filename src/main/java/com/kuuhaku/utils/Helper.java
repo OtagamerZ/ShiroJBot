@@ -1530,6 +1530,7 @@ public class Helper {
 
     public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildId())) return;
+        Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 
         double cardBuff = getBuffMult(gc, BuffType.CARD);
         double foilBuff = getBuffMult(gc, BuffType.FOIL);
@@ -1582,7 +1583,6 @@ public class Helper {
                 }
 
                 Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-                Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
             } catch (IllegalStateException ignore) {
             }
         }
@@ -1658,6 +1658,7 @@ public class Helper {
 
     public static void spawnDrop(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildId())) return;
+        Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
 
         double dropBuff = getBuffMult(gc, BuffType.DROP);
 
@@ -1706,7 +1707,6 @@ public class Helper {
                 }
 
                 Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
-                Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
             } catch (IllegalStateException ignore) {
             }
         }
@@ -1715,6 +1715,7 @@ public class Helper {
     public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
         String padoru = ShiroInfo.RESOURCES_URL + "/assets/padoru_padoru.gif";
         if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
+        Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
 
         if (chance(0.1 - clamp(channel.getGuild().getMemberCount() * 0.08 / 5000, 0, 0.08))) {
             try {
@@ -1816,8 +1817,6 @@ public class Helper {
                                 act.accept(msg);
                             });
                 }
-
-                Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
             } catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
             }
         }
@@ -1825,6 +1824,7 @@ public class Helper {
 
     public static void spawnUsaTan(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
+        Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
 
         if (chance(0.15 - clamp(channel.getGuild().getMemberCount() * 0.5 / 5000, 0, 0.05))) {
             try {
@@ -1920,8 +1920,6 @@ public class Helper {
                                 if (!found.get()) act.run();
                             }, Helper::doNothing);
                 }
-
-                Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
             } catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
             }
         }
