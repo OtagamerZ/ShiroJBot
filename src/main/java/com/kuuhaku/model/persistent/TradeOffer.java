@@ -50,7 +50,7 @@ public class TradeOffer {
 	private Trade trade;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumns(value = {
+	@JoinColumns({
 			@JoinColumn(name = "tradeoffer_id", referencedColumnName = "id"),
 			@JoinColumn(name = "tradeoffer_uid", referencedColumnName = "uid")
 	})
