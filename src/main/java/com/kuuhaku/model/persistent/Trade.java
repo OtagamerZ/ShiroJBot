@@ -28,12 +28,12 @@ public class Trade {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament_id")
 	private TradeOffer left = null;
 
+	@PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament_id")
 	private TradeOffer right = null;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
