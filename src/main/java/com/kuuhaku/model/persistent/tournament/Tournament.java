@@ -22,6 +22,8 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.persistence.*;
@@ -50,7 +52,7 @@ public class Tournament {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Set<Participant> participants = new LinkedHashSet<>();
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Bracket bracket;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -224,7 +226,7 @@ public class Tournament {
 	public void close() {
 		closed = true;
 		size = Math.max(8, Helper.roundToBit(participants.size()));
-		bracket = new Bracket(size);
+		bracket = new Bracket(size, this);
 		bracket.populate(this, List.copyOf(participants));
 		participants.removeIf(p -> p.getIndex() == -1);
 	}
