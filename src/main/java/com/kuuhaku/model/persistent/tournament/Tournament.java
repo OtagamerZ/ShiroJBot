@@ -47,11 +47,10 @@ public class Tournament {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int seed = new Random().nextInt();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament_id")
 	private Set<Participant> participants = new LinkedHashSet<>();
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "trade_id")
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament_id")
 	private Bracket bracket;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
