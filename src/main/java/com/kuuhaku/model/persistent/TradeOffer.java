@@ -38,7 +38,7 @@ import java.util.List;
 @IdClass(CompositeTradeId.class)
 public class TradeOffer {
 	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Id
