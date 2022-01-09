@@ -51,7 +51,6 @@ public class Tournament {
 	private Set<Participant> participants = new LinkedHashSet<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(referencedColumnName = "tournament_id")
 	private Bracket bracket;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
