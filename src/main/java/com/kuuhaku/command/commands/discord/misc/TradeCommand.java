@@ -93,10 +93,7 @@ public class TradeCommand implements Executable {
 				Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (!wrapper.getUser().getId().equals(tgt.getId())) return;
 							s.delete().queue(null, Helper::doNothing);
-							Trade trade = Helper.getOr(t, new Trade(
-									new TradeOffer(author.getId()),
-									new TradeOffer(tgt.getId())
-							));
+							Trade trade = Helper.getOr(t, new Trade(author.getId(), tgt.getId()));
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
@@ -305,6 +302,8 @@ public class TradeCommand implements Executable {
 										channel.sendMessage("❌ | Você não pode oferecer uma carta que não possui!").queue();
 										return;
 									}
+
+									to.getCards().add(tc);
 
 									KawaiponDAO.saveKawaipon(finalKp);
 								} catch (InterruptedException | ExecutionException e) {

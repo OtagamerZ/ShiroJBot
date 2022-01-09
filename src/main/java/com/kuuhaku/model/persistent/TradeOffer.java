@@ -39,6 +39,10 @@ public class TradeOffer {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "trade_id")
+	private Trade trade;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "tradeoffer_id")
 	private List<TradeCard> cards = new ArrayList<>();
@@ -52,12 +56,17 @@ public class TradeOffer {
 	public TradeOffer() {
 	}
 
-	public TradeOffer(String uid) {
+	public TradeOffer(String uid, Trade trade) {
 		this.uid = uid;
+		this.trade = trade;
 	}
 
 	public String getUid() {
 		return uid;
+	}
+
+	public Trade getTrade() {
+		return trade;
 	}
 
 	public List<TradeCard> getCards() {
