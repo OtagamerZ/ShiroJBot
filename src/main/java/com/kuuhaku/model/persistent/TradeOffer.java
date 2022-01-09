@@ -201,7 +201,7 @@ public class TradeOffer {
 	}
 
 	public void commit(String uid) {
-		TradeOffer to = new TradeOffer(uid);
+		TradeOffer to = new TradeOffer(uid, trade);
 		to.addValue(value);
 		to.getCards().addAll(cards);
 		to.rollback();
