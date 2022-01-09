@@ -47,10 +47,10 @@ public class Tournament {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int seed = new Random().nextInt();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament_id")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Set<Participant> participants = new LinkedHashSet<>();
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament_id")
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Bracket bracket;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -224,7 +224,7 @@ public class Tournament {
 	public void close() {
 		closed = true;
 		size = Math.max(8, Helper.roundToBit(participants.size()));
-		bracket = new Bracket(size);
+		bracket = new Bracket(size, this);
 		bracket.populate(this, List.copyOf(participants));
 		participants.removeIf(p -> p.getIndex() == -1);
 	}
