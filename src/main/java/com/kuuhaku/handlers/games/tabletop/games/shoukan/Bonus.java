@@ -257,18 +257,7 @@ public class Bonus implements Cloneable {
 			b.ddg = Arrays.copyOf(ddg, 6);
 			b.blk = Arrays.copyOf(blk, 6);
 
-			return new Bonus(
-					b.getSpecialData(),
-					b.getFlags(),
-					atk[0],
-					def[0],
-					ddg[0],
-					blk[0],
-					b.getMana(),
-					b.getBlood(),
-					b.getWrite(),
-					b.getCharm()
-			);
+			return b;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
