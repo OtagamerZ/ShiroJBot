@@ -2070,6 +2070,16 @@ public class Shoukan extends GlobalGame implements Serializable {
 					else if (c.isStunned()) c.reduceStun();
 					else if (c.isSleeping()) c.reduceSleep();
 
+
+					Iterator<Equipment> it = c.getLinkedTo().iterator();
+					while (it.hasNext()) {
+						Equipment e = it.next();
+						Equipment equip = slots.get(e.getIndex()).getBottom();
+						if (!e.equals(equip)) {
+							it.remove();
+						}
+					}
+
 					if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
 							|| makeFusion(h.get())
 					) return;
