@@ -142,6 +142,8 @@ public class ShoukanCommand implements Executable {
 					MatchMakingRatingDAO.saveMMR(mmr);
 
 					for (SoloLobby sl : mm.getSoloLobby()) {
+						if (sl.mmr().getUid().equals(author.getId())) continue;
+
 						sl.mmr().getUser().openPrivateChannel()
 								.flatMap(c -> c.sendMessage(author.getName() + " entrou no saguão (" + (mm.getSoloLobby().size() - 1) + " na fila)."))
 								.queue(null, Helper::doNothing);
@@ -191,6 +193,9 @@ public class ShoukanCommand implements Executable {
 											MatchMakingRatingDAO.saveMMR(duo);
 
 											for (DuoLobby sl : mm.getDuoLobby()) {
+												if (sl.duo().p1().getUid().equals(author.getId())) continue;
+												else if (sl.duo().p2().getUid().equals(author.getId())) continue;
+
 												sl.duo().p1().getUser().openPrivateChannel()
 														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão (" + (mm.getDuoLobby().size() - 1) + " na fila)."))
 														.queue(null, Helper::doNothing);
