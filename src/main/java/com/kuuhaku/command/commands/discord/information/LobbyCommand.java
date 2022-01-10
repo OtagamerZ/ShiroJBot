@@ -127,7 +127,11 @@ public class LobbyCommand implements Executable, Slashed {
 				for (List<SoloLobby> chunk : lobby) {
 					sb.setLength(0);
 					for (SoloLobby sl : chunk)
-						sb.append("%s (%s)\n".formatted(sl.mmr().getUser().getName(), sl.mmr().getTier().getName()));
+						sb.append("%s | %s (%s)\n".formatted(
+								sl.unlocked().get() ? "\\✅" : "\\❌",
+								sl.mmr().getUser().getName(),
+								sl.mmr().getTier().getName()
+						));
 
 					eb.setDescription(sb.toString());
 					pages.add(new InteractPage(eb.build()));
@@ -154,7 +158,11 @@ public class LobbyCommand implements Executable, Slashed {
 				for (List<DuoLobby> chunk : lobby) {
 					sb.setLength(0);
 					for (DuoLobby dl : chunk)
-						sb.append("%s (%s)\n".formatted(dl.duo().p1().getUser().getName() + " | " + dl.duo().p2().getUser().getName(), RankedTier.getTierName(dl.duo().getAvgTier(), false)));
+						sb.append("%s | %s (%s)\n".formatted(
+								dl.unlocked().get() ? "\\✅" : "\\❌",
+								dl.duo().p1().getUser().getName() + " | " + dl.duo().p2().getUser().getName(),
+								RankedTier.getTierName(dl.duo().getAvgTier(), false)
+						));
 
 					eb.setDescription(sb.toString());
 					pages.add(new InteractPage(eb.build()));
