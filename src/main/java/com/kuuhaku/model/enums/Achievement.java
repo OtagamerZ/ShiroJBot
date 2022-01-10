@@ -177,13 +177,12 @@ public enum Achievement {
 			}
 			case UNTOUCHABLE -> h.getHp() < h.getPrevHp();
 			case LAST_STAND -> {
-				if (!last) yield false;
+				JSONObject data = game.getAchData().computeIfAbsent(this, k -> new JSONObject());
 
-				if (game.getHistory().getWinner().equals(side)) {
-					yield h.getHp() == 1;
-				}
+				if (data.getBoolean("completed")) yield false;
 
-				yield true;
+				data.put("completed", h.getHp() == 1);
+				yield false;
 			}
 			case SPOOKY_NIGHTS -> {
 				Calendar c = Calendar.getInstance();
