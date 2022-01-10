@@ -1530,12 +1530,13 @@ public class Helper {
 
     public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildId())) return;
-        Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
 
         double cardBuff = getBuffMult(gc, BuffType.CARD);
         double foilBuff = getBuffMult(gc, BuffType.FOIL);
 
         if (chance((3 - clamp(channel.getGuild().getMemberCount() / 5000, 0, 1)) * cardBuff)) {
+            Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
+
             KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
                     .map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
                     .collect(Collectors.toList())
@@ -1658,11 +1659,12 @@ public class Helper {
 
     public static void spawnDrop(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildId())) return;
-        Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
 
         double dropBuff = getBuffMult(gc, BuffType.DROP);
 
         if (chance((2.5 - clamp(channel.getGuild().getMemberCount() * 0.75f / 5000, 0, 0.75)) * dropBuff)) {
+            Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
+
             Prize<?> drop;
             int type = rng(1000);
 
@@ -1715,9 +1717,10 @@ public class Helper {
     public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
         String padoru = ShiroInfo.RESOURCES_URL + "/assets/padoru_padoru.gif";
         if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
-        Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
 
         if (chance(0.1 - clamp(channel.getGuild().getMemberCount() * 0.08 / 5000, 0, 0.08))) {
+            Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
+
             try {
                 TextChannel tc = getOr(gc.getDropChannel(), channel);
                 Webhook wh = getOrCreateWebhook(tc, "Shiro");
@@ -1824,9 +1827,10 @@ public class Helper {
 
     public static void spawnUsaTan(GuildConfig gc, TextChannel channel) {
         if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
-        Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
 
         if (chance(0.15 - clamp(channel.getGuild().getMemberCount() * 0.5 / 5000, 0, 0.05))) {
+            Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
+
             try {
                 TextChannel tc = getOr(gc.getDropChannel(), channel);
                 Webhook wh = getOrCreateWebhook(tc, "Shiro");
