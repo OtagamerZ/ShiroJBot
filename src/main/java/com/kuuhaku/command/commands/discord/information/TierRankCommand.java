@@ -98,7 +98,7 @@ public class TierRankCommand implements Executable, Slashed {
 
 					prom.append("**%s - %s**%s\n".formatted(u.getName(), md.toString(), tier));
 				} else
-					sb.append("%s - %s PDR%s\n".formatted(u.getName(), mm.getRankPoints(), tier));
+					sb.append("%s - %s PDR %s\n".formatted(u.getName(), mm.getRankPoints(), tier));
 			}
 
 			eb.addField("Promoção de tier", prom.toString(), false)
