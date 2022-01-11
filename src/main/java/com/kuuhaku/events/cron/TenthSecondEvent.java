@@ -81,7 +81,7 @@ public class TenthSecondEvent implements Job {
 						first.unlocked().set(false);
 						second.unlocked().set(false);
 					} else {
-						first.threshold().getAndIncrement();
+						first.threshold().getAndAdd(2);
 					}
 				}
 			}
@@ -105,7 +105,7 @@ public class TenthSecondEvent implements Job {
 						first.unlocked().set(false);
 						second.unlocked().set(false);
 					} else {
-						first.threshold().getAndIncrement();
+						first.threshold().getAndAdd(2);
 					}
 				}
 			}
