@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
+import com.kuuhaku.model.enums.LobbyType;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.records.DuoLobby;
@@ -95,5 +96,18 @@ public class MatchMaking {
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+
+	public LobbyType getLobbyType(MatchMakingRating mmr) {
+		if (soloLobby.stream().anyMatch(sl -> sl.mmr().equals(mmr)))
+			return LobbyType.SOLO;
+		else if (duoLobby.stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr)))
+			return LobbyType.DUO;
+
+		return LobbyType.NONE;
+	}
+
+	public boolean isInLobby(MatchMakingRating mmr) {
+		return getLobbyType(mmr) != LobbyType.NONE;
 	}
 }
