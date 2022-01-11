@@ -32,6 +32,7 @@ import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MatchMaking;
+import com.kuuhaku.model.enums.LobbyType;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.exceptions.ValidationException;
@@ -75,8 +76,8 @@ public class LobbyCommand implements Executable, Slashed {
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 			MatchMaking mm = Main.getInfo().getMatchMaking();
 
-			if (mm.getSoloLobby().contains(mmr)) {
-				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+			if (mm.getLobbyType(mmr) == LobbyType.SOLO) {
+				mm.getSoloLobby().removeIf(sl -> sl.mmr().equals(mmr));
 
 				if (mmr.getJoins() >= 3) {
 					mmr.block((int) Math.pow(2, mmr.getJoins() - 2), ChronoUnit.MINUTES);
@@ -88,8 +89,8 @@ public class LobbyCommand implements Executable, Slashed {
 				} else {
 					channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
 				}
-			} else if (mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
-				Main.getInfo().getMatchMaking().getDuoLobby().removeIf(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr));
+			} else if (mm.getLobbyType(mmr) == LobbyType.DUO) {
+				mm.getDuoLobby().removeIf(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr));
 
 				if (mmr.getJoins() >= 3) {
 					mmr.block((int) Math.pow(2, mmr.getJoins() - 2), ChronoUnit.MINUTES);
