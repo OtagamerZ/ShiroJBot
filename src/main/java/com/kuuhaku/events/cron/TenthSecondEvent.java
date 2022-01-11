@@ -65,23 +65,20 @@ public class TenthSecondEvent implements Job {
 
 		List<SoloLobby> soloLobby = Main.getInfo().getMatchMaking().getSoloLobby().stream()
 				.filter(sl -> sl.unlocked().get())
+				.sorted(Comparator.comparingLong(sl -> sl.mmr().getMMR()))
 				.collect(Collectors.toList());
 		if (soloLobby.size() >= 2) {
-			Collections.shuffle(soloLobby);
-
 			for (int x = 0; x < soloLobby.size(); x++) {
 				SoloLobby first = soloLobby.get(x);
 				if (!first.unlocked().get()) continue;
 
-				for (int y = x + 1; y < soloLobby.size(); y++) {
+				for (int y = soloLobby.size() - 1; y > x; y--) {
 					SoloLobby second = soloLobby.get(y);
 					if (!second.unlocked().get()) continue;
 
 					if (trySoloMatching(first, second)) {
 						first.unlocked().set(false);
 						second.unlocked().set(false);
-					} else {
-						first.threshold().getAndAdd(2);
 					}
 				}
 			}
@@ -89,6 +86,7 @@ public class TenthSecondEvent implements Job {
 
 		List<DuoLobby> duoLobby = Main.getInfo().getMatchMaking().getDuoLobby().stream()
 				.filter(dl -> dl.unlocked().get())
+				.sorted(Comparator.comparingLong(dl -> dl.duo().getAvgMMR()))
 				.collect(Collectors.toList());
 		if (duoLobby.size() >= 2) {
 			Collections.shuffle(duoLobby);
@@ -97,15 +95,13 @@ public class TenthSecondEvent implements Job {
 				DuoLobby first = duoLobby.get(x);
 				if (!first.unlocked().get()) continue;
 
-				for (int y = x + 1; y < duoLobby.size(); y++) {
+				for (int y = duoLobby.size() - 1; y > x; y--) {
 					DuoLobby second = duoLobby.get(y);
 					if (!second.unlocked().get()) continue;
 
 					if (tryDuoMatching(first, second)) {
 						first.unlocked().set(false);
 						second.unlocked().set(false);
-					} else {
-						first.threshold().getAndAdd(2);
 					}
 				}
 			}
@@ -120,9 +116,7 @@ public class TenthSecondEvent implements Job {
 			MatchMakingRating mmr2 = p2.mmr();
 
 			if (!mmr1.equals(mmr2)
-				&& Helper.prcntToInt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.threshold().get() * 10
 				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)
-				&& (!p1.channel().getGuild().getId().equals(p2.channel().getGuild().getId()) || p1.threshold().get() > 50)
 			) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(p1);
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(p2);
@@ -187,9 +181,7 @@ public class TenthSecondEvent implements Job {
 			RankedDuo t2 = p2.duo();
 
 			if (!t1.equals(t2)
-				&& Helper.prcnt(t1.getAvgMMR(), t2.getAvgMMR() == 0 ? 1 : t2.getAvgMMR()) * 100 <= p1.threshold().get() * 10
 				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < 2 || t2.getAvgTier() == 0)
-				&& (!p1.channel().getGuild().getId().equals(p2.channel().getGuild().getId()) || p1.threshold().get() > 50)
 			) {
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(p1);
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(p2);
