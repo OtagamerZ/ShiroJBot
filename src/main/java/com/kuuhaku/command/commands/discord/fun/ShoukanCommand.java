@@ -121,7 +121,7 @@ public class ShoukanCommand implements Executable {
 			if (mm.inGame(author.getId())) {
 				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
-			} else if (mm.getSoloLobby().contains(mmr) || mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
+			} else if (mm.isInLobby(mmr)) {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
@@ -164,7 +164,7 @@ public class ShoukanCommand implements Executable {
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
 						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();
 						return;
-					} else if (mm.getSoloLobby().contains(mmr) || mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
+					} else if (mm.isInLobby(duo)) {
 						channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
 						return;
 					}
@@ -177,7 +177,10 @@ public class ShoukanCommand implements Executable {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
-											if (mm.getSoloLobby().contains(mmr) || mm.getDuoLobby().stream().anyMatch(rd -> rd.duo().p1().equals(mmr) || rd.duo().p2().equals(mmr))) {
+											if (mm.isInLobby(mmr)) {
+												channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
+												return;
+											} else if (mm.isInLobby(duo)) {
 												channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
 												return;
 											}
