@@ -2234,7 +2234,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				wrapper.getHook()
 						.setEphemeral(true)
-						.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "png"))
+						.sendFile(Helper.writeAndGet(arena.renderSide(getCurrentSide()), String.valueOf(this.hashCode()), "png"))
 						.queue();
 			});
 		}
