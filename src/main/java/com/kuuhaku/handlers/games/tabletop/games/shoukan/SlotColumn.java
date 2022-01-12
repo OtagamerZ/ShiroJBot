@@ -56,9 +56,6 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setBottom(Equipment bottom) {
-		if (this.bottom != null) {
-			this.bottom.setIndex(-2);
-		}
 		if (bottom != null) {
 			bottom.setIndex(index);
 			bottom.bind(hand);
