@@ -159,7 +159,7 @@ public class Attributes {
 				str * 0.275
 				+ res * 0.15
 				+ agi * 0.0175
-				+ wis * -0.15
+				+ wis * (wis / (double) (str + res + agi + con))
 				+ con * 0.075
 		));
 	}
@@ -185,7 +185,7 @@ public class Attributes {
 	}
 
 	public int calcEvoTierCap() {
-		return (int) Math.max(1, Math.round(1 + 3 * (1 - Math.exp(-0.01 * wis + -0.0085 * res + -0.008 * str))));
+		return (int) Math.max(1, Math.round(1 + 3 * (1 - Math.exp(-0.015 * wis + -0.0085 * res + -0.009 * str))));
 	}
 
 	public Integer[] getStats() {
