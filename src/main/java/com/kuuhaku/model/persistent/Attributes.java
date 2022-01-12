@@ -159,7 +159,7 @@ public class Attributes {
 				str * 0.275
 				+ res * 0.15
 				+ agi * 0.0175
-				- wis * (wis / (double) (str + res + agi + con))
+				- wis * (wis / (double) (str + res + agi + wis + con))
 				+ con * 0.075
 		));
 	}
