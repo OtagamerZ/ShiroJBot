@@ -2236,7 +2236,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				List<SlotColumn> slts = arena.getSlots().get(getCurrentSide());
-				if (slts.stream().map(slt -> List.of(slt.getTop(), slt.getBottom())).flatMap(List::stream).noneMatch(Objects::nonNull)) {
+				if (slts.stream().map(slt -> Arrays.asList(slt.getTop(), slt.getBottom())).flatMap(List::stream).noneMatch(Objects::nonNull)) {
 					channel.sendMessage("❌ | Não há nenhuma carta no seu campo.").queue(null, Helper::doNothing);
 					return;
 				}
