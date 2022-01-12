@@ -15,14 +15,14 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 		if (linked instanceof Champion c)
 			return c;
 
-		throw new InvalidStateException();
+		throw new ClassCastException("Wrong Drawable type.");
 	}
 
 	public Equipment asEquipment() {
 		if (linked instanceof Equipment e)
 			return e;
 
-		throw new InvalidStateException();
+		throw new ClassCastException("Wrong Drawable type.");
 	}
 
 	public CardType getType() {
