@@ -29,8 +29,8 @@ public enum Perk {
 	VAMPIRE("Vampiro", "Derrotar cartas restaura 10% do HP perdido, mas reduz o HP máximo em 25%."),
 	ARMORED("Encouraçado", "O atributo AGI passa a conceder chance de bloqueio ao invés de esquiva."),
 	MINDSHIELD("Escudo Psíquico", "Ganha permanentemente um escudo de feitiços, mas dobra o custo de mana."),
-	OPTIMISTIC("Otimista", "Aumenta a taxa de regeneração em 50%."),
-	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50%."),
+	OPTIMISTIC("Otimista", "Aumenta a taxa de regeneração em 50% e recebe 10% mais XP ao falhar a missão."),
+	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50% e possui 10% menos chance de ser penalizado ao falhar a missão."),
 	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
 	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva, ocorrendo o inverso em modo de defesa."),
 	;

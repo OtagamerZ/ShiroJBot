@@ -23,6 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.Danger;
 import com.kuuhaku.model.enums.Event;
@@ -100,18 +101,24 @@ public class BountyRewardCommand implements Executable {
 					.setColor(Color.red)
 					.setTitle("A missão \"" + info + "\" fracassou");
 
-			int expXp = info.rewards().getOrDefault(Reward.XP, 0) / 2;
+			boolean opt = h.getPerks().contains(Perk.OPTIMISTIC);
+			int expXp = (int) Math.round(info.rewards().getOrDefault(Reward.XP, 0) / 2d * (opt ? 1.1 : 1));
+
 			if (expXp > 0 && Helper.chance(66)) {
 				expXp = Helper.rng(expXp);
 
 				if (expXp > 0) {
 					h.setXp(h.getXp() + expXp);
-					eb.addField("Bônus de experiência", "+" + expXp + " XP", true);
+					if (opt)
+						eb.addField("Bônus de experiência", "+" + expXp + " XP (Otimista)", true);
+					else
+						eb.addField("Bônus de experiência", "+" + expXp + " XP", true);
 				}
 			}
 
+			boolean pes = h.getPerks().contains(Perk.PESSIMISTIC);
 			for (Danger danger : q.getDangers()) {
-				if (Helper.chance(50)) {
+				if (Helper.chance(50 - (pes ? 10 : 0))) {
 					switch (danger) {
 						case HP -> {
 							int max = h.getMaxHp();
