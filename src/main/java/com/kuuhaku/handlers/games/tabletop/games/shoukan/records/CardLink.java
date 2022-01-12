@@ -37,17 +37,22 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 	}
 
 	public boolean isInvalid() {
-		if (linked == null || (!Helper.between(index, 0, 5) && index != -1)) return true;
-		else if (index == -1) return false;
+		try {
+			if (linked == null || (!Helper.between(index, 0, 5) && index != -1)) return true;
+			else if (index == -1) return false;
 
-		SlotColumn sc = linked.getGame().getSlot(linked.getSide(), index);
-		Drawable d;
-		if (linked instanceof Champion)
-			d = sc.getTop();
-		else
-			d = sc.getBottom();
+			SlotColumn sc = linked.getGame().getSlot(linked.getSide(), index);
+			Drawable d;
+			if (linked instanceof Champion)
+				d = sc.getTop();
+			else
+				d = sc.getBottom();
 
-		return !linked.equals(d);
+			return !linked.equals(d);
+		} catch (IndexOutOfBoundsException e) {
+			Helper.logger(this.getClass()).error(e + ": [" + index + ", " + linked.getCard().getId() + "]");
+			return true;
+		}
 	}
 
 	public void sync() {
