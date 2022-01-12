@@ -108,6 +108,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private final TournamentMatch tourMatch;
 
 	private Phase phase = Phase.PLAN;
+	private boolean forfeit = true;
 	private boolean draw = false;
 	private int fusionLock = 0;
 	private int spellLock = 0;
@@ -2235,7 +2236,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				List<SlotColumn> slts = arena.getSlots().get(getCurrentSide());
-				if (slts.stream().map(slt -> List.of(slt.getTop(), slt.getBottom())).flatMap(List::stream).filter(Objects::nonNull).count() == 0) {
+				if (slts.stream().map(slt -> List.of(slt.getTop(), slt.getBottom())).flatMap(List::stream).noneMatch(Objects::nonNull)) {
 					channel.sendMessage("❌ | Não há nenhuma carta no seu campo.").queue(null, Helper::doNothing);
 					return;
 				}
@@ -2461,35 +2462,44 @@ public class Shoukan extends GlobalGame implements Serializable {
 					oldState = new GameState(this);
 				}
 			});
-		if (phase == Phase.PLAN && (getCustom() != null || getRound() > 8))
+		if (phase == Phase.PLAN && (getCustom() != null || getRound() > 8)) {
 			buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
-				if (getCustom() == null) {
-					getHistory().setWinner(getNextSide());
-					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
-				}
-
-				String msg = getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)";
-
-				for (List<SlotColumn> sides : arena.getSlots().values()) {
-					for (SlotColumn slts : sides) {
-						if (slts.getTop() != null)
-							slts.getTop().setFlipped(false);
-
-						if (slts.getBottom() != null)
-							slts.getBottom().setFlipped(false);
+				if (forfeit) {
+					if (getCustom() == null) {
+						getHistory().setWinner(getNextSide());
+						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 					}
-				}
 
-				close();
-				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
-						.queue(mm ->
-								this.message.compute(mm.getChannel().getId(), (id, m) -> {
-									if (m != null) m.delete().queue(null, Helper::doNothing);
-									return mm;
-								})
-						);
+					String msg = getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)";
+
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false);
+						}
+					}
+
+					close();
+					channel.sendMessage(msg)
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.queue(mm ->
+									this.message.compute(mm.getChannel().getId(), (id, m) -> {
+										if (m != null) m.delete().queue(null, Helper::doNothing);
+										return mm;
+									})
+							);
+				} else {
+					forfeit = true;
+					wrapper.getHook()
+							.setEphemeral(true)
+							.sendMessage("Pressione novamente para desistir.")
+							.queue();
+				}
 			});
+		}
 
 		return buttons;
 	}
@@ -2875,6 +2885,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	@Override
 	public void resetTimer(Shoukan shkn) {
+		forfeit = false;
+
 		for (TextChannel chn : getChannel().getChannels()) {
 			Main.getInfo().getShoukanSlot().put(chn.getId(), true);
 		}
