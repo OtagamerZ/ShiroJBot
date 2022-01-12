@@ -104,7 +104,7 @@ public class BountyBoardCommand implements Executable {
 					case HP -> Helper.separate(val) + " HP";
 					case EP -> Helper.separate(val) + " EP";
 					case CREDIT -> Helper.separate(val) + " CR";
-					case GEM -> Helper.separate(val) + " gemas";
+					case GEM -> Helper.separate(val) + " gema" + (val == 1 ? "" : "s");
 					case EQUIPMENT, SPELL -> Helper.clamp(val, 0, 100) + "% de chance";
 				}).append("\n");
 			}
