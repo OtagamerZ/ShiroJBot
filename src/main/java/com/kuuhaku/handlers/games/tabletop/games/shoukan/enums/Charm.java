@@ -37,10 +37,10 @@ public enum Charm {
     SPELL("Magia", "Executa um efeito ao ativar"),
     ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
     TRAP("Armadilha", "Prende-se à uma carta mas virada para baixo, adicionando um efeito de uso único à ela"),
-    PIERCING("Penetração", "Causa dano direto ao atacar"),
+    PIERCING("Penetração", "Causa %s%% do dano final da da carta como dano direto"),
     AGILITY("Agilidade", "Aumenta a chance de esquiva em %s%%"),
     DRAIN("Dreno", "Rouba %s de mana ao atacar"),
-    BLEEDING("Sangramento", "Reduz curas em 50% e causa dano direto ao longo de 10 turnos ao atacar"),
+    BLEEDING("Sangramento", "Reduz curas em 50%% e adiciona %s%% do dano final da carta como sangramento"),
     FORTIFY("Fortificar", "Aumenta a chance de bloqueio em %s%%");
 
     private final String name;
@@ -62,9 +62,11 @@ public enum Charm {
                     Helper.equalsAny(tier, 1, 2) ? "" : "s"
             );
             case DRAIN -> description.formatted(Helper.getFibonacci(tier));
-            case AGILITY -> description.formatted(10 * Helper.getFibonacci(tier));
-            case FORTIFY -> description.formatted(5 * Helper.getFibonacci(tier));
-            default -> description;
+            case AGILITY -> description.formatted(7.5 * tier);
+            case FORTIFY -> description.formatted(5 * tier);
+			case PIERCING -> description.formatted(10 * tier);
+			case BLEEDING -> description.formatted(5 * tier);
+			default -> description;
         };
     }
 
@@ -78,7 +80,7 @@ public enum Charm {
 				.map(Charm::getIcon)
 				.filter(Objects::nonNull)
 				.limit(2)
-				.collect(Collectors.toList());
+				.toList();
 
 		if (icons.isEmpty()) return null;
 		else if (icons.size() == 1) return icons.get(0);

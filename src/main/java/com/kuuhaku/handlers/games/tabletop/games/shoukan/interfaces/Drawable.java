@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -74,6 +75,10 @@ public interface Drawable {
 	Drawable copy();
 
 	Drawable deepCopy();
+
+	default Side getSide() {
+		return getGame().getSideById(getAcc().getUid());
+	}
 
 	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, int block, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
