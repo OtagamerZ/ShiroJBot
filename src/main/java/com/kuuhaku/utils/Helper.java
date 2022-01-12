@@ -499,7 +499,7 @@ public class Helper {
             }
             eb.setTimestamp(Instant.now());
 
-            tc.sendMessageEmbeds(eb.build()).queue();
+            tc.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
         } catch (Exception e) {
             gc.setLogChannel("");
             GuildDAO.updateGuildSettings(gc);
