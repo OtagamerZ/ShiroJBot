@@ -1902,8 +1902,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 									if (d instanceof Champion c) return c.canGoToGrave();
 									else if (d instanceof Equipment e) return !e.isEffectOnly();
 									else return true;
-								})
-								.collect(Collectors.toList())
+								}).toList()
 				);
 				Collections.shuffle(h.get().getRealDeque());
 			} else {
@@ -1913,8 +1912,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 									if (d instanceof Champion c) return c.canGoToGrave();
 									else if (d instanceof Equipment e) return e.canGoToGrave();
 									else return true;
-								})
-								.collect(Collectors.toList())
+								}).toList()
 				);
 			}
 			discardBatch.clear();
@@ -2228,6 +2226,17 @@ public class Shoukan extends GlobalGame implements Serializable {
 					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
+			buttons.put(Helper.parseEmoji("\uD83D\uDC53"), wrapper -> {
+				if (phase != Phase.PLAN) {
+					channel.sendMessage("❌ | Você só pode inspecionar o campo na fase de planejamento.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				wrapper.getHook()
+						.setEphemeral(true)
+						.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "png"))
+						.queue();
+			});
 		}
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
 			buttons.put(Helper.parseEmoji("\uD83D\uDD04"), wrapper -> {
@@ -2309,14 +2318,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.get().getRealDeque().addAll(
 								discardBatch.stream()
 										.map(Drawable::copy)
-										.collect(Collectors.toList())
+										.toList()
 						);
 						Collections.shuffle(h.get().getRealDeque());
 					} else {
 						arena.getGraveyard().get(getCurrentSide()).addAll(
 								discardBatch.stream()
 										.map(Drawable::copy)
-										.collect(Collectors.toList())
+										.toList()
 						);
 					}
 					discardBatch.clear();
