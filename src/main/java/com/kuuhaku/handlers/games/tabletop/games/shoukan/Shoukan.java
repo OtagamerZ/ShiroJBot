@@ -897,7 +897,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		BufferedImage bi = arena.render(this, hands);
 		if (resetTimer) {
 			resetTimerKeepTurn();
-			applyEffect(GLOBAL_TICK, null, getCurrentSide(), -1);
+			applyEffect(GLOBAL_TICK, (Champion) null, getCurrentSide(), -1);
 			for (TextChannel chn : getChannel().getChannels()) {
 				Main.getInfo().getShoukanSlot().put(chn.getId(), true);
 			}
@@ -1729,6 +1729,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			slts.get(index).setBottom(null);
 			arena.getBanned().add(target);
+
+			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			Champion target = slts.get(index).getTop();
 			if (target == null) return;
@@ -2713,6 +2715,22 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		return false;
+	}
+
+	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index) {
+		applyEffect(trigger, activator, side, index, Duelists.of());
+	}
+
+	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Source source) {
+		applyEffect(trigger, activator, side, index, Duelists.of(source));
+	}
+
+	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Target target) {
+		applyEffect(trigger, activator, side, index, Duelists.of(target));
+	}
+
+	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Source source, Target target) {
+		applyEffect(trigger, activator, side, index, Duelists.of(source, target));
 	}
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Duelists duelists) {
