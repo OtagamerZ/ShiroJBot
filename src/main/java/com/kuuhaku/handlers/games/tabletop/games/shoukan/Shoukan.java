@@ -1776,7 +1776,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				arena.getGraveyard().get(side).add(target);
 		}
 
-		applyEffect(ON_DESTROY, target, side, index, Duelists.of());
+		applyEffect(ON_DESTROY, target, side, index);
 	}
 
 	public Arena getArena() {
@@ -2716,6 +2716,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			for (CardLink cl : List.copyOf(activator.getLinkedTo())) {
+				if (cl.isFake()) continue;
+
 				Equipment e = cl.asEquipment();
 				if (e.hasEffect())
 					applyEffect(trigger, e, side, index, duelists);
