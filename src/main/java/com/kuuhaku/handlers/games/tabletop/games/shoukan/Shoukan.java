@@ -2232,6 +2232,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 					return;
 				}
 
+				List<SlotColumn> slts = arena.getSlots().get(getCurrentSide());
+				if (slts.stream().map(slt -> List.of(slt.getTop(), slt.getBottom())).flatMap(List::stream).filter(Objects::nonNull).count() == 0) {
+					channel.sendMessage("❌ | Não há nenhuma carta no seu campo.").queue(null, Helper::doNothing);
+					return;
+				}
+
 				wrapper.getHook()
 						.setEphemeral(true)
 						.sendFile(Helper.writeAndGet(arena.renderSide(getCurrentSide()), String.valueOf(this.hashCode()), "png"))
