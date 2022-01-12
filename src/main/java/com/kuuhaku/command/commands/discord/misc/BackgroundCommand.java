@@ -29,6 +29,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -55,7 +56,12 @@ public class BackgroundCommand implements Executable {
 		}
 
 		try (InputStream is = Helper.getImage(img)) {
-			ImageIO.read(is);
+			BufferedImage bi = ImageIO.read(is);
+			if (bi == null) {
+				channel.sendMessage(I18n.getString("err_invalid-image")).queue();
+				return;
+			}
+
 			byte[] bytes = is.readAllBytes();
 
 			if (bytes.length > StorageUnit.B.convert(5, StorageUnit.MB)) {
