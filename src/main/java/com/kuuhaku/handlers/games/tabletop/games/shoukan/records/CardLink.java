@@ -26,7 +26,7 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 	}
 
 	public CardType getType() {
-		if (asChampion() != null)
+		if (linked instanceof Champion)
 			return CardType.SENSHI;
 		else
 			return CardType.EVOGEAR;
@@ -41,7 +41,7 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 
 		SlotColumn sc = linked.getGame().getSlot(linked.getSide(), index);
 		Drawable d;
-		if (asChampion() != null)
+		if (linked instanceof Champion)
 			d = sc.getTop();
 		else
 			d = sc.getBottom();
