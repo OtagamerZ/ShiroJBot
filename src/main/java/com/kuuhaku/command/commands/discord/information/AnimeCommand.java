@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.records.anime.Anime;
 import com.kuuhaku.model.records.anime.Media;
-import com.kuuhaku.model.records.anime.NAMHData;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.JSONUtils;
@@ -76,32 +75,6 @@ public class AnimeCommand implements Executable {
 						return;
 					}
 
-					NAMHData namh = null;
-					JSONObject res;
-
-					if (hentai) res = AnimeRequest.getMHData(media.title().romaji());
-					else res = AnimeRequest.getNAData(media.title().romaji());
-
-					if (res != null)
-						namh = JSONUtils.fromJSON(res.toString(), NAMHData.class);
-
-					String link;
-					if (namh != null) {
-						if (hentai) {
-							link = "[Mega Hentais](https://www.megahentais.com/?page_id=%s&ref=%s)".formatted(
-									namh.id(),
-									Helper.hash(System.getenv("MEGAHENTAIS_TOKEN"), "SHA-1")
-							);
-						} else {
-							link = "[Now Animes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
-									namh.id(),
-									Helper.hash(System.getenv("NOWANIMES_TOKEN"), "SHA-1")
-							);
-						}
-					} else {
-						link = "Link indisponível";
-					}
-
 					eb.setColor(media.coverImage().getParsedColor());
 					if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir! ( ͡° ͜ʖ ͡°)");
 					else eb.setAuthor("Bem, aqui está um novo anime para você assistir!");
@@ -120,15 +93,10 @@ public class AnimeCommand implements Executable {
 
 					eb.addField("Nota:", media.averageScore() == 0 ? "Nenhuma" : String.valueOf(media.averageScore()), true)
 							.addField("Popularidade:", String.valueOf(media.popularity()), true)
-							.addField("Assista em:", link, true);
-
-					if (!link.equalsIgnoreCase("Link indisponível")) {
-						eb.setDescription(StringUtils.abbreviate(namh.desc(), 2048));
-					} else {
-						eb.setDescription(
-								StringUtils.abbreviate(Helper.htmlConverter.convert(media.description()), 2048)
-						);
-					}
+							.addField("Assista em:", "Link indisponível", true)
+							.setDescription(
+									StringUtils.abbreviate(Helper.htmlConverter.convert(media.description()), 2048)
+							);
 					eb.addField("Gêneros:", media.genres().stream().map(s -> "`" + s + "`").collect(Collectors.joining(", ")), false);
 
 					m.delete().queue();
