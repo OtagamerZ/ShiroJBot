@@ -289,6 +289,11 @@ public class Champion implements Drawable, Cloneable {
 		link.link(this);
 	}
 
+	public void link(Equipment link, boolean fake) {
+		this.linkedTo.add(new CardLink(fake ? -1 : link.getIndex(), link, this));
+		link.link(this);
+	}
+
 	public void unlink(Equipment link) {
 		int i = -1;
 		for (int j = 0; j < linkedTo.size(); j++) {
