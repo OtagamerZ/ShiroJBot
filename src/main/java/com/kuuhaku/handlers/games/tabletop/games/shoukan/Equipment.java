@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -31,12 +32,14 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
+import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -88,7 +91,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Bonus bonus = new Bonus();
-	private transient Pair<Integer, Champion> linkedTo = null;
+	private transient CardLink linkedTo = null;
 	private transient int index = -1;
 
 	private transient String altDescription = null;
@@ -148,7 +151,7 @@ public class Equipment implements Drawable, Cloneable {
 			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), 0, 0, hasDesc);
 
 			if (linkedTo != null) {
-				Champion c = Helper.getOr(linkedTo.getRight().getFakeCard(), linkedTo.getRight());
+				Champion c = Helper.getOr(linkedTo.asChampion().getFakeCard(), linkedTo.asChampion());
 				BufferedImage linked = c.isFlipped()
 						? Helper.getResourceAsImage(this.getClass(), "kawaipon/missing.jpg")
 						: c.getCard().drawCardNoBorder(acc);
@@ -240,12 +243,12 @@ public class Equipment implements Drawable, Cloneable {
 		return bonus;
 	}
 
-	public Pair<Integer, Champion> getLinkedTo() {
+	public CardLink getLinkedTo() {
 		return linkedTo;
 	}
 
-	public void link(int index, Champion link) {
-		this.linkedTo = Pair.of(index, link);
+	public void link(Champion link) {
+		this.linkedTo = new CardLink(link.getIndex(), link, this);
 	}
 
 	public void unlink() {
@@ -466,7 +469,7 @@ public class Equipment implements Drawable, Cloneable {
 			Equipment e = (Equipment) super.clone();
 			e.bonus = bonus.clone();
 			if (linkedTo != null)
-				e.linkedTo = Pair.of(linkedTo.getLeft(), linkedTo.getRight());
+				e.linkedTo = new CardLink(linkedTo.index(), linkedTo.linked(), e);
 			return e;
 		} catch (CloneNotSupportedException e) {
 			return null;
