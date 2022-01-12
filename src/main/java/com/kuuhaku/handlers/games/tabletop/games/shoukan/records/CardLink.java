@@ -38,6 +38,7 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 
 	public boolean isInvalid() {
 		if (linked == null || (!Helper.between(index, 0, 5) && index != -1)) return true;
+		else if (index == -1) return false;
 
 		SlotColumn sc = linked.getGame().getSlot(linked.getSide(), index);
 		Drawable d;
