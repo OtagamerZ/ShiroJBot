@@ -42,44 +42,4 @@ public class AnimeRequest {
 				)
 		);
 	}
-
-	public static JSONObject getNAData(String name) {
-		JSONObject resposta;
-		if (System.getenv().containsKey("NOWANIMES_URL") && System.getenv().containsKey("NOWANIMES_TOKEN")) {
-			resposta = Helper.get(System.getenv("NOWANIMES_URL"),
-					new JSONObject() {{
-						put("anime", URLEncoder.encode(name, StandardCharsets.UTF_8));
-					}},
-					Collections.emptyMap(),
-					System.getenv("NOWANIMES_TOKEN")
-			);
-
-			if (resposta.isEmpty()) return null;
-		} else {
-			return null;
-		}
-
-		Helper.logger(AnimeRequest.class).debug(resposta);
-		return resposta;
-	}
-
-	public static JSONObject getMHData(String name) {
-		JSONObject resposta;
-		if (System.getenv().containsKey("MEGAHENTAIS_URL") && System.getenv().containsKey("MEGAHENTAIS_TOKEN")) {
-			resposta = Helper.get(System.getenv("MEGAHENTAIS_URL"),
-					new JSONObject() {{
-						put("anime", URLEncoder.encode(name, StandardCharsets.UTF_8));
-					}},
-					Collections.emptyMap(),
-					System.getenv("MEGAHENTAIS_TOKEN")
-			);
-
-			if (resposta.isEmpty()) return null;
-		} else {
-			return null;
-		}
-
-		Helper.logger(AnimeRequest.class).debug(resposta);
-		return resposta;
-	}
 }
