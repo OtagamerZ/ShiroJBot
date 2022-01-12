@@ -529,8 +529,9 @@ public class Champion implements Drawable, Cloneable {
 		return (int) Math.round(getFinAtk() * linkedTo.stream()
 				.map(CardLink::asEquipment)
 				.filter(e -> e.getCharms().contains(Charm.PIERCING))
-				.mapToDouble(e -> 0.1 * e.getTier())
-				.sum());
+				.mapToDouble(e -> 0.075 * e.getTier())
+				.sum()
+		);
 	}
 
 	public int getBldAtk() {
@@ -538,7 +539,8 @@ public class Champion implements Drawable, Cloneable {
 				.map(CardLink::asEquipment)
 				.filter(e -> e.getCharms().contains(Charm.BLEEDING))
 				.mapToDouble(e -> 0.05 * e.getTier())
-				.sum());
+				.sum()
+		);
 	}
 
 	public int getManaDrain() {
