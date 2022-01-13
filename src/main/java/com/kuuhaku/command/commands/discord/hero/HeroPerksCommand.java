@@ -77,14 +77,7 @@ public class HeroPerksCommand implements Executable {
 			pool = EnumSet.complementOf(EnumSet.copyOf(h.getPerks()));
 
 		for (Perk perk : h.getPerks()) {
-			switch (perk) {
-				case VANGUARD -> pool.removeAll(Set.of(Perk.CARELESS, Perk.NIMBLE));
-				case BLOODLUST, MINDSHIELD -> pool.remove(Perk.MANALESS);
-				case CARELESS, NIMBLE -> pool.remove(Perk.VANGUARD);
-				case MANALESS -> pool.removeAll(Set.of(Perk.BLOODLUST, Perk.MINDSHIELD));
-				case OPTIMISTIC -> pool.remove(Perk.PESSIMISTIC);
-				case PESSIMISTIC -> pool.remove(Perk.OPTIMISTIC);
-			}
+			pool.removeAll(perk.getIncompatibility());
 		}
 
 		List<Perk> perks = Helper.getRandomN(List.copyOf(pool), 3, 1, author.getIdLong() + h.getId() + h.getLevel() + h.getSeed());
@@ -141,11 +134,14 @@ public class HeroPerksCommand implements Executable {
 	}
 
 	private MessageEmbed getEmbed(List<Perk> perks) {
-		return new ColorlessEmbedBuilder()
-				.setTitle("Perks disponíveis")
-				.addField("1️⃣ | " + perks.get(0), perks.get(0).getDescription(), false)
-				.addField("2️⃣ | " + perks.get(1), perks.get(1).getDescription(), false)
-				.addField("3️⃣ | " + perks.get(2), perks.get(2).getDescription(), false)
-				.build();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle("Perks disponíveis");
+
+		for (int i = 0; i < perks.size(); i++) {
+			Perk perk = perks.get(i);
+			eb.addField(Helper.getFancyNumber(i + 1) + " | " + perk, perk.getDescription(), false);
+		}
+
+		return eb.build();
 	}
 }
