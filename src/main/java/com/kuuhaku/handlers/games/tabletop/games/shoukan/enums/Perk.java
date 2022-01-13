@@ -18,6 +18,9 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public enum Perk {
 	VANGUARD("Vanguarda", "Aumenta o HP em 33% e a defesa em 15%, mas reduz ataque em 25%."),
 	BLOODLUST("Sede de sangue", "Converte metade do custo de MP em custo de HP (1 MP = 100 HP)."),
@@ -48,7 +51,24 @@ public enum Perk {
 	}
 
 	public String getDescription() {
+		Set<Perk> incom = getIncompatibility();
+
+		if (!incom.isEmpty())
+			return description + "\n\n**Incompatível com: " + incom.stream().map(Perk::toString).collect(Collectors.joining(", ")) + "**";
+
 		return description;
+	}
+
+	public Set<Perk> getIncompatibility() {
+		return switch (this) {
+			case BLOODLUST, MINDSHIELD -> Set.of(MANALESS);
+			case MANALESS -> Set.of(BLOODLUST, MINDSHIELD);
+			case NIGHTCAT -> Set.of(ARMORED);
+			case ARMORED -> Set.of(NIGHTCAT);
+			case OPTIMISTIC -> Set.of(PESSIMISTIC);
+			case PESSIMISTIC -> Set.of(OPTIMISTIC);
+			default -> Set.of();
+		};
 	}
 
 	@Override
