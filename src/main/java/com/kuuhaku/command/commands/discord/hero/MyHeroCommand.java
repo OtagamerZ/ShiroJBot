@@ -107,7 +107,7 @@ public class MyHeroCommand implements Executable {
 						HP: %s/%s%s
 						EP: %s/%s
 						""".formatted(
-						h.getXp() + (h.getXpToNext() == -1 ? "" : "/" + h.getXpToNext()),
+						h.getXp() + "/" + h.getXpToNext(),
 						h.getHp(),
 						h.getMaxHp(),
 						h.getHp() < h.getMaxHp() ? "\n`recuperação total em " + hours + " hora" + (hours != 1 ? "s" : "") + "`" : "",
