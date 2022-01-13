@@ -57,7 +57,7 @@ public class TenthSecondEvent implements Job {
 		if (lock) return;
 		lock = true;
 
-		if (Main.getInfo().getMatchMaking().getSoloLobby().size() >= 5) {
+		if (Main.getInfo().getMatchMaking().getSoloLobby().size() >= 6) {
 			for (SoloLobby lobby : Main.getInfo().getMatchMaking().getSoloLobby()) {
 				lobby.unlocked().set(true);
 			}
@@ -65,9 +65,10 @@ public class TenthSecondEvent implements Job {
 
 		List<SoloLobby> soloLobby = Main.getInfo().getMatchMaking().getSoloLobby().stream()
 				.filter(sl -> sl.unlocked().get())
-				.sorted(Comparator.comparingLong(sl -> sl.mmr().getMMR()))
 				.collect(Collectors.toList());
 		if (soloLobby.size() >= 2) {
+			Collections.shuffle(soloLobby);
+
 			for (int x = 0; x < soloLobby.size(); x++) {
 				SoloLobby first = soloLobby.get(x);
 				if (!first.unlocked().get()) continue;
@@ -84,7 +85,6 @@ public class TenthSecondEvent implements Job {
 
 		List<DuoLobby> duoLobby = Main.getInfo().getMatchMaking().getDuoLobby().stream()
 				.filter(dl -> dl.unlocked().get())
-				.sorted(Comparator.comparingLong(dl -> dl.duo().getAvgMMR()))
 				.collect(Collectors.toList());
 		if (duoLobby.size() >= 2) {
 			Collections.shuffle(duoLobby);
