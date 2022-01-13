@@ -106,6 +106,8 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
+    private static final double GROWTH_FAC = Math.log10(Helper.GOLDEN_RATIO * 2);
+
     public Hero() {
     }
 
@@ -191,8 +193,16 @@ public class Hero implements Cloneable {
         return race;
     }
 
+    private int levelToXp(int level) {
+        return (int) Math.round(Helper.getFibonacci(level) * 10 / GROWTH_FAC);
+    }
+
+    private int xpToLevel(int xp) {
+        return (int) Math.round(Helper.log(xp * GROWTH_FAC / 10 * Math.sqrt(5), Helper.GOLDEN_RATIO) - 2);
+    }
+
     public int getLevel() {
-        return Helper.clamp((int) (Math.log(xp / 10d * Math.sqrt(5)) / Math.log(Helper.GOLDEN_RATIO) - 1), 1, 20);
+        return xpToLevel(xp) + 1;
     }
 
     public int getXp() {
@@ -212,9 +222,7 @@ public class Hero implements Cloneable {
     }
 
     public int getXpToNext() {
-        int level = getLevel();
-        if (level < 20) return (int) Helper.getFibonacci(level + 2) * 10;
-        else return -1;
+        return levelToXp(getLevel() + 1);
     }
 
     public int getBonusPoints() {

@@ -60,6 +60,7 @@ public class BountyRewardCommand implements Executable {
 		BountyInfo info = h.getQuest();
 		BountyQuest q = BountyQuestDAO.getBounty(info.id());
 
+		int lvl = h.getLevel();
 		int diff = q.getDifficulty().getValue();
 		double modDiff = Helper.prcnt(diff - info.diff(), diff);
 
@@ -155,9 +156,17 @@ public class BountyRewardCommand implements Executable {
 				}
 			}
 
-			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-					.setEmbeds(eb.build())
-					.queue();
+			if (h.getLevel() > lvl) {
+				h.setEnergy(h.getMaxEnergy());
+				h.setHp(h.getMaxHp());
+				channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
+						.setEmbeds(eb.build())
+						.queue();
+			} else {
+				channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
+						.setEmbeds(eb.build())
+						.queue();
+			}
 		}
 
 		h.arrive();
