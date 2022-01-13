@@ -198,7 +198,7 @@ public class Hero implements Cloneable {
     }
 
     private int xpToLevel(int xp) {
-        return (int) Math.round(Helper.log(xp * GROWTH_FAC / 10 * Math.sqrt(5), Helper.GOLDEN_RATIO) - 2);
+        return (int) Math.round(Helper.log(xp * GROWTH_FAC / 10 * Math.sqrt(5), Helper.GOLDEN_RATIO));
     }
 
     public int getLevel() {
@@ -222,7 +222,7 @@ public class Hero implements Cloneable {
     }
 
     public int getXpToNext() {
-        return levelToXp(getLevel() + 2);
+        return levelToXp(getLevel() + 1);
     }
 
     public int getBonusPoints() {
