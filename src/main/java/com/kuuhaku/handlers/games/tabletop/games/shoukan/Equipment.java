@@ -92,7 +92,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Account acc = null;
 	private transient Bonus bonus = new Bonus();
 	private transient CardLink linkedTo = null;
-	private transient int index = -1;
+	private transient int index = -2;
 
 	private transient String altDescription = null;
 	private transient String altEffect = null;

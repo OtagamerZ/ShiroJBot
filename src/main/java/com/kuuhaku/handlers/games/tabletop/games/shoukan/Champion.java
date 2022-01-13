@@ -96,7 +96,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient Champion nemesis = null;
 	private transient BiConsumer<Side, Shoukan> onDuelEnd = null;
 	private transient SetUniqueList<CardLink> linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
-	private transient int index = -1;
+	private transient int index = -2;
 
 	private transient String altDescription = null;
 	private transient String altEffect = null;
