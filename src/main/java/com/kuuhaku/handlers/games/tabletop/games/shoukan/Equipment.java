@@ -351,6 +351,10 @@ public class Equipment implements Drawable, Cloneable {
 				.collect(Collectors.toList());
 	}
 
+	public void setCharms(String charms) {
+		this.charms = charms;
+	}
+
 	public Set<String> getTags() {
 		if (tags == null) return Set.of();
 
