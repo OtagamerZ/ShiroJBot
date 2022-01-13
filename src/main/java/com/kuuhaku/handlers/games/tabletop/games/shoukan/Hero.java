@@ -106,7 +106,7 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
-    private static final double GROWTH_FAC = Math.log10(Helper.GOLDEN_RATIO * 2);
+    private static final double GROWTH_FAC = Math.log10(Helper.GOLDEN_RATIO * 20);
 
     public Hero() {
     }
