@@ -393,11 +393,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
 
-					if (e.hasEffect()) {
-						if (!args[1].equalsIgnoreCase("s")) {
-							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
-							return;
-						} else if (spellLock > 0) {
+					if (Helper.containsAny(e.getCharms(), Charm.SPELL, Charm.CURSE, Charm.ENCHANTMENT, Charm.TRAP)) {
+						if (spellLock > 0) {
 							channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, Helper::doNothing);
 							return;
 						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
@@ -423,11 +420,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 						switch (e.getArgType()) {
 							case ALLY -> {
-								if (!StringUtils.isNumeric(args[2])) {
+								if (!StringUtils.isNumeric(args[1])) {
 									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos = Integer.parseInt(args[2]) - 1;
+								int pos = Integer.parseInt(args[1]) - 1;
 								Champion target = slots.get(pos).getTop();
 
 								if (target == null) {
@@ -438,11 +435,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 								allyPos = Pair.of(target, pos);
 							}
 							case ENEMY -> {
-								if (!StringUtils.isNumeric(args[2])) {
+								if (!StringUtils.isNumeric(args[1])) {
 									channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos = Integer.parseInt(args[2]) - 1;
+								int pos = Integer.parseInt(args[1]) - 1;
 								List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
 								Champion target = eSlots.get(pos).getTop();
 
@@ -454,12 +451,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 								enemyPos = Pair.of(target, pos);
 							}
 							case BOTH -> {
-								if (!StringUtils.isNumeric(args[2]) || !StringUtils.isNumeric(args[3])) {
+								if (!StringUtils.isNumeric(args[1]) || !StringUtils.isNumeric(args[2])) {
 									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada e uma inimiga para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos1 = Integer.parseInt(args[2]) - 1;
-								int pos2 = Integer.parseInt(args[3]) - 1;
+								int pos1 = Integer.parseInt(args[1]) - 1;
+								int pos2 = Integer.parseInt(args[2]) - 1;
 								Champion target = slots.get(pos1).getTop();
 
 								if (target == null) {
