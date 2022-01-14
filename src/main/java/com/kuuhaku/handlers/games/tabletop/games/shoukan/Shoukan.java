@@ -1381,7 +1381,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			Equipment e = slt.getBottom();
-			if (e != null && e.getLinkedTo().index() == index) {
+			if (e != null && e.getLinkedTo().getIndex() == index) {
 				unequipCard(side, slt.getIndex());
 			}
 		}
@@ -1447,7 +1447,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Equipment e = slt.getBottom();
-				if (e != null && e.getLinkedTo().index() == index) {
+				if (e != null && e.getLinkedTo().getIndex() == index) {
 					unequipCard(side, slt.getIndex());
 				}
 			}
@@ -1522,7 +1522,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Equipment e = slt.getBottom();
-				if (e != null && e.getLinkedTo().index() == index) {
+				if (e != null && e.getLinkedTo().getIndex() == index) {
 					unequipCard(side, slt.getIndex());
 				}
 			}
@@ -1593,7 +1593,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Equipment e = slt.getBottom();
-				if (e != null && e.getLinkedTo().index() == index) {
+				if (e != null && e.getLinkedTo().getIndex() == index) {
 					unequipCard(side, slt.getIndex());
 				}
 			}
@@ -1629,7 +1629,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Equipment e = slt.getBottom();
-				if (e != null && e.getLinkedTo().index() == source) {
+				if (e != null && e.getLinkedTo().getIndex() == source) {
 					unequipCard(caster, slt.getIndex());
 				}
 			}
@@ -1698,7 +1698,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Equipment e = slt.getBottom();
-				if (e != null && e.getLinkedTo().index() == index) {
+				if (e != null && e.getLinkedTo().getIndex() == index) {
 					unequipCard(side, slt.getIndex());
 				}
 			}
@@ -1747,7 +1747,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				Equipment e = slt.getBottom();
-				if (e != null && e.getLinkedTo().index() == index) {
+				if (e != null && e.getLinkedTo().getIndex() == index) {
 					banCard(side, slt.getIndex(), true);
 				}
 			}
@@ -2010,7 +2010,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (e.getLinkedTo() == null) {
 						unequipCard(getCurrentSide(), e.getIndex());
 					} else {
-						Champion link = getSlot(getCurrentSide(), e.getLinkedTo().index()).getTop();
+						Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getIndex()).getTop();
 
 						if (link == null || !link.equals(e.getLinkedTo().linked())) {
 							unequipCard(getCurrentSide(), e.getIndex());
@@ -2429,7 +2429,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							if (e.getLinkedTo() == null) {
 								unequipCard(getCurrentSide(), e.getIndex());
 							} else {
-								Champion link = getSlot(getCurrentSide(), e.getLinkedTo().index()).getTop();
+								Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getIndex()).getTop();
 
 								if (link == null || !link.equals(e.getLinkedTo().linked())) {
 									unequipCard(getCurrentSide(), e.getIndex());
