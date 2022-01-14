@@ -41,6 +41,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -96,7 +97,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient Champion nemesis = null;
 	private transient BiConsumer<Side, Shoukan> onDuelEnd = null;
 	private transient SetUniqueList<CardLink> linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
-	private transient int index = -2;
+	private transient AtomicInteger index = new AtomicInteger(-2);
 
 	private transient String altDescription = null;
 	private transient String altEffect = null;
@@ -256,12 +257,17 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public int getIndex() {
+		return index.get();
+	}
+
+	@Override
+	public AtomicInteger getIndexReference() {
 		return index;
 	}
 
 	@Override
 	public void setIndex(int index) {
-		this.index = index;
+		this.index = new AtomicInteger(index);
 	}
 
 	@Override
@@ -290,12 +296,12 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void link(Equipment link) {
-		this.linkedTo.add(new CardLink(link.getIndex(), link, this));
+		this.linkedTo.add(new CardLink(link.getIndexReference(), link, this));
 		link.link(this);
 	}
 
 	public void link(Equipment link, boolean fake) {
-		this.linkedTo.add(new CardLink(fake ? -1 : link.getIndex(), link, this));
+		this.linkedTo.add(new CardLink(fake ? new AtomicInteger(-1) : link.getIndexReference(), link, this));
 		link.link(this);
 	}
 
@@ -303,7 +309,7 @@ public class Champion implements Drawable, Cloneable {
 		int i = -1;
 		for (int j = 0; j < linkedTo.size(); j++) {
 			CardLink cl = linkedTo.get(j);
-			if (cl.index() == link.getIndex() && cl.linked().equals(link)) {
+			if (cl.getIndex() == link.getIndex() && cl.linked().equals(link)) {
 				i = j;
 				break;
 			}
@@ -844,7 +850,7 @@ public class Champion implements Drawable, Cloneable {
 			Side s = game.getSideById(acc.getUid());
 
 			if (nemesis != null && (nemesis.getIndex() == -1 || !Objects.equals(game.getSlot(s.getOther(), nemesis.getIndex()).getTop(), nemesis))) {
-				if (index != -1)
+				if (getIndex() != -2)
 					onDuelEnd.accept(s, game);
 
 				if (nemesis != null) {
@@ -991,6 +997,7 @@ public class Champion implements Drawable, Cloneable {
 
 	public Champion getAdjacent(Neighbor side) {
 		Side s = game.getSideById(acc.getUid());
+		int index = getIndex();
 
 		return switch (side) {
 			case LEFT -> index > 0 ? game.getArena().getSlots().get(s).get(index - 1).getTop() : null;
@@ -1009,18 +1016,20 @@ public class Champion implements Drawable, Cloneable {
 		fakeCard = null;
 		nemesis = null;
 		onDuelEnd = null;
-		index = -1;
+		index = new AtomicInteger(-2);
 		altAtk = -1;
 		altDef = -1;
 		altDescription = null;
 		altEffect = null;
+		curse = null;
 		altRace = null;
 		mAtk = 0;
 		mDef = 0;
+		mDodge = 0;
+		mBlock = 0;
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
-		mDodge = 0;
 	}
 
 	@Override

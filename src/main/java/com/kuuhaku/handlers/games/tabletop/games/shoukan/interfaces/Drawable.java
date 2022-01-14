@@ -30,6 +30,7 @@ import com.kuuhaku.utils.Helper;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public interface Drawable {
 	BufferedImage drawCard(boolean flipped);
@@ -47,7 +48,11 @@ public interface Drawable {
 	void setAcc(Account acc);
 
 	default int getIndex() {
-		return -1;
+		return -2;
+	}
+
+	default AtomicInteger getIndexReference() {
+		return null;
 	}
 
 	default void setIndex(int index) {
