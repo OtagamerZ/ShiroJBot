@@ -440,7 +440,7 @@ public class Hand {
 		return getAvailableCards().stream()
 				.filter(d -> d instanceof Champion)
 				.map(d -> (Champion) d)
-				.sorted(Comparator.comparingInt(Champion::getMana)
+				.sorted(Comparator.<Champion>comparingInt(Champion::getMana)
 						.thenComparing(Champion::getAtk)
 						.thenComparing(Champion::getDef)
 				).collect(Collectors.toList());
