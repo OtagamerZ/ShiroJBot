@@ -494,7 +494,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 								arena.getGraveyard().get(getCurrentSide()).add(e);
 						}
 
-						String result = switch (e.getArgType()) {
+						msg = switch (e.getArgType()) {
 							case NONE -> "%s usou %s.".formatted(
 									h.getUser().getName(),
 									e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName()
@@ -528,8 +528,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 								);
 							}
 						};
-
-						if (!postCombat()) reportEvent(h, result, true, false);
 					} else {
 						if (args.length < 3) {
 							channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
