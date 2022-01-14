@@ -393,7 +393,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
 
-					if (e.getCharms().contains(Charm.SPELL)) {
+					if (Helper.containsAny(e.getCharms(), Charm.SPELL, Charm.CURSE)) {
 						if (!args[1].equalsIgnoreCase("s")) {
 							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
 							return;
@@ -655,8 +655,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 								t.isFlipped() ? "um campeão virado para baixo" : t.getName()
 						);
 					}
-
-					return;
 				} else if (d instanceof Champion) {
 					Champion c = (Champion) d.copy();
 					if (args.length < 3) {
