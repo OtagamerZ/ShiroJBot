@@ -267,7 +267,7 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public void setIndex(int index) {
-		this.index = new AtomicInteger(index);
+		this.index.set(index);
 	}
 
 	@Override
