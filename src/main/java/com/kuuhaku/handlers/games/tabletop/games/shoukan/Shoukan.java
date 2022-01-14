@@ -394,7 +394,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					Equipment e = (Equipment) d.copy();
 
 					if (Helper.containsAny(e.getCharms(), Charm.SPELL, Charm.CURSE, Charm.ENCHANTMENT, Charm.TRAP)) {
-						if (spellLock > 0) {
+						if (e.getArgType() == Arguments.NONE && !args[1].equalsIgnoreCase("S")) {
+							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia sem alvo.").queue(null, Helper::doNothing);
+							return;
+						} else if (spellLock > 0) {
 							channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, Helper::doNothing);
 							return;
 						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
@@ -1038,8 +1041,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				boolean isHero = defr.getHero() != null;
 				boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
-								|| defr.getBonus().popFlag(Flag.NODAMAGE)
-								|| (getCustom() != null && getCustom().getBoolean("semdano"));
+						|| defr.getBonus().popFlag(Flag.NODAMAGE)
+						|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 				int dmg;
 				if (isHero || !noDmg) {
@@ -1126,7 +1129,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			boolean isHero = atkr.getHero() != null;
 			boolean noDmg = atkr.getBonus().popFlag(Flag.NODAMAGE)
-							|| (getCustom() != null && getCustom().getBoolean("semdano"));
+					|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 			int dmg;
 			if (isHero || !noDmg) {
@@ -1325,9 +1328,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				.parallelStream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
-						((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
-						h.getHp() > f.getBlood()
+								!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
+								((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
+								h.getHp() > f.getBlood()
 				)
 				.findFirst()
 				.map(Champion::copy)
@@ -1887,7 +1890,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.setAvailable(!c.isStunned() && !c.isSleeping());
 					c.resetAttribs();
 					if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-						|| makeFusion(h.get())
+							|| makeFusion(h.get())
 					) return;
 				}
 			}
@@ -2026,7 +2029,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.getLinkedTo().removeIf(CardLink::isInvalid);
 
 					if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-						|| makeFusion(h.get())
+							|| makeFusion(h.get())
 					) return;
 				}
 
@@ -2312,7 +2315,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							c.setAvailable(!c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-								|| makeFusion(h.get())
+									|| makeFusion(h.get())
 							) return;
 						}
 					}
@@ -2445,7 +2448,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							c.getLinkedTo().removeIf(CardLink::isInvalid);
 
 							if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-								|| makeFusion(h.get())
+									|| makeFusion(h.get())
 							) return;
 						}
 
