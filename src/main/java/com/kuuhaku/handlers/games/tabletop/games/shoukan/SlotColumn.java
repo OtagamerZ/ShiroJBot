@@ -59,6 +59,7 @@ public class SlotColumn implements Cloneable {
 		if (bottom != null) {
 			bottom.setIndex(index);
 			bottom.bind(hand);
+			bottom.getLinkedTo();
 		}
 
 		this.bottom = bottom;
