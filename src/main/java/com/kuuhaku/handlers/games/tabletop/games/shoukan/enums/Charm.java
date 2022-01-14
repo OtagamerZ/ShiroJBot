@@ -36,6 +36,7 @@ public enum Charm {
     LINK("Vínculo", "Bloqueia modificadores de campo"),
     SPELL("Magia", "Executa um efeito ao ativar"),
     ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
+	CURSE("Maldição", "Adiciona um efeito negativo ao alvo"),
     TRAP("Armadilha", "Prende-se à uma carta mas virada para baixo, adicionando um efeito de uso único à ela"),
     PIERCING("Penetração", "Causa %s%% do dano final da da carta como dano direto"),
     AGILITY("Agilidade", "Aumenta a chance de esquiva em %s%%"),
