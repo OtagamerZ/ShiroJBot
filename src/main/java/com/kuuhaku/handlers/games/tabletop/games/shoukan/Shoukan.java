@@ -1402,8 +1402,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (caster != null && source > -1) {
 			activator = getSlot(caster, source).getTop();
 			if (activator != null) {
-				int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
-				int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
+				int sourceMana = activator.getMana(5);
+				int targetMana = target.getMana(5);
 
 				chance -= target.getDodge() * 0.75;
 				if (sourceMana < targetMana)
@@ -1477,8 +1477,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (source > -1) {
 			activator = getSlot(caster, source).getTop();
 			if (activator != null) {
-				int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
-				int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
+				int sourceMana = activator.getMana(5);
+				int targetMana = target.getMana(5);
 
 				chance -= target.getDodge() * 0.75;
 				if (sourceMana < targetMana)
@@ -1554,8 +1554,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Champion activator = getSlot(caster, source).getTop();
 		if (activator == null || activator.getBonus().popFlag(Flag.NOCONVERT)) return;
 
-		int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
-		int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
+		int sourceMana = activator.getMana(5);
+		int targetMana = target.getMana(5);
 
 		chance -= target.getDodge() * 0.75;
 		if (sourceMana < targetMana)
@@ -1653,8 +1653,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (caster != null && source > -1) {
 			activator = getSlot(caster, source).getTop();
 			if (activator != null) {
-				int sourceMana = activator.getMana() + (activator.isFusion() ? 5 : 0);
-				int targetMana = target.getMana() + (target.isFusion() ? 5 : 0);
+				int sourceMana = activator.getMana(5);
+				int targetMana = target.getMana(5);
 
 				chance -= target.getDodge() * 0.75;
 				if (sourceMana < targetMana)
