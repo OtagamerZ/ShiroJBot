@@ -119,7 +119,7 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			FrameColor fc = acc.getFrame();
-			boolean hasDesc = hasEffect();
+			boolean hasDesc = description != null && !description.isBlank();
 
 			g2d.setClip(new Polygon(
 					new int[]{13, 212, 223, 223, 212, 13, 2, 2},
@@ -143,10 +143,7 @@ public class Equipment implements Drawable, Cloneable {
 
 			List<Charm> charms = getCharms();
 			if (!charms.isEmpty()) {
-				if (Helper.containsAny(charms, Charm.ENCHANTMENT, Charm.TRAP))
-					g2d.drawImage(Charm.getIcon(charms), 135, 188, null);
-				else
-					g2d.drawImage(Charm.getIcon(charms), 135, 255, null);
+				g2d.drawImage(Charm.getIcon(charms), 135, hasDesc ? 188 : 255, null);
 			}
 
 			Drawable.drawAttributes(bi, getAtk(), getDef(), getMana(), getBlood(), 0, 0, hasDesc);
