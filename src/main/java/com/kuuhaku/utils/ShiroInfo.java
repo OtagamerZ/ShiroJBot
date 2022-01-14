@@ -66,7 +66,7 @@ public class ShiroInfo {
 
 	//PUBLIC CONSTANTS
 	public static final String RESOURCES_URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources";
-	public static final String GIFS_URL = "https://raw.githubusercontent.com/OtagamerZ/KawaiponImages/tree/master/gifs";
+	public static final String GIFS_URL = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/tree/master/gifs";
 	public static final String SHIRO_AVATAR = RESOURCES_URL + "/avatar/shiro/%s.png";
 	public static final String JIBRIL_AVATAR = RESOURCES_URL + "/avatar/jibril/%s.png";
 	public static final String TET_AVATAR = RESOURCES_URL + "/avatar/tet/%s.png";
