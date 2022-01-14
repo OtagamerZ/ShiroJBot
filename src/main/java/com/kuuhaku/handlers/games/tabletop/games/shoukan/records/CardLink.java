@@ -9,8 +9,13 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.utils.Helper;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public record CardLink(int index, Drawable linked, Drawable self) {
+public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
+	public int getIndex() {
+		return index.get();
+	}
+
 	public Champion asChampion() {
 		if (linked instanceof Champion c)
 			return c;
@@ -33,15 +38,15 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 	}
 
 	public boolean isFake() {
-		return index == -1;
+		return getIndex() == -1;
 	}
 
 	public boolean isInvalid() {
 		try {
-			if (linked == null || (!Helper.between(index, 0, 5) && index != -1)) return true;
-			else if (index == -1) return false;
+			if (linked == null || (!Helper.between(getIndex(), 0, 5) && getIndex() != -1)) return true;
+			else if (getIndex() == -1) return false;
 
-			SlotColumn sc = linked.getGame().getSlot(linked.getSide(), index);
+			SlotColumn sc = linked.getGame().getSlot(linked.getSide(), getIndex());
 			Drawable d;
 			if (linked instanceof Champion)
 				d = sc.getTop();
@@ -50,7 +55,7 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 
 			return !linked.equals(d);
 		} catch (IndexOutOfBoundsException e) {
-			Helper.logger(this.getClass()).error(e + ": [" + index + ", " + linked.getCard().getId() + "]");
+			Helper.logger(this.getClass()).error(e + ": [" + getIndex() + ", " + linked.getCard().getId() + "]");
 			return true;
 		}
 	}
@@ -68,7 +73,7 @@ public record CardLink(int index, Drawable linked, Drawable self) {
 		if (isFake()) return false;
 		if (o == null || getClass() != o.getClass()) return false;
 		CardLink cardLink = (CardLink) o;
-		return index == cardLink.index;
+		return getIndex() == cardLink.getIndex();
 	}
 
 	@Override

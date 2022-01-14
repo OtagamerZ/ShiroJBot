@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Entity
@@ -92,7 +93,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Account acc = null;
 	private transient Bonus bonus = new Bonus();
 	private transient CardLink linkedTo = null;
-	private transient int index = -2;
+	private transient AtomicInteger index = new AtomicInteger(-2);
 
 	private transient String altDescription = null;
 	private transient String altEffect = null;
@@ -211,12 +212,17 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Override
 	public int getIndex() {
+		return index.get();
+	}
+
+	@Override
+	public AtomicInteger getIndexReference() {
 		return index;
 	}
 
 	@Override
 	public void setIndex(int index) {
-		this.index = index;
+		this.index = new AtomicInteger(index);
 	}
 
 	@Override
@@ -248,7 +254,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void link(Champion link) {
-		this.linkedTo = new CardLink(link.getIndex(), link, this);
+		this.linkedTo = new CardLink(link.getIndexReference(), link, this);
 	}
 
 	public void unlink() {
@@ -447,6 +453,7 @@ public class Equipment implements Drawable, Cloneable {
 		available = true;
 		bonus = new Bonus();
 		linkedTo = null;
+		index = new AtomicInteger(-2);
 		altAtk = -1;
 		altDef = -1;
 		altTier = -1;
@@ -471,6 +478,7 @@ public class Equipment implements Drawable, Cloneable {
 	public Equipment copy() {
 		try {
 			Equipment e = (Equipment) super.clone();
+			e.index = new AtomicInteger(-2);
 			e.bonus = bonus.clone();
 			if (linkedTo != null)
 				e.linkedTo = new CardLink(linkedTo.index(), linkedTo.linked(), e);
