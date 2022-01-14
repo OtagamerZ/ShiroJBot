@@ -595,7 +595,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
 						h.removeHp(e.getBlood());
+						e.setFlipped(!e.getCharms().contains(Charm.TRAP));
 						slot.setBottom(e);
+
 						int toEquip = target.getRight();
 						Champion t = target.getLeft();
 						t.link(e);
