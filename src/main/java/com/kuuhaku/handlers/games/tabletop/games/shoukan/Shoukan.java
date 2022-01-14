@@ -393,9 +393,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
 
-					if (Helper.containsAny(e.getCharms(), Charm.SPELL, Charm.CURSE, Charm.ENCHANTMENT, Charm.TRAP)) {
-						if (e.getArgType() == Arguments.NONE && !args[1].equalsIgnoreCase("S")) {
-							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia sem alvo.").queue(null, Helper::doNothing);
+					if (e.getCharms().contains(Charm.SPELL)) {
+						if (!args[1].equalsIgnoreCase("s")) {
+							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
 							return;
 						} else if (spellLock > 0) {
 							channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, Helper::doNothing);
@@ -423,47 +423,47 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 						switch (e.getArgType()) {
 							case ALLY -> {
-								if (!StringUtils.isNumeric(args[1])) {
-									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para usar esta magia.").queue(null, Helper::doNothing);
+								if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
+									channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos = Integer.parseInt(args[1]) - 1;
+								int pos = Integer.parseInt(args[2]) - 1;
 								Champion target = slots.get(pos).getTop();
 
 								if (target == null) {
-									channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
 									return;
 								}
 
 								allyPos = Pair.of(target, pos);
 							}
 							case ENEMY -> {
-								if (!StringUtils.isNumeric(args[1])) {
-									channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para usar esta magia.").queue(null, Helper::doNothing);
+								if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
+									channel.sendMessage("❌ | Índice inválido, escolha um campeão inimigo para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos = Integer.parseInt(args[1]) - 1;
+								int pos = Integer.parseInt(args[2]) - 1;
 								List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
 								Champion target = eSlots.get(pos).getTop();
 
 								if (target == null) {
-									channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
 									return;
 								}
 
 								enemyPos = Pair.of(target, pos);
 							}
 							case BOTH -> {
-								if (!StringUtils.isNumeric(args[1]) || !StringUtils.isNumeric(args[2])) {
-									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada e uma inimiga para usar esta magia.").queue(null, Helper::doNothing);
+								if (!org.apache.commons.lang.StringUtils.isNumeric(args[2]) || !org.apache.commons.lang.StringUtils.isNumeric(args[3])) {
+									channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado e um inimigo para usar esta magia.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos1 = Integer.parseInt(args[1]) - 1;
-								int pos2 = Integer.parseInt(args[2]) - 1;
+								int pos1 = Integer.parseInt(args[2]) - 1;
+								int pos2 = Integer.parseInt(args[3]) - 1;
 								Champion target = slots.get(pos1).getTop();
 
 								if (target == null) {
-									channel.sendMessage("❌ | Não existe uma carta na primeira casa.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
 									return;
 								}
 
@@ -472,25 +472,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 								target = eSlots.get(pos2).getTop();
 
 								if (target == null) {
-									channel.sendMessage("❌ | Não existe uma carta na segunda casa.").queue(null, Helper::doNothing);
+									channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
 									return;
 								}
 
 								enemyPos = Pair.of(target, pos2);
-							}
-						}
-
-						SlotColumn free = null;
-						if (Helper.containsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP) && Helper.equalsAny(e.getArgType(), Arguments.ALLY, Arguments.ENEMY)) {
-							if (e.getArgType() == Arguments.ALLY) {
-								free = getFirstAvailableSlot(getCurrentSide(), false);
-							} else if (e.getArgType() == Arguments.ENEMY) {
-								free = getFirstAvailableSlot(getCurrentSide().getOther(), false);
-							}
-
-							if (free == null) {
-								channel.sendMessage("❌ | Não há espaço suficiente no campo para invocar essa magia.").queue(null, Helper::doNothing);
-								return;
 							}
 						}
 
@@ -499,35 +485,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 						h.removeMana(e.getMana());
 						h.removeHp(e.getBlood());
 
-						if (free != null) {
-							if (e.getCharms().contains(Charm.TRAP))
-								e.setFlipped(true);
-							free.setBottom(e);
-
-							Champion t;
-							if (e.getArgType() == Arguments.ALLY) {
-								assert allyPos != null;
-								t = allyPos.getLeft();
-							} else {
-								assert enemyPos != null;
-								t = enemyPos.getLeft();
-							}
-
-							t.link(e);
-							if (applyEffect(ON_EQUIP, t, getCurrentSide(), t.getIndex(), new Source(t, getCurrentSide(), t.getIndex())))
-								return;
-						}
-
 						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 
-						if (e.canGoToGrave() && !Helper.containsAny(e.getCharms(), Charm.ENCHANTMENT, Charm.TRAP)) {
+						if (e.canGoToGrave()) {
 							if (e.getTier() >= 4)
 								arena.getBanned().add(e);
 							else
 								arena.getGraveyard().get(getCurrentSide()).add(e);
 						}
-
-						if (makeFusion(h)) return;
 
 						String result = switch (e.getArgType()) {
 							case NONE -> "%s usou %s.".formatted(
@@ -540,7 +505,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 								yield "%s usou %s em %s.".formatted(
 										h.getUser().getName(),
 										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
-										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName()
+										allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName()
 								);
 							}
 							case ENEMY -> {
@@ -549,7 +514,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 								yield "%s usou %s em %s.".formatted(
 										h.getUser().getName(),
 										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
-										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
+										enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
 								);
 							}
 							case BOTH -> {
@@ -558,107 +523,140 @@ public class Shoukan extends GlobalGame implements Serializable {
 								yield "%s usou %s em %s e %s.".formatted(
 										h.getUser().getName(),
 										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
-										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName(),
-										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
+										allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName(),
+										enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
 								);
 							}
 						};
 
 						if (!postCombat()) reportEvent(h, result, true, false);
-						return;
-					}
+					} else {
+						if (args.length < 3) {
+							channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
+							return;
+						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
+							channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+							return;
+						} else if (h.getHp() <= e.getBlood()) {
+							channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+							return;
+						}
 
-					if (args.length < 3) {
-						channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
-						return;
-					} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
-						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-						return;
-					} else if (h.getHp() <= e.getBlood()) {
-						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-						return;
-					}
+						if (!org.apache.commons.lang.StringUtils.isNumeric(args[1])) {
+							channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
+							return;
+						}
 
-					if (!StringUtils.isNumeric(args[1])) {
-						channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
-						return;
-					}
+						int dest = Integer.parseInt(args[1]) - 1;
 
-					int dest = Integer.parseInt(args[1]) - 1;
-					SlotColumn slot = slots.get(dest);
+						SlotColumn slot;
+						Pair<Champion, Integer> target;
 
-					if (slot.getBottom() != null) {
-						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
-						return;
-					} else if (slot.isUnavailable()) {
-						channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
-						return;
-					}
+						if (e.getArgType() == Arguments.ALLY) {
+							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
+								channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
+								return;
+							}
+							int pos = Integer.parseInt(args[2]) - 1;
+							Champion t = slots.get(pos).getTop();
 
-					if (!StringUtils.isNumeric(args[2])) {
-						channel.sendMessage("❌ | Índice inválido, escolha uma carta para equipar esse equipamento.").queue(null, Helper::doNothing);
-						return;
-					}
-					int toEquip = Integer.parseInt(args[2]) - 1;
+							if (t == null) {
+								channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+								return;
+							}
 
-					SlotColumn target = slots.get(toEquip);
+							target = Pair.of(t, pos);
+							slot = slots.get(dest);
+						} else {
+							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
+								channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para equipar este evogear.").queue(null, Helper::doNothing);
+								return;
+							}
+							int pos = Integer.parseInt(args[2]) - 1;
+							List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
+							Champion t = eSlots.get(pos).getTop();
 
-					if (target.getTop() == null) {
-						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
-						return;
-					}
+							if (t == null) {
+								channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+								return;
+							}
 
-					reroll = false;
-					d.setAvailable(false);
-					h.removeMana(e.getMana());
-					h.removeHp(e.getBlood());
-					slot.setBottom(e);
-					Champion t = target.getTop();
-					if (t.isFlipped()) {
-						t.setFlipped(false);
-						t.setDefending(true);
-					}
-					t.link(e);
-					if (applyEffect(ON_EQUIP, t, getCurrentSide(), toEquip, new Source(t, getCurrentSide(), toEquip)))
-						return;
+							target = Pair.of(t, pos);
+							slot = eSlots.get(dest);
+						}
 
-					if (e.getCharms() != null) {
-						int uses = (int) Helper.getFibonacci(e.getTier());
-						for (int i = 0; i < uses; i++) {
-							for (Charm charm : e.getCharms()) {
-								switch (charm) {
-									case TIMEWARP -> {
-										if (t.hasEffect()) {
-											t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-											t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+						if (slot.getBottom() != null) {
+							channel.sendMessage("❌ | Já existe um evogear nessa casa.").queue(null, Helper::doNothing);
+							return;
+						} else if (slot.isUnavailable()) {
+							channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
+							return;
+						}
+
+						reroll = false;
+						d.setAvailable(false);
+						h.removeMana(e.getMana());
+						h.removeHp(e.getBlood());
+						slot.setBottom(e);
+						int toEquip = target.getRight();
+						Champion t = target.getLeft();
+						t.link(e);
+
+						if (e.hasEffect()) {
+							if (e.getArgType() == Arguments.ALLY) {
+								e.activate(h, hands.get(getNextSide()), this, toEquip, -1);
+							} else {
+								e.activate(h, hands.get(getNextSide()), this, -1, toEquip);
+							}
+						}
+
+						if (applyEffect(ON_EQUIP, t, getCurrentSide(), toEquip, new Source(t, getCurrentSide(), toEquip)))
+							return;
+
+						if (e.getCharms() != null) {
+							int uses = (int) Helper.getFibonacci(e.getTier());
+							for (int i = 0; i < uses; i++) {
+								for (Charm charm : e.getCharms()) {
+									switch (charm) {
+										case TIMEWARP -> {
+											if (t.hasEffect()) {
+												t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+												t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+											}
 										}
-									}
-									case DOUBLETAP -> {
-										if (t.hasEffect())
-											t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-									}
-									case CLONE -> {
-										SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
+										case DOUBLETAP -> {
+											if (t.hasEffect())
+												t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
+										}
+										case CLONE -> {
+											SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 
-										if (sc != null) {
-											t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
-											t.removeDef(Math.round(t.getAltDef() * 0.25f));
+											if (sc != null) {
+												t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
+												t.removeDef(Math.round(t.getAltDef() * 0.25f));
 
-											Champion dp = t.copy();
-											dp.getBonus().removeMana(dp.getMana() / 2);
-											dp.setGravelocked(true);
+												Champion dp = t.copy();
+												dp.getBonus().removeMana(dp.getMana() / 2);
+												dp.setGravelocked(true);
 
-											sc.setTop(dp);
+												sc.setTop(dp);
+											}
 										}
 									}
 								}
 							}
+
+							if (postCombat()) return;
 						}
 
-						if (postCombat()) return;
+						msg = "%s equipou %s em %s.".formatted(
+								h.getUser().getName(),
+								e.isFlipped() ? "um evogear virado para baixo" : e.getCard().getName(),
+								t.isFlipped() ? "um campeão virado para baixo" : t.getName()
+						);
 					}
 
-					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getName() + ".";
+					return;
 				} else if (d instanceof Champion) {
 					Champion c = (Champion) d.copy();
 					if (args.length < 3) {
@@ -1041,8 +1039,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				boolean isHero = defr.getHero() != null;
 				boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
-						|| defr.getBonus().popFlag(Flag.NODAMAGE)
-						|| (getCustom() != null && getCustom().getBoolean("semdano"));
+								|| defr.getBonus().popFlag(Flag.NODAMAGE)
+								|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 				int dmg;
 				if (isHero || !noDmg) {
@@ -1129,7 +1127,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			boolean isHero = atkr.getHero() != null;
 			boolean noDmg = atkr.getBonus().popFlag(Flag.NODAMAGE)
-					|| (getCustom() != null && getCustom().getBoolean("semdano"));
+							|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 			int dmg;
 			if (isHero || !noDmg) {
@@ -1328,9 +1326,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				.parallelStream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-								!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
-								((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
-								h.getHp() > f.getBlood()
+						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
+						((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
+						h.getHp() > f.getBlood()
 				)
 				.findFirst()
 				.map(Champion::copy)
@@ -1890,7 +1888,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.setAvailable(!c.isStunned() && !c.isSleeping());
 					c.resetAttribs();
 					if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-							|| makeFusion(h.get())
+						|| makeFusion(h.get())
 					) return;
 				}
 			}
@@ -2029,7 +2027,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.getLinkedTo().removeIf(CardLink::isInvalid);
 
 					if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-							|| makeFusion(h.get())
+						|| makeFusion(h.get())
 					) return;
 				}
 
@@ -2315,7 +2313,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							c.setAvailable(!c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-									|| makeFusion(h.get())
+								|| makeFusion(h.get())
 							) return;
 						}
 					}
@@ -2448,7 +2446,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							c.getLinkedTo().removeIf(CardLink::isInvalid);
 
 							if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-									|| makeFusion(h.get())
+								|| makeFusion(h.get())
 							) return;
 						}
 
