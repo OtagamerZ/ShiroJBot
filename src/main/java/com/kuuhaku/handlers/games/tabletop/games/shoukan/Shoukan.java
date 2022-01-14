@@ -119,6 +119,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	private GameState oldState = null;
 
+	private static final String GIF_URL = "https://github.com/OtagamerZ/KawaiponImages/tree/master/gifs/%s.gif";
+
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
@@ -2766,7 +2768,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				if (gif != null) {
 					wmb.addEmbeds(new WebhookEmbedBuilder()
-							.setImageUrl(ShiroInfo.RESOURCES_URL + "/shoukan/gifs/" + gif + ".gif")
+							.setImageUrl(ShiroInfo.GIFS_URL + "/" + gif + ".gif")
 							.build());
 				}
 
