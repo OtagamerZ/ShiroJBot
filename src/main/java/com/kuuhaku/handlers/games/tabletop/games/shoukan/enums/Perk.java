@@ -54,7 +54,7 @@ public enum Perk {
 		Set<Perk> incom = getIncompatibility();
 
 		if (!incom.isEmpty())
-			return description + "\n\n**Incompatível com: " + incom.stream().map(Perk::toString).collect(Collectors.joining(", ")) + "**";
+			return description + "\n**Incompatível com: " + incom.stream().map(Perk::toString).collect(Collectors.joining(", ")) + "**";
 
 		return description;
 	}

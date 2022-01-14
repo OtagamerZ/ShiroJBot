@@ -2715,6 +2715,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 			}
 
+			if (activator.hasCurse()) {
+				activator.getCurse(new EffectParameters(trigger, this, side, index, duelists, channel));
+			}
+
 			for (CardLink cl : List.copyOf(activator.getLinkedTo())) {
 				if (cl.isFake()) continue;
 
