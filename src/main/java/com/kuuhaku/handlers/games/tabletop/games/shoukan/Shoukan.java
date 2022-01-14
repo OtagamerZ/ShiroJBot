@@ -550,22 +550,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						SlotColumn slot;
 						Pair<Champion, Integer> target;
 
-						if (e.getArgType() == Arguments.ALLY) {
-							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
-								channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
-								return;
-							}
-							int pos = Integer.parseInt(args[2]) - 1;
-							Champion t = slots.get(pos).getTop();
-
-							if (t == null) {
-								channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
-								return;
-							}
-
-							target = Pair.of(t, pos);
-							slot = slots.get(dest);
-						} else {
+						if (e.getArgType() == Arguments.ENEMY) {
 							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
 								channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para equipar este evogear.").queue(null, Helper::doNothing);
 								return;
@@ -581,6 +566,21 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 							target = Pair.of(t, pos);
 							slot = eSlots.get(dest);
+						} else {
+							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
+								channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
+								return;
+							}
+							int pos = Integer.parseInt(args[2]) - 1;
+							Champion t = slots.get(pos).getTop();
+
+							if (t == null) {
+								channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+								return;
+							}
+
+							target = Pair.of(t, pos);
+							slot = slots.get(dest);
 						}
 
 						if (slot.getBottom() != null) {
