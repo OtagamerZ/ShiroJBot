@@ -1,6 +1,5 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.records;
 
-import com.github.ygimenez.exception.InvalidStateException;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
@@ -44,7 +43,7 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 	public boolean isInvalid() {
 		try {
 			if (linked == null || (!Helper.between(getIndex(), 0, 5) && getIndex() != -1)) return true;
-			else if (getIndex() == -1) return false;
+			else if (isFake()) return false;
 
 			SlotColumn sc = linked.getGame().getSlot(linked.getSide(), getIndex());
 			Drawable d;
