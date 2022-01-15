@@ -35,7 +35,7 @@ public enum Perk {
 	OPTIMISTIC("Otimista", "Aumenta a taxa de regeneração em 50% e recebe 10% mais XP ao falhar a missão."),
 	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50% e possui 10% menos chance de ser penalizado ao falhar a missão."),
 	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
-	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva, ocorrendo o inverso em modo de defesa."),
+	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva (2% esquiva = 1% bloqueio), ocorrendo o inverso em modo de defesa."),
 	;
 
 	private final String name;

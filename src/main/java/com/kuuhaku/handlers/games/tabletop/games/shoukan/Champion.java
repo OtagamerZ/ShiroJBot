@@ -623,7 +623,7 @@ public class Champion implements Drawable, Cloneable {
 		if (hero != null && game != null) {
 			if (hero.getPerks().contains(Perk.ADAPTIVE)) {
 				if (isDefending())
-					extra += getDodge();
+					extra += getDodge() / 2;
 				else
 					heroMod = 0;
 			}
