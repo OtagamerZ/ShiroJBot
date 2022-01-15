@@ -358,6 +358,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 						c.setFlipped(false);
 						c.setDefending(true);
 						msg = "Carta virada para cima em modo de defesa.";
+
+						if (applyEffect(ON_SUMMON, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
+							return;
 					} else if (c.isDefending()) {
 						c.setDefending(false);
 						msg = "Carta trocada para modo de ataque.";
