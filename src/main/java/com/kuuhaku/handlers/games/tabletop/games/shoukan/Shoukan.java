@@ -865,7 +865,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				attack(new Source(yours, getCurrentSide(), is[0]), new Target(his, getNextSide(), is[1]));
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
-
 			} catch (NumberFormatException e) {
 				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue(null, Helper::doNothing);
 			}

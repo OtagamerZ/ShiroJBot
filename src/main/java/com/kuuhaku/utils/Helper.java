@@ -447,7 +447,7 @@ public class Helper {
 
     public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
         GuildConfig gc = GuildDAO.getGuildById(g.getId());
-        if (gc.getLogChannel() == null) return;
+        if (gc == null || gc.getLogChannel() == null) return;
 
         TextChannel tc = gc.getLogChannel();
         if (tc == null) {
