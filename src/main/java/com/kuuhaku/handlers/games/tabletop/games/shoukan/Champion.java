@@ -853,7 +853,7 @@ public class Champion implements Drawable, Cloneable {
 		if (acc != null && game != null) {
 			Side s = game.getSideById(acc.getUid());
 
-			if (nemesis != null && (nemesis.getIndex() == -1 || !Objects.equals(game.getSlot(s.getOther(), nemesis.getIndex()).getTop(), nemesis))) {
+			if (nemesis != null && (nemesis.getIndex() == -2 || !Objects.equals(game.getSlot(s.getOther(), nemesis.getIndex()).getTop(), nemesis))) {
 				if (getIndex() != -2)
 					onDuelEnd.accept(s, game);
 
@@ -1002,6 +1002,7 @@ public class Champion implements Drawable, Cloneable {
 	public Champion getAdjacent(Neighbor side) {
 		Side s = game.getSideById(acc.getUid());
 		int index = getIndex();
+		if (!Helper.between(index, 0, 5)) return null;
 
 		return switch (side) {
 			case LEFT -> index > 0 ? game.getArena().getSlots().get(s).get(index - 1).getTop() : null;
