@@ -194,11 +194,11 @@ public class Hero implements Cloneable {
     }
 
     private int levelToXp(int level) {
-        return (int) Math.round(Helper.getFibonacci(level) * 10 / GROWTH_FAC);
+        return (int) (Helper.getFibonacci(level) * 10 / GROWTH_FAC);
     }
 
     private int xpToLevel(int xp) {
-        return (int) Math.round(Helper.log(xp * GROWTH_FAC / 10 * Math.sqrt(5), Helper.GOLDEN_RATIO));
+        return (int) Helper.log(xp * GROWTH_FAC / 10 * Math.sqrt(5), Helper.GOLDEN_RATIO);
     }
 
     public int getLevel() {
