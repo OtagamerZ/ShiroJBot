@@ -222,7 +222,7 @@ public class Hero implements Cloneable {
     }
 
     public int getXpToNext() {
-        return levelToXp(getLevel());
+        return levelToXp(getLevel() + 1);
     }
 
     public int getBonusPoints() {
