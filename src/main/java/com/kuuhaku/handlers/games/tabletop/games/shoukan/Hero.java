@@ -414,7 +414,7 @@ public class Hero implements Cloneable {
             };
         }
 
-        return (int) Math.ceil(Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp(getReferenceChampion()) * mpModif));
+        return (int) Math.ceil(Math.max(perks.contains(Perk.MANALESS) ? 0 : 1, stats.calcMp(this, getReferenceChampion()) * mpModif));
     }
 
     public int getBlood() {
@@ -432,7 +432,7 @@ public class Hero implements Cloneable {
             }
 
             blood += switch (perk) {
-                case BLOODLUST -> stats.calcMp(getReferenceChampion()) * mpModif / 2 * 100;
+                case BLOODLUST -> stats.calcMp(this, getReferenceChampion()) * mpModif / 2 * 100;
                 default -> 0;
             };
         }

@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.utils.Helper;
 
@@ -154,12 +155,12 @@ public class Attributes {
 		return (int) Math.max(1, Math.round(1 + 10 * (1 - Math.exp(-0.06 * res + -0.03 * con))));
 	}
 
-	public int calcMp(Champion ref) {
+	public int calcMp(Hero h, Champion ref) {
 		return (int) (1 + (ref == null ? 0 : ref.getMana() * 0.75) + Math.max(0,
 				str * 0.275
 				+ res * 0.15
 				+ agi * 0.0175
-				- wis * (wis / (double) (str + res + agi + wis + con))
+				- (wis * (wis / (double) (str + res + agi + wis + con)) / (h.getPerks().contains(Perk.MINDSHIELD) ? 2 : 1))
 				+ con * 0.075
 		));
 	}
