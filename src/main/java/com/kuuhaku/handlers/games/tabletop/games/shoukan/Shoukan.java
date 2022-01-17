@@ -1723,9 +1723,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Equipment target = slts.get(index).getBottom();
 			if (target == null) return;
 
-			Champion link = target.getLinkedTo().asChampion();
+			CardLink link = target.getLinkedTo();
 			if (link != null)
-				link.unlink(target);
+				link.asChampion().unlink(target);
 
 			slts.get(index).setBottom(null);
 			arena.getBanned().add(target);

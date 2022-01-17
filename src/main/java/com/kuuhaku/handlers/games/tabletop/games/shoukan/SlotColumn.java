@@ -72,7 +72,8 @@ public class SlotColumn implements Cloneable {
 		if (curr != null) {
 			curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
 
-			curr.getLinkedTo().asChampion().unlink(curr);
+			if (curr.getLinkedTo() != null)
+				curr.getLinkedTo().asChampion().unlink(curr);
 		}
 
 		if (bottom != null) {
