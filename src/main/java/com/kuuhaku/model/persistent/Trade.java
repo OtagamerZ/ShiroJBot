@@ -42,8 +42,8 @@ public class Trade {
 	}
 
 	public Trade(String left, String right) {
-		this.left = new TradeOffer(left, this);
-		this.right = new TradeOffer(right, this);
+		this.left = new TradeOffer(left, this, true);
+		this.right = new TradeOffer(right, this, false);
 	}
 
 	public int getId() {
