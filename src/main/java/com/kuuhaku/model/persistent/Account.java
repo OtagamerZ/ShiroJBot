@@ -145,7 +145,7 @@ public class Account {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
-	@JoinColumn(name = "account_id")
+	@JoinColumn(nullable = false, name = "account_id")
 	private Set<Achievement> achievements = EnumSet.noneOf(Achievement.class);
 
 	private transient Map<String, CompletionState> compState = null;

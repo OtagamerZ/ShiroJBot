@@ -47,11 +47,11 @@ public class CustomAnswer {
 	private int chance = 100;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customanswer_id")
+	@JoinColumn(nullable = false, name = "customanswer_id")
 	private final Set<String> users = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customanswer_id")
+	@JoinColumn(nullable = false, name = "customanswer_id")
 	private final Set<String> channels = new HashSet<>();
 
 	public CustomAnswer(Integer id, String guildId, String trigger, String answer, Boolean anywhere, Integer chance, String users, String channels) {

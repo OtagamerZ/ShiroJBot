@@ -33,14 +33,14 @@ public class Bracket {
 	private int id;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tournament_id")
+	@JoinColumn(nullable = false, name = "tournament_id")
 	private Tournament tournament;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "bracket_id")
+	@JoinColumn(nullable = false, name = "bracket_id")
 	private List<Phase> phases;
 
 	public Bracket() {

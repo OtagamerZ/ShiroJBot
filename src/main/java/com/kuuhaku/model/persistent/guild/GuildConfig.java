@@ -155,50 +155,50 @@ public class GuildConfig {
 
     //COLLECTIONS
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_id")
+    @JoinColumn(nullable = false, name = "guildconfig_id")
     private Set<LevelRole> levelRoles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_id")
+    @JoinColumn(nullable = false, name = "guildconfig_id")
     private Set<ColorRole> colorRoles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_id")
+    @JoinColumn(nullable = false, name = "guildconfig_id")
     private Set<PaidRole> paidRoles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_id")
+    @JoinColumn(nullable = false, name = "guildconfig_id")
     private Set<VoiceRole> voiceRoles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_id")
+    @JoinColumn(nullable = false, name = "guildconfig_id")
     private Set<ButtonChannel> buttonConfigs = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "guildconfig_id")
+    @JoinColumn(nullable = false, name = "guildconfig_id")
     private Set<Buff> buffs = new HashSet<>();
 
     //CHANNELS
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinColumn(name = "guildconfig_guildid")
+    @JoinColumn(nullable = false, name = "guildconfig_guildid")
     private Set<String> noLinkChannels = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinColumn(name = "guildconfig_guildid")
+    @JoinColumn(nullable = false, name = "guildconfig_guildid")
     private Set<String> noSpamChannels = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinColumn(name = "guildconfig_guildid")
+    @JoinColumn(nullable = false, name = "guildconfig_guildid")
     private Set<String> noCommandChannels = new HashSet<>();
 
     //CONFIGS
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinColumn(name = "guildconfig_guildid")
+    @JoinColumn(nullable = false, name = "guildconfig_guildid")
     private Set<String> disabledCommands = new HashSet<>();
 
     //MISC
     @ElementCollection(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guildconfig_guildid")
+    @JoinColumn(nullable = false, name = "guildconfig_guildid")
     private List<String> rules = new ArrayList<>();
 
     public GuildConfig(String guildId, String name) {

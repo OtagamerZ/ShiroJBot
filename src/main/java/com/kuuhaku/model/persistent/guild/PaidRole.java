@@ -39,7 +39,7 @@ public class PaidRole {
 	private long duration;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "paidrole_id")
+	@JoinColumn(nullable = false, name = "paidrole_id")
 	private Map<String, Long> users = new HashMap<>();
 
 	public PaidRole() {
