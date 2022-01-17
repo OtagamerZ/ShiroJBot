@@ -18,6 +18,8 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
+
 public class SlotColumn implements Cloneable {
 	private final int index;
 	private final Hand hand;
@@ -43,6 +45,13 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setTop(Champion top) {
+		Champion curr = this.top;
+		if (curr != null) {
+			for (CardLink link : curr.getLinkedTo()) {
+				curr.unlink(link.asEquipment());
+			}
+		}
+
 		if (top != null) {
 			top.setIndex(index);
 			top.bind(hand);
@@ -56,10 +65,14 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setBottom(Equipment bottom) {
+		Equipment curr = this.bottom;
+		if (curr != null) {
+			curr.getLinkedTo().asChampion().unlink(curr);
+		}
+
 		if (bottom != null) {
 			bottom.setIndex(index);
 			bottom.bind(hand);
-			bottom.getLinkedTo();
 		}
 
 		this.bottom = bottom;
