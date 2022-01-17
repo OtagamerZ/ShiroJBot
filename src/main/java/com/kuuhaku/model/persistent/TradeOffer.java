@@ -38,13 +38,10 @@ import java.util.List;
 @IdClass(CompositeTradeId.class)
 public class TradeOffer {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
+	@Id
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "trade_id")
 	private Trade trade;
@@ -68,10 +65,6 @@ public class TradeOffer {
 	public TradeOffer(String uid, Trade trade) {
 		this.uid = uid;
 		this.trade = trade;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getUid() {

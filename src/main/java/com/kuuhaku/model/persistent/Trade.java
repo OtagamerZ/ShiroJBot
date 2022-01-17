@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "trade")
@@ -72,5 +73,18 @@ public class Trade {
 
 	public void setFinished(boolean finished) {
 		this.finished = finished;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Trade trade = (Trade) o;
+		return id == trade.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
