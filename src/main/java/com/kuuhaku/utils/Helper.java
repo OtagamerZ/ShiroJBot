@@ -2931,7 +2931,7 @@ public class Helper {
         try {
             List<Constructor<?>> constructors = Arrays.stream(type.getConstructors())
                     .filter(c -> c.getParameterCount() == tuple.length)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (Constructor<?> ctor : constructors) {
                 try {
@@ -3300,9 +3300,14 @@ public class Helper {
     }
 
     public static long getFibonacci(int nth) {
-        if (Math.abs(nth) == 1) return nth;
+        if (nth < 1) return 1;
+        else if (nth == 1) return 2;
 
-        return Math.round((Math.pow(GOLDEN_RATIO, nth) - Math.pow(GOLDEN_RATIO - 1, nth)) / Math.sqrt(5));
+        return getFibonacci(nth -1) + getFibonacci(nth - 2);
+    }
+
+    public static int revFibonacci(int fib) {
+        return (int) Helper.log(fib * Math.sqrt(5) + 0.5, Helper.GOLDEN_RATIO);
     }
 
     public static double getRatio(double w, double h) {
