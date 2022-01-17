@@ -18,27 +18,29 @@
 
 package com.kuuhaku.model.persistent.id;
 
+import com.kuuhaku.model.persistent.Trade;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class CompositeTradeId implements Serializable {
-	private int id;
 	private String uid;
+	private Trade trade;
 
 	public CompositeTradeId() {
 	}
 
-	public CompositeTradeId(int id, String uid) {
-		this.id = id;
+	public CompositeTradeId(String uid, Trade trade) {
 		this.uid = uid;
-	}
-
-	public int getId() {
-		return id;
+		this.trade = trade;
 	}
 
 	public String getUid() {
 		return uid;
+	}
+
+	public Trade getTrade() {
+		return trade;
 	}
 
 	@Override
@@ -46,11 +48,11 @@ public class CompositeTradeId implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CompositeTradeId that = (CompositeTradeId) o;
-		return id == that.id && Objects.equals(uid, that.uid);
+		return Objects.equals(uid, that.uid) && Objects.equals(trade, that.trade);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, uid);
+		return Objects.hash(uid, trade);
 	}
 }
