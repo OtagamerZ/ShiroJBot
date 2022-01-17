@@ -59,6 +59,9 @@ public class BountyQuest {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '{}'")
 	private String rewards = "{}";
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean exactReward = false;
+
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '[]'")
 	private String dangers = "[]";
 
@@ -92,6 +95,10 @@ public class BountyQuest {
 		return new JSONObject(rewards).entrySet().stream()
 				.map(e -> Pair.of(Reward.valueOf(e.getKey()), (int) (double) e.getValue()))
 				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+	}
+
+	public boolean isExactReward() {
+		return exactReward;
 	}
 
 	public Set<Danger> getDangers() {
@@ -135,7 +142,7 @@ public class BountyQuest {
 				(int) Math.round(baseTime * diff),
 				Helper.round(finDiff, 1),
 				new Attributes(baseStats),
-				rewards.entrySet().stream()
+				exactReward ? rewards : rewards.entrySet().stream()
 						.map(e -> Pair.of(e.getKey(), (int) Math.round(e.getValue() * diff)))
 						.collect(Collectors.toMap(Pair::getLeft, Pair::getRight))
 		);
