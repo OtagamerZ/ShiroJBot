@@ -34,7 +34,7 @@ public class ButtonMessage {
 	private String id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "parent_id")
+	@JoinColumn(nullable = false, name = "parent_id")
 	private ButtonChannel parent;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
