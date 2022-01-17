@@ -40,6 +40,7 @@ public enum EffectTrigger {
 	ON_WIN(false, false),
 	ON_HEAL(false, false),
 	ON_DAMAGE(false, false),
+	FINALIZE(false, true),
 
 	BEFORE_DEATH(true, true),
 	AFTER_DEATH(true, true),
