@@ -20,14 +20,17 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.Danger;
 import com.kuuhaku.model.enums.Event;
 import com.kuuhaku.model.enums.Reward;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.records.BountyInfo;
@@ -156,7 +159,19 @@ public class BountyRewardCommand implements Executable {
 				}
 			}
 
-			if (h.getLevel() > lvl) {
+			if (!died && h.getLevel() > lvl) {
+				Account acc = AccountDAO.getAccount(author.getId());
+				boolean save = false;
+
+				if (lvl >= 10 && acc.getAchievements().add(Achievement.GROWING_STRONGER)) {
+					save = true;
+				}
+				if (lvl >= 20 && acc.getAchievements().add(Achievement.LEGENDARY_HERO)) {
+					save = true;
+				}
+
+				if (save) AccountDAO.saveAccount(acc);
+
 				h.setEnergy(h.getMaxEnergy());
 				h.setHp(h.getMaxHp());
 				channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
