@@ -76,6 +76,9 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
 
+	@Column(columnDefinition = "TEXT")
+	private String finalization = "";
+
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String tags = null;
 
@@ -752,6 +755,17 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
+	public void finalizeEffect(EffectParameters ep) {
+		try {
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("ep", ep);
+			gs.setVariable("self", this);
+			gs.evaluate(Helper.getOr(finalization, ""));
+		} catch (Exception e) {
+			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
+		}
+	}
+
 	public Class getCategory() {
 		return category;
 	}
@@ -895,6 +909,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setStun(int stun) {
+		if (bonus.getFlags().contains(Flag.NOSTUN)) {
+			this.stun = 0;
+			return;
+		}
+
 		this.stun = stun;
 		if (getStun() > 0) defending = true;
 	}
@@ -912,6 +931,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setSleep(int sleep) {
+		if (bonus.getFlags().contains(Flag.NOSLEEP)) {
+			this.sleep = 0;
+			return;
+		}
+
 		this.sleep = sleep;
 		if (getSleep() > 0) defending = true;
 	}
