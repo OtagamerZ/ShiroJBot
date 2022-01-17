@@ -65,8 +65,8 @@ public class TradeOffer {
 	public TradeOffer() {
 	}
 
-	public TradeOffer(String uid, Trade trade) {
-		this.id = trade.getId();
+	public TradeOffer(String uid, Trade trade, boolean left) {
+		this.id = left ? -trade.getId() : trade.getId();
 		this.uid = uid;
 		this.trade = trade;
 	}
@@ -215,7 +215,7 @@ public class TradeOffer {
 	}
 
 	public void commit(String uid) {
-		TradeOffer to = new TradeOffer(uid, trade);
+		TradeOffer to = new TradeOffer(uid, trade, id < 0);
 		to.addValue(value);
 		to.getCards().addAll(cards);
 		to.rollback();
