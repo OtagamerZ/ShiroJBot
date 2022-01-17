@@ -70,6 +70,8 @@ public class SlotColumn implements Cloneable {
 	public void setBottom(Equipment bottom) {
 		Equipment curr = this.bottom;
 		if (curr != null) {
+			curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+
 			curr.getLinkedTo().asChampion().unlink(curr);
 		}
 
