@@ -83,7 +83,7 @@ public class Champion implements Drawable, Cloneable {
 	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "champion_id")
+	@JoinColumn(nullable = false, name = "champion_id")
 	private Set<String> requiredCards = new HashSet<>();
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")

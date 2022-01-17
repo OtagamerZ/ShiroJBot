@@ -75,7 +75,7 @@ public class Member implements Hashable {
 	private TrophyType trophy = null;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(nullable = false, name = "member_id")
 	private List<String> warns = new ArrayList<>();
 
 	public Member(String uid, String sid) {

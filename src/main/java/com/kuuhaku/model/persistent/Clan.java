@@ -59,15 +59,15 @@ public class Clan {
 	private Calendar paidRent = Calendar.getInstance();
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "clan_id")
+	@JoinColumn(nullable = false, name = "clan_id")
 	private List<String> transactions = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "clan_id")
+	@JoinColumn(nullable = false, name = "clan_id")
 	private List<ClanMember> members = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "clan_id")
+	@JoinColumn(nullable = false, name = "clan_id")
 	private Map<ClanHierarchy, Integer> permissions = new HashMap<>() {{
 		put(ClanHierarchy.LEADER, 0xf);
 		put(ClanHierarchy.SUBLEADER, 0xf);
