@@ -51,6 +51,8 @@ public enum Achievement {
 			"Intocável", "Vença uma partida sem levar dano.", false),
 	LAST_STAND(Medal.GOLD,
 			"O Último Bastião", "Vença uma partida após sobreviver um ataque fatal.", false),
+	LEGENDARY_HERO(Medal.GOLD,
+			"O Lendário Herói", "Alcance o nível 20 com um herói", false),
 
 	SPOOKY_NIGHTS(Medal.SILVER,
 			"Noites de Arrepio", "Vença uma partida em Outubro onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
@@ -58,6 +60,8 @@ public enum Achievement {
 			"Golpe de Misericórdia", "Vença uma partida após esvaziar o deck do oponente.", false),
 	HIPSTER(Medal.SILVER,
 			"Hipster", "Vença uma partida com um deck com divergência do meta acima de 95%.", false),
+	GROWING_STRONGER(Medal.SILVER,
+			"Ficando mais Forte", "Alcance o nível 10 com um herói", false),
 
 	STAND_UNITED(Medal.BRONZE,
 			"Manter União", "Vença uma partida com um parceiro.", false),
@@ -69,6 +73,8 @@ public enum Achievement {
 			"Amantes", "Vença uma partida DUO com seu husbando/waifu.", false),
 	JOURNEYS_BEGIN(Medal.BRONZE,
 			"O Início da Jornada", "Vença uma partida ranqueada.", false),
+	A_HERO_IS_BORN(Medal.BRONZE,
+			"Nasce um Herói", "Crie um herói", false)
 	;
 
 	private final Medal medal;
@@ -265,6 +271,7 @@ public enum Achievement {
 
 				yield (!game.getHistory().getWinner().equals(side));
 			}
+			default -> true;
 		};
 	}
 
