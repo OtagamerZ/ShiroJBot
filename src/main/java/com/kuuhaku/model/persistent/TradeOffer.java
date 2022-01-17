@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.model.persistent.id.CompositeTradeId;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
 
@@ -35,12 +34,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tradeoffer")
-@IdClass(CompositeTradeId.class)
 public class TradeOffer {
-	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int id;
-
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
@@ -50,10 +44,7 @@ public class TradeOffer {
 	private Trade trade;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(name = "tradeoffer_id", referencedColumnName = "id"),
-			@JoinColumn(name = "tradeoffer_uid", referencedColumnName = "uid")
-	})
+	@JoinColumn(name = "tradeoffer_id")
 	private List<TradeCard> cards = new ArrayList<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -66,13 +57,8 @@ public class TradeOffer {
 	}
 
 	public TradeOffer(String uid, Trade trade) {
-		this.id = trade.getId();
 		this.uid = uid;
 		this.trade = trade;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getUid() {
