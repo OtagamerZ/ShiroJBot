@@ -48,7 +48,8 @@ public class SlotColumn implements Cloneable {
 	public void setTop(Champion top) {
 		Champion curr = this.top;
 		if (curr != null) {
-			curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+			if (curr.hasEffect())
+				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
 
 			for (CardLink link : curr.getLinkedTo()) {
 				curr.unlink(link.asEquipment());
@@ -70,7 +71,8 @@ public class SlotColumn implements Cloneable {
 	public void setBottom(Equipment bottom) {
 		Equipment curr = this.bottom;
 		if (curr != null) {
-			curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+			if (curr.hasEffect())
+				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
 
 			if (curr.getLinkedTo() != null)
 				curr.getLinkedTo().asChampion().unlink(curr);
