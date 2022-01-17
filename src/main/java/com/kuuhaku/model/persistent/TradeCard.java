@@ -50,7 +50,7 @@ public class TradeCard {
 	public TradeCard(Card card, CardType type, boolean foil) {
 		this.card = card;
 		this.type = type;
-		this.foil = true;
+		this.foil = foil;
 	}
 
 	public int getId() {
