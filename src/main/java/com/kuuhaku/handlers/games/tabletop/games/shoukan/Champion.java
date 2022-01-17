@@ -76,9 +76,6 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
 
-	@Column(columnDefinition = "TEXT")
-	private String finalization = "";
-
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String tags = null;
 
@@ -752,17 +749,6 @@ public class Champion implements Drawable, Cloneable {
 			if (!e.hasEffect()) continue;
 
 			e.getEffect(ep);
-		}
-	}
-
-	public void finalizeEffect(EffectParameters ep) {
-		try {
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", this);
-			gs.evaluate(Helper.getOr(finalization, ""));
-		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
 
