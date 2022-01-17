@@ -312,6 +312,18 @@ public class Hand {
 		}
 	}
 
+	public Drawable drawChampion(int mana) {
+		if (lockTime > 0) return null;
+		try {
+			Drawable dr = getRealDeque().stream().filter(d -> d instanceof Champion c && c.getMana() == mana).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
+			cards.add(dr.copy());
+			return dr;
+		} catch (NoSuchElementException ignore) {
+			return null;
+		}
+	}
+
 	public void manualDrawChampion() {
 		try {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
