@@ -55,10 +55,12 @@ public class TeamHand extends Hand {
 	private final InfiniteList<BondedList<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
 	private final InfiniteList<Hero> heroes = new InfiniteList<>();
-
+	private final double divergence;
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
 		super(game, null, null, side);
+
+		this.divergence = dks.stream().mapToDouble(Deck::getAverageDivergence).average().orElse(0);
 
 		for (int i = 0; i < users.size(); i++) {
 			Deck dk = dks.get(i);
@@ -496,6 +498,10 @@ public class TeamHand extends Hand {
 
 	public Pair<Race, Race> getCombo() {
 		return combo;
+	}
+
+	public double getDivergence() {
+		return divergence;
 	}
 
 	public BondedList<Drawable> getDeque() {
