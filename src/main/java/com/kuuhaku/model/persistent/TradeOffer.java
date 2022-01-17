@@ -43,8 +43,8 @@ public class TradeOffer {
 	@JoinColumn(name = "trade_id")
 	private Trade trade;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tradeoffer_id")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "tradeoffer_uid")
 	private List<TradeCard> cards = new ArrayList<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
