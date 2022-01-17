@@ -28,6 +28,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -117,6 +118,7 @@ public class SummonHeroCommand implements Executable {
 							KawaiponDAO.saveKawaipon(kp);
 
 							acc.removeGem((int) Math.pow(2, heroes));
+							acc.getAchievements().add(Achievement.A_HERO_IS_BORN);
 							AccountDAO.saveAccount(acc);
 
 							Main.getInfo().getConfirmationPending().remove(author.getId());
