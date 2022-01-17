@@ -32,14 +32,11 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
-import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -73,6 +70,9 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String finalization = "";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tier;
@@ -435,6 +435,17 @@ public class Equipment implements Drawable, Cloneable {
 			gs.setVariable("enemyPos", enemyPos);
 			gs.setVariable("self", this);
 			gs.evaluate(Helper.getOr(altEffect, effect));
+		} catch (Exception e) {
+			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
+		}
+	}
+
+	public void finalizeEffect(EffectParameters ep) {
+		try {
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("ep", ep);
+			gs.setVariable("self", this);
+			gs.evaluate(Helper.getOr(finalization, ""));
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}

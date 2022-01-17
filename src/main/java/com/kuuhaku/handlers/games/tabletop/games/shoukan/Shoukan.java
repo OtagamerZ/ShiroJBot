@@ -36,10 +36,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.FusionMaterial;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Target;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.states.GameState;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
@@ -875,8 +872,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
+		Side[] sides = {getCurrentSide(), getNextSide()};
+
 		for (int i = 0; i < 5; i++) {
-			for (Side s : Side.values()) {
+			for (Side s : sides) {
 				List<SlotColumn> slts = arena.getSlots().get(s);
 				Hand hd = getHands().get(s);
 
@@ -2711,7 +2710,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getAttacker())) activate = false;
 				}
 
-				if (activate)
+				if (activate && !activator.isStunned())
 					activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 			}
 

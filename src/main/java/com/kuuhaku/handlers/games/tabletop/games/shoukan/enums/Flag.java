@@ -19,5 +19,5 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum Flag {
-	NODAMAGE, NODEATH, NOCONVERT, NOEFFECT, ALLDAMAGE, SKIPCOMBAT
+	NODAMAGE, NODEATH, NOCONVERT, NOEFFECT, ALLDAMAGE, SKIPCOMBAT, NOSTUN, NOSLEEP
 }
