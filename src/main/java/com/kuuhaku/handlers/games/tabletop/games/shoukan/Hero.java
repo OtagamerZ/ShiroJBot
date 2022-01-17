@@ -84,7 +84,7 @@ public class Hero implements Cloneable {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hero_id")
+    @JoinColumn(nullable = false, name = "hero_id")
     private Set<Perk> perks = EnumSet.noneOf(Perk.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)

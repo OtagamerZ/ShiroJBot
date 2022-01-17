@@ -37,7 +37,7 @@ public class MatchHistory {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "matchhistory_id")
+	@JoinColumn(nullable = false, name = "matchhistory_id")
 	private Map<String, Side> players = new HashMap<>();
 
 	@Enumerated(value = EnumType.STRING)
@@ -50,7 +50,7 @@ public class MatchHistory {
 	private boolean wo = false;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "matchhistory_id")
+	@JoinColumn(nullable = false, name = "matchhistory_id")
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
 	@Column(columnDefinition = "TIMESTAMP")

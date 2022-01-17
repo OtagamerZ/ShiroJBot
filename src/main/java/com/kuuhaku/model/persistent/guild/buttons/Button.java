@@ -33,7 +33,7 @@ public class Button {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "parent_id")
+	@JoinColumn(nullable = false, name = "parent_id")
 	private ButtonMessage parent;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
