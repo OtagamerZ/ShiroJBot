@@ -43,7 +43,7 @@ public class TradeOffer {
 	private String uid;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tradeoffer+id")
+	@JoinColumn(name = "tradeoffer_id")
 	private List<TradeCard> cards = new ArrayList<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
