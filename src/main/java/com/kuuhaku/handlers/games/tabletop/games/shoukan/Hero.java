@@ -238,7 +238,10 @@ public class Hero implements Cloneable {
     }
 
     public int getMaxPerks() {
-        return getLevel() / 5;
+        int extra = 0;
+        if (perks.contains(Perk.SCHOLAR)) extra += 2;
+
+        return getLevel() / 5 + extra;
     }
 
     public int getAvailablePerks() {
@@ -257,6 +260,8 @@ public class Hero implements Cloneable {
     }
 
     public int getInventoryCap() {
+        if (perks.contains(Perk.SCHOLAR)) return 0;
+
         return Math.max(0, getStats().calcInventoryCap() - inventory.size());
     }
 
