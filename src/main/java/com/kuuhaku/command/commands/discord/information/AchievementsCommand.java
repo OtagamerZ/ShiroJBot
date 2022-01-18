@@ -83,6 +83,8 @@ public class AchievementsCommand implements Executable, Slashed {
 				.setFooter("As conquistas só podem ser desbloqueadas em partidas ranqueadas.");
 
 		for (List<Achievement> chunk : achs) {
+			eb.clearFields();
+
 			for (Achievement a : chunk) {
 				if (a.isHidden() && !acc.getAchievements().contains(a))
 					eb.addField(a.toString(acc), "Desbloqueie a conquista para poder vê-la.", false);
