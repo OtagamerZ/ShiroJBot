@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.model.persistent.id.CompositeTradeId;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
 
@@ -35,25 +34,16 @@ import java.util.List;
 
 @Entity
 @Table(name = "tradeoffer")
-@IdClass(CompositeTradeId.class)
 public class TradeOffer {
 	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(nullable = false, name = "trade_id")
-	private Trade trade;
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(nullable = false, name = "tradeoffer_id", referencedColumnName = "id"),
-			@JoinColumn(nullable = false, name = "tradeoffer_uid", referencedColumnName = "uid")
-	})
+	@JoinColumn(name = "tradeoffer+id")
 	private List<TradeCard> cards = new ArrayList<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -65,10 +55,8 @@ public class TradeOffer {
 	public TradeOffer() {
 	}
 
-	public TradeOffer(String uid, Trade trade, boolean left) {
-		this.id = left ? -trade.getId() : trade.getId();
+	public TradeOffer(String uid) {
 		this.uid = uid;
-		this.trade = trade;
 	}
 
 	public int getId() {
@@ -77,10 +65,6 @@ public class TradeOffer {
 
 	public String getUid() {
 		return uid;
-	}
-
-	public Trade getTrade() {
-		return trade;
 	}
 
 	public List<TradeCard> getCards() {
@@ -136,6 +120,7 @@ public class TradeOffer {
 				}
 				case SENSHI -> {
 					Champion c = CardDAO.getChampion(card.getCard());
+					if (c == null) continue;
 
 					if (dk.checkChampionError(c) != 0) {
 						StashDAO.saveCard(new Stash(uid, c));
@@ -145,6 +130,7 @@ public class TradeOffer {
 				}
 				case EVOGEAR -> {
 					Equipment e = CardDAO.getEquipment(card.getCard());
+					if (e == null) continue;
 
 					if (dk.checkEquipmentError(e) != 0) {
 						StashDAO.saveCard(new Stash(uid, e));
@@ -154,6 +140,7 @@ public class TradeOffer {
 				}
 				case FIELD -> {
 					Field f = CardDAO.getField(card.getCard());
+					if (f == null) continue;
 
 					if (dk.checkFieldError(f) != 0) {
 						StashDAO.saveCard(new Stash(uid, f));
@@ -183,6 +170,7 @@ public class TradeOffer {
 			}
 			case SENSHI -> {
 				Champion c = CardDAO.getChampion(card.getCard());
+				if (c == null) return;
 
 				if (dk.checkChampionError(c) != 0) {
 					StashDAO.saveCard(new Stash(uid, c));
@@ -192,6 +180,7 @@ public class TradeOffer {
 			}
 			case EVOGEAR -> {
 				Equipment e = CardDAO.getEquipment(card.getCard());
+				if (e == null) return;
 
 				if (dk.checkEquipmentError(e) != 0) {
 					StashDAO.saveCard(new Stash(uid, e));
@@ -201,6 +190,7 @@ public class TradeOffer {
 			}
 			case FIELD -> {
 				Field f = CardDAO.getField(card.getCard());
+				if (f == null) return;
 
 				if (dk.checkFieldError(f) != 0) {
 					StashDAO.saveCard(new Stash(uid, f));
@@ -215,7 +205,7 @@ public class TradeOffer {
 	}
 
 	public void commit(String uid) {
-		TradeOffer to = new TradeOffer(uid, trade, id < 0);
+		TradeOffer to = new TradeOffer(uid);
 		to.addValue(value);
 		to.getCards().addAll(cards);
 		to.rollback();
