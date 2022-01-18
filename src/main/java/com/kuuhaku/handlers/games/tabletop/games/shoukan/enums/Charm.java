@@ -60,7 +60,7 @@ public enum Charm {
         return switch (this) {
             case SHIELD, TIMEWARP, DOUBLETAP, CLONE -> description.formatted(
                     Helper.getFibonacci(tier),
-                    Helper.equalsAny(tier, 1, 2) ? "" : "s"
+					Helper.getFibonacci(tier) == 1 ? "" : "s"
             );
             case DRAIN -> description.formatted(Helper.getFibonacci(tier));
             case AGILITY -> description.formatted(Helper.roundToString(7.5 * tier, 1));
