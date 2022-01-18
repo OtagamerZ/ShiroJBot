@@ -194,7 +194,7 @@ public class Hero implements Cloneable {
     }
 
     public int getLevel() {
-        return Helper.revFibonacci(xp / 5);
+        return Helper.revFibonacci(xp / 5) + 1;
     }
 
     public int getXp() {
