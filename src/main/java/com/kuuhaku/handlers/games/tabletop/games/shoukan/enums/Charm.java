@@ -65,8 +65,7 @@ public enum Charm {
             case DRAIN -> description.formatted(Helper.getFibonacci(tier));
             case AGILITY -> description.formatted(Helper.roundToString(7.5 * tier, 1));
             case FORTIFY -> description.formatted(5 * tier);
-			case PIERCING -> description.formatted(Helper.roundToString(7.5 * tier, 1));
-			case BLEEDING -> description.formatted(5 * tier);
+			case PIERCING, BLEEDING -> description.formatted(4 * tier);
 			default -> description;
         };
     }
