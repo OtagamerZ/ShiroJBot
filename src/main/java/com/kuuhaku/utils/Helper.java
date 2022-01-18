@@ -3306,6 +3306,8 @@ public class Helper {
     }
 
     public static int revFibonacci(int fib) {
+        if (fib <= 1) return 1;
+
         return (int) Helper.log(fib * Math.sqrt(5) + 0.5, Helper.GOLDEN_RATIO);
     }
 
