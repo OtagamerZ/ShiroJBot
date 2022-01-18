@@ -3300,10 +3300,9 @@ public class Helper {
     }
 
     public static long getFibonacci(int nth) {
-        if (nth < 1) return 1;
-        else if (nth == 1) return 2;
+        if (nth <= 1) return nth;
 
-        return getFibonacci(nth -1) + getFibonacci(nth - 2);
+        return getFibonacci(nth - 1) + getFibonacci(nth - 2);
     }
 
     public static int revFibonacci(int fib) {
