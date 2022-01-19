@@ -51,7 +51,7 @@ public class Table {
 	}
 
 	public void awardWinner(Game game, String id) {
-		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).toList();
 
 		Account wacc = AccountDAO.getAccount(id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());

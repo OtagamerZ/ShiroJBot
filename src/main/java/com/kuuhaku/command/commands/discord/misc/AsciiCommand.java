@@ -74,7 +74,7 @@ public class AsciiCommand implements Executable {
 		}
 
 		OkHttpClient caller = new OkHttpClient();
-		Request request = new Request.Builder().url("http://artii.herokuapp.com/make?text=" + query).build();
+		Request request = new Request.Builder().url("https://artii.herokuapp.com/make?text=" + query).build();
 		try {
 			Response response = caller.newCall(request).execute();
 			assert response.body() != null;

@@ -72,7 +72,7 @@ public class RankCommand implements Executable {
 						case 2 -> "Cartas";
 						case 3 -> "Tempo em call";
 					} + ")")
-					.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+					.setThumbnail("https://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
 			List<String> d = switch (type) {
 				default -> RankDAO.getLevelRanking(guild.getId(), 0);

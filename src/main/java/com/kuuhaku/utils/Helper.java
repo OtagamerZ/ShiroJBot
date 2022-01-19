@@ -866,7 +866,7 @@ public class Helper {
     }
 
     public static String getSponsors() {
-        List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).collect(Collectors.toList());
+        List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).toList();
         List<Guild> spGuilds = new ArrayList<>();
         for (String sp : sponsors) {
             spGuilds.add(Main.getShiroShards()
@@ -2019,7 +2019,7 @@ public class Helper {
         return bi;
     }
 
-    public static String getFileType(String url) throws IOException {
+    public static String getFileType(String url) {
         try {
             HttpHead req = new HttpHead(url);
 
@@ -3329,7 +3329,7 @@ public class Helper {
     @SuppressWarnings("unchecked")
     public static <T extends Cloneable> T clone(T orig) {
         try {
-            return orig != null ? (T) Object.class.getMethod("clone").invoke(orig) : null;
+            return orig != null ? (T) Object.class.getDeclaredMethod("clone").invoke(orig) : null;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             return orig;
         }
