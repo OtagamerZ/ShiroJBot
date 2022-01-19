@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.model.records.MetaData;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -1080,25 +1081,18 @@ public class CardDAO {
 		}
 	}
 
-	public static double getCategoryMeta(Class cat) {
+	@SuppressWarnings("unchecked")
+	public static Map<Class, Integer> getCategoryMeta() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT SUM(x.total) / COUNT(1) * 0.75
-				FROM (
-						SELECT COUNT(1) AS total
-						     , c.category
-						FROM deck_champion dc
-						         INNER JOIN champion c on c.id = dc.champions_id
-						WHERE (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)
-						GROUP BY dc.deck_id, c.category
-					) x
-				WHERE x.category = :cat
-				""");
-		q.setParameter("cat", cat.name());
+		Query q = em.createNativeQuery("SELECT * FROM \"GetChampionMeta\"");
 
 		try {
-			return ((Number) q.getSingleResult()).doubleValue();
+			List<MetaData> res = Helper.map(MetaData.class, q.getResultList());
+
+			return res.stream()
+					.map(md -> Pair.of(Class.valueOf(md.id()), md.average()))
+					.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
 		} finally {
 			em.close();
 		}
