@@ -152,7 +152,7 @@ public class MatchMakingRating {
 				return;
 			}
 			return;
-		} else if (rankPoints == tier.getPromRP()) {
+		} else if (rankPoints >= tier.getPromRP()) {
 			promWins++;
 
 			if (promWins > tier.getMd() / 2f) {
@@ -212,7 +212,7 @@ public class MatchMakingRating {
 						.queue(null, Helper::doNothing);
 			}
 			return;
-		} else if (rankPoints == tier.getPromRP()) {
+		} else if (rankPoints >= tier.getPromRP()) {
 			promLosses++;
 
 			if (promLosses > tier.getMd() / 2f) {
