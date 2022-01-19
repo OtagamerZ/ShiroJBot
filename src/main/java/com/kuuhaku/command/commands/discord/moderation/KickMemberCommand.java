@@ -53,7 +53,7 @@ public class KickMemberCommand implements Executable {
 				.filter(StringUtils::isNumeric)
 				.map(guild::getMemberById)
 				.filter(Objects::nonNull)
-				.collect(Collectors.toList()));
+				.toList();
 
 		if (m.isEmpty()) {
 			channel.sendMessage(I18n.getString("err_user-or-id-required")).queue();

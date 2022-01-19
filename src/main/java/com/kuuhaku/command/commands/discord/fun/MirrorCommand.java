@@ -84,6 +84,7 @@ public class MirrorCommand implements Executable {
 							}
 						}
 
+						assert url != null;
 						if (url.contains(".gif")) {
 							int finalMode = mode;
 							f = File.createTempFile("mirrored", ".gif");

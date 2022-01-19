@@ -62,7 +62,7 @@ public class RemoveEmoteCommand implements Executable {
 		} else {
 			List<Emote> filteredList = message.getEmotes().stream()
 					.filter(e -> guild.getEmoteById(e.getId()) != null)
-					.collect(Collectors.toList());
+					.toList();
 
 			List<AuditableRestAction<Void>> acts = new ArrayList<>();
 			int removed = 0;

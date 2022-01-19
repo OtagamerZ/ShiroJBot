@@ -94,7 +94,7 @@ public class DailyEvent implements Job {
 		} else {
 			List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank().stream()
 					.filter(mmr -> mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
-					.collect(Collectors.toList());
+					.toList();
 
 			for (MatchMakingRating mmr : mmrs) {
 				mmr.applyInactivityPenalty();

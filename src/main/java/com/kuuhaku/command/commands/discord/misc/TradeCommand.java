@@ -483,7 +483,7 @@ public class TradeCommand implements Executable {
 		List<KawaiponCard> kcs = kp.getCards().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.sorted(Comparator.comparing(KawaiponCard::isFoil))
-				.collect(Collectors.toList());
+				.toList();
 
 		if (kcs.size() > 1) {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
@@ -513,7 +513,7 @@ public class TradeCommand implements Executable {
 		List<TradeCard> tcs = to.getCards().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.sorted(Comparator.comparing(TradeCard::isFoil))
-				.collect(Collectors.toList());
+				.toList();
 
 		if (tcs.size() > 1) {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);

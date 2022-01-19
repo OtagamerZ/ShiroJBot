@@ -41,7 +41,7 @@ public interface TriFunction<A, B, C, R> {
 	 *
 	 * @param a the first function argument
 	 * @param b the second function argument
-	 * @param b the third function argument
+	 * @param c the third function argument
 	 * @return the function result
 	 */
 	R apply(A a, B b, C c);
