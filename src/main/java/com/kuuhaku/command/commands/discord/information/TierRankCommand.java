@@ -110,7 +110,7 @@ public class TierRankCommand implements Executable, Slashed {
 		sb.setLength(0);
 		eb.clearFields()
 				.setTitle("Tiers do Shoukan ranqueado")
-				.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+				.setThumbnail("https://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
 		for (int i = 1; i < 8; i++) {
 			sb.append("%s | %s\n".formatted(Helper.getNumericEmoji(i), RankedTier.getTierName(i, false)));

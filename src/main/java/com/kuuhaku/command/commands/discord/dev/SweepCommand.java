@@ -86,7 +86,7 @@ public class SweepCommand implements Executable {
 					guildTrashBin.add(e.getKey());
 
 					missingIds.computeIfAbsent(e.getKey(), t -> new HashSet<>())
-							.addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
+							.addAll(e.getValue().stream().map(id -> id + e.getKey()).toList());
 					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					try {
@@ -94,8 +94,7 @@ public class SweepCommand implements Executable {
 						g.findMembers(m -> !m.getUser().isBot()).onSuccess(res -> {
 							foundIds.addAll(
 									res.stream()
-											.map(m -> m.getId() + e.getKey())
-											.collect(Collectors.toList())
+											.map(m -> m.getId() + e.getKey()).toList()
 							);
 
 							loaded.complete(null);
@@ -103,7 +102,7 @@ public class SweepCommand implements Executable {
 						});
 						loaded.get();
 					} catch (ExecutionException | InterruptedException err) {
-						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).collect(Collectors.toList()));
+						foundIds.addAll(mbs.stream().map(m -> m.getUid() + m.getSid()).toList());
 					}
 				}
 			}

@@ -321,7 +321,7 @@ public class Tournament {
 			} else {
 				List<Participant> ps = p.getParticipants().stream()
 						.map(this::getLookup)
-						.collect(Collectors.toList());
+						.toList();
 
 				int pSize = ps.size();
 				for (int k = 0; k < pSize; k++) {

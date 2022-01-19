@@ -36,6 +36,7 @@ public enum Perk {
 	PESSIMISTIC("Pessimista", "Reduz a taxa de regeneração em 50% e possui 10% menos chance de ser penalizado ao falhar a missão."),
 	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
 	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva (2% esquiva = 1% bloqueio), ocorrendo o inverso em modo de defesa."),
+	SCHOLAR("Erudito", "Não pode ter equipamentos, mas recebe +2 slots de perk extras.")
 	;
 
 	private final String name;
@@ -55,6 +56,9 @@ public enum Perk {
 
 		if (!incom.isEmpty())
 			return description + "\n**Incompatível com: " + incom.stream().map(Perk::toString).collect(Collectors.joining(", ")) + "**";
+
+		if (this == SCHOLAR)
+			return description + "\n**Irá destruir todos os equipamentos atualmente equipados**";
 
 		return description;
 	}

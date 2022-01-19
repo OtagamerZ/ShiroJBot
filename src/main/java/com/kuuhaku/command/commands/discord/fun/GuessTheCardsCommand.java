@@ -76,7 +76,7 @@ public class GuessTheCardsCommand implements Executable {
 			List<BufferedImage> imgs = c.stream()
 					.map(Card::drawCardNoBorder)
 					.map(bi -> Helper.toColorSpace(bi, BufferedImage.TYPE_INT_ARGB))
-					.collect(Collectors.toList());
+					.toList();
 
 			BufferedImage img = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = img.createGraphics();
