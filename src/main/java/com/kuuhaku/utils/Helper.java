@@ -3300,9 +3300,16 @@ public class Helper {
     }
 
     public static long getFibonacci(int nth) {
-        if (Math.abs(nth) == 1) return nth;
+        if (nth <= 2) return 1;
 
-        return Math.round((Math.pow(GOLDEN_RATIO, nth) - Math.pow(GOLDEN_RATIO - 1, nth)) / Math.sqrt(5));
+        return getFibonacci(nth - 1) + getFibonacci(nth - 2);
+    }
+
+    public static int revFibonacci(int fib) {
+        if (fib < 1) return 1;
+        else if (fib == 1) return 2;
+
+        return (int) log(fib * Math.sqrt(5), Helper.GOLDEN_RATIO);
     }
 
     public static double getRatio(double w, double h) {
