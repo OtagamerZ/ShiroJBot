@@ -927,8 +927,9 @@ public class Helper {
     }
 
     public static InviteAction createInvite(Guild guild) {
-        if (guild.getDefaultChannel() != null) {
-            return guild.getDefaultChannel().createInvite();
+        TextChannel def = guild.getDefaultChannel();
+        if (def != null && guild.getSelfMember().hasPermission(def, Permission.CREATE_INSTANT_INVITE)) {
+            return def.createInvite();
         }
 
         for (TextChannel tc : guild.getTextChannels()) {

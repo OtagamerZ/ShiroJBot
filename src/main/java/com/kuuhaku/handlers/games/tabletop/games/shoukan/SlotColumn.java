@@ -21,6 +21,8 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
 
+import java.util.List;
+
 public class SlotColumn implements Cloneable {
 	private final int index;
 	private final Hand hand;
@@ -51,7 +53,7 @@ public class SlotColumn implements Cloneable {
 			if (curr.hasEffect())
 				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
 
-			for (CardLink link : curr.getLinkedTo()) {
+			for (CardLink link : List.copyOf(curr.getLinkedTo())) {
 				curr.unlink(link.asEquipment());
 			}
 		}
