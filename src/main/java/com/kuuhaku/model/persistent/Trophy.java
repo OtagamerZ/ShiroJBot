@@ -33,7 +33,7 @@ public class Trophy {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "trophy_uid")
+	@JoinColumn(nullable = false, name = "trophy_uid")
 	private Set<TrophyType> trophies = EnumSet.noneOf(TrophyType.class);
 
 	public Trophy(String uid) {

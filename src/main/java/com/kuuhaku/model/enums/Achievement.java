@@ -44,18 +44,24 @@ public enum Achievement {
 	TIMED_BOMB(Medal.GOLD,
 			"Bomba Relógio", "Vença a partida durante a morte-súbita III.", false),
 	TRUE_JUSTICE(Medal.GOLD,
-			"A Verdadeira Justiça", "Vença uma partida com Kira ou L. Lawliet em campo.", false),
+			"A Verdadeira Justiça", "Vença uma partida com Kira ou L. Lawliet em campo.", true),
 	UNFORTUNATE_LUCK(Medal.GOLD,
 			"Sorte Maldita", "Comece a partida com 3 campos na mão.", true),
 	UNTOUCHABLE(Medal.GOLD,
 			"Intocável", "Vença uma partida sem levar dano.", false),
 	LAST_STAND(Medal.GOLD,
 			"O Último Bastião", "Vença uma partida após sobreviver um ataque fatal.", false),
+	LEGENDARY_HERO(Medal.GOLD,
+			"O Lendário Herói", "Alcance o nível 20 com um herói", false),
 
 	SPOOKY_NIGHTS(Medal.SILVER,
 			"Noites de Arrepio", "Vença uma partida em Outubro onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
 	COUP_DE_GRACE(Medal.SILVER,
 			"Golpe de Misericórdia", "Vença uma partida após esvaziar o deck do oponente.", false),
+	HIPSTER(Medal.SILVER,
+			"Hipster", "Vença uma partida com um deck com divergência do meta acima de 95%.", false),
+	GROWING_STRONGER(Medal.SILVER,
+			"Ficando mais Forte", "Alcance o nível 10 com um herói", false),
 
 	STAND_UNITED(Medal.BRONZE,
 			"Manter União", "Vença uma partida com um parceiro.", false),
@@ -67,6 +73,8 @@ public enum Achievement {
 			"Amantes", "Vença uma partida DUO com seu husbando/waifu.", false),
 	JOURNEYS_BEGIN(Medal.BRONZE,
 			"O Início da Jornada", "Vença uma partida ranqueada.", false),
+	A_HERO_IS_BORN(Medal.BRONZE,
+			"Nasce um Herói", "Crie um herói", false)
 	;
 
 	private final Medal medal;
@@ -205,6 +213,15 @@ public enum Achievement {
 
 				yield true;
 			}
+			case HIPSTER -> {
+				if (!last) yield false;
+
+				if (game.getHistory().getWinner().equals(side)) {
+					yield (game.getHands().get(side).getDivergence() < 0.95);
+				}
+
+				yield true;
+			}
 			case STAND_UNITED -> {
 				if (!last) yield false;
 
@@ -254,6 +271,7 @@ public enum Achievement {
 
 				yield (!game.getHistory().getWinner().equals(side));
 			}
+			default -> true;
 		};
 	}
 

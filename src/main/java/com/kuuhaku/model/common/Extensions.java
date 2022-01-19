@@ -36,7 +36,7 @@ public class Extensions {
 		String[] tldArr = new String[0];
 
 		try {
-			HttpRequest iana = HttpRequest.get("http://data.iana.org/TLD/tlds-alpha-by-domain.txt", true)
+			HttpRequest iana = HttpRequest.get("https://data.iana.org/TLD/tlds-alpha-by-domain.txt", true)
 					.header("Content-Type", "application/json; charset=UTF-8")
 					.header("User-Agent", "Mozilla/5.0");
 

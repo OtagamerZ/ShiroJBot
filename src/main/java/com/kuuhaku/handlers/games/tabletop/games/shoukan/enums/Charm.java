@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public enum Charm {
     SHIELD("Escudo", "Bloqueia %s efeito%s de destruição ou conversão"),
@@ -60,13 +59,12 @@ public enum Charm {
         return switch (this) {
             case SHIELD, TIMEWARP, DOUBLETAP, CLONE -> description.formatted(
                     Helper.getFibonacci(tier),
-                    Helper.equalsAny(tier, 1, 2) ? "" : "s"
+					Helper.getFibonacci(tier) == 1 ? "" : "s"
             );
             case DRAIN -> description.formatted(Helper.getFibonacci(tier));
             case AGILITY -> description.formatted(Helper.roundToString(7.5 * tier, 1));
             case FORTIFY -> description.formatted(5 * tier);
-			case PIERCING -> description.formatted(Helper.roundToString(7.5 * tier, 1));
-			case BLEEDING -> description.formatted(5 * tier);
+			case PIERCING, BLEEDING -> description.formatted(4 * tier);
 			default -> description;
         };
     }

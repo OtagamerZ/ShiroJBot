@@ -19,7 +19,9 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "trade")
@@ -28,11 +30,9 @@ public class Trade {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "trade")
-	private TradeOffer left = null;
-
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "trade")
-	private TradeOffer right = null;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "trade")
+	private List<TradeOffer> offers = new ArrayList<>();
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean finished = false;
@@ -41,8 +41,8 @@ public class Trade {
 	}
 
 	public Trade(String left, String right) {
-		this.left = new TradeOffer(left, this);
-		this.right = new TradeOffer(right, this);
+		offers.add(new TradeOffer(left));
+		offers.add(new TradeOffer(right));
 	}
 
 	public int getId() {
@@ -50,20 +50,20 @@ public class Trade {
 	}
 
 	public TradeOffer getOffer(String uid) {
-		if (left.getUid().equals(uid)) return left;
-		return right;
+		if (getLeft().getUid().equals(uid)) return getLeft();
+		return getRight();
 	}
 
 	public List<TradeOffer> getOffers() {
-		return List.of(left, right);
+		return offers;
 	}
 
 	public TradeOffer getLeft() {
-		return left;
+		return offers.get(0);
 	}
 
 	public TradeOffer getRight() {
-		return right;
+		return offers.get(1);
 	}
 
 	public boolean isFinished() {
@@ -72,5 +72,18 @@ public class Trade {
 
 	public void setFinished(boolean finished) {
 		this.finished = finished;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Trade trade = (Trade) o;
+		return id == trade.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

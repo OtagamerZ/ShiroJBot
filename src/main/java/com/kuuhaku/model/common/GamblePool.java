@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamblePool {
-	public static record Gamble(Slot slot, int weight) {
+	public record Gamble(Slot slot, int weight) {
 	}
 
 	public void addGamble(Gamble gamble) {

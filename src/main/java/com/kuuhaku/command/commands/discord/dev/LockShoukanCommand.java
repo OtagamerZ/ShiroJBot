@@ -29,17 +29,17 @@ import net.dv8tion.jda.api.entities.*;
 		name = "rlock",
 		category = Category.DEV
 )
-public class LockRankedCommand implements Executable {
+public class LockShoukanCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		MatchMaking mm = Main.getInfo().getMatchMaking();
 		if (mm.isLocked())
-			channel.sendMessage("❌ | A fila ranqueada já está bloqueada (" + mm.getGames().size() + " jogos restantes).").queue();
+			channel.sendMessage("❌ | O Shoukan já está bloqueado (" + Main.getInfo().getShoukanSlot().size() + " jogos restantes).").queue();
 		else {
 			mm.getSoloLobby().clear();
 			mm.setLocked(true);
-			channel.sendMessage("✅ | Fila ranqueada bloqueada com sucesso até a reinicialização.").queue();
+			channel.sendMessage("✅ | Shoukan bloqueado com sucesso até a reinicialização.").queue();
 		}
 	}
 }

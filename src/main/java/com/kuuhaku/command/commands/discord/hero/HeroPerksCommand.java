@@ -120,6 +120,9 @@ public class HeroPerksCommand implements Executable {
 		msg.getChannel().sendMessage("Você selecionou a perk `" + perk + "`, deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							h.getPerks().add(perk);
+							if (perk == Perk.SCHOLAR)
+								h.getInventory().clear();
+
 							KawaiponDAO.saveHero(h);
 
 							s.delete()

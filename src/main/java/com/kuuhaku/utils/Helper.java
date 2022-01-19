@@ -866,7 +866,7 @@ public class Helper {
     }
 
     public static String getSponsors() {
-        List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).collect(Collectors.toList());
+        List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).toList();
         List<Guild> spGuilds = new ArrayList<>();
         for (String sp : sponsors) {
             spGuilds.add(Main.getShiroShards()
@@ -927,8 +927,9 @@ public class Helper {
     }
 
     public static InviteAction createInvite(Guild guild) {
-        if (guild.getDefaultChannel() != null) {
-            return guild.getDefaultChannel().createInvite();
+        TextChannel def = guild.getDefaultChannel();
+        if (def != null && guild.getSelfMember().hasPermission(def, Permission.CREATE_INSTANT_INVITE)) {
+            return def.createInvite();
         }
 
         for (TextChannel tc : guild.getTextChannels()) {
@@ -2018,7 +2019,7 @@ public class Helper {
         return bi;
     }
 
-    public static String getFileType(String url) throws IOException {
+    public static String getFileType(String url) {
         try {
             HttpHead req = new HttpHead(url);
 
@@ -2931,7 +2932,7 @@ public class Helper {
         try {
             List<Constructor<?>> constructors = Arrays.stream(type.getConstructors())
                     .filter(c -> c.getParameterCount() == tuple.length)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (Constructor<?> ctor : constructors) {
                 try {
@@ -3300,16 +3301,15 @@ public class Helper {
     }
 
     public static long getFibonacci(int nth) {
-        if (nth <= 2) return 1;
+        if (nth <= 1) return nth;
 
         return getFibonacci(nth - 1) + getFibonacci(nth - 2);
     }
 
     public static int revFibonacci(int fib) {
-        if (fib < 1) return 1;
-        else if (fib == 1) return 2;
+        if (fib <= 1) return 1;
 
-        return (int) log(fib * Math.sqrt(5), Helper.GOLDEN_RATIO);
+        return (int) Helper.log(fib * Math.sqrt(5) + 0.5, Helper.GOLDEN_RATIO);
     }
 
     public static double getRatio(double w, double h) {
@@ -3329,7 +3329,7 @@ public class Helper {
     @SuppressWarnings("unchecked")
     public static <T extends Cloneable> T clone(T orig) {
         try {
-            return orig != null ? (T) Object.class.getMethod("clone").invoke(orig) : null;
+            return orig != null ? (T) Object.class.getDeclaredMethod("clone").invoke(orig) : null;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             return orig;
         }
