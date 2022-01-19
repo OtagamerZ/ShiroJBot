@@ -615,6 +615,14 @@ public class Champion implements Drawable, Cloneable {
 		this.mDodge = dodge;
 	}
 
+	public void addModDodge(double dodge) {
+		this.mDodge += dodge;
+	}
+
+	public void removeModDodge(double dodge) {
+		this.mDodge -= dodge;
+	}
+
 	public int getBlock() {
 		if (isStasis() || isStunned() || isSleeping()) return 0;
 
