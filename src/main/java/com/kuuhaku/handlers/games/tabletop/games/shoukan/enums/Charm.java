@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public enum Charm {
     SHIELD("Escudo", "Bloqueia %s efeito%s de destruição ou conversão"),
