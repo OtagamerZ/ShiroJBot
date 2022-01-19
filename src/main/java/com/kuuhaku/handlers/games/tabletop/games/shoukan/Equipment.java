@@ -337,8 +337,8 @@ public class Equipment implements Drawable, Cloneable {
 	public int getWeight(Deck d) {
 		return Math.max(
 				switch (d.getCombo().getLeft()) {
-					case MACHINE -> !hasEffect() ? tier - 1 : tier;
-					case MYSTICAL -> hasEffect() ? tier - 1 : tier;
+					case MACHINE -> !isSpell() ? tier - 1 : tier;
+					case MYSTICAL -> isSpell() ? tier - 1 : tier;
 					default -> tier;
 				}, 1);
 	}
@@ -393,6 +393,10 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void setAltDescription(String altDescription) {
 		this.altDescription = altDescription;
+	}
+
+	public boolean isSpell() {
+		return Helper.containsAny(getCharms(), Charm.SPELL, Charm.CURSE);
 	}
 
 	public boolean hasEffect() {
@@ -495,7 +499,7 @@ public class Equipment implements Drawable, Cloneable {
 				if (charms != null)
 					put("charm", new JSONObject() {{
 						put("id", charms);
-						put("image", hasEffect() ? "" : Helper.atob(Charm.getIcon(getCharms()), "png"));
+						put("image", isSpell() ? "" : Helper.atob(Charm.getIcon(getCharms()), "png"));
 					}});
 				put("attack", atk);
 				put("defense", def);

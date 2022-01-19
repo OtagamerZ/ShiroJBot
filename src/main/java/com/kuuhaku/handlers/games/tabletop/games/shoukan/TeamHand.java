@@ -221,9 +221,9 @@ public class TeamHand extends Hand {
 				cards.add(dr);
 
 				if (dr instanceof Equipment e) {
-					if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+					if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
-					else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+					else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 						addHp(250);
 				}
 			}
@@ -261,9 +261,9 @@ public class TeamHand extends Hand {
 				cards.add(dr.copy());
 
 				if (dr instanceof Equipment e) {
-					if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+					if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
-					else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+					else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 						addHp(250);
 				}
 			}
@@ -283,9 +283,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -306,9 +306,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -328,9 +328,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -370,7 +370,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -388,7 +388,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -406,7 +406,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			Drawable dr = getRealDeque().stream().max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
