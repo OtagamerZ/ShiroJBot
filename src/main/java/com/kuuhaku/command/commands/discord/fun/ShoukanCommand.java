@@ -63,7 +63,12 @@ public class ShoukanCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+		MatchMaking mm = Main.getInfo().getMatchMaking();
+
+		if (mm.isLocked()) {
+			channel.sendMessage("❌ | O Shoukan está bloqueado temporariamente para minha reinicialização, por favor aguarde.").queue();
+			return;
+		} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
 			channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 			return;
 		}
@@ -89,12 +94,7 @@ public class ShoukanCommand implements Executable {
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, false, null, author, author);
 			t.start();
 		} else if (ranked) {
-			MatchMaking mm = Main.getInfo().getMatchMaking();
-
-			if (mm.isLocked()) {
-				channel.sendMessage("❌ | A fila ranqueada está bloqueada temporariamente para minha reinicialização, por favor aguarde.").queue();
-				return;
-			} else if (d.isNovice()) {
+			if (d.isNovice()) {
 				channel.sendMessage("❌ | Você não pode jogar partidas ranqueadas com o deck de iniciante.").queue();
 				return;
 			}
