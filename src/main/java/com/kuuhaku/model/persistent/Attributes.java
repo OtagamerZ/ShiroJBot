@@ -168,13 +168,13 @@ public class Attributes {
 	public int calcAtk() {
 		double fac = (1 - Math.exp(-0.017 * str + -0.005 * agi));
 
-		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (5 * fac) * str, 25));
+		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (7.5 * fac) * str, 25));
 	}
 
 	public int calcDef() {
 		double fac = (1 - Math.exp(-0.022 * res + -0.0075 * agi));
 
-		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (5 * fac) * agi, 25));
+		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (7.5 * fac) * agi, 25));
 	}
 
 	public int calcDodge() {
