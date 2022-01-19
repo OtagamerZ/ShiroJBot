@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.entities.*;
 import java.awt.*;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -143,7 +144,7 @@ public class TutorialCommand implements Executable {
 
 			if (stage.get() < 4) {
 				Main.getInfo().getIgnore().add(author.getId());
-				KawaiponCard kc = new KawaiponCard(CardDAO.getCard("QUEEN"), false);
+				KawaiponCard kc = new KawaiponCard(Objects.requireNonNull(CardDAO.getCard("QUEEN")), false);
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 						.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")

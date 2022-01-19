@@ -57,7 +57,7 @@ public class MyBuffsCommand implements Executable, Slashed {
 				.setTitle(":level_slider: Modificadores ativos")
 				.setColor(Helper.getRandomColor());
 
-		boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+		boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 		if (waifu)
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + Helper.roundToString(WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100, 0) + "% XP ganho", false);

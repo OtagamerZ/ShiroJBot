@@ -91,7 +91,7 @@ public class MyStatsCommand implements Executable, Slashed {
 		eb.clear();
 
 		{
-			boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+			boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 			int xp = (int) (15
 							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
