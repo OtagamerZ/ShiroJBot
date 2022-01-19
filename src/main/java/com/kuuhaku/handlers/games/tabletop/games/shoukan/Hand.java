@@ -58,7 +58,8 @@ public class Hand {
 	private final BondedList<Drawable> cards;
 	private final BondedList<Drawable> destinyDeck;
 	private final Hero hero;
-	private Pair<Race, Race> combo;
+	private final Pair<Race, Race> combo;
+	private final double divergence;
 	private int baseHp;
 	private int baseManaPerTurn;
 	private float mitigation = 0;
@@ -83,6 +84,8 @@ public class Hand {
 			this.deque = null;
 			this.cards = null;
 			this.destinyDeck = null;
+			this.combo = null;
+			this.divergence = 0;
 			this.raceCount = null;
 			this.hero = null;
 			return;
@@ -95,6 +98,8 @@ public class Hand {
 		this.deque = new BondedList<>(bonding);
 		this.cards = new BondedList<>(bonding);
 		this.destinyDeck = new BondedList<>(bonding);
+		this.combo = Race.getCombo(dk.getChampions());
+		this.divergence = dk.getAverageDivergence();
 
 		game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
@@ -114,7 +119,7 @@ public class Hand {
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
 						.map(Drawable::copy)
-						.collect(Collectors.toList())
+						.toList()
 		);
 		if (hero != null && hero.getHp() > 0 && hero.getQuest() == null)
 			deque.add(hero.toChampion());
@@ -178,7 +183,6 @@ public class Hand {
 			baseManaPerTurn = 5;
 		}
 
-		combo = Race.getCombo(champs);
 		if (combo.getLeft() == Race.DIVINITY) {
 			for (Drawable d : deque) {
 				if (d instanceof Champion c) {
@@ -308,6 +312,18 @@ public class Hand {
 		}
 	}
 
+	public Drawable drawChampion(int mana) {
+		if (lockTime > 0) return null;
+		try {
+			Drawable dr = getRealDeque().stream().filter(d -> d instanceof Champion c && c.getMana() == mana).findFirst().orElseThrow();
+			getRealDeque().remove(dr);
+			cards.add(dr.copy());
+			return dr;
+		} catch (NoSuchElementException ignore) {
+			return null;
+		}
+	}
+
 	public void manualDrawChampion() {
 		try {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
@@ -320,7 +336,7 @@ public class Hand {
 	public Drawable drawEquipment() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
@@ -332,7 +348,7 @@ public class Hand {
 	public Drawable drawSpell() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
@@ -378,7 +394,7 @@ public class Hand {
 	}
 
 	public void redrawHand() {
-		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
+		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).toList();
 		deque.addAll(notUsed);
 		cards.removeIf(Drawable::isAvailable);
 
@@ -413,17 +429,21 @@ public class Hand {
 		return combo;
 	}
 
+	public double getDivergence() {
+		return divergence;
+	}
+
+	public BondedList<Drawable> getDeque() {
+		if (lockTime > 0) return new BondedList<>(deque.getBonding());
+		else return getRealDeque();
+	}
+
 	public BondedList<Drawable> getRealDeque() {
 		if (deque.isEmpty()) {
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
 		}
 		return deque;
-	}
-
-	public BondedList<Drawable> getDeque() {
-		if (lockTime > 0) return new BondedList<>(deque.getBonding());
-		else return getRealDeque();
 	}
 
 	public BondedList<Drawable> getCards() {

@@ -76,9 +76,6 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
 
-	@Column(columnDefinition = "TEXT")
-	private String finalization = "";
-
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String tags = null;
 
@@ -86,7 +83,7 @@ public class Champion implements Drawable, Cloneable {
 	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn(name = "champion_id")
+	@JoinColumn(nullable = false, name = "champion_id")
 	private Set<String> requiredCards = new HashSet<>();
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -618,6 +615,14 @@ public class Champion implements Drawable, Cloneable {
 		this.mDodge = dodge;
 	}
 
+	public void addModDodge(double dodge) {
+		this.mDodge += dodge;
+	}
+
+	public void removeModDodge(double dodge) {
+		this.mDodge -= dodge;
+	}
+
 	public int getBlock() {
 		if (isStasis() || isStunned() || isSleeping()) return 0;
 
@@ -752,17 +757,6 @@ public class Champion implements Drawable, Cloneable {
 			if (!e.hasEffect()) continue;
 
 			e.getEffect(ep);
-		}
-	}
-
-	public void finalizeEffect(EffectParameters ep) {
-		try {
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", this);
-			gs.evaluate(Helper.getOr(finalization, ""));
-		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
 
