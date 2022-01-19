@@ -336,7 +336,7 @@ public class Hand {
 	public Drawable drawEquipment() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
@@ -348,7 +348,7 @@ public class Hand {
 	public Drawable drawSpell() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;

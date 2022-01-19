@@ -68,7 +68,7 @@ public class EquipHeroCommand implements Executable {
 		} else if (h.getInventory().contains(e)) {
 			channel.sendMessage("❌ | Seu herói já possui esse equipamento!").queue();
 			return;
-		} else if (Helper.containsAny(e.getCharms(), Charm.SPELL, Charm.CURSE)) {
+		} else if (e.isSpell()) {
 			channel.sendMessage("❌ | Você não pode equipar magias!").queue();
 			return;
 		} else if (e.getTier() > h.getStats().calcEvoTierCap()) {
