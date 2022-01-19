@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.Stash;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Objects;
 
 public class StashDAO {
 	@SuppressWarnings("unchecked")
@@ -121,7 +122,7 @@ public class StashDAO {
 		}
 
 		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
-		if (!params[1].isBlank()) q.setParameter("rarity", rarity.name());
+		if (!params[1].isBlank()) q.setParameter("rarity", Objects.requireNonNull(rarity).name());
 		if (!params[2].isBlank()) q.setParameter("anime", "%" + anime + "%");
 		if (!params[3].isBlank()) q.setParameter("foil", foil);
 

@@ -30,7 +30,9 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.records.CompletionState;
+import com.kuuhaku.model.records.MetaData;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -982,9 +984,9 @@ public class CardDAO {
 
 		Query q;
 		if (spell)
-			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NOT NULL AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE (e.charms LIKE '%SPELL%' OR e.charms LIKE '%CURSE%') AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		else
-			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NULL AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE NOT (e.charms LIKE '%SPELL%' OR e.charms LIKE '%CURSE%') AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setMaxResults(1);
 
 		try {
@@ -1001,9 +1003,9 @@ public class CardDAO {
 
 		Query q;
 		if (spell)
-			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NOT NULL AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE (e.charms LIKE '%SPELL%' OR e.charms LIKE '%CURSE%') AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		else
-			q = em.createQuery("SELECT e FROM Equipment e WHERE e.effect IS NULL AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
+			q = em.createQuery("SELECT e FROM Equipment e WHERE NOT (e.charms LIKE '%SPELL%' OR e.charms LIKE '%CURSE%') AND e.tier = :tier AND e.effectOnly = FALSE ORDER BY RANDOM()", Equipment.class);
 		q.setParameter("tier", tier);
 		q.setMaxResults(1);
 
@@ -1079,25 +1081,18 @@ public class CardDAO {
 		}
 	}
 
-	public static double getCategoryMeta(Class cat) {
+	@SuppressWarnings("unchecked")
+	public static Map<Class, Integer> getCategoryMeta() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT SUM(x.total) / COUNT(1) * 0.75
-				FROM (
-						SELECT COUNT(1) AS total
-						     , c.category
-						FROM deck_champion dc
-						         INNER JOIN champion c on c.id = dc.champions_id
-						WHERE (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)
-						GROUP BY dc.deck_id, c.category
-					) x
-				WHERE x.category = :cat
-				""");
-		q.setParameter("cat", cat.name());
+		Query q = em.createNativeQuery("SELECT * FROM \"GetCategoryMeta\"");
 
 		try {
-			return ((Number) q.getSingleResult()).doubleValue();
+			List<MetaData> res = Helper.map(MetaData.class, q.getResultList());
+
+			return res.stream()
+					.map(md -> Pair.of(Class.valueOf(md.id()), md.average()))
+					.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
 		} finally {
 			em.close();
 		}
@@ -1107,18 +1102,15 @@ public class CardDAO {
 	public static List<String> getChampionMeta() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT c.card_id
-				FROM deck_champion dc
-				         INNER JOIN champion c on c.id = dc.champions_id
-				WHERE (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)
-				GROUP BY c.card_id
-				ORDER BY COUNT(1) DESC
-				""");
-		q.setMaxResults(36);
+		Query q = em.createNativeQuery("SELECT * FROM \"GetChampionMeta\"");
 
 		try {
-			return (List<String>) q.getResultList();
+			List<MetaData> res = Helper.map(MetaData.class, q.getResultList());
+
+			return res.stream()
+					.map(md -> Collections.nCopies(md.average(), md.id()))
+					.flatMap(List::stream)
+					.toList();
 		} finally {
 			em.close();
 		}
@@ -1128,17 +1120,15 @@ public class CardDAO {
 	public static List<String> getEquipmentMeta() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT e.card_id
-				FROM deck_equipment de
-				         INNER JOIN equipment e on e.id = de.equipments_id
-				GROUP BY e.card_id
-				ORDER BY COUNT(1) DESC
-				""");
-		q.setMaxResults(24);
+		Query q = em.createNativeQuery("SELECT * FROM \"GetEvogearMeta\"");
 
 		try {
-			return (List<String>) q.getResultList();
+			List<MetaData> res = Helper.map(MetaData.class, q.getResultList());
+
+			return res.stream()
+					.map(md -> Collections.nCopies(md.average(), md.id()))
+					.flatMap(List::stream)
+					.toList();
 		} finally {
 			em.close();
 		}
@@ -1148,40 +1138,38 @@ public class CardDAO {
 	public static List<String> getFieldMeta() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
-				SELECT f.card_id
-				FROM deck_field df
-				         INNER JOIN field f on f.id = df.fields_id
-				GROUP BY f.card_id
-				ORDER BY COUNT(1) DESC
-				""");
-		q.setMaxResults(3);
+		Query q = em.createNativeQuery("SELECT * FROM \"GetFieldMeta\"");
 
 		try {
-			return (List<String>) q.getResultList();
+			List<MetaData> res = Helper.map(MetaData.class, q.getResultList());
+
+			return res.stream()
+					.map(md -> Collections.nCopies(md.average(), md.id()))
+					.flatMap(List::stream)
+					.toList();
 		} finally {
 			em.close();
 		}
 	}
 
-	@SuppressWarnings({"SqlResolve", "unchecked"})
 	public static Deck getMetaDeck() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query champs = em.createNativeQuery("SELECT card_id FROM \"GetChampionMeta\"");
-		Query evos = em.createNativeQuery("SELECT card_id FROM \"GetEvogearMeta\"");
-		Query fields = em.createNativeQuery("SELECT card_id FROM \"GetFieldMeta\"");
+		List<String> champs = getChampionMeta();
+		List<String> evos = getEquipmentMeta();
+		List<String> fields = getFieldMeta();
 
 		try {
 			return new Deck(
-					((List<String>) champs.getResultList()).stream()
+					champs.stream()
 							.map(CardDAO::getChampion)
 							.collect(Collectors.toList()),
-					((List<String>) evos.getResultList()).stream()
+					evos.stream()
 							.map(CardDAO::getEquipment)
 							.collect(Collectors.toList()),
-					((List<String>) fields.getResultList()).stream()
-							.map(CardDAO::getField).collect(Collectors.toList())
+					fields.stream()
+							.map(CardDAO::getField)
+							.collect(Collectors.toList())
 			);
 		} finally {
 			em.close();

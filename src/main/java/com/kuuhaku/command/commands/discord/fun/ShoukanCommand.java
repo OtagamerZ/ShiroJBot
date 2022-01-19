@@ -63,7 +63,12 @@ public class ShoukanCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+		MatchMaking mm = Main.getInfo().getMatchMaking();
+
+		if (mm.isLocked()) {
+			channel.sendMessage("❌ | O Shoukan está bloqueado temporariamente para minha reinicialização, por favor aguarde.").queue();
+			return;
+		} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
 			channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 			return;
 		}
@@ -89,12 +94,7 @@ public class ShoukanCommand implements Executable {
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, false, null, author, author);
 			t.start();
 		} else if (ranked) {
-			MatchMaking mm = Main.getInfo().getMatchMaking();
-
-			if (mm.isLocked()) {
-				channel.sendMessage("❌ | A fila ranqueada está bloqueada temporariamente para minha reinicialização, por favor aguarde.").queue();
-				return;
-			} else if (d.isNovice()) {
+			if (d.isNovice()) {
 				channel.sendMessage("❌ | Você não pode jogar partidas ranqueadas com o deck de iniciante.").queue();
 				return;
 			}
@@ -348,8 +348,7 @@ public class ShoukanCommand implements Executable {
 				for (User player : players) {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
-				int finalBet = bet;
-				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : ""))
+				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (players.contains(wrapper.getUser())) {
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
@@ -371,7 +370,7 @@ public class ShoukanCommand implements Executable {
 										if (accepted.size() == players.size()) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											//Main.getInfo().getGames().put(id, t);
-											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, custom, daily, false, true, null, players.toArray(User[]::new));
+											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, true, null, players.toArray(User[]::new));
 											s.delete().queue(null, Helper::doNothing);
 											t.start();
 										}

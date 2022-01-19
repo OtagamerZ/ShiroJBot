@@ -55,10 +55,12 @@ public class TeamHand extends Hand {
 	private final InfiniteList<BondedList<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
 	private final InfiniteList<Hero> heroes = new InfiniteList<>();
-
+	private final double divergence;
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
 		super(game, null, null, side);
+
+		this.divergence = dks.stream().mapToDouble(Deck::getAverageDivergence).average().orElse(0);
 
 		for (int i = 0; i < users.size(); i++) {
 			Deck dk = dks.get(i);
@@ -219,9 +221,9 @@ public class TeamHand extends Hand {
 				cards.add(dr);
 
 				if (dr instanceof Equipment e) {
-					if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+					if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
-					else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+					else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 						addHp(250);
 				}
 			}
@@ -259,9 +261,9 @@ public class TeamHand extends Hand {
 				cards.add(dr.copy());
 
 				if (dr instanceof Equipment e) {
-					if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+					if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
-					else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+					else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 						addHp(250);
 				}
 			}
@@ -281,9 +283,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -304,9 +306,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -326,9 +328,9 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 
 			if (dr instanceof Equipment e) {
-				if (e.hasEffect() && combo.getLeft() == Race.MYSTICAL)
+				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
-				else if (!e.hasEffect() && combo.getLeft() == Race.MACHINE)
+				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
 
@@ -368,7 +370,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -386,7 +388,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.hasEffect()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -404,7 +406,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.hasEffect()).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			Drawable dr = getRealDeque().stream().max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -449,7 +451,7 @@ public class TeamHand extends Hand {
 		LinkedList<Drawable> deque = getRealDeque();
 		List<Drawable> cards = getCards();
 
-		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
+		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).toList();
 		deque.addAll(notUsed);
 		cards.removeIf(Drawable::isAvailable);
 
@@ -496,6 +498,10 @@ public class TeamHand extends Hand {
 
 	public Pair<Race, Race> getCombo() {
 		return combo;
+	}
+
+	public double getDivergence() {
+		return divergence;
 	}
 
 	public BondedList<Drawable> getDeque() {

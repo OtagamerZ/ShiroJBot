@@ -75,7 +75,7 @@ public class Member implements Hashable {
 	private TrophyType trophy = null;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(nullable = false, name = "member_id")
 	private List<String> warns = new ArrayList<>();
 
 	public Member(String uid, String sid) {
@@ -115,7 +115,7 @@ public class Member implements Hashable {
 	public synchronized boolean addXp(Guild g, double buff) {
 		AtomicReference<Double> mult = new AtomicReference<>(buff);
 
-		boolean waifu = g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(uid));
+		boolean waifu = g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(uid));
 		if (waifu)
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
 

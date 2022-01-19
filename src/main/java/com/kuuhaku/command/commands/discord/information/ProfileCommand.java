@@ -34,6 +34,7 @@ import org.apache.commons.imaging.ImageReadException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 @Command(
 		name = "perfil",
@@ -54,7 +55,7 @@ public class ProfileCommand implements Executable {
 
 		channel.sendMessage(I18n.getString("str_generating-profile")).queue(m -> {
 			try {
-				if (acc.hasAnimatedBg() && Helper.getFileType(acc.getBg()).contains("gif")) {
+				if (acc.hasAnimatedBg() && Objects.requireNonNull(Helper.getFileType(acc.getBg())).contains("gif")) {
 					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(mb, mb.getGuild()));
 					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
 							.addFile(pf, "perfil.gif")

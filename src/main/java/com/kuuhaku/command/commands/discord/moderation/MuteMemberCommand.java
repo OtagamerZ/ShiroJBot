@@ -79,7 +79,7 @@ public class MuteMemberCommand implements Executable {
 		List<String> params = Arrays.stream(argsAsText.split("([0-9]+[dhms])+"))
 				.filter(s -> !s.isBlank())
 				.map(String::trim)
-				.collect(Collectors.toList());
+				.toList();
 		if (params.size() < 2) {
 			channel.sendMessage("❌ | Você precisa informar um tempo.").queue();
 			return;

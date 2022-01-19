@@ -43,7 +43,12 @@ import java.util.concurrent.TimeUnit;
 		aliases = {"undelete", "desdeletar"},
 		category = Category.INFO
 )
-@Requires({Permission.MESSAGE_HISTORY})
+@Requires({
+		Permission.MESSAGE_HISTORY,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_EXT_EMOJI
+})
 public class SnipeCommand implements Executable {
 
 	@Override

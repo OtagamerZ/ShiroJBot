@@ -71,9 +71,6 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
 
-	@Column(columnDefinition = "TEXT")
-	private String finalization = "";
-
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tier;
 
@@ -340,8 +337,8 @@ public class Equipment implements Drawable, Cloneable {
 	public int getWeight(Deck d) {
 		return Math.max(
 				switch (d.getCombo().getLeft()) {
-					case MACHINE -> !hasEffect() ? tier - 1 : tier;
-					case MYSTICAL -> hasEffect() ? tier - 1 : tier;
+					case MACHINE -> !isSpell() ? tier - 1 : tier;
+					case MYSTICAL -> isSpell() ? tier - 1 : tier;
 					default -> tier;
 				}, 1);
 	}
@@ -398,6 +395,10 @@ public class Equipment implements Drawable, Cloneable {
 		this.altDescription = altDescription;
 	}
 
+	public boolean isSpell() {
+		return Helper.containsAny(getCharms(), Charm.SPELL, Charm.CURSE);
+	}
+
 	public boolean hasEffect() {
 		return Helper.getOr(altEffect, effect) != null;
 	}
@@ -435,17 +436,6 @@ public class Equipment implements Drawable, Cloneable {
 			gs.setVariable("enemyPos", enemyPos);
 			gs.setVariable("self", this);
 			gs.evaluate(Helper.getOr(altEffect, effect));
-		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
-		}
-	}
-
-	public void finalizeEffect(EffectParameters ep) {
-		try {
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", this);
-			gs.evaluate(Helper.getOr(finalization, ""));
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
@@ -509,7 +499,7 @@ public class Equipment implements Drawable, Cloneable {
 				if (charms != null)
 					put("charm", new JSONObject() {{
 						put("id", charms);
-						put("image", hasEffect() ? "" : Helper.atob(Charm.getIcon(getCharms()), "png"));
+						put("image", isSpell() ? "" : Helper.atob(Charm.getIcon(getCharms()), "png"));
 					}});
 				put("attack", atk);
 				put("defense", def);

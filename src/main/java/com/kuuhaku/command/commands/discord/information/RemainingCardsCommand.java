@@ -79,7 +79,7 @@ public class RemainingCardsCommand implements Executable {
 				.filter(c -> !c.isFoil())
 				.map(KawaiponCard::getCard)
 				.filter(c -> c.getAnime().equals(anime))
-				.collect(Collectors.toList());
+				.toList();
 		List<Card> cards = CardDAO.getCardsByAnime(anime.getName());
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())

@@ -37,21 +37,21 @@ public class Kawaipon implements Cloneable {
 	private String uid = "";
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "kawaipon_id")
+	@JoinColumn(nullable = false, name = "kawaipon_id")
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int activeDeck = 0;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "kawaipon_id")
+	@JoinColumn(nullable = false, name = "kawaipon_id")
 	private List<Deck> decks = new ArrayList<>();
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int activeHero = 0;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "kawaipon_id")
+	@JoinColumn(nullable = false, name = "kawaipon_id")
 	private List<Hero> heroes = new ArrayList<>();
 
 	public Kawaipon() {
