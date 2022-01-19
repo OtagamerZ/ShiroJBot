@@ -168,7 +168,7 @@ public class Deck {
 
 	public boolean hasInvalidEquipmentCopyCount() {
 		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c))
-			   || equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(4);
+				|| equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(4);
 	}
 
 	public boolean hasTierFour() {
@@ -557,34 +557,34 @@ public class Deck {
 		}
 
 		return """
-					   __**:crossed_swords: | Cartas Senshi:** %s__
-					   					   					   				
-					   :large_orange_diamond: | Efeito primário: %s (%s)
-					   :small_orange_diamond: | Efeito secundário: %s (%s)
-					   :shield: | Peso evogear: %s
-					   :thermometer: | Custo médio de mana: %s
-					   :recycle: | Divergência do meta: %s/%s/%s (%s)
-					   					   					   				
-					   """
-					   .formatted(
-							   champions.size(),
-							   combo.getLeft(), combo.getLeft().getMajorDesc(),
-							   combo.getRight(), combo.getRight().getMinorDesc(),
-							   getEvoWeight(),
-							   Helper.round(getAverageCost(), 2),
-							   Helper.roundToString(divs[0] * 100, 1),
-							   Helper.roundToString(divs[1] * 100, 1),
-							   Helper.roundToString(divs[2] * 100, 1),
-							   Helper.roundToString(getAverageDivergence() * 100, 1) + "%"
-					   ) + """
-					   __**:abacus: | Classes**__
-					   **Duelista:** %s carta%s
-					   **Tanque:** %s carta%s
-					   **Suporte:** %s carta%s
-					   **Nuker:** %s carta%s
-					   **Armadilha:** %s carta%s
-					   **Nivelador:** %s carta%s
-					   **Especialista:** %s carta%s
-					   """.formatted((Object[]) data);
+				__**:crossed_swords: | Cartas Senshi:** %s__
+
+				:large_orange_diamond: | Efeito primário: %s (%s)
+				:small_orange_diamond: | Efeito secundário: %s (%s)
+				:shield: | Peso evogear: %s
+				:thermometer: | Custo médio de mana: %s
+				:recycle: | Divergência do meta: %s/%s/%s (%s)
+
+				"""
+				.formatted(
+						champions.size(),
+						combo.getLeft(), combo.getLeft().getMajorDesc(),
+						combo.getRight(), combo.getRight().getMinorDesc(),
+						getEvoWeight(),
+						Helper.round(getAverageCost(), 2),
+						Helper.roundToString(divs[0] * 100, 1),
+						Helper.roundToString(divs[1] * 100, 1),
+						Helper.roundToString(divs[2] * 100, 1),
+						Helper.roundToString(getAverageDivergence() * 100, 1) + "%"
+				) + """
+				__**:abacus: | Classes**__
+				**Duelista:** %s carta%s
+				**Tanque:** %s carta%s
+				**Suporte:** %s carta%s
+				**Nuker:** %s carta%s
+				**Armadilha:** %s carta%s
+				**Nivelador:** %s carta%s
+				**Especialista:** %s carta%s
+				""".formatted((Object[]) data);
 	}
 }

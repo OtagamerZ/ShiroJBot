@@ -451,7 +451,7 @@ public class TeamHand extends Hand {
 		LinkedList<Drawable> deque = getRealDeque();
 		List<Drawable> cards = getCards();
 
-		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
+		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).toList();
 		deque.addAll(notUsed);
 		cards.removeIf(Drawable::isAvailable);
 

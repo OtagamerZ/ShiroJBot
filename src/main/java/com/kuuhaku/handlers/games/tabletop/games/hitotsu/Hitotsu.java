@@ -117,7 +117,7 @@ public class Hitotsu extends Game {
 					Collections.shuffle(l);
 					return l.stream().limit(25);
 				})
-				.collect(Collectors.toList());
+				.toList();
 
 		deque.addAll(inGame);
 		if (deque.size() < 100) {
@@ -183,7 +183,7 @@ public class Hitotsu extends Game {
 			}
 
 			int finalLowest = lowest;
-			List<Hand> winners = seats.values().stream().filter(h -> h.getCards().size() <= finalLowest).collect(Collectors.toList());
+			List<Hand> winners = seats.values().stream().filter(h -> h.getCards().size() <= finalLowest).toList();
 
 			if (winners.size() == 1) {
 				Hand h = winners.get(0);
