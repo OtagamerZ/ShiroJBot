@@ -414,13 +414,9 @@ public class Arena {
 		g2d.drawImage(arena, 0, 370, null);
 		for (int i = 0; i < hs.size(); i++) {
 			BufferedImage h = hs.get(i).render();
-			g2d.drawImage(h,
-					bi.getWidth() / 2 - h.getWidth() / 2,
-					i == 0 ? 370 + arena.getHeight() + 10 : 10,
-					bi.getWidth(),
-					h.getHeight(),
-					null
-			);
+			h = Helper.scaleAndCenterImage(h, bi.getWidth(), h.getHeight());
+
+			g2d.drawImage(h, bi.getWidth() / 2 - h.getWidth() / 2, i == 0 ? 370 + arena.getHeight() + 10 : 10, null);
 		}
 		g2d.dispose();
 
