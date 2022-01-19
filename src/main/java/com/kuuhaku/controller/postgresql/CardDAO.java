@@ -1085,7 +1085,7 @@ public class CardDAO {
 	public static Map<Class, Integer> getCategoryMeta() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT * FROM \"GetChampionMeta\"");
+		Query q = em.createNativeQuery("SELECT * FROM \"GetCategoryMeta\"");
 
 		try {
 			List<MetaData> res = Helper.map(MetaData.class, q.getResultList());
