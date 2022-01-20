@@ -48,19 +48,26 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setTop(Champion top) {
-		Champion curr = this.top;
-		if (curr != null) {
-			if (curr.hasEffect())
-				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
-
-			for (CardLink link : List.copyOf(curr.getLinkedTo())) {
-				curr.unlink(link.asEquipment());
-			}
-		}
-
 		if (top != null) {
 			top.setIndex(index);
 			top.bind(hand);
+		}
+
+		Champion curr = this.top;
+		if (curr != null) {
+			if (top == null) {
+				if (curr.hasEffect())
+					curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+
+				for (CardLink link : List.copyOf(curr.getLinkedTo())) {
+					curr.unlink(link.asEquipment());
+				}
+			} else {
+				for (CardLink link : List.copyOf(curr.getLinkedTo())) {
+					curr.unlink(link.asEquipment());
+					top.link(link.asEquipment());
+				}
+			}
 		}
 
 		this.top = top;
@@ -71,6 +78,11 @@ public class SlotColumn implements Cloneable {
 	}
 
 	public void setBottom(Equipment bottom) {
+		if (bottom != null) {
+			bottom.setIndex(index);
+			bottom.bind(hand);
+		}
+
 		Equipment curr = this.bottom;
 		if (curr != null) {
 			if (curr.hasEffect())
@@ -78,11 +90,6 @@ public class SlotColumn implements Cloneable {
 
 			if (curr.getLinkedTo() != null)
 				curr.getLinkedTo().asChampion().unlink(curr);
-		}
-
-		if (bottom != null) {
-			bottom.setIndex(index);
-			bottom.bind(hand);
 		}
 
 		this.bottom = bottom;
