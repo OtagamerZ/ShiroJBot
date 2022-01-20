@@ -192,6 +192,7 @@ public class AuctionCommand implements Executable {
 								highest.set(Pair.of(evt.getAuthor(), offer));
 								phase.set(1);
 
+								Main.getInfo().getConfirmationPending().put(author.getId(), true);
 								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " CR**!").queue();
 
 								event.get().cancel(true);
@@ -232,7 +233,6 @@ public class AuctionCommand implements Executable {
 											AccountDAO.saveAccount(acc);
 											AccountDAO.saveAccount(bacc);
 										}
-
 
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										close();
