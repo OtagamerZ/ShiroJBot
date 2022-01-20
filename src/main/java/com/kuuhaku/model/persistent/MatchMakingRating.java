@@ -142,7 +142,7 @@ public class MatchMakingRating {
 
 			if (promWins + promLosses == tier.getMd()) {
 				tier = tier.getNext();
-				rankPoints = (int) (50 * Helper.prcnt(promWins, tier.getMd()));
+				rankPoints = (int) Math.min(50 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
