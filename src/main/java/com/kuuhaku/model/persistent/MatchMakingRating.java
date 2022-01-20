@@ -141,8 +141,8 @@ public class MatchMakingRating {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
+				rankPoints = (int) Math.min(75 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				tier = tier.getNext();
-				rankPoints = (int) Math.min(50 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
@@ -202,8 +202,8 @@ public class MatchMakingRating {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
+				rankPoints = (int) Math.min(75 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				tier = tier.getNext();
-				rankPoints = (int) (50 * Helper.prcnt(promWins, tier.getMd()));
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
