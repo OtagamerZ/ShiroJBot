@@ -128,7 +128,7 @@ public class MatchMakingRating {
 	}
 
 	public int getRankPoints() {
-		return rankPoints;
+		return Math.min(rankPoints, tier.getPromRP());
 	}
 
 	public void increaseRankPoints(long opMMR) {
