@@ -128,7 +128,7 @@ public class MatchMakingRating {
 	}
 
 	public int getRankPoints() {
-		return rankPoints;
+		return Math.min(rankPoints, tier.getPromRP());
 	}
 
 	public void increaseRankPoints(long opMMR) {
@@ -141,8 +141,8 @@ public class MatchMakingRating {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
+				rankPoints = (int) Math.min(75 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				tier = tier.getNext();
-				rankPoints = (int) (50 * Helper.prcnt(promWins, tier.getMd()));
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
@@ -152,7 +152,7 @@ public class MatchMakingRating {
 				return;
 			}
 			return;
-		} else if (rankPoints == tier.getPromRP()) {
+		} else if (rankPoints >= tier.getPromRP()) {
 			promWins++;
 
 			if (promWins > tier.getMd() / 2f) {
@@ -202,8 +202,8 @@ public class MatchMakingRating {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
+				rankPoints = (int) Math.min(75 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				tier = tier.getNext();
-				rankPoints = (int) (50 * Helper.prcnt(promWins, tier.getMd()));
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
@@ -212,7 +212,7 @@ public class MatchMakingRating {
 						.queue(null, Helper::doNothing);
 			}
 			return;
-		} else if (rankPoints == tier.getPromRP()) {
+		} else if (rankPoints >= tier.getPromRP()) {
 			promLosses++;
 
 			if (promLosses > tier.getMd() / 2f) {
