@@ -196,6 +196,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return cmdManager;
 	}
 
+	public static void setCommandManager(CommandManager manager) {
+		Main.cmdManager = manager;
+	}
+
 	public static TwitchCommandManager getTwitchCommandManager() {
 		return tCmdManager;
 	}
