@@ -33,6 +33,7 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
+import org.intellij.lang.annotations.Language;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -479,7 +480,7 @@ public class Equipment implements Drawable, Cloneable {
 			e.index = new AtomicInteger(-2);
 			e.bonus = bonus.clone();
 			if (linkedTo != null)
-				e.linkedTo = new CardLink(linkedTo.index(), linkedTo.linked(), e);
+				e.linkedTo = new CardLink(new AtomicInteger(linkedTo.getIndex()), linkedTo.linked(), e);
 			return e;
 		} catch (CloneNotSupportedException e) {
 			return null;

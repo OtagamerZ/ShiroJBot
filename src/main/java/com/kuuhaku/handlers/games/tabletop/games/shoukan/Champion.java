@@ -1086,7 +1086,15 @@ public class Champion implements Drawable, Cloneable {
 	public Champion deepCopy() {
 		try {
 			Champion c = (Champion) super.clone();
-			c.linkedTo = linkedTo = SetUniqueList.setUniqueList(new ArrayList<>(linkedTo));
+			c.linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
+			for (CardLink cl : linkedTo) {
+				c.linkedTo.add(new CardLink(
+						new AtomicInteger(cl.getIndex()),
+						c,
+						cl.self()
+				));
+			}
+
 			c.bonus = bonus.clone();
 			if (nemesis != null) {
 				c.nemesis = nemesis.deepCopy();

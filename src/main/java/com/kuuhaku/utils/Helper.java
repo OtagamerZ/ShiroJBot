@@ -150,7 +150,7 @@ import java.util.zip.GZIPOutputStream;
 
 import static net.dv8tion.jda.api.Permission.*;
 
-public class Helper {
+public abstract class Helper {
     public static final String VOID = "\u200B";
     public static final String CANCEL = "❎";
     public static final String ACCEPT = "✅";

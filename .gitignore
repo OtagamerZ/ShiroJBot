@@ -61,17 +61,12 @@ hs_err_pid*
 .idea/modules.xml
 .idea/*.iml
 .idea/modules
-*.iml
-*.ipr
 
 # CMake
 cmake-build-*/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
-
-# File-based project format
-*.iws
 
 # IntelliJ
 out/
@@ -116,6 +111,9 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Unit tests
+**/test/
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
