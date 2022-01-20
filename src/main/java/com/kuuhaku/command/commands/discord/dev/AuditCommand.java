@@ -27,6 +27,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
@@ -49,6 +50,9 @@ import java.util.concurrent.TimeUnit;
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION
+})
+@Signature({
+		"<tipo:WORD:R> <ID:NUMBER:R>"
 })
 public class AuditCommand implements Executable {
 
