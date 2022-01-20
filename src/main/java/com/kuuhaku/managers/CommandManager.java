@@ -22,10 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.annotations.SlashCommand;
-import com.kuuhaku.model.annotations.SlashGroup;
+import com.kuuhaku.model.annotations.*;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.records.SlashParam;
 import com.kuuhaku.utils.Helper;
@@ -225,5 +222,12 @@ public class CommandManager {
 
 		Main.getDefaultShard().updateCommands().addCommands(cds).complete();
 		Helper.logger(this.getClass()).info(slashes.values().stream().mapToLong(Set::size).sum() + " comandos Slash registrados.");
+	}
+
+	public String[] getCommandSignature(Class<?> klass) {
+		Signature sig = klass.getDeclaredAnnotation(Signature.class);
+		if (sig == null) return new String[0];
+
+		return sig.value();
 	}
 }
