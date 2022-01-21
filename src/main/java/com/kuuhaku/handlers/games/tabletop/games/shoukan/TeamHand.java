@@ -61,6 +61,19 @@ public class TeamHand extends Hand {
 		super(game, null, null, side);
 
 		this.divergence = dks.stream().mapToDouble(Deck::getAverageDivergence).average().orElse(0);
+		raceCount = dks.stream()
+				.flatMap(kp -> kp.getChampions().stream())
+				.collect(Collectors.groupingBy(Champion::getRace, Collectors.counting()));
+
+		combo = Race.getCombo(dks.stream()
+				.flatMap(kp -> kp.getChampions().stream())
+				.collect(Collectors.toList()));
+		setMitigation(combo.getRight() == Race.HUMAN
+				? decks.stream()
+				.flatMap(List::stream)
+				.filter(d -> d instanceof Champion c && c.getMana() <= 2)
+				.count() * 0.005f : 0
+		);
 
 		for (int i = 0; i < users.size(); i++) {
 			Deck dk = dks.get(i);
@@ -145,13 +158,6 @@ public class TeamHand extends Hand {
 			this.cards.add(new BondedList<>(bonding));
 		}
 
-		raceCount = dks.stream()
-				.flatMap(kp -> kp.getChampions().stream())
-				.collect(Collectors.groupingBy(Champion::getRace, Collectors.counting()));
-
-		combo = Race.getCombo(dks.stream()
-				.flatMap(kp -> kp.getChampions().stream())
-				.collect(Collectors.toList()));
 		if (combo.getLeft() == Race.DIVINITY) {
 			for (LinkedList<Drawable> deque : decks) {
 				for (Drawable d : deque) {
@@ -197,12 +203,6 @@ public class TeamHand extends Hand {
 		setMaxCards(Math.max(maxCards
 							 + (combo.getLeft() == Race.CREATURE ? 2 : combo.getLeft() == Race.HUMAN ? 3 : 0)
 							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
-		);
-		setMitigation(combo.getRight() == Race.HUMAN
-				? decks.stream()
-						  .flatMap(List::stream)
-						  .filter(d -> d instanceof Champion c && c.getMana() <= 2)
-						  .count() * 0.005f : 0
 		);
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
