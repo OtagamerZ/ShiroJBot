@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.information;
+package com.kuuhaku.command.commands.discord.moderation;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "snipe",
 		aliases = {"undelete", "desdeletar"},
-		category = Category.INFO
+		category = Category.MODERATION
 )
 @Requires({
 		Permission.MESSAGE_HISTORY,

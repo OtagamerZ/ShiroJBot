@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
+import com.kuuhaku.controller.postgresql.RaidDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
@@ -133,6 +134,11 @@ public class UserInfoCommand implements Executable, Slashed {
             eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.dateFormat) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeBoosted().toEpochSecond()) + ")", true);
         else
             eb.addBlankField(true);
+
+        int raids = RaidDAO.getUserRaids(m.getId());
+        if (raids > 0) {
+            eb.addField(":warning: | ALERTA | :warning:", "Este usuário foi banido " + raids + (raids == 1 ? " vez " : " vezes ") + "pelo sistema R.A.ID.", false);
+        }
 
         List<String> roles = m.getRoles().stream().map(Role::getAsMention).collect(Collectors.toList());
         int x = 0;

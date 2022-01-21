@@ -34,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
+import java.util.HashSet;
 
 @Command(
         name = "semraid",
@@ -89,7 +90,7 @@ public class AntiraidCommand implements Executable {
                             .queue(null, Helper::doNothing);
                 }
 
-                Main.getInfo().getAntiRaidStreak().put(guild.getId(), Pair.of(System.currentTimeMillis(), 0));
+                Main.getInfo().getAntiRaidStreak().put(guild.getId(), Pair.of(System.currentTimeMillis(), new HashSet<>()));
 
                 for (TextChannel tc : guild.getTextChannels()) {
                     if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
