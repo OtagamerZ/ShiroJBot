@@ -24,7 +24,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "raid")
+@Table(name = "raidinfo")
 public class RaidInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
