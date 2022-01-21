@@ -325,7 +325,7 @@ public class BuyCardCommand implements Executable {
 			m.setBuyer(author.getId());
 			MarketDAO.saveCard(m);
 
-			channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
+			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` retirada com sucesso!").queue();
 		}
 	}
 }
