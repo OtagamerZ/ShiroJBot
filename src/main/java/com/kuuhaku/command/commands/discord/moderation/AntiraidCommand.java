@@ -26,6 +26,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.records.RaidData;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -90,7 +91,7 @@ public class AntiraidCommand implements Executable {
                             .queue(null, Helper::doNothing);
                 }
 
-                Main.getInfo().getAntiRaidStreak().put(guild.getId(), Pair.of(System.currentTimeMillis(), new HashSet<>()));
+                Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), new HashSet<>()));
 
                 for (TextChannel tc : guild.getTextChannels()) {
                     if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
