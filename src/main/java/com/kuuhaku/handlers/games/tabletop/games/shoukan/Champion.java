@@ -33,7 +33,6 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.UniqueList;
 import groovy.lang.GroovyShell;
-import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -1035,7 +1034,7 @@ public class Champion implements Drawable, Cloneable {
 		flipped = false;
 		available = true;
 		defending = false;
-		linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
+		linkedTo = new UniqueList<>(CardLink::getIndex);
 		bonus = new Bonus();
 		fakeCard = null;
 		nemesis = null;
@@ -1073,7 +1072,7 @@ public class Champion implements Drawable, Cloneable {
 	public Champion copy() {
 		try {
 			Champion c = (Champion) super.clone();
-			c.linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
+			c.linkedTo = new UniqueList<>(CardLink::getIndex);
 			c.bonus = bonus.clone();
 			c.nemesis = null;
 			c.onDuelEnd = null;
@@ -1087,7 +1086,7 @@ public class Champion implements Drawable, Cloneable {
 	public Champion deepCopy() {
 		try {
 			Champion c = (Champion) super.clone();
-			c.linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
+			c.linkedTo = new UniqueList<>(CardLink::getIndex);
 			for (CardLink cl : linkedTo) {
 				c.linkedTo.add(new CardLink(
 						new AtomicInteger(cl.getIndex()),
