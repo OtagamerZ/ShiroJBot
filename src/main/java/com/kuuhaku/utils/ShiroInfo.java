@@ -21,6 +21,7 @@ package com.kuuhaku.utils;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
+import com.kuuhaku.controller.postgresql.RaidDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
@@ -33,7 +34,10 @@ import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.RaidInfo;
+import com.kuuhaku.model.persistent.RaidMember;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.records.RaidData;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -148,15 +152,17 @@ public class ShiroInfo {
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
 	private final Set<String> ignore = new HashSet<>();
-	private final ConcurrentMap<String, Pair<Long, Integer>> antiRaidStreak = ExpiringMap.builder()
+	private final ConcurrentMap<String, RaidData> antiRaidStreak = ExpiringMap.builder()
 			.expirationListener((k, v) -> {
 				Guild guild = Main.getShiroShards().getGuildById((String) k);
 				if (guild == null) return;
 
-				@SuppressWarnings("unchecked")
-				Pair<Long, Integer> p = (Pair<Long, Integer>) v;
+				RaidData data = (RaidData) v;
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 				TextChannel chn = gc.getGeneralChannel();
+
+				long duration = System.currentTimeMillis() - data.start();
+				Set<String> ids = data.ids();
 				if (chn != null) {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(Color.green)
@@ -166,7 +172,9 @@ public class ShiroInfo {
 									          
 									Duração da raid: %s
 									Usuários banidos: %s
-									""".formatted(Helper.toStringDuration(System.currentTimeMillis() - p.getLeft()), p.getRight())
+									
+									O relatório completo pode ser encontrado no comando `raids`.
+									""".formatted(Helper.toStringDuration(duration), ids.size())
 							);
 
 					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
@@ -177,6 +185,12 @@ public class ShiroInfo {
 						tc.getManager().setSlowmode(0).queue(null, Helper::doNothing);
 					}
 				}
+
+				RaidInfo info = new RaidInfo(guild.getId(), duration);
+				for (String id : ids) {
+					info.getMembers().add(new RaidMember(id, guild.getId()));
+				}
+				RaidDAO.saveInfo(info);
 			})
 			.expirationPolicy(ExpirationPolicy.ACCESSED)
 			.expiration(10, TimeUnit.SECONDS)
@@ -353,7 +367,7 @@ public class ShiroInfo {
 		return ignore;
 	}
 
-	public ConcurrentMap<String, Pair<Long, Integer>> getAntiRaidStreak() {
+	public ConcurrentMap<String, RaidData> getAntiRaidStreak() {
 		return antiRaidStreak;
 	}
 
