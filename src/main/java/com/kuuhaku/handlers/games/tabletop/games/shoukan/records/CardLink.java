@@ -7,7 +7,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.utils.Helper;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
@@ -65,18 +64,5 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 		} else {
 			((Equipment) linked).link((Champion) self);
 		}
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (isFake()) return false;
-		if (o == null || getClass() != o.getClass()) return false;
-		CardLink cardLink = (CardLink) o;
-		return getIndex() == cardLink.getIndex();
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(index, linked);
 	}
 }
