@@ -20,54 +20,49 @@ package com.kuuhaku.utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.function.Consumer;
+import java.util.Objects;
+import java.util.function.Function;
 
-public class BondedList<T> extends LinkedList<T> {
-	private final Consumer<T> bonding;
+public class UniqueList<T> extends ArrayList<T> {
+	private final Function<T, ?> checker;
 
-	public BondedList(Consumer<T> bonding) {
-		this.bonding = bonding;
+	public UniqueList(Function<T, ?> checker) {
+		this.checker = checker;
 	}
 
-	public BondedList(@NotNull Collection<? extends T> c, Consumer<T> bonding) {
-		super(c);
-		this.bonding = bonding;
+	public UniqueList(@NotNull Collection<? extends T> c, Function<T, ?> checker) {
+		addAll(c);
+		this.checker = checker;
 	}
 
-	public Consumer<T> getBonding() {
-		return bonding;
+	public Function<T, ?> getChecker() {
+		return checker;
 	}
 
-	@Override
-	public void addFirst(T t) {
-		bonding.accept(t);
-		super.addFirst(t);
-	}
-
-	@Override
-	public void addLast(T t) {
-		bonding.accept(t);
-		super.addLast(t);
+	private boolean check(T a, T b) {
+		return Objects.equals(checker.apply(a), checker.apply(b));
 	}
 
 	@Override
 	public boolean add(T t) {
-		bonding.accept(t);
+		if (stream().anyMatch(v -> check(v, t))) return false;
+
 		return super.add(t);
 	}
 
 	@Override
 	public void add(int index, T element) {
-		bonding.accept(element);
+		if (stream().anyMatch(v -> check(v, element))) return;
+
 		super.add(index, element);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
 		for (T t : c) {
-			bonding.accept(t);
+			add(t);
 		}
 
 		return super.addAll(c);
@@ -76,7 +71,7 @@ public class BondedList<T> extends LinkedList<T> {
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
 		for (T t : c) {
-			bonding.accept(t);
+			add(index, t);
 		}
 
 		return super.addAll(index, c);

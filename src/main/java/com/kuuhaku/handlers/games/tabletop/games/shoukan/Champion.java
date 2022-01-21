@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.UniqueList;
 import groovy.lang.GroovyShell;
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
@@ -96,7 +97,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient Champion fakeCard = null;
 	private transient Champion nemesis = null;
 	private transient BiConsumer<Side, Shoukan> onDuelEnd = null;
-	private transient SetUniqueList<CardLink> linkedTo = SetUniqueList.setUniqueList(new ArrayList<>());
+	private transient List<CardLink> linkedTo = new UniqueList<>(CardLink::getIndex);
 	private transient AtomicInteger index = new AtomicInteger(-2);
 
 	private transient String altDescription = null;
