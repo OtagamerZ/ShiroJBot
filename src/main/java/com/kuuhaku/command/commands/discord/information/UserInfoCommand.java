@@ -135,11 +135,6 @@ public class UserInfoCommand implements Executable, Slashed {
         else
             eb.addBlankField(true);
 
-        int raids = RaidDAO.getUserRaids(m.getId());
-        if (raids > 0) {
-            eb.addField(":warning: | ALERTA | :warning:", "Este usuário foi banido " + raids + (raids == 1 ? " vez " : " vezes ") + "pelo sistema R.A.ID.", false);
-        }
-
         List<String> roles = m.getRoles().stream().map(Role::getAsMention).collect(Collectors.toList());
         int x = 0;
         while (String.join(" ").length() > 1000) {
@@ -149,6 +144,11 @@ public class UserInfoCommand implements Executable, Slashed {
 
         if (!m.getRoles().isEmpty())
             eb.addField(":beginner: | Cargos", x > 0 ? String.join(" ") + "... e mais xx cargos" : String.join(" "), false);
+
+        int raids = RaidDAO.getUserRaids(m.getId());
+        if (raids > 0) {
+            eb.addField(":warning: | ALERTA | :warning:", "Este usuário foi banido " + raids + (raids == 1 ? " vez " : " vezes ") + "pelo sistema R.A.ID.", false);
+        }
 
         channel.sendMessageEmbeds(eb.build()).queue();
     }
