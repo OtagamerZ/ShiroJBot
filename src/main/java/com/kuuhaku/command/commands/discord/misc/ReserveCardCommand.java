@@ -269,7 +269,7 @@ public class ReserveCardCommand implements Executable {
 					Helper::doNothing
 			);
 
-			channel.sendMessage("✅ | Carta comprada e reservada com sucesso!").queue();
+			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` comprada e reservada com sucesso!").queue();
 		} else {
 			StashDAO.saveCard(switch (m.getType()) {
 				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());

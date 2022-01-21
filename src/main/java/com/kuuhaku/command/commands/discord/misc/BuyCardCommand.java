@@ -283,7 +283,7 @@ public class BuyCardCommand implements Executable {
 					Helper::doNothing
 			);
 
-			channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
+			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` comprada com sucesso!").queue();
 		} else {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (m.getType()) {
