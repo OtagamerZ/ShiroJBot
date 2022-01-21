@@ -100,6 +100,13 @@ public class Hand {
 		this.destinyDeck = new BondedList<>(bonding);
 		this.combo = Race.getCombo(dk.getChampions());
 		this.divergence = dk.getAverageDivergence();
+		this.mitigation = Math.min(
+				combo.getRight() == Race.HUMAN
+						? deque.stream()
+						.filter(d -> d instanceof Champion c && c.getMana() <= 2)
+						.count() * 0.01f
+						: 0, 0.5f
+		);
 
 		game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
@@ -213,13 +220,6 @@ public class Hand {
 
 		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
 		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
-		this.mitigation = Math.min(
-				combo.getRight() == Race.HUMAN
-						? deque.stream()
-								  .filter(d -> d instanceof Champion c && c.getMana() <= 2)
-								  .count() * 0.01f
-						: 0, 0.5f
-		);
 		this.maxCards = Math.max(maxCards
 								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
 								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
