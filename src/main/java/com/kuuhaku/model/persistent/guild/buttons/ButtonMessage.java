@@ -105,7 +105,7 @@ public class ButtonMessage {
 	}
 
 	public void removeButton(Button btn) {
-		btn.setParent(null);
+		buttons.remove(btn);
 	}
 
 	@Override
