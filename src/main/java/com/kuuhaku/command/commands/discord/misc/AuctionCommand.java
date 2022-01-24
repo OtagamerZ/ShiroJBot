@@ -132,19 +132,15 @@ public class AuctionCommand implements Executable {
 		}
 
 		try {
-			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 			int price = Integer.parseInt(args[2]);
 			int min = switch (type) {
-				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
-				case 2 -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
-				default -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
+				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+				case 2 -> Helper.BASE_EQUIPMENT_PRICE / 2;
+				default -> Helper.BASE_FIELD_PRICE / 2;
 			};
 
 			if (price < min) {
-				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
-				else
-					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
+				channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
 				return;
 			}
 

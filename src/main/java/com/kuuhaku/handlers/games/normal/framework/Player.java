@@ -21,13 +21,11 @@ package com.kuuhaku.handlers.games.normal.framework;
 public class Player {
 	private final String id;
 	private final long bet;
-	private final boolean hasLoan;
 	private boolean inGame = true;
 
-	public Player(String id, long bet, boolean hasLoan) {
+	public Player(String id, long bet) {
 		this.id = id;
-		this.bet = hasLoan ? bet / 2 : bet;
-		this.hasLoan = hasLoan;
+		this.bet = bet;
 	}
 
 	public String getId() {
@@ -36,10 +34,6 @@ public class Player {
 
 	public long getBet() {
 		return bet;
-	}
-
-	public boolean hasLoan() {
-		return hasLoan;
 	}
 
 	public boolean isInGame() {

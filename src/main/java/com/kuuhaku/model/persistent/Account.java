@@ -62,9 +62,6 @@ public class Account {
 	private long sBalance = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long loan = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long spent = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -84,9 +81,6 @@ public class Account {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tutorialStage = 0;
-
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int interest = 0;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
@@ -175,47 +169,16 @@ public class Account {
 		return spent;
 	}
 
-	public long getLoan() {
-		return loan;
-	}
-
-	public void addLoan(int loan) {
-		addCredit(loan, this.getClass());
-		this.loan += Math.ceil(loan * 1.03);
-		interest = 3;
-	}
-
-	public void calcInterest() {
-		if (!Helper.between(interest, 3, 100)) return;
-
-		loan += Math.ceil(loan * 1.03);
-		interest += 3;
-	}
-
 	public void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
-		else if (loan > 0) {
-			TransactionDAO.register(uid, from, -credit);
-			loan = loan - credit;
-		} else {
-			TransactionDAO.register(uid, from, credit);
-			balance += credit;
 
-			if (hasPendingQuest()) {
-				Map<DailyTask, Integer> pg = getDailyProgress();
-				pg.merge(DailyTask.CREDIT_TASK, (int) credit, Integer::sum);
-				setDailyProgress(pg);
-			}
-		}
+		TransactionDAO.register(uid, from, credit);
+		balance += credit;
 
-		if (loan < 0) {
-			balance += loan * -1;
-			TransactionDAO.register(uid, from, loan * -1);
-			loan = 0;
-		}
-
-		if (loan == 0) {
-			interest = 0;
+		if (hasPendingQuest()) {
+			Map<DailyTask, Integer> pg = getDailyProgress();
+			pg.merge(DailyTask.CREDIT_TASK, (int) credit, Integer::sum);
+			setDailyProgress(pg);
 		}
 	}
 
@@ -235,29 +198,9 @@ public class Account {
 		this.sBalance = sBalance;
 	}
 
-	public long debitLoan() {
-		long stBalance = balance;
-
-		if (balance >= loan) {
-			balance -= loan;
-			loan = 0;
-			interest = 0;
-		} else {
-			loan -= balance;
-			balance = 0;
-		}
-
-		return stBalance - balance;
-	}
-
 	public void removeCredit(long credit, Class<?> from) {
 		this.spent += credit;
 		this.balance -= credit;
-
-		if (balance < 0) {
-			this.loan += Math.abs(balance);
-			this.balance = 0;
-		}
 
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
@@ -277,11 +220,6 @@ public class Account {
 
 			if (credit > 0) {
 				balance -= credit;
-
-				if (balance < 0) {
-					this.loan += Math.abs(balance);
-					this.balance = 0;
-				}
 			}
 		}
 
@@ -341,11 +279,11 @@ public class Account {
 		if (lastVoted == null) streak = 1;
 		else try {
 			Helper.logger(this.getClass()).info("""
-															
-					Voto anterior: %s
-					Hoje: %s
-					Acumula? %s
-							""".formatted(
+																	
+							Voto anterior: %s
+							Hoje: %s
+							Acumula? %s
+									""".formatted(
 							lastVoted.format(Helper.fullDateFormat),
 							today.format(Helper.fullDateFormat),
 							today.isBefore(lastVoted.plusHours(24))
