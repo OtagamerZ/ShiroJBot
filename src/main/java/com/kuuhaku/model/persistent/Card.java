@@ -166,7 +166,7 @@ public class Card {
 					if (nProg >= 1) {
 						g2d.drawImage(nBar, 0, 0, null);
 					} else {
-						g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - nProg), frame.getWidth(), 85 + 213 * nProg));
+						g2d.setClip(new Rectangle2D.Double(0, 380 * (1 - nProg), frame.getWidth(), 85 + 213 * nProg));
 						g2d.drawImage(nBar, 0, 0, null);
 					}
 				}
@@ -175,7 +175,7 @@ public class Card {
 					if (fProg >= 1) {
 						g2d.drawImage(fBar, 0, 0, null);
 					} else {
-						g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - fProg), frame.getWidth(), 85 + 213 * fProg));
+						g2d.setClip(new Rectangle2D.Double(0, 380 * (1 - fProg), frame.getWidth(), 85 + 213 * fProg));
 						g2d.drawImage(fBar, 0, 0, null);
 					}
 				}
