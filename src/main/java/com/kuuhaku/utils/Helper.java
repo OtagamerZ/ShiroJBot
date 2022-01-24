@@ -1538,10 +1538,12 @@ public abstract class Helper {
         if (chance((3 - clamp(channel.getGuild().getMemberCount() / 5000, 0, 1)) * cardBuff)) {
             Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
 
-            KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
-                    .map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-                    .collect(Collectors.toList())
-            );
+            List<org.apache.commons.math3.util.Pair<KawaiponRarity, Double>> odds = new ArrayList<>();
+            for (KawaiponRarity kr : KawaiponRarity.validValues()) {
+                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, kr.getIndex() - 1)));
+            }
+
+            KawaiponRarity kr = getRandom(odds);
 
             List<Card> cards = CardDAO.getCardsByRarity(kr);
             Card c = getRandomEntry(cards);
@@ -1592,25 +1594,31 @@ public abstract class Helper {
 
     public static void forceSpawnKawaipon(GuildConfig gc, TextChannel channel, User user, AddedAnime anime, boolean foil) {
         double foilBuff = getBuffMult(gc, BuffType.FOIL);
-        KawaiponRarity kr;
         List<Card> cards;
+
         if (anime != null) {
             List<Card> cds = CardDAO.getCardsByAnime(anime.getName());
-
-            kr = getRandom(cds.stream()
+            Set<KawaiponRarity> rarities = cds.stream()
                     .map(Card::getRarity)
-                    .map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-                    .collect(Collectors.toList())
-            );
+                    .collect(Collectors.toSet());
+
+            List<org.apache.commons.math3.util.Pair<KawaiponRarity, Double>> odds = new ArrayList<>();
+            for (KawaiponRarity kr : KawaiponRarity.validValues()) {
+                if (!rarities.contains(kr)) continue;
+
+                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, kr.getIndex() - 1)));
+            }
+
+            KawaiponRarity kr = getRandom(odds);
 
             cards = cds.stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
         } else {
-            kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
-                    .map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
-                    .collect(Collectors.toList())
-            );
+            List<org.apache.commons.math3.util.Pair<KawaiponRarity, Double>> odds = new ArrayList<>();
+            for (KawaiponRarity kr : KawaiponRarity.validValues()) {
+                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, kr.getIndex() - 1)));
+            }
 
-            cards = CardDAO.getCardsByRarity(kr);
+            cards = CardDAO.getCardsByRarity(getRandom(odds));
         }
 
         Card c = getRandomEntry(cards);
