@@ -78,7 +78,6 @@ public class LoanCommand implements Executable {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-
 		if (acc.getLoan() > 0) {
 			channel.sendMessage("❌ | Você ainda não terminou de pagar seu último empréstimo.").queue();
 			return;
