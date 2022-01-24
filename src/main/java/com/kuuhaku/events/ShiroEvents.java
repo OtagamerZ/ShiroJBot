@@ -328,10 +328,6 @@ public class ShiroEvents extends ListenerAdapter {
 
 		if (!blacklisted) {
 			if (!found) {
-				/*if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.isPinging(message, ShiroInfo.getNiiChan())) {
-					channel.sendMessage("✅ | Você comprou um \"Pingue o Sora por **1.000 de dívida**\" com sucesso!").queue();
-					acc.addLoan(1000);
-				}*/
 				try {
 					if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
 					if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
