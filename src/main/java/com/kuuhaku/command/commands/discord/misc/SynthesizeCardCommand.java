@@ -69,7 +69,7 @@ public class SynthesizeCardCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
-			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
+			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal, `c` = síntese cromada e `r` = resintetizar).").queue();
 			return;
 		} else if (!Helper.equalsAny(args[1], "n", "c", "r")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da síntese (`n` = síntese normal, `c` = síntese cromada e `r` = resintetizar).").queue();
