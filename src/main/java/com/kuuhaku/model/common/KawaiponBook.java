@@ -34,10 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -89,6 +87,9 @@ public class KawaiponBook {
 			return bg;
 		});
 
+		BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
+		BufferedImage nbar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
+		BufferedImage fbar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -101,7 +102,7 @@ public class KawaiponBook {
 				List<Card> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Card kc = chunk.get(i);
-					BufferedImage card = kc.drawCard(false);
+					BufferedImage card = kc.drawCardNoBorder();
 
 					int width = 4026 / COLUMN_COUNT;
 					int actualWidth = width * chunk.size();
@@ -115,10 +116,21 @@ public class KawaiponBook {
 					g.setColor(Color.white);
 					g.drawImage(slot, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 
-					double prcnt = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
+					double nProg = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
+					double fProg = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), true);
+
+					double prcnt = Math.max(nProg, fProg);
 					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT * (1 - prcnt), CARD_WIDTH, CARD_HEIGHT * prcnt));
 					g.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), x, y, CARD_WIDTH, CARD_HEIGHT, null);
+
+					g.setClip(new Rectangle2D.Double(x, y + 295 * (1 - nProg), CARD_WIDTH, 213 * nProg));
+					g.drawImage(nbar, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+
+					g.setClip(new Rectangle2D.Double(x, y + 295 * (1 - fProg), CARD_WIDTH, 213 * fProg));
+					g.drawImage(fbar, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+
 					g.setClip(null);
+					g.drawImage(frame, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 				}
 
