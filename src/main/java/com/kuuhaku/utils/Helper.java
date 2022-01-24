@@ -1540,7 +1540,7 @@ public abstract class Helper {
 
             List<org.apache.commons.math3.util.Pair<KawaiponRarity, Double>> odds = new ArrayList<>();
             for (KawaiponRarity kr : KawaiponRarity.validValues()) {
-                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, kr.getIndex() - 1)));
+                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, 5 - kr.getIndex())));
             }
 
             KawaiponRarity kr = getRandom(odds);
@@ -1606,7 +1606,7 @@ public abstract class Helper {
             for (KawaiponRarity kr : KawaiponRarity.validValues()) {
                 if (!rarities.contains(kr)) continue;
 
-                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, kr.getIndex() - 1)));
+                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, 5 - kr.getIndex())));
             }
 
             KawaiponRarity kr = getRandom(odds);
@@ -1615,7 +1615,7 @@ public abstract class Helper {
         } else {
             List<org.apache.commons.math3.util.Pair<KawaiponRarity, Double>> odds = new ArrayList<>();
             for (KawaiponRarity kr : KawaiponRarity.validValues()) {
-                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, kr.getIndex() - 1)));
+                odds.add(org.apache.commons.math3.util.Pair.create(kr, Math.pow(2, 5 - kr.getIndex())));
             }
 
             cards = CardDAO.getCardsByRarity(getRandom(odds));
