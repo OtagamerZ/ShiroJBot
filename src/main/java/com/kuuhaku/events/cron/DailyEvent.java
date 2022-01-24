@@ -45,12 +45,6 @@ public class DailyEvent implements Job {
 			AccountDAO.punishHoarders();
 		}
 
-		List<Account> loaners = AccountDAO.getLoanedAccounts();
-		for (Account loaner : loaners) {
-			loaner.calcInterest();
-			AccountDAO.saveAccount(loaner);
-		}
-
 		if (c.get(Calendar.DAY_OF_MONTH) == 1) {
 			List<Clan> unpaid = ClanDAO.getUnpaidClans();
 			for (Clan clan : unpaid) {
