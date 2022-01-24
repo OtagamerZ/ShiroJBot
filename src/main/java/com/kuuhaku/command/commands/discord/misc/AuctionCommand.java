@@ -188,7 +188,7 @@ public class AuctionCommand implements Executable {
 								highest.set(Pair.of(evt.getAuthor(), offer));
 								phase.set(1);
 
-								Main.getInfo().getConfirmationPending().put(author.getId(), true);
+								Main.getInfo().getConfirmationPending().put(author.getId() + "_L", true);
 								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " CR**!").queue();
 
 								event.get().cancel(true);
@@ -259,9 +259,9 @@ public class AuctionCommand implements Executable {
 			channel.sendMessage("Esta carta será vendida para quem oferecer o maior valor. Deseja mesmo leiloá-la?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								if (wrapper.getUser().getId().equals(author.getId())) {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
+									Main.getInfo().getConfirmationPending().put(author.getId() + "_L", true);
 									event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
-												Main.getInfo().getConfirmationPending().remove(author.getId());
+												Main.getInfo().getConfirmationPending().remove(author.getId() + "_L");
 												listener.close();
 											}
 									));
