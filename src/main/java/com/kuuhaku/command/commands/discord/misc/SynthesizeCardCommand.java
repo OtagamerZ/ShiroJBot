@@ -199,8 +199,8 @@ public class SynthesizeCardCommand implements Executable {
 						.collect(Collectors.groupingBy(Equipment::getTier))
 						.entrySet()
 						.stream()
-						.map(e -> Pair.create(e.getValue(), bag.getCount(e.getKey()) / 3d)
-						).toList()
+						.map(e -> Pair.create(e.getValue(), bag.getCount(e.getKey()) / 3d))
+						.toList()
 				);
 
 				Equipment e = Helper.getRandomEntry(chosenTier);
@@ -273,6 +273,7 @@ public class SynthesizeCardCommand implements Executable {
 				double t4 = Math.max(0, (t3 * 15) / 65 - 0.05);
 				double t1 = Math.max(0, base - t4 * 10);
 				double t2 = Math.max(0, 0.85 - Math.abs(0.105 - t1 / 3) * 5 - t3);
+				double[] tiers = Helper.normalize(t1, t2, t3, t4);
 
 				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
 				if (blessed) {
@@ -284,10 +285,7 @@ public class SynthesizeCardCommand implements Executable {
 						.entrySet()
 						.stream()
 						.map(e -> Pair.create(e.getValue(), switch (e.getKey()) {
-									case 1 -> t1;
-									case 2 -> t2;
-									case 3 -> t3;
-									case 4 -> t4;
+									case 1, 2, 3, 4 -> tiers[e.getKey() - 1];
 									default -> 0d;
 								})
 						).toList()
@@ -297,10 +295,10 @@ public class SynthesizeCardCommand implements Executable {
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Possíveis resultados")
-						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(t1 * 100, 1)) + "%", false)
-						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(t2 * 100, 1)) + "%", false)
-						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(t3 * 100, 1)) + "%", false)
-						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(t4 * 100, 1)) + "%", false);
+						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[0] * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[1] * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[2] * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[3] * 100, 1)) + "%", false);
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prester a sintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")

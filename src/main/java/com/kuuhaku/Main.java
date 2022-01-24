@@ -18,9 +18,6 @@
 
 package com.kuuhaku;
 
-import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
-import com.github.twitch4j.TwitchClient;
-import com.github.twitch4j.TwitchClientBuilder;
 import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.postgresql.GuildDAO;
@@ -57,7 +54,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static CommandManager cmdManager;
 	private static ShardManager shiroShards;
 	private static JDA tet;
-	private static TwitchClient twitch;
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
 
@@ -113,16 +109,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		cmdManager.registerCommands();
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
-
-		if (System.getenv().containsKey("TWITCH_TOKEN")) {
-			OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
-			twitch = TwitchClientBuilder.builder()
-					.withEnableHelix(true)
-					.withEnableChat(true)
-					.withDefaultAuthToken(cred)
-					.withChatAccount(cred)
-					.build();
-		}
 
 		info.setSockets(new WebSocketConfig());
 		spring = SpringApplication.run(Application.class, args);
@@ -188,10 +174,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void setCommandManager(CommandManager manager) {
 		Main.cmdManager = manager;
-	}
-
-	public static TwitchClient getTwitch() {
-		return twitch;
 	}
 
 	public static void shutdown() {
