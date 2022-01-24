@@ -52,7 +52,7 @@ public class Uwuifier {
     }
 
     public Uwuifier(double faceFac, double actionFac, double stutterFac, double none) {
-        double[] norm = Helper.normalize(faceFac, actionFac, stutterFac, none);
+        double[] norm = Helper.sumToOne(faceFac, actionFac, stutterFac, none);
 
         this.faceFac = norm[0];
         this.actionFac = norm[1];
