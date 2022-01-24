@@ -123,14 +123,16 @@ public class KawaiponBook {
 					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT * (1 - prcnt), CARD_WIDTH, CARD_HEIGHT * prcnt));
 					g.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), x, y, CARD_WIDTH, CARD_HEIGHT, null);
 
+					g.setClip(null);
+					g.drawImage(frame, x, y, 255 * CARD_WIDTH / 225, 380 * CARD_HEIGHT / 350, null);
+
 					g.setClip(new Rectangle2D.Double(x, y + 295 * (1 - nProg), CARD_WIDTH, 213 * nProg));
-					g.drawImage(nbar, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+					g.drawImage(nbar, x, y, 255 * CARD_WIDTH / 225, 380 * CARD_HEIGHT / 350, null);
 
 					g.setClip(new Rectangle2D.Double(x, y + 295 * (1 - fProg), CARD_WIDTH, 213 * fProg));
-					g.drawImage(fbar, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+					g.drawImage(fbar, x, y, 255 * CARD_WIDTH / 225, 380 * CARD_HEIGHT / 350, null);
 
 					g.setClip(null);
-					g.drawImage(frame, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 				}
 
