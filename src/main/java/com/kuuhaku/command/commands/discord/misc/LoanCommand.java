@@ -26,7 +26,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -41,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "emprestimo",
 		aliases = {"emp", "loan"},
-		usage = "req_id",
+		usage = "req_loan",
 		category = Category.MISC
 )
 @Requires({
@@ -63,24 +62,18 @@ public class LoanCommand implements Executable {
 					     
 					Usando este comando você pode contratar um ~~agiota~~ empréstimo de CR e ter a possibilidade de pagar a dívida mais tarde.
 					""");
-			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1.000 CR (juros de " + (int) (CreditLoan.LOAN_1.getInterest() * 100 - 100) + "%)", false);
-			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2.500 CR (juros de " + (int) (CreditLoan.LOAN_2.getInterest() * 100 - 100) + "%)", false);
-			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5.000 CR (juros de " + (int) (CreditLoan.LOAN_3.getInterest() * 100 - 100) + "%)", false);
-			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10.000 CR (juros de " + (int) (CreditLoan.LOAN_4.getInterest() * 100 - 100) + "%)", false);
-			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 CR (juros de " + (int) (CreditLoan.LOAN_5.getInterest() * 100 - 100) + "%)", false);
-			eb.setFooter("Não há prazo para debitar a dívida, todo CR que você ganhar reduzirá a dívida.");
+			eb.setFooter("A cada dia sua dívida aumentará em 3% (até no máximo 100%), todo CR que você ganhar reduzirá a dívida.");
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
+			channel.sendMessage("❌ | O valor deve ser numérico.").queue();
 			return;
 		}
 
 		int loan = Integer.parseInt(args[0]);
-
-		if (loan < 1 || loan > 5) {
-			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
+		if (!Helper.between(loan, 1000, 250_001)) {
+			channel.sendMessage("❌ | O empréstimo deve ser um valor entre 1.000 e 250.000 CR.").queue();
 			return;
 		}
 
@@ -91,16 +84,14 @@ public class LoanCommand implements Executable {
 			return;
 		}
 
-		CreditLoan cl = CreditLoan.getById(loan);
-
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " CR**__ a um juros de __" + (int) (cl.getInterest() * 100 - 100) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest())) + " de dívida**__), deseja confirmar?")
+		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(loan) + " CR**__ a um juros de __3% a.d.__ (__max: 100%__), deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							Account finalAcc = AccountDAO.getAccount(author.getId());
-							cl.sign(finalAcc);
+							finalAcc.addLoan(loan);
 
-							s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais CR até que termine de pagar sua dívida.")).queue();
+							s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA!.")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

@@ -60,6 +60,22 @@ public class AccountDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Account> getLoanedAccounts() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a FROM Account a WHERE loan > 0", Account.class);
+		q.setLockMode(LockModeType.PESSIMISTIC_READ);
+
+		try {
+			em.getTransaction().begin();
+			return q.getResultList();
+		} finally {
+			em.getTransaction().commit();
+			em.close();
+		}
+	}
+
 	public static Account getAccount(String id) {
 		EntityManager em = Manager.getEntityManager();
 
