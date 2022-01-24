@@ -396,9 +396,8 @@ public class TutorialCommand implements Executable {
 				.setDescription("""
 						Muito bem!
 
-						Com este comando você pode ver quantos CR você possui, além dos CR voláteis, dívida, gemas acumuladas e a data do seu último voto.
+						Com este comando você pode ver quantos CR você possui, além dos CR voláteis, gemas acumuladas e a data do seu último voto.
 						- **CR voláteis:** São iguais aos CR normais, mas só podem ser usados para transações comigo além de perder 25% a cada hora.
-						- **Dívidas:** Caso você faça um empréstimo de CR (ou seja pego abusando de algum comando) você receberá um valor de dívida, fazendo com que você não receba mais CR até terminar de pagá-la.
 						- **Gemas:** A moeda VIP para quem vota frequentemente em mim, com ela você consegue comprar melhorias exóticas na loja exclusiva.
 
 						Para continuar, clique em ▶️.
