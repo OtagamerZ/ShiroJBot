@@ -27,7 +27,6 @@ import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Achievement;
-import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
@@ -85,6 +84,9 @@ public class Account {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tutorialStage = 0;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int interest = 0;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
@@ -177,9 +179,17 @@ public class Account {
 		return loan;
 	}
 
-	public void signLoan(CreditLoan loan) {
-		this.addCredit(loan.getLoan(), this.getClass());
-		this.loan = Math.round(loan.getLoan() * loan.getInterest());
+	public void addLoan(int loan) {
+		addCredit(loan, this.getClass());
+		loan += Math.ceil(loan * 1.03);
+		interest = 1;
+	}
+
+	public void calcInterest() {
+		if (!Helper.between(interest, 1, 11)) return;
+
+		loan += Math.ceil(loan * 1.03);
+		interest++;
 	}
 
 	public void addCredit(long credit, Class<?> from) {
@@ -202,6 +212,10 @@ public class Account {
 			balance += loan * -1;
 			TransactionDAO.register(uid, from, loan * -1);
 			loan = 0;
+		}
+
+		if (loan == 0) {
+			interest = 0;
 		}
 	}
 
@@ -227,6 +241,7 @@ public class Account {
 		if (balance >= loan) {
 			balance -= loan;
 			loan = 0;
+			interest = 0;
 		} else {
 			loan -= balance;
 			balance = 0;
@@ -277,11 +292,6 @@ public class Account {
 
 	public void expireVCredit() {
 		this.vBalance *= 0.75;
-	}
-
-	public void addLoan(long loan) {
-		this.loan += loan;
-		AccountDAO.saveAccount(this);
 	}
 
 	public ZonedDateTime getLastVoted() {
