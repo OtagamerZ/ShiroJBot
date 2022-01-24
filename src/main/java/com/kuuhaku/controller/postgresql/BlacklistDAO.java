@@ -125,17 +125,4 @@ public class BlacklistDAO {
 			return false;
 		}
 	}
-
-	public static void purgeData(Blacklist bl) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.createStoredProcedureQuery("purge_all_data")
-				.registerStoredProcedureParameter("id", String.class, ParameterMode.IN)
-				.setParameter("id", bl.getUid())
-				.executeUpdate();
-		em.getTransaction().commit();
-
-		em.close();
-	}
 }

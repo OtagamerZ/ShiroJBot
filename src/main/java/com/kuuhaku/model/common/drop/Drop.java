@@ -76,9 +76,6 @@ public abstract class Drop<P> implements Prize<P> {
 			add(Pair.of("Ter dívida ativa",
 					u -> AccountDAO.getAccount(u.getId()).getLoan() > 0));
 
-			add(Pair.of("Ter conta vinculada com o canal do meu Nii-chan",
-					u -> !AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
-
 			add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase(Locale.ROOT) + " ou superior",
 					u -> {
 						Clan c = ClanDAO.getUserClan(u.getId());
