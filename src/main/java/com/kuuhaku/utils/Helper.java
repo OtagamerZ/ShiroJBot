@@ -2608,6 +2608,16 @@ public abstract class Helper {
                 .toArray();
     }
 
+    public static double[] sumToOne(double... values) {
+        if (values.length < 2) return values;
+
+        double total = DoubleStream.of(values).sum();
+
+        return DoubleStream.of(values)
+                .map(d -> d / total)
+                .toArray();
+    }
+
     public static double mirroredCeil(double value) {
         return value < 0 ? Math.floor(value) : Math.ceil(value);
     }
