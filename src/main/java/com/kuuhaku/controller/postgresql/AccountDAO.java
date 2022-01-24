@@ -90,8 +90,8 @@ public class AccountDAO {
 
 			return acc;
 		} finally {
-			em.close();
 			em.getTransaction().commit();
+			em.close();
 		}
 	}
 
