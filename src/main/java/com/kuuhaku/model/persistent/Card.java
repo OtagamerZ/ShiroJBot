@@ -143,7 +143,7 @@ public class Card {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
+				BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
 				BufferedImage nBar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
 				BufferedImage fBar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
 				assert frame != null;
@@ -158,16 +158,17 @@ public class Card {
 				double prcnt = Math.max(nProg, fProg);
 				g2d.setClip(new Rectangle2D.Double(15, 15 + 350 * (1 - prcnt), 225, 350 * prcnt));
 				g2d.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), 15, 15, null);
-
 				g2d.setClip(null);
+
 				g2d.drawImage(frame, 0, 0, null);
 
 				if (nProg > 0) {
 					if (nProg >= 1) {
 						g2d.drawImage(nBar, 0, 0, null);
 					} else {
-						g2d.setClip(new Rectangle2D.Double(0, 380 * (1 - nProg), frame.getWidth(), 85 + 213 * nProg));
+						g2d.setClip(new Rectangle2D.Double(0, 82 + 295 * (1 - nProg), frame.getWidth(), 85 + 213 * nProg));
 						g2d.drawImage(nBar, 0, 0, null);
+						g2d.setClip(null);
 					}
 				}
 
@@ -175,8 +176,9 @@ public class Card {
 					if (fProg >= 1) {
 						g2d.drawImage(fBar, 0, 0, null);
 					} else {
-						g2d.setClip(new Rectangle2D.Double(0, 380 * (1 - fProg), frame.getWidth(), 85 + 213 * fProg));
+						g2d.setClip(new Rectangle2D.Double(0, 82 + 295 * (1 - fProg), frame.getWidth(), 85 + 213 * fProg));
 						g2d.drawImage(fBar, 0, 0, null);
+						g2d.setClip(null);
 					}
 				}
 
