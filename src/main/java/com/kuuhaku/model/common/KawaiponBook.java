@@ -88,8 +88,6 @@ public class KawaiponBook {
 		});
 
 		BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
-		BufferedImage nbar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
-		BufferedImage fbar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -102,7 +100,7 @@ public class KawaiponBook {
 				List<Card> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Card kc = chunk.get(i);
-					BufferedImage card = kc.drawCardNoBorder();
+					BufferedImage card = kc.drawUltimate(uid);
 
 					int width = 4026 / COLUMN_COUNT;
 					int actualWidth = width * chunk.size();
@@ -116,23 +114,7 @@ public class KawaiponBook {
 					g.setColor(Color.white);
 					g.drawImage(slot, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 
-					double nProg = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
-					double fProg = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), true);
-
-					double prcnt = Math.max(nProg, fProg);
-					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT * (1 - prcnt), CARD_WIDTH, CARD_HEIGHT * prcnt));
-					g.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), x, y, CARD_WIDTH, CARD_HEIGHT, null);
-
-					g.setClip(null);
-					g.drawImage(frame, x, y, 255 * CARD_WIDTH / 225, 380 * CARD_HEIGHT / 350, null);
-
-					g.setClip(new Rectangle2D.Double(x, y + 295 * (1 - nProg), CARD_WIDTH, 213 * nProg));
-					g.drawImage(nbar, x, y, 255 * CARD_WIDTH / 225, 380 * CARD_HEIGHT / 350, null);
-
-					g.setClip(new Rectangle2D.Double(x, y + 295 * (1 - fProg), CARD_WIDTH, 213 * fProg));
-					g.drawImage(fbar, x, y, 255 * CARD_WIDTH / 225, 380 * CARD_HEIGHT / 350, null);
-
-					g.setClip(null);
+					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 				}
 
