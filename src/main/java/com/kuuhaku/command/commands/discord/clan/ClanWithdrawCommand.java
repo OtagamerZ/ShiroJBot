@@ -78,10 +78,17 @@ public class ClanWithdrawCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							acc.addCredit(value, this.getClass());
-							c.withdraw(value, author);
+							Clan finalC = ClanDAO.getUserClan(author.getId());
+							assert finalC != null;
+							if (finalC.getVault() < value) {
+								channel.sendMessage("❌ | O cofre do clã não possui CR suficientes.").queue();
+								return;
+							}
 
-							ClanDAO.saveClan(c);
+							acc.addCredit(value, this.getClass());
+							finalC.withdraw(value, author);
+
+							ClanDAO.saveClan(finalC);
 							AccountDAO.saveAccount(acc);
 
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso.")).queue();
