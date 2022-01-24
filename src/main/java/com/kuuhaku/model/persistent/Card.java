@@ -162,11 +162,23 @@ public class Card {
 				g2d.setClip(null);
 				g2d.drawImage(frame, 0, 0, null);
 
-				g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - nProg), frame.getWidth(), 213 * nProg));
-				g2d.drawImage(nBar, 0, 0, null);
+				if (nProg > 0) {
+					if (nProg >= 1) {
+						g2d.drawImage(nBar, 0, 0, null);
+					} else {
+						g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - nProg), frame.getWidth(), 85 + 298 * nProg));
+						g2d.drawImage(nBar, 0, 0, null);
+					}
+				}
 
-				g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - fProg), frame.getWidth(), 213 * fProg));
-				g2d.drawImage(fBar, 0, 0, null);
+				if (fProg > 0) {
+					if (fProg >= 1) {
+						g2d.drawImage(fBar, 0, 0, null);
+					} else {
+						g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - fProg), frame.getWidth(), 85 + 298 * fProg));
+						g2d.drawImage(fBar, 0, 0, null);
+					}
+				}
 
 				g2d.dispose();
 
