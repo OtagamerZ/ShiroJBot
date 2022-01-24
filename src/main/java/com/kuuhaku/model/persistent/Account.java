@@ -181,7 +181,7 @@ public class Account {
 
 	public void addLoan(int loan) {
 		addCredit(loan, this.getClass());
-		loan += Math.ceil(loan * 1.03);
+		this.loan += Math.ceil(loan * 1.03);
 		interest = 1;
 	}
 
