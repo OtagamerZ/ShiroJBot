@@ -33,7 +33,7 @@ public class Table {
 	private boolean awarded = false;
 
 	public Table(long bet, String... players) {
-		this.players = Arrays.stream(players).map(s -> new Player(s, bet, AccountDAO.getAccount(s).getLoan() > 0)).collect(Collectors.toCollection(InfiniteList::new));
+		this.players = Arrays.stream(players).map(s -> new Player(s, bet)).collect(Collectors.toCollection(InfiniteList::new));
 
 		Collections.reverse(this.players);
 	}
@@ -59,7 +59,7 @@ public class Table {
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
+			lacc.removeCredit(l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
