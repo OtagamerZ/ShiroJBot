@@ -102,8 +102,8 @@ public class Hand {
 		this.divergence = dk.getAverageDivergence();
 		this.mitigation = Math.min(
 				combo.getRight() == Race.HUMAN
-						? deque.stream()
-						.filter(d -> d instanceof Champion c && c.getMana() <= 2)
+						? dk.getChampions().stream()
+						.filter(c -> c.getMana() <= 2)
 						.count() * 0.01f
 						: 0, 0.5f
 		);

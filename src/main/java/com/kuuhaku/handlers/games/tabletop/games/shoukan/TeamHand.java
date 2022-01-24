@@ -69,9 +69,10 @@ public class TeamHand extends Hand {
 				.flatMap(kp -> kp.getChampions().stream())
 				.collect(Collectors.toList()));
 		setMitigation(combo.getRight() == Race.HUMAN
-				? decks.stream()
+				? dks.stream()
+				.map(Deck::getChampions)
 				.flatMap(List::stream)
-				.filter(d -> d instanceof Champion c && c.getMana() <= 2)
+				.filter(c -> c.getMana() <= 2)
 				.count() * 0.005f : 0
 		);
 
@@ -201,8 +202,8 @@ public class TeamHand extends Hand {
 		setManaPerTurn(getBaseManaPerTurn());
 
 		setMaxCards(Math.max(maxCards
-							 + (combo.getLeft() == Race.CREATURE ? 2 : combo.getLeft() == Race.HUMAN ? 3 : 0)
-							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
+				+ (combo.getLeft() == Race.CREATURE ? 2 : combo.getLeft() == Race.HUMAN ? 3 : 0)
+				+ (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
 		);
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
