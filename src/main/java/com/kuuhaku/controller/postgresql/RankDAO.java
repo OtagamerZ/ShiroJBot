@@ -85,10 +85,10 @@ public class RankDAO {
                 FROM (
                          SELECT *
                          FROM (
-                                  SELECT ' - ' || "GetUsername"(a.uid) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)' AS v
+                                  SELECT ' - ' || "GetUsername"(a.uid) || ' (' || to_char(a.balance - a.loan, 'FM9,999,999,999') || ' CR)' AS v
                                   FROM account a
                                   WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = a.uid)
-                                  ORDER BY a.balance DESC
+                                  ORDER BY a.balance - a.loan DESC
                               ) x
                          WHERE x.v IS NOT NULL
                          LIMIT 15 OFFSET 15 * :page
