@@ -63,9 +63,6 @@ public class TransferCommand implements Executable {
 		} else if (value <= 0) {
 			channel.sendMessage(I18n.getString("err_cannot-transfer-negative-or-zero")).queue();
 			return;
-		} else if (from.getLoan() > 0) {
-			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
-			return;
 		}
 
 		to.addCredit(value, this.getClass());

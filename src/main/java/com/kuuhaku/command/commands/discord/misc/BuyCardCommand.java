@@ -211,9 +211,6 @@ public class BuyCardCommand implements Executable {
 		if (m == null) {
 			channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
 			return;
-		} else if (buyer.getLoan() > 0) {
-			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
-			return;
 		}
 
 		Account seller = AccountDAO.getAccount(m.getSeller());
@@ -255,9 +252,6 @@ public class BuyCardCommand implements Executable {
 			m = MarketDAO.getCard(Integer.parseInt(args[0]));
 			if (m == null) {
 				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-				return;
-			} else if (buyer.getLoan() > 0) {
-				channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 				return;
 			}
 
@@ -316,9 +310,6 @@ public class BuyCardCommand implements Executable {
 			m = MarketDAO.getCard(Integer.parseInt(args[0]));
 			if (m == null) {
 				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-				return;
-			} else if (buyer.getLoan() > 0) {
-				channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 				return;
 			}
 
