@@ -93,7 +93,6 @@ public class ShiroInfo {
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
 	private static final String supportServerName = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
-	private static final String twitchChannelID = "743479145618472960";
 	private static final String announcementChannelID = "597587565809369089";
 	private static final String default_prefix = "s!";
 	private static final String nomeDB = "shiro.sqlite";
@@ -278,10 +277,6 @@ public class ShiroInfo {
 
 	public static String getSupportServerID() {
 		return supportServerID;
-	}
-
-	public static String getTwitchChannelID() {
-		return twitchChannelID;
 	}
 
 	public static String getAnnouncementChannelID() {
