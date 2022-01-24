@@ -101,14 +101,6 @@ public class MonthlyEvent implements Job {
 
 		LotteryDAO.closeLotteries();
 
-		List<Blacklist> blacklist = BlacklistDAO.getBlacklist();
-		for (Blacklist bl : blacklist) {
-			if (bl.canClear()) try {
-				BlacklistDAO.purgeData(bl);
-			} catch (Exception ignore) {
-			}
-		}
-
 		for (Map.Entry<String, SupportTier> entry : ShiroInfo.getSupports().entrySet()) {
 			Account acc = AccountDAO.getAccount(entry.getKey());
 			acc.addCredit(entry.getValue().getSalary(), MonthlyEvent.class);
