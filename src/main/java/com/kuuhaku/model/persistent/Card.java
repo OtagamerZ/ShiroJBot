@@ -19,14 +19,17 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ImageFilters;
 import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -114,6 +117,56 @@ public class Card {
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.drawImage(foil ? adjust(card, false) : card, 15, 15, null);
 				g2d.drawImage(foil ? adjust(frame, true) : frame, 0, 0, null);
+
+				g2d.dispose();
+
+				return canvas;
+			}
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
+	}
+
+	public BufferedImage drawUltimate(String uid) {
+		try {
+			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+				try {
+					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					return null;
+				}
+			}) : Helper.btoc(heroImg);
+
+			assert cardBytes != null;
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+				BufferedImage card = ImageIO.read(bais);
+
+				BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
+				BufferedImage nBar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
+				BufferedImage fBar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
+				assert frame != null;
+				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2d = canvas.createGraphics();
+
+				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+				double nProg = CardDAO.getCollectionProgress(uid, id, false);
+				double fProg = CardDAO.getCollectionProgress(uid, id, true);
+
+				double prcnt = Math.max(nProg, fProg);
+				g2d.setClip(new Rectangle2D.Double(15, 15 + 350 * (1 - prcnt), 225, 350 * prcnt));
+				g2d.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), 15, 15, null);
+
+				g2d.setClip(null);
+				g2d.drawImage(frame, 0, 0, null);
+
+				g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - nProg), frame.getWidth(), 213 * nProg));
+				g2d.drawImage(nBar, 0, 0, null);
+
+				g2d.setClip(new Rectangle2D.Double(0, 295 * (1 - fProg), frame.getWidth(), 213 * fProg));
+				g2d.drawImage(fBar, 0, 0, null);
 
 				g2d.dispose();
 
