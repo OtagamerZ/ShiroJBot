@@ -77,7 +77,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -277,7 +276,7 @@ public class ShiroEvents extends ListenerAdapter {
 			found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
 			if (found) {
-				if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+				if (Main.getInfo().getConfirmationPending().keySet().stream().anyMatch(s -> s.startsWith(author.getId()))) {
 					channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 					return;
 				} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
