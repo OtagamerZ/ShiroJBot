@@ -34,7 +34,6 @@ import org.quartz.JobExecutionContext;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DailyEvent implements Job {
 	public static JobDetail daily;
@@ -44,6 +43,12 @@ public class DailyEvent implements Job {
 		Calendar c = Calendar.getInstance();
 		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
 			AccountDAO.punishHoarders();
+		}
+
+		List<Account> loaners = AccountDAO.getLoanedAccounts();
+		for (Account loaner : loaners) {
+			loaner.calcInterest();
+			AccountDAO.saveAccount(loaner);
 		}
 
 		if (c.get(Calendar.DAY_OF_MONTH) == 1) {
