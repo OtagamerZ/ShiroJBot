@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -67,7 +68,16 @@ public class TierCommand implements Executable, Slashed {
 			return;
 		}
 
-		List<List<MatchMakingRating>> tier = Helper.chunkify(MatchMakingRatingDAO.getMMRRank(mmr.getTier()), 10);
+		List<MatchMakingRating> rank = MatchMakingRatingDAO.getMMRRank(mmr.getTier());
+		rank.sort(Comparator
+				.<MatchMakingRating>comparingInt(m -> m.getTier().ordinal()).reversed()
+				.thenComparingInt(m -> m.getPromWins() + m.getPromLosses()).reversed()
+				.thenComparing(m -> m.getPromWins() > m.getPromLosses() ? 0 : 1)
+				.thenComparingInt(MatchMakingRating::getRankPoints).reversed()
+				.thenComparingLong(MatchMakingRating::getMMR).reversed()
+		);
+
+		List<List<MatchMakingRating>> tier = Helper.chunkify(rank, 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Ranking do tier %s (%s) ".formatted(mmr.getTier().getTier(), mmr.getTier().getName()));
