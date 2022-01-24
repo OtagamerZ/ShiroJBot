@@ -26,11 +26,9 @@ import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.ScheduledEvents;
-import com.kuuhaku.events.TwitchEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
-import com.kuuhaku.managers.TwitchCommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -57,11 +55,9 @@ import java.util.concurrent.Executors;
 public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShiroInfo info;
 	private static CommandManager cmdManager;
-	private static TwitchCommandManager tCmdManager;
 	private static ShardManager shiroShards;
 	private static JDA tet;
 	private static TwitchClient twitch;
-	private static TwitchEvents twitchManager;
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
 
@@ -79,7 +75,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		cmdManager = new CommandManager();
-		tCmdManager = new TwitchCommandManager();
 
 		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
 
@@ -127,11 +122,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 					.withDefaultAuthToken(cred)
 					.withChatAccount(cred)
 					.build();
-
-			twitchManager = new TwitchEvents(twitch);
-			twitch.getChat().joinChannel("kuuhaku_otgmz");
-			twitch.getClientHelper().enableStreamEventListener("kuuhaku_otgmz");
-			twitch.getClientHelper().enableFollowEventListener("kuuhaku_otgmz");
 		}
 
 		info.setSockets(new WebSocketConfig());
@@ -200,16 +190,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Main.cmdManager = manager;
 	}
 
-	public static TwitchCommandManager getTwitchCommandManager() {
-		return tCmdManager;
-	}
-
 	public static TwitchClient getTwitch() {
 		return twitch;
-	}
-
-	public static TwitchEvents getTwitchManager() {
-		return twitchManager;
 	}
 
 	public static void shutdown() {
