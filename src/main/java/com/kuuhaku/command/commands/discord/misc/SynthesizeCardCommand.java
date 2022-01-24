@@ -273,7 +273,7 @@ public class SynthesizeCardCommand implements Executable {
 				double t4 = Math.max(0, (t3 * 15) / 65 - 0.05);
 				double t1 = Math.max(0, base - t4 * 10);
 				double t2 = Math.max(0, 0.85 - Math.abs(0.105 - t1 / 3) * 5 - t3);
-				double[] tiers = Helper.normalize(t1, t2, t3, t4);
+				double[] tiers = Helper.sumToOne(t1, t2, t3, t4);
 
 				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
 				if (blessed) {
