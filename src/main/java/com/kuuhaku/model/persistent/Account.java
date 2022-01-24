@@ -186,10 +186,10 @@ public class Account {
 	}
 
 	public void calcInterest() {
-		if (!Helper.between(interest, 1, 11)) return;
+		if (!Helper.between(interest, 1, 100)) return;
 
 		loan += Math.ceil(loan * 1.03);
-		interest++;
+		interest += 3;
 	}
 
 	public void addCredit(long credit, Class<?> from) {
