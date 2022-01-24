@@ -2844,7 +2844,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		h.removeHp(nc.getBlood());
 
 		nc.setDefending(from.isDefending());
-		nc.setFlipped(from.isFlipped());
 
 		int i = from.getIndex();
 		banCard(ep.getSide(), i, false);
