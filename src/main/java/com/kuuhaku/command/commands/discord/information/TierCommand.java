@@ -71,10 +71,10 @@ public class TierCommand implements Executable, Slashed {
 		List<MatchMakingRating> rank = MatchMakingRatingDAO.getMMRRank(mmr.getTier());
 		rank.sort(Comparator
 				.<MatchMakingRating>comparingInt(m -> m.getTier().ordinal()).reversed()
-				.thenComparingInt(m -> m.getPromWins() + m.getPromLosses()).reversed()
-				.thenComparing(m -> m.getPromWins() > m.getPromLosses() ? 0 : 1)
-				.thenComparingInt(MatchMakingRating::getRankPoints).reversed()
-				.thenComparingLong(MatchMakingRating::getMMR).reversed()
+				.thenComparing(m -> m.getPromWins() + m.getPromLosses(), Comparator.reverseOrder())
+				.thenComparing(m -> m.getPromWins() < m.getPromLosses())
+				.thenComparing(MatchMakingRating::getRankPoints, Comparator.reverseOrder())
+				.thenComparing(MatchMakingRating::getMMR, Comparator.reverseOrder())
 		);
 
 		List<List<MatchMakingRating>> tier = Helper.chunkify(rank, 10);
