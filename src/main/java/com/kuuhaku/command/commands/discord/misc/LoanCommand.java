@@ -91,7 +91,8 @@ public class LoanCommand implements Executable {
 							Account finalAcc = AccountDAO.getAccount(author.getId());
 							finalAcc.addLoan(loan);
 
-							s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA!.")).queue();
+							AccountDAO.saveAccount(finalAcc);
+							s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA!")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
