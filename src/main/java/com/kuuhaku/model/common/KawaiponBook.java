@@ -27,15 +27,15 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ImageFilters;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -113,7 +113,6 @@ public class KawaiponBook {
 					g.setBackground(Color.black);
 					g.setColor(Color.white);
 					g.drawImage(slot, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-
 					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 				}
