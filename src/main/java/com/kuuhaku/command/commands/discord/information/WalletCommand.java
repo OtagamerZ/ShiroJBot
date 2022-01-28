@@ -55,11 +55,9 @@ public class WalletCommand implements Executable, Slashed {
 						":moneybag: | Saldo: %s%s".formatted(Helper.separate(acc.getBalance()), acc.getBalance() > 100_000 && prcnt < 10 ? " (" + prcnt + "%)" : ""),
 						"""
 								:money_with_wings: | Volátil: %s
-								:bank: | Dívida: %s
 								:diamonds: | Gemas: %s
 								""".formatted(
 								Helper.separate(acc.getVBalance()),
-								Helper.separate(acc.getLoan()),
 								Helper.separate(acc.getGems())
 						)
 						, true

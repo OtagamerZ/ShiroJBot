@@ -41,11 +41,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.ListUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Command(
@@ -123,16 +120,16 @@ public class SeeCardCommand implements Executable {
 					.addField("Anime:", tc.getAnime().toString(), true)
 					.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
-			try {
-				BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
+			BufferedImage bi = Helper.getResourceAsImage(this.getClass(), "kawaipon/missing.jpg");
 
-				if (cards.contains(card))
+			if (cards.contains(card)) {
+				if (tc.getRarity() == KawaiponRarity.ULTIMATE) {
+					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(tc.drawUltimate(author.getId()), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
+				} else {
 					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
-				else
-					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
-			} catch (IOException e) {
-				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} else {
+				channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
 			}
 		}
 	}

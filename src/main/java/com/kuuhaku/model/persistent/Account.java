@@ -27,7 +27,6 @@ import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Achievement;
-import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
@@ -53,9 +52,6 @@ public class Account {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
-	private String twitchId = "";
-
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long balance = 0;
 
@@ -64,9 +60,6 @@ public class Account {
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long sBalance = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long loan = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long spent = 0;
@@ -160,14 +153,6 @@ public class Account {
 		this.uid = uid;
 	}
 
-	public String getTwitchId() {
-		return twitchId;
-	}
-
-	public void setTwitchId(String twitchId) {
-		this.twitchId = twitchId;
-	}
-
 	public long getBalance() {
 		return balance;
 	}
@@ -184,35 +169,16 @@ public class Account {
 		return spent;
 	}
 
-	public long getLoan() {
-		return loan;
-	}
-
-	public void signLoan(CreditLoan loan) {
-		this.addCredit(loan.getLoan(), this.getClass());
-		this.loan = Math.round(loan.getLoan() * loan.getInterest());
-	}
-
 	public void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
-		else if (loan > 0) {
-			TransactionDAO.register(uid, from, -credit);
-			loan = loan - credit;
-		} else {
-			TransactionDAO.register(uid, from, credit);
-			balance += credit;
 
-			if (hasPendingQuest()) {
-				Map<DailyTask, Integer> pg = getDailyProgress();
-				pg.merge(DailyTask.CREDIT_TASK, (int) credit, Integer::sum);
-				setDailyProgress(pg);
-			}
-		}
+		TransactionDAO.register(uid, from, credit);
+		balance += credit;
 
-		if (loan < 0) {
-			balance += loan * -1;
-			TransactionDAO.register(uid, from, loan * -1);
-			loan = 0;
+		if (hasPendingQuest()) {
+			Map<DailyTask, Integer> pg = getDailyProgress();
+			pg.merge(DailyTask.CREDIT_TASK, (int) credit, Integer::sum);
+			setDailyProgress(pg);
 		}
 	}
 
@@ -232,28 +198,9 @@ public class Account {
 		this.sBalance = sBalance;
 	}
 
-	public long debitLoan() {
-		long stBalance = balance;
-
-		if (balance >= loan) {
-			balance -= loan;
-			loan = 0;
-		} else {
-			loan -= balance;
-			balance = 0;
-		}
-
-		return stBalance - balance;
-	}
-
 	public void removeCredit(long credit, Class<?> from) {
 		this.spent += credit;
 		this.balance -= credit;
-
-		if (balance < 0) {
-			this.loan += Math.abs(balance);
-			this.balance = 0;
-		}
 
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
@@ -273,11 +220,6 @@ public class Account {
 
 			if (credit > 0) {
 				balance -= credit;
-
-				if (balance < 0) {
-					this.loan += Math.abs(balance);
-					this.balance = 0;
-				}
 			}
 		}
 
@@ -288,11 +230,6 @@ public class Account {
 
 	public void expireVCredit() {
 		this.vBalance *= 0.75;
-	}
-
-	public void addLoan(long loan) {
-		this.loan += loan;
-		AccountDAO.saveAccount(this);
 	}
 
 	public ZonedDateTime getLastVoted() {
@@ -342,11 +279,11 @@ public class Account {
 		if (lastVoted == null) streak = 1;
 		else try {
 			Helper.logger(this.getClass()).info("""
-															
-					Voto anterior: %s
-					Hoje: %s
-					Acumula? %s
-							""".formatted(
+																	
+							Voto anterior: %s
+							Hoje: %s
+							Acumula? %s
+									""".formatted(
 							lastVoted.format(Helper.fullDateFormat),
 							today.format(Helper.fullDateFormat),
 							today.isBefore(lastVoted.plusHours(24))

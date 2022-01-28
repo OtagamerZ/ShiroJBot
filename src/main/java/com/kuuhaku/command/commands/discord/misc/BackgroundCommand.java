@@ -75,7 +75,7 @@ public class BackgroundCommand implements Executable {
 			if (img.contains("discord"))
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
 			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();
-		} catch (IOException | NullPointerException e) {
+		} catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage(I18n.getString("err_invalid-image")).queue();
 		}
 	}
