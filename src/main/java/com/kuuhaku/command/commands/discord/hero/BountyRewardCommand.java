@@ -68,9 +68,9 @@ public class BountyRewardCommand implements Executable {
 		double modDiff = Helper.prcnt(diff - info.diff(), diff);
 
 		boolean died = false;
+		EmbedBuilder eb = new EmbedBuilder();
 		if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
-			EmbedBuilder eb = new EmbedBuilder()
-					.setColor(Color.green);
+			eb.setColor(Color.green);
 
 			boolean padoru = Event.getCurrent() == Event.XMAS;
 			if (padoru)
@@ -96,13 +96,8 @@ public class BountyRewardCommand implements Executable {
 
 			h = KawaiponDAO.getHero(author.getId());
 			assert h != null;
-
-			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-					.setEmbeds(eb.build())
-					.queue();
 		} else {
-			EmbedBuilder eb = new EmbedBuilder()
-					.setColor(Color.red)
+			eb.setColor(Color.red)
 					.setTitle("A missão \"" + info + "\" fracassou");
 
 			boolean opt = h.getPerks().contains(Perk.OPTIMISTIC);
@@ -158,30 +153,30 @@ public class BountyRewardCommand implements Executable {
 					}
 				}
 			}
+		}
 
-			if (!died && h.getLevel() > lvl) {
-				Account acc = AccountDAO.getAccount(author.getId());
-				boolean save = false;
+		if (!died && h.getLevel() > lvl) {
+			Account acc = AccountDAO.getAccount(author.getId());
+			boolean save = false;
 
-				if (lvl >= 10 && acc.getAchievements().add(Achievement.GROWING_STRONGER)) {
-					save = true;
-				}
-				if (lvl >= 20 && acc.getAchievements().add(Achievement.LEGENDARY_HERO)) {
-					save = true;
-				}
-
-				if (save) AccountDAO.saveAccount(acc);
-
-				h.setEnergy(h.getMaxEnergy());
-				h.setHp(h.getMaxHp());
-				channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
-						.setEmbeds(eb.build())
-						.queue();
-			} else {
-				channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
-						.setEmbeds(eb.build())
-						.queue();
+			if (lvl >= 10 && acc.getAchievements().add(Achievement.GROWING_STRONGER)) {
+				save = true;
 			}
+			if (lvl >= 20 && acc.getAchievements().add(Achievement.LEGENDARY_HERO)) {
+				save = true;
+			}
+
+			if (save) AccountDAO.saveAccount(acc);
+
+			h.setEnergy(h.getMaxEnergy());
+			h.setHp(h.getMaxHp());
+			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
+					.setEmbeds(eb.build())
+					.queue();
+		} else {
+			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "!")
+					.setEmbeds(eb.build())
+					.queue();
 		}
 
 		h.arrive();
