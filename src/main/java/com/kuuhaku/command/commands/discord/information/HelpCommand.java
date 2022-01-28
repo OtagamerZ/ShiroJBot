@@ -121,7 +121,6 @@ public class HelpCommand implements Executable {
 					.addField(Helper.VOID, I18n.getString("str_waifu-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_kawaipon-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_edit-message-tip", prefix), false)
-					.addField(Helper.VOID, I18n.getString("str_loan-tip", prefix), false)
 					.addField(Helper.VOID, I18n.getString("str_placeholder-tip", prefix), false);
 
 			categories.put(Helper.parseEmoji("684039810079522846"), new InteractPage(ceb.build()));

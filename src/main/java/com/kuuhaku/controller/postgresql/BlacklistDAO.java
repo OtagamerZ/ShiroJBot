@@ -18,14 +18,11 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.github.twitch4j.common.events.domain.EventUser;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Blacklist;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.ParameterMode;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -93,49 +90,5 @@ public class BlacklistDAO {
 		} finally {
 			em.close();
 		}
-	}
-
-	public static boolean isBlacklisted(EventUser user) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT a FROM Account a WHERE twitchId = :id", Account.class);
-		q.setParameter("id", user.getId());
-
-		Account acc;
-		try {
-			acc = (Account) q.getSingleResult();
-		} catch (NoResultException e) {
-			acc = null;
-		}
-
-		if (acc != null) {
-			q = em.createQuery("SELECT b FROM Blacklist b WHERE uid = :id", Blacklist.class);
-			q.setParameter("id", acc.getUid());
-
-			try {
-				q.getSingleResult();
-				return true;
-			} catch (NoResultException e) {
-				return false;
-			} finally {
-				em.close();
-			}
-		} else {
-			em.close();
-			return false;
-		}
-	}
-
-	public static void purgeData(Blacklist bl) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.createStoredProcedureQuery("purge_all_data")
-				.registerStoredProcedureParameter("id", String.class, ParameterMode.IN)
-				.setParameter("id", bl.getUid())
-				.executeUpdate();
-		em.getTransaction().commit();
-
-		em.close();
 	}
 }

@@ -67,9 +67,6 @@ public class ClanDepositCommand implements Executable {
 		if (acc.getBalance() < amount) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
-		} else if (acc.getLoan() > 0) {
-			channel.sendMessage("❌ | Você não pode depositar se possuir dívida ativa.").queue();
-			return;
 		} else if (c.getVault() + amount > c.getTier().getVaultSize()) {
 			channel.sendMessage("❌ | Depositar essa quantidade ultrapassa a capacidade do cofre do clã.").queue();
 			return;

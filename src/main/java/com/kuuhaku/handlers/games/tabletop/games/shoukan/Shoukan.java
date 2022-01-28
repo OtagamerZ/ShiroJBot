@@ -1170,15 +1170,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int extra = Math.round(dmg * demonFac - dmg);
 				String msg;
 				if (yPower > hPower)
-					msg = "%s não conseguiu derrotar %s! (BLOQUEADO)%s%s".formatted(
+					msg = "%s não conseguiu derrotar %s! (BLOQUEADO)".formatted(
 							atkr.getName(),
-							defr.getName(),
-							extra > 0
-									? " (efeito de raça: dano direto aumentado em " + extra + ")"
-									: extra < 0
-									? " (efeito de raça: dano direto reduzido em " + extra + ")"
-									: "",
-							defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+							defr.getName()
 					);
 				else
 					msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
