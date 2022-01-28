@@ -41,7 +41,7 @@ public class Board {
 
 	public Board(BoardSize size, long bet, String... players) {
 		this.size = size;
-		this.players = Arrays.stream(players).map(s -> new Player(s, bet, AccountDAO.getAccount(s).getLoan() > 0)).collect(Collectors.toCollection(InfiniteList::new));
+		this.players = Arrays.stream(players).map(s -> new Player(s, bet)).collect(Collectors.toCollection(InfiniteList::new));
 		this.matrix = new Piece[size.getHeight()][size.getWidth()];
 
 		if (size.getWidth() + size.getHeight() != 0) {
@@ -161,7 +161,7 @@ public class Board {
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
+			lacc.removeCredit(l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
@@ -183,7 +183,7 @@ public class Board {
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
+			lacc.removeCredit(l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
@@ -203,7 +203,7 @@ public class Board {
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
+			lacc.removeCredit(l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 
@@ -225,7 +225,7 @@ public class Board {
 
 		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), game.getClass());
+			lacc.removeCredit(l.getBet(), game.getClass());
 			AccountDAO.saveAccount(lacc);
 		}
 

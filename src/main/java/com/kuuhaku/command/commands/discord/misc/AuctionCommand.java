@@ -132,19 +132,15 @@ public class AuctionCommand implements Executable {
 		}
 
 		try {
-			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 			int price = Integer.parseInt(args[2]);
 			int min = switch (type) {
-				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
-				case 2 -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
-				default -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
+				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+				case 2 -> Helper.BASE_EQUIPMENT_PRICE / 2;
+				default -> Helper.BASE_FIELD_PRICE / 2;
 			};
 
 			if (price < min) {
-				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
-				else
-					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
+				channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
 				return;
 			}
 
@@ -192,7 +188,7 @@ public class AuctionCommand implements Executable {
 								highest.set(Pair.of(evt.getAuthor(), offer));
 								phase.set(1);
 
-								Main.getInfo().getConfirmationPending().put(author.getId(), true);
+								Main.getInfo().getConfirmationPending().put(author.getId() + "_L", true);
 								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " CR**!").queue();
 
 								event.get().cancel(true);
@@ -263,9 +259,9 @@ public class AuctionCommand implements Executable {
 			channel.sendMessage("Esta carta será vendida para quem oferecer o maior valor. Deseja mesmo leiloá-la?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								if (wrapper.getUser().getId().equals(author.getId())) {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
+									Main.getInfo().getConfirmationPending().put(author.getId() + "_L", true);
 									event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
-												Main.getInfo().getConfirmationPending().remove(author.getId());
+												Main.getInfo().getConfirmationPending().remove(author.getId() + "_L");
 												listener.close();
 											}
 									));

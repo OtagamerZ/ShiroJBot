@@ -24,7 +24,6 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MarketDAO;
@@ -49,7 +48,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "anunciar",
@@ -98,9 +96,9 @@ public class SellCardCommand implements Executable {
 					.setTitle("Por favor escolha uma")
 					.setDescription(
 							(matches.contains(CardType.KAWAIPON) ? ":regional_indicator_k: -> Kawaipon\n" : "") +
-							(matches.contains(CardType.SENSHI) ? ":regional_indicator_c: -> Campeão\n" : "") +
-							(matches.contains(CardType.EVOGEAR) ? ":regional_indicator_e: -> Evogear\n" : "") +
-							(matches.contains(CardType.FIELD) ? ":regional_indicator_f: -> Campo\n" : "")
+									(matches.contains(CardType.SENSHI) ? ":regional_indicator_c: -> Campeão\n" : "") +
+									(matches.contains(CardType.EVOGEAR) ? ":regional_indicator_e: -> Evogear\n" : "") +
+									(matches.contains(CardType.FIELD) ? ":regional_indicator_f: -> Campo\n" : "")
 					);
 
 			Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
@@ -159,12 +157,11 @@ public class SellCardCommand implements Executable {
 				return;
 			}
 
-			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 			int price = Integer.parseInt(args[1]);
 			int min = switch (off.getMiddle()) {
-				case EVOGEAR -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
-				case FIELD -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
-				default -> off.getLeft().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (off.getRight() ? 2 : 1);
+				case EVOGEAR -> Helper.BASE_EQUIPMENT_PRICE / 2;
+				case FIELD -> Helper.BASE_FIELD_PRICE / 2;
+				default -> off.getLeft().getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (off.getRight() ? 2 : 1);
 			};
 			int max = switch (off.getMiddle()) {
 				case EVOGEAR -> Helper.BASE_EQUIPMENT_PRICE * 25;
@@ -173,10 +170,7 @@ public class SellCardCommand implements Executable {
 			};
 
 			if (price < min) {
-				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " CR.").queue();
-				else
-					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " CR.").queue();
+				channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " CR.").queue();
 				Main.getInfo().getConfirmationPending().remove(author.getId());
 				return;
 			} else if (price > max) {

@@ -39,10 +39,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -73,12 +70,20 @@ public class TierRankCommand implements Executable, Slashed {
 			sb.setLength(0);
 			prom.setLength(0);
 
-			List<MatchMakingRating> top10 = MatchMakingRatingDAO.getMMRRank(rt.getTier());
-			top10 = top10.subList(0, Math.min(10, top10.size()));
+			List<MatchMakingRating> rank = MatchMakingRatingDAO.getMMRRank(rt.getTier());
+			rank.sort(Comparator
+					.<MatchMakingRating>comparingInt(m -> m.getTier().ordinal()).reversed()
+					.thenComparing(m -> m.getPromWins() + m.getPromLosses(), Comparator.reverseOrder())
+					.thenComparing(m -> m.getPromWins() < m.getPromLosses())
+					.thenComparing(MatchMakingRating::getRankPoints, Comparator.reverseOrder())
+					.thenComparing(MatchMakingRating::getMMR, Comparator.reverseOrder())
+			);
+
+			rank = rank.subList(0, Math.min(10, rank.size()));
 
 			eb.setTitle("Top 10 do tier %s (%s)".formatted(rt.getTier(), RankedTier.getTierName(rt.getTier(), false)));
 
-			for (MatchMakingRating mm : top10) {
+			for (MatchMakingRating mm : rank) {
 				User u = mm.getUser();
 				if (u == null) continue;
 

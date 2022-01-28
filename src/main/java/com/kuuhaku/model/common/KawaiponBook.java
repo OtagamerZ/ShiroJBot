@@ -27,12 +27,10 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ImageFilters;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
 import java.util.List;
@@ -89,6 +87,7 @@ public class KawaiponBook {
 			return bg;
 		});
 
+		BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -101,7 +100,7 @@ public class KawaiponBook {
 				List<Card> chunk = chunks.get(finalC);
 				for (int i = 0; i < chunk.size(); i++) {
 					Card kc = chunk.get(i);
-					BufferedImage card = kc.drawCard(false);
+					BufferedImage card = kc.drawUltimate(uid);
 
 					int width = 4026 / COLUMN_COUNT;
 					int actualWidth = width * chunk.size();
@@ -114,11 +113,7 @@ public class KawaiponBook {
 					g.setBackground(Color.black);
 					g.setColor(Color.white);
 					g.drawImage(slot, x, y, CARD_WIDTH, CARD_HEIGHT, null);
-
-					double prcnt = CardDAO.getCollectionProgress(uid, kc.getAnime().getName(), false);
-					g.setClip(new Rectangle2D.Double(x, y + CARD_HEIGHT * (1 - prcnt), CARD_WIDTH, CARD_HEIGHT * prcnt));
-					g.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), x, y, CARD_WIDTH, CARD_HEIGHT, null);
-					g.setClip(null);
+					g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 					Profile.printCenteredString(StringUtils.abbreviate(kc.getName(), 15), CARD_WIDTH, x, y + 274, g);
 				}
 
