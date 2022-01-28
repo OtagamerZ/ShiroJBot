@@ -34,7 +34,6 @@ import org.quartz.JobExecutionContext;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DailyEvent implements Job {
 	public static JobDetail daily;

@@ -145,7 +145,7 @@ public class DeckReorderCommand implements Executable {
 							return;
 						}
 					}
-				} catch (NumberFormatException e) {
+				} catch (NumberFormatException | IndexOutOfBoundsException e) {
 					channel.sendMessage("❌ | Você precisa informar 2 posições válidas no deck.").queue();
 					return;
 				}

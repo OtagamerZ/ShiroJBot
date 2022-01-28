@@ -74,30 +74,14 @@ public class AccountDAO {
 
 			return acc;
 		} finally {
-			em.close();
-			em.getTransaction().commit();
-		}
-	}
-
-	public static Account getAccountByTwitchId(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT a FROM Account a WHERE twitchId = :id", Account.class);
-		q.setLockMode(LockModeType.PESSIMISTIC_READ);
-		q.setParameter("id", id);
-
-		try {
-			em.getTransaction().begin();
-			return (Account) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
 			em.getTransaction().commit();
 			em.close();
 		}
 	}
 
 	public static void saveAccount(Account acc) {
+		if (BlacklistDAO.isBlacklisted(acc.getUid())) return;
+
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
