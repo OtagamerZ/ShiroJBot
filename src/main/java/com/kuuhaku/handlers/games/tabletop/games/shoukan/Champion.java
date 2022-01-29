@@ -136,6 +136,8 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
+		boolean debug = game != null && Helper.getOr(game.getCustom(), new JSONObject()).getBoolean("debug");
+
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -161,8 +163,12 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setColor(fc.getPrimaryColor());
 			g2d.setBackground(fc.getBackgroundColor());
 
-			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 181, 38, 32, g2d);
-			g2d.drawImage(c.getRace().getIcon(), 11, 12, 23, 23, null);
+			if (debug) {
+				Profile.printCenteredString(toString(), 181, 38, 32, g2d);
+			} else {
+				Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 181, 38, 32, g2d);
+				g2d.drawImage(c.getRace().getIcon(), 11, 12, 23, 23, null);
+			}
 
 			if (bonus.getWrite() != null) {
 				g2d.setBackground(Color.black);
@@ -180,10 +186,13 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(fc.getSecondaryColor());
-			g2d.drawString("[" + c.getRace().toString().toUpperCase(Locale.ROOT) + (c.hasEffect() ? "/EFEITO" : "") + "]", 9, 277);
-
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, c.getDescription(), 205, 9, 293);
+			if (debug) {
+				Profile.drawStringMultiLineNO(g2d, getLinkedTo().toString(), 205, 9, 277);
+			} else {
+				g2d.drawString("[" + c.getRace().toString().toUpperCase(Locale.ROOT) + (c.hasEffect() ? "/EFEITO" : "") + "]", 9, 277);
+				Profile.drawStringMultiLineNO(g2d, c.getDescription(), 205, 9, 293);
+			}
 
 			if (isStunned() || isSleeping() || (hero != null && hero.getQuest() != null)) {
 				available = false;
@@ -1104,19 +1113,6 @@ public class Champion implements Drawable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
-	}
-
-	public String toString() {
-		return new JSONObject(card.toString()) {{
-			put("champion", new JSONObject() {{
-				put("id", id);
-				put("category", category);
-				put("mana", mana);
-				put("attack", atk);
-				put("defense", def);
-				put("description", description);
-			}});
-		}}.toString();
 	}
 
 	public String getBase64() {
