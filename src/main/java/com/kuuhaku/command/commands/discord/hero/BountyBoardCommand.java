@@ -154,7 +154,7 @@ public class BountyBoardCommand implements Executable {
 	private MessageEmbed getEmbed(Hero h, List<BountyQuest> pool, long seed) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Missões disponíveis")
-				.setDescription("Para ganhar XP (e outras coisas) você pode enviar seu herói em uma missão, consumindo 1 EP. Mas cuidado, existem riscos na jornada, e dependendo da dificuldade da missão pode resultar até na morte. Rotaciona a cada semana.");
+				.setDescription("Para ganhar XP (e outras coisas) você pode enviar seu herói em uma missão, consumindo 1 EP. Mas cuidado, existem riscos na jornada, e dependendo da dificuldade da missão pode resultar até na morte. Rotaciona a cada dia.");
 
 		for (int i = 0; i < pool.size(); i++) {
 			BountyQuest q = pool.get(i);

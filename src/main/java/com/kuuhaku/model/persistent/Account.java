@@ -103,6 +103,9 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean useFoil = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean dmWarned = false;
+
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String ultimate = "";
 
@@ -382,6 +385,14 @@ public class Account {
 
 	public void setUseFoil(boolean useFoil) {
 		this.useFoil = useFoil;
+	}
+
+	public boolean isDMWarned() {
+		return dmWarned;
+	}
+
+	public void setDmWarned(boolean dmWarned) {
+		this.dmWarned = dmWarned;
 	}
 
 	public int getStreak() {
