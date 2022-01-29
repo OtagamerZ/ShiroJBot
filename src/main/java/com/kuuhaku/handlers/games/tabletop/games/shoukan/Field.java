@@ -68,6 +68,8 @@ public class Field implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
+		boolean debug = game != null && Helper.getOr(game.getCustom(), new JSONObject()).getBoolean("debug");
+
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -92,7 +94,11 @@ public class Field implements Drawable, Cloneable {
 			g2d.setColor(fc.getPrimaryColor());
 			g2d.setBackground(fc.getBackgroundColor());
 
-			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+			if (debug) {
+				Profile.printCenteredString(toString(), 181, 38, 32, g2d);
+			} else {
+				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+			}
 
 			Map<Race, String> colors = Map.of(
 					Race.HUMAN, "#9013fe",
@@ -247,15 +253,6 @@ public class Field implements Drawable, Cloneable {
 	@Override
 	public Drawable deepCopy() {
 		return copy();
-	}
-
-	public String toString() {
-		return new JSONObject(card.toString()) {{
-			put("field", new JSONObject() {{
-				put("id", id);
-				put("modifiers", getModifiers());
-			}});
-		}}.toString();
 	}
 
 	public String getBase64() {

@@ -65,4 +65,9 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 			((Equipment) linked).link((Champion) self);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return index.get() + "-" + linked;
+	}
 }
