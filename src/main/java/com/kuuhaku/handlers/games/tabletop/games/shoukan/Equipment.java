@@ -33,7 +33,6 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
-import org.intellij.lang.annotations.Language;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -107,6 +106,8 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
+		boolean debug = game != null && Helper.getOr(game.getCustom(), new JSONObject()).getBoolean("debug");
+
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -132,7 +133,11 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.setColor(fc.getPrimaryColor());
 			g2d.setBackground(fc.getBackgroundColor());
 
-			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+			if (debug) {
+				Profile.printCenteredString(toString(), 181, 38, 32, g2d);
+			} else {
+				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+			}
 
 			BufferedImage star = Helper.getResourceAsImage(this.getClass(), "shoukan/star.png");
 			if (star != null)
@@ -157,7 +162,11 @@ public class Equipment implements Drawable, Cloneable {
 
 			g2d.setColor(fc.getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, getDescription(), 205, 9, 277);
+			if (debug) {
+				Profile.drawStringMultiLineNO(g2d, getLinkedTo().toString(), 205, 9, 277);
+			} else {
+				Profile.drawStringMultiLineNO(g2d, getDescription(), 205, 9, 277);
+			}
 
 			if (!available) {
 				g2d.setColor(new Color(0, 0, 0, 150));
@@ -490,25 +499,6 @@ public class Equipment implements Drawable, Cloneable {
 	@Override
 	public Equipment deepCopy() {
 		return copy();
-	}
-
-	public String toString() {
-		return new JSONObject(card.toString()) {{
-			put("equipment", new JSONObject() {{
-				put("id", id);
-				put("tier", tier);
-				if (charms != null)
-					put("charm", new JSONObject() {{
-						put("id", charms);
-						put("image", isSpell() ? "" : Helper.atob(Charm.getIcon(getCharms()), "png"));
-					}});
-				put("attack", atk);
-				put("defense", def);
-				put("mana", mana);
-				put("description", description);
-				put("effectType", argType);
-			}});
-		}}.toString();
 	}
 
 	public String getBase64() {

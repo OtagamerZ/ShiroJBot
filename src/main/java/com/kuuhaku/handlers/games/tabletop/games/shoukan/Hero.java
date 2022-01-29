@@ -106,8 +106,6 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
-    private static final double GROWTH_FAC = Math.log10(Helper.GOLDEN_RATIO * 20);
-
     public Hero() {
     }
 
@@ -214,7 +212,7 @@ public class Hero implements Cloneable {
     }
 
     public int getXpToNext() {
-        return (int) Helper.getFibonacci(getLevel() + 1) * 5;
+            return (int) Helper.getFibonacci(getLevel() + 1) * 5;
     }
 
     public int getBonusPoints() {
