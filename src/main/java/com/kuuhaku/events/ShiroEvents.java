@@ -1109,22 +1109,28 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		} else {
 			event.getAuthor().openPrivateChannel().queue(c -> {
-				if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
-					c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
-							.queue(s -> {
-								EmbedBuilder eb = new ColorlessEmbedBuilder()
-										.setDescription((content + "\n\n" + (msg.getAttachments().size() > 0 ? "`Contém " + msg.getAttachments().size() + " anexos`" : "")).trim())
-										.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
-										.setFooter(event.getAuthor().getId())
-										.setTimestamp(Instant.now());
+				Account acc = AccountDAO.getAccount(event.getAuthor().getId());
 
-								for (String d : staffIds) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
-											.flatMap(ch -> ch.sendMessageEmbeds(eb.build()))
-											.queue();
-								}
-								s.delete().queueAfter(1, TimeUnit.MINUTES);
-							}, Helper::doNothing);
+				if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
+					if (!acc.isDMWarned()) {
+						c.sendMessage(":octagonal_sign: | Aviso: as mensagens enviadas neste canal serão monitoradas pela equipe de suporte.\nUse-o apenas para dúvidas ou assuntos referentes à Shiro, usá-lo para outros assuntos poderá fazer com que você seja bloqueado.").queue();
+					} else {
+						c.sendMessage("Mensagem enviada à equipe de suporte, por favor aguarde...")
+								.queue(s -> {
+									EmbedBuilder eb = new ColorlessEmbedBuilder()
+											.setDescription((content + "\n\n" + (msg.getAttachments().size() > 0 ? "`Contém " + msg.getAttachments().size() + " anexos`" : "")).trim())
+											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
+											.setFooter(event.getAuthor().getId())
+											.setTimestamp(Instant.now());
+
+									for (String d : staffIds) {
+										Main.getInfo().getUserByID(d).openPrivateChannel()
+												.flatMap(ch -> ch.sendMessageEmbeds(eb.build()))
+												.queue();
+									}
+									s.delete().queueAfter(1, TimeUnit.MINUTES);
+								}, Helper::doNothing);
+					}
 				}
 			});
 		}

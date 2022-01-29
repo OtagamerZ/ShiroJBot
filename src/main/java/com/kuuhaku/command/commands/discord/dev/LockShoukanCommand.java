@@ -39,7 +39,7 @@ public class LockShoukanCommand implements Executable {
 		else {
 			mm.getSoloLobby().clear();
 			mm.setLocked(true);
-			channel.sendMessage("✅ | Shoukan bloqueado com sucesso até a reinicialização.").queue();
+			channel.sendMessage("✅ | Shoukan bloqueado com sucesso até a reinicialização (" + Main.getInfo().getShoukanSlot().size() + " jogos restantes).").queue();
 		}
 	}
 }
