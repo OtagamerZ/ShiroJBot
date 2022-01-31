@@ -701,6 +701,8 @@ public class Hand {
 		if (value <= 0) return;
 
 		setHp((int) (hp + value * getHealingFac()));
+		decreaseBleeding((int) (value * 0.25));
+
 		if (trigger) {
 			Arena arena = game.getArena();
 			if (arena != null) {
@@ -867,6 +869,10 @@ public class Hand {
 
 	public void addBleeding(int bleeding) {
 		this.bleeding += bleeding;
+	}
+
+	public void decreaseBleeding(int value) {
+		bleeding = Math.max(0, bleeding - value);
 	}
 
 	public void decreaseBleeding() {
