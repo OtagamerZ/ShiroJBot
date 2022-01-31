@@ -1745,7 +1745,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			Champion target = slts.get(index).getTop();
-			if (target == null) return;
+			if (target == null || target.getBonus().popFlag(Flag.NOBAN)) return;
 
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
