@@ -96,16 +96,9 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
-				try {
-					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
-				} catch (IOException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					return null;
-				}
-			}) : Helper.btoc(heroImg);
-
+			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
+
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
@@ -130,16 +123,9 @@ public class Card {
 
 	public BufferedImage drawUltimate(String uid) {
 		try {
-			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
-				try {
-					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
-				} catch (IOException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					return null;
-				}
-			}) : Helper.btoc(heroImg);
-
+			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
+
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
@@ -194,16 +180,9 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder() {
 		try {
-			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
-				try {
-					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
-				} catch (IOException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					return null;
-				}
-			}) : Helper.btoc(heroImg);
-
+			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
+
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return ImageIO.read(bais);
 			}
@@ -212,18 +191,33 @@ public class Card {
 		}
 	}
 
-	public BufferedImage drawCardNoBorder(boolean foil) {
-		try {
-			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+	private byte[] getImageBytes() throws IOException {
+		File f = new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png");
+		byte[] cardBytes;
+		if (f.exists()) {
+			File finalF = f;
+			cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
 				try {
-					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+					return FileUtils.readFileToByteArray(finalF);
 				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					return null;
 				}
 			}) : Helper.btoc(heroImg);
+		} else {
+			f = Helper.getResourceAsFile(this.getClass(), "kawaipon/not_found.png");
+			assert f != null;
 
+			cardBytes = FileUtils.readFileToByteArray(f);
+		}
+		return cardBytes;
+	}
+
+	public BufferedImage drawCardNoBorder(boolean foil) {
+		try {
+			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
+
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return foil ? adjust(ImageIO.read(bais), false) : ImageIO.read(bais);
 			}
@@ -234,16 +228,9 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder(Account acc) {
 		try {
-			byte[] cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
-				try {
-					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
-				} catch (IOException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					return null;
-				}
-			}) : Helper.btoc(heroImg);
-
+			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
+
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return acc.isUsingFoil() && acc.getCompletion(anime).foil()
 						? adjust(ImageIO.read(bais), false)
