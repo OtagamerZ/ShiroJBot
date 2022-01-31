@@ -1003,8 +1003,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			hPower = defr.isDecoy() ? 0 : defr.getFinAtk();
 		}
 
-		int dodge = defr.getDodge();
-		int block = defr.getBlock();
+		int dodge = defr.getDodge(false);
+		int block = defr.getBlock(false);
 		boolean dodged = dodge >= 100 || (dodge > 0 && Helper.chance(dodge));
 		boolean blocked = block >= 100 || (block > 0 && Helper.chance(block));
 
@@ -1990,7 +1990,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h.get().getBleeding() > 0) {
-				h.get().removeHp(h.get().getBleeding() / 10);
+				h.get().removeHp(h.get().getBleeding() / 5);
 				h.get().decreaseBleeding();
 			}
 
@@ -2409,7 +2409,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 
 					if (h.get().getBleeding() > 0) {
-						h.get().removeHp(h.get().getBleeding() / 10);
+						h.get().removeHp(h.get().getBleeding() / 5);
 						h.get().decreaseBleeding();
 					}
 
