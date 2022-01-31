@@ -29,6 +29,7 @@ import java.util.stream.IntStream;
 public class Bonus implements Cloneable {
 	private JSONObject specialData;
 	private EnumSet<Flag> flags;
+	private EnumSet<Flag> pFlags;
 	private int[] atk = new int[6];
 	private int[] def = new int[6];
 	private int[] ddg = new int[6];
@@ -38,9 +39,10 @@ public class Bonus implements Cloneable {
 	private String write = null;
 	private Charm charm = null;
 
-	public Bonus(JSONObject specialData, EnumSet<Flag> flags, int atk, int def, int ddg, int blk, int mana, int blood, String write, Charm charm) {
+	public Bonus(JSONObject specialData, EnumSet<Flag> flags, EnumSet<Flag> pFlags, int atk, int def, int ddg, int blk, int mana, int blood, String write, Charm charm) {
 		this.specialData = specialData;
 		this.flags = flags;
+		this.pFlags = pFlags;
 		this.atk[0] = atk;
 		this.def[0] = def;
 		this.ddg[0] = ddg;
@@ -54,11 +56,13 @@ public class Bonus implements Cloneable {
 	public Bonus(JSONObject specialData) {
 		this.specialData = new JSONObject(specialData.toString());
 		this.flags = EnumSet.noneOf(Flag.class);
+		this.pFlags = EnumSet.noneOf(Flag.class);
 	}
 
 	public Bonus() {
 		this.specialData = new JSONObject();
 		this.flags = EnumSet.noneOf(Flag.class);
+		this.pFlags = EnumSet.noneOf(Flag.class);
 	}
 
 	public JSONObject getSpecialData() {
@@ -74,16 +78,21 @@ public class Bonus implements Cloneable {
 	}
 
 	public boolean hasFlag(Flag flag) {
-		return flags.contains(flag);
+		return flags.contains(flag) || pFlags.contains(flag);
 	}
 
 	public boolean popFlag(Flag flag) {
-		return flags.remove(flag);
+		return flags.remove(flag) || pFlags.contains(flag);
 	}
 
 	public void setFlag(Flag flag, boolean on) {
 		if (on) flags.add(flag);
 		else flags.remove(flag);
+	}
+
+	public void setPFlag(Flag flag, boolean on) {
+		if (on) pFlags.add(flag);
+		else pFlags.remove(flag);
 	}
 
 	public int getAtk() {
@@ -252,6 +261,7 @@ public class Bonus implements Cloneable {
 			Bonus b = (Bonus) super.clone();
 			b.specialData = new JSONObject(specialData);
 			b.flags = EnumSet.copyOf(flags);
+			b.pFlags = EnumSet.copyOf(pFlags);
 			b.atk = Arrays.copyOf(atk, 6);
 			b.def = Arrays.copyOf(def, 6);
 			b.ddg = Arrays.copyOf(ddg, 6);
