@@ -248,7 +248,7 @@ public class Arena {
 						g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
 
 						String hp = "HP: %04d".formatted(Math.max(0, h.getHp()));
-						String mp = h.isHidingMana() ? "--" : "MP: %02d".formatted(Math.max(0, h.getMana()));
+						String mp = h.isHidingMana() ? "MP: --" : "MP: %02d".formatted(Math.max(0, h.getMana()));
 
 						int hpWidth = g2d.getFontMetrics().stringWidth(hp);
 						Profile.drawOutlinedText(
