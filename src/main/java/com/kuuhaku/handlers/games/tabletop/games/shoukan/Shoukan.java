@@ -1414,7 +1414,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (CardLink cl : List.copyOf(target.getLinkedTo())) {
+			List<CardLink> aux = List.copyOf(target.getLinkedTo());
+			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
 				if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
@@ -1492,7 +1493,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (CardLink cl : List.copyOf(target.getLinkedTo())) {
+			List<CardLink> aux = List.copyOf(target.getLinkedTo());
+			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
 				if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
@@ -1570,7 +1572,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (CardLink cl : List.copyOf(target.getLinkedTo())) {
+			List<CardLink> aux = List.copyOf(target.getLinkedTo());
+			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
 				if (e.getCharms().contains(Charm.SHIELD)) {
@@ -1609,7 +1612,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (CardLink cl : List.copyOf(target.getLinkedTo())) {
+			List<CardLink> aux = List.copyOf(target.getLinkedTo());
+			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
 				if (e.getCharms().contains(Charm.SHIELD)) {
@@ -1677,7 +1681,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			for (CardLink cl : List.copyOf(target.getLinkedTo())) {
+			List<CardLink> aux = List.copyOf(target.getLinkedTo());
+			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
 				if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
@@ -2734,7 +2739,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				activator.getCurse(new EffectParameters(trigger, this, side, index, duelists, channel));
 			}
 
-			for (CardLink cl : List.copyOf(activator.getLinkedTo())) {
+			List<CardLink> aux = List.copyOf(activator.getLinkedTo());
+			for (CardLink cl : aux) {
 				if (cl.isFake()) continue;
 
 				Equipment e = cl.asEquipment();
