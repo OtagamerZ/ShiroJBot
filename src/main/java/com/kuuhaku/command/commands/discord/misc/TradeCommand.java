@@ -24,7 +24,10 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.TradeDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
@@ -39,8 +42,8 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -50,7 +53,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "trocar",
@@ -89,12 +91,15 @@ public class TradeCommand implements Executable {
 			}
 		}
 
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja" + (t == null ? "" : " continuar a") + " negociar com você, deseja aceitar?").queue(s ->
 				Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (!wrapper.getUser().getId().equals(tgt.getId())) return;
 							s.delete().queue(null, Helper::doNothing);
 							Trade trade = Helper.getOr(t, new Trade(author.getId(), tgt.getId()));
 
+							Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
+							Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
 									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta`, para adicionar/remover uma quantia de CR digite `+/- valor`.")
@@ -109,7 +114,8 @@ public class TradeCommand implements Executable {
 
 							sendTradeWindow(author, channel, guild, tgt, trade, eb);
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId())
+						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				)
 		);
 	}
@@ -231,13 +237,15 @@ public class TradeCommand implements Executable {
 										});
 									}
 
-									Main.getInfo().getConfirmationPending().put(author.getId(), true);
+									Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
+									Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 									channel.sendMessageEmbeds(eb.build())
 											.queue(s -> Pages.buttonize(s, btns, true,
 													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
 													u -> u.getId().equals(author.getId()),
 													ms -> {
-														Main.getInfo().getConfirmationPending().remove(author.getId());
+														Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
+														Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
 														chosen.complete(null);
 													}
 											));
@@ -354,13 +362,15 @@ public class TradeCommand implements Executable {
 										});
 									}
 
-									Main.getInfo().getConfirmationPending().put(author.getId(), true);
+									Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
+									Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 									channel.sendMessageEmbeds(eb.build())
 											.queue(s -> Pages.buttonize(s, btns, true,
 													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
 													u -> u.getId().equals(author.getId()),
 													ms -> {
-														Main.getInfo().getConfirmationPending().remove(author.getId());
+														Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
+														Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
 														chosen.complete(null);
 													}
 											));
