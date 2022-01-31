@@ -1612,7 +1612,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 
-			List<CardLink> aux = List.copyOf(target.getLinkedTo());
+			aux = List.copyOf(target.getLinkedTo());
 			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
