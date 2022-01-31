@@ -182,7 +182,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(Charm.CURSE.getIcon(), 135, 188, null);
 			}
 
-			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(), c.getBlock(), true);
+			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(false), c.getBlock(false), true);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(fc.getSecondaryColor());
@@ -583,7 +583,7 @@ public class Champion implements Drawable, Cloneable {
 		);
 	}
 
-	public int getDodge() {
+	public int getDodge(boolean ignoreAdaptive) {
 		if (isStasis() || isStunned() || isSleeping()) return 0;
 
 		double heroMod = 1;
@@ -593,9 +593,9 @@ public class Champion implements Drawable, Cloneable {
 				heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
 			}
 
-			if (hero.getPerks().contains(Perk.ADAPTIVE)) {
-				if (isDefending())
-					extra += getBlock();
+			if (!ignoreAdaptive && hero.getPerks().contains(Perk.ADAPTIVE)) {
+				if (!isDefending())
+					extra += getBlock(true) * 2;
 				else
 					heroMod = 0;
 			}
@@ -632,15 +632,15 @@ public class Champion implements Drawable, Cloneable {
 		this.mDodge -= dodge;
 	}
 
-	public int getBlock() {
+	public int getBlock(boolean ignoreAdaptive) {
 		if (isStasis() || isStunned() || isSleeping()) return 0;
 
 		double heroMod = 1;
 		int extra = 0;
 		if (hero != null && game != null) {
-			if (hero.getPerks().contains(Perk.ADAPTIVE)) {
+			if (!ignoreAdaptive && hero.getPerks().contains(Perk.ADAPTIVE)) {
 				if (isDefending())
-					extra += getDodge() / 2;
+					extra += getDodge(true) / 2;
 				else
 					heroMod = 0;
 			}
@@ -895,7 +895,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setStasis(int stasis) {
-		this.stasis = stasis;
+		this.stasis = Math.max(stasis, this.stasis);
 		if (getStasis() > 0) defending = true;
 	}
 
@@ -917,7 +917,7 @@ public class Champion implements Drawable, Cloneable {
 			return;
 		}
 
-		this.stun = stun;
+		this.stun = Math.max(stun, this.stun);
 		if (getStun() > 0) defending = true;
 	}
 
@@ -939,7 +939,7 @@ public class Champion implements Drawable, Cloneable {
 			return;
 		}
 
-		this.sleep = sleep;
+		this.sleep = Math.max(sleep, this.sleep);
 		if (getSleep() > 0) defending = true;
 	}
 
