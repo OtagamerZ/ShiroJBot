@@ -47,20 +47,26 @@ public class FrameBackgroundCommand implements Executable {
 			return;
 		}
 
-		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
-		if (anime == null) {
-			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
-			return;
-		}
+		if (Helper.equalsAny(args[0], "limpar", "clear")) {
+			acc.setUltimate("");
+			AccountDAO.saveAccount(acc);
+			channel.sendMessage("✅ | Ultimate limpa com sucesso!").queue();
+		} else {
+			AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
+			if (anime == null) {
+				channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+				return;
+			}
 
-		boolean canUse = acc.getCompletion(anime).any();
-		if (!canUse) {
-			channel.sendMessage("❌ | Você só pode usar como fundo animes que você já tenha completado a coleção.").queue();
-			return;
-		}
+			boolean canUse = acc.getCompletion(anime).any();
+			if (!canUse) {
+				channel.sendMessage("❌ | Você só pode usar como fundo animes que você já tenha completado a coleção.").queue();
+				return;
+			}
 
-		acc.setUltimate(anime.getName());
-		AccountDAO.saveAccount(acc);
-		channel.sendMessage("✅ | Ultimate definida com sucesso!").queue();
+			acc.setUltimate(anime.getName());
+			AccountDAO.saveAccount(acc);
+			channel.sendMessage("✅ | Ultimate definida com sucesso!").queue();
+		}
 	}
 }
