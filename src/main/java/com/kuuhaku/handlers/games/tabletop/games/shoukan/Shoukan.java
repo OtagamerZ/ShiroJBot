@@ -1330,7 +1330,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				.orElse(null);
 
 		if (fusion != null) {
-			for (FusionMaterial material : fusion.canFuse(champsInField, equipsInField, field)) {
+			List<FusionMaterial> mats = fusion.canFuse(champsInField, equipsInField, field);
+			for (FusionMaterial material : mats) {
 				banCard(h.getSide(), material.index(), material.equipment());
 			}
 
