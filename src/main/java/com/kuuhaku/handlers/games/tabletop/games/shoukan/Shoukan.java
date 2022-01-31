@@ -1401,7 +1401,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int sourceMana = activator.getMana(5);
 				int targetMana = target.getMana(5);
 
-				chance -= target.getDodge() * 0.75;
+				chance -= target.getDodge(false) * 0.75;
 				if (sourceMana < targetMana)
 					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 			}
@@ -1479,7 +1479,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int sourceMana = activator.getMana(5);
 				int targetMana = target.getMana(5);
 
-				chance -= target.getDodge() * 0.75;
+				chance -= target.getDodge(false) * 0.75;
 				if (sourceMana < targetMana)
 					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 			}
@@ -1559,7 +1559,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		int sourceMana = activator.getMana(5);
 		int targetMana = target.getMana(5);
 
-		chance -= target.getDodge() * 0.75;
+		chance -= target.getDodge(false) * 0.75;
 		if (sourceMana < targetMana)
 			chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 
@@ -1664,7 +1664,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int sourceMana = activator.getMana(5);
 				int targetMana = target.getMana(5);
 
-				chance -= target.getDodge() * 0.75;
+				chance -= target.getDodge(false) * 0.75;
 				if (sourceMana < targetMana)
 					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
 			}
