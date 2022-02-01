@@ -86,7 +86,11 @@ public class BotStats {
 		memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		memoryPrcnt = Helper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
 		cpuUsage = ShiroInfo.getSystemInfo().getProcessCpuLoad();
-		ping = Main.getShiroShards().getShards().get(0).getRestPing().complete();
+		try {
+			ping = Main.getShiroShards().getShards().get(0).getRestPing().complete();
+		} catch (Exception e) {
+			ping = 0;
+		}
 		dbPing = Manager.ping();
 
 		ratelimitCount = Main.getInfo().getRatelimit().size();
