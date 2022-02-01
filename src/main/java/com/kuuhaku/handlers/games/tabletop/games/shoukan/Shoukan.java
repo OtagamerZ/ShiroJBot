@@ -310,7 +310,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* CHECK COST */
 		{
-			if (!hand.isNullMode() && (hand.getMana() < hand.getMana())) {
+			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
 				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
 			} else if (hand.getHp() <= card.getBlood()) {
@@ -378,7 +378,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* CHECK COST */
 		{
-			if (!hand.isNullMode() && (hand.getMana() < hand.getMana())) {
+			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
 				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
 			} else if (hand.getHp() <= card.getBlood()) {
@@ -519,7 +519,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		/* CHECK COST */
 		{
-			if (!hand.isNullMode() && (hand.getMana() < hand.getMana())) {
+			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
 				channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
 			} else if (hand.getHp() <= card.getBlood()) {
