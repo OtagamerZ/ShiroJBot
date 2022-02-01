@@ -193,22 +193,24 @@ public class Card {
 
 	private byte[] getImageBytes() throws IOException {
 		File f = new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png");
-		byte[] cardBytes;
-		if (f.exists()) {
-			File finalF = f;
-			cardBytes = heroImg == null ? Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
-				try {
-					return FileUtils.readFileToByteArray(finalF);
-				} catch (IOException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					return null;
-				}
-			}) : Helper.btoc(heroImg);
-		} else {
-			f = Helper.getResourceAsFile(this.getClass(), "kawaipon/not_found.png");
-			assert f != null;
+		byte[] cardBytes = heroImg == null ? null : Helper.btoc(heroImg);
+		if (cardBytes == null) {
+			if (f.exists()) {
+				File finalF = f;
+				cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+					try {
+						return FileUtils.readFileToByteArray(finalF);
+					} catch (IOException e) {
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+						return null;
+					}
+				});
+			} else {
+				f = Helper.getResourceAsFile(this.getClass(), "kawaipon/not_found.png");
+				assert f != null;
 
-			cardBytes = FileUtils.readFileToByteArray(f);
+				cardBytes = FileUtils.readFileToByteArray(f);
+			}
 		}
 		return cardBytes;
 	}
