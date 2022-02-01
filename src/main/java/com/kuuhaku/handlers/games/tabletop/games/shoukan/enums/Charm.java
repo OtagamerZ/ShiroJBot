@@ -31,7 +31,7 @@ public enum Charm {
     MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
     TIMEWARP("Salto temporal", "Ativa %s efeito%s por turno instantaneamente"),
     DOUBLETAP("Toque duplo", "Ativa novamente %s efeito%s de invocação"),
-    CLONE("Clone", "Cria um clone com %s% dos atributos"),
+    CLONE("Clone", "Cria um clone com %s%% dos atributos"),
     LINK("Vínculo", "Bloqueia modificadores de campo"),
     SPELL("Magia", "Executa um efeito ao ativar"),
     ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
