@@ -363,7 +363,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					hand.getUser().getName(),
 					copy.getName()
 			);
-			case FLIPPED -> "%s invocou uma carta virada para baixo.";
+			case FLIPPED -> "%s invocou uma carta virada para baixo.".formatted(
+					hand.getUser().getName()
+			);
 			default -> null;
 		};
 	}
