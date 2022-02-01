@@ -501,7 +501,6 @@ public class Hand {
 	public BufferedImage render() {
 		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 0, null);
@@ -509,7 +508,12 @@ public class Hand {
 
 		g2d.dispose();
 
-		return bi;
+		BufferedImage container = new BufferedImage(Math.max(2250, bi.getWidth()), 350, BufferedImage.TYPE_INT_ARGB);
+		g2d = container.createGraphics();
+		g2d.drawImage(bi, container.getWidth() / 2 - bi.getWidth() / 2, 0, null);
+		g2d.dispose();
+
+		return container;
 	}
 
 	public void showHand() {
@@ -877,5 +881,9 @@ public class Hand {
 
 	public void decreaseBleeding() {
 		bleeding = Math.max(0, (int) (bleeding * 0.9));
+	}
+
+	public List<SlotColumn> getSlots() {
+		return game.getArena().getSlots().get(side);
 	}
 }

@@ -31,7 +31,7 @@ public enum Charm {
     MIRROR("Reflexo", "Reflete efeitos de destruição ou conversão"),
     TIMEWARP("Salto temporal", "Ativa %s efeito%s por turno instantaneamente"),
     DOUBLETAP("Toque duplo", "Ativa novamente %s efeito%s de invocação"),
-    CLONE("Clone", "Cria %s clone%s com 75%% dos atributos"),
+    CLONE("Clone", "Cria um clone com %s% dos atributos"),
     LINK("Vínculo", "Bloqueia modificadores de campo"),
     SPELL("Magia", "Executa um efeito ao ativar"),
     ENCHANTMENT("Encantamento", "Prende-se à uma carta, adicionando um efeito extra à ela"),
@@ -57,10 +57,11 @@ public enum Charm {
 
     public String getDescription(int tier) {
         return switch (this) {
-            case SHIELD, TIMEWARP, DOUBLETAP, CLONE -> description.formatted(
+            case SHIELD, TIMEWARP, DOUBLETAP -> description.formatted(
                     Helper.getFibonacci(tier),
 					Helper.getFibonacci(tier) == 1 ? "" : "s"
             );
+			case CLONE -> description.formatted(25 * tier);
             case DRAIN -> description.formatted(Helper.getFibonacci(tier));
             case AGILITY -> description.formatted(Helper.roundToString(7.5 * tier, 1));
             case FORTIFY -> description.formatted(5 * tier);
