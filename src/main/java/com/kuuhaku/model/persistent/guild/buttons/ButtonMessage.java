@@ -113,11 +113,11 @@ public class ButtonMessage {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ButtonMessage that = (ButtonMessage) o;
-		return Objects.equals(id, that.id) && Objects.equals(parent, that.parent);
+		return gatekeeper == that.gatekeeper && Objects.equals(id, that.id) && Objects.equals(parent, that.parent) && Objects.equals(author, that.author) && Objects.equals(role, that.role);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, parent);
+		return Objects.hash(id, parent, author, gatekeeper, role);
 	}
 }
