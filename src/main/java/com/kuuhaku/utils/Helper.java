@@ -3440,4 +3440,68 @@ public abstract class Helper {
                 .map(d -> d + (gc.isPartner() ? 0.2 : 0))
                 .findFirst().orElse(1);
     }
+
+    public static int safeGet(int[] arr, int index) {
+        try {
+            return arr[index];
+        } catch (IndexOutOfBoundsException e) {
+            return -1;
+        }
+    }
+
+    public static long safeGet(long[] arr, int index) {
+        try {
+            return arr[index];
+        } catch (IndexOutOfBoundsException e) {
+            return -1;
+        }
+    }
+
+    public static float safeGet(float[] arr, int index) {
+        try {
+            return arr[index];
+        } catch (IndexOutOfBoundsException e) {
+            return -1;
+        }
+    }
+
+    public static double safeGet(double[] arr, int index) {
+        try {
+            return arr[index];
+        } catch (IndexOutOfBoundsException e) {
+            return -1;
+        }
+    }
+
+    public static <T> T safeGet(T[] arr, int index) {
+        try {
+            return arr[index];
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public static <T> T safeGet(List<T> lst, int index) {
+        try {
+            return lst.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public static <T, O> O castGet(T[] arr, int index, Function<T, O> converter) {
+        try {
+            return converter.apply(arr[index]);
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    public static <T, O> O castGet(List<T> lst, int index, Function<T, O> converter) {
+        try {
+            return converter.apply(lst.get(index));
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
 }
