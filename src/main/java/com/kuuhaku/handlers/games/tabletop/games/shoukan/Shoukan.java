@@ -77,6 +77,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm.*;
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
 public class Shoukan extends GlobalGame implements Serializable {
@@ -301,6 +302,348 @@ public class Shoukan extends GlobalGame implements Serializable {
 				.test(evt);
 	}
 
+	public String summonCard(Champion card, Mode mode, int index) {
+		Hand hand = hands.get(getCurrentSide());
+		if (index > -1) {
+			index--;
+		}
+
+		/* CHECK COST */
+		{
+			if (!hand.isNullMode() && (hand.getMana() < hand.getMana())) {
+				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				return null;
+			} else if (hand.getHp() <= card.getBlood()) {
+				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				return null;
+			}
+		}
+
+		Champion copy = card.copy();
+		/* CHECK ARGUMENTS */
+		{
+			if (index == -1) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
+				return null;
+			}
+		}
+
+		SlotColumn slot = getSlot(getCurrentSide(), index);
+		if (slot.getBottom() != null) {
+			channel.sendMessage("❌ | Já existe um campeão nessa casa.").queue(null, Helper::doNothing);
+			return null;
+		} else if (slot.isUnavailable()) {
+			channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
+			return null;
+		}
+
+		reroll = false;
+		card.setAvailable(false);
+		if (hand.isNullMode())
+			hand.removeHp(card.getBaseStats() / 2);
+		else
+			hand.removeMana(card.getMana());
+		hand.removeHp(card.getBlood());
+
+		copy.setDefending(mode == Mode.DEFENSE || mode == Mode.FLIPPED);
+		copy.setFlipped(mode == Mode.FLIPPED);
+		slot.setTop(copy);
+
+		if (!copy.isFlipped() && applyEffect(ON_SUMMON, copy, getCurrentSide(), index, new Source(copy, getCurrentSide(), index)))
+			return null;
+
+		summoned.get(getCurrentSide()).merge(copy.getRace(), 1, Integer::sum);
+
+		return switch (mode) {
+			case ATTACK -> "%s invocou %s em posição de ataque.".formatted(
+					hand.getUser().getName(),
+					copy.getName()
+			);
+			case DEFENSE -> "%s invocou %s em posição de defesa.".formatted(
+					hand.getUser().getName(),
+					copy.getName()
+			);
+			case FLIPPED -> "%s invocou uma carta virada para baixo.";
+			default -> null;
+		};
+	}
+
+	public String summonCard(Equipment card, Integer[] targets) {
+		Hand hand = hands.get(getCurrentSide());
+		Arguments type = card.getArgType();
+		int dest = Helper.getOr(targets[0], 0) - 1;
+		int pos = Helper.getOr(targets[1], 0) - 1;
+
+		/* CHECK COST */
+		{
+			if (!hand.isNullMode() && (hand.getMana() < hand.getMana())) {
+				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				return null;
+			} else if (hand.getHp() <= card.getBlood()) {
+				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				return null;
+			}
+		}
+
+		Equipment copy = card.copy();
+		/* CHECK ARGUMENTS */
+		{
+			if (dest == -1) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
+				return null;
+			}
+		}
+
+		SlotColumn slot;
+		Pair<Champion, Integer> target;
+
+		if (type == Arguments.ENEMY) {
+			if (pos == -1) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para equipar este evogear.").queue(null, Helper::doNothing);
+				return null;
+			}
+
+			Champion t = getSlot(getCurrentSide(), pos).getTop();
+			if (t == null) {
+				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+				return null;
+			}
+
+			target = Pair.of(t, pos);
+			slot = getSlot(getCurrentSide(), dest);
+		} else {
+			if (pos == -1) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
+				return null;
+			}
+
+			Champion t = getSlot(getNextSide(), pos).getTop();
+			if (t == null) {
+				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+				return null;
+			}
+
+			target = Pair.of(t, pos);
+			slot = getSlot(getNextSide(), dest);
+		}
+
+		if (slot.getBottom() != null) {
+			channel.sendMessage("❌ | Já existe um evogear nessa casa.").queue(null, Helper::doNothing);
+			return null;
+		} else if (slot.isUnavailable()) {
+			channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
+			return null;
+		}
+
+		reroll = false;
+		card.setAvailable(false);
+		hand.removeMana(card.getMana());
+		hand.removeHp(card.getBlood());
+
+		copy.setFlipped(card.getCharms().contains(Charm.TRAP));
+		slot.setBottom(copy);
+
+		Champion t = target.getLeft();
+		t.link(copy);
+
+		if (copy.hasEffect()) {
+			if (type == Arguments.ALLY) {
+				copy.activate(hand, hands.get(getNextSide()), this, pos, -1);
+			} else {
+				copy.activate(hand, hands.get(getNextSide()), this, -1, pos);
+			}
+		}
+
+		if (applyEffect(ON_EQUIP, t, getCurrentSide(), pos, new Source(t, getCurrentSide(), pos)))
+			return null;
+
+		if (copy.getCharms() != null) {
+			if (Helper.containsAny(copy.getCharms(), TIMEWARP, DOUBLETAP)) {
+				int uses = (int) Helper.getFibonacci(copy.getTier());
+
+				activations:
+				for (Charm charm : copy.getCharms()) {
+					for (int i = 0; i < uses; i++) {
+						if (!getSlot(getCurrentSide(), target.getRight()).getTop().equals(t)) {
+							break activations;
+						}
+
+						switch (charm) {
+							case TIMEWARP -> {
+								if (t.hasEffect()) {
+									t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), pos, Duelists.of(t, pos, null, -1), channel));
+									t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), pos, Duelists.of(t, pos, null, -1), channel));
+								}
+							}
+							case DOUBLETAP -> {
+								if (t.hasEffect())
+									t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), pos, Duelists.of(t, pos, null, -1), channel));
+							}
+						}
+					}
+				}
+			}
+
+			if (copy.getCharms().contains(CLONE)) {
+				SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
+
+				if (sc != null) {
+					t.removeAtk(Math.round(t.getAltAtk() * (1 - copy.getTier() * 0.25f)));
+					t.removeDef(Math.round(t.getAltDef() * (1 - copy.getTier() * 0.25f)));
+
+					Champion dp = t.copy();
+					dp.getBonus().removeMana(dp.getMana() / 2);
+					dp.setGravelocked(true);
+
+					sc.setTop(dp);
+				}
+			}
+
+			if (postCombat()) return null;
+		}
+
+		return "%s equipou %s em %s.".formatted(
+				hand.getUser().getName(),
+				copy.isFlipped() ? "um evogear virado para baixo" : copy.getCard().getName(),
+				t.isFlipped() ? "um campeão virado para baixo" : t.getName()
+		);
+	}
+
+	public String castSpell(Equipment card, Integer[] targets) {
+		Hand hand = hands.get(getCurrentSide());
+		Arguments type = card.getArgType();
+		int pos1 = Helper.getOr(targets[0], 0) - 1;
+		int pos2 = Helper.getOr(targets[1], 0) - 1;
+
+		/* CHECK COST */
+		{
+			if (!hand.isNullMode() && (hand.getMana() < hand.getMana())) {
+				channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				return null;
+			} else if (hand.getHp() <= card.getBlood()) {
+				channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				return null;
+			}
+		}
+
+		Equipment copy = card.copy();
+		/* CHECK ARGUMENTS */
+		{
+			if (spellLock > 0) {
+				channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, Helper::doNothing);
+				return null;
+			} else if (targets.length < type.getArgCount()) {
+				channel.sendMessage(
+						switch (type) {
+							case ALLY -> "❌ | Esta magia requer um alvo aliado.";
+							case ENEMY -> "❌ | Esta magia requer um alvo inimigo.";
+							case BOTH -> "❌ | Esta magia requer um alvo aliado e um inimigo.";
+							default -> "";
+						}
+				).queue(null, Helper::doNothing);
+				return null;
+			}
+		}
+
+		Pair<Champion, Integer> allyPos = null;
+		Pair<Champion, Integer> enemyPos = null;
+
+		switch (type) {
+			case ALLY -> {
+				if (pos1 == -1) {
+					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado para usar esta magia.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				Champion target = getSlot(getCurrentSide(), pos1).getTop();
+				if (target == null) {
+					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				allyPos = Pair.of(target, pos1);
+			}
+			case ENEMY -> {
+				if (pos1 == -1) {
+					channel.sendMessage("❌ | Índice inválido, escolha um campeão inimigo para usar esta magia.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				Champion target = getSlot(getNextSide(), pos1).getTop();
+				if (target == null) {
+					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				enemyPos = Pair.of(target, pos1);
+			}
+			case BOTH -> {
+				if (pos1 == -1 || pos2 == -1) {
+					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado e um inimigo para usar esta magia.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				Champion target = getSlot(getCurrentSide(), pos1).getTop();
+				if (target == null) {
+					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				allyPos = Pair.of(target, pos1);
+
+				target = getSlot(getNextSide(), pos2).getTop();
+				if (target == null) {
+					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
+					return null;
+				}
+
+				enemyPos = Pair.of(target, pos2);
+			}
+		}
+
+		reroll = false;
+		card.setAvailable(false);
+		hand.removeMana(card.getMana());
+		hand.removeHp(card.getBlood());
+
+		switch (type) {
+			case NONE -> copy.activate(hand, hands.get(getNextSide()), this, -1, -1);
+			case ALLY -> copy.activate(hand, hands.get(getNextSide()), this, pos1, -1);
+			case ENEMY -> copy.activate(hand, hands.get(getNextSide()), this, -1, pos1);
+			case BOTH -> copy.activate(hand, hands.get(getNextSide()), this, pos1, pos2);
+		}
+
+		if (card.canGoToGrave()) {
+			if (card.getTier() >= 4)
+				arena.getBanned().add(copy);
+			else
+				arena.getGraveyard().get(getCurrentSide()).add(copy);
+		}
+
+		return switch (type) {
+			case NONE -> "%s usou a magia %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName()
+			);
+			case ALLY -> "%s usou a magia %s em %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName(),
+					allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName()
+			);
+			case ENEMY -> "%s usou a magia %s em %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName(),
+					enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
+			);
+			case BOTH -> "%s usou a magia %s em %s e %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName(),
+					allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName(),
+					enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
+			);
+		};
+	}
+
 	@Override
 	public synchronized void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
@@ -312,76 +655,76 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return;
 		}
 
-		String[] args = cmd.split(",");
-		if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
+		String[] args = cmd.replace(" ", "").split(",");
+		int index;
+		try {
+			index = Integer.parseInt(args[0]) - 1;
+		} catch (NumberFormatException e) {
+			channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser um valor inteiro que represente uma carta na sua mão.").queue(null, Helper::doNothing);
 			return;
 		}
-		int index = Integer.parseInt(args[0]) - 1;
 
 		if (phase == Phase.PLAN) {
-			try {
-				List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
-				if (args.length == 1) {
-					if (index < 0 || index >= slots.size()) {
-						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
-						return;
-					}
-
-					Champion c = slots.get(index).getTop();
-
-					if (c == null) {
-						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
-						return;
-					} else if (isSlotChanged(getCurrentSide(), index)) {
-						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
-						return;
-					}
-
-					String stt = switch (c.getStatus()) {
-						case STASIS -> "❌ | Essa carta está inalvejável.";
-						case STUNNED -> "❌ | Essa carta está atordoada.";
-						case SLEEPING -> "❌ | Essa carta está dormindo.";
-						default -> null;
-					};
-
-					if (stt != null) {
-						channel.sendMessage(stt).queue(null, Helper::doNothing);
-						return;
-					}
-
-					String msg;
-					if (c.isFlipped()) {
-						c.setFlipped(false);
-						c.setDefending(true);
-						msg = "Carta virada para cima em modo de defesa.";
-
-						if (applyEffect(ON_SUMMON, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
-							return;
-					} else if (c.isDefending()) {
-						c.setDefending(false);
-						msg = "Carta trocada para modo de ataque.";
-					} else {
-						c.setDefending(true);
-						msg = "Carta trocada para modo de defesa.";
-					}
-
-					if (applyEffect(ON_SWITCH, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
-						return;
-
-					setSlotChanged(getCurrentSide(), index, true);
-					reportEvent(h, msg, true, false);
+			if (args.length == 1) {
+				if (!Helper.between(index, 0, 5)) {
+					channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				Drawable d = h.getCards().get(index);
+				Champion c = getSlot(getCurrentSide(), index).getTop();
 
-				if (!d.isAvailable()) {
+				if (c == null) {
+					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
+					return;
+				} else if (isSlotChanged(getCurrentSide(), index)) {
+					channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				String stt = switch (c.getStatus()) {
+					case STASIS -> "❌ | Essa carta está inalvejável.";
+					case STUNNED -> "❌ | Essa carta está atordoada.";
+					case SLEEPING -> "❌ | Essa carta está dormindo.";
+					default -> null;
+				};
+
+				if (stt != null) {
+					channel.sendMessage(stt).queue(null, Helper::doNothing);
+					return;
+				}
+
+				String msg;
+				if (c.isFlipped()) {
+					c.setFlipped(false);
+					c.setDefending(true);
+					msg = "Carta virada para cima em modo de defesa.";
+
+					if (applyEffect(ON_SUMMON, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
+						return;
+				} else if (c.isDefending()) {
+					c.setDefending(false);
+					msg = "Carta trocada para modo de ataque.";
+				} else {
+					c.setDefending(true);
+					msg = "Carta trocada para modo de defesa.";
+				}
+
+				if (applyEffect(ON_SWITCH, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
+					return;
+
+				setSlotChanged(getCurrentSide(), index, true);
+				reportEvent(h, msg, true, false);
+			} else {
+				Drawable d = Helper.safeGet(h.getCards(), index);
+				if (d == null) {
+					channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
+					return;
+				} else if (!d.isAvailable()) {
 					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				if (args[1].equalsIgnoreCase("d") && args.length < 3) {
+				if (args[1].equalsIgnoreCase("d") && args.length == 2) {
 					discardBatch.add(d);
 					d.setAvailable(false);
 
@@ -391,339 +734,45 @@ public class Shoukan extends GlobalGame implements Serializable {
 					return;
 				}
 
-				String msg;
-				if (d instanceof Equipment) {
-					Equipment e = (Equipment) d.copy();
+				String msg = null;
+				if (d instanceof Equipment e) {
+					boolean cast = args[1].equalsIgnoreCase("s");
 
-					if (e.isSpell()) {
-						if (!args[1].equalsIgnoreCase("s")) {
-							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de magia.").queue(null, Helper::doNothing);
-							return;
-						} else if (spellLock > 0) {
-							channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, Helper::doNothing);
-							return;
-						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
-							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-							return;
-						} else if (h.getHp() <= e.getBlood()) {
-							channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-							return;
-						} else if (args.length - 2 < e.getArgType().getArgs()) {
-							channel.sendMessage(
-									switch (e.getArgType()) {
-										case ALLY -> "❌ | Esta magia requer um alvo aliado.";
-										case ENEMY -> "❌ | Esta magia requer um alvo inimigo.";
-										case BOTH -> "❌ | Esta magia requer um alvo aliado e um inimigo.";
-										default -> "";
-									}
-							).queue(null, Helper::doNothing);
-							return;
-						}
-
-						Pair<Champion, Integer> allyPos = null;
-						Pair<Champion, Integer> enemyPos = null;
-
-						switch (e.getArgType()) {
-							case ALLY -> {
-								if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
-									channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado para usar esta magia.").queue(null, Helper::doNothing);
-									return;
-								}
-								int pos = Integer.parseInt(args[2]) - 1;
-								Champion target = slots.get(pos).getTop();
-
-								if (target == null) {
-									channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
-									return;
-								}
-
-								allyPos = Pair.of(target, pos);
-							}
-							case ENEMY -> {
-								if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
-									channel.sendMessage("❌ | Índice inválido, escolha um campeão inimigo para usar esta magia.").queue(null, Helper::doNothing);
-									return;
-								}
-								int pos = Integer.parseInt(args[2]) - 1;
-								List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
-								Champion target = eSlots.get(pos).getTop();
-
-								if (target == null) {
-									channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
-									return;
-								}
-
-								enemyPos = Pair.of(target, pos);
-							}
-							case BOTH -> {
-								if (!org.apache.commons.lang.StringUtils.isNumeric(args[2]) || !org.apache.commons.lang.StringUtils.isNumeric(args[3])) {
-									channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado e um inimigo para usar esta magia.").queue(null, Helper::doNothing);
-									return;
-								}
-								int pos1 = Integer.parseInt(args[2]) - 1;
-								int pos2 = Integer.parseInt(args[3]) - 1;
-								Champion target = slots.get(pos1).getTop();
-
-								if (target == null) {
-									channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
-									return;
-								}
-
-								allyPos = Pair.of(target, pos1);
-								List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
-								target = eSlots.get(pos2).getTop();
-
-								if (target == null) {
-									channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
-									return;
-								}
-
-								enemyPos = Pair.of(target, pos2);
-							}
-						}
-
-						reroll = false;
-						d.setAvailable(false);
-						h.removeMana(e.getMana());
-						h.removeHp(e.getBlood());
-
-						e.activate(h, hands.get(getNextSide()), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
-
-						if (e.canGoToGrave()) {
-							if (e.getTier() >= 4)
-								arena.getBanned().add(e);
-							else
-								arena.getGraveyard().get(getCurrentSide()).add(e);
-						}
-
-						msg = switch (e.getArgType()) {
-							case NONE -> "%s usou %s.".formatted(
-									h.getUser().getName(),
-									e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName()
-							);
-							case ALLY -> {
-								assert allyPos != null;
-
-								yield "%s usou %s em %s.".formatted(
-										h.getUser().getName(),
-										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
-										allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName()
-								);
-							}
-							case ENEMY -> {
-								assert enemyPos != null;
-
-								yield "%s usou %s em %s.".formatted(
-										h.getUser().getName(),
-										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
-										enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
-								);
-							}
-							case BOTH -> {
-								assert allyPos != null && enemyPos != null;
-
-								yield "%s usou %s em %s e %s.".formatted(
-										h.getUser().getName(),
-										e.isFlipped() ? "uma magia virada para baixo" : "a magia " + e.getCard().getName(),
-										allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName(),
-										enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
-								);
-							}
-						};
-					} else {
-						if (args.length < 3) {
-							channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
-							return;
-						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
-							channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-							return;
-						} else if (h.getHp() <= e.getBlood()) {
-							channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-							return;
-						}
-
-						if (!org.apache.commons.lang.StringUtils.isNumeric(args[1])) {
-							channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
-							return;
-						}
-
-						int dest = Integer.parseInt(args[1]) - 1;
-
-						SlotColumn slot;
-						Pair<Champion, Integer> target;
-
-						if (e.getArgType() == Arguments.ENEMY) {
-							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
-								channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para equipar este evogear.").queue(null, Helper::doNothing);
-								return;
-							}
-							int pos = Integer.parseInt(args[2]) - 1;
-							List<SlotColumn> eSlots = arena.getSlots().get(getNextSide());
-							Champion t = eSlots.get(pos).getTop();
-
-							if (t == null) {
-								channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
-								return;
-							}
-
-							target = Pair.of(t, pos);
-							slot = eSlots.get(dest);
-						} else {
-							if (!org.apache.commons.lang.StringUtils.isNumeric(args[2])) {
-								channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
-								return;
-							}
-							int pos = Integer.parseInt(args[2]) - 1;
-							Champion t = slots.get(pos).getTop();
-
-							if (t == null) {
-								channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
-								return;
-							}
-
-							target = Pair.of(t, pos);
-							slot = slots.get(dest);
-						}
-
-						if (slot.getBottom() != null) {
-							channel.sendMessage("❌ | Já existe um evogear nessa casa.").queue(null, Helper::doNothing);
-							return;
-						} else if (slot.isUnavailable()) {
-							channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
-							return;
-						}
-
-						reroll = false;
-						d.setAvailable(false);
-						h.removeMana(e.getMana());
-						h.removeHp(e.getBlood());
-						e.setFlipped(e.getCharms().contains(Charm.TRAP));
-						slot.setBottom(e);
-
-						int toEquip = target.getRight();
-						Champion t = target.getLeft();
-						t.link(e);
-
-						if (e.hasEffect()) {
-							if (e.getArgType() == Arguments.ALLY) {
-								e.activate(h, hands.get(getNextSide()), this, toEquip, -1);
-							} else {
-								e.activate(h, hands.get(getNextSide()), this, -1, toEquip);
-							}
-						}
-
-						if (applyEffect(ON_EQUIP, t, getCurrentSide(), toEquip, new Source(t, getCurrentSide(), toEquip)))
-							return;
-
-						if (e.getCharms() != null) {
-							int uses = (int) Helper.getFibonacci(e.getTier());
-							for (int i = 0; i < uses; i++) {
-								for (Charm charm : e.getCharms()) {
-									switch (charm) {
-										case TIMEWARP -> {
-											if (t.hasEffect()) {
-												t.getEffect(new EffectParameters(BEFORE_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-												t.getEffect(new EffectParameters(AFTER_TURN, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-											}
-										}
-										case DOUBLETAP -> {
-											if (t.hasEffect())
-												t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), toEquip, Duelists.of(t, toEquip, null, -1), channel));
-										}
-										case CLONE -> {
-											SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
-
-											if (sc != null) {
-												t.removeAtk(Math.round(t.getAltAtk() * 0.25f));
-												t.removeDef(Math.round(t.getAltDef() * 0.25f));
-
-												Champion dp = t.copy();
-												dp.getBonus().removeMana(dp.getMana() / 2);
-												dp.setGravelocked(true);
-
-												sc.setTop(dp);
-											}
-										}
-									}
-								}
-							}
-
-							if (postCombat()) return;
-						}
-
-						msg = "%s equipou %s em %s.".formatted(
-								h.getUser().getName(),
-								e.isFlipped() ? "um evogear virado para baixo" : e.getCard().getName(),
-								t.isFlipped() ? "um campeão virado para baixo" : t.getName()
-						);
+					if (e.isSpell() && !cast) {
+						channel.sendMessage("❌ | O segundo argumento deve ser `S` para usar magias.").queue(null, Helper::doNothing);
+						return;
+					} else if (!e.isSpell() && cast) {
+						channel.sendMessage("❌ | O segundo argumento não deve ser `S` para usar equipamentos.").queue(null, Helper::doNothing);
+						return;
 					}
-				} else if (d instanceof Champion) {
-					Champion c = (Champion) d.copy();
-					if (args.length < 3) {
+
+					if (cast) {
+						msg = castSpell(e, new Integer[]{
+								Helper.castGet(args, 2, Integer::parseInt),
+								Helper.castGet(args, 3, Integer::parseInt)
+						});
+					} else {
+						msg = summonCard(e, new Integer[]{
+								Helper.castGet(args, 1, Integer::parseInt),
+								Helper.castGet(args, 2, Integer::parseInt)
+						});
+					}
+				} else if (d instanceof Champion c) {
+					Mode mode = switch (args[1].toUpperCase(Locale.ROOT)) {
+						case "A" -> Mode.ATTACK;
+						case "D" -> Mode.DEFENSE;
+						case "B" -> Mode.FLIPPED;
+						default -> Mode.NONE;
+					};
+
+					if (mode == Mode.NONE) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
-					} else if (!h.isNullMode() && (h.getMana() < c.getMana())) {
-						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-						return;
-					} else if ((h.isNullMode() && h.getHp() <= c.getBaseStats() / 2) || h.getHp() <= c.getBlood()) {
-						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
-						return;
 					}
 
-					if (!StringUtils.isNumeric(args[1])) {
-						channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
-						return;
-					}
-					int dest = Integer.parseInt(args[1]) - 1;
-
-					SlotColumn slot = slots.get(dest);
-
-					if (slot.getTop() != null) {
-						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
-						return;
-					} else if (slot.isUnavailable()) {
-						channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
-						return;
-					}
-
-					switch (args[2].toLowerCase(Locale.ROOT)) {
-						case "a" -> {
-							c.setFlipped(false);
-							c.setDefending(false);
-						}
-						case "d" -> {
-							c.setFlipped(false);
-							c.setDefending(true);
-						}
-						case "b" -> {
-							c.setFlipped(true);
-							c.setDefending(true);
-						}
-						default -> {
-							channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
-							return;
-						}
-					}
-
-					reroll = false;
-					d.setAvailable(false);
-					slot.setTop(c);
-					if (!c.isFlipped() && applyEffect(ON_SUMMON, c, getCurrentSide(), dest, new Source(c, getCurrentSide(), dest)))
-						return;
-
-					summoned.get(getCurrentSide()).merge(c.getRace(), 1, Integer::sum);
-
-					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
-
-					if (c.getMana() > 0) {
-						if (h.isNullMode())
-							h.removeHp(c.getBaseStats() / 2);
-						else
-							h.removeMana(c.getMana());
-					}
-					h.removeHp(c.getBlood());
-				} else {
-					Field f = (Field) d.copy();
+					msg = summonCard(c, mode, Helper.getOr(Helper.castGet(args, 2, Integer::parseInt), -1));
+				} else if (d instanceof Field f) {
+					Field copy = f.copy();
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
 						return;
@@ -731,142 +780,95 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					reroll = false;
 					d.setAvailable(false);
-					arena.setField(f);
-					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
+					arena.setField(copy);
+					msg = h.getUser().getName() + " invocou o campo " + copy.getCard().getName() + ".";
 				}
 
-				if (makeFusion(h)) return;
-				reportEvent(h, msg, true, false);
-			} catch (IndexOutOfBoundsException e) {
-				channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
-			} catch (NumberFormatException e) {
-				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser um valor inteiro que represente uma carta na sua mão e o segundo deve ser uma casa vazia no tabuleiro.").queue(null, Helper::doNothing);
+				if (!makeFusion(h) && msg != null) {
+					reportEvent(h, msg, true, false);
+				}
 			}
 		} else {
-			try {
-				if (args.length > 1 && !StringUtils.isNumeric(args[1])) {
-					channel.sendMessage("❌ | Índice inválido, escolha uma carta para ser atacada.").queue(null, Helper::doNothing);
+			int target = Helper.getOr(Helper.castGet(args, 1, Integer::parseInt), 0) - 1;
+			if (!Helper.between(index, 0, 5)) {
+				channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
+				return;
+			} else if (args.length > 1 && !Helper.between(target, 0, 5)) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta para ser atacada.").queue(null, Helper::doNothing);
+				return;
+			}
+
+			Champion ally = getSlot(getCurrentSide(), index).getTop();
+			if (ally == null) {
+				channel.sendMessage("❌ | Não existe um aliado nessa casa.").queue(null, Helper::doNothing);
+				return;
+			}
+
+			String stt = switch (ally.getStatus()) {
+				case FLIPPED -> "❌ | Você não pode atacar com cartas viradas para baixo.";
+				case STASIS -> "❌ | Essa carta está inalvejável.";
+				case STUNNED -> "❌ | Essa carta está atordoada.";
+				case SLEEPING -> "❌ | Essa carta está dormindo.";
+				case DEFENDING -> "❌ | Você não pode atacar com cartas em modo de defesa.";
+				case UNAVAILABLE -> "❌ | Essa carta já atacou neste turno.";
+				default -> null;
+			};
+
+			if (stt != null) {
+				channel.sendMessage(stt).queue(null, Helper::doNothing);
+				return;
+			}
+
+			if (target == -1) {
+				if (arena.getSlots().get(getNextSide()).parallelStream().anyMatch(s -> s.getTop() != null)) {
+					channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				int[] is = {index, args.length == 1 ? 0 : Integer.parseInt(args[1]) - 1};
+				Hand you = hands.get(getCurrentSide());
+				Hand op = hands.get(getNextSide());
 
-				List<SlotColumn> yourSide = arena.getSlots().get(getCurrentSide());
-				List<SlotColumn> hisSide = arena.getSlots().get(getNextSide());
+				float fac = (getRound() < 2 ? 0.5f : 1) * (1 - op.getMitigation());
+				if (h.getCombo().getRight() == Race.DEMON)
+					fac *= 1.25f;
+				if (op.getCombo().getRight() == Race.DEMON)
+					fac *= 1.33f;
 
-				if (args.length == 1) {
-					if (is[0] < 0 || is[0] >= yourSide.size()) {
-						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
-						return;
-					}
+				if (op.getMana() > 0) {
+					int toSteal = Math.min(op.getMana(), ally.getManaDrain());
 
-					Champion c = yourSide.get(is[0]).getTop();
+					you.addMana(toSteal);
+					op.removeMana(toSteal);
+				}
 
-					if (c == null) {
-						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
-						return;
-					} else if (hisSide.parallelStream().anyMatch(s -> s.getTop() != null)) {
-						channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue(null, Helper::doNothing);
-						return;
-					}
+				int power = ally.getFinAtk();
+				op.removeHp(Math.round(power * fac));
+				op.addBleeding(Math.round(ally.getBldAtk() * fac));
 
-					String stt = switch (c.getStatus()) {
-						case FLIPPED -> "❌ | Você não pode atacar com cartas viradas para baixo.";
-						case STASIS -> "❌ | Essa carta está inalvejável.";
-						case STUNNED -> "❌ | Essa carta está atordoada.";
-						case SLEEPING -> "❌ | Essa carta está dormindo.";
-						case DEFENDING -> "❌ | Você não pode atacar com cartas em modo de defesa.";
-						case UNAVAILABLE -> "❌ | Essa carta já atacou neste turno.";
-						default -> null;
-					};
-
-					if (stt != null) {
-						channel.sendMessage(stt).queue(null, Helper::doNothing);
-						return;
-					}
-
-					Hand you = hands.get(getCurrentSide());
-					Hand op = hands.get(getNextSide());
-
-					float demonFac = 1 - op.getMitigation();
-
-					if (h.getCombo().getRight() == Race.DEMON)
-						demonFac *= 1.25f;
-					if (op.getCombo().getRight() == Race.DEMON)
-						demonFac *= 1.33f;
-
-					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
-
-					if (!c.isDecoy()) {
-						op.removeHp(Math.round(yPower * demonFac));
-					}
-
-					if (op.getMana() > 0) {
-						int toSteal = Math.min(
-								op.getMana(),
-								c.getLinkedTo().parallelStream()
-										.map(CardLink::asEquipment)
-										.filter(e -> e.getCharms().contains(Charm.DRAIN))
-										.mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
-										.sum()
-						);
-
-						you.addMana(toSteal);
-						op.removeMana(toSteal);
-					}
-
-					int bleed = Math.round(c.getBldAtk() * demonFac);
-					if (bleed > 0) op.addBleeding(bleed);
-
-					c.setAvailable(false);
-
-					if (!postCombat()) {
-						int extra = Math.round(yPower * demonFac - yPower);
-						reportEvent(h,
-								"%s atacou %s causando %s de dano direto!%s%s".formatted(
-										c.getName(),
-										hands.get(getNextSide()).getUser().getName(),
-										yPower,
-										getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
-										extra > 0
-												? " (efeito de raça: dano direto aumentado em " + extra + ")"
-												: extra < 0
-												? " (efeito de raça: dano direto reduzido em " + extra + ")"
-												: ""
-								)
-								, true, false);
-					}
+				ally.setAvailable(false);
+				if (!postCombat()) {
+					int extra = Math.round(power * fac - power);
+					reportEvent(h,
+							"%s atacou diretamente, causando %s de dano!%s%s".formatted(
+									ally.getName(),
+									power,
+									getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
+									extra > 0
+											? " (dano direto aumentado em " + extra + ")"
+											: extra < 0
+											? " (dano direto reduzido em " + extra + ")"
+											: ""
+							)
+							, true, false);
+				}
+			} else {
+				Champion enemy = getSlot(getNextSide(), target).getTop();
+				if (enemy == null) {
+					channel.sendMessage("❌ | Não existe um inimigo nessa casa.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				Champion yours = yourSide.get(is[0]).getTop();
-				Champion his = hisSide.get(is[1]).getTop();
-
-				if (yours == null || his == null) {
-					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
-					return;
-				}
-
-				String stt = switch (yours.getStatus()) {
-					case FLIPPED -> "❌ | Você não pode atacar com cartas viradas para baixo.";
-					case STASIS -> "❌ | Essa carta está inalvejável.";
-					case STUNNED -> "❌ | Essa carta está atordoada.";
-					case SLEEPING -> "❌ | Essa carta está dormindo.";
-					case DEFENDING -> "❌ | Você não pode atacar com cartas em modo de defesa.";
-					case UNAVAILABLE -> "❌ | Essa carta já atacou neste turno.";
-					default -> null;
-				};
-
-				if (stt != null) {
-					channel.sendMessage(stt).queue(null, Helper::doNothing);
-					return;
-				}
-
-				attack(new Source(yours, getCurrentSide(), is[0]), new Target(his, getNextSide(), is[1]));
-			} catch (IndexOutOfBoundsException e) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
-			} catch (NumberFormatException e) {
-				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue(null, Helper::doNothing);
+				attack(new Source(ally, getCurrentSide(), index), new Target(enemy, getNextSide(), target));
 			}
 		}
 	}
@@ -989,8 +991,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 		}
 
-		int yPower = Math.round((atkr.isDecoy() ? 0 : atkr.getFinAtk()) * (defr.isSleeping() ? 1.25f : 1));
+		float fac = defr.isSleeping() ? 1.25f : 1;
 
+		int yPower = Math.round(atkr.getFinAtk() * fac);
 		int hPower;
 		if (defr.isDefending()) {
 			if (defr.isFlipped()) {
@@ -1000,7 +1003,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			hPower = defr.getFinDef();
 		} else {
-			hPower = defr.isDecoy() ? 0 : defr.getFinAtk();
+			hPower = defr.getFinAtk();
 		}
 
 		int dodge = defr.getDodge(false);
@@ -1015,94 +1018,86 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Hand op = hands.get(target.side());
 
 		/* ATTACK SUCCESS */
+		proc:
 		if (yPower > hPower && !blocked) {
 			if (dodged) {
 				if (applyEffect(ON_MISS, atkr, source.side(), source.index(), source, target)) return;
 				if (applyEffect(ON_DODGE, defr, target.side(), target.index(), source, target)) return;
 
 				reportEvent(null, defr.getName() + " esquivou do ataque de " + atkr.getName() + "! (" + Helper.roundToString(dodge, 1) + "%)", true, false);
-			} else {
-				if (applyEffect(POST_ATTACK, atkr, source.side(), target.index(), source, target)) return;
-				if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
-
-				float demonFac = 1 - op.getMitigation();
-				if (you.getCombo().getRight() == Race.DEMON)
-					demonFac *= 1.25f;
-				if (op.getCombo().getRight() == Race.DEMON)
-					demonFac *= 1.33f;
-
-				if (atkr.isDecoy()) {
-					reportEvent(null, atkr.getName() + " derrotou " + defr.getName() + "? (" + yPower + " > " + hPower + ")", true, false);
-				} else if (defr.isDecoy()) {
-					killCard(target.side(), target.index(), defr.getId());
-					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-				}
-
-				boolean isHero = defr.getHero() != null;
-				boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
-								|| defr.getBonus().popFlag(Flag.NODAMAGE)
-								|| (getCustom() != null && getCustom().getBoolean("semdano"));
-
-				int dmg;
-				if (isHero || !noDmg) {
-					dmg = Math.round((atkr.getBonus().hasFlag(Flag.ALLDAMAGE) ? yPower : yPower - hPower) * demonFac);
-				} else {
-					dmg = Math.round(atkr.getPenAtk() * demonFac);
-				}
-
-				if (op.getMana() > 0) {
-					int toSteal = Math.min(op.getMana(), atkr.getManaDrain());
-
-					you.addMana(toSteal);
-					op.removeMana(toSteal);
-				}
-
-				Hero h = defr.getHero();
-				if (h != null) {
-					int aux = dmg - h.getHp();
-					h.setHp(h.getHp() - dmg);
-					dmg = aux;
-				}
-
-				if (h == null || h.getHp() == 0) {
-					int bleed = Math.round(atkr.getBldAtk() * demonFac);
-					if (bleed > 0) op.addBleeding(bleed);
-					op.removeHp(dmg);
-
-					if (atkr.getHero() != null && atkr.getHero().getPerks().contains(Perk.REAPER)) {
-						defr.setSealed(true);
-					}
-					killCard(target.side(), target.index(), defr.getId());
-
-					Hero y = atkr.getHero();
-					if (y != null) {
-						y.addXp(1);
-						if (y.getPerks().contains(Perk.VAMPIRE)) {
-							y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
-						}
-					}
-				}
-
-				if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
-
-				if (!postCombat()) {
-					int extra = Math.round(dmg * demonFac - dmg);
-					String msg = "%s derrotou %s! (%d > %d)%s%s".formatted(
-							atkr.getName(),
-							defr.getCard().getName(),
-							yPower,
-							hPower,
-							extra > 0
-									? " (efeito de raça: dano direto aumentado em " + extra + ")"
-									: extra < 0
-									? " (efeito de raça: dano direto reduzido em " + extra + ")"
-									: "",
-							defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
-					);
-
-					reportEvent(null, msg, true, false);
-				} else return;
+				break proc;
 			}
+
+			if (applyEffect(POST_ATTACK, atkr, source.side(), target.index(), source, target)) return;
+			if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
+
+			fac *= 1 - op.getMitigation();
+			if (you.getCombo().getRight() == Race.DEMON)
+				fac *= 1.25f;
+			if (op.getCombo().getRight() == Race.DEMON)
+				fac *= 1.33f;
+
+			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
+					|| defr.getBonus().popFlag(Flag.NODAMAGE)
+					|| (getCustom() != null && getCustom().getBoolean("semdano"));
+
+			int dmg;
+			if (noDmg) {
+				dmg = Math.round(atkr.getPenAtk() * fac);
+			} else {
+				dmg = Math.round((atkr.getBonus().hasFlag(Flag.ALLDAMAGE) ? yPower : yPower - hPower) * fac);
+			}
+
+			if (op.getMana() > 0) {
+				int toSteal = Math.min(op.getMana(), atkr.getManaDrain());
+
+				you.addMana(toSteal);
+				op.removeMana(toSteal);
+			}
+
+			Hero h = defr.getHero();
+			if (h != null) {
+				int aux = dmg - h.getHp();
+				h.setHp(h.getHp() - dmg);
+				dmg = aux;
+			}
+
+			if (h == null || h.getHp() == 0) {
+				op.removeHp(dmg);
+				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+
+				if (atkr.getHero() != null && atkr.getHero().getPerks().contains(Perk.REAPER)) {
+					defr.setSealed(true);
+				}
+				killCard(target.side(), target.index(), defr.getId());
+
+				if (h != null) {
+					h.addXp(1);
+					if (h.getPerks().contains(Perk.VAMPIRE)) {
+						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
+					}
+				}
+			}
+
+			if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
+
+			if (!postCombat()) {
+				int extra = Math.round(dmg * fac - dmg);
+				String msg = "%s derrotou %s (%d > %d), causando %s de dano!%s".formatted(
+						atkr.getName(),
+						defr.getName(),
+						yPower,
+						hPower,
+						dmg,
+						extra > 0
+								? " (dano direto aumentado em " + extra + ")"
+								: extra < 0
+								? " (dano direto reduzido em " + extra + ")"
+								: ""
+				);
+
+				reportEvent(null, msg, true, false);
+			} else return;
 		}
 
 		/* ATTACK FAILED */
@@ -1110,31 +1105,20 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(POST_DEFENSE, defr, target.side(), target.index(), source, target)) return;
 
-			float demonFac = 1 - you.getMitigation();
+			fac *= 1 - you.getMitigation();
 			if (op.getCombo().getRight() == Race.DEMON)
-				demonFac *= 1.25f;
+				fac *= 1.25f;
 			if (you.getCombo().getRight() == Race.DEMON)
-				demonFac *= 1.33f;
+				fac *= 1.33f;
 
-			if (atkr.isDecoy()) {
-				killCard(source.side(), source.index(), atkr.getId());
-				if (yPower > hPower)
-					reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getName() + "? (BLOQUEADO)", true, false);
-				else
-					reportEvent(null, atkr.getName() + " não conseguiu derrotar " + defr.getName() + "? (" + yPower + " < " + hPower + ")", true, false);
-			} else if (defr.isDecoy()) {
-				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-			}
-
-			boolean isHero = atkr.getHero() != null;
 			boolean noDmg = atkr.getBonus().popFlag(Flag.NODAMAGE)
-							|| (getCustom() != null && getCustom().getBoolean("semdano"));
+					|| (getCustom() != null && getCustom().getBoolean("semdano"));
 
 			int dmg;
-			if (isHero || !noDmg) {
-				dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * demonFac);
+			if (noDmg) {
+				dmg = Math.round(defr.getPenAtk() * fac);
 			} else {
-				dmg = Math.round(defr.getPenAtk() * demonFac);
+				dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 			}
 
 			if (you.getMana() > 0) {
@@ -1145,47 +1129,55 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			Hero h = atkr.getHero();
-			if (isHero) {
+			if (h != null) {
 				int aux = dmg - h.getHp();
 				h.setHp(h.getHp() - dmg);
 				dmg = aux;
 			}
 
 			if (h == null || h.getHp() == 0) {
-				int bleed = Math.round(defr.getBldAtk() * demonFac);
-				if (bleed > 0) you.addBleeding(bleed);
 				you.removeHp(dmg);
+				you.addBleeding(Math.round(defr.getBldAtk() * fac));
+
+				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
+					atkr.setSealed(true);
+				}
 				killCard(source.side(), source.index(), atkr.getId());
 
-				Hero y = defr.getHero();
-				if (y != null) {
-					y.addXp(1);
-					if (y.getPerks().contains(Perk.VAMPIRE)) {
-						y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
+				if (h != null) {
+					h.addXp(1);
+					if (h.getPerks().contains(Perk.VAMPIRE)) {
+						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
 					}
 				}
 			}
 
 			if (!postCombat()) {
-				int extra = Math.round(dmg * demonFac - dmg);
+				int extra = Math.round(dmg * fac - dmg);
 				String msg;
 				if (yPower > hPower)
-					msg = "%s não conseguiu derrotar %s! (BLOQUEADO)".formatted(
+					msg = "%s não conseguiu derrotar %s (BLOQUEADO), sofrendo %s de dano!%s".formatted(
 							atkr.getName(),
-							defr.getName()
+							defr.getName(),
+							dmg,
+							extra > 0
+									? " (dano direto aumentado em " + extra + ")"
+									: extra < 0
+									? " (dano direto reduzido em " + extra + ")"
+									: ""
 					);
 				else
-					msg = "%s não conseguiu derrotar %s! (%d < %d)%s%s".formatted(
+					msg = "%s não conseguiu derrotar %s (%d > %d), sofrendo %s de dano!%s".formatted(
 							atkr.getName(),
 							defr.getName(),
 							yPower,
 							hPower,
+							dmg,
 							extra > 0
-									? " (efeito de raça: dano direto aumentado em " + extra + ")"
+									? " (dano direto aumentado em " + extra + ")"
 									: extra < 0
-									? " (efeito de raça: dano direto reduzido em " + extra + ")"
-									: "",
-							defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+									? " (dano direto reduzido em " + extra + ")"
+									: ""
 					);
 
 				reportEvent(null, msg, true, false);
@@ -1197,16 +1189,21 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
 
-			if (atkr.isDecoy() && defr.isDecoy()) {
-				killCard(source.side(), source.index(), atkr.getId());
-				killCard(target.side(), target.index(), defr.getId());
-				reportEvent(null, "As duas cartas eram iscas!", true, false);
-			} else if (atkr.isDecoy()) {
-				killCard(source.side(), source.index(), atkr.getId());
-				reportEvent(null, "Ambas as cartas foram destruídas? (" + yPower + " = " + hPower + ")", true, false);
-			} else if (defr.isDecoy()) {
-				killCard(target.side(), target.index(), defr.getId());
-				reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+			fac *= 1 - op.getMitigation();
+			if (you.getCombo().getRight() == Race.DEMON)
+				fac *= 1.25f;
+			if (op.getCombo().getRight() == Race.DEMON)
+				fac *= 1.33f;
+
+			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
+					|| defr.getBonus().popFlag(Flag.NODAMAGE)
+					|| (getCustom() != null && getCustom().getBoolean("semdano"));
+
+			int dmg;
+			if (noDmg) {
+				dmg = Math.round(atkr.getPenAtk() * fac);
+			} else {
+				dmg = Math.round((atkr.getBonus().hasFlag(Flag.ALLDAMAGE) ? yPower : 0) * fac);
 			}
 
 			if (op.getMana() > 0 || you.getMana() > 0) {
@@ -1227,62 +1224,75 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			boolean isHero = atkr.getHero() != null;
-
-			Hero h = atkr.getHero();
-			if (isHero) {
-				h.setHp(h.getHp() - hPower);
+			Hero h = defr.getHero();
+			if (h != null) {
+				int aux = dmg - h.getHp();
+				h.setHp(h.getHp() - dmg);
+				dmg = aux;
 			}
 
 			if (h == null || h.getHp() == 0) {
-				int hDmg = defr.getPenAtk();
-				int bleed = defr.getBldAtk();
-				if (bleed > 0) you.addBleeding(bleed);
-				you.removeHp(Math.round(hDmg));
+				op.removeHp(dmg);
+				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 
-				killCard(source.side(), source.index(), atkr.getId());
-
-				Hero y = defr.getHero();
-				if (y != null) {
-					y.addXp(1);
-					if (y.getPerks().contains(Perk.VAMPIRE)) {
-						y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
-					}
+				if (atkr.getHero() != null && atkr.getHero().getPerks().contains(Perk.REAPER)) {
+					defr.setSealed(true);
 				}
-			}
-
-			isHero = defr.getHero() != null;
-
-			h = defr.getHero();
-			if (isHero) {
-				h.setHp(h.getHp() - hPower);
-			} else {
-				int yDmg = atkr.getPenAtk();
-				int bleed = atkr.getBldAtk();
-				if (bleed > 0) op.addBleeding(bleed);
-				op.removeHp(Math.round(yDmg));
-			}
-
-			if (h == null || h.getHp() == 0) {
 				killCard(target.side(), target.index(), defr.getId());
 
-				Hero y = atkr.getHero();
-				if (y != null) {
-					y.addXp(1);
-					if (y.getPerks().contains(Perk.VAMPIRE)) {
-						y.setHp(y.getHp() + Math.round((y.getMaxHp() - y.getHp()) * 0.1f));
+				if (h != null) {
+					h.addXp(1);
+					if (h.getPerks().contains(Perk.VAMPIRE)) {
+						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
 					}
 				}
 			}
 
-			if (applyEffect(AFTER_DEATH, atkr, source.side(), source.index(), source, target)) return;
+			fac *= 1 - you.getMitigation();
+			if (op.getCombo().getRight() == Race.DEMON)
+				fac *= 1.25f;
+			if (you.getCombo().getRight() == Race.DEMON)
+				fac *= 1.33f;
+
+			noDmg = atkr.getBonus().popFlag(Flag.NODAMAGE)
+					|| (getCustom() != null && getCustom().getBoolean("semdano"));
+
+			if (noDmg) {
+				dmg = Math.round(defr.getPenAtk() * fac);
+			} else {
+				dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : 0) * fac);
+			}
+
+			h = defr.getHero();
+			if (h != null) {
+				int aux = dmg - h.getHp();
+				h.setHp(h.getHp() - dmg);
+				dmg = aux;
+			}
+
+			if (h == null || h.getHp() == 0) {
+				you.removeHp(dmg);
+				you.addBleeding(Math.round(defr.getBldAtk() * fac));
+
+				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
+					atkr.setSealed(true);
+				}
+				killCard(source.side(), source.index(), atkr.getId());
+
+				if (h != null) {
+					h.addXp(1);
+					if (h.getPerks().contains(Perk.VAMPIRE)) {
+						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
+					}
+				}
+			}
+
 			if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			if (!postCombat()) {
-				String msg = "Ambas as cartas foram destruídas! (%d = %d)%s".formatted(
+				String msg = "Ambas as cartas foram destruídas! (%d = %d)".formatted(
 						yPower,
-						hPower,
-						defr.isSleeping() ? " (alvo dormindo: +25% dano final)" : ""
+						hPower
 				);
 
 				reportEvent(null, msg, true, false);
@@ -1321,9 +1331,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				.parallelStream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
-						((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
-						h.getHp() > f.getBlood()
+								!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
+								((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
+								h.getHp() > f.getBlood()
 				)
 				.findFirst()
 				.map(Champion::copy)
@@ -1910,7 +1920,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.setAvailable(!c.isStunned() && !c.isSleeping());
 					c.resetAttribs();
 					if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-						|| makeFusion(h.get())
+							|| makeFusion(h.get())
 					) return;
 				}
 			}
@@ -2049,7 +2059,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.getLinkedTo().removeIf(CardLink::isInvalid);
 
 					if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-						|| makeFusion(h.get())
+							|| makeFusion(h.get())
 					) return;
 				}
 
@@ -2335,7 +2345,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							c.setAvailable(!c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-								|| makeFusion(h.get())
+									|| makeFusion(h.get())
 							) return;
 						}
 					}
@@ -2468,7 +2478,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							c.getLinkedTo().removeIf(CardLink::isInvalid);
 
 							if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-								|| makeFusion(h.get())
+									|| makeFusion(h.get())
 							) return;
 						}
 
@@ -2906,7 +2916,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	}
 
 	public SlotColumn getSlot(Side s, int index) {
-		return arena.getSlots().get(s).get(index);
+		return Helper.safeGet(arena.getSlots().get(s), index);
 	}
 
 	@Override
