@@ -36,17 +36,13 @@ public class PingCommand implements Executable, Slashed {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
-		long currTime = System.currentTimeMillis();
-		channel.sendMessage(":ping_pong: Pong! ")
-				.flatMap(m -> m.editMessage(m.getContentRaw() + """
-						 %s ms.
+		channel.getJDA().getRestPing()
+				.flatMap(t -> channel.sendMessage("""
+						:ping_pong: Pong! %s ms.
 						:file_cabinet: %s ms.
 						:floppy_disk: %s MB.
-						""".formatted(
-						System.currentTimeMillis() - currTime,
-						Manager.ping(),
-						fp
-				)))
+						""".formatted(t, Manager.ping(), fp))
+				)
 				.queue();
 	}
 }
