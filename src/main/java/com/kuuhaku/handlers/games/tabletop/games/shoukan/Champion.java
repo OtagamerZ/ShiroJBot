@@ -1014,10 +1014,6 @@ public class Champion implements Drawable, Cloneable {
 		this.gravelocked = gravelocked;
 	}
 
-	public boolean isDecoy() {
-		return card.getId().equals("DECOY");
-	}
-
 	public Hero getHero() {
 		return hero;
 	}
@@ -1082,6 +1078,7 @@ public class Champion implements Drawable, Cloneable {
 		try {
 			Champion c = (Champion) super.clone();
 			c.linkedTo = new UniqueList<>(CardLink::getIndex);
+			c.index = new AtomicInteger(-2);
 			c.bonus = bonus.clone();
 			c.nemesis = null;
 			c.onDuelEnd = null;
@@ -1104,6 +1101,7 @@ public class Champion implements Drawable, Cloneable {
 				));
 			}
 
+			c.index = new AtomicInteger(index.get());
 			c.bonus = bonus.clone();
 			if (nemesis != null) {
 				c.nemesis = nemesis.deepCopy();

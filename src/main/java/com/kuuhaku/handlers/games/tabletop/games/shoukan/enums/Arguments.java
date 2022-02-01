@@ -30,7 +30,7 @@ public enum Arguments {
 		this.args = args;
 	}
 
-	public int getArgs() {
+	public int getArgCount() {
 		return args;
 	}
 }
