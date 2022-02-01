@@ -403,20 +403,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return null;
 			}
 
-			Champion t = getSlot(getCurrentSide(), pos).getTop();
-			if (t == null) {
-				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
-				return null;
-			}
-
-			target = Pair.of(t, pos);
-			slot = getSlot(getCurrentSide(), dest);
-		} else {
-			if (pos == -1) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
-				return null;
-			}
-
 			Champion t = getSlot(getNextSide(), pos).getTop();
 			if (t == null) {
 				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
@@ -425,6 +411,20 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			target = Pair.of(t, pos);
 			slot = getSlot(getNextSide(), dest);
+		} else {
+			if (pos == -1) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
+				return null;
+			}
+
+			Champion t = getSlot(getCurrentSide(), pos).getTop();
+			if (t == null) {
+				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+				return null;
+			}
+
+			target = Pair.of(t, pos);
+			slot = getSlot(getCurrentSide(), dest);
 		}
 
 		if (slot.getBottom() != null) {
@@ -448,7 +448,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (copy.hasEffect()) {
 			if (type == Arguments.ALLY) {
-				copy.activate(hand, hands.get(getNextSide()), this, pos, -1);
+				copy.activate(hand, hands.get(getCurrentSide()), this, pos, -1);
 			} else {
 				copy.activate(hand, hands.get(getNextSide()), this, -1, pos);
 			}
