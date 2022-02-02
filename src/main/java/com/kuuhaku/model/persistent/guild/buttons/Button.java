@@ -87,11 +87,11 @@ public class Button {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Button button = (Button) o;
-		return id == button.id && Objects.equals(parent, button.parent) && Objects.equals(role, button.role) && Objects.equals(emote, button.emote);
+		return id == button.id && Objects.equals(role, button.role) && Objects.equals(emote, button.emote);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, parent, role, emote);
+		return Objects.hash(id, role, emote);
 	}
 }
