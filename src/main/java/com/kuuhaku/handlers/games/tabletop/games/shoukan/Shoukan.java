@@ -329,7 +329,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		SlotColumn slot = getSlot(getCurrentSide(), index);
-		if (slot.getBottom() != null) {
+		if (slot.getTop() != null) {
 			channel.sendMessage("❌ | Já existe um campeão nessa casa.").queue(null, Helper::doNothing);
 			return null;
 		} else if (slot.isUnavailable()) {
