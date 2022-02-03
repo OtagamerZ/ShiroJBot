@@ -65,14 +65,14 @@ public enum FrameColor {
 	),
 
 	PADORU("**(Emblema \"Padoru padoru\")** Hashiro sori yo, kaze no you ni, tsukimihara wo **PADORU PADORU!**",
-			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
+			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.PADORU_PADORU)
 	),
 
 	METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
 			acc -> (float) acc.getMedalBag().size() / Achievement.getMedalBag().size() > 0.75f
 	),
 
-	RICH("**(Emblema \"Rico\")** Uns chamam de playboy, outros de gancioso, mas no fim todos querem um pedaço da grana!",
+	RICH("**(Emblema \"Rico\")** Uns chamam de playboy, outros de ganancioso, mas no fim todos querem um pedaço da grana!",
 			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.RICO)
 	),
 	;
@@ -137,10 +137,10 @@ public enum FrameColor {
 					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY,
-					HALLOWEEN -> Color.WHITE;
+					HALLOWEEN, PADORU, METALLIC, RICH -> Color.WHITE;
 
 			case BLACK -> Color.BLACK;
-			case RAINBOW, GLITCH, PADORU, METALLIC, RICH -> getThemeColor();
+			case RAINBOW, GLITCH -> getThemeColor();
 		};
 	}
 
