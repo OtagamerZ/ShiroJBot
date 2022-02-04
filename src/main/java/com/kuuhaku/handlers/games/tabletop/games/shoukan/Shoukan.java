@@ -2727,6 +2727,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (activator == null) return false;
 		if (effectLock == 0) {
+			EffectParameters ep = new EffectParameters(trigger, this, side, index, duelists, channel);
+
 			if (activator.hasEffect()) {
 				boolean activate = true;
 
@@ -2744,21 +2746,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				if (activate && !activator.isStunned())
-					activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
+					activator.getEffect(ep);
 			}
 
 			if (activator.hasCurse()) {
-				activator.getCurse(new EffectParameters(trigger, this, side, index, duelists, channel));
+				activator.getCurse(ep);
 			}
 
-			List<CardLink> aux = List.copyOf(activator.getLinkedTo());
-			for (CardLink cl : aux) {
-				if (cl.isFake()) continue;
-
-				Equipment e = cl.asEquipment();
-				if (e.hasEffect())
-					applyEffect(trigger, e, side, index, duelists);
-			}
+			activator.triggerSpells(ep);
 
 			return !lastTick && postCombat();
 		}

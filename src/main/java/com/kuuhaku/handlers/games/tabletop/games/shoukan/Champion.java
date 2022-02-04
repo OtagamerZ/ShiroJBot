@@ -761,7 +761,9 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void triggerSpells(EffectParameters ep) {
-		for (CardLink cl : linkedTo) {
+		for (CardLink cl : List.copyOf(linkedTo)) {
+			if (cl.isFake()) continue;
+
 			Equipment e = (Equipment) cl.linked();
 			if (!e.hasEffect()) continue;
 
@@ -903,6 +905,10 @@ public class Champion implements Drawable, Cloneable {
 		this.stasis = Math.max(stasis - 1, 0);
 	}
 
+	public void reduceStasis(int val) {
+		this.stasis = Math.max(stasis - val, 0);
+	}
+
 	public boolean isStunned() {
 		return !isStasis() && stun > 0;
 	}
@@ -925,6 +931,10 @@ public class Champion implements Drawable, Cloneable {
 		this.stun = Math.max(stun - 1, 0);
 	}
 
+	public void reduceStun(int val) {
+		this.stun = Math.max(stun - val, 0);
+	}
+
 	public boolean isSleeping() {
 		return !isStunned() && sleep > 0;
 	}
@@ -945,6 +955,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public void reduceSleep() {
 		this.sleep = Math.max(sleep - 1, 0);
+	}
+
+	public void reduceSleep(int val) {
+		this.sleep = Math.max(sleep - val, 0);
 	}
 
 	public Status getStatus() {
