@@ -212,7 +212,7 @@ public class Hero implements Cloneable {
     }
 
     public int getXpToNext() {
-            return (int) Helper.getFibonacci(getLevel() + 1) * 5;
+            return (int) Helper.getFibonacci(getLevel() + 2) * 5;
     }
 
     public int getBonusPoints() {
