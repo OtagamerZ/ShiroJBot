@@ -691,6 +691,14 @@ public class Champion implements Drawable, Cloneable {
 		this.bonus = new Bonus();
 	}
 
+	public String getAltImage() {
+		return altImage;
+	}
+
+	public void setAltImage(String altImage) {
+		this.altImage = altImage;
+	}
+
 	public String getDescription() {
 		return sealed ? "Carta selada." : Helper.getOr(altDescription, description);
 	}
