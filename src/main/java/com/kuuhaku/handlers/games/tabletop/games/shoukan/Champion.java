@@ -99,6 +99,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient List<CardLink> linkedTo = new UniqueList<>(CardLink::getIndex);
 	private transient AtomicInteger index = new AtomicInteger(-2);
 
+	private transient String altImage = null;
 	private transient String altDescription = null;
 	private transient String altEffect = null;
 	private transient String curse = null;
@@ -155,7 +156,11 @@ public class Champion implements Drawable, Cloneable {
 					new int[]{2, 2, 13, 337, 348, 348, 337, 13},
 					8
 			));
-			g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
+			if (altImage == null) {
+				g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
+			} else {
+				g2d.drawImage(Helper.btoa(altImage), 0, 0, null);
+			}
 			g2d.setClip(null);
 
 			g2d.drawImage(fc.getFront(true), 0, 0, null);
