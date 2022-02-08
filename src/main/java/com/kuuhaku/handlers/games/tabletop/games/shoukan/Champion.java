@@ -1074,6 +1074,7 @@ public class Champion implements Drawable, Cloneable {
 		index = new AtomicInteger(-2);
 		altAtk = -1;
 		altDef = -1;
+		altImage = null;
 		altDescription = null;
 		altEffect = null;
 		curse = null;
