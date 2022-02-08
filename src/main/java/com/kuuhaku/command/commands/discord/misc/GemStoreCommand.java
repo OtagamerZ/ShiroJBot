@@ -78,7 +78,7 @@ public class GemStoreCommand implements Executable {
 
 			GemItem gi = GemItem.values()[i];
 			if (acc.getGems() < gi.getPrice()) {
-				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
+				channel.sendMessage(I18n.getString("err_insufficient-gems-user")).queue();
 				return;
 			}
 
