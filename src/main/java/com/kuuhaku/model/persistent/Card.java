@@ -296,6 +296,22 @@ public class Card {
 	}
 
 	public String getBase64() {
-		return Helper.atob(drawCard(false), "png");
+		return getBase64(false);
+	}
+
+	public String getBase64(boolean withBorder) {
+		if (withBorder) {
+			return Helper.atob(drawCard(false), "png");
+		} else {
+			return Helper.atob(drawCardNoBorder(false), "png");
+		}
+	}
+
+	public String getBase64(boolean withBorder, boolean foil) {
+		if (withBorder) {
+			return Helper.atob(drawCard(foil), "png");
+		} else {
+			return Helper.atob(drawCardNoBorder(foil), "png");
+		}
 	}
 }
