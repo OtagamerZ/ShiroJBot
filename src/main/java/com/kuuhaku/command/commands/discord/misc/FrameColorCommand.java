@@ -60,14 +60,16 @@ public class FrameColorCommand implements Executable {
 
 			EmbedBuilder eb = new EmbedBuilder();
 			for (FrameColor fc : FrameColor.values()) {
-				eb.clear()
-						.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT))
-						.setDescription(fc.getDescription())
-						.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/back/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
-						.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/front/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
-						.setColor(fc.getThemeColor());
+				if (fc.canUse(acc)) {
+					eb.clear()
+							.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT))
+							.setDescription(fc.getDescription())
+							.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/back/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
+							.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/front/" + fc.name().toLowerCase(Locale.ROOT) + ".png")
+							.setColor(fc.getThemeColor());
 
-				pages.add(new InteractPage(eb.build()));
+					pages.add(new InteractPage(eb.build()));
+				}
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, true, u -> u.getId().equals(author.getId())));
