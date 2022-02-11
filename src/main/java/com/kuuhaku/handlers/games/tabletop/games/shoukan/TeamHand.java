@@ -46,6 +46,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_DRAW;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_MANUAL_DRAW;
+
 public class TeamHand extends Hand {
 	private final Map<Race, Long> raceCount;
 	private final Pair<Race, Race> combo;
@@ -229,6 +232,9 @@ public class TeamHand extends Hand {
 				}
 			}
 
+			triggerEffect(ON_DRAW);
+			triggerEffect(ON_MANUAL_DRAW);
+
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -247,6 +253,8 @@ public class TeamHand extends Hand {
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
 		}
+
+		triggerEffect(ON_DRAW);
 	}
 
 	public Drawable draw() {
@@ -268,6 +276,9 @@ public class TeamHand extends Hand {
 						addHp(250);
 				}
 			}
+
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -289,6 +300,8 @@ public class TeamHand extends Hand {
 				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
 					addHp(250);
 			}
+
+			triggerEffect(ON_DRAW);
 
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -313,6 +326,8 @@ public class TeamHand extends Hand {
 					addHp(250);
 			}
 
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -335,6 +350,8 @@ public class TeamHand extends Hand {
 					addHp(250);
 			}
 
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -349,6 +366,8 @@ public class TeamHand extends Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -362,6 +381,8 @@ public class TeamHand extends Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+			triggerEffect(ON_MANUAL_DRAW);
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -377,6 +398,8 @@ public class TeamHand extends Hand {
 
 			if (combo.getLeft() == Race.MACHINE)
 				addHp(250);
+
+			triggerEffect(ON_DRAW);
 
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -396,6 +419,8 @@ public class TeamHand extends Hand {
 			if (combo.getLeft() == Race.MYSTICAL)
 				addMana(1);
 
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -413,6 +438,10 @@ public class TeamHand extends Hand {
 
 			if (combo.getLeft() == Race.MACHINE)
 				addHp(250);
+			else if (combo.getLeft() == Race.MYSTICAL)
+				addMana(1);
+
+			triggerEffect(ON_DRAW);
 
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -428,6 +457,8 @@ public class TeamHand extends Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -442,6 +473,8 @@ public class TeamHand extends Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
