@@ -139,6 +139,9 @@ public class Account {
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime tutorial = null;
 
+	@Column(columnDefinition = "TIMESTAMP")
+	private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	@JoinColumn(nullable = false, name = "account_id")
