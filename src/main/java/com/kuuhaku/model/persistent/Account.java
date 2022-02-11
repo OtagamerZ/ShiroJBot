@@ -36,6 +36,7 @@ import org.apache.commons.collections4.bag.HashBag;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -278,6 +279,14 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 		return today.isBefore(tutorial.plusMonths(1));
+	}
+
+	public ZonedDateTime getCreationDate() {
+		return createdAt;
+	}
+
+	public boolean isOldPlayer() {
+		return createdAt.isBefore(ZonedDateTime.of(LocalDateTime.of(2022, 2, 12, 0, 0), ZoneId.of("GMT-3")));
 	}
 
 	public void voted() {
