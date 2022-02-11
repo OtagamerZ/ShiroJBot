@@ -226,18 +226,6 @@ public class ReserveCardCommand implements Executable {
 				return;
 			}
 
-			StashDAO.saveCard(switch (m.getType()) {
-				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
-				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
-				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
-			});
-
-			seller.addCredit(price, this.getClass());
-			buyer.removeCredit(price, this.getClass());
-
-			AccountDAO.saveAccount(seller);
-			AccountDAO.saveAccount(buyer);
-
 			m = MarketDAO.getCard(Integer.parseInt(args[0]));
 			if (m == null) {
 				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
@@ -262,6 +250,18 @@ public class ReserveCardCommand implements Executable {
 							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
 					Helper::doNothing
 			);
+
+			StashDAO.saveCard(switch (m.getType()) {
+				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
+				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
+			});
+
+			seller.addCredit(price, this.getClass());
+			buyer.removeCredit(price, this.getClass());
+
+			AccountDAO.saveAccount(seller);
+			AccountDAO.saveAccount(buyer);
 
 			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` comprada e reservada com sucesso!").queue();
 		} else {
