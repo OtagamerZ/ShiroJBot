@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -46,8 +47,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_DAMAGE;
-import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_HEAL;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
 public class Hand {
 	private final Shoukan game;
@@ -231,6 +231,9 @@ public class Hand {
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() >= 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
 			else cards.add(getRealDeque().removeFirst().copy());
+			triggerEffect(ON_DRAW);
+			triggerEffect(ON_MANUAL_DRAW);
+
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -244,6 +247,7 @@ public class Hand {
 			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
+			triggerEffect(ON_DRAW);
 		}
 	}
 
@@ -257,6 +261,8 @@ public class Hand {
 				dr = getRealDeque().removeFirst();
 				cards.add(dr.copy());
 			}
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -269,6 +275,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -282,6 +290,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -294,6 +304,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -306,6 +318,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -318,6 +332,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(d -> d instanceof Champion c && c.getMana() == mana).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -329,6 +345,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+			triggerEffect(ON_MANUAL_DRAW);
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -339,6 +357,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -351,6 +371,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -363,6 +385,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -375,6 +399,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -387,6 +413,8 @@ public class Hand {
 			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
+			triggerEffect(ON_DRAW);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -708,16 +736,7 @@ public class Hand {
 		decreaseBleeding((int) (value * 0.25));
 
 		if (trigger) {
-			Arena arena = game.getArena();
-			if (arena != null) {
-				List<SlotColumn> slots = arena.getSlots().get(side);
-				game.applyPersistentEffects(ON_HEAL, side, -1);
-				for (SlotColumn slt : slots) {
-					if (slt.getTop() != null) {
-						game.applyEffect(ON_HEAL, slt.getTop(), side, slt.getIndex());
-					}
-				}
-			}
+			triggerEffect(ON_HEAL);
 		}
 	}
 
@@ -740,16 +759,7 @@ public class Hand {
 
 		setHp(hp - value);
 		if (trigger) {
-			Arena arena = game.getArena();
-			if (arena != null) {
-				List<SlotColumn> slots = arena.getSlots().get(side);
-				game.applyPersistentEffects(ON_DAMAGE, side, -1);
-				for (SlotColumn slt : slots) {
-					if (slt.getTop() != null) {
-						game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
-					}
-				}
-			}
+			triggerEffect(ON_DAMAGE);
 		}
 	}
 
@@ -762,16 +772,7 @@ public class Hand {
 
 		setHp(Math.max(1, hp - value));
 		if (trigger) {
-			Arena arena = game.getArena();
-			if (arena != null) {
-				List<SlotColumn> slots = arena.getSlots().get(side);
-				game.applyPersistentEffects(ON_DAMAGE, side, -1);
-				for (SlotColumn slt : slots) {
-					if (slt.getTop() != null) {
-						game.applyEffect(ON_DAMAGE, slt.getTop(), side, slt.getIndex());
-					}
-				}
-			}
+			triggerEffect(ON_DAMAGE);
 		}
 	}
 
@@ -881,6 +882,41 @@ public class Hand {
 
 	public void decreaseBleeding() {
 		bleeding = Math.max(0, (int) (bleeding * 0.9));
+	}
+
+	protected void triggerEffect(EffectTrigger trigger) {
+		Arena arena = game.getArena();
+		if (arena != null) {
+			List<SlotColumn> slots = arena.getSlots().get(side);
+			game.applyPersistentEffects(trigger, side, -1);
+			for (SlotColumn slt : slots) {
+				if (slt.getTop() != null) {
+					game.applyEffect(trigger, slt.getTop(), side, slt.getIndex());
+				}
+			}
+
+			EffectTrigger other = switch (trigger) {
+				case ON_HEAL -> ON_OP_HEAL;
+				case ON_DAMAGE -> ON_OP_DAMAGE;
+				case ON_DRAW -> ON_OP_DRAW;
+				case ON_MANUAL_DRAW -> ON_OP_MANUAL_DRAW;
+				default -> null;
+			};
+
+			if (other != null) {
+				slots = arena.getSlots().get(side.getOther());
+				game.applyPersistentEffects(trigger, side.getOther(), -1);
+				for (SlotColumn slt : slots) {
+					if (slt.getTop() != null) {
+						game.applyEffect(trigger, slt.getTop(), side.getOther(), slt.getIndex());
+					}
+				}
+			}
+		}
+	}
+
+	public Hand getOponent() {
+		return game.getHands().get(side.getOther());
 	}
 
 	public List<SlotColumn> getSlots() {
