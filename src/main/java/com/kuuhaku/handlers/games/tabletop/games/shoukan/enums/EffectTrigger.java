@@ -40,6 +40,12 @@ public enum EffectTrigger {
 	ON_WIN(false, false),
 	ON_HEAL(false, false),
 	ON_DAMAGE(false, false),
+	ON_OP_HEAL(false, false),
+	ON_OP_DAMAGE(false, false),
+	ON_MANUAL_DRAW(false, false),
+	ON_OP_MANUAL_DRAW(false, false),
+	ON_DRAW(false, false),
+	ON_OP_DRAW(false, false),
 	FINALIZE(false, true),
 
 	BEFORE_DEATH(true, true),
