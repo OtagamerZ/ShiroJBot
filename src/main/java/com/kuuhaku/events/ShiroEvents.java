@@ -485,6 +485,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		if (!evt.isFromGuild()) {
 			hook.sendMessage("❌ | Meus comandos não funcionam em canais privados.").queue();
+			return;
 		}
 
 		Guild guild = evt.getGuild();
