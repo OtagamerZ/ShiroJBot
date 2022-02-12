@@ -403,7 +403,7 @@ public class Account {
 		return dmWarned;
 	}
 
-	public void setDmWarned(boolean dmWarned) {
+	public void setDMWarned(boolean dmWarned) {
 		this.dmWarned = dmWarned;
 	}
 

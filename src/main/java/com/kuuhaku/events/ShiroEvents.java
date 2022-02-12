@@ -1114,6 +1114,8 @@ public class ShiroEvents extends ListenerAdapter {
 				if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
 					if (!acc.isDMWarned()) {
 						c.sendMessage(":octagonal_sign: | Aviso: as mensagens enviadas neste canal serão monitoradas pela equipe de suporte.\nUse-o apenas para dúvidas ou assuntos referentes à Shiro, usá-lo para outros assuntos poderá fazer com que você seja bloqueado.").queue();
+						acc.setDMWarned(true);
+						AccountDAO.saveAccount(acc);
 					} else {
 						c.sendMessage("Mensagem enviada à equipe de suporte, por favor aguarde...")
 								.queue(s -> {
