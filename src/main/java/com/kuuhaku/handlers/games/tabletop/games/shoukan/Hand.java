@@ -905,10 +905,10 @@ public class Hand {
 
 			if (other != null) {
 				slots = arena.getSlots().get(side.getOther());
-				game.applyPersistentEffects(trigger, side.getOther(), -1);
+				game.applyPersistentEffects(other, side.getOther(), -1);
 				for (SlotColumn slt : slots) {
 					if (slt.getTop() != null) {
-						game.applyEffect(trigger, slt.getTop(), side.getOther(), slt.getIndex());
+						game.applyEffect(other, slt.getTop(), side.getOther(), slt.getIndex());
 					}
 				}
 			}
