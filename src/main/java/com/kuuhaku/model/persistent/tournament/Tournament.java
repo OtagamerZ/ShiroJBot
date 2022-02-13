@@ -50,8 +50,9 @@ public class Tournament {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Set<Participant> participants = new LinkedHashSet<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
-	private Set<Participant> bench = new LinkedHashSet<>();
+	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false, name = "tournament_id")
+	private Set<String> bench = new LinkedHashSet<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Bracket bracket;
@@ -121,7 +122,7 @@ public class Tournament {
 		return getPartLookup().get(id);
 	}
 
-	public Set<Participant> getBench() {
+	public Set<String> getBench() {
 		return bench;
 	}
 
@@ -233,7 +234,11 @@ public class Tournament {
 		size = Math.max(8, Helper.roundToBit(participants.size()));
 		bracket = new Bracket(size, this);
 		bracket.populate(this, List.copyOf(participants));
-		bench.addAll(Helper.removeIf(participants, p -> p.getIndex() == -1));
+		bench.addAll(
+				Helper.removeIf(participants, p -> p.getIndex() == -1).stream()
+						.map(Participant::getUid)
+						.toList()
+		);
 	}
 
 	public void setResult(int phase, int index) {

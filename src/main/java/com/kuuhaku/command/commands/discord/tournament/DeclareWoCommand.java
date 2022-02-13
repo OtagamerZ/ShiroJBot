@@ -63,11 +63,12 @@ public class DeclareWoCommand implements Executable {
 				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							t.getParticipants().remove(p);
 							if (!t.getBench().isEmpty()) {
-								Participant sub = new ArrayList<>(t.getBench()).get(0);
+								Participant sub = new Participant(new ArrayList<>(t.getBench()).get(0), t);
 								sub.setIndex(p.getIndex());
 								sub.setPoints(p.getPoints());
 
 								t.getParticipants().add(sub);
+								t.getBench().remove(args[1]);
 								try {
 									Main.getInfo().getUserByID(sub.getUid()).openPrivateChannel()
 											.flatMap(c -> c.sendMessage("Um dos participantes não compareceu, você foi adicionado às chaves."))
