@@ -214,7 +214,7 @@ public class ShoukanCommand implements Executable {
 				}
 			}
 		} else if (tournament) {
-			Tournament tn = TournamentDAO.getUserTournament(author.getId());
+			Tournament tn = TournamentDAO.getUserTournaments(author.getId()).get(0);
 			if (tn == null) {
 				channel.sendMessage("❌ | Você não está registrado em nenhum torneio ou as chaves ainda não foram liberadas.").queue();
 				return;
