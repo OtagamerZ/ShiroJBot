@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.tournament;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.TournamentDAO;
@@ -67,6 +68,12 @@ public class DeclareWoCommand implements Executable {
 								sub.setPoints(p.getPoints());
 
 								t.getParticipants().add(sub);
+								try {
+									Main.getInfo().getUserByID(sub.getUid()).openPrivateChannel()
+											.flatMap(c -> c.sendMessage("Um dos participantes não compareceu, você foi adicionado às chaves."))
+											.queue(null, Helper::doNothing);
+								} catch (RuntimeException ignore) {
+								}
 							}
 
 							TournamentDAO.save(t);
