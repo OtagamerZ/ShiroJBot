@@ -74,6 +74,10 @@ public class Participant {
 		return points;
 	}
 
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
 	public void addPoints(int pts) {
 		points += pts;
 	}
