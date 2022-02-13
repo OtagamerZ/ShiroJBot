@@ -23,11 +23,13 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -50,14 +52,23 @@ public class DeclareWoCommand implements Executable {
 		}
 
 		Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
-		if (t.getParticipants().stream().noneMatch(p -> p.getUid().equals(args[1]))) {
+		Participant p = t.getPartLookup().get(args[1]);
+		if (p == null) {
 			channel.sendMessage("❌ | Não há nenhum participante com esse ID.").queue();
 			return;
 		}
 
 		channel.sendMessage("Você está prestes a definir que `" + Helper.getUsername(args[1]) + "` não compareceu ao torneio `" + t.getName() + "`, deseja confirmar?").queue(
 				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-							t.getParticipants().removeIf(p -> p.getUid().equals(args[1]));
+							t.getParticipants().remove(p);
+							if (!t.getBench().isEmpty()) {
+								Participant sub = new ArrayList<>(t.getBench()).get(0);
+								sub.setIndex(p.getIndex());
+								sub.setPoints(p.getPoints());
+
+								t.getParticipants().add(sub);
+							}
+
 							TournamentDAO.save(t);
 
 							s.delete().queue(null, Helper::doNothing);

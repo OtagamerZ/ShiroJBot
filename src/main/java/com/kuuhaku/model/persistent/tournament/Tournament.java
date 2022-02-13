@@ -22,8 +22,6 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.persistence.*;
@@ -51,6 +49,9 @@ public class Tournament {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Set<Participant> participants = new LinkedHashSet<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
+	private Set<Participant> bench = new LinkedHashSet<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tournament")
 	private Bracket bracket;
@@ -118,6 +119,10 @@ public class Tournament {
 
 	public Participant getLookup(String id) {
 		return getPartLookup().get(id);
+	}
+
+	public Set<Participant> getBench() {
+		return bench;
 	}
 
 	public TreeSet<Participant> getRanking() {
@@ -228,7 +233,7 @@ public class Tournament {
 		size = Math.max(8, Helper.roundToBit(participants.size()));
 		bracket = new Bracket(size, this);
 		bracket.populate(this, List.copyOf(participants));
-		participants.removeIf(p -> p.getIndex() == -1);
+		bench.addAll(Helper.removeIf(participants, p -> p.getIndex() == -1));
 	}
 
 	public void setResult(int phase, int index) {
