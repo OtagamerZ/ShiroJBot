@@ -114,6 +114,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private boolean reroll = true;
 	private boolean moveLock = false;
 	private final int[] synthCd = {0, 0};
+	private final int[] undyingCd = {0, 0};
+	private boolean undying = false;
 
 	private GameState oldState = null;
 
@@ -1866,7 +1868,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Hand op = hands.get(h.getSide().getOther());
 
 			if (h.getHp() <= 0) {
-				if (lastTick()) return false;
+				if (lastTick() || undying) continue;
+				else if (combos.get(h.getSide()).getLeft() == Race.UNDEAD) {
+					int i = h.getSide() == Side.TOP ? 1 : 0;
+					if (undyingCd[i] == 0) {
+						undyingCd[i] = 5;
+						undying = true;
+						continue;
+					}
+				}
 
 				if (getCustom() == null) {
 					getHistory().setWinner(op.getSide());
@@ -1951,6 +1961,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				);
 			}
 			discardBatch.clear();
+			undying = false;
 
 			if (getRound() > 0) reroll = false;
 			resetTimer(this);
@@ -1960,9 +1971,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			h.get().decreaseSuppression();
 			h.get().decreaseLockTime();
 			h.get().decreaseNullTime();
-			if (synthCd[getCurrentSide() == Side.TOP ? 1 : 0] > 0) {
-				synthCd[getCurrentSide() == Side.TOP ? 1 : 0]--;
-			}
 			slots = arena.getSlots().get(getCurrentSide());
 
 			if (getRound() >= 75) {
@@ -2370,6 +2378,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						);
 					}
 					discardBatch.clear();
+					undying = false;
 
 					if (getRound() > 0) reroll = false;
 					resetTimer(this);
@@ -2379,9 +2388,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.get().decreaseSuppression();
 					h.get().decreaseLockTime();
 					h.get().decreaseNullTime();
-					if (synthCd[getCurrentSide() == Side.TOP ? 1 : 0] > 0) {
-						synthCd[getCurrentSide() == Side.TOP ? 1 : 0]--;
-					}
 					slots = arena.getSlots().get(getCurrentSide());
 
 					if (getRound() >= 75) {
@@ -2931,6 +2937,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 		decreaseFLockTime();
 		decreaseSLockTime();
 		decreaseELockTime();
+
+		int idx = getCurrentSide() == Side.TOP ? 1 : 0;
+		if (synthCd[idx] > 0) {
+			synthCd[idx]--;
+		}
+		if (undyingCd[idx] > 0) {
+			undyingCd[idx]--;
+		}
 
 		if (team) ((TeamHand) hands.get(getCurrentSide())).next();
 		super.resetTimer(shkn);

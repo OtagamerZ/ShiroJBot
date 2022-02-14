@@ -85,7 +85,7 @@ public enum Race {
             new Integer[]{4, 2, 2, 1, 1}
     ),
     UNDEAD("Morto-vivo",
-            "Possui 5% de chance de receber uma cópia quando uma carta sua for enviada ao cemitério",
+            "Sobrevive 1 turno extra ao atingir 0 de HP (tempo de recarga: 5 turnos)",
             "+1% dano por carta no cemitério",
             "Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate.",
             new Integer[]{3, 3, 1, 0, 3}
