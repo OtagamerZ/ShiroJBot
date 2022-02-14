@@ -111,7 +111,10 @@ public class Tournament {
 	}
 
 	public Map<String, Participant> getPartLookup() {
-		if (partLookup.isEmpty()) {
+		if (partLookup.isEmpty() || idLookup.size() != partLookup.size()) {
+			idLookup.clear();
+			partLookup.clear();
+
 			for (Participant p : participants) {
 				idLookup.put(p.getId(), p.getUid());
 				partLookup.put(p.getUid(), p);
@@ -119,6 +122,20 @@ public class Tournament {
 		}
 
 		return partLookup;
+	}
+
+	public Map<Integer, String> getIdLookup() {
+		if (idLookup.isEmpty() || idLookup.size() != partLookup.size()) {
+			idLookup.clear();
+			partLookup.clear();
+
+			for (Participant p : participants) {
+				idLookup.put(p.getId(), p.getUid());
+				partLookup.put(p.getUid(), p);
+			}
+		}
+
+		return idLookup;
 	}
 
 	public Participant getLookup(String id) {
@@ -130,7 +147,7 @@ public class Tournament {
 	public Participant getLookup(Integer id) {
 		if (id == null) return null;
 
-		return getLookup(idLookup.get(id));
+		return getLookup(getIdLookup().get(id));
 	}
 
 	public Set<String> getBench() {

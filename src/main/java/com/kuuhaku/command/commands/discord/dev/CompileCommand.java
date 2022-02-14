@@ -49,7 +49,7 @@ public class CompileCommand implements Executable {
 				final long start = System.currentTimeMillis();
 
 				try {
-					String code = argsAsText.replaceAll("```java|```", "");
+					String code = argsAsText.replaceAll("```groovy|```", "");
 
 					GroovyShell gs = new GroovyShell();
 					gs.setVariable("msg", message);
