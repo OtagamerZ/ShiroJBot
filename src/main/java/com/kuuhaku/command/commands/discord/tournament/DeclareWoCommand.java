@@ -57,14 +57,11 @@ public class DeclareWoCommand implements Executable {
 		if (p == null) {
 			channel.sendMessage("❌ | Não há nenhum participante com esse ID.").queue();
 			return;
-		} else if (p.getPhase() > 0) {
-			channel.sendMessage("❌ | Esse participante não pode ser substituído.").queue();
-			return;
 		}
 
 		channel.sendMessage("Você está prestes a definir que `" + Helper.getUsername(args[1]) + "` não compareceu ao torneio `" + t.getName() + "`, deseja confirmar?").queue(
 				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-							if (!t.getBench().isEmpty()) {
+							if (p.getPhase() == 0 && !t.getBench().isEmpty()) {
 								String next = new ArrayList<>(t.getBench()).get(0);
 								p.setUid(next);
 								t.getBench().remove(next);
@@ -76,7 +73,7 @@ public class DeclareWoCommand implements Executable {
 								} catch (RuntimeException ignore) {
 								}
 							} else {
-								p.setUid(null);
+								t.setResult(p.getPhase(), p.getIndex());
 							}
 
 							TournamentDAO.save(t);
