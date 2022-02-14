@@ -28,9 +28,9 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "removerbloco",
-		aliases = {"removelist"},
-		usage = "req_index",
+		name = "removerafazer",
+		aliases = {"removernota", "removetodo", "removenote"},
+		usage = "req_index-index",
 		category = Category.MISC
 )
 public class DeleteCheckitemCommand implements Executable {
