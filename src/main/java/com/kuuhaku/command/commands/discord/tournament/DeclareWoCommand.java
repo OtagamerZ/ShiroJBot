@@ -53,28 +53,30 @@ public class DeclareWoCommand implements Executable {
 		}
 
 		Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
-		Participant p = t.getPartLookup().get(args[1]);
+		Participant p = t.getLookup(args[1]);
 		if (p == null) {
 			channel.sendMessage("❌ | Não há nenhum participante com esse ID.").queue();
+			return;
+		} else if (p.getPhase() > 0) {
+			channel.sendMessage("❌ | Esse participante não pode ser substituído.").queue();
 			return;
 		}
 
 		channel.sendMessage("Você está prestes a definir que `" + Helper.getUsername(args[1]) + "` não compareceu ao torneio `" + t.getName() + "`, deseja confirmar?").queue(
 				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-							t.getParticipants().remove(p);
 							if (!t.getBench().isEmpty()) {
-								Participant sub = new Participant(new ArrayList<>(t.getBench()).get(0), t);
-								sub.setIndex(p.getIndex());
-								sub.setPoints(p.getPoints());
+								String next = new ArrayList<>(t.getBench()).get(0);
+								p.setUid(next);
+								t.getBench().remove(next);
 
-								t.getParticipants().add(sub);
-								t.getBench().remove(args[1]);
 								try {
-									Main.getInfo().getUserByID(sub.getUid()).openPrivateChannel()
+									Main.getInfo().getUserByID(next).openPrivateChannel()
 											.flatMap(c -> c.sendMessage("Um dos participantes não compareceu, você foi adicionado às chaves."))
 											.queue(null, Helper::doNothing);
 								} catch (RuntimeException ignore) {
 								}
+							} else {
+								p.setUid(null);
 							}
 
 							TournamentDAO.save(t);

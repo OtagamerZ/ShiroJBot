@@ -87,9 +87,9 @@ public class ManualResultCommand implements Executable {
 				Phase p = t.getPhase(phase);
 
 				int index = Integer.parseInt(args[2]);
-				Pair<String, String> match = p.getMatch(index);
-				User winner = Main.getInfo().getUserByID(p.getParticipants().get(index));
-				String matchName = Arrays.stream(new String[]{match.getLeft(), match.getRight()})
+				Pair<Participant, Participant> match = p.getMatch(t, index);
+				User winner = Main.getInfo().getUserByID(p.getParticipants(t).get(index).getUid());
+				String matchName = Arrays.stream(new String[]{match.getLeft().getUid(), match.getRight().getUid()})
 						.map(Helper::getUsername)
 						.collect(Collectors.joining(" VS "));
 
