@@ -504,4 +504,9 @@ public class Equipment implements Drawable, Cloneable {
 	public String getBase64() {
 		return Helper.atob(drawCard(false), "png");
 	}
+
+	@Override
+	public String toString() {
+		return "Equipment@%x".formatted(hashCode());
+	}
 }
