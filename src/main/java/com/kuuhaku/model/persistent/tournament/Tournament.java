@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.tournament;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
-import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
@@ -68,7 +67,8 @@ public class Tournament {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size = 0;
 
-	private final transient MultiKeyMap<Object, Participant> partLookup = new MultiKeyMap<>();
+	private final transient Map<Integer, String> idLookup = new HashMap<>();
+	private final transient Map<String, Participant> partLookup = new HashMap<>();
 
 	private static final int H_MARGIN = 150;
 	private static final int V_MARGIN = 25;
@@ -110,28 +110,27 @@ public class Tournament {
 		return size == 0 ? Math.max(8, Helper.roundToBit(participants.size())) : size;
 	}
 
-	public MultiKeyMap<Object, Participant> getPartLookup() {
+	public Map<String, Participant> getPartLookup() {
 		if (partLookup.isEmpty()) {
 			for (Participant p : participants) {
-				partLookup.put(p.getId(), p.getUid(), p);
+				idLookup.put(p.getId(), p.getUid());
+				partLookup.put(p.getUid(), p);
 			}
 		}
 
 		return partLookup;
 	}
 
-	@SuppressWarnings("SuspiciousMethodCalls")
 	public Participant getLookup(String id) {
 		if (id == null) return null;
 
 		return getPartLookup().get(id);
 	}
 
-	@SuppressWarnings("SuspiciousMethodCalls")
 	public Participant getLookup(Integer id) {
 		if (id == null) return null;
 
-		return getPartLookup().get(id);
+		return getLookup(idLookup.get(id));
 	}
 
 	public Set<String> getBench() {
@@ -340,7 +339,7 @@ public class Tournament {
 					if (i == 1 && k == 0) {
 						g2d.setColor(Color.white);
 						g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, bi.getHeight() / 10f));
-						g2d.drawString(name, bi.getWidth() - g2d.getFontMetrics().stringWidth(name), y + g2d.getFontMetrics().getHeight());
+						g2d.drawString(name, bi.getWidth() - g2d.getFontMetrics().stringWidth(name) - 10, y + g2d.getFontMetrics().getHeight());
 					}
 				}
 			}

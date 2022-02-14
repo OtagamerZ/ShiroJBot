@@ -1961,7 +1961,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				);
 			}
 			discardBatch.clear();
-			undying = false;
 
 			if (getRound() > 0) reroll = false;
 			resetTimer(this);
@@ -2378,7 +2377,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 						);
 					}
 					discardBatch.clear();
-					undying = false;
 
 					if (getRound() > 0) reroll = false;
 					resetTimer(this);
@@ -2925,6 +2923,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		forfeit = false;
+		undying = false;
 
 		for (TextChannel chn : getChannel().getChannels()) {
 			Main.getInfo().getShoukanSlot().put(chn.getId(), true);
