@@ -68,18 +68,8 @@ public class Arena {
 				)
 		);
 		this.graveyard = Map.of(
-				Side.TOP, new BondedList<>(d -> {
-					d.reset();
-					if (top.getCombo().getLeft() == Race.UNDEAD && Helper.chance(5)) {
-						top.getCards().add(d.copy());
-					}
-				}),
-				Side.BOTTOM, new BondedList<>(d -> {
-					d.reset();
-					if (bot.getCombo().getLeft() == Race.UNDEAD && Helper.chance(5)) {
-						bot.getCards().add(d.copy());
-					}
-				})
+				Side.TOP, new BondedList<>(Drawable::reset),
+				Side.BOTTOM, new BondedList<>(Drawable::reset)
 		);
 		this.banned = new BondedList<>(Drawable::reset);
 
