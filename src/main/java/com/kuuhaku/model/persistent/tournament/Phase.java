@@ -67,18 +67,25 @@ public class Phase {
 		return size;
 	}
 
-	public List<String> getParticipants() {
+	public List<Participant> getParticipants(Tournament t) {
 		return JSONUtils.toList(participants).stream()
-				.map(s -> s == null ? null : String.valueOf(s))
+				.map(s -> s == null ? null : (int) s)
+				.map(t::getLookup)
 				.collect(Collectors.toList());
 	}
 
-	public void setParticipants(List<String> participants) {
+	public List<Integer> getRawParticipants() {
+		return JSONUtils.toList(participants).stream()
+				.map(s -> s == null ? null : (int) s)
+				.collect(Collectors.toList());
+	}
+
+	public void setParticipants(List<Integer> participants) {
 		this.participants = JSONUtils.toJSON(participants);
 	}
 
-	public Pair<String, String> getMatch(int index) {
-		List<String> parts = getParticipants();
+	public Pair<Participant, Participant> getMatch(Tournament t, int index) {
+		List<Participant> parts = getParticipants(t);
 		boolean top = index % 2 == 0;
 
 		return Pair.of(
@@ -88,10 +95,10 @@ public class Phase {
 	}
 
 	public void setMatch(int index, Participant p) {
-		List<String> parts = getParticipants();
+		List<Integer> parts = getRawParticipants();
 
 		p.setIndex(index);
-		parts.set(index, p.getUid());
+		parts.set(index, p.getId());
 		participants = JSONUtils.toJSON(parts);
 	}
 
@@ -99,8 +106,8 @@ public class Phase {
 		return last;
 	}
 
-	public String getOpponent(Participant p) {
-		List<String> parts = getParticipants();
+	public Participant getOpponent(Tournament t, Participant p) {
+		List<Participant> parts = getParticipants(t);
 		boolean top = p.getIndex() % 2 == 0;
 
 		if (last) return null;

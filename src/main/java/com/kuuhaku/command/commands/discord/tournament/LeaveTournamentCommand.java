@@ -93,7 +93,7 @@ public class LeaveTournamentCommand implements Executable {
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
-			}else if (!t.getPartLookup().containsKey(author.getId())) {
+			}else if (t.getLookup(author.getId()) == null) {
 				channel.sendMessage("❌ | Você não está inscrito nesse torneio.").queue();
 				return;
 			}
