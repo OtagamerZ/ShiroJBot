@@ -1144,4 +1144,9 @@ public class Champion implements Drawable, Cloneable {
 	public String getBase64() {
 		return Helper.atob(drawCard(false), "png");
 	}
+
+	@Override
+	public String toString() {
+		return "Champion@%x".formatted(hashCode());
+	}
 }
