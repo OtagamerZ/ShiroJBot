@@ -140,12 +140,14 @@ public class Tournament {
 
 	public Participant getLookup(String id) {
 		if (id == null) return null;
+		else if (id.equals("BYE")) return Participant.BYE;
 
 		return getPartLookup().get(id);
 	}
 
 	public Participant getLookup(Integer id) {
 		if (id == null) return null;
+		else if (id == -1) return Participant.BYE;
 
 		return getLookup(getIdLookup().get(id));
 	}

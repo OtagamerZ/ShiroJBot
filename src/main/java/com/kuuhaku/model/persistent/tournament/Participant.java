@@ -42,6 +42,8 @@ public class Participant {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int phase = 0;
 
+	public transient static final Participant BYE = new Participant(null);
+
 	public Participant() {
 	}
 
