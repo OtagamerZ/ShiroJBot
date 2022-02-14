@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
-import com.kuuhaku.utils.JSONUtils;
+import com.kuuhaku.utils.converters.IntListConverter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
@@ -39,8 +39,9 @@ public class Phase {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int size;
 
+	@Convert(converter = IntListConverter.class)
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
-	private String participants;
+	private List<Integer> participants;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean last;
@@ -51,7 +52,7 @@ public class Phase {
 	public Phase(int phase, int size, boolean last) {
 		this.phase = phase;
 		this.size = size;
-		this.participants = Arrays.toString(new Participant[size]);
+		this.participants = Arrays.asList(new Integer[size]);
 		this.last = last;
 	}
 
@@ -68,20 +69,17 @@ public class Phase {
 	}
 
 	public List<Participant> getParticipants(Tournament t) {
-		return JSONUtils.toList(participants).stream()
-				.map(s -> s == null ? null : ((Number) s).intValue())
+		return participants.stream()
 				.map(t::getLookup)
 				.collect(Collectors.toList());
 	}
 
 	public List<Integer> getRawParticipants() {
-		return JSONUtils.toList(participants).stream()
-				.map(s -> s == null ? null : ((Number) s).intValue())
-				.collect(Collectors.toList());
+		return participants;
 	}
 
 	public void setParticipants(List<Integer> participants) {
-		this.participants = JSONUtils.toJSON(participants);
+		this.participants = participants;
 	}
 
 	public Pair<Participant, Participant> getMatch(Tournament t, int index) {
@@ -99,7 +97,7 @@ public class Phase {
 
 		p.setIndex(index);
 		parts.set(index, p.getId());
-		participants = JSONUtils.toJSON(parts);
+		participants = parts;
 	}
 
 	public boolean isLast() {
