@@ -74,14 +74,14 @@ public class Bracket {
 	}
 
 	public void populate(Tournament t, List<Participant> participants) {
-		List<String> ids = participants.stream()
-				.map(Participant::getUid)
+		List<Integer> ids = participants.stream()
+				.map(Participant::getId)
 				.collect(Collectors.toList());
 
 		if (participants.size() >= size)
 			ids = ids.subList(0, size);
 		else
-			ids.addAll(ListUtils.union(ids, Collections.nCopies(size - participants.size(), "BYE")));
+			ids.addAll(ListUtils.union(ids, Collections.nCopies(size - participants.size(), -1)));
 
 		Collections.shuffle(ids);
 		getPhases().get(0).setParticipants(ids);
@@ -89,11 +89,11 @@ public class Bracket {
 		for (int j = 0; j < phases.size(); j++) {
 			Phase phase = getPhases().get(j);
 			for (int i = 0; i < phase.getSize(); i++) {
-				Participant p = t.getLookup(phase.getParticipants().get(i));
+				Participant p = phase.getParticipants(t).get(i);
 				if (p == null) continue;
 
 				if (p.getIndex() == -1) p.setIndex(i);
-				Participant op = t.getLookup(phase.getOpponent(p));
+				Participant op = phase.getOpponent(t, p);
 				if (op != null && op.isBye()) {
 					t.setResult(j, i);
 				}

@@ -220,7 +220,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			int phase = tn.getCurrPhase(author.getId());
+			int phase = tn.getLookup(author.getId()).getPhase();
 			if (phase != -1) {
 				TournamentMatch match = tn.generateMatch(phase, author.getId());
 				if (match == null) return;

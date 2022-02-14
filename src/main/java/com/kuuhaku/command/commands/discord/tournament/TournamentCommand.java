@@ -69,7 +69,7 @@ public class TournamentCommand implements Executable {
 							"`ID: %d` | %s%s | Chave de %s".formatted(
 									tn.getId(),
 									tn.getName(),
-									tn.isFinished() ? " (ENCERRADO)" : tn.isClosed() ? " (FECHADO)" : tn.getPartLookup().containsKey(author.getId()) ? " (INSCRITO)" : "",
+									tn.isFinished() ? " (ENCERRADO)" : tn.isClosed() ? " (FECHADO)" : tn.getLookup(author.getId()) != null ? " (INSCRITO)" : "",
 									tn.getSize()
 							),
 							StringUtils.abbreviate(tn.getDescription(), 100),

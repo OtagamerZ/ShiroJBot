@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
-import com.kuuhaku.model.persistent.id.CompositeTournamentId;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
@@ -26,15 +25,13 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "participant")
-@IdClass(CompositeTournamentId.class)
 public class Participant {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String uid;
-
-	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int tournament;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int index = -1;
@@ -42,24 +39,31 @@ public class Participant {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int points = 0;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean third = false;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int phase = 0;
 
 	public Participant() {
 	}
 
-	public Participant(String uid, Tournament t) {
-		if (uid == null) uid = "BYE";
+	public Participant(String uid) {
+		if (uid == null) {
+			uid = "BYE";
+			id = -1;
+		}
+
 		this.uid = uid;
-		this.tournament = t.getId();
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getUid() {
 		return uid;
 	}
 
-	public int getTournament() {
-		return tournament;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public int getIndex() {
@@ -82,16 +86,16 @@ public class Participant {
 		points += pts;
 	}
 
-	public boolean isThird() {
-		return third;
+	public int getPhase() {
+		return phase;
 	}
 
-	public void setThird() {
-		this.third = true;
+	public void setPhase(int phase) {
+		this.phase = phase;
 	}
 
 	public boolean isBye() {
-		return uid.equals("BYE");
+		return id == -1 || uid.equals("BYE");
 	}
 
 	@Override
@@ -99,12 +103,12 @@ public class Participant {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Participant that = (Participant) o;
-		return tournament == that.tournament && Objects.equals(uid, that.uid);
+		return id == that.id && index == that.index && points == that.points && phase == that.phase && Objects.equals(uid, that.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid, tournament);
+		return Objects.hash(id, uid, index, points, phase);
 	}
 
 	@Override
