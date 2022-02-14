@@ -258,4 +258,9 @@ public class Field implements Drawable, Cloneable {
 	public String getBase64() {
 		return Helper.atob(drawCard(false), "png");
 	}
+
+	@Override
+	public String toString() {
+		return "Field@%x".formatted(hashCode());
+	}
 }
