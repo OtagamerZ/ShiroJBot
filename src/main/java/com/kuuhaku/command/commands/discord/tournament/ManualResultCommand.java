@@ -90,7 +90,7 @@ public class ManualResultCommand implements Executable {
 				Pair<Participant, Participant> match = p.getMatch(t, index);
 				User winner = Main.getInfo().getUserByID(p.getParticipants(t).get(index).getUid());
 				String matchName = Arrays.stream(new String[]{match.getLeft().getUid(), match.getRight().getUid()})
-						.map(Helper::getUsername)
+						.map(s -> s.equals("BYE") ? "_" + s + "_" : Helper.getUsername(s))
 						.collect(Collectors.joining(" VS "));
 
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
