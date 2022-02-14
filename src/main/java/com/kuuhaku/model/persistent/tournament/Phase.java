@@ -40,7 +40,7 @@ public class Phase {
 	private int size;
 
 	@Convert(converter = IntListConverter.class)
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '[]'")
 	private List<Integer> participants;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
