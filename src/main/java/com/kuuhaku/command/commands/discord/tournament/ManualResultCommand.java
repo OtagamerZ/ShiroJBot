@@ -66,6 +66,11 @@ public class ManualResultCommand implements Executable {
 			if (phase == t.getBracket().getPhases().size() - 1) {
 				int index = Integer.parseInt(args[2]);
 				List<Participant> match = t.getTPMatch();
+				if (!match.stream().allMatch(p -> p.getPhase() == phase)) {
+					channel.sendMessage("❌ | Essa partida já foi encerrada.").queue();
+					return;
+				}
+
 				User winner = Main.getInfo().getUserByID(match.get(index).getUid());
 				String matchName = match.stream()
 						.map(Participant::getUid)
@@ -88,6 +93,11 @@ public class ManualResultCommand implements Executable {
 
 				int index = Integer.parseInt(args[2]);
 				Pair<Participant, Participant> match = p.getMatch(t, index);
+				if (!Helper.equalsAll(phase, match.getLeft().getPhase(), match.getRight().getPhase())) {
+					channel.sendMessage("❌ | Essa partida já foi encerrada.").queue();
+					return;
+				}
+
 				User winner = Main.getInfo().getUserByID(p.getParticipants(t).get(index).getUid());
 				String matchName = Arrays.stream(new String[]{match.getLeft().getUid(), match.getRight().getUid()})
 						.map(s -> s.equals("BYE") ? "_" + s + "_" : Helper.getUsername(s))

@@ -251,6 +251,8 @@ public class Tournament {
 		}
 
 		Participant winner = p.getParticipants(this).get(index);
+		if (winner.getPhase() != phase) return;
+
 		winner.addPoints((size / 2) >> phase);
 		winner.setPhase(phase + 1);
 
