@@ -383,7 +383,7 @@ public class Tournament {
 		if (part != null) {
 			String name;
 			if (part.isBye()) {
-				g2d.setColor(PRIMARY_COLOR);
+				g2d.setColor(new Color(0xc7494c));
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.ITALIC, 50 * mult));
 				name = "BYE";
 			} else {
