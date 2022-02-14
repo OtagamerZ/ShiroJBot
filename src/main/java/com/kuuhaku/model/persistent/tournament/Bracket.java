@@ -23,7 +23,6 @@ import org.apache.commons.collections4.ListUtils;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "bracket")
@@ -74,16 +73,19 @@ public class Bracket {
 	}
 
 	public void populate(Tournament t, List<Participant> participants) {
-		List<Integer> ids = participants.stream()
-				.map(Participant::getId)
-				.collect(Collectors.toList());
-
 		if (participants.size() >= size)
-			ids = ids.subList(0, size);
+			participants = participants.subList(0, size);
 		else
-			ids.addAll(ListUtils.union(ids, Collections.nCopies(size - participants.size(), -1)));
+			participants = ListUtils.union(participants, Collections.nCopies(size - participants.size(), new Participant(null)));
 
-		Collections.shuffle(ids);
+		Collections.shuffle(participants);
+		List<Integer> ids = new ArrayList<>();
+		for (int i = 0; i < participants.size(); i++) {
+			Participant p = participants.get(i);
+			ids.add(p.getId());
+			p.setIndex(i);
+		}
+
 		getPhases().get(0).setParticipants(ids);
 
 		for (int j = 0; j < phases.size(); j++) {
