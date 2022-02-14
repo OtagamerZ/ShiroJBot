@@ -69,14 +69,14 @@ public class Phase {
 
 	public List<Participant> getParticipants(Tournament t) {
 		return JSONUtils.toList(participants).stream()
-				.map(s -> s == null ? null : (int) s)
+				.map(s -> s == null ? null : ((Number) s).intValue())
 				.map(t::getLookup)
 				.collect(Collectors.toList());
 	}
 
 	public List<Integer> getRawParticipants() {
 		return JSONUtils.toList(participants).stream()
-				.map(s -> s == null ? null : (int) s)
+				.map(s -> s == null ? null : ((Number) s).intValue())
 				.collect(Collectors.toList());
 	}
 
