@@ -315,7 +315,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
 				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
-			} else if (hand.getHp() <= card.getBlood()) {
+			} else if (card.getBlood() > 0 && hand.getHp() <= card.getBlood()) {
 				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
 			}
@@ -383,7 +383,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
 				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
-			} else if (hand.getHp() <= card.getBlood()) {
+			} else if (card.getBlood() > 0 && hand.getHp() <= card.getBlood()) {
 				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
 			}
@@ -524,7 +524,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
 				channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
-			} else if (hand.getHp() <= card.getBlood()) {
+			} else if (card.getBlood() > 0 && hand.getHp() <= card.getBlood()) {
 				channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
 				return null;
 			}
@@ -770,7 +770,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					};
 
 					if (mode == Mode.NONE) {
-						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | O segundo argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
 					}
 
