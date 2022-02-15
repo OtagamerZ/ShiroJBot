@@ -784,6 +784,14 @@ public class Hand {
 		this.prevHp = prevHp;
 	}
 
+	public int getHealDelta() {
+		return Math.max(hp - prevHp, 0);
+	}
+
+	public int getDamageDelta() {
+		return Math.max(prevHp - hp, 0);
+	}
+
 	public int getSuppressTime() {
 		return suppressTime;
 	}
