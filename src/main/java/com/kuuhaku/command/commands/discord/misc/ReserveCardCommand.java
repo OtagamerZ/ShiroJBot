@@ -265,12 +265,6 @@ public class ReserveCardCommand implements Executable {
 
 			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` comprada e reservada com sucesso!").queue();
 		} else {
-			StashDAO.saveCard(switch (m.getType()) {
-				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
-				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
-				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
-			});
-
 			m = MarketDAO.getCard(Integer.parseInt(args[0]));
 			if (m == null) {
 				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
@@ -279,6 +273,12 @@ public class ReserveCardCommand implements Executable {
 				channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
 				return;
 			}
+
+			StashDAO.saveCard(switch (m.getType()) {
+				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
+				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
+			});
 
 			m.setBuyer(author.getId());
 			MarketDAO.saveCard(m);
