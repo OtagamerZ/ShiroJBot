@@ -875,7 +875,7 @@ public class Hand {
 		if (bleeding > 0) {
 			fac *= 0.5;
 		} else if (regeneration > 0) {
-			fac *= 1.5;
+			fac *= 1.25;
 		}
 
 		return fac;
