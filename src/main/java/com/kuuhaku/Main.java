@@ -124,7 +124,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		}
 
 		for (GuildConfig guildConfig : GuildDAO.getAllGuildsWithButtons()) {
-			Helper.refreshButtons(guildConfig);
+			try {
+				Helper.refreshButtons(guildConfig);
+			} catch (RuntimeException e) {
+				Helper.logger(Main.class).error("Error loading role buttons for guild with ID " + guildConfig.getGuildId());
+			}
 		}
 
 		CompletableFuture<Void> lst = new CompletableFuture<>();

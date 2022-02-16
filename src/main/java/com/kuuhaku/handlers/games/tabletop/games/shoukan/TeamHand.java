@@ -83,7 +83,11 @@ public class TeamHand extends Hand {
 			Deck dk = dks.get(i);
 			User user = users.get(i);
 			game.getDivergence().put(user.getId(), dk.getAverageDivergence());
+
 			Hero hero = KawaiponDAO.getHero(user.getId());
+			if (hero == null || hero.getHp() <= 0 || hero.getQuest() != null) {
+				hero = null;
+			}
 
 			Account acc = AccountDAO.getAccount(user.getId());
 			this.users.add(user.getId());
@@ -95,8 +99,7 @@ public class TeamHand extends Hand {
 					.flatMap(List::stream)
 					.map(Drawable::copy)
 					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));
-			if (hero != null && hero.getHp() > 0 && hero.getQuest() == null)
-				deque.add(hero.toChampion());
+			if (hero != null) deque.add(hero.toChampion());
 
 			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
 
