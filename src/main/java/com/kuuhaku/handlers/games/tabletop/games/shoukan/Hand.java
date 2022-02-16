@@ -906,7 +906,7 @@ public class Hand {
 	}
 
 	public float getHealingFac() {
-		float fac = healingFac;
+		float fac = healingFac * getBaseHealingFac();
 		if (bleeding > 0) {
 			fac *= 0.5;
 		} else if (regeneration > 0) {
