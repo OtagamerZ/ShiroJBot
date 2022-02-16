@@ -92,7 +92,13 @@ public class Hand {
 		}
 
 		this.acc = AccountDAO.getAccount(user.getId());
-		this.hero = KawaiponDAO.getHero(user.getId());
+
+		Hero h = KawaiponDAO.getHero(user.getId());
+		if (h != null && h.getHp() > 0 && h.getQuest() == null) {
+			this.hero = h;
+		} else {
+			this.hero = null;
+		}
 
 		Consumer<Drawable> bonding = d -> d.bind(this);
 		this.deque = new BondedList<>(bonding);
@@ -122,14 +128,13 @@ public class Hand {
 	}
 
 	private void setData(List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw) {
+		if (hero != null) deque.add(hero.toChampion());
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
 						.map(Drawable::copy)
 						.toList()
 		);
-		if (hero != null && hero.getHp() > 0 && hero.getQuest() == null)
-			deque.add(hero.toChampion());
 
 		int baseHp;
 		int baseManaPerTurn;
