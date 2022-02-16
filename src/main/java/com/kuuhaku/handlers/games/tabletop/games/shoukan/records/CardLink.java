@@ -18,14 +18,14 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 		if (linked instanceof Champion c)
 			return c;
 
-		throw new ClassCastException("Wrong Drawable type.");
+		throw new ClassCastException("Wrong Drawable type: " + linked.getClass().getSimpleName() + " " + linked.getCard().getName() + ".");
 	}
 
 	public Equipment asEquipment() {
 		if (linked instanceof Equipment e)
 			return e;
 
-		throw new ClassCastException("Wrong Drawable type.");
+		throw new ClassCastException("Wrong Drawable type: " + linked.getClass().getSimpleName() + " " + linked.getCard().getName() + ".");
 	}
 
 	public CardType getType() {
