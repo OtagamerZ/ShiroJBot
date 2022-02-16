@@ -31,14 +31,14 @@ import java.util.stream.Collectors;
 
 public enum Race {
     HUMAN("Humano",
-            "**(SOLO)** +1 limite de cópias para campeões **(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
+            "+25% poder de cura, permite ver metade da mão inicial do oponente caso você comece",
             "Campeões com 1 ou 2 de custo no deck reduzem o dano sofrido em (**SOLO** | 1%/**DUO** | 0,5%), 3/4 disso adicionado à esquiva de suas cartas",
             "Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia.",
             new Integer[]{2, 2, 2, 2, 2}
     ),
     ELF("Elfo",
             "+1 mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas",
-            "+1 mana a cada 3 turnos",
+            "+1 mana a cada 2 turnos ou +2 mana a cada 5 turnos",
             "Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha.",
             new Integer[]{1, 2, 3, 3, 1}
     ),
