@@ -254,6 +254,13 @@ public class Arena {
 									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(-" + h.getBleeding() + ")"),
 									key == Side.TOP ? 82 : 1638, g2d
 							);
+						} else if (h.getRegeneration() > 0) {
+							g2d.setColor(new Color(0, 153, 89));
+							Profile.drawOutlinedText(
+									"(-" + h.getRegeneration() + ")",
+									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(+" + h.getRegeneration() + ")"),
+									key == Side.TOP ? 82 : 1638, g2d
+							);
 						}
 
 						g2d.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);

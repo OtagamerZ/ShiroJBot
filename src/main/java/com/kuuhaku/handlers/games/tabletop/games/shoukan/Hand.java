@@ -74,6 +74,7 @@ public class Hand {
 	private int hideMana = 0;
 	private float healingFac = 1;
 	private int bleeding = 0;
+	private int regeneration = 0;
 	private Message old = null;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
@@ -870,7 +871,14 @@ public class Hand {
 	}
 
 	public float getHealingFac() {
-		return healingFac - (bleeding > 0 ? (healingFac / 2) : 0);
+		float fac = healingFac;
+		if (bleeding > 0) {
+			fac *= 0.5;
+		} else if (regeneration > 0) {
+			fac *= 1.5;
+		}
+
+		return fac;
 	}
 
 	public void setHealingFac(float healingFac) {
@@ -882,10 +890,34 @@ public class Hand {
 	}
 
 	public void setBleeding(int bleeding) {
+		bleeding = Math.max(0, bleeding);
+
+		if (regeneration > 0) {
+			regeneration -= bleeding;
+			if (regeneration < 0) {
+				bleeding += regeneration;
+				regeneration = 0;
+			} else {
+				bleeding = 0;
+			}
+		}
+
 		this.bleeding = bleeding;
 	}
 
 	public void addBleeding(int bleeding) {
+		bleeding = Math.max(0, bleeding);
+
+		if (regeneration > 0) {
+			regeneration -= bleeding;
+			if (regeneration < 0) {
+				bleeding += regeneration;
+				regeneration = 0;
+			} else {
+				bleeding = 0;
+			}
+		}
+
 		this.bleeding += bleeding;
 	}
 
@@ -895,6 +927,50 @@ public class Hand {
 
 	public void decreaseBleeding() {
 		bleeding = Math.max(0, (int) (bleeding * 0.9));
+	}
+
+	public int getRegeneration() {
+		return regeneration;
+	}
+
+	public void setRegeneration(int regeneration) {
+		regeneration = Math.max(0, regeneration);
+
+		if (bleeding > 0) {
+			bleeding -= regeneration;
+			if (bleeding < 0) {
+				regeneration += bleeding;
+				bleeding = 0;
+			} else {
+				regeneration = 0;
+			}
+		}
+
+		this.regeneration = regeneration;
+	}
+
+	public void addRegeneration(int regeneration) {
+		regeneration = Math.max(0, regeneration);
+
+		if (bleeding > 0) {
+			bleeding -= regeneration;
+			if (bleeding < 0) {
+				regeneration += bleeding;
+				bleeding = 0;
+			} else {
+				regeneration = 0;
+			}
+		}
+
+		this.regeneration += regeneration;
+	}
+
+	public void decreaseRegeneration(int value) {
+		regeneration = Math.max(0, regeneration - value);
+	}
+
+	public void decreaseRegeneration() {
+		regeneration = Math.max(0, (int) (regeneration * 0.5));
 	}
 
 	protected void triggerEffect(EffectTrigger trigger) {
