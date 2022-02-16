@@ -777,7 +777,7 @@ public class Champion implements Drawable, Cloneable {
 		for (CardLink cl : List.copyOf(linkedTo)) {
 			if (cl.isFake()) continue;
 
-			Equipment e = (Equipment) cl.linked();
+			Equipment e = cl.asEquipment();
 			if (!e.hasEffect()) continue;
 
 			e.getEffect(ep);
