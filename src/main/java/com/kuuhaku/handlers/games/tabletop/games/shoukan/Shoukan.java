@@ -282,7 +282,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 						shownHand.set(true);
 						h.showHand();
 
-						h.showEnemyHand(0.5f);
+						if (h.getCombo().getLeft() == Race.HUMAN)
+							h.showEnemyHand(0.5f);
 					}
 				});
 
