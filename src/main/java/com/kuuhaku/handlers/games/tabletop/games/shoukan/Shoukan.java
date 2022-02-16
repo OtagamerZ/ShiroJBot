@@ -2017,6 +2017,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (h.get().getBleeding() > 0) {
 				h.get().removeHp(h.get().getBleeding() / 5);
 				h.get().decreaseBleeding();
+			} else if (h.get().getRegeneration() > 0) {
+				h.get().addHp(h.get().getRegeneration() / 2);
+				h.get().decreaseRegeneration();
 			}
 
 			int mpt = h.get().getManaPerTurn();
@@ -2433,6 +2436,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (h.get().getBleeding() > 0) {
 						h.get().removeHp(h.get().getBleeding() / 5);
 						h.get().decreaseBleeding();
+					} else if (h.get().getRegeneration() > 0) {
+						h.get().addHp(h.get().getRegeneration() / 2);
+						h.get().decreaseRegeneration();
 					}
 
 					int mpt = h.get().getManaPerTurn();
