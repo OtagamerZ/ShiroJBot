@@ -24,7 +24,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-import com.kuuhaku.model.records.MetaData;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -234,7 +233,7 @@ public class Deck {
 	}
 
 	public int getChampionMaxCopies() {
-		return getCombo().getLeft() == Race.HUMAN ? 4 : 3;
+		return 3;
 	}
 
 	public int getEquipmentMaxCopies(Equipment eq) {
