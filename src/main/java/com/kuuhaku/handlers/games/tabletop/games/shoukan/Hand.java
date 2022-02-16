@@ -610,7 +610,7 @@ public class Hand {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = enemy.getCards();
-		List<Integer> hidIndx = Helper.getRandomN(IntStream.range(0, cards.size()).boxed().toList(), (int) (cards.size() * hidden), 1);
+		List<Integer> hidIndx = Helper.getRandomN(IntStream.range(0, cards.size()).boxed().toList(), (int) Math.ceil(cards.size() * hidden), 1);
 
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(hidIndx.contains(i)), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
