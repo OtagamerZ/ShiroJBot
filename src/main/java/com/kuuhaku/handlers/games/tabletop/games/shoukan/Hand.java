@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
@@ -599,6 +600,36 @@ public class Hand {
 				.queue(null, Helper::doNothing);
 	}
 
+	public void showEnemyHand(float hidden) {
+		hidden = Helper.clamp(hidden, 0, 1);
+
+		Hand enemy = game.getHands().get(side.getOther());
+		BufferedImage bi = new BufferedImage(Math.max(5, enemy.getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
+
+		List<Drawable> cards = enemy.getCards();
+		List<Integer> hidIndx = Helper.getRandomN(IntStream.range(0, cards.size()).boxed().toList(), (int) (cards.size() * hidden), 1);
+
+		for (int i = 0; i < cards.size(); i++) {
+			g2d.drawImage(cards.get(i).drawCard(hidIndx.contains(i)), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			try {
+				BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
+				g2d.drawImage(so, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			} catch (IOException ignore) {
+			}
+		}
+
+		g2d.dispose();
+
+		getUser().openPrivateChannel()
+				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente:")
+						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+				)
+				.queue(null, Helper::doNothing);
+	}
+
 	public void showEnemyDeck(int amount) {
 		Hand op = game.getHands().get(side.getOther());
 		BufferedImage bi = new BufferedImage(Math.max(5, amount) * 300, 450, BufferedImage.TYPE_INT_ARGB);
@@ -868,6 +899,10 @@ public class Hand {
 
 	public void decreaseHiddenMana() {
 		hideMana = Math.max(0, hideMana - 1);
+	}
+
+	public float getBaseHealingFac() {
+		return 1 + (combo.getLeft() == Race.HUMAN ? 0.25f : 0);
 	}
 
 	public float getHealingFac() {

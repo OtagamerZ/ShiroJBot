@@ -40,7 +40,7 @@ public enum Charm {
     PIERCING("Penetração", "Causa %s%% do dano final da carta como dano direto"),
     AGILITY("Agilidade", "Aumenta a chance de esquiva em %s%%"),
     DRAIN("Dreno", "Rouba %s de mana ao atacar"),
-    BLEEDING("Sangramento", "Reduz curas em 50%% e adiciona %s%% do dano final da carta como sangramento"),
+    BLEEDING("Sangramento", "Reduz o poder de cura em 50%% e adiciona %s%% do dano final da carta como sangramento"),
     FORTIFY("Fortificar", "Aumenta a chance de bloqueio em %s%%");
 
     private final String name;
