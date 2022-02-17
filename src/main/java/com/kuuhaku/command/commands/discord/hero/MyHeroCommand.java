@@ -99,7 +99,7 @@ public class MyHeroCommand implements Executable {
 			}
 		}
 
-		int hours = (int) ((10 - Helper.prcnt(h.getHp(), h.getMaxHp()) * 10) * healModif);
+		int hours = (int) Math.ceil((10 - Helper.prcnt(h.getHp(), h.getMaxHp()) * 10) * healModif);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
