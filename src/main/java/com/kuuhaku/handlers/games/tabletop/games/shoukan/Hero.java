@@ -164,16 +164,19 @@ public class Hero implements Cloneable {
             out[0] += e.getAtk() / (e.getCharms() == null ? 100 : 125);
             out[1] += e.getDef() / (e.getCharms() == null ? 100 : 125);
 
-            if (e.getCharms() != null)
+            if (e.getCharms() != null) {
+                int div = e.getCharms().size();
+
                 for (Charm charm : e.getCharms()) {
                     switch (charm) {
-                        case PIERCING, DRAIN, BLEEDING -> out[0] += e.getTier();
-                        case SHIELD, MIRROR -> out[1] += e.getTier();
-                        case AGILITY -> out[2] += e.getTier() * 2;
-                        case TIMEWARP, DOUBLETAP -> out[3] += e.getTier() * 2;
-                        case CLONE, LINK -> out[4] += e.getTier() * 2;
+                        case PIERCING, DRAIN, BLEEDING -> out[0] += e.getTier() / div;
+                        case SHIELD, MIRROR -> out[1] += e.getTier() / div;
+                        case AGILITY -> out[2] += e.getTier() * 2 / div;
+                        case TIMEWARP, DOUBLETAP -> out[3] += e.getTier() * 2 / div;
+                        case CLONE, LINK -> out[4] += e.getTier() * 2 / div;
                     }
                 }
+            }
         }
 
         return new Attributes(out);
