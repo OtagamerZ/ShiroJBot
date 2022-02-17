@@ -242,7 +242,6 @@ public class ReserveCardCommand implements Executable {
 			};
 
 			User sellerU = Main.getInfo().getUserByID(m.getSeller());
-			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
 			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 				StashDAO.saveCard(switch (m.getType()) {
@@ -255,7 +254,7 @@ public class ReserveCardCommand implements Executable {
 				MarketDAO.saveCard(m);
 
 				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
 						Helper::doNothing
 				);
 
@@ -282,7 +281,7 @@ public class ReserveCardCommand implements Executable {
 									MarketDAO.saveCard(finalM);
 
 									if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
 											Helper::doNothing
 									);
 
@@ -292,7 +291,7 @@ public class ReserveCardCommand implements Executable {
 									AccountDAO.saveAccount(seller);
 									AccountDAO.saveAccount(buyer);
 
-									channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!").queue();
+									s.delete().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!")).queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

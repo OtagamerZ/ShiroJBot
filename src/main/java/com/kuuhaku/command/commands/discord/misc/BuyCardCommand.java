@@ -262,7 +262,6 @@ public class BuyCardCommand implements Executable {
 			};
 
 			User sellerU = Main.getInfo().getUserByID(m.getSeller());
-			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
 			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 				m.setBuyer(author.getId());
@@ -275,7 +274,7 @@ public class BuyCardCommand implements Executable {
 				AccountDAO.saveAccount(buyer);
 
 				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
 						Helper::doNothing
 				);
 
@@ -296,11 +295,11 @@ public class BuyCardCommand implements Executable {
 									AccountDAO.saveAccount(buyer);
 
 									if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
 											Helper::doNothing
 									);
 
-									channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!").queue();
+									s.delete().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!")).queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
