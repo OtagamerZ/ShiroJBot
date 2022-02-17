@@ -1988,6 +1988,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
 					if (postCombat()) return;
 				} else {
+					draw = true;
 					String msg = "Declaro empate! (" + getRound() + " turnos)";
 
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
@@ -2412,6 +2413,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
 							if (postCombat()) return;
 						} else {
+							draw = true;
 							String msg = "Declaro empate! (" + getRound() + " turnos)";
 
 							for (List<SlotColumn> sides : arena.getSlots().values()) {
