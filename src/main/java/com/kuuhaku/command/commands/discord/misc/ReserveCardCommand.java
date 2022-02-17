@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -55,7 +56,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "reservar",
 		aliases = {"reserve"},
-		usage = "req_id",
+		usage = "req_id-override",
 		category = Category.MISC
 )
 @Requires({
@@ -235,35 +236,68 @@ public class ReserveCardCommand implements Executable {
 				return;
 			}
 
-			m.setBuyer(author.getId());
-			MarketDAO.saveCard(m);
-
-			User sellerU = Main.getInfo().getUserByID(m.getSeller());
-			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
-
 			String name = switch (m.getType()) {
 				case EVOGEAR, FIELD -> m.getRawCard().getName();
 				default -> ((KawaiponCard) m.getCard()).getName();
 			};
 
-			if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
-					Helper::doNothing
-			);
+			User sellerU = Main.getInfo().getUserByID(m.getSeller());
+			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
-			StashDAO.saveCard(switch (m.getType()) {
-				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
-				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
-				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
-			});
+			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
+				StashDAO.saveCard(switch (m.getType()) {
+					case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+					case FIELD -> new Stash(author.getId(), (Field) m.getCard());
+					default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
+				});
 
-			seller.addCredit(price, this.getClass());
-			buyer.removeCredit(price, this.getClass());
+				m.setBuyer(author.getId());
+				MarketDAO.saveCard(m);
 
-			AccountDAO.saveAccount(seller);
-			AccountDAO.saveAccount(buyer);
+				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+						Helper::doNothing
+				);
 
-			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` comprada e reservada com sucesso!").queue();
+				seller.addCredit(price, this.getClass());
+				buyer.removeCredit(price, this.getClass());
+
+				AccountDAO.saveAccount(seller);
+				AccountDAO.saveAccount(buyer);
+
+				channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!").queue();
+			} else {
+				Market finalM = m;
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+				channel.sendMessage("Você está prestes a comprar e reservar a carta `" + name + "` por " + Helper.separate(price) + " CR, deseja confirmar?")
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									StashDAO.saveCard(switch (finalM.getType()) {
+										case EVOGEAR -> new Stash(author.getId(), (Equipment) finalM.getCard());
+										case FIELD -> new Stash(author.getId(), (Field) finalM.getCard());
+										default -> new Stash(author.getId(), (KawaiponCard) finalM.getCard());
+									});
+
+									finalM.setBuyer(author.getId());
+									MarketDAO.saveCard(finalM);
+
+									if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+											Helper::doNothing
+									);
+
+									seller.addCredit(price, this.getClass());
+									buyer.removeCredit(price, this.getClass());
+
+									AccountDAO.saveAccount(seller);
+									AccountDAO.saveAccount(buyer);
+
+									channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!").queue();
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								u -> u.getId().equals(author.getId()),
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
+			}
 		} else {
 			m = MarketDAO.getCard(Integer.parseInt(args[0]));
 			if (m == null) {

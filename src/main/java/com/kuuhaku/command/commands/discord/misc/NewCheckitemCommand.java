@@ -31,7 +31,7 @@ import java.util.Arrays;
 @Command(
 		name = "afazer",
 		aliases = {"todo"},
-		usage = "req_id-text",
+		usage = "req_index-text",
 		category = Category.MISC
 )
 public class NewCheckitemCommand implements Executable {

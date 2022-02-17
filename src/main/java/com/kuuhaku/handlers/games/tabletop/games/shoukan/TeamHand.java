@@ -46,8 +46,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_DRAW;
-import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_MANUAL_DRAW;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
 public class TeamHand extends Hand {
 	private final Map<Race, Long> raceCount;
@@ -59,9 +58,10 @@ public class TeamHand extends Hand {
 	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
 	private final InfiniteList<Hero> heroes = new InfiniteList<>();
 	private final double divergence;
+	private float healingFac = 1;
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
-		super(game, null, null, side);
+		super(game, side);
 
 		this.divergence = dks.stream().mapToDouble(Deck::getAverageDivergence).average().orElse(0);
 		raceCount = dks.stream()
@@ -713,5 +713,34 @@ public class TeamHand extends Hand {
 
 	public List<String> getNames() {
 		return List.of(getUser().getName(), getUsers().peekNext().getName());
+	}
+
+	@Override
+	public float getBaseHealingFac() {
+		return 1 + (combo.getLeft() == Race.HUMAN ? 0.25f : 0);
+	}
+
+	@Override
+	public float getHealingFac() {
+		float fac = healingFac * getBaseHealingFac();
+		if (getBleeding() > 0) {
+			fac *= 0.5;
+		} else if (getRegeneration() > 0) {
+			fac *= 1.25;
+		}
+
+		return fac;
+	}
+
+	@Override
+	public void addHp(int value, boolean trigger) {
+		if (value <= 0) return;
+
+		setHp((int) (getHp() + value * getHealingFac()));
+		decreaseBleeding((int) (value * 0.25));
+
+		if (trigger) {
+			triggerEffect(ON_HEAL);
+		}
 	}
 }
