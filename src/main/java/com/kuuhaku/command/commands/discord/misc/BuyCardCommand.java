@@ -46,6 +46,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -53,7 +54,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "comprar",
 		aliases = {"buy", "loja"},
-		usage = "req_id",
+		usage = "req_id-override",
 		category = Category.MISC
 )
 @Requires({
@@ -255,29 +256,56 @@ public class BuyCardCommand implements Executable {
 				return;
 			}
 
-			m.setBuyer(author.getId());
-			MarketDAO.saveCard(m);
-
-			seller.addCredit(price, this.getClass());
-			buyer.removeCredit(price, this.getClass());
-
-			AccountDAO.saveAccount(seller);
-			AccountDAO.saveAccount(buyer);
-
-			User sellerU = Main.getInfo().getUserByID(m.getSeller());
-			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
-
 			String name = switch (m.getType()) {
 				case EVOGEAR, FIELD -> m.getRawCard().getName();
 				default -> ((KawaiponCard) m.getCard()).getName();
 			};
 
-			if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
-					Helper::doNothing
-			);
+			User sellerU = Main.getInfo().getUserByID(m.getSeller());
+			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
-			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` comprada com sucesso!").queue();
+			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
+				m.setBuyer(author.getId());
+				MarketDAO.saveCard(m);
+
+				seller.addCredit(price, this.getClass());
+				buyer.removeCredit(price, this.getClass());
+
+				AccountDAO.saveAccount(seller);
+				AccountDAO.saveAccount(buyer);
+
+				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+						Helper::doNothing
+				);
+
+				channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!").queue();
+			} else {
+				Market finalM = m;
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por " + Helper.separate(price) + " CR, deseja confirmar?")
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									finalM.setBuyer(author.getId());
+									MarketDAO.saveCard(finalM);
+
+									seller.addCredit(price, this.getClass());
+									buyer.removeCredit(price, this.getClass());
+
+									AccountDAO.saveAccount(seller);
+									AccountDAO.saveAccount(buyer);
+
+									if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+											Helper::doNothing
+									);
+
+									channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!").queue();
+								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								u -> u.getId().equals(author.getId()),
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
+			}
 		} else {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (m.getType()) {

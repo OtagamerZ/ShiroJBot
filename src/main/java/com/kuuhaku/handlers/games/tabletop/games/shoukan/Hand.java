@@ -78,6 +78,10 @@ public class Hand {
 	private int regeneration = 0;
 	private Message old = null;
 
+	public Hand(Shoukan game, Side side) {
+		this(game, null, null, side);
+	}
+
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
 		this.game = game;
 		this.side = side;
