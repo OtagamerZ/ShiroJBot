@@ -393,7 +393,10 @@ public class Hand {
 	public Drawable drawHighest(boolean attack) {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			Drawable dr = getRealDeque().stream()
+					.filter(c -> c instanceof Equipment e && !e.isSpell())
+					.max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef()))
+					.orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			triggerEffect(ON_DRAW);
