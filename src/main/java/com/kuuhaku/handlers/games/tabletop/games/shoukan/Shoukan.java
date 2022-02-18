@@ -2782,7 +2782,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return !lastTick && postCombat();
 		}
 
-		return false;
+		return postCombat();
 	}
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index) {
