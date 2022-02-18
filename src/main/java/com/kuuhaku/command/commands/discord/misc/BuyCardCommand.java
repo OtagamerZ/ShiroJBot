@@ -222,40 +222,6 @@ public class BuyCardCommand implements Executable {
 				return;
 			}
 
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			switch (m.getType()) {
-				case EVOGEAR -> {
-					Deck dk = kp.getDeck();
-
-					if (dk.checkEquipment(m.getCard(), channel)) return;
-
-					dk.addEquipment(m.getCard());
-				}
-				case FIELD -> {
-					Deck dk = kp.getDeck();
-
-					if (dk.checkField(m.getCard(), channel)) return;
-
-					dk.addField(m.getCard());
-
-				}
-				default -> {
-					if (kp.getCards().contains((KawaiponCard) m.getCard())) {
-						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
-						return;
-					}
-
-					kp.addCard(m.getCard());
-				}
-			}
-			KawaiponDAO.saveKawaipon(kp);
-
-			m = MarketDAO.getCard(Integer.parseInt(args[0]));
-			if (m == null) {
-				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-				return;
-			}
-
 			String name = switch (m.getType()) {
 				case EVOGEAR, FIELD -> m.getRawCard().getName();
 				default -> ((KawaiponCard) m.getCard()).getName();
@@ -264,6 +230,34 @@ public class BuyCardCommand implements Executable {
 			User sellerU = Main.getInfo().getUserByID(m.getSeller());
 
 			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+				switch (m.getType()) {
+					case EVOGEAR -> {
+						Deck dk = kp.getDeck();
+
+						if (dk.checkEquipment(m.getCard(), channel)) return;
+
+						dk.addEquipment(m.getCard());
+					}
+					case FIELD -> {
+						Deck dk = kp.getDeck();
+
+						if (dk.checkField(m.getCard(), channel)) return;
+
+						dk.addField(m.getCard());
+
+					}
+					default -> {
+						if (kp.getCards().contains((KawaiponCard) m.getCard())) {
+							channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+							return;
+						}
+
+						kp.addCard(m.getCard());
+					}
+				}
+				KawaiponDAO.saveKawaipon(kp);
+
 				m.setBuyer(author.getId());
 				MarketDAO.saveCard(m);
 
@@ -274,17 +268,50 @@ public class BuyCardCommand implements Executable {
 				AccountDAO.saveAccount(buyer);
 
 				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por **" + Helper.separate(price) + " CR**!").queue(null, Helper::doNothing),
 						Helper::doNothing
 				);
 
 				channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!").queue();
 			} else {
-				Market finalM = m;
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por " + Helper.separate(price) + " CR, deseja confirmar?")
+				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por **" + Helper.separate(price) + " CR**, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
+									Market finalM = MarketDAO.getCard(Integer.parseInt(args[0]));
+									if (finalM == null) {
+										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+										return;
+									}
+
+									Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+									switch (finalM.getType()) {
+										case EVOGEAR -> {
+											Deck dk = kp.getDeck();
+
+											if (dk.checkEquipment(finalM.getCard(), channel)) return;
+
+											dk.addEquipment(finalM.getCard());
+										}
+										case FIELD -> {
+											Deck dk = kp.getDeck();
+
+											if (dk.checkField(finalM.getCard(), channel)) return;
+
+											dk.addField(finalM.getCard());
+
+										}
+										default -> {
+											if (kp.getCards().contains((KawaiponCard) finalM.getCard())) {
+												channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+												return;
+											}
+
+											kp.addCard(finalM.getCard());
+										}
+									}
+									KawaiponDAO.saveKawaipon(kp);
+
 									finalM.setBuyer(author.getId());
 									MarketDAO.saveCard(finalM);
 
