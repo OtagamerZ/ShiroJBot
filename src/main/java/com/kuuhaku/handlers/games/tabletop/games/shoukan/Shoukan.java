@@ -1966,6 +1966,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (getRound() > 0) reroll = false;
 			resetTimer(this);
+			if (postCombat()) return;
 
 			phase = Phase.PLAN;
 			h.set(hands.get(getCurrentSide()));
@@ -2391,6 +2392,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					if (getRound() > 0) reroll = false;
 					resetTimer(this);
+					if (postCombat()) return;
 
 					phase = Phase.PLAN;
 					h.set(hands.get(getCurrentSide()));
@@ -2749,7 +2751,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!lastTick && postCombat()) return true;
 		}
 
-		if (activator == null) return postCombat();
+		if (activator == null) return false;
 		if (effectLock == 0) {
 			EffectParameters ep = new EffectParameters(trigger, this, side, index, duelists, channel);
 
@@ -2782,7 +2784,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return !lastTick && postCombat();
 		}
 
-		return postCombat();
+			return false;
 	}
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index) {
