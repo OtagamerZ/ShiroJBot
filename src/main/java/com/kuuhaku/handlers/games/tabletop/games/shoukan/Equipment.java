@@ -487,11 +487,12 @@ public class Equipment implements Drawable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Equipment equipment = (Equipment) o;
-		return id == equipment.id && Objects.equals(card, equipment.card) && Objects.equals(game, equipment.game) && Objects.equals(acc, equipment.acc) && Objects.equals(index, equipment.index) && side == equipment.side;	}
+		return id == equipment.id;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, game, acc, index, side);
+		return Objects.hash(id);
 	}
 
 	@Override
