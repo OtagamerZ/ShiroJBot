@@ -2749,7 +2749,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!lastTick && postCombat()) return true;
 		}
 
-		if (activator == null) return false;
+		if (activator == null) return postCombat();
 		if (effectLock == 0) {
 			EffectParameters ep = new EffectParameters(trigger, this, side, index, duelists, channel);
 
