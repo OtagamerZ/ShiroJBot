@@ -134,13 +134,13 @@ public class Hand {
 	}
 
 	private void setData(List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw) {
-		if (hero != null) deque.add(hero.toChampion());
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
 						.map(Drawable::copy)
 						.toList()
 		);
+		if (hero != null) deque.add(hero.toChampion());
 
 		int baseHp;
 		int baseManaPerTurn;
