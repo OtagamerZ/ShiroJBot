@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
@@ -61,6 +62,8 @@ public class Field implements Drawable, Cloneable {
 
 	private transient Shoukan game = null;
 	private transient Account acc = null;
+	private transient Side side = null;
+
 	private transient boolean available = true;
 
 	public Field() {
@@ -160,6 +163,7 @@ public class Field implements Drawable, Cloneable {
 	public void bind(Hand h) {
 		this.game = h.getGame();
 		this.acc = h.getAcc();
+		this.side = h.getSide();
 	}
 
 	@Override
@@ -180,6 +184,16 @@ public class Field implements Drawable, Cloneable {
 	@Override
 	public void setAcc(Account acc) {
 		this.acc = acc;
+	}
+
+	@Override
+	public Side getSide() {
+		return side;
+	}
+
+	@Override
+	public void setSide(Side side) {
+		this.side = side;
 	}
 
 	@Override
@@ -233,12 +247,12 @@ public class Field implements Drawable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Field field = (Field) o;
-		return id == field.id;
+		return id == field.id && Objects.equals(card, field.card) && Objects.equals(game, field.game) && Objects.equals(acc, field.acc);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, card, game, acc);
 	}
 
 	@Override
@@ -261,6 +275,6 @@ public class Field implements Drawable, Cloneable {
 
 	@Override
 	public String toString() {
-		return "Field@%x".formatted(hashCode());
+		return "Field@%x".formatted(super.hashCode());
 	}
 }

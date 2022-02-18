@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
 import com.kuuhaku.model.common.Profile;
@@ -91,6 +92,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Bonus bonus = new Bonus();
 	private transient CardLink linkedTo = null;
 	private transient AtomicInteger index = new AtomicInteger(-2);
+	private transient Side side = null;
 
 	private transient String altDescription = null;
 	private transient String altEffect = null;
@@ -192,6 +194,7 @@ public class Equipment implements Drawable, Cloneable {
 	public void bind(Hand h) {
 		this.game = h.getGame();
 		this.acc = h.getAcc();
+		this.side = h.getSide();
 	}
 
 	@Override
@@ -227,6 +230,16 @@ public class Equipment implements Drawable, Cloneable {
 	@Override
 	public void setIndex(int index) {
 		this.index.set(index);
+	}
+
+	@Override
+	public Side getSide() {
+		return side;
+	}
+
+	@Override
+	public void setSide(Side side) {
+		this.side = side;
 	}
 
 	@Override
@@ -474,12 +487,12 @@ public class Equipment implements Drawable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Equipment equipment = (Equipment) o;
-		return id == equipment.id;
+		return id == equipment.id && Objects.equals(card, equipment.card) && Objects.equals(game, equipment.game) && Objects.equals(acc, equipment.acc) && Objects.equals(index, equipment.index);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, card, game, acc, index);
 	}
 
 	@Override
@@ -507,6 +520,6 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Override
 	public String toString() {
-		return "Equipment@%x".formatted(hashCode());
+		return "Equipment@%x".formatted(super.hashCode());
 	}
 }

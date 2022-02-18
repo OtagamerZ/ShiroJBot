@@ -189,8 +189,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					};
 					if (d == null) continue;
 
-					for (Hand h : hands.values())
+					for (Hand h : hands.values()) {
 						h.getCards().add(d.copy());
+					}
 				}
 			}
 		}

@@ -59,6 +59,10 @@ public interface Drawable {
 
 	}
 
+	Side getSide();
+
+	void setSide(Side side);
+
 	default boolean isFlipped() {
 		return false;
 	}
@@ -80,10 +84,6 @@ public interface Drawable {
 	Drawable copy();
 
 	Drawable deepCopy();
-
-	default Side getSide() {
-		return getGame().getSideById(getAcc().getUid());
-	}
 
 	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, int block, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
