@@ -225,12 +225,6 @@ public class ReserveCardCommand implements Executable {
 			if (buyer.getBalance() < price) {
 				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 				return;
-			}
-
-			m = MarketDAO.getCard(Integer.parseInt(args[0]));
-			if (m == null) {
-				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-				return;
 			} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 				channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
 				return;
@@ -254,7 +248,7 @@ public class ReserveCardCommand implements Executable {
 				MarketDAO.saveCard(m);
 
 				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por **" + Helper.separate(price) + " CR**!").queue(null, Helper::doNothing),
 						Helper::doNothing
 				);
 
@@ -268,7 +262,7 @@ public class ReserveCardCommand implements Executable {
 			} else {
 				Market finalM = m;
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage("Você está prestes a comprar e reservar a carta `" + name + "` por " + Helper.separate(price) + " CR, deseja confirmar?")
+				channel.sendMessage("Você está prestes a comprar e reservar a carta `" + name + "` por **" + Helper.separate(price) + " CR**, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									StashDAO.saveCard(switch (finalM.getType()) {
