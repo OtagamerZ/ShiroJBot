@@ -96,7 +96,7 @@ public class EmbedCommand implements Executable {
 											, ms -> channel.sendMessageEmbeds(finalEb.build())
 													.flatMap(r -> m.delete())
 													.flatMap(r -> ms.delete())
-													.queue()
+													.queue(null, Helper::doNothing)
 									), Helper::doNothing
 							);
 				}

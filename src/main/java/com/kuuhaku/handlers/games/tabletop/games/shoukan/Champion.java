@@ -98,6 +98,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient BiConsumer<Side, Shoukan> onDuelEnd = null;
 	private transient List<CardLink> linkedTo = new UniqueList<>(CardLink::getIndex);
 	private transient AtomicInteger index = new AtomicInteger(-2);
+	private transient Side side = null;
 
 	private transient String altImage = null;
 	private transient String altDescription = null;
@@ -247,6 +248,7 @@ public class Champion implements Drawable, Cloneable {
 	public void bind(Hand h) {
 		this.game = h.getGame();
 		this.acc = h.getAcc();
+		this.side = h.getSide();
 	}
 
 	@Override
@@ -272,6 +274,16 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public int getIndex() {
 		return index.get();
+	}
+
+	@Override
+	public Side getSide() {
+		return side;
+	}
+
+	@Override
+	public void setSide(Side side) {
+		this.side = side;
 	}
 
 	@Override
@@ -1049,14 +1061,13 @@ public class Champion implements Drawable, Cloneable {
 		this.hero = hero;
 	}
 
-	public Champion getAdjacent(Neighbor side) {
-		Side s = game.getSideById(acc.getUid());
+	public Champion getAdjacent(Neighbor direction) {
 		int index = getIndex();
 		if (!Helper.between(index, 0, 5)) return null;
 
-		return switch (side) {
-			case LEFT -> index > 0 ? game.getArena().getSlots().get(s).get(index - 1).getTop() : null;
-			case RIGHT -> index < 4 ? game.getArena().getSlots().get(s).get(index + 1).getTop() : null;
+		return switch (direction) {
+			case LEFT -> index > 0 ? game.getArena().getSlots().get(side).get(index - 1).getTop() : null;
+			case RIGHT -> index < 4 ? game.getArena().getSlots().get(side).get(index + 1).getTop() : null;
 			default -> null;
 		};
 	}
@@ -1093,12 +1104,12 @@ public class Champion implements Drawable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Champion champion = (Champion) o;
-		return id == champion.id;
+		return id == champion.id && Objects.equals(card, champion.card) && Objects.equals(game, champion.game) && Objects.equals(acc, champion.acc) && Objects.equals(index, champion.index);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, card, game, acc, index);
 	}
 
 	@Override
@@ -1147,6 +1158,6 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public String toString() {
-		return "Champion@%x".formatted(hashCode());
+		return "Champion@%x".formatted(super.hashCode());
 	}
 }
