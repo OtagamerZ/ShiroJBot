@@ -247,12 +247,12 @@ public class Field implements Drawable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Field field = (Field) o;
-		return id == field.id && Objects.equals(card, field.card) && Objects.equals(game, field.game) && Objects.equals(acc, field.acc) && side == field.side;
+		return id == field.id;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, game, acc, side);
+		return Objects.hash(id);
 	}
 
 	@Override

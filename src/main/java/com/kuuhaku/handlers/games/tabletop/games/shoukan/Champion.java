@@ -1104,12 +1104,12 @@ public class Champion implements Drawable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Champion champion = (Champion) o;
-		return id == champion.id && Objects.equals(card, champion.card) && Objects.equals(game, champion.game) && Objects.equals(acc, champion.acc) && Objects.equals(index, champion.index) && side == champion.side;
+		return id == champion.id;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, game, acc, index, side);
+		return Objects.hash(id);
 	}
 
 	@Override
