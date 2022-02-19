@@ -287,7 +287,7 @@ public class Equipment implements Drawable, Cloneable {
 		if (altAtk == -1) altAtk = atk;
 
 		float mult = 1;
-		if (game.getCombos().get(side).getRight() == Race.MACHINE) {
+		if (game != null && game.getCombos().get(side).getRight() == Race.MACHINE) {
 			mult *= 1.25;
 		}
 
@@ -298,7 +298,7 @@ public class Equipment implements Drawable, Cloneable {
 		if (altDef == -1) altDef = def;
 
 		float mult = 1;
-		if (game.getCombos().get(side).getRight() == Race.MACHINE) {
+		if (game != null && game.getCombos().get(side).getRight() == Race.MACHINE) {
 			mult *= 1.25;
 		}
 
