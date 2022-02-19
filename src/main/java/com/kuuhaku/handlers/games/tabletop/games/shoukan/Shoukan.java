@@ -265,8 +265,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 	public void start() {
 		Hand h = hands.get(getCurrentSide());
 		h.addMana(h.getManaPerTurn());
-		if (h.getCombo().getRight() == Race.BESTIAL)
-			h.addMana(1);
+		if (!h.isSuppressed()) {
+			if (h.getCombo().getRight() == Race.BESTIAL) {
+				h.addMana(1);
+			} else if (h.getCombo().getRight() == Race.DIVINITY) {
+				h.addMana((int) Math.round(5 - h.getAvgCost()));
+			}
+		}
 
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
@@ -282,9 +287,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (!shownHand.get()) {
 						shownHand.set(true);
 						h.showHand();
-
-						if (h.getCombo().getLeft() == Race.HUMAN)
-							h.showEnemyHand(0.5f);
 					}
 				});
 
@@ -2017,7 +2019,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h.get().getBleeding() > 0) {
-				h.get().removeHp(h.get().getBleeding() / 5);
+				h.get().removeHp(h.get().getBleeding() / (h.get().getCombo().getLeft() == Race.HUMAN ? 10 : 5));
 				h.get().decreaseBleeding();
 			} else if (h.get().getRegeneration() > 0) {
 				h.get().addHp(h.get().getRegeneration() / 2);
@@ -2034,21 +2036,27 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 			h.get().addMana(mpt);
 
-			switch (h.get().getCombo().getRight()) {
-				case BESTIAL -> {
-					if (getRound() <= 1)
-						h.get().addMana(1);
-				}
-				case ELF -> {
-					int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
-
-					if (getRound() > 1) {
-						if (turns % 5 == 0) {
-							h.get().addMana(2);
-						} else if (turns % 2 == 0) {
+			if (!h.get().isSuppressed()) {
+				switch (h.get().getCombo().getRight()) {
+					case BESTIAL -> {
+						if (getRound() <= 1)
 							h.get().addMana(1);
+					}
+					case ELF -> {
+						int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
+
+						if (getRound() > 1) {
+							if (turns % 5 == 0) {
+								h.get().addMana(2);
+							} else if (turns % 2 == 0) {
+								h.get().addMana(1);
+							}
 						}
 					}
+				}
+
+				if (h.get().getCombo().getRight() == Race.DIVINITY) {
+					h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
 				}
 			}
 
@@ -2443,7 +2451,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 
 					if (h.get().getBleeding() > 0) {
-						h.get().removeHp(h.get().getBleeding() / 5);
+						h.get().removeHp(h.get().getBleeding() / (h.get().getCombo().getLeft() == Race.HUMAN ? 10 : 5));
 						h.get().decreaseBleeding();
 					} else if (h.get().getRegeneration() > 0) {
 						h.get().addHp(h.get().getRegeneration() / 2);
@@ -2460,21 +2468,27 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 					h.get().addMana(mpt);
 
-					switch (h.get().getCombo().getRight()) {
-						case BESTIAL -> {
-							if (getRound() <= 1)
-								h.get().addMana(1);
-						}
-						case ELF -> {
-							int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
-
-							if (getRound() > 1) {
-								if (turns % 5 == 0) {
-									h.get().addMana(2);
-								} else if (turns % 2 == 0) {
+					if (!h.get().isSuppressed()) {
+						switch (h.get().getCombo().getRight()) {
+							case BESTIAL -> {
+								if (getRound() <= 1)
 									h.get().addMana(1);
+							}
+							case ELF -> {
+								int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
+
+								if (getRound() > 1) {
+									if (turns % 5 == 0) {
+										h.get().addMana(2);
+									} else if (turns % 2 == 0) {
+										h.get().addMana(1);
+									}
 								}
 							}
+						}
+
+						if (h.get().getCombo().getRight() == Race.DIVINITY) {
+							h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
 						}
 					}
 
