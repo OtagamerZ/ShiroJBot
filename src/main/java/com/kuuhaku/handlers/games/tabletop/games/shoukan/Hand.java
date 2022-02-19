@@ -946,6 +946,10 @@ public class Hand {
 		}
 
 		this.bleeding = bleeding;
+		if (this.bleeding > 9999) {
+			this.bleeding = 0;
+			this.hp = 0;
+		}
 	}
 
 	public void addBleeding(int bleeding) {
@@ -962,6 +966,10 @@ public class Hand {
 		}
 
 		this.bleeding += bleeding;
+		if (this.bleeding > 9999) {
+			this.bleeding = 0;
+			this.hp = 0;
+		}
 	}
 
 	public void decreaseBleeding(int value) {
@@ -989,7 +997,7 @@ public class Hand {
 			}
 		}
 
-		this.regeneration = regeneration;
+		this.regeneration = Math.min(regeneration, 9999);
 	}
 
 	public void addRegeneration(int regeneration) {
@@ -1005,7 +1013,7 @@ public class Hand {
 			}
 		}
 
-		this.regeneration += regeneration;
+		this.regeneration = Math.min(this.regeneration + regeneration, 9999);
 	}
 
 	public void decreaseRegeneration(int value) {
