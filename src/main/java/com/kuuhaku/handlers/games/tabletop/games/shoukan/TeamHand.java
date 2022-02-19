@@ -58,12 +58,14 @@ public class TeamHand extends Hand {
 	private final InfiniteList<BondedList<Drawable>> destinyDecks = new InfiniteList<>();
 	private final InfiniteList<Hero> heroes = new InfiniteList<>();
 	private final double divergence;
+	private final double avgCost;
 	private float healingFac = 1;
 
 	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
 		super(game, side);
 
 		this.divergence = dks.stream().mapToDouble(Deck::getAverageDivergence).average().orElse(0);
+		this.avgCost = dks.stream().mapToDouble(Deck::getAverageCost).average().orElse(0);
 		raceCount = dks.stream()
 				.flatMap(kp -> kp.getChampions().stream())
 				.collect(Collectors.groupingBy(Champion::getRace, Collectors.counting()));
@@ -496,12 +498,6 @@ public class TeamHand extends Hand {
 		Collections.shuffle(deque);
 		int toDraw = Math.max(0, getMaxCards() - cards.size());
 		for (int i = 0; i < toDraw; i++) manualDraw();
-
-		switch (combo.getRight()) {
-			case MACHINE -> drawEquipment();
-			case DIVINITY -> drawChampion();
-			case MYSTICAL -> drawSpell();
-		}
 	}
 
 	public void next() {
@@ -540,6 +536,10 @@ public class TeamHand extends Hand {
 
 	public double getDivergence() {
 		return divergence;
+	}
+
+	public double getAvgCost() {
+		return avgCost;
 	}
 
 	public BondedList<Drawable> getDeque() {
