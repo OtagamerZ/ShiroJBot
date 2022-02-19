@@ -339,7 +339,7 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getMana() {
 		float mult = 1;
-		if (isSpell() && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
+		if (isSpell() && game != null && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
 			mult *= 0.75;
 		}
 
@@ -352,7 +352,7 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getBlood() {
 		float mult = 1;
-		if (isSpell() && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
+		if (isSpell() && game != null && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
 			mult *= 0.75;
 		}
 
