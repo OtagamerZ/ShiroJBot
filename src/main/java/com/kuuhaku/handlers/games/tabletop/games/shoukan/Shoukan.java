@@ -268,7 +268,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (!h.isSuppressed()) {
 			if (h.getCombo().getRight() == Race.BESTIAL) {
 				h.addMana(1);
-			} else if (h.getCombo().getRight() == Race.DIVINITY) {
+			} else if (h.getCombo().getLeft() == Race.DIVINITY) {
 				h.addMana((int) Math.round(5 - h.getAvgCost()));
 			}
 		}
@@ -2055,7 +2055,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				}
 
-				if (h.get().getCombo().getRight() == Race.DIVINITY) {
+				if (h.get().getCombo().getLeft() == Race.DIVINITY) {
 					h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
 				}
 			}
@@ -2487,7 +2487,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							}
 						}
 
-						if (h.get().getCombo().getRight() == Race.DIVINITY) {
+						if (h.get().getCombo().getLeft() == Race.DIVINITY) {
 							h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
 						}
 					}
