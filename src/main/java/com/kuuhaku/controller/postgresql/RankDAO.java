@@ -36,7 +36,7 @@ public class RankDAO {
                     FROM (
                              SELECT *
                              FROM (
-                                      SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || ceil(sqrt(mb.xp / 100)) || ')' AS v
+                                      SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || ceil(sqrt(mb.xp / 100.0)) || ')' AS v
                                       FROM member mb
                                                INNER JOIN guildconfig gc ON gc.guildid = mb.sid
                                       WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
@@ -52,7 +52,7 @@ public class RankDAO {
                     FROM (
                              SELECT *
                              FROM (
-                                      SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || ceil(sqrt(mb.xp / 100)) || ')' AS v
+                                      SELECT ' - ' || "GetUsername"(mb.uid) || ' (Level ' || ceil(sqrt(mb.xp / 100.0)) || ')' AS v
                                       FROM member mb
                                                INNER JOIN guildconfig gc ON gc.guildid = mb.sid
                                       WHERE gc.guildid = :guild
