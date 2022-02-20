@@ -852,6 +852,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int power = ally.getFinAtk();
 				op.removeHp(Math.round(power * fac));
 				op.addBleeding(Math.round(ally.getBldAtk() * fac));
+				if (undying) {
+					you.addHp(op.getDamageDelta() / 10);
+				}
 
 				ally.setAvailable(false);
 				if (!postCombat()) {
@@ -1045,9 +1048,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
-					|| defr.getBonus().popFlag(Flag.NODAMAGE)
-					|| (getCustom() != null && getCustom().getBoolean("semdano"));
+			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()));
 
 			int dmg;
 			if (noDmg) {
@@ -1071,8 +1072,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHp() == 0) {
-				op.removeHp(dmg);
-				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+					op.removeHp(dmg);
+					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+					if (undying) {
+						you.addHp(op.getDamageDelta() / 10);
+					}
+				}
 
 				if (atkr.getHero() != null && atkr.getHero().getPerks().contains(Perk.REAPER)) {
 					defr.setSealed(true);
@@ -1119,15 +1125,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (you.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean noDmg = atkr.getBonus().popFlag(Flag.NODAMAGE)
-					|| (getCustom() != null && getCustom().getBoolean("semdano"));
-
-			int dmg;
-			if (noDmg) {
-				dmg = Math.round(defr.getPenAtk() * fac);
-			} else {
-				dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
-			}
+			int dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 
 			if (you.getMana() > 0) {
 				int toSteal = Math.min(you.getMana(), defr.getManaDrain());
@@ -1144,8 +1142,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHp() == 0) {
-				you.removeHp(dmg);
-				you.addBleeding(Math.round(defr.getBldAtk() * fac));
+				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+					you.removeHp(dmg);
+					you.addBleeding(Math.round(defr.getBldAtk() * fac));
+				}
 
 				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
 					atkr.setSealed(true);
@@ -1203,9 +1203,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()))
-					|| defr.getBonus().popFlag(Flag.NODAMAGE)
-					|| (getCustom() != null && getCustom().getBoolean("semdano"));
+			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()));
 
 			int dmg;
 			if (noDmg) {
@@ -1240,8 +1238,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHp() == 0) {
-				op.removeHp(dmg);
-				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+					op.removeHp(dmg);
+					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+					if (undying) {
+						you.addHp(op.getDamageDelta() / 10);
+					}
+				}
 
 				if (atkr.getHero() != null && atkr.getHero().getPerks().contains(Perk.REAPER)) {
 					defr.setSealed(true);
@@ -1262,14 +1265,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (you.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			noDmg = atkr.getBonus().popFlag(Flag.NODAMAGE)
-					|| (getCustom() != null && getCustom().getBoolean("semdano"));
-
-			if (noDmg) {
-				dmg = Math.round(defr.getPenAtk() * fac);
-			} else {
-				dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : 0) * fac);
-			}
+			dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : 0) * fac);
 
 			h = defr.getHero();
 			if (h != null) {
@@ -1279,8 +1275,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHp() == 0) {
-				you.removeHp(dmg);
-				you.addBleeding(Math.round(defr.getBldAtk() * fac));
+				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+					you.removeHp(dmg);
+					you.addBleeding(Math.round(defr.getBldAtk() * fac));
+				}
 
 				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
 					atkr.setSealed(true);
@@ -2798,7 +2796,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return !lastTick && postCombat();
 		}
 
-			return false;
+		return false;
 	}
 
 	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index) {
