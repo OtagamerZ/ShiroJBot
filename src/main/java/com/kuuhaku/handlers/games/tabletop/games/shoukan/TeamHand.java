@@ -167,7 +167,7 @@ public class TeamHand extends Hand {
 			this.cards.add(new BondedList<>(bonding));
 		}
 
-		if (combo.getLeft() == Race.DIVINITY) {
+		if (combo.getRight() == Race.DIVINITY) {
 			for (LinkedList<Drawable> deque : decks) {
 				for (Drawable d : deque) {
 					if (d instanceof Champion c) {
