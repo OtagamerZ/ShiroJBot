@@ -204,7 +204,7 @@ public class Hand {
 			baseManaPerTurn = 5;
 		}
 
-		if (combo.getLeft() == Race.DIVINITY) {
+		if (combo.getRight() == Race.DIVINITY) {
 			for (Drawable d : deque) {
 				if (d instanceof Champion c) {
 					if (!c.hasEffect()) {

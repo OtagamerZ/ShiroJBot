@@ -55,8 +55,8 @@ public enum Race {
             new Integer[]{1, 3, 1, 0, 4}
     ),
     DIVINITY("Divindade",
-            "Cartas sem efeito em seu deck ganham um aleatório de mesmo custo (exceto fusões)",
             "Recebe mana extra por turno de acordo com o custo médio do seu deck (mais barato = mais mana, até +5)",
+            "Cartas sem efeito em seu deck ganham um aleatório de mesmo custo (exceto fusões)",
             "Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos.",
             new Integer[]{3, 3, 0, 3, 1}
     ),
