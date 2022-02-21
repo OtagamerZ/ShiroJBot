@@ -150,7 +150,11 @@ public class Hero implements Cloneable {
     }
 
     public void setImage(BufferedImage image) {
-        this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
+        if (image.getWidth() == 225 && image.getHeight() == 350) {
+            this.image = Helper.atob(Helper.removeAlpha(image), "jpg");
+        } else {
+            this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
+        }
     }
 
     public Attributes getRawStats() {
