@@ -736,6 +736,17 @@ public class Shoukan extends GlobalGame implements Serializable {
 					discardBatch.add(d);
 					d.setAvailable(false);
 
+					Side[] sides = {getCurrentSide(), getNextSide()};
+					for (int i = 0; i < 5; i++) {
+						for (Side s : sides) {
+							SlotColumn slot = arena.getSlots().get(s).get(i);
+							if (slot.getTop() == null) continue;
+
+							Champion c = slot.getTop();
+							if (applyEffect(s == getCurrentSide() ? ON_DISCARD : ON_OP_DISCARD, c, s, -1)) return;
+						}
+					}
+
 					if (makeFusion(h)) return;
 
 					reportEvent(h, h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".", true, false);
@@ -886,18 +897,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
 		Side[] sides = {getCurrentSide(), getNextSide()};
-
 		for (int i = 0; i < 5; i++) {
 			for (Side s : sides) {
-				List<SlotColumn> slts = arena.getSlots().get(s);
-				Hand hd = getHands().get(s);
-
-				SlotColumn slot = slts.get(i);
+				SlotColumn slot = arena.getSlots().get(s).get(i);
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
 				if (applyEffect(GAME_TICK, c, s, i, new Source(c, s, i))) return;
 
+				Hand hd = getHands().get(s);
 				int heroIndex = isHeroInField(s);
 				if (heroIndex == -1 && hd.getHero() != null && c.getCard().getId().equals(hd.getUser().getId()) && c.getCard().getName().equals(hd.getHero().getName())) {
 					c.setHero(hd.getHero());
