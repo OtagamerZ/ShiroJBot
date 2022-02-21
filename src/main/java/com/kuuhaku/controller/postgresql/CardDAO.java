@@ -626,6 +626,33 @@ public class CardDAO {
 		}
 	}
 
+	public static Champion getFusion(List<String> cards) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT c
+				FROM (
+				         SELECT c
+				              , array_agg(cr.requiredcards) AS required
+				         FROM Champion c
+				                  INNER JOIN champion_requiredcards cr on c.id = cr.champion_id
+				         WHERE c.fusion = TRUE
+				           AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)
+				         GROUP BY c.id
+				     ) x
+				WHERE x.required <@ :cards
+				""", Champion.class);
+		q.setParameter("cards", cards);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static List<Drawable> getDrawables(List<String> ids) {
 		List<Champion> c = getChampions(ids);
 		List<Equipment> e = getEquipments(ids);
