@@ -2926,6 +2926,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return getCurrentSide().getOther();
 	}
 
+	public List<Champion> getFusions() {
+		return List.copyOf(fusions);
+	}
+
 	public boolean isTeam() {
 		return team;
 	}
