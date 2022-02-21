@@ -1056,7 +1056,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()));
+			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
 			if (noDmg) {
@@ -1211,7 +1211,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean noDmg = (defr.isDefending() && !(defr.isSleeping() || defr.isStunned()));
+			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
 			if (noDmg) {
