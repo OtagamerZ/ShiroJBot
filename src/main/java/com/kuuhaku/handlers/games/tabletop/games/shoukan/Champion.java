@@ -1173,7 +1173,7 @@ public class Champion implements Drawable, Cloneable {
 			for (CardLink cl : linkedTo) {
 				c.linkedTo.add(new CardLink(
 						new AtomicInteger(cl.getIndex()),
-						cl.self(),
+						cl.linked(),
 						c
 				));
 			}
