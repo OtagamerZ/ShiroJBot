@@ -18,10 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
 import com.kuuhaku.model.common.Profile;
@@ -288,12 +285,24 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getAtk() {
 		if (altAtk == -1) altAtk = atk;
-		return altAtk + bonus.getAtk();
+
+		float mult = 1;
+		if (game != null && game.getCombos().get(side).getRight() == Race.MACHINE) {
+			mult *= 1.25;
+		}
+
+		return Math.round((altAtk + bonus.getAtk()) * mult);
 	}
 
 	public int getDef() {
 		if (altDef == -1) altDef = def;
-		return altDef + bonus.getDef();
+
+		float mult = 1;
+		if (game != null && game.getCombos().get(side).getRight() == Race.MACHINE) {
+			mult *= 1.25;
+		}
+
+		return Math.round((altDef + bonus.getDef()) * mult);
 	}
 
 	public void addAtk(int atk) {
@@ -329,7 +338,12 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana + bonus.getMana();
+		float mult = 1;
+		if (isSpell() && game != null && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
+			mult *= 0.75;
+		}
+
+		return Math.round((mana + bonus.getMana()) * mult);
 	}
 
 	public void setMana(int mana) {
@@ -337,7 +351,12 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getBlood() {
-		return blood + bonus.getBlood();
+		float mult = 1;
+		if (isSpell() && game != null && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
+			mult *= 0.75;
+		}
+
+		return Math.round((blood + bonus.getBlood()) * mult);
 	}
 
 	public void setBlood(int blood) {

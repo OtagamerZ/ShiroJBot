@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public enum Race {
     HUMAN("Humano",
-            "+25% poder de cura, permite ver metade da mão inicial do oponente caso você comece",
+            "+25% poder de cura, -50% dano sofrido de sangramento",
             "Campeões com 1 ou 2 de custo no deck reduzem o dano sofrido em (**SOLO** | 1%/**DUO** | 0,5%), 3/4 disso adicionado à esquiva de suas cartas",
             "Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia.",
             new Integer[]{2, 2, 2, 2, 2}
@@ -50,19 +50,19 @@ public enum Race {
     ),
     MACHINE("Máquina",
             "**(SOLO)** -1 peso de equipamentos **(DUO)** Ao puxar um equipamento ganhe 250 de HP",
-            "Inicia com 1 equipamento extra",
+            "Evogears possuem os atributos base aumentados em 25%",
             "Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo.",
             new Integer[]{1, 3, 1, 0, 4}
     ),
     DIVINITY("Divindade",
+            "Recebe mana extra por turno de acordo com o custo médio do seu deck (mais barato = mais mana, até +5)",
             "Cartas sem efeito em seu deck ganham um aleatório de mesmo custo (exceto fusões)",
-            "Inicia com 1 campeão extra",
             "Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos.",
             new Integer[]{3, 3, 0, 3, 1}
     ),
     MYSTICAL("Místico",
             "**(SOLO)** -1 peso de magias **(DUO)** Ao puxar uma magia ganhe 1 de mana",
-            "Inicia com 1 magia extra",
+            "Magias possuem o custo reduzido em 25%",
             "Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos.",
             new Integer[]{2, 1, 2, 4, 1}
     ),
@@ -85,7 +85,7 @@ public enum Race {
             new Integer[]{4, 2, 2, 1, 1}
     ),
     UNDEAD("Morto-vivo",
-            "Sobrevive 1 turno extra ao atingir 0 de HP (tempo de recarga: 5 turnos)",
+            "Sobrevive 1 turno extra ao atingir 0 de HP, recebendo 10% de roubo de vida enquanto o efeito durar (tempo de recarga: 5 turnos)",
             "+1% dano por carta no cemitério",
             "Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate.",
             new Integer[]{3, 3, 1, 0, 3}
