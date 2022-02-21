@@ -626,28 +626,23 @@ public class CardDAO {
 		}
 	}
 
-	public static Champion getFusion(List<String> cards) {
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getFusions(String card) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("""
+		Query q = em.createQuery("""
 				SELECT c
-				FROM (
-				         SELECT c
-				              , array_agg(cr.requiredcards) AS required
-				         FROM Champion c
-				                  INNER JOIN champion_requiredcards cr on c.id = cr.champion_id
-				         WHERE c.fusion = TRUE
-				           AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)
-				         GROUP BY c.id
-				     ) x
-				WHERE x.required <@ :cards
+				FROM Champion c
+				JOIN c.requiredCards req
+				WHERE c.fusion = TRUE
+				  AND (c.effect NOT LIKE '%//TODO%' OR c.effect IS NULL)
+				  AND :card IN req
 				""", Champion.class);
-		q.setParameter("cards", cards);
 
 		try {
-			return (Champion) q.getSingleResult();
+			return q.getResultList();
 		} catch (NoResultException e) {
-			return null;
+			return new ArrayList<>();
 		} finally {
 			em.close();
 		}
