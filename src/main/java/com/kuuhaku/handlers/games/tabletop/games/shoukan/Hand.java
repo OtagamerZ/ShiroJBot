@@ -61,6 +61,7 @@ public class Hand {
 	private final Hero hero;
 	private final Pair<Race, Race> combo;
 	private final double divergence;
+	private final double avgCost;
 	private int baseHp;
 	private int baseManaPerTurn;
 	private float mitigation = 0;
@@ -92,6 +93,7 @@ public class Hand {
 			this.destinyDeck = null;
 			this.combo = null;
 			this.divergence = 0;
+			this.avgCost = 0;
 			this.raceCount = null;
 			this.hero = null;
 			return;
@@ -112,6 +114,7 @@ public class Hand {
 		this.destinyDeck = new BondedList<>(bonding);
 		this.combo = Race.getCombo(dk.getChampions());
 		this.divergence = dk.getAverageDivergence();
+		this.avgCost = dk.getAverageCost();
 		this.mitigation = Math.min(
 				combo.getRight() == Race.HUMAN
 						? dk.getChampions().stream()
@@ -201,7 +204,7 @@ public class Hand {
 			baseManaPerTurn = 5;
 		}
 
-		if (combo.getLeft() == Race.DIVINITY) {
+		if (combo.getRight() == Race.DIVINITY) {
 			for (Drawable d : deque) {
 				if (d instanceof Champion c) {
 					if (!c.hasEffect()) {
@@ -443,12 +446,6 @@ public class Hand {
 		Collections.shuffle(deque);
 		int toDraw = Math.max(0, maxCards - getCardCount());
 		for (int i = 0; i < toDraw; i++) manualDraw();
-
-		switch (combo.getRight()) {
-			case MACHINE -> drawEquipment();
-			case DIVINITY -> drawChampion();
-			case MYSTICAL -> drawSpell();
-		}
 	}
 
 	public Shoukan getGame() {
@@ -473,6 +470,10 @@ public class Hand {
 
 	public double getDivergence() {
 		return divergence;
+	}
+
+	public double getAvgCost() {
+		return avgCost;
 	}
 
 	public BondedList<Drawable> getDeque() {
@@ -945,6 +946,10 @@ public class Hand {
 		}
 
 		this.bleeding = bleeding;
+		if (this.bleeding > 9999) {
+			this.bleeding = 0;
+			this.hp = 0;
+		}
 	}
 
 	public void addBleeding(int bleeding) {
@@ -961,6 +966,10 @@ public class Hand {
 		}
 
 		this.bleeding += bleeding;
+		if (this.bleeding > 9999) {
+			this.bleeding = 0;
+			this.hp = 0;
+		}
 	}
 
 	public void decreaseBleeding(int value) {
@@ -988,7 +997,7 @@ public class Hand {
 			}
 		}
 
-		this.regeneration = regeneration;
+		this.regeneration = Math.min(regeneration, 9999);
 	}
 
 	public void addRegeneration(int regeneration) {
@@ -1004,7 +1013,7 @@ public class Hand {
 			}
 		}
 
-		this.regeneration += regeneration;
+		this.regeneration = Math.min(this.regeneration + regeneration, 9999);
 	}
 
 	public void decreaseRegeneration(int value) {
