@@ -875,6 +875,44 @@ public class Champion implements Drawable, Cloneable {
 		} else return List.of();
 	}
 
+	public List<FusionMaterial> canFuse(List<String> cards) {
+		Set<String> rem = new HashSet<>(requiredCards);
+		List<FusionMaterial> out = new ArrayList<>();
+
+		for (String req : requiredCards) {
+			if (req.contains(",")) {
+				String[] optArgs = req.split(";");
+				int reqCombo = Integer.parseInt(optArgs[0]);
+				String[] opts = optArgs[1].split(",");
+
+				Set<String> found = new HashSet<>();
+				for (String opt : opts) {
+					if (cards.contains(opt)) {
+						if (found.add(opt)) {
+							out.add(new FusionMaterial(opt, cards.indexOf(opt), false));
+
+							if (found.size() == reqCombo) break;
+						}
+					}
+				}
+
+				if (found.size() != reqCombo) return List.of();
+				else rem.remove(req);
+			} else {
+				if (cards.contains(req)) {
+					out.add(new FusionMaterial(req, cards.indexOf(req), false));
+					rem.remove(req);
+				} else return List.of();
+			}
+		}
+
+		if (rem.isEmpty()) {
+			out.sort(Comparator.comparingInt(fm -> fm.equipment() ? 0 : 1));
+
+			return out;
+		} else return List.of();
+	}
+
 	public void setRequiredCards(Set<String> requiredCards) {
 		this.requiredCards = requiredCards;
 	}
