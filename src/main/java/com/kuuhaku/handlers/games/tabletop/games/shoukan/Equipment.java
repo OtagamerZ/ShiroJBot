@@ -152,7 +152,7 @@ public class Equipment implements Drawable, Cloneable {
 
 			if (linkedTo != null) {
 				Champion c = Helper.getOr(linkedTo.asChampion().getFakeCard(), linkedTo.asChampion());
-				BufferedImage linked = flipped
+				BufferedImage linked = linkedTo.asChampion().isFlipped()
 						? Helper.getResourceAsImage(this.getClass(), "kawaipon/missing.jpg")
 						: c.getCard().drawCardNoBorder(acc);
 
