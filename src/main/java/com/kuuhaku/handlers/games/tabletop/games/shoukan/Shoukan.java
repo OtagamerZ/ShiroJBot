@@ -1925,8 +1925,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				}
 
-				reportEvent(null, msg, false, false);
 				close();
+				channel.sendMessage(msg)
+						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+						.queue(ms ->
+								this.message.compute(ms.getChannel().getId(), (id, m) -> {
+									if (m != null) m.delete().queue(null, Helper::doNothing);
+									return ms;
+								})
+						);
 				finished = true;
 				break;
 			}
