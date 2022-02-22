@@ -68,9 +68,6 @@ public class Hero implements Cloneable {
     private Race race;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int hp = 0;
-
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int energy = 0;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -106,6 +103,8 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
+    private transient int hitpoints = -1;
+
     public Hero() {
     }
 
@@ -129,7 +128,6 @@ public class Hero implements Cloneable {
         this.stats = new Attributes(race.getStartingStats());
         this.race = race;
         this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
-        this.hp = getMaxHp();
         this.energy = getMaxEnergy();
     }
 
@@ -352,33 +350,19 @@ public class Hero implements Cloneable {
         return getStats().calcMaxHp(perks);
     }
 
-    public int getHp() {
-        return Helper.clamp(hp, 0, getMaxHp());
+    public int getHitpoints() {
+        if (hitpoints == -1) hitpoints = getMaxHp();
+        return hitpoints;
     }
 
-    public void setHp(int hp) {
-        this.hp = Helper.clamp(hp, 0, getMaxHp());
+    public void setHitpoints(int hitpoints) {
+        this.hitpoints = Helper.clamp(hitpoints, 0, getMaxHp());
     }
 
-    public void heal() {
-        double healModif = 1;
-        for (Perk perk : perks) {
-            healModif *= switch (perk) {
-                case OPTIMISTIC -> 1.5;
-                case PESSIMISTIC -> 0.5;
-                default -> 1;
-            };
-        }
-
-        setHp(hp + (int) (getMaxHp() * (0.1 * healModif)));
-    }
-
-    public void heal(int val) {
-        setHp(hp + val);
-    }
-
-    public void removeHp(int val) {
-        setHp(hp - val);
+    public int bufferDamage(int dmg) {
+        int aux = dmg - getHitpoints();
+        hitpoints -= dmg;
+        return Math.max(0, aux);
     }
 
     public int getMaxEnergy() {
@@ -449,7 +433,7 @@ public class Hero implements Cloneable {
                 case VANGUARD -> 0.75;
                 case CARELESS -> 1.25;
                 case MANALESS -> 0.5;
-                case MASOCHIST -> 1 + (1 - Helper.prcnt(getHp(), getMaxHp())) / 2;
+                case MASOCHIST -> 1 + (1 - Helper.prcnt(getHitpoints(), getMaxHp())) / 2;
                 default -> 1;
             };
         }
@@ -464,7 +448,7 @@ public class Hero implements Cloneable {
                 case VANGUARD -> 1.15;
                 case CARELESS -> 0.66;
                 case MANALESS -> 0.5;
-                case MASOCHIST -> 1 - (1 - Helper.prcnt(getHp(), getMaxHp())) / 2;
+                case MASOCHIST -> 1 - (1 - Helper.prcnt(getHitpoints(), getMaxHp())) / 2;
                 default -> 1;
             };
         }
