@@ -1925,7 +1925,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				}
 
-				reportEvent(null, msg, true, false);
+				reportEvent(null, msg, false, false);
 				close();
 				finished = true;
 				break;
