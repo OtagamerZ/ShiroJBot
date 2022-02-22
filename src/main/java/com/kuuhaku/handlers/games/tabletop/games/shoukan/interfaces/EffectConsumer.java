@@ -22,5 +22,5 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 
 @FunctionalInterface
 public interface EffectConsumer {
-	boolean accept(Side side, int index, boolean last);
+	Boolean accept(Side side, int index, boolean last);
 }
