@@ -641,7 +641,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			case ALLY_SLOT -> "%s usou a magia %s na posição %s.".formatted(
 					hand.getUser().getName(),
 					card.getCard().getName(),
-					allyPos.getRight()
+					allyPos.getRight() + 1
 			);
 			case ENEMY -> "%s usou a magia %s em %s.".formatted(
 					hand.getUser().getName(),
@@ -651,7 +651,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			case ENEMY_SLOT -> "%s usou a magia %s na posição %s.".formatted(
 					hand.getUser().getName(),
 					card.getCard().getName(),
-					enemyPos.getRight()
+					enemyPos.getRight() + 1
 			);
 			case BOTH -> "%s usou a magia %s em %s e %s.".formatted(
 					hand.getUser().getName(),
@@ -662,8 +662,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			case BOTH_SLOT -> "%s usou a magia %s nas posições %s e %s.".formatted(
 					hand.getUser().getName(),
 					card.getCard().getName(),
-					allyPos.getRight(),
-					enemyPos.getRight()
+					allyPos.getRight() + 1,
+					enemyPos.getRight() + 1
 			);
 		};
 	}
