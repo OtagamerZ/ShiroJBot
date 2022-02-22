@@ -66,15 +66,6 @@ public class MyHeroCommand implements Executable {
 			equips.add("`Slot disponível (tier " + h.getStats().calcEvoTierCap() + ")`");
 		}
 
-		double healModif = 1;
-		for (Perk perk : h.getPerks()) {
-			healModif *= switch (perk) {
-				case OPTIMISTIC -> 0.5;
-				case PESSIMISTIC -> 1.5;
-				default -> 1;
-			};
-		}
-
 		Integer[] raw = h.getRawStats().getStats();
 		Integer[] equip = h.getEquipStats().getStats();
 
@@ -99,20 +90,19 @@ public class MyHeroCommand implements Executable {
 			}
 		}
 
-		int hours = (int) Math.ceil((10 - Helper.prcnt(h.getHp(), h.getMaxHp()) * 10) * healModif);
+		int hours = (int) Math.ceil((10 - Helper.prcnt(h.getHitpoints(), h.getMaxHp()) * 10));
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
 						XP: %s
-						HP: %s/%s%s
 						EP: %s/%s
+						
+						HP: %s
 						""".formatted(
 						h.getXp() + "/" + h.getXpToNext(),
-						h.getHp(),
-						h.getMaxHp(),
-						h.getHp() < h.getMaxHp() ? "\n`recuperação total em " + hours + " hora" + (hours != 1 ? "s" : "") + "`" : "",
 						h.getEnergy(),
-						h.getMaxEnergy()
+						h.getMaxEnergy(),
+						h.getMaxHp()
 				), true)
 				.addField(":bar_chart: | Atributos:", stats.toString(), true)
 				.addField(":books: | Perks:", String.join("\n", perks), true)
@@ -123,7 +113,6 @@ public class MyHeroCommand implements Executable {
 			eb.setFooter("\uD83E\uDDED | " + h.getQuest() + ": " + Helper.toStringDuration(h.getQuestEnd() - System.currentTimeMillis()));
 
 		Champion c = h.toChampion();
-		if (h.getHp() == 0) c.setStun(1);
 
 		channel.sendMessageEmbeds(eb.build())
 				.addFile(Helper.getBytes(c.drawCard(false), "png"), "hero.png")

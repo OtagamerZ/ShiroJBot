@@ -189,7 +189,7 @@ public class Arena {
 									if (d.getHero() != null) {
 										g2d.setColor(Color.orange);
 										g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-										Profile.printCenteredString("HP: " + d.getHero().getHp(), 257, 484 + (257 * i), 377, g2d);
+										Profile.printCenteredString("HP: " + d.getHero().getHitpoints(), 257, 484 + (257 * i), 377, g2d);
 									}
 								}
 
@@ -220,7 +220,7 @@ public class Arena {
 									if (d.getHero() != null) {
 										g2d.setColor(Color.orange);
 										g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-										Profile.printCenteredString("HP: " + d.getHero().getHp(), 257, 484 + (257 * i), 1390, g2d);
+										Profile.printCenteredString("HP: " + d.getHero().getHitpoints(), 257, 484 + (257 * i), 1390, g2d);
 									}
 								}
 
@@ -385,7 +385,7 @@ public class Arena {
 				if (c.getHero() != null) {
 					g2d.setColor(Color.orange);
 					g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-					Profile.printCenteredString("HP: " + c.getHero().getHp(), 257, 47 + (257 * slt.getIndex()), champs + 10, g2d);
+					Profile.printCenteredString("HP: " + c.getHero().getHitpoints(), 257, 47 + (257 * slt.getIndex()), champs + 10, g2d);
 				}
 			}
 
