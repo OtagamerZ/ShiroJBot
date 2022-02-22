@@ -87,9 +87,7 @@ public class HourlyEvent implements Job {
 		for (Hero hero : heroes) {
 			if (hero.isQuesting()) continue;
 
-			hero.heal();
 			if (hero.isResting()) {
-				hero.heal();
 				hero.rest();
 			}
 

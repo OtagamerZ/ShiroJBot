@@ -93,7 +93,7 @@ public class GameState {
 			);
 
 			if (h.getHero() != null) {
-				h.getHero().setHp(old.getHero().getHp());
+				h.getHero().setHitpoints(old.getHero().getHitpoints());
 				h.getHero().setXp(old.getHero().getXp());
 			}
 
