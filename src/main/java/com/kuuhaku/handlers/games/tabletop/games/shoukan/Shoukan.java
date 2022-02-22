@@ -506,8 +506,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					sc.setTop(dp);
 				}
 			}
-
-			if (postCombat()) return null;
 		}
 
 		return "%s equipou %s em %s.".formatted(
@@ -884,21 +882,19 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				ally.setAvailable(false);
-				if (!postCombat()) {
-					int extra = Math.round(power * fac - power);
-					reportEvent(h,
-							"%s atacou diretamente, causando %s de dano!%s%s".formatted(
-									ally.getName(),
-									power,
-									getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
-									extra > 0
-											? " (dano direto aumentado em " + extra + ")"
-											: extra < 0
-											? " (dano direto reduzido em " + extra + ")"
-											: ""
-							)
-							, true, false);
-				}
+				int extra = Math.round(power * fac - power);
+				reportEvent(h,
+						"%s atacou diretamente, causando %s de dano!%s%s".formatted(
+								ally.getName(),
+								power,
+								getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
+								extra > 0
+										? " (dano direto aumentado em " + extra + ")"
+										: extra < 0
+										? " (dano direto reduzido em " + extra + ")"
+										: ""
+						)
+						, true, false);
 			} else {
 				Champion enemy = getSlot(getNextSide(), target).getTop();
 				if (enemy == null) {
@@ -1118,33 +1114,31 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
 
-			if (!postCombat()) {
-				int extra = Math.round(dmg * fac - dmg);
-				String msg;
-				if (applyDamage) {
-					msg = "%s derrotou %s (%d > %d), causando %s de dano!%s".formatted(
-							atkr.getName(),
-							defr.getName(),
-							yPower,
-							hPower,
-							dmg,
-							extra > 0
-									? " (dano direto aumentado em " + extra + ")"
-									: extra < 0
-									? " (dano direto reduzido em " + extra + ")"
-									: ""
-					);
-				} else {
-					msg = "%s derrotou %s (%d > %d)!".formatted(
-							atkr.getName(),
-							defr.getName(),
-							yPower,
-							hPower
-					);
-				}
+			int extra = Math.round(dmg * fac - dmg);
+			String msg;
+			if (applyDamage) {
+				msg = "%s derrotou %s (%d > %d), causando %s de dano!%s".formatted(
+						atkr.getName(),
+						defr.getName(),
+						yPower,
+						hPower,
+						dmg,
+						extra > 0
+								? " (dano direto aumentado em " + extra + ")"
+								: extra < 0
+								? " (dano direto reduzido em " + extra + ")"
+								: ""
+				);
+			} else {
+				msg = "%s derrotou %s (%d > %d)!".formatted(
+						atkr.getName(),
+						defr.getName(),
+						yPower,
+						hPower
+				);
+			}
 
-				reportEvent(null, msg, true, false);
-			} else return;
+			reportEvent(null, msg, true, false);
 		}
 
 		/* ATTACK FAILED */
@@ -1192,31 +1186,29 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			if (!postCombat()) {
-				int extra = Math.round(dmg * fac - dmg);
-				String msg;
-				if (applyDamage) {
-					msg = "%s não conseguiu derrotar %s (%s), sofrendo %s de dano!%s".formatted(
-							atkr.getName(),
-							defr.getName(),
-							yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower),
-							dmg,
-							extra > 0
-									? " (dano direto aumentado em " + extra + ")"
-									: extra < 0
-									? " (dano direto reduzido em " + extra + ")"
-									: ""
-					);
-				} else {
-					msg = "%s não conseguiu derrotar %s (%s)".formatted(
-							atkr.getName(),
-							defr.getName(),
-							yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower)
-					);
-				}
+			int extra = Math.round(dmg * fac - dmg);
+			String msg;
+			if (applyDamage) {
+				msg = "%s não conseguiu derrotar %s (%s), sofrendo %s de dano!%s".formatted(
+						atkr.getName(),
+						defr.getName(),
+						yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower),
+						dmg,
+						extra > 0
+								? " (dano direto aumentado em " + extra + ")"
+								: extra < 0
+								? " (dano direto reduzido em " + extra + ")"
+								: ""
+				);
+			} else {
+				msg = "%s não conseguiu derrotar %s (%s)".formatted(
+						atkr.getName(),
+						defr.getName(),
+						yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower)
+				);
+			}
 
-				reportEvent(null, msg, true, false);
-			} else return;
+			reportEvent(null, msg, true, false);
 		}
 
 		/* ATTACK CLASHED */
@@ -1318,14 +1310,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
 
-			if (!postCombat()) {
-				String msg = "Ambas as cartas foram destruídas! (%d = %d)".formatted(
-						yPower,
-						hPower
-				);
+			String msg = "Ambas as cartas foram destruídas! (%d = %d)".formatted(
+					yPower,
+					hPower
+			);
 
-				reportEvent(null, msg, true, false);
-			} else return;
+			reportEvent(null, msg, true, false);
 		}
 
 		if (applyEffect(POST_ATTACK_ASSIST, atkr.getAdjacent(Neighbor.LEFT), source.side(), source.index() - 1, source, target))
