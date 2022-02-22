@@ -931,7 +931,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 		}
 
-		BufferedImage bi = arena.render(this, hands);
 		if (resetTimer) {
 			resetTimerKeepTurn();
 			applyEffect(GLOBAL_TICK, (Champion) null, getCurrentSide(), -1);
@@ -939,6 +938,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Main.getInfo().getShoukanSlot().put(chn.getId(), true);
 			}
 		}
+		BufferedImage bi = arena.render(this, hands);
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
 		channel.sendMessage(msg)
