@@ -1886,9 +1886,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Hand op = hands.get(h.getSide().getOther());
 
 			if (h.getHp() <= 0) {
-				if (lastTick() || undying) continue;
+				int i = h.getSide() == Side.TOP ? 1 : 0;
+
+				if (lastTick() || (undying && undyingCd[i] == 5)) continue;
 				else if (combos.get(h.getSide()).getLeft() == Race.UNDEAD) {
-					int i = h.getSide() == Side.TOP ? 1 : 0;
 					if (undyingCd[i] == 0) {
 						undyingCd[i] = 5;
 						undying = true;
