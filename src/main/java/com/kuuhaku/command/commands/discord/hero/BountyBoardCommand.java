@@ -101,7 +101,6 @@ public class BountyBoardCommand implements Executable {
 
 				sb.append(rew).append(" | ").append(switch (rew) {
 					case XP -> Helper.separate(val) + " XP";
-					case HP -> Helper.separate(val) + " HP";
 					case EP -> Helper.separate(val) + " EP";
 					case CREDIT -> Helper.separate(val) + " CR";
 					case GEM -> Helper.separate(val) + " gema" + (val == 1 ? "" : "s");
@@ -121,9 +120,6 @@ public class BountyBoardCommand implements Executable {
 			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
 				if (h.getEnergy() < 1) {
 					channel.sendMessage("❌ | Seu herói está cansado (sem energia suficiente).").queue();
-					return;
-				} else if (h.getHp() < h.getMaxHp() / 4) {
-					channel.sendMessage("❌ | Seu herói está muito ferido para ir em uma missão (HP muito baixo).").queue();
 					return;
 				}
 

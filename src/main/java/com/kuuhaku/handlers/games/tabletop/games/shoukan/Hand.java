@@ -102,7 +102,7 @@ public class Hand {
 		this.acc = AccountDAO.getAccount(user.getId());
 
 		Hero h = KawaiponDAO.getHero(user.getId());
-		if (h != null && h.getHp() > 0 && h.getQuest() == null) {
+		if (h != null && h.getQuest() == null) {
 			this.hero = h;
 		} else {
 			this.hero = null;

@@ -87,7 +87,7 @@ public class TeamHand extends Hand {
 			game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
 			Hero hero = KawaiponDAO.getHero(user.getId());
-			if (hero == null || hero.getHp() <= 0 || hero.getQuest() != null) {
+			if (hero == null || hero.getQuest() != null) {
 				hero = null;
 			}
 
