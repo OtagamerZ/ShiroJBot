@@ -1072,6 +1072,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
+			boolean applyDamage = !(defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano")));
 			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
@@ -1094,7 +1095,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHitpoints() == 0) {
-				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+				if (applyDamage) {
 					op.removeHp(dmg);
 					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 					if (undying) {
@@ -1119,18 +1120,28 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			if (!postCombat()) {
 				int extra = Math.round(dmg * fac - dmg);
-				String msg = "%s derrotou %s (%d > %d), causando %s de dano!%s".formatted(
-						atkr.getName(),
-						defr.getName(),
-						yPower,
-						hPower,
-						dmg,
-						extra > 0
-								? " (dano direto aumentado em " + extra + ")"
-								: extra < 0
-								? " (dano direto reduzido em " + extra + ")"
-								: ""
-				);
+				String msg;
+				if (applyDamage) {
+					msg = "%s derrotou %s (%d > %d), causando %s de dano!%s".formatted(
+							atkr.getName(),
+							defr.getName(),
+							yPower,
+							hPower,
+							dmg,
+							extra > 0
+									? " (dano direto aumentado em " + extra + ")"
+									: extra < 0
+									? " (dano direto reduzido em " + extra + ")"
+									: ""
+					);
+				} else {
+					msg = "%s derrotou %s (%d > %d)!".formatted(
+							atkr.getName(),
+							defr.getName(),
+							yPower,
+							hPower
+					);
+				}
 
 				reportEvent(null, msg, true, false);
 			} else return;
@@ -1147,6 +1158,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (you.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
+			boolean applyDamage = !(atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano")));
 			int dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 
 			if (you.getMana() > 0) {
@@ -1162,7 +1174,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHitpoints() == 0) {
-				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+				if (applyDamage) {
 					you.removeHp(dmg);
 					you.addBleeding(Math.round(defr.getBldAtk() * fac));
 				}
@@ -1183,10 +1195,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (!postCombat()) {
 				int extra = Math.round(dmg * fac - dmg);
 				String msg;
-				if (yPower > hPower)
-					msg = "%s não conseguiu derrotar %s (BLOQUEADO), sofrendo %s de dano!%s".formatted(
+				if (applyDamage) {
+					msg = "%s não conseguiu derrotar %s (%s), sofrendo %s de dano!%s".formatted(
 							atkr.getName(),
 							defr.getName(),
+							yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower),
 							dmg,
 							extra > 0
 									? " (dano direto aumentado em " + extra + ")"
@@ -1194,19 +1207,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 									? " (dano direto reduzido em " + extra + ")"
 									: ""
 					);
-				else
-					msg = "%s não conseguiu derrotar %s (%d > %d), sofrendo %s de dano!%s".formatted(
+				} else {
+					msg = "%s não conseguiu derrotar %s (%s)".formatted(
 							atkr.getName(),
 							defr.getName(),
-							yPower,
-							hPower,
-							dmg,
-							extra > 0
-									? " (dano direto aumentado em " + extra + ")"
-									: extra < 0
-									? " (dano direto reduzido em " + extra + ")"
-									: ""
+							yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower)
 					);
+				}
 
 				reportEvent(null, msg, true, false);
 			} else return;
