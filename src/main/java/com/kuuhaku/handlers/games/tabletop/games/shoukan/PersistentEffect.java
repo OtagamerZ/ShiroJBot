@@ -65,8 +65,8 @@ public class PersistentEffect implements Cloneable {
 	}
 
 	public void activate(Side side, int index) {
-		if (limit != null && limit > 0) limit--;
-		effect.accept(side, index, (turns != null && turns == 0) || (limit != null && limit == 0));
+		boolean valid = effect.accept(side, index, (turns != null && turns == 0) || (limit != null && limit == 1));
+		if (valid && limit != null && limit > 0) limit--;
 	}
 
 	public Side getTarget() {
