@@ -20,9 +20,9 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum Arguments {
 	NONE(0),
-	ALLY(1),
-	ENEMY(1),
-	BOTH(2);
+	ALLY(1), ALLY_SLOT(1),
+	ENEMY(1), ENEMY_SLOT(1),
+	BOTH(2), BOTH_SLOT(2);
 
 	private final int args;
 
