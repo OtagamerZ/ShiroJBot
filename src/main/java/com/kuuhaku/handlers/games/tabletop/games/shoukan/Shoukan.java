@@ -557,42 +557,42 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Pair<Champion, Integer> enemyPos = null;
 
 		switch (type) {
-			case ALLY -> {
+			case ALLY, ALLY_SLOT -> {
 				if (pos1 == -1) {
 					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado para usar esta magia.").queue(null, Helper::doNothing);
 					return null;
 				}
 
 				Champion target = getSlot(getCurrentSide(), pos1).getTop();
-				if (target == null) {
+				if (target == null && type != Arguments.ALLY_SLOT) {
 					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
 					return null;
 				}
 
 				allyPos = Pair.of(target, pos1);
 			}
-			case ENEMY -> {
+			case ENEMY, ENEMY_SLOT -> {
 				if (pos1 == -1) {
 					channel.sendMessage("❌ | Índice inválido, escolha um campeão inimigo para usar esta magia.").queue(null, Helper::doNothing);
 					return null;
 				}
 
 				Champion target = getSlot(getNextSide(), pos1).getTop();
-				if (target == null) {
+				if (target == null && type != Arguments.ENEMY_SLOT) {
 					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
 					return null;
 				}
 
 				enemyPos = Pair.of(target, pos1);
 			}
-			case BOTH -> {
+			case BOTH, BOTH_SLOT -> {
 				if (pos1 == -1 || pos2 == -1) {
 					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado e um inimigo para usar esta magia.").queue(null, Helper::doNothing);
 					return null;
 				}
 
 				Champion target = getSlot(getCurrentSide(), pos1).getTop();
-				if (target == null) {
+				if (target == null && type != Arguments.BOTH_SLOT) {
 					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
 					return null;
 				}
@@ -616,9 +616,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		switch (type) {
 			case NONE -> copy.activate(hand, hands.get(getNextSide()), this, -1, -1);
-			case ALLY -> copy.activate(hand, hands.get(getNextSide()), this, pos1, -1);
-			case ENEMY -> copy.activate(hand, hands.get(getNextSide()), this, -1, pos1);
-			case BOTH -> copy.activate(hand, hands.get(getNextSide()), this, pos1, pos2);
+			case ALLY, ALLY_SLOT -> copy.activate(hand, hands.get(getNextSide()), this, pos1, -1);
+			case ENEMY, ENEMY_SLOT -> copy.activate(hand, hands.get(getNextSide()), this, -1, pos1);
+			case BOTH, BOTH_SLOT -> copy.activate(hand, hands.get(getNextSide()), this, pos1, pos2);
 		}
 
 		if (card.canGoToGrave()) {
@@ -638,16 +638,32 @@ public class Shoukan extends GlobalGame implements Serializable {
 					card.getCard().getName(),
 					allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName()
 			);
+			case ALLY_SLOT -> "%s usou a magia %s na posição %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName(),
+					allyPos.getRight()
+			);
 			case ENEMY -> "%s usou a magia %s em %s.".formatted(
 					hand.getUser().getName(),
 					card.getCard().getName(),
 					enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
+			);
+			case ENEMY_SLOT -> "%s usou a magia %s na posição %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName(),
+					enemyPos.getRight()
 			);
 			case BOTH -> "%s usou a magia %s em %s e %s.".formatted(
 					hand.getUser().getName(),
 					card.getCard().getName(),
 					allyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : allyPos.getLeft().getName(),
 					enemyPos.getLeft().isFlipped() ? "um campeão virado para baixo" : enemyPos.getLeft().getName()
+			);
+			case BOTH_SLOT -> "%s usou a magia %s nas posições %s e %s.".formatted(
+					hand.getUser().getName(),
+					card.getCard().getName(),
+					allyPos.getRight(),
+					enemyPos.getRight()
 			);
 		};
 	}
