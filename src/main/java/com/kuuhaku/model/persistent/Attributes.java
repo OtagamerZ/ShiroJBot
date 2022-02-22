@@ -148,7 +148,7 @@ public class Attributes {
 
 		double fac = (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res));
 
-		return (int) Math.max(500, Helper.roundTrunc((1000 + 3000 * fac + (100 * fac) * con) * hpModif, 5));
+		return (int) Math.max(500, Helper.roundTrunc((750 + 2500 * fac + (100 * fac) * con) * hpModif, 5));
 	}
 
 	public int calcMaxEnergy() {

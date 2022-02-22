@@ -41,15 +41,6 @@ public enum Reward {
 
 		return v < 0 ? -r : r;
 	}),
-	HP("HP", (h, v) -> {
-		int r = Math.abs(v);
-
-		if (v >= 0) h.heal(r);
-		else h.removeHp(r);
-		KawaiponDAO.saveHero(h);
-
-		return v < 0 ? -r : r;
-	}),
 	EP("EP", (h, v) -> {
 		int r = Math.abs(v);
 

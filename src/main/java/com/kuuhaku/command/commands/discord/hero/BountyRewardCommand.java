@@ -86,7 +86,6 @@ public class BountyRewardCommand implements Executable {
 				eb.addField(rew.toString(),
 						switch (rew) {
 							case XP -> Helper.separate(rew.apply(h, val)) + " XP";
-							case HP -> Helper.separate(rew.apply(h, val)) + " HP";
 							case EP -> Helper.separate(rew.apply(h, val)) + " EP";
 							case CREDIT -> Helper.separate(rew.apply(h, val)) + " CR";
 							case GEM -> Helper.separate(rew.apply(h, val)) + " gemas";
@@ -101,7 +100,7 @@ public class BountyRewardCommand implements Executable {
 					.setTitle("A missão \"" + info + "\" fracassou");
 
 			boolean opt = h.getPerks().contains(Perk.OPTIMISTIC);
-			int expXp = (int) Math.round(info.rewards().getOrDefault(Reward.XP, 0) / 2d * (opt ? 1.1 : 1));
+			int expXp = (int) Math.round(info.rewards().getOrDefault(Reward.XP, 0) / 2d * (opt ? 1.25 : 1));
 
 			if (expXp > 0 && Helper.chance(66)) {
 				expXp = Helper.rng(expXp);
@@ -119,12 +118,6 @@ public class BountyRewardCommand implements Executable {
 			for (Danger danger : q.getDangers()) {
 				if (Helper.chance(50 - (pes ? 10 : 0))) {
 					switch (danger) {
-						case HP -> {
-							int max = h.getMaxHp();
-							int penalty = Helper.rng(max / 5, max / 3);
-							h.setHp(h.getHp() - penalty);
-							eb.addField(danger.toString(), "-" + penalty + " HP", true);
-						}
 						case EP -> {
 							if (h.getEnergy() <= 1) continue;
 
@@ -169,7 +162,6 @@ public class BountyRewardCommand implements Executable {
 			if (save) AccountDAO.saveAccount(acc);
 
 			h.setEnergy(h.getMaxEnergy());
-			h.setHp(h.getMaxHp());
 			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
 					.setEmbeds(eb.build())
 					.queue();

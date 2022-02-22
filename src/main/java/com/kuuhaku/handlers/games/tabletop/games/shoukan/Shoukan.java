@@ -1074,12 +1074,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			Hero h = defr.getHero();
 			if (h != null) {
-				int aux = dmg - h.getHp();
-				h.setHp(h.getHp() - dmg);
-				dmg = aux;
+				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHp() == 0) {
+			if (h == null || h.getHitpoints() == 0) {
 				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					op.removeHp(dmg);
 					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
@@ -1096,7 +1094,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (h != null) {
 					h.addXp(1);
 					if (h.getPerks().contains(Perk.VAMPIRE)) {
-						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
+						h.setHitpoints(h.getHitpoints() + Math.round((h.getMaxHp() - h.getHitpoints()) * 0.1f));
 					}
 				}
 			}
@@ -1144,12 +1142,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			Hero h = atkr.getHero();
 			if (h != null) {
-				int aux = dmg - h.getHp();
-				h.setHp(h.getHp() - dmg);
-				dmg = aux;
+				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHp() == 0) {
+			if (h == null || h.getHitpoints() == 0) {
 				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					you.removeHp(dmg);
 					you.addBleeding(Math.round(defr.getBldAtk() * fac));
@@ -1163,7 +1159,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (h != null) {
 					h.addXp(1);
 					if (h.getPerks().contains(Perk.VAMPIRE)) {
-						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
+						h.setHitpoints(h.getHitpoints() + Math.round((h.getMaxHp() - h.getHitpoints()) * 0.1f));
 					}
 				}
 			}
@@ -1240,12 +1236,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			Hero h = defr.getHero();
 			if (h != null) {
-				int aux = dmg - h.getHp();
-				h.setHp(h.getHp() - dmg);
-				dmg = aux;
+				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHp() == 0) {
+			if (h == null || h.getHitpoints() == 0) {
 				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					op.removeHp(dmg);
 					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
@@ -1262,7 +1256,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (h != null) {
 					h.addXp(1);
 					if (h.getPerks().contains(Perk.VAMPIRE)) {
-						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
+						h.setHitpoints(h.getHitpoints() + Math.round((h.getMaxHp() - h.getHitpoints()) * 0.1f));
 					}
 				}
 			}
@@ -1277,12 +1271,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			h = defr.getHero();
 			if (h != null) {
-				int aux = dmg - h.getHp();
-				h.setHp(h.getHp() - dmg);
-				dmg = aux;
+				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHp() == 0) {
+			if (h == null || h.getHitpoints() == 0) {
 				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					you.removeHp(dmg);
 					you.addBleeding(Math.round(defr.getBldAtk() * fac));
@@ -1296,7 +1288,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (h != null) {
 					h.addXp(1);
 					if (h.getPerks().contains(Perk.VAMPIRE)) {
-						h.setHp(h.getHp() + Math.round((h.getMaxHp() - h.getHp()) * 0.1f));
+						h.setHitpoints(h.getHitpoints() + Math.round((h.getMaxHp() - h.getHitpoints()) * 0.1f));
 					}
 				}
 			}
@@ -1909,16 +1901,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				}
 
+				reportEvent(null, msg, true, false);
 				close();
 				finished = true;
-				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
-						.queue(ms ->
-								this.message.compute(ms.getChannel().getId(), (id, m) -> {
-									if (m != null) m.delete().queue(null, Helper::doNothing);
-									return ms;
-								})
-						);
 				break;
 			}
 		}
@@ -3045,7 +3030,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 									hr.addBonusPoints(2);
 								}
 
-								hr.setHp(h.getHero().getHp());
 								KawaiponDAO.saveHero(h.getHero());
 							}
 						}
@@ -3080,7 +3064,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 								hr.addBonusPoints(2);
 							}
 
-							hr.setHp(h.getHero().getHp());
 							KawaiponDAO.saveHero(hr);
 						}
 					}
