@@ -63,7 +63,7 @@ public class CustomAnswerDAO {
 		Query q = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
 
 		try {
-			return (List<CustomAnswer>) q.getSingleResult();
+			return (List<CustomAnswer>) q.getResultList();
 		} finally {
 			em.close();
 		}
