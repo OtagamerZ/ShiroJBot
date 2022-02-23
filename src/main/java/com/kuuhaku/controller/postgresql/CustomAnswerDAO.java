@@ -19,66 +19,13 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.CustomAnswer;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.Locale;
 
 public class CustomAnswerDAO {
-	@SuppressWarnings("unchecked")
-	public static CustomAnswer getCAByTrigger(String trigger, String guild) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createNativeQuery("""
-				SELECT c.id
-					 , c.guildId
-					 , c.trigger
-					 , c.answer
-					 , c.anywhere
-					 , c.chance
-					 , string_agg(cu.users, ',') AS users
-					 , string_agg(cc.channels, ',') AS channels
-				FROM CustomAnswer c
-						 LEFT JOIN customanswer_users cu ON c.id = cu.customanswer_id
-						 LEFT JOIN customanswer_channels cc ON c.id = cc.customanswer_id
-				WHERE guildId = :guild
-				  AND (
-						(c.anywhere AND :trigger LIKE LOWER('%'||trigger||'%'))
-						OR LOWER(trigger) = :trigger
-					)
-				group by c.id
-				""");
-		q.setParameter("trigger", trigger.toLowerCase(Locale.ROOT));
-		q.setParameter("guild", guild);
-
-		try {
-			List<Object[]> answers = q.getResultList();
-
-			if (answers.isEmpty()) return null;
-			return Helper.map(CustomAnswer.class, Helper.getRandomEntry(answers));
-		} finally {
-			em.close();
-		}
-	}
-
-	public static CustomAnswer getCAByID(int id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE id = :id", CustomAnswer.class);
-		q.setParameter("id", id);
-
-		try {
-			return (CustomAnswer) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
-
 	public static CustomAnswer getCAByIDAndGuild(int id, String guild) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -104,6 +51,19 @@ public class CustomAnswerDAO {
 
 		try {
 			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<CustomAnswer> getCustomAnswers() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
+
+		try {
+			return (List<CustomAnswer>) q.getSingleResult();
 		} finally {
 			em.close();
 		}
