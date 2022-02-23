@@ -33,7 +33,7 @@ public enum Perk {
 	ARMORED("Encouraçado", "O atributo AGI passa a conceder chance de bloqueio ao invés de esquiva."),
 	MINDSHIELD("Escudo Psíquico", "Ganha permanentemente um escudo de feitiços, mas dobra o custo de mana e reduz a eficiência de WIS pela metade."),
 	OPTIMISTIC("Otimista", "Recebe 25% mais XP ao falhar a missão."),
-	PESSIMISTIC("Pessimista", "Reduz aPossui 25% menos chance de ser penalizado ao falhar a missão."),
+	PESSIMISTIC("Pessimista", "Possui 25% menos chance de ser penalizado ao falhar a missão."),
 	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
 	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva (2% esquiva = 1% bloqueio), ocorrendo o inverso em modo de defesa."),
 	SCHOLAR("Erudito", "Não pode ter equipamentos, mas recebe +2 slots de perk extras.")
