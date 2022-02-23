@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
@@ -60,6 +61,7 @@ public class RemoveAnswerCommand implements Executable {
 
 			if (ca != null) {
 				CustomAnswerDAO.deleteCustomAnswer(ca);
+				Main.getInfo().removeCustomAnswer(ca);
 				channel.sendMessage("Não vou mais responder com a resposta de ID " + args[0] + ".").queue();
 			} else {
 				channel.sendMessage("❌ | ID de resposta inválido.").queue();

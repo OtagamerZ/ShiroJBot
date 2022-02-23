@@ -19,10 +19,7 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CanvasDAO;
-import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.postgresql.RaidDAO;
-import com.kuuhaku.controller.postgresql.VersionDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
@@ -32,16 +29,14 @@ import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.enums.Version;
-import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.model.persistent.PixelCanvas;
-import com.kuuhaku.model.persistent.RaidInfo;
-import com.kuuhaku.model.persistent.RaidMember;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.records.RaidData;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.tuple.Pair;
@@ -207,8 +202,16 @@ public class ShiroInfo {
 	private final ExpiringMap<String, Prize<?>> currentDrop = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, byte[]> cardCache = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, byte[]> resourceCache = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
+	private final RefreshingMap<Pair<String, String>, RandomList<CustomAnswer>> customAnswerCache = new RefreshingMap<>(() -> {
+		List<CustomAnswer> cas = CustomAnswerDAO.getCustomAnswers();
+		Map<Pair<String, String>, RandomList<CustomAnswer>> out = new HashMap<>();
 
-	private boolean isLive = false;
+		for (CustomAnswer ca : cas) {
+			registerCustomAnswer(ca);
+		}
+
+		return out;
+	}, 30, TimeUnit.MINUTES);
 
 	public ShiroInfo() {
 		try {
@@ -502,15 +505,37 @@ public class ShiroInfo {
 		return shoukanSlot;
 	}
 
+	public RefreshingMap<Pair<String, String>, RandomList<CustomAnswer>> getCustomAnswerCache() {
+		return customAnswerCache;
+	}
+
+	public CustomAnswer getCustomAnswer(String guild, String msg) {
+		CustomAnswer ca = customAnswerCache.entrySet().parallelStream()
+				.filter(e -> e.getKey().getLeft().equals(guild))
+				.filter(e -> msg.contains(e.getKey().getRight()))
+				.map(Map.Entry::getValue)
+				.map(RandomList::get)
+				.findFirst()
+				.orElse(null);
+
+		if (ca == null) return null;
+		return ca.isAnywhere() || msg.equals(ca.getTrigger()) ? ca : null;
+	}
+
+	public void registerCustomAnswer(CustomAnswer ca) {
+		Pair<String, String> key = Pair.of(ca.getGuildId(), ca.getTrigger().toLowerCase(Locale.ROOT));
+		customAnswerCache.computeIfAbsent(key, k -> new RandomList<>()).add(ca);
+	}
+
+	public void removeCustomAnswer(CustomAnswer ca) {
+		Pair<String, String> key = Pair.of(ca.getGuildId(), ca.getTrigger().toLowerCase(Locale.ROOT));
+		customAnswerCache.computeIfPresent(key, (k, v) -> {
+			v.remove(ca);
+			return v;
+		});
+	}
+
 	public Set<String> getGameLock() {
 		return gameLock;
-	}
-
-	public boolean isLive() {
-		return isLive;
-	}
-
-	public void setLive(boolean live) {
-		this.isLive = live;
 	}
 }
