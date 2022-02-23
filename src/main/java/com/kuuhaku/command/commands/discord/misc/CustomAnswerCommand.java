@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
@@ -188,6 +189,7 @@ public class CustomAnswerCommand implements Executable {
 			msg += ".";
 
 			CustomAnswerDAO.addCustomAnswer(ca);
+			Main.getInfo().registerCustomAnswer(ca);
 			channel.sendMessage(msg.formatted(StringUtils.abbreviate(ca.getAnswer().replace("\n", " "), 100), ca.getTrigger().replace("\n", " "))).queue();
 		} catch (JsonDataException | IllegalStateException e) {
 			channel.sendMessage("❌ | Olha, esse JSON não me parece certo não.").queue();

@@ -44,10 +44,9 @@ public class HourlyEvent implements Job {
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
-		if (!Main.getInfo().isLive())
-			for (JDA shard : Main.getShiroShards().getShards()) {
-				shard.getPresence().setActivity(Main.getRandomActivity());
-			}
+		for (JDA shard : Main.getShiroShards().getShards()) {
+			shard.getPresence().setActivity(Main.getRandomActivity());
+		}
 
 		if (Main.getInfo().getDblApi() != null) {
 			int size = Main.getShiroShards().getGuilds().size();
