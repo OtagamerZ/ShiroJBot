@@ -221,7 +221,7 @@ public class ShiroEvents extends ListenerAdapter {
 			rawMsgNoCommand = rawMsgNoPrefix.substring(commandName.length()).trim();
 		}
 
-		CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
+		CustomAnswer ca = Main.getInfo().getCustomAnswer(guild.getId(), rawMessage);
 
 		if (ca != null) {
 			Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
