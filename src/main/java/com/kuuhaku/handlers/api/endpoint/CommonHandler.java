@@ -106,8 +106,8 @@ public class CommonHandler {
 
 				byte[] bytes = page.formatted(
 						"Animes disponíveis",
-						sb.toString(),
-						""
+						"",
+						sb.toString()
 				).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.TEXT_HTML);
@@ -145,8 +145,8 @@ public class CommonHandler {
 
 				byte[] bytes = page.formatted(
 						"Imagens de " + WordUtils.capitalize(anime),
-						sb.toString(),
-						" <a href=\"?anime=" + anime + "&m=file\">(download)</a>"
+						" <a href=\"?anime=" + anime + "&m=file\">(download)</a>",
+						sb.toString()
 				).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.TEXT_HTML);
