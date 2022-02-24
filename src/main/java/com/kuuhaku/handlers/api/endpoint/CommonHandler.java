@@ -189,7 +189,13 @@ public class CommonHandler {
 		headers.setContentDisposition(cd);
 
 		try (FileInputStream fis = new FileInputStream(tmp)) {
-			return new HttpEntity<>((output) -> Helper.stream(fis, output), headers);
+			return new HttpEntity<>((output) -> {
+				try {
+					Helper.stream(fis, output);
+				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			}, headers);
 		} finally {
 			tmp.delete();
 		}
