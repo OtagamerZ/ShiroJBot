@@ -3211,6 +3211,16 @@ public abstract class Helper {
 		}
 	}
 
+	public static void stream(InputStream input, OutputStream output) throws IOException {
+		byte[] data = new byte[2048];
+		int read;
+		while ((read = input.read(data)) >= 0) {
+			output.write(data, 0, read);
+		}
+
+		output.flush();
+	}
+
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static byte[] compress(File file) throws IOException {
 		if (file.isDirectory()) {
