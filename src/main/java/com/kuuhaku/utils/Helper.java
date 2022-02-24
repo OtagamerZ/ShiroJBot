@@ -3221,6 +3221,48 @@ public abstract class Helper {
 		output.flush();
 	}
 
+	public static File compressDir(File file) throws IOException {
+		if (file.isDirectory()) {
+			Path source = file.toPath();
+			File tmp = File.createTempFile("files-all_" + System.currentTimeMillis(), null);
+			SevenZOutputFile szof = new SevenZOutputFile(tmp);
+
+			try (szof) {
+				Files.walkFileTree(source, new SimpleFileVisitor<>() {
+					@Override
+					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+						if (attrs.isSymbolicLink()) return FileVisitResult.CONTINUE;
+
+						Path rel = source.relativize(file);
+
+						try {
+							SevenZArchiveEntry entry = szof.createArchiveEntry(file.toFile(), rel.toString());
+							szof.putArchiveEntry(entry);
+							szof.write(FileUtils.readFileToByteArray(file.toFile()));
+							szof.closeArchiveEntry();
+						} catch (IOException e) {
+							Helper.logger(this.getClass()).error("Error compressing file " + file);
+						}
+
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFileFailed(Path file, IOException exc) {
+						Helper.logger(this.getClass()).error("Error opening file " + file);
+						return FileVisitResult.CONTINUE;
+					}
+				});
+
+				szof.finish();
+
+				return tmp;
+			}
+		}
+
+		return null;
+	}
+
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static byte[] compress(File file) throws IOException {
 		if (file.isDirectory()) {
