@@ -3250,7 +3250,7 @@ public abstract class Helper {
 				taos.finish();
 
 				try {
-					return compress(tmp);
+					return FileUtils.readFileToByteArray(tmp);
 				} finally {
 					tmp.delete();
 				}
