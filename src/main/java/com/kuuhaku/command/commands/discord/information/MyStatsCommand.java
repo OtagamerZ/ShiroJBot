@@ -45,6 +45,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -93,8 +94,8 @@ public class MyStatsCommand implements Executable, Slashed {
 			boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 			int xp = (int) (15
-							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
-							* Helper.getBuffMult(gc, BuffType.XP)
+					* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
+					* Helper.getBuffMult(gc, BuffType.XP)
 			);
 
 			float collection = Helper.prcnt(kp.getCards().size(), CardDAO.getTotalCards() * 2);
@@ -150,15 +151,11 @@ public class MyStatsCommand implements Executable, Slashed {
 			} else
 				eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/" + mmr.getTier().getPromRP() + " Pontos de Ranking", false);
 
-			if (mmr.getTier() != RankedTier.UNRANKED) {
-				if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier()) {
-					eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
-				}
-
-				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(mmr.getTier().ordinal(), true) + ".png");
-			} else {
-				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png");
+			if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier()) {
+				eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
 			}
+
+			eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(mmr.getTier().ordinal(), true).toLowerCase(Locale.ROOT) + ".png");
 
 			categories.put(Helper.parseEmoji("\uD83D\uDCCB"), new InteractPage(eb.build()));
 		}
