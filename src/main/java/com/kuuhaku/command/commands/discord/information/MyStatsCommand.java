@@ -48,7 +48,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "eu",
@@ -151,10 +150,15 @@ public class MyStatsCommand implements Executable, Slashed {
 			} else
 				eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/" + mmr.getTier().getPromRP() + " Pontos de Ranking", false);
 
-			if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
-				eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
+			if (mmr.getTier() != RankedTier.UNRANKED) {
+				if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier()) {
+					eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
+				}
 
-			eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png");
+				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(mmr.getTier().ordinal(), true) + ".png");
+			} else {
+				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png");
+			}
 
 			categories.put(Helper.parseEmoji("\uD83D\uDCCB"), new InteractPage(eb.build()));
 		}
