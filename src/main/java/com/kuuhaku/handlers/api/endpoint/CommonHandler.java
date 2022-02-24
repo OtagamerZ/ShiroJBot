@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.api.endpoint;
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -167,7 +168,7 @@ public class CommonHandler {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public @ResponseBody
-	void downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+	HttpEntity<InputStreamResource> downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
 		boolean all = anime.equalsIgnoreCase("all");
 		if (all) {
 			anime = "";
@@ -185,12 +186,13 @@ public class CommonHandler {
 				.filename("kawaipon-" + anime.toLowerCase(Locale.ROOT) + ".7z")
 				.build();
 
-		try (FileInputStream fis = new FileInputStream(tmp)) {
-			res.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-			res.addHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(tmp.toPath())));
-			res.addHeader(HttpHeaders.CONTENT_DISPOSITION, cd.toString());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentLength(Files.size(tmp.toPath()));
+		headers.setContentDisposition(cd);
 
-			Helper.stream(fis, res.getOutputStream());
+		try (FileInputStream fis = new FileInputStream(tmp)) {
+			return new HttpEntity<>(new InputStreamResource(fis), headers);
 		} finally {
 			tmp.delete();
 		}
