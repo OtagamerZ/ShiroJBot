@@ -56,7 +56,7 @@ public class CommonHandler {
 
 	@RequestMapping(value = "/card", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<byte[]> serveCardImage(@RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+	HttpEntity<byte[]> serveCardImage(@RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
 		name = name.toUpperCase(Locale.ROOT);
 		anime = anime.toUpperCase(Locale.ROOT);
 
@@ -64,37 +64,54 @@ public class CommonHandler {
 			URL pageUrl = this.getClass().getClassLoader().getResource("template.html");
 			if (pageUrl == null) throw new IllegalArgumentException();
 
-			String page = Files.readString(Path.of(pageUrl.toURI()), StandardCharsets.UTF_8);
+			String page = Files.readString(Path.of(pageUrl.toURI()), StandardCharsets.UTF_8).replace("%;", "%%;");
 			String item = "<li><a href=\"%s\">%s</a></li>\n";
 
-			if (anime.isBlank()) {
-				page = page.replace("<table>", "<ul>")
-						.replace("</table>", "</ul>")
-						.replace("%;", "%%;");
+			if (method.equals("file")) {
+				byte[] bytes;
 
-				File f = new File(System.getenv("CARDS_PATH"));
-				if (!f.exists()) throw new FileNotFoundException();
-
-				StringBuilder sb = new StringBuilder();
-
-				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
-						.map(File::getName)
-						.sorted()
-						.toArray(String[]::new);
-
-				for (String s : available) {
-					sb.append(item.formatted("?anime=" + s, s));
+				if (anime.isBlank() || name.isBlank()) {
+					File f = new File(System.getenv("CARDS_PATH") + anime);
+					if (!f.exists()) throw new FileNotFoundException();
+					bytes = Helper.compress(f);
+				} else {
+					File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
+					if (!f.exists()) throw new FileNotFoundException();
+					bytes = FileUtils.readFileToByteArray(f);
 				}
 
-				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.TEXT_HTML);
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 				headers.setContentLength(bytes.length);
 
 				return new HttpEntity<>(bytes, headers);
-			} else if (name.isBlank()) {
-				page = page.replace("%;", "%%;");
-				item = """
+			} else {
+				if (anime.isBlank()) {
+					page = page.replace("<table>", "<ul>")
+							.replace("</table>", "</ul>");
+
+					File f = new File(System.getenv("CARDS_PATH"));
+					if (!f.exists()) throw new FileNotFoundException();
+
+					StringBuilder sb = new StringBuilder();
+
+					String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
+							.map(File::getName)
+							.sorted()
+							.toArray(String[]::new);
+
+					for (String s : available) {
+						sb.append(item.formatted("?anime=" + s, s));
+					}
+
+					byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
+					HttpHeaders headers = new HttpHeaders();
+					headers.setContentType(MediaType.TEXT_HTML);
+					headers.setContentLength(bytes.length);
+
+					return new HttpEntity<>(bytes, headers);
+				} else if (name.isBlank()) {
+					item = """
 						<td>
 						    <a href="?anime={0}&name={1}">
 						        <img alt="{0}" src="?anime={0}&name={1}"/>
@@ -103,41 +120,42 @@ public class CommonHandler {
 						</td>
 						""";
 
-				File f = new File(System.getenv("CARDS_PATH") + anime);
-				if (!f.exists()) throw new FileNotFoundException();
+					File f = new File(System.getenv("CARDS_PATH") + anime);
+					if (!f.exists()) throw new FileNotFoundException();
 
-				StringBuilder sb = new StringBuilder();
+					StringBuilder sb = new StringBuilder();
 
-				String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
-						.map(fl -> fl.getName().replace(".png", ""))
-						.sorted()
-						.toArray(String[]::new);
+					String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
+							.map(fl -> fl.getName().replace(".png", ""))
+							.sorted()
+							.toArray(String[]::new);
 
-				for (int i = 0; i < available.length; i++) {
-					String s = available[i];
-					if (i % 5 == 0) {
-						if (i > 0) sb.append("\n</tr>\n");
-						sb.append("\n<tr>\n");
+					for (int i = 0; i < available.length; i++) {
+						String s = available[i];
+						if (i % 5 == 0) {
+							if (i > 0) sb.append("\n</tr>\n");
+							sb.append("\n<tr>\n");
+						}
+						sb.append(MessageFormat.format(item, anime, s));
 					}
-					sb.append(MessageFormat.format(item, anime, s));
+
+					byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
+					HttpHeaders headers = new HttpHeaders();
+					headers.setContentType(MediaType.TEXT_HTML);
+					headers.setContentLength(bytes.length);
+
+					return new HttpEntity<>(bytes, headers);
+				} else {
+					File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
+					if (!f.exists()) throw new FileNotFoundException();
+					byte[] bytes = FileUtils.readFileToByteArray(f);
+
+					HttpHeaders headers = new HttpHeaders();
+					headers.setContentType(MediaType.IMAGE_PNG);
+					headers.setContentLength(bytes.length);
+
+					return new HttpEntity<>(bytes, headers);
 				}
-
-				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.TEXT_HTML);
-				headers.setContentLength(bytes.length);
-
-				return new HttpEntity<>(bytes, headers);
-			} else {
-				File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
-				if (!f.exists()) throw new FileNotFoundException();
-				byte[] bytes = FileUtils.readFileToByteArray(f);
-
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.IMAGE_PNG);
-				headers.setContentLength(bytes.length);
-
-				return new HttpEntity<>(bytes, headers);
 			}
 		} catch (URISyntaxException e) {
 			HttpHeaders headers = new HttpHeaders();
