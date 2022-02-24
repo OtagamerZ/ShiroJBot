@@ -52,10 +52,24 @@
             width: 50%;
             border-radius: 10%;
         }
+
+        #wait {
+            visibility: hidden;
+            background-color: white;
+            position: absolute;
+            left: 0;
+            top: 0;
+            line-height: 100vh;
+            width: 100vw;
+            text-align: center;
+            font-size: 3vmax;
+            margin: 0
+        }
     </style>
 </head>
 <body>
-<h1>%s%s</h1>
+<h1 id="wait">Preparando download, por favor aguarde...</h1>
+<h1>%s %s</h1>
 <table>
     %s
 </table>

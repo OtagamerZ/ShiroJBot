@@ -145,7 +145,9 @@ public class CommonHandler {
 
 				byte[] bytes = page.formatted(
 						"Imagens de " + WordUtils.capitalize(anime),
-						" <a href=\"?anime=" + anime + "&m=file\">(download)</a>",
+						"""
+								<a href="?anime=%s&m=file" onclick="document.getElementById('wait').style.visibility = 'visible'">(download)</a>
+								""".formatted(anime),
 						sb.toString()
 				).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
@@ -176,7 +178,7 @@ public class CommonHandler {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<byte[]> downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+	void downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
 		if (anime.isBlank() || anime.equalsIgnoreCase("ALL")) {
 			throw new IllegalArgumentException();
 		}
@@ -199,23 +201,6 @@ public class CommonHandler {
 
 		try (FileInputStream fis = new FileInputStream(tmp)) {
 			Helper.stream(fis, res.getOutputStream());
-
-			URL pageUrl = this.getClass().getClassLoader().getResource("downloading.html");
-			if (pageUrl == null) throw new IllegalArgumentException();
-			String page = Files.readString(Path.of(pageUrl.toURI()), StandardCharsets.UTF_8);
-
-			byte[] bytes = page.getBytes(StandardCharsets.UTF_8);
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.TEXT_HTML);
-			headers.setContentLength(bytes.length);
-
-			return new HttpEntity<>(bytes, headers);
-		} catch (URISyntaxException e) {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.TEXT_HTML);
-			headers.setContentLength(new byte[0].length);
-
-			return new HttpEntity<>(new byte[0], headers);
 		} finally {
 			tmp.delete();
 		}
