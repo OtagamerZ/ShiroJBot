@@ -21,7 +21,7 @@ package com.kuuhaku.handlers.api.endpoint;
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.InputStreamResource;
+import org.apache.commons.lang.WordUtils;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -104,7 +104,11 @@ public class CommonHandler {
 					sb.append(item.formatted("?anime=" + s, s));
 				}
 
-				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
+				byte[] bytes = page.formatted(
+						"Animes disponíveis",
+						sb.toString(),
+						""
+				).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.TEXT_HTML);
 				headers.setContentLength(bytes.length);
@@ -139,7 +143,11 @@ public class CommonHandler {
 					sb.append(MessageFormat.format(item, anime, s));
 				}
 
-				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
+				byte[] bytes = page.formatted(
+						"Imagens de " + WordUtils.capitalize(anime),
+						sb.toString(),
+						" <a href=\"?anime=" + anime + "&m=file\">(download)</a>"
+				).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.TEXT_HTML);
 				headers.setContentLength(bytes.length);
@@ -169,12 +177,11 @@ public class CommonHandler {
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public @ResponseBody
 	void downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
-		boolean all = anime.equalsIgnoreCase("all");
-		if (all) {
-			anime = "";
-		} else {
-			anime = anime.toUpperCase(Locale.ROOT);
+		if (anime.isBlank() || anime.equalsIgnoreCase("ALL")) {
+			throw new IllegalArgumentException();
 		}
+
+		anime = anime.toUpperCase(Locale.ROOT);
 
 		File f = new File(System.getenv("CARDS_PATH") + anime);
 		if (!f.exists()) throw new FileNotFoundException();
