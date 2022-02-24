@@ -2419,15 +2419,23 @@ public abstract class Helper {
         }
     }
 
-    public static String replaceTags(String text, User author, Guild guild) {
+    public static String replaceTags(String text, User user, Guild guild, Message msg) {
         Map<String, String> reps = new HashMap<>() {{
-            put("%user%", author.getAsMention());
-            put("%user.id%", author.getId());
-            put("%user.name%", author.getName());
-            put("%user.created%", TIMESTAMP.formatted(author.getTimeCreated().toEpochSecond()));
+            if (user != null) {
+                put("%user%", user.getAsMention());
+                put("%user.id%", user.getId());
+                put("%user.name%", user.getName());
+                put("%user.created%", TIMESTAMP.formatted(user.getTimeCreated().toEpochSecond()));
+            }
 
-            put("%guild%", guild.getName());
-            put("%guild.count%", String.valueOf(guild.getMemberCount()));
+            if (guild != null) {
+                put("%guild%", guild.getName());
+                put("%guild.count%", String.valueOf(guild.getMemberCount()));
+            }
+
+            if (msg != null) {
+                put("%message%", msg.getContentRaw());
+            }
         }};
 
         for (Map.Entry<String, String> rep : reps.entrySet()) {
