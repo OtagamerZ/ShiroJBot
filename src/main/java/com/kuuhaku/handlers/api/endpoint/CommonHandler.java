@@ -26,10 +26,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -165,7 +167,7 @@ public class CommonHandler {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<StreamingResponseBody> downloadCardImage(@RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+	void downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
 		boolean all = anime.equalsIgnoreCase("all");
 		if (all) {
 			anime = "";
@@ -183,19 +185,12 @@ public class CommonHandler {
 				.filename("kawaipon-" + anime.toLowerCase(Locale.ROOT) + ".7z")
 				.build();
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		headers.setContentLength(Files.size(tmp.toPath()));
-		headers.setContentDisposition(cd);
-
 		try (FileInputStream fis = new FileInputStream(tmp)) {
-			return new HttpEntity<>((output) -> {
-				try {
-					Helper.stream(fis, output);
-				} catch (IOException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
-			}, headers);
+			res.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+			res.addHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(tmp.toPath())));
+			res.addHeader(HttpHeaders.CONTENT_DISPOSITION, cd.toString());
+
+			Helper.stream(fis, res.getOutputStream());
 		} finally {
 			tmp.delete();
 		}
