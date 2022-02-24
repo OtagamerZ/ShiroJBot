@@ -19,9 +19,9 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.WordUtils;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -144,7 +144,7 @@ public class CommonHandler {
 				}
 
 				byte[] bytes = page.formatted(
-						"Imagens de " + WordUtils.capitalize(anime),
+						"Imagens de " + CardDAO.getUltimate(anime).getName(),
 						"""
 								<a href="?anime=%s&m=file" onclick="document.getElementById('wait').style.visibility = 'visible'">(download)</a>
 								""".formatted(anime),
