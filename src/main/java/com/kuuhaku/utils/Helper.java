@@ -39,8 +39,8 @@ import com.kuuhaku.model.common.GifFrame;
 import com.kuuhaku.model.common.drop.*;
 import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.Buff;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.buttons.Button;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
@@ -60,8 +60,8 @@ import net.dv8tion.jda.api.exceptions.MissingAccessException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.common.bytesource.ByteSourceInputStream;
 import org.apache.commons.imaging.formats.gif.DisposalMethod;
@@ -3216,11 +3216,9 @@ public abstract class Helper {
 		if (file.isDirectory()) {
 			Path source = file.toPath();
 			File tmp = File.createTempFile("files-all_" + System.currentTimeMillis(), null);
-			OutputStream os = Files.newOutputStream(tmp.toPath());
-			GZIPOutputStream gzip = new GZIPOutputStream(os);
-			TarArchiveOutputStream taos = new TarArchiveOutputStream(gzip);
+			SevenZOutputFile szof = new SevenZOutputFile(tmp);
 
-			try (os; gzip; taos) {
+			try (szof) {
 				Files.walkFileTree(source, new SimpleFileVisitor<>() {
 					@Override
 					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -3229,10 +3227,10 @@ public abstract class Helper {
 						Path rel = source.relativize(file);
 
 						try {
-							TarArchiveEntry entry = new TarArchiveEntry(file.toFile(), rel.toString());
-							taos.putArchiveEntry(entry);
-							Files.copy(file, taos);
-							taos.closeArchiveEntry();
+							SevenZArchiveEntry entry = szof.createArchiveEntry(file.toFile(), rel.toString());
+							szof.putArchiveEntry(entry);
+							szof.write(FileUtils.readFileToByteArray(file.toFile()));
+							szof.closeArchiveEntry();
 						} catch (IOException e) {
 							Helper.logger(this.getClass()).error("Error compressing file " + file);
 						}
@@ -3247,7 +3245,7 @@ public abstract class Helper {
 					}
 				});
 
-				taos.finish();
+				szof.finish();
 
 				try {
 					return FileUtils.readFileToByteArray(tmp);
