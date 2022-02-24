@@ -234,9 +234,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (p.test(ca)) {
 				if (message.getReferencedMessage() != null)
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild), message.getReferencedMessage());
+					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild, message.getReferencedMessage()), message.getReferencedMessage());
 				else
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild));
+					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild, message));
 			}
 		}
 
@@ -756,7 +756,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (!gc.getWelcomeMessage().isBlank()) {
 				BufferedImage image = ImageIO.read(Helper.getImage(author.getEffectiveAvatarUrl()));
 
-				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
+				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild, null);
 				EmbedBuilder eb;
 				if (!temp.isEmpty()) {
 					Embed e = gc.getEmbedTemplate();
@@ -799,7 +799,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (IllegalArgumentException ignore) {
 					}
 
-					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild));
+					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild, null));
 
 					if (e.footer() != null && e.footer().name() != null)
 						eb.setFooter(e.footer().name(), e.footer().icon());
@@ -821,7 +821,7 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild))
+							.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild, null))
 							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
@@ -852,7 +852,7 @@ public class ShiroEvents extends ListenerAdapter {
 			if (!gc.getByeMessage().isBlank()) {
 				BufferedImage image = ImageIO.read(Helper.getImage(author.getEffectiveAvatarUrl()));
 
-				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
+				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild, null);
 				EmbedBuilder eb;
 				if (!temp.isEmpty()) {
 					Embed e = gc.getEmbedTemplate();
@@ -895,7 +895,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (IllegalArgumentException ignore) {
 					}
 
-					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild));
+					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild, null));
 
 					if (e.footer() != null && e.footer().name() != null)
 						eb.setFooter(e.footer().name(), e.footer().icon());
@@ -917,7 +917,7 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild))
+							.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild, null))
 							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
