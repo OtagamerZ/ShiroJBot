@@ -26,7 +26,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -62,9 +65,21 @@ public class CommonHandler {
 
 	@RequestMapping(value = "/card", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<byte[]> serveCardImage(@RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
-		name = name.toUpperCase(Locale.ROOT);
+	HttpEntity<byte[]> serveCardImage(HttpServletResponse res, @RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
 		anime = anime.toUpperCase(Locale.ROOT);
+		name = name.toUpperCase(Locale.ROOT);
+
+		if (method.equals("file")) {
+			if (anime.isBlank()) {
+				res.sendRedirect("/download");
+			} else if (name.isBlank()) {
+				res.sendRedirect("/download?anime=" + anime);
+			} else {
+				res.sendRedirect("/download?anime=" + anime + "&name=" + name);
+			}
+
+			return new HttpEntity<>(new byte[0]);
+		}
 
 		try {
 			URL pageUrl = this.getClass().getClassLoader().getResource("template.html");
@@ -73,59 +88,32 @@ public class CommonHandler {
 			String page = Files.readString(Path.of(pageUrl.toURI()), StandardCharsets.UTF_8).replace("%;", "%%;");
 			String item = "<li><a href=\"%s\">%s</a></li>\n";
 
-			if (method.equals("file")) {
-				byte[] bytes;
-				String type;
+			if (anime.isBlank()) {
+				page = page.replace("<table>", "<ul>")
+						.replace("</table>", "</ul>");
 
-				if (anime.isBlank() || name.isBlank()) {
-					File f = new File(System.getenv("CARDS_PATH") + anime);
-					if (!f.exists()) throw new FileNotFoundException();
-					bytes = Helper.compress(f);
-					type = Helper.getOr(anime.toLowerCase(Locale.ROOT), "all") + ".7z";
-				} else {
-					File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
-					if (!f.exists()) throw new FileNotFoundException();
-					bytes = FileUtils.readFileToByteArray(f);
-					type = name.toLowerCase(Locale.ROOT) + ".png";
+				File f = new File(System.getenv("CARDS_PATH"));
+				if (!f.exists()) throw new FileNotFoundException();
+
+				StringBuilder sb = new StringBuilder();
+
+				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
+						.map(File::getName)
+						.sorted()
+						.toArray(String[]::new);
+
+				for (String s : available) {
+					sb.append(item.formatted("?anime=" + s, s));
 				}
 
-				ContentDisposition cd = ContentDisposition.attachment()
-						.filename("kawaipon-" + type)
-						.build();
-
+				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
 				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+				headers.setContentType(MediaType.TEXT_HTML);
 				headers.setContentLength(bytes.length);
-				headers.setContentDisposition(cd);
 
 				return new HttpEntity<>(bytes, headers);
-			} else {
-				if (anime.isBlank()) {
-					page = page.replace("<table>", "<ul>")
-							.replace("</table>", "</ul>");
-
-					File f = new File(System.getenv("CARDS_PATH"));
-					if (!f.exists()) throw new FileNotFoundException();
-
-					StringBuilder sb = new StringBuilder();
-
-					String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
-							.map(File::getName)
-							.sorted()
-							.toArray(String[]::new);
-
-					for (String s : available) {
-						sb.append(item.formatted("?anime=" + s, s));
-					}
-
-					byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
-					HttpHeaders headers = new HttpHeaders();
-					headers.setContentType(MediaType.TEXT_HTML);
-					headers.setContentLength(bytes.length);
-
-					return new HttpEntity<>(bytes, headers);
-				} else if (name.isBlank()) {
-					item = """
+			} else if (name.isBlank()) {
+				item = """
 						<td>
 						    <a href="?anime={0}&name={1}">
 						        <img alt="{0}" src="?anime={0}&name={1}"/>
@@ -134,42 +122,41 @@ public class CommonHandler {
 						</td>
 						""";
 
-					File f = new File(System.getenv("CARDS_PATH") + anime);
-					if (!f.exists()) throw new FileNotFoundException();
+				File f = new File(System.getenv("CARDS_PATH") + anime);
+				if (!f.exists()) throw new FileNotFoundException();
 
-					StringBuilder sb = new StringBuilder();
+				StringBuilder sb = new StringBuilder();
 
-					String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
-							.map(fl -> fl.getName().replace(".png", ""))
-							.sorted()
-							.toArray(String[]::new);
+				String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
+						.map(fl -> fl.getName().replace(".png", ""))
+						.sorted()
+						.toArray(String[]::new);
 
-					for (int i = 0; i < available.length; i++) {
-						String s = available[i];
-						if (i % 5 == 0) {
-							if (i > 0) sb.append("\n</tr>\n");
-							sb.append("\n<tr>\n");
-						}
-						sb.append(MessageFormat.format(item, anime, s));
+				for (int i = 0; i < available.length; i++) {
+					String s = available[i];
+					if (i % 5 == 0) {
+						if (i > 0) sb.append("\n</tr>\n");
+						sb.append("\n<tr>\n");
 					}
-
-					byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
-					HttpHeaders headers = new HttpHeaders();
-					headers.setContentType(MediaType.TEXT_HTML);
-					headers.setContentLength(bytes.length);
-
-					return new HttpEntity<>(bytes, headers);
-				} else {
-					File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
-					if (!f.exists()) throw new FileNotFoundException();
-					byte[] bytes = FileUtils.readFileToByteArray(f);
-
-					HttpHeaders headers = new HttpHeaders();
-					headers.setContentType(MediaType.IMAGE_PNG);
-					headers.setContentLength(bytes.length);
-
-					return new HttpEntity<>(bytes, headers);
+					sb.append(MessageFormat.format(item, anime, s));
 				}
+
+				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.TEXT_HTML);
+				headers.setContentLength(bytes.length);
+
+				return new HttpEntity<>(bytes, headers);
+			} else {
+				File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
+				if (!f.exists()) throw new FileNotFoundException();
+				byte[] bytes = FileUtils.readFileToByteArray(f);
+
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.IMAGE_PNG);
+				headers.setContentLength(bytes.length);
+
+				return new HttpEntity<>(bytes, headers);
 			}
 		} catch (URISyntaxException e) {
 			HttpHeaders headers = new HttpHeaders();
@@ -177,6 +164,41 @@ public class CommonHandler {
 			headers.setContentLength(new byte[0].length);
 
 			return new HttpEntity<>(new byte[0], headers);
+		}
+	}
+
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
+	public @ResponseBody
+	HttpEntity<StreamingResponseBody> downloadCardImage(HttpServletResponse res, @RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+		anime = anime.toUpperCase(Locale.ROOT);
+		name = name.toUpperCase(Locale.ROOT);
+
+		byte[] bytes;
+		String type;
+
+		if (anime.isBlank() || name.isBlank()) {
+			File f = new File(System.getenv("CARDS_PATH") + anime);
+			if (!f.exists()) throw new FileNotFoundException();
+			bytes = Helper.compress(f);
+			type = Helper.getOr(anime.toLowerCase(Locale.ROOT), "all") + ".7z";
+		} else {
+			File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
+			if (!f.exists()) throw new FileNotFoundException();
+			bytes = FileUtils.readFileToByteArray(f);
+			type = name.toLowerCase(Locale.ROOT) + ".png";
+		}
+
+		ContentDisposition cd = ContentDisposition.attachment()
+				.filename("kawaipon-" + type)
+				.build();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentLength(bytes.length);
+		headers.setContentDisposition(cd);
+
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+			return new HttpEntity<>((output) -> Helper.stream(bais, output), headers);
 		}
 	}
 
