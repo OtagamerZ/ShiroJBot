@@ -63,6 +63,12 @@ public class ErrorHandler implements ErrorController {
 		return new Exception(HttpStatus.UNAUTHORIZED, "Access not authorized");
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Exception invalidRequest() {
+		return new Exception(HttpStatus.BAD_REQUEST, "Invalid request");
+	}
+
 	@ExceptionHandler(NoResultException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Exception noResult() {
