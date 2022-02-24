@@ -115,7 +115,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private boolean moveLock = false;
 	private final int[] synthCd = {0, 0};
 	private final int[] undyingCd = {0, 0};
-	private boolean undying = false;
 
 	private GameState oldState = null;
 
@@ -877,7 +876,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int power = ally.getFinAtk();
 				op.removeHp(Math.round(power * fac));
 				op.addBleeding(Math.round(ally.getBldAtk() * fac));
-				if (undying) {
+				if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
 					you.addHp(op.getDamageDelta() / 10);
 				}
 
@@ -1094,7 +1093,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (applyDamage) {
 					op.removeHp(dmg);
 					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
-					if (undying) {
+					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
 						you.addHp(op.getDamageDelta() / 10);
 					}
 				}
@@ -1258,7 +1257,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					op.removeHp(dmg);
 					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
-					if (undying) {
+					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
 						you.addHp(op.getDamageDelta() / 10);
 					}
 				}
@@ -1885,11 +1884,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (h.getHp() <= 0) {
 				int i = h.getSide() == Side.TOP ? 1 : 0;
 
-				if (lastTick() || (undying && undyingCd[i] == 5)) continue;
+				if (lastTick() || undyingCd[i] == 5) continue;
 				else if (combos.get(h.getSide()).getLeft() == Race.UNDEAD) {
 					if (undyingCd[i] == 0) {
 						undyingCd[i] = 5;
-						undying = true;
 						continue;
 					}
 				}
@@ -2975,7 +2973,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		forfeit = false;
-		undying = false;
 
 		for (TextChannel chn : getChannel().getChannels()) {
 			Main.getInfo().getShoukanSlot().put(chn.getId(), true);
