@@ -3211,6 +3211,7 @@ public abstract class Helper {
 		}
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static byte[] compress(File file) throws IOException {
 		if (file.isDirectory()) {
 			Path source = file.toPath();
@@ -3222,7 +3223,7 @@ public abstract class Helper {
 			try (os; gzip; taos) {
 				Files.walkFileTree(source, new SimpleFileVisitor<>() {
 					@Override
-					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
 						if (attrs.isSymbolicLink()) return FileVisitResult.CONTINUE;
 
 						Path rel = source.relativize(file);
@@ -3240,14 +3241,19 @@ public abstract class Helper {
 					}
 
 					@Override
-					public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+					public FileVisitResult visitFileFailed(Path file, IOException exc) {
 						Helper.logger(this.getClass()).error("Error opening file " + file);
 						return FileVisitResult.CONTINUE;
 					}
 				});
 
 				taos.finish();
-				return compress(tmp);
+
+				try {
+					return compress(tmp);
+				} finally {
+					tmp.delete();
+				}
 			}
 		} else {
 			return compress(FileUtils.readFileToByteArray(file));
