@@ -81,7 +81,7 @@ public class CommonHandler {
 					File f = new File(System.getenv("CARDS_PATH") + anime);
 					if (!f.exists()) throw new FileNotFoundException();
 					bytes = Helper.compress(f);
-					type = Helper.getOr(anime.toLowerCase(Locale.ROOT), "all") + ".tar.gz";
+					type = Helper.getOr(anime.toLowerCase(Locale.ROOT), "all") + ".7z";
 				} else {
 					File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
 					if (!f.exists()) throw new FileNotFoundException();
