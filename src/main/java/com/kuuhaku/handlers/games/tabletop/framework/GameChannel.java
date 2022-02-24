@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.tabletop.ClusterAction;
 import com.kuuhaku.model.records.ChannelReference;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -74,7 +75,7 @@ public class GameChannel {
 	public ClusterAction sendMessage(String message) {
 		Map<String, MessageAction> acts = new HashMap<>();
 		for (TextChannel chn : getChannels()) {
-			acts.put(chn.getId(), chn.sendMessage(message));
+			acts.put(chn.getId(), chn.sendMessage(Helper.unmention(message)));
 		}
 
 		return new ClusterAction(acts);
