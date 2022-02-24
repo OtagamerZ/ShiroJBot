@@ -168,7 +168,7 @@ public class CommonHandler {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<InputStreamResource> downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+	void downloadCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
 		boolean all = anime.equalsIgnoreCase("all");
 		if (all) {
 			anime = "";
@@ -186,13 +186,12 @@ public class CommonHandler {
 				.filename("kawaipon-" + anime.toLowerCase(Locale.ROOT) + ".7z")
 				.build();
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		headers.setContentLength(Files.size(tmp.toPath()));
-		headers.setContentDisposition(cd);
+		res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		res.setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(tmp.toPath())));
+		res.setHeader(HttpHeaders.CONTENT_DISPOSITION, cd.toString());
 
 		try (FileInputStream fis = new FileInputStream(tmp)) {
-			return new HttpEntity<>(new InputStreamResource(fis), headers);
+			Helper.stream(fis, res.getOutputStream());
 		} finally {
 			tmp.delete();
 		}
