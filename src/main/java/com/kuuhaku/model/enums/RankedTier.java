@@ -100,18 +100,21 @@ public enum RankedTier {
 	}
 
 	public static String getTierName(int tier, boolean enumName) {
-		if (enumName) return Arrays.stream(values())
-				.filter(rt -> rt.getTier() == tier)
-				.map(RankedTier::name)
-				.findFirst()
-				.orElseThrow()
-				.replaceFirst("_.+", "");
-		else return Arrays.stream(values())
-				.filter(rt -> rt.getTier() == tier)
-				.map(rt -> StringUtils.capitalize(rt.getName()))
-				.findFirst()
-				.orElseThrow()
-				.replaceFirst("\\s(IV|III|II|I)", "");
+		if (enumName) {
+			return Arrays.stream(values())
+					.filter(rt -> rt.getTier() == tier)
+					.map(RankedTier::name)
+					.findFirst()
+					.orElseThrow()
+					.replaceFirst("_.+", "");
+		} else {
+			return Arrays.stream(values())
+					.filter(rt -> rt.getTier() == tier)
+					.map(rt -> StringUtils.capitalize(rt.getName()))
+					.findFirst()
+					.orElseThrow()
+					.replaceFirst("\\s(IV|III|II|I)", "");
+		}
 	}
 
 	@Override
