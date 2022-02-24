@@ -29,10 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -65,17 +62,15 @@ public class CommonHandler {
 
 	@RequestMapping(value = "/card", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<byte[]> serveCardImage(HttpServletResponse res, @RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
+	HttpEntity<byte[]> serveCardImage(HttpServletResponse res, @RequestParam(value = "anime", defaultValue = "") String anime, @RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "m", defaultValue = "img") String method) throws IOException {
 		anime = anime.toUpperCase(Locale.ROOT);
 		name = name.toUpperCase(Locale.ROOT);
 
 		if (method.equals("file")) {
 			if (anime.isBlank()) {
 				res.sendRedirect("/download");
-			} else if (name.isBlank()) {
-				res.sendRedirect("/download?anime=" + anime);
 			} else {
-				res.sendRedirect("/download?anime=" + anime + "&name=" + name);
+				res.sendRedirect("/download?anime=" + anime);
 			}
 
 			return new HttpEntity<>(new byte[0]);
@@ -167,38 +162,36 @@ public class CommonHandler {
 		}
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public @ResponseBody
-	HttpEntity<StreamingResponseBody> downloadCardImage(HttpServletResponse res, @RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
-		anime = anime.toUpperCase(Locale.ROOT);
-		name = name.toUpperCase(Locale.ROOT);
-
-		byte[] bytes;
-		String type;
-
-		if (anime.isBlank() || name.isBlank()) {
-			File f = new File(System.getenv("CARDS_PATH") + anime);
-			if (!f.exists()) throw new FileNotFoundException();
-			bytes = Helper.compress(f);
-			type = Helper.getOr(anime.toLowerCase(Locale.ROOT), "all") + ".7z";
+	HttpEntity<StreamingResponseBody> downloadCardImage(@RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+		boolean all = anime.equalsIgnoreCase("all");
+		if (all) {
+			anime = "";
 		} else {
-			File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
-			if (!f.exists()) throw new FileNotFoundException();
-			bytes = FileUtils.readFileToByteArray(f);
-			type = name.toLowerCase(Locale.ROOT) + ".png";
+			anime = anime.toUpperCase(Locale.ROOT);
 		}
 
+		File f = new File(System.getenv("CARDS_PATH") + anime);
+		if (!f.exists()) throw new FileNotFoundException();
+
+		File tmp = Helper.compressDir(f);
+		if (tmp == null) throw new FileNotFoundException();
+
 		ContentDisposition cd = ContentDisposition.attachment()
-				.filename("kawaipon-" + type)
+				.filename("kawaipon-" + anime.toLowerCase(Locale.ROOT) + ".7z")
 				.build();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		headers.setContentLength(bytes.length);
+		headers.setContentLength(Files.size(tmp.toPath()));
 		headers.setContentDisposition(cd);
 
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			return new HttpEntity<>((output) -> Helper.stream(bais, output), headers);
+		try (FileInputStream fis = new FileInputStream(tmp)) {
+			return new HttpEntity<>((output) -> Helper.stream(fis, output), headers);
+		} finally {
+			tmp.delete();
 		}
 	}
 
