@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.api.endpoint;
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -47,9 +48,14 @@ public class CommonHandler {
 		if (!f.exists()) throw new FileNotFoundException();
 		byte[] bytes = FileUtils.readFileToByteArray(f);
 
+		ContentDisposition cd = ContentDisposition.attachment()
+				.filename("collection-" + id + ".jpg")
+				.build();
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(method.equals("file") ? MediaType.APPLICATION_OCTET_STREAM : MediaType.IMAGE_JPEG);
 		headers.setContentLength(bytes.length);
+		headers.setContentDisposition(cd);
 
 		return new HttpEntity<>(bytes, headers);
 	}
@@ -69,20 +75,28 @@ public class CommonHandler {
 
 			if (method.equals("file")) {
 				byte[] bytes;
+				String type;
 
 				if (anime.isBlank() || name.isBlank()) {
 					File f = new File(System.getenv("CARDS_PATH") + anime);
 					if (!f.exists()) throw new FileNotFoundException();
 					bytes = Helper.compress(f);
+					type = Helper.getOr(anime.toLowerCase(Locale.ROOT), "all") + ".tar.gz";
 				} else {
 					File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
 					if (!f.exists()) throw new FileNotFoundException();
 					bytes = FileUtils.readFileToByteArray(f);
+					type = name.toLowerCase(Locale.ROOT) + ".png";
 				}
+
+				ContentDisposition cd = ContentDisposition.attachment()
+						.filename("kawaipon-" + type)
+						.build();
 
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 				headers.setContentLength(bytes.length);
+				headers.setContentDisposition(cd);
 
 				return new HttpEntity<>(bytes, headers);
 			} else {
