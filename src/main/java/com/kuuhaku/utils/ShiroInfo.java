@@ -512,14 +512,14 @@ public class ShiroInfo {
 	public CustomAnswer getCustomAnswer(String guild, String msg) {
 		CustomAnswer ca = customAnswerCache.entrySet().parallelStream()
 				.filter(e -> e.getKey().getLeft().equals(guild))
-				.filter(e -> msg.contains(e.getKey().getRight()))
+				.filter(e -> msg.contains(e.getKey().getRight().toLowerCase(Locale.ROOT)))
 				.map(Map.Entry::getValue)
 				.map(RandomList::get)
 				.findFirst()
 				.orElse(null);
 
 		if (ca == null) return null;
-		return ca.isAnywhere() || msg.equals(ca.getTrigger()) ? ca : null;
+		return ca.isAnywhere() || msg.equalsIgnoreCase(ca.getTrigger()) ? ca : null;
 	}
 
 	public void registerCustomAnswer(CustomAnswer ca) {
