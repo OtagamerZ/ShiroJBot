@@ -213,7 +213,7 @@ public class ColorNameCommand implements Executable {
 								timeout.cancel(true);
 								timeout = null;
 
-								int prize = (int) (hit * Math.pow(1.075, hit));
+								int prize = (int) (hit * Math.pow(1.075, hit)) * 5;
 								channel.sendMessage("Você errou! Seu prêmio é de " + prize + " CR.").queue();
 
 								Account acc = AccountDAO.getAccount(author.getId());
