@@ -221,7 +221,7 @@ public class ShiroEvents extends ListenerAdapter {
 			rawMsgNoCommand = rawMsgNoPrefix.substring(commandName.length()).trim();
 		}
 
-		CustomAnswer ca = Main.getInfo().getCustomAnswer(guild.getId(), rawMessage);
+		CustomAnswer ca = Main.getInfo().getCustomAnswer(guild.getId(), rawMessage.toLowerCase(Locale.ROOT));
 
 		if (ca != null) {
 			Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
