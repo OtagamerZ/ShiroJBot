@@ -51,14 +51,9 @@ public class CommonHandler {
 		if (!f.exists()) throw new FileNotFoundException();
 		byte[] bytes = FileUtils.readFileToByteArray(f);
 
-		ContentDisposition cd = ContentDisposition.attachment()
-				.filename("collection-" + id + ".jpg")
-				.build();
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(method.equals("file") ? MediaType.APPLICATION_OCTET_STREAM : MediaType.IMAGE_JPEG);
 		headers.setContentLength(bytes.length);
-		headers.setContentDisposition(cd);
 
 		return new HttpEntity<>(bytes, headers);
 	}
