@@ -109,7 +109,6 @@ dependencies {
 
 	//Wrappers
 	implementation group: "com.graphql-java", name: "graphql-java", version: "2019-05-08T02-56-27-cca4316"
-	implementation group: "com.github.twitch4j", name: "twitch4j", version: "1.1.0"
 	implementation group: "com.github.philippheuer.events4j", name: "events4j", version: "0.6.0"
 	implementation group: "org.discordbots", name: "DBL-Java-Library", version: "2.0.1"
 
