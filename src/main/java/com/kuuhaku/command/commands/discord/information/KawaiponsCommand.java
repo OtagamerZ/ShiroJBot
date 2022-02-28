@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -82,15 +83,15 @@ public class KawaiponsCommand implements Executable {
 
                     EmbedBuilder eb = new ColorlessEmbedBuilder();
                     int count = collection.size();
-                    int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+                    int foil = kp.getFoilCards().size();
                     int common = kp.getCards().size() - foil;
 
                     eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
-                    eb.addField(":books: | Coleções completas:", count + " de " + CardDAO.getValidAnime().size() + " (" + Helper.prcntToInt(count, CardDAO.getValidAnime().size()) + "%)", true);
-                    eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.getTotalCards() + " (" + Helper.prcntToInt(common, CardDAO.getTotalCards()) + "%)", true);
-                    eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.getTotalCards() + " (" + Helper.prcntToInt(foil, CardDAO.getTotalCards()) + "%)", true);
+                    eb.addField(":books: | Coleções completas:", count + " de " + CardDAO.getValidAnime().size() + " (" + Helper.prcntToInt(count, CardDAO.getValidAnime().size(), RoundingMode.DOWN) + "%)", true);
+                    eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.getTotalCards() + " (" + Helper.prcntToInt(common, CardDAO.getTotalCards(), RoundingMode.DOWN) + "%)", true);
+                    eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.getTotalCards() + " (" + Helper.prcntToInt(foil, CardDAO.getTotalCards(), RoundingMode.DOWN) + "%)", true);
                     eb.setImage("attachment://cards.jpg");
-                    eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.getTotalCards() * 2) + "%");
+                    eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.getTotalCards() * 2, RoundingMode.DOWN) + "%");
 
                     m.delete().queue();
                     channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "jpg")).queue();
@@ -207,9 +208,9 @@ public class KawaiponsCommand implements Executable {
         String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
         eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")")
                 .setDescription("[Clique aqui](%s) para abrir a imagem no navegador\nSe estiver borrada, [clique aqui](%s)".formatted(url, url + "&m=file"))
-                .addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true)
-                .addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true)
-                .setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%")
+                .addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l, RoundingMode.DOWN) + "%)", true)
+                .addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l, RoundingMode.DOWN) + "%)", true)
+                .setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2, RoundingMode.DOWN) + "%")
                 .setImage(url);
         m.delete().queue();
 
