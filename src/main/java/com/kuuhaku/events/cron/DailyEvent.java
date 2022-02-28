@@ -41,7 +41,7 @@ public class DailyEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		Calendar c = Calendar.getInstance();
-		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			AccountDAO.punishHoarders();
 			AccountDAO.resetRolls();
 		}
