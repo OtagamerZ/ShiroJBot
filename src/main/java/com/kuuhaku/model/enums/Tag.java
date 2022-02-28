@@ -21,7 +21,6 @@ package com.kuuhaku.model.enums;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Emote;
@@ -63,28 +62,28 @@ public enum Tag {
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 500000),
 
 	CARTAS_NORMAIS_25(TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons normais.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(k -> !k.isFoil()).count() * 100 / CardDAO.getTotalCards(), 25, 50)),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards(), 0.25, 0.5)),
 
 	CARTAS_NORMAIS_50(TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons normais.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(k -> !k.isFoil()).count() * 100 / CardDAO.getTotalCards(), 50, 75)),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards(), 0.5, 0.75)),
 
 	CARTAS_NORMAIS_75(TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons normais.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(k -> !k.isFoil()).count() * 100 / CardDAO.getTotalCards(), 75, 100)),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards(), 0.75, 1)),
 
 	CARTAS_NORMAIS_100(TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons normais.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(k -> !k.isFoil()).count() * 100 / CardDAO.getTotalCards() == 100),
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards() >= 1),
 
 	CARTAS_CROMADAS_25(TagIcons.FOIL25, "Usuário que completou 25% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.getTotalCards(), 25, 50)),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards(), 0.25, 0.5)),
 
 	CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.getTotalCards(), 50, 75)),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards(), 0.5, 0.75)),
 
 	CARTAS_CROMADAS_75(TagIcons.FOIL75, "Usuário que completou 75% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.getTotalCards(), 75, 100)),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards(), 0.75, 1)),
 
 	CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.getTotalCards() == 100),
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards() >= 1),
 
 	CLA_VITORIOSO(TagIcons.CLAN_CHAMPION, "Seu clã está em primeiro lugar.",
 			(user, member) -> {
