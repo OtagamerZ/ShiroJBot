@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.internal.entities.UserById;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -160,7 +161,7 @@ public abstract class GlobalGame {
 	}
 
 	public User getCurrent() {
-		return handler.getUserById(board.getPlayers().getCurrent().getId());
+		return Helper.getOr(handler.getUserById(board.getPlayers().getCurrent().getId()), new UserById(0));
 	}
 
 	public User getPlayerById(String id) {
