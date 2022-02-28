@@ -25,12 +25,14 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.collections4.BidiMap;
@@ -55,6 +57,7 @@ import java.util.function.Consumer;
 		aliases = {"colormatch", "namethecolor", "combinacor"},
 		category = Category.FUN
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class ColorNameCommand implements Executable {
 	private static final BidiMap<String, Integer> colors = new TreeBidiMap<>(Map.of(
 			"azul", 0x3C63FF,
