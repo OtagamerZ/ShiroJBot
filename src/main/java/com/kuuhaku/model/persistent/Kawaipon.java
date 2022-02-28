@@ -28,6 +28,7 @@ import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
@@ -79,6 +80,18 @@ public class Kawaipon implements Cloneable {
 
 	public Set<KawaiponCard> getCards() {
 		return cards;
+	}
+
+	public Set<KawaiponCard> getNormalCards() {
+		return cards.stream()
+				.filter(kc -> !kc.isFoil())
+				.collect(Collectors.toSet());
+	}
+
+	public Set<KawaiponCard> getFoilCards() {
+		return cards.stream()
+				.filter(KawaiponCard::isFoil)
+				.collect(Collectors.toSet());
 	}
 
 	public void setCards(Set<KawaiponCard> cards) {

@@ -633,6 +633,10 @@ public class Champion implements Drawable, Cloneable {
 		return (int) Helper.roundTrunc(d * parFac * 100, 5) / 100;
 	}
 
+	public int getDodge() {
+		return getDodge(false);
+	}
+
 	public double getModDodge() {
 		return mDodge;
 	}
@@ -670,6 +674,10 @@ public class Champion implements Drawable, Cloneable {
 				.sum();
 		double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
 		return (int) d;
+	}
+
+	public int getBlock() {
+		return getBlock(false);
 	}
 
 	public double getModBlock() {

@@ -1111,7 +1111,15 @@ public abstract class Helper {
 	}
 
 	public static int prcntToInt(float value, float max) {
-		return Math.round((value * 100) / max);
+		return prcntToInt(value, max, RoundingMode.UNNECESSARY);
+	}
+
+	public static int prcntToInt(float value, float max, RoundingMode mode) {
+		return (int) switch (mode) {
+			case UP, CEILING, HALF_UP -> Math.ceil((value * 100) / max);
+			case DOWN, FLOOR, HALF_DOWN -> Math.floor((value * 100) / max);
+			case HALF_EVEN, UNNECESSARY -> Math.round((value * 100) / max);
+		};
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, String token) {
@@ -2092,8 +2100,8 @@ public abstract class Helper {
 	}
 
 	public static CardStatus checkStatus(Kawaipon kp) {
-		int normalCount = (int) kp.getCards().stream().filter(cd -> !cd.isFoil()).count();
-		int foilCount = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+		int normalCount = kp.getNormalCards().size();
+		int foilCount = kp.getFoilCards().size();
 		int total = (int) CardDAO.getTotalCards();
 
 		if (normalCount + foilCount == total * 2) return CardStatus.NO_CARDS;
