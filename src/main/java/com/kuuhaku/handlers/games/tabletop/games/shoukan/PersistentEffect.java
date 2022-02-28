@@ -21,7 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectConsumer;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectFunction;
 import com.kuuhaku.utils.Helper;
 
 import java.util.Objects;
@@ -31,13 +31,13 @@ public class PersistentEffect implements Cloneable {
 	private final Drawable card;
 	private final String source;
 	private final Set<EffectTrigger> triggers;
-	private final EffectConsumer effect;
+	private final EffectFunction effect;
 	private final Side target;
 	private final boolean debuff;
 	private Integer turns;
 	private Integer limit;
 
-	public PersistentEffect(Drawable card, String source, EffectConsumer effect, Side target, boolean debuff, Integer turns, Integer limit, EffectTrigger... triggers) {
+	public PersistentEffect(Drawable card, String source, EffectFunction effect, Side target, boolean debuff, Integer turns, Integer limit, EffectTrigger... triggers) {
 		this.card = card;
 		this.source = source;
 		this.triggers = Set.of(triggers);
@@ -60,12 +60,12 @@ public class PersistentEffect implements Cloneable {
 		return triggers;
 	}
 
-	public EffectConsumer getEffect() {
+	public EffectFunction getEffect() {
 		return effect;
 	}
 
 	public void activate(Side side, int index) {
-		Boolean valid = effect.accept(side, index, (turns != null && turns == 0) || (limit != null && limit == 1));
+		Boolean valid = effect.apply(side, index, (turns != null && turns == 0) || (limit != null && limit == 1));
 		if (Helper.getOr(valid, true) && limit != null && limit > 0) limit--;
 	}
 
