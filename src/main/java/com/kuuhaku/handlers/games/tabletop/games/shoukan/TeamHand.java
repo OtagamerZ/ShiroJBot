@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArcadeMode;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -105,46 +106,46 @@ public class TeamHand extends Hand {
 
 			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
 
-			if (game.getCustom() != null) {
-				if (game.getCustom().getBoolean("semequip"))
-					deque.removeIf(d -> d instanceof Equipment);
-				if (game.getCustom().getBoolean("semcampo"))
-					deque.removeIf(d -> d instanceof Field);
+			if (game.getRules().noEquip())
+				deque.removeIf(d -> d instanceof Equipment e && !e.isSpell());
+			if (game.getRules().noSpell())
+				deque.removeIf(d -> d instanceof Equipment e && e.isSpell());
+			if (game.getRules().noField())
+				deque.removeIf(d -> d instanceof Field);
 
-				switch (game.getCustom().getString("arcade")) {
-					case "roleta" -> {
-						for (Drawable d : deque) {
-							if (d instanceof Champion c) {
-								c.setRawEffect("""
-																		%s
-										if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-											int rng = Math.round(Math.random() * 100);
-											if (rng < 25) {
-												Hand h = ep.getHands().get(ep.getSide());
-												h.setHp(h.getHp() / 2);
-											} else if (rng < 50) {
-												Hand h = ep.getHands().get(ep.getSide().getOther());
-												h.setHp(h.getHp() / 2);
-											}
+			switch (game.getRules().arcade()) {
+				case ROULETTE -> {
+					for (Drawable d : deque) {
+						if (d instanceof Champion c) {
+							c.setRawEffect("""
+																	%s
+									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
+										int rng = Math.round(Math.random() * 100);
+										if (rng < 25) {
+											Hand h = ep.getHands().get(ep.getSide());
+											h.setHp(h.getHp() / 2);
+										} else if (rng < 50) {
+											Hand h = ep.getHands().get(ep.getSide().getOther());
+											h.setHp(h.getHp() / 2);
 										}
-										""".formatted(Helper.getOr(c.getRawEffect(), "")));
-							}
+									}
+									""".formatted(Helper.getOr(c.getRawEffect(), "")));
 						}
 					}
-					case "blackrock" -> {
-						deque.removeIf(d -> d instanceof Champion || d instanceof Field);
-						for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
-							Champion c = CardDAO.getChampion(name);
-							deque.addAll(Collections.nCopies(6, c));
-						}
+				}
+				case BLACKROCK -> {
+					deque.removeIf(d -> d instanceof Champion || d instanceof Field);
+					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
+						Champion c = CardDAO.getChampion(name);
+						deque.addAll(Collections.nCopies(6, c));
 					}
-					case "instakill" -> deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
-					case "cardmaster" -> {
-						deque.clear();
-						deque.addAll(CardDAO.getAllChampions(false));
-						deque.addAll(CardDAO.getAllAvailableEquipments());
-						deque.addAll(CardDAO.getAllAvailableFields());
-					}
+				}
+				case INSTAKILL -> deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
+				case CARDMASTER -> {
+					deque.clear();
+					deque.addAll(CardDAO.getAllChampions(false));
+					deque.addAll(CardDAO.getAllAvailableEquipments());
+					deque.addAll(CardDAO.getAllAvailableFields());
 				}
 			}
 
@@ -181,23 +182,14 @@ public class TeamHand extends Hand {
 			}
 		}
 
-		int baseHp;
-		int baseManaPerTurn;
-		int maxCards;
-		if (game.getCustom() != null) {
-			setMana(Helper.clamp(game.getCustom().getInt("mana", 0), 0, 20));
-			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 9999);
-			maxCards = Helper.clamp(game.getCustom().getInt("cartasmax", 5), 1, 10);
-			baseManaPerTurn = Helper.clamp(game.getCustom().getInt("manapt", 5), 1, 20);
+		int baseHp = game.getRules().baseHp();
+		int baseManaPerTurn = game.getRules().baseManaPerTurn();
+		int maxCards = game.getRules().maxCards();
 
-			if (game.getCustom().getString("arcade").equals("instakill")) {
-				baseHp = 1;
-			}
-		} else {
-			setMana(0);
-			baseHp = 5000;
-			maxCards = 5;
-			baseManaPerTurn = 5;
+		setMana(game.getRules().mana());
+
+		if (game.getRules().arcade() == ArcadeMode.INSTAKILL) {
+			baseHp = 1;
 		}
 
 		int hpMod = combo.getLeft() == Race.DEMON ? -1500 : 0;

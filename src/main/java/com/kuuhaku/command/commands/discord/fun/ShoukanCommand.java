@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.MatchMaking;
@@ -79,7 +80,14 @@ public class ShoukanCommand implements Executable {
 		Deck d = KawaiponDAO.getDeck(author.getId());
 
 		if (practice) {
-			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText), new JSONObject());
+			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
+			Rules rules;
+			if (!custom.isEmpty()) {
+				rules = new Rules(custom);
+			} else {
+				rules = new Rules();
+			}
+
 			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
 
 			if (!daily && d.hasInvalidDeck(channel)) return;
@@ -91,7 +99,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, false, null, author, author);
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, false, null, author, author);
 			t.start();
 		} else if (ranked) {
 			if (d.isNovice()) {
@@ -259,7 +267,7 @@ public class ShoukanCommand implements Executable {
 										}
 
 										//Main.getInfo().getGames().put(id, t);
-										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, null, false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
+										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
 										s.delete().queue(null, Helper::doNothing);
 										t.start();
 									}
@@ -289,12 +297,19 @@ public class ShoukanCommand implements Executable {
 			boolean daily = Helper.findParam(args, "daily", "diario");
 
 			int bet = 0;
-			JSONObject custom = Helper.findJson(argsAsText);
+			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
+			Rules rules;
+			if (!custom.isEmpty()) {
+				rules = new Rules(custom);
+			} else {
+				rules = new Rules();
+			}
+
 			if (!team) {
 				Account uacc = AccountDAO.getAccount(author.getId());
 				Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
-				if (args.length > 1 && StringUtils.isNumeric(args[1]) && custom == null) {
+				if (args.length > 1 && StringUtils.isNumeric(args[1]) && rules.official()) {
 					bet = Integer.parseInt(args[1]);
 					if (bet < 0) {
 						channel.sendMessage(I18n.getString("err_invalid-credit-amount")).queue();
@@ -370,7 +385,7 @@ public class ShoukanCommand implements Executable {
 										if (accepted.size() == players.size()) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											//Main.getInfo().getGames().put(id, t);
-											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, true, null, players.toArray(User[]::new));
+											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, true, null, players.toArray(User[]::new));
 											s.delete().queue(null, Helper::doNothing);
 											t.start();
 										}
@@ -402,7 +417,7 @@ public class ShoukanCommand implements Executable {
 										}
 
 										//Main.getInfo().getGames().put(id, t);
-										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, custom, daily, false, true, null, author, message.getMentionedUsers().get(0));
+										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
 										s.delete().queue(null, Helper::doNothing);
 										t.start();
 									}
