@@ -621,7 +621,7 @@ public class TeamHand extends Hand {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		for (int i = 0; i < cards.size(); i++) {
-			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			g2d.drawImage(cards.get(i).drawCard(isBlinded()), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			if (cards.get(i).isAvailable())
 				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
 		}
