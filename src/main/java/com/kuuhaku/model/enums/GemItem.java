@@ -115,9 +115,15 @@ public enum GemItem {
 			}
 	),
 	SEED_REROLL(
-			"Aleatorizar seed", "Aleatoriza a seed do seu herói atual (altera missões, efeitos e perks disponíveis)",
+			"Aleatorizar seed (max: 3 por semana)", "Aleatoriza a seed do seu herói atual (altera missões, efeitos e perks disponíveis)",
 			1,
 			(mb, chn, args) -> {
+				Account acc = AccountDAO.getAccount(mb.getId());
+				if (acc.getWeeklyRolls() <= 0) {
+					chn.sendMessage("❌ | Você não possui rolls semanais restantes.").queue();
+					return false;
+				}
+
 				Hero h = KawaiponDAO.getHero(mb.getId());
 				if (h == null) {
 					chn.sendMessage("❌ | Você não possui ou não selecionou um herói.").queue();
