@@ -14,14 +14,14 @@ public class CacheManager {
 	private final DB db = DBMaker.memoryDB().make();
 
 	private final HTreeMap<String, byte[]> cardCache = db.hashMap("card", Serializer.STRING, Serializer.BYTE_ARRAY)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
+			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
 			.counterEnable()
 			.create();
 
 	private final HTreeMap<String, byte[]> resourceCache = db.hashMap("resource", Serializer.STRING, Serializer.BYTE_ARRAY)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
+			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
 			.counterEnable()
