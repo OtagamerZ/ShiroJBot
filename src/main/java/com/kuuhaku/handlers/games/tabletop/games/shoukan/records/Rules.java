@@ -80,8 +80,8 @@ public record Rules(
 			sb.appendNewLine("**Debug** ");
 		if (arcade != def.arcade)
 			sb.appendNewLine("**Arcade:** " + StringUtils.capitalize(arcade.name().toLowerCase(Locale.ROOT)));
-		if (test != def.test)
-			sb.appendNewLine("**Cartas iniciais:** " + Helper.getOr(test, new JSONArray()).stream()
+		if (!Helper.getOr(test, new JSONArray()).isEmpty())
+			sb.appendNewLine("**Cartas iniciais:** " + test.stream()
 					.map(s -> Objects.requireNonNull(CardDAO.getCard(String.valueOf(s))).getName())
 					.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())));
 		if (official != def.official)
