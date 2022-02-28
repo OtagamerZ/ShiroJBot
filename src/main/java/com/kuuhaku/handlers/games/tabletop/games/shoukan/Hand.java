@@ -73,6 +73,7 @@ public class Hand {
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int nullTime = 0;
+	private int blindTime = 0;
 	private int hideMana = 0;
 	private float healingFac = 1;
 	private int bleeding = 0;
@@ -559,7 +560,7 @@ public class Hand {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		for (int i = 0; i < cards.size(); i++) {
-			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			g2d.drawImage(cards.get(i).drawCard(isBlinded()), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			if (cards.get(i).isAvailable())
 				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
 		}
@@ -880,6 +881,26 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
+	}
+
+	public int getBlindTime() {
+		return blindTime;
+	}
+
+	public boolean isBlinded() {
+		return blindTime > 0;
+	}
+
+	public void setBlindTime(int blindTime) {
+		this.blindTime = blindTime;
+	}
+
+	public void addBlindTime(int time) {
+		blindTime += time;
+	}
+
+	public void decreaseBlindTime() {
+		blindTime = Math.max(0, blindTime - 1);
 	}
 
 	public int getHiddenMana() {
