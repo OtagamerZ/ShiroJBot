@@ -43,6 +43,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -61,12 +62,15 @@ public class TutorialCommand implements Executable {
 			return;
 		}
 
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		AtomicInteger stage = new AtomicInteger(acc.getTutorialStage());
-		AtomicReference<Runnable> r = new AtomicReference<>(() -> {
+		AtomicBoolean finished = new AtomicBoolean();
+		Runnable r = () -> {
 			acc.setTutorialStage(stage.get());
 			AccountDAO.saveAccount(acc);
 			Main.getInfo().getIgnore().remove(author.getId());
-		});
+			Main.getInfo().getConfirmationPending().remove(author.getId());
+		};
 		try {
 			AtomicReference<CompletableFuture<Boolean>> next = new AtomicReference<>();
 			Message msg;
@@ -81,9 +85,9 @@ public class TutorialCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -107,9 +111,9 @@ public class TutorialCommand implements Executable {
 						5, TimeUnit.MINUTES, () -> {
 							{
 								next.get().complete(false);
-								if (r.get() != null) {
-									r.get().run();
-									r.set(null);
+								if (!finished.get()) {
+									finished.set(true);
+									r.run();
 								}
 							}
 						}
@@ -130,9 +134,9 @@ public class TutorialCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -173,9 +177,9 @@ public class TutorialCommand implements Executable {
 						},
 						5, TimeUnit.MINUTES, () -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -199,9 +203,9 @@ public class TutorialCommand implements Executable {
 						},
 						5, TimeUnit.MINUTES, () -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -221,9 +225,9 @@ public class TutorialCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -246,9 +250,9 @@ public class TutorialCommand implements Executable {
 						},
 						5, TimeUnit.MINUTES, () -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -271,9 +275,9 @@ public class TutorialCommand implements Executable {
 						},
 						5, TimeUnit.MINUTES, () -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -296,9 +300,9 @@ public class TutorialCommand implements Executable {
 						},
 						5, TimeUnit.MINUTES, () -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -318,9 +322,9 @@ public class TutorialCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -340,9 +344,9 @@ public class TutorialCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
-							if (r.get() != null) {
-								r.get().run();
-								r.set(null);
+							if (!finished.get()) {
+								finished.set(true);
+								r.run();
 							}
 						}
 				);
@@ -350,6 +354,8 @@ public class TutorialCommand implements Executable {
 				if (!next.get().get()) return;
 				msg.delete().queue(null, Helper::doNothing);
 				stage.getAndIncrement();
+
+				Main.getInfo().getConfirmationPending().remove(author.getId());
 
 				acc.addSCredit(25000, this.getClass());
 				acc.completeTutorial();

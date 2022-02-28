@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.managers.CacheManager;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.JDA;
@@ -52,8 +53,8 @@ import java.util.concurrent.Executors;
 public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShiroInfo info;
 	private static CommandManager cmdManager;
+	private static CacheManager cacheManager;
 	private static ShardManager shiroShards;
-	private static JDA tet;
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
 
@@ -71,6 +72,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		cmdManager = new CommandManager();
+		cacheManager = new CacheManager();
 
 		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
 
@@ -176,8 +178,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return cmdManager;
 	}
 
-	public static void setCommandManager(CommandManager manager) {
-		Main.cmdManager = manager;
+	public static CacheManager getCacheManager() {
+		return cacheManager;
 	}
 
 	public static void shutdown() {
@@ -198,10 +200,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static JDA getDefaultShard() {
 		return shiroShards.getShardById(0);
-	}
-
-	public static JDA getTet() {
-		return tet;
 	}
 
 	@Override
