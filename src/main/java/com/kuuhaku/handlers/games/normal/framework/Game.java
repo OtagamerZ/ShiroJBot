@@ -20,12 +20,14 @@ package com.kuuhaku.handlers.games.normal.framework;
 
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.internal.entities.UserById;
 
 import java.util.Map;
 import java.util.Objects;
@@ -103,7 +105,7 @@ public abstract class Game {
 	}
 
 	public User getCurrent() {
-		return handler.getUserById(table.getPlayers().getCurrent().getId());
+		return Helper.getOr(handler.getUserById(table.getPlayers().getCurrent().getId()), new UserById(0));
 	}
 
 	public User getPlayerById(String id) {
