@@ -39,12 +39,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "cartasrestantes",
@@ -75,8 +75,7 @@ public class RemainingCardsCommand implements Executable {
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		List<Page> pages = new ArrayList<>();
-		List<Card> collected = kp.getCards().stream()
-				.filter(c -> !c.isFoil())
+		List<Card> collected = kp.getNormalCards().stream()
 				.map(KawaiponCard::getCard)
 				.filter(c -> c.getAnime().equals(anime))
 				.toList();
@@ -88,7 +87,7 @@ public class RemainingCardsCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime);
-		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcntToInt(collected.size(), cards.size())) + "%)", false);
+		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + Helper.prcntToInt(collected.size(), cards.size(), RoundingMode.DOWN) + "%)", false);
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < cards.size(); i++) {
