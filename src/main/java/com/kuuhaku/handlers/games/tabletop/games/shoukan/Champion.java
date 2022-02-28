@@ -138,7 +138,7 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
-		boolean debug = game != null && Helper.getOr(game.getCustom(), new JSONObject()).getBoolean("debug");
+		boolean debug = game != null && game.getRules().debug();
 
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();

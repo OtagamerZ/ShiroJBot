@@ -207,13 +207,17 @@ public abstract class GlobalGame {
 	}
 
 	public void close() {
+		close(false);
+	}
+
+	public void close(boolean ignoreCustom) {
 		if (closed) return;
 		closed = true;
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
 		executor.shutdownNow();
 
-		if (round > 0 && custom == null) {
+		if (round > 0 && (custom == null || ignoreCustom)) {
 			history.setRanked(ranked);
 			history.setWo(wo);
 			MatchDAO.saveMatch(history);

@@ -85,6 +85,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private final Map<Side, Pair<Race, Race>> combos;
 	private final GameChannel channel;
 	private final Arena arena;
+	private final Rules rules;
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -118,8 +119,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	private GameState oldState = null;
 
-	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
-		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
+	public Shoukan(ShardManager handler, GameChannel channel, int bet, Rules rules, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
+		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, new JSONObject(rules));
+		this.rules = rules;
 		this.channel = channel;
 		this.team = players.length == 4;
 		this.record = record;
@@ -155,13 +157,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Side.BOTTOM, hands.get(Side.BOTTOM).getCombo()
 		);
 
-		if (custom == null) {
+		if (rules == null || tourMatch != null) {
 			getHistory().setPlayers(Map.of(
 					players[0].getId(), Side.TOP,
 					players[1].getId(), Side.BOTTOM
 			));
 		} else {
-			if (custom.getString("arcade").equals("blackrock")) {
+			if (rules.arcade() == ArcadeMode.BLACKROCK) {
 				Field f = CardDAO.getField(switch (Helper.rng(5)) {
 					case 0 -> "THE_SKY_GATES";
 					case 1 -> "THE_CUBE";
@@ -175,8 +177,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				arena.setField(f);
 			}
 
-			if (custom.has("test") && ShiroInfo.getStaff().contains(players[0].getId())) {
-				for (Object o : custom.getJSONArray("test")) {
+			if (ShiroInfo.getStaff().contains(players[0].getId())) {
+				for (Object o : rules.test()) {
 					String id = String.valueOf(o).toUpperCase(Locale.ROOT);
 					CardType type = CardDAO.identifyType(id);
 
@@ -226,7 +228,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							);
 				},
 				s -> {
-					if (custom == null) {
+					if (rules == null || tourMatch != null) {
 						if (ranked) {
 							MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(getCurrent().getId());
 							mmr.block(30, ChronoUnit.MINUTES);
@@ -1067,7 +1069,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean applyDamage = !(defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano")));
+			boolean applyDamage = !(defr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage());
 			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
@@ -1152,7 +1154,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (you.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean applyDamage = !(atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano")));
+			boolean applyDamage = !(atkr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage());
 			int dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 
 			if (you.getMana() > 0) {
@@ -1258,7 +1260,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (h == null || h.getHitpoints() == 0) {
 				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 
-				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
 					op.removeHp(dmg);
 					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
 						you.addHp(op.getDamageDelta() / 10);
@@ -1294,7 +1296,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (h == null || h.getHitpoints() == 0) {
 				you.addBleeding(Math.round(defr.getBldAtk() * fac));
 
-				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
+				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
 					you.removeHp(dmg);
 				}
 
@@ -1850,6 +1852,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		return combos;
 	}
 
+	public Rules getRules() {
+		return rules;
+	}
+
 	public SlotColumn getFirstAvailableSlot(Side s, boolean top) {
 		List<SlotColumn> slots = arena.getSlots().get(s);
 		for (SlotColumn slt : slots) {
@@ -1896,7 +1902,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				}
 
-				if (getCustom() == null) {
+				if (rules.official()) {
 					getHistory().setWinner(op.getSide());
 					getBoard().awardWinner(this, op.getUser().getId());
 				}
@@ -2149,7 +2155,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				if (!h.manualDraw()) {
-					if (getCustom() == null) {
+					if (rules.official()) {
 						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 					}
@@ -2202,7 +2208,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				int toDraw = Math.min(remaining, h.getRealDeque().size());
 				if (toDraw == 0) {
-					if (getCustom() == null) {
+					if (rules.official()) {
 						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 					}
@@ -2548,10 +2554,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					oldState = new GameState(this);
 				}
 			});
-		if (phase == Phase.PLAN && (getCustom() != null || getRound() > 8)) {
+		if (phase == Phase.PLAN && (!rules.official() || getRound() > 8)) {
 			buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 				if (forfeit) {
-					if (getCustom() == null) {
+					if (rules.official()) {
 						getHistory().setWinner(getNextSide());
 						getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 					}
@@ -3014,13 +3020,13 @@ public class Shoukan extends GlobalGame implements Serializable {
 				hands.get(getCurrentSide()),
 				arena.getSlots().get(getCurrentSide())
 		);
-		super.close();
+		super.close(rules.official());
 
 		for (Map.Entry<Side, EnumSet<Achievement>> e : achievements.entrySet()) {
 			e.getValue().removeIf(a -> a.isInvalid(this, e.getKey(), true));
 		}
 
-		if (!draw && getCustom() == null) {
+		if (!draw && rules.official()) {
 			for (Side s : Side.values()) {
 				Hand h = hands.get(s);
 				if (h instanceof TeamHand th) {

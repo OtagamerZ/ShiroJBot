@@ -145,63 +145,56 @@ public class Hand {
 		);
 		if (hero != null) deque.add(hero.toChampion());
 
-		int baseHp;
-		int baseManaPerTurn;
-		int maxCards;
-		if (game.getCustom() != null) {
-			mana = Helper.clamp(game.getCustom().getInt("mana", 0), 0, 20);
-			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 9999);
-			maxCards = Helper.clamp(game.getCustom().getInt("cartasmax", 5), 1, 10);
-			baseManaPerTurn = Helper.clamp(game.getCustom().getInt("manapt", 5), 1, 20);
+		int baseHp = game.getRules().baseHp();
+		int baseManaPerTurn = game.getRules().baseManaPerTurn();
+		int maxCards = game.getRules().maxCards();
 
-			if (game.getCustom().getBoolean("semequip"))
-				getRealDeque().removeIf(d -> d instanceof Equipment);
-			if (game.getCustom().getBoolean("semcampo"))
-				getRealDeque().removeIf(d -> d instanceof Field);
+		mana = game.getRules().mana();
 
-			switch (game.getCustom().getString("arcade")) {
-				case "roleta" -> {
-					for (Drawable d : deque) {
-						if (d instanceof Champion c) {
-							c.setRawEffect("""
-																%s
-									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-										int rng = Math.round(Math.random() * 100);
-										if (rng < 25) {
-											Hand h = ep.getHands().get(ep.getSide());
-											h.setHp(h.getHp() / 2);
-										} else if (rng < 50) {
-											Hand h = ep.getHands().get(ep.getSide().getOther());
-											h.setHp(h.getHp() / 2);
-										}
+		if (game.getRules().noEquip())
+			getRealDeque().removeIf(d -> d instanceof Equipment e && !e.isSpell());
+		if (game.getRules().noSpell())
+			getRealDeque().removeIf(d -> d instanceof Equipment e && e.isSpell());
+		if (game.getRules().noField())
+			getRealDeque().removeIf(d -> d instanceof Field);
+
+		switch (game.getRules().arcade()) {
+			case ROULETTE -> {
+				for (Drawable d : deque) {
+					if (d instanceof Champion c) {
+						c.setRawEffect("""
+															%s
+								if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
+									int rng = Math.round(Math.random() * 100);
+									if (rng < 25) {
+										Hand h = ep.getHands().get(ep.getSide());
+										h.setHp(h.getHp() / 2);
+									} else if (rng < 50) {
+										Hand h = ep.getHands().get(ep.getSide().getOther());
+										h.setHp(h.getHp() / 2);
 									}
-									""".formatted(Helper.getOr(c.getRawEffect(), "")));
-						}
+								}
+								""".formatted(Helper.getOr(c.getRawEffect(), "")));
 					}
-				}
-				case "blackrock" -> {
-					deque.removeIf(d -> d instanceof Champion || d instanceof Field);
-					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
-						Champion c = CardDAO.getChampion(name);
-						deque.addAll(Collections.nCopies(6, c));
-					}
-				}
-				case "instakill" -> {
-					deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
-					baseHp = 1;
-				}
-				case "cardmaster" -> {
-					deque.clear();
-					deque.addAll(CardDAO.getAllChampions(false));
-					deque.addAll(CardDAO.getAllAvailableEquipments());
-					deque.addAll(CardDAO.getAllAvailableFields());
 				}
 			}
-		} else {
-			mana = 0;
-			baseHp = 5000;
-			maxCards = 5;
-			baseManaPerTurn = 5;
+			case BLACKROCK -> {
+				deque.removeIf(d -> d instanceof Champion || d instanceof Field);
+				for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
+					Champion c = CardDAO.getChampion(name);
+					deque.addAll(Collections.nCopies(6, c));
+				}
+			}
+			case INSTAKILL -> {
+				deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
+				baseHp = 1;
+			}
+			case CARDMASTER -> {
+				deque.clear();
+				deque.addAll(CardDAO.getAllChampions(false));
+				deque.addAll(CardDAO.getAllAvailableEquipments());
+				deque.addAll(CardDAO.getAllAvailableFields());
+			}
 		}
 
 		if (combo.getRight() == Race.DIVINITY) {
@@ -235,8 +228,8 @@ public class Hand {
 		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
 		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
 		this.maxCards = Math.max(maxCards
-								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
-								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
+				+ (combo.getLeft() == Race.CREATURE ? 2 : 0)
+				+ (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
 		redrawHand();
 	}
 
