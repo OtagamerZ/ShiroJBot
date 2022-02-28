@@ -1090,9 +1090,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHitpoints() == 0) {
+				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+
 				if (applyDamage) {
 					op.removeHp(dmg);
-					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
 						you.addHp(op.getDamageDelta() / 10);
 					}
@@ -1167,9 +1168,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHitpoints() == 0) {
+				you.addBleeding(Math.round(defr.getBldAtk() * fac));
+
 				if (applyDamage) {
 					you.removeHp(dmg);
-					you.addBleeding(Math.round(defr.getBldAtk() * fac));
 				}
 
 				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
@@ -1254,9 +1256,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHitpoints() == 0) {
+				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
+
 				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					op.removeHp(dmg);
-					op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
 						you.addHp(op.getDamageDelta() / 10);
 					}
@@ -1289,9 +1292,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (h == null || h.getHitpoints() == 0) {
+				you.addBleeding(Math.round(defr.getBldAtk() * fac));
+
 				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || (getCustom() != null && getCustom().getBoolean("semdano"))) {
 					you.removeHp(dmg);
-					you.addBleeding(Math.round(defr.getBldAtk() * fac));
 				}
 
 				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
