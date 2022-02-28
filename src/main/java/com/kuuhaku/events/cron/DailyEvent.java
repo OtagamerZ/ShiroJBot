@@ -43,6 +43,7 @@ public class DailyEvent implements Job {
 		Calendar c = Calendar.getInstance();
 		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
 			AccountDAO.punishHoarders();
+			AccountDAO.resetRolls();
 		}
 
 		if (c.get(Calendar.DAY_OF_MONTH) == 1) {
