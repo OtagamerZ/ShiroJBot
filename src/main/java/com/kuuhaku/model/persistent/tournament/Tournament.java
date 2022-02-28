@@ -18,9 +18,11 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
@@ -43,6 +45,9 @@ public class Tournament {
 
 	@Column(columnDefinition = "TEXT")
 	private String description = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String customRules = "{}";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int seed = new Random().nextInt();
@@ -96,6 +101,18 @@ public class Tournament {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getCustomRulesRaw() {
+		return customRules;
+	}
+
+	public Rules getCustomRules() {
+		return JSONUtils.fromJSON(customRules, Rules.class);
+	}
+
+	public void setCustomRules(Rules customRules) {
+		this.customRules = JSONUtils.toJSON(customRules);
 	}
 
 	public void setDescription(String description) {

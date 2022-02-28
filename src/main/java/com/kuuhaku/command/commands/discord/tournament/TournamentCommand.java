@@ -105,6 +105,10 @@ public class TournamentCommand implements Executable {
 					.addField("Jogadores: " + t.getParticipants().size(), t.isClosed() ? "" : "O tamanho do torneio pode variar de acordo com a quantidade de participantes", false)
 					.setImage("attachment://brackets.jpg");
 
+			String rules = t.getCustomRules().toString();
+			if (!rules.isBlank())
+				eb.addField("Regras adicionais:", rules, false);
+
 			if (t.isClosed())
 				channel.sendMessageEmbeds(eb.build())
 						.addFile(Helper.writeAndGet(t.view(), "brackets", "jpg"))
