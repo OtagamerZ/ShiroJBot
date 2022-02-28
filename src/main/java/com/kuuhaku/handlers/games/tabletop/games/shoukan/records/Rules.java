@@ -81,7 +81,7 @@ public record Rules(
 		if (arcade != def.arcade)
 			sb.appendNewLine("**Arcade:** " + StringUtils.capitalize(arcade.name().toLowerCase(Locale.ROOT)));
 		if (test != def.test)
-			sb.appendNewLine("**Cartas iniciais:** " + test.stream()
+			sb.appendNewLine("**Cartas iniciais:** " + Helper.getOr(test, new JSONArray()).stream()
 					.map(s -> Objects.requireNonNull(CardDAO.getCard(String.valueOf(s))).getName())
 					.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())));
 		if (official != def.official)
