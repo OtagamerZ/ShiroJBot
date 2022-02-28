@@ -98,8 +98,8 @@ public class BotStats {
 		specialEventCount = Main.getInfo().getSpecialEvent().size();
 		currentCardCount = Main.getInfo().getCurrentCard().size();
 		currentDropCount = Main.getInfo().getCurrentDrop().size();
-		cardCacheCount = Main.getInfo().getCardCache().size();
-		resourceCacheCount = Main.getInfo().getResourceCache().size();
+		cardCacheCount = Main.getCacheManager().getCardCache().size();
+		resourceCacheCount = Main.getCacheManager().getResourceCache().size();
 
 		return this;
 	}

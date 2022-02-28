@@ -1223,8 +1223,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		Set<Permission> required = EnumSet.of(Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS);
 
-		if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS) && h.size() >= gc.getNoSpamAmount() && guild.getSelfMember().canInteract(member)) {
+		if (guild.getSelfMember().hasPermission(required) && h.size() >= gc.getNoSpamAmount() && guild.getSelfMember().canInteract(member)) {
 			TextChannel ch = (TextChannel) channel;
 
 			ch.deleteMessagesByIds(h.stream()
@@ -1244,7 +1245,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 			List<PermissionOverrideAction> act = new ArrayList<>();
 			for (TextChannel chn : guild.getTextChannels()) {
-				act.add(chn.putPermissionOverride(member).deny(Helper.ALL_MUTE_PERMISSIONS));
+				if (guild.getSelfMember().hasPermission(chn, required)) {
+					act.add(chn.putPermissionOverride(member).deny(Helper.ALL_MUTE_PERMISSIONS));
+				}
 			}
 
 			RestAction.allOf(act)
