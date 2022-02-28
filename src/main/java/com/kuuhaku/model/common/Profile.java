@@ -33,7 +33,7 @@ import com.kuuhaku.utils.Helper;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
