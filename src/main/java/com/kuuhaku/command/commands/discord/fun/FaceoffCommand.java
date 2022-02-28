@@ -81,8 +81,9 @@ public class FaceoffCommand implements Executable {
 						return;
 
 					if (start.get() == 0) {
-						channel.sendMessage("Você atirou antes da hora! Você perdeu.").queue();
+						win.set(true);
 						close();
+						channel.sendMessage("Você foi apressado demais e derrubou a arma no chão.").queue();
 						return;
 					}
 
