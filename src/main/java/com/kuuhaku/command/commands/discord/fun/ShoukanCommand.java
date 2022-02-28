@@ -363,7 +363,7 @@ public class ShoukanCommand implements Executable {
 				for (User player : players) {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
-				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
+				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (players.contains(wrapper.getUser())) {
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
@@ -401,7 +401,7 @@ public class ShoukanCommand implements Executable {
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				int finalBet = bet;
-				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : ""))
+				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
