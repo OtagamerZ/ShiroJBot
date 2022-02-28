@@ -35,8 +35,8 @@ import com.kuuhaku.model.records.RaidData;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.*;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.tuple.Pair;
@@ -200,9 +200,7 @@ public class ShiroInfo {
 	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, KawaiponCard> currentCard = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Prize<?>> currentDrop = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
-	private final ExpiringMap<String, byte[]> cardCache = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
-	private final ExpiringMap<String, byte[]> resourceCache = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
-	private final RefreshingMap<Pair<String, String>, RandomList<CustomAnswer>> customAnswerCache = new RefreshingMap<>(() -> {
+	private final Map<Pair<String, String>, RandomList<CustomAnswer>> customAnswerCache = new RefreshingMap<>(() -> {
 		List<CustomAnswer> cas = CustomAnswerDAO.getCustomAnswers();
 		Map<Pair<String, String>, RandomList<CustomAnswer>> out = new HashMap<>();
 
@@ -481,14 +479,6 @@ public class ShiroInfo {
 		return currentDrop;
 	}
 
-	public ExpiringMap<String, byte[]> getCardCache() {
-		return cardCache;
-	}
-
-	public ExpiringMap<String, byte[]> getResourceCache() {
-		return resourceCache;
-	}
-
 	public ExpiringMap<String, Boolean> getRatelimit() {
 		return ratelimit;
 	}
@@ -505,12 +495,14 @@ public class ShiroInfo {
 		return shoukanSlot;
 	}
 
-	public RefreshingMap<Pair<String, String>, RandomList<CustomAnswer>> getCustomAnswerCache() {
+	public Map<Pair<String, String>, RandomList<CustomAnswer>> getCustomAnswerCache() {
 		return customAnswerCache;
 	}
 
 	public CustomAnswer getCustomAnswer(String guild, String msg) {
-		CustomAnswer ca = customAnswerCache.entrySet().parallelStream()
+		Map<Pair<String, String>, RandomList<CustomAnswer>> cas = Map.copyOf(customAnswerCache);
+
+		CustomAnswer ca = cas.entrySet().parallelStream()
 				.filter(e -> e.getKey().getLeft().equals(guild))
 				.filter(e -> msg.contains(e.getKey().getRight().toLowerCase(Locale.ROOT)))
 				.map(Map.Entry::getValue)
