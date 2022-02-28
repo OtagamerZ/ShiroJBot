@@ -83,6 +83,9 @@ public class Account {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tutorialStage = 0;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 3")
+	private int weeklyRolls = 3;
+
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
 
@@ -272,6 +275,14 @@ public class Account {
 
 	public boolean hasCompletedTutorial() {
 		return tutorial != null;
+	}
+
+	public int getWeeklyRolls() {
+		return weeklyRolls;
+	}
+
+	public void setWeeklyRolls(int weeklyRolls) {
+		this.weeklyRolls = weeklyRolls;
 	}
 
 	public boolean hasNoviceDeck() {

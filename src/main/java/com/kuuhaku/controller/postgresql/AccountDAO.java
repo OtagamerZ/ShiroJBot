@@ -139,4 +139,14 @@ public class AccountDAO {
 
 		em.close();
 	}
+
+	public static void resetRolls() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("UPDATE Account a SET weeklyRolls = 3").executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }
