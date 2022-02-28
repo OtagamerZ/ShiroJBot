@@ -70,7 +70,7 @@ import org.apache.commons.imaging.formats.gif.GifImageMetadataItem;
 import org.apache.commons.imaging.formats.gif.GifImageParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;

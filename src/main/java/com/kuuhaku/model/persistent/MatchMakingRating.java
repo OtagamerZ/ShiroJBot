@@ -26,8 +26,8 @@ import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.*;
 import java.time.ZoneId;
