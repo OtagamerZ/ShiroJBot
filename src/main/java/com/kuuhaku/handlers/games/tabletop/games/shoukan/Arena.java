@@ -257,7 +257,7 @@ public class Arena {
 						} else if (h.getRegeneration() > 0) {
 							g2d.setColor(new Color(0, 153, 89));
 							Profile.drawOutlinedText(
-									"(-" + h.getRegeneration() + ")",
+									"(+" + h.getRegeneration() + ")",
 									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(+" + h.getRegeneration() + ")"),
 									key == Side.TOP ? 82 : 1638, g2d
 							);
