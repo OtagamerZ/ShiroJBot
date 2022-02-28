@@ -36,32 +36,38 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 	public AutoEmbedBuilder(Embed embed) {
 		e = embed;
 
-		if (e.title() != null)
+		if (e.title() != null) {
 			setTitle(
 					StringUtils.abbreviate(e.title().name(), MessageEmbed.TITLE_MAX_LENGTH),
 					e.title().url()
 			);
+		}
 
-		if (e.author() != null)
+		if (e.author() != null) {
 			setAuthor(
 					StringUtils.abbreviate(e.author().name(), MessageEmbed.AUTHOR_MAX_LENGTH),
 					e.author().url(),
 					e.author().icon()
 			);
+		}
 
 		setColor(e.getParsedColor());
 		setDescription(Helper.getOr(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH), Helper.VOID));
 		setThumbnail(e.thumbnail());
-		if (e.image() != null)
+		if (e.image() != null) try {
 			setImage(e.image().getRandomImage());
-		if (e.showDate())
+		} catch (IllegalArgumentException ignore) {
+		}
+		if (e.showDate()) {
 			setTimestamp(OffsetDateTime.now(ZoneId.of("GMT-3")));
+		}
 
-		if (e.footer() != null)
+		if (e.footer() != null) {
 			setFooter(
 					StringUtils.abbreviate(e.footer().name(), MessageEmbed.TEXT_MAX_LENGTH),
 					e.footer().icon()
 			);
+		}
 
 		if (e.fields() != null) {
 			List<Field> fields = e.fields();

@@ -2764,7 +2764,7 @@ public abstract class Helper {
 	}
 
 	public static BufferedImage getResourceAsImage(Class<?> klass, String path) {
-		byte[] bytes = Main.getInfo().getResourceCache().computeIfAbsent(path, s -> {
+		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(path, s -> {
 			InputStream is = klass.getClassLoader().getResourceAsStream(path);
 
 			if (is == null) return new byte[0];
