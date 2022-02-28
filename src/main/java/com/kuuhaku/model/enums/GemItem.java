@@ -130,6 +130,9 @@ public enum GemItem {
 					return false;
 				}
 
+				acc.setWeeklyRolls(acc.getWeeklyRolls() - 1);
+				AccountDAO.saveAccount(acc);
+
 				h.randomizeSeed();
 				KawaiponDAO.saveHero(h);
 
