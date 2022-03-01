@@ -500,7 +500,7 @@ public class ShiroInfo {
 	}
 
 	public CustomAnswer getCustomAnswer(String guild, String msg) {
-		Map<Pair<String, String>, RandomList<CustomAnswer>> cas = Map.copyOf(customAnswerCache);
+		Map<Pair<String, String>, RandomList<CustomAnswer>> cas = new HashMap<>(customAnswerCache);
 
 		CustomAnswer ca = cas.entrySet().parallelStream()
 				.filter(e -> e.getKey().getLeft().equals(guild))
