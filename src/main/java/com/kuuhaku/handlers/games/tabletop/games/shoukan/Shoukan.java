@@ -2732,6 +2732,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
 		if (persistentEffects.size() > 0) {
+			boolean lastTick = Helper.equalsAny(trigger, ON_WIN, ON_LOSE, ON_GLOBAL_WIN, ON_GLOBAL_LOSE);
+
 			Set<PersistentEffect> efs = Set.copyOf(persistentEffects).stream()
 					.peek(e -> {
 						if (!e.isExpired()) {
@@ -2755,7 +2757,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			Helper.replaceContent(efs, persistentEffects);
 
-			return postCombat();
+			return !lastTick && postCombat();
 		}
 
 		return false;
