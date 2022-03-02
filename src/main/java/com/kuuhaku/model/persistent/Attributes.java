@@ -156,7 +156,7 @@ public class Attributes {
 	}
 
 	public int calcMp(Hero h, Champion ref) {
-		return (int) (1 + (ref == null ? 0 : ref.getMana() * 0.75) + Math.max(0,
+		return (int) (1 + (ref == null ? 0 : ref.getMana(5) * 0.75) + Math.max(0,
 				str * 0.275
 				+ res * 0.15
 				+ agi * 0.0175
