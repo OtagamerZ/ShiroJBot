@@ -28,7 +28,6 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 
@@ -395,6 +394,10 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void setCharms(String charms) {
 		this.charms = charms;
+	}
+
+	public void setCharms(List<Charm> charms) {
+		this.charms = charms.toString();
 	}
 
 	public Set<String> getTags() {
