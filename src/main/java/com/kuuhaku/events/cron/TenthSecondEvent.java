@@ -25,6 +25,7 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -135,7 +136,7 @@ public class TenthSecondEvent implements Job {
 								Main.getShiroShards(),
 								new GameChannel(p1.channel(), p2.channel()),
 								0,
-								null,
+								new Rules(),
 								false,
 								true,
 								true,
@@ -205,7 +206,7 @@ public class TenthSecondEvent implements Job {
 								Main.getShiroShards(),
 								new GameChannel(p1.channel(), p2.channel()),
 								0,
-								null,
+								new Rules(),
 								false,
 								true,
 								true,
