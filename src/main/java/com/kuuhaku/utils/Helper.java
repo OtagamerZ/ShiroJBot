@@ -3460,12 +3460,14 @@ public abstract class Helper {
 	}
 
 	public static <T> void replaceContent(Collection<T> from, Collection<T> to) {
-		to.clear();
+		to.removeAll(from);
 		to.addAll(from);
 	}
 
 	public static <K, V> void replaceContent(Map<K, V> from, Map<K, V> to) {
-		to.clear();
+		for (K key : from.keySet()) {
+			from.remove(key);
+		}
 		to.putAll(from);
 	}
 

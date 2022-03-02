@@ -43,6 +43,8 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 @Entity
@@ -344,7 +346,7 @@ public class Account {
 							voteCheck.complete(voted);
 						});
 
-						return voteCheck.get();
+						return voteCheck.get(1, TimeUnit.MINUTES);
 					}
 
 					return false;
@@ -359,12 +361,12 @@ public class Account {
 						voteCheck.complete(voted);
 					});
 
-					return voteCheck.get();
+					return voteCheck.get(1, TimeUnit.MINUTES);
 				}
 
 				return false;
 			}
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			return false;
 		}
 	}
