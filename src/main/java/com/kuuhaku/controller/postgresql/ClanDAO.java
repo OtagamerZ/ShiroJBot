@@ -28,6 +28,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 public class ClanDAO {
 	public static Clan getClan(String name) {
@@ -86,10 +87,10 @@ public class ClanDAO {
 	public static List<Clan> getUnpaidClans() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT c FROM Clan c WHERE EXTRACT(MONTH FROM c.paidRent) < EXTRACT(MONTH FROM CURRENT_DATE AT TIME ZONE 'GMT-3')", Clan.class);
+		Query q = em.createQuery("SELECT c FROM Clan c", Clan.class);
 
 		try {
-			return (List<Clan>) q.getResultList();
+			return ((Stream<Clan>) q.getResultStream()).filter(c -> !c.hasPaidRent()).toList();
 		} finally {
 			em.close();
 		}
