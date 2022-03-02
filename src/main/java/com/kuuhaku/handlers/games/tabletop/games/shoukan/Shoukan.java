@@ -2725,9 +2725,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 		persistentEffects.add(pe);
 	}
 
-	@SuppressWarnings("SuspiciousMethodCalls")
 	public void removePersistentEffect(Drawable card) {
-		persistentEffects.remove(card);
+		persistentEffects.removeIf(pe -> pe.getCard().equals(card));
+	}
+
+	public void removePersistentEffect(String source) {
+		persistentEffects.removeIf(pe -> pe.getSource().equals(source));
 	}
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
