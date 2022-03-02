@@ -389,7 +389,7 @@ public class Hero implements Cloneable {
         setEnergy(energy - val);
     }
 
-    public int getMp() {
+    public int getMana() {
         double mpModif = 1;
         for (Perk perk : perks) {
             mpModif *= switch (perk) {
@@ -486,7 +486,7 @@ public class Hero implements Cloneable {
         Champion ref = CardDAO.getChampion(effect);
         Champion c = new Champion(
                 new Card(uid, name, new AddedAnime("HERO", true), KawaiponRarity.ULTIMATE, image),
-                race, getMp(), getBlood(), getAtk(), getDef(), getDescription(), ref == null ? null : ref.getRawEffect()
+                race, getMana(), getBlood(), getAtk(), getDef(), getDescription(), ref == null ? null : ref.getRawEffect()
         );
         c.setAcc(AccountDAO.getAccount(uid));
         c.setHero(this);
