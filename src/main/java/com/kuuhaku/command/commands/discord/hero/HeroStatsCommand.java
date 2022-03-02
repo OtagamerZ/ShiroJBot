@@ -170,7 +170,7 @@ public class HeroStatsCommand implements Executable {
 								h.getBlock(),
 								h.getMaxHp(),
 								h.getMaxEnergy(),
-								h.getMp(),
+								h.getMana(),
 								h.getStats().calcInventoryCap(),
 								h.getStats().calcEvoTierCap()
 						),
