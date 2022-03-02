@@ -97,7 +97,17 @@ public class TeamHand extends Hand {
 			this.accs.add(acc);
 			this.heroes.add(hero);
 
-			Consumer<Drawable> bonding = d -> d.bind(this);
+			Consumer<Drawable> bonding = d -> {
+				d.bind(this);
+
+				if (getCombo().getRight() == Race.DIVINITY) {
+					if (d instanceof Champion c && !c.hasEffect() && !c.isFusion()) {
+						String[] de = CardDAO.getRandomEffect(c.getMana());
+						c.setAltDescription(de[0]);
+						c.setAltEffect(de[1]);
+					}
+				}
+			};
 			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)
 					.map(Drawable::copy)
@@ -166,20 +176,6 @@ public class TeamHand extends Hand {
 			this.decks.add(deque);
 			this.destinyDecks.add(destinyDeck);
 			this.cards.add(new BondedList<>(bonding));
-		}
-
-		if (combo.getRight() == Race.DIVINITY) {
-			for (LinkedList<Drawable> deque : decks) {
-				for (Drawable d : deque) {
-					if (d instanceof Champion c) {
-						if (!c.hasEffect()) {
-							String[] de = CardDAO.getRandomEffect(c.getMana());
-							c.setDescription(de[0]);
-							c.setRawEffect(de[1]);
-						}
-					}
-				}
-			}
 		}
 
 		int baseHp = game.getRules().baseHp();
