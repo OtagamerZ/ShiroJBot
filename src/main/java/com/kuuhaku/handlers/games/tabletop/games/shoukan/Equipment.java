@@ -98,6 +98,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient int altTier = -1;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
+	private transient String altCharms = null;
 
 	public Equipment() {
 	}
@@ -386,18 +387,19 @@ public class Equipment implements Drawable, Cloneable {
 
 	public List<Charm> getCharms() {
 		if (charms == null) return List.of();
+		else if (altCharms == null) altCharms = charms;
 
-		return new JSONArray(charms).stream()
+		return new JSONArray(altCharms).stream()
 				.map(o -> Charm.valueOf(String.valueOf(o)))
 				.collect(Collectors.toList());
 	}
 
-	public void setCharms(String charms) {
-		this.charms = charms;
+	public void setAltCharms(String charms) {
+		this.altCharms = charms;
 	}
 
-	public void setCharms(List<Charm> charms) {
-		this.charms = charms.toString();
+	public void setAltCharms(List<Charm> charms) {
+		this.altCharms = charms.toString();
 	}
 
 	public Set<String> getTags() {
