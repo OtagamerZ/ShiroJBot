@@ -32,6 +32,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Command(
 		name = "compilar",
@@ -51,11 +53,17 @@ public class CompileCommand implements Executable {
 				try {
 					String code = argsAsText.replaceAll("```groovy|```", "");
 
-					GroovyShell gs = new GroovyShell();
-					gs.setVariable("msg", message);
-					gs.evaluate(code);
+					Future<GroovyShell> fut = ShiroInfo.getCompilationPool().submit(() -> {
+						GroovyShell gs = new GroovyShell();
+						gs.setVariable("msg", message);
+						gs.evaluate(code);
 
-					return Pair.of(String.valueOf(gs.getVariable("out")), System.currentTimeMillis() - start);
+						return gs;
+					});
+
+					return Pair.of(String.valueOf(fut.get(10, TimeUnit.MINUTES).getVariable("out")), System.currentTimeMillis() - start);
+				} catch (TimeoutException e) {
+					return Pair.of("Tempo limite de execução excedido", -1L);
 				} catch (Exception e) {
 					Throwable t = e;
 					while (t.getCause() != null) {
