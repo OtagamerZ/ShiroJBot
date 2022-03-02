@@ -117,7 +117,6 @@ public class PersistentEffect implements Cloneable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		else if (o == null) return false;
-		else if (o instanceof Drawable) return card.equals(o);
 		else if (getClass() != o.getClass()) return false;
 
 		PersistentEffect that = (PersistentEffect) o;
