@@ -840,19 +840,23 @@ public class Hand {
 	}
 
 	public void setSuppressTime(int time) {
-		this.suppressTime = time;
+		this.suppressTime = Math.max(this.suppressTime, time);
 	}
 
 	public void decreaseSuppression() {
 		suppressTime = Math.max(0, suppressTime - 1);
 	}
 
+	public void decreaseSuppression(int value) {
+		suppressTime = Math.max(0, suppressTime - value);
+	}
+
 	public int getLockTime() {
 		return lockTime;
 	}
 
-	public void setLockTime(int lockTime) {
-		this.lockTime = lockTime;
+	public void setLockTime(int time) {
+		this.lockTime = Math.max(this.lockTime, time);
 	}
 
 	public void addLockTime(int time) {
@@ -863,6 +867,10 @@ public class Hand {
 		lockTime = Math.max(0, lockTime - 1);
 	}
 
+	public void decreaseLockTime(int value) {
+		lockTime = Math.max(0, lockTime - value);
+	}
+
 	public int getNullTime() {
 		return nullTime;
 	}
@@ -871,8 +879,8 @@ public class Hand {
 		return nullTime > 0;
 	}
 
-	public void setNullTime(int nullTime) {
-		this.nullTime = nullTime;
+	public void setNullTime(int time) {
+		this.nullTime = Math.max(this.nullTime, time);
 	}
 
 	public void addNullTime(int time) {
@@ -883,6 +891,10 @@ public class Hand {
 		nullTime = Math.max(0, nullTime - 1);
 	}
 
+	public void decreaseNullTime(int value) {
+		nullTime = Math.max(0, nullTime - value);
+	}
+
 	public int getBlindTime() {
 		return blindTime;
 	}
@@ -891,8 +903,8 @@ public class Hand {
 		return blindTime > 0;
 	}
 
-	public void setBlindTime(int blindTime) {
-		this.blindTime = blindTime;
+	public void setBlindTime(int time) {
+		this.blindTime = Math.max(this.blindTime, time);
 	}
 
 	public void addBlindTime(int time) {
@@ -903,6 +915,10 @@ public class Hand {
 		blindTime = Math.max(0, blindTime - 1);
 	}
 
+	public void decreaseBlindTime(int value) {
+		blindTime = Math.max(0, blindTime - value);
+	}
+
 	public int getHiddenMana() {
 		return hideMana;
 	}
@@ -911,8 +927,8 @@ public class Hand {
 		return hideMana > 0 || isNullMode();
 	}
 
-	public void setHiddenMana(int hideMana) {
-		this.hideMana = hideMana;
+	public void setHiddenMana(int time) {
+		this.hideMana = Math.max(this.hideMana, time);
 	}
 
 	public void addHiddenMana(int time) {
@@ -921,6 +937,10 @@ public class Hand {
 
 	public void decreaseHiddenMana() {
 		hideMana = Math.max(0, hideMana - 1);
+	}
+
+	public void decreaseHiddenMana(int value) {
+		hideMana = Math.max(0, hideMana - value);
 	}
 
 	public float getBaseHealingFac() {
