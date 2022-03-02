@@ -499,11 +499,12 @@ public class Equipment implements Drawable, Cloneable {
 		bonus = new Bonus();
 		linkedTo = null;
 		index = new AtomicInteger(-2);
+		altTier = -1;
 		altAtk = -1;
 		altDef = -1;
-		altTier = -1;
 		altDescription = null;
 		altEffect = null;
+		altCharms = null;
 	}
 
 	@Override
