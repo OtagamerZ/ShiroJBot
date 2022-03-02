@@ -887,7 +887,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				reportEvent(h,
 						"%s atacou diretamente, causando %s de dano!%s%s".formatted(
 								ally.getName(),
-								power,
+								op.getDamageDelta(),
 								getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
 								extra > 0
 										? " (dano direto aumentado em " + extra + ")"
@@ -1124,7 +1124,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						defr.getName(),
 						yPower,
 						hPower,
-						dmg,
+						op.getDamageDelta(),
 						extra > 0
 								? " (dano direto aumentado em " + extra + ")"
 								: extra < 0
@@ -1196,7 +1196,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						atkr.getName(),
 						defr.getName(),
 						yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower),
-						dmg,
+						you.getDamageDelta(),
 						extra > 0
 								? " (dano direto aumentado em " + extra + ")"
 								: extra < 0
