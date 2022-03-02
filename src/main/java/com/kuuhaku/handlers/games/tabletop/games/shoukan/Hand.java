@@ -109,7 +109,17 @@ public class Hand {
 			this.hero = null;
 		}
 
-		Consumer<Drawable> bonding = d -> d.bind(this);
+		Consumer<Drawable> bonding = d -> {
+			d.bind(this);
+
+			if (getCombo().getRight() == Race.DIVINITY) {
+				if (d instanceof Champion c && !c.hasEffect() && !c.isFusion()) {
+					String[] de = CardDAO.getRandomEffect(c.getMana());
+					c.setAltDescription(de[0]);
+					c.setAltEffect(de[1]);
+				}
+			}
+		};
 		this.deque = new BondedList<>(bonding);
 		this.cards = new BondedList<>(bonding);
 		this.destinyDeck = new BondedList<>(bonding);
@@ -195,18 +205,6 @@ public class Hand {
 				deque.addAll(CardDAO.getAllChampions(false));
 				deque.addAll(CardDAO.getAllAvailableEquipments());
 				deque.addAll(CardDAO.getAllAvailableFields());
-			}
-		}
-
-		if (combo.getRight() == Race.DIVINITY) {
-			for (Drawable d : deque) {
-				if (d instanceof Champion c) {
-					if (!c.hasEffect()) {
-						String[] de = CardDAO.getRandomEffect(c.getMana());
-						c.setDescription(de[0]);
-						c.setRawEffect(de[1]);
-					}
-				}
 			}
 		}
 
