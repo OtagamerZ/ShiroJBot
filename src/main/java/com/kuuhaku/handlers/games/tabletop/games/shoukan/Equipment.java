@@ -241,7 +241,7 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Override
 	public boolean isFlipped() {
-		return flipped;
+		return flipped || (linkedTo != null && linkedTo.asChampion().isFlipped());
 	}
 
 	@Override
