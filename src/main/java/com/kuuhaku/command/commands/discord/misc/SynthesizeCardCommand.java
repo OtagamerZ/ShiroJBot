@@ -140,6 +140,10 @@ public class SynthesizeCardCommand implements Executable {
 				if (blessed) {
 					pool = pool.subList(0, Math.min(10, pool.size()));
 				}
+				if (pool.isEmpty()) {
+					channel.sendMessage("❌ | Não há nenhuma síntese válida usando os materiais informados.").queue();
+					return;
+				}
 
 				Field f = Helper.getRandomEntry(pool);
 
@@ -190,6 +194,10 @@ public class SynthesizeCardCommand implements Executable {
 				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
 				if (blessed) {
 					pool = pool.subList(0, Math.min(10, pool.size()));
+				}
+				if (pool.isEmpty()) {
+					channel.sendMessage("❌ | Não há nenhuma síntese válida usando os materiais informados.").queue();
+					return;
 				}
 
 				Bag<Integer> bag = tributes.stream()
