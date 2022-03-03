@@ -497,7 +497,10 @@ public class TeamHand extends Hand {
 	}
 
 	public User getUser() {
-		return Main.getInfo().getUserByID(users.getCurrent());
+		User u = Main.getInfo().getUserByID(users.getCurrent());
+		if (!u.getId().equals(users.getCurrent())) return getUser();
+
+		return u;
 	}
 
 	public Account getAcc() {
