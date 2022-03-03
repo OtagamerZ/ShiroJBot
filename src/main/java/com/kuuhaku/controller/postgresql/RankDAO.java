@@ -32,7 +32,7 @@ public class RankDAO {
         Query q;
         if (guild == null) {
             q = em.createNativeQuery("""
-                    SELECT (row_number() OVER () + 15 * :page) || x.v AS v
+                    SELECT (row_number() OVER () + 45 * :page) || x.v AS v
                     FROM (
                              SELECT *
                              FROM (
@@ -40,15 +40,15 @@ public class RankDAO {
                                       FROM member mb
                                                INNER JOIN guildconfig gc ON gc.guildid = mb.sid
                                       WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
-                                      ORDER BY mb.xp DESC
+                                      ORDER BY ceil(sqrt(mb.xp / 100.0)) DESC, mb.xp DESC
                                   ) x
                              WHERE x.v IS NOT NULL
-                             LIMIT 15 OFFSET 15 * :page
+                             LIMIT 45 OFFSET 45 * :page
                          ) x
                     """);
         } else {
             q = em.createNativeQuery("""
-                    SELECT (row_number() OVER () + 15 * :page) || x.v AS v
+                    SELECT (row_number() OVER () + 45 * :page) || x.v AS v
                     FROM (
                              SELECT *
                              FROM (
@@ -57,10 +57,10 @@ public class RankDAO {
                                                INNER JOIN guildconfig gc ON gc.guildid = mb.sid
                                       WHERE gc.guildid = :guild
                                         AND NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = mb.uid)
-                                      ORDER BY mb.xp DESC
+                                      ORDER BY ceil(sqrt(mb.xp / 100.0)) DESC, mb.xp DESC
                                   ) x
                              WHERE x.v IS NOT NULL
-                             LIMIT 15 OFFSET 15 * :page
+                             LIMIT 45 OFFSET 45 * :page
                          ) x
                     """);
             q.setParameter("guild", guild);
@@ -81,7 +81,7 @@ public class RankDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createNativeQuery("""
-                SELECT (row_number() OVER () + 15 * :page) || x.v AS v
+                SELECT (row_number() OVER () + 45 * :page) || x.v AS v
                 FROM (
                          SELECT *
                          FROM (
@@ -91,7 +91,7 @@ public class RankDAO {
                                   ORDER BY a.balance DESC
                               ) x
                          WHERE x.v IS NOT NULL
-                         LIMIT 15 OFFSET 15 * :page
+                         LIMIT 45 OFFSET 45 * :page
                      ) x
                 """);
         q.setParameter("page", page);
@@ -110,7 +110,7 @@ public class RankDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createNativeQuery("""
-                SELECT (row_number() OVER () + 15 * :page) || x.v AS v
+                SELECT (row_number() OVER () + 45 * :page) || x.v AS v
                 FROM (
                          SELECT *
                          FROM (
@@ -126,7 +126,7 @@ public class RankDAO {
                                   ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
                               ) x
                          WHERE x.v IS NOT NULL
-                         LIMIT 15 OFFSET 15 * :page
+                         LIMIT 45 OFFSET 45 * :page
                      ) x
                 """);
         q.setParameter("page", page);
@@ -145,7 +145,7 @@ public class RankDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createNativeQuery("""
-                SELECT (row_number() OVER () + 15 * :page) || x.v AS v
+                SELECT (row_number() OVER () + 45 * :page) || x.v AS v
                 FROM (
                          SELECT *
                          FROM (
@@ -156,7 +156,7 @@ public class RankDAO {
                                   ORDER BY vt.time DESC
                               ) x
                          WHERE x.v IS NOT NULL
-                         LIMIT 15 OFFSET 15 * :page
+                         LIMIT 45 OFFSET 45 * :page
                      ) x
                 """);
         q.setParameter("guild", guild);
