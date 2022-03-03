@@ -92,6 +92,8 @@ public class RankCommand implements Executable {
 			m.delete().queue();
 			channel.sendMessageEmbeds(eb.build()).queue(s ->
 					Pages.lazyPaginate(s, i -> {
+						d.setIndex(i / 15);
+
 						if (d.isEmpty()) return null;
 						fillData(d, i, eb);
 
@@ -106,6 +108,8 @@ public class RankCommand implements Executable {
 
 		XStringBuilder sb = new XStringBuilder();
 		for (int i = 0; i < 15 || data.current() == null; i++) {
+			if (data.index() == 0) continue;
+
 			String line = data.current();
 			sb.appendNewLine(line);
 			data.next();
