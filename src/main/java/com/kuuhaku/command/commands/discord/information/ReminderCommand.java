@@ -50,7 +50,7 @@ public class ReminderCommand implements Executable {
 				.filter(s -> !s.isBlank())
 				.map(String::trim)
 				.toList();
-		if (params.size() < 2) {
+		if (params.isEmpty()) {
 			channel.sendMessage("❌ | Você precisa informar um tempo.").queue();
 			return;
 		}
