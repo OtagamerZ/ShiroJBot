@@ -3082,7 +3082,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						if (h.getHero() != null && tourMatch == null) {
 							Hero hr = KawaiponDAO.getHero(h.getAcc().getUid());
 
-							if (hr != null) {
+							if (hr != null && hr.equals(h.getHero())) {
 								if (isRanked() && Helper.chance(5)) {
 									h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
 									hr.addBonusPoints(2);
@@ -3116,7 +3116,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (h.getHero() != null && tourMatch == null) {
 						Hero hr = KawaiponDAO.getHero(h.getAcc().getUid());
 
-						if (hr != null) {
+						if (hr != null && hr.equals(h.getHero())) {
 							if (isRanked() && Helper.chance(5)) {
 								h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
 								hr.addBonusPoints(2);
