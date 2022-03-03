@@ -14,22 +14,26 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	private final ExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 	private final int loadEvery;
 	private int i = 0;
+	private int last = 0;
+
+	public LazyLoadingList(Function<Integer, List<T>> loader, int loadEvery) {
+		this.loader = loader;
+		this.loadEvery = loadEvery;
+		addAll(loader.apply(i));
+	}
 
 	public LazyLoadingList(int initialCapacity, Function<Integer, List<T>> loader, int loadEvery) {
 		super(initialCapacity);
 		this.loader = loader;
 		this.loadEvery = loadEvery;
-	}
-
-	public LazyLoadingList(Function<Integer, List<T>> loader, int loadEvery) {
-		this.loader = loader;
-		this.loadEvery = loadEvery;
+		addAll(loader.apply(i));
 	}
 
 	public LazyLoadingList(@NotNull Collection<? extends T> c, Function<Integer, List<T>> loader, int loadEvery) {
 		super(c);
 		this.loader = loader;
 		this.loadEvery = loadEvery;
+		addAll(loader.apply(i));
 	}
 
 	public T current() {
@@ -37,14 +41,15 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	}
 
 	public T next() {
-		if (++i % loadEvery == 0 || i >= size()) {
-			exec.submit(() -> loader.apply(i));
+		if (++i > last && (i % loadEvery == 0 || i >= size())) {
+			exec.submit(() -> addAll(loader.apply(i)));
 		}
 
 		if (i >= size()) {
 			return Helper.safeGet(this, i = size() - 1);
 		}
 
+		last = Math.max(last, i);
 		return Helper.safeGet(this, i);
 	}
 
