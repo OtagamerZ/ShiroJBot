@@ -1197,6 +1197,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 				if (applyDamage) {
 					you.removeHp(dmg);
+					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
+						you.addHp((op.getDamageDelta() - hBefore) / 10);
+					}
 				}
 
 				if (defr.getHero() != null && defr.getHero().getPerks().contains(Perk.REAPER)) {
@@ -1286,7 +1289,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
 					op.removeHp(dmg);
 					if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
-						you.addHp((op.getDamageDelta() - yBefore) / 10);
+						you.addHp((op.getDamageDelta() - hBefore) / 10);
 					}
 				}
 
