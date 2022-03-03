@@ -30,7 +30,6 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.UniqueList;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
@@ -408,6 +407,7 @@ public class Champion implements Drawable, Cloneable {
 		if (altAtk == -1) altAtk = atk;
 		float fBonus = 1;
 		float cBonus = 1;
+		float hBonus = 1;
 
 		if (game != null) {
 			Side s = game.getSideById(acc.getUid());
@@ -429,6 +429,16 @@ public class Champion implements Drawable, Cloneable {
 
 			if (combos.getRight() == Race.UNDEAD)
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
+
+			if (hero != null) {
+				for (Perk perk : hero.getPerks()) {
+					hBonus *= switch (perk) {
+						case MASOCHIST -> 1 + (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						case COWARD -> 1 - (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						default -> 1;
+					};
+				}
+			}
 		}
 
 		float extraFac = 1f;
@@ -443,6 +453,7 @@ public class Champion implements Drawable, Cloneable {
 		if (altDef == -1) altDef = def;
 		float fBonus = 1;
 		float cBonus = 1;
+		float hBonus = 1;
 
 		if (game != null) {
 			Side s = game.getSideById(acc.getUid());
@@ -464,6 +475,16 @@ public class Champion implements Drawable, Cloneable {
 
 			if (combos.getRight() == Race.SPIRIT)
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
+
+			if (hero != null) {
+				for (Perk perk : hero.getPerks()) {
+					hBonus *= switch (perk) {
+						case MASOCHIST -> 1 - (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						case COWARD -> 1 + (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						default -> 1;
+					};
+				}
+			}
 		}
 
 		float extraFac = 1f;

@@ -433,8 +433,6 @@ public class Hero implements Cloneable {
                 case VANGUARD -> 0.75;
                 case CARELESS -> 1.25;
                 case MANALESS -> 0.5;
-                case MASOCHIST -> 1 + (1 - Helper.prcnt(getHitpoints(), getMaxHp())) / 2;
-                case COWARD -> 1 - (1 - Helper.prcnt(getHitpoints(), getMaxHp())) / 2;
                 default -> 1;
             };
         }
@@ -449,8 +447,6 @@ public class Hero implements Cloneable {
                 case VANGUARD -> 1.15;
                 case CARELESS -> 0.66;
                 case MANALESS -> 0.5;
-                case MASOCHIST -> 1 - (1 - Helper.prcnt(getHitpoints(), getMaxHp())) / 2;
-                case COWARD -> 1 + (1 - Helper.prcnt(getHitpoints(), getMaxHp())) / 2;
                 default -> 1;
             };
         }
