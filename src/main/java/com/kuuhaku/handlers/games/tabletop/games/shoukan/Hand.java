@@ -449,7 +449,10 @@ public class Hand {
 	}
 
 	public User getUser() {
-		return Main.getInfo().getUserByID(acc.getUid());
+		User u = Main.getInfo().getUserByID(acc.getUid());
+		if (!u.getId().equals(acc.getUid())) return getUser();
+
+		return u;
 	}
 
 	public Map<Race, Long> getRaceCount() {
