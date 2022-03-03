@@ -178,6 +178,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return cmdManager;
 	}
 
+	public static void setCommandManager(CommandManager cmdManager) {
+		Main.cmdManager = cmdManager;
+	}
+
 	public static CacheManager getCacheManager() {
 		return cacheManager;
 	}
