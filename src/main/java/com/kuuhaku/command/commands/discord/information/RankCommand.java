@@ -92,7 +92,7 @@ public class RankCommand implements Executable {
 			m.delete().queue();
 			channel.sendMessageEmbeds(eb.build()).queue(s ->
 					Pages.lazyPaginate(s, i -> {
-						d.setIndex(i / 15);
+						d.setIndex(i * 15);
 
 						if (d.isEmpty()) return null;
 						fillData(d, i, eb);
