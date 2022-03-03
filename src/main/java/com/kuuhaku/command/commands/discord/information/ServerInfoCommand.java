@@ -51,8 +51,8 @@ public class ServerInfoCommand implements Executable {
 						Usuários: %s
 						Bots: %s
 						""".formatted(Helper.separate(guild.getMemberCount() - bots), bots), true)
-				.addField(":calendar: | Criado em", guild.getTimeCreated().format(Helper.dateFormat), true)
-				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Helper.dateFormat) : "Não lembro", true);
+				.addField(":calendar: | Criado em", guild.getTimeCreated().format(Helper.DATE_FORMAT), true)
+				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Helper.DATE_FORMAT) : "Não lembro", true);
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

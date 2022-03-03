@@ -37,7 +37,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "silenciar",
@@ -93,6 +92,7 @@ public class MuteMemberCommand implements Executable {
 		}
 
 		Member finalMb = mb;
+		argsAsText = String.join(" ", params);
 		String reason = argsAsText.replaceFirst("<@!?" + mb.getId() + ">|" + mb.getId(), "").trim();
 		if (reason.isBlank()) {
 			channel.sendMessage("❌ | Você precisa informar uma razão.").queue();

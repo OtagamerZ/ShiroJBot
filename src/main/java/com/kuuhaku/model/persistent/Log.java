@@ -57,7 +57,7 @@ public class Log {
 		this.usr = user.getAsTag();
 		this.uid = user.getId();
 		this.command = command;
-		this.timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+		this.timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.FULL_DATE_FORMAT);
 	}
 
 	public Log() {
