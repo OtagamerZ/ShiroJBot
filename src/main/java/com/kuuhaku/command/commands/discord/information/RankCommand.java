@@ -76,11 +76,11 @@ public class RankCommand implements Executable {
 					.setThumbnail("https://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
 			LazyLoadingList<String> d = new LazyLoadingList<>(i -> switch (type) {
-				default -> RankDAO.getLevelRanking(guild.getId(), i);
-				case 0 -> RankDAO.getLevelRanking(null, i);
-				case 1 -> RankDAO.getCreditRanking(i);
-				case 2 -> RankDAO.getCardRanking(i);
-				case 3 -> RankDAO.getVoiceRanking(guild.getId(), i);
+				default -> RankDAO.getLevelRanking(guild.getId(), i / 15);
+				case 0 -> RankDAO.getLevelRanking(null, i / 15);
+				case 1 -> RankDAO.getCreditRanking(i / 15);
+				case 2 -> RankDAO.getCardRanking(i / 15);
+				case 3 -> RankDAO.getVoiceRanking(guild.getId(), i / 15);
 			}, 30);
 
 			if (d.isEmpty()) {
