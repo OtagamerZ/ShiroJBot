@@ -903,18 +903,30 @@ public class Hand {
 
 	public void setBlindTime(int time) {
 		this.blindTime = Math.max(this.blindTime, time);
+		if (isBlinded()) {
+			Collections.shuffle(cards);
+		}
 	}
 
 	public void addBlindTime(int time) {
 		blindTime += time;
+		if (isBlinded()) {
+			Collections.shuffle(cards);
+		}
 	}
 
 	public void decreaseBlindTime() {
 		blindTime = Math.max(0, blindTime - 1);
+		if (isBlinded()) {
+			Collections.shuffle(cards);
+		}
 	}
 
 	public void decreaseBlindTime(int value) {
 		blindTime = Math.max(0, blindTime - value);
+		if (isBlinded()) {
+			Collections.shuffle(cards);
+		}
 	}
 
 	public int getHiddenMana() {
