@@ -66,7 +66,15 @@ public class PersistentEffect implements Cloneable {
 
 	public void activate(Side side, int index) {
 		Boolean valid = effect.apply(side, index, (turns != null && turns == 0) || (limit != null && limit == 1));
-		if (Helper.getOr(valid, true) && limit != null && limit > 0) limit--;
+		if (Helper.getOr(valid, true)) {
+			if (limit == null) {
+				if (turns == null) {
+					limit = 0;
+				}
+			} else if (limit > 0) {
+				limit--;
+			}
+		}
 	}
 
 	public Side getTarget() {
@@ -116,15 +124,13 @@ public class PersistentEffect implements Cloneable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		else if (o == null) return false;
-		else if (getClass() != o.getClass()) return false;
-
+		if (o == null || getClass() != o.getClass()) return false;
 		PersistentEffect that = (PersistentEffect) o;
-		return Objects.equals(card, that.card) && Objects.equals(source, that.source);
+		return debuff == that.debuff && Objects.equals(card, that.card) && Objects.equals(source, that.source) && target == that.target;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(card, source);
+		return Objects.hash(card, source, target, debuff);
 	}
 }
