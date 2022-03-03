@@ -466,7 +466,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (applyEffect(ON_EQUIP, t, getCurrentSide(), pos, new Source(t, getCurrentSide(), pos)))
 			return null;
 
-		if (copy.getCharms() != null) {
+		if (!copy.getCharms().isEmpty()) {
 			if (Helper.containsAny(copy.getCharms(), TIMEWARP, DOUBLETAP)) {
 				int uses = (int) Helper.getFibonacci(copy.getTier());
 
