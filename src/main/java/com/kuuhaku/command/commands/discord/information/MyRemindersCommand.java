@@ -69,7 +69,11 @@ public class MyRemindersCommand implements Executable {
 					Reminder rem = chunk.get(i);
 					eb.addField(
 							"`" + i + "` | " + rem.getNextReminder().format(Helper.FULL_DATE_FORMAT),
-							Helper.TIMESTAMP.formatted(now.plusSeconds(rem.getPeriod() / 1000).toEpochSecond()) + "\n\n" + StringUtils.abbreviate(rem.getDescription(), 100),
+							(Helper.TIMESTAMP + "%s\n\n%s").formatted(
+									now.plusSeconds(rem.getPeriod() / 1000).toEpochSecond(),
+									rem.isRepeating() ? " - RECORRENTE" : "",
+									StringUtils.abbreviate(rem.getDescription(), 100)
+							),
 							false
 					);
 				}

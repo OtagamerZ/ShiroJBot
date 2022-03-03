@@ -33,7 +33,7 @@ import java.util.Locale;
 @Command(
 		name = "lembrete",
 		aliases = {"reminder", "rem"},
-		usage = "req_period-repeating",
+		usage = "req_period-repeating-message",
 		category = Category.INFO
 )
 public class ReminderCommand implements Executable {
