@@ -64,7 +64,7 @@ public class WalletCommand implements Executable, Slashed {
 				)
 				.addField(
 						"Ultimo voto em:",
-						acc.getLastVoted() == null ? "Nunca" : Helper.fullDateFormat.format(acc.getLastVoted()),
+						acc.getLastVoted() == null ? "Nunca" : Helper.FULL_DATE_FORMAT.format(acc.getLastVoted()),
 						true
 				)
 				.setThumbnail("https://i.imgur.com/nhWckfq.png");

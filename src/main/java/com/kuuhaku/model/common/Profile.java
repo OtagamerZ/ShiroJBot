@@ -153,7 +153,7 @@ public class Profile {
 			if (c != null) {
 				String waifu = StringUtils.abbreviate(Unidecode.decode(Helper.getUsername(Member.getWaifu(m.getId()))), 20);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + waifu + " (" + c.getMarriedAt().format(Helper.dateFormat) + ")", 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + waifu + " (" + c.getMarriedAt().format(Helper.DATE_FORMAT) + ")", 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
