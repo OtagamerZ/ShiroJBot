@@ -139,7 +139,7 @@ public class MemberDAO {
 					FROM (
 							 SELECT m.uid
 								  , row_number() OVER (ORDER BY m.xp DESC) AS row
-							 FROM Member m
+							 FROM member m
 							 INNER JOIN guildconfig gc ON gc.guildid = m.sid
 							 WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = m.uid)
 						 ) x
@@ -151,7 +151,7 @@ public class MemberDAO {
 					FROM (
 							 SELECT m.uid
 								  , row_number() OVER (ORDER BY m.xp DESC) AS row
-							 FROM Member m
+							 FROM member m
 							 INNER JOIN guildconfig gc ON gc.guildid = m.sid
 							 WHERE NOT EXISTS(SELECT b.uid FROM blacklist b WHERE b.uid = m.uid)
 							   AND m.sid = :guild
