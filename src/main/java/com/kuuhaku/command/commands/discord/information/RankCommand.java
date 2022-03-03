@@ -107,7 +107,7 @@ public class RankCommand implements Executable {
 		eb.clearFields();
 
 		XStringBuilder sb = new XStringBuilder();
-		for (int i = 0; i < 15 || data.current() == null; i++) {
+		for (int i = 0; i < 15 && data.hasNext(); i++) {
 			if (data.index() == 0) {
 				data.next();
 				continue;
