@@ -55,13 +55,13 @@ public class ReminderCommand implements Executable {
 			return;
 		}
 
+		boolean repeating = argsAsText.toLowerCase(Locale.ROOT).contains("-r");
 		long time = Helper.stringToDurationMillis(argsAsText);
-		if (time < 60000) {
-			channel.sendMessage("❌ | O tempo deve ser maior que 1 minuto.").queue();
+		if (time < (repeating ? 600_000 : 60_000)) {
+			channel.sendMessage("❌ | O tempo deve ser maior que " + (repeating ? 10 : 1) + " minuto" + (repeating ? "s" : "") + ".").queue();
 			return;
 		}
 
-		boolean repeating = argsAsText.toLowerCase(Locale.ROOT).contains("-r");
 		String desc = String.join(" ", params);
 		if (desc.isBlank()) {
 			channel.sendMessage("❌ | Você precisa informar uma razão.").queue();
@@ -71,6 +71,6 @@ public class ReminderCommand implements Executable {
 		Reminder rem = new Reminder(author.getId(), desc, time, repeating);
 		ReminderDAO.saveReminder(rem);
 
-		channel.sendMessage("✅ | Lembrete criado com sucesso, use `" + prefix + "lembretes` para ver seu cronograma.").queue();
+		channel.sendMessage("✅ | Lembrete" + (repeating ? " **recorrente**" : "") + " criado com sucesso, use `" + prefix + "lembretes` para ver seu cronograma.").queue();
 	}
 }
