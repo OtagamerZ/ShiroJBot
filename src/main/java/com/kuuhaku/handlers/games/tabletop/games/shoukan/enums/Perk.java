@@ -36,7 +36,8 @@ public enum Perk {
 	PESSIMISTIC("Pessimista", "Possui 25% menos chance de ser penalizado ao falhar a missão."),
 	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
 	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva (2% esquiva = 1% bloqueio), ocorrendo o inverso em modo de defesa."),
-	SCHOLAR("Erudito", "Não pode ter equipamentos, mas recebe +2 slots de perk extras.")
+	SCHOLAR("Erudito", "Não pode ter equipamentos, mas recebe +2 slots de perk extras."),
+	TABULA_RASA("Tabula Rasa", "")
 	;
 
 	private final String name;

@@ -84,7 +84,7 @@ public class RankCommand implements Executable {
 			}, 30);
 
 			if (d.isEmpty()) {
-				channel.sendMessage("❌ | Não há dados para exibir ainda.").queue();
+				m.editMessage("❌ | Não há dados para exibir ainda.").queue();
 				return;
 			}
 			fillData(d, 0, eb);
