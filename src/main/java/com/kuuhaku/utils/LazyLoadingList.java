@@ -40,8 +40,8 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 		return i;
 	}
 
-	public int setIndex(int i) {
-		return Math.min(i, last);
+	public void setIndex(int i) {
+		this.i = Math.min(i, last);
 	}
 
 	public T current() {
