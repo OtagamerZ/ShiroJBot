@@ -1996,6 +1996,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			h.get().decreaseSuppression();
 			h.get().decreaseLockTime();
 			h.get().decreaseNullTime();
+			h.get().decreaseBlindTime();
 			slots = arena.getSlots().get(getCurrentSide());
 
 			if (getRound() >= 75) {
@@ -2428,6 +2429,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.get().decreaseSuppression();
 					h.get().decreaseLockTime();
 					h.get().decreaseNullTime();
+					h.get().decreaseBlindTime();
 					slots = arena.getSlots().get(getCurrentSide());
 
 					if (getRound() >= 75) {
