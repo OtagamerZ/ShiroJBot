@@ -21,6 +21,7 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.controller.postgresql.ReminderDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
@@ -29,6 +30,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.Reminder;
 import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.model.records.SoloLobby;
@@ -36,6 +38,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
@@ -55,6 +58,21 @@ public class TenthSecondEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
+		List<Reminder> reminders = ReminderDAO.getExpiredReminders();
+		for (Reminder reminder : reminders) {
+			User u = Main.getInfo().getUserByID(reminder.getUid());
+			if (u != null) {
+				u.openPrivateChannel()
+						.flatMap(c -> c.sendMessage(":alarm_clock: | Alô alô, seu lembrete `" + reminder.getDescription() + "` acabou de ativar, não se esqueça ein!"))
+						.queue();
+
+				if (reminder.isRepeating())
+					reminder.scheduleNext();
+			}
+
+			ReminderDAO.saveReminder(reminder);
+		}
+
 		if (lock) return;
 		lock = true;
 

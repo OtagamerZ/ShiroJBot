@@ -19,10 +19,12 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.BotStatsDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.TempRoleDAO;
+import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.persistent.MutedMember;
-import com.kuuhaku.model.persistent.Reminder;
 import com.kuuhaku.model.persistent.TempRole;
 import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.utils.Helper;
@@ -118,21 +120,6 @@ public class MinuteEvent implements Job {
 			} finally {
 				TempRoleDAO.removeTempRole(role);
 			}
-		}
-
-		List<Reminder> reminders = ReminderDAO.getExpiredReminders();
-		for (Reminder reminder : reminders) {
-			User u = Main.getInfo().getUserByID(reminder.getUid());
-			if (u != null) {
-				u.openPrivateChannel()
-						.flatMap(c -> c.sendMessage(":alarm_clock: | Alô alô, seu lembrete `" + reminder.getDescription() + "` acabou de ativar, não se esqueça ein!"))
-						.queue();
-
-				if (reminder.isRepeating())
-					reminder.scheduleNext();
-			}
-
-			ReminderDAO.saveReminder(reminder);
 		}
 	}
 }
