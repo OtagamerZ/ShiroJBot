@@ -15,6 +15,7 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	private final int loadEvery;
 	private int i = 0;
 	private int last = 0;
+	private boolean hasNext = true;
 
 	public LazyLoadingList(Function<Integer, List<T>> loader, int loadEvery) {
 		this.loader = loader;
@@ -49,16 +50,26 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	}
 
 	public T next() {
-		if (++i > last && (i % loadEvery == 0 || i >= size())) {
-			exec.submit(() -> addAll(loader.apply(i)));
+		if (hasNext) {
+			if (++i > last && (i % loadEvery == 0 || i >= size())) {
+				exec.submit(() -> addAll(loader.apply(i)));
+			}
+
+			if (i >= size()) {
+				hasNext = false;
+				exec.shutdown();
+				return get(i = size() - 1);
+			}
+
+			last = Math.max(last, i);
+			return get(i);
 		}
 
-		if (i >= size()) {
+		if (++i >= size()) {
 			return get(i = size() - 1);
+		} else {
+			return get(i);
 		}
-
-		last = Math.max(last, i);
-		return get(i);
 	}
 
 	public T previous() {
@@ -66,9 +77,10 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	}
 
 	public boolean hasNext() {
-		int curr = i;
+		if (!hasNext) return false;
 		next();
+		previous();
 
-		return curr < i;
+		return hasNext;
 	}
 }

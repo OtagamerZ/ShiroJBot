@@ -94,7 +94,7 @@ public class RankCommand implements Executable {
 					Pages.lazyPaginate(s, i -> {
 						d.setIndex(i * 16);
 
-						if (d.isEmpty()) return null;
+						if (!d.hasNext()) return null;
 						fillData(d, i, eb);
 
 						return new InteractPage(eb.build());
@@ -107,7 +107,7 @@ public class RankCommand implements Executable {
 		eb.clearFields();
 
 		XStringBuilder sb = new XStringBuilder();
-		for (int i = 0; i < 15 && data.hasNext(); i++) {
+		for (int i = 0; i < 15; i++) {
 			if (data.index() == 0) {
 				data.next();
 				continue;
@@ -115,7 +115,9 @@ public class RankCommand implements Executable {
 
 			String line = data.current();
 			sb.appendNewLine(line);
-			data.next();
+
+			if (!data.hasNext()) break;
+			else data.next();
 		}
 
 		if (page == 0) {
