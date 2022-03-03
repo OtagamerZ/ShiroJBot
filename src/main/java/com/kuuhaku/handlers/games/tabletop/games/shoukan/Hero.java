@@ -163,10 +163,10 @@ public class Hero implements Cloneable {
         Integer[] out = new Integer[]{0, 0, 0, 0, 0};
 
         for (Equipment e : inventory) {
-            out[0] += e.getAtk() / (e.getCharms() == null ? 100 : 125);
-            out[1] += e.getDef() / (e.getCharms() == null ? 100 : 125);
+            out[0] += e.getAtk() / (e.getCharms().isEmpty() ? 100 : 125);
+            out[1] += e.getDef() / (e.getCharms().isEmpty() ? 100 : 125);
 
-            if (e.getCharms() != null) {
+            if (!e.getCharms().isEmpty()) {
                 int div = e.getCharms().size();
 
                 for (Charm charm : e.getCharms()) {
