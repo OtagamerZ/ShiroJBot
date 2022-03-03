@@ -128,10 +128,10 @@ public class UserInfoCommand implements Executable, Slashed {
                 .addField(":man_detective: | Nome real", "`" + m.getUser().getAsTag() + "`", true)
                 .addField(":medal: | Emblemas", sb.toString(), true)
                 .addField(":1234: | ID", "`" + m.getId() + "`", true)
-                .addField(":calendar: | Conta criada em", m.getTimeCreated().format(Helper.dateFormat) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeCreated().toEpochSecond()) + ")", true)
-                .addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Helper.dateFormat) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeJoined().toEpochSecond()) + ")" : "Não sei", true);
+                .addField(":calendar: | Conta criada em", m.getTimeCreated().format(Helper.DATE_FORMAT) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeCreated().toEpochSecond()) + ")", true)
+                .addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Helper.DATE_FORMAT) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeJoined().toEpochSecond()) + ")" : "Não sei", true);
         if (booster)
-            eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.dateFormat) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeBoosted().toEpochSecond()) + ")", true);
+            eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.DATE_FORMAT) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeBoosted().toEpochSecond()) + ")", true);
         else
             eb.addBlankField(true);
 

@@ -72,7 +72,7 @@ public class RequestAssistCommand implements Executable, Slashed {
 							eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
 							eb.addField("ID do servidor:", guild.getId(), true);
 							eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-							eb.addField("Requisitado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+							eb.addField("Requisitado em:", Helper.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 							eb.setFooter(author.getId());
 							eb.setColor(Color.cyan);
 

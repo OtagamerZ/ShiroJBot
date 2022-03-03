@@ -70,7 +70,7 @@ public class MarkTicketCommand implements Executable {
 		if (Helper.getOr(t.getUid(), null) != null)
 			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getUid()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
-		eb.addField("Fechado em:", Helper.fullDateFormat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
+		eb.addField("Fechado em:", Helper.FULL_DATE_FORMAT.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
 		for (String dev : ShiroInfo.getStaff()) {

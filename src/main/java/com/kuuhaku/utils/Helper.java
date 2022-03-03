@@ -165,8 +165,8 @@ public abstract class Helper {
 	public static final String TIMESTAMP = "<t:%s:R>";
 	public static final double GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
 	public static final int CANVAS_SIZE = 2049;
-	public static final DateTimeFormatter fullDateFormat = DateTimeFormatter.ofPattern(I18n.getString("full-date-format"));
-	public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(I18n.getString("date-format"));
+	public static final DateTimeFormatter FULL_DATE_FORMAT = DateTimeFormatter.ofPattern(I18n.getString("full-date-format"));
+	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(I18n.getString("date-format"));
 	public static final CopyDown htmlConverter = new CopyDown();
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 300;

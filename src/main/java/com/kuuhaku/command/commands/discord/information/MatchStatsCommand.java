@@ -89,7 +89,7 @@ public class MatchStatsCommand implements Executable {
 					}
 
 					sb.append("(%s)\n`%sID: %s` - %s **VS** %s **(%s)**\n\n".formatted(
-							mh.getTimestamp().format(Helper.fullDateFormat),
+							mh.getTimestamp().format(Helper.FULL_DATE_FORMAT),
 							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							mh.getId(),
 							players.get(Side.BOTTOM),
@@ -146,7 +146,7 @@ public class MatchStatsCommand implements Executable {
 									1º: %s %s
 									2º: %s %s
 									""".formatted(
-									mh.getTimestamp().format(Helper.dateFormat),
+									mh.getTimestamp().format(Helper.DATE_FORMAT),
 									mh.isRanked() ? "Ranqueada" : "Normal",
 									p1Name,
 									bot.winner() ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",
@@ -201,7 +201,7 @@ public class MatchStatsCommand implements Executable {
 									3º: %s %s
 									4º: %s %s
 									""".formatted(
-									mh.getTimestamp().format(Helper.dateFormat),
+									mh.getTimestamp().format(Helper.DATE_FORMAT),
 									mh.isRanked() ? "Ranqueada" : "Normal",
 									p1Name,
 									bot1.winner() ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",

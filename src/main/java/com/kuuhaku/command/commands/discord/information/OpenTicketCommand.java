@@ -87,7 +87,7 @@ public class OpenTicketCommand implements Executable, Slashed {
 							EmbedBuilder eb = new EmbedBuilder()
 									.setTitle("Ticket Nº " + number + "")
 									.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
-									.addField("Enviado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+									.addField("Enviado em:", Helper.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
 									.addField("Descrição:", "```" + mensagem + "```", false)
 									.setFooter(author.getId())
 									.setColor(Color.yellow);

@@ -47,7 +47,7 @@ public class Transaction {
 		this.uid = id;
 		this.fromClass = from;
 		this.value = value;
-		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.FULL_DATE_FORMAT);
 	}
 
 	public Transaction() {
