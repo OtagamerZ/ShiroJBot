@@ -152,11 +152,10 @@ public class BountyRewardCommand implements Executable {
 			Account acc = AccountDAO.getAccount(author.getId());
 			boolean save = false;
 
-			if (lvl >= 10 && acc.getAchievements().add(Achievement.GROWING_STRONGER)) {
-				save = true;
-			}
-			if (lvl >= 20 && acc.getAchievements().add(Achievement.LEGENDARY_HERO)) {
-				save = true;
+			if (h.getLevel() >= 10) {
+				save = acc.getAchievements().add(Achievement.GROWING_STRONGER);
+			} else if (h.getLevel() >= 20) {
+				save = acc.getAchievements().add(Achievement.LEGENDARY_HERO);
 			}
 
 			if (save) AccountDAO.saveAccount(acc);
