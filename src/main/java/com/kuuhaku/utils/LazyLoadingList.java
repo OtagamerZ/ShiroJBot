@@ -54,7 +54,7 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 		}
 
 		if (i >= size()) {
-			return get(i = size() - 1);
+			return null;
 		}
 
 		last = Math.max(last, i);
