@@ -36,6 +36,14 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 		addAll(loader.apply(i));
 	}
 
+	public int index() {
+		return i;
+	}
+
+	public int setIndex(int i) {
+		return Math.min(i, last);
+	}
+
 	public T current() {
 		return Helper.safeGet(this, i);
 	}
