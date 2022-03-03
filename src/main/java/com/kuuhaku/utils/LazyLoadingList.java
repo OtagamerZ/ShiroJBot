@@ -69,6 +69,6 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 		int curr = i;
 		next();
 
-		return curr == i;
+		return curr < i;
 	}
 }
