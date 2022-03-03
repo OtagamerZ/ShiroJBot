@@ -23,7 +23,6 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.RaidDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -35,9 +34,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -125,7 +122,7 @@ public class RaidInfoCommand implements Executable {
 
 			List<Page> pages = new ArrayList<>();
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(":octagonal_sign: | Raid ocorrida em " + Helper.fullDateFormat.format(r.getOccurrence()));
+					.setTitle(":octagonal_sign: | Raid ocorrida em " + Helper.FULL_DATE_FORMAT.format(r.getOccurrence()));
 			for (List<RaidMember> chunk : chunks) {
 				eb.clearFields();
 

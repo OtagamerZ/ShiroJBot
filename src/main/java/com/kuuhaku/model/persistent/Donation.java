@@ -56,7 +56,7 @@ public class Donation {
 		this.bundle = bundle;
 		this.value = value;
 		this.status = status;
-		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.FULL_DATE_FORMAT);
 	}
 
 	public Donation() {

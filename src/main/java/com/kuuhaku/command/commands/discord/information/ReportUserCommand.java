@@ -85,7 +85,7 @@ public class ReportUserCommand implements Executable, Slashed {
 							EmbedBuilder eb = new EmbedBuilder()
 									.setTitle("Relatório de report (Ticket Nº " + number + ")")
 									.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
-									.addField("Enviado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+									.addField("Enviado em:", Helper.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
 									.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true)
 									.addField("Relatório:", "```" + mensagem + "```", false)
 									.setFooter(author.getId())

@@ -312,8 +312,8 @@ public class Account {
 							Hoje: %s
 							Acumula? %s
 									""".formatted(
-							lastVoted.format(Helper.fullDateFormat),
-							today.format(Helper.fullDateFormat),
+							lastVoted.format(Helper.FULL_DATE_FORMAT),
+							today.format(Helper.FULL_DATE_FORMAT),
 							today.isBefore(lastVoted.plusHours(24))
 					)
 			);
