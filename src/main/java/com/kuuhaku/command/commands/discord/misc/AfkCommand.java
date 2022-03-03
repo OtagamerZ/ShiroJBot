@@ -24,6 +24,8 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -40,6 +42,10 @@ public class AfkCommand implements Executable {
 		if (text.length() > 250) {
 			channel.sendMessage(I18n.getString("err_afk-message-too-long")).queue();
 			return;
+		}
+
+		if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+			member.modifyNickname("[AFK] " + member.getNickname()).queue(null, Helper::doNothing);
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
