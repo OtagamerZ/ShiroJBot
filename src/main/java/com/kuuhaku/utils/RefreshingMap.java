@@ -2,11 +2,10 @@ package com.kuuhaku.utils;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
-public class RefreshingMap<K, V> extends HashMap<K, V> implements Closeable {
+public class RefreshingMap<K, V> extends ConcurrentHashMap<K, V> implements Closeable {
 	private final Callable<Map<K, V>> refresher;
 	private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 
