@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.utils.Helper;
@@ -156,7 +157,17 @@ public class Attributes {
 	}
 
 	public int calcMp(Hero h, Champion ref) {
-		return (int) (1 + (ref == null ? 0 : ref.getMana(5) * 0.75) + Math.max(0,
+		int cost = 1;
+		if (ref != null) {
+			cost += ref.getMana() * 0.75;
+		}
+		if (h.getPerks().contains(Perk.TABULA_RASA)) {
+			cost += h.getInventory().stream()
+					.mapToInt(Equipment::getTier)
+					.sum();
+		}
+
+		return (int) (cost + Math.max(0,
 				str * 0.275
 				+ res * 0.15
 				+ agi * 0.0175

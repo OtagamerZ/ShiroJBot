@@ -38,6 +38,7 @@ public enum Perk {
 	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva (2% esquiva = 1% bloqueio), ocorrendo o inverso em modo de defesa."),
 	SCHOLAR("Erudito", "Não pode ter equipamentos, mas recebe +2 slots de perk extras."),
 	COWARD("Covarde", "Aumenta a defesa e reduz o ataque com base no dano acumulado (2% HP perdido = +1% DEF/-1% ATK)."),
+	TABULA_RASA("Tabula Rasa", "Equipamentos não afetam mais seus atributos e têm seu tier adicionado ao custo, mas são invocados junto com seu herói.")
 	;
 
 	private final String name;
@@ -66,8 +67,8 @@ public enum Perk {
 
 	public Set<Perk> getIncompatibility() {
 		return switch (this) {
-			case BLOODLUST, MINDSHIELD -> Set.of(MANALESS);
-			case MANALESS -> Set.of(BLOODLUST, MINDSHIELD);
+			case BLOODLUST, MINDSHIELD, TABULA_RASA -> Set.of(MANALESS);
+			case MANALESS -> Set.of(BLOODLUST, MINDSHIELD, TABULA_RASA);
 			case MASOCHIST -> Set.of(COWARD);
 			case NIGHTCAT -> Set.of(ARMORED);
 			case ARMORED -> Set.of(NIGHTCAT);
