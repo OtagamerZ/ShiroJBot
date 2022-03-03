@@ -169,8 +169,8 @@ public class Attributes {
 
 		return (int) (cost + Math.max(0,
 				str * 0.275
-				+ res * 0.15
-				+ agi * 0.0175
+				+ res * 0.175
+				+ agi * 0.02
 				- (wis * (wis / (double) (str + res + agi + wis + con)) / (h.getPerks().contains(Perk.MINDSHIELD) ? 2 : 1))
 				+ con * 0.075
 		));
