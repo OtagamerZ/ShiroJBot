@@ -356,6 +356,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 		copy.setFlipped(mode == Mode.FLIPPED);
 		slot.setTop(copy);
 
+		if (copy.getHero() != null) {
+
+		}
+
 		if (!copy.isFlipped() && applyEffect(ON_SUMMON, copy, getCurrentSide(), index, new Source(copy, getCurrentSide(), index)))
 			return null;
 
@@ -922,6 +926,20 @@ public class Shoukan extends GlobalGame implements Serializable {
 				int heroIndex = isHeroInField(s);
 				if (heroIndex == -1 && hd.getHero() != null && c.getCard().getId().equals(hd.getUser().getId()) && c.getCard().getName().equals(hd.getHero().getName())) {
 					c.setHero(hd.getHero());
+
+					if (hd.getHero().getPerks().contains(Perk.TABULA_RASA)) {
+						Iterator<Equipment> it = hd.getHero().getInventory().iterator();
+						while (it.hasNext()) {
+							Equipment e = it.next();
+							SlotColumn sc = getFirstAvailableSlot(s, false);
+							if (sc == null) break;
+
+							e.bind(hd);
+							c.link(e);
+							sc.setBottom(e);
+							it.remove();
+						}
+					}
 				} else if (i != heroIndex) {
 					c.setHero(null);
 				}

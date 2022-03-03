@@ -161,6 +161,7 @@ public class Hero implements Cloneable {
 
     public Attributes getEquipStats() {
         Integer[] out = new Integer[]{0, 0, 0, 0, 0};
+        if (perks.contains(Perk.TABULA_RASA)) return new Attributes(out);
 
         for (Equipment e : inventory) {
             out[0] += e.getAtk() / (e.getCharms().isEmpty() ? 100 : 125);
@@ -406,10 +407,10 @@ public class Hero implements Cloneable {
     public int getBlood() {
         int blood = 0;
         for (Perk perk : perks) {
-            double mpModif = 1;
+            double bldModif = 1;
             for (Perk p : perks) {
                 if (!p.equals(perk))
-                    mpModif *= switch (p) {
+                    bldModif *= switch (p) {
                         case BLOODLUST -> 0.5;
                         case MANALESS -> 0;
                         case MINDSHIELD -> 2;
@@ -418,7 +419,7 @@ public class Hero implements Cloneable {
             }
 
             blood += switch (perk) {
-                case BLOODLUST -> stats.calcMp(this, getReferenceChampion()) * mpModif / 2 * 100;
+                case BLOODLUST -> stats.calcMp(this, getReferenceChampion()) * bldModif / 2 * 100;
                 default -> 0;
             };
         }
