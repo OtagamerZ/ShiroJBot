@@ -37,6 +37,7 @@ public enum Perk {
 	REAPER("Ceifador", "Ceifa cartas destruídas, selando-as, mas efeitos positivos de campo não te afetam mais."),
 	ADAPTIVE("Adaptivo", "Enquanto em modo de ataque toda chance de bloqueio torna-se esquiva (2% esquiva = 1% bloqueio), ocorrendo o inverso em modo de defesa."),
 	SCHOLAR("Erudito", "Não pode ter equipamentos, mas recebe +2 slots de perk extras."),
+	COWARD("Covarde", "Aumenta a defesa e reduz o ataque com base no dano acumulado (2% HP perdido = +1% DEF/-1% ATK)."),
 	;
 
 	private final String name;
@@ -67,10 +68,12 @@ public enum Perk {
 		return switch (this) {
 			case BLOODLUST, MINDSHIELD -> Set.of(MANALESS);
 			case MANALESS -> Set.of(BLOODLUST, MINDSHIELD);
+			case MASOCHIST -> Set.of(COWARD);
 			case NIGHTCAT -> Set.of(ARMORED);
 			case ARMORED -> Set.of(NIGHTCAT);
 			case OPTIMISTIC -> Set.of(PESSIMISTIC);
 			case PESSIMISTIC -> Set.of(OPTIMISTIC);
+			case COWARD -> Set.of(MASOCHIST);
 			default -> Set.of();
 		};
 	}
