@@ -45,7 +45,7 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	}
 
 	public T current() {
-		return Helper.safeGet(this, i);
+		return get(i);
 	}
 
 	public T next() {
@@ -54,14 +54,14 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 		}
 
 		if (i >= size()) {
-			return Helper.safeGet(this, i = size() - 1);
+			return get(i = size() - 1);
 		}
 
 		last = Math.max(last, i);
-		return Helper.safeGet(this, i);
+		return get(i);
 	}
 
 	public T previous() {
-		return Helper.safeGet(this, --i);
+		return get(i = Math.max(0, i - 1));
 	}
 }
