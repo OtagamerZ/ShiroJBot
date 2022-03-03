@@ -148,18 +148,18 @@ public class BountyRewardCommand implements Executable {
 			}
 		}
 
+		Account acc = AccountDAO.getAccount(author.getId());
+		boolean save = false;
+
+		if (h.getLevel() >= 10) {
+			save = acc.getAchievements().add(Achievement.GROWING_STRONGER);
+		} else if (h.getLevel() >= 20) {
+			save = acc.getAchievements().add(Achievement.LEGENDARY_HERO);
+		}
+
+		if (save) AccountDAO.saveAccount(acc);
+
 		if (!died && h.getLevel() > lvl) {
-			Account acc = AccountDAO.getAccount(author.getId());
-			boolean save = false;
-
-			if (h.getLevel() >= 10) {
-				save = acc.getAchievements().add(Achievement.GROWING_STRONGER);
-			} else if (h.getLevel() >= 20) {
-				save = acc.getAchievements().add(Achievement.LEGENDARY_HERO);
-			}
-
-			if (save) AccountDAO.saveAccount(acc);
-
 			h.setEnergy(h.getMaxEnergy());
 			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
 					.setEmbeds(eb.build())
