@@ -157,7 +157,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Side.BOTTOM, hands.get(Side.BOTTOM).getCombo()
 		);
 
-		if (rules == null || tourMatch != null) {
+		if (rules.official() || tourMatch != null) {
 			getHistory().setPlayers(Map.of(
 					players[0].getId(), Side.TOP,
 					players[1].getId(), Side.BOTTOM
@@ -228,7 +228,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 							);
 				},
 				s -> {
-					if (rules == null || tourMatch != null) {
+					if (rules.official() || tourMatch != null) {
 						if (ranked) {
 							MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(getCurrent().getId());
 							mmr.block(30, ChronoUnit.MINUTES);
