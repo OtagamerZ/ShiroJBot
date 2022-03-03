@@ -108,7 +108,10 @@ public class RankCommand implements Executable {
 
 		XStringBuilder sb = new XStringBuilder();
 		for (int i = 0; i < 15 || data.current() == null; i++) {
-			if (data.index() == 0) continue;
+			if (data.index() == 0) {
+				data.next();
+				continue;
+			}
 
 			String line = data.current();
 			sb.appendNewLine(line);
