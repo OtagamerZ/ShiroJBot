@@ -5,8 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
 public class LazyLoadingList<T> extends ArrayList<T> {
@@ -16,6 +18,7 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 	private int i = 0;
 	private int last = 0;
 	private boolean hasNext = true;
+	private Future<Boolean> task = null;
 
 	public LazyLoadingList(Function<Integer, List<T>> loader, int loadEvery) {
 		this.loader = loader;
@@ -51,14 +54,17 @@ public class LazyLoadingList<T> extends ArrayList<T> {
 
 	public T next() {
 		if (hasNext) {
-			if (++i > last && (i % loadEvery == 0 || i >= size())) {
-				exec.submit(() -> addAll(loader.apply(i)));
+			if (++i > last && i % loadEvery == 0) {
+				task = exec.submit(() -> addAll(loader.apply(i)));
 			}
 
-			if (i >= size()) {
-				hasNext = false;
-				exec.shutdown();
-				return get(i = size() - 1);
+			try {
+				if (i >= size() && !task.get()) {
+					hasNext = false;
+					exec.shutdown();
+					return get(i = size() - 1);
+				}
+			} catch (ExecutionException | InterruptedException ignore) {
 			}
 
 			last = Math.max(last, i);
