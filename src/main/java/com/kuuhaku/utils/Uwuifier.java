@@ -60,7 +60,7 @@ public class Uwuifier {
     }
 
     public String uwu(String text) {
-        String[] split = StringUtils.normalizeSpace(text).split(" ");
+        String[] split = StringUtils.normalizeSpace(text).replace("\n", "\n ").split(" ");
 
         for (int i = 0; i < split.length; i++) {
             String word = split[i];
