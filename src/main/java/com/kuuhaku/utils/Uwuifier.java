@@ -64,7 +64,7 @@ public class Uwuifier {
 
         for (int i = 0; i < split.length; i++) {
             String word = split[i];
-            if (Helper.isUrl(word) || word.matches(":\\w+:|<a?:\\w+:\\d+>")) continue;
+            if (Helper.isUrl(word) || word.matches(":.+:|<.+>")) continue;
 
             for (Pair<String, String> p : exp) {
                 word = word.replaceAll(p.getLeft(), p.getRight());
