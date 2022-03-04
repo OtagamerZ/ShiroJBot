@@ -377,13 +377,17 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getWeight(Deck d) {
-		boolean weighted = (description != null && !description.isBlank())
-				&& Helper.containsAny(getCharms(), Charm.ENCHANTMENT, Charm.TRAP, Charm.SPELL, Charm.CURSE);
+		boolean active = Helper.containsAny(getCharms(), Charm.ENCHANTMENT, Charm.TRAP, Charm.SPELL, Charm.CURSE);
 
 		int weight = tier;
 		weight += switch (getCharms().size()) {
-			case 1 -> weighted ? 0 : -1;
-			case 2 -> weighted ? 1 : 0;
+			case 1, 2 -> {
+				if (active && Helper.getOr(description, "").isBlank()) {
+					yield -2 + tier;
+				}
+
+				yield -1 + tier;
+			}
 			default -> -1;
 		};
 
