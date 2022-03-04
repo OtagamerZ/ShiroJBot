@@ -60,25 +60,31 @@ public class Uwuifier {
     }
 
     public String uwu(String text) {
-        String[] split = StringUtils.normalizeSpace(text).replace("\n", "¬").split(" ");
+        String[] lines = text.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            String[] words = StringUtils.normalizeSpace(text).split(" ");
 
-        for (int i = 0; i < split.length; i++) {
-            String word = split[i];
-            if (Helper.isUrl(word) || word.matches(":.+:|<.+>")) continue;
+            for (int j = 0; j < words.length; j++) {
+                String word = words[j];
+                if (Helper.isUrl(word) || word.matches(":.+:|<.+>")) continue;
 
-            for (Pair<String, String> p : exp) {
-                word = word.replaceAll(p.getLeft(), p.getRight());
+                for (Pair<String, String> p : exp) {
+                    word = word.replaceAll(p.getLeft(), p.getRight());
+                }
+
+                words[j] = word.replace("!", Helper.getRandomEntry(punctuation));
             }
 
-            split[i] = word.replace("!", Helper.getRandomEntry(punctuation));
+            String out = String.join(" ", words);
+            while (Helper.regex(out, " [A-z]").find()) {
+                out = out.replaceFirst(" ([A-z])", replaceSpace());
+            }
+
+            lines[i] = out.replace("§", " ");
         }
 
-        String out = String.join(" ", split);
-        while (Helper.regex(out, " [A-z]").find()) {
-            out = out.replaceFirst(" ([A-z])", replaceSpace());
-        }
-
-        return out.replace("§", " ").replace("¬", "\n");
+        return String.join("\n", lines);
     }
 
     private String replaceSpace() {
