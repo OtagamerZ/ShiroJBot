@@ -60,7 +60,7 @@ public class Uwuifier {
     }
 
     public String uwu(String text) {
-        String[] split = StringUtils.normalizeSpace(text).replace("\n", "\n ").split(" ");
+        String[] split = StringUtils.normalizeSpace(text).replace("\n", "¬").split(" ");
 
         for (int i = 0; i < split.length; i++) {
             String word = split[i];
@@ -78,7 +78,7 @@ public class Uwuifier {
             out = out.replaceFirst(" ([A-z])", replaceSpace());
         }
 
-        return out.replace("§", " ");
+        return out.replace("§", " ").replace("¬", "\n");
     }
 
     private String replaceSpace() {
