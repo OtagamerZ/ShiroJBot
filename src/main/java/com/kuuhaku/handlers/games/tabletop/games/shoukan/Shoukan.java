@@ -3072,6 +3072,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						}
 
 						EnumSet<Achievement> achs = achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class));
+						achs.removeIf(a -> !achData.getOrDefault(a, new JSONObject()).getBoolean("completed", true));
 						acc.getAchievements().addAll(achs);
 
 						if (!achs.isEmpty())
@@ -3106,6 +3107,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 
 					EnumSet<Achievement> achs = achievements.getOrDefault(s, EnumSet.noneOf(Achievement.class));
+					achs.removeIf(a -> !achData.getOrDefault(a, new JSONObject()).getBoolean("completed", true));
 					acc.getAchievements().addAll(achs);
 
 					if (!achs.isEmpty())
