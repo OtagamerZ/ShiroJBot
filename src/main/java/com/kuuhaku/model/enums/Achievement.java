@@ -49,11 +49,13 @@ public enum Achievement {
 			"Sorte Maldita", "Comece a partida com 3 campos na mão.", true),
 	UNTOUCHABLE(Medal.GOLD,
 			"Intocável", "Vença uma partida sem levar dano.", false),
-	LAST_STAND(Medal.GOLD,
-			"O Último Bastião", "Vença uma partida após sobreviver um ataque fatal.", false),
 	LEGENDARY_HERO(Medal.GOLD,
 			"O Lendário Herói", "Alcance o nível 20 com um herói", false),
+	DESTROYER_OF_WORLDS(Medal.GOLD,
+			"Destruidor de Mundos", "Vença uma partida após desabilitar todas as casas do oponente.", true),
 
+	LAST_STAND(Medal.SILVER,
+			"O Último Bastião", "Vença uma partida após sobreviver um ataque fatal.", false),
 	SPOOKY_NIGHTS(Medal.SILVER,
 			"Noites de Arrepio", "Vença uma partida em Outubro onde seu deck possua apenas criaturas malígnas (espírito, morto-vivo e demônio).", false),
 	COUP_DE_GRACE(Medal.SILVER,
@@ -190,6 +192,15 @@ public enum Achievement {
 				if (data.getBoolean("completed")) yield false;
 
 				data.put("completed", h.getHp() == 1);
+				yield false;
+			}
+			case DESTROYER_OF_WORLDS -> {
+				JSONObject data = game.getAchData().computeIfAbsent(this, k -> new JSONObject());
+
+				if (data.getBoolean("completed")) yield false;
+
+				List<SlotColumn> slots = game.getArena().getSlots().get(side.getOther());
+				data.put("completed", slots.stream().allMatch(SlotColumn::isUnavailable));
 				yield false;
 			}
 			case SPOOKY_NIGHTS -> {
