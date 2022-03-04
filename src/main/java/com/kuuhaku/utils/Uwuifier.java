@@ -70,10 +70,10 @@ public class Uwuifier {
                 word = word.replaceAll(p.getLeft(), p.getRight());
             }
 
-            split[i] = word;
+            split[i] = word.replace("!", Helper.getRandomEntry(punctuation));
         }
 
-        String out = String.join(" ", split).replace("!", Helper.getRandomEntry(punctuation));
+        String out = String.join(" ", split);
         while (Helper.regex(out, " [A-z]").find()) {
             out = out.replaceFirst(" ([A-z])", replaceSpace());
         }
