@@ -25,11 +25,24 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 public class TradeDAO {
-	public static Trade getTrade(String uid) {
+	public static Trade getTrade(String uid, String target) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Trade t JOIN t.offers o WHERE t.finished = FALSE AND o.uid = :uid", Trade.class);
+		Query q = em.createQuery("""
+				SELECT t
+				FROM Trade t
+				JOIN t.offers o
+				WHERE t.finished = FALSE
+				AND EXISTS (
+					SELECT 1
+					FROM o
+					WHERE o.uid = :uid
+					OR o.uid = :target
+				)
+				""", Trade.class);
 		q.setParameter("uid", uid);
+		q.setParameter("target", target);
+		q.setMaxResults(1);
 
 		try {
 			return (Trade) q.getSingleResult();
