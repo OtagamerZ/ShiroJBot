@@ -377,12 +377,18 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getWeight(Deck d) {
-		return Math.max(
-				switch (d.getCombo().getLeft()) {
-					case MACHINE -> !isSpell() ? tier - 1 : tier;
-					case MYSTICAL -> isSpell() ? tier - 1 : tier;
-					default -> tier;
-				}, 1);
+		int weight = tier;
+		if (getCharms().isEmpty()) {
+			weight -= 1;
+		}
+
+		weight -= switch (d.getCombo().getLeft()) {
+			case MACHINE -> !isSpell() ? 1 : 0;
+			case MYSTICAL -> isSpell() ? 1 : 0;
+			default -> 0;
+		};
+
+		return Math.max(weight, 1);
 	}
 
 	public List<Charm> getCharms() {
