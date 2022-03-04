@@ -1031,20 +1031,17 @@ public abstract class Helper {
 			}
 		}
 
-		String[] oldLines = text.split("\n");
-		String[] newLines = new String[oldLines.length];
-
-		for (int l = 0; l < oldLines.length; l++) {
-			String[] oldWords = oldLines[l].split(" ");
-			String[] newWords = new String[oldWords.length];
-			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
-				String old = oldWords[i];
-				if (!old.matches(":.+:")) {
-					newWords[i] = old;
+		String[] lines = text.split("\n");
+		for (int l = 0; l < lines.length; l++) {
+			String[] words = lines[l].split(" ");
+			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < words.length && emotes < 10; i++) {
+				String word = words[i];
+				if (!word.matches(":.+:")) {
+					words[i] = word;
 					continue;
 				}
 
-				String id = ShiroInfo.getEmoteLookup().get(old);
+				String id = ShiroInfo.getEmoteLookup().get(word);
 				Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
 
 				if (e != null) {
@@ -1061,18 +1058,18 @@ public abstract class Helper {
 							else slots--;
 						}
 
-						newWords[i] = e.getAsMention();
+						words[i] = e.getAsMention();
 						emotes++;
 					} catch (IOException ex) {
 						logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
 					}
-				} else newWords[i] = old;
+				}
 			}
 
-			newLines[l] = String.join(" ", newWords);
+			lines[l] = String.join(" ", words);
 		}
 
-		return String.join("\n", newLines);
+		return String.join("\n", lines);
 	}
 
 	public static boolean isEmpty(String... values) {
