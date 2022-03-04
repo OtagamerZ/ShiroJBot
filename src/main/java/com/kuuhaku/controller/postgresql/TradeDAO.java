@@ -19,12 +19,15 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Trade;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.List;
 
 public class TradeDAO {
+	@SuppressWarnings("unchecked")
 	public static Trade getTrade(String uid, String target) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -33,19 +36,16 @@ public class TradeDAO {
 				FROM Trade t
 				JOIN t.offers o
 				WHERE t.finished = FALSE
-				AND EXISTS (
-					SELECT 1
-					FROM o
-					WHERE o.uid = :uid
-					OR o.uid = :target
-				)
+				AND o.uid = :uid
 				""", Trade.class);
 		q.setParameter("uid", uid);
-		q.setParameter("target", target);
 		q.setMaxResults(1);
 
 		try {
-			return (Trade) q.getSingleResult();
+			List<Trade> trades = (List<Trade>) q.getResultList();
+			trades.removeIf(t -> !t.getOffers().stream().allMatch(to -> Helper.equalsAny(to.getUid(), uid, target)));
+
+			return Helper.safeGet(trades, 0);
 		} catch (NoResultException e) {
 			return null;
 		} finally {
