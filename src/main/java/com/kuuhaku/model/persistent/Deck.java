@@ -233,7 +233,7 @@ public class Deck {
 	}
 
 	public int getChampionMaxCopies() {
-		return 3;
+		return 3 + (getCombo().getRight() == Race.BESTIAL ? 1 : 0);
 	}
 
 	public int getEquipmentMaxCopies(Equipment eq) {

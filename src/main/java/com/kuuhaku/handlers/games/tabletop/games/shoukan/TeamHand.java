@@ -108,10 +108,26 @@ public class TeamHand extends Hand {
 					}
 				}
 			};
+
+			boolean bestial = Helper.equalsAny(Race.BESTIAL, combo.getLeft(), combo.getRight());
+			List<Drawable> extra = new ArrayList<>();
 			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)
 					.map(Drawable::copy)
+					.peek(d -> {
+						if (bestial) {
+							if (Helper.chance(25)) {
+								if (combo.getLeft() == Race.BESTIAL && d instanceof Equipment) {
+									extra.add(d.copy());
+								} else if (d instanceof Champion) {
+									extra.add(d.copy());
+								}
+							}
+						}
+					})
 					.collect(Collectors.toCollection(() -> new BondedList<>(bonding)));
+			deque.addAll(extra);
+
 			if (hero != null) deque.add(hero.toChampion());
 
 			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
@@ -705,7 +721,6 @@ public class TeamHand extends Hand {
 	public List<String> getNames() {
 		return List.of(getUser().getName(), getUsers().peekNext().getName());
 	}
-
 	@Override
 	public float getBaseHealingFac() {
 		return 1 + (combo.getLeft() == Race.HUMAN ? 0.25f : 0);
@@ -721,6 +736,11 @@ public class TeamHand extends Hand {
 		}
 
 		return fac;
+	}
+
+	@Override
+	public void setHealingFac(float healingFac) {
+		this.healingFac = healingFac;
 	}
 
 	@Override
