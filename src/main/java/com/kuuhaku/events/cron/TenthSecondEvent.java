@@ -102,6 +102,12 @@ public class TenthSecondEvent implements Job {
 			}
 		}
 
+		if (Main.getInfo().getMatchMaking().getDuoLobby().size() >= 4) {
+			for (DuoLobby lobby : Main.getInfo().getMatchMaking().getDuoLobby()) {
+				lobby.unlocked().set(true);
+			}
+		}
+
 		List<DuoLobby> duoLobby = Main.getInfo().getMatchMaking().getDuoLobby().stream()
 				.filter(dl -> dl.unlocked().get())
 				.collect(Collectors.toList());
