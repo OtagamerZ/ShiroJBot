@@ -34,6 +34,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Command(
 		name = "compilar",
@@ -48,7 +49,7 @@ public class CompileCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> | Compilando...").queue(m -> {
 			Future<Pair<String, Long>> execute = ShiroInfo.getCompilationPool().submit(() -> {
-				final long start = System.currentTimeMillis();
+				AtomicLong start = new AtomicLong();
 
 				try {
 					String code = argsAsText.replaceAll("```groovy|```", "");
@@ -56,12 +57,14 @@ public class CompileCommand implements Executable {
 					Future<GroovyShell> fut = ShiroInfo.getCompilationPool().submit(() -> {
 						GroovyShell gs = new GroovyShell();
 						gs.setVariable("msg", message);
+
+						start.set(System.currentTimeMillis());
 						gs.evaluate(code);
 
 						return gs;
 					});
 
-					return Pair.of(String.valueOf(fut.get(10, TimeUnit.MINUTES).getVariable("out")), System.currentTimeMillis() - start);
+					return Pair.of(String.valueOf(fut.get(10, TimeUnit.MINUTES).getVariable("out")), System.currentTimeMillis() - start.get());
 				} catch (TimeoutException e) {
 					return Pair.of("Tempo limite de execução excedido", -1L);
 				} catch (Exception e) {
