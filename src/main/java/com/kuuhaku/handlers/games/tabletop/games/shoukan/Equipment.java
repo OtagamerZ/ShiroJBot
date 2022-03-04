@@ -381,7 +381,7 @@ public class Equipment implements Drawable, Cloneable {
 
 		int weight = tier;
 		weight += switch (getCharms().size()) {
-			case 1 -> 0;
+			case 1 -> hasEffect() && hasDesc ? 0 : -1;
 			case 2 -> hasEffect() && hasDesc ? 1 : 0;
 			default -> -1;
 		};
