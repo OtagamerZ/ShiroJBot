@@ -378,13 +378,15 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getWeight(Deck d) {
 		int weight = tier;
-		if (getCharms().isEmpty()) {
-			weight -= 1;
-		}
+		weight += switch (getCharms().size()) {
+			case 1 -> 0;
+			case 2 -> 1;
+			default -> -1;
+		};
 
-		weight -= switch (d.getCombo().getLeft()) {
-			case MACHINE -> !isSpell() ? 1 : 0;
-			case MYSTICAL -> isSpell() ? 1 : 0;
+		weight += switch (d.getCombo().getLeft()) {
+			case MACHINE -> !isSpell() ? -1 : 0;
+			case MYSTICAL -> isSpell() ? -1 : 0;
 			default -> 0;
 		};
 
