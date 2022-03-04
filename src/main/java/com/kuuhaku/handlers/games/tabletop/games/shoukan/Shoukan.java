@@ -866,7 +866,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				Hand you = hands.get(getCurrentSide());
 				Hand op = hands.get(getNextSide());
 
-				int before = op.getDamageDelta();
+				int before = op.getHp();
 				float fac = (getRound() < 2 ? 0.5f : 1) * (1 - op.getMitigation());
 				if (h.getCombo().getRight() == Race.DEMON)
 					fac *= 1.25f;
@@ -884,7 +884,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				op.removeHp(Math.round(power * fac));
 				op.addBleeding(Math.round(ally.getBldAtk() * fac));
 				if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
-					you.addHp((op.getDamageDelta() - before) / 10);
+					you.addHp((before - op.getHp()) / 10);
 				}
 
 				ally.setAvailable(false);
@@ -892,7 +892,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				reportEvent(h,
 						"%s atacou diretamente, causando %s de dano!%s%s".formatted(
 								ally.getName(),
-								op.getDamageDelta() - before,
+								before - op.getHp(),
 								getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "",
 								extra > 0
 										? " (dano direto aumentado em " + extra + ")"
@@ -1068,9 +1068,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Hand you = hands.get(source.side());
 		Hand op = hands.get(target.side());
 
-		int yBefore = you.getDamageDelta();
-		int hBefore = op.getDamageDelta();
-
+		int yBefore = you.getHp();
+		int hBefore = op.getHp();
 
 		/* ATTACK SUCCESS */
 		proc:
@@ -1144,7 +1143,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						defr.getName(),
 						yPower,
 						hPower,
-						op.getDamageDelta() - hBefore,
+						op.getHp() - hBefore,
 						extra > 0
 								? " (dano direto aumentado em " + extra + ")"
 								: extra < 0
@@ -1216,7 +1215,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						atkr.getName(),
 						defr.getName(),
 						yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower),
-						you.getDamageDelta() - yBefore,
+						you.getHp() - yBefore,
 						extra > 0
 								? " (dano direto aumentado em " + extra + ")"
 								: extra < 0
@@ -1350,9 +1349,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return;
 
 		if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
-			you.addHp((op.getDamageDelta() - hBefore) / 10);
+			you.addHp((op.getHp() - hBefore) / 10);
 		} else if (undyingCd[you.getSide() == Side.TOP ? 0 : 1] == 5) {
-			you.addHp((you.getDamageDelta() - yBefore) / 10);
+			you.addHp((you.getHp() - yBefore) / 10);
 		}
 		postCombat();
 	}
