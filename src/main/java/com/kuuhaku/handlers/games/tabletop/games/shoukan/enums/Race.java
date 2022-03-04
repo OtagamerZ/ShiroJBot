@@ -43,8 +43,8 @@ public enum Race {
             new Integer[]{1, 2, 3, 3, 1}
     ),
     BESTIAL("Bestial",
-            "**(SOLO)** +1 limite de cópias para evogears **(DUO)** Cartas descartadas voltam para o deck e embaralham-no",
-            "Inicia com 1 ponto de mana extra",
+            "**(SOLO)** +1 limite de cópias para evogears **(DUO)** 25% de chance de receber +1 cópia de cada evogear no deck (por carta)",
+            "**(SOLO)** +1 limite de cópias para campeões **(DUO)** 25% de chance de receber +1 cópia de cada campeão no deck (por carta)",
             "Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido.\n\n**Alinhamento: animal.**",
             new Integer[]{3, 2, 3, 1, 1}
     ),
