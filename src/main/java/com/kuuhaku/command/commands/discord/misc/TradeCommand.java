@@ -81,7 +81,7 @@ public class TradeCommand implements Executable {
 		}
 
 		User tgt = message.getMentionedUsers().get(0);
-		Trade t = TradeDAO.getTrade(author.getId());
+		Trade t = TradeDAO.getTrade(author.getId(), tgt.getId());
 		if (t != null) {
 			String other = t.getLeft().getUid().equals(author.getId()) ? t.getRight().getUid() : t.getLeft().getUid();
 			String name = Helper.getUsername(other);
