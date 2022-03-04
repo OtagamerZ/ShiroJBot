@@ -267,9 +267,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		Hand h = hands.get(getCurrentSide());
 		h.addMana(h.getManaPerTurn());
 		if (!h.isSuppressed()) {
-			if (h.getCombo().getRight() == Race.BESTIAL) {
-				h.addMana(1);
-			} else if (h.getCombo().getLeft() == Race.DIVINITY) {
+			if (h.getCombo().getLeft() == Race.DIVINITY) {
 				h.addMana((int) Math.round(5 - h.getAvgCost()));
 			}
 		}
@@ -1986,26 +1984,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (Drawable d : discardBatch) {
 				d.setAvailable(true);
 			}
-			if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
-				h.get().getRealDeque().addAll(
-						discardBatch.stream()
-								.filter(d -> {
-									if (d instanceof Champion c) return c.canGoToGrave();
-									else if (d instanceof Equipment e) return !e.isEffectOnly();
-									else return true;
-								}).toList()
-				);
-				Collections.shuffle(h.get().getRealDeque());
-			} else {
-				arena.getGraveyard().get(getCurrentSide()).addAll(
-						discardBatch.stream()
-								.filter(d -> {
-									if (d instanceof Champion c) return c.canGoToGrave();
-									else if (d instanceof Equipment e) return e.canGoToGrave();
-									else return true;
-								}).toList()
-				);
-			}
+
+			arena.getGraveyard().get(getCurrentSide()).addAll(
+					discardBatch.stream()
+							.filter(d -> {
+								if (d instanceof Champion c) return c.canGoToGrave();
+								else if (d instanceof Equipment e) return e.canGoToGrave();
+								else return true;
+							}).toList()
+			);
 			discardBatch.clear();
 
 			if (getRound() > 0) reroll = false;
@@ -2080,20 +2067,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 			h.get().addMana(mpt);
 
 			if (!h.get().isSuppressed()) {
-				switch (h.get().getCombo().getRight()) {
-					case BESTIAL -> {
-						if (getRound() <= 1)
-							h.get().addMana(1);
-					}
-					case ELF -> {
-						int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
+				if (h.get().getCombo().getRight() == Race.ELF) {
+					int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
 
-						if (getRound() > 1) {
-							if (turns % 5 == 0) {
-								h.get().addMana(2);
-							} else if (turns % 2 == 0) {
-								h.get().addMana(1);
-							}
+					if (getRound() > 1) {
+						if (turns % 5 == 0) {
+							h.get().addMana(2);
+						} else if (turns % 2 == 0) {
+							h.get().addMana(1);
 						}
 					}
 				}
@@ -2425,20 +2406,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (Drawable d : discardBatch) {
 						d.setAvailable(true);
 					}
-					if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
-						h.get().getRealDeque().addAll(
-								discardBatch.stream()
-										.map(Drawable::copy)
-										.toList()
-						);
-						Collections.shuffle(h.get().getRealDeque());
-					} else {
-						arena.getGraveyard().get(getCurrentSide()).addAll(
-								discardBatch.stream()
-										.map(Drawable::copy)
-										.toList()
-						);
-					}
+
+					arena.getGraveyard().get(getCurrentSide()).addAll(
+							discardBatch.stream()
+									.map(Drawable::copy)
+									.toList()
+					);
 					discardBatch.clear();
 
 					if (getRound() > 0) reroll = false;
@@ -2513,20 +2486,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 					h.get().addMana(mpt);
 
 					if (!h.get().isSuppressed()) {
-						switch (h.get().getCombo().getRight()) {
-							case BESTIAL -> {
-								if (getRound() <= 1)
-									h.get().addMana(1);
-							}
-							case ELF -> {
-								int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
+						if (h.get().getCombo().getRight() == Race.ELF) {
+							int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
 
-								if (getRound() > 1) {
-									if (turns % 5 == 0) {
-										h.get().addMana(2);
-									} else if (turns % 2 == 0) {
-										h.get().addMana(1);
-									}
+							if (getRound() > 1) {
+								if (turns % 5 == 0) {
+									h.get().addMana(2);
+								} else if (turns % 2 == 0) {
+									h.get().addMana(1);
 								}
 							}
 						}
