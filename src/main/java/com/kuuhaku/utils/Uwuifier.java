@@ -63,7 +63,7 @@ public class Uwuifier {
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            String[] words = StringUtils.normalizeSpace(text).split(" ");
+            String[] words = StringUtils.normalizeSpace(line).split(" ");
 
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
