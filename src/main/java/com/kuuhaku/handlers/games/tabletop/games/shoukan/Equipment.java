@@ -383,10 +383,10 @@ public class Equipment implements Drawable, Cloneable {
 		weight += switch (getCharms().size()) {
 			case 1, 2 -> {
 				if (active && Helper.getOr(description, "").isBlank()) {
-					yield -2 + tier;
+					yield -2 + getCharms().size();
 				}
 
-				yield -1 + tier;
+				yield -1 + getCharms().size();
 			}
 			default -> -1;
 		};
