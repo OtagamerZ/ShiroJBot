@@ -49,7 +49,7 @@ public class CompileCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> | Compilando...").queue(m -> {
 			Future<Pair<String, Long>> execute = ShiroInfo.getCompilationPool().submit(() -> {
-				AtomicLong start = new AtomicLong();
+				AtomicLong time = new AtomicLong();
 
 				try {
 					String code = argsAsText.replaceAll("```groovy|```", "");
@@ -58,13 +58,14 @@ public class CompileCommand implements Executable {
 						GroovyShell gs = new GroovyShell();
 						gs.setVariable("msg", message);
 
-						start.set(System.currentTimeMillis());
+						time.set(System.currentTimeMillis());
 						gs.evaluate(code);
+						time.getAndUpdate(t -> System.currentTimeMillis() - t);
 
 						return gs;
 					});
 
-					return Pair.of(String.valueOf(fut.get(10, TimeUnit.MINUTES).getVariable("out")), System.currentTimeMillis() - start.get());
+					return Pair.of(String.valueOf(fut.get(10, TimeUnit.MINUTES).getVariable("out")), time.get());
 				} catch (TimeoutException e) {
 					return Pair.of("Tempo limite de execução excedido", -1L);
 				} catch (Exception e) {
