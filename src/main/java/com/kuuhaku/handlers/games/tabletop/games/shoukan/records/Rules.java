@@ -27,7 +27,7 @@ public record Rules(
 		boolean official
 ) {
 	public Rules() {
-		this(0, 5000, 5, 5, false, false, false, false, false, ArcadeMode.NONE, new JSONArray(), true);
+		this(0, 5000, 5, 5, false, false, false, false, false, ArcadeMode.NONE, null, true);
 	}
 
 	public Rules(int mana, int baseHp, int maxCards, int baseManaPerTurn, boolean noDamage, boolean noEquip, boolean noSpell, boolean noField, boolean debug, ArcadeMode arcade, JSONArray test) {
@@ -53,6 +53,16 @@ public record Rules(
 				json.getJSONArray("test"),
 				official
 		);
+	}
+
+	@Override
+	public ArcadeMode arcade() {
+		return Helper.getOr(arcade, ArcadeMode.NONE);
+	}
+
+	@Override
+	public JSONArray test() {
+		return Helper.getOr(test, new JSONArray());
 	}
 
 	@Override
