@@ -1111,7 +1111,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHitpoints() == 0) {
+			if (h == null || h.getHitpoints() <= 0) {
 				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 
 				if (applyDamage) {
@@ -1186,7 +1186,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHitpoints() == 0) {
+			if (h == null || h.getHitpoints() <= 0) {
 				you.addBleeding(Math.round(defr.getBldAtk() * fac));
 
 				if (applyDamage) {
@@ -1274,7 +1274,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHitpoints() == 0) {
+			if (h == null || h.getHitpoints() <= 0) {
 				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 
 				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
@@ -1307,7 +1307,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				dmg = h.bufferDamage(dmg);
 			}
 
-			if (h == null || h.getHitpoints() == 0) {
+			if (h == null || h.getHitpoints() <= 0) {
 				you.addBleeding(Math.round(defr.getBldAtk() * fac));
 
 				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
