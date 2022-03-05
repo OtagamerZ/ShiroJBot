@@ -441,8 +441,11 @@ public class TeamHand extends Hand {
 		if (getLockTime() > 0) return null;
 		try {
 			List<Drawable> cards = getCards();
+			Drawable dr = getRealDeque().stream()
+					.filter(c -> c instanceof Equipment e && !e.isSpell())
+					.max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef()))
+					.orElseThrow();
 
-			Drawable dr = getRealDeque().stream().max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
