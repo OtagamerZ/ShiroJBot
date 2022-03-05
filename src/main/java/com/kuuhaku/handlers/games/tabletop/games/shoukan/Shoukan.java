@@ -1141,7 +1141,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						defr.getName(),
 						yPower,
 						hPower,
-						op.getHp() - hBefore,
+						hBefore - op.getHp(),
 						extra > 0
 								? " (dano direto aumentado em " + extra + ")"
 								: extra < 0
@@ -1213,7 +1213,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						atkr.getName(),
 						defr.getName(),
 						yPower > hPower ? "BLOQUEADO" : "%d < %d".formatted(yPower, hPower),
-						you.getHp() - yBefore,
+						yBefore - you.getHp(),
 						extra > 0
 								? " (dano direto aumentado em " + extra + ")"
 								: extra < 0
@@ -1347,9 +1347,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return;
 
 		if (undyingCd[you.getSide() == Side.TOP ? 1 : 0] == 5) {
-			you.addHp((op.getHp() - hBefore) / 10);
+			you.addHp((hBefore - op.getHp()) / 10);
 		} else if (undyingCd[you.getSide() == Side.TOP ? 0 : 1] == 5) {
-			you.addHp((you.getHp() - yBefore) / 10);
+			you.addHp((yBefore - you.getHp()) / 10);
 		}
 		postCombat();
 	}
