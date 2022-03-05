@@ -30,6 +30,10 @@ public record Rules(
 		this(0, 5000, 5, 5, false, false, false, false, false, ArcadeMode.NONE, null, true);
 	}
 
+	public Rules(boolean official) {
+		this(0, 5000, 5, 5, false, false, false, false, false, ArcadeMode.NONE, null, official);
+	}
+
 	public Rules(int mana, int baseHp, int maxCards, int baseManaPerTurn, boolean noDamage, boolean noEquip, boolean noSpell, boolean noField, boolean debug, ArcadeMode arcade, JSONArray test) {
 		this(mana, baseHp, maxCards, baseManaPerTurn, noDamage, noEquip, noSpell, noField, debug, arcade, test, true);
 	}

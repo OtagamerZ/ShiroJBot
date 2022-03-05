@@ -83,9 +83,9 @@ public class ShoukanCommand implements Executable {
 			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
 			Rules rules;
 			if (!custom.isEmpty()) {
-				rules = new Rules(custom);
+				rules = new Rules(custom, false);
 			} else {
-				rules = new Rules();
+				rules = new Rules(false);
 			}
 
 			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
