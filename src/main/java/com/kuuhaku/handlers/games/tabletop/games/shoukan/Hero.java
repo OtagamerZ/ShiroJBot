@@ -362,7 +362,7 @@ public class Hero implements Cloneable {
 
     public int bufferDamage(int dmg) {
         int aux = dmg - getHitpoints();
-        hitpoints -= dmg;
+        hitpoints = -Math.min(aux, 0);
         return Math.max(0, aux);
     }
 
