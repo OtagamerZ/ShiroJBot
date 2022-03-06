@@ -170,10 +170,6 @@ public class Deck {
 				|| equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(4);
 	}
 
-	public boolean hasTierFour() {
-		return equipments.stream().anyMatch(c -> c.getTier() == 4);
-	}
-
 	public Field getField(Card card) {
 		for (Field field : fields) {
 			if (field.getCard().equals(card)) return field;
