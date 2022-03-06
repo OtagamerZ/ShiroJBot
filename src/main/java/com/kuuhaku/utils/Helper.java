@@ -361,8 +361,8 @@ public abstract class Helper {
 		}
 	}
 
-	public static void spawnAd(MessageChannel channel) {
-		if (chance(1)) {
+	public static void spawnAd(Account acc, MessageChannel channel) {
+		if (!acc.hasVoted(false) && chance(1)) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901").queue();
 		}
 	}
