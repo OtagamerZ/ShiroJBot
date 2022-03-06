@@ -318,7 +318,7 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (Exception e) {
 					Helper.logger(command.getCommand().getClass()).error("Erro ao executar comando " + command.getName(), e);
 				}
-				Helper.spawnAd(channel);
+				Helper.spawnAd(acc, channel);
 
 				LogDAO.saveLog(new Log(guild, author, rawMessage));
 				Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
@@ -584,7 +584,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		hook.deleteOriginal().queue();
 		command.execute(author, member, commandLine, args, msg, channel, guild, gc.getPrefix());
-		Helper.spawnAd(channel);
+		Helper.spawnAd(AccountDAO.getAccount(author.getId()), channel);
 
 		LogDAO.saveLog(new Log(guild, author, commandLine));
 		Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
