@@ -813,12 +813,12 @@ public class Champion implements Drawable, Cloneable {
 		if (triggerLock || !effect.contains(ep.getTrigger().name())) return;
 
 		try {
+			triggerLock = true;
+
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
 			gs.evaluate(effect);
-
-			triggerLock = true;
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
