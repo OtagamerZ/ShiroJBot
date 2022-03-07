@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -39,6 +40,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_FLIP;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_SWITCH;
 
 @Entity
 @Table(name = "equipment")
@@ -246,7 +250,15 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Override
 	public void setFlipped(boolean flipped) {
+		setFlipped(flipped, true);
+	}
+
+	public void setFlipped(boolean flipped, boolean trigger) {
 		this.flipped = flipped;
+
+		if (trigger) {
+			game.applyEffect(game.getCurrentSide() == side ? ON_SWITCH : ON_FLIP, this, side, getIndex(), new Source(linkedTo.asChampion(), side, getIndex()));
+		}
 	}
 
 	@Override
