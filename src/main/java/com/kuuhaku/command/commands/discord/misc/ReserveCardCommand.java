@@ -189,7 +189,7 @@ public class ReserveCardCommand implements Executable {
 					String anime = m.getRawCard().getAnime().toString();
 
 					eb.addField(
-							"`ID: " + m.getId() + "` | " + name,
+							"`" + (m.getEmoji() == null ? "" : m.getEmoji() + " ") + "ID: " + m.getId() + "` | " + name,
 							"""
 									%s
 									Por %s
