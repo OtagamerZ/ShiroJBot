@@ -19,5 +19,5 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum Phase {
-	PLAN, ATTACK
+	PLAN, COMBAT
 }

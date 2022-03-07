@@ -26,6 +26,8 @@ public enum EffectTrigger {
 	GLOBAL_TICK(false),
 
 	BEFORE_TURN(false, false), // Is triggered individually
+	PLAN_STAGE(false),
+	COMBAT_STAGE(false),
 	AFTER_TURN(false, false), // Is triggered individually
 
 	ON_LOSE(false, false),
