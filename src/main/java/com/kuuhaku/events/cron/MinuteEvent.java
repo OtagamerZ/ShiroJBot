@@ -55,7 +55,8 @@ public class MinuteEvent implements Job {
 		if (!Main.getInfo().isEncoderConnected()) {
 			try {
 				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
-			} catch (URISyntaxException | DeploymentException | IOException ignore) {
+			} catch (URISyntaxException | DeploymentException | IOException e) {
+				Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 
