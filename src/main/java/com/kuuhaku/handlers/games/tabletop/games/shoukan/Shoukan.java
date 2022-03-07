@@ -103,7 +103,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			Side.BOTTOM, new HashMap<>()
 	);
 	private final Set<PersistentEffect> persistentEffects = new HashSet<>();
-	private final List<Drawable> discardBatch = new ArrayList<>();
 	private final TournamentMatch tourMatch;
 
 	private Phase phase = Phase.PLAN;
