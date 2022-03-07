@@ -1955,6 +1955,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (postCombat()) return;
 
 			phase = Phase.PLAN;
+			applyEffect(PLAN_STAGE, (Champion) null, getCurrentSide(), -1);
+
 			h.set(hands.get(getCurrentSide()));
 			h.get().decreaseSuppression();
 			h.get().decreaseLockTime();
@@ -2077,20 +2079,20 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
-
 			reportEvent(h.get(), msg, false, true);
 			oldState = new GameState(this);
 		};
 
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		if (getRound() < 1 || phase == Phase.ATTACK)
+		if (getRound() < 1 || phase == Phase.COMBAT)
 			buttons.put(Helper.parseEmoji("▶️"), skip);
 		else {
 			buttons.put(Helper.parseEmoji("▶️"), wrapper -> {
-				phase = Phase.ATTACK;
+				phase = Phase.COMBAT;
 				draw = false;
 				reroll = false;
-				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
+				applyEffect(COMBAT_STAGE, (Champion) null, getCurrentSide(), -1);
+				reportEvent(null, "**FASE DE COMBATE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
 			buttons.put(Helper.parseEmoji("⏩"), wrapper -> {
 				draw = false;
@@ -2370,6 +2372,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (postCombat()) return;
 
 					phase = Phase.PLAN;
+					applyEffect(PLAN_STAGE, (Champion) null, getCurrentSide(), -1);
+
 					h.set(hands.get(getCurrentSide()));
 					h.get().decreaseSuppression();
 					h.get().decreaseLockTime();
