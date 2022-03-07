@@ -3323,7 +3323,7 @@ public abstract class Helper {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(bytes.length);
 		GZIPOutputStream gzip = new GZIPOutputStream(baos);
 
-		try (baos; gzip) {
+		try (gzip; baos) {
 			gzip.write(bytes);
 			return baos.toByteArray();
 		}
