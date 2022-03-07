@@ -23,6 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Market;
+import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -60,13 +61,13 @@ public class SetMarketIconCommand implements Executable {
 
 			channel.sendMessage("✅ | Ícone removido com sucesso.").queue();
 		} else {
-			String emj = args[1];
-			if (!EmojiManager.isEmoji(emj)) {
+			Emoji e = EmojiManager.getByUnicode(args[1]);
+			if (e == null) {
 				channel.sendMessage("❌ | O segundo argumento deve ser um **emoji** (emotes customizados não são emojis).").queue();
 				return;
 			}
 
-			m.setEmoji(emj);
+			m.setEmoji(e.getUnicode());
 			MarketDAO.saveCard(m);
 
 			channel.sendMessage("✅ | Ícone definido com sucesso.").queue();
