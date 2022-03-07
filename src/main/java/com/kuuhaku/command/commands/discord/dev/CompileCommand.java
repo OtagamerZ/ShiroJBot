@@ -65,7 +65,7 @@ public class CompileCommand implements Executable {
 						return gs;
 					});
 
-					return Pair.of(String.valueOf(fut.get(10, TimeUnit.MINUTES).getVariable("out")), time.get());
+					return Pair.of(String.valueOf(fut.get(1, TimeUnit.MINUTES).getVariable("out")), time.get());
 				} catch (TimeoutException e) {
 					return Pair.of("Tempo limite de execução excedido", -1L);
 				} catch (Exception e) {
