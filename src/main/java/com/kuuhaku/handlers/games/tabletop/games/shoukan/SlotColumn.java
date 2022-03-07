@@ -59,11 +59,11 @@ public class SlotColumn implements Cloneable {
 
 		Champion curr = this.top;
 		if (curr != null) {
-			if (top == null) {
-				if (curr.hasEffect()) {
-					curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
-				}
+			if (curr.hasEffect()) {
+				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+			}
 
+			if (top == null) {
 				for (CardLink link : List.copyOf(curr.getLinkedTo())) {
 					curr.unlink(link.asEquipment());
 				}
