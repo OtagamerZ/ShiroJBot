@@ -56,6 +56,9 @@ public class Market implements com.kuuhaku.model.common.Market {
 	@Enumerated(EnumType.STRING)
 	private CardType type;
 
+	@Column(columnDefinition = "CHAR(1)")
+	private String emoji;
+
 	public Market(String seller, KawaiponCard card, int price) {
 		this.seller = seller;
 		this.card = card.getCard();
@@ -152,5 +155,13 @@ public class Market implements com.kuuhaku.model.common.Market {
 
 	public CardType getType() {
 		return type;
+	}
+
+	public String getEmoji() {
+		return emoji;
+	}
+
+	public void setEmoji(String emoji) {
+		this.emoji = emoji;
 	}
 }
