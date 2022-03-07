@@ -115,7 +115,8 @@ public class EncoderClient extends Endpoint {
 					put("hash", hash);
 					put("type", "END");
 				}}.toString());
-			} catch (IOException ignore) {
+			} catch (IOException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 
