@@ -35,7 +35,6 @@ public class GameState {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, List<Drawable>> graveyard;
 	private final List<Drawable> banned;
-	private final List<Drawable> discardBatch;
 	private final Set<PersistentEffect> persistentEffects;
 	private final Field field;
 	private final int fusionLock;
@@ -61,9 +60,6 @@ public class GameState {
 						e -> e.getValue().stream().map(Drawable::copy).toList()
 				));
 		this.banned = game.getArena().getBanned().stream()
-				.map(Drawable::copy)
-				.toList();
-		this.discardBatch = game.getDiscardBatch().stream()
 				.map(Drawable::copy)
 				.toList();
 		this.persistentEffects = game.getPersistentEffects().stream()
@@ -134,10 +130,6 @@ public class GameState {
 				game.getArena().getBanned()
 		);
 		Helper.replaceContent(
-				discardBatch.stream().map(Drawable::copy).toList(),
-				game.getDiscardBatch()
-		);
-		Helper.replaceContent(
 				persistentEffects.stream().map(PersistentEffect::clone).collect(Collectors.toSet()),
 				game.getPersistentEffects()
 		);
@@ -160,10 +152,6 @@ public class GameState {
 
 	public List<Drawable> getBanned() {
 		return banned;
-	}
-
-	public List<Drawable> getDiscardBatch() {
-		return discardBatch;
 	}
 
 	public Set<PersistentEffect> getPersistentEffects() {
