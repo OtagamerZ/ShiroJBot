@@ -3098,7 +3098,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 														try {
 															Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 															Thread.sleep(2000);
-														} catch (URISyntaxException | DeploymentException | IOException | InterruptedException ignore) {
+														} catch (URISyntaxException | DeploymentException | IOException | InterruptedException e) {
+															Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 														}
 													}
 
