@@ -255,8 +255,11 @@ public class ShiroEvents extends ListenerAdapter {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (!author.isBot()) {
 			if (acc.isAfk()) {
-				if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
-					member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, Helper::doNothing);
+				if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && member.getEffectiveName().startsWith("[AFK]")) {
+					try {
+						member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, Helper::doNothing);
+					} catch (Exception ignore) {
+					}
 				}
 
 				message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
