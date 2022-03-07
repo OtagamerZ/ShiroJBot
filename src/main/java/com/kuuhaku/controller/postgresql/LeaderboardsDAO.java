@@ -64,12 +64,12 @@ public class LeaderboardsDAO {
 		Query q = em.createQuery("""
 				SELECT MAX(l.id) AS id
 					 , l.uid
-					 , l.usr
+					 , MAX(l.usr) AS usr
 					 , l.minigame
 					 , MIN(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = 'FaceoffCommand'
-				GROUP BY l.uid, l.usr, l.minigame
+				GROUP BY l.uid, l.minigame
 				ORDER BY score, id DESC
 				""");
 		q.setMaxResults(10);
@@ -88,12 +88,12 @@ public class LeaderboardsDAO {
 		Query q = em.createQuery("""
 				SELECT MAX(l.id) AS id
 					 , l.uid
-					 , l.usr
+					 , MAX(l.usr) AS usr
 					 , l.minigame
 					 , MAX(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = 'SlotsCommand'
-				GROUP BY l.uid, l.usr, l.minigame
+				GROUP BY l.uid, l.minigame
 				ORDER BY score DESC, id DESC
 				""");
 		q.setMaxResults(10);
@@ -111,13 +111,13 @@ public class LeaderboardsDAO {
 
 		Query q = em.createQuery("""
 				SELECT MAX(l.id) AS id
-					 , l.uid
-					 , l.usr
-					 , l.minigame
-					 , SUM(l.score) AS score
+				     , l.uid
+				     , MAX(l.usr) AS usr
+				     , l.minigame
+				     , SUM(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = :minigame
-				GROUP BY l.uid, l.usr, l.minigame
+				GROUP BY l.uid, l.minigame
 				ORDER BY score DESC, id DESC
 				""");
 		q.setParameter("minigame", minigame.getSimpleName());
