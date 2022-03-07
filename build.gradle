@@ -149,8 +149,7 @@ dependencies {
 	implementation group: "com.github.sbesada", name: "java.math.expression.parser", version: "v3.3.0"
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
 	implementation group: "org.mapdb", name: "mapdb", version: "3.0.8"
-	implementation group: "com.kcthota", name: "emoji4j", version: "6.0"
-	implementation group: "cglib", name: "cglib", version: "3.3.0"
+	implementation group: 'com.vdurmont', name: 'emoji-java', version: '5.1.1'
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.8.2"
