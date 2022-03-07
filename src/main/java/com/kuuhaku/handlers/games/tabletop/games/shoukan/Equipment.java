@@ -103,6 +103,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
 	private transient String altCharms = null;
+	private transient boolean triggerLock = false;
 
 	public Equipment() {
 	}
@@ -491,13 +492,15 @@ public class Equipment implements Drawable, Cloneable {
 
 	public void getEffect(EffectParameters ep) {
 		String effect = Helper.getOr(this.altEffect, this.effect);
-		if (!effect.contains(ep.getTrigger().name())) return;
+		if (triggerLock || !effect.contains(ep.getTrigger().name())) return;
 
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
 			gs.evaluate(effect);
+
+			triggerLock = true;
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
@@ -522,6 +525,14 @@ public class Equipment implements Drawable, Cloneable {
 		return !effectOnly;
 	}
 
+	public boolean isTriggerLocked() {
+		return triggerLock;
+	}
+
+	public void unlockTrigger() {
+		this.triggerLock = false;
+	}
+
 	@Override
 	public void reset() {
 		flipped = false;
@@ -535,6 +546,7 @@ public class Equipment implements Drawable, Cloneable {
 		altDescription = null;
 		altEffect = null;
 		altCharms = null;
+		triggerLock = false;
 	}
 
 	@Override
