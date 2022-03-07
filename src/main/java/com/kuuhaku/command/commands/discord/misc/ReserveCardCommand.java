@@ -42,6 +42,7 @@ import com.kuuhaku.model.persistent.Market;
 import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -73,6 +74,7 @@ public class ReserveCardCommand implements Executable {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<String> byRarity = new AtomicReference<>(null);
 			AtomicReference<String> byAnime = new AtomicReference<>(null);
+			AtomicReference<String> byEmoji = new AtomicReference<>(null);
 			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
 			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
@@ -98,6 +100,12 @@ public class ReserveCardCommand implements Executable {
 						.filter(s -> s.startsWith("-a") && s.length() > 2)
 						.findFirst()
 						.ifPresent(anime -> byAnime.set(anime.substring(2)));
+
+				params.stream()
+						.filter(s -> s.startsWith("-j") && s.length() > 2)
+						.filter(s -> EmojiUtils.isEmoji(s.substring(2)))
+						.findFirst()
+						.ifPresent(emoji -> byEmoji.set(emoji.substring(2)));
 
 				minPrice.set(params.stream()
 						.filter(s -> s.startsWith("-min") && s.length() > 4)
@@ -132,6 +140,7 @@ public class ReserveCardCommand implements Executable {
 						maxPrice.get(),
 						byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
 						byAnime.get(),
+						byEmoji.get(),
 						onlyFoil.get(),
 						onlyKawaipon.get(),
 						onlyEquip.get(),
@@ -154,6 +163,7 @@ public class ReserveCardCommand implements Executable {
 							`-n` - Busca cartas por nome
 							`-r` - Busca cartas por raridade
 							`-a` - Busca cartas por anime
+							`-j` - Busca cartas por emoji
 							`-c` - Busca apenas cartas cromadas
 							`-k` - Busca apenas cartas kawaipon
 							`-e` - Busca apenas cartas-equipamento
@@ -207,6 +217,11 @@ public class ReserveCardCommand implements Executable {
 			channel.sendMessageEmbeds((MessageEmbed) p.getContent()).queue(s ->
 					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
+			return;
+		}
+
+		if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage("❌ | O ID precisa ser um valor inteiro.").queue();
 			return;
 		}
 

@@ -75,7 +75,7 @@ public class MarketDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Market> getOffers(int page, String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String seller) {
+	public static List<Market> getOffers(int page, String name, int min, int max, KawaiponRarity rarity, String anime, String emoji, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String seller) {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
@@ -114,6 +114,7 @@ public class MarketDAO {
 				max > -1 ? "AND m.price < :max" : "",
 				rarity != null ? "AND c.rarity LIKE UPPER(:rarity)" : "",
 				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
+				emoji != null ? "AND m.emoji = :emoji" : "",
 				foil ? "AND m.foil = :foil" : "",
 				onlyKp ? "AND c.rarity <> 'EQUIPMENT' AND c.rarity <> 'FIELD'" : "",
 				onlyEq ? "AND c.rarity = 'EQUIPMENT'" : "",
@@ -134,7 +135,8 @@ public class MarketDAO {
 		if (!params[2].isBlank()) q.setParameter("max", max);
 		if (!params[3].isBlank()) q.setParameter("rarity", rarity.name());
 		if (!params[4].isBlank()) q.setParameter("anime", "%" + anime + "%");
-		if (!params[5].isBlank()) q.setParameter("foil", foil);
+		if (!params[5].isBlank()) q.setParameter("emoji", emoji);
+		if (!params[6].isBlank()) q.setParameter("foil", foil);
 		if (!params[9].isBlank()) q.setParameter("seller", seller);
 		if (!params[10].isBlank()) {
 			q.setParameter("cbase", Helper.BASE_CARD_PRICE);

@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutionException;
 
 @Command(
 		name = "emblema",
-		aliases = {"icon", "icone"},
+		aliases = {"thumb", "thumbnail"},
 		usage = "req_file",
 		category = Category.CLAN
 )
