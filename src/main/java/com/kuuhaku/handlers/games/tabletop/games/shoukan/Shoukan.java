@@ -1004,6 +1004,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (applyEffect(ON_DEFEND, defr, target.side(), target.index(), source, target)) return;
 
 			if (defr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
+				if (defr.isFlipped()) {
+					defr.setFlipped(false);
+				}
+
 				atkr.resetAttribs();
 				defr.resetAttribs();
 
