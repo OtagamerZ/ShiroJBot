@@ -20,58 +20,86 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum EffectTrigger {
 	NONE(false, false),
-	ON_FLIP(false, true),
-	ON_ATTACK(false, true),
-	ON_SUMMON(false, true),
-	BEFORE_TURN(false, false),
-	AFTER_TURN(false, false),
-	ON_SWITCH(false, true),
-	ON_SUICIDE(false, true),
-	ON_EQUIP(false, true),
-	POST_ATTACK(false, true),
-	ATTACK_ASSIST(false, true),
-	POST_DEFENSE_ASSIST(false, true),
-	POST_ATTACK_ASSIST(false, true),
-	ON_MISS(false, true),
+
+	// GLOBAL
 	GAME_TICK(false, false),
-	GLOBAL_TICK(false, true),
-	ON_DESTROY(false, true),
+	GLOBAL_TICK(false),
+
+	BEFORE_TURN(false, false), // Is triggered individually
+	AFTER_TURN(false, false), // Is triggered individually
+
 	ON_LOSE(false, false),
 	ON_WIN(false, false),
-	ON_GLOBAL_LOSE(false, true),
-	ON_GLOBAL_WIN(false, true),
-	ON_HEAL(false, true),
-	ON_DAMAGE(false, true),
-	ON_OP_HEAL(false, true),
-	ON_OP_DAMAGE(false, true),
-	ON_MANUAL_DRAW(false, true),
-	ON_OP_MANUAL_DRAW(false, true),
-	ON_DRAW(false, true),
-	ON_OP_DRAW(false, true),
-	ON_DISCARD(false, true),
-	ON_OP_DISCARD(false, true),
-	FINALIZE(false, true),
+	ON_GLOBAL_LOSE(false),
+	ON_GLOBAL_WIN(false),
+	// ------
 
-	BEFORE_DEATH(true, true),
-	AFTER_DEATH(true, true),
-	ON_DEFEND(true, true),
-	POST_DEFENSE(true, true),
-	DEFENSE_ASSIST(true, true),
-	ON_DODGE(true, true);
+	// CARD
+	ON_FLIP(false),
+	ON_SWITCH(false),
+	ON_EQUIP(false),
+	// ----
+
+	// SLOT
+	ON_SUMMON(false),
+	FINALIZE(false),
+	// ----
+
+	// COMBAT
+	ON_ATTACK(false),
+	ON_MISS(false),
+	ON_SUICIDE(false),
+	POST_ATTACK(false),
+	ATTACK_ASSIST(false),
+	POST_ATTACK_ASSIST(false),
+
+	ON_DEFEND(true),
+	ON_DODGE(true),
+	ON_DEATH(true),
+	AFTER_DEATH(true),
+	POST_DEFENSE(true),
+	DEFENSE_ASSIST(true),
+	POST_DEFENSE_ASSIST(true),
+	// ------
+
+	// HAND
+	ON_DAMAGE(false),
+	ON_HEAL(false),
+	ON_MANUAL_DRAW(false),
+	ON_DRAW(false),
+	ON_DISCARD(false),
+
+	ON_OP_DAMAGE(false),
+	ON_OP_HEAL(false),
+	ON_OP_MANUAL_DRAW(false),
+	ON_OP_DRAW(false),
+	ON_OP_DISCARD(false),
+	// ----
+
+	// GRAVEYARD
+	ON_SACRIFICE(false),
+	ON_GRAVEYARD(true),
+	// ---------
+	;
 
 	private final boolean defensive;
-	private final boolean individual;
+	private final boolean triggerPE;
 
-	EffectTrigger(boolean defensive, boolean individual) {
+	EffectTrigger(boolean defensive, boolean triggerPE) {
 		this.defensive = defensive;
-		this.individual = individual;
+		this.triggerPE = triggerPE;
+	}
+
+	EffectTrigger(boolean defensive) {
+		this.defensive = defensive;
+		this.triggerPE = true;
 	}
 
 	public boolean isDefensive() {
 		return defensive;
 	}
 
-	public boolean isIndividual() {
-		return individual;
+	public boolean shouldTriggerPE() {
+		return triggerPE;
 	}
 }

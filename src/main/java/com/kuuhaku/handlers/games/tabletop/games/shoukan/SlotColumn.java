@@ -20,23 +20,27 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
 
 import java.util.List;
 
 public class SlotColumn implements Cloneable {
 	private final int index;
+	private final Shoukan game;
 	private final Hand hand;
 	private Champion top = null;
 	private Equipment bottom = null;
 	private int unavailable = 0;
 	private boolean changed = false;
 
-	public SlotColumn(int index, Hand hand) {
+	public SlotColumn(int index, Shoukan game, Hand hand) {
+		this.game = game;
 		this.index = index;
 		this.hand = hand;
 	}
 
-	public SlotColumn(int index, Hand hand, Champion top, Equipment bottom) {
+	public SlotColumn(int index, Shoukan game, Hand hand, Champion top, Equipment bottom) {
+		this.game = game;
 		this.index = index;
 		this.hand = hand;
 		this.top = top;
@@ -56,8 +60,9 @@ public class SlotColumn implements Cloneable {
 		Champion curr = this.top;
 		if (curr != null) {
 			if (top == null) {
-				if (curr.hasEffect())
+				if (curr.hasEffect()) {
 					curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+				}
 
 				for (CardLink link : List.copyOf(curr.getLinkedTo())) {
 					curr.unlink(link.asEquipment());
@@ -71,6 +76,9 @@ public class SlotColumn implements Cloneable {
 		}
 
 		this.top = top;
+		if (top != null && !top.isFlipped()) {
+			game.applyEffect(EffectTrigger.ON_SUMMON, top, hand.getSide(), index, new Source(top, hand.getSide(), index));
+		}
 	}
 
 	public Equipment getBottom() {
@@ -85,14 +93,19 @@ public class SlotColumn implements Cloneable {
 
 		Equipment curr = this.bottom;
 		if (curr != null) {
-			if (curr.hasEffect())
+			if (curr.hasEffect()) {
 				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
+			}
 
-			if (curr.getLinkedTo() != null)
+			if (curr.getLinkedTo() != null) {
 				curr.getLinkedTo().asChampion().unlink(curr);
+			}
 		}
 
 		this.bottom = bottom;
+		if (bottom != null && !bottom.isFlipped()) {
+			game.applyEffect(EffectTrigger.ON_SUMMON, bottom, hand.getSide(), index);
+		}
 	}
 
 	public int getIndex() {
