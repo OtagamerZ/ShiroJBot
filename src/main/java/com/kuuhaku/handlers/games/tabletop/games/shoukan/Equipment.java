@@ -490,11 +490,14 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
+		String effect = Helper.getOr(this.altEffect, this.effect);
+		if (!effect.contains(ep.getTrigger().name())) return;
+
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
-			gs.evaluate(Helper.getOr(altEffect, effect));
+			gs.evaluate(effect);
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
