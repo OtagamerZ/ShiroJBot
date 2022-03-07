@@ -915,6 +915,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				} else if (i != heroIndex) {
 					c.setHero(null);
 				}
+
+				c.unlockTrigger();
 			}
 		}
 
