@@ -123,6 +123,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int stasis = 0;
 	private transient int stun = 0;
 	private transient int sleep = 0;
+	private transient boolean triggerLock = false;
 
 	public Champion(Card card, Race race, int mana, int blood, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -809,13 +810,15 @@ public class Champion implements Drawable, Cloneable {
 
 	public void getEffect(EffectParameters ep) {
 		String effect = Helper.getOr(this.altEffect, this.effect);
-		if (!effect.contains(ep.getTrigger().name())) return;
+		if (triggerLock || !effect.contains(ep.getTrigger().name())) return;
 
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
 			gs.evaluate(effect);
+
+			triggerLock = true;
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
@@ -1083,6 +1086,17 @@ public class Champion implements Drawable, Cloneable {
 		this.sleep = Math.max(sleep - val, 0);
 	}
 
+	public boolean isTriggerLocked() {
+		return triggerLock;
+	}
+
+	public void unlockTrigger() {
+		this.triggerLock = false;
+		for (CardLink link : linkedTo) {
+			link.asEquipment().unlockTrigger();
+		}
+	}
+
 	public Status getStatus() {
 		if (isFlipped())
 			return Status.FLIPPED;
@@ -1194,6 +1208,7 @@ public class Champion implements Drawable, Cloneable {
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
+		triggerLock = false;
 	}
 
 	@Override
