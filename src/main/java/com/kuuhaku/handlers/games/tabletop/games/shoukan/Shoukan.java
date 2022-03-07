@@ -211,10 +211,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -243,10 +243,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -350,8 +350,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			hand.removeMana(card.getMana());
 		hand.removeHp(card.getBlood());
 
-		copy.setDefending(mode == Mode.DEFENSE || mode == Mode.FLIPPED);
-		copy.setFlipped(mode == Mode.FLIPPED);
+		copy.setDefending(mode == Mode.DEFENSE || mode == Mode.FLIPPED, false);
+		copy.setFlipped(mode == Mode.FLIPPED, false);
 		slot.setTop(copy);
 
 		summoned.get(getCurrentSide()).merge(copy.getRace(), 1, Integer::sum);
@@ -444,7 +444,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		hand.removeMana(card.getMana());
 		hand.removeHp(card.getBlood());
 
-		copy.setFlipped(card.getCharms().contains(TRAP));
+		copy.setFlipped(card.getCharms().contains(TRAP), false);
 		slot.setBottom(copy);
 
 		Champion t = target.getLeft();
@@ -1890,10 +1890,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 				for (List<SlotColumn> sides : arena.getSlots().values()) {
 					for (SlotColumn slts : sides) {
 						if (slts.getTop() != null)
-							slts.getTop().setFlipped(false);
+							slts.getTop().setFlipped(false, false);
 
 						if (slts.getBottom() != null)
-							slts.getBottom().setFlipped(false);
+							slts.getBottom().setFlipped(false, false);
 					}
 				}
 
@@ -1982,10 +1982,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -2127,10 +2127,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -2180,10 +2180,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -2322,10 +2322,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -2401,10 +2401,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 							for (List<SlotColumn> sides : arena.getSlots().values()) {
 								for (SlotColumn slts : sides) {
 									if (slts.getTop() != null)
-										slts.getTop().setFlipped(false);
+										slts.getTop().setFlipped(false, false);
 
 									if (slts.getBottom() != null)
-										slts.getBottom().setFlipped(false);
+										slts.getBottom().setFlipped(false, false);
 								}
 							}
 
@@ -2512,10 +2512,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					for (List<SlotColumn> sides : arena.getSlots().values()) {
 						for (SlotColumn slts : sides) {
 							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false);
+								slts.getTop().setFlipped(false, false);
 
 							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false);
+								slts.getBottom().setFlipped(false, false);
 						}
 					}
 
@@ -2885,7 +2885,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 		h.removeHp(nc.getBlood());
 
-		nc.setDefending(from.isDefending());
+		nc.setDefending(from.isDefending(), false);
 
 		int i = from.getIndex();
 		banCard(ep.getSide(), i, false);

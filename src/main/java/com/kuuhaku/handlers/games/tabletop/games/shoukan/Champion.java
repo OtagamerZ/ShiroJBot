@@ -305,13 +305,19 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public void setFlipped(boolean flipped) {
+		setFlipped(flipped, true);
+	}
+
+	public void setFlipped(boolean flipped, boolean trigger) {
 		boolean wasFlipped = this.flipped;
 		this.flipped = flipped;
 
 		if (!this.flipped) {
 			if (wasFlipped) defending = true;
 
-			game.applyEffect(game.getCurrentSide() == side ? ON_SWITCH : ON_FLIP, this, side, getIndex(), new Source(this, side, getIndex()));
+			if (trigger) {
+				game.applyEffect(game.getCurrentSide() == side ? ON_SWITCH : ON_FLIP, this, side, getIndex(), new Source(this, side, getIndex()));
+			}
 		}
 	}
 
@@ -369,9 +375,15 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setDefending(boolean defending) {
+		setDefending(defending, true);
+	}
+
+	public void setDefending(boolean defending, boolean trigger) {
 		this.defending = defending;
 
-		game.applyEffect(ON_SWITCH, this, side, getIndex(), new Source(this, side, getIndex()));
+		if (trigger) {
+			game.applyEffect(ON_SWITCH, this, side, getIndex(), new Source(this, side, getIndex()));
+		}
 	}
 
 	public boolean isSealed() {
