@@ -38,6 +38,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
+
 public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, BondedList<Drawable>> graveyard;
@@ -53,23 +55,29 @@ public class Arena {
 
 		this.slots = Map.of(
 				Side.TOP, List.of(
-						new SlotColumn(0, top),
-						new SlotColumn(1, top),
-						new SlotColumn(2, top),
-						new SlotColumn(3, top),
-						new SlotColumn(4, top)
+						new SlotColumn(0, game, top),
+						new SlotColumn(1, game, top),
+						new SlotColumn(2, game, top),
+						new SlotColumn(3, game, top),
+						new SlotColumn(4, game, top)
 				),
 				Side.BOTTOM, List.of(
-						new SlotColumn(0, bot),
-						new SlotColumn(1, bot),
-						new SlotColumn(2, bot),
-						new SlotColumn(3, bot),
-						new SlotColumn(4, bot)
+						new SlotColumn(0, game, bot),
+						new SlotColumn(1, game, bot),
+						new SlotColumn(2, game, bot),
+						new SlotColumn(3, game, bot),
+						new SlotColumn(4, game, bot)
 				)
 		);
 		this.graveyard = Map.of(
-				Side.TOP, new BondedList<>(Drawable::reset),
-				Side.BOTTOM, new BondedList<>(Drawable::reset)
+				Side.TOP, new BondedList<>(d -> {
+					game.applyEffect(game.getCurrentSide() == Side.TOP ? ON_SACRIFICE : ON_GRAVEYARD, d, Side.TOP, d.getIndex());
+					d.reset();
+				}),
+				Side.BOTTOM, new BondedList<>(d -> {
+					game.applyEffect(game.getCurrentSide() == Side.BOTTOM ? ON_SACRIFICE : ON_GRAVEYARD, d, Side.BOTTOM, d.getIndex());
+					d.reset();
+				})
 		);
 		this.banned = new BondedList<>(Drawable::reset);
 

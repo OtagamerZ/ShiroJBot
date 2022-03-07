@@ -58,6 +58,7 @@ public class Hand {
 	private final BondedList<Drawable> deque;
 	private final BondedList<Drawable> cards;
 	private final BondedList<Drawable> destinyDeck;
+	private final BondedList<Drawable> discardBatch;
 	private final Hero hero;
 	private final Pair<Race, Race> combo;
 	private final double divergence;
@@ -87,6 +88,19 @@ public class Hand {
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
 		this.game = game;
 		this.side = side;
+		this.discardBatch = new BondedList<>(d -> {
+			Side[] sides = {side, side.getOther()};
+			for (int i = 0; i < 5; i++) {
+				for (Side s : sides) {
+					SlotColumn slot = game.getSlots().get(s).get(i);
+					if (slot.getTop() == null) continue;
+
+					Champion c = slot.getTop();
+					game.applyEffect(side == game.getCurrentSide() ? ON_DISCARD : ON_OP_DISCARD, c, s, -1);
+				}
+			}
+		});
+
 		if (user == null) {
 			this.acc = null;
 			this.deque = null;
@@ -526,6 +540,10 @@ public class Hand {
 
 	public BondedList<Drawable> getDestinyDeck() {
 		return destinyDeck;
+	}
+
+	public BondedList<Drawable> getDiscardBatch() {
+		return discardBatch;
 	}
 
 	public Hero getHero() {
