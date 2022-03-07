@@ -42,43 +42,59 @@ public class BondedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addFirst(T t) {
-		bonding.accept(t);
-		super.addFirst(t);
+		try {
+			super.addFirst(t);
+		} finally {
+			bonding.accept(t);
+		}
 	}
 
 	@Override
 	public void addLast(T t) {
-		bonding.accept(t);
-		super.addLast(t);
+		try {
+			super.addLast(t);
+		} finally {
+			bonding.accept(t);
+		}
 	}
 
 	@Override
 	public boolean add(T t) {
-		bonding.accept(t);
-		return super.add(t);
+		try {
+			return super.add(t);
+		} finally {
+			bonding.accept(t);
+		}
 	}
 
 	@Override
 	public void add(int index, T element) {
-		bonding.accept(element);
-		super.add(index, element);
+		try {
+			super.add(index, element);
+		} finally {
+			bonding.accept(element);
+		}
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		for (T t : c) {
-			bonding.accept(t);
+		try {
+			return super.addAll(c);
+		} finally {
+			for (T t : c) {
+				bonding.accept(t);
+			}
 		}
-
-		return super.addAll(c);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		for (T t : c) {
-			bonding.accept(t);
+		try {
+			return super.addAll(index, c);
+		} finally {
+			for (T t : c) {
+				bonding.accept(t);
+			}
 		}
-
-		return super.addAll(index, c);
 	}
 }
