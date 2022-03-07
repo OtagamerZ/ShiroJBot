@@ -45,7 +45,7 @@ public class AfkCommand implements Executable {
 		}
 
 		if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
-			member.modifyNickname("[AFK] " + member.getNickname()).queue(null, Helper::doNothing);
+			member.modifyNickname("[AFK] " + member.getEffectiveName()).queue(null, Helper::doNothing);
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
