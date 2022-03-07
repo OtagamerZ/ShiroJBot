@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.CardLink;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.FusionMaterial;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Source;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -43,6 +44,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
 @Entity
 @Table(name = "champion")
@@ -302,8 +305,14 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		if (this.flipped && !flipped) defending = true;
+		boolean wasFlipped = this.flipped;
 		this.flipped = flipped;
+
+		if (!this.flipped) {
+			if (wasFlipped) defending = true;
+
+			game.applyEffect(game.getCurrentSide() == side ? ON_SWITCH : ON_FLIP, this, side, getIndex(), new Source(this, side, getIndex()));
+		}
 	}
 
 	@Override
@@ -323,11 +332,15 @@ public class Champion implements Drawable, Cloneable {
 	public void link(Equipment link) {
 		this.linkedTo.add(new CardLink(link.getIndexReference(), link, this));
 		link.link(this);
+
+		game.applyEffect(ON_EQUIP, this, side, getIndex(), new Source(this, side, getIndex()));
 	}
 
 	public void link(Equipment link, boolean fake) {
 		this.linkedTo.add(new CardLink(fake ? new AtomicInteger(-1) : link.getIndexReference(), link, this));
 		link.link(this);
+
+		game.applyEffect(ON_EQUIP, this, side, getIndex(), new Source(this, side, getIndex()));
 	}
 
 	public void unlink(Equipment link) {
@@ -357,6 +370,8 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setDefending(boolean defending) {
 		this.defending = defending;
+
+		game.applyEffect(ON_SWITCH, this, side, getIndex(), new Source(this, side, getIndex()));
 	}
 
 	public boolean isSealed() {

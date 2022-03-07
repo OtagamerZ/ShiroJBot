@@ -354,13 +354,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		copy.setFlipped(mode == Mode.FLIPPED);
 		slot.setTop(copy);
 
-		if (copy.getHero() != null) {
-
-		}
-
-		if (!copy.isFlipped() && applyEffect(ON_SUMMON, copy, getCurrentSide(), index, new Source(copy, getCurrentSide(), index)))
-			return null;
-
 		summoned.get(getCurrentSide()).merge(copy.getRace(), 1, Integer::sum);
 
 		return switch (mode) {
@@ -451,7 +444,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		hand.removeMana(card.getMana());
 		hand.removeHp(card.getBlood());
 
-		copy.setFlipped(card.getCharms().contains(Charm.TRAP));
+		copy.setFlipped(card.getCharms().contains(TRAP));
 		slot.setBottom(copy);
 
 		Champion t = target.getLeft();
@@ -464,9 +457,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				copy.activate(hand, hands.get(getNextSide()), this, -1, pos);
 			}
 		}
-
-		if (applyEffect(ON_EQUIP, t, getCurrentSide(), pos, new Source(t, getCurrentSide(), pos)))
-			return null;
 
 		if (!copy.getCharms().isEmpty()) {
 			if (Helper.containsAny(copy.getCharms(), TIMEWARP, DOUBLETAP)) {
@@ -487,8 +477,9 @@ public class Shoukan extends GlobalGame implements Serializable {
 								}
 							}
 							case DOUBLETAP -> {
-								if (t.hasEffect())
+								if (t.hasEffect()) {
 									t.getEffect(new EffectParameters(ON_SUMMON, this, getCurrentSide(), pos, Duelists.of(t, pos, null, -1), channel));
+								}
 							}
 						}
 					}
@@ -723,9 +714,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.setFlipped(false);
 					c.setDefending(true);
 					msg = "Carta virada para cima em modo de defesa.";
-
-					if (applyEffect(ON_SUMMON, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
-						return;
 				} else if (c.isDefending()) {
 					c.setDefending(false);
 					msg = "Carta trocada para modo de ataque.";
@@ -733,9 +721,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					c.setDefending(true);
 					msg = "Carta trocada para modo de defesa.";
 				}
-
-				if (applyEffect(ON_SWITCH, c, getCurrentSide(), index, new Source(c, getCurrentSide(), index)))
-					return;
 
 				setSlotChanged(getCurrentSide(), index, true);
 				reportEvent(h, msg, true, false);
@@ -750,19 +735,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				if (args[1].equalsIgnoreCase("d") && args.length == 2) {
-					discardBatch.add(d);
+					h.getDiscardBatch().add(d);
 					d.setAvailable(false);
-
-					Side[] sides = {getCurrentSide(), getNextSide()};
-					for (int i = 0; i < 5; i++) {
-						for (Side s : sides) {
-							SlotColumn slot = arena.getSlots().get(s).get(i);
-							if (slot.getTop() == null) continue;
-
-							Champion c = slot.getTop();
-							if (applyEffect(s == getCurrentSide() ? ON_DISCARD : ON_OP_DISCARD, c, s, -1)) return;
-						}
-					}
 
 					if (makeFusion(h)) return;
 
@@ -1047,7 +1021,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (defr.isDefending()) {
 			if (defr.isFlipped()) {
 				defr.setFlipped(false);
-				if (applyEffect(ON_FLIP, defr, target.side(), target.index(), source, target)) return;
 			}
 
 			hPower = defr.getFinDef();
@@ -1081,7 +1054,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			if (applyEffect(POST_ATTACK, atkr, source.side(), target.index(), source, target)) return;
-			if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
+			if (applyEffect(ON_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			fac *= 1 - op.getMitigation();
 			if (you.getCombo().getRight() == Race.DEMON)
@@ -1130,8 +1103,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 					}
 				}
 			}
-
-			if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			int extra = Math.round(dmg * fac - dmg);
 			String msg;
@@ -1234,7 +1205,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		/* ATTACK CLASHED */
 		else {
 			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
-			if (applyEffect(BEFORE_DEATH, defr, target.side(), target.index(), source, target)) return;
+			if (applyEffect(ON_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			fac *= 1 - op.getMitigation();
 			if (you.getCombo().getRight() == Race.DEMON)
@@ -1327,8 +1298,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			if (applyEffect(AFTER_DEATH, defr, target.side(), target.index(), source, target)) return;
-
 			String msg = "Ambas as cartas foram destruídas! (%d = %d)".formatted(
 					yPower,
 					hPower
@@ -1391,8 +1360,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			SlotColumn sc = getFirstAvailableSlot(getCurrentSide(), true);
 			if (sc != null) {
 				sc.setTop(fusion);
-				if (applyEffect(ON_SUMMON, fusion, getCurrentSide(), sc.getIndex(), new Source(fusion, getCurrentSide(), sc.getIndex())))
-					return true;
 
 				if (fusion.getMana() > 0) {
 					if (h.isNullMode())
@@ -1439,8 +1406,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		getSlot(side, index).setTop(null);
 		if (target.canGoToGrave())
 			arena.getGraveyard().get(side).add(target);
-
-		applyEffect(ON_DESTROY, target, side, index);
 	}
 
 	public void destroyCard(Side side, int index, Side caster, int source) {
@@ -1463,7 +1428,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
-			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
@@ -1471,11 +1436,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
-				if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
+				if (e.getCharms().contains(MIRROR) && activator != null) {
 					destroyCard(caster, source, side, index);
 				}
 
-				if (e.getCharms().contains(Charm.SHIELD)) {
+				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
@@ -1509,8 +1474,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			getSlot(side, index).setTop(null);
 			if (target.canGoToGrave())
 				arena.getGraveyard().get(side).add(target);
-
-			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1542,7 +1505,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
-			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
@@ -1550,11 +1513,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
-				if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
+				if (e.getCharms().contains(MIRROR) && activator != null) {
 					convertCard(caster, source, side, index);
 				}
 
-				if (e.getCharms().contains(Charm.SHIELD)) {
+				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
@@ -1593,8 +1556,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			} else {
 				sc.setTop(target);
 			}
-
-			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1621,7 +1582,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
-			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
@@ -1629,7 +1590,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
-				if (e.getCharms().contains(Charm.SHIELD)) {
+				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
@@ -1661,7 +1622,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			}
 
 			charm = activator.getBonus().getCharm();
-			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
@@ -1669,7 +1630,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
-				if (e.getCharms().contains(Charm.SHIELD)) {
+				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
@@ -1702,9 +1663,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			getSlot(side, index).setTop(activator);
 			getSlot(caster, source).setTop(target);
-
-			applyEffect(ON_DESTROY, target, side, index);
-			applyEffect(ON_DESTROY, activator, caster, source);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1730,7 +1688,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
-			if (charm == Charm.SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
+			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
 			}
 
@@ -1738,11 +1696,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 			for (CardLink cl : aux) {
 				Equipment e = cl.asEquipment();
 
-				if (e.getCharms().contains(Charm.MIRROR) && activator != null) {
+				if (e.getCharms().contains(MIRROR) && activator != null) {
 					captureCard(caster, source, side, index, withFusion);
 				}
 
-				if (e.getCharms().contains(Charm.SHIELD)) {
+				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
@@ -1777,8 +1735,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			getSlot(side, index).setTop(null);
 			if (!target.isFusion() || withFusion)
 				hands.get(side.getOther()).getCards().add(target);
-
-			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
 		}
@@ -1800,8 +1756,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 			slts.get(index).setBottom(null);
 			arena.getBanned().add(target);
-
-			applyEffect(ON_DESTROY, target, side, index);
 		} else {
 			Champion target = slts.get(index).getTop();
 			if (target == null || target.getBonus().popFlag(Flag.NOBAN)) return;
@@ -1828,8 +1782,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 			getSlot(side, index).setTop(null);
 			if (target.canGoToGrave())
 				arena.getBanned().add(target);
-
-			applyEffect(ON_DESTROY, target, side, index);
 		}
 	}
 
@@ -1848,12 +1800,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 			else
 				arena.getGraveyard().get(side).add(target);
 		}
-
-		applyEffect(ON_DESTROY, target, side, index);
 	}
 
 	public Arena getArena() {
 		return arena;
+	}
+
+	public Map<Side, List<SlotColumn>> getSlots() {
+		return arena.getSlots();
 	}
 
 	public Side getSideById(String id) {
@@ -2775,7 +2729,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, Side side, int index, Duelists duelists) {
 		boolean lastTick = Helper.equalsAny(trigger, ON_WIN, ON_LOSE, ON_GLOBAL_WIN, ON_GLOBAL_LOSE);
 
-		if (trigger.isIndividual()) {
+		if (trigger.shouldTriggerPE()) {
 			applyPersistentEffects(trigger, side, index);
 
 			if (!lastTick && postCombat()) return true;
@@ -2838,6 +2792,30 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (activator.hasEffect()) {
 				activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
 			}
+		}
+	}
+
+	public void applyEffect(EffectTrigger trigger, Drawable activator, Side side, int index) {
+		applyEffect(trigger, activator, side, index, Duelists.of());
+	}
+
+	public void applyEffect(EffectTrigger trigger, Drawable activator, Side side, int index, Source source) {
+		applyEffect(trigger, activator, side, index, Duelists.of(source));
+	}
+
+	public void applyEffect(EffectTrigger trigger, Drawable activator, Side side, int index, Target target) {
+		applyEffect(trigger, activator, side, index, Duelists.of(target));
+	}
+
+	public void applyEffect(EffectTrigger trigger, Drawable activator, Side side, int index, Source source, Target target) {
+		applyEffect(trigger, activator, side, index, Duelists.of(source, target));
+	}
+
+	public void applyEffect(EffectTrigger trigger, Drawable activator, Side side, int index, Duelists duelists) {
+		if (activator instanceof Champion c) {
+			applyEffect(trigger, c, side, index, duelists);
+		} else if (activator instanceof Equipment e) {
+			applyEffect(trigger, e, side, index, duelists);
 		}
 	}
 
@@ -2912,7 +2890,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 		int i = from.getIndex();
 		banCard(ep.getSide(), i, false);
 		arena.getSlots().get(ep.getSide()).get(i).setTop(nc);
-		applyEffect(ON_SUMMON, nc, ep.getSide(), i, ep.getDuelists());
 		return nc;
 	}
 
