@@ -1939,19 +1939,15 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 			}
 
-			for (Drawable d : discardBatch) {
-				d.setAvailable(true);
-			}
-
 			arena.getGraveyard().get(getCurrentSide()).addAll(
-					discardBatch.stream()
+					h.get().getDiscardBatch().stream()
 							.filter(d -> {
 								if (d instanceof Champion c) return c.canGoToGrave();
 								else if (d instanceof Equipment e) return e.canGoToGrave();
 								else return true;
 							}).toList()
 			);
-			discardBatch.clear();
+			h.get().getDiscardBatch().clear();
 
 			if (getRound() > 0) reroll = false;
 			resetTimer(this);
@@ -2361,16 +2357,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 						}
 					}
 
-					for (Drawable d : discardBatch) {
-						d.setAvailable(true);
-					}
-
 					arena.getGraveyard().get(getCurrentSide()).addAll(
-							discardBatch.stream()
+							h.get().getDiscardBatch().stream()
 									.map(Drawable::copy)
 									.toList()
 					);
-					discardBatch.clear();
+					h.get().getDiscardBatch().clear();
 
 					if (getRound() > 0) reroll = false;
 					resetTimer(this);
@@ -2643,10 +2635,6 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public void setSlotChanged(Side side, int slot, boolean changed) {
 		arena.getSlots().get(side).get(slot).setChanged(changed);
-	}
-
-	public List<Drawable> getDiscardBatch() {
-		return discardBatch;
 	}
 
 	public Set<PersistentEffect> getPersistentEffects() {
