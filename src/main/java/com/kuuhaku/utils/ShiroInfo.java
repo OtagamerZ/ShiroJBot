@@ -214,6 +214,7 @@ public class ShiroInfo {
 		try {
 			encoderClient = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
 		} catch (URISyntaxException | DeploymentException | IOException e) {
+			Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 			encoderClient = null;
 		}
 	}
