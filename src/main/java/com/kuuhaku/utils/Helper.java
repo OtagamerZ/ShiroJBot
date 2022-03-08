@@ -621,7 +621,7 @@ public abstract class Helper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getOr(Object get, T... or) {
+	public static <T> T getOrMany(Object get, T... or) {
 		T out = null;
 
 		for (T t : or) {
