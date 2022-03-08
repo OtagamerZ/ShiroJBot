@@ -736,7 +736,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				}
 
 				if (args[1].equalsIgnoreCase("d") && args.length == 2) {
-					h.getDiscardBatch().add(d);
+					h.getDiscardBatch().add(d.copy());
 					d.setAvailable(false);
 
 					if (makeFusion(h)) return;
@@ -2364,8 +2364,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 					arena.getGraveyard().get(getCurrentSide()).addAll(
 							h.get().getDiscardBatch().stream()
-									.map(Drawable::copy)
-									.toList()
+									.filter(d -> {
+										if (d instanceof Champion c) return c.canGoToGrave();
+										else if (d instanceof Equipment e) return e.canGoToGrave();
+										else return true;
+									}).toList()
 					);
 					h.get().getDiscardBatch().clear();
 
