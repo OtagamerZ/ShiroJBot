@@ -481,6 +481,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 								}
 							}
 						}
+
+						t.unlockTrigger();
 					}
 				}
 			}

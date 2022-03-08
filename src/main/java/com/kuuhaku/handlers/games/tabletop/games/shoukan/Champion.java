@@ -317,6 +317,10 @@ public class Champion implements Drawable, Cloneable {
 			if (wasFlipped) defending = true;
 
 			if (trigger) {
+				if (wasFlipped && game.getCurrentSide() == side) {
+					game.applyEffect(ON_SUMMON, this, side, getIndex(), new Source(this, side, getIndex()));
+				}
+
 				game.applyEffect(game.getCurrentSide() == side ? ON_SWITCH : ON_FLIP, this, side, getIndex(), new Source(this, side, getIndex()));
 			}
 		}
@@ -793,7 +797,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getRawEffect() {
-		return sealed ? null : Helper.getOr(altEffect, effect);
+		return sealed ? null : Helper.getOr(altEffect, effect, "");
 	}
 
 	public void setRawEffect(String effect) {
@@ -809,8 +813,8 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String effect = Helper.getOr(this.altEffect, this.effect);
-		if (triggerLock || !effect.contains(ep.getTrigger().name())) return;
+		String effect = getRawEffect();
+		if (triggerLock || effect == null || !effect.contains(ep.getTrigger().name())) return;
 
 		try {
 			triggerLock = true;
@@ -825,7 +829,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean hasCurse() {
-		return curse != null;
+		return curse != null && !curse.isBlank();
 	}
 
 	public String getRawCurse() {
@@ -837,7 +841,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void getCurse(EffectParameters ep) {
+		if (triggerLock || curse == null || !curse.contains(ep.getTrigger().name())) return;
+
 		try {
+			triggerLock = true;
+
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);

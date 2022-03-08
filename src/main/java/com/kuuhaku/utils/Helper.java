@@ -384,13 +384,13 @@ public abstract class Helper {
 				.ifPresent(w -> webhook[0] = w);
 
 		try {
-			if (webhook[0] == null) return chn.createWebhook(name).complete();
+			if (webhook[0] == null) return Pages.subGet(chn.createWebhook(name));
 			else {
 				webhook[0].getUrl();
 				return webhook[0];
 			}
 		} catch (NullPointerException e) {
-			return chn.createWebhook(name).complete();
+			return Pages.subGet(chn.createWebhook(name));
 		}
 	}
 
@@ -407,12 +407,12 @@ public abstract class Helper {
 
 		try {
 			if (webhook.get() == null)
-				return chn.createWebhook(name).complete();
+				return Pages.subGet(chn.createWebhook(name));
 			else {
 				return webhook.get();
 			}
 		} catch (NullPointerException e) {
-			return chn.createWebhook(name).complete();
+			return Pages.subGet(chn.createWebhook(name));
 		}
 	}
 
@@ -618,6 +618,18 @@ public abstract class Helper {
 	public static <T> T getOr(Object get, T or) {
 		if (get instanceof String s && s.isBlank()) return or;
 		else return get == null ? or : (T) get;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getOr(Object get, T... or) {
+		T out = null;
+
+		for (T t : or) {
+			out = getOr(get, t);
+			if (out != null && !(out instanceof String s && s.isBlank())) break;
+		}
+
+		return out;
 	}
 
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
@@ -1900,9 +1912,7 @@ public abstract class Helper {
 					finished.set(true);
 				};
 
-				List<Message> hist = tc.getHistory()
-						.retrievePast(100)
-						.complete();
+				List<Message> hist = Pages.subGet(tc.getHistory().retrievePast(100));
 
 				if (hist.size() == 0) return;
 
