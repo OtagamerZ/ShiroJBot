@@ -491,8 +491,8 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String effect = Helper.getOr(this.altEffect, this.effect);
-		if (triggerLock || !effect.contains(ep.getTrigger().name())) return;
+		String effect = getRawEffect();
+		if (triggerLock || effect == null || !effect.contains(ep.getTrigger().name())) return;
 
 		try {
 			triggerLock = true;
