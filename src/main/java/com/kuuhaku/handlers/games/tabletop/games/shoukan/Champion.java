@@ -658,19 +658,21 @@ public class Champion implements Drawable, Cloneable {
 
 		double heroMod = 1;
 		int extra = isDuelling() ? 50 : 0;
-		if (hero != null && game != null) {
-			if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
-				heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
-			}
-
-			if (!ignoreAdaptive && hero.getPerks().contains(Perk.ADAPTIVE)) {
-				if (!isDefending())
-					extra += getBlock(true) * 2;
-				else
-					heroMod = 0;
-			}
-
+		if (hero != null) {
 			extra += hero.getDodge();
+
+			if (game != null) {
+				if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
+					heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
+				}
+
+				if (!ignoreAdaptive && hero.getPerks().contains(Perk.ADAPTIVE)) {
+					if (!isDefending())
+						extra += getBlock(true) * 2;
+					else
+						heroMod = 0;
+				}
+			}
 		}
 
 		if (game != null && acc != null) {
@@ -713,15 +715,17 @@ public class Champion implements Drawable, Cloneable {
 
 		double heroMod = 1;
 		int extra = 0;
-		if (hero != null && game != null) {
-			if (!ignoreAdaptive && hero.getPerks().contains(Perk.ADAPTIVE)) {
-				if (isDefending())
-					extra += getDodge(true) / 2;
-				else
-					heroMod = 0;
-			}
-
+		if (hero != null) {
 			extra += hero.getBlock();
+
+			if (game != null) {
+				if (!ignoreAdaptive && hero.getPerks().contains(Perk.ADAPTIVE)) {
+					if (isDefending())
+						extra += getDodge(true) / 2;
+					else
+						heroMod = 0;
+				}
+			}
 		}
 
 		int blockEquips = getLinkedTo().stream()
