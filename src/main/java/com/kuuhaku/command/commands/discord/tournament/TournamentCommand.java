@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -38,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "torneio",
@@ -102,19 +104,40 @@ public class TournamentCommand implements Executable {
 					.setTitle("Torneio " + t.getName() + " (Chave de " + t.getSize() + ")")
 					.setDescription(t.getDescription())
 					.setColor(Helper.textToColor(t.getName()))
-					.addField("Jogadores: " + t.getParticipants().size(), t.isClosed() ? "" : "O tamanho do torneio pode variar de acordo com a quantidade de participantes", false)
+					.addField(
+							"Jogadores: " + t.getParticipants().size(),
+							t.isClosed()
+									? t.getParticipants().stream()
+									.map(Participant::getUid)
+									.map(id -> "<@" + id + ">")
+									.collect(Collectors.joining(" "))
+									: "O tamanho do torneio pode variar de acordo com a quantidade de participantes",
+							false
+					)
 					.setImage("attachment://brackets.jpg");
 
-			String rules = t.getCustomRules().toString();
-			if (!rules.isBlank())
-				eb.addField("Regras adicionais:", rules, false);
+			if (t.isClosed() && !t.getBench().isEmpty()) {
+				eb.addField(
+						"Reservas: " + t.getBench().size(),
+						t.getBench().stream()
+								.map(id -> "<@" + id + ">")
+								.collect(Collectors.joining(" ")),
+						false
+				);
+			}
 
-			if (t.isClosed())
+			String rules = t.getCustomRules().toString();
+			if (!rules.isBlank()) {
+				eb.addField("Regras adicionais:", rules, false);
+			}
+
+			if (t.isClosed()) {
 				channel.sendMessageEmbeds(eb.build())
 						.addFile(Helper.writeAndGet(t.view(), "brackets", "jpg"))
 						.queue();
-			else
+			} else {
 				channel.sendMessageEmbeds(eb.build()).queue();
+			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | ID inválido.").queue();
 		}
