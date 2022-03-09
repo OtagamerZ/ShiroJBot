@@ -657,7 +657,7 @@ public class Champion implements Drawable, Cloneable {
 		if (isStasis() || isStunned() || isSleeping()) return 0;
 
 		double heroMod = 1;
-		int extra = 0;
+		int extra = isDuelling() ? 50 : 0;
 		if (hero != null && game != null) {
 			if (hero.getPerks().contains(Perk.NIGHTCAT) && game.getArena().getField() != null) {
 				heroMod = game.getArena().getField().isDay() ? 0.5 : 2;
@@ -669,6 +669,8 @@ public class Champion implements Drawable, Cloneable {
 				else
 					heroMod = 0;
 			}
+
+			extra += hero.getDodge();
 		}
 
 		if (game != null && acc != null) {
@@ -681,7 +683,7 @@ public class Champion implements Drawable, Cloneable {
 				.mapToDouble(e -> 7.5 * e.getTier())
 				.sum()
 		);
-		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips + (isDuelling() ? 50 : 0) + (hero != null ? hero.getDodge() : 0) + extra) * heroMod, 0, 100);
+		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips + extra) * heroMod, 0, 100);
 		double parFac = !isAvailable() ? 0.75 : 1;
 		return (int) Helper.roundTrunc(d * parFac * 100, 5) / 100;
 	}
@@ -718,6 +720,8 @@ public class Champion implements Drawable, Cloneable {
 				else
 					heroMod = 0;
 			}
+
+			extra += hero.getBlock();
 		}
 
 		int blockEquips = getLinkedTo().stream()
