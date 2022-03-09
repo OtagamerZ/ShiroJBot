@@ -73,6 +73,8 @@ public class Bracket {
 	}
 
 	public void populate(Tournament t, List<Participant> participants) {
+		participants = new ArrayList<>(participants);
+
 		if (participants.size() >= size)
 			participants = participants.subList(0, size);
 		else
