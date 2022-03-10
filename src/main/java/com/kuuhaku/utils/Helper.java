@@ -2447,6 +2447,7 @@ public abstract class Helper {
 				put("%user.id%", user.getId());
 				put("%user.name%", user.getName());
 				put("%user.created%", TIMESTAMP.formatted(user.getTimeCreated().toEpochSecond()));
+				put("%user.raids%", String.valueOf(RaidDAO.getUserRaids(user.getId())));
 			}
 
 			if (guild != null) {
