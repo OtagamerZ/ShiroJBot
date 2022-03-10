@@ -111,7 +111,7 @@ public class BountyBoardCommand implements Executable {
 
 			Set<Debuff> debuffs = q.getDebuffs();
 			if (!debuffs.isEmpty()) {
-				sb.appendNewLine("Maldições:");
+				sb.appendNewLine("**Maldições:**");
 				for (Debuff debuff : debuffs) {
 					sb.appendNewLine("- " + debuff.getName());
 				}
