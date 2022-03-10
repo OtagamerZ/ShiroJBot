@@ -1,7 +1,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.DebuffDAO;
-import com.kuuhaku.model.persistent.id.CompositeDebuffId;
 
 import javax.persistence.*;
 import java.time.ZoneId;
@@ -11,19 +10,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "applieddebuff")
-@IdClass(CompositeDebuffId.class)
 public class AppliedDebuff {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String debuff;
-
-	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String uid;
-
-	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private int hero;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime expiration = null;
@@ -31,10 +21,8 @@ public class AppliedDebuff {
 	public AppliedDebuff() {
 	}
 
-	public AppliedDebuff(Debuff debuff, Hero hero, long duration) {
+	public AppliedDebuff(Debuff debuff, long duration) {
 		this.debuff = debuff.getId();
-		this.uid = hero.getUid();
-		this.hero = hero.getId();
 		this.expiration = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(duration, ChronoUnit.SECONDS);
 	}
 
@@ -44,14 +32,6 @@ public class AppliedDebuff {
 
 	public void setDebuff(Debuff debuff) {
 		this.debuff = debuff.getId();
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public int getHero() {
-		return hero;
 	}
 
 	public ZonedDateTime getExpiration() {
