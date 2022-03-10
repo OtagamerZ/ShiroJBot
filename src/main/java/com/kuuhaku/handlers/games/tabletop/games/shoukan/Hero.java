@@ -284,15 +284,23 @@ public class Hero implements Cloneable {
         this.quest = quest.getId();
         this.questSeed = seed;
 
-        double expModif = 1;
+        double timeModif = 1;
         for (Perk perk : perks) {
-            expModif *= switch (perk) {
+            timeModif *= switch (perk) {
                 case NIMBLE -> 0.9;
                 default -> 1;
             };
         }
 
-        this.questEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(Math.round(getQuest().time() * expModif), TimeUnit.MINUTES);
+        for (AppliedDebuff d : debuffs) {
+            Debuff debuff = d.getDebuff();
+            timeModif *= switch (debuff.getId()) {
+                case "D_TIREDNESS" -> 1.5;
+                default -> 1;
+            };
+        }
+
+        this.questEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(Math.round(getQuest().time() * timeModif), TimeUnit.MINUTES);
     }
 
     public long getQuestEnd() {
