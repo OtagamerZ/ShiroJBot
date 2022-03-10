@@ -26,6 +26,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -42,10 +43,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -106,8 +104,17 @@ public class BountyBoardCommand implements Executable {
 			eb.addField("Recompensas", sb.toString(), true);
 
 			sb.setLength(0);
-			for (Danger danger : q.getDangers()) {
-				sb.append(danger.toString()).append("\n");
+			Set<Danger> dangers = q.getDangers();
+			for (Danger danger : dangers) {
+				sb.appendNewLine(danger.toString());
+			}
+
+			Set<Debuff> debuffs = q.getDebuffs();
+			if (!debuffs.isEmpty()) {
+				sb.appendNewLine("Maldições:");
+				for (Debuff debuff : debuffs) {
+					sb.appendNewLine("- " + debuff.getName());
+				}
 			}
 
 			eb.addField("Possíveis perigos", sb.toString(), true);
