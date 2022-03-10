@@ -113,9 +113,9 @@ public class MyHeroCommand implements Executable {
 						h.getMaxHp()
 				), true)
 				.addField(":bar_chart: | Atributos:", stats.toString(), true)
+				.addField(":toolbox: | Equipamentos:", String.join("\n", equips), true)
 				.addField(":books: | Perks:", String.join("\n", perks), true)
 				.addField(":skull_crossbones: | Debuffs:", String.join("\n", debuffs), true)
-				.addField(":books: | Equipamentos:", String.join("\n", equips), true)
 				.setImage("attachment://hero.png");
 
 		if (h.isQuesting())
