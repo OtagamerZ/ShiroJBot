@@ -33,6 +33,7 @@ import java.util.function.BiFunction;
 
 public enum Reward {
 	XP("XP", (h, v) -> {
+		if (h == null) return Helper.separate(v) + " XP";
 		int r = Math.abs(v);
 
 		if (v >= 0) h.addXp(r);
@@ -42,6 +43,7 @@ public enum Reward {
 		return Helper.separate(v < 0 ? -r : r) + " XP";
 	}),
 	EP("EP", (h, v) -> {
+		if (h == null) return Helper.separate(v) + " EP";
 		int r = Math.abs(v);
 
 		if (v >= 0) h.rest(r);
@@ -51,6 +53,7 @@ public enum Reward {
 		return Helper.separate(v < 0 ? -r : r) + " EP";
 	}),
 	CREDIT("CR", (h, v) -> {
+		if (h == null) return Helper.separate(v) + " CR";
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
@@ -61,6 +64,7 @@ public enum Reward {
 		return Helper.separate(v < 0 ? -r : r) + " CR";
 	}),
 	GEM("Gemas", (h, v) -> {
+		if (h == null) return Helper.separate(v) + " gema" + (Math.abs(v) == 1 ? "" : "s");
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
@@ -68,9 +72,10 @@ public enum Reward {
 		else acc.removeGem(r);
 		AccountDAO.saveAccount(acc);
 
-		return Helper.separate(v < 0 ? -r : r) + " gemas";
+		return Helper.separate(v < 0 ? -r : r) + " gema" + (Math.abs(v) == 1 ? "" : "s");
 	}),
 	EQUIPMENT("Equipamento", (h, v) -> {
+		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
 		String r = "Nenhum";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
@@ -84,6 +89,7 @@ public enum Reward {
 		return r;
 	}),
 	SPELL("Magia", (h, v) -> {
+		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
 		String r = "Nenhum";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
@@ -97,6 +103,7 @@ public enum Reward {
 		return r;
 	}),
 	CLEANSE("Purificação", (h, v) -> {
+		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
 		String r = "Falhou";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
