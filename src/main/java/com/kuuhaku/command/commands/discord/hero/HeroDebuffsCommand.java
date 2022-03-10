@@ -65,7 +65,7 @@ public class HeroDebuffsCommand implements Executable {
 			Debuff debuff = d.getDebuff();
 			eb.addField(
 					debuff.getName(),
-					debuff.getDescription() + "\n\n**Expira:** " + Helper.TIMESTAMP.formatted(d.getExpiration().toEpochSecond()),
+					debuff.getDescription() + "\n**Expira:** " + Helper.TIMESTAMP.formatted(d.getExpiration().toEpochSecond()),
 					false
 			);
 		}
