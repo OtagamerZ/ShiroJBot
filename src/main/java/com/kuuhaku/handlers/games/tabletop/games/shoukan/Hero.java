@@ -331,14 +331,20 @@ public class Hero implements Cloneable {
     }
 
     public Set<AppliedDebuff> getDebuffs() {
+        debuffs.removeIf(AppliedDebuff::expired);
+
         return debuffs;
     }
 
     public void setDebuffs(Set<AppliedDebuff> debuffs) {
+        debuffs.removeIf(AppliedDebuff::expired);
+
         this.debuffs = debuffs;
     }
 
     public void addDebuff(Debuff debuff) {
+        debuffs.removeIf(AppliedDebuff::expired);
+
         this.debuffs.add(new AppliedDebuff(debuff, this, debuff.getDuration()));
     }
 
