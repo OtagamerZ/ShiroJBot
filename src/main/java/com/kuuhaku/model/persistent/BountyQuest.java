@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.DebuffDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.enums.BountyDifficulty;
 import com.kuuhaku.model.enums.Danger;
@@ -104,7 +106,16 @@ public class BountyQuest {
 	public Set<Danger> getDangers() {
 		return new JSONArray(dangers).stream()
 				.map(String::valueOf)
+				.filter(s -> !s.startsWith("D_"))
 				.map(Danger::valueOf)
+				.collect(Collectors.toSet());
+	}
+
+	public Set<Debuff> getDebuffs() {
+		return new JSONArray(dangers).stream()
+				.map(String::valueOf)
+				.filter(s -> s.startsWith("D_"))
+				.map(DebuffDAO::getDebuff)
 				.collect(Collectors.toSet());
 	}
 
