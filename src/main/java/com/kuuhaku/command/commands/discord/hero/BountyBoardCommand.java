@@ -32,10 +32,12 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.BountyDifficulty;
 import com.kuuhaku.model.enums.Danger;
+import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -91,21 +93,15 @@ public class BountyBoardCommand implements Executable {
 							CON: %s
 							""".formatted((Object[]) info.reqStats().getStats()), true);
 
-			StringBuilder sb = new StringBuilder();
+			XStringBuilder sb = new XStringBuilder();
 
-			/*for (Map.Entry<Reward, Integer> entry : info.rewards().entrySet()) {
+			for (Map.Entry<Reward, Integer> entry : info.rewards().entrySet()) {
 				Reward rew = entry.getKey();
 				int val = entry.getValue();
 				if (val == 0) continue;
 
-				sb.append(rew).append(" | ").append(switch (rew) {
-					case XP -> Helper.separate(val) + " XP";
-					case EP -> Helper.separate(val) + " EP";
-					case CREDIT -> Helper.separate(val) + " CR";
-					case GEM -> Helper.separate(val) + " gema" + (val == 1 ? "" : "s");
-					case EQUIPMENT, SPELL -> Helper.clamp(val, 0, 100) + "% de chance";
-				}).append("\n");
-			}*/
+				sb.appendNewLine(rew).append(" | ").append(rew.apply(null, val));
+			}
 
 			eb.addField("Recompensas", sb.toString(), true);
 

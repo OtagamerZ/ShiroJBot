@@ -31,12 +31,12 @@ public class XStringBuilder {
         sb = new StringBuilder(value);
     }
 
-    public XStringBuilder append(String value) {
+    public XStringBuilder append(Object value) {
         sb.append(value);
         return this;
     }
 
-    public XStringBuilder appendNewLine(String value) {
+    public XStringBuilder appendNewLine(Object value) {
         if (sb.length() > 0)
             sb.append("\n").append(value);
         else
@@ -44,13 +44,18 @@ public class XStringBuilder {
         return this;
     }
 
-    public XStringBuilder appendIndent(String value, int indent) {
+    public XStringBuilder appendIndent(Object value, int indent) {
         sb.append(StringUtils.repeat("\t", indent)).append(value);
         return this;
     }
 
-    public XStringBuilder appendIndentNewLine(String value, int indent) {
+    public XStringBuilder appendIndentNewLine(Object value, int indent) {
         sb.append("\n").append(StringUtils.repeat("\t", indent)).append(value);
+        return this;
+    }
+
+    public XStringBuilder setLength(int length) {
+        sb.setLength(length);
         return this;
     }
 
