@@ -98,6 +98,8 @@
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero</class>
+        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff</class>
+        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff</class>
 
         <properties>
             <!-- dados da conexao -->

@@ -23,6 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
@@ -32,14 +33,15 @@ import com.kuuhaku.model.enums.Event;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.BountyQuest;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.records.BountyInfo;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.Set;
 
 @Command(
 		name = "recompensa",
@@ -67,7 +69,6 @@ public class BountyRewardCommand implements Executable {
 		int diff = q.getDifficulty().getValue();
 		double modDiff = Helper.prcnt(diff - info.diff(), diff);
 
-		boolean died = false;
 		EmbedBuilder eb = new EmbedBuilder();
 		if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
 			eb.setColor(Color.green);
@@ -83,21 +84,13 @@ public class BountyRewardCommand implements Executable {
 				int val = Math.round(e.getValue() * (padoru ? 1.5f : 1));
 				if (val == 0) continue;
 
-				eb.addField(rew.toString(),
-						switch (rew) {
-							case XP -> Helper.separate(rew.apply(h, val)) + " XP";
-							case EP -> Helper.separate(rew.apply(h, val)) + " EP";
-							case CREDIT -> Helper.separate(rew.apply(h, val)) + " CR";
-							case GEM -> Helper.separate(rew.apply(h, val)) + " gemas";
-							case EQUIPMENT, SPELL -> String.valueOf(rew.apply(h, Helper.clamp(val, 0, 100)));
-						}, true);
+				eb.addField(rew.toString(), rew.apply(h, val), true);
 			}
 
 			h = KawaiponDAO.getHero(author.getId());
 			assert h != null;
 		} else {
-			eb.setColor(Color.red)
-					.setTitle("A missão \"" + info + "\" fracassou");
+			eb.setColor(Color.red).setTitle("A missão \"" + info + "\" fracassou");
 
 			boolean opt = h.getPerks().contains(Perk.OPTIMISTIC);
 			int expXp = (int) Math.round(info.rewards().getOrDefault(Reward.XP, 0) / 2d * (opt ? 1.25 : 1));
@@ -115,36 +108,22 @@ public class BountyRewardCommand implements Executable {
 			}
 
 			boolean pes = h.getPerks().contains(Perk.PESSIMISTIC);
-			for (Danger danger : q.getDangers()) {
-				if (Helper.chance(50 - (pes ? 10 : 0))) {
-					switch (danger) {
-						case EP -> {
-							if (h.getEnergy() <= 1) continue;
-
-							h.removeEnergy(1);
-							eb.addField(danger.toString(), "-1 EP", true);
-						}
-						case XP -> {
-							int max = h.getXp();
-							int penalty = Helper.rng(max / 10, max / 8);
-							h.setXp(h.getXp() - penalty);
-							eb.addField(danger.toString(), "-" + penalty + " XP", true);
-						}
-						case DEATH -> {
-							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-							kp.getHeroes().remove(h);
-							KawaiponDAO.saveKawaipon(kp);
-							eb.addField(danger.toString(), "Seu herói morreu durante a missão", true);
-							died = true;
-						}
-						case EQUIPMENT -> {
-							if (h.getInventory().isEmpty()) continue;
-
-							h.getInventory().remove(Helper.getRandomEntry(h.getInventory()));
-							eb.addField(danger.toString(), "Seu herói perdeu um dos equipamentos durante a missão", true);
-						}
-					}
+			Set<Danger> dangers = q.getDangers();
+			for (Danger danger : dangers) {
+				if (Helper.chance(50 - (pes ? 25 : 0))) {
+					eb.addField(danger.toString(), danger.apply(h), true);
 				}
+			}
+
+			Set<Debuff> debuffs = q.getDebuffs();
+			for (Debuff debuff : debuffs) {
+				XStringBuilder sb = new XStringBuilder();
+				if (Helper.chance(50 - (pes ? 25 : 0))) {
+					sb.appendNewLine("- " + debuff.getName());
+					h.addDebuff(debuff);
+				}
+
+				eb.addField("Maldições", sb.toString(), true);
 			}
 		}
 
@@ -159,7 +138,7 @@ public class BountyRewardCommand implements Executable {
 
 		if (save) AccountDAO.saveAccount(acc);
 
-		if (!died && h.getLevel() > lvl) {
+		if (!h.hasDied() && h.getLevel() > lvl) {
 			h.setEnergy(h.getMaxEnergy());
 			channel.sendMessage("\uD83E\uDDED | Seja bem-vindo(a) de volta " + h.getName() + "! **(+1 nível)**")
 					.setEmbeds(eb.build())
@@ -171,6 +150,6 @@ public class BountyRewardCommand implements Executable {
 		}
 
 		h.arrive();
-		if (!died) KawaiponDAO.saveHero(h);
+		if (!h.hasDied()) KawaiponDAO.saveHero(h);
 	}
 }

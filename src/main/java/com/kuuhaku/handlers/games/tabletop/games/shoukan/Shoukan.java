@@ -2761,7 +2761,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					activator.getEffect(ep);
 			}
 
-			if (activator.hasCurse()) {
+			if (activator.isCursed()) {
 				activator.getCurse(ep);
 			}
 
