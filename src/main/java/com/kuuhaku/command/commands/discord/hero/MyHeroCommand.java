@@ -115,7 +115,7 @@ public class MyHeroCommand implements Executable {
 				.addField(":bar_chart: | Atributos:", stats.toString(), true)
 				.addField(":toolbox: | Equipamentos:", String.join("\n", equips), true)
 				.addField(":books: | Perks:", String.join("\n", perks), true)
-				.addField(":skull_crossbones: | Debuffs:", String.join("\n", debuffs), true)
+				.addField(":skull_crossbones: | Maldições:", String.join("\n", debuffs), true)
 				.setImage("attachment://hero.png");
 
 		if (h.isQuesting())
