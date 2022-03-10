@@ -191,7 +191,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.setBackground(Color.white);
 				g2d.setColor(Color.black);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-				g2d.drawString(String.valueOf(curses.size()), 180, 188);
+				Profile.drawOutlinedText(String.valueOf(curses.size()), 180, 188, g2d);
 
 				g2d.drawImage(Charm.CURSE.getIcon(), 135, 188, null);
 			}
