@@ -116,15 +116,17 @@ public class BountyRewardCommand implements Executable {
 			}
 
 			Set<Debuff> debuffs = q.getDebuffs();
-			XStringBuilder sb = new XStringBuilder();
-			for (Debuff debuff : debuffs) {
-				if (Helper.chance(50 - (pes ? 25 : 0))) {
-					sb.appendNewLine("- " + debuff.getName());
-					h.addDebuff(debuff);
+			if (!debuffs.isEmpty()) {
+				XStringBuilder sb = new XStringBuilder();
+				for (Debuff debuff : debuffs) {
+					if (Helper.chance(50 - (pes ? 25 : 0))) {
+						sb.appendNewLine("- " + debuff.getName());
+						h.addDebuff(debuff);
+					}
 				}
-			}
 
-			eb.addField("Maldições", sb.toString(), true);
+				eb.addField("Maldições", sb.toString(), true);
+			}
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
