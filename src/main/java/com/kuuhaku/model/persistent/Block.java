@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import net.dv8tion.jda.api.entities.User;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,10 +32,14 @@ public class Block {
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
 
-	public Block(String uid) {
-		this.uid = uid;
-	}
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
+	private String username;
 
 	public Block() {
+	}
+
+	public Block(User user) {
+		this.uid = user.getId();
+		this.username = user.getAsTag();
 	}
 }

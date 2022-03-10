@@ -1051,7 +1051,7 @@ public class ShiroEvents extends ListenerAdapter {
 									.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png")
 									.setTimestamp(Instant.now());
 
-							BlockDAO.block(new Block(args[1]));
+							BlockDAO.block(new Block(u));
 
 							u.openPrivateChannel().queue(c -> {
 								try {
