@@ -2447,12 +2447,12 @@ public abstract class Helper {
 				put("%user.id%", user.getId());
 				put("%user.name%", user.getName());
 				put("%user.created%", TIMESTAMP.formatted(user.getTimeCreated().toEpochSecond()));
-				put("%user.raids%", String.valueOf(RaidDAO.getUserRaids(user.getId())));
+				put("%user.raids%", Helper.separate(RaidDAO.getUserRaids(user.getId())));
 			}
 
 			if (guild != null) {
 				put("%guild%", guild.getName());
-				put("%guild.count%", String.valueOf(guild.getMemberCount()));
+				put("%guild.count%", Helper.separate(guild.getMemberCount()));
 			}
 
 			if (msg != null) {
