@@ -40,6 +40,6 @@ public class ReverseCommand implements Executable {
 		}
 
 		String txt = new StringBuilder(argsAsText.trim()).reverse().toString();
-		channel.sendMessage(Helper.makeEmoteFromMention(txt)).queue();
+		channel.sendMessage(Helper.replaceTags(txt, author, guild, message)).queue();
 	}
 }
