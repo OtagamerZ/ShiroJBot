@@ -339,7 +339,7 @@ public class Hero implements Cloneable {
     }
 
     public void addDebuff(Debuff debuff) {
-        this.debuffs.add(new AppliedDebuff(debuff, debuff.getDuration()));
+        this.debuffs.add(new AppliedDebuff(debuff, this, debuff.getDuration()));
     }
 
     public long getSeed() {
