@@ -59,6 +59,11 @@ public class HeroPerksCommand implements Executable {
 			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
 		} else if (h.getAvailablePerks() <= 0) {
+			if (h.getPerks().isEmpty()) {
+				channel.sendMessage("❌ | Seu herói não possui nenhuma perk ainda.").queue();
+				return;
+			}
+
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Perks de " + h.getName());
 
