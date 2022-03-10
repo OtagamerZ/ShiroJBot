@@ -105,7 +105,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient String altImage = null;
 	private transient String altDescription = null;
 	private transient String altEffect = null;
-	private transient String curse = null;
+	private transient Set<String> curses = new HashSet<>();
 	private transient Race altRace = null;
 
 	private transient boolean flipped = false;
@@ -187,7 +187,11 @@ public class Champion implements Drawable, Cloneable {
 				g2d.setBackground(fc.getBackgroundColor());
 			}
 
-			if (hasCurse()) {
+			if (isCursed()) {
+				g2d.setBackground(Color.white);
+				g2d.setColor(Color.black);
+				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
+				g2d.drawString(String.valueOf(curses.size()), 199, 188);
 				g2d.drawImage(Charm.CURSE.getIcon(), 135, 188, null);
 			}
 
@@ -836,30 +840,39 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
-	public boolean hasCurse() {
-		return curse != null && !curse.isBlank();
+	public boolean isCursed() {
+		return !curses.isEmpty();
 	}
 
-	public String getRawCurse() {
-		return curse;
+	public Set<String> getRawCurses() {
+		return curses;
 	}
 
-	public void setRawCurse(String curse) {
-		this.curse = curse;
+	public void setRawCurses(Set<String> curse) {
+		this.curses = curse;
+	}
+
+	public void addCurse(String curse) {
+		this.curses.add(curse);
 	}
 
 	public void getCurse(EffectParameters ep) {
-		if (triggerLock || curse == null || !curse.contains(ep.getTrigger().name())) return;
+		if (triggerLock) return;
 
-		try {
-			triggerLock = true;
+		triggerLock = true;
 
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", this);
-			gs.evaluate(curse);
-		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn("Erro ao executar maldição de " + card.getName(), e);
+		GroovyShell gs = new GroovyShell();
+		gs.setVariable("ep", ep);
+		gs.setVariable("self", this);
+
+		for (String curse : curses) {
+			if (curse == null || !curse.contains(ep.getTrigger().name())) continue;
+
+			try {
+				gs.evaluate(curse);
+			} catch (Exception e) {
+				Helper.logger(this.getClass()).warn("Erro ao executar maldição de " + card.getName(), e);
+			}
 		}
 	}
 
@@ -1185,7 +1198,12 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setHero(Hero hero) {
+		if (hero == null) return;
+
 		this.hero = hero;
+		for (AppliedDebuff d : hero.getDebuffs()) {
+			addCurse(d.getDebuff().getEffect());
+		}
 	}
 
 	public Champion getAdjacent(Neighbor direction) {
@@ -1215,7 +1233,7 @@ public class Champion implements Drawable, Cloneable {
 		altImage = null;
 		altDescription = null;
 		altEffect = null;
-		curse = null;
+		curses = new HashSet<>();
 		altRace = null;
 		mAtk = 0;
 		mDef = 0;
