@@ -285,14 +285,14 @@ public abstract class Helper {
 	public static void typeMessage(MessageChannel channel, String message) {
 		channel.sendTyping()
 				.delay(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS)
-				.flatMap(s -> channel.sendMessage(makeEmoteFromMention(message.split(" "))))
+				.flatMap(s -> channel.sendMessage(makeEmoteFromMention(message)))
 				.queue(null, Helper::doNothing);
 	}
 
 	public static void typeMessage(MessageChannel channel, String message, Message target) {
 		channel.sendTyping()
 				.delay(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS)
-				.flatMap(s -> target.reply(makeEmoteFromMention(message.split(" "))))
+				.flatMap(s -> target.reply(makeEmoteFromMention(message)))
 				.queue(null, Helper::doNothing);
 	}
 
@@ -428,27 +428,12 @@ public abstract class Helper {
 		return text.replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
-	public static String makeEmoteFromMention(String[] source) {
-		String[] chkdSrc = new String[source.length];
-		for (int i = 0; i < source.length; i++) {
-			if (source[i].startsWith("{") && source[i].endsWith("}"))
-				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
-			else chkdSrc[i] = source[i];
-		}
-
-		return unmention(String.join(" ", chkdSrc).trim());
+	public static String makeEmoteFromMention(String text) {
+		return unmention(text.replaceAll("\\{(a)?&(\\w+)&(\\d+)}", "<$1:$2:$3>"));
 	}
 
-	public static String makeEmoteFromMention(String sourceNoSplit) {
-		String[] source = sourceNoSplit.split(" ");
-		String[] chkdSrc = new String[source.length];
-		for (int i = 0; i < source.length; i++) {
-			if (source[i].startsWith("{") && source[i].endsWith("}"))
-				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
-			else chkdSrc[i] = source[i];
-		}
-
-		return unmention(String.join(" ", chkdSrc).trim());
+	public static String makeTagFromEmote(String text) {
+		return unmention(text.replaceAll("<a?(:\\w+:)\\d+>", "$1"));
 	}
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
@@ -1042,6 +1027,9 @@ public abstract class Helper {
 				}
 			}
 		}
+
+		text = makeEmoteFromMention(text);
+		text = makeTagFromEmote(text);
 
 		String[] lines = text.split("\n");
 		for (int l = 0; l < lines.length; l++) {
@@ -2464,7 +2452,7 @@ public abstract class Helper {
 			text = text.replace(rep.getKey(), rep.getValue());
 		}
 
-		return text;
+		return makeEmoteFromMention(text);
 	}
 
 	public static boolean isPureMention(String msg) {

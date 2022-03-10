@@ -169,7 +169,7 @@ public class ShiroEvents extends ListenerAdapter {
 				if (rawMessage.replace(";", "").length() == 0) {
 					channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
 				} else {
-					MessageAction send = channel.sendMessage(Helper.makeEmoteFromMention(rawMessage.substring(1).split(" ")));
+					MessageAction send = channel.sendMessage(Helper.replaceTags(rawMessage.substring(1), author, guild, message));
 					for (Message.Attachment a : message.getAttachments()) {
 						try {
 							//noinspection ResultOfMethodCallIgnored
@@ -270,7 +270,7 @@ public class ShiroEvents extends ListenerAdapter {
 			for (Member m : message.getMentionedMembers()) {
 				Account tgt = AccountDAO.getAccount(m.getId());
 				if (tgt.isAfk()) {
-					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.makeEmoteFromMention(tgt.getAfkMessage())).queue();
+					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
 				}
 			}
 		}
