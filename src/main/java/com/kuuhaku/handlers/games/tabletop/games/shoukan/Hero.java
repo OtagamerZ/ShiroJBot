@@ -103,7 +103,12 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany
+    private Set<AppliedDebuff> debuffs = new HashSet<>();
+
     private transient int hitpoints = -1;
+    private transient boolean died = false;
 
     public Hero() {
     }
@@ -325,6 +330,18 @@ public class Hero implements Cloneable {
         this.resting = !this.resting;
     }
 
+    public Set<AppliedDebuff> getDebuffs() {
+        return debuffs;
+    }
+
+    public void setDebuffs(Set<AppliedDebuff> debuffs) {
+        this.debuffs = debuffs;
+    }
+
+    public void addDebuff(Debuff debuff) {
+        this.debuffs.add(new AppliedDebuff(debuff, debuff.getDuration()));
+    }
+
     public long getSeed() {
         return seed;
     }
@@ -491,6 +508,14 @@ public class Hero implements Cloneable {
         c.setHero(this);
 
         return c;
+    }
+
+    public boolean hasDied() {
+        return died;
+    }
+
+    public void setDied(boolean died) {
+        this.died = died;
     }
 
     @Override

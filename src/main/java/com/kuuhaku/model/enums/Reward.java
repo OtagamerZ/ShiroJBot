@@ -39,7 +39,7 @@ public enum Reward {
 		else h.removeXp(r);
 		KawaiponDAO.saveHero(h);
 
-		return v < 0 ? -r : r;
+		return Helper.separate(v < 0 ? -r : r) + " XP";
 	}),
 	EP("EP", (h, v) -> {
 		int r = Math.abs(v);
@@ -48,7 +48,7 @@ public enum Reward {
 		else h.removeEnergy(r);
 		KawaiponDAO.saveHero(h);
 
-		return v < 0 ? -r : r;
+		return Helper.separate(v < 0 ? -r : r) + " EP";
 	}),
 	CREDIT("CR", (h, v) -> {
 		int r = Math.abs(v);
@@ -58,7 +58,7 @@ public enum Reward {
 		else acc.removeCredit(r, Reward.class);
 		AccountDAO.saveAccount(acc);
 
-		return v < 0 ? -r : r;
+		return Helper.separate(v < 0 ? -r : r) + " CR";
 	}),
 	GEM("Gemas", (h, v) -> {
 		int r = Math.abs(v);
@@ -68,12 +68,12 @@ public enum Reward {
 		else acc.removeGem(r);
 		AccountDAO.saveAccount(acc);
 
-		return v < 0 ? -r : r;
+		return Helper.separate(v < 0 ? -r : r) + " gemas";
 	}),
 	EQUIPMENT("Equipamento", (h, v) -> {
 		String r = "Nenhum";
 
-		if (Helper.chance(v)) {
+		if (Helper.chance(Helper.clamp(v, 0, 100))) {
 			Equipment e = CardDAO.getRandomEquipment(false);
 			assert e != null;
 			StashDAO.saveCard(new Stash(h.getUid(), e));
@@ -86,7 +86,7 @@ public enum Reward {
 	SPELL("Magia", (h, v) -> {
 		String r = "Nenhum";
 
-		if (Helper.chance(v)) {
+		if (Helper.chance(Helper.clamp(v, 0, 100))) {
 			Equipment e = CardDAO.getRandomEquipment(true);
 			assert e != null;
 			StashDAO.saveCard(new Stash(h.getUid(), e));
@@ -95,17 +95,28 @@ public enum Reward {
 		}
 
 		return r;
-	});
+	}),
+	CLEANSE("Purificação", (h, v) -> {
+		String r = "Falhou";
+
+		if (Helper.chance(Helper.clamp(v, 0, 100))) {
+			h.getDebuffs().clear();
+			r = "Sucesso";
+		}
+
+		return r;
+	}),
+	;
 
 	private final String name;
-	private final BiFunction<Hero, Integer, Object> evt;
+	private final BiFunction<Hero, Integer, String> evt;
 
-	Reward(String name, BiFunction<Hero, Integer, Object> evt) {
+	Reward(String name, BiFunction<Hero, Integer, String> evt) {
 		this.name = name;
 		this.evt = evt;
 	}
 
-	public Object apply(Hero h, int value) {
+	public String apply(Hero h, int value) {
 		return evt.apply(h, value);
 	}
 
