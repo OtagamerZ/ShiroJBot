@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -84,7 +85,7 @@ public abstract class Action {
 									.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji("↪"), wrapper -> {
 												if (wrapper.getUser().getId().equals(target.getId())) {
 													answer(channel);
-													s.clearReactions().queue();
+													s.editMessageComponents(List.of()).queue();
 												}
 											}), ShiroInfo.USE_BUTTONS, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
 									);
