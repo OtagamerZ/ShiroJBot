@@ -53,6 +53,9 @@ public class HeroDebuffsCommand implements Executable {
 		} else if (h.isUnavailable()) {
 			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
+		} else if (h.getDebuffs().isEmpty()) {
+			channel.sendMessage("❌ | Seu herói não possui nenhuma maldição ainda.").queue();
+			return;
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
