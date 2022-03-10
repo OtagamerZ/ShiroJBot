@@ -21,7 +21,9 @@ package com.kuuhaku.command.commands.discord.hero;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
@@ -56,10 +58,17 @@ public class MyHeroCommand implements Executable {
 			return;
 		}
 
-		List<String> perks = h.getPerks().stream().map(Perk::toString).collect(Collectors.toList());
+		List<String> perks = h.getPerks().stream()
+				.map(Perk::toString)
+				.collect(Collectors.toList());
 		for (int i = 0; i < h.getAvailablePerks(); i++) {
 			perks.add("`Perk disponível`");
 		}
+
+		List<String> debuffs = h.getDebuffs().stream()
+				.map(AppliedDebuff::getDebuff)
+				.map(Debuff::getName)
+				.toList();
 
 		List<String> equips = new ArrayList<>(h.getInventoryNames());
 		for (int i = 0; i < h.getInventoryCap(); i++) {
@@ -90,7 +99,6 @@ public class MyHeroCommand implements Executable {
 			}
 		}
 
-		int hours = (int) Math.ceil((10 - Helper.prcnt(h.getHitpoints(), h.getMaxHp()) * 10));
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Herói " + h.getName())
 				.addField(":chart_with_upwards_trend: | Nível: " + h.getLevel(), """
@@ -106,6 +114,7 @@ public class MyHeroCommand implements Executable {
 				), true)
 				.addField(":bar_chart: | Atributos:", stats.toString(), true)
 				.addField(":books: | Perks:", String.join("\n", perks), true)
+				.addField(":skull_crossbones: | Debuffs:", String.join("\n", debuffs), true)
 				.addField(":books: | Equipamentos:", String.join("\n", equips), true)
 				.setImage("attachment://hero.png");
 
