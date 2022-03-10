@@ -1,5 +1,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.controller.postgresql.DebuffDAO;
 import com.kuuhaku.model.persistent.id.CompositeDebuffId;
 
 import javax.persistence.*;
@@ -45,8 +46,8 @@ public class AppliedDebuff {
 		return uid;
 	}
 
-	public String getDebuff() {
-		return debuff;
+	public Debuff getDebuff() {
+		return DebuffDAO.getDebuff(debuff);
 	}
 
 	public ZonedDateTime getExpiration() {
