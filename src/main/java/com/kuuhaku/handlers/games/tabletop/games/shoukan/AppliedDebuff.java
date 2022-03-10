@@ -1,6 +1,5 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.controller.postgresql.DebuffDAO;
 import com.kuuhaku.model.persistent.id.CompositeDebuffId;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ import java.util.Objects;
 public class AppliedDebuff {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String debuff;
+	private int hero;
 
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
@@ -23,7 +22,7 @@ public class AppliedDebuff {
 
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private int hero;
+	private String debuff;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime expiration = null;
@@ -31,27 +30,23 @@ public class AppliedDebuff {
 	public AppliedDebuff() {
 	}
 
-	public AppliedDebuff(Debuff debuff, Hero hero, long duration) {
-		this.debuff = debuff.getId();
-		this.uid = hero.getUid();
+	public AppliedDebuff(Hero hero, Debuff debuff, long duration) {
 		this.hero = hero.getId();
+		this.uid = hero.getUid();
+		this.debuff = debuff.getId();
 		this.expiration = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(duration, ChronoUnit.SECONDS);
 	}
 
-	public Debuff getDebuff() {
-		return DebuffDAO.getDebuff(debuff);
-	}
-
-	public void setDebuff(Debuff debuff) {
-		this.debuff = debuff.getId();
+	public int getHero() {
+		return hero;
 	}
 
 	public String getUid() {
 		return uid;
 	}
 
-	public int getHero() {
-		return hero;
+	public String getDebuff() {
+		return debuff;
 	}
 
 	public ZonedDateTime getExpiration() {
