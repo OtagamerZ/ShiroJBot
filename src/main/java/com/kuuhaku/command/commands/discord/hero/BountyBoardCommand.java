@@ -82,17 +82,24 @@ public class BountyBoardCommand implements Executable {
 
 			EmbedBuilder eb = new EmbedBuilder()
 					.setTitle("Informações da missão \"" + q + "\"")
-					.setDescription(q.getDescription())
-					.addField("Atributos recomendados", """
-							STR: %s
-							RES: %s
-							AGI: %s
-							WIS: %s
-							CON: %s
-							""".formatted((Object[]) info.reqStats().getStats()), true);
+					.setDescription(q.getDescription());
 
 			XStringBuilder sb = new XStringBuilder();
+			Integer[] stats = info.reqStats().getStats();
+			String[] capt = {"STR: ", "RES: ", "AGI: ", "WIS: ", "CON: "};
+			for (int j = 0; j < stats.length; j++) {
+				Integer stat = stats[j];
 
+				if (stat > 0) {
+					sb.appendNewLine(capt[j] + stat);
+				}
+			}
+
+			if (!sb.isBlank()) {
+				eb.addField("Atributos recomendados", sb.toString(), true);
+			}
+
+			sb.clear();
 			for (Map.Entry<Reward, Integer> entry : info.rewards().entrySet()) {
 				Reward rew = entry.getKey();
 				int val = entry.getValue();
@@ -101,9 +108,11 @@ public class BountyBoardCommand implements Executable {
 				sb.appendNewLine(rew).append(" | ").append(rew.apply(null, val));
 			}
 
-			eb.addField("Recompensas", sb.toString(), true);
+			if (!sb.isBlank()) {
+				eb.addField("Recompensas", sb.toString(), true);
+			}
 
-			sb.setLength(0);
+			sb.clear();
 			Set<Danger> dangers = q.getDangers();
 			for (Danger danger : dangers) {
 				sb.appendNewLine(danger.toString());
@@ -117,7 +126,9 @@ public class BountyBoardCommand implements Executable {
 				}
 			}
 
-			eb.addField("Possíveis perigos", sb.toString(), true);
+			if (!sb.isBlank()) {
+				eb.addField("Possíveis perigos", sb.toString(), true);
+			}
 
 			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
 				if (h.getEnergy() < 1) {
