@@ -14,7 +14,7 @@ import java.util.Objects;
 @IdClass(CompositeDebuffId.class)
 public class AppliedDebuff {
 	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	@Column(columnDefinition = "INT NOT NULL")
 	private int hero;
 
 	@Id
