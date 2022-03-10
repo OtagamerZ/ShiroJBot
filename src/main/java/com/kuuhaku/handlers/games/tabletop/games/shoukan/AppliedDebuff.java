@@ -62,6 +62,10 @@ public class AppliedDebuff {
 		this.expiration = expiration;
 	}
 
+	public boolean expired() {
+		return ZonedDateTime.now(ZoneId.of("GMT-3")).isAfter(expiration);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
