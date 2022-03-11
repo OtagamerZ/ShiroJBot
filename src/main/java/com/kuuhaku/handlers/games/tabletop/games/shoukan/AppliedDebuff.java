@@ -67,11 +67,11 @@ public class AppliedDebuff {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		AppliedDebuff that = (AppliedDebuff) o;
-		return Objects.equals(debuff, that.debuff);
+		return hero == that.hero && Object.equals(uid, that.uid) && Objects.equals(debuff, that.debuff);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(debuff);
+		return Objects.hash(hero, uid, debuff);
 	}
 }
