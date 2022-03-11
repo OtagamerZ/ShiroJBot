@@ -22,29 +22,29 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class CompositeDebuffId implements Serializable {
-	private String debuff;
-	private String uid;
 	private int hero;
+	private String uid;
+	private String debuff;
 
 	public CompositeDebuffId() {
 	}
 
-	public CompositeDebuffId(String debuff, String uid, int hero) {
-		this.debuff = debuff;
-		this.uid = uid;
+	public CompositeDebuffId(int hero, String uid, String debuff) {
 		this.hero = hero;
+		this.uid = uid;
+		this.debuff = debuff;
 	}
 
-	public String getDebuff() {
-		return debuff;
+	public int getHero() {
+		return hero;
 	}
 
 	public String getUid() {
 		return uid;
 	}
 
-	public int getHero() {
-		return hero;
+	public String getDebuff() {
+		return debuff;
 	}
 
 	@Override
@@ -52,11 +52,11 @@ public class CompositeDebuffId implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CompositeDebuffId that = (CompositeDebuffId) o;
-		return hero == that.hero && Objects.equals(debuff, that.debuff) && Objects.equals(uid, that.uid);
+		return hero == that.hero && Objects.equals(uid, that.uid) && Objects.equals(debuff, that.debuff);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(debuff, uid, hero);
+		return Objects.hash(hero, uid, debuff);
 	}
 }
