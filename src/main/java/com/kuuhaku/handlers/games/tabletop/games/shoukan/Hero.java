@@ -103,8 +103,11 @@ public class Hero implements Cloneable {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean resting = false;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumns({
+            @JoinColumn(nullable = false, name = "hero_id", referencedColumnName = "id"),
+            @JoinColumn(nullable = false, name = "hero_uid", referencedColumnName = "uid")
+    })
     private Set<AppliedDebuff> debuffs = new HashSet<>();
 
     private transient int hitpoints = -1;
