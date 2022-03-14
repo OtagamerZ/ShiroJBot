@@ -76,6 +76,19 @@ public class TournamentDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<Tournament> getClosedTournaments() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Tournament t WHERE t.closed = TRUE", Tournament.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<Tournament> getUserTournaments(String id) {
 		EntityManager em = Manager.getEntityManager();
 
