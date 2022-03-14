@@ -389,7 +389,7 @@ public class Equipment implements Drawable, Cloneable {
 		this.altTier = altTier;
 	}
 
-	public int getWeight(Deck d) {
+	public int getWeight(Deck d, int min) {
 		boolean active = Helper.containsAny(getCharms(), Charm.ENCHANTMENT, Charm.TRAP, Charm.SPELL, Charm.CURSE);
 
 		int weight = tier;
@@ -410,7 +410,7 @@ public class Equipment implements Drawable, Cloneable {
 			default -> 0;
 		};
 
-		return Math.max(weight, 1);
+		return Math.max(weight, min);
 	}
 
 	public List<Charm> getCharms() {
