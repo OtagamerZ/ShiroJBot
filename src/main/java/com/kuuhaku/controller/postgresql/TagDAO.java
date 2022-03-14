@@ -63,18 +63,6 @@ public class TagDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Tags> getSponsors() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.sponsor = true", Tags.class);
-		List<Tags> ts = q.getResultList();
-
-		em.close();
-
-		return ts;
-	}
-
 	public static void addUserTagsToDB(String id) {
 		EntityManager em = Manager.getEntityManager();
 
