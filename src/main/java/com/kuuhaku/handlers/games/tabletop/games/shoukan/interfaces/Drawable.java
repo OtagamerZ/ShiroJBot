@@ -136,8 +136,8 @@ public interface Drawable {
 				Profile.drawOutlinedText(block + "%", 57, y + 21, g2d);
 			}
 		} else if (this instanceof Equipment e && e.getCharms().contains(Charm.SHIELD)) {
-			int charges = (int) Helper.getFibonacci(e.getTier()) - e.getBonus().getSpecialData().getInt("uses");
-			if (charges > 1) {
+			int charges = (int) Helper.getFibonacci(e.getTier()) - e.getBonus().getSpecialData().getInt("uses") - 1;
+			if (charges > 0) {
 				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/charges.png");
 				g2d.drawImage(icon, 29, y, null);
 
