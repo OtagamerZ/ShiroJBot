@@ -87,11 +87,6 @@ public class RegenRulesCommand implements Executable {
 			channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
 
 			channel.sendMessage(text).complete();
-
-			if (Helper.getSponsors().length() > 0) {
-				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "sponsors.png").complete();
-				channel.sendMessage(Helper.getSponsors()).complete();
-			}
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}

@@ -868,46 +868,6 @@ public abstract class Helper {
 		GuildDAO.updateGuildSettings(gc);
 	}
 
-	public static String getSponsors() {
-		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).toList();
-		List<Guild> spGuilds = new ArrayList<>();
-		for (String sp : sponsors) {
-			spGuilds.add(Main.getShiroShards()
-					.getGuilds()
-					.stream()
-					.filter(g -> g.getOwnerId().equals(sp) && g.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE))
-					.max(Comparator.comparing(Guild::getMemberCount))
-					.orElse(null));
-		}
-
-		spGuilds.removeIf(Objects::isNull);
-		StringBuilder sb = new StringBuilder();
-
-		for (Guild g : spGuilds) {
-			AtomicReference<Invite> i = new AtomicReference<>();
-			g.retrieveInvites().queue(invs -> {
-				for (Invite inv : invs) {
-					if (inv.getInviter() == Main.getSelfUser()) {
-						i.set(inv);
-					}
-				}
-			});
-
-			if (i.get() == null) {
-				try {
-					InviteAction ia = createInvite(g);
-					if (ia != null) sb.append(ia.setMaxAge(0).submit().get().getUrl()).append("\n");
-				} catch (InterruptedException | ExecutionException e) {
-					logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-				}
-			} else {
-				sb.append(i.get().getUrl()).append("\n");
-			}
-		}
-
-		return sb.toString();
-	}
-
 	public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
 		int original_width = imgSize.width;
 		int original_height = imgSize.height;
