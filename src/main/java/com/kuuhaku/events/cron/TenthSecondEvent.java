@@ -137,7 +137,7 @@ public class TenthSecondEvent implements Job {
 			MatchMakingRating mmr2 = p2.mmr();
 
 			if (!mmr1.equals(mmr2)
-				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)
+				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < (mmr2.getTier() == RankedTier.UNRANKED ? 4 : 2))
 			) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(p1);
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(p2);
@@ -202,7 +202,7 @@ public class TenthSecondEvent implements Job {
 			RankedDuo t2 = p2.duo();
 
 			if (!t1.equals(t2)
-				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < 2 || t2.getAvgTier() == 0)
+				&& (Math.abs(t1.getAvgTier() - t2.getAvgTier()) < (t2.getAvgTier() == 0 ? 4 : 2))
 			) {
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(p1);
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(p2);
