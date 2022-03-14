@@ -18,8 +18,11 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
@@ -85,7 +88,7 @@ public interface Drawable {
 
 	Drawable deepCopy();
 
-	static void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, int dodge, int block, boolean hasDesc) {
+	default void drawAttributes(BufferedImage in, int atk, int def, int mana, int blood, boolean hasDesc) {
 		Graphics2D g2d = in.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
@@ -112,22 +115,35 @@ public interface Drawable {
 			y -= 25;
 		}
 
-		if (dodge != 0) {
-			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/dodge.png");
-			g2d.drawImage(icon, 29, y, null);
+		if (this instanceof Champion c) {
+			int dodge = c.getDodge();
+			if (dodge != 0) {
+				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/dodge.png");
+				g2d.drawImage(icon, 29, y, null);
 
-			g2d.setColor(Color.orange);
-			Profile.drawOutlinedText(dodge + "%", 57, y + 21, g2d);
+				g2d.setColor(Color.orange);
+				Profile.drawOutlinedText(dodge + "%", 57, y + 21, g2d);
 
-			y -= 25;
-		}
+				y -= 25;
+			}
 
-		if (block != 0) {
-			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/block.png");
-			g2d.drawImage(icon, 29, y, null);
+			int block = c.getBlock();
+			if (block != 0) {
+				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/block.png");
+				g2d.drawImage(icon, 29, y, null);
 
-			g2d.setColor(new Color(155, 155, 190));
-			Profile.drawOutlinedText(block + "%", 57, y + 21, g2d);
+				g2d.setColor(new Color(155, 155, 190));
+				Profile.drawOutlinedText(block + "%", 57, y + 21, g2d);
+			}
+		} else if (this instanceof Equipment e && e.getCharms().contains(Charm.SHIELD)) {
+			int charges = (int) Helper.getFibonacci(e.getTier()) - e.getBonus().getSpecialData().getInt("uses");
+			if (charges > 1) {
+				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/charges.png");
+				g2d.drawImage(icon, 29, y, null);
+
+				g2d.setColor(Color.orange);
+				Profile.drawOutlinedText(String.valueOf(charges), 57, y + 21, g2d);
+			}
 		}
 
 		y = 59;
