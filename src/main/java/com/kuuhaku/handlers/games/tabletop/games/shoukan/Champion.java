@@ -196,7 +196,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(Charm.CURSE.getIcon(), 135, 188, null);
 			}
 
-			Drawable.drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), c.getDodge(false), c.getBlock(false), true);
+			drawAttributes(bi, c.getFinAtk(), c.getFinDef(), c.getMana(), c.getBlood(), true);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(fc.getSecondaryColor());
