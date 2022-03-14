@@ -40,7 +40,7 @@ public class EvogearDrop extends Drop<Equipment> {
 	@Override
 	public void award(User u) {
 		Deck dk = KawaiponDAO.getDeck(u.getId());
-		if (dk.getEvoWeight() + getPrize().getWeight(dk) <= 24 && dk.getEquipmentCopies(getPrize().getCard()) < dk.getEquipmentMaxCopies(getPrize())) {
+		if (dk.getEvoWeight() + getPrize().getWeight(dk, 1) <= 24 && dk.getEquipmentCopies(getPrize().getCard()) < dk.getEquipmentMaxCopies(getPrize())) {
 			dk.addEquipment(getPrize());
 		} else {
 			awardInstead(u, Helper.BASE_EQUIPMENT_PRICE);

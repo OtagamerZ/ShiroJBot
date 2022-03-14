@@ -57,7 +57,7 @@ public class ShoukanDeck {
 				.collect(Collectors.toList());
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(dk) - 1, 0), new Equipment())).stream())
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(dk, 1) - 1, 0), new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
