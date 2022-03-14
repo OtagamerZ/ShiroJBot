@@ -98,6 +98,9 @@ public class CloseBracketsCommand implements Executable {
 			} else if (Helper.prcnt(t.getParticipants().size(), t.getSize()) < 0.75) {
 				channel.sendMessage("❌ | É necessário ter no mínimo 75% das vagas preenchidas para poder fechar as chaves.").queue();
 				return;
+			} else if (TournamentDAO.getClosedTournaments().size() > 0) {
+				channel.sendMessage("❌ | Já existe um torneio fechado.").queue();
+				return;
 			}
 
 			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + t.getName() + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
