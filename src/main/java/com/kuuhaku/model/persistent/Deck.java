@@ -138,7 +138,7 @@ public class Deck {
 	}
 
 	public int getEvoWeight() {
-		return equipments.stream().mapToInt(e -> e.getWeight(this)).sum();
+		return equipments.stream().mapToInt(e -> e.getWeight(this, 1)).sum();
 	}
 
 	public void setEquipments(List<Equipment> equipments) {
@@ -234,6 +234,8 @@ public class Deck {
 
 	public int getEquipmentMaxCopies(Equipment eq) {
 		if (eq == null) return 0;
+		else if (eq.getWeight(this, 0) == 0) return 24;
+
 		return 5 - eq.getTier() + (getCombo().getLeft() == Race.BESTIAL ? 1 : 0);
 	}
 
@@ -391,7 +393,7 @@ public class Deck {
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			channel.sendMessage("❌ | Você não possui mais espaços para evogears tier 4!").queue();
 			return true;
-		} else if (getEvoWeight() + e.getWeight(this) > 24) {
+		} else if (getEvoWeight() + e.getWeight(this, 1) > 24) {
 			channel.sendMessage("❌ | Você não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
@@ -407,7 +409,7 @@ public class Deck {
 		} else if (d.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears tier 4!").queue();
 			return true;
-		} else if (d.getEvoWeight() + e.getWeight(d) > 24) {
+		} else if (d.getEvoWeight() + e.getWeight(d, 1) > 24) {
 			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
@@ -421,7 +423,7 @@ public class Deck {
 			return 1;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			return 2;
-		} else if (getEvoWeight() + e.getWeight(this) > 24) {
+		} else if (getEvoWeight() + e.getWeight(this, 1) > 24) {
 			return 3;
 		}
 
@@ -434,7 +436,7 @@ public class Deck {
 			return 1;
 		} else if (d.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			return 2;
-		} else if (d.getEvoWeight() + e.getWeight(d) > 24) {
+		} else if (d.getEvoWeight() + e.getWeight(d, 1) > 24) {
 			return 3;
 		}
 
