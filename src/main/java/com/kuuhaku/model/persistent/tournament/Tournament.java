@@ -202,6 +202,7 @@ public class Tournament {
 		List<Participant> parts = p.getParticipants(this);
 		for (int i = 0; i < parts.size(); i++) {
 			Participant part = parts.get(i);
+			if (part == null) continue;
 
 			if (part.getUid().equals(uid)) {
 				if (!p.isLast()) {
