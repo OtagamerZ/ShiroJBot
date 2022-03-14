@@ -101,22 +101,22 @@ public class ShiroInfo {
 
 	);
 	private static final Map<String, SupportTier> supports = Map.of(
-			"656542716108472340", SupportTier.NORMAL, //Lazuli
-			"553244700258336825", SupportTier.SENIOR, //Caos
-			"435229114132201493", SupportTier.NORMAL, //Megu
-			"774526344708620298", SupportTier.NORMAL  //Mask
+			"656542716108472340", SupportTier.NORMAL   //Lazuli
+			, "553244700258336825", SupportTier.SENIOR //Caos
+			//, "435229114132201493", SupportTier.NORMAL //Megu
+			//, "774526344708620298", SupportTier.NORMAL //Mask
 	);
 	private static final List<String> emoteRepo = List.of(
-			"666619034103447642", //Shiro Emote Repository 1
-			"726171298044313694", //Shiro Emote Repository 2
-			"732300321673576498", //Shiro Emote Repository 3
-			"763775306095788033"  //Shiro Emote Repository 4
+			"666619034103447642"   //Shiro Emote Repository 1
+			, "726171298044313694" //Shiro Emote Repository 2
+			, "732300321673576498" //Shiro Emote Repository 3
+			, "763775306095788033" //Shiro Emote Repository 4
 	);
 	private static final List<String> levelEmoteRepo = List.of(
-			"806891504442277969", //Low level emotes
-			"806891669345271849", //Medium level emotes
-			"806891903990628362", //High level emotes
-			"806892045327007794"  //Top level emotes
+			"806891504442277969"   //Low level emotes
+			, "806891669345271849" //Medium level emotes
+			, "806891903990628362" //High level emotes
+			, "806892045327007794" //Top level emotes
 	);
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
 	private static final ShiroEvents shiroEvents = new ShiroEvents();
