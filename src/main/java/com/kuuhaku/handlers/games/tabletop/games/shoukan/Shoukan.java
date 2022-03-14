@@ -978,6 +978,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 		if (atkr.isDefending()) return;
 		atkr.setAvailable(false);
+		defr.setFlipped(false);
 
 		/* PRE-ATTACK */
 		{
