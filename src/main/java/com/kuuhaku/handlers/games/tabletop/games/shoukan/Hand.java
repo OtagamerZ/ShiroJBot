@@ -806,10 +806,10 @@ public class Hand {
 		if (value <= 0) return;
 
 		if (hp > 1) {
-			if (hp > baseHp / 3d) {
+			if (hp > baseHp / 3f) {
 				crippleHp(value);
 				return;
-			} else if (hp > baseHp / 6d && Helper.chance(hp * 100d / baseHp)) {
+			} else if (hp > baseHp / 6f && Helper.chance(hp * 100d / baseHp)) {
 				crippleHp(value);
 				return;
 			}
