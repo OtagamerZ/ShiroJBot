@@ -988,7 +988,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			if (applyEffect(ON_ATTACK, atkr, source.side(), source.index(), source, target)) return;
 
-			if (atkr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
+			if (atkr.getBonus().popFlag(atkr, Flag.SKIPCOMBAT)) {
 				atkr.resetAttribs();
 				defr.resetAttribs();
 
@@ -1007,7 +1007,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			if (applyEffect(ON_DEFEND, defr, target.side(), target.index(), source, target)) return;
 
-			if (defr.getBonus().popFlag(Flag.SKIPCOMBAT)) {
+			if (defr.getBonus().popFlag(defr, Flag.SKIPCOMBAT)) {
 				if (defr.isFlipped()) {
 					defr.setFlipped(false);
 				}
@@ -1070,14 +1070,14 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean applyDamage = !(defr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage());
+			boolean applyDamage = !(defr.getBonus().popFlag(defr, Flag.NODAMAGE) || rules.noDamage());
 			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
 			if (noDmg) {
 				dmg = Math.round(atkr.getPenAtk() * fac);
 			} else {
-				dmg = Math.round((atkr.getBonus().hasFlag(Flag.ALLDAMAGE) ? yPower : yPower - hPower) * fac);
+				dmg = Math.round((atkr.getBonus().popFlag(atkr, Flag.ALLDAMAGE) ? yPower : yPower - hPower) * fac);
 			}
 
 			if (op.getMana() > 0) {
@@ -1150,8 +1150,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (you.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean applyDamage = !(atkr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage());
-			int dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
+			boolean applyDamage = !(atkr.getBonus().popFlag(atkr, Flag.NODAMAGE) || rules.noDamage());
+			int dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 
 			if (you.getMana() > 0) {
 				int toSteal = Math.min(you.getMana(), defr.getManaDrain());
@@ -1227,7 +1227,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (noDmg) {
 				dmg = Math.round(atkr.getPenAtk() * fac);
 			} else {
-				dmg = Math.round((atkr.getBonus().hasFlag(Flag.ALLDAMAGE) ? yPower : 0) * fac);
+				dmg = Math.round((atkr.getBonus().popFlag(atkr, Flag.ALLDAMAGE) ? yPower : 0) * fac);
 			}
 
 			if (op.getMana() > 0 || you.getMana() > 0) {
@@ -1256,7 +1256,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (h == null || h.getHitpoints() <= 0) {
 				op.addBleeding(Math.round(atkr.getBldAtk() * fac));
 
-				if (!defr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
+				if (!defr.getBonus().popFlag(defr, Flag.NODAMAGE) || rules.noDamage()) {
 					op.removeHp(dmg);
 				}
 
@@ -1279,7 +1279,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (you.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			dmg = Math.round((defr.getBonus().hasFlag(Flag.ALLDAMAGE) ? hPower : 0) * fac);
+			dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : 0) * fac);
 
 			h = defr.getHero();
 			if (h != null) {
@@ -1289,7 +1289,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			if (h == null || h.getHitpoints() <= 0) {
 				you.addBleeding(Math.round(defr.getBldAtk() * fac));
 
-				if (!atkr.getBonus().popFlag(Flag.NODAMAGE) || rules.noDamage()) {
+				if (!atkr.getBonus().popFlag(atkr, Flag.NODAMAGE) || rules.noDamage()) {
 					you.removeHp(dmg);
 				}
 
@@ -1386,7 +1386,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	public void killCard(Side side, int index, int id) {
 		Champion target = getSlot(side, index).getTop();
 		if (id > -1) {
-			if (target == null || target.getId() != id || target.getBonus().popFlag(Flag.NODEATH)) return;
+			if (target == null || target.getId() != id || target.getBonus().popFlag(target, Flag.NODEATH)) return;
 		} else {
 			if (target == null) return;
 		}
@@ -1418,7 +1418,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public void destroyCard(Side side, int index, Side caster, int source) {
 		Champion target = getSlot(side, index).getTop();
-		if (target == null || target.getBonus().popFlag(Flag.NODEATH)) return;
+		if (target == null || target.getBonus().popFlag(target, Flag.NODEATH)) return;
 
 		double chance = 100;
 		Champion activator = null;
@@ -1453,7 +1453,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
-						e.getBonus().getSpecialData().put("uses", uses);
+						e.getBonus().putProp("uses", uses);
 					}
 					return;
 				}
@@ -1495,7 +1495,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 		if (caster == null) caster = side.getOther();
 
 		Champion target = getSlot(side, index).getTop();
-		if (target == null || target.getBonus().popFlag(Flag.NOCONVERT)) return;
+		if (target == null || target.getBonus().popFlag(target, Flag.NOCONVERT)) return;
 
 		double chance = 100;
 		Champion activator = null;
@@ -1530,7 +1530,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
-						e.getBonus().getSpecialData().put("uses", uses);
+						e.getBonus().putProp("uses", uses);
 					}
 					return;
 				}
@@ -1575,11 +1575,11 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	public void switchCards(Side side, int index, Side caster, int source) {
 		Champion target = getSlot(side, index).getTop();
-		if (target == null || target.getBonus().popFlag(Flag.NOCONVERT)) return;
+		if (target == null || target.getBonus().popFlag(target, Flag.NOCONVERT)) return;
 
 		double chance = 100;
 		Champion activator = getSlot(caster, source).getTop();
-		if (activator == null || activator.getBonus().popFlag(Flag.NOCONVERT)) return;
+		if (activator == null || activator.getBonus().popFlag(activator, Flag.NOCONVERT)) return;
 
 		int sourceMana = activator.getMana(5);
 		int targetMana = target.getMana(5);
@@ -1603,7 +1603,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
-						e.getBonus().getSpecialData().put("uses", uses);
+						e.getBonus().putProp("uses", uses);
 					}
 					return;
 				}
@@ -1643,7 +1643,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
-						e.getBonus().getSpecialData().put("uses", uses);
+						e.getBonus().putProp("uses", uses);
 					}
 					return;
 				}
@@ -1713,7 +1713,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (uses >= Helper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
-						e.getBonus().getSpecialData().put("uses", uses);
+						e.getBonus().putProp("uses", uses);
 					}
 					return;
 				}
@@ -1766,7 +1766,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 			arena.getBanned().add(target);
 		} else {
 			Champion target = slts.get(index).getTop();
-			if (target == null || target.getBonus().popFlag(Flag.NOBAN)) return;
+			if (target == null || target.getBonus().popFlag(target, Flag.NOBAN)) return;
 
 			for (SlotColumn slt : slts) {
 				Champion c = slt.getTop();
