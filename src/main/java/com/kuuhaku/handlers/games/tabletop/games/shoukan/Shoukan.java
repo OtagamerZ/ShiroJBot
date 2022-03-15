@@ -1924,167 +1924,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 
 	@Override
 	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
-		ThrowingConsumer<ButtonWrapper> skip = wrapper -> {
-			User u = getCurrent();
-
-			AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
-			h.get().getCards().removeIf(d -> !d.isAvailable());
-			List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
-
-			if (applyPersistentEffects(AFTER_TURN, getCurrentSide(), -1)) return;
-			for (int i = 0; i < slots.size(); i++) {
-				Champion c = slots.get(i).getTop();
-				if (c != null) {
-					c.setAvailable(!c.isStunned() && !c.isSleeping());
-					c.resetAttribs();
-					if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-							|| makeFusion(h.get())
-					) return;
-				}
-			}
-
-			arena.getGraveyard().get(getCurrentSide()).addAll(
-					h.get().getDiscardBatch().stream()
-							.filter(d -> {
-								if (d instanceof Champion c) return c.canGoToGrave();
-								else if (d instanceof Equipment e) return e.canGoToGrave();
-								else return true;
-							}).toList()
-			);
-			h.get().getDiscardBatch().clear();
-
-			if (getRound() > 0) reroll = false;
-			resetTimer(this);
-			if (postCombat()) return;
-
-			phase = Phase.PLAN;
-			applyEffect(PLAN_STAGE, (Champion) null, getCurrentSide(), -1);
-
-			h.set(hands.get(getCurrentSide()));
-			h.get().decreaseSuppression();
-			h.get().decreaseLockTime();
-			h.get().decreaseNullTime();
-			h.get().decreaseBlindTime();
-			slots = arena.getSlots().get(getCurrentSide());
-
-			if (getRound() >= 75) {
-				if (Helper.equalsAny(getRound(), 75, 100, 125)) {
-					if (getRound() == 75) {
-						channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
-					} else if (getRound() == 100) {
-						channel.sendMessage(":warning: | ALERTA: Morte-súbita II ativada, os jogadores perderão 25% do HP atual a cada turno!").queue();
-					} else {
-						channel.sendMessage(":warning: | ALERTA: Morte-súbita III ativada, se a partida não acabar neste turno será declarado empate!").queue();
-					}
-				}
-
-				if (Helper.between(getRound(), 75, 126)) {
-					h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
-					if (postCombat()) return;
-				} else {
-					draw = true;
-					String msg = "Declaro empate! (" + getRound() + " turnos)";
-
-					for (List<SlotColumn> sides : arena.getSlots().values()) {
-						for (SlotColumn slts : sides) {
-							if (slts.getTop() != null)
-								slts.getTop().setFlipped(false, false);
-
-							if (slts.getBottom() != null)
-								slts.getBottom().setFlipped(false, false);
-						}
-					}
-
-					close();
-					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
-							.queue(mm ->
-									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
-										return mm;
-									})
-							);
-					return;
-				}
-			}
-
-			if (h.get().getBleeding() > 0) {
-				h.get().removeHp(h.get().getBleeding() / (h.get().getCombo().getLeft() == Race.HUMAN ? 10 : 5));
-				h.get().decreaseBleeding();
-			} else if (h.get().getRegeneration() > 0) {
-				h.get().addHp(h.get().getRegeneration() / 2);
-				h.get().decreaseRegeneration();
-			}
-
-			int mpt = h.get().getManaPerTurn();
-			if (h.get().getCombo().getLeft() == Race.DEMON) {
-				Hand op = hands.get(getNextSide());
-				mpt += Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5;
-				if (h.get().getHp() < h.get().getBaseHp() / 3f) {
-					h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
-				}
-			}
-			h.get().addMana(mpt);
-
-			if (!h.get().isSuppressed()) {
-				if (h.get().getCombo().getRight() == Race.ELF) {
-					int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
-
-					if (getRound() > 1) {
-						if (turns % 5 == 0) {
-							h.get().addMana(2);
-						} else if (turns % 2 == 0) {
-							h.get().addMana(1);
-						}
-					}
-				}
-
-				if (h.get().getCombo().getLeft() == Race.DIVINITY) {
-					h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
-				}
-			}
-
-			if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
-			for (int i = 0; i < slots.size(); i++) {
-				SlotColumn sc = slots.get(i);
-
-				Equipment e = sc.getBottom();
-				if (e != null) {
-					if (e.getLinkedTo() == null) {
-						unequipCard(getCurrentSide(), e.getIndex());
-					} else {
-						Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getIndex()).getTop();
-
-						if (link == null || !link.equals(e.getLinkedTo().linked())) {
-							unequipCard(getCurrentSide(), e.getIndex());
-						} else {
-							e.getLinkedTo().sync();
-						}
-					}
-				}
-
-				Champion c = sc.getTop();
-				if (c != null) {
-					if (c.isStasis()) c.reduceStasis();
-					else if (c.isStunned()) c.reduceStun();
-					else if (c.isSleeping()) c.reduceSleep();
-
-					c.getLinkedTo().removeIf(CardLink::isInvalid);
-
-					if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
-							|| makeFusion(h.get())
-					) return;
-				}
-
-				if (sc.isUnavailable()) {
-					sc.setUnavailable(-1);
-				}
-			}
-
-			String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
-			reportEvent(h.get(), msg, false, true);
-			oldState = new GameState(this);
-		};
+		ThrowingConsumer<ButtonWrapper> skip = skipTurn();
 
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		if (getRound() < 1 || phase == Phase.COMBAT)
@@ -2546,6 +2386,170 @@ public class Shoukan extends GlobalGame implements Serializable {
 		}
 
 		return buttons;
+	}
+
+	public ThrowingConsumer<ButtonWrapper> skipTurn() {
+		return w -> {
+			User u = getCurrent();
+
+			AtomicReference<Hand> h = new AtomicReference<>(hands.get(getCurrentSide()));
+			h.get().getCards().removeIf(d -> !d.isAvailable());
+			List<SlotColumn> slots = arena.getSlots().get(getCurrentSide());
+
+			if (applyPersistentEffects(AFTER_TURN, getCurrentSide(), -1)) return;
+			for (int i = 0; i < slots.size(); i++) {
+				Champion c = slots.get(i).getTop();
+				if (c != null) {
+					c.setAvailable(!c.isStunned() && !c.isSleeping());
+					c.resetAttribs();
+					if (applyEffect(AFTER_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
+							|| makeFusion(h.get())
+					) return;
+				}
+			}
+
+			arena.getGraveyard().get(getCurrentSide()).addAll(
+					h.get().getDiscardBatch().stream()
+							.filter(d -> {
+								if (d instanceof Champion c) return c.canGoToGrave();
+								else if (d instanceof Equipment e) return e.canGoToGrave();
+								else return true;
+							}).toList()
+			);
+			h.get().getDiscardBatch().clear();
+
+			if (getRound() > 0) reroll = false;
+			resetTimer(this);
+			if (postCombat()) return;
+
+			phase = Phase.PLAN;
+			applyEffect(PLAN_STAGE, (Champion) null, getCurrentSide(), -1);
+
+			h.set(hands.get(getCurrentSide()));
+			h.get().decreaseSuppression();
+			h.get().decreaseLockTime();
+			h.get().decreaseNullTime();
+			h.get().decreaseBlindTime();
+			slots = arena.getSlots().get(getCurrentSide());
+
+			if (getRound() >= 75) {
+				if (Helper.equalsAny(getRound(), 75, 100, 125)) {
+					if (getRound() == 75) {
+						channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
+					} else if (getRound() == 100) {
+						channel.sendMessage(":warning: | ALERTA: Morte-súbita II ativada, os jogadores perderão 25% do HP atual a cada turno!").queue();
+					} else {
+						channel.sendMessage(":warning: | ALERTA: Morte-súbita III ativada, se a partida não acabar neste turno será declarado empate!").queue();
+					}
+				}
+
+				if (Helper.between(getRound(), 75, 126)) {
+					h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
+					if (postCombat()) return;
+				} else {
+					draw = true;
+					String msg = "Declaro empate! (" + getRound() + " turnos)";
+
+					for (List<SlotColumn> sides : arena.getSlots().values()) {
+						for (SlotColumn slts : sides) {
+							if (slts.getTop() != null)
+								slts.getTop().setFlipped(false, false);
+
+							if (slts.getBottom() != null)
+								slts.getBottom().setFlipped(false, false);
+						}
+					}
+
+					close();
+					channel.sendMessage(msg)
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.queue(mm ->
+									this.message.compute(mm.getChannel().getId(), (id, m) -> {
+										if (m != null) m.delete().queue(null, Helper::doNothing);
+										return mm;
+									})
+							);
+					return;
+				}
+			}
+
+			if (h.get().getBleeding() > 0) {
+				h.get().removeHp(h.get().getBleeding() / (h.get().getCombo().getLeft() == Race.HUMAN ? 10 : 5));
+				h.get().decreaseBleeding();
+			} else if (h.get().getRegeneration() > 0) {
+				h.get().addHp(h.get().getRegeneration() / 2);
+				h.get().decreaseRegeneration();
+			}
+
+			int mpt = h.get().getManaPerTurn();
+			if (h.get().getCombo().getLeft() == Race.DEMON) {
+				Hand op = hands.get(getNextSide());
+				mpt += Math.max(0f, op.getBaseHp() - op.getHp()) / op.getBaseHp() * 5;
+				if (h.get().getHp() < h.get().getBaseHp() / 3f) {
+					h.get().addHp(Math.round((h.get().getBaseHp() - h.get().getHp()) * 0.1f));
+				}
+			}
+			h.get().addMana(mpt);
+
+			if (!h.get().isSuppressed()) {
+				if (h.get().getCombo().getRight() == Race.ELF) {
+					int turns = getRound() - (h.get().getSide() == Side.TOP ? 1 : 0);
+
+					if (getRound() > 1) {
+						if (turns % 5 == 0) {
+							h.get().addMana(2);
+						} else if (turns % 2 == 0) {
+							h.get().addMana(1);
+						}
+					}
+				}
+
+				if (h.get().getCombo().getLeft() == Race.DIVINITY) {
+					h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
+				}
+			}
+
+			if (applyPersistentEffects(BEFORE_TURN, getCurrentSide(), -1)) return;
+			for (int i = 0; i < slots.size(); i++) {
+				SlotColumn sc = slots.get(i);
+
+				Equipment e = sc.getBottom();
+				if (e != null) {
+					if (e.getLinkedTo() == null) {
+						unequipCard(getCurrentSide(), e.getIndex());
+					} else {
+						Champion link = getSlot(getCurrentSide(), e.getLinkedTo().getIndex()).getTop();
+
+						if (link == null || !link.equals(e.getLinkedTo().linked())) {
+							unequipCard(getCurrentSide(), e.getIndex());
+						} else {
+							e.getLinkedTo().sync();
+						}
+					}
+				}
+
+				Champion c = sc.getTop();
+				if (c != null) {
+					if (c.isStasis()) c.reduceStasis();
+					else if (c.isStunned()) c.reduceStun();
+					else if (c.isSleeping()) c.reduceSleep();
+
+					c.getLinkedTo().removeIf(CardLink::isInvalid);
+
+					if (applyEffect(BEFORE_TURN, c, getCurrentSide(), i, new Source(c, getCurrentSide(), i))
+							|| makeFusion(h.get())
+					) return;
+				}
+
+				if (sc.isUnavailable()) {
+					sc.setUnavailable(-1);
+				}
+			}
+
+			String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
+			reportEvent(h.get(), msg, false, true);
+			oldState = new GameState(this);
+		};
 	}
 
 	public Champion getChampionFromGrave(Side s) {
