@@ -255,6 +255,8 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(other.getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
+										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
+
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
@@ -264,7 +266,7 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
-										}
+										} else if (dk.hasInvalidDeck(channel)) return;
 
 										//Main.getInfo().getGames().put(id, t);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
@@ -366,6 +368,8 @@ public class ShoukanCommand implements Executable {
 				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (players.contains(wrapper.getUser())) {
+										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
+
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
@@ -375,7 +379,7 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
-										}
+										} else if (dk.hasInvalidDeck(channel)) return;
 
 										if (!accepted.contains(wrapper.getUser().getId())) {
 											channel.sendMessage(wrapper.getUser().getAsMention() + " aceitou a partida.").queue();
@@ -405,6 +409,8 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
+										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
+
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
@@ -414,7 +420,7 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
-										}
+										} else if (dk.hasInvalidDeck(channel)) return;
 
 										//Main.getInfo().getGames().put(id, t);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
