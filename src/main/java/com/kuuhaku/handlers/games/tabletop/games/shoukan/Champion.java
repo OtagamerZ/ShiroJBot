@@ -402,6 +402,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setSealed(boolean sealed) {
 		this.sealed = sealed;
+		if (sealed) {
+			bonus.getFlags().clear();
+			bonus.getPFlags().clear();
+		}
 	}
 
 	public Race getRace() {
