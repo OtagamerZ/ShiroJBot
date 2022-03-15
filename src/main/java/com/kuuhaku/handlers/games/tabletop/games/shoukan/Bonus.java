@@ -90,6 +90,10 @@ public class Bonus implements Cloneable {
 		else flags.remove(flag);
 	}
 
+	public EnumSet<Flag> getPFlags() {
+		return pFlags;
+	}
+
 	public void setPFlag(Flag flag, boolean on) {
 		if (on) pFlags.add(flag);
 		else pFlags.remove(flag);
