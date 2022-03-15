@@ -662,6 +662,10 @@ public class Champion implements Drawable, Cloneable {
 		);
 	}
 
+	public int getFinAttr() {
+		return isDefending() ? getFinDef() : getFinAtk();
+	}
+
 	public int getDodge(boolean ignoreAdaptive) {
 		if (isStasis() || isStunned() || isSleeping()) return 0;
 
