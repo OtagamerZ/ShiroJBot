@@ -83,6 +83,7 @@ public class Tournament {
 	private static final Color BG_COLOR = new Color(0x2f3136);
 	private static final Color PRIMARY_COLOR = new Color(0x8e9297);
 	private static final Color SECONDARY_COLOR = new Color(0x40444b);
+	private static final Color WO_COLOR = new Color(0x964B4B);
 
 	public Tournament() {
 	}
@@ -262,6 +263,10 @@ public class Tournament {
 	}
 
 	public void setResult(int phase, int index) {
+		setResult(phase, index, false);
+	}
+
+	public void setResult(int phase, int index, boolean wo) {
 		Phase p = getPhase(phase);
 		if (!p.isLast()) {
 			Phase next = getPhase(phase + 1);
@@ -372,7 +377,12 @@ public class Tournament {
 					Helper.drawSquareLine(g2d, x + WIDTH, y + offset + HEIGHT / 2, (WIDTH + H_MARGIN) * (i + 1), y2 + offset2 + HEIGHT / 2);
 					g2d.setComposite(comp);
 
-					drawNameBox(g2d, x, y + offset, winner ? Color.white : PRIMARY_COLOR, false);
+					Color color = winner ? Color.white : PRIMARY_COLOR;
+					if (part != null && part.isWo()) {
+						color = WO_COLOR;
+					}
+
+					drawNameBox(g2d, x, y + offset, color, false);
 					drawName(g2d, part, x, y + offset, winner, false);
 
 					if (i == 1 && k == 0) {
