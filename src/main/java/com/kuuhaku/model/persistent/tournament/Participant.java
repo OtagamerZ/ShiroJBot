@@ -99,6 +99,14 @@ public class Participant {
 		this.phase = phase;
 	}
 
+	public boolean isWo() {
+		return wo;
+	}
+
+	public void setWo(boolean wo) {
+		this.wo = wo;
+	}
+
 	public boolean isBye() {
 		return id == -1 || uid.equals("BYE");
 	}
