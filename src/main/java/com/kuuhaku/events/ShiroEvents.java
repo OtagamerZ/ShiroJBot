@@ -609,13 +609,34 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+		String s = """
+				Obrigada por me escolher!
+				Utilize `s!ajuda`%s para ver todos os meus comandos!
+				Para ver informações sobre um comando específico, use `s!ajuda comando` (substituindo `comando` pelo nome do comando).
+				
+				**Guia rápido de funções:**
+				- Para habilitar minhas proteções de servidor, utilize `s!semraid`, `s!semspam`, `s!semhoist`, `s!semlink` e `s!tornarmencionavel`.
+				+- As proteções são opcionais, para mais informações sobre elas utilize `s!ajuda comando` (substituindo `comando` pelo nome do comando).
+				
+				- Para configurar minhas mensagens de bem-vindo/adeus, utilize os comandos `s!msgbv`/`s!msgadeus`.
+				+- **Dica:** utilize `s!embed` para definir um GIF ou alterar os outros campos do bloco de boas-vindas/adeus. Se precisar, use minha ferramenta de criação de embeds em https://shirojbot.site/EmbedBuilder
+				
+				- Para configurar respostas automáticas, utilize `s!fale`.
+				+- **Dica:** é possível usar substituições dentro de mensagens, consulte o comando `s!help` para vê-las. Se precisar, use minha ferramenta de criação de respostas em https://shirojbot.site/CABuilder
+				
+				- Para habilitar o spawn de cartas e drops, utilize os comandos `s!spawncartas` e `s!spawndrops`, respectivamente.
+				+- Não deixe também de conferir meu jogo principal: **Shoukan**!
+				
+				Ainda com dúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!
+				""";
+
 		try {
-			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me escolher! Utilize `s!ajuda` **em um dos canais do seu servidor** para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!");
+			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), s.formatted(" **em um dos canais do seu servidor**"));
 		} catch (Exception err) {
 			TextChannel dch = event.getGuild().getDefaultChannel();
 			if (dch != null) {
 				if (dch.canTalk()) {
-					dch.sendMessage("Obrigada por me escolher! Utilize `s!ajuda` para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!").queue();
+					dch.sendMessage(s.formatted("")).queue();
 				}
 			}
 		}
