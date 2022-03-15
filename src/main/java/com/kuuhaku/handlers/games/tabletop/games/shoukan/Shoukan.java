@@ -2143,7 +2143,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				reroll = false;
 				reportEvent(h, getCurrent().getName() + " rolou novamente as cartas na mão!", true, false);
 			});
-		if (hands.get(getCurrentSide()).getHp() < hands.get(getCurrentSide()).getBaseHp() / 3 && hands.get(getCurrentSide()).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
+		if (hands.get(getCurrentSide()).getHp() < hands.get(getCurrentSide()).getBaseHp() / 3f && hands.get(getCurrentSide()).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
 			buttons.put(Helper.parseEmoji("\uD83E\uDDE7"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
