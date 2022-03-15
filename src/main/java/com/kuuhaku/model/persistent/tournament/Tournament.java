@@ -417,9 +417,7 @@ public class Tournament {
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.ITALIC, 50 * mult));
 				name = "BYE";
 			} else {
-				Color color = winner ? Color.white : PRIMARY_COLOR;
-
-				g2d.setColor(part.isWo() ? WO_COLOR : color);
+				g2d.setColor(winner ? Color.white : PRIMARY_COLOR);
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 50 * mult));
 				name = StringUtils.abbreviate(part.toString(), 13);
 			}
