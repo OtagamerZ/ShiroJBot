@@ -73,6 +73,7 @@ public class DeclareWoCommand implements Executable {
 								} catch (RuntimeException ignore) {
 								}
 							} else {
+								p.setWo(true);
 								t.setResult(p.getPhase(), p.getIndex() % 2 == 0 ? p.getIndex() + 1 : p.getIndex() - 1);
 							}
 
