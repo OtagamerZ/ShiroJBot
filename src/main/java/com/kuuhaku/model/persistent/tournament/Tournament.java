@@ -413,11 +413,13 @@ public class Tournament {
 		if (part != null) {
 			String name;
 			if (part.isBye()) {
-				g2d.setColor(new Color(0xc7494c));
+				g2d.setColor(WO_COLOR);
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.ITALIC, 50 * mult));
 				name = "BYE";
 			} else {
-				g2d.setColor(winner ? Color.white : PRIMARY_COLOR);
+				Color color = winner ? Color.white : PRIMARY_COLOR;
+
+				g2d.setColor(part.isWo() ? WO_COLOR : color);
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 50 * mult));
 				name = StringUtils.abbreviate(part.toString(), 13);
 			}
