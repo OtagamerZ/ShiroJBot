@@ -69,7 +69,7 @@ public class Bonus implements Cloneable {
 		return specialData;
 	}
 
-	public void addProp(String key, Object value) {
+	public void putProp(String key, Object value) {
 		specialData.put(key, value);
 	}
 
@@ -82,6 +82,12 @@ public class Bonus implements Cloneable {
 	}
 
 	public boolean popFlag(Flag flag) {
+		return flags.remove(flag) || pFlags.contains(flag);
+	}
+
+	public boolean popFlag(Champion op, Flag flag) {
+		if (op.getBonus().hasFlag(Flag.NOEFFECT)) return false;
+
 		return flags.remove(flag) || pFlags.contains(flag);
 	}
 
