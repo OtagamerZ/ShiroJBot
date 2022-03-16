@@ -322,11 +322,11 @@ public class Champion implements Drawable, Cloneable {
 			if (wasFlipped) defending = true;
 
 			if (trigger) {
-				if (wasFlipped && game.getCurrentSide() == side) {
-					game.applyEffect(ON_SUMMON, this, side, getIndex(), new Source(this, side, getIndex()));
+				if (wasFlipped) {
+					game.applyEffect(game.getCurrentSide() == side ? ON_SUMMON : ON_FLIP, this, side, getIndex(), new Source(this, side, getIndex()));
 				}
 
-				game.applyEffect(game.getCurrentSide() == side ? ON_SWITCH : ON_FLIP, this, side, getIndex(), new Source(this, side, getIndex()));
+				game.applyEffect(ON_SWITCH, this, side, getIndex(), new Source(this, side, getIndex()));
 			}
 		}
 	}
