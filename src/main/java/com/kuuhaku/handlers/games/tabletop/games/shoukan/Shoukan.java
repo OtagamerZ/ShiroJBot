@@ -976,9 +976,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 			return;
 		}
 
-		if (atkr.isDefending()) return;
+		if (atkr.isDefending() || !atkr.isAvailable()) return;
 		atkr.setAvailable(false);
-		defr.setFlipped(false);
 
 		/* PRE-ATTACK */
 		{
@@ -1021,6 +1020,8 @@ public class Shoukan extends GlobalGame implements Serializable {
 				return;
 			}
 		}
+
+		defr.setFlipped(false);
 
 		float fac = defr.isSleeping() ? 1.25f : 1;
 
