@@ -195,6 +195,8 @@ public class Tournament {
 	public TournamentMatch generateMatch(int phase, String uid) {
 		if (phase == getBracket().getPhases().size()) {
 			List<Participant> tp = getTPMatch();
+			if (tp.size() < 2) return null;
+
 			return new TournamentMatch(id, phase, 0, tp.get(0).getUid(), 1, tp.get(1).getUid());
 		}
 
