@@ -859,7 +859,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Role welcomer = gc.getWelcomerRole();
 					chn.sendMessage(author.getAsMention() + (welcomer != null ? " " + welcomer.getAsMention() : ""))
 							.setEmbeds(eb.build())
-							.queue();
+							.queue(null, Helper::doNothing);
 
 					if (author.getId().equals(ShiroInfo.getNiiChan()))
 						chn.sendMessage("<:b_shirolove:752890212371267676> | Seja bem-vindo Nii-chan!").queue();
@@ -952,7 +952,8 @@ public class ShiroEvents extends ListenerAdapter {
 
 				TextChannel chn = gc.getByeChannel();
 				if (chn != null && chn.canTalk(guild.getSelfMember()))
-					chn.sendMessageEmbeds(eb.build()).queue();
+					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+
 				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
 		} catch (IOException ignore) {

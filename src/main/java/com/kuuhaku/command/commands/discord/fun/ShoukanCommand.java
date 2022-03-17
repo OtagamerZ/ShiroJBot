@@ -35,6 +35,7 @@ import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
@@ -222,14 +223,20 @@ public class ShoukanCommand implements Executable {
 				}
 			}
 		} else if (tournament) {
-			Tournament tn = TournamentDAO.getUserTournaments(author.getId()).get(0);
-			if (tn == null) {
+			List<Tournament> curr = TournamentDAO.getUserTournaments(author.getId());
+			if (curr.isEmpty()) {
 				channel.sendMessage("❌ | Você não está registrado em nenhum torneio ou as chaves ainda não foram liberadas.").queue();
 				return;
 			}
 
-			int phase = tn.getLookup(author.getId()).getPhase();
+			Tournament tn = curr.get(0);
+			Participant p = tn.getLookup(author.getId());
+			int phase = p.getPhase();
 			if (phase != -1) {
+				if (p.getPoints() == tn.getSize() - 4) {
+					phase = tn.getBracket().getPhases().size();
+				}
+
 				TournamentMatch match = tn.generateMatch(phase, author.getId());
 				if (match == null) return;
 
