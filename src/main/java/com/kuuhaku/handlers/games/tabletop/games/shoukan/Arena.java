@@ -71,11 +71,19 @@ public class Arena {
 		);
 		this.graveyard = Map.of(
 				Side.TOP, new BondedList<>(d -> {
-					game.applyEffect(game.getCurrentSide() == Side.TOP ? ON_SACRIFICE : ON_GRAVEYARD, d, Side.TOP, d.getIndex());
+					if (game.getCurrentSide() == Side.TOP) {
+						game.applyEffect(ON_SACRIFICE, d, Side.TOP, d.getIndex());
+					}
+
+					game.applyEffect(ON_GRAVEYARD, d, Side.TOP, d.getIndex());
 					d.reset();
 				}),
 				Side.BOTTOM, new BondedList<>(d -> {
-					game.applyEffect(game.getCurrentSide() == Side.BOTTOM ? ON_SACRIFICE : ON_GRAVEYARD, d, Side.BOTTOM, d.getIndex());
+					if (game.getCurrentSide() == Side.TOP) {
+						game.applyEffect(ON_SACRIFICE, d, Side.BOTTOM, d.getIndex());
+					}
+
+					game.applyEffect(ON_GRAVEYARD, d, Side.BOTTOM, d.getIndex());
 					d.reset();
 				})
 		);
