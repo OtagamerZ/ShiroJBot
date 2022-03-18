@@ -28,6 +28,7 @@ import java.io.Closeable;
 
 public abstract class SimpleMessageListener extends ListenerAdapter implements Closeable {
 	private final GameChannel channel;
+	public Object mutex = new Object();
 	private boolean closed = false;
 
 	public SimpleMessageListener(TextChannel... channels) {
@@ -58,6 +59,7 @@ public abstract class SimpleMessageListener extends ListenerAdapter implements C
 	}
 
 	public boolean isClosed() {
+		mutex = null;
 		return closed;
 	}
 

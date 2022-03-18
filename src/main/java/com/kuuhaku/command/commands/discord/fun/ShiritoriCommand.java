@@ -129,7 +129,6 @@ public class ShiritoriCommand implements Executable {
 
 							s.delete().queue(null, Helper::doNothing);
 							Game t = new Shiritori(Main.getShiroShards(), channel, finalBet, players.toArray(User[]::new));
-							Main.getInfo().setGameInProgress(t, players);
 							t.start();
 						}
 					}
