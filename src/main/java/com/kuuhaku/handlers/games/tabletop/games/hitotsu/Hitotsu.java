@@ -55,12 +55,7 @@ public class Hitotsu extends Game {
 	private final LinkedList<KawaiponCard> played = new LinkedList<>();
 	private final GameDeque<KawaiponCard> deque = new GameDeque<>(this);
 	private final TextChannel channel;
-	private final SimpleMessageListener listener = new SimpleMessageListener() {
-		@Override
-		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-			if (canInteract(event)) play(event);
-		}
-	};
+	private final SimpleMessageListener listener;
 	private final BufferedImage mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
 	private Message message = null;
 	private boolean suddenDeath = false;
@@ -68,6 +63,12 @@ public class Hitotsu extends Game {
 	public Hitotsu(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
+		this.listener = new SimpleMessageListener(channel) {
+			@Override
+			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				if (canInteract(event)) play(event);
+			}
+		};
 
 		setActions(
 				s -> {

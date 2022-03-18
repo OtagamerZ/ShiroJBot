@@ -47,17 +47,18 @@ public class Reversi extends Game {
 	private final Map<String, Piece> pieces;
 	private final TextChannel channel;
 	private Message message;
-	private final SimpleMessageListener listener = new SimpleMessageListener() {
-		@Override
-		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-			if (canInteract(event)) play(event);
-		}
-	};
+	private final SimpleMessageListener listener;
 	private boolean draw = false;
 
 	public Reversi(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_8X8, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
+		this.listener = new SimpleMessageListener(channel) {
+			@Override
+			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				if (canInteract(event)) play(event);
+			}
+		};
 		this.pieces = Map.of(
 				players[0].getId(), new Disk(players[0].getId(), false, "pieces/man.png"),
 				players[1].getId(), new Disk(players[1].getId(), true, "pieces/man.png")

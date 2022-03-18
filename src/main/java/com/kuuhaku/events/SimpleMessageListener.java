@@ -18,6 +18,8 @@
 
 package com.kuuhaku.events;
 
+import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -26,10 +28,31 @@ import java.io.Closeable;
 
 public abstract class SimpleMessageListener extends ListenerAdapter implements Closeable {
 	public final SimpleMessageListener self = this;
+	private final GameChannel channel;
 	private boolean closed = false;
+
+	public SimpleMessageListener(TextChannel... channels) {
+		this.channel = new GameChannel(channels);
+	}
+
+	public SimpleMessageListener(GameChannel channel) {
+		this.channel = channel;
+	}
 
 	@Override
 	public abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
+
+	public GameChannel getChannel() {
+		return channel;
+	}
+
+	public boolean checkChannel(TextChannel channel) {
+		return this.channel.getChannels().stream().anyMatch(tc -> tc.getId().equals(channel.getId()));
+	}
+
+	public boolean checkChannel(String channel) {
+		return this.channel.getChannels().stream().anyMatch(tc -> tc.getId().equals(channel));
+	}
 
 	public boolean isClosed() {
 		return closed;

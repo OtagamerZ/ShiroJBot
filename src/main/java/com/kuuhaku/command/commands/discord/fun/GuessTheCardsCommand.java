@@ -89,7 +89,7 @@ public class GuessTheCardsCommand implements Executable {
 
 			channel.sendMessage("Quais são as 3 cartas nesta imagem? Escreva os três nomes com `_` no lugar de espaços e separados por ponto-e-vírgula (`;`).")
 					.addFile(Helper.writeAndGet(img, "cards", "png"))
-					.queue(ms -> ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+					.queue(ms -> ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
 						private final Consumer<Void> success = s -> {
 							ms.delete().queue(null, Helper::doNothing);
 							close();
@@ -107,8 +107,7 @@ public class GuessTheCardsCommand implements Executable {
 
 						@Override
 						public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-							if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-								return;
+							if (!event.getAuthor().getId().equals(author.getId())) return;
 
 							String value = event.getMessage().getContentRaw();
 							if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.toLowerCase(Locale.ROOT).split(" ")[0].replaceFirst(prefix, ""), GuessTheCardsCommand.class.getDeclaredAnnotation(Command.class).aliases())) {

@@ -49,16 +49,17 @@ public class CrissCross extends Game {
 	private final Map<String, Piece> pieces;
 	private final TextChannel channel;
 	private Message message;
-	private final SimpleMessageListener listener = new SimpleMessageListener() {
-		@Override
-		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-			if (canInteract(event)) play(event);
-		}
-	};
+	private final SimpleMessageListener listener;
 
 	public CrissCross(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_3X3, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
+		this.listener = new SimpleMessageListener(channel) {
+			@Override
+			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				if (canInteract(event)) play(event);
+			}
+		};
 		this.pieces = Map.of(
 				players[0].getId(), new Circle(players[0].getId(), false, "pieces/circle.png"),
 				players[1].getId(), new Cross(players[1].getId(), true, "pieces/cross.png")
