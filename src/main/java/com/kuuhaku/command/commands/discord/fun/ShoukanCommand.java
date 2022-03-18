@@ -70,7 +70,7 @@ public class ShoukanCommand implements Executable {
 		if (mm.isLocked()) {
 			channel.sendMessage("❌ | O Shoukan está bloqueado temporariamente para minha reinicialização, por favor aguarde.").queue();
 			return;
-		} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+		} else if (Main.getInfo().isOccupied(channel.getId())) {
 			channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 			return;
 		}
@@ -93,14 +93,14 @@ public class ShoukanCommand implements Executable {
 
 			if (!daily && d.hasInvalidDeck(channel)) return;
 
-			String id = author.getId() + "." + 0 + "." + guild.getId();
-
 			if (Main.getInfo().gameInProgress(author.getId())) {
 				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
 			}
 
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, false, null, author, author);
+			Main.getInfo().setGameInProgress(t, author);
+			Main.getInfo().getGameSlot().put(channel.getId(), t);
 			t.start();
 		} else if (ranked) {
 			if (d.isNovice()) {
@@ -119,8 +119,6 @@ public class ShoukanCommand implements Executable {
 			}
 
 			if (d.hasInvalidDeck(channel)) return;
-
-			String id = author.getId() + "." + 0 + "." + guild.getId();
 
 			if (Main.getInfo().gameInProgress(author.getId())) {
 				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
@@ -270,14 +268,15 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().gameInProgress(other.getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
-										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+										} else if (Main.getInfo().isOccupied(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
 										} else if (dk.hasInvalidDeck(channel)) return;
 
-										//Main.getInfo().getGames().put(id, t);
-										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
 										s.delete().queue(null, Helper::doNothing);
+										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
+										Main.getInfo().setGameInProgress(t, match.top(), match.bot());
+										Main.getInfo().getGameSlot().put(channel.getId(), t);
 										t.start();
 									}
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -339,8 +338,6 @@ public class ShoukanCommand implements Executable {
 					return;
 			}
 
-			String id = author.getId() + "." + users.get(0).getId() + "." + guild.getId();
-
 			if (Main.getInfo().gameInProgress(author.getId())) {
 				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
@@ -383,7 +380,7 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().gameInProgress(author.getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
-										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+										} else if (Main.getInfo().isOccupied(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
 										} else if (dk.hasInvalidDeck(channel)) return;
@@ -395,9 +392,11 @@ public class ShoukanCommand implements Executable {
 
 										if (accepted.size() == players.size()) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
-											//Main.getInfo().getGames().put(id, t);
-											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, true, null, players.toArray(User[]::new));
+
 											s.delete().queue(null, Helper::doNothing);
+											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, true, null, players.toArray(User[]::new));
+											Main.getInfo().setGameInProgress(t, players);
+											Main.getInfo().getGameSlot().put(channel.getId(), t);
 											t.start();
 										}
 									}
@@ -424,14 +423,15 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
-										} else if (Main.getInfo().getShoukanSlot().containsKey(channel.getId())) {
+										} else if (Main.getInfo().isOccupied(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
 										} else if (dk.hasInvalidDeck(channel)) return;
 
-										//Main.getInfo().getGames().put(id, t);
-										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
 										s.delete().queue(null, Helper::doNothing);
+										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
+										Main.getInfo().setGameInProgress(t, author, message.getMentionedUsers().get(0));
+										Main.getInfo().getGameSlot().put(channel.getId(), t);
 										t.start();
 									}
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

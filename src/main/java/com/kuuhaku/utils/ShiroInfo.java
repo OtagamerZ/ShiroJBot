@@ -23,7 +23,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
-import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.Playable;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
+import org.apache.commons.collections4.map.ReferenceMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpHeaders;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -55,9 +56,11 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.apache.commons.collections4.map.AbstractReferenceMap.ReferenceStrength.HARD;
+import static org.apache.commons.collections4.map.AbstractReferenceMap.ReferenceStrength.WEAK;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -140,8 +143,8 @@ public class ShiroInfo {
 			.token(dblToken)
 			.botId("572413282653306901")
 			.build();
-	private final Map<String, Game> games = new HashMap<>();
-	private final Set<String> gameLock = new HashSet<>();
+	private final ReferenceMap<String, Object> games = new ReferenceMap<>(HARD, WEAK);
+	private final ReferenceMap<String, Playable> gameSlot = new ReferenceMap<>(HARD, WEAK);
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
@@ -195,7 +198,6 @@ public class ShiroInfo {
 	private final ConcurrentMap<String, ExpiringMap<Long, String>> antiRaidCache = new ConcurrentHashMap<>();
 	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private final ExpiringMap<String, Boolean> confirmationPending = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
-	private final ExpiringMap<String, Boolean> shoukanSlot = ExpiringMap.builder().expiration(200, TimeUnit.SECONDS).build();
 	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, KawaiponCard> currentCard = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Prize<?>> currentDrop = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
@@ -334,12 +336,38 @@ public class ShiroInfo {
 		return Executors.newSingleThreadScheduledExecutor();
 	}
 
-	public Map<String, Game> getGames() {
+	public Map<String, Object> getGames() {
 		return games;
 	}
 
+	public void setGameInProgress(Object game, String... players) {
+		for (String player : players) {
+			games.putIfAbsent(player, game);
+		}
+	}
+
+	public void setGameInProgress(Object game, User... players) {
+		for (User player : players) {
+			games.putIfAbsent(player.getId(), game);
+		}
+	}
+
+	public void setGameInProgress(Object game, List<User> players) {
+		for (User player : players) {
+			games.putIfAbsent(player.getId(), game);
+		}
+	}
+
 	public boolean gameInProgress(String id) {
-		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
+		return games.containsKey(id);
+	}
+
+	public ReferenceMap<String, Playable> getGameSlot() {
+		return gameSlot;
+	}
+
+	public boolean isOccupied(String channel) {
+		return gameSlot.containsKey(channel);
 	}
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
@@ -491,10 +519,6 @@ public class ShiroInfo {
 		return confirmationPending;
 	}
 
-	public ExpiringMap<String, Boolean> getShoukanSlot() {
-		return shoukanSlot;
-	}
-
 	public Map<Pair<String, String>, RandomList<CustomAnswer>> getCustomAnswerCache() {
 		return customAnswerCache;
 	}
@@ -523,9 +547,5 @@ public class ShiroInfo {
 			v.remove(ca);
 			return v;
 		});
-	}
-
-	public Set<String> getGameLock() {
-		return gameLock;
 	}
 }

@@ -79,6 +79,8 @@ public class ColorNameCommand implements Executable {
 			return;
 		}
 
+		Object holder = new Object();
+		Main.getInfo().setGameInProgress(holder, author);
 		List<Pair<String, Integer>> sequence = new ArrayList<>();
 
 		List<Map.Entry<String, Integer>> pairs = List.copyOf(colors.entrySet());

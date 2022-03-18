@@ -35,7 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "shiritori",
@@ -86,8 +85,6 @@ public class ShiritoriCommand implements Executable {
 			}
 		}
 
-		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getId).collect(Collectors.joining(".")) + "." + guild.getId();
-
 		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 			return;
@@ -129,9 +126,10 @@ public class ShiritoriCommand implements Executable {
 
 						if (accepted.size() == players.size()) {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
-							//Main.getInfo().getGames().put(id, t);
-							Game t = new Shiritori(Main.getShiroShards(), channel, finalBet, players.toArray(User[]::new));
+
 							s.delete().queue(null, Helper::doNothing);
+							Game t = new Shiritori(Main.getShiroShards(), channel, finalBet, players.toArray(User[]::new));
+							Main.getInfo().setGameInProgress(t, players);
 							t.start();
 						}
 					}
