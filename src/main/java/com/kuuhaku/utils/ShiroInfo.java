@@ -359,6 +359,7 @@ public class ShiroInfo {
 	}
 
 	public boolean gameInProgress(String id) {
+		System.gc();
 		return games.containsKey(id);
 	}
 
@@ -367,6 +368,7 @@ public class ShiroInfo {
 	}
 
 	public boolean isOccupied(String channel) {
+		System.gc();
 		return gameSlot.containsKey(channel);
 	}
 
