@@ -69,7 +69,7 @@ public class FaceoffCommand implements Executable {
 			AtomicBoolean win = new AtomicBoolean();
 			AtomicReference<ScheduledFuture<?>> timeout = new AtomicReference<>();
 
-			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
 				{
 					Main.getInfo().setGameInProgress(self, author);
 				}
@@ -81,8 +81,7 @@ public class FaceoffCommand implements Executable {
 						return;
 					}
 
-					if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-						return;
+					if (!event.getAuthor().getId().equals(author.getId())) return;
 
 					if (start.get() == 0) {
 						close();

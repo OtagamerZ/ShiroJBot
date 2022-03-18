@@ -282,7 +282,7 @@ public class TenthSecondEvent implements Job {
 	private void sendSoloConfirmation(SoloLobby p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<SoloLobby, Boolean>> match, Runnable result) {
 		MatchMakingRating mmr = p1.mmr();
 
-		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener(p1Channel) {
 			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr.getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						mmr.setEvades(mmr.getEvades() + 1);
@@ -348,7 +348,7 @@ public class TenthSecondEvent implements Job {
 			add(rd.p2().getUid());
 		}};
 
-		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener(p1Channel) {
 			private Future<?> p1Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.p1().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.p1().getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						MatchMakingRating mmr = rd.p1();

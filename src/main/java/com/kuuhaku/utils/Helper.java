@@ -1307,24 +1307,23 @@ public abstract class Helper {
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
-		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
-					if (act.apply(event.getMessage()))
-						close();
+				if (event.getAuthor().getId().equals(u.getId())) {
+					if (act.apply(event.getMessage())) close();
 				}
 			}
 		});
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit) {
-		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			final ScheduledFuture<?> timeout = Executors.newSingleThreadScheduledExecutor().schedule(this::close, time, unit);
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
+				if (event.getAuthor().getId().equals(u.getId())) {
 					if (act.apply(event.getMessage())) {
 						timeout.cancel(true);
 						close();
@@ -1335,7 +1334,7 @@ public abstract class Helper {
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, Runnable onTimeout) {
-		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			final ScheduledFuture<?> timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
 				close();
 				onTimeout.run();
@@ -1343,7 +1342,7 @@ public abstract class Helper {
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
+				if (event.getAuthor().getId().equals(u.getId())) {
 					if (act.apply(event.getMessage())) {
 						timeout.cancel(true);
 						close();
@@ -1743,7 +1742,7 @@ public abstract class Helper {
 				web.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
 
 				Set<String> users = new HashSet<>();
-				SimpleMessageListener sml = new SimpleMessageListener() {
+				SimpleMessageListener sml = new SimpleMessageListener(channel) {
 					@Override
 					public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 						String msg = event.getMessage().getContentRaw();

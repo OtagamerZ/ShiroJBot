@@ -151,10 +151,10 @@ public class AuctionCommand implements Executable {
 			AtomicInteger phase = new AtomicInteger(1);
 			AtomicReference<Pair<User, Integer>> highest = new AtomicReference<>(null);
 
-			SimpleMessageListener listener = new SimpleMessageListener() {
+			SimpleMessageListener listener = new SimpleMessageListener(channel) {
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent evt) {
-					if (!evt.getChannel().getId().equals(channel.getId()) || evt.getAuthor().isBot()) return;
+					if (evt.getAuthor().isBot()) return;
 					String raw = evt.getMessage().getContentRaw();
 					if (StringUtils.isNumeric(raw)) {
 						try {

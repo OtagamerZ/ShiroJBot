@@ -122,7 +122,7 @@ public class TradeCommand implements Executable {
 
 	private void sendTradeWindow(User author, TextChannel channel, Guild guild, User tgt, Trade trade, EmbedBuilder eb) {
 		channel.sendMessageEmbeds(eb.build()).queue(msg -> {
-			SimpleMessageListener sml = new SimpleMessageListener() {
+			SimpleMessageListener sml = new SimpleMessageListener(channel) {
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 					User usr = event.getAuthor();
