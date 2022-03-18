@@ -58,7 +58,7 @@ public class GuessTheNumberCommand implements Executable {
 
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
-		ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
 			private final Consumer<Void> success = s -> close();
 			private Future<?> timeout = channel.sendMessage("Acabou o tempo, o número escolhido por mim era **" + theValue + "**.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 			int chances = 4;
@@ -69,8 +69,7 @@ public class GuessTheNumberCommand implements Executable {
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-					return;
+				if (!event.getAuthor().getId().equals(author.getId())) return;
 
 				String value = event.getMessage().getContentRaw();
 				if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.split(" ")[0].replaceFirst(prefix, ""), "adivinheonumero", "guessthenumber", "gtn", "aon")) {

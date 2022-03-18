@@ -113,7 +113,7 @@ public class ColorNameCommand implements Executable {
 							.clearFiles()
 							.addFile(Helper.getBytes(bi, "png"), "colors.png")
 							.queue();
-					ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+					ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
 						private final Consumer<Void> success = s -> close();
 						private final AtomicBoolean win = new AtomicBoolean();
 						private int hit = 0;
@@ -140,8 +140,7 @@ public class ColorNameCommand implements Executable {
 
 						@Override
 						public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-							if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-								return;
+							if (!event.getAuthor().getId().equals(author.getId())) return;
 
 							if (win.get()) return;
 							else if (System.currentTimeMillis() - lastMillis < 1000) {

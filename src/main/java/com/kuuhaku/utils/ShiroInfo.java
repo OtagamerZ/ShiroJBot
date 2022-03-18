@@ -362,7 +362,7 @@ public class ShiroInfo {
 		return games.containsKey(id);
 	}
 
-	public ReferenceMap<String, Object> getGameSlot() {
+	public Map<String, Object> getGameSlot() {
 		return gameSlot;
 	}
 

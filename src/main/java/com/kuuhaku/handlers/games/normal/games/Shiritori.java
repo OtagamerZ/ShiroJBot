@@ -44,12 +44,7 @@ import java.util.function.Predicate;
 
 public class Shiritori extends Game {
 	private final TextChannel channel;
-	private final SimpleMessageListener listener = new SimpleMessageListener() {
-		@Override
-		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-			if (canInteract(event)) play(event);
-		}
-	};
+	private final SimpleMessageListener listener;
 	private final File list = Helper.getResourceAsFile(this.getClass(), "shiritori/ptBR_dict.txt");
 	private final Set<String> used = new HashSet<>();
 	private Message message = null;
@@ -59,6 +54,12 @@ public class Shiritori extends Game {
 	public Shiritori(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Table(bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
+		this.listener = new SimpleMessageListener(channel) {
+			@Override
+			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				if (canInteract(event)) play(event);
+			}
+		};
 		setTime(60);
 
 		setActions(
