@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.MatchMaking;
 import net.dv8tion.jda.api.entities.*;
@@ -34,19 +33,14 @@ public class LockShoukanCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		int games = (int) Main.getInfo().getGameSlot().values().stream()
-				.filter(g -> g instanceof Shoukan)
-				.distinct()
-				.count();
-
 		MatchMaking mm = Main.getInfo().getMatchMaking();
 		if (mm.isLocked())
-			channel.sendMessage("❌ | O Shoukan já está bloqueado (" + games + " jogos restantes).").queue();
+			channel.sendMessage("❌ | O Shoukan já está bloqueado (" + Main.getInfo().getGameSlot().size() + " jogos restantes).").queue();
 		else {
 			mm.getSoloLobby().clear();
 			mm.getDuoLobby().clear();
 			mm.setLocked(true);
-			channel.sendMessage("✅ | Shoukan bloqueado com sucesso até a reinicialização (" + games + " jogos restantes).").queue();
+			channel.sendMessage("✅ | Shoukan bloqueado com sucesso até a reinicialização (" + Main.getInfo().getGameSlot().size() + " jogos restantes).").queue();
 		}
 	}
 }

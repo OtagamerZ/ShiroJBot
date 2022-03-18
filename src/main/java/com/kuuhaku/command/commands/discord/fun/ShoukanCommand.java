@@ -273,8 +273,6 @@ public class ShoukanCommand implements Executable {
 
 										s.delete().queue(null, Helper::doNothing);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
-										Main.getInfo().setGameInProgress(t, match.top(), match.bot());
-										Main.getInfo().getGameSlot().put(channel.getId(), t);
 										t.start();
 									}
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -393,8 +391,6 @@ public class ShoukanCommand implements Executable {
 
 											s.delete().queue(null, Helper::doNothing);
 											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, true, null, players.toArray(User[]::new));
-											Main.getInfo().setGameInProgress(t, players);
-											Main.getInfo().getGameSlot().put(channel.getId(), t);
 											t.start();
 										}
 									}
