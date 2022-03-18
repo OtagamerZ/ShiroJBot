@@ -91,13 +91,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
-	private final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
 
 	@Override
@@ -1312,12 +1313,12 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 	}
 
-	public Map<String, List<SimpleMessageListener>> getHandler() {
+	public Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
 		return Collections.unmodifiableMap(toHandle);
 	}
 
-	public synchronized void addHandler(Guild guild, SimpleMessageListener sml) {
-		toHandle.computeIfAbsent(guild.getId(), k -> new ArrayList<>()).add(sml);
+	public void addHandler(Guild guild, SimpleMessageListener sml) {
+		toHandle.computeIfAbsent(guild.getId(), k -> new CopyOnWriteArrayList<>()).add(sml);
 	}
 
 	public Map<String, VoiceTime> getVoiceTimes() {
