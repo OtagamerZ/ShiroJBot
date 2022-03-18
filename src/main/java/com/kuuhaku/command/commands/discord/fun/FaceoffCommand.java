@@ -58,8 +58,6 @@ public class FaceoffCommand implements Executable {
 			return;
 		}
 
-		Object holder = new Object();
-		Main.getInfo().setGameInProgress(holder, author);
 		try {
 			int level = Integer.parseInt(args[0]);
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
@@ -72,6 +70,10 @@ public class FaceoffCommand implements Executable {
 			AtomicReference<ScheduledFuture<?>> timeout = new AtomicReference<>();
 
 			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+				{
+					Main.getInfo().setGameInProgress(self, author);
+				}
+
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 					if (win.get()) {

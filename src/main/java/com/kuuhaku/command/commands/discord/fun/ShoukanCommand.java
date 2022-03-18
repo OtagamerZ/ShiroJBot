@@ -99,8 +99,6 @@ public class ShoukanCommand implements Executable {
 			}
 
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, false, null, author, author);
-			Main.getInfo().setGameInProgress(t, author);
-			Main.getInfo().getGameSlot().put(channel.getId(), t);
 			t.start();
 		} else if (ranked) {
 			if (d.isNovice()) {
@@ -430,8 +428,6 @@ public class ShoukanCommand implements Executable {
 
 										s.delete().queue(null, Helper::doNothing);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
-										Main.getInfo().setGameInProgress(t, author, message.getMentionedUsers().get(0));
-										Main.getInfo().getGameSlot().put(channel.getId(), t);
 										t.start();
 									}
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

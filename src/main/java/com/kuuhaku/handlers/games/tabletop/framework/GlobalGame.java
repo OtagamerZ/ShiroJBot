@@ -23,7 +23,6 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.handlers.games.Playable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
@@ -51,7 +50,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public abstract class GlobalGame implements Playable {
+public abstract class GlobalGame {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	private final ShardManager handler;
 	private final Board board;

@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
-import com.kuuhaku.handlers.games.Playable;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
 import com.kuuhaku.utils.Helper;
@@ -39,7 +38,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public abstract class Game implements Playable {
+public abstract class Game {
 	private final ShardManager handler;
 	private final Board board;
 	private final TextChannel channel;
