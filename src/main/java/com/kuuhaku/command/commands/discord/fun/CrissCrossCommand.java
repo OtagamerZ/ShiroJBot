@@ -78,8 +78,6 @@ public class CrissCrossCommand implements Executable {
             }
         }
 
-        String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
-
         if (Main.getInfo().gameInProgress(author.getId())) {
             channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
             return;
@@ -105,9 +103,9 @@ public class CrissCrossCommand implements Executable {
 									return;
 								}
 
-								//Main.getInfo().getGames().put(id, t);
-								Game t = new CrissCross(Main.getShiroShards(), channel, finalBet, author, message.getMentionedUsers().get(0));
 								s.delete().queue(null, Helper::doNothing);
+								Game t = new CrissCross(Main.getShiroShards(), channel, finalBet, author, message.getMentionedUsers().get(0));
+								Main.getInfo().setGameInProgress(t, author, message.getMentionedUsers().get(0));
 								t.start();
 							}
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
