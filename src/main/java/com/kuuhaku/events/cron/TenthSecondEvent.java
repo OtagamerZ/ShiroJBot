@@ -168,9 +168,6 @@ public class TenthSecondEvent implements Job {
 								p1Starts ? mmr1.getUser() : mmr2.getUser(),
 								p1Starts ? mmr2.getUser() : mmr1.getUser()
 						);
-						Main.getInfo().setGameInProgress(g, mmr1.getUid(), mmr2.getUid());
-						Main.getInfo().getGameSlot().put(p1.channel().getId(), g);
-						Main.getInfo().getGameSlot().put(p2.channel().getId(), g);
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
@@ -251,12 +248,6 @@ public class TenthSecondEvent implements Job {
 										leaderStarts ?
 												t1.p1().getUser() : t1.p2().getUser()
 						);
-						Main.getInfo().setGameInProgress(g,
-								t1.p1().getUid(), t1.p2().getUid(),
-								t2.p1().getUid(), t2.p2().getUid()
-						);
-						Main.getInfo().getGameSlot().put(p1.channel().getId(), g);
-						Main.getInfo().getGameSlot().put(p2.channel().getId(), g);
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
