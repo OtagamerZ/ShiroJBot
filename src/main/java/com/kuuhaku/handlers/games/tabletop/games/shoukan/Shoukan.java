@@ -3088,10 +3088,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 				};
 
 				Tournament t = TournamentDAO.getTournament(tourMatch.id());
-				if (t.getPhase(tourMatch.phase()).isLast())
-					t.setTPResult(winner);
-				else
-					t.setResult(tourMatch.phase(), winner);
+				t.setResult(tourMatch.phase(), winner);
 
 				TournamentDAO.save(t);
 			}
