@@ -282,9 +282,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 						previous.set(s.getGuild().getId());
 						ShiroInfo.getShiroEvents().addHandler(s.getGuild(), listener);
 						Main.getInfo().setGameInProgress(listener, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
-						for (TextChannel chn : channel.getChannels()) {
-							Main.getInfo().getGameSlot().put(chn.getId(), listener);
-						}
+						Main.getInfo().getGameSlot().put(s.getChannel().getId(), listener);
 					}
 					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					if (!shownHand.get()) {
