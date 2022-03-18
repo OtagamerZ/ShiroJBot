@@ -59,12 +59,12 @@ public abstract class SimpleMessageListener extends ListenerAdapter implements C
 	}
 
 	public boolean isClosed() {
-		mutex = null;
 		return closed;
 	}
 
 	@Override
 	public void close() {
+		mutex = null;
 		closed = true;
 	}
 }
