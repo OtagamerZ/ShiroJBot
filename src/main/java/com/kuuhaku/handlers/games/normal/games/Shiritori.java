@@ -21,8 +21,10 @@ package com.kuuhaku.handlers.games.normal.games;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
+import com.kuuhaku.Main;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.normal.framework.Game;
+import com.kuuhaku.handlers.games.normal.framework.Player;
 import com.kuuhaku.handlers.games.normal.framework.Table;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -90,6 +92,7 @@ public class Shiritori extends Game {
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
+					Main.getInfo().setGameInProgress(listener, getTable().getPlayers().stream().map(Player::getId).toArray(String[]::new));
 					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}

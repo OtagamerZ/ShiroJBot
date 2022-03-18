@@ -65,8 +65,6 @@ public class GuessTheCardsCommand implements Executable {
 			return;
 		}
 
-		Object holder = new Object();
-		Main.getInfo().setGameInProgress(holder, author);
 		try {
 			File[] masks = new File(Helper.getResource(this.getClass(), "assets/masks").toURI()).listFiles();
 			assert masks != null;
@@ -102,6 +100,10 @@ public class GuessTheCardsCommand implements Executable {
 								names.get(2))
 						).queueAfter(2, TimeUnit.MINUTES, msg -> success.accept(null));
 						int chances = 2;
+
+						{
+							Main.getInfo().setGameInProgress(self, author);
+						}
 
 						@Override
 						public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {

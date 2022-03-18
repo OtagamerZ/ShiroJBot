@@ -32,6 +32,7 @@ import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
+import com.kuuhaku.handlers.games.tabletop.framework.Player;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
@@ -280,6 +281,10 @@ public class Shoukan extends GlobalGame implements Serializable {
 					if (!s.getGuild().getId().equals(previous.get())) {
 						previous.set(s.getGuild().getId());
 						ShiroInfo.getShiroEvents().addHandler(s.getGuild(), listener);
+						Main.getInfo().setGameInProgress(listener, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
+						for (TextChannel chn : channel.getChannels()) {
+							Main.getInfo().getGameSlot().put(chn.getId(), listener);
+						}
 					}
 					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					if (!shownHand.get()) {

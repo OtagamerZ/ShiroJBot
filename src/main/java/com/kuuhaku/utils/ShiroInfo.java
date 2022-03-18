@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
-import com.kuuhaku.handlers.games.Playable;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
@@ -144,7 +143,7 @@ public class ShiroInfo {
 			.botId("572413282653306901")
 			.build();
 	private final ReferenceMap<String, Object> games = new ReferenceMap<>(HARD, WEAK);
-	private final ReferenceMap<String, Playable> gameSlot = new ReferenceMap<>(HARD, WEAK);
+	private final ReferenceMap<String, Object> gameSlot = new ReferenceMap<>(HARD, WEAK);
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
@@ -363,7 +362,7 @@ public class ShiroInfo {
 		return games.containsKey(id);
 	}
 
-	public ReferenceMap<String, Playable> getGameSlot() {
+	public ReferenceMap<String, Object> getGameSlot() {
 		return gameSlot;
 	}
 
