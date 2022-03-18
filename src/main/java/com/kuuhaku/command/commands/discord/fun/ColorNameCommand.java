@@ -79,8 +79,6 @@ public class ColorNameCommand implements Executable {
 			return;
 		}
 
-		Object holder = new Object();
-		Main.getInfo().setGameInProgress(holder, author);
 		List<Pair<String, Integer>> sequence = new ArrayList<>();
 
 		List<Map.Entry<String, Integer>> pairs = List.copyOf(colors.entrySet());
@@ -135,6 +133,10 @@ public class ColorNameCommand implements Executable {
 								}, 10_000, TimeUnit.MILLISECONDS
 						);
 						private Message msg = t;
+
+						{
+							Main.getInfo().setGameInProgress(self, author);
+						}
 
 						@Override
 						public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {

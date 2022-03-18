@@ -21,11 +21,9 @@ package com.kuuhaku.handlers.games.tabletop.games.reversi;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
+import com.kuuhaku.Main;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.handlers.games.tabletop.framework.Board;
-import com.kuuhaku.handlers.games.tabletop.framework.Game;
-import com.kuuhaku.handlers.games.tabletop.framework.Piece;
-import com.kuuhaku.handlers.games.tabletop.framework.Spot;
+import com.kuuhaku.handlers.games.tabletop.framework.*;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.reversi.pieces.Disk;
 import com.kuuhaku.utils.Helper;
@@ -102,6 +100,7 @@ public class Reversi extends Game {
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
+					Main.getInfo().setGameInProgress(listener, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
 					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}

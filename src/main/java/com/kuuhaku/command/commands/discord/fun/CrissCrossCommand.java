@@ -105,7 +105,6 @@ public class CrissCrossCommand implements Executable {
 
 								s.delete().queue(null, Helper::doNothing);
 								Game t = new CrissCross(Main.getShiroShards(), channel, finalBet, author, message.getMentionedUsers().get(0));
-								Main.getInfo().setGameInProgress(t, author, message.getMentionedUsers().get(0));
 								t.start();
 							}
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
