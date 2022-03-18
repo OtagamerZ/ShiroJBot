@@ -91,14 +91,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
-	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
 
 	@Override
@@ -247,7 +246,9 @@ public class ShiroEvents extends ListenerAdapter {
 		if (toHandle.containsKey(guild.getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(guild.getId());
 			for (SimpleMessageListener evt : evts) {
-				evt.onGuildMessageReceived(event);
+				if (evt.checkChannel(channel)) {
+					evt.onGuildMessageReceived(event);
+				}
 			}
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
@@ -1311,12 +1312,12 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 	}
 
-	public Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
-		return toHandle;
+	public Map<String, List<SimpleMessageListener>> getHandler() {
+		return Collections.unmodifiableMap(toHandle);
 	}
 
-	public void addHandler(Guild guild, SimpleMessageListener sml) {
-		getHandler().computeIfAbsent(guild.getId(), k -> new CopyOnWriteArrayList<>()).add(sml);
+	public synchronized void addHandler(Guild guild, SimpleMessageListener sml) {
+		toHandle.computeIfAbsent(guild.getId(), k -> new ArrayList<>()).add(sml);
 	}
 
 	public Map<String, VoiceTime> getVoiceTimes() {

@@ -78,14 +78,13 @@ public class MarryCommand implements Executable {
 					""".formatted(message.getMentionedUsers().get(0).getAsMention(), author.getAsMention())
 			).queue();
 
-			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
 				private final Consumer<Void> success = s -> close();
 				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null), Helper::doNothing);
 
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0) || event.getChannel() != channel)
-						return;
+					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0)) return;
 
 					if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 						channel.sendMessage(I18n.getString("err_already-married")).queue();

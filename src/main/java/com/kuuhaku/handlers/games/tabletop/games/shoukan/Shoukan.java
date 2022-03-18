@@ -87,12 +87,7 @@ public class Shoukan extends GlobalGame implements Serializable {
 	private final GameChannel channel;
 	private final Arena arena;
 	private final Rules rules;
-	private final SimpleMessageListener listener = new SimpleMessageListener() {
-		@Override
-		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-			if (canInteract(event)) play(event);
-		}
-	};
+	private final SimpleMessageListener listener;
 	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean team;
@@ -123,6 +118,12 @@ public class Shoukan extends GlobalGame implements Serializable {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, new JSONObject(rules));
 		this.rules = rules;
 		this.channel = channel;
+		this.listener = new SimpleMessageListener(channel) {
+			@Override
+			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				if (canInteract(event)) play(event);
+			}
+		};
 		this.team = players.length == 4;
 		this.record = record;
 		this.tourMatch = match;
