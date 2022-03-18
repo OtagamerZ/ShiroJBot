@@ -121,8 +121,6 @@ public class TradeCommand implements Executable {
 	}
 
 	private void sendTradeWindow(User author, TextChannel channel, Guild guild, User tgt, Trade trade, EmbedBuilder eb) {
-		Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
-		Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 		channel.sendMessageEmbeds(eb.build()).queue(msg -> {
 			SimpleMessageListener sml = new SimpleMessageListener() {
 				@Override
@@ -239,17 +237,11 @@ public class TradeCommand implements Executable {
 										});
 									}
 
-									Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
-									Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 									channel.sendMessageEmbeds(eb.build())
 											.queue(s -> Pages.buttonize(s, btns, true,
 													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
 													u -> u.getId().equals(author.getId()),
-													ms -> {
-														Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
-														Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
-														chosen.complete(null);
-													}
+													ms -> chosen.complete(null)
 											));
 								} else if (matches.isEmpty()) {
 									channel.sendMessage("❌ | Você não pode oferecer uma carta que não possui!").queue();
@@ -364,17 +356,11 @@ public class TradeCommand implements Executable {
 										});
 									}
 
-									Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
-									Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 									channel.sendMessageEmbeds(eb.build())
 											.queue(s -> Pages.buttonize(s, btns, true,
 													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
 													u -> u.getId().equals(author.getId()),
-													ms -> {
-														Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
-														Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
-														chosen.complete(null);
-													}
+													ms -> chosen.complete(null)
 											));
 								} else if (matches.isEmpty()) {
 									channel.sendMessage("❌ | Você não pode retornar uma carta que não ofereceu!").queue();
@@ -445,9 +431,6 @@ public class TradeCommand implements Executable {
 							trade.getOffer(wrapper.getUser().getId()).setAccepted(true);
 
 							if (trade.getOffers().stream().allMatch(TradeOffer::hasAccepted)) {
-								Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
-								Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
-
 								trade.getLeft().commit(trade.getRight().getUid());
 								trade.getRight().commit(trade.getLeft().getUid());
 								trade.setFinished(true);
@@ -477,8 +460,6 @@ public class TradeCommand implements Executable {
 					}), ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 					u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 					_ms -> {
-						Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
-						Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
 						msg.editMessage("Transação cancelada.")
 								.flatMap(m -> m.suppressEmbeds(true))
 								.queue(null, Helper::doNothing);
@@ -507,10 +488,12 @@ public class TradeCommand implements Executable {
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
 								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, false));
 									wrapper.getMessage().delete().queue(null, Helper::doNothing);
 								});
 								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(kcs.get(1).getCard(), CardType.KAWAIPON, true));
 									wrapper.getMessage().delete().queue(null, Helper::doNothing);
 								});
@@ -537,10 +520,12 @@ public class TradeCommand implements Executable {
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
 								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(tcs.get(0).getCard(), CardType.KAWAIPON, false));
 									wrapper.getMessage().delete().queue(null, Helper::doNothing);
 								});
 								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(tcs.get(1).getCard(), CardType.KAWAIPON, true));
 									wrapper.getMessage().delete().queue(null, Helper::doNothing);
 								});
