@@ -102,7 +102,7 @@ public class GuessTheCardsCommand implements Executable {
 						int chances = 2;
 
 						{
-							Main.getInfo().setGameInProgress(getSelf(), author);
+							Main.getInfo().setGameInProgress(mutex, author);
 						}
 
 						@Override

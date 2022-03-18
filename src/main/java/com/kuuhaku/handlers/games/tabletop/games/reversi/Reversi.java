@@ -101,7 +101,7 @@ public class Reversi extends Game {
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
-					Main.getInfo().setGameInProgress(listener, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
+					Main.getInfo().setGameInProgress(listener.mutex, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
 					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}

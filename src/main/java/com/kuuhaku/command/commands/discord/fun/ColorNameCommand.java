@@ -135,7 +135,7 @@ public class ColorNameCommand implements Executable {
 						private Message msg = t;
 
 						{
-							Main.getInfo().setGameInProgress(getSelf(), author);
+							Main.getInfo().setGameInProgress(mutex, author);
 						}
 
 						@Override
