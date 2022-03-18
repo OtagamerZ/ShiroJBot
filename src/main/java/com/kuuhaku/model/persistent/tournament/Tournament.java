@@ -265,6 +265,11 @@ public class Tournament {
 	}
 
 	public void setResult(int phase, int index) {
+		if (phase == bracket.getPhases().size()) {
+			setTPResult(index);
+			return;
+		}
+
 		setResult(phase, index, false);
 	}
 
@@ -291,7 +296,7 @@ public class Tournament {
 
 		Participant winner = tp.get(index);
 		winner.addPoints(1);
-		winner.setPhase(winner.getPhase() + 1);
+		winner.setPhase(bracket.getPhases().size());
 
 		finished = true;
 	}

@@ -227,8 +227,9 @@ public class Hand {
 				if (i > champs.size()) {
 					destinyDeck.clear();
 					break;
-				} else
-					destinyDeck.add(deque.get(i));
+				} else {
+					destinyDeck.add(champs.get(i));
+				}
 			}
 		}
 		for (Drawable drawable : destinyDeck) {

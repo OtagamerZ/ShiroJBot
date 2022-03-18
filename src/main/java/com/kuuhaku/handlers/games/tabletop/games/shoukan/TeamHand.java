@@ -182,7 +182,7 @@ public class TeamHand extends Hand {
 						destinyDeck.clear();
 						break;
 					} else
-						destinyDeck.add(deque.get(x));
+						destinyDeck.add(dk.getChampions().get(x));
 				}
 			}
 			for (Drawable drawable : destinyDeck) {

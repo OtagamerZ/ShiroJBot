@@ -63,10 +63,10 @@ public class ManualResultCommand implements Executable {
 			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
 
 			int phase = Integer.parseInt(args[1]);
-			if (phase == t.getBracket().getPhases().size() - 1) {
+			if (phase == t.getBracket().getPhases().size()) {
 				int index = Integer.parseInt(args[2]);
 				List<Participant> match = t.getTPMatch();
-				if (!match.stream().allMatch(p -> p.getPhase() == phase)) {
+				if (match.stream().anyMatch(p -> p.getPoints() == t.getSize() - 4)) {
 					channel.sendMessage("❌ | Essa partida já foi encerrada.").queue();
 					return;
 				}
