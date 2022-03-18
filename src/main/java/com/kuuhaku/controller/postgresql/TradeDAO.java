@@ -67,7 +67,7 @@ public class TradeDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(t);
+		em.remove(em.contains(t) ? t : em.merge(t));
 		em.getTransaction().commit();
 
 		em.close();
