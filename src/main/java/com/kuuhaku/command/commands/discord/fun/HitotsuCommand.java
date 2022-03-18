@@ -149,7 +149,6 @@ public class HitotsuCommand implements Executable {
 
 							s.delete().queue(null, Helper::doNothing);
 							Game t = new Hitotsu(Main.getShiroShards(), channel, finalBet, players.toArray(User[]::new));
-							Main.getInfo().setGameInProgress(t, players);
 							t.start();
 						}
 					}
