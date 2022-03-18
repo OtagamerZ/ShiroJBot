@@ -44,6 +44,7 @@ public class LockShoukanCommand implements Executable {
 			channel.sendMessage("❌ | O Shoukan já está bloqueado (" + games + " jogos restantes).").queue();
 		else {
 			mm.getSoloLobby().clear();
+			mm.getDuoLobby().clear();
 			mm.setLocked(true);
 			channel.sendMessage("✅ | Shoukan bloqueado com sucesso até a reinicialização (" + games + " jogos restantes).").queue();
 		}
