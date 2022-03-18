@@ -52,6 +52,8 @@ public class GuessTheNumberCommand implements Executable {
 			return;
 		}
 
+		Object holder = new Object();
+		Main.getInfo().setGameInProgress(holder, author);
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		int theValue = Helper.rng(100);

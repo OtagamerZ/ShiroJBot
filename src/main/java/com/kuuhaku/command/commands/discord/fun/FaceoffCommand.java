@@ -58,6 +58,8 @@ public class FaceoffCommand implements Executable {
 			return;
 		}
 
+		Object holder = new Object();
+		Main.getInfo().setGameInProgress(holder, author);
 		try {
 			int level = Integer.parseInt(args[0]);
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();

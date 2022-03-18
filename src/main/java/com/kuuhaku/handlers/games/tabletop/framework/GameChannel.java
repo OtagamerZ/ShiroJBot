@@ -36,7 +36,6 @@ public class GameChannel {
 	public GameChannel(TextChannel... channel) {
 		for (TextChannel chn : channel) {
 			channels.add(new ChannelReference(chn.getGuild(), chn));
-			Main.getInfo().getShoukanSlot().put(chn.getId(), true);
 		}
 	}
 
