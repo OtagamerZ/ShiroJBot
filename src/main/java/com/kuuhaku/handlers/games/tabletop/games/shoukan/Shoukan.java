@@ -65,7 +65,6 @@ import javax.websocket.DeploymentException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -81,7 +80,7 @@ import java.util.stream.Collectors;
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm.*;
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
-public class Shoukan extends GlobalGame implements Serializable {
+public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
 	private final GameChannel channel;

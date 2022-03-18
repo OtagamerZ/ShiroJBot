@@ -71,7 +71,7 @@ public class FaceoffCommand implements Executable {
 
 			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
 				{
-					Main.getInfo().setGameInProgress(self, author);
+					Main.getInfo().setGameInProgress(getSelf(), author);
 				}
 
 				@Override
