@@ -64,7 +64,7 @@ public class GuessTheNumberCommand implements Executable {
 			int chances = 4;
 
 			{
-				Main.getInfo().setGameInProgress(self, author);
+				Main.getInfo().setGameInProgress(getSelf(), author);
 			}
 
 			@Override
