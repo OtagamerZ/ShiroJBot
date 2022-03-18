@@ -66,7 +66,7 @@ public class ManualResultCommand implements Executable {
 			if (phase == t.getBracket().getPhases().size() - 1) {
 				int index = Integer.parseInt(args[2]);
 				List<Participant> match = t.getTPMatch();
-				if (match.stream().anyMatch(p -> p.getPoints() == t.getSize() - 4)) {
+				if (!match.stream().allMatch(p -> p.getPoints() == t.getSize() - 4)) {
 					channel.sendMessage("❌ | Essa partida já foi encerrada.").queue();
 					return;
 				}
