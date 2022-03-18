@@ -98,8 +98,6 @@ public class TradeCommand implements Executable {
 							s.delete().queue(null, Helper::doNothing);
 							Trade trade = Helper.getOr(t, new Trade(author.getId(), tgt.getId()));
 
-							Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
-							Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
 									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta`, para adicionar/remover uma quantia de CR digite `+/- valor`.")
@@ -121,6 +119,8 @@ public class TradeCommand implements Executable {
 	}
 
 	private void sendTradeWindow(User author, TextChannel channel, Guild guild, User tgt, Trade trade, EmbedBuilder eb) {
+		Main.getInfo().getConfirmationPending().put(author.getId() + "_T", true);
+		Main.getInfo().getConfirmationPending().put(tgt.getId() + "_T", true);
 		channel.sendMessageEmbeds(eb.build()).queue(msg -> {
 			SimpleMessageListener sml = new SimpleMessageListener() {
 				@Override
@@ -443,6 +443,9 @@ public class TradeCommand implements Executable {
 							trade.getOffer(wrapper.getUser().getId()).setAccepted(true);
 
 							if (trade.getOffers().stream().allMatch(TradeOffer::hasAccepted)) {
+								Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
+								Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
+
 								trade.getLeft().commit(trade.getRight().getUid());
 								trade.getRight().commit(trade.getLeft().getUid());
 								trade.setFinished(true);
@@ -472,6 +475,8 @@ public class TradeCommand implements Executable {
 					}), ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 					u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 					_ms -> {
+						Main.getInfo().getConfirmationPending().remove(author.getId() + "_T");
+						Main.getInfo().getConfirmationPending().remove(tgt.getId() + "_T");
 						msg.editMessage("Transação cancelada.")
 								.flatMap(m -> m.suppressEmbeds(true))
 								.queue(null, Helper::doNothing);
