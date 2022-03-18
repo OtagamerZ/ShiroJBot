@@ -95,7 +95,9 @@ public class TradeCommand implements Executable {
 		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja" + (t == null ? "" : " continuar a") + " negociar com você, deseja aceitar?").queue(s ->
 				Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (!wrapper.getUser().getId().equals(tgt.getId())) return;
+							Main.getInfo().getConfirmationPending().remove(author.getId(), true);
 							s.delete().queue(null, Helper::doNothing);
+
 							Trade trade = Helper.getOr(t, new Trade(author.getId(), tgt.getId()));
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
