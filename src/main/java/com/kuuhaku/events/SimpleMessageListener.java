@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 import java.io.Closeable;
 
 public abstract class SimpleMessageListener extends ListenerAdapter implements Closeable {
-	public final SimpleMessageListener self = this;
 	private final GameChannel channel;
 	private boolean closed = false;
 
@@ -41,6 +40,10 @@ public abstract class SimpleMessageListener extends ListenerAdapter implements C
 
 	@Override
 	public abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
+
+	public SimpleMessageListener getSelf() {
+		return this;
+	}
 
 	public GameChannel getChannel() {
 		return channel;
