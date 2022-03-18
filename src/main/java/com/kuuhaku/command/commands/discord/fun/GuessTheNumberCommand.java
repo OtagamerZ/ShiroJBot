@@ -52,8 +52,6 @@ public class GuessTheNumberCommand implements Executable {
 			return;
 		}
 
-		Object holder = new Object();
-		Main.getInfo().setGameInProgress(holder, author);
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		int theValue = Helper.rng(100);
@@ -64,6 +62,10 @@ public class GuessTheNumberCommand implements Executable {
 			private final Consumer<Void> success = s -> close();
 			private Future<?> timeout = channel.sendMessage("Acabou o tempo, o número escolhido por mim era **" + theValue + "**.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 			int chances = 4;
+
+			{
+				Main.getInfo().setGameInProgress(self, author);
+			}
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {

@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.normal.framework;
 
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
-import com.kuuhaku.handlers.games.Playable;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
@@ -36,7 +35,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public abstract class Game implements Playable {
+public abstract class Game {
 	private final ShardManager handler;
 	private final Table table;
 	private final TextChannel channel;
