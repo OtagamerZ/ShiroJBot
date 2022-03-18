@@ -65,6 +65,8 @@ public class GuessTheCardsCommand implements Executable {
 			return;
 		}
 
+		Object holder = new Object();
+		Main.getInfo().setGameInProgress(holder, author);
 		try {
 			File[] masks = new File(Helper.getResource(this.getClass(), "assets/masks").toURI()).listFiles();
 			assert masks != null;
