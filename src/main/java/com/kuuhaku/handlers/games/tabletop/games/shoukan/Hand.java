@@ -1128,4 +1128,17 @@ public class Hand {
 	public List<SlotColumn> getSlots() {
 		return game.getArena().getSlots().get(side);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Hand hand = (Hand) o;
+		return Objects.equals(game, hand.game) && Objects.equals(acc, hand.acc) && side == hand.side;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(game, acc, side);
+	}
 }

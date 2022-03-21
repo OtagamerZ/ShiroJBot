@@ -346,12 +346,11 @@ public class ShoukanCommand implements Executable {
 			}
 
 			if (team) {
-				if (!daily)
-					for (int i = 0; i < 3; i++) {
-						User u = message.getMentionedUsers().get(i);
+				if (!daily) for (int i = 0; i < 3; i++) {
+					User u = message.getMentionedUsers().get(i);
 
-						if (Deck.hasInvalidDeck(KawaiponDAO.getDeck(u.getId()), u, channel)) return;
-					}
+					if (Deck.hasInvalidDeck(KawaiponDAO.getDeck(u.getId()), u, channel)) return;
+				}
 
 				List<User> players = new ArrayList<>() {{
 					add(author);
@@ -379,7 +378,7 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().isOccupied(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
-										} else if (dk.hasInvalidDeck(channel)) return;
+										} else if (!daily && dk.hasInvalidDeck(channel)) return;
 
 										if (!accepted.contains(wrapper.getUser().getId())) {
 											channel.sendMessage(wrapper.getUser().getAsMention() + " aceitou a partida.").queue();
@@ -420,7 +419,7 @@ public class ShoukanCommand implements Executable {
 										} else if (Main.getInfo().isOccupied(channel.getId())) {
 											channel.sendMessage("❌ | Já existe uma partida sendo jogada neste canal, por favor aguarde.").queue();
 											return;
-										} else if (dk.hasInvalidDeck(channel)) return;
+										} else if (!daily && dk.hasInvalidDeck(channel)) return;
 
 										s.delete().queue(null, Helper::doNothing);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));

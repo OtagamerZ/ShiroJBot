@@ -36,7 +36,7 @@ import java.util.Locale;
 public enum CreditItem {
 	XP_BOOST(
 			"XP Boost", "Ganha 3500 de XP instantâneamente (valor reduzido se você ganhou XP em menos de 10 segundos)",
-			6500,
+			6_500,
 			(mb, chn, args) -> {
 				com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 				int lvl = m.getLevel();
@@ -59,7 +59,7 @@ public enum CreditItem {
 	),
 	SPAWN_CARD(
 			"Invocar Carta", "Invoca uma carta aleatória (possui chance de ser cromada)",
-			5000,
+			5_000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, false);
@@ -69,7 +69,7 @@ public enum CreditItem {
 	),
 	SPAWN_ANIME(
 			"Invocar Anime", "Invoca uma carta aleatória de um anime específico (possui chance de ser cromada)",
-			8500,
+			8_500,
 			(mb, chn, args) -> {
 				if (args.length < 2) {
 					chn.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
@@ -89,7 +89,7 @@ public enum CreditItem {
 	),
 	CARD_STASH_SIZE(
 			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 5",
-			15000,
+			15_000,
 			(mb, chn, args) -> {
 				Account acc = AccountDAO.getAccount(mb.getId());
 
@@ -101,7 +101,7 @@ public enum CreditItem {
 	),
 	SPAWN_CARD_FOIL(
 			"Invocar Carta Cromada", "Invoca uma carta cromada aleatória",
-			85000,
+			65_000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, true);
@@ -110,7 +110,7 @@ public enum CreditItem {
 	),
 	SPAWN_ANIME_FOIL(
 			"Invocar Anime Cromado", "Invoca uma carta cromada aleatória de um anime específico",
-			175000,
+			100_000,
 			(mb, chn, args) -> {
 				if (args.length < 2) {
 					chn.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
