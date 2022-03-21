@@ -110,7 +110,7 @@ public enum CreditItem {
 	),
 	SPAWN_ANIME_FOIL(
 			"Invocar Anime Cromado", "Invoca uma carta cromada aleatória de um anime específico",
-			100_000,
+			150_000,
 			(mb, chn, args) -> {
 				if (args.length < 2) {
 					chn.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
