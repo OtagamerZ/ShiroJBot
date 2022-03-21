@@ -2113,7 +2113,7 @@ public class Shoukan extends GlobalGame {
 					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
-			buttons.put(Helper.parseEmoji("\uD83D\uDC53"), wrapper -> {
+			buttons.put(Helper.parseEmoji("\uD83D\uDD0D"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode inspecionar o campo na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
