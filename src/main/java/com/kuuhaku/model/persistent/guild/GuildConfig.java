@@ -605,6 +605,7 @@ public class GuildConfig {
 	}
 
 	public void addColorRole(String id, Color color, String name) {
+		colorRoles.removeIf(cr -> cr.getName().equalsIgnoreCase(name));
 		colorRoles.add(new ColorRole(id, color, name));
 	}
 

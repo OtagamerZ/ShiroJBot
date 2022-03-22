@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.awt.*;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -82,11 +83,11 @@ public class ColorRole {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ColorRole colorRole = (ColorRole) o;
-		return Objects.equals(name, colorRole.name);
+		return Objects.equals(name.toLowerCase(Locale.ROOT), colorRole.name.toLowerCase(Locale.ROOT));
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(name.toLowerCase(Locale.ROOT));
 	}
 }
