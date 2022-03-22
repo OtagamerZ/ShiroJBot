@@ -58,6 +58,7 @@ public class SlotColumn implements Cloneable {
 		}
 
 		Champion curr = this.top;
+		this.top = top;
 		if (curr != null) {
 			if (curr.hasEffect()) {
 				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
@@ -75,7 +76,6 @@ public class SlotColumn implements Cloneable {
 			}
 		}
 
-		this.top = top;
 		if (top != null && !top.isFlipped()) {
 			game.applyEffect(EffectTrigger.ON_SUMMON, top, hand.getSide(), index, new Source(top, hand.getSide(), index));
 		}
@@ -92,6 +92,7 @@ public class SlotColumn implements Cloneable {
 		}
 
 		Equipment curr = this.bottom;
+		this.bottom = bottom;
 		if (curr != null) {
 			if (curr.hasEffect()) {
 				curr.getEffect(new EffectParameters(EffectTrigger.FINALIZE, curr.getGame(), curr.getSide(), index, Duelists.of(), curr.getGame().getChannel()));
@@ -102,7 +103,6 @@ public class SlotColumn implements Cloneable {
 			}
 		}
 
-		this.bottom = bottom;
 		if (bottom != null && !bottom.isFlipped()) {
 			game.applyEffect(EffectTrigger.ON_SUMMON, bottom, hand.getSide(), index);
 		}
