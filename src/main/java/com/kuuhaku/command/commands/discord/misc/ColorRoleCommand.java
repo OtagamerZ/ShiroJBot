@@ -95,7 +95,6 @@ public class ColorRoleCommand implements Executable {
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
 			guild.modifyMemberRoles(member, List.of(), rols).queue();
-
 			channel.sendMessage("✅ | Sua cor foi removida com sucesso!").queue();
 			return;
 		}
@@ -129,8 +128,7 @@ public class ColorRoleCommand implements Executable {
 			return;
 		}
 
-		guild.modifyMemberRoles(member, rols).queue();
-		guild.addRoleToMember(member, r).queue();
+		guild.modifyMemberRoles(member, List.of(r), rols).queue();
 		channel.sendMessage("✅ | Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
 		GuildDAO.updateGuildSettings(gc);
 	}
