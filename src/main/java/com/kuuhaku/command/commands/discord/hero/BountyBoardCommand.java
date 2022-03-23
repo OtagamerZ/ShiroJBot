@@ -140,10 +140,11 @@ public class BountyBoardCommand implements Executable {
 				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES)) + ")")
 						.setEmbeds(eb.build())
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+
 									h.setQuest(q, seed);
 									KawaiponDAO.saveHero(h);
 
-									Main.getInfo().getConfirmationPending().remove(author.getId());
 									s.delete()
 											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Herói enviado com sucesso!"))

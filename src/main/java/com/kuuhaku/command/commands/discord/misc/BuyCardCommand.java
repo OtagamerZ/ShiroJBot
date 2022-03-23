@@ -292,7 +292,6 @@ public class BuyCardCommand implements Executable {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por **" + Helper.separate(price) + " CR**, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
 									Market finalM = MarketDAO.getCard(Integer.parseInt(args[0]));
 									if (finalM == null) {
 										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
@@ -325,6 +324,8 @@ public class BuyCardCommand implements Executable {
 											kp.addCard(finalM.getCard());
 										}
 									}
+
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									KawaiponDAO.saveKawaipon(kp);
 
 									finalM.setBuyer(author.getId());

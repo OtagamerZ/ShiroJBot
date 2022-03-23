@@ -88,8 +88,7 @@ public class CreditStoreCommand implements Executable {
 									facc.consumeCredit(ci.getPrice(), CreditStoreCommand.class);
 									AccountDAO.saveAccount(facc);
 
-									s.delete().queue(null, Helper::doNothing);
-									channel.sendMessage("✅ | Item comprado com sucesso!").queue();
+									s.delete().flatMap(d -> channel.sendMessage("✅ | Item comprado com sucesso!")).queue();
 								}
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),

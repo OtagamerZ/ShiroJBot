@@ -105,11 +105,12 @@ public class ConvertCardCommand implements Executable {
 			channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(c.drawCard(false), "kp_" + c.getId(), "png"), "card.png")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
+
 								kp.removeCard(kc);
 								dk.addChampion(c);
 								KawaiponDAO.saveKawaipon(kp);
-								s.delete().queue();
-								channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
+
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Conversão realizada com sucesso!")).queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

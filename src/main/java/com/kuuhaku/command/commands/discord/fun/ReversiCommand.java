@@ -94,6 +94,8 @@ public class ReversiCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
+								s.delete().queue(null, Helper::doNothing);
+
 								if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 									channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 									return;

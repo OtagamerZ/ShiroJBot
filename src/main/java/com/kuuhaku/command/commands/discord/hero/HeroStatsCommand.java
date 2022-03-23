@@ -107,13 +107,14 @@ public class HeroStatsCommand implements Executable {
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
 							put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+
 								KawaiponDAO.saveHero(h);
 
 								s.delete()
 										.flatMap(d -> wrapper.getMessage().delete())
 										.flatMap(m -> channel.sendMessage("Herói salvo com sucesso!"))
 										.queue(null, Helper::doNothing);
-								Main.getInfo().getConfirmationPending().remove(author.getId());
 							});
 						}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
