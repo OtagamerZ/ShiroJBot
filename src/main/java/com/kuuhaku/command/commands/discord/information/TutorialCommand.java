@@ -66,10 +66,11 @@ public class TutorialCommand implements Executable {
 		AtomicInteger stage = new AtomicInteger(acc.getTutorialStage());
 		AtomicBoolean finished = new AtomicBoolean();
 		Runnable r = () -> {
+			Main.getInfo().getConfirmationPending().remove(author.getId());
+
 			acc.setTutorialStage(stage.get());
 			AccountDAO.saveAccount(acc);
 			Main.getInfo().getIgnore().remove(author.getId());
-			Main.getInfo().getConfirmationPending().remove(author.getId());
 		};
 		try {
 			AtomicReference<CompletableFuture<Boolean>> next = new AtomicReference<>();

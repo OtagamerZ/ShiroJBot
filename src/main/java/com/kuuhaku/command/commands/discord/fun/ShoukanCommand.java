@@ -258,8 +258,9 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(other.getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
-										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
+										s.delete().queue(null, Helper::doNothing);
 
+										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
@@ -271,7 +272,6 @@ public class ShoukanCommand implements Executable {
 											return;
 										} else if (dk.hasInvalidDeck(channel)) return;
 
-										s.delete().queue(null, Helper::doNothing);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
 										t.start();
 									}
@@ -408,8 +408,9 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
-										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
+										s.delete().queue(null, Helper::doNothing);
 
+										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
@@ -421,7 +422,6 @@ public class ShoukanCommand implements Executable {
 											return;
 										} else if (!daily && dk.hasInvalidDeck(channel)) return;
 
-										s.delete().queue(null, Helper::doNothing);
 										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
 										t.start();
 									}

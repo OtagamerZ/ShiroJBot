@@ -77,6 +77,7 @@ public class ClanWithdrawCommand implements Executable {
 		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(value) + " CR do cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
+							s.delete().queue(null, Helper::doNothing);
 
 							Clan finalC = ClanDAO.getUserClan(author.getId());
 							assert finalC != null;

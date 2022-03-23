@@ -92,8 +92,7 @@ public class GemStoreCommand implements Executable {
 									facc.removeGem(gi.getPrice());
 									AccountDAO.saveAccount(facc);
 
-									s.delete().queue(null, Helper::doNothing);
-									channel.sendMessage("✅ | Item comprado com sucesso!").queue();
+									s.delete().flatMap(d -> channel.sendMessage("✅ | Item comprado com sucesso!")).queue();
 								}
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
