@@ -190,6 +190,8 @@ public class SellCardCommand implements Executable {
 			channel.sendMessage(msg)
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
+								s.delete().queue();
+
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
 
@@ -236,7 +238,7 @@ public class SellCardCommand implements Executable {
 								MarketDAO.saveCard(m);
 								KawaiponDAO.saveKawaipon(finalKp);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
+								channel.sendMessage("✅ | Carta anunciada com sucesso!").queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
