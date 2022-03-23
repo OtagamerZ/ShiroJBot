@@ -53,12 +53,12 @@ public class RedeemCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (wrapper.getMember().getId().equals(author.getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
+
 								acc.setStreak(0);
 								acc.addGem();
 								AccountDAO.saveAccount(acc);
 
-								s.delete().queue();
-								channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "shopg` para ver a loja de gemas.").queue();
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "shopg` para ver a loja de gemas.")).queue();
 							}
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),

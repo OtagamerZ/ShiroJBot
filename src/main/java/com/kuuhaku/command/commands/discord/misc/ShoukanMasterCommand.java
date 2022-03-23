@@ -83,8 +83,8 @@ public class ShoukanMasterCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							if (wrapper.getUser().getId().equals(author.getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
-
 								s.delete().queue();
+
 								contract.setSignatureA(true);
 								secondStep(contract, guild, author, target, channel);
 							}

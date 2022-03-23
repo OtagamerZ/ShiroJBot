@@ -86,10 +86,11 @@ public class EffectShopCommand implements Executable {
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + ", deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+
 									h.setReferenceChampion(c.getId());
 									KawaiponDAO.saveHero(h);
 
-									Main.getInfo().getConfirmationPending().remove(author.getId());
 									s.delete()
 											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!"))

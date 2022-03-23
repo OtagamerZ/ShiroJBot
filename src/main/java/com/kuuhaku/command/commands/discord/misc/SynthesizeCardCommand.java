@@ -152,6 +152,7 @@ public class SynthesizeCardCommand implements Executable {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
 									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
+										s.delete().queue();
 
 										if (dp.getValue().isBlank()) {
 											for (Card t : tributes) {
@@ -179,8 +180,6 @@ public class SynthesizeCardCommand implements Executable {
 										}
 
 										KawaiponDAO.saveKawaipon(kp);
-
-										s.delete().queue(null, Helper::doNothing);
 									});
 
 									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -227,6 +226,8 @@ public class SynthesizeCardCommand implements Executable {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
 									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
+										s.delete().queue();
+
 										String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
 										if (dp.getValue().isBlank()) {
@@ -262,8 +263,6 @@ public class SynthesizeCardCommand implements Executable {
 										}
 
 										KawaiponDAO.saveKawaipon(kp);
-
-										s.delete().queue(null, Helper::doNothing);
 									});
 
 									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -315,6 +314,8 @@ public class SynthesizeCardCommand implements Executable {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
 									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
+										s.delete().queue();
+
 										String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
 										if (dp.getValue().isBlank()) {
@@ -350,8 +351,6 @@ public class SynthesizeCardCommand implements Executable {
 										}
 
 										KawaiponDAO.saveKawaipon(kp);
-
-										s.delete().queue(null, Helper::doNothing);
 									});
 
 									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
