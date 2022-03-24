@@ -177,8 +177,11 @@ public class ShiroInfo {
 				}
 
 				for (TextChannel tc : guild.getTextChannels()) {
-					if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
-						tc.getManager().setSlowmode(0).queue(null, Helper::doNothing);
+					try {
+						if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
+							tc.getManager().setSlowmode(0).queue(null, Helper::doNothing);
+						}
+					} catch (Exception ignore) {
 					}
 				}
 
