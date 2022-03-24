@@ -108,7 +108,7 @@ public class DismissHeroCommand implements Executable {
 								fKp.getHeroes().remove(chosen);
 								KawaiponDAO.saveKawaipon(fKp);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Herói retornado com sucesso!")).queue();
+								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Herói retornado com sucesso!")).queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

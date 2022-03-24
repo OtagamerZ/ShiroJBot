@@ -92,7 +92,7 @@ public class ClanWithdrawCommand implements Executable {
 							ClanDAO.saveClan(finalC);
 							AccountDAO.saveAccount(acc);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso.")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso.")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

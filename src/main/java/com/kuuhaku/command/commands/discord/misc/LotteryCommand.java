@@ -89,7 +89,7 @@ public class LotteryCommand implements Executable {
 							lv.addValue(cost);
 							LotteryDAO.saveLotteryValue(lv);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Bilhete comprado com sucesso!")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Bilhete comprado com sucesso!")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

@@ -266,7 +266,7 @@ public class AuctionCommand implements Executable {
 											}
 									));
 
-									s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que **" + Helper.separate(price) + " CR** dentro de 30 segundos irei fechá-lo!")).queue();
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que **" + Helper.separate(price) + " CR** dentro de 30 segundos irei fechá-lo!")).queue();
 									ShiroInfo.getShiroEvents().addHandler(guild, listener);
 								}
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

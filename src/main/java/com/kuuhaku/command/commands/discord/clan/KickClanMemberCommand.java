@@ -75,7 +75,7 @@ public class KickClanMemberCommand implements Executable {
 								c.kick(cm.getUid(), author);
 								ClanDAO.saveClan(c);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Membro expulso com sucesso.")).queue();
+								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Membro expulso com sucesso.")).queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
