@@ -342,7 +342,7 @@ public class BuyCardCommand implements Executable {
 											Helper::doNothing
 									);
 
-									s.delete().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!")).queue();
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!")).queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

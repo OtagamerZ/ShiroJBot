@@ -300,7 +300,7 @@ public class ReserveCardCommand implements Executable {
 									AccountDAO.saveAccount(seller);
 									AccountDAO.saveAccount(buyer);
 
-									s.delete().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!")).queue();
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!")).queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
