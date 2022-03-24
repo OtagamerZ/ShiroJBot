@@ -717,6 +717,8 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					for (Member admin : admins) {
+						if (admin.getUser().isBot()) continue;
+
 						admin.getUser().openPrivateChannel()
 								.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
 								.queue(null, Helper::doNothing);
