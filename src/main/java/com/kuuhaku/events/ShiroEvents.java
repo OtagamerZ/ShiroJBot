@@ -615,20 +615,20 @@ public class ShiroEvents extends ListenerAdapter {
 				Obrigada por me escolher!
 				Utilize `s!ajuda`%s para ver todos os meus comandos!
 				Para ver informações sobre um comando específico, use `s!ajuda comando` (substituindo `comando` pelo nome do comando).
-				
+								
 				**Guia rápido de funções:**
 				- Para habilitar minhas proteções de servidor, utilize `s!semraid`, `s!semspam`, `s!semhoist`, `s!semlink` e `s!tornarmencionavel`.
 				+- As proteções são opcionais, para mais informações sobre elas utilize `s!ajuda comando` (substituindo `comando` pelo nome do comando).
-				
+								
 				- Para configurar minhas mensagens de bem-vindo/adeus, utilize os comandos `s!msgbv`/`s!msgadeus`.
 				+- **Dica:** utilize `s!embed` para definir um GIF ou alterar os outros campos do bloco de boas-vindas/adeus. Se precisar, use minha ferramenta de criação de embeds em https://shirojbot.site/EmbedBuilder
-				
+								
 				- Para configurar respostas automáticas, utilize `s!fale`.
 				+- **Dica:** é possível usar substituições dentro de mensagens, consulte o comando `s!help` para vê-las. Se precisar, use minha ferramenta de criação de respostas em https://shirojbot.site/CABuilder
-				
+								
 				- Para habilitar o spawn de cartas e drops, utilize os comandos `s!spawncartas` e `s!spawndrops`, respectivamente.
 				+- Não deixe também de conferir meu jogo principal: **Shoukan**!
-				
+								
 				Ainda com dúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!
 				""";
 
@@ -688,7 +688,7 @@ public class ShiroEvents extends ListenerAdapter {
 				Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), arc));
 
 				TextChannel chn = gc.getGeneralChannel();
-				if (chn != null) {
+				if (chn != null && chn.canTalk()) {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(Color.red)
 							.setTitle("**⚠️ | RAID DETECTADA - SISTEMA R.A.ID ATIVADO | ⚠️**")
@@ -705,29 +705,29 @@ public class ShiroEvents extends ListenerAdapter {
 					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 				}
 
-				User owner = Main.getInfo().getUserByID(guild.getOwnerId());
-				if (owner != null) {
-					List<Role> admRoles = guild.getRoles().stream()
-							.filter(r -> r.hasPermission(Permission.ADMINISTRATOR))
-							.toList();
+				List<Role> admRoles = guild.getRoles().stream()
+						.filter(r -> r.hasPermission(Permission.ADMINISTRATOR))
+						.toList();
 
-					Set<Member> admins = new HashSet<>();
-					for (Role admRole : admRoles) {
-						admins.addAll(guild.getMembersWithRoles(admRole));
-					}
+				Set<Member> admins = new HashSet<>();
+				for (Role admRole : admRoles) {
+					admins.addAll(guild.getMembersWithRoles(admRole));
+				}
 
-					for (Member admin : admins) {
-						if (admin.getUser().isBot()) continue;
+				for (Member admin : admins) {
+					if (admin.getUser().isBot()) continue;
 
-						admin.getUser().openPrivateChannel()
-								.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
-								.queue(null, Helper::doNothing);
-					}
+					admin.getUser().openPrivateChannel()
+							.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
+							.queue(null, Helper::doNothing);
 				}
 
 				for (TextChannel tc : guild.getTextChannels()) {
-					if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
-						tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+					try {
+						if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
+							tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+						}
+					} catch (Exception ignore) {
 					}
 				}
 
