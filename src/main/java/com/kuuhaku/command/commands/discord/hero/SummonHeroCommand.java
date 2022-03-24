@@ -123,7 +123,7 @@ public class SummonHeroCommand implements Executable {
 							acc.getAchievements().add(Achievement.A_HERO_IS_BORN);
 							AccountDAO.saveAccount(acc);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

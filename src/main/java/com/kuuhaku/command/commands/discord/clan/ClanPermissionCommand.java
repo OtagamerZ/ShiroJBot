@@ -154,7 +154,7 @@ public class ClanPermissionCommand implements Executable {
 					u -> u.getId().equals(author.getId()),
 					ms -> {
 						ClanDAO.saveClan(c);
-						s.delete().flatMap(d -> channel.sendMessage("✅ | Permissões salvas com sucesso.")).queue();
+						s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Permissões salvas com sucesso.")).queue();
 						Main.getInfo().getConfirmationPending().remove(author.getId());
 					}
 			));
