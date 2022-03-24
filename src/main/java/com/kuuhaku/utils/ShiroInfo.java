@@ -185,11 +185,13 @@ public class ShiroInfo {
 					}
 				}
 
-				RaidInfo info = new RaidInfo(guild.getId(), duration);
-				for (String id : ids) {
-					info.getMembers().add(new RaidMember(id, guild.getId()));
+				if (!ids.isEmpty()) {
+					RaidInfo info = new RaidInfo(guild.getId(), duration);
+					for (String id : ids) {
+						info.getMembers().add(new RaidMember(id, guild.getId()));
+					}
+					RaidDAO.saveInfo(info);
 				}
-				RaidDAO.saveInfo(info);
 			})
 			.expirationPolicy(ExpirationPolicy.ACCESSED)
 			.expiration(10, TimeUnit.SECONDS)
