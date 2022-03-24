@@ -58,7 +58,7 @@ public class RedeemCommand implements Executable {
 								acc.addGem();
 								AccountDAO.saveAccount(acc);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "shopg` para ver a loja de gemas.")).queue();
+								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "shopg` para ver a loja de gemas.")).queue();
 							}
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),

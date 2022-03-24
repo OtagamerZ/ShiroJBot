@@ -75,7 +75,7 @@ public class InviteClanMemberCommand implements Executable {
 
 							ClanDAO.saveClan(c);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | " + usr.getAsMention() + " agora é membro do clã " + c.getName() + ".")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | " + usr.getAsMention() + " agora é membro do clã " + c.getName() + ".")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(usr.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

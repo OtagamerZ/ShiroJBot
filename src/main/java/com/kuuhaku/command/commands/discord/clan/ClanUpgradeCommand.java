@@ -70,7 +70,7 @@ public class ClanUpgradeCommand implements Executable {
 							c.upgrade(author);
 							ClanDAO.saveClan(c);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
