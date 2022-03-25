@@ -28,6 +28,7 @@ plugins {
 	id "java"
 	id "idea"
 	id "application"
+	id "io.freefair.aspectj" version "6.4.1"
 	id "org.springframework.boot" version "2.5.1"
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
@@ -149,7 +150,8 @@ dependencies {
 	implementation group: "com.github.sbesada", name: "java.math.expression.parser", version: "v3.3.0"
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
 	implementation group: "org.mapdb", name: "mapdb", version: "3.0.8"
-	implementation group: 'com.vdurmont', name: 'emoji-java', version: '5.1.1'
+	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
+	implementation group: "org.aspectj", name: "aspectjrt", version: "1.9.9"
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.8.2"
