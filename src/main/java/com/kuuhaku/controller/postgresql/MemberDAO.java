@@ -60,7 +60,6 @@ public class MemberDAO {
 		em.getTransaction().commit();
 
 		em.close();
-
 	}
 
 	@SuppressWarnings("unchecked")
