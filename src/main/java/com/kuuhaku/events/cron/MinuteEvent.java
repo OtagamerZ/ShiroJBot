@@ -69,7 +69,7 @@ public class MinuteEvent implements Job {
 		for (Guild g : Main.getShiroShards().getGuilds()) {
 			for (Emote e : g.getEmotes()) {
 				if (e.getName().startsWith("TEMP_")) {
-					e.delete().queue();
+					e.delete().queue(null, Helper::doNothing);
 				}
 			}
 		}
