@@ -39,6 +39,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.states.GameState;
+import com.kuuhaku.model.annotations.ExecTime;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.CardType;
@@ -113,6 +114,7 @@ public class Shoukan extends GlobalGame {
 
 	private GameState oldState = null;
 
+	@ExecTime
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, Rules rules, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, new JSONObject(rules));
 		this.rules = rules;
@@ -197,7 +199,7 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		if (ranked)
+		if (ranked) {
 			for (Map.Entry<Side, Hand> e : hands.entrySet()) {
 				Set<Achievement> achs = e.getValue().getAcc().getAchievements();
 				if (!achs.isEmpty())
@@ -205,6 +207,7 @@ public class Shoukan extends GlobalGame {
 				else
 					achievements.put(e.getKey(), EnumSet.allOf(Achievement.class));
 			}
+		}
 
 		setActions(
 				s -> {
