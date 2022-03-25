@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.annotations.ExecTime;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -81,10 +82,12 @@ public class Hand {
 	private int regeneration = 0;
 	private Message old = null;
 
+	@ExecTime
 	public Hand(Shoukan game, Side side) {
 		this(game, null, null, side);
 	}
 
+	@ExecTime
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
 		this.game = game;
 		this.side = side;
