@@ -167,7 +167,7 @@ idea {
 sourceSets {
 	main {
 		aspectj.srcDir "src/main/java"
-		java.srcDirs = ["src/main/java"]
+		java.srcDirs = files([]) as Iterable<?>
 	}
 
 	test {
