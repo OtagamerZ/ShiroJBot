@@ -110,9 +110,9 @@ public class ShiftCommand implements Executable {
 						channel.sendMessage("Aqui está sua imagem!")
 								.addFile(f)
 								.queue();
-					} catch (IOException | ImageReadException e) {
+					} catch (NullPointerException | IOException | ImageReadException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
-						channel.sendMessage("❌ | Deu erro ao baixar a imagem, tente com outra.").queue();
+						channel.sendMessage("❌ | Houve um erro ao baixar a imagem, tente com outra.").queue();
 					} catch (IllegalArgumentException e) {
 						channel.sendMessage("❌ | A imagem final ficou muito grande, que tal tentar com uma imagem menor?").queue();
 					}

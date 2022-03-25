@@ -110,9 +110,9 @@ public class MirrorCommand implements Executable {
 						channel.sendMessage("Aqui está sua imagem!")
 								.addFile(f)
 								.queue();
-					} catch (IOException | ImageReadException e) {
+					} catch (NullPointerException | IOException | ImageReadException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
-						channel.sendMessage("❌ | Deu erro ao baixar a imagem, tente com outra.").queue();
+						channel.sendMessage("❌ | Houve um erro ao baixar a imagem, tente com outra.").queue();
 					} catch (NumberFormatException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("❌ | A intensidade deve ser um valor numérico.").queue();

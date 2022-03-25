@@ -26,12 +26,6 @@ public class ExecTimeAspect {
 							watch.getTime()
 					)
 			);
-			Helper.logger(pjp.getTarget().getClass()).info(
-					"Method %s executed in %sms".formatted(
-							pjp.getSignature().getName(),
-							watch.getTime()
-					)
-			);
 		}
 	}
 }
