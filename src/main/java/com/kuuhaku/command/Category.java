@@ -54,10 +54,6 @@ public enum Category {
 		this.description = description;
 		this.privilegeLevel = privilegeLevel;
 	}
-
-	public boolean equals(Category other) {
-		return this.getName().equals(other.getName());
-	}
 	
 	public String getName() {
 		return name;

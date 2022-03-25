@@ -36,7 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class DailyEvent implements Job {
-	public static JobDetail daily;
+	static JobDetail daily;
 
 	@Override
 	public void execute(JobExecutionContext context) {

@@ -35,8 +35,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +56,7 @@ public class Shiritori extends Game {
 		this.channel = channel;
 		this.listener = new SimpleMessageListener(channel) {
 			@Override
-			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (canInteract(event)) play(event);
 			}
 		};

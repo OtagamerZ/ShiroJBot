@@ -34,7 +34,7 @@ plugins {
 }
 
 application {
-	mainClassName = "com.kuuhaku.Main"
+	getMainClass().set("com.kuuhaku.Main")
 }
 
 group "com.kuuhaku"
@@ -57,8 +57,8 @@ applicationDefaultJvmArgs = [
 ]
 
 repositories {
-	mavenCentral()
 	jcenter()
+	mavenCentral()
 	maven { url "https://jitpack.io" }
 	maven { url "https://m2.dv8tion.net/releases" }
 	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -152,7 +152,7 @@ dependencies {
 	implementation group: "org.mapdb", name: "mapdb", version: "3.0.8"
 	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
 	implementation group: "org.aspectj", name: "aspectjrt", version: "1.9.9"
-	implementation group: "org.aspectj", name: "aspectjweaver", version: "1.9.9"
+	implementation group: "com.github.spotbugs", name: "spotbugs-annotations", version: "4.0.1"
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.8.2"

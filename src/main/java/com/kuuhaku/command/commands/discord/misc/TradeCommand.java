@@ -47,8 +47,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -124,7 +124,7 @@ public class TradeCommand implements Executable {
 		channel.sendMessageEmbeds(eb.build()).queue(msg -> {
 			SimpleMessageListener sml = new SimpleMessageListener(channel) {
 				@Override
-				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 					User usr = event.getAuthor();
 					String content = event.getMessage().getContentRaw();
 

@@ -18,8 +18,7 @@
 
 package com.kuuhaku.utils;
 
-import org.jetbrains.annotations.NotNull;
-
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -31,9 +30,9 @@ public class BondedList<T> extends LinkedList<T> {
 		this.bonding = bonding;
 	}
 
-	public BondedList(@NotNull Collection<? extends T> c, Consumer<T> bonding) {
-		super(c);
+	public BondedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
 		this.bonding = bonding;
+		addAll(c);
 	}
 
 	public Consumer<T> getBonding() {

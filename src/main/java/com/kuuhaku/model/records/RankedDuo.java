@@ -35,7 +35,7 @@ public record RankedDuo(MatchMakingRating p1, MatchMakingRating p2) {
 	}
 
 	public int getAvgTier() {
-		return (int) (Math.ceil(p1.getTier().getTier() + p2.getTier().getTier()) / 2d);
+		return (int) Math.ceil((p1.getTier().getTier() + p2.getTier().getTier()) / 2d);
 	}
 
 	@Override
