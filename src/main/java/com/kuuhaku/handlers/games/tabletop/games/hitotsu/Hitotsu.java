@@ -39,8 +39,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -65,7 +65,7 @@ public class Hitotsu extends Game {
 		this.channel = channel;
 		this.listener = new SimpleMessageListener(channel) {
 			@Override
-			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (canInteract(event)) play(event);
 			}
 		};

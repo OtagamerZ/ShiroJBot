@@ -21,9 +21,9 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -35,6 +35,9 @@ public class FlipCoinCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		channel.sendMessage("Calculando cara ou coroa....").queue((msg) -> msg.editMessage(((new Random()).nextBoolean() ? "<@" + author.getId() + "> **CARA** :smile:!" : "<@" + author.getId() + "> **COROA** :crown:!")).queueAfter(750, TimeUnit.MILLISECONDS));
+		channel.sendMessage("Calculando cara ou coroa....")
+				.delay(750, TimeUnit.MILLISECONDS)
+				.flatMap(s -> s.editMessage(s.getContentRaw() + (Helper.DEFAULT_RNG.nextBoolean() ? "**CARA** :smile:!" : "**COROA** :crown:!")))
+				.queue();
 	}
 }

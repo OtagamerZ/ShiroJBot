@@ -46,7 +46,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class MinuteEvent implements Job {
-	public static JobDetail minute;
+	static JobDetail minute;
 
 	@Override
 	public void execute(JobExecutionContext context) {
