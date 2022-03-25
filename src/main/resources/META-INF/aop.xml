@@ -22,6 +22,7 @@
         <include within="com.kuuhaku.model.aspect.*"/>
         <weaver options="-verbose -showWeaveInfo">
             <include within="com.kuuhaku.*"/>
+            <exclude within="com.kuuhaku.model.aspect.*"/>
         </weaver>
     </aspects>
 </aspectj>
