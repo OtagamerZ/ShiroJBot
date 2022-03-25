@@ -18,6 +18,10 @@
   -->
 
 <Configuration status="warn">
+    <CustomLevels>
+        <CustomLevel name="ASPECT" intLevel="400" />
+    </CustomLevels>
+
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout

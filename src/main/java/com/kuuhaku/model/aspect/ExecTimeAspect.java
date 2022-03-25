@@ -19,7 +19,7 @@ public class ExecTimeAspect {
 		} finally {
 			watch.stop();
 			Helper.logger(pjp.getTarget().getClass()).log(
-					Level.forName("ASPECT", 400),
+					Level.getLevel("ASPECT"),
 					"Method %s executed in %sms".formatted(
 							pjp.getSignature().getName(),
 							watch.getTime()
