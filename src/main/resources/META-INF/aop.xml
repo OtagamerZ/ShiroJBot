@@ -1,9 +1,0 @@
-<aspectj>
-    <aspects>
-        <include within="com.kuuhaku.model.aspect.*"/>
-    </aspects>
-
-    <weaver>
-        <include within="com.kuuhaku.*"/>
-    </weaver>
-</aspectj>
