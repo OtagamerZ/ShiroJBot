@@ -187,19 +187,20 @@ public class Hand {
 			case ROULETTE -> {
 				for (Drawable d : deque) {
 					if (d instanceof Champion c) {
-						c.setRawEffect("""
-															%s
+						c.addCurse("""
+								import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger
+																
 								if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-									int rng = Math.round(Math.random() * 100);
+									int rng = Math.round(Math.random() * 100) as int
 									if (rng < 25) {
-										Hand h = ep.getHands().get(ep.getSide());
-										h.setHp(h.getHp() / 2);
+										Hand h = ep.getHands().get(ep.getSide())
+										h.setHp(h.getHp() / 2)
 									} else if (rng < 50) {
-										Hand h = ep.getHands().get(ep.getSide().getOther());
-										h.setHp(h.getHp() / 2);
+										Hand h = ep.getHands().get(ep.getSide().getOther())
+										h.setHp(h.getHp() / 2)
 									}
 								}
-								""".formatted(Helper.getOr(c.getRawEffect(), "")));
+								""");
 					}
 				}
 			}
