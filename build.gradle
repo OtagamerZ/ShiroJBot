@@ -33,6 +33,11 @@ plugins {
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
+sourceSets.main {
+	aspectj.srcDir "src/main/java"
+	java.srcDirs = files()
+}
+
 application {
 	mainClassName = "com.kuuhaku.Main"
 }
