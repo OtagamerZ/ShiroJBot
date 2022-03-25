@@ -30,9 +30,9 @@ import net.dv8tion.jda.api.requests.restaction.pagination.ReactionPaginationActi
 import net.dv8tion.jda.api.utils.AttachmentOption;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
@@ -65,59 +65,59 @@ public record PseudoMessage(
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<User> getMentionedUsers() {
 		return mentionedUsers;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Bag<User> getMentionedUsersBag() {
 		return new HashBag<>(mentionedUsers);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<TextChannel> getMentionedChannels() {
 		return mentionedChannels;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Bag<TextChannel> getMentionedChannelsBag() {
 		return new HashBag<>(mentionedChannels);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<Role> getMentionedRoles() {
 		return mentionedRoles;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Bag<Role> getMentionedRolesBag() {
 		return new HashBag<>(mentionedRoles);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<Member> getMentionedMembers(@NotNull Guild guild) {
+	public List<Member> getMentionedMembers(@Nonnull Guild guild) {
 		return mentionedMembers.stream()
 				.filter(m -> m.getGuild().getId().equals(guild.getId()))
 				.toList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<Member> getMentionedMembers() {
 		return mentionedMembers;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<IMentionable> getMentions(@NotNull MentionType @NotNull ... types) {
+	public List<IMentionable> getMentions(@Nonnull MentionType... types) {
 		return Stream.of(mentionedUsers, mentionedMembers, mentionedRoles, mentionedChannels)
 				.flatMap(List::stream)
 				.filter(m -> types.length == 0 || Stream.of(types).anyMatch(t -> t.getPattern().matcher(m.getAsMention()).matches()))
@@ -125,7 +125,7 @@ public record PseudoMessage(
 	}
 
 	@Override
-	public boolean isMentioned(@NotNull IMentionable mentionable, @NotNull MentionType @NotNull ... types) {
+	public boolean isMentioned(@Nonnull IMentionable mentionable, @Nonnull MentionType... types) {
 		return Stream.of(mentionedUsers, mentionedMembers, mentionedRoles, mentionedChannels)
 				.flatMap(List::stream)
 				.filter(m -> m.getId().equals(mentionable.getId()))
@@ -150,7 +150,7 @@ public record PseudoMessage(
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public User getAuthor() {
 		return author;
@@ -162,31 +162,31 @@ public record PseudoMessage(
 		return member;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getJumpUrl() {
 		return "";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getContentDisplay() {
 		return content;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getContentRaw() {
 		return content;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getContentStripped() {
 		return content;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<String> getInvites() {
 		return List.of();
@@ -199,7 +199,7 @@ public record PseudoMessage(
 	}
 
 	@Override
-	public boolean isFromType(@NotNull ChannelType type) {
+	public boolean isFromType(@Nonnull ChannelType type) {
 		return type == ChannelType.TEXT;
 	}
 
@@ -208,7 +208,7 @@ public record PseudoMessage(
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ChannelType getChannelType() {
 		return ChannelType.TEXT;
@@ -219,19 +219,19 @@ public record PseudoMessage(
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MessageChannel getChannel() {
 		return channel;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PrivateChannel getPrivateChannel() {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public TextChannel getTextChannel() {
 		return channel;
@@ -243,31 +243,31 @@ public record PseudoMessage(
 		return channel.getParent();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Guild getGuild() {
 		return channel.getGuild();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<Attachment> getAttachments() {
 		return List.of();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<MessageEmbed> getEmbeds() {
 		return List.of();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<ActionRow> getActionRows() {
 		return List.of();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<Button> getButtons() {
 		return List.of();
@@ -275,35 +275,35 @@ public record PseudoMessage(
 
 	@Nullable
 	@Override
-	public Button getButtonById(@NotNull String id) {
+	public Button getButtonById(@Nonnull String id) {
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<Button> getButtonsByLabel(@NotNull String label, boolean ignoreCase) {
+	public List<Button> getButtonsByLabel(@Nonnull String label, boolean ignoreCase) {
 		return List.of();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<Emote> getEmotes() {
 		return List.of();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Bag<Emote> getEmotesBag() {
 		return new HashBag<>();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<MessageReaction> getReactions() {
 		return List.of();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<MessageSticker> getStickers() {
 		return List.of();
@@ -320,109 +320,109 @@ public record PseudoMessage(
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessage(@NotNull CharSequence newContent) {
+	public MessageAction editMessage(@Nonnull CharSequence newContent) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessageEmbeds(@NotNull Collection<? extends MessageEmbed> embeds) {
+	public MessageAction editMessageEmbeds(@Nonnull Collection<? extends MessageEmbed> embeds) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessageEmbeds(@NotNull MessageEmbed @NotNull ... embeds) {
+	public MessageAction editMessageEmbeds(@Nonnull MessageEmbed... embeds) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessageComponents(@NotNull Collection<? extends ComponentLayout> components) {
+	public MessageAction editMessageComponents(@Nonnull Collection<? extends ComponentLayout> components) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessageComponents(@NotNull ComponentLayout @NotNull ... components) {
+	public MessageAction editMessageComponents(@Nonnull ComponentLayout... components) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessageFormat(@NotNull String format, @NotNull Object @NotNull ... args) {
+	public MessageAction editMessageFormat(@Nonnull String format, @Nonnull Object... args) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction editMessage(@NotNull Message newContent) {
+	public MessageAction editMessage(@Nonnull Message newContent) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction reply(@NotNull CharSequence content) {
+	public MessageAction reply(@Nonnull CharSequence content) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction replyEmbeds(@NotNull MessageEmbed embed, @NotNull MessageEmbed @NotNull ... other) {
+	public MessageAction replyEmbeds(@Nonnull MessageEmbed embed, @Nonnull MessageEmbed... other) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction replyEmbeds(@NotNull Collection<? extends MessageEmbed> embeds) {
+	public MessageAction replyEmbeds(@Nonnull Collection<? extends MessageEmbed> embeds) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction reply(@NotNull Message content) {
+	public MessageAction reply(@Nonnull Message content) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction replyFormat(@NotNull String format, @NotNull Object @NotNull ... args) {
+	public MessageAction replyFormat(@Nonnull String format, @Nonnull Object ... args) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction reply(@NotNull File file, @NotNull AttachmentOption @NotNull ... options) {
+	public MessageAction reply(@Nonnull File file, @Nonnull AttachmentOption ... options) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction reply(@NotNull File data, @NotNull String name, @NotNull AttachmentOption @NotNull ... options) {
+	public MessageAction reply(@Nonnull File data, @Nonnull String name, @Nonnull AttachmentOption... options) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction reply(@NotNull InputStream data, @NotNull String name, @NotNull AttachmentOption @NotNull ... options) {
+	public MessageAction reply(@Nonnull InputStream data, @Nonnull String name, @Nonnull AttachmentOption... options) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MessageAction reply(byte @NotNull [] data, @NotNull String name, @NotNull AttachmentOption @NotNull ... options) {
+	public MessageAction reply(@Nonnull byte[] data, @Nonnull String name, @Nonnull AttachmentOption... options) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public AuditableRestAction<Void> delete() {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JDA getJDA() {
 		return author.getJDA();
@@ -433,93 +433,93 @@ public record PseudoMessage(
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public RestAction<Void> pin() {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public RestAction<Void> unpin() {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> addReaction(@NotNull Emote emote) {
+	public RestAction<Void> addReaction(@Nonnull Emote emote) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> addReaction(@NotNull String unicode) {
+	public RestAction<Void> addReaction(@Nonnull String unicode) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public RestAction<Void> clearReactions() {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> clearReactions(@NotNull String unicode) {
+	public RestAction<Void> clearReactions(@Nonnull String unicode) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> clearReactions(@NotNull Emote emote) {
+	public RestAction<Void> clearReactions(@Nonnull Emote emote) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> removeReaction(@NotNull Emote emote) {
+	public RestAction<Void> removeReaction(@Nonnull Emote emote) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> removeReaction(@NotNull Emote emote, @NotNull User user) {
+	public RestAction<Void> removeReaction(@Nonnull Emote emote, @Nonnull User user) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> removeReaction(@NotNull String unicode) {
+	public RestAction<Void> removeReaction(@Nonnull String unicode) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public RestAction<Void> removeReaction(@NotNull String unicode, @NotNull User user) {
+	public RestAction<Void> removeReaction(@Nonnull String unicode, @Nonnull User user) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ReactionPaginationAction retrieveReactionUsers(@NotNull Emote emote) {
+	public ReactionPaginationAction retrieveReactionUsers(@Nonnull Emote emote) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ReactionPaginationAction retrieveReactionUsers(@NotNull String unicode) {
+	public ReactionPaginationAction retrieveReactionUsers(@Nonnull String unicode) {
 		throw new IllegalStateException();
 	}
 
 	@Nullable
 	@Override
-	public MessageReaction.ReactionEmote getReactionByUnicode(@NotNull String unicode) {
+	public MessageReaction.ReactionEmote getReactionByUnicode(@Nonnull String unicode) {
 		return null;
 	}
 
 	@Nullable
 	@Override
-	public MessageReaction.ReactionEmote getReactionById(@NotNull String id) {
+	public MessageReaction.ReactionEmote getReactionById(@Nonnull String id) {
 		return null;
 	}
 
@@ -529,13 +529,13 @@ public record PseudoMessage(
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public AuditableRestAction<Void> suppressEmbeds(boolean suppressed) {
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public RestAction<Message> crosspost() {
 		throw new IllegalStateException();
@@ -546,7 +546,7 @@ public record PseudoMessage(
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public EnumSet<MessageFlag> getFlags() {
 		return EnumSet.noneOf(MessageFlag.class);
@@ -562,7 +562,7 @@ public record PseudoMessage(
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MessageType getType() {
 		return MessageType.APPLICATION_COMMAND;

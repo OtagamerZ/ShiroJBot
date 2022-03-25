@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.records.RaidData;
 import com.sun.management.OperatingSystemMXBean;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -168,7 +169,7 @@ public class ShiroInfo {
 									          
 									Duração da raid: %s
 									Usuários banidos: %s
-									
+																		
 									O relatório completo pode ser encontrado no comando `raids`.
 									""".formatted(Helper.toStringDuration(duration), ids.size())
 							);
@@ -362,6 +363,7 @@ public class ShiroInfo {
 		}
 	}
 
+	@SuppressFBWarnings("DM_GC")
 	public boolean gameInProgress(String id) {
 		System.gc();
 		return games.containsKey(id);
@@ -371,6 +373,7 @@ public class ShiroInfo {
 		return gameSlot;
 	}
 
+	@SuppressFBWarnings("DM_GC")
 	public boolean isOccupied(String channel) {
 		System.gc();
 		return gameSlot.containsKey(channel);
@@ -378,15 +381,23 @@ public class ShiroInfo {
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getCollectionsFolder() {
-		if (!collectionsFolder.exists())
-			collectionsFolder.mkdir();
+		if (!collectionsFolder.exists()) {
+			if (!collectionsFolder.mkdir()) {
+				Helper.logger(this.getClass()).warn("Failed to create collections folder");
+			}
+		}
+
 		return collectionsFolder;
 	}
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getTemporaryFolder() {
-		if (!temporaryFolder.exists())
-			temporaryFolder.mkdir();
+		if (!temporaryFolder.exists()) {
+			if (!temporaryFolder.mkdir()) {
+				Helper.logger(this.getClass()).warn("Failed to create temporary folder");
+			}
+		}
+
 		return temporaryFolder;
 	}
 
@@ -474,10 +485,10 @@ public class ShiroInfo {
 
 	public void cache(Guild guild, Message message) {
 		messageCache.computeIfAbsent(guild.getId(), k -> ExpiringMap.builder()
-				.maxSize(64)
-				.expiration(1, TimeUnit.DAYS)
-				.build()
-		)
+						.maxSize(64)
+						.expiration(1, TimeUnit.DAYS)
+						.build()
+				)
 				.put(message.getId(), message);
 	}
 

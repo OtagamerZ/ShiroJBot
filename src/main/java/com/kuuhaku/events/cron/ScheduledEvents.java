@@ -16,9 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.events;
+package com.kuuhaku.events.cron;
 
-import com.kuuhaku.events.cron.*;
 import com.kuuhaku.utils.Helper;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;

@@ -37,7 +37,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 
 @Command(
 		name = "shippar",
@@ -64,7 +63,7 @@ public class ShipCommand implements Executable {
 			String doneMeter;
 			BufferedImage bi = new BufferedImage(257, 128, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();
-			float love = 100 * new Random(message.getMentionedUsers().get(0).getIdLong() + message.getMentionedUsers().get(1).getIdLong()).nextFloat();
+			double love = Helper.rng(0d, 100d, message.getMentionedUsers().stream().mapToLong(User::getIdLong).sum());
 
 			for (int i = 0; i < Math.round(love / 5); i++) {
 				meter[i] = "▉";

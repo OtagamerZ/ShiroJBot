@@ -20,6 +20,7 @@ package com.kuuhaku.utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -27,7 +28,7 @@ public class RoundList<T> extends LinkedList<T> {
 	public RoundList() {
 	}
 
-	public RoundList(@NotNull Collection<? extends T> c) {
+	public RoundList(@Nonnull Collection<? extends T> c) {
 		super(c);
 	}
 

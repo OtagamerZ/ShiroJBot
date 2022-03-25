@@ -77,8 +77,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -102,7 +102,7 @@ public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
 
 	@Override
-	public void onReconnected(@NotNull ReconnectedEvent event) {
+	public void onReconnected(@Nonnull ReconnectedEvent event) {
 		for (JDA shard : Main.getShiroShards().getShards()) {
 			Helper.logger(this.getClass()).info("Shard %d: %s | %s listeners".formatted(
 					shard.getShardInfo().getShardId(),
@@ -120,7 +120,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildUpdateOwner(@NotNull GuildUpdateOwnerEvent event) {
+	public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
 		assert event.getOldOwner() != null;
 		assert event.getNewOwner() != null;
 
@@ -138,7 +138,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageUpdate(@NotNull GuildMessageUpdateEvent event) {
+	public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
 		if (event.getAuthor().isBot()) return;
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
@@ -148,7 +148,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 		User author = event.getAuthor();
 		Member member = event.getMember();
 		Message message = event.getMessage();
@@ -489,7 +489,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
+	public void onSlashCommand(@Nonnull SlashCommandEvent evt) {
 		InteractionHook hook = evt.deferReply().complete();
 
 		if (!evt.isFromGuild()) {
@@ -600,7 +600,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onRoleDelete(@NotNull RoleDeleteEvent event) {
+	public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
 		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 		gc.removeLevelRole(event.getRole().getId());
@@ -610,7 +610,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+	public void onGuildJoin(@Nonnull GuildJoinEvent event) {
 		String s = """
 				Obrigada por me escolher!
 				Utilize `s!ajuda`%s para ver todos os meus comandos!
@@ -653,7 +653,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+	public void onGuildLeave(@Nonnull GuildLeaveEvent event) {
 		for (String d : ShiroInfo.getDevelopers()) {
 			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
@@ -666,7 +666,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+	public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
 		User author = event.getUser();
@@ -875,7 +875,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
 		Guild guild = event.getGuild();
 		User author = event.getUser();
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
@@ -965,7 +965,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
+	public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
 		if (!event.getReactionEmote().isEmoji() || !event.getReactionEmote().getEmoji().equals("⭐")) return;
 
 		Message msg;
@@ -1173,7 +1173,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageDelete(@NotNull GuildMessageDeleteEvent event) {
+	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg == null || msg.getAuthor().isBot()) return;
@@ -1182,7 +1182,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+	public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
@@ -1192,7 +1192,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+	public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(mb.getUser());
@@ -1207,7 +1207,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberUpdateNickname(@NotNull GuildMemberUpdateNicknameEvent event) {
+	public void onGuildMemberUpdateNickname(@Nonnull GuildMemberUpdateNicknameEvent event) {
 		String name = event.getNewNickname();
 		if (name == null) return;
 
@@ -1241,7 +1241,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onUserTyping(@NotNull UserTypingEvent event) {
+	public void onUserTyping(@Nonnull UserTypingEvent event) {
 		User u = event.getUser();
 		if (event.isFromType(ChannelType.PRIVATE) && ShiroInfo.getStaff().contains(u.getId())) {
 			for (String d : ShiroInfo.getStaff()) {
