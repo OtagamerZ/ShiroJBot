@@ -114,7 +114,6 @@ public class Shoukan extends GlobalGame {
 
 	private GameState oldState = null;
 
-	@ExecTime
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, Rules rules, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, new JSONObject(rules));
 		this.rules = rules;
