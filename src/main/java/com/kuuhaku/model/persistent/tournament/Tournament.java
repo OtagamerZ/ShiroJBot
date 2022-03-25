@@ -50,7 +50,7 @@ public class Tournament {
 	private String customRules = "{}";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int seed = new Random().nextInt();
+	private int seed = Helper.DEFAULT_RNG.nextInt();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(nullable = false, name = "tournament_id")

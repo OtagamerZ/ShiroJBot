@@ -36,8 +36,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -56,7 +56,7 @@ public class CrissCross extends Game {
 		this.channel = channel;
 		this.listener = new SimpleMessageListener(channel) {
 			@Override
-			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (canInteract(event)) play(event);
 			}
 		};

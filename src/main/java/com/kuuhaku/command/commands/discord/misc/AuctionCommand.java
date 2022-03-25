@@ -39,8 +39,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -153,7 +153,7 @@ public class AuctionCommand implements Executable {
 
 			SimpleMessageListener listener = new SimpleMessageListener(channel) {
 				@Override
-				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent evt) {
+				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent evt) {
 					if (evt.getAuthor().isBot()) return;
 					String raw = evt.getMessage().getContentRaw();
 					if (StringUtils.isNumeric(raw)) {

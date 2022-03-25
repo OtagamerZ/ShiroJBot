@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MonthlyEvent implements Job {
-	public static JobDetail monthly;
+	static JobDetail monthly;
 
 	@Override
 	public void execute(JobExecutionContext context) {

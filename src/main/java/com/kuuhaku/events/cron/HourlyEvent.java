@@ -36,13 +36,11 @@ import org.quartz.JobExecutionContext;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 public class HourlyEvent implements Job {
-	public static JobDetail hourly;
+	static JobDetail hourly;
 
 	@Override
-	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
 		for (JDA shard : Main.getShiroShards().getShards()) {
 			shard.getPresence().setActivity(Main.getRandomActivity());
@@ -67,10 +65,14 @@ public class HourlyEvent implements Job {
 		}
 
 		System.runFinalization();
-		System.gc();
 
-		for (File file : Objects.requireNonNull(Main.getInfo().getCollectionsFolder().listFiles())) {
-			file.delete();
+		File[] files = Main.getInfo().getCollectionsFolder().listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (!file.delete()) {
+					Helper.logger(this.getClass()).warn("Failed to delete file at " + file.toPath().getFileName());
+				}
+			}
 		}
 
 		List<Account> accs = AccountDAO.getVolatileAccounts();

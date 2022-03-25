@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -28,6 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"garbagecollector", "gc"},
 		category = Category.DEV
 )
+@SuppressFBWarnings("DM_GC")
 public class GarbageCollectorCommand implements Executable {
 
 	@Override

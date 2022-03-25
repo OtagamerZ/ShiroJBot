@@ -22,7 +22,7 @@ import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.events.ConsoleListener;
-import com.kuuhaku.events.ScheduledEvents;
+import com.kuuhaku.events.cron.ScheduledEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
@@ -55,8 +55,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static CommandManager cmdManager;
 	private static CacheManager cacheManager;
 	private static ShardManager shiroShards;
-	public static boolean exiting = false;
-	public static ConfigurableApplicationContext spring;
+	static boolean exiting = false;
+	static ConfigurableApplicationContext spring;
 
 	static {
 		Helper.logger(Main.class).info("""
@@ -118,8 +118,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	private static void finishStartUp() {
-		ConsoleListener console = new ConsoleListener();
-		console.start();
+		try (ConsoleListener console = new ConsoleListener()) {
+			console.start();
+		}
 
 		for (Emote emote : shiroShards.getEmotes()) {
 			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
@@ -147,7 +148,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		try {
 			lst.get();
 			System.runFinalization();
-			System.gc();
 
 			Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 			Helper.logger(Main.class).info("Estou pronta!");
