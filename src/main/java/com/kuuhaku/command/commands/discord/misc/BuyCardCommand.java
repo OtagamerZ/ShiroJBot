@@ -293,6 +293,16 @@ public class BuyCardCommand implements Executable {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por **" + Helper.separate(price) + " CR**, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									Market mkt = MarketDAO.getCard(Integer.parseInt(args[0]));
+									if (mkt == null) {
+										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+										return;
+									}
+
+									mkt.setBuyer(author.getId());
+									MarketDAO.saveCard(mkt);
+
 									Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 									switch (finalM.getType()) {
 										case EVOGEAR -> {
@@ -320,17 +330,7 @@ public class BuyCardCommand implements Executable {
 										}
 									}
 
-									Main.getInfo().getConfirmationPending().remove(author.getId());
 									KawaiponDAO.saveKawaipon(kp);
-
-									Market mkt = MarketDAO.getCard(Integer.parseInt(args[0]));
-									if (mkt == null) {
-										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-										return;
-									}
-
-									mkt.setBuyer(author.getId());
-									MarketDAO.saveCard(mkt);
 
 									seller.addCredit(price, this.getClass());
 									buyer.removeCredit(price, this.getClass());
