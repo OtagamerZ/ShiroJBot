@@ -59,12 +59,14 @@ public class RaidInfoCommand implements Executable {
 				return;
 			}
 
-			Set<String> bans = new HashSet<>();
+			Set<String> bans;
 			if (guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)) {
 				bans = guild.retrieveBanList().complete().stream()
 						.map(Guild.Ban::getUser)
 						.map(User::getId)
 						.collect(Collectors.toSet());
+			} else {
+				bans = new HashSet<>();
 			}
 
 			List<Page> pages = new ArrayList<>();
@@ -85,8 +87,8 @@ public class RaidInfoCommand implements Executable {
 									Helper.TIMESTAMP.formatted(r.getOccurrence().toEpochSecond()),
 									Helper.toStringDuration(r.getDuration()),
 									r.getMembers().size(),
-									bans.stream()
-											.filter(id -> r.getMembers().stream().noneMatch(rm -> rm.getUid().equals(id)))
+									r.getMembers().stream()
+											.filter(u -> !bans.contains(u.getUid()))
 											.count()
 							),
 							false
