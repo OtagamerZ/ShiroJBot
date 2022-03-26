@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TenthSecondEvent implements Job {
-	public static JobDetail tenthSecond;
+	static JobDetail tenthSecond;
 	private boolean lock = false;
 
 	@Override

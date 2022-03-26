@@ -35,8 +35,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -106,7 +106,7 @@ public class GuessTheCardsCommand implements Executable {
 						}
 
 						@Override
-						public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+						public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 							if (!event.getAuthor().getId().equals(author.getId())) return;
 
 							String value = event.getMessage().getContentRaw();

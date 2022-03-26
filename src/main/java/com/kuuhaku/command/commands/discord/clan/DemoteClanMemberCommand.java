@@ -75,7 +75,7 @@ public class DemoteClanMemberCommand implements Executable {
 								c.demote(cm.getUid(), author);
 								ClanDAO.saveClan(c);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Membro rebaixado com sucesso.")).queue();
+								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Membro rebaixado com sucesso.")).queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

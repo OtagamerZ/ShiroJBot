@@ -113,6 +113,8 @@ public class SummonHeroCommand implements Executable {
 		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por " + (int) Math.pow(2, heroes) + " gemas, deseja confirmar?")
 				.setEmbeds(eb.build())
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							Main.getInfo().getConfirmationPending().remove(author.getId());
+
 							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 							kp.getHeroes().add(new Hero(author, name, r, image));
 							KawaiponDAO.saveKawaipon(kp);
@@ -121,8 +123,7 @@ public class SummonHeroCommand implements Executable {
 							acc.getAchievements().add(Achievement.A_HERO_IS_BORN);
 							AccountDAO.saveAccount(acc);
 
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

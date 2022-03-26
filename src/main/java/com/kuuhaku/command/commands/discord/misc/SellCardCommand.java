@@ -190,11 +190,13 @@ public class SellCardCommand implements Executable {
 			channel.sendMessage(msg)
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
+								s.delete().queue();
+
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
 
 								if (fDk.isNovice() && off.getMiddle() == CardType.SENSHI) {
-									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!")).queue();
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!")).queue();
 									return;
 								}
 
@@ -229,14 +231,14 @@ public class SellCardCommand implements Executable {
 									}
 								};
 								if (m == null) {
-									s.delete().flatMap(d -> channel.sendMessage("❌ | Você não pode vender uma carta que não possui!")).queue();
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("❌ | Você não pode vender uma carta que não possui!")).queue();
 									return;
 								}
 
 								MarketDAO.saveCard(m);
 								KawaiponDAO.saveKawaipon(finalKp);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
+								channel.sendMessage("✅ | Carta anunciada com sucesso!").queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

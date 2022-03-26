@@ -289,16 +289,10 @@ public class BuyCardCommand implements Executable {
 
 				channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!").queue();
 			} else {
+				Market finalM = m;
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por **" + Helper.separate(price) + " CR**, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-									Market finalM = MarketDAO.getCard(Integer.parseInt(args[0]));
-									if (finalM == null) {
-										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-										return;
-									}
-
 									Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 									switch (finalM.getType()) {
 										case EVOGEAR -> {
@@ -325,10 +319,18 @@ public class BuyCardCommand implements Executable {
 											kp.addCard(finalM.getCard());
 										}
 									}
+
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									KawaiponDAO.saveKawaipon(kp);
 
-									finalM.setBuyer(author.getId());
-									MarketDAO.saveCard(finalM);
+									Market mkt = MarketDAO.getCard(Integer.parseInt(args[0]));
+									if (mkt == null) {
+										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+										return;
+									}
+
+									mkt.setBuyer(author.getId());
+									MarketDAO.saveCard(mkt);
 
 									seller.addCredit(price, this.getClass());
 									buyer.removeCredit(price, this.getClass());
@@ -341,7 +343,7 @@ public class BuyCardCommand implements Executable {
 											Helper::doNothing
 									);
 
-									s.delete().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!")).queue();
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada com sucesso!")).queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

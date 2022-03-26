@@ -510,7 +510,7 @@ public class CardDAO {
 		try {
 			List<Object[]> res = (List<Object[]>) q.getResultList();
 			return res.stream()
-					.collect(Collectors.toMap(o -> (String) o[0], o -> (boolean) o[1]));
+					.collect(Collectors.toMap(o -> (String) o[0], o -> (Boolean) o[1]));
 		} finally {
 			em.close();
 		}
@@ -543,7 +543,7 @@ public class CardDAO {
 		try {
 			List<Object[]> res = (List<Object[]>) q.getResultList();
 			return res.stream()
-					.collect(Collectors.toMap(o -> (String) o[0], o -> (boolean) o[1]));
+					.collect(Collectors.toMap(o -> (String) o[0], o -> (Boolean) o[1]));
 		} finally {
 			em.close();
 		}

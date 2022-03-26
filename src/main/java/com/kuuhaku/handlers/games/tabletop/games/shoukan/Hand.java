@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.annotations.ExecTime;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
@@ -81,10 +82,12 @@ public class Hand {
 	private int regeneration = 0;
 	private Message old = null;
 
+	@ExecTime
 	public Hand(Shoukan game, Side side) {
 		this(game, null, null, side);
 	}
 
+	@ExecTime
 	public Hand(Shoukan game, User user, Deck dk, Side side) {
 		this.game = game;
 		this.side = side;
@@ -187,19 +190,20 @@ public class Hand {
 			case ROULETTE -> {
 				for (Drawable d : deque) {
 					if (d instanceof Champion c) {
-						c.setRawEffect("""
-															%s
+						c.addCurse("""
+								import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger
+																
 								if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-									int rng = Math.round(Math.random() * 100);
+									int rng = Math.round(Math.random() * 100) as int
 									if (rng < 25) {
-										Hand h = ep.getHands().get(ep.getSide());
-										h.setHp(h.getHp() / 2);
+										Hand h = ep.getHands().get(ep.getSide())
+										h.setHp(h.getHp() / 2)
 									} else if (rng < 50) {
-										Hand h = ep.getHands().get(ep.getSide().getOther());
-										h.setHp(h.getHp() / 2);
+										Hand h = ep.getHands().get(ep.getSide().getOther())
+										h.setHp(h.getHp() / 2)
 									}
 								}
-								""".formatted(Helper.getOr(c.getRawEffect(), "")));
+								""");
 					}
 				}
 			}
@@ -1127,5 +1131,18 @@ public class Hand {
 
 	public List<SlotColumn> getSlots() {
 		return game.getArena().getSlots().get(side);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Hand hand = (Hand) o;
+		return Objects.equals(game, hand.game) && Objects.equals(acc, hand.acc) && side == hand.side;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(game, acc, side);
 	}
 }

@@ -31,8 +31,8 @@ import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.records.RaidData;
-import com.kuuhaku.model.records.UserData;
 import com.sun.management.OperatingSystemMXBean;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -159,7 +159,7 @@ public class ShiroInfo {
 				TextChannel chn = gc.getGeneralChannel();
 
 				long duration = System.currentTimeMillis() - data.start();
-				Set<UserData> ids = data.users();
+				Set<String> ids = data.ids();
 				if (chn != null) {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(Color.green)
@@ -169,7 +169,7 @@ public class ShiroInfo {
 									          
 									Duração da raid: %s
 									Usuários banidos: %s
-									
+																		
 									O relatório completo pode ser encontrado no comando `raids`.
 									""".formatted(Helper.toStringDuration(duration), ids.size())
 							);
@@ -178,16 +178,21 @@ public class ShiroInfo {
 				}
 
 				for (TextChannel tc : guild.getTextChannels()) {
-					if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
-						tc.getManager().setSlowmode(0).queue(null, Helper::doNothing);
+					try {
+						if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
+							tc.getManager().setSlowmode(0).queue(null, Helper::doNothing);
+						}
+					} catch (Exception ignore) {
 					}
 				}
 
-				RaidInfo info = new RaidInfo(guild.getId(), duration);
-				for (UserData user : ids) {
-					info.getMembers().add(new RaidMember(guild.getId(), user.uid(), user.name()));
+				if (!ids.isEmpty()) {
+					RaidInfo info = new RaidInfo(guild.getId(), duration);
+					for (String id : ids) {
+						info.getMembers().add(new RaidMember(id, guild.getId()));
+					}
+					RaidDAO.saveInfo(info);
 				}
-				RaidDAO.saveInfo(info);
 			})
 			.expirationPolicy(ExpirationPolicy.ACCESSED)
 			.expiration(10, TimeUnit.SECONDS)
@@ -195,7 +200,7 @@ public class ShiroInfo {
 
 	//CACHES
 	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, ExpiringMap<Long, UserData>> antiRaidCache = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, ExpiringMap<Long, String>> antiRaidCache = new ConcurrentHashMap<>();
 	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private final ExpiringMap<String, Boolean> confirmationPending = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
@@ -358,6 +363,7 @@ public class ShiroInfo {
 		}
 	}
 
+	@SuppressFBWarnings("DM_GC")
 	public boolean gameInProgress(String id) {
 		System.gc();
 		return games.containsKey(id);
@@ -367,6 +373,7 @@ public class ShiroInfo {
 		return gameSlot;
 	}
 
+	@SuppressFBWarnings("DM_GC")
 	public boolean isOccupied(String channel) {
 		System.gc();
 		return gameSlot.containsKey(channel);
@@ -374,15 +381,23 @@ public class ShiroInfo {
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getCollectionsFolder() {
-		if (!collectionsFolder.exists())
-			collectionsFolder.mkdir();
+		if (!collectionsFolder.exists()) {
+			if (!collectionsFolder.mkdir()) {
+				Helper.logger(this.getClass()).warn("Failed to create collections folder");
+			}
+		}
+
 		return collectionsFolder;
 	}
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getTemporaryFolder() {
-		if (!temporaryFolder.exists())
-			temporaryFolder.mkdir();
+		if (!temporaryFolder.exists()) {
+			if (!temporaryFolder.mkdir()) {
+				Helper.logger(this.getClass()).warn("Failed to create temporary folder");
+			}
+		}
+
 		return temporaryFolder;
 	}
 
@@ -470,10 +485,10 @@ public class ShiroInfo {
 
 	public void cache(Guild guild, Message message) {
 		messageCache.computeIfAbsent(guild.getId(), k -> ExpiringMap.builder()
-				.maxSize(64)
-				.expiration(1, TimeUnit.DAYS)
-				.build()
-		)
+						.maxSize(64)
+						.expiration(1, TimeUnit.DAYS)
+						.build()
+				)
 				.put(message.getId(), message);
 	}
 
@@ -497,7 +512,7 @@ public class ShiroInfo {
 		);
 	}
 
-	public ConcurrentMap<String, ExpiringMap<Long, UserData>> getAntiRaidCache() {
+	public ConcurrentMap<String, ExpiringMap<Long, String>> getAntiRaidCache() {
 		return antiRaidCache;
 	}
 

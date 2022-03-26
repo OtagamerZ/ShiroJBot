@@ -18,8 +18,7 @@
 
 package com.kuuhaku.utils;
 
-import org.jetbrains.annotations.NotNull;
-
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -32,7 +31,7 @@ public class UniqueList<T> extends ArrayList<T> {
 		this.checker = checker;
 	}
 
-	public UniqueList(@NotNull Collection<? extends T> c, Function<T, ?> checker) {
+	public UniqueList(@Nonnull Collection<? extends T> c, Function<T, ?> checker) {
 		addAll(c);
 		this.checker = checker;
 	}

@@ -49,6 +49,6 @@ public class EightBallCommand implements Executable {
 			seed += (int) c;
 		}
 
-		channel.sendMessage(":8ball: | " + res[new Random(seed).nextInt(res.length)] + ".").queue();
+		channel.sendMessage(":8ball: | " + Helper.getRandomEntry(new Random(seed), res) + ".").queue();
 	}
 }

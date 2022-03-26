@@ -169,6 +169,8 @@ public abstract class Helper {
 	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(I18n.getString("date-format"));
 	public static final CopyDown htmlConverter = new CopyDown();
 	public static final String HOME = "674261700366827539";
+	public static final Random DEFAULT_RNG = new Random();
+	public static final Random DEFAULT_SECURE_RNG = new SecureRandom();
 	public static final int BASE_CARD_PRICE = 300;
 	public static final int BASE_EQUIPMENT_PRICE = 2250;
 	public static final int BASE_FIELD_PRICE = 35000;
@@ -297,7 +299,7 @@ public abstract class Helper {
 	}
 
 	public static int rng(int max) {
-		return rng(0, max, new Random());
+		return rng(0, max, DEFAULT_RNG);
 	}
 
 	public static int rng(int max, long seed) {
@@ -309,7 +311,7 @@ public abstract class Helper {
 	}
 
 	public static int rng(int min, int max) {
-		return rng(min, max, new Random());
+		return rng(min, max, DEFAULT_RNG);
 	}
 
 	public static int rng(int min, int max, long seed) {
@@ -321,7 +323,7 @@ public abstract class Helper {
 	}
 
 	public static double rng(double max) {
-		return rng(0, max, new Random());
+		return rng(0, max, DEFAULT_RNG);
 	}
 
 	public static double rng(double max, long seed) {
@@ -333,7 +335,7 @@ public abstract class Helper {
 	}
 
 	public static double rng(double min, double max) {
-		return rng(min, max, new Random());
+		return rng(min, max, DEFAULT_RNG);
 	}
 
 	public static double rng(double min, double max, long seed) {
@@ -507,7 +509,7 @@ public abstract class Helper {
 		String[] colorTable = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 6; i++) {
-			sb.append(colorTable[clamp(new Random().nextInt(16), 0, 16)]);
+			sb.append(colorTable[clamp(rng(16), 0, 16)]);
 		}
 		return "#" + sb;
 	}
@@ -1298,10 +1300,9 @@ public abstract class Helper {
 	}
 
 	public static String generateToken(String seed, int length) {
-		SecureRandom sr = new SecureRandom();
 		byte[] nameSpace = seed.getBytes(StandardCharsets.UTF_8);
 		byte[] randomSpace = new byte[length];
-		sr.nextBytes(randomSpace);
+		Helper.DEFAULT_SECURE_RNG.nextBytes(randomSpace);
 
 		return atob(nameSpace) + "." + atob(randomSpace);
 	}
@@ -1744,7 +1745,7 @@ public abstract class Helper {
 				Set<String> users = new HashSet<>();
 				SimpleMessageListener sml = new SimpleMessageListener(channel) {
 					@Override
-					public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+					public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 						String msg = event.getMessage().getContentRaw();
 						User author = event.getAuthor();
 						if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && users.add(author.getId())) {

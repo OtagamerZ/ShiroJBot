@@ -39,7 +39,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.time.temporal.ChronoUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "buffs",
@@ -59,20 +58,22 @@ public class MyBuffsCommand implements Executable, Slashed {
 
 		boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
-		if (waifu)
+		if (waifu) {
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + Helper.roundToString(WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100, 0) + "% XP ganho", false);
+		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		float progress = kp.getCards().size() / (CardDAO.getTotalCards() * 2f);
 
-		if (progress >= 1)
+		if (progress >= 1) {
 			eb.addField("Coleção de cartas (100%)", "+100% XP ganho", false);
-		else if (progress >= 0.75)
+		} else if (progress >= 0.75) {
 			eb.addField("Coleção de cartas (75%)", "+75% XP ganho", false);
-		else if (progress >= 0.5)
+		} else if (progress >= 0.5) {
 			eb.addField("Coleção de cartas (50%)", "+50% XP ganho", false);
-		else if (progress >= 0.25)
+		} else if (progress >= 0.25) {
 			eb.addField("Coleção de cartas (25%)", "+25% XP ganho", false);
+		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		if (!gc.getBuffs().isEmpty()) {
@@ -88,8 +89,9 @@ public class MyBuffsCommand implements Executable, Slashed {
 			}
 		}
 
-		if (gc.isPartner())
+		if (gc.isPartner()) {
 			eb.addField("Servidor parceiro", "+20% buff global (XP/cartas/drops/cromadas)", false);
+		}
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

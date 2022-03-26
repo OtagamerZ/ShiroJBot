@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,7 +39,7 @@ public class RaidInfo {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(nullable = false, name = "raidinfo_id")
-	private List<RaidMember> members;
+	private List<RaidMember> members = new ArrayList<>();
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime occurrence = ZonedDateTime.now(ZoneId.of("GMT-3"));

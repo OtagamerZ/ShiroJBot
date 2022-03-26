@@ -30,10 +30,11 @@ plugins {
 	id "application"
 	id "org.springframework.boot" version "2.5.1"
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
+	id "io.freefair.aspectj" version "6.4.1"
 }
 
 application {
-	mainClassName = "com.kuuhaku.Main"
+	getMainClass().set("com.kuuhaku.Main")
 }
 
 group "com.kuuhaku"
@@ -56,8 +57,8 @@ applicationDefaultJvmArgs = [
 ]
 
 repositories {
-	mavenCentral()
 	jcenter()
+	mavenCentral()
 	maven { url "https://jitpack.io" }
 	maven { url "https://m2.dv8tion.net/releases" }
 	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -149,7 +150,9 @@ dependencies {
 	implementation group: "com.github.sbesada", name: "java.math.expression.parser", version: "v3.3.0"
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
 	implementation group: "org.mapdb", name: "mapdb", version: "3.0.8"
-	implementation group: 'com.vdurmont', name: 'emoji-java', version: '5.1.1'
+	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
+	implementation group: "org.aspectj", name: "aspectjrt", version: "1.9.9"
+	implementation group: "com.github.spotbugs", name: "spotbugs-annotations", version: "4.0.1"
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.8.2"
@@ -163,10 +166,14 @@ idea {
 }
 
 sourceSets {
+	main {
+		aspectj.srcDir "src/main/java"
+		java.srcDirs = ["src/main/java"]
+	}
+
 	test {
-		java {
-			srcDirs = ["src/test/java"]
-		}
+		aspectj.srcDir "src/test/java"
+		java.srcDirs = ["src/test/java"]
 	}
 }
 
