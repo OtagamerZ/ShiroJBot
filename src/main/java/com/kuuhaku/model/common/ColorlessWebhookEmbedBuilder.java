@@ -21,89 +21,89 @@ package com.kuuhaku.model.common;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.kuuhaku.utils.Helper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.time.temporal.TemporalAccessor;
 
 public class ColorlessWebhookEmbedBuilder extends WebhookEmbedBuilder {
-	@NotNull
+	@Nonnull
 	@Override
 	public WebhookEmbed build() {
 		super.setColor(Color.decode("#2f3136").getRGB());
 		return super.build();
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setTimestamp(@Nullable TemporalAccessor timestamp) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setTimestamp(@Nullable TemporalAccessor timestamp) {
 		return (ColorlessWebhookEmbedBuilder) super.setTimestamp(timestamp);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setColor(@Nullable Integer color) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setColor(@Nullable Integer color) {
 		return (ColorlessWebhookEmbedBuilder) super.setColor(color);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setDescription(@Nullable String description) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setDescription(@Nullable String description) {
 		return (ColorlessWebhookEmbedBuilder) super.setDescription(description);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setThumbnailUrl(@Nullable String thumbnailUrl) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setThumbnailUrl(@Nullable String thumbnailUrl) {
 		return (ColorlessWebhookEmbedBuilder) super.setThumbnailUrl(thumbnailUrl);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setImageUrl(@Nullable String imageUrl) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setImageUrl(@Nullable String imageUrl) {
 		return (ColorlessWebhookEmbedBuilder) super.setImageUrl(imageUrl);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setFooter(WebhookEmbed.@Nullable EmbedFooter footer) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setFooter(@Nullable WebhookEmbed.EmbedFooter footer) {
 		return (ColorlessWebhookEmbedBuilder) super.setFooter(footer);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setTitle(WebhookEmbed.@Nullable EmbedTitle title) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setTitle(@Nullable WebhookEmbed.EmbedTitle title) {
 		return (ColorlessWebhookEmbedBuilder) super.setTitle(title);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setAuthor(WebhookEmbed.@Nullable EmbedAuthor author) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setAuthor(@Nullable WebhookEmbed.EmbedAuthor author) {
 		return (ColorlessWebhookEmbedBuilder) super.setAuthor(author);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder addField(WebhookEmbed.@NotNull EmbedField field) {
+	public @Nonnull ColorlessWebhookEmbedBuilder addField(@Nonnull WebhookEmbed.EmbedField field) {
 		return (ColorlessWebhookEmbedBuilder) super.addField(field);
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setFooter(String text) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setFooter(String text) {
 		return (ColorlessWebhookEmbedBuilder) super.setFooter(new WebhookEmbed.EmbedFooter(text, null));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setFooter(String text, String icon) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setFooter(String text, String icon) {
 		return (ColorlessWebhookEmbedBuilder) super.setFooter(new WebhookEmbed.EmbedFooter(text, icon));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setTitle(String text) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setTitle(String text) {
 		return (ColorlessWebhookEmbedBuilder) super.setTitle(new WebhookEmbed.EmbedTitle(text, null));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setTitle(String text, String icon) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setTitle(String text, String icon) {
 		return (ColorlessWebhookEmbedBuilder) super.setTitle(new WebhookEmbed.EmbedTitle(text, icon));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setAuthor(String text) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setAuthor(String text) {
 		return (ColorlessWebhookEmbedBuilder) super.setAuthor(new WebhookEmbed.EmbedAuthor(text, null, null));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setAuthor(String text, String icon) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setAuthor(String text, String icon) {
 		return (ColorlessWebhookEmbedBuilder) super.setAuthor(new WebhookEmbed.EmbedAuthor(text, icon, null));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder setAuthor(String text, String icon, String url) {
+	public @Nonnull ColorlessWebhookEmbedBuilder setAuthor(String text, String icon, String url) {
 		return (ColorlessWebhookEmbedBuilder) super.setAuthor(new WebhookEmbed.EmbedAuthor(text, icon, url));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder addBlankField(boolean inline) {
+	public @Nonnull ColorlessWebhookEmbedBuilder addBlankField(boolean inline) {
 		return (ColorlessWebhookEmbedBuilder) super.addField(new WebhookEmbed.EmbedField(inline, Helper.VOID, Helper.VOID));
 	}
 
-	public @NotNull ColorlessWebhookEmbedBuilder addField(String title, String value, boolean inline) {
+	public @Nonnull ColorlessWebhookEmbedBuilder addField(String title, String value, boolean inline) {
 		return (ColorlessWebhookEmbedBuilder) super.addField(new WebhookEmbed.EmbedField(inline, title, value));
 	}
 }

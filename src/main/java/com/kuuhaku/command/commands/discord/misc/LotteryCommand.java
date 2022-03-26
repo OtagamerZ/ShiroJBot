@@ -80,6 +80,7 @@ public class LotteryCommand implements Executable {
 		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + Helper.separate(cost) + " CR, deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
+
 							acc.consumeCredit(cost, this.getClass());
 							AccountDAO.saveAccount(acc);
 							LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
@@ -88,7 +89,7 @@ public class LotteryCommand implements Executable {
 							lv.addValue(cost);
 							LotteryDAO.saveLotteryValue(lv);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Bilhete comprado com sucesso!")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Bilhete comprado com sucesso!")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

@@ -67,7 +67,7 @@ public class ClanPayRentCommand implements Executable {
 							c.payRent(author);
 							ClanDAO.saveClan(c);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Aluguel pago com sucesso.")).queue();
+							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Aluguel pago com sucesso.")).queue();
 						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

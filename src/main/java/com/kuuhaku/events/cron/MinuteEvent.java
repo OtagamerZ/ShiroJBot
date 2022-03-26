@@ -46,7 +46,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class MinuteEvent implements Job {
-	public static JobDetail minute;
+	static JobDetail minute;
 
 	@Override
 	public void execute(JobExecutionContext context) {
@@ -69,7 +69,7 @@ public class MinuteEvent implements Job {
 		for (Guild g : Main.getShiroShards().getGuilds()) {
 			for (Emote e : g.getEmotes()) {
 				if (e.getName().startsWith("TEMP_")) {
-					e.delete().queue();
+					e.delete().queue(null, Helper::doNothing);
 				}
 			}
 		}

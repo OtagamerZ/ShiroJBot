@@ -58,7 +58,7 @@ public class LeaveClanCommand implements Executable {
 
 								ClanDAO.removeClan(c);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | O clã " + c.getName() + " foi desfeito com sucesso.")).queue();
+								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | O clã " + c.getName() + " foi desfeito com sucesso.")).queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
@@ -71,7 +71,7 @@ public class LeaveClanCommand implements Executable {
 								c.leave(author.getId());
 								ClanDAO.saveClan(c);
 
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Você saiu do clã " + c.getName() + " com sucesso.")).queue();
+								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Você saiu do clã " + c.getName() + " com sucesso.")).queue();
 							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

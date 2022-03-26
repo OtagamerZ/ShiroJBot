@@ -61,11 +61,12 @@ public class ImageFilters {
 			int x = coords[0];
 			int y = coords[1];
 
+			int val = type > 1 ? y : x;
+			int half = (type > 1 ? source.getHeight() : source.getWidth()) / 2;
+			int i = half + (half - val - half % 2);
 			int pos = switch (type) {
-				case 0 -> (int) ((out.getWidth() / (2d * Math.PI)) * Math.acos(Math.cos(((2 * Math.PI) / out.getWidth()) * x)));
-				case 1 -> out.getWidth() - (int) ((out.getWidth() / (2d * Math.PI)) * Math.acos(Math.cos(((2 * Math.PI) / out.getWidth()) * x)));
-				case 2 -> (int) ((out.getHeight() / (2d * Math.PI)) * Math.acos(Math.cos(((2 * Math.PI) / out.getHeight()) * y)));
-				case 3 -> out.getHeight() - (int) ((out.getHeight() / (2d * Math.PI)) * Math.acos(Math.cos(((2 * Math.PI) / out.getHeight()) * y)));
+				case 0, 2 -> val > half ? i : val;
+				case 1, 3 -> val < half ? i : val;
 				default -> throw new IllegalStateException("Unexpected value: " + type);
 			};
 

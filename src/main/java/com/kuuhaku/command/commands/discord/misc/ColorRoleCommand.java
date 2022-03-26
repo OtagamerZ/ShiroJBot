@@ -29,7 +29,6 @@ import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -88,19 +87,19 @@ public class ColorRoleCommand implements Executable {
 		}
 
 		Map<String, ColorRole> roles = gc.getColorRoles().stream()
-				.collect(Collectors.toMap(cr -> StringUtils.capitalize(cr.getName().toLowerCase(Locale.ROOT)), Function.identity()));
+				.collect(Collectors.toMap(cr -> cr.getName().toLowerCase(Locale.ROOT), Function.identity()));
+
 		List<Role> rols = member.getRoles().stream()
-				.filter(r -> roles.values().stream().noneMatch(cr -> cr.getId().equals(r.getId())))
+				.filter(r -> roles.containsKey(r.getName().toLowerCase(Locale.ROOT)))
 				.collect(Collectors.toList());
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
-			guild.modifyMemberRoles(member, rols).queue();
-
+			guild.modifyMemberRoles(member, List.of(), rols).queue();
 			channel.sendMessage("✅ | Sua cor foi removida com sucesso!").queue();
 			return;
 		}
 
-		String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
+		String name = args[0].toLowerCase(Locale.ROOT);
 
 		if (!roles.containsKey(name)) {
 			channel.sendMessage(I18n.getString("err_color-not-registered")).queue();
@@ -108,8 +107,7 @@ public class ColorRoleCommand implements Executable {
 		}
 
 		Role r = guild.getRoleById(roles.get(name).getId());
-
-		if (roles.containsKey(name) && r == null) {
+		if (r == null) {
 			Color c = roles.get(name).getColor();
 			r = guild.createRole()
 					.setColor(c)
@@ -125,14 +123,12 @@ public class ColorRoleCommand implements Executable {
 			gc.addColorRole(r.getId(), c, name);
 		}
 
-		assert r != null;
 		if (r.getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
 			channel.sendMessage("❌ | O cargo dessa cor está acima de mim. Por favor peça a um moderador para colocar-me acima dele.").queue();
 			return;
 		}
 
-		guild.modifyMemberRoles(member, rols).queue();
-		guild.addRoleToMember(member, r).queue();
+		guild.modifyMemberRoles(member, List.of(r), rols).queue();
 		channel.sendMessage("✅ | Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
 		GuildDAO.updateGuildSettings(gc);
 	}

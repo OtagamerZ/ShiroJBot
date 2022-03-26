@@ -50,10 +50,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TenthMinuteEvent implements Job {
-	public static JobDetail tenthMinute;
+	static JobDetail tenthMinute;
 
 	@Override
-	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
 		for (Account account : AccountDAO.getNotifiableAccounts()) {
 			account.notifyVote();
@@ -211,8 +210,11 @@ public class TenthMinuteEvent implements Job {
 		for (File file : temp) {
 			try {
 				BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-				if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - attr.creationTime().toMillis()) >= 3)
-					file.delete();
+				if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - attr.creationTime().toMillis()) >= 3) {
+					if (!file.delete()) {
+						Helper.logger(this.getClass()).warn("Failed to delete file at " + file.toPath().getFileName());
+					}
+				}
 			} catch (IOException ignore) {
 			}
 		}

@@ -20,15 +20,17 @@ package com.kuuhaku.model.common;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 public class ColorlessEmbedBuilder extends EmbedBuilder {
-	@NotNull
+	private static final Color color = Color.decode("#2f3136");
+
+	@Nonnull
 	@Override
 	public MessageEmbed build() {
-		super.setColor(Color.decode("#2f3136"));
+		super.setColor(color);
 		return super.build();
 	}
 }

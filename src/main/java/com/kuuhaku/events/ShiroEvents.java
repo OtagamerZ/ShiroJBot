@@ -78,8 +78,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -103,7 +103,7 @@ public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
 
 	@Override
-	public void onReconnected(@NotNull ReconnectedEvent event) {
+	public void onReconnected(@Nonnull ReconnectedEvent event) {
 		for (JDA shard : Main.getShiroShards().getShards()) {
 			Helper.logger(this.getClass()).info("Shard %d: %s | %s listeners".formatted(
 					shard.getShardInfo().getShardId(),
@@ -121,7 +121,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildUpdateOwner(@NotNull GuildUpdateOwnerEvent event) {
+	public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
 		assert event.getOldOwner() != null;
 		assert event.getNewOwner() != null;
 
@@ -139,7 +139,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageUpdate(@NotNull GuildMessageUpdateEvent event) {
+	public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
 		if (event.getAuthor().isBot()) return;
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
@@ -149,7 +149,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 		User author = event.getAuthor();
 		Member member = event.getMember();
 		Message message = event.getMessage();
@@ -490,7 +490,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onSlashCommand(@NotNull SlashCommandEvent evt) {
+	public void onSlashCommand(@Nonnull SlashCommandEvent evt) {
 		InteractionHook hook = evt.deferReply().complete();
 
 		if (!evt.isFromGuild()) {
@@ -601,7 +601,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onRoleDelete(@NotNull RoleDeleteEvent event) {
+	public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
 		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 		gc.removeLevelRole(event.getRole().getId());
@@ -611,25 +611,25 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+	public void onGuildJoin(@Nonnull GuildJoinEvent event) {
 		String s = """
 				Obrigada por me escolher!
 				Utilize `s!ajuda`%s para ver todos os meus comandos!
 				Para ver informações sobre um comando específico, use `s!ajuda comando` (substituindo `comando` pelo nome do comando).
-				
+								
 				**Guia rápido de funções:**
 				- Para habilitar minhas proteções de servidor, utilize `s!semraid`, `s!semspam`, `s!semhoist`, `s!semlink` e `s!tornarmencionavel`.
 				+- As proteções são opcionais, para mais informações sobre elas utilize `s!ajuda comando` (substituindo `comando` pelo nome do comando).
-				
+								
 				- Para configurar minhas mensagens de bem-vindo/adeus, utilize os comandos `s!msgbv`/`s!msgadeus`.
 				+- **Dica:** utilize `s!embed` para definir um GIF ou alterar os outros campos do bloco de boas-vindas/adeus. Se precisar, use minha ferramenta de criação de embeds em https://shirojbot.site/EmbedBuilder
-				
+								
 				- Para configurar respostas automáticas, utilize `s!fale`.
 				+- **Dica:** é possível usar substituições dentro de mensagens, consulte o comando `s!help` para vê-las. Se precisar, use minha ferramenta de criação de respostas em https://shirojbot.site/CABuilder
-				
+								
 				- Para habilitar o spawn de cartas e drops, utilize os comandos `s!spawncartas` e `s!spawndrops`, respectivamente.
 				+- Não deixe também de conferir meu jogo principal: **Shoukan**!
-				
+								
 				Ainda com dúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!
 				""";
 
@@ -654,7 +654,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+	public void onGuildLeave(@Nonnull GuildLeaveEvent event) {
 		for (String d : ShiroInfo.getDevelopers()) {
 			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
@@ -667,7 +667,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+	public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
 		User author = event.getUser();
@@ -689,7 +689,7 @@ public class ShiroEvents extends ListenerAdapter {
 				Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), arc));
 
 				TextChannel chn = gc.getGeneralChannel();
-				if (chn != null) {
+				if (chn != null && chn.canTalk()) {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(Color.red)
 							.setTitle("**⚠️ | RAID DETECTADA - SISTEMA R.A.ID ATIVADO | ⚠️**")
@@ -706,27 +706,29 @@ public class ShiroEvents extends ListenerAdapter {
 					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
 				}
 
-				User owner = Main.getInfo().getUserByID(guild.getOwnerId());
-				if (owner != null) {
-					List<Role> admRoles = guild.getRoles().stream()
-							.filter(r -> r.hasPermission(Permission.ADMINISTRATOR))
-							.toList();
+				List<Role> admRoles = guild.getRoles().stream()
+						.filter(r -> r.hasPermission(Permission.ADMINISTRATOR))
+						.toList();
 
-					Set<Member> admins = new HashSet<>();
-					for (Role admRole : admRoles) {
-						admins.addAll(guild.getMembersWithRoles(admRole));
-					}
+				Set<Member> admins = new HashSet<>();
+				for (Role admRole : admRoles) {
+					admins.addAll(guild.getMembersWithRoles(admRole));
+				}
 
-					for (Member admin : admins) {
-						admin.getUser().openPrivateChannel()
-								.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
-								.queue(null, Helper::doNothing);
-					}
+				for (Member admin : admins) {
+					if (admin.getUser().isBot()) continue;
+
+					admin.getUser().openPrivateChannel()
+							.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
+							.queue(null, Helper::doNothing);
 				}
 
 				for (TextChannel tc : guild.getTextChannels()) {
-					if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
-						tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+					try {
+						if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
+							tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+						}
+					} catch (Exception ignore) {
 					}
 				}
 
@@ -874,7 +876,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
 		Guild guild = event.getGuild();
 		User author = event.getUser();
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
@@ -964,7 +966,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
+	public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
 		if (!event.getReactionEmote().isEmoji() || !event.getReactionEmote().getEmoji().equals("⭐")) return;
 
 		Message msg;
@@ -1172,7 +1174,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageDelete(@NotNull GuildMessageDeleteEvent event) {
+	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg == null || msg.getAuthor().isBot()) return;
@@ -1181,7 +1183,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+	public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
@@ -1191,7 +1193,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+	public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(mb.getUser());
@@ -1206,7 +1208,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberUpdateNickname(@NotNull GuildMemberUpdateNicknameEvent event) {
+	public void onGuildMemberUpdateNickname(@Nonnull GuildMemberUpdateNicknameEvent event) {
 		String name = event.getNewNickname();
 		if (name == null) return;
 
@@ -1240,7 +1242,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onUserTyping(@NotNull UserTypingEvent event) {
+	public void onUserTyping(@Nonnull UserTypingEvent event) {
 		User u = event.getUser();
 		if (event.isFromType(ChannelType.PRIVATE) && ShiroInfo.getStaff().contains(u.getId())) {
 			for (String d : ShiroInfo.getStaff()) {

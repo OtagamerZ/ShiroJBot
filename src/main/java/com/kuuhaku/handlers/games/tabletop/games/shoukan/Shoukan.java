@@ -39,6 +39,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.states.GameState;
+import com.kuuhaku.model.annotations.ExecTime;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.CardType;
@@ -59,8 +60,8 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.websocket.DeploymentException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -113,13 +114,14 @@ public class Shoukan extends GlobalGame {
 
 	private GameState oldState = null;
 
+	@ExecTime
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, Rules rules, boolean daily, boolean ranked, boolean record, TournamentMatch match, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, new JSONObject(rules));
 		this.rules = rules;
 		this.channel = channel;
 		this.listener = new SimpleMessageListener(channel) {
 			@Override
-			public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (canInteract(event)) play(event);
 			}
 		};
@@ -197,7 +199,7 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		if (ranked)
+		if (ranked) {
 			for (Map.Entry<Side, Hand> e : hands.entrySet()) {
 				Set<Achievement> achs = e.getValue().getAcc().getAchievements();
 				if (!achs.isEmpty())
@@ -205,6 +207,7 @@ public class Shoukan extends GlobalGame {
 				else
 					achievements.put(e.getKey(), EnumSet.allOf(Achievement.class));
 			}
+		}
 
 		setActions(
 				s -> {
@@ -2113,7 +2116,7 @@ public class Shoukan extends GlobalGame {
 					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
-			buttons.put(Helper.parseEmoji("\uD83D\uDC53"), wrapper -> {
+			buttons.put(Helper.parseEmoji("\uD83D\uDD0D"), wrapper -> {
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode inspecionar o campo na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
