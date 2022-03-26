@@ -79,14 +79,14 @@ public class RaidInfoCommand implements Executable {
 							"""
 									Ocorrido: %s
 									Duração: %s
-									Usuários banidos: %s
+									Usuários detectados: %s
 									Usuários perdoados: %s
 									""".formatted(
 									Helper.TIMESTAMP.formatted(r.getOccurrence().toEpochSecond()),
 									Helper.toStringDuration(r.getDuration()),
 									r.getMembers().size(),
 									bans.stream()
-											.filter(id -> r.getMembers().stream().anyMatch(rm -> rm.getUid().equals(id)))
+											.filter(id -> r.getMembers().stream().noneMatch(rm -> rm.getUid().equals(id)))
 											.count()
 							),
 							false
@@ -136,11 +136,7 @@ public class RaidInfoCommand implements Executable {
 						status = ":orange_circle: Expulso/Ausente";
 					}
 
-					eb.addField(
-							Helper.getUsername(m.getUid()) + " (" + m.getUid() + ")",
-							"Status: " + status,
-							false
-					);
+					eb.addField(m.getName(), "ID: `" + m.getUid() + "`\nStatus: " + status, false);
 				}
 
 				pages.add(new InteractPage(eb.build()));

@@ -348,6 +348,15 @@ public class BuyCardCommand implements Executable {
 						));
 			}
 		} else {
+			m = MarketDAO.getCard(Integer.parseInt(args[0]));
+			if (m == null) {
+				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+				return;
+			}
+
+			m.setBuyer(author.getId());
+			MarketDAO.saveCard(m);
+
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (m.getType()) {
 				case EVOGEAR -> {
@@ -375,15 +384,6 @@ public class BuyCardCommand implements Executable {
 				}
 			}
 			KawaiponDAO.saveKawaipon(kp);
-
-			m = MarketDAO.getCard(Integer.parseInt(args[0]));
-			if (m == null) {
-				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
-				return;
-			}
-
-			m.setBuyer(author.getId());
-			MarketDAO.saveCard(m);
 
 			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` retirada com sucesso!").queue();
 		}
