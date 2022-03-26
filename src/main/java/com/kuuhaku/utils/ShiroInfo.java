@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.records.RaidData;
+import com.kuuhaku.model.records.UserData;
 import com.sun.management.OperatingSystemMXBean;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -159,7 +160,7 @@ public class ShiroInfo {
 				TextChannel chn = gc.getGeneralChannel();
 
 				long duration = System.currentTimeMillis() - data.start();
-				Set<String> ids = data.ids();
+				Set<UserData> ids = data.users();
 				if (chn != null) {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(Color.green)
@@ -188,8 +189,8 @@ public class ShiroInfo {
 
 				if (!ids.isEmpty()) {
 					RaidInfo info = new RaidInfo(guild.getId(), duration);
-					for (String id : ids) {
-						info.getMembers().add(new RaidMember(id, guild.getId()));
+					for (UserData user : ids) {
+						info.getMembers().add(new RaidMember(guild.getId(), user.uid(), user.name()));
 					}
 					RaidDAO.saveInfo(info);
 				}
@@ -200,7 +201,7 @@ public class ShiroInfo {
 
 	//CACHES
 	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, ExpiringMap<Long, String>> antiRaidCache = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, ExpiringMap<Long, UserData>> antiRaidCache = new ConcurrentHashMap<>();
 	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private final ExpiringMap<String, Boolean> confirmationPending = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
 	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
@@ -512,7 +513,7 @@ public class ShiroInfo {
 		);
 	}
 
-	public ConcurrentMap<String, ExpiringMap<Long, String>> getAntiRaidCache() {
+	public ConcurrentMap<String, ExpiringMap<Long, UserData>> getAntiRaidCache() {
 		return antiRaidCache;
 	}
 
