@@ -214,10 +214,7 @@ public class Hand {
 					deque.addAll(Collections.nCopies(6, c));
 				}
 			}
-			case INSTAKILL -> {
-				deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
-				baseHp = 1;
-			}
+			case INSTAKILL -> baseHp = 1;
 			case CARDMASTER -> {
 				deque.clear();
 				deque.addAll(CardDAO.getAllChampions(false));
