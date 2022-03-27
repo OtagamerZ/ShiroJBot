@@ -79,7 +79,7 @@ public class TournamentDAO {
 	public static List<Tournament> getClosedTournaments() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tournament t WHERE t.closed = TRUE", Tournament.class);
+		Query q = em.createQuery("SELECT t FROM Tournament t WHERE t.closed = TRUE AND t.finished = FALSE", Tournament.class);
 
 		try {
 			return q.getResultList();
