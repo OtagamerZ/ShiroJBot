@@ -419,6 +419,7 @@ public class Equipment implements Drawable, Cloneable {
 
 		return new JSONArray(altCharms).stream()
 				.map(o -> Charm.valueOf(String.valueOf(o)))
+				.filter(c -> game.getRules().arcade() != ArcadeMode.INSTAKILL || !Helper.equalsAny(c, Charm.BLEEDING, Charm.PIERCING))
 				.collect(Collectors.toList());
 	}
 
