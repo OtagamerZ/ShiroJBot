@@ -167,12 +167,12 @@ idea {
 
 sourceSets {
 	main {
-		aspectj.srcDir "src/main/java"
+		//aspectj.srcDir "src/main/java"
 		java.srcDirs = ["src/main/java"]
 	}
 
 	test {
-		aspectj.srcDir "src/test/java"
+		//aspectj.srcDir "src/test/java"
 		java.srcDirs = ["src/test/java"]
 	}
 }
