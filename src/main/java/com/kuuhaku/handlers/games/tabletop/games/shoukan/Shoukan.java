@@ -1075,7 +1075,7 @@ public class Shoukan extends GlobalGame {
 				fac *= 1.33f;
 
 			boolean applyDamage = !(defr.getBonus().popFlag(defr, Flag.NODAMAGE) || rules.noDamage());
-			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
+			boolean noDmg = (defr.getHero() == null && defr.isDefending()) && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
 			if (noDmg) {
@@ -1094,6 +1094,9 @@ public class Shoukan extends GlobalGame {
 			Hero h = defr.getHero();
 			if (h != null) {
 				dmg = h.bufferDamage(dmg);
+				if (defr.isDefending()) {
+					dmg = 0;
+				}
 			}
 
 			if (h == null || h.getHitpoints() <= 0) {
@@ -1225,7 +1228,7 @@ public class Shoukan extends GlobalGame {
 			if (op.getCombo().getRight() == Race.DEMON)
 				fac *= 1.33f;
 
-			boolean noDmg = defr.isDefending() && !(defr.isSleeping() || defr.isStunned());
+			boolean noDmg = (defr.getHero() == null && defr.isDefending()) && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
 			if (noDmg) {
@@ -1255,6 +1258,9 @@ public class Shoukan extends GlobalGame {
 			Hero h = defr.getHero();
 			if (h != null) {
 				dmg = h.bufferDamage(dmg);
+				if (defr.isDefending()) {
+					dmg = 0;
+				}
 			}
 
 			if (h == null || h.getHitpoints() <= 0) {
@@ -1285,7 +1291,7 @@ public class Shoukan extends GlobalGame {
 
 			dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : 0) * fac);
 
-			h = defr.getHero();
+			h = atkr.getHero();
 			if (h != null) {
 				dmg = h.bufferDamage(dmg);
 			}
