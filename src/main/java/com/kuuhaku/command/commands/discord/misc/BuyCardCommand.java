@@ -271,10 +271,11 @@ public class BuyCardCommand implements Executable {
 						kp.addCard(m.getCard());
 					}
 				}
-				KawaiponDAO.saveKawaipon(kp);
 
 				m.setBuyer(author.getId());
 				MarketDAO.saveCard(m);
+
+				KawaiponDAO.saveKawaipon(kp);
 
 				seller.addCredit(price, this.getClass());
 				buyer.removeCredit(price, this.getClass());
@@ -299,9 +300,6 @@ public class BuyCardCommand implements Executable {
 										channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
 										return;
 									}
-
-									mkt.setBuyer(author.getId());
-									MarketDAO.saveCard(mkt);
 
 									Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 									switch (finalM.getType()) {
@@ -330,6 +328,9 @@ public class BuyCardCommand implements Executable {
 										}
 									}
 
+									mkt.setBuyer(author.getId());
+									MarketDAO.saveCard(mkt);
+
 									KawaiponDAO.saveKawaipon(kp);
 
 									seller.addCredit(price, this.getClass());
@@ -355,9 +356,6 @@ public class BuyCardCommand implements Executable {
 				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
 				return;
 			}
-
-			m.setBuyer(author.getId());
-			MarketDAO.saveCard(m);
 
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (m.getType()) {
@@ -385,6 +383,10 @@ public class BuyCardCommand implements Executable {
 					kp.addCard(m.getCard());
 				}
 			}
+
+			m.setBuyer(author.getId());
+			MarketDAO.saveCard(m);
+
 			KawaiponDAO.saveKawaipon(kp);
 
 			channel.sendMessage("✅ | Carta `" + m.getRawCard().getName() + "` retirada com sucesso!").queue();
