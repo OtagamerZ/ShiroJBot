@@ -83,6 +83,8 @@ public class EffectShopCommand implements Executable {
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
 			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
+				wrapper.getMessage().delete().queue(null, Helper::doNothing);
+
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + ", deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
@@ -92,7 +94,6 @@ public class EffectShopCommand implements Executable {
 									KawaiponDAO.saveHero(h);
 
 									s.delete()
-											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!"))
 											.queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -101,6 +102,25 @@ public class EffectShopCommand implements Executable {
 						));
 			});
 		}
+		buttons.put(Helper.parseEmoji("\uD83D\uDDD1️"), wrapper -> {
+			wrapper.getMessage().delete().queue(null, Helper::doNothing);
+
+			Main.getInfo().getConfirmationPending().put(h.getUid(), true);
+			channel.sendMessage(h.getName() + " perderá seu efeito atual, deseja confirmar?")
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+
+								h.setReferenceChampion(0);
+								KawaiponDAO.saveHero(h);
+
+								s.delete()
+										.flatMap(d -> channel.sendMessage("✅ | Efeito removido com sucesso!"))
+										.queue();
+							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(h.getUid()),
+							m -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		});
 
 		channel.sendMessageEmbeds(getEmbed(pool)).queue(s ->
 				Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
@@ -118,6 +138,6 @@ public class EffectShopCommand implements Executable {
 			eb.addField(Helper.getFancyNumber(i + 1) + " :droplet: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
 		}
 
-		return eb.build();
+		return eb.addField(":wastebasket: | Remover efeito", "Remove o efeito atual do seu herói.", false).build();
 	}
 }
