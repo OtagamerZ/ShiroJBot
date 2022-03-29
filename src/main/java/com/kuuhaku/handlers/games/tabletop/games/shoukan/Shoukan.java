@@ -1348,12 +1348,12 @@ public class Shoukan extends GlobalGame {
 		List<String> champsInField = slts.parallelStream()
 				.map(SlotColumn::getTop)
 				.map(c -> c == null || c.isSealed() ? null : c.getCard().getId())
-				.collect(Collectors.toList());
+				.toList();
 
 		List<String> equipsInField = slts.parallelStream()
 				.map(SlotColumn::getBottom)
 				.map(dr -> dr == null ? null : dr.getCard().getId())
-				.collect(Collectors.toList());
+				.toList();
 
 		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : "DEFAULT";
 
@@ -1363,7 +1363,7 @@ public class Shoukan extends GlobalGame {
 						f.getRequiredCards().size() > 0 &&
 								!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
 								((h.isNullMode() && h.getHp() > f.getBaseStats() / 2) || h.getMana() >= f.getMana()) &&
-								f.getBlood() == 0 || h.getHp() > f.getBlood()
+								(f.getBlood() == 0 || h.getHp() > f.getBlood())
 				)
 				.findFirst()
 				.map(Champion::copy)
@@ -1390,6 +1390,7 @@ public class Shoukan extends GlobalGame {
 
 			return makeFusion(h);
 		}
+
 		return false;
 	}
 
