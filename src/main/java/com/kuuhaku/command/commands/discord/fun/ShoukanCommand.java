@@ -229,7 +229,7 @@ public class ShoukanCommand implements Executable {
 			Participant p = tn.getLookup(author.getId());
 			int phase = p.getPhase();
 			if (phase != -1) {
-				if (p.getPoints() == tn.getSize() - 4) {
+				if (tn.getTPMatch().size() == 2 && p.getPoints() == tn.getSize() - 4) {
 					phase = tn.getBracket().getPhases().size();
 				}
 
