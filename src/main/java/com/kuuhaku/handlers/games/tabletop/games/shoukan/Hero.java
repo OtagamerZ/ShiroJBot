@@ -295,6 +295,7 @@ public class Hero implements Cloneable {
             };
         }
 
+        debuffs.removeIf(AppliedDebuff::expired);
         for (AppliedDebuff d : debuffs) {
             Debuff debuff = d.getDebuff();
             timeModif *= switch (debuff.getId()) {
