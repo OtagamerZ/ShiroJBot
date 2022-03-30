@@ -27,19 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MemberHandler {
-
 	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
-	public Member requestProfileById(@RequestParam(value = "uid") String uid, @RequestParam(value = "server") String server) {
-		return MemberDAO.getMember(uid, server);
-	}
-
-	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
-	public Member[] requestProfileByMid(@RequestParam(value = "id") String mid) {
-		return MemberDAO.getMembersByUid(mid).toArray(new Member[0]);
-	}
-
-	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
-	public Member[] requestProfileBySid(@RequestParam(value = "id") String sid) {
-		return MemberDAO.getMembersBySid(sid).toArray(new Member[0]);
+	public Member requestProfileById(@RequestParam(value = "id") String id, @RequestParam(value = "server") String server) {
+		return MemberDAO.getMember(id, server);
 	}
 }
