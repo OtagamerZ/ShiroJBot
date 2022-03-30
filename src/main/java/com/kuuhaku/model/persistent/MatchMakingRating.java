@@ -19,12 +19,12 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.enums.RankedTier;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -33,6 +33,7 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalUnit;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -85,12 +86,20 @@ public class MatchMakingRating {
 	public MatchMakingRating() {
 	}
 
+	public static long getAverageMMR(String... ids) {
+		return Math.round(Arrays.stream(ids)
+				.map(MatchMakingRatingDAO::getMMR)
+				.mapToLong(MatchMakingRating::getMMR)
+				.average()
+				.orElse(0));
+	}
+
 	public String getUid() {
 		return uid;
 	}
 
 	public User getUser() {
-		return Main.getInfo().getUserByID(uid);
+		return Main.getUserByID(uid);
 	}
 
 	public void setUid(String uid) {
@@ -102,7 +111,7 @@ public class MatchMakingRating {
 	}
 
 	public void addMMR(long gained, long opponent, boolean ranked) {
-		double score = gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
+		double score = gained * (this.mmr == 0 ? 1 : MathHelper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
 		this.mmr += score;
 
 		ClanMember cm = ClanDAO.getClanMember(uid);
@@ -113,7 +122,7 @@ public class MatchMakingRating {
 	}
 
 	public void removeMMR(long lost, long opponent, boolean ranked) {
-		double score = Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
+		double score = Math.min(this.mmr, lost * (opponent == 0 ? 1 : MathHelper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
 		this.mmr = (long) Math.max(0, mmr - score);
 
 		ClanMember cm = ClanDAO.getClanMember(uid);
@@ -134,21 +143,21 @@ public class MatchMakingRating {
 	public void increaseRankPoints(long opMMR) {
 		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
 			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
-		double mmrModif = Helper.prcnt(mmr, Helper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
-		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
+		double mmrModif = MathHelper.prcnt(mmr, MathHelper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * MathHelper.prcnt((double) opMMR, mmr);
+		int rpValue = MathHelper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				rankPoints = (int) Math.min(75 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
+				rankPoints = (int) Math.min(75 * MathHelper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				tier = tier.getNext();
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
-				Main.getInfo().getUserByID(uid).openPrivateChannel()
+				Main.getUserByID(uid).openPrivateChannel()
 						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 				return;
 			}
 			return;
@@ -161,24 +170,24 @@ public class MatchMakingRating {
 				promWins = promLosses = 0;
 
 				if (StringUtils.isNumeric(master) && tier.getTier() > 1) {
-					Account acc = AccountDAO.getAccount(master);
+					Account acc = Account.find(Account.class, master);
 					master = "FULFILLED_" + master;
-					User u = Main.getInfo().getUserByID(uid);
+					User u = Main.getUserByID(uid);
 					u.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratuitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
-							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
+							.flatMap(c -> Main.getUserByID(master).openPrivateChannel())
 							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de " + tier.getName() + ", você recebeu **50.000 CR**!"))
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 
 					acc.addCredit(30000, this.getClass());
-					AccountDAO.saveAccount(acc);
+					acc.save();
 
 					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + uid);
 					DynamicParameterDAO.setParam("freeSynth_" + uid, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
 				} else {
-					Main.getInfo().getUserByID(uid).openPrivateChannel()
+					Main.getUserByID(uid).openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)!".formatted(tier.getTier(), tier.getName())))
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 				}
 
 				return;
@@ -195,21 +204,21 @@ public class MatchMakingRating {
 	public void decreaseRankPoints(long opMMR) {
 		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
 			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
-		double mmrModif = Helper.prcnt(Helper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
-		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
+		double mmrModif = MathHelper.prcnt(MathHelper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * MathHelper.prcnt(mmr, (double) opMMR);
+		int rpValue = MathHelper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				rankPoints = (int) Math.min(75 * Helper.prcnt(promWins, tier.getMd()), tier.getPromRP());
+				rankPoints = (int) Math.min(75 * MathHelper.prcnt(promWins, tier.getMd()), tier.getPromRP());
 				tier = tier.getNext();
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
-				Main.getInfo().getUserByID(uid).openPrivateChannel()
+				Main.getUserByID(uid).openPrivateChannel()
 						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)!".formatted(tier.getTier(), tier.getName())))
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 			}
 			return;
 		} else if (rankPoints >= tier.getPromRP()) {
@@ -223,12 +232,12 @@ public class MatchMakingRating {
 			return;
 		}
 
-		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
+		if (rankPoints == 0 && MathHelper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
 			tier = tier.getPrevious();
 			rankPoints = Math.max(0, rankPoints - rpValue);
-			Main.getInfo().getUserByID(uid).openPrivateChannel()
+			Main.getUserByID(uid).openPrivateChannel()
 					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s).".formatted(tier.getTier(), tier.getName())))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 			return;
 		}
 
@@ -245,9 +254,9 @@ public class MatchMakingRating {
 		if (rankPoints == 0) {
 			tier = tier.getPrevious();
 			rankPoints = 75;
-			Main.getInfo().getUserByID(uid).openPrivateChannel()
+			Main.getUserByID(uid).openPrivateChannel()
 					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s) por inatividade.".formatted(tier.getTier(), tier.getName())))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		}
 	}
 
@@ -285,7 +294,7 @@ public class MatchMakingRating {
 
 	public String getWinrate() {
 		if (losses == 0) return "perfeito";
-		return "%s%% (V/D)".formatted(Helper.prcntToInt((float) wins, wins + losses));
+		return "%s%% (V/D)".formatted(MathHelper.prcntToInt((float) wins, wins + losses));
 	}
 
 	public boolean isBlocked() {

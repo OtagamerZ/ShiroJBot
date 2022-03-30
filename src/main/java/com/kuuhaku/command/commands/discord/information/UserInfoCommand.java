@@ -21,14 +21,14 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
-import com.kuuhaku.controller.postgresql.RaidDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.exceptions.ValidationException;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.model.persistent.RaidInfo;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -128,10 +128,10 @@ public class UserInfoCommand implements Executable, Slashed {
                 .addField(":man_detective: | Nome real", "`" + m.getUser().getAsTag() + "`", true)
                 .addField(":medal: | Emblemas", sb.toString(), true)
                 .addField(":1234: | ID", "`" + m.getId() + "`", true)
-                .addField(":calendar: | Conta criada em", m.getTimeCreated().format(Helper.DATE_FORMAT) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeCreated().toEpochSecond()) + ")", true)
-                .addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Helper.DATE_FORMAT) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeJoined().toEpochSecond()) + ")" : "Não sei", true);
+                .addField(":calendar: | Conta criada em", m.getTimeCreated().format(Constants.DATE_FORMAT) + "\n(" + Constants.TIMESTAMP.formatted(m.getTimeCreated().toEpochSecond()) + ")", true)
+                .addField(":calendar: | Membro desde", m.hasTimeJoined() ? m.getTimeJoined().format(Constants.DATE_FORMAT) + "\n(" + Constants.TIMESTAMP.formatted(m.getTimeJoined().toEpochSecond()) + ")" : "Não sei", true);
         if (booster)
-            eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Helper.DATE_FORMAT) + "\n(" + Helper.TIMESTAMP.formatted(m.getTimeBoosted().toEpochSecond()) + ")", true);
+            eb.addField(":calendar: | Booster desde", m.getTimeBoosted().format(Constants.DATE_FORMAT) + "\n(" + Constants.TIMESTAMP.formatted(m.getTimeBoosted().toEpochSecond()) + ")", true);
         else
             eb.addBlankField(true);
 
@@ -145,7 +145,7 @@ public class UserInfoCommand implements Executable, Slashed {
         if (!m.getRoles().isEmpty())
             eb.addField(":beginner: | Cargos", x > 0 ? String.join(" ") + "... e mais xx cargos" : String.join(" "), false);
 
-        int raids = RaidDAO.getUserRaids(m.getId());
+        int raids = RaidInfo.queryNative(Number.class, "SELECT COUNT(1) FROM RaidMember r WHERE r.uid = :uid", m.getId()).intValue();
         if (raids > 0) {
             eb.addField(":warning: | ALERTA | :warning:", "Este usuário foi banido " + raids + (raids == 1 ? " vez " : " vezes ") + "pelo sistema R.A.ID.", false);
         }

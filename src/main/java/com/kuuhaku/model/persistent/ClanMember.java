@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.model.enums.ClanHierarchy;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -74,11 +74,11 @@ public class ClanMember {
 	}
 
 	public void promote() {
-		role = Helper.getNext(role, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
+		role = CollectionHelper.getNext(role, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 	}
 
 	public void demote() {
-		role = Helper.getPrevious(role, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
+		role = CollectionHelper.getPrevious(role, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 	}
 
 	public long getScore() {

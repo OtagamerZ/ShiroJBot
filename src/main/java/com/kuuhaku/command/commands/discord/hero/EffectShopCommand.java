@@ -24,7 +24,6 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
@@ -34,8 +33,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.MatchMakingRating;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -74,18 +74,25 @@ public class EffectShopCommand implements Executable {
 		int max = mmr.getTier().getTier() + 1;
 		boolean manaless = h.getPerks().contains(Perk.MANALESS);
 
-		List<Champion> masters = CardDAO.getAllChampionsWithEffect(!manaless && mmr.getTier().getTier() >= 5, Math.min(manaless ? 4 : max, max));
-		Calendar cal = Calendar.getInstance();
-		long seed = Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)) + h.getSeed();
 
-		List<Champion> pool = Helper.getRandomN(masters, 5, 1, seed);
+		List<Champion> masters = Champion.queryAll(Champion.class, """
+				SELECT c
+				FROM Champion c
+				WHERE COALESCE(c.effect, '') <> ''
+				AND (c.fusion = FALSE OR c.fusion = :fusion)
+				AND c.mana <= :mana
+				""", !manaless && mmr.getTier().getTier() >= 5, Math.min(manaless ? 4 : max, max));
+		Calendar cal = Calendar.getInstance();
+		long seed = StringHelper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)) + h.getSeed();
+
+		List<Champion> pool = CollectionHelper.getRandomN(masters, 5, 1, seed);
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
-			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
+			buttons.put(StringHelper.parseEmoji(StringHelper.getFancyNumber(i + 1)), wrapper -> {
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 				channel.sendMessage(h.getName() + " será treinado por " + c.getName() + ", deseja confirmar?")
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
+						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), w -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 
 									h.setReferenceChampion(c.getId());
@@ -95,7 +102,7 @@ public class EffectShopCommand implements Executable {
 											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Treinado com sucesso!"))
 											.queue();
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(h.getUid()),
 								m -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
@@ -103,7 +110,7 @@ public class EffectShopCommand implements Executable {
 		}
 
 		channel.sendMessageEmbeds(getEmbed(pool)).queue(s ->
-				Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 
@@ -115,7 +122,7 @@ public class EffectShopCommand implements Executable {
 		for (int i = 0; i < pool.size(); i++) {
 			Champion c = pool.get(i);
 			int cost = (c.getMana() + (c.isFusion() ? 5 : 0)) / 2;
-			eb.addField(Helper.getFancyNumber(i + 1) + " :droplet: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
+			eb.addField(StringHelper.getFancyNumber(i + 1) + " :droplet: " + cost + " | Mestre: " + c.getName(), c.getDescription(), false);
 		}
 
 		return eb.build();

@@ -18,23 +18,22 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
 
-public class EvogearDrop extends Drop<Equipment> {
+public class EvogearDrop extends Drop<Evogear> {
 	boolean mainPrize = true;
 
 	public EvogearDrop() {
-		super(CardDAO.getRandomEquipment());
+		super(Evogear.getRandomEvogear(false));
 	}
 
 	@Override
@@ -43,18 +42,18 @@ public class EvogearDrop extends Drop<Equipment> {
 		if (dk.getEvoWeight() + getPrize().getWeight(dk, 1) <= 24 && dk.getEquipmentCopies(getPrize().getCard()) < dk.getEquipmentMaxCopies(getPrize())) {
 			dk.addEquipment(getPrize());
 		} else {
-			awardInstead(u, Helper.BASE_EQUIPMENT_PRICE);
+			awardInstead(u, Constants.BASE_EQUIPMENT_PRICE);
 			mainPrize = false;
 			return;
 		}
 		KawaiponDAO.saveDeck(dk);
 
-		Account acc = AccountDAO.getAccount(u.getId());
+		Account acc = Account.find(Account.class, u.getId());
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.merge(DailyTask.DROP_TASK, 1, Integer::sum);
 			acc.setDailyProgress(pg);
-			AccountDAO.saveAccount(acc);
+			acc.save();
 		}
 	}
 
@@ -70,7 +69,7 @@ public class EvogearDrop extends Drop<Equipment> {
 		else
 			return "~~Evogear %s~~\n(convertido em %s CR)".formatted(
 					getPrize().getCard().getName(),
-					Helper.separate(Helper.BASE_EQUIPMENT_PRICE)
+					StringHelper.separate(Constants.BASE_EQUIPMENT_PRICE)
 			);
 	}
 }

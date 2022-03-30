@@ -21,19 +21,21 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.guild.Buff;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,16 +56,18 @@ public class MyBuffsCommand implements Executable, Slashed {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(":level_slider: Modificadores ativos")
-				.setColor(Helper.getRandomColor());
+				.setColor(ImageHelper.getRandomColor());
 
 		boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 		if (waifu) {
-			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + Helper.roundToString(WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100, 0) + "% XP ganho", false);
+			float mult = Account.find(Account.class, author.getId()).getCoupleMult();
+			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + MathHelper.roundToString(mult * 100 - 100, 0) + "% XP ganho", false);
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		float progress = kp.getCards().size() / (CardDAO.getTotalCards() * 2f);
+		int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+		float progress = kp.getCards().size() / (total * 2f);
 
 		if (progress >= 1) {
 			eb.addField("Coleção de cartas (100%)", "+100% XP ganho", false);
@@ -78,8 +82,8 @@ public class MyBuffsCommand implements Executable, Slashed {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		if (!gc.getBuffs().isEmpty()) {
 			for (Buff b : gc.getBuffs()) {
-				String until = Helper.TIMESTAMP.formatted((b.getAcquiredAt().plus(b.getTime(), ChronoUnit.MILLIS).toEpochSecond()));
-				String chance = Helper.roundToString(b.getMultiplier() * 100 - 100, 0) + "%";
+				String until = Constants.TIMESTAMP.formatted((b.getAcquiredAt().plus(b.getTime(), ChronoUnit.MILLIS).toEpochSecond()));
+				String chance = MathHelper.roundToString(b.getMultiplier() * 100 - 100, 0) + "%";
 				switch (b.getType()) {
 					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " ganho de XP (expira " + until + ")", false);
 					case CARD -> eb.addField("Melhoria de servidor (cartas)", "+" + chance + " chance de aparecer cartas (expira " + until + ")", false);
@@ -87,10 +91,6 @@ public class MyBuffsCommand implements Executable, Slashed {
 					case FOIL -> eb.addField("Melhoria de servidor (cromadas)", "+" + chance + " chance de cartas serem cromadas (expira " + until + ")", false);
 				}
 			}
-		}
-
-		if (gc.isPartner()) {
-			eb.addField("Servidor parceiro", "+20% buff global (XP/cartas/drops/cromadas)", false);
 		}
 
 		channel.sendMessageEmbeds(eb.build()).queue();

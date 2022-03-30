@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.controller.postgresql.DrawableDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -26,9 +27,11 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -40,7 +43,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "field")
-public class Field implements Drawable, Cloneable {
+public class Field extends DrawableDAO implements Drawable, Cloneable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -130,14 +133,14 @@ public class Field implements Drawable, Cloneable {
 
 				g2d.drawImage(icon, 29, y - (25 * i), 23, 23, null);
 				g2d.setColor(Color.decode(colors.get(r)));
-				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0) + "%", 57, y + 21 - (25 * i), g2d);
+				Profile.drawOutlinedText((modif > 0 ? "+" : "") + MathHelper.roundToString(modif * 100, 0) + "%", 57, y + 21 - (25 * i), g2d);
 				i++;
 			}
 
 			if (day)
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/day.png"), 135, 58, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/day.png"), 135, 58, null);
 			else
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/night.png"), 135, 58, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/night.png"), 135, 58, null);
 
 			if (!available) {
 				g2d.setColor(new Color(0, 0, 0, 150));
@@ -270,7 +273,7 @@ public class Field implements Drawable, Cloneable {
 	}
 
 	public String getBase64() {
-		return Helper.atob(drawCard(false), "png");
+		return ImageHelper.atob(drawCard(false), "png");
 	}
 
 	@Override

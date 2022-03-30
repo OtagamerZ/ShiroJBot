@@ -24,8 +24,9 @@ import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Locale;
@@ -56,7 +57,7 @@ public class SetTournamentRulesCommand implements Executable {
 				return;
 			}
 
-			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
+			JSONObject custom = CollectionHelper.getOr(StringHelper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
 
 			t.setCustomRules(new Rules(custom, true));
 			TournamentDAO.save(t);

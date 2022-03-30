@@ -21,8 +21,12 @@ package com.kuuhaku.model.persistent.tournament;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONUtils;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.json.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
@@ -90,7 +94,7 @@ public class Tournament {
 
 	public Tournament(String name) {
 		this.name = name;
-		this.seed = Helper.DEFAULT_RNG.nextInt();
+		this.seed = Constants.DEFAULT_RNG.nextInt();
 	}
 
 	public int getId() {
@@ -126,7 +130,7 @@ public class Tournament {
 	}
 
 	public int getSize() {
-		return size == 0 ? Math.max(8, Helper.roundToBit(participants.size())) : size;
+		return size == 0 ? Math.max(8, MiscHelper.roundToBit(participants.size())) : size;
 	}
 
 	public Map<String, Participant> getPartLookup() {
@@ -221,7 +225,7 @@ public class Tournament {
 				Participant bot = parts.get(botIndex);
 
 				TournamentMatch tm = new TournamentMatch(id, phase, topIndex, top.getUid(), botIndex, bot.getUid());
-				if (Helper.notNull(top, bot)) {
+				if (LogicHelper.notNull(top, bot)) {
 					return tm;
 				} else {
 					return null;
@@ -255,11 +259,11 @@ public class Tournament {
 
 	public void close() {
 		closed = true;
-		size = Math.max(8, Helper.roundToBit(participants.size()));
+		size = Math.max(8, MiscHelper.roundToBit(participants.size()));
 		bracket = new Bracket(size, this);
 		bracket.populate(this, List.copyOf(participants));
 		bench.addAll(
-				Helper.removeIf(participants, p -> p.getIndex() == -1).stream()
+				CollectionHelper.removeIf(participants, p -> p.getIndex() == -1).stream()
 						.map(Participant::getUid)
 						.toList()
 		);
@@ -382,7 +386,7 @@ public class Tournament {
 					g2d.setColor(winner ? Color.white : SECONDARY_COLOR);
 					Composite comp = g2d.getComposite();
 					g2d.setComposite(BlendComposite.Lighten);
-					Helper.drawSquareLine(g2d, x + WIDTH, y + offset + HEIGHT / 2, (WIDTH + H_MARGIN) * (i + 1), y2 + offset2 + HEIGHT / 2);
+					ImageHelper.drawSquareLine(g2d, x + WIDTH, y + offset + HEIGHT / 2, (WIDTH + H_MARGIN) * (i + 1), y2 + offset2 + HEIGHT / 2);
 					g2d.setComposite(comp);
 
 					Color color = winner ? Color.white : PRIMARY_COLOR;
@@ -430,7 +434,7 @@ public class Tournament {
 				name = StringUtils.abbreviate(part.toString(), 13);
 			}
 
-			Helper.drawCenteredString(g2d, name, x, y, WIDTH * mult, (HEIGHT - 20) * mult);
+			ImageHelper.drawCenteredString(g2d, name, x, y, WIDTH * mult, (HEIGHT - 20) * mult);
 		}
 	}
 

@@ -28,8 +28,9 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -37,7 +38,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "sweep",
@@ -60,7 +60,7 @@ public class SweepCommand implements Executable {
 			for (GuildConfig gd : gds) {
 				if (Main.getInfo().getGuildByID(gd.getGuildId()) == null) {
 					guildTrashBin.add(gd.getGuildId());
-					Helper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
+					MiscHelper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
 				}
 			}
 
@@ -87,7 +87,7 @@ public class SweepCommand implements Executable {
 
 					missingIds.computeIfAbsent(e.getKey(), t -> new HashSet<>())
 							.addAll(e.getValue().stream().map(id -> id + e.getKey()).toList());
-					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
+					MiscHelper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					try {
 						CompletableFuture<Void> loaded = new CompletableFuture<>();
@@ -98,7 +98,7 @@ public class SweepCommand implements Executable {
 							);
 
 							loaded.complete(null);
-							Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + res.size() + " members");
+							MiscHelper.logger(this.getClass()).debug(g.getName() + ": Loaded " + res.size() + " members");
 						});
 						loaded.get();
 					} catch (ExecutionException | InterruptedException err) {
@@ -128,13 +128,13 @@ public class SweepCommand implements Executable {
 				String mText = memberTrashBin.size() > 0 ? memberTrashBin.size() == 1 ? memberTrashBin.size() + " membro" : memberTrashBin.size() + " membros" : "";
 
 				s.editMessage(":warning: | " + (guildTrashBin.size() + memberTrashBin.size() > 1 ? "Foram encontrados " : "Foi encontrado ") + gText + (!gText.isBlank() && !mText.isBlank() ? " e " : "") + mText + (guildTrashBin.size() + memberTrashBin.size() > 1 ? " inexistentes" : " inexistente") + ", deseja executar a limpeza?")
-						.queue(m -> Pages.buttonize(m, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+						.queue(m -> Pages.buttonize(m, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									Sweeper.sweep(guildTrashBin, memberTrashBin);
 
-									m.delete().queue(null, Helper::doNothing);
+									m.delete().queue(null, MiscHelper::doNothing);
 									channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));

@@ -21,7 +21,9 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.ClanTier;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
@@ -78,7 +80,7 @@ public class Clan {
 	public Clan(String name, String leader) {
 		this.name = name;
 		members.add(new ClanMember(leader, ClanHierarchy.LEADER));
-		transactions.add(Helper.getUsername(leader) + " criou o clã por 10.000 CR.");
+		transactions.add(MiscHelper.getUsername(leader) + " criou o clã por 10.000 CR.");
 	}
 
 	public Clan() {
@@ -101,19 +103,19 @@ public class Clan {
 	}
 
 	public BufferedImage getIcon() {
-		return Helper.btoa(icon);
+		return ImageHelper.btoa(icon);
 	}
 
 	public void setIcon(BufferedImage icon) {
-		this.icon = Helper.atob(Helper.scaleAndCenterImage(icon, 256, 256), "png");
+		this.icon = ImageHelper.atob(ImageHelper.scaleAndCenterImage(icon, 256, 256), "png");
 	}
 
 	public BufferedImage getBanner() {
-		return Helper.btoa(banner);
+		return ImageHelper.btoa(banner);
 	}
 
 	public void setBanner(BufferedImage banner) {
-		this.banner = Helper.atob(Helper.scaleAndCenterImage(banner, 512, 256), "png");
+		this.banner = ImageHelper.atob(ImageHelper.scaleAndCenterImage(banner, 512, 256), "png");
 	}
 
 	public ClanMember getLeader() {
@@ -158,13 +160,13 @@ public class Clan {
 
 		leader.setRole(ClanHierarchy.SUBLEADER);
 		sub.setRole(ClanHierarchy.LEADER);
-		transactions.add(Helper.getUsername(leader.getUid()) + " transferiu a posse do clã para " + Helper.getUsername(sub.getUid()) + ".");
+		transactions.add(MiscHelper.getUsername(leader.getUid()) + " transferiu a posse do clã para " + MiscHelper.getUsername(sub.getUid()) + ".");
 	}
 
 	public void promote(String id, User u) {
 		ClanMember cm = getMember(id);
 		cm.promote();
-		transactions.add(u.getAsTag() + " promoveu " + Helper.getUsername(id) + ".");
+		transactions.add(u.getAsTag() + " promoveu " + MiscHelper.getUsername(id) + ".");
 	}
 
 	public void promote(User tgt, User u) {
@@ -176,7 +178,7 @@ public class Clan {
 	public void demote(String id, User u) {
 		ClanMember cm = getMember(id);
 		cm.demote();
-		transactions.add(u.getAsTag() + " rebaixou " + Helper.getUsername(id) + ".");
+		transactions.add(u.getAsTag() + " rebaixou " + MiscHelper.getUsername(id) + ".");
 	}
 
 	public void demote(User tgt, User u) {
@@ -187,7 +189,7 @@ public class Clan {
 
 	public void kick(String id, User u) {
 		members.removeIf(cm -> cm.getUid().equals(id));
-		transactions.add(u.getAsTag() + " expulsou " + Helper.getUsername(id) + ".");
+		transactions.add(u.getAsTag() + " expulsou " + MiscHelper.getUsername(id) + ".");
 	}
 
 	public void kick(User tgt, User u) {
@@ -197,7 +199,7 @@ public class Clan {
 
 	public void invite(String id, User u) {
 		members.add(new ClanMember(id, ClanHierarchy.MEMBER));
-		transactions.add(u.getAsTag() + " convidou " + Helper.getUsername(id) + " para o clã.");
+		transactions.add(u.getAsTag() + " convidou " + MiscHelper.getUsername(id) + " para o clã.");
 	}
 
 	public void invite(User tgt, User u) {
@@ -212,7 +214,7 @@ public class Clan {
 		}
 
 		members.remove(cm);
-		transactions.add(Helper.getUsername(id) + " saiu do clã.");
+		transactions.add(MiscHelper.getUsername(id) + " saiu do clã.");
 	}
 
 	public ClanHierarchy getHierarchy(String id) {
@@ -233,7 +235,7 @@ public class Clan {
 
 	public void deposit(long amount, User u) {
 		this.vault += amount;
-		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " CR.");
+		transactions.add(u.getAsTag() + " depositou " + StringHelper.separate(amount) + " CR.");
 
 		for (ClanMember mb : members) {
 			mb.addScore(amount / tier.getCapacity());
@@ -246,7 +248,7 @@ public class Clan {
 
 	public void withdraw(long amount, User u) {
 		this.vault -= amount;
-		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " CR.");
+		transactions.add(u.getAsTag() + " sacou " + StringHelper.separate(amount) + " CR.");
 
 		for (ClanMember mb : members) {
 			mb.removeScore(amount / tier.getCapacity());
@@ -256,7 +258,7 @@ public class Clan {
 	public void upgrade(User u) {
 		this.vault -= tier.getNext().getCost();
 		this.tier = this.tier.getNext();
-		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier.getCost()) + " CR.");
+		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + StringHelper.separate(tier.getCost()) + " CR.");
 	}
 
 	public long getScore() {
@@ -278,13 +280,13 @@ public class Clan {
 	public void payRent(User u) {
 		this.vault -= tier.getRent();
 		this.paidRent = Calendar.getInstance();
-		transactions.add(u.getAsTag() + " pagou o aluguel de " + Helper.separate(tier.getRent()) + " CR.");
+		transactions.add(u.getAsTag() + " pagou o aluguel de " + StringHelper.separate(tier.getRent()) + " CR.");
 	}
 
 	public void payRent() {
 		this.vault -= tier.getRent();
 		this.paidRent = Calendar.getInstance();
-		transactions.add("Aluguel pago de " + Helper.separate(tier.getRent()) + " CR pago automaticamente.");
+		transactions.add("Aluguel pago de " + StringHelper.separate(tier.getRent()) + " CR pago automaticamente.");
 	}
 
 	public void changeName(User u, String name) {

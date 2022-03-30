@@ -37,7 +37,7 @@ public class MatchMakingRatingDAO {
 		try {
 			MatchMakingRating mmr = em.find(MatchMakingRating.class, id);
 			if (mmr == null) {
-				User u = Main.getInfo().getUserByID(id);
+				User u = Main.getUserByID(id);
 				mmr = new MatchMakingRating(u.getId());
 				saveMMR(mmr);
 			}

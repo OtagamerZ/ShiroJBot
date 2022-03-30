@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
@@ -30,8 +29,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -55,7 +55,7 @@ public class ConvertCardCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
@@ -66,7 +66,7 @@ public class ConvertCardCommand implements Executable {
 
 		Card tc = CardDAO.getCard(args[0], true);
 		if (tc == null) {
-			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Card.getCards().stream().map(Card::getId).toList()) + "`?").queue();
 			return;
 		} else if (tc.getId().equals(tc.getAnime().getName())) {
 			channel.sendMessage("❌ | Você não pode converter cartas Ultimate.").queue();
@@ -80,7 +80,7 @@ public class ConvertCardCommand implements Executable {
 			return;
 		}
 
-		Champion c = CardDAO.getChampion(tc);
+		Champion c = Champion.getChampion(tc.getId());
 		if (dk.checkChampion(c, channel)) return;
 
 		assert c != null;
@@ -102,8 +102,8 @@ public class ConvertCardCommand implements Executable {
 			eb.setImage("attachment://card.png");
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(c.drawCard(false), "kp_" + c.getId(), "png"), "card.png")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+			channel.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(c.drawCard(false), "kp_" + c.getId(), "png"), "card.png")
+					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								kp.removeCard(kc);
@@ -111,7 +111,7 @@ public class ConvertCardCommand implements Executable {
 								KawaiponDAO.saveKawaipon(kp);
 
 								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Conversão realizada com sucesso!")).queue();
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

@@ -25,7 +25,8 @@ import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Upvote;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
@@ -62,7 +63,7 @@ public class DrawRaffleCommand implements Executable {
 					.map(Upvote::getUid)
 					.map(Main.getInfo()::getUserByID)
 					.filter(Objects::nonNull)
-					.map(u -> u.getAsMention() + " (" + Helper.bugText(u.getName()) + ")")
+					.map(u -> u.getAsMention() + " (" + StringHelper.bugText(u.getName()) + ")")
 					.collect(Collectors.toList());
 
 			if (votes.isEmpty()) {
@@ -73,7 +74,7 @@ public class DrawRaffleCommand implements Executable {
 				return;
 			}
 
-			List<String> winners = Helper.getRandomN(votes, amount, 1);
+			List<String> winners = CollectionHelper.getRandomN(votes, amount, 1);
 			MessageAction ma;
 			if (winners.size() == 1) {
 				ma = channel.sendMessage("E o vencedor do sorteio é");
@@ -90,7 +91,7 @@ public class DrawRaffleCommand implements Executable {
 					.delay(2, TimeUnit.SECONDS)
 					.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
 					.delay(2, TimeUnit.SECONDS)
-					.flatMap(s -> s.editMessage(s.getContentRaw() + Helper.properlyJoin().apply(winners) + ", parabéns!\nUm membro da equipe entrará em contato para discutir sobre a premiação."))
+					.flatMap(s -> s.editMessage(s.getContentRaw() + CollectionHelper.properlyJoin().apply(winners) + ", parabéns!\nUm membro da equipe entrará em contato para discutir sobre a premiação."))
 					.queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | A quantidade precisa ser um valor inteiro.").queue();

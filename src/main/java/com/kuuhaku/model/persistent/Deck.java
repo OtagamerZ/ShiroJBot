@@ -19,12 +19,13 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.DrawableDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.ListUtils;
@@ -52,7 +53,7 @@ public class Deck {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
-	private List<Equipment> equipments = new ArrayList<>();
+	private List<Evogear> equipments = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
@@ -71,9 +72,9 @@ public class Deck {
 		this.novice = novice;
 	}
 
-	public Deck(List<Champion> champions, List<Equipment> equipments, List<Field> fields) {
+	public Deck(List<Champion> champions, List<Evogear> evogears, List<Field> fields) {
 		this.champions = champions;
-		this.equipments = equipments;
+		this.equipments = evogears;
 		this.fields = fields;
 	}
 
@@ -125,15 +126,15 @@ public class Deck {
 		return champions.stream().distinct().anyMatch(c -> Collections.frequency(champions, c) > getChampionMaxCopies());
 	}
 
-	public Equipment getEquipment(Card card) {
-		for (Equipment equipment : equipments) {
-			if (equipment.getCard().equals(card)) return equipment;
+	public Evogear getEquipment(Card card) {
+		for (Evogear evogear : equipments) {
+			if (evogear.getCard().equals(card)) return evogear;
 		}
 
 		return null;
 	}
 
-	public List<Equipment> getEquipments() {
+	public List<Evogear> getEquipments() {
 		return equipments;
 	}
 
@@ -141,24 +142,24 @@ public class Deck {
 		return equipments.stream().mapToInt(e -> e.getWeight(this, 1)).sum();
 	}
 
-	public void setEquipments(List<Equipment> equipments) {
-		this.equipments = equipments;
+	public void setEquipments(List<Evogear> evogears) {
+		this.equipments = evogears;
 	}
 
-	public void addEquipment(Equipment equipment) {
-		this.equipments.add(equipment);
+	public void addEquipment(Evogear evogear) {
+		this.equipments.add(evogear);
 	}
 
-	public void addEquipments(List<Equipment> equipments) {
-		this.equipments.addAll(equipments);
+	public void addEquipments(List<Evogear> evogears) {
+		this.equipments.addAll(evogears);
 	}
 
-	public void removeEquipment(Equipment equipment) {
-		this.equipments.remove(equipment);
+	public void removeEquipment(Evogear evogear) {
+		this.equipments.remove(evogear);
 	}
 
-	public void removeEquipments(List<Equipment> equipments) {
-		this.equipments.removeAll(equipments);
+	public void removeEquipments(List<Evogear> evogears) {
+		this.equipments.removeAll(evogears);
 	}
 
 	public int getEquipmentCopies(Card card) {
@@ -232,7 +233,7 @@ public class Deck {
 		return 3 + (getCombo().getRight() == Race.BESTIAL ? 1 : 0);
 	}
 
-	public int getEquipmentMaxCopies(Equipment eq) {
+	public int getEquipmentMaxCopies(Evogear eq) {
 		if (eq == null) return 0;
 		else if (eq.getWeight(this, 0) == 0) return 24;
 
@@ -244,19 +245,19 @@ public class Deck {
 	}
 
 	public double[] getMetaDivergence() {
-		List<String> champ = CardDAO.getChampionMeta();
-		List<String> equip = CardDAO.getEquipmentMeta();
-		List<String> field = CardDAO.getFieldMeta();
+		List<String> champ = DrawableDAO.getChampionMeta();
+		List<String> equip = DrawableDAO.getEquipmentMeta();
+		List<String> field = DrawableDAO.getFieldMeta();
 
 		return new double[]{
-				champions.size() == 0 ? 0 : 1 - Helper.prcnt(champions.stream().map(c -> c.getCard().getId()).filter(champ::contains).count(), champions.size()),
-				equipments.size() == 0 ? 0 : 1 - Helper.prcnt(equipments.stream().map(c -> c.getCard().getId()).filter(equip::contains).count(), equipments.size()),
-				fields.size() == 0 ? 0 : 1 - Helper.prcnt(fields.stream().map(c -> c.getCard().getId()).filter(field::contains).count(), fields.size()),
+				champions.size() == 0 ? 0 : 1 - MathHelper.prcnt(champions.stream().map(c -> c.getCard().getId()).filter(champ::contains).count(), champions.size()),
+				equipments.size() == 0 ? 0 : 1 - MathHelper.prcnt(equipments.stream().map(c -> c.getCard().getId()).filter(equip::contains).count(), equipments.size()),
+				fields.size() == 0 ? 0 : 1 - MathHelper.prcnt(fields.stream().map(c -> c.getCard().getId()).filter(field::contains).count(), fields.size()),
 		};
 	}
 
 	public double getAverageDivergence() {
-		return Helper.average(getMetaDivergence());
+		return MathHelper.average(getMetaDivergence());
 	}
 
 	public Map<Class, Integer> getComposition() {
@@ -280,14 +281,14 @@ public class Deck {
 	public double getAverageCost() {
 		return ListUtils.union(champions, equipments)
 				.stream()
-				.mapToInt(d -> d instanceof Champion c ? c.getMana() : ((Equipment) d).getMana())
+				.mapToInt(d -> d instanceof Champion c ? c.getMana() : ((Evogear) d).getMana())
 				.filter(i -> i != 0)
 				.average()
 				.orElse(0);
 	}
 
 	public List<String> getTips() {
-		Map<Class, Integer> data = CardDAO.getCategoryMeta();
+		Map<Class, Integer> data = DrawableDAO.getCategoryMeta();
 
 		List<String> tips = new ArrayList<>();
 		for (Map.Entry<Class, Integer> e : getComposition().entrySet()) {
@@ -385,7 +386,7 @@ public class Deck {
 		return 0;
 	}
 
-	public boolean checkEquipment(Equipment e, TextChannel channel) {
+	public boolean checkEquipment(Evogear e, TextChannel channel) {
 		int max = getEquipmentMaxCopies(e);
 		if (Collections.frequency(getEquipments(), e) >= max) {
 			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
@@ -401,7 +402,7 @@ public class Deck {
 		return false;
 	}
 
-	public static boolean checkEquipment(Deck d, Equipment e, TextChannel channel) {
+	public static boolean checkEquipment(Deck d, Evogear e, TextChannel channel) {
 		int max = d.getEquipmentMaxCopies(e);
 		if (Collections.frequency(d.getEquipments(), e) >= max) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
@@ -417,7 +418,7 @@ public class Deck {
 		return false;
 	}
 
-	public int checkEquipmentError(Equipment e) {
+	public int checkEquipmentError(Evogear e) {
 		int max = getEquipmentMaxCopies(e);
 		if (Collections.frequency(getEquipments(), e) >= max) {
 			return 1;
@@ -430,7 +431,7 @@ public class Deck {
 		return 0;
 	}
 
-	public static int checkEquipmentError(Deck d, Equipment e) {
+	public static int checkEquipmentError(Deck d, Evogear e) {
 		int max = d.getEquipmentMaxCopies(e);
 		if (Collections.frequency(d.getEquipments(), e) >= max) {
 			return 1;
@@ -568,11 +569,11 @@ public class Deck {
 						combo.getLeft(), combo.getLeft().getMajorDesc(),
 						combo.getRight(), combo.getRight().getMinorDesc(),
 						getEvoWeight(),
-						Helper.round(getAverageCost(), 2),
-						Helper.roundToString(divs[0] * 100, 1),
-						Helper.roundToString(divs[1] * 100, 1),
-						Helper.roundToString(divs[2] * 100, 1),
-						Helper.roundToString(getAverageDivergence() * 100, 1) + "%"
+						MathHelper.round(getAverageCost(), 2),
+						MathHelper.roundToString(divs[0] * 100, 1),
+						MathHelper.roundToString(divs[1] * 100, 1),
+						MathHelper.roundToString(divs[2] * 100, 1),
+						MathHelper.roundToString(getAverageDivergence() * 100, 1) + "%"
 				) + """
 				__**:abacus: | Classes**__
 				**Duelista:** %s carta%s

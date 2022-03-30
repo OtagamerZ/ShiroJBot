@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -40,6 +40,6 @@ public class ReverseCommand implements Executable {
 		}
 
 		String txt = new StringBuilder(argsAsText.trim()).reverse().toString();
-		channel.sendMessage(Helper.replaceTags(txt, author, guild, message)).queue();
+		channel.sendMessage(MiscHelper.replaceTags(txt, author, guild, message)).queue();
 	}
 }

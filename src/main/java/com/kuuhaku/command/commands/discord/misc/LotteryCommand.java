@@ -22,16 +22,15 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Lottery;
 import com.kuuhaku.model.persistent.LotteryValue;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -51,17 +50,17 @@ public class LotteryCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage("O prêmio atual é __**" + Helper.separate(LotteryDAO.getLotteryValue().getValue()) + " CR**__.").queue();
+			channel.sendMessage("O prêmio atual é __**" + StringHelper.separate(LotteryValue.find(LotteryValue.class, 0).getValue()) + " CR**__.").queue();
 			return;
 		} else if (args[0].split(",").length != 6 || args[0].length() != 17) {
 			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 
 		for (String dozen : args[0].split(",")) {
-			if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 31)) {
+			if (!StringUtils.isNumeric(dozen) || !MathHelper.between(Integer.parseInt(dozen), 0, 31)) {
 				channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 30.").queue();
 				return;
 			} else if (args[0].split(dozen).length > 2) {
@@ -70,27 +69,28 @@ public class LotteryCommand implements Executable {
 			}
 		}
 
-		long cost = (long) (750 * Math.pow(5, LotteryDAO.getLotteriesByUser(author.getId()).size()));
+		int tickets = Lottery.queryNative(Number.class, "SELECT COUNT(1) FROM Lottery l WHERE l.valid = TRUE AND l.uid = :uid", author.getId()).intValue();
+		long cost = (long) (750 * Math.pow(5, tickets));
 		if (acc.getTotalBalance() < cost) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + Helper.separate(cost) + " CR, deseja confirmar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + StringHelper.separate(cost) + " CR, deseja confirmar?")
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							acc.consumeCredit(cost, this.getClass());
-							AccountDAO.saveAccount(acc);
-							LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
+							acc.save();
+							new Lottery(author.getId(), args[0]).save();
 
-							LotteryValue lv = LotteryDAO.getLotteryValue();
+							LotteryValue lv = LotteryValue.find(LotteryValue.class, 0);
 							lv.addValue(cost);
-							LotteryDAO.saveLotteryValue(lv);
+							lv.save();
 
 							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Bilhete comprado com sucesso!")).queue();
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

@@ -19,8 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
@@ -32,8 +30,11 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.BondedList;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.collections.BondedList;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
@@ -117,7 +118,7 @@ public class Hand {
 			return;
 		}
 
-		this.acc = AccountDAO.getAccount(user.getId());
+		this.acc = Account.find(Account.class, user.getId());
 
 		Hero h = KawaiponDAO.getHero(user.getId());
 		if (h != null && h.getQuest() == null) {
@@ -131,7 +132,15 @@ public class Hand {
 
 			if (getCombo().getRight() == Race.DIVINITY) {
 				if (d instanceof Champion c && !c.hasEffect() && !c.isFusion()) {
-					String[] de = CardDAO.getRandomEffect(c.getMana());
+					String[] de = Card.queryNative(String[].class, """
+							SELECT c.description
+								 , c.effect
+							FROM Champion c
+							WHERE c.fusion = false
+							AND c.effect IS NOT NULL
+							AND c.mana = :mana
+							ORDER BY RANDOM()
+							""", c.getMana());
 					c.setAltDescription(de[0]);
 					c.setAltEffect(de[1]);
 				}
@@ -164,7 +173,7 @@ public class Hand {
 		);
 	}
 
-	private void setData(List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw) {
+	private void setData(List<Champion> champs, List<Evogear> equips, List<Field> fields, List<Integer> destinyDraw) {
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
@@ -180,9 +189,9 @@ public class Hand {
 		mana = game.getRules().mana();
 
 		if (game.getRules().noEquip())
-			getRealDeque().removeIf(d -> d instanceof Equipment e && !e.isSpell());
+			getRealDeque().removeIf(d -> d instanceof Evogear e && !e.isSpell());
 		if (game.getRules().noSpell())
-			getRealDeque().removeIf(d -> d instanceof Equipment e && e.isSpell());
+			getRealDeque().removeIf(d -> d instanceof Evogear e && e.isSpell());
 		if (game.getRules().noField())
 			getRealDeque().removeIf(d -> d instanceof Field);
 
@@ -210,19 +219,19 @@ public class Hand {
 			case BLACKROCK -> {
 				deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 				for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
-					Champion c = CardDAO.getChampion(name);
+					Champion c = Champion.getChampion(name);
 					deque.addAll(Collections.nCopies(6, c));
 				}
 			}
 			case INSTAKILL -> {
-				deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
+				deque.removeIf(d -> d instanceof Evogear e && e.hasEffect());
 				baseHp = 1;
 			}
 			case CARDMASTER -> {
 				deque.clear();
-				deque.addAll(CardDAO.getAllChampions(false));
-				deque.addAll(CardDAO.getAllAvailableEquipments());
-				deque.addAll(CardDAO.getAllAvailableFields());
+				deque.addAll(Champion.getChampions(false));
+				deque.addAll(Evogear.getEvogears(false));
+				deque.addAll(Field.getFields(false));
 			}
 		}
 
@@ -253,7 +262,7 @@ public class Hand {
 
 	public boolean manualDraw() {
 		try {
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() >= 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Evogear || d instanceof Field).count() >= 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
 			else cards.add(getRealDeque().removeFirst().copy());
 			triggerEffect(ON_DRAW);
@@ -267,7 +276,7 @@ public class Hand {
 
 	public void destinyDraw() {
 		if (destinyDeck.size() > 0) {
-			Drawable dr = Helper.getRandomEntry(destinyDeck);
+			Drawable dr = CollectionHelper.getRandomEntry(destinyDeck);
 			destinyDeck.remove(dr);
 			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
@@ -280,7 +289,7 @@ public class Hand {
 		if (lockTime > 0) return null;
 		try {
 			Drawable dr;
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Evogear || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				dr = drawChampion();
 			else {
 				dr = getRealDeque().removeFirst();
@@ -379,7 +388,7 @@ public class Hand {
 	public Drawable drawEquipment() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Evogear e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			triggerEffect(ON_DRAW);
@@ -393,7 +402,7 @@ public class Hand {
 	public Drawable drawSpell() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Evogear e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 			triggerEffect(ON_DRAW);
@@ -408,8 +417,8 @@ public class Hand {
 		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getRealDeque().stream()
-					.filter(c -> c instanceof Equipment e && !e.isSpell())
-					.max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef()))
+					.filter(c -> c instanceof Evogear e && !e.isSpell())
+					.max(Comparator.comparingInt(c -> attack ? ((Evogear) c).getAtk() : ((Evogear) c).getDef()))
 					.orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
@@ -468,7 +477,7 @@ public class Hand {
 	}
 
 	public User getUser() {
-		User u = Main.getInfo().getUserByID(acc.getUid());
+		User u = Main.getUserByID(acc.getUid());
 		if (!u.getId().equals(acc.getUid())) return getUser();
 
 		return u;
@@ -523,13 +532,13 @@ public class Hand {
 				).collect(Collectors.toList());
 	}
 
-	public List<Equipment> getSortedEquipments() {
+	public List<Evogear> getSortedEquipments() {
 		return getAvailableCards().stream()
-				.filter(d -> d instanceof Equipment)
-				.map(d -> (Equipment) d)
-				.sorted(Comparator.comparingInt(Equipment::getMana)
-						.thenComparing(Equipment::getAtk)
-						.thenComparing(Equipment::getDef)
+				.filter(d -> d instanceof Evogear)
+				.map(d -> (Evogear) d)
+				.sorted(Comparator.comparingInt(Evogear::getMana)
+						.thenComparing(Evogear::getAtk)
+						.thenComparing(Evogear::getDef)
 				).collect(Collectors.toList());
 	}
 
@@ -592,11 +601,11 @@ public class Hand {
 		g2d.dispose();
 
 		getUser().openPrivateChannel()
-				.flatMap(c -> c.sendMessage("Suas cartas:").addFile(Helper.writeAndGet(bi, "hand", "png")))
+				.flatMap(c -> c.sendMessage("Suas cartas:").addFile(ImageHelper.writeAndGet(bi, "hand", "png")))
 				.queue(m -> {
-					if (old != null) old.delete().queue(null, Helper::doNothing);
+					if (old != null) old.delete().queue(null, MiscHelper::doNothing);
 					old = m;
-				}, Helper::doNothing);
+				}, MiscHelper::doNothing);
 	}
 
 	public void showEnemyHand() {
@@ -621,13 +630,13 @@ public class Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente:")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public void showEnemyHand(float hidden) {
-		hidden = Helper.clamp(hidden, 0, 1);
+		hidden = MathHelper.clamp(hidden, 0, 1);
 
 		Hand enemy = game.getHands().get(side.getOther());
 		BufferedImage bi = new BufferedImage(Math.max(5, enemy.getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
@@ -636,7 +645,7 @@ public class Hand {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = enemy.getCards();
-		List<Integer> hidIndx = Helper.getRandomN(IntStream.range(0, cards.size()).boxed().toList(), (int) Math.ceil(cards.size() * hidden), 1);
+		List<Integer> hidIndx = CollectionHelper.getRandomN(IntStream.range(0, cards.size()).boxed().toList(), (int) Math.ceil(cards.size() * hidden), 1);
 
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(hidIndx.contains(i)), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
@@ -651,9 +660,9 @@ public class Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente:")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public void showEnemyDeck(int amount) {
@@ -678,9 +687,9 @@ public class Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente:")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public void showCards(Drawable... cards) {
@@ -702,15 +711,15 @@ public class Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as cartas:")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public void sendDM(String message) {
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage(message))
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public int sumAttack() {
@@ -731,7 +740,7 @@ public class Hand {
 
 	public int getCardCount() {
 		return (int) cards.stream()
-				.filter(d -> !(d instanceof Equipment e) || !e.isEffectOnly())
+				.filter(d -> !(d instanceof Evogear e) || !e.isEffectOnly())
 				.count();
 	}
 
@@ -785,7 +794,7 @@ public class Hand {
 
 	public void setHp(int value) {
 		prevHp = hp;
-		hp = Helper.clamp(value, 0, 9999);
+		hp = MathHelper.clamp(value, 0, 9999);
 	}
 
 	public void addHp(int value) {
@@ -814,7 +823,7 @@ public class Hand {
 			if (hp > baseHp * (2 / 3f)) {
 				crippleHp(value);
 				return;
-			} else if (hp > baseHp * (1 / 3f) && Helper.chance(hp * 100d / baseHp)) {
+			} else if (hp > baseHp * (1 / 3f) && MathHelper.chance(hp * 100d / baseHp)) {
 				crippleHp(value);
 				return;
 			}

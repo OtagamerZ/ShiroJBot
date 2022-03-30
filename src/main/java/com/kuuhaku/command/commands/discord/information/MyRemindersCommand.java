@@ -27,7 +27,8 @@ import com.kuuhaku.controller.postgresql.ReminderDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Reminder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +58,7 @@ public class MyRemindersCommand implements Executable {
 
 			ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 			List<Page> pages = new ArrayList<>();
-			List<List<Reminder>> chunks = Helper.chunkify(rems, 10);
+			List<List<Reminder>> chunks = CollectionHelper.chunkify(rems, 10);
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor("Seu cronograma")
 					.setThumbnail("https://cdn-icons-png.flaticon.com/512/193/193682.png");
@@ -68,8 +69,8 @@ public class MyRemindersCommand implements Executable {
 				for (int i = 0; i < chunk.size(); i++) {
 					Reminder rem = chunk.get(i);
 					eb.addField(
-							"`" + i + "` | " + rem.getNextReminder().format(Helper.FULL_DATE_FORMAT),
-							(Helper.TIMESTAMP + "%s\n\n%s").formatted(
+							"`" + i + "` | " + rem.getNextReminder().format(Constants.FULL_DATE_FORMAT),
+							(Constants.TIMESTAMP + "%s\n\n%s").formatted(
 									now.plusSeconds(rem.getPeriod() / 1000).toEpochSecond(),
 									rem.isRepeating() ? " - RECORRENTE" : "",
 									StringUtils.abbreviate(rem.getDescription(), 100)

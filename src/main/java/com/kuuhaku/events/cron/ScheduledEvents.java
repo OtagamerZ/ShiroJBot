@@ -18,141 +18,64 @@
 
 package com.kuuhaku.events.cron;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.model.records.CronJob;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ScheduledEvents implements JobListener {
-	private static Scheduler sched;
+	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
+	private static ScheduledEvents self = null;
+	private final Scheduler sched;
 
 	public ScheduledEvents() {
 		Thread.currentThread().setName("crontab");
-		schedFifthSecond();
-		schedHourly();
-		schedDaily();
-		schedMinute();
-		schedTenthMinute();
-		schedMonthly();
-	}
-
-	private void schedTenthMinute() {
+		Scheduler s = null;
 		try {
-			if (TenthMinuteEvent.tenthMinute == null) {
-				TenthMinuteEvent.tenthMinute = JobBuilder.newJob(TenthMinuteEvent.class).withIdentity("tenth", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("tenth", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/10 * ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(TenthMinuteEvent.tenthMinute, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada 10 minutos");
-			}
+			s = new StdSchedulerFactory().getScheduler();
+			schedule(
+					new CronJob("10 seconds", "0/10 * * ? * * *"),
+					new CronJob("1 minute", "0 0/1 * ? * * *"),
+					new CronJob("10 minutes", "0 0/10 * ? * * *"),
+					new CronJob("1 hour", "0 0 0/1 ? * * *"),
+					new CronJob("1 day", "0 0 0 ? * * *"),
+					new CronJob("1 month", "0 0 0 1 * ? *")
+			);
 		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada 10 minutos: " + e);
+			MiscHelper.logger(this.getClass()).error("Failed to initialize cron scheduler: " + e);
+		} finally {
+			sched = s;
 		}
 	}
 
-	private void schedHourly() {
-		try {
-			if (HourlyEvent.hourly == null) {
-				HourlyEvent.hourly = JobBuilder.newJob(HourlyEvent.class).withIdentity("hourly", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("hourly", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(HourlyEvent.hourly, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada hora");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada hora: " + e);
-		}
+	public static void init() {
+		exec.execute(() -> self = new ScheduledEvents());
 	}
 
-	private void schedMinute() {
-		try {
-			if (MinuteEvent.minute == null) {
-				MinuteEvent.minute = JobBuilder.newJob(MinuteEvent.class).withIdentity("minute", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("minute", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ? *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(MinuteEvent.minute, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada minuto");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada minuto: " + e);
-		}
-	}
+	private void schedule(CronJob... jobs) throws SchedulerException {
+		sched.clear();
 
-	private void schedMonthly() {
-		try {
-			if (MonthlyEvent.monthly == null) {
-				MonthlyEvent.monthly = JobBuilder.newJob(MonthlyEvent.class).withIdentity("monthly", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("monthly", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 * ? *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(MonthlyEvent.monthly, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada mês");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada mês: " + e);
-		}
-	}
+		for (CronJob job : jobs) {
+			JobDetail detail = JobBuilder.newJob(TenthSecondEvent.class)
+					.withIdentity(job.name(), "1")
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withSchedule(CronScheduleBuilder.cronSchedule(job.cron()))
+					.withIdentity(job.name(), "1")
+					.build();
 
-	private void schedFifthSecond() {
-		try {
-			if (TenthSecondEvent.tenthSecond == null) {
-				TenthSecondEvent.tenthSecond = JobBuilder.newJob(TenthSecondEvent.class).withIdentity("fifthsecond", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("fifthsecond", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/10 * * ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(TenthSecondEvent.tenthSecond, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada décimo segundo");
+				sched.scheduleJob(detail, trigger);
+				MiscHelper.logger(this.getClass()).info("Cron initialized: " + job.name());
+			} catch (SchedulerException e) {
+				MiscHelper.logger(this.getClass()).error("Failed to initialize cron (" + job.name() + "): " + e);
 			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada décimo segundo: " + e);
 		}
-	}
 
-	private void schedDaily() {
-		try {
-			if (DailyEvent.daily == null) {
-				DailyEvent.daily = JobBuilder.newJob(DailyEvent.class).withIdentity("daily", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("daily", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(DailyEvent.daily, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso diariamente");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma diariamente");
-		}
+		sched.start();
 	}
 
 	@Override
@@ -172,14 +95,16 @@ public class ScheduledEvents implements JobListener {
 
 	@Override
 	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
-		Helper.logger(this.getClass()).info("Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
+		MiscHelper.logger(this.getClass()).debug("Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
 	}
 
 	public static void shutdown() {
 		try {
-			sched.shutdown();
+			if (self != null) {
+				self.sched.shutdown();
+			}
 		} catch (SchedulerException e) {
-			Helper.logger(ScheduledEvents.class).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(ScheduledEvents.class).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

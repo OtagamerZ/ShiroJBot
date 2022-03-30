@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -126,6 +126,6 @@ public class Participant {
 
 	@Override
 	public String toString() {
-		return isBye() ? "BYE" : Helper.getUsername(uid);
+		return isBye() ? "BYE" : MiscHelper.getUsername(uid);
 	}
 }

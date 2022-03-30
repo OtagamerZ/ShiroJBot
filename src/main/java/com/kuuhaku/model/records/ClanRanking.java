@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 
 import java.awt.*;
 import java.math.BigInteger;
@@ -28,7 +28,7 @@ import java.util.zip.CRC32;
 public record ClanRanking(int id, String name, BigInteger score, BigInteger rank, String icon) {
 	public Color getColor() {
 		if (icon != null)
-			return Helper.colorThief(Helper.btoa(icon));
+			return ImageHelper.colorThief(ImageHelper.btoa(icon));
 
 		CRC32 crc = new CRC32();
 		crc.update(name.getBytes(StandardCharsets.UTF_8));

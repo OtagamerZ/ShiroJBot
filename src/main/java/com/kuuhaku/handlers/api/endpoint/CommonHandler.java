@@ -19,8 +19,9 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.FileHelper;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
@@ -90,7 +91,7 @@ public class CommonHandler {
 
 				StringBuilder sb = new StringBuilder();
 
-				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
+				String[] available = Arrays.stream(CollectionHelper.getOr(f.listFiles(File::isDirectory), new File[0]))
 						.map(File::getName)
 						.sorted()
 						.toArray(String[]::new);
@@ -124,7 +125,7 @@ public class CommonHandler {
 
 				StringBuilder sb = new StringBuilder();
 
-				String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
+				String[] available = Arrays.stream(CollectionHelper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
 						.map(fl -> fl.getName().replace(".png", ""))
 						.sorted()
 						.toArray(String[]::new);
@@ -139,7 +140,7 @@ public class CommonHandler {
 				}
 
 				byte[] bytes = page.formatted(
-						"Imagens de " + CardDAO.getUltimate(anime).getName(),
+						"Imagens de " + Card.find(Card.class, anime).getName(),
 						"""
 								<a href="?anime=%s&m=file" onclick="document.getElementById('wait').style.visibility = 'visible'">(download)</a>
 								""".formatted(anime),
@@ -183,7 +184,7 @@ public class CommonHandler {
 		File f = new File(System.getenv("CARDS_PATH") + anime);
 		if (!f.exists()) throw new FileNotFoundException();
 
-		File tmp = Helper.compressDir(f);
+		File tmp = FileHelper.compressDir(f);
 		if (tmp == null) throw new FileNotFoundException();
 
 		ContentDisposition cd = ContentDisposition.attachment()
@@ -195,7 +196,7 @@ public class CommonHandler {
 		res.setHeader(HttpHeaders.CONTENT_DISPOSITION, cd.toString());
 
 		try (FileInputStream fis = new FileInputStream(tmp)) {
-			Helper.stream(fis, res.getOutputStream());
+			FileHelper.stream(fis, res.getOutputStream());
 		} finally {
 			tmp.delete();
 		}

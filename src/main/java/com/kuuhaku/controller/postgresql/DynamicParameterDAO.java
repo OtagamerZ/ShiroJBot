@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.DynamicParameter;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -29,7 +29,7 @@ public class DynamicParameterDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
+			return CollectionHelper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
 		} finally {
 			em.close();
 		}
@@ -39,7 +39,7 @@ public class DynamicParameterDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param)).getValue();
+			return CollectionHelper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param)).getValue();
 		} finally {
 			em.close();
 		}
@@ -47,7 +47,7 @@ public class DynamicParameterDAO {
 
 	public static void setParam(String param, String value) {
 		EntityManager em = Manager.getEntityManager();
-		DynamicParameter dp = Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
+		DynamicParameter dp = CollectionHelper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
 
 		dp.setValue(value);
 

@@ -28,8 +28,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -68,7 +69,7 @@ public class ClanHistoryCommand implements Executable {
 		StringBuilder sb = new StringBuilder();
 		List<String> trans = c.getTransactions();
 		Collections.reverse(trans);
-		List<List<String>> chunks = Helper.chunkify(trans, 10);
+		List<List<String>> chunks = CollectionHelper.chunkify(trans, 10);
 		boolean first = true;
 		for (List<String> chunk : chunks) {
 			sb.setLength(0);
@@ -85,10 +86,10 @@ public class ClanHistoryCommand implements Executable {
 		}
 
 		MessageAction ma = channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent());
-		if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
-		if (c.getBanner() != null) ma = ma.addFile(Helper.writeAndGet(c.getBanner(), "banner", "png"));
+		if (c.getIcon() != null) ma = ma.addFile(ImageHelper.writeAndGet(c.getIcon(), "icon", "png"));
+		if (c.getBanner() != null) ma = ma.addFile(ImageHelper.writeAndGet(c.getBanner(), "banner", "png"));
 		ma.queue(s ->
-				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

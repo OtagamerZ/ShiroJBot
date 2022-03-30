@@ -23,7 +23,7 @@ import com.expression.parser.function.FunctionX;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -43,7 +43,7 @@ public class MathCommand implements Executable {
 
 		try {
 			FunctionX func = new FunctionX(argsAsText);
-			channel.sendMessage("x = " + Helper.roundToString(func.getF_xo(0), 5)).queue();
+			channel.sendMessage("f(x) = " + MathHelper.roundToString(func.getF_xo(0), 5)).queue();
 		} catch (CalculatorException e) {
 			channel.sendMessage("❌ | Equação inválida.").queue();
 		}

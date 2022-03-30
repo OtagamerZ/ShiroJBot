@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.normal.framework;
 
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -105,7 +105,7 @@ public abstract class Game {
 	}
 
 	public User getCurrent() {
-		return Helper.getOr(handler.getUserById(table.getPlayers().getCurrent().getId()), new UserById(0));
+		return CollectionHelper.getOr(handler.getUserById(table.getPlayers().getCurrent().getId()), new UserById(0));
 	}
 
 	public User getPlayerById(String id) {

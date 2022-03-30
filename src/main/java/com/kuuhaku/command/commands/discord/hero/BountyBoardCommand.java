@@ -24,7 +24,6 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
@@ -36,15 +35,19 @@ import com.kuuhaku.model.enums.Danger;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.records.BountyInfo;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
 import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static com.kuuhaku.model.enums.BountyDifficulty.*;
 
 @Command(
 		name = "muraldemissoes",
@@ -70,10 +73,13 @@ public class BountyBoardCommand implements Executable {
 		}
 
 		Calendar cal = Calendar.getInstance();
-		long seed = Helper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)) + h.getSeed();
+		long seed = StringHelper.stringToLong(author.getId() + h.getId() + cal.get(Calendar.DAY_OF_YEAR) + cal.get(Calendar.YEAR)) + h.getSeed();
 
-		List<BountyQuest> pool = Helper.getRandomN(BountyQuestDAO.getBounties(), 3, 1, seed);
-		pool.add(Helper.getRandomEntry(BountyQuestDAO.getTraining()));
+		List<BountyQuest> pool = BountyQuest.queryAll(BountyQuest.class, "SELECT b FROM BountyQuest b WHERE b.difficulty IN :allowed", Set.of(VERY_EASY, EASY, MEDIUM, HARD, VERY_HARD));
+		pool = CollectionHelper.getRandomN(pool, 3, 1, seed);
+
+		List<BountyQuest> training = BountyQuest.queryAll(BountyQuest.class, "SELECT b FROM BountyQuest b WHERE b.difficulty = 'NONE'");
+		pool.add(CollectionHelper.getRandomEntry(training));
 
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		for (int i = 0; i < pool.size(); i++) {
@@ -130,16 +136,16 @@ public class BountyBoardCommand implements Executable {
 				eb.addField("Possíveis perigos", sb.toString(), true);
 			}
 
-			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
+			buttons.put(StringHelper.parseEmoji(StringHelper.getFancyNumber(i + 1)), wrapper -> {
 				if (h.getEnergy() < 1) {
 					channel.sendMessage("❌ | Seu herói está cansado (sem energia suficiente).").queue();
 					return;
 				}
 
 				Main.getInfo().getConfirmationPending().put(h.getUid(), true);
-				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES)) + ")")
+				channel.sendMessage("Deseja aceitar a missão \"" + q + "\"? (Duração: " + StringHelper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES)) + ")")
 						.setEmbeds(eb.build())
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), w -> {
+						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), w -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 
 									h.setQuest(q, seed);
@@ -149,7 +155,7 @@ public class BountyBoardCommand implements Executable {
 											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Herói enviado com sucesso!"))
 											.queue();
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(h.getUid()),
 								m -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
@@ -157,7 +163,7 @@ public class BountyBoardCommand implements Executable {
 		}
 
 		channel.sendMessageEmbeds(getEmbed(h, pool, seed)).queue(s ->
-				Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 
@@ -171,14 +177,14 @@ public class BountyBoardCommand implements Executable {
 			BountyInfo info = q.getInfo(h, seed);
 
 			int diff = q.getDifficulty().getValue();
-			double modDiff = Helper.prcnt(diff - info.diff(), diff);
+			double modDiff = MathHelper.prcnt(diff - info.diff(), diff);
 
-			eb.addField(Helper.getFancyNumber(i + 1) + " | " + q
+			eb.addField(StringHelper.getFancyNumber(i + 1) + " | " + q
 					, "%s\n\nDificuldade: %s (Sucesso: %s%%) | Duração: %s".formatted(
 							q.getDescription(),
 							BountyDifficulty.valueOf(10 - 10 * modDiff),
-							info.diff() == 0 ? "100" : Helper.roundToString(100 * modDiff, 1),
-							Helper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
+							info.diff() == 0 ? "100" : MathHelper.roundToString(100 * modDiff, 1),
+							StringHelper.toStringDuration(TimeUnit.MILLISECONDS.convert(info.time(), TimeUnit.MINUTES))
 					), false
 			);
 		}

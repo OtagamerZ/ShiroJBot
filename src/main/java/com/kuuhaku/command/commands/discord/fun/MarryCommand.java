@@ -21,11 +21,10 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -55,7 +54,7 @@ public class MarryCommand implements Executable {
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(I18n.getString("err_cannot-marry-yourself")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
+			} else if (message.getMentionedUsers().get(0) == Main.getSelfUser() && !author.getId().equals(ShiroInfo.NIICHAN)) {
 				channel.sendMessage(I18n.getString("err_cannot-marry-shiro")).queue();
 				return;
 			} else if (WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
@@ -78,9 +77,9 @@ public class MarryCommand implements Executable {
 					""".formatted(message.getMentionedUsers().get(0).getAsMention(), author.getAsMention())
 			).queue();
 
-			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
+			Main.getEvents().addHandler(guild, new SimpleMessageListener(channel) {
 				private final Consumer<Void> success = s -> close();
-				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null), Helper::doNothing);
+				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null), MiscHelper::doNothing);
 
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
@@ -99,6 +98,7 @@ public class MarryCommand implements Executable {
 						switch (msg.getContentRaw().toLowerCase(Locale.ROOT)) {
 							case "sim" -> {
 								channel.sendMessage("Eu os declaro husbando e waifu!").queue();
+
 								WaifuDAO.saveCouple(author, message.getMentionedUsers().get(0));
 								success.accept(null);
 								timeout.cancel(true);

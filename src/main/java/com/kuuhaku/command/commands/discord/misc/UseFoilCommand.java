@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
 import net.dv8tion.jda.api.entities.*;
@@ -34,7 +33,7 @@ public class UseFoilCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 
 		if (acc.isUsingFoil()) {
 			acc.setUseFoil(false);
@@ -44,6 +43,6 @@ public class UseFoilCommand implements Executable {
 			channel.sendMessage("✅ | Suas cartas terão a aparência cromada no Shoukan (apenas animes com cromadas completas)!").queue();
 		}
 
-		AccountDAO.saveAccount(acc);
+		acc.save();
 	}
 }

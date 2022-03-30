@@ -50,8 +50,9 @@ import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.model.records.TournamentMatch;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.*;
+import com.kuuhaku.utils.json.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -89,7 +90,7 @@ public class Shoukan extends GlobalGame {
 	private final Rules rules;
 	private final SimpleMessageListener listener;
 	private final Map<String, Message> message = new HashMap<>();
-	private final List<Champion> fusions = CardDAO.getFusions();
+	private final List<Champion> fusions = Champion.getChampions(true);
 	private final boolean team;
 	private final boolean record;
 	private final Map<Side, EnumSet<Achievement>> achievements = new HashMap<>();
@@ -131,7 +132,7 @@ public class Shoukan extends GlobalGame {
 
 		if (team) {
 			List<Deck> kps = daily ?
-					Collections.nCopies(4, Helper.getDailyDeck()) :
+					Collections.nCopies(4, MiscHelper.getDailyDeck()) :
 					List.of(
 							KawaiponDAO.getDeck(players[2].getId()),
 							KawaiponDAO.getDeck(players[0].getId()),
@@ -144,8 +145,8 @@ public class Shoukan extends GlobalGame {
 					Side.BOTTOM, new TeamHand(this, List.of(players[3], players[1]), kps.subList(2, 4), Side.BOTTOM)
 			);
 		} else {
-			Deck p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getDeck(players[0].getId());
-			Deck p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getDeck(players[1].getId());
+			Deck p1 = daily ? MiscHelper.getDailyDeck() : KawaiponDAO.getDeck(players[0].getId());
+			Deck p2 = daily ? MiscHelper.getDailyDeck() : KawaiponDAO.getDeck(players[1].getId());
 
 			this.hands = Map.of(
 					Side.TOP, new Hand(this, players[0], p1, Side.TOP),
@@ -166,15 +167,14 @@ public class Shoukan extends GlobalGame {
 			));
 		} else {
 			if (rules.arcade() == ArcadeMode.BLACKROCK) {
-				Field f = CardDAO.getField(switch (Helper.rng(5)) {
-					case 0 -> "THE_SKY_GATES";
-					case 1 -> "THE_CUBE";
-					case 2 -> "GREY_AREA";
-					case 3 -> "BLACK_ROCK_BATTLEFIELD";
-					case 4 -> "CHARIOTS_LAND";
-					case 5 -> "DEAD_MASTERS_LAIR";
-					default -> throw new IllegalStateException("Unexpected value: " + Helper.rng(5));
-				});
+				Field f = Field.getField(CollectionHelper.getRandomEntry(
+						"THE_SKY_GATES",
+						"THE_CUBE",
+						"GREY_AREA",
+						"BLACK_ROCK_BATTLEFIELD",
+						"CHARIOTS_LAND",
+						"DEAD_MASTERS_LAIR"
+				));
 				assert f != null;
 				arena.setField(f);
 			}
@@ -185,9 +185,9 @@ public class Shoukan extends GlobalGame {
 					CardType type = CardDAO.identifyType(id);
 
 					Drawable d = switch (type) {
-						case SENSHI -> CardDAO.getChampion(id);
-						case EVOGEAR -> CardDAO.getEquipment(id);
-						case FIELD -> CardDAO.getField(id);
+						case SENSHI -> Champion.getChampion(id);
+						case EVOGEAR -> Evogear.getEvogear(id);
+						case FIELD -> Field.getField(id);
 						default -> null;
 					};
 					if (d == null) continue;
@@ -222,10 +222,10 @@ public class Shoukan extends GlobalGame {
 					}
 
 					close();
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+					channel.sendFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return msg;
 									})
 							);
@@ -254,10 +254,10 @@ public class Shoukan extends GlobalGame {
 					}
 
 					close();
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+					channel.sendFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return msg;
 									})
 							);
@@ -278,16 +278,16 @@ public class Shoukan extends GlobalGame {
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
-				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+				.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message.put(s.getChannel().getId(), s);
 					if (!s.getGuild().getId().equals(previous.get())) {
 						previous.set(s.getGuild().getId());
-						ShiroInfo.getShiroEvents().addHandler(s.getGuild(), listener);
+						Main.getEvents().addHandler(s.getGuild(), listener);
 						Main.getInfo().setGameInProgress(listener.mutex, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
 						Main.getInfo().getGameSlot().put(s.getChannel().getId(), listener.mutex);
 					}
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					if (!shownHand.get()) {
 						shownHand.set(true);
 						h.showHand();
@@ -321,10 +321,10 @@ public class Shoukan extends GlobalGame {
 		/* CHECK COST */
 		{
 			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
-				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			} else if (card.getBlood() > 0 && hand.getHp() <= card.getBlood()) {
-				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 		}
@@ -333,17 +333,17 @@ public class Shoukan extends GlobalGame {
 		/* CHECK ARGUMENTS */
 		{
 			if (index == -1) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 		}
 
 		SlotColumn slot = getSlot(getCurrentSide(), index);
 		if (slot.getTop() != null) {
-			channel.sendMessage("❌ | Já existe um campeão nessa casa.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Já existe um campeão nessa casa.").queue(null, MiscHelper::doNothing);
 			return null;
 		} else if (slot.isUnavailable()) {
-			channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, MiscHelper::doNothing);
 			return null;
 		}
 
@@ -377,28 +377,28 @@ public class Shoukan extends GlobalGame {
 		};
 	}
 
-	public String summonCard(Equipment card, Integer[] targets) {
+	public String summonCard(Evogear card, Integer[] targets) {
 		Hand hand = hands.get(getCurrentSide());
 		Arguments type = card.getArgType();
-		int dest = Helper.getOr(targets[0], 0) - 1;
-		int pos = Helper.getOr(targets[1], 0) - 1;
+		int dest = CollectionHelper.getOr(targets[0], 0) - 1;
+		int pos = CollectionHelper.getOr(targets[1], 0) - 1;
 
 		/* CHECK COST */
 		{
 			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
-				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			} else if (card.getBlood() > 0 && hand.getHp() <= card.getBlood()) {
-				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 		}
 
-		Equipment copy = card.copy();
+		Evogear copy = card.copy();
 		/* CHECK ARGUMENTS */
 		{
 			if (dest == -1) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 		}
@@ -408,13 +408,13 @@ public class Shoukan extends GlobalGame {
 
 		if (type == Arguments.ENEMY) {
 			if (pos == -1) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para equipar este evogear.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para equipar este evogear.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 
 			Champion t = getSlot(getNextSide(), pos).getTop();
 			if (t == null) {
-				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 
@@ -422,13 +422,13 @@ public class Shoukan extends GlobalGame {
 			slot = getSlot(getNextSide(), dest);
 		} else {
 			if (pos == -1) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para equipar este evogear.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 
 			Champion t = getSlot(getCurrentSide(), pos).getTop();
 			if (t == null) {
-				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Não existe um campeão nessa casa.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 
@@ -437,10 +437,10 @@ public class Shoukan extends GlobalGame {
 		}
 
 		if (slot.getBottom() != null) {
-			channel.sendMessage("❌ | Já existe um evogear nessa casa.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Já existe um evogear nessa casa.").queue(null, MiscHelper::doNothing);
 			return null;
 		} else if (slot.isUnavailable()) {
-			channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Essa casa está indisponível.").queue(null, MiscHelper::doNothing);
 			return null;
 		}
 
@@ -464,8 +464,8 @@ public class Shoukan extends GlobalGame {
 		}
 
 		if (!copy.getCharms().isEmpty()) {
-			if (Helper.containsAny(copy.getCharms(), TIMEWARP, DOUBLETAP)) {
-				int uses = (int) Helper.getFibonacci(copy.getTier());
+			if (LogicHelper.containsAny(copy.getCharms(), TIMEWARP, DOUBLETAP)) {
+				int uses = (int) MathHelper.getFibonacci(copy.getTier());
 
 				activations:
 				for (Charm charm : copy.getCharms()) {
@@ -516,28 +516,28 @@ public class Shoukan extends GlobalGame {
 		);
 	}
 
-	public String castSpell(Equipment card, Integer[] targets) {
+	public String castSpell(Evogear card, Integer[] targets) {
 		Hand hand = hands.get(getCurrentSide());
 		Arguments type = card.getArgType();
-		int pos1 = Helper.getOr(targets[0], 0) - 1;
-		int pos2 = Helper.getOr(targets[1], 0) - 1;
+		int pos1 = CollectionHelper.getOr(targets[0], 0) - 1;
+		int pos2 = CollectionHelper.getOr(targets[1], 0) - 1;
 
 		/* CHECK COST */
 		{
 			if (!hand.isNullMode() && (hand.getMana() < card.getMana())) {
-				channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			} else if (card.getBlood() > 0 && hand.getHp() <= card.getBlood()) {
-				channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não tem HP suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou escolha outra carta.").queue(null, MiscHelper::doNothing);
 				return null;
 			}
 		}
 
-		Equipment copy = card.copy();
+		Evogear copy = card.copy();
 		/* CHECK ARGUMENTS */
 		{
 			if (spellLock > 0) {
-				channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Magias estão bloqueadas por mais " + spellLock + (spellLock == 1 ? " turno." : " turnos.")).queue(null, MiscHelper::doNothing);
 				return null;
 			} else if (targets.length < type.getArgCount()) {
 				channel.sendMessage(
@@ -547,7 +547,7 @@ public class Shoukan extends GlobalGame {
 							case BOTH -> "❌ | Esta magia requer um alvo aliado e um inimigo.";
 							default -> "";
 						}
-				).queue(null, Helper::doNothing);
+				).queue(null, MiscHelper::doNothing);
 				return null;
 			}
 		}
@@ -558,13 +558,13 @@ public class Shoukan extends GlobalGame {
 		switch (type) {
 			case ALLY, ALLY_SLOT -> {
 				if (pos1 == -1) {
-					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado para usar esta magia.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado para usar esta magia.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
 				Champion target = getSlot(getCurrentSide(), pos1).getTop();
 				if (target == null && type != Arguments.ALLY_SLOT) {
-					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
@@ -572,13 +572,13 @@ public class Shoukan extends GlobalGame {
 			}
 			case ENEMY, ENEMY_SLOT -> {
 				if (pos1 == -1) {
-					channel.sendMessage("❌ | Índice inválido, escolha um campeão inimigo para usar esta magia.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Índice inválido, escolha um campeão inimigo para usar esta magia.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
 				Champion target = getSlot(getNextSide(), pos1).getTop();
 				if (target == null && type != Arguments.ENEMY_SLOT) {
-					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
@@ -586,13 +586,13 @@ public class Shoukan extends GlobalGame {
 			}
 			case BOTH, BOTH_SLOT -> {
 				if (pos1 == -1 || pos2 == -1) {
-					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado e um inimigo para usar esta magia.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Índice inválido, escolha um campeão aliado e um inimigo para usar esta magia.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
 				Champion target = getSlot(getCurrentSide(), pos1).getTop();
 				if (target == null && type != Arguments.BOTH_SLOT) {
-					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não existe um campeão no alvo aliado.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
@@ -600,7 +600,7 @@ public class Shoukan extends GlobalGame {
 
 				target = getSlot(getNextSide(), pos2).getTop();
 				if (target == null) {
-					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não existe um campeão no alvo inimigo.").queue(null, MiscHelper::doNothing);
 					return null;
 				}
 
@@ -683,24 +683,24 @@ public class Shoukan extends GlobalGame {
 		try {
 			index = Integer.parseInt(args[0]) - 1;
 		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser um valor inteiro que represente uma carta na sua mão.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser um valor inteiro que represente uma carta na sua mão.").queue(null, MiscHelper::doNothing);
 			return;
 		}
 
 		if (phase == Phase.PLAN) {
 			if (args.length == 1) {
-				if (!Helper.between(index, 0, 5)) {
-					channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
+				if (!MathHelper.between(index, 0, 5)) {
+					channel.sendMessage("❌ | Índice inválido.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
 				Champion c = getSlot(getCurrentSide(), index).getTop();
 
 				if (c == null) {
-					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, MiscHelper::doNothing);
 					return;
 				} else if (isSlotChanged(getCurrentSide(), index)) {
-					channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -712,7 +712,7 @@ public class Shoukan extends GlobalGame {
 				};
 
 				if (stt != null) {
-					channel.sendMessage(stt).queue(null, Helper::doNothing);
+					channel.sendMessage(stt).queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -732,12 +732,12 @@ public class Shoukan extends GlobalGame {
 				setSlotChanged(getCurrentSide(), index, true);
 				reportEvent(h, msg, true, false);
 			} else {
-				Drawable d = Helper.safeGet(h.getCards(), index);
+				Drawable d = CollectionHelper.safeGet(h.getCards(), index);
 				if (d == null) {
-					channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, MiscHelper::doNothing);
 					return;
 				} else if (!d.isAvailable()) {
-					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -752,26 +752,26 @@ public class Shoukan extends GlobalGame {
 				}
 
 				String msg = null;
-				if (d instanceof Equipment e) {
+				if (d instanceof Evogear e) {
 					boolean cast = args[1].equalsIgnoreCase("s");
 
 					if (e.isSpell() && !cast) {
-						channel.sendMessage("❌ | O segundo argumento deve ser `S` para usar magias.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | O segundo argumento deve ser `S` para usar magias.").queue(null, MiscHelper::doNothing);
 						return;
 					} else if (!e.isSpell() && cast) {
-						channel.sendMessage("❌ | O segundo argumento não deve ser `S` para usar equipamentos.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | O segundo argumento não deve ser `S` para usar equipamentos.").queue(null, MiscHelper::doNothing);
 						return;
 					}
 
 					if (cast) {
 						msg = castSpell(e, new Integer[]{
-								Helper.castGet(args, 2, Integer::parseInt),
-								Helper.castGet(args, 3, Integer::parseInt)
+								CollectionHelper.castGet(args, 2, Integer::parseInt),
+								CollectionHelper.castGet(args, 3, Integer::parseInt)
 						});
 					} else {
 						msg = summonCard(e, new Integer[]{
-								Helper.castGet(args, 1, Integer::parseInt),
-								Helper.castGet(args, 2, Integer::parseInt)
+								CollectionHelper.castGet(args, 1, Integer::parseInt),
+								CollectionHelper.castGet(args, 2, Integer::parseInt)
 						});
 					}
 				} else if (d instanceof Champion c) {
@@ -783,15 +783,15 @@ public class Shoukan extends GlobalGame {
 					};
 
 					if (mode == Mode.NONE) {
-						channel.sendMessage("❌ | O segundo argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | O segundo argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, MiscHelper::doNothing);
 						return;
 					}
 
-					msg = summonCard(c, mode, Helper.getOr(Helper.castGet(args, 2, Integer::parseInt), -1));
+					msg = summonCard(c, mode, CollectionHelper.getOr(CollectionHelper.castGet(args, 2, Integer::parseInt), -1));
 				} else if (d instanceof Field f) {
 					Field copy = f.copy();
 					if (!args[1].equalsIgnoreCase("f")) {
-						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, MiscHelper::doNothing);
 						return;
 					}
 
@@ -806,18 +806,18 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 		} else {
-			int target = Helper.getOr(Helper.castGet(args, 1, Integer::parseInt), 0) - 1;
-			if (!Helper.between(index, 0, 5)) {
-				channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
+			int target = CollectionHelper.getOr(CollectionHelper.castGet(args, 1, Integer::parseInt), 0) - 1;
+			if (!MathHelper.between(index, 0, 5)) {
+				channel.sendMessage("❌ | Índice inválido.").queue(null, MiscHelper::doNothing);
 				return;
-			} else if (args.length > 1 && !Helper.between(target, 0, 5)) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma carta para ser atacada.").queue(null, Helper::doNothing);
+			} else if (args.length > 1 && !MathHelper.between(target, 0, 5)) {
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta para ser atacada.").queue(null, MiscHelper::doNothing);
 				return;
 			}
 
 			Champion ally = getSlot(getCurrentSide(), index).getTop();
 			if (ally == null) {
-				channel.sendMessage("❌ | Não existe um aliado nessa casa.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Não existe um aliado nessa casa.").queue(null, MiscHelper::doNothing);
 				return;
 			}
 
@@ -832,13 +832,13 @@ public class Shoukan extends GlobalGame {
 			};
 
 			if (stt != null) {
-				channel.sendMessage(stt).queue(null, Helper::doNothing);
+				channel.sendMessage(stt).queue(null, MiscHelper::doNothing);
 				return;
 			}
 
 			if (target == -1) {
 				if (arena.getSlots().get(getNextSide()).parallelStream().anyMatch(s -> s.getTop() != null)) {
-					channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -883,7 +883,7 @@ public class Shoukan extends GlobalGame {
 			} else {
 				Champion enemy = getSlot(getNextSide(), target).getTop();
 				if (enemy == null) {
-					channel.sendMessage("❌ | Não existe um inimigo nessa casa.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não existe um inimigo nessa casa.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -908,9 +908,9 @@ public class Shoukan extends GlobalGame {
 					c.setHero(hd.getHero());
 
 					if (hd.getHero().getPerks().contains(Perk.TABULA_RASA)) {
-						Iterator<Equipment> it = hd.getHero().getInventory().iterator();
+						Iterator<Evogear> it = hd.getHero().getInventory().iterator();
 						while (it.hasNext()) {
-							Equipment e = it.next();
+							Evogear e = it.next();
 							SlotColumn sc = getFirstAvailableSlot(s, false);
 							if (sc == null) break;
 
@@ -936,13 +936,13 @@ public class Shoukan extends GlobalGame {
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
 		channel.sendMessage(msg)
-				.addFile(Helper.writeAndGet(bi, String.valueOf(this.hashCode()), "jpg"))
+				.addFile(ImageHelper.writeAndGet(bi, String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message.compute(s.getChannel().getId(), (id, m) -> {
-						if (m != null) m.delete().queue(null, Helper::doNothing);
+						if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 						return s;
 					});
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					moveLock = false;
 					if (!shownHand.get() && h != null) {
 						shownHand.set(true);
@@ -958,7 +958,7 @@ public class Shoukan extends GlobalGame {
 
 		if (record) {
 			try {
-				getFrames().add(Helper.compress(Helper.atob(getArena().addHands(bi, hands.values()), "jpg")));
+				getFrames().add(FileHelper.compress(ImageHelper.atob(getArena().addHands(bi, hands.values()), "jpg")));
 			} catch (IOException ignore) {
 			}
 		}
@@ -1042,8 +1042,8 @@ public class Shoukan extends GlobalGame {
 
 		int dodge = defr.getDodge(false);
 		int block = defr.getBlock(false);
-		boolean dodged = dodge >= 100 || (dodge > 0 && Helper.chance(dodge));
-		boolean blocked = block >= 100 || (block > 0 && Helper.chance(block));
+		boolean dodged = dodge >= 100 || (dodge > 0 && MathHelper.chance(dodge));
+		boolean blocked = block >= 100 || (block > 0 && MathHelper.chance(block));
 
 		atkr.resetAttribs();
 		defr.resetAttribs();
@@ -1061,7 +1061,7 @@ public class Shoukan extends GlobalGame {
 				if (applyEffect(ON_MISS, atkr, source.side(), source.index(), source, target)) return;
 				if (applyEffect(ON_DODGE, defr, target.side(), target.index(), source, target)) return;
 
-				reportEvent(null, defr.getName() + " esquivou do ataque de " + atkr.getName() + "! (" + Helper.roundToString(dodge, 1) + "%)", true, false);
+				reportEvent(null, defr.getName() + " esquivou do ataque de " + atkr.getName() + "! (" + MathHelper.roundToString(dodge, 1) + "%)", true, false);
 				break proc;
 			}
 
@@ -1406,7 +1406,7 @@ public class Shoukan extends GlobalGame {
 				c.getBonus().setDodge(index, 0);
 			}
 
-			Equipment e = slt.getBottom();
+			Evogear e = slt.getBottom();
 			if (e != null) {
 				CardLink cl = e.getLinkedTo();
 				if (cl != null && cl.getIndex() == index) {
@@ -1434,11 +1434,11 @@ public class Shoukan extends GlobalGame {
 
 				chance -= target.getDodge(false) * 0.75;
 				if (sourceMana < targetMana)
-					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+					chance -= 25 - MathHelper.clamp(sourceMana * 25 / targetMana, 0, 25);
 			}
 		}
 
-		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+		if (chance >= 100 || (chance > 0 && MathHelper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
 			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
@@ -1446,7 +1446,7 @@ public class Shoukan extends GlobalGame {
 
 			List<CardLink> aux = List.copyOf(target.getLinkedTo());
 			for (CardLink cl : aux) {
-				Equipment e = cl.asEquipment();
+				Evogear e = cl.asEquipment();
 
 				if (e.getCharms().contains(MIRROR) && activator != null) {
 					destroyCard(caster, source, side, index);
@@ -1454,7 +1454,7 @@ public class Shoukan extends GlobalGame {
 
 				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
-					if (uses >= Helper.getFibonacci(e.getTier())) {
+					if (uses >= MathHelper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
 						e.getBonus().putProp("uses", uses);
@@ -1474,7 +1474,7 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDodge(index, 0);
 				}
 
-				Equipment e = slt.getBottom();
+				Evogear e = slt.getBottom();
 				if (e != null) {
 					CardLink cl = e.getLinkedTo();
 					if (cl != null && cl.getIndex() == index) {
@@ -1487,7 +1487,7 @@ public class Shoukan extends GlobalGame {
 			if (target.canGoToGrave())
 				arena.getGraveyard().get(side).add(target);
 		} else {
-			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + MathHelper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1511,11 +1511,11 @@ public class Shoukan extends GlobalGame {
 
 				chance -= target.getDodge(false) * 0.75;
 				if (sourceMana < targetMana)
-					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+					chance -= 25 - MathHelper.clamp(sourceMana * 25 / targetMana, 0, 25);
 			}
 		}
 
-		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+		if (chance >= 100 || (chance > 0 && MathHelper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
 			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
@@ -1523,7 +1523,7 @@ public class Shoukan extends GlobalGame {
 
 			List<CardLink> aux = List.copyOf(target.getLinkedTo());
 			for (CardLink cl : aux) {
-				Equipment e = cl.asEquipment();
+				Evogear e = cl.asEquipment();
 
 				if (e.getCharms().contains(MIRROR) && activator != null) {
 					convertCard(caster, source, side, index);
@@ -1531,7 +1531,7 @@ public class Shoukan extends GlobalGame {
 
 				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
-					if (uses >= Helper.getFibonacci(e.getTier())) {
+					if (uses >= MathHelper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
 						e.getBonus().putProp("uses", uses);
@@ -1551,7 +1551,7 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDodge(index, 0);
 				}
 
-				Equipment e = slt.getBottom();
+				Evogear e = slt.getBottom();
 				if (e != null) {
 					CardLink cl = e.getLinkedTo();
 					if (cl != null && cl.getIndex() == index) {
@@ -1569,7 +1569,7 @@ public class Shoukan extends GlobalGame {
 				sc.setTop(target);
 			}
 		} else {
-			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + MathHelper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1590,9 +1590,9 @@ public class Shoukan extends GlobalGame {
 
 		chance -= target.getDodge(false) * 0.75;
 		if (sourceMana < targetMana)
-			chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+			chance -= 25 - MathHelper.clamp(sourceMana * 25 / targetMana, 0, 25);
 
-		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+		if (chance >= 100 || (chance > 0 && MathHelper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
 			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
@@ -1600,11 +1600,11 @@ public class Shoukan extends GlobalGame {
 
 			List<CardLink> aux = List.copyOf(target.getLinkedTo());
 			for (CardLink cl : aux) {
-				Equipment e = cl.asEquipment();
+				Evogear e = cl.asEquipment();
 
 				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
-					if (uses >= Helper.getFibonacci(e.getTier())) {
+					if (uses >= MathHelper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
 						e.getBonus().putProp("uses", uses);
@@ -1624,7 +1624,7 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDodge(index, 0);
 				}
 
-				Equipment e = slt.getBottom();
+				Evogear e = slt.getBottom();
 				if (e != null) {
 					CardLink cl = e.getLinkedTo();
 					if (cl != null && cl.getIndex() == index) {
@@ -1640,11 +1640,11 @@ public class Shoukan extends GlobalGame {
 
 			aux = List.copyOf(target.getLinkedTo());
 			for (CardLink cl : aux) {
-				Equipment e = cl.asEquipment();
+				Evogear e = cl.asEquipment();
 
 				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
-					if (uses >= Helper.getFibonacci(e.getTier())) {
+					if (uses >= MathHelper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
 						e.getBonus().putProp("uses", uses);
@@ -1664,7 +1664,7 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDodge(source, 0);
 				}
 
-				Equipment e = slt.getBottom();
+				Evogear e = slt.getBottom();
 				if (e != null) {
 					CardLink cl = e.getLinkedTo();
 					if (cl != null && cl.getIndex() == index) {
@@ -1676,7 +1676,7 @@ public class Shoukan extends GlobalGame {
 			getSlot(side, index).setTop(activator);
 			getSlot(caster, source).setTop(target);
 		} else {
-			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + MathHelper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1694,11 +1694,11 @@ public class Shoukan extends GlobalGame {
 
 				chance -= target.getDodge(false) * 0.75;
 				if (sourceMana < targetMana)
-					chance -= 25 - Helper.clamp(sourceMana * 25 / targetMana, 0, 25);
+					chance -= 25 - MathHelper.clamp(sourceMana * 25 / targetMana, 0, 25);
 			}
 		}
 
-		if (chance >= 100 || (chance > 0 && Helper.chance(chance))) {
+		if (chance >= 100 || (chance > 0 && MathHelper.chance(chance))) {
 			Charm charm = target.getBonus().getCharm();
 			if (charm == SHIELD || (target.getHero() != null && target.getHero().getPerks().contains(Perk.MINDSHIELD))) {
 				return;
@@ -1706,7 +1706,7 @@ public class Shoukan extends GlobalGame {
 
 			List<CardLink> aux = List.copyOf(target.getLinkedTo());
 			for (CardLink cl : aux) {
-				Equipment e = cl.asEquipment();
+				Evogear e = cl.asEquipment();
 
 				if (e.getCharms().contains(MIRROR) && activator != null) {
 					captureCard(caster, source, side, index, withFusion);
@@ -1714,7 +1714,7 @@ public class Shoukan extends GlobalGame {
 
 				if (e.getCharms().contains(SHIELD)) {
 					int uses = e.getBonus().getSpecialData().getInt("uses") + 1;
-					if (uses >= Helper.getFibonacci(e.getTier())) {
+					if (uses >= MathHelper.getFibonacci(e.getTier())) {
 						unequipCard(side, e.getIndex());
 					} else {
 						e.getBonus().putProp("uses", uses);
@@ -1734,7 +1734,7 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDodge(index, 0);
 				}
 
-				Equipment e = slt.getBottom();
+				Evogear e = slt.getBottom();
 				if (e != null) {
 					CardLink cl = e.getLinkedTo();
 					if (cl != null && cl.getIndex() == index) {
@@ -1748,7 +1748,7 @@ public class Shoukan extends GlobalGame {
 			if (!target.isFusion() || withFusion)
 				hands.get(side.getOther()).getCards().add(target);
 		} else {
-			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + Helper.roundToString(chance, 1) + "%)").queue();
+			channel.sendMessage("Efeito de " + activator.getName() + " errou. (" + MathHelper.roundToString(chance, 1) + "%)").queue();
 		}
 	}
 
@@ -1759,7 +1759,7 @@ public class Shoukan extends GlobalGame {
 	public void banCard(Side side, int index, boolean equipment) {
 		List<SlotColumn> slts = getArena().getSlots().get(side);
 		if (equipment) {
-			Equipment target = slts.get(index).getBottom();
+			Evogear target = slts.get(index).getBottom();
 			if (target == null) return;
 
 			CardLink link = target.getLinkedTo();
@@ -1782,7 +1782,7 @@ public class Shoukan extends GlobalGame {
 					c.getBonus().setDodge(index, 0);
 				}
 
-				Equipment e = slt.getBottom();
+				Evogear e = slt.getBottom();
 				if (e != null) {
 					CardLink cl = e.getLinkedTo();
 					if (cl != null && cl.getIndex() == index) {
@@ -1798,7 +1798,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public void unequipCard(Side side, int index) {
-		Equipment target = getSlot(side, index).getBottom();
+		Evogear target = getSlot(side, index).getBottom();
 		if (target == null) return;
 
 		if (target.getLinkedTo() != null) {
@@ -1911,10 +1911,10 @@ public class Shoukan extends GlobalGame {
 
 				close();
 				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+						.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 						.queue(ms ->
 								this.message.compute(ms.getChannel().getId(), (id, m) -> {
-									if (m != null) m.delete().queue(null, Helper::doNothing);
+									if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 									return ms;
 								})
 						);
@@ -1932,25 +1932,25 @@ public class Shoukan extends GlobalGame {
 
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		if (getRound() < 1 || phase == Phase.COMBAT)
-			buttons.put(Helper.parseEmoji("▶️"), skip);
+			buttons.put(StringHelper.parseEmoji("▶️"), skip);
 		else {
-			buttons.put(Helper.parseEmoji("▶️"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("▶️"), wrapper -> {
 				phase = Phase.COMBAT;
 				draw = false;
 				reroll = false;
 				applyEffect(COMBAT_STAGE, (Champion) null, getCurrentSide(), -1);
 				reportEvent(null, "**FASE DE COMBATE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
-			buttons.put(Helper.parseEmoji("⏩"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("⏩"), wrapper -> {
 				draw = false;
 				reroll = false;
 				skip.accept(wrapper);
 			});
 		}
 		if (phase == Phase.PLAN) {
-			buttons.put(Helper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -1958,7 +1958,7 @@ public class Shoukan extends GlobalGame {
 
 				int remaining = h.getMaxCards() - h.getCardCount();
 				if (remaining <= 0) {
-					channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -1986,10 +1986,10 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return mm;
 									})
 							);
@@ -2000,9 +2000,9 @@ public class Shoukan extends GlobalGame {
 				remaining = h.getMaxCards() - h.getCardCount();
 				reportEvent(h, getCurrent().getName() + " puxou uma carta. (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")", true, false);
 			});
-			buttons.put(Helper.parseEmoji("\uD83D\uDCE6"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83D\uDCE6"), wrapper -> {
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -2010,7 +2010,7 @@ public class Shoukan extends GlobalGame {
 
 				int remaining = h.getMaxCards() - h.getCardCount();
 				if (remaining <= 0) {
-					channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver " + h.getMaxCards() + " ou mais na sua mão.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -2039,10 +2039,10 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return mm;
 									})
 							);
@@ -2060,15 +2060,15 @@ public class Shoukan extends GlobalGame {
 					reportEvent(h, getCurrent().getName() + " puxou " + toDraw + " cartas.", true, false);
 			});
 			if (combos.get(getCurrentSide()).getLeft() == Race.SPIRIT && synthCd[getCurrentSide() == Side.TOP ? 1 : 0] == 0) {
-				buttons.put(Helper.parseEmoji("\uD83C\uDF00"), wrapper -> {
+				buttons.put(StringHelper.parseEmoji("\uD83C\uDF00"), wrapper -> {
 					if (phase != Phase.PLAN) {
-						channel.sendMessage("❌ | Você só pode sintetizar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | Você só pode sintetizar cartas na fase de planejamento.").queue(null, MiscHelper::doNothing);
 						return;
 					}
 
 					List<Drawable> grv = arena.getGraveyard().get(getCurrentSide());
 					if (grv.size() < 3) {
-						channel.sendMessage("❌ | Você não possui almas suficiente para sintetizar.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | Você não possui almas suficiente para sintetizar.").queue(null, MiscHelper::doNothing);
 						return;
 					}
 					grv = grv.subList(0, 3);
@@ -2078,7 +2078,7 @@ public class Shoukan extends GlobalGame {
 					int score = grv.stream()
 							.mapToInt(c -> switch (c.getCard().getRarity()) {
 										case FIELD -> 5;
-										case EQUIPMENT -> ((Equipment) c).getTier();
+										case EQUIPMENT -> ((Evogear) c).getTier();
 										case COMMON, UNCOMMON, RARE, ULTRA_RARE, LEGENDARY -> c.getCard().getRarity().getIndex();
 										default -> 0;
 									}
@@ -2092,10 +2092,10 @@ public class Shoukan extends GlobalGame {
 					double t1 = Math.max(0, base - t4 * 10);
 					double t2 = Math.max(0, 0.85 - Math.abs(0.105 - t1 / 3) * 5 - t3);
 
-					List<Equipment> pool = CardDAO.getAllAvailableEquipments();
+					List<Evogear> pool = Evogear.getEvogears(false);
 
-					List<Equipment> chosenTier = Helper.getRandom(pool.stream()
-							.collect(Collectors.groupingBy(Equipment::getTier))
+					List<Evogear> chosenTier = MathHelper.getRandom(pool.stream()
+							.collect(Collectors.groupingBy(Evogear::getTier))
 							.entrySet()
 							.stream()
 							.map(e -> org.apache.commons.math3.util.Pair.create(e.getValue(), switch (e.getKey()) {
@@ -2108,7 +2108,7 @@ public class Shoukan extends GlobalGame {
 							).toList()
 					);
 
-					h.getCards().add(Helper.getRandomEntry(chosenTier));
+					h.getCards().add(CollectionHelper.getRandomEntry(chosenTier));
 
 					arena.getBanned().addAll(grv);
 					grv.clear();
@@ -2116,28 +2116,28 @@ public class Shoukan extends GlobalGame {
 					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
-			buttons.put(Helper.parseEmoji("\uD83D\uDD0D"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83D\uDD0D"), wrapper -> {
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode inspecionar o campo na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode inspecionar o campo na fase de planejamento.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
 				List<SlotColumn> slts = arena.getSlots().get(getCurrentSide());
 				if (slts.stream().map(slt -> Arrays.asList(slt.getTop(), slt.getBottom())).flatMap(List::stream).noneMatch(Objects::nonNull)) {
-					channel.sendMessage("❌ | Não há nenhuma carta no seu campo.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Não há nenhuma carta no seu campo.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
 				wrapper.getHook()
 						.setEphemeral(true)
-						.sendFile(Helper.writeAndGet(arena.renderSide(getCurrentSide()), String.valueOf(this.hashCode()), "png"))
+						.sendFile(ImageHelper.writeAndGet(arena.renderSide(getCurrentSide()), String.valueOf(this.hashCode()), "png"))
 						.queue();
 			});
 		}
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
-			buttons.put(Helper.parseEmoji("\uD83D\uDD04"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83D\uDD04"), wrapper -> {
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -2148,9 +2148,9 @@ public class Shoukan extends GlobalGame {
 				reportEvent(h, getCurrent().getName() + " rolou novamente as cartas na mão!", true, false);
 			});
 		if (hands.get(getCurrentSide()).getHp() < hands.get(getCurrentSide()).getBaseHp() / 3f && hands.get(getCurrentSide()).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
-			buttons.put(Helper.parseEmoji("\uD83E\uDDE7"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83E\uDDE7"), wrapper -> {
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -2160,9 +2160,9 @@ public class Shoukan extends GlobalGame {
 				reportEvent(h, getCurrent().getName() + " executou um saque do destino!", true, false);
 			});
 		if (phase == Phase.PLAN && tourMatch == null)
-			buttons.put(Helper.parseEmoji("\uD83E\uDD1D"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83E\uDD1D"), wrapper -> {
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode pedir empate na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode pedir empate na fase de planejamento.").queue(null, MiscHelper::doNothing);
 					return;
 				}
 
@@ -2181,10 +2181,10 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return mm;
 									})
 							);
@@ -2211,7 +2211,7 @@ public class Shoukan extends GlobalGame {
 							h.get().getDiscardBatch().stream()
 									.filter(d -> {
 										if (d instanceof Champion c) return c.canGoToGrave();
-										else if (d instanceof Equipment e) return e.canGoToGrave();
+										else if (d instanceof Evogear e) return e.canGoToGrave();
 										else return true;
 									}).toList()
 					);
@@ -2232,7 +2232,7 @@ public class Shoukan extends GlobalGame {
 					slots = arena.getSlots().get(getCurrentSide());
 
 					if (getRound() >= 75) {
-						if (Helper.equalsAny(getRound(), 75, 100, 125)) {
+						if (LogicHelper.equalsAny(getRound(), 75, 100, 125)) {
 							if (getRound() == 75) {
 								channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
 							} else if (getRound() == 100) {
@@ -2242,7 +2242,7 @@ public class Shoukan extends GlobalGame {
 							}
 						}
 
-						if (Helper.between(getRound(), 75, 126)) {
+						if (MathHelper.between(getRound(), 75, 126)) {
 							h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
 							if (postCombat()) return;
 						} else {
@@ -2261,10 +2261,10 @@ public class Shoukan extends GlobalGame {
 
 							close();
 							channel.sendMessage(msg)
-									.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+									.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 									.queue(mm ->
 											this.message.compute(mm.getChannel().getId(), (id, m) -> {
-												if (m != null) m.delete().queue(null, Helper::doNothing);
+												if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 												return mm;
 											})
 									);
@@ -2312,7 +2312,7 @@ public class Shoukan extends GlobalGame {
 					for (int i = 0; i < slots.size(); i++) {
 						SlotColumn sc = slots.get(i);
 
-						Equipment e = sc.getBottom();
+						Evogear e = sc.getBottom();
 						if (e != null) {
 							if (e.getLinkedTo() == null) {
 								unequipCard(getCurrentSide(), e.getIndex());
@@ -2351,7 +2351,7 @@ public class Shoukan extends GlobalGame {
 				}
 			});
 		if (phase == Phase.PLAN && (!rules.official() || getRound() > 8)) {
-			buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
+			buttons.put(StringHelper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 				if (forfeit) {
 					if (rules.official()) {
 						getHistory().setWinner(getNextSide());
@@ -2372,10 +2372,10 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return mm;
 									})
 							);
@@ -2416,7 +2416,7 @@ public class Shoukan extends GlobalGame {
 					h.get().getDiscardBatch().stream()
 							.filter(d -> {
 								if (d instanceof Champion c) return c.canGoToGrave();
-								else if (d instanceof Equipment e) return e.canGoToGrave();
+								else if (d instanceof Evogear e) return e.canGoToGrave();
 								else return true;
 							}).toList()
 			);
@@ -2437,7 +2437,7 @@ public class Shoukan extends GlobalGame {
 			slots = arena.getSlots().get(getCurrentSide());
 
 			if (getRound() >= 75) {
-				if (Helper.equalsAny(getRound(), 75, 100, 125)) {
+				if (LogicHelper.equalsAny(getRound(), 75, 100, 125)) {
 					if (getRound() == 75) {
 						channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
 					} else if (getRound() == 100) {
@@ -2447,7 +2447,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
-				if (Helper.between(getRound(), 75, 126)) {
+				if (MathHelper.between(getRound(), 75, 126)) {
 					h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
 					if (postCombat()) return;
 				} else {
@@ -2466,10 +2466,10 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
-										if (m != null) m.delete().queue(null, Helper::doNothing);
+										if (m != null) m.delete().queue(null, MiscHelper::doNothing);
 										return mm;
 									})
 							);
@@ -2517,7 +2517,7 @@ public class Shoukan extends GlobalGame {
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn sc = slots.get(i);
 
-				Equipment e = sc.getBottom();
+				Evogear e = sc.getBottom();
 				if (e != null) {
 					if (e.getLinkedTo() == null) {
 						unequipCard(getCurrentSide(), e.getIndex());
@@ -2565,11 +2565,11 @@ public class Shoukan extends GlobalGame {
 		return null;
 	}
 
-	public Equipment getEquipmentFromGrave(Side s) {
+	public Evogear getEquipmentFromGrave(Side s) {
 		LinkedList<Drawable> grv = getArena().getGraveyard().get(s);
 		for (int i = grv.size() - 1; i >= 0; i--)
-			if (grv.get(i) instanceof Equipment)
-				return (Equipment) grv.remove(i);
+			if (grv.get(i) instanceof Evogear)
+				return (Evogear) grv.remove(i);
 
 		return null;
 	}
@@ -2583,11 +2583,11 @@ public class Shoukan extends GlobalGame {
 		return null;
 	}
 
-	public Equipment getEquipmentFromBanned() {
+	public Evogear getEquipmentFromBanned() {
 		LinkedList<Drawable> grv = getArena().getBanned();
 		for (int i = grv.size() - 1; i >= 0; i--)
-			if (grv.get(i) instanceof Equipment)
-				return (Equipment) grv.remove(i);
+			if (grv.get(i) instanceof Evogear)
+				return (Evogear) grv.remove(i);
 
 		return null;
 	}
@@ -2666,7 +2666,7 @@ public class Shoukan extends GlobalGame {
 		Set<PersistentEffect> aux = Set.copyOf(persistentEffects);
 		for (PersistentEffect curr : aux) {
 			if (curr.equals(pe)) {
-				float bias = Helper.prcnt(pe.getTurns(), Math.max(1, curr.getTurns())) * Helper.prcnt(pe.getLimit(), Math.max(1, curr.getLimit()));
+				float bias = MathHelper.prcnt(pe.getTurns(), Math.max(1, curr.getTurns())) * MathHelper.prcnt(pe.getLimit(), Math.max(1, curr.getLimit()));
 
 				if (bias > 1) {
 					persistentEffects.remove(curr);
@@ -2690,7 +2690,7 @@ public class Shoukan extends GlobalGame {
 
 	public boolean applyPersistentEffects(EffectTrigger trigger, Side to, int index) {
 		if (persistentEffects.size() > 0) {
-			boolean lastTick = Helper.equalsAny(trigger, ON_WIN, ON_LOSE, ON_GLOBAL_WIN, ON_GLOBAL_LOSE);
+			boolean lastTick = LogicHelper.equalsAny(trigger, ON_WIN, ON_LOSE, ON_GLOBAL_WIN, ON_GLOBAL_LOSE);
 
 			Set<PersistentEffect> efs = Set.copyOf(persistentEffects).stream()
 					.peek(e -> {
@@ -2713,7 +2713,7 @@ public class Shoukan extends GlobalGame {
 					.filter(e -> !e.isExpired())
 					.collect(Collectors.toSet());
 
-			Helper.replaceContent(efs, persistentEffects);
+			CollectionHelper.replaceContent(efs, persistentEffects);
 
 			return !lastTick && postCombat();
 		}
@@ -2738,7 +2738,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public boolean applyEffect(EffectTrigger trigger, Champion activator, Side side, int index, Duelists duelists) {
-		boolean lastTick = Helper.equalsAny(trigger, ON_WIN, ON_LOSE, ON_GLOBAL_WIN, ON_GLOBAL_LOSE);
+		boolean lastTick = LogicHelper.equalsAny(trigger, ON_WIN, ON_LOSE, ON_GLOBAL_WIN, ON_GLOBAL_LOSE);
 
 		if (trigger.shouldTriggerPE()) {
 			applyPersistentEffects(trigger, side, index);
@@ -2782,23 +2782,23 @@ public class Shoukan extends GlobalGame {
 		return false;
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index) {
+	public void applyEffect(EffectTrigger trigger, Evogear activator, Side side, int index) {
 		applyEffect(trigger, activator, side, index, Duelists.of());
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Source source) {
+	public void applyEffect(EffectTrigger trigger, Evogear activator, Side side, int index, Source source) {
 		applyEffect(trigger, activator, side, index, Duelists.of(source));
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Target target) {
+	public void applyEffect(EffectTrigger trigger, Evogear activator, Side side, int index, Target target) {
 		applyEffect(trigger, activator, side, index, Duelists.of(target));
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Source source, Target target) {
+	public void applyEffect(EffectTrigger trigger, Evogear activator, Side side, int index, Source source, Target target) {
 		applyEffect(trigger, activator, side, index, Duelists.of(source, target));
 	}
 
-	public void applyEffect(EffectTrigger trigger, Equipment activator, Side side, int index, Duelists duelists) {
+	public void applyEffect(EffectTrigger trigger, Evogear activator, Side side, int index, Duelists duelists) {
 		if (effectLock == 0) {
 			if (activator.hasEffect()) {
 				activator.getEffect(new EffectParameters(trigger, this, side, index, duelists, channel));
@@ -2825,7 +2825,7 @@ public class Shoukan extends GlobalGame {
 	public void applyEffect(EffectTrigger trigger, Drawable activator, Side side, int index, Duelists duelists) {
 		if (activator instanceof Champion c) {
 			applyEffect(trigger, c, side, index, duelists);
-		} else if (activator instanceof Equipment e) {
+		} else if (activator instanceof Evogear e) {
 			applyEffect(trigger, e, side, index, duelists);
 		}
 	}
@@ -2833,7 +2833,7 @@ public class Shoukan extends GlobalGame {
 	public void sendWebhookMessage(String message, String gif, Drawable d) {
 		for (TextChannel channel : channel.getChannels()) {
 			try {
-				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
+				Webhook wh = MiscHelper.getOrCreateWebhook(channel, "Shiro");
 				Card c = d.getCard();
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
@@ -2843,7 +2843,7 @@ public class Shoukan extends GlobalGame {
 
 				if (gif != null) {
 					wmb.addEmbeds(new WebhookEmbedBuilder()
-							.setImageUrl(ShiroInfo.GIFS_URL + "/" + gif + ".gif")
+							.setImageUrl(Constants.GIFS_URL + "/" + gif + ".gif")
 							.build());
 				}
 
@@ -2852,10 +2852,10 @@ public class Shoukan extends GlobalGame {
 					WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 					wc.send(wmb.build()).get();
 				} catch (InterruptedException | ExecutionException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			} catch (InsufficientPermissionException | InterruptedException | ExecutionException | NullPointerException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 	}
@@ -2882,7 +2882,7 @@ public class Shoukan extends GlobalGame {
 		if (fusionLock > 0) return from;
 
 		Hand h = hands.get(ep.getSide());
-		Champion nc = CardDAO.getChampion(to);
+		Champion nc = Champion.getChampion(to);
 		if (nc == null) return from;
 
 		if (h.isNullMode() && h.getHp() <= nc.getBaseStats() / 2) return from;
@@ -2961,7 +2961,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public SlotColumn getSlot(Side s, int index) {
-		return Helper.safeGet(arena.getSlots().get(s), index);
+		return CollectionHelper.safeGet(arena.getSlots().get(s), index);
 	}
 
 	@Override
@@ -3008,7 +3008,7 @@ public class Shoukan extends GlobalGame {
 				Hand h = hands.get(s);
 				if (h instanceof TeamHand th) {
 					for (int i = 0; i < 2; i++) {
-						Account acc = AccountDAO.getAccount(h.getUser().getId());
+						Account acc = Account.find(Account.class, h.getUser().getId());
 
 						if (acc.hasPendingQuest()) {
 							Map<DailyTask, Integer> pg = acc.getDailyProgress();
@@ -3025,13 +3025,13 @@ public class Shoukan extends GlobalGame {
 						if (!achs.isEmpty())
 							acc.addGem(achs.stream().mapToInt(Achievement::getValue).sum());
 
-						AccountDAO.saveAccount(acc);
+						acc.save();
 
 						if (h.getHero() != null && tourMatch == null) {
 							Hero hr = KawaiponDAO.getHero(h.getAcc().getUid());
 
 							if (hr != null && hr.equals(h.getHero())) {
-								if (isRanked() && Helper.chance(5)) {
+								if (isRanked() && MathHelper.chance(5)) {
 									h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
 									hr.addBonusPoints(2);
 								}
@@ -3043,7 +3043,7 @@ public class Shoukan extends GlobalGame {
 						th.next();
 					}
 				} else {
-					Account acc = AccountDAO.getAccount(h.getUser().getId());
+					Account acc = Account.find(Account.class, h.getUser().getId());
 
 					if (acc.hasPendingQuest()) {
 						Map<DailyTask, Integer> pg = acc.getDailyProgress();
@@ -3060,13 +3060,13 @@ public class Shoukan extends GlobalGame {
 					if (!achs.isEmpty())
 						acc.addGem(achs.stream().mapToInt(Achievement::getValue).sum());
 
-					AccountDAO.saveAccount(acc);
+					acc.save();
 
 					if (h.getHero() != null && tourMatch == null) {
 						Hero hr = KawaiponDAO.getHero(h.getAcc().getUid());
 
 						if (hr != null && hr.equals(h.getHero())) {
-							if (isRanked() && Helper.chance(5)) {
+							if (isRanked() && MathHelper.chance(5)) {
 								h.sendDM(":bulb: | Durante esta batalha " + hr.getName() + " obteve 2 pontos bônus de atributo devido à experiência de combate. GG!");
 								hr.addBonusPoints(2);
 							}
@@ -3092,22 +3092,22 @@ public class Shoukan extends GlobalGame {
 
 		if (!getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
 			try {
-				getFrames().add(Helper.compress(Helper.atob(getArena().addHands(arena.render(this, hands), hands.values()), "jpg")));
+				getFrames().add(FileHelper.compress(ImageHelper.atob(getArena().addHands(arena.render(this, hands), hands.values()), "jpg")));
 			} catch (IOException ignore) {
 			}
 
 			channel.sendMessage("Deseja baixar o replay desta partida?")
 					.queue(s -> Pages.buttonize(s, Map.of(
-									Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
-										wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
+										wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										wrapper.getChannel().sendMessage("<a:loading:697879726630502401> Aguardando conexão com API...")
 												.flatMap(m -> {
-													while (!Main.getInfo().isEncoderConnected()) {
+													while (Main.getInfo().isEncoderDisconnected()) {
 														try {
-															Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+															Main.getInfo().setEncoderClient(new EncoderClient(Constants.SOCKET_ROOT + "/encoder"));
 															Thread.sleep(2000);
 														} catch (URISyntaxException | DeploymentException | IOException | InterruptedException e) {
-															Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
+															MiscHelper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 														}
 													}
 
@@ -3125,7 +3125,7 @@ public class Shoukan extends GlobalGame {
 																.setTitle("Replay pronto!")
 																.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
 													} catch (Exception e) {
-														Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+														MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 														eb.setColor(Color.red)
 																.setTitle("Erro!")
 																.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
@@ -3133,9 +3133,9 @@ public class Shoukan extends GlobalGame {
 
 													m.editMessage(wrapper.getUser().getAsMention())
 															.setEmbeds(eb.build())
-															.queue(null, Helper::doNothing);
+															.queue(null, MiscHelper::doNothing);
 												});
-									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> hands.values().parallelStream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
 					));
 		}

@@ -24,7 +24,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -50,7 +50,7 @@ public class MakeLogCommand implements Executable {
 				.setParent(channel.getParent())
 				.queue(c -> {
 					gc.setLogChannel(c.getId());
-					channel.sendMessage("✅ | Canal de log criado com sucesso em " + c.getAsMention()).queue(null, Helper::doNothing);
+					channel.sendMessage("✅ | Canal de log criado com sucesso em " + c.getAsMention()).queue(null, MiscHelper::doNothing);
 					GuildDAO.updateGuildSettings(gc);
 				});
 	}

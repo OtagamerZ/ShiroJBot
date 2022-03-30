@@ -33,8 +33,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.MatchMakingRating;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -107,9 +107,9 @@ public class TierRankCommand implements Executable, Slashed {
 			}
 
 			eb.addField("Promoção de tier", prom.toString(), false)
-					.addField(Helper.VOID, sb.toString(), false)
-					.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
-			categories.put(Helper.parseEmoji(Helper.getNumericEmoji(rt.getTier())), new InteractPage(eb.build()));
+					.addField(Constants.VOID, sb.toString(), false)
+					.setThumbnail(Constants.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
+			categories.put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(rt.getTier())), new InteractPage(eb.build()));
 		}
 
 		sb.setLength(0);
@@ -118,13 +118,13 @@ public class TierRankCommand implements Executable, Slashed {
 				.setThumbnail("https://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
 		for (int i = 1; i < 8; i++) {
-			sb.append("%s | %s\n".formatted(Helper.getNumericEmoji(i), RankedTier.getTierName(i, false)));
+			sb.append("%s | %s\n".formatted(StringHelper.getNumericEmoji(i), RankedTier.getTierName(i, false)));
 		}
 
 		eb.setDescription(sb.toString());
 
 		channel.sendMessageEmbeds(eb.build()).queue(s ->
-				Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.categorize(s, categories, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

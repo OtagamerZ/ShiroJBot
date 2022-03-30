@@ -30,8 +30,10 @@ import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -63,7 +65,7 @@ public class RequestAssistCommand implements Executable, Slashed {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							int number = TicketDAO.openTicket("Requisição de suporte presencial.", member);
@@ -72,11 +74,11 @@ public class RequestAssistCommand implements Executable, Slashed {
 							eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
 							eb.addField("ID do servidor:", guild.getId(), true);
 							eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-							eb.addField("Requisitado em:", Helper.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+							eb.addField("Requisitado em:", Constants.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 							eb.setFooter(author.getId());
 							eb.setColor(Color.cyan);
 
-							InviteAction ia = Helper.createInvite(guild);
+							InviteAction ia = MiscHelper.createInvite(guild);
 
 							if (ia == null) {
 								channel.sendMessage("❌ | Não encontrei nenhum canal que eu possa criar um convite aqui.").queue();
@@ -101,7 +103,7 @@ public class RequestAssistCommand implements Executable, Slashed {
 
 							author.openPrivateChannel()
 									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado sobre o progresso dele."))
-									.queue(null, Helper::doNothing);
+									.queue(null, MiscHelper::doNothing);
 
 							t.setMsgIds(ids);
 
@@ -111,9 +113,9 @@ public class RequestAssistCommand implements Executable, Slashed {
 							} catch (InterruptedException | ExecutionException ignore) {
 							}
 
-							s.delete().queue(null, Helper::doNothing);
+							s.delete().queue(null, MiscHelper::doNothing);
 							channel.sendMessage(I18n.getString("str_successfully-requested-assist")).queue();
-						}), ShiroInfo.USE_BUTTONS, true, 60, TimeUnit.SECONDS,
+						}), Constants.USE_BUTTONS, true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

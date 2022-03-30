@@ -19,18 +19,16 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.HttpHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Emote;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.io.File;
@@ -38,30 +36,29 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class HourlyEvent implements Job {
-	static JobDetail hourly;
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		for (JDA shard : Main.getShiroShards().getShards()) {
+		for (JDA shard : Main.getShiro().getShards()) {
 			shard.getPresence().setActivity(Main.getRandomActivity());
 		}
 
-		if (Main.getInfo().getDblApi() != null) {
-			int size = Main.getShiroShards().getGuilds().size();
-			Main.getInfo().getDblApi().setStats(size);
+		if (Main.getInfo().getTopggClient() != null) {
+			int size = Main.getShiro().getGuilds().size();
+			Main.getInfo().getTopggClient().setStats(size);
 			if (System.getenv().containsKey("DBL_TOKEN")) {
 				JSONObject jo = new JSONObject();
 
 				jo.put("guildCount", size);
 
-				String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getShiroShards().getShards().get(0).getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
-				Helper.logger(this.getClass()).debug(response);
+				String response = HttpHelper.post("https://discord.bots.gg/api/v1/bots/" + Main.getShiro().getShards().get(0).getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
+				MiscHelper.logger(this.getClass()).debug(response);
 			}
 		}
 
-		ShiroInfo.getEmoteLookup().clear();
-		for (Emote emote : Main.getShiroShards().getEmotes()) {
-			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
+		Main.getEmoteCache().clear();
+		for (Emote emote : Main.getShiro().getEmotes()) {
+			Main.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
 		}
 
 		System.runFinalization();
@@ -70,15 +67,15 @@ public class HourlyEvent implements Job {
 		if (files != null) {
 			for (File file : files) {
 				if (!file.delete()) {
-					Helper.logger(this.getClass()).warn("Failed to delete file at " + file.toPath().getFileName());
+					MiscHelper.logger(this.getClass()).warn("Failed to delete file at " + file.toPath().getFileName());
 				}
 			}
 		}
 
-		List<Account> accs = AccountDAO.getVolatileAccounts();
+		List<Account> accs = Account.queryAll(Account.class, "SELECT a FROM Account a WHERE a.vBalance > 0");
 		for (Account acc : accs) {
 			acc.expireVCredit();
-			AccountDAO.saveAccount(acc);
+			acc.save();
 		}
 
 		MatchDAO.cleanHistory();

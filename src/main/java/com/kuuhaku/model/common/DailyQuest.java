@@ -18,11 +18,11 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.AddedAnime;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 
 import java.util.*;
 
@@ -35,23 +35,23 @@ public class DailyQuest {
 	private DailyQuest(long id) {
 		Calendar today = Calendar.getInstance(TimeZone.getTimeZone("GMT-3:00"));
 		long seed = (id / (today.get(Calendar.DAY_OF_YEAR) + today.get(Calendar.YEAR)));
-		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
+		List<DailyTask> tasks = CollectionHelper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
-		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
-		this.chosenAnime = Helper.getRandomEntry(r, animes);
-		this.chosenRace = Helper.getRandomEntry(r, Race.validValues());
-		this.divergence = Helper.round(Helper.rng(0.2, 0.5, r), 3);
+		List<AddedAnime> animes = AddedAnime.queryAll(AddedAnime.class, "SELECT a FROM AddedAnime a WHERE a.hidden = FALSE");
+		this.chosenAnime = CollectionHelper.getRandomEntry(r, animes);
+		this.chosenRace = CollectionHelper.getRandomEntry(r, Race.validValues());
+		this.divergence = MathHelper.round(MathHelper.rng(0.2, 0.5, r), 3);
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
 					switch (task) {
-						case CREDIT_TASK -> Helper.rng(5000, 50000, r);
-						case CARD_TASK -> Helper.rng(5, 20, r);
-						case DROP_TASK -> Helper.rng(10, 20, r);
-						case WINS_TASK, OFFMETA_TASK -> Helper.rng(1, 5, r);
-						case XP_TASK -> Helper.rng(1000, 10000, r);
-						case ANIME_TASK -> Helper.rng(1, 3, r);
-						case RACE_TASK -> Helper.rng(2, 10, r);
+						case CREDIT_TASK -> MathHelper.rng(5000, 50000, r);
+						case CARD_TASK -> MathHelper.rng(5, 20, r);
+						case DROP_TASK -> MathHelper.rng(10, 20, r);
+						case WINS_TASK, OFFMETA_TASK -> MathHelper.rng(1, 5, r);
+						case XP_TASK -> MathHelper.rng(1000, 10000, r);
+						case ANIME_TASK -> MathHelper.rng(1, 3, r);
+						case RACE_TASK -> MathHelper.rng(2, 10, r);
 					}
 			);
 		}
@@ -66,14 +66,14 @@ public class DailyQuest {
 		for (Map.Entry<DailyTask, Integer> task : tasks.entrySet()) {
 			DailyTask dt = task.getKey();
 			mod += 1 * switch (dt) {
-				case CREDIT_TASK -> Helper.prcnt(task.getValue(), 25000) * 0.55;
-				case CARD_TASK -> Helper.prcnt(task.getValue(), 25);
-				case DROP_TASK -> Helper.prcnt(task.getValue(), 20);
-				case WINS_TASK -> Helper.prcnt(task.getValue(), 5) * 1.25;
-				case OFFMETA_TASK -> Helper.prcnt(task.getValue(), 1.75);
-				case XP_TASK -> Helper.prcnt(task.getValue(), 10000) * 0.45;
-				case ANIME_TASK -> Helper.prcnt(task.getValue(), 3) * 0.9;
-				case RACE_TASK -> Helper.prcnt(task.getValue(), 10) * 1.1;
+				case CREDIT_TASK -> MathHelper.prcnt(task.getValue(), 25000) * 0.55;
+				case CARD_TASK -> MathHelper.prcnt(task.getValue(), 25);
+				case DROP_TASK -> MathHelper.prcnt(task.getValue(), 20);
+				case WINS_TASK -> MathHelper.prcnt(task.getValue(), 5) * 1.25;
+				case OFFMETA_TASK -> MathHelper.prcnt(task.getValue(), 1.75);
+				case XP_TASK -> MathHelper.prcnt(task.getValue(), 10000) * 0.45;
+				case ANIME_TASK -> MathHelper.prcnt(task.getValue(), 3) * 0.9;
+				case RACE_TASK -> MathHelper.prcnt(task.getValue(), 10) * 1.1;
 			};
 		}
 		return mod;

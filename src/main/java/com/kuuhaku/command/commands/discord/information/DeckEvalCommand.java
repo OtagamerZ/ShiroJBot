@@ -25,7 +25,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -44,7 +44,7 @@ public class DeckEvalCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Análise do deck de " + author.getName())
-				.addField(Helper.VOID, dk.toString(), false);
+				.addField(Constants.VOID, dk.toString(), false);
 
 		if (dk.getChampions().size() < 30)
 			eb.setDescription("Seu deck ainda não está pronto para duelos.");

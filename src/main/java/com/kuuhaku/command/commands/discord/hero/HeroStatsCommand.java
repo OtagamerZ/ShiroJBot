@@ -27,8 +27,9 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -61,7 +62,7 @@ public class HeroStatsCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(h.getUid(), true);
 		channel.sendMessageEmbeds(getEmbed(h)).queue(s ->
 				Pages.buttonize(s, new LinkedHashMap<>() {{
-							put(Helper.parseEmoji("\uD83C\uDDF8"), wrapper -> {
+							put(StringHelper.parseEmoji("\uD83C\uDDF8"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -70,7 +71,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addStr();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put(Helper.parseEmoji("\uD83C\uDDF7"), wrapper -> {
+							put(StringHelper.parseEmoji("\uD83C\uDDF7"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -79,7 +80,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addRes();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put(Helper.parseEmoji("\uD83C\uDDE6"), wrapper -> {
+							put(StringHelper.parseEmoji("\uD83C\uDDE6"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -88,7 +89,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addAgi();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put(Helper.parseEmoji("\uD83C\uDDFC"), wrapper -> {
+							put(StringHelper.parseEmoji("\uD83C\uDDFC"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -97,7 +98,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addWis();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
+							put(StringHelper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
 								if (h.getAvailableStatPoints() == 0) {
 									channel.sendMessage("❌ | Você não tem mais pontos restantes.").queue();
 									return;
@@ -106,7 +107,7 @@ public class HeroStatsCommand implements Executable {
 								h.getRawStats().addCon();
 								s.editMessageEmbeds(getEmbed(h)).queue();
 							});
-							put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							put(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								KawaiponDAO.saveHero(h);
@@ -114,9 +115,9 @@ public class HeroStatsCommand implements Executable {
 								s.delete()
 										.flatMap(d -> wrapper.getMessage().delete())
 										.flatMap(m -> channel.sendMessage("Herói salvo com sucesso!"))
-										.queue(null, Helper::doNothing);
+										.queue(null, MiscHelper::doNothing);
 							});
-						}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						}}, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));
@@ -130,19 +131,19 @@ public class HeroStatsCommand implements Executable {
 		for (int i = 0; i < 5; i++) {
 			switch (i) {
 				case 0 -> stats.append("**S**TR: %s%s\n".formatted(
-						raw[0], equip[0] != 0 ? " (" + Helper.sign(equip[0]) + ")" : ""
+						raw[0], equip[0] != 0 ? " (" + StringHelper.sign(equip[0]) + ")" : ""
 				));
 				case 1 -> stats.append("**R**ES: %s%s\n".formatted(
-						raw[1], equip[1] != 0 ? " (" + Helper.sign(equip[1]) + ")" : ""
+						raw[1], equip[1] != 0 ? " (" + StringHelper.sign(equip[1]) + ")" : ""
 				));
 				case 2 -> stats.append("**A**GI: %s%s\n".formatted(
-						raw[2], equip[2] != 0 ? " (" + Helper.sign(equip[2]) + ")" : ""
+						raw[2], equip[2] != 0 ? " (" + StringHelper.sign(equip[2]) + ")" : ""
 				));
 				case 3 -> stats.append("**W**IS: %s%s\n".formatted(
-						raw[3], equip[3] != 0 ? " (" + Helper.sign(equip[3]) + ")" : ""
+						raw[3], equip[3] != 0 ? " (" + StringHelper.sign(equip[3]) + ")" : ""
 				));
 				case 4 -> stats.append("**C**ON: %s%s\n".formatted(
-						raw[4], equip[4] != 0 ? " (" + Helper.sign(equip[4]) + ")" : ""
+						raw[4], equip[4] != 0 ? " (" + StringHelper.sign(equip[4]) + ")" : ""
 				));
 			}
 		}

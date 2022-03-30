@@ -20,7 +20,7 @@ package com.kuuhaku.model.common;
 
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -100,7 +100,7 @@ public class ColorlessWebhookEmbedBuilder extends WebhookEmbedBuilder {
 	}
 
 	public @Nonnull ColorlessWebhookEmbedBuilder addBlankField(boolean inline) {
-		return (ColorlessWebhookEmbedBuilder) super.addField(new WebhookEmbed.EmbedField(inline, Helper.VOID, Helper.VOID));
+		return (ColorlessWebhookEmbedBuilder) super.addField(new WebhookEmbed.EmbedField(inline, Constants.VOID, Constants.VOID));
 	}
 
 	public @Nonnull ColorlessWebhookEmbedBuilder addField(String title, String value, boolean inline) {

@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
@@ -30,8 +29,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -66,32 +64,32 @@ public class GuessTheCardsCommand implements Executable {
 		}
 
 		try {
-			File[] masks = new File(Helper.getResource(this.getClass(), "assets/masks").toURI()).listFiles();
+			File[] masks = new File(FileHelper.getResource(this.getClass(), "assets/masks").toURI()).listFiles();
 			assert masks != null;
 
-			BufferedImage mask = Helper.toColorSpace(ImageIO.read(Helper.getRandomEntry(masks)), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage mask = ImageHelper.toColorSpace(ImageIO.read(CollectionHelper.getRandomEntry(masks)), BufferedImage.TYPE_INT_ARGB);
 
-			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
+			List<Card> c = CollectionHelper.getRandomN(CardDAO.getCards(), 3, 1);
 			List<String> names = c.stream().map(Card::getId).collect(Collectors.toList());
 			List<BufferedImage> imgs = c.stream()
 					.map(Card::drawCardNoBorder)
-					.map(bi -> Helper.toColorSpace(bi, BufferedImage.TYPE_INT_ARGB))
+					.map(bi -> ImageHelper.toColorSpace(bi, BufferedImage.TYPE_INT_ARGB))
 					.toList();
 
 			BufferedImage img = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = img.createGraphics();
 			for (int i = 0; i < imgs.size(); i++) {
 				BufferedImage bi = imgs.get(i);
-				Helper.applyMask(bi, mask, i);
+				ImageHelper.applyMask(bi, mask, i);
 				g2d.drawImage(bi, 0, 0, null);
 			}
 			g2d.dispose();
 
 			channel.sendMessage("Quais são as 3 cartas nesta imagem? Escreva os três nomes com `_` no lugar de espaços e separados por ponto-e-vírgula (`;`).")
-					.addFile(Helper.writeAndGet(img, "cards", "png"))
-					.queue(ms -> ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
+					.addFile(ImageHelper.writeAndGet(img, "cards", "png"))
+					.queue(ms -> Main.getEvents().addHandler(guild, new SimpleMessageListener(channel) {
 						private final Consumer<Void> success = s -> {
-							ms.delete().queue(null, Helper::doNothing);
+							ms.delete().queue(null, MiscHelper::doNothing);
 							close();
 						};
 						private Future<?> timeout = channel.sendMessage("Acabou o tempo, as cartas eram `%s`, `%s` e `%s`".formatted(
@@ -110,7 +108,7 @@ public class GuessTheCardsCommand implements Executable {
 							if (!event.getAuthor().getId().equals(author.getId())) return;
 
 							String value = event.getMessage().getContentRaw();
-							if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.toLowerCase(Locale.ROOT).split(" ")[0].replaceFirst(prefix, ""), GuessTheCardsCommand.class.getDeclaredAnnotation(Command.class).aliases())) {
+							if (value.equalsIgnoreCase("desistir") || LogicHelper.equalsAny(value.toLowerCase(Locale.ROOT).split(" ")[0].replaceFirst(prefix, ""), GuessTheCardsCommand.class.getDeclaredAnnotation(Command.class).aliases())) {
 								channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
 										names.get(0),
 										names.get(1),
@@ -140,9 +138,9 @@ public class GuessTheCardsCommand implements Executable {
 							for (String s : answers)
 								points += names.remove(s.toUpperCase(Locale.ROOT)) ? 1 : 0;
 
-							int reward = (int) (50 * Math.pow(2 + Helper.rng(0.2, 0.5), points));
+							int reward = (int) (50 * Math.pow(2 + MathHelper.rng(0.2, 0.5), points));
 
-							Account acc = AccountDAO.getAccount(author.getId());
+							Account acc = Account.find(Account.class, author.getId());
 							acc.addCredit(reward, GuessTheCardsCommand.class);
 
 							switch (points) {
@@ -164,7 +162,7 @@ public class GuessTheCardsCommand implements Executable {
 													.formatted(
 															names.get(0),
 															names.get(1),
-															Helper.separate(reward)
+															StringHelper.separate(reward)
 													)).queue();
 									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
 									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 1 - lost);
@@ -174,7 +172,7 @@ public class GuessTheCardsCommand implements Executable {
 											"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s CR)."
 													.formatted(
 															names.get(0),
-															Helper.separate(reward)
+															StringHelper.separate(reward)
 													)).queue();
 									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
 									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 2 - lost);
@@ -182,19 +180,19 @@ public class GuessTheCardsCommand implements Executable {
 								case 3 -> {
 									channel.sendMessage(
 											"Você acertou todos os nomes, parabéns! (Recebeu %s CR)."
-													.formatted(Helper.separate(reward))).queue();
+													.formatted(StringHelper.separate(reward))).queue();
 									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 3);
 								}
 							}
 
-							AccountDAO.saveAccount(acc);
+							acc.save();
 							success.accept(null);
 							timeout.cancel(true);
 							timeout = null;
 						}
 					}));
 		} catch (IOException | URISyntaxException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

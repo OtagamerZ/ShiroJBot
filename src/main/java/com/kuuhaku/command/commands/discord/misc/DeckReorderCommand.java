@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
@@ -56,7 +56,7 @@ public class DeckReorderCommand implements Executable {
 					case "custo", "mana" -> Comparator.<Drawable>comparingInt(d -> {
 						if (d instanceof Champion c) {
 							return c.getMana();
-						} else if (d instanceof Equipment e) {
+						} else if (d instanceof Evogear e) {
 							return e.getMana();
 						} else {
 							return 0;
@@ -65,7 +65,7 @@ public class DeckReorderCommand implements Executable {
 					case "atk", "ataque", "dano" -> Comparator.<Drawable>comparingInt(d -> {
 						if (d instanceof Champion c) {
 							return c.getAtk();
-						} else if (d instanceof Equipment e) {
+						} else if (d instanceof Evogear e) {
 							return e.getAtk();
 						} else {
 							return 0;
@@ -74,7 +74,7 @@ public class DeckReorderCommand implements Executable {
 					case "def", "defesa" -> Comparator.<Drawable>comparingInt(d -> {
 						if (d instanceof Champion c) {
 							return c.getDef();
-						} else if (d instanceof Equipment e) {
+						} else if (d instanceof Evogear e) {
 							return e.getDef();
 						} else {
 							return 0;
@@ -83,14 +83,14 @@ public class DeckReorderCommand implements Executable {
 					case "atributos", "stats" -> Comparator.<Drawable>comparingDouble(d -> {
 						if (d instanceof Champion c) {
 							return (double) (c.getAtk() + c.getDef()) / Math.max(1, c.getMana());
-						} else if (d instanceof Equipment e) {
+						} else if (d instanceof Evogear e) {
 							return (double) (e.getAtk() + e.getDef()) / Math.max(1, e.getMana());
 						} else {
 							return 0;
 						}
 					}).reversed();
 					case "tier" -> Comparator.<Drawable>comparingInt(d -> {
-						if (d instanceof Equipment e) {
+						if (d instanceof Evogear e) {
 							return e.getTier();
 						} else {
 							return 0;

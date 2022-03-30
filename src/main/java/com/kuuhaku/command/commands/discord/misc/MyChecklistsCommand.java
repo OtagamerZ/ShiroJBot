@@ -28,7 +28,8 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Checkitem;
 import com.kuuhaku.model.persistent.Checklist;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -54,7 +55,7 @@ public class MyChecklistsCommand implements Executable {
 			}
 
 			List<Page> pages = new ArrayList<>();
-			List<List<Checklist>> chunks = Helper.chunkify(lists, 10);
+			List<List<Checklist>> chunks = CollectionHelper.chunkify(lists, 10);
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor("Meus blocos de notas")
 					.setThumbnail("https://cdn2.iconfinder.com/data/icons/origami/PNG/256%20x%20256/archive.png");
@@ -64,7 +65,7 @@ public class MyChecklistsCommand implements Executable {
 
 				for (int i = 0; i < chunk.size(); i++) {
 					Checklist list = chunk.get(i);
-					eb.addField("`" + i + "` | " + list.getName(), Helper.VOID, false);
+					eb.addField("`" + i + "` | " + list.getName(), Constants.VOID, false);
 				}
 
 				pages.add(new InteractPage(eb.build()));
@@ -84,7 +85,7 @@ public class MyChecklistsCommand implements Executable {
 			}
 
 			List<Page> pages = new ArrayList<>();
-			List<List<Checkitem>> chunks = Helper.chunkify(c.getItems(), 10);
+			List<List<Checkitem>> chunks = CollectionHelper.chunkify(c.getItems(), 10);
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(c.getName())
 					.setThumbnail("https://cdn-icons-png.flaticon.com/512/2438/2438239.png");

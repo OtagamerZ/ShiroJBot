@@ -18,7 +18,8 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -27,7 +28,7 @@ public enum ClanHierarchy {
 	LEADER("Líder", "🔱"),
 	SUBLEADER("Sub-líder", "⚜️"),
 	CAPTAIN("Capitão", "🔰"),
-	MEMBER("Membro", Helper.VOID);
+	MEMBER("Membro", Constants.VOID);
 
 	private final String name;
 	private final String icon;
@@ -47,7 +48,7 @@ public enum ClanHierarchy {
 
 	public static ClanHierarchy getByName(String name) {
 		return Arrays.stream(ClanHierarchy.values())
-				.filter(e -> Helper.equalsAny(name, StringUtils.stripAccents(e.name), e.name, e.name()))
+				.filter(e -> LogicHelper.equalsAny(name, StringUtils.stripAccents(e.name), e.name, e.name()))
 				.findFirst()
 				.orElse(null);
 	}

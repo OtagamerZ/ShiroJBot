@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -30,8 +29,9 @@ import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -65,7 +65,7 @@ public class ClanWithdrawCommand implements Executable {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		int value = Integer.parseInt(args[0]);
 
 		if (c.getVault() < value) {
@@ -74,10 +74,10 @@ public class ClanWithdrawCommand implements Executable {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(value) + " CR do cofre do clã?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+		channel.sendMessage("Tem certeza que deseja sacar " + StringHelper.separate(value) + " CR do cofre do clã?")
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
-							s.delete().queue(null, Helper::doNothing);
+							s.delete().queue(null, MiscHelper::doNothing);
 
 							Clan finalC = ClanDAO.getUserClan(author.getId());
 							assert finalC != null;
@@ -90,10 +90,10 @@ public class ClanWithdrawCommand implements Executable {
 							finalC.withdraw(value, author);
 
 							ClanDAO.saveClan(finalC);
-							AccountDAO.saveAccount(acc);
+							acc.save();
 
 							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso.")).queue();
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

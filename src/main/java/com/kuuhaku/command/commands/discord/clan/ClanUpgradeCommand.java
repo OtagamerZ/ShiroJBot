@@ -27,8 +27,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -60,18 +61,18 @@ public class ClanUpgradeCommand implements Executable {
 			return;
 		}
 
-		ClanTier next = Helper.getNext(c.getTier(), ClanTier.PARTY, ClanTier.FACTION, ClanTier.GUILD, ClanTier.DYNASTY);
+		ClanTier next = CollectionHelper.getNext(c.getTier(), ClanTier.PARTY, ClanTier.FACTION, ClanTier.GUILD, ClanTier.DYNASTY);
 		assert next != null;
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Tem certeza que deseja evoluir o tier do clã para " + next.getName() + "?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							c.upgrade(author);
 							ClanDAO.saveClan(c);
 
 							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

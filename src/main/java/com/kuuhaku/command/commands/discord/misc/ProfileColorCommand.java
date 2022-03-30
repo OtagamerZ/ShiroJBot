@@ -20,11 +20,11 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Locale;
@@ -39,23 +39,23 @@ public class ProfileColorCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		if (args.length == 0) {
 			channel.sendMessage("❌ | O primeiro argumento deve ser uma cor em formato hexadecimal (#RRGGBB) ou `reset`.").queue();
 			return;
-		} else if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
+		} else if (LogicHelper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
 			acc.setProfileColor("");
-			AccountDAO.saveAccount(acc);
+			acc.save();
 			channel.sendMessage("✅ | Cor de perfil restaurada ao padrão com sucesso!").queue();
 			return;
-		} else if (!args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
+		} else if (!args[0].contains("#") || !MathHelper.between(args[0].length(), 7, 8)) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 			return;
 		}
 
 		try {
 			acc.setProfileColor(args[0].toUpperCase(Locale.ROOT));
-			AccountDAO.saveAccount(acc);
+			acc.save();
 			channel.sendMessage("✅ | Cor de perfil definida com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();

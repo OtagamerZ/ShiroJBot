@@ -1,6 +1,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 
 import java.util.Arrays;
 
@@ -19,7 +19,7 @@ public enum ArcadeMode {
 
 	public static ArcadeMode get(String name) {
 		return Arrays.stream(values())
-				.filter(a -> a.name().equalsIgnoreCase(name) || Helper.containsAny(name, a.aliases))
+				.filter(a -> a.name().equalsIgnoreCase(name) || LogicHelper.containsAny(name, a.aliases))
 				.findFirst()
 				.orElse(NONE);
 	}

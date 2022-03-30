@@ -24,14 +24,16 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.model.persistent.Log;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -52,7 +54,7 @@ import java.util.concurrent.TimeUnit;
 		Permission.MESSAGE_ADD_REACTION
 })
 @Signature({
-		"<tipo:WORD:R> <ID:NUMBER:R>"
+		"<tipo:WORD:R>[] <ID:NUMBER:R>"
 })
 public class AuditCommand implements Executable {
 
@@ -61,12 +63,12 @@ public class AuditCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | É necessário informar o tipo de auditoria (`T` = transações e `C` = comandos) e o ID do usuário.").queue();
 			return;
-		} else if (!Helper.equalsAny(args[0], "T", "C")) {
+		} else if (!LogicHelper.equalsAny(args[0], "T", "C")) {
 			channel.sendMessage("❌ | O tipo de auditoria deve ser `T` = transações ou `C` = comandos.").queue();
 			return;
 		}
 
-		User usr = Main.getInfo().getUserByID(args[1]);
+		User usr = Main.getUserByID(args[1]);
 
 		if (usr == null) {
 			channel.sendMessage(I18n.getString("err_invalid-id")).queue();
@@ -79,7 +81,28 @@ public class AuditCommand implements Executable {
 						args[0].equalsIgnoreCase("T") ? "Transações" : "Comandos"
 				));
 
-		List<List<Object[]>> data = Helper.chunkify(LogDAO.auditUser(usr.getId(), args[0]), 20);
+		List<Object[]> audit;
+		if (args[0].equalsIgnoreCase("T")) {
+			audit = Log.queryAllUnmapped("""
+					SELECT CASE t.fromclass WHEN '' THEN 'Anonymous' ELSE t.fromclass END
+						 , SUM(t.value)
+					FROM Transaction t
+					WHERE t.uid = :uid
+					GROUP BY t.fromclass
+					ORDER BY 2 DESC
+					""", usr.getId());
+		} else {
+			audit = Log.queryAllUnmapped("""
+					SELECT l.command
+						 , COUNT(1)
+					FROM Logs l
+					WHERE l.uid = :uid
+					GROUP BY l.command
+					ORDER BY 2 DESC
+					""", usr.getId());
+		}
+
+		List<List<Object[]>> data = CollectionHelper.chunkify(audit, 20);
 		List<Page> pages = new ArrayList<>();
 
 		StringBuilder sb = new StringBuilder();
@@ -87,7 +110,7 @@ public class AuditCommand implements Executable {
 			sb.setLength(0);
 			if (args[0].equalsIgnoreCase("T"))
 				for (Object[] entry : chunk)
-					sb.append("`%s`: %s CR\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), Helper.separate(entry[1])));
+					sb.append("`%s`: %s CR\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), StringHelper.separate(entry[1])));
 			else
 				for (Object[] entry : chunk)
 					sb.append("`%s`: %s usos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), entry[1]));
@@ -97,7 +120,7 @@ public class AuditCommand implements Executable {
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

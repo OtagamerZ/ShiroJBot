@@ -19,7 +19,6 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
@@ -29,7 +28,9 @@ import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
 import com.kuuhaku.model.persistent.guild.VoiceRole;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -39,7 +40,6 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.io.File;
@@ -50,17 +50,17 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TenthMinuteEvent implements Job {
-	static JobDetail tenthMinute;
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		for (Account account : AccountDAO.getNotifiableAccounts()) {
+		List<Account> accs = Account.queryAll(Account.class, "SELECT a FROM Account a WHERE a.remind = TRUE");
+		for (Account account : accs) {
 			account.notifyVote();
 		}
 
 		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithPaidRoles();
 		for (GuildConfig gc : guilds) {
-			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
+			Guild guild = Main.getGuildByID(gc.getGuildId());
 			if (guild == null) continue;
 
 			Set<String> invalid = new HashSet<>();
@@ -114,13 +114,13 @@ public class TenthMinuteEvent implements Job {
 
 		guilds = GuildDAO.getAllGuildsWithGeneralChannel();
 		for (GuildConfig gc : guilds) {
-			Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
-			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
+			Guild g = Main.getGuildByID(gc.getGuildId());
+			if (g != null && !CollectionHelper.getOr(gc.getGeneralTopic(), "").isBlank()) {
 				TextChannel tc = gc.getGeneralChannel();
 				if (tc != null)
 					try {
 						tc.getManager()
-								.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount())))
+								.setTopic(gc.getGeneralTopic().replace("%count%", StringHelper.getFancyNumber(g.getMemberCount())))
 								.queue(null, t -> {
 									gc.setGeneralChannel(null);
 									GuildDAO.updateGuildSettings(gc);
@@ -138,7 +138,7 @@ public class TenthMinuteEvent implements Job {
 
 		guilds = GuildDAO.getAllGuildsWithVoiceRoles();
 		for (GuildConfig gc : guilds) {
-			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
+			Guild guild = Main.getGuildByID(gc.getGuildId());
 			if (guild == null) continue;
 
 			Set<String> invalid = new HashSet<>();
@@ -183,7 +183,7 @@ public class TenthMinuteEvent implements Job {
 					guild.modifyMemberRoles(m, role != null ? List.of(role.getLeft()) : null, prev)
 							.flatMap(
 									p -> gc.isLevelNotif() && tc != null && finalRole != null,
-									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + finalRole.getLeft().getName() + "`** por acumular " + Helper.toStringDuration(finalRole.getRight().getTime()) + " em call! :tada:")
+									v -> tc.sendMessage(m.getAsMention() + " ganhou o cargo **`" + finalRole.getLeft().getName() + "`** por acumular " + StringHelper.toStringDuration(finalRole.getRight().getTime()) + " em call! :tada:")
 							)
 							.queue();
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
@@ -212,7 +212,7 @@ public class TenthMinuteEvent implements Job {
 				BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 				if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - attr.creationTime().toMillis()) >= 3) {
 					if (!file.delete()) {
-						Helper.logger(this.getClass()).warn("Failed to delete file at " + file.toPath().getFileName());
+						MiscHelper.logger(this.getClass()).warn("Failed to delete file at " + file.toPath().getFileName());
 					}
 				}
 			} catch (IOException ignore) {

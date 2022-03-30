@@ -25,7 +25,9 @@ import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -67,10 +69,10 @@ public class MarkTicketCommand implements Executable {
 
 		eb.setTitle("Resolução do ticket Nº " + args[0]);
 		eb.setDescription("Assunto:```" + t.getSubject() + "```");
-		if (Helper.getOr(t.getUid(), null) != null)
+		if (CollectionHelper.getOr(t.getUid(), null) != null)
 			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getUid()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
-		eb.addField("Fechado em:", Helper.FULL_DATE_FORMAT.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
+		eb.addField("Fechado em:", Constants.FULL_DATE_FORMAT.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
 		for (String dev : ShiroInfo.getStaff()) {
@@ -79,7 +81,7 @@ public class MarkTicketCommand implements Executable {
 					.complete();
 			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
 					.flatMap(Message::delete)
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 			t.solved();
 		}
 
@@ -93,7 +95,7 @@ public class MarkTicketCommand implements Executable {
 		String finalRole = role;
 		Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
 				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getAsTag() + " **(" + finalRole + ")**"))
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 
 		TicketDAO.updateTicket(t);
 		channel.sendMessage(I18n.getString("str_successfully-solved-ticket")).queue();

@@ -23,8 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,7 +54,7 @@ public class EmoteCommand implements Executable {
 			else
 				id = ShiroInfo.getEmoteLookup().getOrDefault(args[0], "1");
 
-			Emote emt = Main.getShiroShards().getEmoteById(id);
+			Emote emt = Main.getShiro().getEmoteById(id);
 
 			if (emt == null) {
 				channel.sendMessage("❌ | Não conheço esse emote.").queue();
@@ -64,7 +64,7 @@ public class EmoteCommand implements Executable {
 			EmbedBuilder eb = new EmbedBuilder()
 					.setTitle(emt.getName(), emt.getImageUrl())
 					.setThumbnail(emt.getImageUrl())
-					.setColor(Helper.colorThief(emt.getImageUrl()));
+					.setColor(ImageHelper.colorThief(emt.getImageUrl()));
 
 			Guild g = emt.getGuild();
 			eb.addField(

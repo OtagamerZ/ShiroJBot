@@ -19,10 +19,17 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.ClanDAO;
+import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.Couple;
 import com.kuuhaku.model.records.ClanRanking;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -38,52 +45,73 @@ import java.util.function.BiFunction;
 
 public enum Tag {
 	NIICHAN(TagIcons.NIICHAN, "Desenvolvedor inicial da Shiro, nominalmente KuuHaKu.",
-			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.NIICHAN)),
+			(user, member) -> MiscHelper.hasPermission(member, PrivilegeLevel.NIICHAN)),
 
 	DESENVOLVEDOR(TagIcons.DEV, "Equipe de desenvolvimento da Shiro.",
-			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.DEV)),
+			(user, member) -> MiscHelper.hasPermission(member, PrivilegeLevel.DEV)),
 
 	SUPORTE(TagIcons.SUPPORT, "Equipe de suporte da Shiro.",
-			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.SUPPORT)),
+			(user, member) -> MiscHelper.hasPermission(member, PrivilegeLevel.SUPPORT)),
 
 	REDATOR(TagIcons.EDITOR, "Equipe de redação da Shiro.",
 			(user, member) -> false),
 
 	MODERADOR(TagIcons.MODERATOR, "Equipe de moderação desse servidor.",
-			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.MOD)),
-
-	LEITOR(TagIcons.READER, "Você leu as regras, que bom!",
-			(user, member) -> TagDAO.getTagById(user.getId()).isReader()),
+			(user, member) -> MiscHelper.hasPermission(member, PrivilegeLevel.MOD)),
 
 	CASADO(TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
-			(user, member) -> WaifuDAO.isWaifued(user.getId())),
+			(user, member) -> Couple.query(Couple.class, "SELECT c FROM Couple c WHERE :uid IN (c.husbando, c.waifu)", user.getId()) != null),
 
 	RICO(TagIcons.RICH, "Usuário que possui 500 mil CR ou mais.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 500000),
+			(user, member) -> Account.find(Account.class, user.getId()).getBalance() > 500000),
 
 	CARTAS_NORMAIS_25(TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons normais.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards(), 0.25, 0.5)),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total, 0.25, 0.5);
+			}),
 
 	CARTAS_NORMAIS_50(TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons normais.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards(), 0.5, 0.75)),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total, 0.5, 0.75);
+			}),
 
 	CARTAS_NORMAIS_75(TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons normais.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards(), 0.75, 1)),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total, 0.75, 1);
+			}),
 
 	CARTAS_NORMAIS_100(TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons normais.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) CardDAO.getTotalCards() >= 1),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total >= 1;
+			}),
 
 	CARTAS_CROMADAS_25(TagIcons.FOIL25, "Usuário que completou 25% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards(), 0.25, 0.5)),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total, 0.25, 0.5);
+			}),
 
 	CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards(), 0.5, 0.75)),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total, 0.5, 0.75);
+			}),
 
 	CARTAS_CROMADAS_75(TagIcons.FOIL75, "Usuário que completou 75% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards(), 0.75, 1)),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total, 0.75, 1);
+			}),
 
 	CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) CardDAO.getTotalCards() >= 1),
+			(user, member) -> {
+				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+				return KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total >= 1;
+			}),
 
 	CLA_VITORIOSO(TagIcons.CLAN_CHAMPION, "Seu clã está em primeiro lugar.",
 			(user, member) -> {
@@ -93,7 +121,7 @@ public enum Tag {
 			}),
 
 	BUG_HUNTER(TagIcons.BUGHUNTER, "Você ajudou a corrigir muitos bugs na Shiro.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25),
+			(user, member) -> Account.find(Account.class, user.getId()).getBugs() > 25),
 
 	PADORU_PADORU(TagIcons.PADORU, "Você cantou tão bem que Nero te deu um emblema.",
 			(user, member) -> !DynamicParameterDAO.getValue("padoru_" + user.getId()).isBlank());
@@ -109,10 +137,10 @@ public enum Tag {
 	}
 
 	public InputStream getPath(com.kuuhaku.model.persistent.Member mb) throws IOException, NullPointerException {
-		Emote e = Main.getShiroShards().getEmoteById(getEmote().getId(mb.getLevel()));
+		Emote e = Main.getShiro().getEmoteById(getEmote().getId(mb.getLevel()));
 
 		if (e != null)
-			return Helper.getImage(e.getImageUrl());
+			return ImageHelper.getImage(e.getImageUrl());
 		else
 			return null;
 	}

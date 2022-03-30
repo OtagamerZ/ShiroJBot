@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.api;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class Application implements WebMvcConfigurer {
 	public Application() {
-		Helper.logger(this.getClass()).info("API inicializada.");
+		MiscHelper.logger(this.getClass()).info("API inicializada.");
 	}
 
 	@Override

@@ -23,8 +23,10 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.GifFrame;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ImageFilters;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.imaging.ImageReadException;
@@ -56,29 +58,29 @@ public class ShiftCommand implements Executable {
 				})
 				.queue(s -> {
 					Message msg;
-					if (Helper.getImageFrom(message) != null)
+					if (MiscHelper.getImageFrom(message) != null)
 						msg = message;
 					else
 						msg = s.stream()
-								.filter(m -> Helper.getImageFrom(m) != null && !m.getId().equals(ms.get().getId()))
+								.filter(m -> MiscHelper.getImageFrom(m) != null && !m.getId().equals(ms.get().getId()))
 								.max(Comparator.comparing(ISnowflake::getTimeCreated))
 								.orElse(null);
 
 					if (msg == null) {
-						ms.get().delete().queue(null, Helper::doNothing);
+						ms.get().delete().queue(null, MiscHelper::doNothing);
 						channel.sendMessage("❌ | Não encontrei nenhum imagem nas últimas 25 mensagens, por favor envie uma.").queue();
 						return;
 					}
 
 					try {
-						String url = Helper.getImageFrom(msg);
+						String url = MiscHelper.getImageFrom(msg);
 						File f;
 
 						int mode = 0;
 						if (args.length > 0) {
 							mode = Integer.parseInt(args[0]);
-							if (!Helper.between(mode, 0, 4)) {
-								ms.get().delete().queue(null, Helper::doNothing);
+							if (!MathHelper.between(mode, 0, 4)) {
+								ms.get().delete().queue(null, MiscHelper::doNothing);
 								channel.sendMessage("❌ | A direção deve ser 0 (horizontal), 1 (vertical) ou 2 (ambos).").queue();
 								return;
 							}
@@ -88,7 +90,7 @@ public class ShiftCommand implements Executable {
 						if (url.contains(".gif")) {
 							int finalMode = mode;
 							f = File.createTempFile("shifted", ".gif");
-							List<GifFrame> frames = Helper.readGif(url, true);
+							List<GifFrame> frames = ImageHelper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
 									ImageFilters.shift(frame.getAdjustedFrame(), finalMode),
 									frame.getDisposal(),
@@ -99,19 +101,19 @@ public class ShiftCommand implements Executable {
 									frame.getDelay()
 							));
 
-							Helper.makeGIF(f, frames);
+							ImageHelper.makeGIF(f, frames);
 						} else {
-							BufferedImage bi = ImageIO.read(Helper.getImage(url));
+							BufferedImage bi = ImageIO.read(ImageHelper.getImage(url));
 
-							f = Helper.writeAndGet(ImageFilters.shift(bi, mode), "shifted", "png");
+							f = ImageHelper.writeAndGet(ImageFilters.shift(bi, mode), "shifted", "png");
 						}
 
-						ms.get().delete().queue(null, Helper::doNothing);
+						ms.get().delete().queue(null, MiscHelper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
 								.addFile(f)
 								.queue();
 					} catch (NullPointerException | IOException | ImageReadException e) {
-						ms.get().delete().queue(null, Helper::doNothing);
+						ms.get().delete().queue(null, MiscHelper::doNothing);
 						channel.sendMessage("❌ | Houve um erro ao baixar a imagem, tente com outra.").queue();
 					} catch (IllegalArgumentException e) {
 						channel.sendMessage("❌ | A imagem final ficou muito grande, que tal tentar com uma imagem menor?").queue();

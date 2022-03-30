@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
@@ -31,8 +30,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.text.WordUtils;
@@ -65,7 +64,7 @@ public class SummonHeroCommand implements Executable {
 		}
 
 		int heroes = KawaiponDAO.getHeroes(author.getId()).size() + 1;
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		if (acc.getGems() < Math.pow(2, heroes)) {
 			channel.sendMessage("❌ | Você não possui gemas suficientes para completar o feitiço de invocação.").queue();
 			return;
@@ -112,7 +111,7 @@ public class SummonHeroCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes a invocar " + name + ", campeão da raça " + r.toString().toLowerCase(Locale.ROOT) + " por " + (int) Math.pow(2, heroes) + " gemas, deseja confirmar?")
 				.setEmbeds(eb.build())
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -121,10 +120,10 @@ public class SummonHeroCommand implements Executable {
 
 							acc.removeGem((int) Math.pow(2, heroes));
 							acc.getAchievements().add(Achievement.A_HERO_IS_BORN);
-							AccountDAO.saveAccount(acc);
+							acc.save();
 
 							s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Herói invocado com sucesso!")).queue();
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

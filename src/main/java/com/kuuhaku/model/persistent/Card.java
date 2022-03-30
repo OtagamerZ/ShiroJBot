@@ -21,9 +21,11 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ImageFilters;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -39,7 +41,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "card")
-public class Card {
+public class Card extends CardDAO {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
@@ -102,7 +104,7 @@ public class Card {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
+				BufferedImage frame = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
@@ -116,7 +118,7 @@ public class Card {
 				return canvas;
 			}
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
 	}
@@ -129,17 +131,17 @@ public class Card {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
-				BufferedImage nBar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
-				BufferedImage fBar = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
+				BufferedImage frame = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
+				BufferedImage nBar = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
+				BufferedImage fBar = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-				double nProg = CardDAO.getCollectionProgress(uid, id, false);
-				double fProg = CardDAO.getCollectionProgress(uid, id, true);
+				double nProg = Card.queryNative(Number.class, "SELECT cs FROM \"GetNormalCompletionState\"(:id, :anime) cs", uid, id).doubleValue();
+				double fProg = Card.queryNative(Number.class, "SELECT cs FROM \"GetFoilCompletionState\"(:id, :anime) cs", uid, id).doubleValue();
 
 				double prcnt = Math.max(nProg, fProg);
 				g2d.setClip(new Rectangle2D.Double(15, 15 + 350 * (1 - prcnt), 225, 350 * prcnt));
@@ -173,7 +175,7 @@ public class Card {
 				return canvas;
 			}
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
 	}
@@ -193,7 +195,7 @@ public class Card {
 
 	private byte[] getImageBytes() throws IOException {
 		File f = new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png");
-		byte[] cardBytes = heroImg == null ? null : Helper.btoc(heroImg);
+		byte[] cardBytes = heroImg == null ? null : ImageHelper.btoc(heroImg);
 		if (cardBytes == null) {
 			if (f.exists()) {
 				File finalF = f;
@@ -201,12 +203,12 @@ public class Card {
 					try {
 						return FileUtils.readFileToByteArray(finalF);
 					} catch (IOException e) {
-						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+						MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 						return null;
 					}
 				});
 			} else {
-				f = Helper.getResourceAsFile(this.getClass(), "kawaipon/not_found.png");
+				f = FileHelper.getResourceAsFile(this.getClass(), "kawaipon/not_found.png");
 				assert f != null;
 
 				cardBytes = FileUtils.readFileToByteArray(f);
@@ -248,7 +250,7 @@ public class Card {
 
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
-				int[] rgb = Helper.unpackRGB(bi.getRGB(x, y));
+				int[] rgb = ImageHelper.unpackRGB(bi.getRGB(x, y));
 				int alpha = rgb[0];
 				float[] hsv;
 				if (border) {
@@ -259,9 +261,9 @@ public class Card {
 					hsv[0] = ((hsv[0] * 360 + 42) % 360) / 360;
 				}
 
-				rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+				rgb = ImageHelper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 
-				out.setRGB(x, y, Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
+				out.setRGB(x, y, ImageHelper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
 			}
 		}
 
@@ -301,17 +303,17 @@ public class Card {
 
 	public String getBase64(boolean withBorder) {
 		if (withBorder) {
-			return Helper.atob(drawCard(false), "png");
+			return ImageHelper.atob(drawCard(false), "png");
 		} else {
-			return Helper.atob(drawCardNoBorder(false), "png");
+			return ImageHelper.atob(drawCardNoBorder(false), "png");
 		}
 	}
 
 	public String getBase64(boolean withBorder, boolean foil) {
 		if (withBorder) {
-			return Helper.atob(drawCard(foil), "png");
+			return ImageHelper.atob(drawCard(foil), "png");
 		} else {
-			return Helper.atob(drawCardNoBorder(foil), "png");
+			return ImageHelper.atob(drawCardNoBorder(foil), "png");
 		}
 	}
 }

@@ -23,7 +23,7 @@ import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
 import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -42,7 +42,7 @@ import java.io.IOException;
 public class ErrorHandler implements ErrorController {
 	@RequestMapping(value = "/error", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] handleError(HttpServletResponse http) throws IOException {
-		return Helper.getBytes(ImageIO.read(Helper.getImage("https://http.cat/" + http.getStatus())));
+		return ImageHelper.getBytes(ImageIO.read(ImageHelper.getImage("https://http.cat/" + http.getStatus())));
 	}
 
 	@ExceptionHandler({HttpMessageNotWritableException.class, ConversionNotSupportedException.class})

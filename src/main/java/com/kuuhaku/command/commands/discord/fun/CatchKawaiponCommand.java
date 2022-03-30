@@ -21,8 +21,6 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
@@ -33,9 +31,8 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.entities.*;
-import org.hibernate.exception.ConstraintViolationException;
 
 import javax.persistence.PersistenceException;
 import java.util.Map;
@@ -49,7 +46,7 @@ public class CatchKawaiponCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
@@ -64,14 +61,14 @@ public class CatchKawaiponCommand implements Executable {
 			return;
 		}
 
-		int cost = kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * (kc.isFoil() ? 2 : 1);
+		int cost = kc.getCard().getRarity().getIndex() * Constants.BASE_CARD_PRICE * (kc.isFoil() ? 2 : 1);
 		if (acc.getTotalBalance() < cost) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		} else if (kp.getCards().contains(kc)) {
 			channel.sendMessage(I18n.getString("err_card-owned")).queue();
 			return;
-		} else if (CardDAO.checkHash(kc.getHash())) {
+		} else if (KawaiponCard.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.hash = :hash", kc.getHash()) != null) {
 			channel.sendMessage("❌ | Essa carta já foi coletada por alguém.").queue();
 			return;
 		}
@@ -94,7 +91,7 @@ public class CatchKawaiponCommand implements Executable {
 				acc.setDailyProgress(pg);
 			}
 
-			AccountDAO.saveAccount(acc);
+			acc.save();
 		} catch (PersistenceException e) {
 			channel.sendMessage("❌ | Essa carta já foi coletada por alguém.").queue();
 			return;

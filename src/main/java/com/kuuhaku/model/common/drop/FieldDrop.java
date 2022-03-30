@@ -18,14 +18,13 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
@@ -34,7 +33,7 @@ public class FieldDrop extends Drop<Field> {
 	boolean mainPrize = true;
 
 	public FieldDrop() {
-		super(CardDAO.getRandomField());
+		super(Field.getRandomField(false));
 	}
 
 	@Override
@@ -43,18 +42,18 @@ public class FieldDrop extends Drop<Field> {
 		if (dk.getFields().size() < 3) {
 			dk.addField(getPrize());
 		} else {
-			awardInstead(u, Helper.BASE_FIELD_PRICE);
+			awardInstead(u, Constants.BASE_FIELD_PRICE);
 			mainPrize = false;
 			return;
 		}
 		KawaiponDAO.saveDeck(dk);
 
-		Account acc = AccountDAO.getAccount(u.getId());
+		Account acc = Account.find(Account.class, u.getId());
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.merge(DailyTask.DROP_TASK, 1, Integer::sum);
 			acc.setDailyProgress(pg);
-			AccountDAO.saveAccount(acc);
+			acc.save();
 		}
 	}
 
@@ -70,7 +69,7 @@ public class FieldDrop extends Drop<Field> {
 		else
 			return "~~Campo %s~~\n(convertido em %s CR)".formatted(
 					getPrize().getCard().getName(),
-					Helper.separate(Helper.BASE_FIELD_PRICE)
+					StringHelper.separate(Constants.BASE_FIELD_PRICE)
 			);
 	}
 }

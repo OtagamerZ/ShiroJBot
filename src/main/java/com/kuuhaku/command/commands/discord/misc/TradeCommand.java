@@ -24,13 +24,10 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.TradeDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -38,8 +35,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -81,40 +81,46 @@ public class TradeCommand implements Executable {
 		}
 
 		User tgt = message.getMentionedUsers().get(0);
-		Trade t = TradeDAO.getTrade(author.getId(), tgt.getId());
+		Trade t = Trade.query(Trade.class, """
+				SELECT t
+				FROM Trade t
+				JOIN t.offers o
+				WHERE t.finished = FALSE
+				AND o.uid IN :ids
+				""", Set.of(author.getId(), tgt.getId()));
 		if (t != null) {
 			String other = t.getLeft().getUid().equals(author.getId()) ? t.getRight().getUid() : t.getLeft().getUid();
-			String name = Helper.getUsername(other);
+			String name = MiscHelper.getUsername(other);
 			if (!tgt.getId().equals(other)) {
-				channel.sendMessage("❌ | Você possui uma troca pendente com " + Helper.unmention(name) + ".").queue();
+				channel.sendMessage("❌ | Você possui uma troca pendente com " + MiscHelper.unmention(name) + ".").queue();
 				return;
 			}
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja" + (t == null ? "" : " continuar a") + " negociar com você, deseja aceitar?").queue(s ->
-				Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				Pages.buttonize(s, Collections.singletonMap(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							if (!wrapper.getUser().getId().equals(tgt.getId())) return;
 							Main.getInfo().getConfirmationPending().remove(author.getId(), true);
-							s.delete().queue(null, Helper::doNothing);
+							s.delete().queue(null, MiscHelper::doNothing);
 
-							Trade trade = Helper.getOr(t, new Trade(author.getId(), tgt.getId()));
+							Trade trade = CollectionHelper.getOr(t, new Trade(author.getId(), tgt.getId()));
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
 									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta`, para adicionar/remover uma quantia de CR digite `+/- valor`.")
-									.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
-									.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
+									.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + StringHelper.separate(trade.getLeft().getValue()), true)
+									.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + StringHelper.separate(trade.getRight().getValue()), true)
 									.setFooter("%s: %s CR\n%s: %s CR".formatted(
 											author.getName(),
-											Helper.separate(trade.getLeft().getAccount().getBalance()),
+											StringHelper.separate(trade.getLeft().getAccount().getBalance()),
 											tgt.getName(),
-											Helper.separate(trade.getRight().getAccount().getBalance())
+											StringHelper.separate(trade.getRight().getAccount().getBalance())
 									));
 
 							sendTradeWindow(author, channel, guild, tgt, trade, eb);
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-						u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						u -> LogicHelper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				)
 		);
@@ -128,7 +134,7 @@ public class TradeCommand implements Executable {
 					User usr = event.getAuthor();
 					String content = event.getMessage().getContentRaw();
 
-					if (Helper.equalsAny(usr.getId(), author.getId(), tgt.getId()) && (content.startsWith("+") || content.startsWith("-"))) {
+					if (LogicHelper.equalsAny(usr.getId(), author.getId(), tgt.getId()) && (content.startsWith("+") || content.startsWith("-"))) {
 						boolean add = content.startsWith("+");
 						String[] rawOffer = content.replaceFirst("[+\\-]", "").trim().split(" ");
 						if (rawOffer.length < 1) return;
@@ -159,7 +165,7 @@ public class TradeCommand implements Executable {
 
 									Account acc = to.getAccount();
 									acc.removeCredit(c, this.getClass());
-									AccountDAO.saveAccount(acc);
+									acc.save();
 								} else {
 									if (to.getValue() - c < 0) {
 										channel.sendMessage("❌ | Você não pode reduzir o CR oferecido para menos que 0.").queue();
@@ -170,10 +176,10 @@ public class TradeCommand implements Executable {
 
 									Account acc = to.getAccount();
 									acc.addCredit(c, this.getClass());
-									AccountDAO.saveAccount(acc);
+									acc.save();
 								}
 							} catch (NumberFormatException e) {
-								channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
+								channel.sendMessage("❌ | O valor máximo é " + StringHelper.separate(Integer.MAX_VALUE) + " CR!").queue();
 								return;
 							}
 						} else {
@@ -213,33 +219,33 @@ public class TradeCommand implements Executable {
 
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
 									if (matches.contains(CardType.KAWAIPON)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
 											chooseVersion(author, channel, kp, name, chosen);
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 									if (matches.contains(CardType.SENSHI)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
-											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
+											chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.SENSHI, false));
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 									if (matches.contains(CardType.EVOGEAR)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
-											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
+											chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.EVOGEAR, false));
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 									if (matches.contains(CardType.FIELD)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
-											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
+											chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.FIELD, false));
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 
 									channel.sendMessageEmbeds(eb.build())
 											.queue(s -> Pages.buttonize(s, btns, true,
-													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
+													Constants.USE_BUTTONS, 1, TimeUnit.MINUTES,
 													u -> u.getId().equals(author.getId()),
 													ms -> chosen.complete(null)
 											));
@@ -250,7 +256,7 @@ public class TradeCommand implements Executable {
 									CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 									switch (type) {
 										case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-										case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+										case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), type, false));
 										case NONE -> chosen.complete(null);
 									}
 								}
@@ -272,7 +278,7 @@ public class TradeCommand implements Executable {
 
 									TradeCard tc = switch (off.getMiddle()) {
 										case EVOGEAR -> {
-											Equipment e = fDk.getEquipment(off.getLeft());
+											Evogear e = fDk.getEquipment(off.getLeft());
 											fDk.removeEquipment(e);
 											if (e == null) yield null;
 
@@ -309,7 +315,7 @@ public class TradeCommand implements Executable {
 
 									KawaiponDAO.saveKawaipon(finalKp);
 								} catch (InterruptedException | ExecutionException e) {
-									Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+									MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 								}
 							} else {
 								String name = offer.toUpperCase(Locale.ROOT);
@@ -332,33 +338,33 @@ public class TradeCommand implements Executable {
 
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
 									if (matches.contains(CardType.KAWAIPON)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
 											chooseVersion(author, channel, to, name, chosen);
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 									if (matches.contains(CardType.SENSHI)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
-											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
+											chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.SENSHI, false));
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 									if (matches.contains(CardType.EVOGEAR)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
-											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
+											chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.EVOGEAR, false));
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 									if (matches.contains(CardType.FIELD)) {
-										btns.put(Helper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
-											chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
-											wrapper.getMessage().delete().queue(null, Helper::doNothing);
+										btns.put(StringHelper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
+											chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.FIELD, false));
+											wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 										});
 									}
 
 									channel.sendMessageEmbeds(eb.build())
 											.queue(s -> Pages.buttonize(s, btns, true,
-													ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
+													Constants.USE_BUTTONS, 1, TimeUnit.MINUTES,
 													u -> u.getId().equals(author.getId()),
 													ms -> chosen.complete(null)
 											));
@@ -369,7 +375,7 @@ public class TradeCommand implements Executable {
 									CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 									switch (type) {
 										case KAWAIPON -> chooseVersion(author, channel, to, name, chosen);
-										case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+										case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), type, false));
 										case NONE -> chosen.complete(null);
 									}
 								}
@@ -396,7 +402,7 @@ public class TradeCommand implements Executable {
 
 									to.rollback(card);
 								} catch (InterruptedException | ExecutionException e) {
-									Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+									MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 								}
 							}
 						}
@@ -404,29 +410,29 @@ public class TradeCommand implements Executable {
 						for (TradeOffer of : trade.getOffers()) {
 							of.setAccepted(false);
 						}
-						TradeDAO.saveTrade(trade);
+						trade.save();
 
 						eb.clearFields()
-								.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
-								.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
+								.addField(author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + StringHelper.separate(trade.getLeft().getValue()), true)
+								.addField(tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + StringHelper.separate(trade.getRight().getValue()), true)
 								.setFooter("%s: %s CR\n%s: %s CR".formatted(
 										author.getName(),
-										Helper.separate(trade.getLeft().getAccount().getBalance()),
+										StringHelper.separate(trade.getLeft().getAccount().getBalance()),
 										tgt.getName(),
-										Helper.separate(trade.getRight().getAccount().getBalance())
+										StringHelper.separate(trade.getRight().getAccount().getBalance())
 								));
 
 						msg.editMessageEmbeds(eb.build()).queue(null, t -> {
-							msg.delete().queue(null, Helper::doNothing);
+							msg.delete().queue(null, MiscHelper::doNothing);
 							sendTradeWindow(author, channel, guild, tgt, trade, eb);
 						});
 
-						event.getMessage().delete().queue(null, Helper::doNothing);
+						event.getMessage().delete().queue(null, MiscHelper::doNothing);
 					}
 				}
 			};
 
-			Pages.buttonize(msg, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+			Pages.buttonize(msg, Collections.singletonMap(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 						if (trade.getOffers().stream().anyMatch(o -> o.getUid().equals(wrapper.getUser().getId()))) {
 							trade.getOffer(wrapper.getUser().getId()).setAccepted(true);
 
@@ -435,45 +441,45 @@ public class TradeCommand implements Executable {
 								trade.getRight().commit(trade.getLeft().getUid());
 								trade.setFinished(true);
 
-								msg.delete().queue(null, Helper::doNothing);
+								msg.delete().queue(null, MiscHelper::doNothing);
 								sml.close();
 								channel.sendMessage("Transação realizada com sucesso!").queue();
-								TradeDAO.saveTrade(trade);
+								trade.save();
 								return;
 							}
 
 							eb.clearFields()
-									.addField((trade.getLeft().hasAccepted() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + Helper.separate(trade.getLeft().getValue()), true)
-									.addField((trade.getRight().hasAccepted() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + Helper.separate(trade.getRight().getValue()), true)
+									.addField((trade.getLeft().hasAccepted() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", trade.getLeft() + "\nValor base da oferta: " + StringHelper.separate(trade.getLeft().getValue()), true)
+									.addField((trade.getRight().hasAccepted() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", trade.getRight() + "\nValor base da oferta: " + StringHelper.separate(trade.getRight().getValue()), true)
 									.setFooter("%s: %s CR\n%s: %s CR".formatted(
 											author.getName(),
-											Helper.separate(trade.getLeft().getAccount().getBalance()),
+											StringHelper.separate(trade.getLeft().getAccount().getBalance()),
 											tgt.getName(),
-											Helper.separate(trade.getRight().getAccount().getBalance())
+											StringHelper.separate(trade.getRight().getAccount().getBalance())
 									));
 
 							msg.editMessageEmbeds(eb.build()).queue(null, t -> {
-								msg.delete().queue(null, Helper::doNothing);
+								msg.delete().queue(null, MiscHelper::doNothing);
 								sendTradeWindow(author, channel, guild, tgt, trade, eb);
 							});
 						}
-					}), ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
-					u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
+					}), Constants.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
+					u -> LogicHelper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 					_ms -> {
 						msg.editMessage("Transação cancelada.")
 								.flatMap(m -> m.suppressEmbeds(true))
-								.queue(null, Helper::doNothing);
+								.queue(null, MiscHelper::doNothing);
 						sml.close();
 
 						for (TradeOffer offer : trade.getOffers()) {
 							offer.rollback();
 						}
 
-						TradeDAO.removeTrade(trade);
+						trade.delete();
 					}
 			);
 
-			ShiroInfo.getShiroEvents().addHandler(guild, sml);
+			Main.getEvents().addHandler(guild, sml);
 		});
 	}
 
@@ -487,17 +493,17 @@ public class TradeCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
-								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+								put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(1)), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, false));
-									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 								});
-								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+								put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(2)), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(kcs.get(1).getCard(), CardType.KAWAIPON, true));
-									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 								});
-							}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}}, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -519,17 +525,17 @@ public class TradeCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
-								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+								put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(1)), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(tcs.get(0).getCard(), CardType.KAWAIPON, false));
-									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 								});
-								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+								put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(2)), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									chosen.complete(Triple.of(tcs.get(1).getCard(), CardType.KAWAIPON, true));
-									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 								});
-							}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}}, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());

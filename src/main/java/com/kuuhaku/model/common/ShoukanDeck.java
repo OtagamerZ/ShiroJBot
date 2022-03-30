@@ -20,14 +20,14 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.FileHelper;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,7 +49,7 @@ public class ShoukanDeck {
 
 	public BufferedImage view(Deck dk) {
 		List<Champion> champs = dk.getChampions();
-		List<Equipment> equips = dk.getEquipments();
+		List<Evogear> equips = dk.getEquipments();
 		List<Field> fields = dk.getFields();
 
 		champs = champs.stream()
@@ -57,15 +57,15 @@ public class ShoukanDeck {
 				.collect(Collectors.toList());
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(dk, 1) - 1, 0), new Equipment())).stream())
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(dk, 1) - 1, 0), new Evogear())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
 				.collect(Collectors.toList());
 
 		String path = acc.getFrame().name().startsWith("LEGACY_") ? "old" : "new";
-		BufferedImage deck = Helper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
-		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/destiny.png");
+		BufferedImage deck = FileHelper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
+		BufferedImage destiny = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/destiny.png");
 
 		assert deck != null;
 		Graphics2D g2d = deck.createGraphics();
@@ -80,9 +80,9 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
 
-		BufferedImage slotLock = Helper.getResourceAsImage(this.getClass(), "shoukan/slot_lock.png");
+		BufferedImage slotLock = FileHelper.getResourceAsImage(this.getClass(), "shoukan/slot_lock.png");
 		for (int i = 0, y = 0; i < equips.size(); i++, y = i / EVOGEAR_COLUMNS) {
-			Equipment e = equips.get(i);
+			Evogear e = equips.get(i);
 			if (e.getTier() == 0)
 				g2d.drawImage(slotLock, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
 			else {

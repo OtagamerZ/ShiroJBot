@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
@@ -34,7 +33,7 @@ public class PadoruDrop extends Drop<Integer> {
 	@Override
 	public void award(User u) {
 		DynamicParameterDAO.setParam("padoru_" + u.getId(), "padoru");
-		Account acc = AccountDAO.getAccount(u.getId());
+		Account acc = Account.find(Account.class, u.getId());
 
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
@@ -42,7 +41,7 @@ public class PadoruDrop extends Drop<Integer> {
 			acc.setDailyProgress(pg);
 		}
 
-		AccountDAO.saveAccount(acc);
+		acc.save();
 	}
 
 	@Override

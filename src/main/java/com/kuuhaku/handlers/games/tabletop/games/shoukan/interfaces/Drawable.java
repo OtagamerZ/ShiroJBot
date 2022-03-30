@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
@@ -28,7 +28,8 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -96,7 +97,7 @@ public interface Drawable {
 		int y = hasDesc ? 220 : 287;
 
 		if (def != 0) {
-			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
+			BufferedImage icon = FileHelper.getResourceAsImage(Drawable.class, "shoukan/defense.png");
 			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.green);
@@ -106,7 +107,7 @@ public interface Drawable {
 		}
 
 		if (atk != 0) {
-			BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
+			BufferedImage icon = FileHelper.getResourceAsImage(Drawable.class, "shoukan/attack.png");
 			g2d.drawImage(icon, 29, y, null);
 
 			g2d.setColor(Color.red);
@@ -118,7 +119,7 @@ public interface Drawable {
 		if (this instanceof Champion c) {
 			int dodge = c.getDodge();
 			if (dodge != 0) {
-				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/dodge.png");
+				BufferedImage icon = FileHelper.getResourceAsImage(Drawable.class, "shoukan/dodge.png");
 				g2d.drawImage(icon, 29, y, null);
 
 				g2d.setColor(Color.orange);
@@ -129,16 +130,16 @@ public interface Drawable {
 
 			int block = c.getBlock();
 			if (block != 0) {
-				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/block.png");
+				BufferedImage icon = FileHelper.getResourceAsImage(Drawable.class, "shoukan/block.png");
 				g2d.drawImage(icon, 29, y, null);
 
 				g2d.setColor(new Color(155, 155, 190));
 				Profile.drawOutlinedText(block + "%", 57, y + 21, g2d);
 			}
-		} else if (this instanceof Equipment e && e.getCharms().contains(Charm.SHIELD)) {
-			int charges = (int) Helper.getFibonacci(e.getTier()) - e.getBonus().getSpecialData().getInt("uses") - 1;
+		} else if (this instanceof Evogear e && e.getCharms().contains(Charm.SHIELD)) {
+			int charges = (int) MathHelper.getFibonacci(e.getTier()) - e.getBonus().getSpecialData().getInt("uses") - 1;
 			if (charges > 0) {
-				BufferedImage icon = Helper.getResourceAsImage(Drawable.class, "shoukan/charges.png");
+				BufferedImage icon = FileHelper.getResourceAsImage(Drawable.class, "shoukan/charges.png");
 				g2d.drawImage(icon, 29, y, null);
 
 				g2d.setColor(Color.orange);
@@ -149,7 +150,7 @@ public interface Drawable {
 		y = 59;
 		boolean drewMana = false;
 		if (mana > 0) {
-			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/mana.png"), 184, y, null);
+			g2d.drawImage(FileHelper.getResourceAsImage(Drawable.class, "shoukan/mana.png"), 184, y, null);
 
 			g2d.setColor(new Color(0, 165, 255));
 			Profile.drawOutlinedText(String.valueOf(mana), 179 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), y + 21, g2d);
@@ -158,7 +159,7 @@ public interface Drawable {
 		}
 
 		if (blood > 0) {
-			g2d.drawImage(Helper.getResourceAsImage(Drawable.class, "shoukan/blood.png"), 184, y + (drewMana ? 25 : 0), null);
+			g2d.drawImage(FileHelper.getResourceAsImage(Drawable.class, "shoukan/blood.png"), 184, y + (drewMana ? 25 : 0), null);
 
 			g2d.setColor(new Color(255, 51, 0));
 			Profile.drawOutlinedText(String.valueOf(blood), 179 - g2d.getFontMetrics().stringWidth(String.valueOf(blood)), y + 21 + (drewMana ? 25 : 0), g2d);

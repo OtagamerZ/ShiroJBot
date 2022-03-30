@@ -18,10 +18,8 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
@@ -29,7 +27,8 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Couple;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.*;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.imaging.ImageReadException;
@@ -58,9 +57,9 @@ public class Profile {
 	public static final int HEIGHT = 600;
 
 	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
-		BufferedImage avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl() + "?size=256")), 200, 200);
+		BufferedImage avatar = ImageHelper.scaleAndCenterImage(ImageIO.read(ImageHelper.getImage(m.getUser().getEffectiveAvatarUrl() + "?size=256")), 200, 200);
 		Member mb = MemberDAO.getMember(m.getId(), g.getId());
-		Account acc = AccountDAO.getAccount(m.getId());
+		Account acc = Account.find(Account.class, m.getId());
 
 		BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -80,27 +79,27 @@ public class Profile {
 		}
 
 		try {
-			if (!acc.hasAnimatedBg() || !Objects.requireNonNull(Helper.getFileType(acc.getBg())).contains("gif")) {
-				BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
+			if (!acc.hasAnimatedBg() || !Objects.requireNonNull(HttpHelper.getFileType(acc.getBg())).contains("gif")) {
+				BufferedImage bg = ImageHelper.scaleAndCenterImage(ImageIO.read(ImageHelper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
 				g2d.drawImage(bg, 0, 0, null);
 			}
 
 			if (main == null)
-				main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
+				main = ImageHelper.reverseColor(ImageHelper.colorThief(acc.getBg()));
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-			BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = ImageHelper.scaleAndCenterImage(ImageIO.read(ImageHelper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
 			g2d.drawImage(bg, xOffset, yOffset, null);
 			if (main == null)
-				main = Helper.reverseColor(Helper.colorThief(bg));
+				main = ImageHelper.reverseColor(ImageHelper.colorThief(bg));
 		}
 
 		Color lvlBar;
-		if (Helper.between(mb.getLevel(), 0, 35) || Helper.between(mb.getLevel(), 125, 155)) {
+		if (MathHelper.between(mb.getLevel(), 0, 35) || MathHelper.between(mb.getLevel(), 125, 155)) {
 			lvlBar = Color.decode("#552911");
-		} else if (Helper.between(mb.getLevel(), 35, 65) || Helper.between(mb.getLevel(), 155, 185)) {
+		} else if (MathHelper.between(mb.getLevel(), 35, 65) || MathHelper.between(mb.getLevel(), 155, 185)) {
 			lvlBar = Color.decode("#b3b3b3");
-		} else if (Helper.between(mb.getLevel(), 65, 90) || Helper.between(mb.getLevel(), 185, 215)) {
+		} else if (MathHelper.between(mb.getLevel(), 65, 90) || MathHelper.between(mb.getLevel(), 185, 215)) {
 			lvlBar = Color.decode("#cf9401");
 		} else {
 			lvlBar = Color.decode("#00d3d3");
@@ -121,7 +120,7 @@ public class Profile {
 
 		int current = (int) (mb.getXp() - Math.pow(mb.getLevel() - 1, 2) * 100);
 		int toNext = (int) (Math.pow(mb.getLevel(), 2) * 100 - Math.pow(mb.getLevel() - 1, 2) * 100);
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, -Helper.clamp(current * 240 / toNext, 0, 240));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, -MathHelper.clamp(current * 240 / toNext, 0, 240));
 
 		g2d.setColor(main);
 		g2d.setClip(null);
@@ -149,11 +148,11 @@ public class Profile {
 		drawOutlinedText(name, 270, 342, g2d);
 
 		try {
-			Couple c = WaifuDAO.getCouple(m.getId());
+			Couple c = Couple.query(Couple.class, "SELECT c FROM Couple c WHERE :uid IN (c.husbando, c.waifu)", m.getId());
 			if (c != null) {
-				String waifu = StringUtils.abbreviate(Unidecode.decode(Helper.getUsername(Member.getWaifu(m.getId()))), 20);
+				String waifu = StringUtils.abbreviate(Unidecode.decode(MiscHelper.getUsername(Member.getWaifu(m.getId()))), 20);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + waifu + " (" + c.getMarriedAt().format(Helper.DATE_FORMAT) + ")", 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + waifu + " (" + c.getMarriedAt().format(Constants.DATE_FORMAT) + ")", 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
@@ -162,7 +161,7 @@ public class Profile {
 		printCenteredString(String.valueOf(mb.getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 25));
-		printCenteredString(Helper.getShortenedValue(current, 1000) + "/" + Helper.getShortenedValue(toNext, 1000), 196, 52, 538, g2d);
+		printCenteredString(StringHelper.getShortenedValue(current, 1000) + "/" + StringHelper.getShortenedValue(toNext, 1000), 196, 52, 538, g2d);
 
 		int pos = MemberDAO.getMemberRankPos(mb.getUid(), mb.getSid(), false);
 		int posG = MemberDAO.getMemberRankPos(mb.getUid(), mb.getSid(), true);
@@ -237,7 +236,7 @@ public class Profile {
 					if (is != null)
 						add(ImageIO.read(is));
 				} catch (IOException e) {
-					Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
+					MiscHelper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
 				} catch (NullPointerException ignore) {
 				}
 			}
@@ -258,13 +257,13 @@ public class Profile {
 
 	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException, ImageReadException {
 		File out = File.createTempFile("profile_", ".gif");
-		List<GifFrame> frames = Helper.readGif(acc.getBg(), true).stream()
+		List<GifFrame> frames = ImageHelper.readGif(acc.getBg(), true).stream()
 				.peek(frame -> frame.rescaleFrame(WIDTH, HEIGHT))
 				.peek(frame -> frame.roundEdges(0.1f))
 				.peek(frame -> frame.applyOverlay(overlay))
 				.collect(Collectors.toList());
 
-		Helper.makeGIF(out, frames, 0, -1, 7);
+		ImageHelper.makeGIF(out, frames, 0, -1, 7);
 		return out;
 	}
 

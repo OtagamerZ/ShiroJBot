@@ -21,10 +21,8 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.entities.*;
-
-import java.util.Locale;
 
 @Command(
 		name = "escolha",
@@ -45,12 +43,6 @@ public class ChooseCommand implements Executable {
 		}
 
 		String[] opts = args[0].split(";");
-		long seed = 0;
-
-		for (char c : args[0].toLowerCase(Locale.ROOT).toCharArray()) {
-			seed += (int) c;
-		}
-
-		channel.sendMessage(":question: | Eu escolho a opção **" + Helper.getRandomEntry(opts) + "**!").queue();
+		channel.sendMessage(":question: | Eu escolho a opção **" + CollectionHelper.getRandomEntry(opts) + "**!").queue();
 	}
 }

@@ -24,7 +24,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -79,13 +79,13 @@ public class UnbanMemberCommand implements Executable {
 			RestAction.allOf(acts)
 					.mapToResult()
 					.flatMap(s -> channel.sendMessage("✅ | Membros desbanidos com sucesso!"))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		} else {
 			User u = users.stream().findFirst().orElse(null);
 
 			guild.unban(u)
 					.flatMap(s -> channel.sendMessage("✅ | " + u.getName() + " desbanido com sucesso!"))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		}
 	}
 }

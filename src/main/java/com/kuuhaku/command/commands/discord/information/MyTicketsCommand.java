@@ -21,14 +21,14 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Lottery;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.model.persistent.LotteryValue;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -50,7 +50,7 @@ public class MyTicketsCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		List<Lottery> l = LotteryDAO.getLotteriesByUser(author.getId());
+		List<Lottery> l = Lottery.queryAll(Lottery.class, "SELECT l FROM Lottery l WHERE l.valid = TRUE AND l.uid = :uid", author.getId());
 
 		if (l.isEmpty()) {
 			channel.sendMessage("❌ | Você não comprou nenhum bilhete ainda.").queue();
@@ -70,7 +70,7 @@ public class MyTicketsCommand implements Executable, Slashed {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(":tickets: | Seus bilhetes da loteria")
 				.setDescription(sb.toString())
-				.setFooter("Prêmio atual: %s CR".formatted(Helper.separate(LotteryDAO.getLotteryValue().getValue())));
+				.setFooter("Prêmio atual: %s CR".formatted(StringHelper.separate(LotteryValue.find(LotteryValue.class, 0).getValue())));
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

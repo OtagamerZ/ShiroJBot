@@ -23,7 +23,9 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -47,7 +49,7 @@ public class ColorTesterCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length < 1 || !args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
+		if (args.length < 1 || !args[0].contains("#") || !MathHelper.between(args[0].length(), 7, 8)) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 			return;
 		}
@@ -65,9 +67,9 @@ public class ColorTesterCommand implements Executable {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bi, "png", baos);
 
-			File colors = Helper.getResourceAsFile(this.getClass(), "colors.txt");
-			int line = Helper.findStringInFile(colors, tone, s -> s.split(",")[0]);
-			String name = line > -1 ? Helper.getLineFromFile(colors, line) : null;
+			File colors = FileHelper.getResourceAsFile(this.getClass(), "colors.txt");
+			int line = FileHelper.findStringInFile(colors, tone, s -> s.split(",")[0]);
+			String name = line > -1 ? FileHelper.getLineFromFile(colors, line) : null;
 			Color color = Color.decode(args[0]);
 
 			EmbedBuilder eb = new EmbedBuilder()
@@ -83,7 +85,7 @@ public class ColorTesterCommand implements Executable {
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

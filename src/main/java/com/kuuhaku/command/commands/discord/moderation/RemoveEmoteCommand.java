@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "removeremote",
@@ -58,7 +57,7 @@ public class RemoveEmoteCommand implements Executable {
 
 			e.delete()
 					.flatMap(s -> channel.sendMessage("✅ | Emote removido com sucesso!"))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		} else {
 			List<Emote> filteredList = message.getEmotes().stream()
 					.filter(e -> guild.getEmoteById(e.getId()) != null)

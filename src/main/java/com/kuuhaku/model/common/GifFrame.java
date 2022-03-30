@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import org.apache.commons.imaging.formats.gif.DisposalMethod;
 
 import java.awt.*;
@@ -61,7 +61,7 @@ public class GifFrame {
 	}
 
 	public BufferedImage rescaleFrame(int width, int height) {
-		adjustedFrame = Helper.scaleAndCenterImage(getAdjustedFrame(), width, height);
+		adjustedFrame = ImageHelper.scaleAndCenterImage(getAdjustedFrame(), width, height);
 		return adjustedFrame;
 	}
 

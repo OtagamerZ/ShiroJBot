@@ -45,7 +45,7 @@ public class RenameCardCommand implements Executable {
 
 		String oldName = args[0].toUpperCase(Locale.ROOT);
 		String newName = args[1].toUpperCase(Locale.ROOT);
-		Card c = CardDAO.getRawCard(oldName);
+		Card c = Card.find(Card.class, oldName.toUpperCase(Locale.ROOT));
 
 		if (c == null) {
 			channel.sendMessage("❌ | Não existe uma carta com esse nome.").queue();
@@ -71,17 +71,18 @@ public class RenameCardCommand implements Executable {
 			return;
 		}
 
-		if (args.length > 2)
-			CardDAO.setCardName(
+		if (args.length > 2) {
+			Card.apply("UPDATE Card c SET c.id = :new, c.name = :name WHERE c.id = :old",
 					oldName,
-					newName,
-					argsAsText.replace(String.join(" ", args[0], args[1]), "").trim()
+					argsAsText.replace(String.join(" ", args[0], args[1]), "").trim(),
+					newName
 			);
-		else
-			CardDAO.setCardName(
+		} else {
+			Card.apply("UPDATE Card c SET c.id = :new WHERE c.id = :old",
 					oldName,
 					newName
 			);
+		}
 
 		channel.sendMessage("Carta renomeada com sucesso!").queue();
 	}
