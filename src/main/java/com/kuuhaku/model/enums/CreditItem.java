@@ -18,19 +18,20 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.TriFunction;
+import com.kuuhaku.utils.functional.TriFunction;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
+import java.util.List;
 import java.util.Locale;
 
 public enum CreditItem {
@@ -48,7 +49,7 @@ public enum CreditItem {
 					GuildConfig gc = GuildDAO.getGuildById(chn.getGuild().getId());
 					TextChannel lvlChannel = gc.getLevelChannel();
 					if (lvlUp && gc.isLevelNotif()) {
-						Helper.getOr(lvlChannel, chn).sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+						CollectionHelper.getOr(lvlChannel, chn).sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 					}
 				} catch (InsufficientPermissionException e) {
 					chn.sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
@@ -62,7 +63,7 @@ public enum CreditItem {
 			5_000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, false);
+				MiscHelper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, false);
 
 				return true;
 			}
@@ -76,14 +77,15 @@ public enum CreditItem {
 					return false;
 				}
 
-				AddedAnime an = CardDAO.verifyAnime(args[1].toUpperCase(Locale.ROOT));
-				if (an == null) {
-					chn.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+				AddedAnime anime = AddedAnime.find(AddedAnime.class, args[1].toUpperCase(Locale.ROOT));
+				List<String> animes = AddedAnime.queryAllNative(String.class, "SELECT a.name FROM AddedAnime a WHERE a.hidden = FALSE");
+				if (anime == null) {
+					chn.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + StringHelper.didYouMean(args[1], animes.toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 					return false;
 				}
 
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), an, false);
+				MiscHelper.forceSpawnKawaipon(gc, chn, mb.getUser(), anime, false);
 				return true;
 			}
 	),
@@ -91,10 +93,10 @@ public enum CreditItem {
 			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 5",
 			15_000,
 			(mb, chn, args) -> {
-				Account acc = AccountDAO.getAccount(mb.getId());
+				Account acc = Account.find(Account.class, mb.getId());
 
 				acc.setCardStashCapacity(acc.getCardStashCapacity() + 5);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
 				return true;
 			}
@@ -104,7 +106,7 @@ public enum CreditItem {
 			65_000,
 			(mb, chn, args) -> {
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, true);
+				MiscHelper.forceSpawnKawaipon(gc, chn, mb.getUser(), null, true);
 				return true;
 			}
 	),
@@ -117,14 +119,15 @@ public enum CreditItem {
 					return false;
 				}
 
-				AddedAnime an = CardDAO.verifyAnime(args[1].toUpperCase(Locale.ROOT));
-				if (an == null) {
-					chn.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+				AddedAnime anime = AddedAnime.find(AddedAnime.class, args[1].toUpperCase(Locale.ROOT));
+				List<String> animes = AddedAnime.queryAllNative(String.class, "SELECT a.name FROM AddedAnime a WHERE a.hidden = FALSE");
+				if (anime == null) {
+					chn.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + StringHelper.didYouMean(args[1], animes.toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 					return false;
 				}
 
 				GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-				Helper.forceSpawnKawaipon(gc, chn, mb.getUser(), an, true);
+				MiscHelper.forceSpawnKawaipon(gc, chn, mb.getUser(), anime, true);
 				return true;
 			}
 	);

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.api.endpoint.payload;
 
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.json.JSONObject;
 
 public class ReadyData {
 	private final JSONObject data;

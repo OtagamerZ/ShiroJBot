@@ -1,30 +1,30 @@
 package com.kuuhaku.utils;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Signature;
+import com.kuuhaku.utils.helpers.StringHelper;
 import org.intellij.lang.annotations.Language;
 
-import javax.annotation.RegEx;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class SignatureUtils {
 	@Language("RegExp")
-	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-z]+):(?<type>[A-Z]+)(?<required>:R)?>$";
+	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-z]+):(?<type>[A-Z]+):(?<required>R)?>(?:\\[(?<options>.*)])?$";
 
 	public static Map<String, String> parse(Class<? extends Executable> klass, String input) {
 		Map<String, String> out = new LinkedHashMap<>();
-		String[] signatures = Main.getCommandManager().getCommandSignature(klass);
+		Signature annot = klass.getDeclaredAnnotation(Signature.class);
+		if (annot == null) return out;
+
+		String[] signatures = annot.value();
 
 		for (String sig : signatures) {
 			String str = input;
-			String[] args = sig.split("[ ]+");
+			String[] args = sig.split(" +");
 
 			for (String arg : args) {
-				Map<String, String> groups = Helper.extractNamedGroups(arg, ARGUMENT_PATTERN);
+				Map<String, String> groups = StringHelper.extractNamedGroups(arg, ARGUMENT_PATTERN);
 				String name = groups.get("name");
 				boolean required = groups.containsKey("required");
 
@@ -35,10 +35,15 @@ public abstract class SignatureUtils {
 						out.put(name, str);
 						str = "";
 					} else {
-						String s = str.split("[ ]+")[0].trim();
+						List<String> opts = Arrays.stream(groups.getOrDefault("options", "").split(","))
+								.filter(s -> !s.isBlank())
+								.map(String::toLowerCase)
+								.toList();
+
+						String s = str.split(" +")[0].trim();
 						str = str.replaceFirst(Pattern.quote(s), "").trim();
 
-						if (type.validate(s)) {
+						if (type.validate(s) && (opts.isEmpty() || opts.contains(s.toLowerCase(Locale.ROOT)))) {
 							out.put(name, str);
 						} else if (required) {
 							out.clear();
@@ -53,7 +58,7 @@ public abstract class SignatureUtils {
 				}
 			}
 
-			if (!out.isEmpty()) break;
+			if (!out.isEmpty()) return out;
 		}
 
 		return out;

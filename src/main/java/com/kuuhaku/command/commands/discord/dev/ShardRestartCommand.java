@@ -22,7 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -50,14 +50,14 @@ public class ShardRestartCommand implements Executable {
 
 		int id = Integer.parseInt(args[0]);
 
-		if (Main.getShiroShards().getShardById(id) == null) {
+		if (Main.getShiro().getShardById(id) == null) {
 			channel.sendMessage("❌ | Não existe nenhum Shard com esse ID.").queue();
 			return;
 		}
 
 		channel.sendMessage("Reiniciando Shard com ID %s...".formatted(id)).queue(m -> {
-			Main.getShiroShards().restart(id);
-			List<JDA> shards = Main.getShiroShards().getShards().stream()
+			Main.getShiro().restart(id);
+			List<JDA> shards = Main.getShiro().getShards().stream()
 					.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
 					.filter(s -> s.getStatus() != JDA.Status.CONNECTED)
 					.toList();
@@ -66,9 +66,9 @@ public class ShardRestartCommand implements Executable {
 					shard.awaitReady();
 					shard.getPresence().setActivity(Main.getRandomActivity());
 
-					Helper.logger(Main.class).info("Shard " + id + " pronto!");
+					MiscHelper.logger(Main.class).info("Shard " + id + " pronto!");
 				} catch (InterruptedException e) {
-					Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
+					MiscHelper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
 				}
 			}
 

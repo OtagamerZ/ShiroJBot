@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -26,7 +28,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "raidinfo")
-public class RaidInfo {
+public class RaidInfo extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

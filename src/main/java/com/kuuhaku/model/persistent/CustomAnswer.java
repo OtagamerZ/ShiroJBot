@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -62,11 +62,11 @@ public class CustomAnswer {
 		this.anywhere = anywhere;
 		this.chance = chance;
 
-		for (String s : Helper.getOr(users, "").split(",")) {
+		for (String s : CollectionHelper.getOr(users, "").split(",")) {
 			if (!s.isBlank()) this.users.add(s);
 		}
 
-		for (String s : Helper.getOr(channels, "").split(",")) {
+		for (String s : CollectionHelper.getOr(channels, "").split(",")) {
 			if (!s.isBlank()) this.channels.add(s);
 		}
 	}

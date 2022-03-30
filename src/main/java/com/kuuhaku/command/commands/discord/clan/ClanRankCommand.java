@@ -27,7 +27,8 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.records.ClanRanking;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
@@ -59,7 +60,7 @@ public class ClanRankCommand implements Executable {
 				if (args.length == 0) {
 					List<ClanRanking> rank = ClanDAO.getClanRanking();
 
-					CategoryChart chart = Helper.buildBarChart(
+					CategoryChart chart = MiscHelper.buildBarChart(
 							"Ranking dos Clãs",
 							Pair.of("", "Pontos"),
 							rank.stream().map(ClanRanking::getColor).collect(Collectors.toList())
@@ -72,12 +73,12 @@ public class ClanRankCommand implements Executable {
 						);
 					}
 
-					channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "ranking", "png")).queue();
+					channel.sendFile(ImageHelper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "ranking", "png")).queue();
 					m.delete().queue();
 				}
 			} catch (Exception e) {
 				m.editMessage(I18n.getString("err_clan-rank")).queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}

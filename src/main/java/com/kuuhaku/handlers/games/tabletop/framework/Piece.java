@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +58,7 @@ public abstract class Piece {
 		if (white) {
 			for (int y = 0; y < 64; y++) {
 				for (int x = 0; x < 64; x++) {
-					int[] rgb = Helper.unpackRGB(bi.getRGB(x, y));
+					int[] rgb = ImageHelper.unpackRGB(bi.getRGB(x, y));
 					int r = 255 - rgb[1];
 					int g = 255 - rgb[2];
 					int b = 255 - rgb[3];
@@ -66,7 +66,7 @@ public abstract class Piece {
 					bi.setRGB(
 							x,
 							y,
-							Helper.packRGB(rgb[0], r, g, b)
+							ImageHelper.packRGB(rgb[0], r, g, b)
 					);
 				}
 			}

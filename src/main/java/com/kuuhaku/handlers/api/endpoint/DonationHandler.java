@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.model.records.KoFi;
-import com.kuuhaku.utils.JSONUtils;
+import com.kuuhaku.utils.json.JSONUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
@@ -55,7 +55,7 @@ public class LogCommand implements Executable {
 
 			channel.sendMessage("Aqui está!").addFile(tempLog, "stacktrace.txt").queue();
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

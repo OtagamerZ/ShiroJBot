@@ -1,10 +1,11 @@
 package com.kuuhaku.utils.converters;
 
-import com.kuuhaku.utils.JSONUtils;
+import com.kuuhaku.utils.json.JSONUtils;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,14 +31,8 @@ public abstract class ListConverter<T> implements AttributeConverter<List<T>, St
 
     @Override
     public List<T> convertToEntityAttribute(String string) {
-        if (converter == null) {
-            return JSONUtils.toList(string).stream()
-                    .map(klass::cast)
-                    .collect(Collectors.toList());
-        } else {
-            return JSONUtils.toList(string).stream()
-                    .map(converter::apply)
-                    .collect(Collectors.toList());
-        }
+        return JSONUtils.toList(string).stream()
+                .map(Objects.requireNonNullElseGet(converter, () -> klass::cast))
+                .collect(Collectors.toList());
     }
 }

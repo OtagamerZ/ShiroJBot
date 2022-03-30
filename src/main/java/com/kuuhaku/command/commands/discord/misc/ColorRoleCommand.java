@@ -26,7 +26,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.ColorRole;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -81,7 +81,7 @@ public class ColorRoleCommand implements Executable {
 				ImageIO.write(bi, "png", baos);
 				channel.sendMessage("**Cores disponíveis neste servidor:**").addFile(baos.toByteArray(), "colors.png").queue();
 			} catch (IOException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 			return;
 		}

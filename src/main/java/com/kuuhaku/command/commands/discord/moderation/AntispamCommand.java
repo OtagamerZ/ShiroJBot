@@ -25,7 +25,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +45,7 @@ public class AntispamCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (args.length > 0 && Helper.equalsAny(args[0], "soft", "hard")) {
+		if (args.length > 0 && LogicHelper.equalsAny(args[0], "soft", "hard")) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "soft" -> {
 					if (!gc.isHardAntispam()) {

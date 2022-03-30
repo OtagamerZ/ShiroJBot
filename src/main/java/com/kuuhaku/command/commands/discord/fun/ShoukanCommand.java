@@ -41,9 +41,12 @@ import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.model.records.SoloLobby;
 import com.kuuhaku.model.records.TournamentMatch;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -75,13 +78,13 @@ public class ShoukanCommand implements Executable {
 			return;
 		}
 
-		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
-		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
-		boolean tournament = args.length > 0 && Helper.equalsAny(args[0], "torneio", "tournament");
+		boolean practice = args.length > 0 && LogicHelper.equalsAny(args[0], "practice", "treino");
+		boolean ranked = args.length > 0 && LogicHelper.equalsAny(args[0], "ranqueada", "ranked");
+		boolean tournament = args.length > 0 && LogicHelper.equalsAny(args[0], "torneio", "tournament");
 		Deck d = KawaiponDAO.getDeck(author.getId());
 
 		if (practice) {
-			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
+			JSONObject custom = CollectionHelper.getOr(StringHelper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
 			Rules rules;
 			if (!custom.isEmpty()) {
 				rules = new Rules(custom, false);
@@ -89,7 +92,7 @@ public class ShoukanCommand implements Executable {
 				rules = new Rules(false);
 			}
 
-			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
+			boolean daily = args.length > 1 && LogicHelper.equalsAny(args[1], "daily", "diario");
 
 			if (!daily && d.hasInvalidDeck(channel)) return;
 
@@ -98,7 +101,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, false, null, author, author);
+			GlobalGame t = new Shoukan(Main.getShiro(), new GameChannel(channel), 0, rules, daily, false, false, null, author, author);
 			t.start();
 		} else if (ranked) {
 			if (d.isNovice()) {
@@ -130,9 +133,9 @@ public class ShoukanCommand implements Executable {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
-				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado por mais %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
+				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado por mais %s.".formatted(StringHelper.toStringDuration(mmr.getRemainingBlock()))).queue();
 				return;
-			} else if (args.length < 2 || !Helper.equalsAny(args[1], "solo", "duo")) {
+			} else if (args.length < 2 || !LogicHelper.equalsAny(args[1], "solo", "duo")) {
 				channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
 				return;
 			}
@@ -151,7 +154,7 @@ public class ShoukanCommand implements Executable {
 
 						sl.mmr().getUser().openPrivateChannel()
 								.flatMap(c -> c.sendMessage(author.getName() + " entrou no saguão (" + (mm.getSoloLobby().size() - 1) + " na fila)."))
-								.queue(null, Helper::doNothing);
+								.queue(null, MiscHelper::doNothing);
 					}
 				}
 				case DUO -> {
@@ -164,7 +167,7 @@ public class ShoukanCommand implements Executable {
 					MatchMakingRating duo = MatchMakingRatingDAO.getMMR(u.getId());
 
 					if (duo.isBlocked()) {
-						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado por mais %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
+						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado por mais %s.".formatted(StringHelper.toStringDuration(mmr.getRemainingBlock()))).queue();
 						return;
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
 						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();
@@ -177,10 +180,10 @@ public class ShoukanCommand implements Executable {
 
 					Main.getInfo().getConfirmationPending().put(author.getId(), true);
 					channel.sendMessage(u.getAsMention() + " você foi convidado a entrar no saguão DUO com " + author.getAsMention() + ", deseja aceitar?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 										if (wrapper.getUser().getId().equals(u.getId())) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
-											s.delete().queue(null, Helper::doNothing);
+											s.delete().queue(null, MiscHelper::doNothing);
 
 											if (mm.isInLobby(mmr)) {
 												channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
@@ -206,14 +209,14 @@ public class ShoukanCommand implements Executable {
 
 												sl.duo().p1().getUser().openPrivateChannel()
 														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão (" + (mm.getDuoLobby().size() - 1) + " na fila)."))
-														.queue(null, Helper::doNothing);
+														.queue(null, MiscHelper::doNothing);
 												sl.duo().p2().getUser().openPrivateChannel()
 														.flatMap(c -> c.sendMessage("Equipe " + author.getName() + " e " + u.getName() + " entraram no saguão (" + (mm.getDuoLobby().size() - 1) + " na fila)."))
-														.queue(null, Helper::doNothing);
+														.queue(null, MiscHelper::doNothing);
 											}
 										}
-									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-									usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId()),
+									}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									usr -> LogicHelper.equalsAny(usr.getId(), author.getId(), u.getId()),
 									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 							));
 				}
@@ -236,7 +239,7 @@ public class ShoukanCommand implements Executable {
 				TournamentMatch match = tn.generateMatch(phase, author.getId());
 				if (match == null) return;
 
-				User other = Main.getInfo().getUserByID(match.top().equals(author.getId()) ? match.bot() : match.top());
+				User other = Main.getUserByID(match.top().equals(author.getId()) ? match.bot() : match.top());
 				if (Main.getInfo().getConfirmationPending().get(other.getId()) != null) {
 					channel.sendMessage("❌ | " + other.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 					return;
@@ -255,10 +258,10 @@ public class ShoukanCommand implements Executable {
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage(other.getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar? (torneio)")
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(other.getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
-										s.delete().queue(null, Helper::doNothing);
+										s.delete().queue(null, MiscHelper::doNothing);
 
 										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
@@ -272,11 +275,11 @@ public class ShoukanCommand implements Executable {
 											return;
 										} else if (dk.hasInvalidDeck(channel)) return;
 
-										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getInfo().getUsersByID(match.top(), match.bot()));
+										GlobalGame t = new Shoukan(Main.getShiro(), new GameChannel(channel), 0, tn.getCustomRules(), false, false, true, match, Main.getUsersByID(match.top(), match.bot()));
 										t.start();
 									}
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-								u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								u -> LogicHelper.equalsAny(u.getId(), author.getId(), other.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			}
@@ -298,10 +301,10 @@ public class ShoukanCommand implements Executable {
 			}
 
 			boolean team = users.size() == 3;
-			boolean daily = Helper.findParam(args, "daily", "diario");
+			boolean daily = MiscHelper.findParam(args, "daily", "diario");
 
 			int bet = 0;
-			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
+			JSONObject custom = CollectionHelper.getOr(StringHelper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
 			Rules rules;
 			if (!custom.isEmpty()) {
 				rules = new Rules(custom);
@@ -310,8 +313,8 @@ public class ShoukanCommand implements Executable {
 			}
 
 			if (!team) {
-				Account uacc = AccountDAO.getAccount(author.getId());
-				Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+				Account uacc = Account.find(Account.class, author.getId());
+				Account tacc = Account.find(Account.class, message.getMentionedUsers().get(0).getId());
 
 				if (args.length > 1 && StringUtils.isNumeric(args[1]) && rules.official()) {
 					bet = Integer.parseInt(args[1]);
@@ -364,8 +367,8 @@ public class ShoukanCommand implements Executable {
 				for (User player : players) {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
-				channel.sendMessage(Helper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : ""))
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				channel.sendMessage(CollectionHelper.parseAndJoin(users, IMentionable::getAsMention) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : ""))
+						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									if (players.contains(wrapper.getUser())) {
 										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
 
@@ -388,12 +391,12 @@ public class ShoukanCommand implements Executable {
 										if (accepted.size() == players.size()) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 
-											s.delete().queue(null, Helper::doNothing);
-											GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, rules, daily, false, true, null, players.toArray(User[]::new));
+											s.delete().queue(null, MiscHelper::doNothing);
+											GlobalGame t = new Shoukan(Main.getShiro(), new GameChannel(channel), 0, rules, daily, false, true, null, players.toArray(User[]::new));
 											t.start();
 										}
 									}
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> players.parallelStream().map(User::getId).anyMatch(i -> i.equals(u.getId())),
 								ms -> {
 									for (User player : players) {
@@ -404,11 +407,11 @@ public class ShoukanCommand implements Executable {
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				int finalBet = bet;
-				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : ""))
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (!rules.official() ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + StringHelper.separate(bet) + " CR)" : ""))
+						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
-										s.delete().queue(null, Helper::doNothing);
+										s.delete().queue(null, MiscHelper::doNothing);
 
 										Deck dk = KawaiponDAO.getDeck(wrapper.getUser().getId());
 										if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
@@ -422,11 +425,11 @@ public class ShoukanCommand implements Executable {
 											return;
 										} else if (!daily && dk.hasInvalidDeck(channel)) return;
 
-										GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
+										GlobalGame t = new Shoukan(Main.getShiro(), new GameChannel(channel), finalBet, rules, daily, false, true, null, author, message.getMentionedUsers().get(0));
 										t.start();
 									}
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								u -> LogicHelper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
 			}

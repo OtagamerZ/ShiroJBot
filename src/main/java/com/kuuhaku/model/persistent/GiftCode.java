@@ -18,8 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import groovy.lang.GroovyShell;
 
 import javax.persistence.Column;
@@ -85,16 +84,16 @@ public class GiftCode {
 	}
 
 	public void useCode(String id) {
-		Account acc = AccountDAO.getAccount(id);
+		Account acc = Account.find(Account.class, id);
 
 		try {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("acc", acc);
 			gs.evaluate(gift);
 
-			AccountDAO.saveAccount(acc);
+			acc.save();
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 

@@ -21,9 +21,12 @@ package com.kuuhaku.command.commands.discord.reactions;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.HttpHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -61,18 +64,18 @@ public abstract class Action {
 	public abstract void answer(TextChannel chn);
 
 	public void sendReaction(String type, TextChannel channel, User target, String message, boolean allowReact) {
-		File loading = Helper.getResourceAsFile(this.getClass(), "assets/loading.gif");
+		File loading = FileHelper.getResourceAsFile(this.getClass(), "assets/loading.gif");
 		assert loading != null;
 
 		channel.sendMessage("Conectando à API...")
 				.addFile(loading)
 				.queue(msg -> {
 					try {
-						JSONObject resposta = Helper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
+						JSONObject resposta = HttpHelper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
 							put("type", type);
 						}}, null);
 
-						Helper.logger(this.getClass()).debug(resposta);
+						MiscHelper.logger(this.getClass()).debug(resposta);
 
 						String url = resposta.getString("url");
 
@@ -82,18 +85,18 @@ public abstract class Action {
 							eb.setFooter("↪ | Clique para retribuir");
 							channel.sendMessage(message)
 									.setEmbeds(eb.build())
-									.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji("↪"), wrapper -> {
+									.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji("↪"), wrapper -> {
 												if (wrapper.getUser().getId().equals(target.getId())) {
 													answer(channel);
 													s.editMessageComponents(List.of()).queue();
 												}
-											}), ShiroInfo.USE_BUTTONS, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
+											}), Constants.USE_BUTTONS, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
 									);
 						} else {
 							channel.sendMessage(message).setEmbeds(eb.build()).queue();
 						}
 					} finally {
-						msg.delete().queue(null, Helper::doNothing);
+						msg.delete().queue(null, MiscHelper::doNothing);
 					}
 				});
 	}

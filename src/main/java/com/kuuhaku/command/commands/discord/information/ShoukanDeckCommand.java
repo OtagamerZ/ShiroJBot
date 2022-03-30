@@ -21,8 +21,8 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.DrawableDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -32,8 +32,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.exceptions.ValidationException;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -57,13 +60,13 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		boolean showPrivate = Helper.equalsAny("p", args);
+		boolean showPrivate = LogicHelper.equalsAny("p", args);
 
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
-			if (Helper.containsAny(args, "daily", "diario")) {
-				Deck dk = Helper.getDailyDeck();
+			if (LogicHelper.containsAny(args, "daily", "diario")) {
+				Deck dk = MiscHelper.getDailyDeck();
 
-				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				ShoukanDeck kb = new ShoukanDeck(Account.find(Account.class, author.getId()));
 				BufferedImage cards = kb.view(dk);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -73,20 +76,20 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 
 				if (showPrivate) {
 					author.openPrivateChannel()
-							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(cards, "deck", "jpg")))
 							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 							.flatMap(c -> m.delete())
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 				} else {
 					channel.sendMessageEmbeds(eb.build())
-							.addFile(Helper.writeAndGet(cards, "deck", "jpg"))
+							.addFile(ImageHelper.writeAndGet(cards, "deck", "jpg"))
 							.flatMap(c -> m.delete())
 							.queue();
 				}
-			} else if (Helper.containsAny(args, "meta")) {
-				Deck dk = CardDAO.getMetaDeck();
+			} else if (LogicHelper.containsAny(args, "meta")) {
+				Deck dk = DrawableDAO.getMetaDeck();
 
-				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				ShoukanDeck kb = new ShoukanDeck(Account.find(Account.class, author.getId()));
 				BufferedImage cards = kb.view(dk);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -96,20 +99,20 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 
 				if (showPrivate) {
 					author.openPrivateChannel()
-							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(cards, "deck", "jpg")))
 							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 							.flatMap(c -> m.delete())
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 				} else {
 					channel.sendMessageEmbeds(eb.build())
-							.addFile(Helper.writeAndGet(cards, "deck", "jpg"))
+							.addFile(ImageHelper.writeAndGet(cards, "deck", "jpg"))
 							.flatMap(c -> m.delete())
 							.queue();
 				}
 			} else {
 				Deck dk = KawaiponDAO.getDeck(author.getId());
 
-				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				ShoukanDeck kb = new ShoukanDeck(Account.find(Account.class, author.getId()));
 				BufferedImage cards = kb.view(dk);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -127,13 +130,13 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 
 				if (showPrivate) {
 					author.openPrivateChannel()
-							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
+							.flatMap(c -> c.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(cards, "deck", "jpg")))
 							.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 							.flatMap(c -> m.delete())
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 				} else {
 					channel.sendMessageEmbeds(eb.build())
-							.addFile(Helper.writeAndGet(cards, "deck", "jpg"))
+							.addFile(ImageHelper.writeAndGet(cards, "deck", "jpg"))
 							.flatMap(c -> m.delete())
 							.queue();
 				}
@@ -147,7 +150,7 @@ public class ShoukanDeckCommand implements Executable, Slashed {
 		OptionMapping prv = evt.getOption("privado");
 
 		String tp = type == null ? "" : type.getAsString();
-		if (!Helper.equalsAny(tp, "daily", "meta"))
+		if (!LogicHelper.equalsAny(tp, "daily", "meta"))
 			throw new ValidationException("❌ | O tipo deve ser `daily` ou `meta`.");
 
 		return tp + (prv == null ? "" : (prv.getAsBoolean() ? "p" : ""));

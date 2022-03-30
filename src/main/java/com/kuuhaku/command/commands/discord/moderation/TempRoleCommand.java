@@ -24,7 +24,7 @@ import com.kuuhaku.controller.postgresql.TempRoleDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.TempRole;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -59,7 +59,7 @@ public class TempRoleCommand implements Executable {
 			return;
 		}
 
-		long time = Helper.stringToDurationMillis(argsAsText);
+		long time = StringHelper.stringToDurationMillis(argsAsText);
 		if (time < 60000) {
 			channel.sendMessage("❌ | O tempo deve ser ao menos 1 minuto.").queue();
 		}

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -58,12 +58,12 @@ public enum Charm {
     public String getDescription(int tier) {
         return switch (this) {
             case SHIELD, TIMEWARP, DOUBLETAP -> description.formatted(
-                    Helper.getFibonacci(tier),
-					Helper.getFibonacci(tier) == 1 ? "" : "s"
+                    MathHelper.getFibonacci(tier),
+					MathHelper.getFibonacci(tier) == 1 ? "" : "s"
             );
 			case CLONE -> description.formatted(25 * tier);
-            case DRAIN -> description.formatted(Helper.getFibonacci(tier));
-            case AGILITY -> description.formatted(Helper.roundToString(7.5 * tier, 1));
+            case DRAIN -> description.formatted(MathHelper.getFibonacci(tier));
+            case AGILITY -> description.formatted(MathHelper.roundToString(7.5 * tier, 1));
             case FORTIFY -> description.formatted(5 * tier);
 			case PIERCING, BLEEDING -> description.formatted(4 * tier);
 			default -> description;
@@ -71,8 +71,8 @@ public enum Charm {
     }
 
     public BufferedImage getIcon() {
-        if (Helper.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
-        return Helper.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
+        if (LogicHelper.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
+        return FileHelper.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
     }
 
     public static BufferedImage getIcon(List<Charm> charms) {
@@ -85,17 +85,17 @@ public enum Charm {
 		if (icons.isEmpty()) return null;
 		else if (icons.size() == 1) return icons.get(0);
 
-		BufferedImage mask = Helper.getResourceAsImage(Charm.class, "shoukan/charm/mask.png");
+		BufferedImage mask = FileHelper.getResourceAsImage(Charm.class, "shoukan/charm/mask.png");
         assert mask != null;
 
         BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		for (int i = 0; i < icons.size(); i++) {
 			BufferedImage icon = icons.get(i);
-			Helper.applyMask(icon, mask, i, true);
+			ImageHelper.applyMask(icon, mask, i, true);
 			g2d.drawImage(icon, 0, 0, null);
 		}
-		g2d.drawImage(Helper.getResourceAsImage(Charm.class, "shoukan/charm/div.png"), 0, 0, null);
+		g2d.drawImage(FileHelper.getResourceAsImage(Charm.class, "shoukan/charm/div.png"), 0, 0, null);
 		g2d.dispose();
 
         return bi;

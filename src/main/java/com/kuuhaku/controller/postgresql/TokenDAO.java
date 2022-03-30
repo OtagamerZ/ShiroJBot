@@ -19,10 +19,8 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.Token;
-import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.Member;
+import com.kuuhaku.utils.helpers.MiscHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -64,7 +62,7 @@ public class TokenDAO {
 	public static Token registerToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Token t = new Token(Helper.generateToken(id, 48), Main.getInfo().getUserByID(id).getAsTag(), id);
+		Token t = new Token(MiscHelper.generateToken(id, 48), Main.getUserByID(id).getAsTag(), id);
 
 		em.getTransaction().begin();
 		em.merge(t);
@@ -73,42 +71,6 @@ public class TokenDAO {
 		em.close();
 
 		return t;
-	}
-
-	public static String verifyToken(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT t FROM Token t WHERE uid = :uid", Token.class);
-		q.setParameter("uid", id);
-		q.setMaxResults(1);
-
-		try {
-			Token t = (Token) q.getSingleResult();
-
-			if (t.isDisabled()) {
-				return null;
-			}
-
-			em.getTransaction().begin();
-			em.merge(t.addCall());
-			em.getTransaction().commit();
-
-			em.close();
-
-			boolean allowed = false;
-			for (Member m : Main.getInfo().getMembersByID(t.getUid())) {
-				if (Helper.hasPermission(m, PrivilegeLevel.BETA)) {
-					allowed = true;
-					break;
-				}
-			}
-
-			if (!allowed) return null;
-			else return t.getToken();
-		} catch (NoResultException e) {
-			Token t = registerToken(id);
-			return t.getToken();
-		}
 	}
 
 	public static boolean validateToken(String token) {

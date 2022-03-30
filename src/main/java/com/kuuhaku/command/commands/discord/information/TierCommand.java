@@ -33,8 +33,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.MatchMakingRating;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -77,7 +77,7 @@ public class TierCommand implements Executable, Slashed {
 				.thenComparing(MatchMakingRating::getMMR, Comparator.reverseOrder())
 		);
 
-		List<List<MatchMakingRating>> tier = Helper.chunkify(rank, 10);
+		List<List<MatchMakingRating>> tier = CollectionHelper.chunkify(rank, 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Ranking do tier %s (%s) ".formatted(mmr.getTier().getTier(), mmr.getTier().getName()));
@@ -107,13 +107,13 @@ public class TierCommand implements Executable, Slashed {
 			}
 
 			if (firstPass) eb.addField("Promoção de tier", prom.toString(), false);
-			eb.addField(Helper.VOID, sb.toString(), false);
+			eb.addField(Constants.VOID, sb.toString(), false);
 			pages.add(new InteractPage(eb.build()));
 			firstPass = false;
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

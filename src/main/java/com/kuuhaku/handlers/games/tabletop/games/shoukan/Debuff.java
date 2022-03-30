@@ -1,11 +1,13 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.controller.DAO;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "debuff")
-public class Debuff {
+public class Debuff extends DAO {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;

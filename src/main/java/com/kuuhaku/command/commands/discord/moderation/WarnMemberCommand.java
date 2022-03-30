@@ -28,7 +28,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -85,7 +87,7 @@ public class WarnMemberCommand implements Executable {
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), guild.getId());
 
 		if (reason.isBlank()) {
-			List<List<String>> chunks = Helper.chunkify(m.getWarns(), 10);
+			List<List<String>> chunks = CollectionHelper.chunkify(m.getWarns(), 10);
 			if (chunks.isEmpty()) {
 				channel.sendMessage("❌ | Não há nenhum alerta para esse usuário.").queue();
 				return;
@@ -107,7 +109,7 @@ public class WarnMemberCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}
@@ -123,9 +125,9 @@ public class WarnMemberCommand implements Executable {
 				.setTimestamp(Instant.now());
 
 		mb.getUser().openPrivateChannel().queue(c ->
-				c.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing));
+				c.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing));
 
 		channel.sendMessage("✅ | Usuário alertado com sucesso!\nRazão: `" + reason + "`").queue();
-		Helper.logToChannel(author, false, null, mb.getAsMention() + " foi alertado.\nRazão: `" + reason + "`", guild);
+		MiscHelper.logToChannel(author, false, null, mb.getAsMention() + " foi alertado.\nRazão: `" + reason + "`", guild);
 	}
 }

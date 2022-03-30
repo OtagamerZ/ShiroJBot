@@ -24,7 +24,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -41,11 +41,11 @@ public class MuteTimeCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		long time = Helper.stringToDurationMillis(argsAsText);
+		long time = StringHelper.stringToDurationMillis(argsAsText);
 		if (time < 60000) {
 			channel.sendMessage("✅ | Tempo do auto-mute limpo com sucesso!").queue();
 		} else {
-			channel.sendMessage("✅ | Tempo de mute definido para " + Helper.toStringDuration(time) + " com sucesso!").queue();
+			channel.sendMessage("✅ | Tempo de mute definido para " + StringHelper.toStringDuration(time) + " com sucesso!").queue();
 		}
 
 		gc.setMuteTime(time);

@@ -19,7 +19,7 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class ConsoleListener extends BufferedReader {
 			try {
 				handleCommand(readLine());
 			} catch (IOException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class ConsoleListener extends BufferedReader {
 			super.close();
 			interrupted = true;
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 

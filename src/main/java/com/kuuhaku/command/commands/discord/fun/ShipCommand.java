@@ -24,7 +24,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -63,7 +65,7 @@ public class ShipCommand implements Executable {
 			String doneMeter;
 			BufferedImage bi = new BufferedImage(257, 128, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();
-			double love = Helper.rng(0d, 100d, message.getMentionedUsers().stream().mapToLong(User::getIdLong).sum());
+			double love = MathHelper.rng(0d, 100d, message.getMentionedUsers().stream().mapToLong(User::getIdLong).sum());
 
 			for (int i = 0; i < Math.round(love / 5); i++) {
 				meter[i] = "▉";
@@ -71,8 +73,8 @@ public class ShipCommand implements Executable {
 
 			doneMeter = Arrays.toString(meter).replace(",", "").replace(" ", "");
 
-			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl())), null, 0, 0);
-			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getEffectiveAvatarUrl())), null, 129, 0);
+			g2d.drawImage(ImageIO.read(ImageHelper.getImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl())), null, 0, 0);
+			g2d.drawImage(ImageIO.read(ImageHelper.getImage(message.getMentionedUsers().get(1).getEffectiveAvatarUrl())), null, 129, 0);
 
 			g2d.dispose();
 
@@ -85,13 +87,13 @@ public class ShipCommand implements Executable {
 			sb.append(":heartpulse: ***Nível de love entre ").append(message.getMentionedUsers().get(0).getName()).append(" e ").append(message.getMentionedUsers().get(1).getName()).append(":***");
 			sb.append("\n\nNome de casal: `").append(n1, 0, n1.length() / 2 + (n1.length() % 2)).append(n2.substring(n2.length() / 2 - (n1.length() % 2))).append("`");
 			if (love <= 30)
-				sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
+				sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n**").append(MathHelper.round(love, 1)).append("%** `").append(doneMeter).append("`");
 			else if (love <= 50)
-				sb.append("\n\nPode ate dar certo esse casal, mas vai precisar insistir!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
+				sb.append("\n\nPode ate dar certo esse casal, mas vai precisar insistir!\n**").append(MathHelper.round(love, 1)).append("%** `").append(doneMeter).append("`");
 			else if (love <= 70)
-				sb.append("\n\nOpa, ou eles já se conhecem, ou o destino sorriu pra eles!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
+				sb.append("\n\nOpa, ou eles já se conhecem, ou o destino sorriu pra eles!\n**").append(MathHelper.round(love, 1)).append("%** `").append(doneMeter).append("`");
 			else
-				sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
+				sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n**").append(MathHelper.round(love, 1)).append("%** `").append(doneMeter).append("`");
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage("attachment://ship.png");
@@ -102,7 +104,7 @@ public class ShipCommand implements Executable {
 
 			channel.sendMessage(mb.build()).addFile(baos.toByteArray(), "ship.png").queue();
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 

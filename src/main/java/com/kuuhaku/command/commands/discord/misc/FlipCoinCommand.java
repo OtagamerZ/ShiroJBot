@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +37,7 @@ public class FlipCoinCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("Calculando cara ou coroa....")
 				.delay(750, TimeUnit.MILLISECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + (Helper.DEFAULT_RNG.nextBoolean() ? "**CARA** :smile:!" : "**COROA** :crown:!")))
+				.flatMap(s -> s.editMessage(s.getContentRaw() + (Constants.DEFAULT_RNG.nextBoolean() ? "**CARA** :smile:!" : "**COROA** :crown:!")))
 				.queue();
 	}
 }

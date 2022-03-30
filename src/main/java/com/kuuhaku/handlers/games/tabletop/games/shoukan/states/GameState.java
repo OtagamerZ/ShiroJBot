@@ -22,7 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -75,15 +75,15 @@ public class GameState {
 	public void revertState() {
 		for (Hand h : game.getHands().values()) {
 			HandState old = hands.get(h.getSide());
-			Helper.replaceContent(
+			CollectionHelper.replaceContent(
 					old.getDeque().stream().map(Drawable::copy).toList(),
 					h.getRealDeque()
 			);
-			Helper.replaceContent(
+			CollectionHelper.replaceContent(
 					old.getCards().stream().map(Drawable::copy).toList(),
 					h.getCards()
 			);
-			Helper.replaceContent(
+			CollectionHelper.replaceContent(
 					old.getDestinyDeck().stream().map(Drawable::copy).toList(),
 					h.getDestinyDeck()
 			);
@@ -105,7 +105,7 @@ public class GameState {
 			h.setLockTime(old.getLockTime());
 			h.setNullTime(old.getNullTime());
 
-			Helper.replaceContent(
+			CollectionHelper.replaceContent(
 					graveyard.get(h.getSide()).stream().map(Drawable::copy).toList(),
 					game.getArena().getGraveyard().get(h.getSide())
 			);
@@ -125,11 +125,11 @@ public class GameState {
 			}
 		}
 
-		Helper.replaceContent(
+		CollectionHelper.replaceContent(
 				banned.stream().map(Drawable::copy).toList(),
 				game.getArena().getBanned()
 		);
-		Helper.replaceContent(
+		CollectionHelper.replaceContent(
 				persistentEffects.stream().map(PersistentEffect::clone).collect(Collectors.toSet()),
 				game.getPersistentEffects()
 		);

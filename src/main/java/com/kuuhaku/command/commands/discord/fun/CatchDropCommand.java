@@ -24,10 +24,10 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.drop.Prize;
+import com.kuuhaku.model.common.interfaces.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -50,7 +50,7 @@ public class CatchDropCommand implements Executable {
 		} else if (args.length < 1) {
 			channel.sendMessage(I18n.getString("err_no-captcha")).queue();
 			return;
-		} else if (args[0].contains(Helper.ANTICOPY)) {
+		} else if (args[0].contains(Constants.ANTICOPY)) {
 			channel.sendMessage("❌ | Espertinho né? Que tal tentarmos sem `Ctrl+C / Ctrl+V` para ficar justo?").queue();
 			return;
 		}

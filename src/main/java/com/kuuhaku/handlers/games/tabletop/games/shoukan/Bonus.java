@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Flag;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.EnumSet;

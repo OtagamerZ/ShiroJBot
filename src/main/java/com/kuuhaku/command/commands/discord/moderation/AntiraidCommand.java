@@ -27,12 +27,12 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.records.RaidData;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -65,7 +65,7 @@ public class AntiraidCommand implements Executable {
                 } catch (NumberFormatException e) {
                     channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
                 }
-            } else if (Helper.equalsAny(args[0], "ativar", "activate")) {
+            } else if (LogicHelper.equalsAny(args[0], "ativar", "activate")) {
                 TextChannel chn = gc.getGeneralChannel();
                 if (chn != null) {
                     EmbedBuilder eb = new EmbedBuilder()
@@ -81,25 +81,25 @@ public class AntiraidCommand implements Executable {
                             .setFooter("Aguarde, o sistema será encerrado em breve")
                             .setImage("https://i.imgur.com/KkhWWJf.gif");
 
-                    chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+                    chn.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
                 }
 
                 User owner = Main.getInfo().getUserByID(guild.getOwnerId());
                 if (owner != null) {
                     owner.openPrivateChannel()
                             .flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado.\n**Ativado por " + author.getAsTag() + "**"))
-                            .queue(null, Helper::doNothing);
+                            .queue(null, MiscHelper::doNothing);
                 }
 
                 Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), new HashSet<>()));
 
                 for (TextChannel tc : guild.getTextChannels()) {
                     if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
-                        tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+                        tc.getManager().setSlowmode(10).queue(null, MiscHelper::doNothing);
                     }
                 }
 
-                Main.getInfo().getAntiRaidCache().remove(guild.getId());
+                Main.getInfo().getRaidTracker().remove(guild.getId());
                 return;
             }
         } else {

@@ -21,7 +21,8 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Random;
@@ -43,12 +44,12 @@ public class EightBallCommand implements Executable {
 		String[] res = new String[]{"Sim", "Não", "Provavelmente sim", "Provavelmente não", "Talvez", "Prefiro não responder"};
 		String question = String.join(" ", args);
 
-		String preSeed = Helper.hash(question + author.getId(), "SHA-1");
+		String preSeed = StringHelper.hash(question + author.getId(), "SHA-1");
 		long seed = 0;
 		for (char c : preSeed.toCharArray()) {
 			seed += (int) c;
 		}
 
-		channel.sendMessage(":8ball: | " + Helper.getRandomEntry(new Random(seed), res) + ".").queue();
+		channel.sendMessage(":8ball: | " + CollectionHelper.getRandomEntry(new Random(seed), res) + ".").queue();
 	}
 }

@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -47,7 +47,7 @@ public class WelcomeChannelCommand implements Executable {
 		}
 
 		try {
-			if (Helper.equalsAny(args[0], "limpar", "reset")) {
+			if (LogicHelper.equalsAny(args[0], "limpar", "reset")) {
 				gc.setWelcomeChannel(null);
 				channel.sendMessage("✅ | Canal de boas-vindas limpo com sucesso.").queue();
 			} else {

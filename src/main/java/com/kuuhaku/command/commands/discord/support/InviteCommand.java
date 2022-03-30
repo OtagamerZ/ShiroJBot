@@ -26,7 +26,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -76,7 +76,7 @@ public class InviteCommand implements Executable {
 			String finalRole = role;
 			Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
 					.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " **(" + finalRole + ")**\nPor favor seja detalhado e lembre-se que ajudaremos apenas sobre assuntos relacionados à Shiro.\n\n**Atenção:** nossa equipe jamais pedirá informações confidenciais como senhas ou emais, nunca forneça-os!"))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 
 			channel.sendMessage("Aqui está!\nhttps://discord.gg/" + t.getInvite()).queue();
 		} catch (NumberFormatException e) {

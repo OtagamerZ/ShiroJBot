@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -40,6 +40,6 @@ public class TokenCommand implements Executable {
 			return;
 		}
 
-		channel.sendMessage("Token de acesso gerado com a seed *" + args[0] + "*: `" + Helper.generateToken(args[0], 48) + "`\n\n__**Este token é aleatório, ele precisa ser ativado antes de poder ser usado (caso contrário é apenas uma String sem valor algum)**__").queue();
+		channel.sendMessage("Token de acesso gerado com a seed *" + args[0] + "*: `" + MiscHelper.generateToken(args[0], 48) + "`\n\n__**Este token é aleatório, ele precisa ser ativado antes de poder ser usado (caso contrário é apenas uma String sem valor algum)**__").queue();
 	}
 }

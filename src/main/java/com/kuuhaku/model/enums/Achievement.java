@@ -19,14 +19,13 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Couple;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.bag.HashBag;
 
@@ -171,7 +170,7 @@ public enum Achievement {
 					yield game.getArena().getSlots().get(side).stream()
 							.map(SlotColumn::getTop)
 							.filter(Objects::nonNull)
-							.noneMatch(id -> Helper.equalsAny(id, 279, 280));
+							.noneMatch(id -> LogicHelper.equalsAny(id, 279, 280));
 				}
 
 				yield true;
@@ -266,12 +265,13 @@ public enum Achievement {
 
 				if (h instanceof TeamHand th) {
 					if (game.getHistory().getWinner().equals(side)) {
-						Couple c = WaifuDAO.getCouple(h.getUser().getId());
+						Couple c = Couple.query(Couple.class, "SELECT c FROM Couple c WHERE :uid IN (c.husbando, c.waifu)", h.getUser().getId());
 
-						if (c != null)
+						if (c != null) {
 							yield (!th.getUsers().stream()
 									.map(User::getId)
-									.allMatch(id -> Helper.equalsAny(id, c.getHusbando(), c.getWaifu())));
+									.allMatch(id -> LogicHelper.equalsAny(id, c.getHusbando(), c.getWaifu())));
+						}
 					}
 				}
 

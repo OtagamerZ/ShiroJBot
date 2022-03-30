@@ -18,7 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
@@ -28,7 +29,7 @@ import java.time.ZoneId;
 
 @Entity
 @Table(name = "logs")
-public class Log {
+public class Log extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -57,7 +58,7 @@ public class Log {
 		this.usr = user.getAsTag();
 		this.uid = user.getId();
 		this.command = command;
-		this.timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.FULL_DATE_FORMAT);
+		this.timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Constants.FULL_DATE_FORMAT);
 	}
 
 	public Log() {

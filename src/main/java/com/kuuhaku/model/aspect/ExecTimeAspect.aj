@@ -1,6 +1,6 @@
 package com.kuuhaku.model.aspect;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.Level;
 
@@ -15,7 +15,7 @@ public aspect ExecTimeAspect {
 			return proceed();
 		} finally {
 			watch.stop();
-			Helper.logger(thisJoinPoint.getTarget().getClass()).log(
+			MiscHelper.logger(thisJoinPoint.getTarget().getClass()).log(
 					Level.getLevel("ASPECT"),
 					"Method %s executed in %sms".formatted(
 							thisJoinPoint.getSignature().getName(),

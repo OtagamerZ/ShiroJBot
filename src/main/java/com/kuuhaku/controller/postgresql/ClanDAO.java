@@ -21,7 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.ClanMember;
 import com.kuuhaku.model.records.ClanRanking;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -104,7 +104,7 @@ public class ClanDAO {
 		q.setMaxResults(10);
 
 		try {
-			return Helper.map(ClanRanking.class, q.getResultList());
+			return CollectionHelper.map(ClanRanking.class, q.getResultList());
 		} finally {
 			em.close();
 		}
@@ -117,7 +117,7 @@ public class ClanDAO {
 		q.setMaxResults(1);
 
 		try {
-			return Helper.map(ClanRanking.class, (Object[]) q.getSingleResult());
+			return CollectionHelper.map(ClanRanking.class, (Object[]) q.getSingleResult());
 		} catch (NoResultException e) {
 			return null;
 		} finally {
@@ -132,7 +132,7 @@ public class ClanDAO {
 		q.setParameter("id", id);
 
 		try {
-			return Helper.map(ClanRanking.class, (Object[]) q.getSingleResult());
+			return CollectionHelper.map(ClanRanking.class, (Object[]) q.getSingleResult());
 		} finally {
 			em.close();
 		}

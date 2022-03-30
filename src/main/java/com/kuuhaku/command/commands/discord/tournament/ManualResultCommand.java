@@ -27,8 +27,10 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Phase;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -74,45 +76,45 @@ public class ManualResultCommand implements Executable {
 				User winner = Main.getInfo().getUserByID(match.get(index).getUid());
 				String matchName = match.stream()
 						.map(Participant::getUid)
-						.map(Helper::getUsername)
+						.map(MiscHelper::getUsername)
 						.collect(Collectors.joining(" VS "));
 
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									t.setTPResult(index);
 									TournamentDAO.save(t);
 
-									s.delete().queue(null, Helper::doNothing);
+									s.delete().queue(null, MiscHelper::doNothing);
 									channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
-						), Helper::doNothing
+						), MiscHelper::doNothing
 				);
 			} else {
 				Phase p = t.getPhase(phase);
 
 				int index = Integer.parseInt(args[2]);
 				Pair<Participant, Participant> match = p.getMatch(t, index);
-				if (!Helper.equalsAll(phase, match.getLeft().getPhase(), match.getRight().getPhase())) {
+				if (!LogicHelper.equalsAll(phase, match.getLeft().getPhase(), match.getRight().getPhase())) {
 					channel.sendMessage("❌ | Essa partida já foi encerrada.").queue();
 					return;
 				}
 
 				User winner = Main.getInfo().getUserByID(p.getParticipants(t).get(index).getUid());
 				String matchName = Arrays.stream(new String[]{match.getLeft().getUid(), match.getRight().getUid()})
-						.map(s -> s.equals("BYE") ? "_" + s + "_" : Helper.getUsername(s))
+						.map(s -> s.equals("BYE") ? "_" + s + "_" : MiscHelper.getUsername(s))
 						.collect(Collectors.joining(" VS "));
 
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									t.setResult(phase, index);
 									TournamentDAO.save(t);
 
-									s.delete().queue(null, Helper::doNothing);
+									s.delete().queue(null, MiscHelper::doNothing);
 									channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
-						), Helper::doNothing
+						), MiscHelper::doNothing
 				);
 			}
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {

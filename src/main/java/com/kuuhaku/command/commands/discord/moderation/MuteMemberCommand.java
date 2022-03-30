@@ -25,8 +25,11 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.MutedMember;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -84,8 +87,8 @@ public class MuteMemberCommand implements Executable {
 			return;
 		}
 
-		MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
-		long time = Helper.stringToDurationMillis(argsAsText);
+		MutedMember m = CollectionHelper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
+		long time = StringHelper.stringToDurationMillis(argsAsText);
 		if (time < 60000) {
 			channel.sendMessage("❌ | O tempo deve ser maior que 1 minuto.").queue();
 			return;
@@ -110,7 +113,7 @@ public class MuteMemberCommand implements Executable {
 						TextChannel chn = (TextChannel) gc;
 
 						if (chn.canTalk(mb))
-							act.add(chn.putPermissionOverride(mb).deny(Helper.ALL_MUTE_PERMISSIONS));
+							act.add(chn.putPermissionOverride(mb).deny(Constants.ALL_MUTE_PERMISSIONS));
 					}
 					case VOICE -> {
 						VoiceChannel chn = (VoiceChannel) gc;
@@ -128,10 +131,10 @@ public class MuteMemberCommand implements Executable {
 		}
 
 		RestAction.allOf(act)
-				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + Helper.toStringDuration(time) + " com sucesso!\nRazão: `" + reason + "`"))
+				.flatMap(s -> channel.sendMessage("✅ | Usuário silenciado por " + StringHelper.toStringDuration(time) + " com sucesso!\nRazão: `" + reason + "`"))
 				.queue(s -> {
-					Helper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + Helper.toStringDuration(time) + ".\nRazão: `" + reason + "`", guild);
+					MiscHelper.logToChannel(author, false, null, finalMb.getAsMention() + " foi silenciado por " + StringHelper.toStringDuration(time) + ".\nRazão: `" + reason + "`", guild);
 					MemberDAO.saveMutedMember(m);
-				}, Helper::doNothing);
+				}, MiscHelper::doNothing);
 	}
 }

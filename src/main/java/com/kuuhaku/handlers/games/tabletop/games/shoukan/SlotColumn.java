@@ -29,7 +29,7 @@ public class SlotColumn implements Cloneable {
 	private final Shoukan game;
 	private final Hand hand;
 	private Champion top = null;
-	private Equipment bottom = null;
+	private Evogear bottom = null;
 	private int unavailable = 0;
 	private boolean changed = false;
 
@@ -39,7 +39,7 @@ public class SlotColumn implements Cloneable {
 		this.hand = hand;
 	}
 
-	public SlotColumn(int index, Shoukan game, Hand hand, Champion top, Equipment bottom) {
+	public SlotColumn(int index, Shoukan game, Hand hand, Champion top, Evogear bottom) {
 		this.game = game;
 		this.index = index;
 		this.hand = hand;
@@ -81,17 +81,17 @@ public class SlotColumn implements Cloneable {
 		}
 	}
 
-	public Equipment getBottom() {
+	public Evogear getBottom() {
 		return bottom;
 	}
 
-	public void setBottom(Equipment bottom) {
+	public void setBottom(Evogear bottom) {
 		if (bottom != null) {
 			bottom.setIndex(index);
 			bottom.bind(hand);
 		}
 
-		Equipment curr = this.bottom;
+		Evogear curr = this.bottom;
 		this.bottom = bottom;
 		if (curr != null) {
 			if (curr.hasEffect()) {

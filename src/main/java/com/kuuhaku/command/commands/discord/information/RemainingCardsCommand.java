@@ -23,7 +23,6 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -33,8 +32,9 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -66,10 +66,10 @@ public class RemainingCardsCommand implements Executable {
 			return;
 		}
 
-		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
-
+		AddedAnime anime = AddedAnime.find(AddedAnime.class, args[0].toUpperCase(Locale.ROOT));
+		List<String> animes = AddedAnime.queryAllNative(String.class, "SELECT a.name FROM AddedAnime a WHERE a.hidden = FALSE");
 		if (anime == null) {
-			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + StringHelper.didYouMean(args[0], animes.toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class RemainingCardsCommand implements Executable {
 				.map(KawaiponCard::getCard)
 				.filter(c -> c.getAnime().equals(anime))
 				.toList();
-		List<Card> cards = CardDAO.getCardsByAnime(anime.getName());
+		List<Card> cards = Card.getCards(anime.getName());
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
@@ -87,7 +87,7 @@ public class RemainingCardsCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime);
-		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + Helper.prcntToInt(collected.size(), cards.size(), RoundingMode.DOWN) + "%)", false);
+		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + MathHelper.prcntToInt(collected.size(), cards.size(), RoundingMode.DOWN) + "%)", false);
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < cards.size(); i++) {
@@ -103,6 +103,6 @@ public class RemainingCardsCommand implements Executable {
 		}
 
 
-		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
+		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
 	}
 }

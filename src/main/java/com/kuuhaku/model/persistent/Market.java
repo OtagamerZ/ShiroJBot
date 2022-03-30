@@ -18,9 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
 
@@ -30,7 +29,7 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "market")
-public class Market implements com.kuuhaku.model.common.Market {
+public class Market implements com.kuuhaku.model.common.interfaces.Market {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -75,7 +74,7 @@ public class Market implements com.kuuhaku.model.common.Market {
 		this.type = CardType.KAWAIPON;
 	}
 
-	public Market(String seller, Equipment card, int price) {
+	public Market(String seller, Evogear card, int price) {
 		this.seller = seller;
 		this.card = card.getCard();
 		this.foil = false;
@@ -121,8 +120,8 @@ public class Market implements com.kuuhaku.model.common.Market {
 	@SuppressWarnings("unchecked")
 	public <T> T getCard() {
 		return (T) switch (type) {
-			case EVOGEAR -> CardDAO.getEquipment(card);
-			case FIELD -> CardDAO.getField(card);
+			case EVOGEAR -> Evogear.getEvogear(card.getId());
+			case FIELD -> Field.getField(card.getId());
 			default -> new KawaiponCard(card, foil);
 		};
 	}

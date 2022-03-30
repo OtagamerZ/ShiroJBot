@@ -23,7 +23,8 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -50,9 +51,9 @@ public class ServerInfoCommand implements Executable {
 				.addField(":busts_in_silhouette: | Membros", """
 						Usuários: %s
 						Bots: %s
-						""".formatted(Helper.separate(guild.getMemberCount() - bots), bots), true)
-				.addField(":calendar: | Criado em", guild.getTimeCreated().format(Helper.DATE_FORMAT), true)
-				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Helper.DATE_FORMAT) : "Não lembro", true);
+						""".formatted(StringHelper.separate(guild.getMemberCount() - bots), bots), true)
+				.addField(":calendar: | Criado em", guild.getTimeCreated().format(Constants.DATE_FORMAT), true)
+				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Constants.DATE_FORMAT) : "Não lembro", true);
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

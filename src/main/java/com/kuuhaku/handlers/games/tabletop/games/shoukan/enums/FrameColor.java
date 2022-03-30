@@ -23,7 +23,9 @@ import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.records.CompletionState;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -61,11 +63,11 @@ public enum FrameColor {
 			acc -> acc.getAchievements().contains(Achievement.SPOOKY_NIGHTS)),
 
 	GLITCH("**(Emblema \"Bug hunter\")** Ę̶̄͛Ŗ̴̓R̸̩͉͗O̴̪͉͊:̸̻̗͗ ̶̧̤̋̕P̴̘̪͑R̶̳̭̈̂Ǫ̸͒̽T̷̡̗̈́̃Ǫ̶̨̈́̐C̸̯͛̂O̴̯̓L̶̲̱̾̌Ọ̸̗͑̓ ̷̰͓̅͌\"̶̝̈͝D̶̳̯̈́Ĕ̵͍Ŕ̴ͅR̶̮̹͛Õ̶̢̾T̶͓͆A̸͚̰͆\"̶̡̌̓ ̸̬̃̈́N̶̢͉̒Ã̸͍̀Ȍ̸̘ͅ ̵̥͒̈́E̵̤̹̽̅Ṅ̷̼̆C̸̞̒O̷͚̪̎Ň̵͎Ṱ̵̨̽R̸̘̍̆Ả̴̙̞͝D̵̜͍̈́̋O̵̯͆",
-			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
+			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
 	),
 
 	PADORU("**(Emblema \"Padoru padoru\")** Hashiro sori yo, kaze no you ni, tsukimihara wo **PADORU PADORU!**",
-			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.PADORU_PADORU)
+			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.PADORU_PADORU)
 	),
 
 	METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
@@ -73,7 +75,7 @@ public enum FrameColor {
 	),
 
 	RICH("**(Emblema \"Rico\")** Uns chamam de playboy, outros de ganancioso, mas no fim todos querem um pedaço da grana!",
-			acc -> Tag.getTags(Main.getInfo().getMemberByID(acc.getUid())).contains(Tag.RICO)
+			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.RICO)
 	),
 	;
 
@@ -97,7 +99,7 @@ public enum FrameColor {
 			case RED, LEGACY_RED -> new Color(232, 116, 116);
 			case GRAY, LEGACY_GRAY -> new Color(190, 190, 190);
 
-			case RAINBOW, GLITCH -> Helper.getRandomColor();
+			case RAINBOW, GLITCH -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;
 			case HALLOWEEN -> new Color(220, 89, 16);
 			case PADORU -> new Color(177, 30, 49);
@@ -120,8 +122,8 @@ public enum FrameColor {
 					HALLOWEEN -> Color.BLACK;
 
 			case BLACK -> Color.WHITE;
-			case RAINBOW -> Helper.toLuma(getThemeColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
-			case GLITCH -> Helper.reverseColor(getThemeColor());
+			case RAINBOW -> ImageHelper.toLuma(getThemeColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
+			case GLITCH -> ImageHelper.reverseColor(getThemeColor());
 			case PADORU, METALLIC, RICH -> getThemeColor().darker();
 		};
 	}
@@ -162,12 +164,12 @@ public enum FrameColor {
 	}
 
 	public BufferedImage getFront(boolean desc) {
-		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
+		return FileHelper.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
 	}
 
 	public BufferedImage getBack(Account acc) {
 		boolean trans = acc.getUltimate() != null;
-		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (trans ? "_t" : "") + ".png");
+		BufferedImage cover = FileHelper.getResourceAsImage(this.getClass(), "shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (trans ? "_t" : "") + ".png");
 		assert cover != null;
 
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -191,7 +193,7 @@ public enum FrameColor {
 	}
 
 	public static FrameColor getByName(String name) {
-		return Arrays.stream(values()).filter(fc -> Helper.equalsAny(name, fc.name(), fc.toString())).findFirst().orElse(null);
+		return Arrays.stream(values()).filter(fc -> LogicHelper.equalsAny(name, fc.name(), fc.toString())).findFirst().orElse(null);
 	}
 
 	@Override

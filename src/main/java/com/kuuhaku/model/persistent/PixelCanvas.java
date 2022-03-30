@@ -18,12 +18,12 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CanvasDAO;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.hibernate.annotations.DynamicUpdate;
@@ -35,12 +35,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
+import static com.kuuhaku.utils.Constants.CANVAS_SIZE;
 
 @Entity
 @DynamicUpdate
 @Table(name = "pixelcanvas")
-public class PixelCanvas {
+public class PixelCanvas extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -53,7 +53,7 @@ public class PixelCanvas {
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
-			BufferedImage canvas = Helper.btoa(this.canvas);
+			BufferedImage canvas = ImageHelper.btoa(this.canvas);
 			assert canvas != null;
 
 			if (canvas.getWidth() != CANVAS_SIZE || canvas.getHeight() != CANVAS_SIZE) {
@@ -79,7 +79,7 @@ public class PixelCanvas {
 	}
 
 	public String getRawCanvas() {
-		BufferedImage img = Helper.btoa(canvas);
+		BufferedImage img = ImageHelper.btoa(canvas);
 		if (img == null) {
 			return canvas;
 		}
@@ -119,7 +119,7 @@ public class PixelCanvas {
 
 			return channel.sendFile(baos.toByteArray(), "canvas.png");
 		} catch (IOException | IllegalArgumentException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(I18n.getString("err_canvas"));
 	}
@@ -143,7 +143,7 @@ public class PixelCanvas {
 
 			return channel.sendFile(baos.toByteArray(), "chunk_" + number + ".png");
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(I18n.getString("err_canvas"));
 	}
@@ -167,7 +167,7 @@ public class PixelCanvas {
 
 			return channel.sendFile(baos.toByteArray(), "chunk.png");
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(I18n.getString("err_canvas-chunk"));
 	}
@@ -181,17 +181,16 @@ public class PixelCanvas {
 	}
 
 	private void saveCanvas(BufferedImage canvas) {
-		this.canvas = Helper.atob(canvas, "png");
+		this.canvas = ImageHelper.atob(canvas, "png");
 	}
 
 	public static synchronized void addPixel(int[] coords, Color color) {
-		PixelCanvas pc = Main.getInfo().getCanvas();
+		PixelCanvas pc = PixelCanvas.query("SELECT c FROM PixelCanvas c WHERE c.shelved = false");
 
 		BufferedImage canvas = pc.getCanvas();
 		canvas.setRGB(coords[0], coords[1], color.getRGB());
 		pc.saveCanvas(canvas);
-
-		CanvasDAO.saveCanvas(pc);
+		pc.save();
 	}
 
 	public boolean isShelved() {

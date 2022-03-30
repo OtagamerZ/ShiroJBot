@@ -19,9 +19,10 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.postgresql.Manager;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 
 import javax.persistence.*;
@@ -30,7 +31,7 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "botstats")
-public class BotStats {
+public class BotStats extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -84,10 +85,10 @@ public class BotStats {
 
 	public BotStats get() {
 		memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-		memoryPrcnt = Helper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
+		memoryPrcnt = MathHelper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
 		cpuUsage = ShiroInfo.getSystemInfo().getProcessCpuLoad();
 		try {
-			ping = Main.getShiroShards().getShards().get(0).getRestPing().complete();
+			ping = Main.getShiro().getShards().get(0).getRestPing().complete();
 		} catch (Exception e) {
 			ping = 0;
 		}

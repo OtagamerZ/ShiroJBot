@@ -18,13 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.*;
 import java.util.*;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
-public class Kawaipon implements Cloneable {
+public class Kawaipon extends DAO implements Cloneable {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String uid = "";
@@ -122,7 +122,7 @@ public class Kawaipon implements Cloneable {
 		if (uid == null) {
 			decks.add(new Deck());
 		} else {
-			Account acc = AccountDAO.getAccount(uid);
+			Account acc = Account.find(Account.class, uid);
 			boolean update = false;
 			if (decks.size() < acc.getDeckStashCapacity()) {
 				for (int i = 0; i < acc.getDeckStashCapacity() - decks.size(); i++) {
@@ -139,10 +139,10 @@ public class Kawaipon implements Cloneable {
 				}
 			} else {
 				if (!novice) {
-					List<Deck> dks = Helper.removeIf(decks, Deck::isNovice);
+					List<Deck> dks = CollectionHelper.removeIf(decks, Deck::isNovice);
 					if (!dks.isEmpty()) {
 						Deck d = dks.get(0);
-						for (Equipment e : d.getEquipments()) {
+						for (Evogear e : d.getEquipments()) {
 							StashDAO.saveCard(new Stash(uid, e));
 						}
 

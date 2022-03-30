@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Checklist;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -41,7 +41,7 @@ public class ChecklistDAO {
 	}
 
 	public static Checklist getChecklist(String uid, int index) {
-		return Helper.safeGet(getChecklists(uid), index);
+		return CollectionHelper.safeGet(getChecklists(uid), index);
 	}
 
 	public static void removeChecklist(Checklist c) {

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -28,7 +27,9 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -47,7 +48,7 @@ public class DeckStashCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		List<Deck> decks = kp.getDecks();
 
 		if (args.length == 0) {
@@ -62,7 +63,7 @@ public class DeckStashCommand implements Executable {
 								j,
 								decks.indexOf(dk) == kp.getActiveDeck() ? " (ATUAL)" : "",
 								prefix,
-								Helper.getOr(dk.getName(), String.valueOf(j))
+								CollectionHelper.getOr(dk.getName(), String.valueOf(j))
 						),
 						dk.toString(),
 						true);
@@ -75,7 +76,7 @@ public class DeckStashCommand implements Executable {
 		try {
 			int slot = Integer.parseInt(args[0]);
 
-			if (!Helper.between(slot, 0, decks.size())) {
+			if (!MathHelper.between(slot, 0, decks.size())) {
 				channel.sendMessage("❌ | Slot inválido.").queue();
 				return;
 			} else if (slot == kp.getActiveDeck()) {
@@ -94,7 +95,7 @@ public class DeckStashCommand implements Executable {
 					.findFirst()
 					.orElse(null);
 			if (dk == null) {
-				channel.sendMessage("❌ | Nenhum deck com o nome `" + Helper.bugText(args[0]) + "` encontrado.").queue();
+				channel.sendMessage("❌ | Nenhum deck com o nome `" + StringHelper.bugText(args[0]) + "` encontrado.").queue();
 				return;
 			}
 

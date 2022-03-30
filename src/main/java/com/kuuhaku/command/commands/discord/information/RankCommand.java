@@ -26,8 +26,8 @@ import com.kuuhaku.controller.postgresql.RankDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,11 +54,11 @@ public class RankCommand implements Executable {
 			int type;
 			if (args.length > 0 && args[0].equalsIgnoreCase("global")) {
 				type = 0;
-			} else if (Helper.findParam(args, "credit", "creditos", "CR")) {
+			} else if (MiscHelper.findParam(args, "credit", "creditos", "CR")) {
 				type = 1;
-			} else if (Helper.findParam(args, "card", "kawaipon", "cartas")) {
+			} else if (MiscHelper.findParam(args, "card", "kawaipon", "cartas")) {
 				type = 2;
-			} else if (Helper.findParam(args, "call", "voice", "voz")) {
+			} else if (MiscHelper.findParam(args, "call", "voice", "voz")) {
 				type = 3;
 			} else {
 				type = -1;
@@ -103,7 +103,7 @@ public class RankCommand implements Executable {
 						fillData(data, i, eb);
 
 						return new InteractPage(eb.build());
-					}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					}, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 		});
 	}
@@ -114,7 +114,7 @@ public class RankCommand implements Executable {
 		if (page == 0) {
 			eb.addField(data.get(0), String.join("\n", data.subList(1, data.size())), false);
 		} else {
-			eb.addField(Helper.VOID, String.join("\n", data), false);
+			eb.addField(Constants.VOID, String.join("\n", data), false);
 		}
 	}
 }

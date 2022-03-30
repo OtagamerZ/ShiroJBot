@@ -23,8 +23,9 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.GifFrame;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ImageFilters;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.imaging.ImageReadException;
@@ -55,28 +56,28 @@ public class NoiseCommand implements Executable {
 				})
 				.queue(s -> {
 					Message msg;
-					if (Helper.getImageFrom(message) != null)
+					if (MiscHelper.getImageFrom(message) != null)
 						msg = message;
 					else
 						msg = s.stream()
-								.filter(m -> Helper.getImageFrom(m) != null && !m.getId().equals(ms.get().getId()))
+								.filter(m -> MiscHelper.getImageFrom(m) != null && !m.getId().equals(ms.get().getId()))
 								.max(Comparator.comparing(ISnowflake::getTimeCreated))
 								.orElse(null);
 
 					if (msg == null) {
-						ms.get().delete().queue(null, Helper::doNothing);
+						ms.get().delete().queue(null, MiscHelper::doNothing);
 						channel.sendMessage("❌ | Não encontrei nenhum imagem nas últimas 25 mensagens, por favor envie uma.").queue();
 						return;
 					}
 
 					try {
-						String url = Helper.getImageFrom(msg);
+						String url = MiscHelper.getImageFrom(msg);
 						File f;
 
 						assert url != null;
 						if (url.contains(".gif")) {
 							f = File.createTempFile("noised", ".gif");
-							List<GifFrame> frames = Helper.readGif(url, true);
+							List<GifFrame> frames = ImageHelper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
 									ImageFilters.noise(frame.getAdjustedFrame()),
 									frame.getDisposal(),
@@ -87,19 +88,19 @@ public class NoiseCommand implements Executable {
 									frame.getDelay()
 							));
 
-							Helper.makeGIF(f, frames);
+							ImageHelper.makeGIF(f, frames);
 						} else {
-							BufferedImage bi = ImageIO.read(Helper.getImage(url));
+							BufferedImage bi = ImageIO.read(ImageHelper.getImage(url));
 
-							f = Helper.writeAndGet(ImageFilters.noise(bi), "noised", "png");
+							f = ImageHelper.writeAndGet(ImageFilters.noise(bi), "noised", "png");
 						}
 
-						ms.get().delete().queue(null, Helper::doNothing);
+						ms.get().delete().queue(null, MiscHelper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
 								.addFile(f)
 								.queue();
 					} catch (NullPointerException | IOException | ImageReadException e) {
-						ms.get().delete().queue(null, Helper::doNothing);
+						ms.get().delete().queue(null, MiscHelper::doNothing);
 						channel.sendMessage("❌ | Houve um erro ao baixar a imagem, tente com outra.").queue();
 					} catch (IllegalArgumentException e) {
 						channel.sendMessage("❌ | A imagem final ficou muito grande, que tal tentar com uma imagem menor?").queue();

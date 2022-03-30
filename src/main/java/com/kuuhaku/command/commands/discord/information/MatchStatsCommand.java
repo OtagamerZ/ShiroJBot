@@ -30,8 +30,10 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.records.MatchInfo;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -64,7 +66,7 @@ public class MatchStatsCommand implements Executable {
 			}
 
 			hist.sort(Comparator.comparingInt(MatchHistory::getId).reversed());
-			List<List<MatchHistory>> history = Helper.chunkify(hist, 10);
+			List<List<MatchHistory>> history = CollectionHelper.chunkify(hist, 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(":floppy_disk: | Histórico de partidas de " + author.getName())
@@ -80,16 +82,16 @@ public class MatchStatsCommand implements Executable {
 						players.compute(e.getValue(),
 								(k, v) -> {
 									if (v == null) {
-										return Helper.getUsername(e.getKey());
+										return MiscHelper.getUsername(e.getKey());
 									} else {
-										return Helper.properlyJoin().apply(List.of(v, Helper.getUsername(e.getKey())));
+										return CollectionHelper.properlyJoin().apply(List.of(v, MiscHelper.getUsername(e.getKey())));
 									}
 								}
 						);
 					}
 
 					sb.append("(%s)\n`%sID: %s` - %s **VS** %s **(%s)**\n\n".formatted(
-							mh.getTimestamp().format(Helper.FULL_DATE_FORMAT),
+							mh.getTimestamp().format(Constants.FULL_DATE_FORMAT),
 							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							mh.getId(),
 							players.get(Side.BOTTOM),
@@ -103,7 +105,7 @@ public class MatchStatsCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
@@ -130,10 +132,10 @@ public class MatchStatsCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		if (stats.size() == 2) {
 			String p1 = players.get(Side.BOTTOM).get(0);
-			String p1Name = Helper.getUsername(p1);
+			String p1Name = MiscHelper.getUsername(p1);
 
 			String p2 = players.get(Side.TOP).get(0);
-			String p2Name = Helper.getUsername(p2);
+			String p2Name = MiscHelper.getUsername(p2);
 
 			MatchInfo bot = stats.get(p1);
 			MatchInfo top = stats.get(p2);
@@ -146,7 +148,7 @@ public class MatchStatsCommand implements Executable {
 									1º: %s %s
 									2º: %s %s
 									""".formatted(
-									mh.getTimestamp().format(Helper.DATE_FORMAT),
+									mh.getTimestamp().format(Constants.DATE_FORMAT),
 									mh.isRanked() ? "Ranqueada" : "Normal",
 									p1Name,
 									bot.winner() ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",
@@ -160,38 +162,38 @@ public class MatchStatsCommand implements Executable {
 							Dano X turno: %s%%
 							Vida X turno: %s%%
 							""".formatted(
-							Helper.roundToString(bot.manaEff() * 100, 1),
-							Helper.roundToString(bot.damageEff() * 100, 1),
-							Helper.roundToString(bot.sustainEff() * 100, 1)
+							MathHelper.roundToString(bot.manaEff() * 100, 1),
+							MathHelper.roundToString(bot.damageEff() * 100, 1),
+							MathHelper.roundToString(bot.sustainEff() * 100, 1)
 					), true)
 					.addField("Eficiencia de " + p2Name, """
 							Eficiência de mana: %s%%
 							Dano X turno: %s%%
 							Vida X turno: %s%%
 							""".formatted(
-							Helper.roundToString(top.manaEff() * 100, 1),
-							Helper.roundToString(top.damageEff() * 100, 1),
-							Helper.roundToString(top.sustainEff() * 100, 1)
+							MathHelper.roundToString(top.manaEff() * 100, 1),
+							MathHelper.roundToString(top.damageEff() * 100, 1),
+							MathHelper.roundToString(top.sustainEff() * 100, 1)
 					), true);
 		} else {
 			String p1 = players.get(Side.BOTTOM).get(0);
-			String p1Name = Helper.getUsername(p1);
+			String p1Name = MiscHelper.getUsername(p1);
 
 			String p2 = players.get(Side.TOP).get(0);
-			String p2Name = Helper.getUsername(p2);
+			String p2Name = MiscHelper.getUsername(p2);
 
 			String p3 = players.get(Side.BOTTOM).get(1);
-			String p3Name = Helper.getUsername(p3);
+			String p3Name = MiscHelper.getUsername(p3);
 
 			String p4 = players.get(Side.TOP).get(1);
-			String p4Name = Helper.getUsername(p4);
+			String p4Name = MiscHelper.getUsername(p4);
 
 			MatchInfo bot1 = stats.get(p1);
 			MatchInfo top1 = stats.get(p2);
 			MatchInfo bot2 = stats.get(p3);
 			MatchInfo top2 = stats.get(p4);
 
-			eb.setTitle("Partida de " + Helper.properlyJoin().apply(List.of(p1Name, p3Name)) + " VS " + Helper.properlyJoin().apply(List.of(p2Name, p4Name)))
+			eb.setTitle("Partida de " + CollectionHelper.properlyJoin().apply(List.of(p1Name, p3Name)) + " VS " + CollectionHelper.properlyJoin().apply(List.of(p2Name, p4Name)))
 					.setDescription("""
 									Jogada em %s (%s)
 																		
@@ -201,7 +203,7 @@ public class MatchStatsCommand implements Executable {
 									3º: %s %s
 									4º: %s %s
 									""".formatted(
-									mh.getTimestamp().format(Helper.DATE_FORMAT),
+									mh.getTimestamp().format(Constants.DATE_FORMAT),
 									mh.isRanked() ? "Ranqueada" : "Normal",
 									p1Name,
 									bot1.winner() ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",
@@ -219,36 +221,36 @@ public class MatchStatsCommand implements Executable {
 							Dano X turno: %s%%
 							Vida X turno: %s%%
 							""".formatted(
-							Helper.roundToString(bot1.manaEff() * 100, 1),
-							Helper.roundToString(bot1.damageEff() * 100, 1),
-							Helper.roundToString(bot1.sustainEff() * 100, 1)
+							MathHelper.roundToString(bot1.manaEff() * 100, 1),
+							MathHelper.roundToString(bot1.damageEff() * 100, 1),
+							MathHelper.roundToString(bot1.sustainEff() * 100, 1)
 					), true)
 					.addField("Eficiencia de " + p2Name, """
 							Eficiência de mana: %s%%
 							Dano X turno: %s%%
 							Vida X turno: %s%%
 							""".formatted(
-							Helper.roundToString(top1.manaEff() * 100, 1),
-							Helper.roundToString(top1.damageEff() * 100, 1),
-							Helper.roundToString(top1.sustainEff() * 100, 1)
+							MathHelper.roundToString(top1.manaEff() * 100, 1),
+							MathHelper.roundToString(top1.damageEff() * 100, 1),
+							MathHelper.roundToString(top1.sustainEff() * 100, 1)
 					), true)
 					.addField("Eficiencia de " + p3Name, """
 							Eficiência de mana: %s%%
 							Dano X turno: %s%%
 							Vida X turno: %s%%
 							""".formatted(
-							Helper.roundToString(bot2.manaEff() * 100, 1),
-							Helper.roundToString(bot2.damageEff() * 100, 1),
-							Helper.roundToString(bot2.sustainEff() * 100, 1)
+							MathHelper.roundToString(bot2.manaEff() * 100, 1),
+							MathHelper.roundToString(bot2.damageEff() * 100, 1),
+							MathHelper.roundToString(bot2.sustainEff() * 100, 1)
 					), true)
 					.addField("Eficiencia de " + p4Name, """
 							Eficiência de mana: %s%%
 							Dano X turno: %s%%
 							Vida X turno: %s%%
 							""".formatted(
-							Helper.roundToString(top2.manaEff() * 100, 1),
-							Helper.roundToString(top2.damageEff() * 100, 1),
-							Helper.roundToString(top2.sustainEff() * 100, 1)
+							MathHelper.roundToString(top2.manaEff() * 100, 1),
+							MathHelper.roundToString(top2.damageEff() * 100, 1),
+							MathHelper.roundToString(top2.sustainEff() * 100, 1)
 					), true);
 		}
 

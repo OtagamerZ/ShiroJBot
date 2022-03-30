@@ -24,7 +24,7 @@ import com.kuuhaku.controller.postgresql.ChecklistDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Checkitem;
 import com.kuuhaku.model.persistent.Checklist;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -52,7 +52,7 @@ public class DeleteCheckitemCommand implements Executable {
 				return;
 			}
 
-			Checkitem i = Helper.safeGet(c.getItems(), Integer.parseInt(args[1]));
+			Checkitem i = CollectionHelper.safeGet(c.getItems(), Integer.parseInt(args[1]));
 			if (i == null) {
 				channel.sendMessage("❌ | Anotação inexistente.").queue();
 				return;

@@ -34,15 +34,15 @@ import com.kuuhaku.model.persistent.Reminder;
 import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.RankedDuo;
 import com.kuuhaku.model.records.SoloLobby;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import javax.annotation.Nonnull;
@@ -53,14 +53,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TenthSecondEvent implements Job {
-	static JobDetail tenthSecond;
 	private boolean lock = false;
 
 	@Override
 	public void execute(JobExecutionContext context) {
 		List<Reminder> reminders = ReminderDAO.getExpiredReminders();
 		for (Reminder reminder : reminders) {
-			User u = Main.getInfo().getUserByID(reminder.getUid());
+			User u = Main.getUserByID(reminder.getUid());
 			if (u != null) {
 				u.openPrivateChannel()
 						.flatMap(c -> c.sendMessage(":alarm_clock: | Alô alô, seu lembrete `" + reminder.getDescription() + "` acabou de ativar, não se esqueça ein!"))
@@ -151,13 +150,13 @@ public class TenthSecondEvent implements Job {
 					mmr1.setJoins(0);
 					mmr2.setJoins(0);
 
-					boolean p1Starts = Helper.chance(50);
+					boolean p1Starts = MathHelper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
 						mmr1.setEvades(0);
 						mmr2.setEvades(0);
 
 						GlobalGame g = new Shoukan(
-								Main.getShiroShards(),
+								Main.getShiro(),
 								new GameChannel(p1.channel(), p2.channel()),
 								0,
 								new Rules(),
@@ -218,8 +217,8 @@ public class TenthSecondEvent implements Job {
 					t2.p1().setJoins(0);
 					t2.p2().setJoins(0);
 
-					boolean p1Starts = Helper.chance(50);
-					boolean leaderStarts = Helper.chance(50);
+					boolean p1Starts = MathHelper.chance(50);
+					boolean leaderStarts = MathHelper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
 						t1.p1().setEvades(0);
 						t1.p2().setEvades(0);
@@ -227,7 +226,7 @@ public class TenthSecondEvent implements Job {
 						t2.p2().setEvades(0);
 
 						GlobalGame g = new Shoukan(
-								Main.getShiroShards(),
+								Main.getShiro(),
 								new GameChannel(p1.channel(), p2.channel()),
 								0,
 								new Rules(),
@@ -282,7 +281,7 @@ public class TenthSecondEvent implements Job {
 	private void sendSoloConfirmation(SoloLobby p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<SoloLobby, Boolean>> match, Runnable result) {
 		MatchMakingRating mmr = p1.mmr();
 
-		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener(p1Channel) {
+		Main.getEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener(p1Channel) {
 			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr.getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						mmr.setEvades(mmr.getEvades() + 1);
@@ -301,7 +300,7 @@ public class TenthSecondEvent implements Job {
 						""".formatted(mmr.getUser().getAsMention())).queue();
 				mmr.getUser().openPrivateChannel()
 						.flatMap(c -> c.sendMessage("**Partida encontrada**: vá para o canal " + p1Channel.getAsMention() + " para confirmar."))
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 			}
 
 			@Override
@@ -323,11 +322,11 @@ public class TenthSecondEvent implements Job {
 				}
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
-					msg.addReaction(Helper.ACCEPT)
+					msg.addReaction(Constants.ACCEPT)
 							.flatMap(s -> p1Channel.sendMessage(msg.getAuthor().getName() + " aceitou a partida."))
 							.queue();
 				else
-					msg.addReaction(Helper.ACCEPT)
+					msg.addReaction(Constants.ACCEPT)
 							.flatMap(s -> p1Channel.sendMessage("Você aceitou a partida."))
 							.flatMap(s -> p2Channel.sendMessage("O oponente aceitou a partida."))
 							.queue();
@@ -348,7 +347,7 @@ public class TenthSecondEvent implements Job {
 			add(rd.p2().getUid());
 		}};
 
-		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener(p1Channel) {
+		Main.getEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener(p1Channel) {
 			private Future<?> p1Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.p1().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.p1().getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						MatchMakingRating mmr = rd.p1();
@@ -378,10 +377,10 @@ public class TenthSecondEvent implements Job {
 						""".formatted(rd.p1().getUser().getAsMention(), rd.p2().getUser().getAsMention())).queue();
 				rd.p1().getUser().openPrivateChannel()
 						.flatMap(c -> c.sendMessage("**Partida encontrada**: vá para o canal " + p1Channel.getAsMention() + " para confirmar."))
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 				rd.p2().getUser().openPrivateChannel()
 						.flatMap(c -> c.sendMessage("**Partida encontrada**: vá para o canal " + p1Channel.getAsMention() + " para confirmar."))
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 			}
 
 			@Override
@@ -403,11 +402,11 @@ public class TenthSecondEvent implements Job {
 				}
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
-					msg.addReaction(Helper.ACCEPT)
+					msg.addReaction(Constants.ACCEPT)
 							.flatMap(s -> p1Channel.sendMessage(msg.getAuthor().getName() + " aceitou a partida."))
 							.queue();
 				else
-					msg.addReaction(Helper.ACCEPT)
+					msg.addReaction(Constants.ACCEPT)
 							.flatMap(s -> p1Channel.sendMessage("Você aceitou a partida (" + (2 - confirmations.size()) + "/2)."))
 							.flatMap(s -> p2Channel.sendMessage("O oponente aceitou a partida (" + (2 - confirmations.size()) + "/2)."))
 							.queue();

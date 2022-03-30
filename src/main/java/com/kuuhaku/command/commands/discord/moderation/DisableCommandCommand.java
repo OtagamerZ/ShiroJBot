@@ -25,7 +25,7 @@ import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.HashSet;
@@ -70,7 +70,7 @@ public class DisableCommandCommand implements Executable {
 			} else if (!e.getCategory().isEnabled(guild, author)) {
 				channel.sendMessage("❌ | A categoria do comando `" + cmd + "` está desativada.").queue();
 				return;
-			} else if (Helper.equalsAny(e, EnableCommandCommand.class, this.getClass())) {
+			} else if (LogicHelper.equalsAny(e, EnableCommandCommand.class, this.getClass())) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` não pode ser desativado.").queue();
 				return;
 			} else if (disabled.contains(e.getCommand().getClass())) {

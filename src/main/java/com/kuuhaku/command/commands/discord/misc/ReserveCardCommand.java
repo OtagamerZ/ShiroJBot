@@ -25,10 +25,9 @@ import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -40,8 +39,9 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.Market;
 import com.kuuhaku.model.persistent.Stash;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import com.vdurmont.emoji.EmojiManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -69,7 +69,7 @@ public class ReserveCardCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		boolean blackfriday = Event.getCurrent() == Event.BLACKFRIDAY;
-		Account buyer = AccountDAO.getAccount(author.getId());
+		Account buyer = Account.find(Account.class, author.getId());
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<String> byRarity = new AtomicReference<>(null);
@@ -151,9 +151,9 @@ public class ReserveCardCommand implements Executable {
 				if (cards.isEmpty()) return null;
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setAuthor("Cartas anunciadas: " + Helper.separate(total) + " | Página " + (i + 1))
+						.setAuthor("Cartas anunciadas: " + StringHelper.separate(total) + " | Página " + (i + 1))
 						.setTitle(":scales: | Mercado de cartas")
-						.setFooter("Seus CR: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+						.setFooter("Seus CR: " + StringHelper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 				if (i == 0) {
 					eb.setDescription("""
@@ -176,13 +176,13 @@ public class ReserveCardCommand implements Executable {
 				}
 
 				for (Market m : cards) {
-					User seller = Main.getInfo().getUserByID(m.getSeller());
+					User seller = Main.getUserByID(m.getSeller());
 					String name = switch (m.getType()) {
 						case EVOGEAR, FIELD -> m.getRawCard().getName();
 						default -> ((KawaiponCard) m.getCard()).getName();
 					};
 					String rarity = switch (m.getType()) {
-						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Equipment) m.getCard()).getTier()) + ")";
+						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Evogear) m.getCard()).getTier()) + ")";
 						case FIELD -> (((Field) m.getCard()).isDay() ? ":sunny: " : ":crescent_moon: ") + "Campo";
 						default -> m.getRawCard().getRarity().getEmote() + m.getRawCard().getRarity().toString();
 					};
@@ -198,8 +198,8 @@ public class ReserveCardCommand implements Executable {
 									rarity + (anime == null ? "" : " - " + anime),
 									seller == null ? "Desconhecido" : seller.getName(),
 									blackfriday
-											? "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "**"
-											: "**" + Helper.separate(m.getPrice()) + "**"
+											? "~~" + StringHelper.separate(m.getPrice()) + "~~ **" + StringHelper.separate(Math.round(m.getPrice() * 0.75)) + "**"
+											: "**" + StringHelper.separate(m.getPrice()) + "**"
 							),
 							false
 					);
@@ -215,7 +215,7 @@ public class ReserveCardCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) p.getContent()).queue(s ->
-					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					Pages.lazyPaginate(s, load, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}
@@ -234,7 +234,7 @@ public class ReserveCardCommand implements Executable {
 			return;
 		}
 
-		Account seller = AccountDAO.getAccount(m.getSeller());
+		Account seller = Account.find(Account.class, m.getSeller());
 		if (!seller.getUid().equals(author.getId())) {
 			int price = (int) Math.round(m.getPrice() * (blackfriday ? 0.75 : 1));
 			if (buyer.getBalance() < price) {
@@ -250,7 +250,7 @@ public class ReserveCardCommand implements Executable {
 				default -> ((KawaiponCard) m.getCard()).getName();
 			};
 
-			User sellerU = Main.getInfo().getUserByID(m.getSeller());
+			User sellerU = Main.getUserByID(m.getSeller());
 
 			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 				m.setBuyer(author.getId());
@@ -259,25 +259,25 @@ public class ReserveCardCommand implements Executable {
 				seller.addCredit(price, this.getClass());
 				buyer.removeCredit(price, this.getClass());
 
-				AccountDAO.saveAccount(seller);
-				AccountDAO.saveAccount(buyer);
+				seller.save();
+				buyer.save();
 
 				StashDAO.saveCard(switch (m.getType()) {
-					case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+					case EVOGEAR -> new Stash(author.getId(), (Evogear) m.getCard());
 					case FIELD -> new Stash(author.getId(), (Field) m.getCard());
 					default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
 				});
 
 				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por **" + Helper.separate(price) + " CR**!").queue(null, Helper::doNothing),
-						Helper::doNothing
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por **" + StringHelper.separate(price) + " CR**!").queue(null, MiscHelper::doNothing),
+						MiscHelper::doNothing
 				);
 
 				channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!").queue();
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage("Você está prestes a comprar e reservar a carta `" + name + "` por **" + Helper.separate(price) + " CR**, deseja confirmar?")
-						.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				channel.sendMessage("Você está prestes a comprar e reservar a carta `" + name + "` por **" + StringHelper.separate(price) + " CR**, deseja confirmar?")
+						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									Market finalM = MarketDAO.getCard(Integer.parseInt(args[0]));
 									if (finalM == null) {
@@ -291,22 +291,22 @@ public class ReserveCardCommand implements Executable {
 									seller.addCredit(price, this.getClass());
 									buyer.removeCredit(price, this.getClass());
 
-									AccountDAO.saveAccount(seller);
-									AccountDAO.saveAccount(buyer);
+									seller.save();
+									buyer.save();
 
 									StashDAO.saveCard(switch (finalM.getType()) {
-										case EVOGEAR -> new Stash(author.getId(), (Equipment) finalM.getCard());
+										case EVOGEAR -> new Stash(author.getId(), (Evogear) finalM.getCard());
 										case FIELD -> new Stash(author.getId(), (Field) finalM.getCard());
 										default -> new Stash(author.getId(), (KawaiponCard) finalM.getCard());
 									});
 
 									if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + Helper.separate(price) + " CR!").queue(null, Helper::doNothing),
-											Helper::doNothing
+													c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + author.getName() + " por " + StringHelper.separate(price) + " CR!").queue(null, MiscHelper::doNothing),
+											MiscHelper::doNothing
 									);
 
 									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Carta `" + name + "` comprada e reservada com sucesso!")).queue();
-								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+								}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
 								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 						));
@@ -322,7 +322,7 @@ public class ReserveCardCommand implements Executable {
 			}
 
 			StashDAO.saveCard(switch (m.getType()) {
-				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
+				case EVOGEAR -> new Stash(author.getId(), (Evogear) m.getCard());
 				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
 				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
 			});

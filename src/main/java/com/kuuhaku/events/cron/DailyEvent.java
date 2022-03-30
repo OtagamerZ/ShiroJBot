@@ -19,42 +19,47 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.MatchMakingRating;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.User;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class DailyEvent implements Job {
-	static JobDetail daily;
 
 	@Override
 	public void execute(JobExecutionContext context) {
 		Calendar c = Calendar.getInstance();
 		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-			AccountDAO.punishHoarders();
-			AccountDAO.resetRolls();
+			Account.apply("""
+					UPDATE Account a
+					SET a.vBalance = a.vBalance + (a.balance / 2)
+					  , a.balance  = a.balance / 2
+					  , a.spent = 0
+					WHERE a.balance > 100000
+					  AND (a.spent * 1.0) / (a.spent + a.balance) < 0.1
+					""");
+			Account.apply("UPDATE Account a SET a.weeklyRolls = 3 WHERE a.weeklyRolls < 3");
 		}
 
 		if (c.get(Calendar.DAY_OF_MONTH) == 1) {
 			List<Clan> unpaid = ClanDAO.getUnpaidClans();
 			for (Clan clan : unpaid) {
 				if (clan.getVault() < clan.getTier().getRent()) {
-					User u = Main.getInfo().getUserByID(clan.getLeader().getUid());
+					User u = Main.getUserByID(clan.getLeader().getUid());
 
 					u.openPrivateChannel()
-							.flatMap(s -> s.sendMessage(":warning: | Alerta: Não há saldo suficiente no cofre do clã " + clan.getName() + " para pagamento do aluguel. Por favor deposite " + Helper.separate(clan.getTier().getRent()) + " CR no cofre do clã.\n**Você tem até dia 8 ou o clã será desfeito.**"))
-							.queue(null, Helper::doNothing);
+							.flatMap(s -> s.sendMessage(":warning: | Alerta: Não há saldo suficiente no cofre do clã " + clan.getName() + " para pagamento do aluguel. Por favor deposite " + StringHelper.separate(clan.getTier().getRent()) + " CR no cofre do clã.\n**Você tem até dia 8 ou o clã será desfeito.**"))
+							.queue(null, MiscHelper::doNothing);
 				} else {
 					clan.payRent();
 					ClanDAO.saveClan(clan);
@@ -81,15 +86,15 @@ public class DailyEvent implements Job {
 				int fac = (int) Math.pow(1.8, mmr.getTier().getTier() - 1);
 				int credits = 10000 * fac;
 
-				Account acc = AccountDAO.getAccount(mmr.getUid());
+				Account acc = Account.find(Account.class, mmr.getUid());
 				acc.addCredit(credits, this.getClass());
 				if (mmr.getTier().getTier() >= 5)
 					acc.addGem(3 * (mmr.getTier().getTier() - 4));
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
-				Main.getInfo().getUserByID(mmr.getUid()).openPrivateChannel()
-						.flatMap(ch -> ch.sendMessage("Parabéns por alcançar o ranking **%s** nesta temporada, como recompensa você recebeu **%s CR**. GG WP!".formatted(mmr.getTier().getName(), Helper.separate(credits))))
-						.queue(null, Helper::doNothing);
+				Main.getUserByID(mmr.getUid()).openPrivateChannel()
+						.flatMap(ch -> ch.sendMessage("Parabéns por alcançar o ranking **%s** nesta temporada, como recompensa você recebeu **%s CR**. GG WP!".formatted(mmr.getTier().getName(), StringHelper.separate(credits))))
+						.queue(null, MiscHelper::doNothing);
 			}
 		} else {
 			List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank().stream()

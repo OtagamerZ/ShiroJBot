@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -39,7 +39,7 @@ public class PseudoNameCommand implements Executable {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa digitar um nome ou `reset`.").queue();
 			return;
-		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
+		} else if (LogicHelper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoName("");
 			MemberDAO.saveMember(mb);
 			channel.sendMessage("✅ | Pseudônimo limpo com sucesso!").queue();

@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
@@ -30,8 +29,10 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -111,14 +112,14 @@ public class ColorNameCommand implements Executable {
 
 					t.editMessage("VALENDO: O nome da cor é...? (0/" + sequence.size() + ")")
 							.clearFiles()
-							.addFile(Helper.getBytes(bi, "png"), "colors.png")
+							.addFile(ImageHelper.getBytes(bi, "png"), "colors.png")
 							.queue();
-					ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
+					Main.getEvents().addHandler(guild, new SimpleMessageListener(channel) {
 						private final Consumer<Void> success = s -> close();
 						private final AtomicBoolean win = new AtomicBoolean();
 						private int hit = 0;
 						private long lastMillis = 0;
-						private ScheduledFuture<?> timeout = Main.getInfo().getScheduler().schedule(() -> {
+						private ScheduledFuture<?> timeout = Main.getInfo().getSchedulerPool().schedule(() -> {
 									if (!win.get()) {
 										win.set(true);
 										success.accept(null);
@@ -126,9 +127,9 @@ public class ColorNameCommand implements Executable {
 										int prize = (int) (hit * Math.pow(1.075, hit));
 										channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + (int) (hit * Math.pow(1.03, hit)) + " CR!").complete();
 
-										Account acc = AccountDAO.getAccount(author.getId());
+										Account acc = Account.find(Account.class, author.getId());
 										acc.addCredit(prize, this.getClass());
-										AccountDAO.saveAccount(acc);
+										acc.save();
 									}
 								}, 10_000, TimeUnit.MILLISECONDS
 						);
@@ -165,17 +166,17 @@ public class ColorNameCommand implements Executable {
 									timeout = null;
 
 									int prize = (int) (hit * Math.pow(1.075, hit));
-									msg.delete().queue(null, Helper::doNothing);
-									channel.sendMessage(":confetti_ball: | Você acertou todas as cores! Seu prêmio é de " + Helper.separate(prize) + " CR.").queue();
+									msg.delete().queue(null, MiscHelper::doNothing);
+									channel.sendMessage(":confetti_ball: | Você acertou todas as cores! Seu prêmio é de " + StringHelper.separate(prize) + " CR.").queue();
 
-									Account acc = AccountDAO.getAccount(author.getId());
+									Account acc = Account.find(Account.class, author.getId());
 									acc.addCredit(prize, this.getClass());
-									AccountDAO.saveAccount(acc);
+									acc.save();
 									return;
 								}
 
 								next = sequence.get(hit);
-								name = Helper.chance(50);
+								name = MathHelper.chance(50);
 
 								Graphics2D g2d = bi.createGraphics();
 								g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
@@ -190,26 +191,26 @@ public class ColorNameCommand implements Executable {
 								g2d.dispose();
 
 								timeout.cancel(true);
-								timeout = Main.getInfo().getScheduler().schedule(() -> {
+								timeout = Main.getInfo().getSchedulerPool().schedule(() -> {
 											if (!win.get()) {
 												win.set(true);
 												success.accept(null);
 
 												int prize = (int) (hit * Math.pow(1.075, hit));
-												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + Helper.separate(prize) + " CR!").complete();
+												channel.sendMessage(":alarm_clock: | Tempo esgotado, sua pontuação foi " + hit + "/" + sequence.size() + " e recebeu " + StringHelper.separate(prize) + " CR!").complete();
 
-												Account acc = AccountDAO.getAccount(author.getId());
+												Account acc = Account.find(Account.class, author.getId());
 												acc.addCredit(prize, this.getClass());
-												AccountDAO.saveAccount(acc);
+												acc.save();
 											}
 										}, 10_000 - (hit * 7_000L / 49), TimeUnit.MILLISECONDS
 								);
 
-								msg.delete().queue(null, Helper::doNothing);
+								msg.delete().queue(null, MiscHelper::doNothing);
 								try {
 									msg = channel.sendMessage("**PRÓXIMO:** O " + (name ? "nome da cor" : "texto escrito") + " é...? (" + hit + "/" + sequence.size() + ")")
 											.clearFiles()
-											.addFile(Helper.getBytes(bi, "png"), "colors.png")
+											.addFile(ImageHelper.getBytes(bi, "png"), "colors.png")
 											.submit().get();
 								} catch (ExecutionException | InterruptedException ignore) {
 								}
@@ -220,11 +221,11 @@ public class ColorNameCommand implements Executable {
 								timeout = null;
 
 								int prize = (int) (hit * Math.pow(1.075, hit));
-								channel.sendMessage("Você errou! Seu prêmio é de " + Helper.separate(prize) + " CR.").queue();
+								channel.sendMessage("Você errou! Seu prêmio é de " + StringHelper.separate(prize) + " CR.").queue();
 
-								Account acc = AccountDAO.getAccount(author.getId());
+								Account acc = Account.find(Account.class, author.getId());
 								acc.addCredit(prize, this.getClass());
-								AccountDAO.saveAccount(acc);
+								acc.save();
 
 								LeaderboardsDAO.submit(author, ColorNameCommand.class, hit);
 							}

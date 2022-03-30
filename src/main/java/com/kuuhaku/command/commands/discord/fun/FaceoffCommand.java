@@ -21,14 +21,12 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -60,16 +58,16 @@ public class FaceoffCommand implements Executable {
 
 		try {
 			int level = Integer.parseInt(args[0]);
-			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
+			if (!MathHelper.between(level, 0, 4)) throw new NumberFormatException();
 
 			int min = 100 + ((3 - level) * 75);
-			int max = Helper.rng(700 - (level * 100));
+			int max = MathHelper.rng(700 - (level * 100));
 			int time = min + max;
 			AtomicLong start = new AtomicLong(0);
 			AtomicBoolean win = new AtomicBoolean();
 			AtomicReference<ScheduledFuture<?>> timeout = new AtomicReference<>();
 
-			ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
+			Main.getEvents().addHandler(guild, new SimpleMessageListener(channel) {
 				{
 					Main.getInfo().setGameInProgress(mutex, author);
 				}
@@ -96,13 +94,13 @@ public class FaceoffCommand implements Executable {
 						timeout.get().cancel(true);
 						timeout.set(null);
 
-						long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
-						int prize = (int) Math.round(100f * (level + 1) + (min * Helper.rng(250f * (level + 1)) / react));
+						long react = MathHelper.clamp(System.currentTimeMillis() - start.get(), min, time);
+						int prize = (int) Math.round(100f * (level + 1) + (min * MathHelper.rng(250f * (level + 1)) / react));
 						channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " CR**!").queue();
 
-						Account acc = AccountDAO.getAccount(author.getId());
+						Account acc = Account.find(Account.class, author.getId());
 						acc.addCredit(prize, this.getClass());
-						AccountDAO.saveAccount(acc);
+						acc.save();
 
 						LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
 					}
@@ -113,21 +111,21 @@ public class FaceoffCommand implements Executable {
 					.delay(3, TimeUnit.SECONDS)
 					.flatMap(s -> s.editMessage("Em suas marcas..."));
 
-			rst = rst.delay(Helper.rng(500, 3000), TimeUnit.MILLISECONDS);
+			rst = rst.delay(MathHelper.rng(500, 3000), TimeUnit.MILLISECONDS);
 
-			if (level > 2 && Helper.chance(25))
+			if (level > 2 && MathHelper.chance(25))
 				rst = rst.flatMap(s -> s.editMessage("AGUA! <:KEKW:837794089486254180>"))
-						.delay(Helper.rng(500, 2000), TimeUnit.MILLISECONDS);
+						.delay(MathHelper.rng(500, 2000), TimeUnit.MILLISECONDS);
 
-			if (level > 1 && Helper.chance(50))
+			if (level > 1 && MathHelper.chance(50))
 				rst = rst.flatMap(s -> s.editMessage("Ainda não..."))
-						.delay(Helper.rng(500, 1500), TimeUnit.MILLISECONDS);
+						.delay(MathHelper.rng(500, 1500), TimeUnit.MILLISECONDS);
 
 			rst = rst.flatMap(s -> s.editMessage("**FOGO!**"));
 
 			rst.queue(t -> {
 				start.set(System.currentTimeMillis());
-				timeout.set(Main.getInfo().getScheduler().schedule(() -> {
+				timeout.set(Main.getInfo().getSchedulerPool().schedule(() -> {
 							if (!win.get()) {
 								win.set(true);
 								channel.sendMessage(":gun: | BANG! Você perdeu.").complete();

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -49,6 +49,6 @@ public enum Class {
 	}
 
 	public static Class getByName(String name) {
-		return Arrays.stream(values()).filter(c -> Helper.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
+		return Arrays.stream(values()).filter(c -> LogicHelper.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
 	}
 }

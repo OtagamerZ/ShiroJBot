@@ -27,8 +27,8 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -55,8 +55,8 @@ public class ShardStatusCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 
-		List<List<JDA>> shards = Helper.chunkify(
-				Main.getShiroShards().getShardCache().stream()
+		List<List<JDA>> shards = CollectionHelper.chunkify(
+				Main.getShiro().getShardCache().stream()
 						.sorted(Comparator.comparingInt(jda -> jda.getShardInfo().getShardId()))
 						.collect(Collectors.toList())
 				, 10);
@@ -79,7 +79,7 @@ public class ShardStatusCommand implements Executable {
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

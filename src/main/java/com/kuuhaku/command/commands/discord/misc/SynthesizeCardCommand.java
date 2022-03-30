@@ -24,11 +24,11 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -36,8 +36,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -71,7 +74,7 @@ public class SynthesizeCardCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal, `c` = síntese cromada e `r` = resintetizar).").queue();
 			return;
-		} else if (!Helper.equalsAny(args[1], "n", "c", "r")) {
+		} else if (!LogicHelper.equalsAny(args[1], "n", "c", "r")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da síntese (`n` = síntese normal, `c` = síntese cromada e `r` = resintetizar).").queue();
 			return;
 		}
@@ -103,10 +106,10 @@ public class SynthesizeCardCommand implements Executable {
 		List<Card> tributes = new ArrayList<>();
 		for (String name : names) {
 			name = name.trim();
-			Card c = CardDAO.getRawCard(name);
+			Card c = Card.find(Card.class, name.toUpperCase(Locale.ROOT));
 
 			if (c == null) {
-				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe, você não quis dizer `" + Helper.didYouMean(name, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
+				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe, você não quis dizer `" + StringHelper.didYouMean(name, Stream.of(Champion.getChampions(), Evogear.getEvogears(), Field.getFields()).flatMap(Collection::stream).map(d -> d.getCard().getId()).toList()) + "`?").queue();
 				return;
 			} else if (switch (type) {
 				case FIELD -> !kp.getCards().contains(new KawaiponCard(c, true));
@@ -115,7 +118,7 @@ public class SynthesizeCardCommand implements Executable {
 			}) {
 				channel.sendMessage("❌ | Você só pode usar na síntese cartas que você possua.").queue();
 				return;
-			} else if (Helper.equalsAny(c.getRarity(), KawaiponRarity.FIELD, KawaiponRarity.FUSION, KawaiponRarity.ULTIMATE)) {
+			} else if (LogicHelper.equalsAny(c.getRarity(), KawaiponRarity.FIELD, KawaiponRarity.FUSION, KawaiponRarity.ULTIMATE)) {
 				channel.sendMessage("❌ | Carta inválida para síntese.").queue();
 				return;
 			}
@@ -136,7 +139,7 @@ public class SynthesizeCardCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		switch (type) {
 			case FIELD -> {
-				List<Field> pool = CardDAO.getAllAvailableFields();
+				List<Field> pool = Field.getFields(false);
 				if (blessed) {
 					pool = pool.subList(0, Math.min(10, pool.size()));
 				}
@@ -145,12 +148,12 @@ public class SynthesizeCardCommand implements Executable {
 					return;
 				}
 
-				Field f = Helper.getRandomEntry(pool);
+				Field f = CollectionHelper.getRandomEntry(pool);
 
 				channel.sendMessage("Você está prester a sintetizar um campo usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 						.queue(s -> {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
-									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									buttons.put(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										s.delete().queue();
 
@@ -165,11 +168,11 @@ public class SynthesizeCardCommand implements Executable {
 										if (dk.checkFieldError(f) > 0) {
 											int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
-											Account acc = AccountDAO.getAccount(author.getId());
+											Account acc = Account.find(Account.class, author.getId());
 											acc.addCredit(change, this.getClass());
-											AccountDAO.saveAccount(acc);
+											acc.save();
 
-											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.").queue();
+											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + StringHelper.separate(change) + " CR.").queue();
 										} else {
 											dk.addField(f);
 											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o campo **" + f.getCard().getName() + "**!").queue();
@@ -182,7 +185,7 @@ public class SynthesizeCardCommand implements Executable {
 										KawaiponDAO.saveKawaipon(kp);
 									});
 
-									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 											u -> u.getId().equals(author.getId()),
 											ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 									);
@@ -190,7 +193,7 @@ public class SynthesizeCardCommand implements Executable {
 						);
 			}
 			case EVOGEAR -> {
-				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
+				List<Evogear> pool = Evogear.getEvogears(false);
 				if (blessed) {
 					pool = pool.subList(0, Math.min(10, pool.size()));
 				}
@@ -202,29 +205,29 @@ public class SynthesizeCardCommand implements Executable {
 				Bag<Integer> bag = tributes.stream()
 						.map(c -> dk.getEquipment(c).getTier())
 						.collect(Collectors.toCollection(HashBag::new));
-				List<Equipment> chosenTier = Helper.getRandom(pool.stream()
-						.collect(Collectors.groupingBy(Equipment::getTier))
+				List<Evogear> chosenTier = MathHelper.getRandom(pool.stream()
+						.collect(Collectors.groupingBy(Evogear::getTier))
 						.entrySet()
 						.stream()
 						.map(e -> Pair.create(e.getValue(), bag.getCount(e.getKey()) / 3d))
 						.toList()
 				);
 
-				Equipment e = Helper.getRandomEntry(chosenTier);
+				Evogear e = CollectionHelper.getRandomEntry(chosenTier);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Possíveis resultados")
-						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(1) * 100 / 3d, 1)) + "%", false)
-						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(2) * 100 / 3d, 1)) + "%", false)
-						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(3) * 100 / 3d, 1)) + "%", false)
-						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(4) * 100 / 3d, 1)) + "%", false);
+						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (MathHelper.round(bag.getCount(1) * 100 / 3d, 1)) + "%", false)
+						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (MathHelper.round(bag.getCount(2) * 100 / 3d, 1)) + "%", false)
+						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (MathHelper.round(bag.getCount(3) * 100 / 3d, 1)) + "%", false)
+						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (MathHelper.round(bag.getCount(4) * 100 / 3d, 1)) + "%", false);
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prester a resintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 						.setEmbeds(eb.build())
 						.queue(s -> {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
-									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									buttons.put(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										s.delete().queue();
 
@@ -241,15 +244,15 @@ public class SynthesizeCardCommand implements Executable {
 										if (dk.checkEquipmentError(e) != 0) {
 											int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
-											Account acc = AccountDAO.getAccount(author.getId());
+											Account acc = Account.find(Account.class, author.getId());
 											acc.addCredit(change, this.getClass());
-											AccountDAO.saveAccount(acc);
+											acc.save();
 
 											channel.sendMessage(
 													switch (dk.checkEquipmentError(e)) {
-														case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
-														case 2 -> "❌ | Você já possui 1 evogear tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
-														case 3 -> "❌ | Você não possui mais espaços para evogears, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.";
+														case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + StringHelper.separate(change) + " CR.";
+														case 2 -> "❌ | Você já possui 1 evogear tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + StringHelper.separate(change) + " CR.";
+														case 3 -> "❌ | Você não possui mais espaços para evogears, as cartas usadas cartas foram convertidas em " + StringHelper.separate(change) + " CR.";
 														default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
 													}
 											).queue();
@@ -265,7 +268,7 @@ public class SynthesizeCardCommand implements Executable {
 										KawaiponDAO.saveKawaipon(kp);
 									});
 
-									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 											u -> u.getId().equals(author.getId()),
 											ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 									);
@@ -280,15 +283,15 @@ public class SynthesizeCardCommand implements Executable {
 				double t4 = Math.max(0, (t3 * 15) / 65 - 0.05);
 				double t1 = Math.max(0, base - t4 * 10);
 				double t2 = Math.max(0, 0.85 - Math.abs(0.105 - t1 / 3) * 5 - t3);
-				double[] tiers = Helper.sumToOne(t1, t2, t3, t4);
+				double[] tiers = MathHelper.sumToOne(t1, t2, t3, t4);
 
-				List<Equipment> pool = CardDAO.getAllAvailableEquipments();
+				List<Evogear> pool = Evogear.getEvogears(false);
 				if (blessed) {
 					pool = pool.subList(0, Math.min(10, pool.size()));
 				}
 
-				List<Equipment> chosenTier = Helper.getRandom(pool.stream()
-						.collect(Collectors.groupingBy(Equipment::getTier))
+				List<Evogear> chosenTier = MathHelper.getRandom(pool.stream()
+						.collect(Collectors.groupingBy(Evogear::getTier))
 						.entrySet()
 						.stream()
 						.map(e -> Pair.create(e.getValue(), switch (e.getKey()) {
@@ -298,21 +301,21 @@ public class SynthesizeCardCommand implements Executable {
 						).toList()
 				);
 
-				Equipment e = Helper.getRandomEntry(chosenTier);
+				Evogear e = CollectionHelper.getRandomEntry(chosenTier);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Possíveis resultados")
-						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[0] * 100, 1)) + "%", false)
-						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[1] * 100, 1)) + "%", false)
-						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[2] * 100, 1)) + "%", false)
-						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[3] * 100, 1)) + "%", false);
+						.addField(KawaiponRarity.COMMON.getEmote() + " | Evogear tier 1 (\uD83D\uDFCA)", "Chance de " + (MathHelper.round(tiers[0] * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.RARE.getEmote() + " | Evogear tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (MathHelper.round(tiers[1] * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Evogear tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (MathHelper.round(tiers[2] * 100, 1)) + "%", false)
+						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (MathHelper.round(tiers[3] * 100, 1)) + "%", false);
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prester a sintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 						.setEmbeds(eb.build())
 						.queue(s -> {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
-									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									buttons.put(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										s.delete().queue();
 
@@ -329,15 +332,15 @@ public class SynthesizeCardCommand implements Executable {
 										if (dk.checkEquipmentError(e) != 0) {
 											int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
-											Account acc = AccountDAO.getAccount(author.getId());
+											Account acc = Account.find(Account.class, author.getId());
 											acc.addCredit(change, this.getClass());
-											AccountDAO.saveAccount(acc);
+											acc.save();
 
 											channel.sendMessage(
 													switch (dk.checkEquipmentError(e)) {
-														case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
-														case 2 -> "❌ | Você já possui 1 evogear tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " CR.";
-														case 3 -> "❌ | Você não possui mais espaços para evogears, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " CR.";
+														case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + StringHelper.separate(change) + " CR.";
+														case 2 -> "❌ | Você já possui 1 evogear tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + StringHelper.separate(change) + " CR.";
+														case 3 -> "❌ | Você não possui mais espaços para evogears, as cartas usadas cartas foram convertidas em " + StringHelper.separate(change) + " CR.";
 														default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
 													}
 											).queue();
@@ -353,7 +356,7 @@ public class SynthesizeCardCommand implements Executable {
 										KawaiponDAO.saveKawaipon(kp);
 									});
 
-									Pages.buttonize(s, buttons, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 											u -> u.getId().equals(author.getId()),
 											ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 									);

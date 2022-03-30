@@ -30,8 +30,11 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -56,7 +59,7 @@ public class CloseBracketsCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			List<List<Tournament>> chunks = Helper.chunkify(TournamentDAO.getOpenTournaments(), 10);
+			List<List<Tournament>> chunks = CollectionHelper.chunkify(TournamentDAO.getOpenTournaments(), 10);
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -85,7 +88,7 @@ public class CloseBracketsCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(
-					s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
+					s -> Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES)
 			);
 			return;
 		}
@@ -95,7 +98,7 @@ public class CloseBracketsCommand implements Executable {
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
-			} else if (Helper.prcnt(t.getParticipants().size(), t.getSize()) < 0.75) {
+			} else if (MathHelper.prcnt(t.getParticipants().size(), t.getSize()) < 0.75) {
 				channel.sendMessage("❌ | É necessário ter no mínimo 75% das vagas preenchidas para poder fechar as chaves.").queue();
 				return;
 			} else if (TournamentDAO.getClosedTournaments().size() > 0) {
@@ -104,7 +107,7 @@ public class CloseBracketsCommand implements Executable {
 			}
 
 			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + t.getName() + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
-					s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								t.close();
 								TournamentDAO.save(t);
 
@@ -112,16 +115,16 @@ public class CloseBracketsCommand implements Executable {
 									try {
 										Main.getInfo().getUserByID(p.getUid()).openPrivateChannel()
 												.flatMap(c -> c.sendMessage("As chaves do torneio `" + t.getName() + "` foram liberadas, fale com o organizador para mais detalhes."))
-												.queue(null, Helper::doNothing);
+												.queue(null, MiscHelper::doNothing);
 									} catch (Exception ignore) {
 									}
 								}
 
-								s.delete().queue(null, Helper::doNothing);
+								s.delete().queue(null, MiscHelper::doNothing);
 								channel.sendMessage("✅ | Chaves liberadas com sucesso, os jogadores foram notificados (use `" + prefix + "torneio ID` para ver as chaves)!").queue();
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
-					), Helper::doNothing
+					), MiscHelper::doNothing
 			);
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | ID inválido.").queue();

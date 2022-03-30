@@ -30,8 +30,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.ClanMember;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -68,9 +68,9 @@ public class ClanCommand implements Executable {
 				.setThumbnail("attachment://icon.png")
 				.setImage("attachment://banner.png")
 				.setDescription(c.getMotd())
-				.addField("Cofre", ":coin: | %s/%s CR".formatted(Helper.separate(c.getVault()), Helper.separate(c.getTier().getVaultSize())), false)
-				.addField("Aluguel", ":receipt: | %s CR/mês (%s)".formatted(Helper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false)
-				.addField("Ranking", ":bar_chart: | %sº lugar (%s pontos)".formatted(ClanDAO.getClanPosition(c.getId()).rank(), Helper.separate(c.getScore())), false);
+				.addField("Cofre", ":coin: | %s/%s CR".formatted(StringHelper.separate(c.getVault()), StringHelper.separate(c.getTier().getVaultSize())), false)
+				.addField("Aluguel", ":receipt: | %s CR/mês (%s)".formatted(StringHelper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false)
+				.addField("Ranking", ":bar_chart: | %sº lugar (%s pontos)".formatted(ClanDAO.getClanPosition(c.getId()).rank(), StringHelper.separate(c.getScore())), false);
 
 		if (c.getTier() != ClanTier.DYNASTY)
 			eb.addField("Metas para promoção", """
@@ -81,7 +81,7 @@ public class ClanCommand implements Executable {
 					%s
 					""".formatted(
 					c.getMembers().size(), c.getTier().getCapacity() / 2,
-					Helper.separate(c.getVault()), Helper.separate(c.getTier().getNext().getCost()),
+					StringHelper.separate(c.getVault()), StringHelper.separate(c.getTier().getNext().getCost()),
 					switch (c.getTier()) {
 						case PARTY -> """
 								Título de facção
@@ -108,7 +108,7 @@ public class ClanCommand implements Executable {
 		StringBuilder sb = new StringBuilder();
 		List<ClanMember> mbs = c.getMembers();
 		List<MessageEmbed.Field> fixed = List.copyOf(eb.getFields());
-		List<List<ClanMember>> chunks = Helper.chunkify(mbs, 10);
+		List<List<ClanMember>> chunks = CollectionHelper.chunkify(mbs, 10);
 		for (int i = 0; i < chunks.size(); i++) {
 			List<ClanMember> chunk = chunks.get(i);
 			sb.setLength(0);
@@ -117,8 +117,8 @@ public class ClanCommand implements Executable {
 				ClanMember mb = chunk.get(j);
 				sb.append("`%s` | %s %s (%s pontos)\n".formatted(
 						j + i * 10,
-						mb.getRole().getIcon(), Helper.getUsername(mb.getUid()),
-						Helper.separate(mb.getScore())
+						mb.getRole().getIcon(), MiscHelper.getUsername(mb.getUid()),
+						StringHelper.separate(mb.getScore())
 				));
 			}
 
@@ -128,10 +128,10 @@ public class ClanCommand implements Executable {
 		}
 
 		MessageAction ma = channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent());
-		if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
-		if (c.getBanner() != null) ma = ma.addFile(Helper.writeAndGet(c.getBanner(), "banner", "png"));
+		if (c.getIcon() != null) ma = ma.addFile(ImageHelper.writeAndGet(c.getIcon(), "icon", "png"));
+		if (c.getBanner() != null) ma = ma.addFile(ImageHelper.writeAndGet(c.getBanner(), "banner", "png"));
 		ma.queue(s ->
-				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

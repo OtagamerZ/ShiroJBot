@@ -20,12 +20,10 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -34,16 +32,20 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.collections4.ListUtils;
 
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Command(
 		name = "carta",
@@ -61,17 +63,17 @@ public class SeeCardCommand implements Executable {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		boolean shoukan = args.length > 1 && args[1].equalsIgnoreCase("S");
 
 		if (shoukan) {
-			Champion ch = CardDAO.peekChampion(args[0]);
-			Equipment eq = CardDAO.getEquipment(args[0]);
-			Field f = CardDAO.getField(args[0]);
+			Champion ch = Champion.getChampion(args[0]);
+			Evogear eq = Evogear.getEvogear(args[0]);
+			Field f = Field.getField(args[0]);
 
 			if (ch == null && eq == null && f == null) {
-				channel.sendMessage("❌ | Esse campeão, equipamento ou campo não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(ListUtils.union(CardDAO.getAllChampionNames(), CardDAO.getAllEquipmentNames()), CardDAO.getAllFieldNames()).toArray(String[]::new)) + "`?").queue();
+				channel.sendMessage("❌ | Esse campeão, equipamento ou campo não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Stream.of(Champion.getChampions(), Evogear.getEvogears(), Field.getFields()).flatMap(Collection::stream).map(d -> d.getCard().getId()).toList()) + "`?").queue();
 				return;
 			}
 
@@ -83,7 +85,7 @@ public class SeeCardCommand implements Executable {
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
 			if (d instanceof Champion c) {
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
-			} else if (d instanceof Equipment e && !e.getCharms().isEmpty()) {
+			} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
 				List<Charm> charms = e.getCharms();
 				for (Charm c : charms) {
 					eb.addField("Amuleto: " + c.getName(), c.getDescription(e.getTier()), true);
@@ -91,11 +93,11 @@ public class SeeCardCommand implements Executable {
 			}
 			eb.setImage("attachment://kawaipon.png");
 
-			channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(d.drawCard(false), "s_" + d.getCard().getId(), "png"), "kawaipon.png").queue();
+			channel.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(d.drawCard(false), "s_" + d.getCard().getId(), "png"), "kawaipon.png").queue();
 		} else {
 			Card tc = CardDAO.getCard(args[0], true);
 			if (tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Card.getCards().stream().map(Card::getId).toList()) + "`?").queue();
 				return;
 			}
 
@@ -103,33 +105,34 @@ public class SeeCardCommand implements Executable {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
 			Set<KawaiponCard> cards = kp.getCards();
-			Set<AddedAnime> animes = CardDAO.getValidAnime();
+			List<AddedAnime> animes = AddedAnime.queryAll(AddedAnime.class, "SELECT a FROM AddedAnime a WHERE a.hidden = FALSE");
 			for (AddedAnime anime : animes) {
-				if (acc.getCompletion(anime).any())
-					cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
+				if (acc.getCompletion(anime).any()) {
+					cards.add(new KawaiponCard(Card.find(Card.class, anime.getName()), false));
+				}
 			}
 
-			Champion c = CardDAO.peekChampion(card.getCard());
+			Champion c = Champion.getChampion(card.getCard().getId());
 			EmbedBuilder eb = new EmbedBuilder()
 					.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName())
-					.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary())
+					.setColor(RarityColors.find(RarityColors.class, tc.getRarity()).getPrimary())
 					.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true)
-					.addField("Elegível:", c != null && !c.isFusion() ? (Helper.getOr(c.getRawEffect(), "").contains("//TODO") ? "Ainda não" : "Sim") : "Não", true)
+					.addField("Elegível:", c != null && !c.isFusion() ? (CollectionHelper.getOr(c.getRawEffect(), "").contains("//TODO") ? "Ainda não" : "Sim") : "Não", true)
 					.addField("Raridade:", tc.getRarity().toString(), true)
 					.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true)
 					.addField("Anime:", tc.getAnime().toString(), true)
 					.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
-			BufferedImage bi = Helper.getResourceAsImage(this.getClass(), "kawaipon/missing.jpg");
+			BufferedImage bi = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/missing.jpg");
 
 			if (cards.contains(card)) {
 				if (tc.getRarity() == KawaiponRarity.ULTIMATE) {
-					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(tc.drawUltimate(author.getId()), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
+					channel.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(tc.drawUltimate(author.getId()), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
 				} else {
-					channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
+					channel.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
 				}
 			} else {
-				channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
+				channel.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
 			}
 		}
 	}

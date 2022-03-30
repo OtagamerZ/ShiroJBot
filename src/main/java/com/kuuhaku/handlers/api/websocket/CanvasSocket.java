@@ -18,14 +18,13 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -45,11 +44,13 @@ public class CanvasSocket extends WebSocketServer {
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		clients.add(conn);
+
+		PixelCanvas pc = PixelCanvas.query("SELECT c FROM PixelCanvas c WHERE c.shelved = false");
 		conn.send(new JSONObject() {{
 			put("type", "canvas_init");
-			put("content", Main.getInfo().getCanvas().getRawCanvas());
+			put("content", pc.getRawCanvas());
 			put("info", new JSONObject() {{
-				put("size", Helper.CANVAS_SIZE);
+				put("size", Constants.CANVAS_SIZE);
 			}});
 		}}.toString());
 	}
@@ -70,7 +71,7 @@ public class CanvasSocket extends WebSocketServer {
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
 				int size = jo.getJSONObject("info").getInt("size", 0);
 				Token t = TokenDAO.getToken(jo.getString("token"));
-				if (t == null || size != Helper.CANVAS_SIZE) return;
+				if (t == null || size != Constants.CANVAS_SIZE) return;
 
 				try {
 					PixelOperation op = new PixelOperation(
@@ -81,7 +82,7 @@ public class CanvasSocket extends WebSocketServer {
 							pixel.getString("color")
 					);
 
-					CanvasDAO.saveOperation(op);
+					op.save();
 				} catch (NullPointerException e) {
 					return;
 				}
@@ -110,7 +111,7 @@ public class CanvasSocket extends WebSocketServer {
 
 	@Override
 	public void onStart() {
-		Helper.logger(this.getClass()).info("WebSocket \"canvas\" iniciado na porta " + this.getPort());
+		MiscHelper.logger(this.getClass()).info("WebSocket \"canvas\" iniciado na porta " + this.getPort());
 	}
 
 	public void notifyUpdate(String color, int x, int y) {
@@ -121,7 +122,7 @@ public class CanvasSocket extends WebSocketServer {
 				put("x", x);
 				put("y", y);
 				put("info", new JSONObject() {{
-					put("size", Helper.CANVAS_SIZE);
+					put("size", Constants.CANVAS_SIZE);
 				}});
 			}}.toString());
 		}

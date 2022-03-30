@@ -22,7 +22,8 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 
 import java.time.temporal.ChronoUnit;
 import java.util.function.Function;
@@ -36,7 +37,7 @@ public enum Danger {
 	}),
 	XP("Penalidade de XP", h -> {
 		int max = h.getXp();
-		int penalty = Helper.rng(max / 10, max / 8);
+		int penalty = MathHelper.rng(max / 10, max / 8);
 		h.setXp(h.getXp() - penalty);
 
 		return "-" + penalty + " XP";
@@ -51,7 +52,7 @@ public enum Danger {
 	}),
 	EQUIPMENT("Penalidade de equipamento", h -> {
 		if (h.getInventory().isEmpty()) return "Nenhum";
-		h.getInventory().remove(Helper.getRandomEntry(h.getInventory()));
+		h.getInventory().remove(CollectionHelper.getRandomEntry(h.getInventory()));
 
 		return "Seu herói perdeu um dos equipamentos durante a missão";
 	}),

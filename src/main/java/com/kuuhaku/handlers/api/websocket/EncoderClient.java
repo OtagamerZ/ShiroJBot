@@ -19,8 +19,12 @@
 package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.jodah.expiringmap.ExpiringMap;
 import org.springframework.http.HttpStatus;
@@ -59,7 +63,7 @@ public class EncoderClient extends Endpoint {
 				.configurator(new ClientEndpointConfig.Configurator() {
 					@Override
 					public void beforeRequest(Map<String, List<String>> headers) {
-						headers.put("Authentication", List.of(Helper.hash(ShiroInfo.getBotToken(), "SHA-256")));
+						headers.put("Authentication", List.of(StringHelper.hash(ShiroInfo.TOKEN, "SHA-256")));
 					}
 				})
 				.build();
@@ -71,14 +75,14 @@ public class EncoderClient extends Endpoint {
 	public void onOpen(Session session, EndpointConfig config) {
 		this.session = session;
 		this.session.addMessageHandler(String.class, handler);
-		Helper.logger(this.getClass()).debug("Conectado ao webSocket \"encoder\" com sucesso");
+		MiscHelper.logger(this.getClass()).debug("Conectado ao webSocket \"encoder\" com sucesso");
 	}
 
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
-		Helper.logger(this.getClass()).debug("Desconectado do webSocket \"encoder\", tentando reconexão...");
+		MiscHelper.logger(this.getClass()).debug("Desconectado do webSocket \"encoder\", tentando reconexão...");
 		try {
-			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+			Main.getInfo().setEncoderClient(new EncoderClient(Constants.SOCKET_ROOT + "/encoder"));
 		} catch (URISyntaxException | DeploymentException | IOException ignore) {
 		}
 	}
@@ -93,7 +97,7 @@ public class EncoderClient extends Endpoint {
 
 		exec.execute(() -> {
 			try {
-				BufferedImage bi = Helper.btoa(Helper.uncompress(frames.get(0)));
+				BufferedImage bi = ImageHelper.btoa(FileHelper.uncompress(frames.get(0)));
 				assert bi != null;
 				send(new JSONObject() {{
 					put("hash", hash);
@@ -116,7 +120,7 @@ public class EncoderClient extends Endpoint {
 					put("type", "END");
 				}}.toString());
 			} catch (IOException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 
@@ -134,7 +138,7 @@ public class EncoderClient extends Endpoint {
 
 			session.getBasicRemote().sendText(msg);
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }
