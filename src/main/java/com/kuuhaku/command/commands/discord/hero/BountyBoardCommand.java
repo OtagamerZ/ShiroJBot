@@ -131,6 +131,7 @@ public class BountyBoardCommand implements Executable {
 			}
 
 			buttons.put(Helper.parseEmoji(Helper.getFancyNumber(i + 1)), wrapper -> {
+				wrapper.getMessage().delete().queue(null, Helper::doNothing);
 				if (h.getEnergy() < 1) {
 					channel.sendMessage("❌ | Seu herói está cansado (sem energia suficiente).").queue();
 					return;
@@ -146,7 +147,6 @@ public class BountyBoardCommand implements Executable {
 									KawaiponDAO.saveHero(h);
 
 									s.delete()
-											.flatMap(d -> wrapper.getMessage().delete())
 											.flatMap(d -> channel.sendMessage("✅ | Herói enviado com sucesso!"))
 											.queue();
 								}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

@@ -321,14 +321,14 @@ public class ReserveCardCommand implements Executable {
 				return;
 			}
 
+			m.setBuyer(author.getId());
+			MarketDAO.saveCard(m);
+
 			StashDAO.saveCard(switch (m.getType()) {
 				case EVOGEAR -> new Stash(author.getId(), (Equipment) m.getCard());
 				case FIELD -> new Stash(author.getId(), (Field) m.getCard());
 				default -> new Stash(author.getId(), (KawaiponCard) m.getCard());
 			});
-
-			m.setBuyer(author.getId());
-			MarketDAO.saveCard(m);
 
 			channel.sendMessage("✅ | Carta reservada com sucesso!").queue();
 		}

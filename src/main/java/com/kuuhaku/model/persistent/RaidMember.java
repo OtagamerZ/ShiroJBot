@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.*;
 
 @Entity
@@ -28,14 +30,18 @@ public class RaidMember {
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String uid;
-
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String sid;
 
-	public RaidMember(String uid, String sid) {
-		this.uid = uid;
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	private String uid;
+
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String name;
+
+	public RaidMember(String sid, String uid, String name) {
 		this.sid = sid;
+		this.uid = uid;
+		this.name = name;
 	}
 
 	public RaidMember() {
@@ -45,11 +51,15 @@ public class RaidMember {
 		return id;
 	}
 
+	public String getSid() {
+		return sid;
+	}
+
 	public String getUid() {
 		return uid;
 	}
 
-	public String getSid() {
-		return sid;
+	public String getName() {
+		return Helper.getOr(name, "Desconhecido");
 	}
 }

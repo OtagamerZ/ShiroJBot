@@ -32,6 +32,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.exceptions.MissingAccessException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.quartz.Job;
@@ -92,9 +93,13 @@ public class MinuteEvent implements Job {
 
 					List<AuditableRestAction<Void>> act = new ArrayList<>();
 					for (GuildChannel gc : g.getChannels()) {
-						PermissionOverride po = gc.getPermissionOverride(mb);
-						if (po != null)
-							act.add(po.delete());
+						try {
+							PermissionOverride po = gc.getPermissionOverride(mb);
+							if (po != null) {
+								act.add(po.delete());
+							}
+						} catch (MissingAccessException ignore) {
+						}
 					}
 
 					RestAction.allOf(act)

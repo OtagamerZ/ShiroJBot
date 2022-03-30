@@ -1273,6 +1273,7 @@ public class Champion implements Drawable, Cloneable {
 			Champion c = (Champion) super.clone();
 			c.linkedTo = new UniqueList<>(CardLink::getIndex);
 			c.index = new AtomicInteger(-2);
+			c.curses = new HashSet<>();
 			c.bonus = bonus.clone();
 			c.nemesis = null;
 			c.onDuelEnd = null;
@@ -1296,6 +1297,7 @@ public class Champion implements Drawable, Cloneable {
 			}
 
 			c.index = new AtomicInteger(index.get());
+			c.curses = new HashSet<>(curses);
 			c.bonus = bonus.clone();
 			if (nemesis != null) {
 				c.nemesis = nemesis.deepCopy();
