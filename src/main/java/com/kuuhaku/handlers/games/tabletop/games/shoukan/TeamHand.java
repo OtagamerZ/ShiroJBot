@@ -167,7 +167,6 @@ public class TeamHand extends Hand {
 						deque.addAll(Collections.nCopies(6, c));
 					}
 				}
-				case INSTAKILL -> deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
 				case CARDMASTER -> {
 					deque.clear();
 					deque.addAll(CardDAO.getAllChampions(false));

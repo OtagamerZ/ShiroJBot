@@ -59,12 +59,14 @@ public class RaidInfoCommand implements Executable {
 				return;
 			}
 
-			Set<String> bans = new HashSet<>();
+			Set<String> bans;
 			if (guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)) {
 				bans = guild.retrieveBanList().complete().stream()
 						.map(Guild.Ban::getUser)
 						.map(User::getId)
 						.collect(Collectors.toSet());
+			} else {
+				bans = new HashSet<>();
 			}
 
 			List<Page> pages = new ArrayList<>();
@@ -79,14 +81,14 @@ public class RaidInfoCommand implements Executable {
 							"""
 									Ocorrido: %s
 									Duração: %s
-									Usuários banidos: %s
+									Usuários detectados: %s
 									Usuários perdoados: %s
 									""".formatted(
 									Helper.TIMESTAMP.formatted(r.getOccurrence().toEpochSecond()),
 									Helper.toStringDuration(r.getDuration()),
 									r.getMembers().size(),
-									bans.stream()
-											.filter(id -> r.getMembers().stream().anyMatch(rm -> rm.getUid().equals(id)))
+									r.getMembers().stream()
+											.filter(u -> !bans.contains(u.getUid()))
 											.count()
 							),
 							false
@@ -136,11 +138,7 @@ public class RaidInfoCommand implements Executable {
 						status = ":orange_circle: Expulso/Ausente";
 					}
 
-					eb.addField(
-							Helper.getUsername(m.getUid()) + " (" + m.getUid() + ")",
-							"Status: " + status,
-							false
-					);
+					eb.addField(m.getName(), "ID: `" + m.getUid() + "`\nStatus: " + status, false);
 				}
 
 				pages.add(new InteractPage(eb.build()));

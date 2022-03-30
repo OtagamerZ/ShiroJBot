@@ -38,6 +38,7 @@ import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.model.records.PseudoMessage;
 import com.kuuhaku.model.records.RaidData;
+import com.kuuhaku.model.records.UserData;
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -672,7 +673,7 @@ public class ShiroEvents extends ListenerAdapter {
 		User author = event.getUser();
 
 		if (Main.getInfo().getAntiRaidStreak().containsKey(guild.getId())) {
-			Main.getInfo().getAntiRaidStreak().get(guild.getId()).ids().add(member.getId());
+			Main.getInfo().getAntiRaidStreak().get(guild.getId()).users().add(new UserData(author));
 			guild.ban(member, 7, "Detectada tentativa de raid").queue();
 			return;
 		}
@@ -680,10 +681,10 @@ public class ShiroEvents extends ListenerAdapter {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.isAntiRaid()) {
-			ExpiringMap<Long, String> arc = Main.getInfo().getAntiRaidCache()
+			ExpiringMap<Long, UserData> arc = Main.getInfo().getAntiRaidCache()
 					.computeIfAbsent(guild.getId(), k -> ExpiringMap.builder().expiration(5, TimeUnit.SECONDS).build());
 
-			arc.put(System.currentTimeMillis(), author.getId());
+			arc.put(System.currentTimeMillis(), new UserData(author));
 			if (arc.size() >= gc.getAntiRaidLimit()) {
 				Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), arc));
 
@@ -734,8 +735,8 @@ public class ShiroEvents extends ListenerAdapter {
 				Main.getInfo().getAntiRaidCache().remove(guild.getId());
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
-				for (String id : arc.values()) {
-					acts.add(guild.ban(id, 7, "Detectada tentativa de raid"));
+				for (UserData user : arc.values()) {
+					acts.add(guild.ban(user.uid(), 7, "Detectada tentativa de raid"));
 				}
 
 				RestAction.allOf(acts)
