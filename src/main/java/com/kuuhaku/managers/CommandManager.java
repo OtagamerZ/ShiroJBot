@@ -21,12 +21,14 @@ package com.kuuhaku.managers;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Signature;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.model.annotations.*;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.records.SlashParam;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONUtils;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.json.JSONUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -46,12 +48,12 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (!names.add(params.name())) {
-				Helper.logger(this.getClass()).warn("Detectado comando com nome existente: " + params.name());
+				MiscHelper.logger(this.getClass()).warn("Detectado comando com nome existente: " + params.name());
 			}
 
 			for (String alias : params.aliases()) {
 				if (!names.add(alias)) {
-					Helper.logger(this.getClass()).warn("Detectado comando com alias existente: " + alias);
+					MiscHelper.logger(this.getClass()).warn("Detectado comando com alias existente: " + alias);
 				}
 			}
 		}
@@ -84,7 +86,7 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (name.equalsIgnoreCase(params.name()) || Helper.equalsAny(name, params.aliases())) {
+			if (name.equalsIgnoreCase(params.name()) || LogicHelper.equalsAny(name, params.aliases())) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
 						params.name(),
@@ -148,7 +150,7 @@ public class CommandManager {
 		try {
 			return (Executable) klass.getConstructor().newInstance();
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
 	}
@@ -221,7 +223,7 @@ public class CommandManager {
 		}
 
 		Main.getDefaultShard().updateCommands().addCommands(cds).complete();
-		Helper.logger(this.getClass()).info(slashes.values().stream().mapToLong(Set::size).sum() + " comandos Slash registrados.");
+		MiscHelper.logger(this.getClass()).info(slashes.values().stream().mapToLong(Set::size).sum() + " comandos Slash registrados.");
 	}
 
 	public String[] getCommandSignature(Class<?> klass) {

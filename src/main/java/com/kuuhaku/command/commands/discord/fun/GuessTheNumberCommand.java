@@ -21,14 +21,14 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -52,13 +52,11 @@ public class GuessTheNumberCommand implements Executable {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
-
-		int theValue = Helper.rng(100);
+		Account acc = Account.find(Account.class, author.getId());
+		int theValue = MathHelper.rng(100);
 
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
-
-		ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener(channel) {
+		Main.getEvents().addHandler(guild, new SimpleMessageListener(channel) {
 			private final Consumer<Void> success = s -> close();
 			private Future<?> timeout = channel.sendMessage("Acabou o tempo, o número escolhido por mim era **" + theValue + "**.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 			int chances = 4;
@@ -72,7 +70,7 @@ public class GuessTheNumberCommand implements Executable {
 				if (!event.getAuthor().getId().equals(author.getId())) return;
 
 				String value = event.getMessage().getContentRaw();
-				if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.split(" ")[0].replaceFirst(prefix, ""), "adivinheonumero", "guessthenumber", "gtn", "aon")) {
+				if (value.equalsIgnoreCase("desistir") || LogicHelper.equalsAny(value.split(" ")[0].replaceFirst(prefix, ""), "adivinheonumero", "guessthenumber", "gtn", "aon")) {
 					channel.sendMessage("Você desistiu, o número escolhido por mim era **" + theValue + "**.").queue();
 					success.accept(null);
 					timeout.cancel(true);
@@ -99,10 +97,10 @@ public class GuessTheNumberCommand implements Executable {
 
 
 				if (guess == theValue) {
-					int prize = Helper.rng(400, 800);
-					channel.sendMessage("Você acertou! Como prêmio você receberá **" + Helper.separate(prize) + "** CR.").queue();
+					int prize = MathHelper.rng(400, 800);
+					channel.sendMessage("Você acertou! Como prêmio você receberá **" + StringHelper.separate(prize) + "** CR.").queue();
 					acc.addCredit(prize, this.getClass());
-					AccountDAO.saveAccount(acc);
+					acc.save();
 
 					success.accept(null);
 					timeout.cancel(true);

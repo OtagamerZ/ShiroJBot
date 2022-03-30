@@ -18,9 +18,8 @@
 
 package com.kuuhaku.handlers.games.normal.framework;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.InfiniteList;
+import com.kuuhaku.utils.collections.InfiniteList;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,14 +52,14 @@ public class Table {
 	public void awardWinner(Game game, String id) {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).toList();
 
-		Account wacc = AccountDAO.getAccount(id);
+		Account wacc = Account.find(Account.class, id);
 		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), game.getClass());
-		AccountDAO.saveAccount(wacc);
+		wacc.save();
 
 		for (Player l : losers) {
-			Account lacc = AccountDAO.getAccount(l.getId());
+			Account lacc = Account.find(Account.class, l.getId());
 			lacc.removeCredit(l.getBet(), game.getClass());
-			AccountDAO.saveAccount(lacc);
+			lacc.save();
 		}
 
 		awarded = true;

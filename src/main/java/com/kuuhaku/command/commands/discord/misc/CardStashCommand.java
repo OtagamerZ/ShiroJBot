@@ -24,18 +24,17 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -61,7 +60,7 @@ public class CardStashCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<String> byRarity = new AtomicReference<>(null);
@@ -114,7 +113,7 @@ public class CardStashCommand implements Executable {
 				if (cards.isEmpty()) return null;
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setAuthor("Cartas armazenadas: " + Helper.separate(total) + "/" + Helper.separate(acc.getCardStashCapacity()) + " | Página " + (i + 1))
+						.setAuthor("Cartas armazenadas: " + StringHelper.separate(total) + "/" + StringHelper.separate(acc.getCardStashCapacity()) + " | Página " + (i + 1))
 						.setTitle(":package: | Armazém de cartas");
 
 				if (i == 0) {
@@ -139,7 +138,7 @@ public class CardStashCommand implements Executable {
 						default -> ((KawaiponCard) s.getCard()).getName();
 					};
 					String rarity = switch (s.getType()) {
-						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Equipment) s.getCard()).getTier()) + ")";
+						case EVOGEAR -> "Equipamento (" + StringUtils.repeat("⭐", ((Evogear) s.getCard()).getTier()) + ")";
 						case FIELD -> (((Field) s.getCard()).isDay() ? ":sunny: " : ":crescent_moon: ") + "Campo";
 						default -> s.getRawCard().getRarity().getEmote() + s.getRawCard().getRarity().toString();
 					};
@@ -161,7 +160,7 @@ public class CardStashCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) p.getContent()).queue(s ->
-					Pages.lazyPaginate(s, load, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					Pages.lazyPaginate(s, load, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}

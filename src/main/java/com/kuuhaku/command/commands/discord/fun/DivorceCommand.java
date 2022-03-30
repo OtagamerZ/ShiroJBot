@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import net.dv8tion.jda.api.entities.*;

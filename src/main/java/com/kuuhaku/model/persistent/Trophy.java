@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.annotations.WhenNull;
 import com.kuuhaku.model.enums.TrophyType;
 
 import javax.persistence.*;
@@ -26,7 +28,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "trophy")
-public class Trophy {
+public class Trophy extends DAO {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
@@ -36,11 +38,12 @@ public class Trophy {
 	@JoinColumn(nullable = false, name = "trophy_uid")
 	private Set<TrophyType> trophies = EnumSet.noneOf(TrophyType.class);
 
-	public Trophy(String uid) {
-		this.uid = uid;
+	public Trophy() {
 	}
 
-	public Trophy() {
+	@WhenNull
+	public Trophy(String uid) {
+		this.uid = uid;
 	}
 
 	public String getUid() {

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records.anime;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import java.util.List;
 
@@ -41,28 +41,28 @@ public record Media(
 
 	@Override
 	public Long idMal() {
-		return Helper.getOr(idMal, 0L);
+		return CollectionHelper.getOr(idMal, 0L);
 	}
 
 	@Override
 	public Long episodes() {
 		if (nextAiringEpisode != null)
-			return Helper.getOr(episodes, nextAiringEpisode.episode() - 1);
+			return CollectionHelper.getOr(episodes, nextAiringEpisode.episode() - 1);
 		else return episodes;
 	}
 
 	@Override
 	public List<String> genres() {
-		return Helper.getOr(genres, List.of());
+		return CollectionHelper.getOr(genres, List.of());
 	}
 
 	@Override
 	public Long popularity() {
-		return Helper.getOr(popularity, 0L);
+		return CollectionHelper.getOr(popularity, 0L);
 	}
 
 	@Override
 	public Long averageScore() {
-		return Helper.getOr(averageScore, 0L);
+		return CollectionHelper.getOr(averageScore, 0L);
 	}
 }

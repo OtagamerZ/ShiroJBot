@@ -18,22 +18,22 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
 
 public class CreditDrop extends Drop<Integer> {
 	public CreditDrop() {
-		super(Helper.rng(300, 800));
+		super(MathHelper.rng(300, 800));
 	}
 
 	@Override
 	public void award(User u) {
-		Account acc = AccountDAO.getAccount(u.getId());
+		Account acc = Account.find(Account.class, u.getId());
 		acc.addCredit(getPrize(), this.getClass());
 
 		if (acc.hasPendingQuest()) {
@@ -42,12 +42,12 @@ public class CreditDrop extends Drop<Integer> {
 			acc.setDailyProgress(pg);
 		}
 
-		AccountDAO.saveAccount(acc);
+		acc.save();
 	}
 
 	@Override
 	public String toString() {
-		return Helper.separate(getPrize()) + " CR";
+		return StringHelper.separate(getPrize()) + " CR";
 	}
 
 	@Override

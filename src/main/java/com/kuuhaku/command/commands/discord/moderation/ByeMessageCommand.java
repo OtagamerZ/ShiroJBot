@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -42,7 +42,7 @@ public class ByeMessageCommand implements Executable {
 			return;
 		}
 
-		if (!Helper.between(argsAsText.length(), 0, 2048)) {
+		if (!MathHelper.between(argsAsText.length(), 0, 2048)) {
 			channel.sendMessage("❌ | A mensagem deve possuir entre 0 e 2048 caracteres.").queue();
 			return;
 		}

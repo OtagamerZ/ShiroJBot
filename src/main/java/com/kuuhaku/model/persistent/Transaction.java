@@ -18,7 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.utils.Constants;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -26,7 +27,7 @@ import java.time.ZoneId;
 
 @Entity
 @Table(name = "transaction")
-public class Transaction {
+public class Transaction extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -47,7 +48,7 @@ public class Transaction {
 		this.uid = id;
 		this.fromClass = from;
 		this.value = value;
-		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.FULL_DATE_FORMAT);
+		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Constants.FULL_DATE_FORMAT);
 	}
 
 	public Transaction() {

@@ -39,8 +39,10 @@ import com.kuuhaku.model.exceptions.ValidationException;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.records.DuoLobby;
 import com.kuuhaku.model.records.SoloLobby;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -72,7 +74,7 @@ public class LobbyCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length > 0 && Helper.equalsAny(args[0], "sair", "exit")) {
+		if (args.length > 0 && LogicHelper.equalsAny(args[0], "sair", "exit")) {
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 			MatchMaking mm = Main.getInfo().getMatchMaking();
 
@@ -83,7 +85,7 @@ public class LobbyCommand implements Executable, Slashed {
 					mmr.block((int) Math.pow(2, mmr.getJoins() - 2), ChronoUnit.MINUTES);
 					MatchMakingRatingDAO.saveMMR(mmr);
 
-					channel.sendMessage("Você saiu do saguão SOLO com sucesso.\n:no_entry_sign: | Devido a cancelamentos frequentes, você está bloqueado de entrar no saguão por %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
+					channel.sendMessage("Você saiu do saguão SOLO com sucesso.\n:no_entry_sign: | Devido a cancelamentos frequentes, você está bloqueado de entrar no saguão por %s.".formatted(StringHelper.toStringDuration(mmr.getRemainingBlock()))).queue();
 				} else if (mmr.getJoins() == 2) {
 					channel.sendMessage("Você saiu do saguão SOLO com sucesso.\n:warning: | O próximo cancelamento de fila resultará em bloqueio de saguão.").queue();
 				} else {
@@ -96,7 +98,7 @@ public class LobbyCommand implements Executable, Slashed {
 					mmr.block((int) Math.pow(2, mmr.getJoins() - 2), ChronoUnit.MINUTES);
 					MatchMakingRatingDAO.saveMMR(mmr);
 
-					channel.sendMessage("Você saiu do saguão DUO com sucesso.\n:no_entry_sign: | Devido a cancelamentos frequentes, você está bloqueado de entrar no saguão por %s.".formatted(Helper.toStringDuration(mmr.getRemainingBlock()))).queue();
+					channel.sendMessage("Você saiu do saguão DUO com sucesso.\n:no_entry_sign: | Devido a cancelamentos frequentes, você está bloqueado de entrar no saguão por %s.".formatted(StringHelper.toStringDuration(mmr.getRemainingBlock()))).queue();
 				} else if (mmr.getJoins() == 2) {
 					channel.sendMessage("Você saiu do saguão DUO com sucesso.\n:warning: | O próximo cancelamento de fila resultará em bloqueio de saguão.").queue();
 				} else {
@@ -107,7 +109,7 @@ public class LobbyCommand implements Executable, Slashed {
 				return;
 			}
 			return;
-		} else if (args.length < 1 || !Helper.equalsAny(args[0], "solo", "duo")) {
+		} else if (args.length < 1 || !LogicHelper.equalsAny(args[0], "solo", "duo")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
 			return;
 		}
@@ -117,7 +119,7 @@ public class LobbyCommand implements Executable, Slashed {
 
 		switch (rq) {
 			case SOLO -> {
-				List<List<SoloLobby>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby(), 10);
+				List<List<SoloLobby>> lobby = CollectionHelper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby(), 10);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(),
@@ -144,11 +146,11 @@ public class LobbyCommand implements Executable, Slashed {
 				}
 
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+						Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
 			}
 			case DUO -> {
-				List<List<DuoLobby>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby(), 10);
+				List<List<DuoLobby>> lobby = CollectionHelper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby(), 10);
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle("Saguão do Shoukan ranqueado (%s | %s equipes)".formatted(rq.name(),
@@ -175,7 +177,7 @@ public class LobbyCommand implements Executable, Slashed {
 				}
 
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+						Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
 			}
 		}
@@ -193,7 +195,7 @@ public class LobbyCommand implements Executable, Slashed {
 			return "sair";
 		} else {
 			String tp = type == null ? "" : type.getAsString();
-			if (!Helper.equalsAny(tp, "SOLO", "DUO"))
+			if (!LogicHelper.equalsAny(tp, "SOLO", "DUO"))
 				throw new ValidationException("❌ | O tipo deve ser `SOLO` ou `DUO`.");
 
 			return tp;

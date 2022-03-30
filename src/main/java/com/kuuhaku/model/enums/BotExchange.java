@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Arrays;
@@ -85,18 +85,18 @@ public enum BotExchange {
 	}
 
 	public boolean matchTrigger(String s) {
-		return Helper.regex(s, trigger).find();
+		return StringHelper.regex(s, trigger).find();
 	}
 
 	public Map<String, String> getTriggerValues(String s) {
-		return Helper.extractNamedGroups(s, trigger);
+		return StringHelper.extractNamedGroups(s, trigger);
 	}
 
 	public boolean matchConfirmation(String s) {
-		return Helper.regex(s, confirmation).find();
+		return StringHelper.regex(s, confirmation).find();
 	}
 
 	public Map<String, String> getConfirmationValues(String s) {
-		return Helper.extractNamedGroups(s, confirmation);
+		return StringHelper.extractNamedGroups(s, confirmation);
 	}
 }

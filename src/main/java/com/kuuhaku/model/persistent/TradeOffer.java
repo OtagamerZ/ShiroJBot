@@ -18,15 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.utils.helpers.StringHelper;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -96,13 +94,13 @@ public class TradeOffer {
 	}
 
 	public Account getAccount() {
-		return AccountDAO.getAccount(uid);
+		return Account.find(Account.class, uid);
 	}
 
 	public void rollback() {
 		Account acc = getAccount();
 		acc.addCredit(value, this.getClass());
-		AccountDAO.saveAccount(acc);
+		acc.save();
 
 		Kawaipon kp = getKawaipon();
 		Deck dk = kp.getDeck();
@@ -119,7 +117,7 @@ public class TradeOffer {
 					}
 				}
 				case SENSHI -> {
-					Champion c = CardDAO.getChampion(card.getCard());
+					Champion c = Champion.getChampion(card.getCard().getId());
 					if (c == null) continue;
 
 					if (dk.checkChampionError(c) != 0) {
@@ -129,7 +127,7 @@ public class TradeOffer {
 					}
 				}
 				case EVOGEAR -> {
-					Equipment e = CardDAO.getEquipment(card.getCard());
+					Evogear e = Evogear.getEvogear(card.getCard().getId());
 					if (e == null) continue;
 
 					if (dk.checkEquipmentError(e) != 0) {
@@ -139,7 +137,7 @@ public class TradeOffer {
 					}
 				}
 				case FIELD -> {
-					Field f = CardDAO.getField(card.getCard());
+					Field f = Field.getField(card.getCard().getId());
 					if (f == null) continue;
 
 					if (dk.checkFieldError(f) != 0) {
@@ -169,7 +167,7 @@ public class TradeOffer {
 				}
 			}
 			case SENSHI -> {
-				Champion c = CardDAO.getChampion(card.getCard());
+				Champion c = Champion.getChampion(card.getCard().getId());
 				if (c == null) return;
 
 				if (dk.checkChampionError(c) != 0) {
@@ -179,7 +177,7 @@ public class TradeOffer {
 				}
 			}
 			case EVOGEAR -> {
-				Equipment e = CardDAO.getEquipment(card.getCard());
+				Evogear e = Evogear.getEvogear(card.getCard().getId());
 				if (e == null) return;
 
 				if (dk.checkEquipmentError(e) != 0) {
@@ -189,7 +187,7 @@ public class TradeOffer {
 				}
 			}
 			case FIELD -> {
-				Field f = CardDAO.getField(card.getCard());
+				Field f = Field.getField(card.getCard().getId());
 				if (f == null) return;
 
 				if (dk.checkFieldError(f) != 0) {
@@ -219,7 +217,7 @@ public class TradeOffer {
 			sb.appendNewLine("Nada");
 		} else {
 			if (value > 0) {
-				sb.appendNewLine(Helper.separate(value) + " CR");
+				sb.appendNewLine(StringHelper.separate(value) + " CR");
 			}
 
 			String head = "";

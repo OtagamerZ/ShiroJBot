@@ -25,10 +25,11 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.io.Closeable;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class SimpleMessageListener extends ListenerAdapter implements Closeable {
 	private final GameChannel channel;
-	public Object mutex = new Object();
+	public AtomicReference<?> mutex = new AtomicReference<>(new Object());
 	private boolean closed = false;
 
 	public SimpleMessageListener(TextChannel... channels) {
@@ -64,7 +65,7 @@ public abstract class SimpleMessageListener extends ListenerAdapter implements C
 
 	@Override
 	public void close() {
-		mutex = null;
+		mutex.set(null);
 		closed = true;
 	}
 }

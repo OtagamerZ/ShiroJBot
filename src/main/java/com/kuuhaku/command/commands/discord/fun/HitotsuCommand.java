@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.hitotsu.Hitotsu;
@@ -31,8 +30,10 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -83,9 +84,9 @@ public class HitotsuCommand implements Executable {
 			}
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
-
+		Account acc = Account.find(Account.class, author.getId());
 		int bet = 0;
+
 		if (args.length > 1 && StringUtils.isNumeric(args[0])) {
 			bet = Integer.parseInt(args[0]);
 			if (bet < 0) {
@@ -97,7 +98,7 @@ public class HitotsuCommand implements Executable {
 			}
 
 			for (User u : message.getMentionedUsers()) {
-				Account a = AccountDAO.getAccount(u.getId());
+				Account a = Account.find(Account.class, u.getId());
 				if (a.getBalance() < bet) {
 					channel.sendMessage(I18n.getString("err_insufficient-credits-mention", u.getAsMention())).queue();
 					return;
@@ -121,15 +122,15 @@ public class HitotsuCommand implements Executable {
 
 		String msg;
 		if (players.size() > 2)
-			msg = Helper.parseAndJoin(message.getMentionedUsers(), IMentionable::getAsMention) + ", vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : "");
+			msg = CollectionHelper.parseAndJoin(message.getMentionedUsers(), IMentionable::getAsMention) + ", vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + StringHelper.separate(bet) + " CR)" : "");
 		else
-			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : "");
+			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + StringHelper.separate(bet) + " CR)" : "");
 
 		for (User player : players) {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);
 		}
 		int finalBet = bet;
-		channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+		channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 					if (players.contains(wrapper.getUser())) {
 						if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 							channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
@@ -147,12 +148,12 @@ public class HitotsuCommand implements Executable {
 						if (accepted.size() == players.size()) {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							s.delete().queue(null, Helper::doNothing);
-							Game t = new Hitotsu(Main.getShiroShards(), channel, finalBet, players.toArray(User[]::new));
+							s.delete().queue(null, MiscHelper::doNothing);
+							Game t = new Hitotsu(Main.getShiro(), channel, finalBet, players.toArray(User[]::new));
 							t.start();
 						}
 					}
-				}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+				}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 				u -> players.parallelStream().map(User::getId).anyMatch(i -> i.equals(u.getId())),
 				ms -> {
 					for (User player : players) {

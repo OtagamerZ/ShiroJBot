@@ -24,7 +24,10 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.StorageUnit;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -61,7 +64,7 @@ public class AddEmoteCommand implements Executable {
 		Set<Emote> emts = new HashSet<>();
 		for (String arg : args) {
 			if (arg.matches("\\{a?&\\w+&\\d{10,}}")) {
-				Emote e = Main.getShiroShards().getEmoteById(Helper.getOr(Helper.extract(arg, "\\{a?&\\w+&(\\d{10,})}", 1), "1"));
+				Emote e = Main.getShiro().getEmoteById(CollectionHelper.getOr(StringHelper.extract(arg, "\\{a?&\\w+&(\\d{10,})}", 1), "1"));
 				if (e == null) {
 					channel.sendMessage("❌ | Emote `" + arg + "` não encontrado, verifique se digitou a menção correta no formato usado por mim no `" + prefix + "semotes`.").queue();
 					return;
@@ -85,7 +88,7 @@ public class AddEmoteCommand implements Executable {
 				return;
 			}
 
-			try (InputStream is = Helper.getImage(att.getUrl())) {
+			try (InputStream is = ImageHelper.getImage(att.getUrl())) {
 				byte[] bytes = is.readAllBytes();
 				if (bytes.length > StorageUnit.B.convert(256, StorageUnit.KB)) {
 					channel.sendMessage("❌ | O Discord só permite emotes de até 256kb.").queue();
@@ -115,14 +118,14 @@ public class AddEmoteCommand implements Executable {
 
 				String msg;
 				if (message.getMentionedRoles().size() > 0) {
-					msg = "✅ | Emote adicionado com sucesso para os cargos " + Helper.parseAndJoin(message.getMentionedRoles(), IMentionable::getAsMention) + "!";
+					msg = "✅ | Emote adicionado com sucesso para os cargos " + CollectionHelper.parseAndJoin(message.getMentionedRoles(), IMentionable::getAsMention) + "!";
 				} else {
 					msg = "✅ | Emote adicionado com sucesso!";
 				}
 
 				guild.createEmote(args[0], Icon.from(bytes, type), message.getMentionedRoles().toArray(new Role[0]))
 						.flatMap(s -> channel.sendMessage(msg))
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 			} catch (IOException ex) {
 				channel.sendMessage("❌ | Não foi possível obter a imagem.").queue();
 			}
@@ -145,7 +148,7 @@ public class AddEmoteCommand implements Executable {
 			int added = 0;
 			for (Emote emote : toadd) {
 				try {
-					acts.add(guild.createEmote(emote.getName(), Icon.from(Helper.getImage(emote.getImageUrl())), message.getMentionedRoles().toArray(new Role[0])));
+					acts.add(guild.createEmote(emote.getName(), Icon.from(ImageHelper.getImage(emote.getImageUrl())), message.getMentionedRoles().toArray(new Role[0])));
 					added++;
 				} catch (IOException ignore) {
 				}
@@ -161,7 +164,7 @@ public class AddEmoteCommand implements Executable {
 			RestAction.allOf(acts)
 					.mapToResult()
 					.flatMap(s -> channel.sendMessage(msg))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		}
 	}
 }

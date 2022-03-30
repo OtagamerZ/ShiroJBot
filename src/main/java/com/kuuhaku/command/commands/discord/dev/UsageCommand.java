@@ -24,12 +24,12 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.model.persistent.Log;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -53,8 +53,8 @@ public class UsageCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		List<Object[]> usos = LogDAO.getUsage();
-		List<List<Object[]>> uPages = Helper.chunkify(usos, 10);
+		List<Object[]> usage = Log.queryAllUnmapped("SELECT * FROM \"GetUsage\"");
+		List<List<Object[]>> uPages = CollectionHelper.chunkify(usage, 10);
 
 		List<Page> pages = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class UsageCommand implements Executable {
 
 			eb.setTitle("Quantidade de comandos usados por servidor neste mês:");
 			for (Object[] p : uPages.get(i)) {
-				Guild g = Main.getInfo().getGuildByID(String.valueOf(p[0]));
+				Guild g = Main.getGuildByID(String.valueOf(p[0]));
 				if (g == null) continue;
 				eb.addField("Servidor: " + g.getName(), """
 						Dono: %s (%s)
@@ -84,6 +84,6 @@ public class UsageCommand implements Executable {
 			pages.add(new InteractPage(eb.build()));
 		}
 
-		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 	}
 }

@@ -28,8 +28,9 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.ClanMember;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -68,15 +69,15 @@ public class PromoteClanMemberCommand implements Executable {
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Tem certeza que deseja promover o membro " + Helper.getUsername(cm.getUid()) + "?")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+			channel.sendMessage("Tem certeza que deseja promover o membro " + MiscHelper.getUsername(cm.getUid()) + "?")
+					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								c.promote(cm.getUid(), author);
 								ClanDAO.saveClan(c);
 
 								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Membro promovido com sucesso.")).queue();
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

@@ -19,7 +19,8 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
@@ -132,11 +133,11 @@ public enum Race {
     }
 
     public BufferedImage getIcon() {
-        return Helper.getResourceAsImage(this.getClass(), "shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png");
+        return FileHelper.getResourceAsImage(this.getClass(), "shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png");
     }
 
     public static Race getByName(String name) {
-        return Arrays.stream(values()).filter(c -> Helper.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(c -> LogicHelper.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
     }
 
     public static Pair<Race, Race> getCombo(List<Champion> champs) {

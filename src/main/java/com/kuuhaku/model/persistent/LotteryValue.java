@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,7 +27,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "lotteryvalue")
-public class LotteryValue {
+public class LotteryValue extends DAO {
 	@Id
 	@Column(columnDefinition = "INT NOT NULL")
 	private int id;

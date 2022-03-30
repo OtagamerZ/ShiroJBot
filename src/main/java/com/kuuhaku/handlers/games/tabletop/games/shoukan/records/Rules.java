@@ -2,9 +2,10 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.records;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArcadeMode;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.json.JSONObject;
 import com.kuuhaku.utils.XStringBuilder;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,10 +45,10 @@ public record Rules(
 
 	public Rules(JSONObject json, boolean official) {
 		this(
-				Helper.clamp(json.getInt("mana"), 0, 20),
-				Helper.clamp(json.getInt("hp", 5000), 500, 9999),
-				Helper.clamp(json.getInt("cartasmax", 5), 1, 10),
-				Helper.clamp(json.getInt("manapt", 5), 1, 20),
+				MathHelper.clamp(json.getInt("mana"), 0, 20),
+				MathHelper.clamp(json.getInt("hp", 5000), 500, 9999),
+				MathHelper.clamp(json.getInt("cartasmax", 5), 1, 10),
+				MathHelper.clamp(json.getInt("manapt", 5), 1, 20),
 				json.getBoolean("semdano"),
 				json.getBoolean("semequip"),
 				json.getBoolean("semmagia"),
@@ -61,12 +62,12 @@ public record Rules(
 
 	@Override
 	public ArcadeMode arcade() {
-		return Helper.getOr(arcade, ArcadeMode.NONE);
+		return CollectionHelper.getOr(arcade, ArcadeMode.NONE);
 	}
 
 	@Override
 	public JSONArray test() {
-		return Helper.getOr(test, new JSONArray());
+		return CollectionHelper.getOr(test, new JSONArray());
 	}
 
 	@Override
@@ -94,10 +95,10 @@ public record Rules(
 			sb.appendNewLine("**Debug** ");
 		if (arcade != def.arcade)
 			sb.appendNewLine("**Arcade:** " + StringUtils.capitalize(arcade.name().toLowerCase(Locale.ROOT)));
-		if (!Helper.getOr(test, new JSONArray()).isEmpty())
+		if (!CollectionHelper.getOr(test, new JSONArray()).isEmpty())
 			sb.appendNewLine("**Cartas iniciais:** " + test.stream()
 					.map(s -> Objects.requireNonNull(CardDAO.getCard(String.valueOf(s))).getName())
-					.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())));
+					.collect(Collectors.collectingAndThen(Collectors.toList(), CollectionHelper.properlyJoin())));
 		if (official != def.official)
 			sb.appendNewLine("**Oficial**");
 

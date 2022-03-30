@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
 import net.dv8tion.jda.api.entities.*;
@@ -34,7 +33,7 @@ public class RemindMeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		if (acc.shouldRemind()) {
 			channel.sendMessage(":mobile_phone_off: | Não irei mais te avisar quando você puder votar novamente!").queue();
 			acc.setRemind(false);
@@ -42,6 +41,6 @@ public class RemindMeCommand implements Executable {
 			channel.sendMessage(":vibration_mode: | Agora irei te avisar quando você puder votar novamente!").queue();
 			acc.setRemind(true);
 		}
-		AccountDAO.saveAccount(acc);
+		acc.save();
 	}
 }

@@ -1,5 +1,9 @@
 package com.kuuhaku.utils;
 
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.HttpHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -52,7 +56,7 @@ public class Uwuifier {
     }
 
     public Uwuifier(double faceFac, double actionFac, double stutterFac, double none) {
-        double[] norm = Helper.sumToOne(faceFac, actionFac, stutterFac, none);
+        double[] norm = MathHelper.sumToOne(faceFac, actionFac, stutterFac, none);
 
         this.faceFac = norm[0];
         this.actionFac = norm[1];
@@ -67,17 +71,17 @@ public class Uwuifier {
 
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
-                if (Helper.isUrl(word) || word.matches(":.+:|<.+>")) continue;
+                if (HttpHelper.isUrl(word) || word.matches(":.+:|<.+>")) continue;
 
                 for (Pair<String, String> p : exp) {
                     word = word.replaceAll(p.getLeft(), p.getRight());
                 }
 
-                words[j] = word.replace("!", Helper.getRandomEntry(punctuation));
+                words[j] = word.replace("!", CollectionHelper.getRandomEntry(punctuation));
             }
 
             String out = String.join(" ", words);
-            while (Helper.regex(out, " [A-z]").find()) {
+            while (StringHelper.regex(out, " [A-z]").find()) {
                 out = out.replaceFirst(" ([A-z])", replaceSpace());
             }
 
@@ -88,12 +92,12 @@ public class Uwuifier {
     }
 
     private String replaceSpace() {
-        if (Helper.chance(faceFac * 100)) {
-            return "§" + Helper.getRandomEntry(faces) + "§$1";
-        } else if (Helper.chance(actionFac * 100)) {
-            return "§" + Helper.getRandomEntry(actions) + "§$1";
-        } else if (Helper.chance(stutterFac * 100)) {
-            return "§" + ("$1" + "-").repeat(Helper.rng(2)) + "$1";
+        if (MathHelper.chance(faceFac * 100)) {
+            return "§" + CollectionHelper.getRandomEntry(faces) + "§$1";
+        } else if (MathHelper.chance(actionFac * 100)) {
+            return "§" + CollectionHelper.getRandomEntry(actions) + "§$1";
+        } else if (MathHelper.chance(stutterFac * 100)) {
+            return "§" + ("$1" + "-").repeat(MathHelper.rng(2)) + "$1";
         }
 
         return "§$1";

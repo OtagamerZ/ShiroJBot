@@ -21,14 +21,15 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -46,25 +47,25 @@ public class WalletCommand implements Executable, Slashed {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 
-		int prcnt = Helper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent());
+		int prcnt = MathHelper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Saldo de " + author.getName())
 				.addField(
-						":moneybag: | Saldo: %s%s".formatted(Helper.separate(acc.getBalance()), acc.getBalance() > 100_000 && prcnt < 10 ? " (" + prcnt + "%)" : ""),
+						":moneybag: | Saldo: %s%s".formatted(StringHelper.separate(acc.getBalance()), acc.getBalance() > 100_000 && prcnt < 10 ? " (" + prcnt + "%)" : ""),
 						"""
 								:money_with_wings: | Volátil: %s
 								:diamonds: | Gemas: %s
 								""".formatted(
-								Helper.separate(acc.getVBalance()),
-								Helper.separate(acc.getGems())
+								StringHelper.separate(acc.getVBalance()),
+								StringHelper.separate(acc.getGems())
 						)
 						, true
 				)
 				.addField(
 						"Ultimo voto em:",
-						acc.getLastVoted() == null ? "Nunca" : Helper.FULL_DATE_FORMAT.format(acc.getLastVoted()),
+						acc.getLastVoted() == null ? "Nunca" : Constants.FULL_DATE_FORMAT.format(acc.getLastVoted()),
 						true
 				)
 				.setThumbnail("https://i.imgur.com/nhWckfq.png");

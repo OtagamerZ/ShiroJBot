@@ -20,6 +20,7 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.Emote;
 
 import java.util.NoSuchElementException;
@@ -29,7 +30,6 @@ public enum TagIcons {
 	DEV,
 	SUPPORT,
 	EDITOR,
-	READER,
 	MODERATOR,
 	MARRIED,
 	RICH,
@@ -56,7 +56,6 @@ public enum TagIcons {
 			case DEV -> "<:developer:697879725925990466> ";
 			case SUPPORT -> "<:support:697879726047625216> ";
 			case EDITOR -> "<:writer:697879725497909310> ";
-			case READER -> "<:reader:697879726148288542> ";
 			case MODERATOR -> "<:moderator:697879725628194878> ";
 			case MARRIED -> "<:married:697879725888241684> ";
 			case RICH -> "<:rich:718447753944105012> ";
@@ -85,7 +84,6 @@ public enum TagIcons {
 			case DEV -> "697879725925990466";
 			case SUPPORT -> "697879726047625216";
 			case EDITOR -> "697879725497909310";
-			case READER -> "697879726148288542";
 			case MODERATOR -> "697879725628194878";
 			case MARRIED -> "697879725888241684";
 			case RICH -> "718447753944105012";
@@ -110,9 +108,9 @@ public enum TagIcons {
 
 	public static Emote getLevelEmote(int lvl) {
 		int l = lvl - (lvl % 5);
-		return Main.getShiroShards().getEmotesByName("lvl_" + Math.min(l, 840), true)
+		return Main.getShiro().getEmotesByName("lvl_" + Math.min(l, 840), true)
 				.stream()
-				.filter(e -> e.getGuild() != null && ShiroInfo.getLevelEmoteRepo().contains(e.getGuild().getId()))
+				.filter(e -> e.getGuild() != null && LogicHelper.equalsAny(e.getGuild().getId(), ShiroInfo.getLevelEmoteRepo()))
 				.findFirst()
 				.orElseThrow(() -> new NoSuchElementException("Emblema inexistente para o level " + l));
 	}

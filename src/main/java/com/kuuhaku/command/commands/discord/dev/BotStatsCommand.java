@@ -20,14 +20,15 @@ package com.kuuhaku.command.commands.discord.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.BotStatsDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.BotStats;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
@@ -56,14 +57,14 @@ public class BotStatsCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		List<BotStats> stats = BotStatsDAO.getStats();
+		List<BotStats> stats = BotStats.findAll(BotStats.class);
 
 		for (int i = 1; i < stats.size() - 1; i++) {
 			BotStats prev = stats.get(i - 1);
 			BotStats curr = stats.get(i);
 			BotStats next = stats.get(i + 1);
 
-			curr.setAverageMemory(Helper.average(prev.getMemoryUsage(), curr.getMemoryUsage(), next.getMemoryUsage()));
+			curr.setAverageMemory(MathHelper.average(prev.getMemoryUsage(), curr.getMemoryUsage(), next.getMemoryUsage()));
 		}
 
 		Map<Date, BotStats> reducedStats = new TreeMap<>(Date::compareTo);
@@ -88,7 +89,7 @@ public class BotStatsCommand implements Executable {
 	}
 
 	private File getGeneralStats(Map<Date, BotStats> reducedStats) {
-		XYChart chart = Helper.buildXYChart(
+		XYChart chart = MiscHelper.buildXYChart(
 				"Estatísticas sobre a Shiro J. Bot",
 				Pair.of("Data", ""),
 				List.of(
@@ -117,7 +118,7 @@ public class BotStatsCommand implements Executable {
 		chart.addSeries(
 				"Uso de memória (%)",
 				List.copyOf(reducedStats.keySet()),
-						reducedStats.values().stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> MathHelper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
@@ -138,7 +139,7 @@ public class BotStatsCommand implements Executable {
 		chart.addSeries(
 				"Uso de CPU (%)",
 				List.copyOf(reducedStats.keySet()),
-						reducedStats.values().stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> MathHelper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
@@ -156,11 +157,11 @@ public class BotStatsCommand implements Executable {
 				).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
-		return Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "stats", "png");
+		return ImageHelper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "stats", "png");
 	}
 
 	private File getCacheStats(Map<Date, BotStats> reducedStats) {
-		XYChart chart = Helper.buildXYChart(
+		XYChart chart = MiscHelper.buildXYChart(
 				"Caching da Shiro J. Bot",
 				Pair.of("Data", ""),
 				List.of(
@@ -222,11 +223,11 @@ public class BotStatsCommand implements Executable {
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
-		long maxCards = CardDAO.getCardCount();
+		long maxCards = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card c").intValue();
 		chart.addSeries(
 				"Cartas em cache (%)",
 				List.copyOf(reducedStats.keySet()),
-						reducedStats.values().stream().map(s -> Helper.prcnt(s.getCardCacheCount(), maxCards) * 100).collect(Collectors.toList())
+						reducedStats.values().stream().map(s -> MathHelper.prcnt(s.getCardCacheCount(), maxCards) * 100).collect(Collectors.toList())
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
@@ -237,6 +238,6 @@ public class BotStatsCommand implements Executable {
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
-		return Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "cache", "png");
+		return ImageHelper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "cache", "png");
 	}
 }

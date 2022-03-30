@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.FileHelper;
 
 import java.awt.*;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public enum Fonts {
 		Font temp;
 
 		try {
-			temp = Font.createFont(Font.TRUETYPE_FONT, Helper.getResourceAsStream(this.getClass(), path));
+			temp = Font.createFont(Font.TRUETYPE_FONT, FileHelper.getResourceAsStream(this.getClass(), path));
 		} catch (FontFormatException | IOException e) {
 			temp = new Font("Arial", Font.PLAIN, 11);
 		}

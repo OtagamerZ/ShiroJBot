@@ -25,7 +25,10 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -44,8 +47,8 @@ public class RoleButtonCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (args.length == 1 && Helper.equalsAny(args[0], "reboot", "regen", "reset", "restart", "refresh")) {
-			Helper.refreshButtons(gc);
+		if (args.length == 1 && LogicHelper.equalsAny(args[0], "reboot", "regen", "reset", "restart", "refresh")) {
+			MiscHelper.refreshButtons(gc);
 			channel.sendMessage("✅ | Botões atualizados com sucesso!").queue();
 			return;
 		} else if (args.length < 3) {
@@ -60,18 +63,18 @@ public class RoleButtonCommand implements Executable {
 		} else if (message.getMentionedRoles().get(0).getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
 			channel.sendMessage("❌ | Não posso manipular cargos que estejam acima de mim.").queue();
 			return;
-		} else if (args[1].equals(Helper.CANCEL)) {
-			channel.sendMessage(I18n.getString("err_role-chooser-cannot-assign-role", Helper.CANCEL)).queue();
+		} else if (args[1].equals(Constants.CANCEL)) {
+			channel.sendMessage(I18n.getString("err_role-chooser-cannot-assign-role", Constants.CANCEL)).queue();
 			return;
-		} else if (!Helper.parseEmoji(args[1]).isUnicode() && message.getEmotes().isEmpty()) {
+		} else if (!StringHelper.parseEmoji(args[1]).isUnicode() && message.getEmotes().isEmpty()) {
 			channel.sendMessage(I18n.getString("err_role-chooser-invalid emote")).queue();
 			return;
 		}
 
 		try {
-			Helper.addButton(args, message, channel, gc, message.getEmotes().size() > 0 ? message.getEmotes().get(0).getId() : args[1], false);
+			MiscHelper.addButton(args, message, channel, gc, message.getEmotes().size() > 0 ? message.getEmotes().get(0).getId() : args[1], false);
 
-			channel.sendMessage("✅ | Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
+			channel.sendMessage("✅ | Botão adicionado com sucesso!").queue(s -> MiscHelper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage("❌ | Você não pode usar um Emote de um servidor que eu não conheça.").queue();
 		} catch (ErrorResponseException e) {

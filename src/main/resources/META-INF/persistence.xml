@@ -32,7 +32,6 @@
         <class>com.kuuhaku.model.persistent.Member</class>
         <class>com.kuuhaku.model.persistent.Username</class>
         <class>com.kuuhaku.model.persistent.CustomAnswer</class>
-        <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.Block</class>
         <class>com.kuuhaku.model.persistent.PixelCanvas</class>
         <class>com.kuuhaku.model.persistent.Log</class>
@@ -44,7 +43,6 @@
         <class>com.kuuhaku.model.persistent.RarityColors</class>
         <class>com.kuuhaku.model.persistent.Ticket</class>
         <class>com.kuuhaku.model.persistent.Couple</class>
-        <class>com.kuuhaku.model.persistent.CoupleMultiplier</class>
         <class>com.kuuhaku.model.persistent.Upvote</class>
         <class>com.kuuhaku.model.persistent.Blacklist</class>
         <class>com.kuuhaku.model.persistent.Kawaipon</class>
@@ -95,7 +93,7 @@
         <class>com.kuuhaku.model.persistent.Checkitem</class>
         <class>com.kuuhaku.model.persistent.Reminder</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
+        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff</class>

@@ -18,16 +18,16 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.DebuffDAO;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.enums.BountyDifficulty;
 import com.kuuhaku.model.enums.Danger;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.records.BountyInfo;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.json.JSONObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "bountyquest")
-public class BountyQuest {
+public class BountyQuest extends DAO {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String id;
@@ -115,7 +115,7 @@ public class BountyQuest {
 		return new JSONArray(dangers).stream()
 				.map(String::valueOf)
 				.filter(s -> s.startsWith("D_"))
-				.map(DebuffDAO::getDebuff)
+				.map(d -> Debuff.find(Debuff.class, d))
 				.collect(Collectors.toSet());
 	}
 
@@ -125,7 +125,7 @@ public class BountyQuest {
 		}
 
 		double min = Math.max(1 + difficulty.ordinal() / 2d, difficulty.getValue() / 3d);
-		double diff = Helper.round(Helper.rng(min, difficulty.getValue(), seed) / difficulty.getValue(), 2);
+		double diff = MathHelper.round(MathHelper.rng(min, difficulty.getValue(), seed) / difficulty.getValue(), 2);
 		Integer[] baseStats = Arrays.stream(getBaseStats())
 				.map(i -> (int) Math.round(i * diff * difficulty.getValue()))
 				.toArray(Integer[]::new);
@@ -144,14 +144,14 @@ public class BountyQuest {
 				double share = modDiff * ((double) base / statSum);
 				int hero = heroStats[i];
 
-				finDiff -= Helper.clamp(hero * share / base, 0, share);
+				finDiff -= MathHelper.clamp(hero * share / base, 0, share);
 			}
 		}
 
 		return new BountyInfo(
 				id,
 				(int) Math.round(baseTime * diff),
-				Helper.round(finDiff, 1),
+				MathHelper.round(finDiff, 1),
 				new Attributes(baseStats),
 				exactReward ? rewards : rewards.entrySet().stream()
 						.map(e -> Pair.of(e.getKey(), (int) Math.round(e.getValue() * diff)))

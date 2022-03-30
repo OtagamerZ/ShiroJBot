@@ -25,7 +25,8 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.*;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -84,7 +85,7 @@ public class PruneCommand implements Executable {
 			};
 		} else if (StringUtils.isNumeric(args[0])) {
 			int amount = Integer.parseInt(args[0]);
-			if (!Helper.between(amount, 1, 1001)) {
+			if (!MathHelper.between(amount, 1, 1001)) {
 				channel.sendMessage("❌ | Só é possível apagar entre 1 e 1000 mensagens de uma vez.").queue();
 				return;
 			}
@@ -115,7 +116,7 @@ public class PruneCommand implements Executable {
 				else
 					return "✅ | " + size + " mensagem de " + target.getAsMention() + " limpa.";
 			};
-		} else if (Helper.equalsAny(args[0], "user", "usuarios")) {
+		} else if (LogicHelper.equalsAny(args[0], "user", "usuarios")) {
 			hist.retrievePast(100).complete();
 			cond = cond.and(m -> !m.getAuthor().isBot());
 
@@ -125,43 +126,43 @@ public class PruneCommand implements Executable {
 				else
 					return "✅ | " + size + " mensagem de usuário limpa.";
 			};
-		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
+		} else if (LogicHelper.equalsAny(args[0], "all", "tudo")) {
 			channel.retrievePinnedMessages().queue(p -> {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 
 				if (p.size() > 0)
 					channel.sendMessage("Há " + p.size() + " mensage" + (p.size() == 1 ? "m fixada " : "ns fixadas ") + "neste canal, tem certeza que deseja limpá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										channel.createCopy()
 												.setPosition(channel.getPosition())
 												.queue(c -> {
 													try {
 														channel.delete().queue();
-														c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
+														c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, MiscHelper::doNothing);
 													} catch (InsufficientPermissionException e) {
-														channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+														channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, MiscHelper::doNothing);
 													}
 												});
-									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 									u -> u.getId().equals(author.getId()),
 									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 							));
 				else
 					channel.sendMessage("O canal será recriado, tem certeza que deseja limpá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+							.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										channel.createCopy()
 												.setPosition(channel.getPosition())
 												.queue(c -> {
 													try {
 														channel.delete().queue();
-														c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
+														c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, MiscHelper::doNothing);
 													} catch (InsufficientPermissionException e) {
-														channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+														channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, MiscHelper::doNothing);
 													}
 												});
-									}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+									}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 									u -> u.getId().equals(author.getId()),
 									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 							));
@@ -191,7 +192,7 @@ public class PruneCommand implements Executable {
 		ShiroInfo.getPruneQueue().add(guild.getId());
 		try {
 			if (msgs.size() > 2) {
-				List<List<Message>> chunks = Helper.chunkify(msgs, 100);
+				List<List<Message>> chunks = CollectionHelper.chunkify(msgs, 100);
 				for (List<Message> chunk : chunks) {
 					channel.deleteMessages(chunk).complete();
 

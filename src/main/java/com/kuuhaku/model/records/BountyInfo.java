@@ -18,15 +18,15 @@
 
 package com.kuuhaku.model.records;
 
-import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.Attributes;
+import com.kuuhaku.model.persistent.BountyQuest;
 
 import java.util.Map;
 
 public record BountyInfo(String id, int time, double diff, Attributes reqStats, Map<Reward, Integer> rewards) {
 	@Override
 	public String toString() {
-		return BountyQuestDAO.getBounty(id).toString();
+		return BountyQuest.find(BountyQuest.class, id).toString();
 	}
 }

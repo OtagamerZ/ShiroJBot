@@ -39,7 +39,8 @@ import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.model.records.PseudoMessage;
 import com.kuuhaku.model.records.RaidData;
 import com.kuuhaku.model.records.embed.Embed;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.*;
 import com.kuuhaku.utils.ShiroInfo;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -54,7 +55,6 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
-import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -80,7 +80,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
-import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -103,8 +102,8 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onReconnected(@Nonnull ReconnectedEvent event) {
-		for (JDA shard : Main.getShiroShards().getShards()) {
-			Helper.logger(this.getClass()).info("Shard %d: %s | %s listeners".formatted(
+		for (JDA shard : Main.getShiro().getShards()) {
+			MiscHelper.logger(this.getClass()).info("Shard %d: %s | %s listeners".formatted(
 					shard.getShardInfo().getShardId(),
 					shard.getStatus().name(),
 					shard.getRegisteredListeners().size()
@@ -120,31 +119,13 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
-		assert event.getOldOwner() != null;
-		assert event.getNewOwner() != null;
-
-		if (TagDAO.getTagById(event.getOldOwner().getId()).isBeta()) {
-			TagDAO.removeTagBeta(event.getOldOwner().getId());
-
-			try {
-				TagDAO.getTagById(event.getNewOwner().getId());
-			} catch (NoResultException e) {
-				TagDAO.addUserTagsToDB(event.getNewOwner().getId());
-			} finally {
-				TagDAO.giveTagBeta(event.getNewOwner().getId());
-			}
-		}
-	}
-
-	@Override
 	public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
 		if (event.getAuthor().isBot()) return;
-		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
+		Message msg = Main.getInfo().getTrackedMessage(event.getGuild(), event.getMessageId());
 		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
 
 		if (msg != null)
-			Helper.logToChannel(event.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
+			MiscHelper.logToChannel(event.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
 	}
 
 	@Override
@@ -169,7 +150,7 @@ public class ShiroEvents extends ListenerAdapter {
 				if (rawMessage.replace(";", "").length() == 0) {
 					channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
 				} else {
-					MessageAction send = channel.sendMessage(Helper.replaceTags(rawMessage.substring(1), author, guild, message));
+					MessageAction send = channel.sendMessage(MiscHelper.replaceTags(rawMessage.substring(1), author, guild, message));
 					for (Message.Attachment a : message.getAttachments()) {
 						try {
 							//noinspection ResultOfMethodCallIgnored
@@ -200,18 +181,18 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+		boolean blacklisted = Blacklist.find(Blacklist.class, author.getId()) != null;
 		if (!blacklisted && !author.isBot()) {
 			MemberDAO.getMember(author.getId(), guild.getId());
 			UsernameDAO.setUsername(author.getId(), author.getName());
 		}
 
-		if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
-			channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!\nSe quiser me convidar, basta acessar https://shirojbot.site e clicar em \"Convide-me!\".").queue(null, Helper::doNothing);
+		if (StringHelper.isPureMention(rawMessage) && MiscHelper.isPinging(message, Main.getSelfUser().getId())) {
+			channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!\nSe quiser me convidar, basta acessar https://shirojbot.site e clicar em \"Convide-me!\".").queue(null, MiscHelper::doNothing);
 			return;
 		}
 
-		if (!author.isBot()) Main.getInfo().cache(guild, message);
+		if (!author.isBot()) Main.getInfo().trackMessage(guild, message);
 
 		String commandName = "";
 		String rawMsgNoCommand = "";
@@ -230,13 +211,13 @@ public class ShiroEvents extends ListenerAdapter {
 			if (!ca.getUsers().isEmpty())
 				p = p.and(answer -> ca.getUsers().contains(author.getId()));
 			if (ca.getChance() != 100)
-				p = p.and(answer -> Helper.chance(answer.getChance()));
+				p = p.and(answer -> MathHelper.chance(answer.getChance()));
 
 			if (p.test(ca)) {
 				if (message.getReferencedMessage() != null)
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild, message.getReferencedMessage()), message.getReferencedMessage());
+					MiscHelper.typeMessage(channel, MiscHelper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild, message.getReferencedMessage()), message.getReferencedMessage());
 				else
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild, message));
+					MiscHelper.typeMessage(channel, MiscHelper.replaceTags(ca.getAnswer(), author, guild, message));
 			}
 		}
 
@@ -254,25 +235,25 @@ public class ShiroEvents extends ListenerAdapter {
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		if (!author.isBot()) {
 			if (acc.isAfk()) {
 				if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && member.getEffectiveName().startsWith("[AFK]")) {
 					try {
-						member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, Helper::doNothing);
+						member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, MiscHelper::doNothing);
 					} catch (Exception ignore) {
 					}
 				}
 
 				message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
 				acc.setAfkMessage(null);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 			}
 
 			for (Member m : message.getMentionedMembers()) {
-				Account tgt = AccountDAO.getAccount(m.getId());
+				Account tgt = Account.find(Account.class, m.getId());
 				if (tgt.isAfk()) {
-					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
+					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + MiscHelper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
 				}
 			}
 		}
@@ -288,7 +269,7 @@ public class ShiroEvents extends ListenerAdapter {
 				if (Main.getInfo().getConfirmationPending().keySet().stream().anyMatch(s -> s.startsWith(author.getId()))) {
 					channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 					return;
-				} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+				} else if (gc.getNoCommandChannels().contains(channel.getId()) && !MiscHelper.hasPermission(member, PrivilegeLevel.MOD)) {
 					channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
 					return;
 				} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
@@ -297,7 +278,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (InsufficientPermissionException ignore) {
 					}
 					return;
-				} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+				} else if (!MiscHelper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 					try {
 						channel.sendMessage(I18n.getString("err_not-enough-permission")).queue();
 					} catch (InsufficientPermissionException ignore) {
@@ -308,7 +289,7 @@ public class ShiroEvents extends ListenerAdapter {
 					return;
 				} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 					channel.sendMessage(I18n.getString("err_user-ratelimited")).queue();
-					Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(3, 6), TimeUnit.SECONDS);
+					Main.getInfo().getRatelimit().put(author.getId(), true, MathHelper.rng(3, 6), TimeUnit.SECONDS);
 					return;
 				} else if (command.getMissingPerms(channel).length > 0) {
 					channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
@@ -319,40 +300,41 @@ public class ShiroEvents extends ListenerAdapter {
 					return;
 				}
 
-				if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-					Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(2, 4), TimeUnit.SECONDS);
+				if (!MiscHelper.hasPermission(member, PrivilegeLevel.SUPPORT)) {
+					Main.getInfo().getRatelimit().put(author.getId(), true, MathHelper.rng(2, 4), TimeUnit.SECONDS);
+				}
 
 				try {
 					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
 				} catch (Exception e) {
-					Helper.logger(command.getCommand().getClass()).error("Erro ao executar comando " + command.getName(), e);
+					MiscHelper.logger(command.getCommand().getClass()).error("Erro ao executar comando " + command.getName(), e);
 				}
-				Helper.spawnAd(acc, channel);
+				MiscHelper.spawnAd(acc, channel);
 
-				LogDAO.saveLog(new Log(guild, author, rawMessage));
-				Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
+				new Log(guild, author, rawMessage).save();
+				MiscHelper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
 			}
 		}
 
 		if (!blacklisted) {
 			if (!found) {
 				try {
-					if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
-					if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
+					if (gc.isCardSpawn()) MiscHelper.spawnKawaipon(gc, channel);
+					if (gc.isDropSpawn()) MiscHelper.spawnDrop(gc, channel);
 				} catch (InsufficientPermissionException ignore) {
 				}
 
 				Event ev = Event.getCurrent();
 				if (ev == Event.XMAS && gc.isDropSpawn())
-					Helper.spawnPadoru(gc, channel);
+					MiscHelper.spawnPadoru(gc, channel);
 				else if (ev == Event.EASTER && gc.isDropSpawn())
-					Helper.spawnUsaTan(gc, channel);
+					MiscHelper.spawnUsaTan(gc, channel);
 
 				try {
-					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-						message.delete().reason("Mensagem possui um URL").queue(null, Helper::doNothing);
+					if (gc.getNoLinkChannels().contains(channel.getId()) && HttpHelper.findURL(rawMessage) && !MiscHelper.hasPermission(member, PrivilegeLevel.MOD)) {
+						message.delete().reason("Mensagem possui um URL").queue(null, MiscHelper::doNothing);
 						channel.sendMessage(author.getAsMention() + ", é proibido postar links neste canal!").queue();
-						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
+						MiscHelper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
@@ -361,21 +343,21 @@ public class ShiroEvents extends ListenerAdapter {
 						m.setSid(guild.getId());
 					}
 
-					boolean lvlUp = m.addXp(guild, Helper.getBuffMult(gc, BuffType.XP));
+					boolean lvlUp = m.addXp(guild, MiscHelper.getBuffMult(gc, BuffType.XP));
 					MemberDAO.saveMember(m);
 					try {
 						if (lvlUp && gc.isLevelNotif()) {
 							if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+								CollectionHelper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+										.addFile(FileHelper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 										.queue();
 							else
-								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+								CollectionHelper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
 						if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+									.addFile(FileHelper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 									.queue();
 						else
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
@@ -407,11 +389,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 						rols.removeIf(member.getRoles()::contains);
 						if (!rols.isEmpty()) {
-							guild.modifyMemberRoles(member, rols, prev).queue(null, Helper::doNothing);
+							guild.modifyMemberRoles(member, rols, prev).queue(null, MiscHelper::doNothing);
 							if (gc.isLevelNotif()) {
-								TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
+								TextChannel chn = CollectionHelper.getOr(gc.getLevelChannel(), channel);
 								if (rols.size() > 1) {
-									String names = Helper.parseAndJoin(rols, rl -> "**`" + rl.getName() + "`**");
+									String names = CollectionHelper.parseAndJoin(rols, rl -> "**`" + rl.getName() + "`**");
 									chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
 								} else
 									chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
@@ -427,26 +409,26 @@ public class ShiroEvents extends ListenerAdapter {
 						GuildDAO.updateGuildSettings(gc);
 					}
 				} catch (ErrorResponseException | NullPointerException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 
-				if (gc.isNQNMode() && Helper.hasEmote(message.getContentRaw()))
+				if (gc.isNQNMode() && StringHelper.hasEmote(message.getContentRaw()))
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
-						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-						String s = Helper.sendEmotifiedString(guild, message.getContentRaw());
+						Webhook wh = MiscHelper.getOrCreateWebhook(channel, "Shiro");
+						String s = MiscHelper.sendEmotifiedString(guild, message.getContentRaw());
 
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 								.setAllowedMentions(AllowedMentions.none())
-								.setContent(String.valueOf(s));
+								.setContent(s);
 
-						String avatar = Helper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
-						String name = Helper.getOr(m.getPseudoName(), author.getName());
+						String avatar = CollectionHelper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
+						String name = CollectionHelper.getOr(m.getPseudoName(), author.getName());
 
 						try {
-							Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
+							Member nii = guild.getMember(Main.getUserByID(ShiroInfo.NIICHAN));
 							wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
 							wmb.setAvatarUrl(avatar);
 						} catch (RuntimeException e) {
@@ -461,9 +443,9 @@ public class ShiroEvents extends ListenerAdapter {
 							try {
 								wc.send(wmb.build()).get();
 							} catch (InterruptedException | ExecutionException e) {
-								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+								MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 							}
-						}, Helper::doNothing);
+						}, MiscHelper::doNothing);
 					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException ignore) {
 					}
 			}
@@ -476,12 +458,12 @@ public class ShiroEvents extends ListenerAdapter {
 					acc.setLastQuest();
 
 					float mod = tasks.getDifficultyMod();
-					if (Helper.round(mod, 1) >= 3.8)
+					if (MathHelper.round(mod, 1) >= 3.8)
 						acc.addGem();
 					else
 						acc.addCredit(Math.round(2000 * mod), this.getClass());
 
-					AccountDAO.saveAccount(acc);
+					acc.save();
 					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 				}
 			}
@@ -505,7 +487,7 @@ public class ShiroEvents extends ListenerAdapter {
 		if (!channel.canTalk()) return;
 
 		assert guild != null;
-		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+		boolean blacklisted = Blacklist.find(Blacklist.class, author.getId()) != null;
 		if (blacklisted) {
 			hook.sendMessage(I18n.getString("err_user-blacklisted")).queue();
 			return;
@@ -523,15 +505,15 @@ public class ShiroEvents extends ListenerAdapter {
 			error = "❌ | Comando inexistente.";
 		} else if (!command.getCategory().isEnabled(guild, author) || gc.getDisabledCommands().contains(command.getCommand().getClass().getName())) {
 			error = "❌ | Comando desabilitado.";
-		} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+		} else if (gc.getNoCommandChannels().contains(channel.getId()) && !MiscHelper.hasPermission(member, PrivilegeLevel.MOD)) {
 			error = "❌ | Comandos estão bloqueados neste canal.";
 		} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
 			error = I18n.getString("err_nsfw-in-non-nsfw-channel");
-		} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+		} else if (!MiscHelper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 			error = I18n.getString("err_not-enough-permission");
 		} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 			error = I18n.getString("err_user-ratelimited");
-			Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(3, 6), TimeUnit.SECONDS);
+			Main.getInfo().getRatelimit().put(author.getId(), true, MathHelper.rng(3, 6), TimeUnit.SECONDS);
 		} else if (command.getMissingPerms(channel).length > 0) {
 			error = "❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
 					Arrays.stream(command.getPermissions())
@@ -588,15 +570,16 @@ public class ShiroEvents extends ListenerAdapter {
 				channels
 		);
 
-		if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-			Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(2, 4), TimeUnit.SECONDS);
+		if (!MiscHelper.hasPermission(member, PrivilegeLevel.SUPPORT)) {
+			Main.getInfo().getRatelimit().put(author.getId(), true, MathHelper.rng(2, 4), TimeUnit.SECONDS);
+		}
 
 		hook.deleteOriginal().queue();
 		command.execute(author, member, commandLine, args, msg, channel, guild, gc.getPrefix());
-		Helper.spawnAd(AccountDAO.getAccount(author.getId()), channel);
+		MiscHelper.spawnAd(Account.find(Account.class, author.getId()), channel);
 
-		LogDAO.saveLog(new Log(guild, author, commandLine));
-		Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
+		new Log(guild, author, commandLine).save();
+		MiscHelper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, commandLine);
 	}
 
 	@Override
@@ -606,7 +589,7 @@ public class ShiroEvents extends ListenerAdapter {
 		gc.removeLevelRole(event.getRole().getId());
 
 		GuildDAO.updateGuildSettings(gc);
-		Helper.logToChannel(null, false, null, "Cargo deletado: " + event.getRole().getName(), event.getGuild());
+		MiscHelper.logToChannel(null, false, null, "Cargo deletado: " + event.getRole().getName(), event.getGuild());
 	}
 
 	@Override
@@ -633,7 +616,7 @@ public class ShiroEvents extends ListenerAdapter {
 				""";
 
 		try {
-			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), s.formatted(" **em um dos canais do seu servidor**"));
+			MiscHelper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), s.formatted(" **em um dos canais do seu servidor**"));
 		} catch (Exception err) {
 			TextChannel dch = event.getGuild().getDefaultChannel();
 			if (dch != null) {
@@ -644,25 +627,25 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 
 		for (String d : ShiroInfo.getDevelopers()) {
-			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+			Main.getUserByID(d).openPrivateChannel().queue(c -> {
 				String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 				c.sendMessage(msg).queue();
 			});
 		}
-		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
+		MiscHelper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
 	public void onGuildLeave(@Nonnull GuildLeaveEvent event) {
 		for (String d : ShiroInfo.getDevelopers()) {
-			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+			Main.getUserByID(d).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 				GuildDAO.removeGuildFromDB(gc);
 				String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 				c.sendMessage(msg).queue();
 			});
 		}
-		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
+		MiscHelper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
@@ -671,8 +654,9 @@ public class ShiroEvents extends ListenerAdapter {
 		Member member = event.getMember();
 		User author = event.getUser();
 
-		if (Main.getInfo().getAntiRaidStreak().containsKey(guild.getId())) {
-			Main.getInfo().getAntiRaidStreak().get(guild.getId()).ids().add(member.getId());
+		RaidData rd = Main.getRaidManager().getRaids().get(guild.getId());
+		if (rd != null) {
+			rd.ids().add(member.getId());
 			guild.ban(member, 7, "Detectada tentativa de raid").queue();
 			return;
 		}
@@ -680,12 +664,12 @@ public class ShiroEvents extends ListenerAdapter {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.isAntiRaid()) {
-			ExpiringMap<Long, String> arc = Main.getInfo().getAntiRaidCache()
+			ExpiringMap<Long, String> arc = Main.getInfo().getRaidTracker()
 					.computeIfAbsent(guild.getId(), k -> ExpiringMap.builder().expiration(5, TimeUnit.SECONDS).build());
 
 			arc.put(System.currentTimeMillis(), author.getId());
 			if (arc.size() >= gc.getAntiRaidLimit()) {
-				Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), arc));
+				Main.getRaidManager().getRaids().put(guild.getId(), new RaidData(System.currentTimeMillis(), arc));
 
 				TextChannel chn = gc.getGeneralChannel();
 				if (chn != null && chn.canTalk()) {
@@ -702,7 +686,7 @@ public class ShiroEvents extends ListenerAdapter {
 							.setFooter("Aguarde, o sistema será encerrado em breve")
 							.setImage("https://i.imgur.com/KkhWWJf.gif");
 
-					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+					chn.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 				}
 
 				List<Role> admRoles = guild.getRoles().stream()
@@ -719,19 +703,19 @@ public class ShiroEvents extends ListenerAdapter {
 
 					admin.getUser().openPrivateChannel()
 							.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 				}
 
 				for (TextChannel tc : guild.getTextChannels()) {
 					try {
 						if (guild.getPublicRole().hasPermission(tc, Permission.MESSAGE_WRITE)) {
-							tc.getManager().setSlowmode(10).queue(null, Helper::doNothing);
+							tc.getManager().setSlowmode(10).queue(null, MiscHelper::doNothing);
 						}
 					} catch (Exception ignore) {
 					}
 				}
 
-				Main.getInfo().getAntiRaidCache().remove(guild.getId());
+				Main.getInfo().getRaidTracker().remove(guild.getId());
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 
 				for (String id : arc.values()) {
@@ -740,22 +724,22 @@ public class ShiroEvents extends ListenerAdapter {
 
 				RestAction.allOf(acts)
 						.queue(s ->
-								Helper.logToChannel(
+								MiscHelper.logToChannel(
 										author,
 										false,
 										null,
 										"ANTIRAID: " + arc.size() + " usuários banidos por entrarem ao mesmo tempo no servidor em um intervalo de 5 segundos (limite: " + gc.getAntiRaidLimit() + " membros/5 seg).",
 										guild
-								), Helper::doNothing
+								), MiscHelper::doNothing
 						);
 				return;
 			}
 		}
 
-		if (BlacklistDAO.isBlacklisted(author)) return;
+		if (Blacklist.find(Blacklist.class, author.getId()) != null) return;
 
 		String name = member.getEffectiveName();
-		if (gc.isMakeMentionable() && !Helper.regex(name, "[A-z0-9]{4}").find()) {
+		if (gc.isMakeMentionable() && !StringHelper.regex(name, "[A-z0-9]{4}").find()) {
 			name = Unidecode.decode(name);
 		}
 
@@ -768,11 +752,11 @@ public class ShiroEvents extends ListenerAdapter {
 		if (!name.equals(member.getEffectiveName())) {
 			if (name.length() < 2) {
 				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
-				name = Helper.getRandomEntry(names);
+				name = CollectionHelper.getRandomEntry(names);
 			}
 
 			try {
-				member.modifyNickname(name).queue(null, Helper::doNothing);
+				member.modifyNickname(name).queue(null, MiscHelper::doNothing);
 			} catch (InsufficientPermissionException ignore) {
 			}
 		}
@@ -780,22 +764,22 @@ public class ShiroEvents extends ListenerAdapter {
 		try {
 			Role r = gc.getJoinRole();
 			if (r != null)
-				guild.addRoleToMember(member, r).queue(null, Helper::doNothing);
+				guild.addRoleToMember(member, r).queue(null, MiscHelper::doNothing);
 		} catch (InsufficientPermissionException | HierarchyException ignore) {
 		}
 
 		try {
 			if (!gc.getWelcomeMessage().isBlank()) {
-				BufferedImage image = ImageIO.read(Helper.getImage(author.getEffectiveAvatarUrl()));
+				BufferedImage image = ImageIO.read(ImageHelper.getImage(author.getEffectiveAvatarUrl()));
 
-				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild, null);
+				String temp = MiscHelper.replaceTags(gc.getEmbedTemplateRaw(), author, guild, null);
 				EmbedBuilder eb;
 				if (!temp.isEmpty()) {
 					Embed e = gc.getEmbedTemplate();
 					try {
 						eb = new AutoEmbedBuilder(e)
 								.setTitle(
-										switch (Helper.rng(4)) {
+										switch (MathHelper.rng(4)) {
 											case 0 -> "Opa, parece que temos um novo membro?";
 											case 1 -> "Mais um membro para nosso lindo servidor!";
 											case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
@@ -808,7 +792,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (IllegalArgumentException ex) {
 						eb = new AutoEmbedBuilder(e)
 								.setTitle(
-										switch (Helper.rng(4)) {
+										switch (MathHelper.rng(4)) {
 											case 0 -> "Opa, parece que temos um novo membro?";
 											case 1 -> "Mais um membro para nosso lindo servidor!";
 											case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
@@ -820,7 +804,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					if (e.color() != null) eb.setColor(e.getParsedColor());
-					else eb.setColor(Helper.colorThief(image));
+					else eb.setColor(ImageHelper.colorThief(image));
 
 					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
@@ -831,18 +815,18 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (IllegalArgumentException ignore) {
 					}
 
-					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild, null));
+					eb.setDescription(MiscHelper.replaceTags(gc.getWelcomeMessage(), author, guild, null));
 
 					if (e.footer() != null && e.footer().name() != null)
 						eb.setFooter(e.footer().name(), e.footer().icon());
 					else if (e.footer() != null)
-						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.footer().icon(), guild.getIconUrl()));
+						eb.setFooter("ID do usuário: " + author.getId(), CollectionHelper.getOr(e.footer().icon(), guild.getIconUrl()));
 					else
 						eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
-									switch (Helper.rng(4)) {
+									switch (MathHelper.rng(4)) {
 										case 0 -> "Opa, parece que temos um novo membro?";
 										case 1 -> "Mais um membro para nosso lindo servidor!";
 										case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
@@ -852,8 +836,8 @@ public class ShiroEvents extends ListenerAdapter {
 									}
 							)
 							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
-							.setColor(Helper.colorThief(image))
-							.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild, null))
+							.setColor(ImageHelper.colorThief(image))
+							.setDescription(MiscHelper.replaceTags(gc.getWelcomeMessage(), author, guild, null))
 							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
@@ -863,12 +847,12 @@ public class ShiroEvents extends ListenerAdapter {
 					Role welcomer = gc.getWelcomerRole();
 					chn.sendMessage(author.getAsMention() + (welcomer != null ? " " + welcomer.getAsMention() : ""))
 							.setEmbeds(eb.build())
-							.queue(null, Helper::doNothing);
+							.queue(null, MiscHelper::doNothing);
 
-					if (author.getId().equals(ShiroInfo.getNiiChan()))
+					if (author.getId().equals(ShiroInfo.NIICHAN))
 						chn.sendMessage("<:b_shirolove:752890212371267676> | Seja bem-vindo Nii-chan!").queue();
 				}
-				Helper.logToChannel(author, false, null, "Um usuário entrou no servidor", guild);
+				MiscHelper.logToChannel(author, false, null, "Um usuário entrou no servidor", guild);
 			}
 		} catch (IOException ignore) {
 		}
@@ -882,16 +866,16 @@ public class ShiroEvents extends ListenerAdapter {
 
 		try {
 			if (!gc.getByeMessage().isBlank()) {
-				BufferedImage image = ImageIO.read(Helper.getImage(author.getEffectiveAvatarUrl()));
+				BufferedImage image = ImageIO.read(ImageHelper.getImage(author.getEffectiveAvatarUrl()));
 
-				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild, null);
+				String temp = MiscHelper.replaceTags(gc.getEmbedTemplateRaw(), author, guild, null);
 				EmbedBuilder eb;
 				if (!temp.isEmpty()) {
 					Embed e = gc.getEmbedTemplate();
 					try {
 						eb = new AutoEmbedBuilder(e)
 								.setTitle(
-										switch (Helper.rng(4)) {
+										switch (MathHelper.rng(4)) {
 											case 0 -> "Nãããoo...um membro deixou este servidor!";
 											case 1 -> "O quê? Temos um membro a menos neste servidor!";
 											case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
@@ -904,7 +888,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (IllegalArgumentException ex) {
 						eb = new AutoEmbedBuilder(e)
 								.setTitle(
-										switch (Helper.rng(4)) {
+										switch (MathHelper.rng(4)) {
 											case 0 -> "Nãããoo...um membro deixou este servidor!";
 											case 1 -> "O quê? Temos um membro a menos neste servidor!";
 											case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
@@ -916,7 +900,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					if (e.color() != null) eb.setColor(e.getParsedColor());
-					else eb.setColor(Helper.colorThief(image));
+					else eb.setColor(ImageHelper.colorThief(image));
 
 					if (e.thumbnail() != null) eb.setThumbnail(e.thumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
@@ -927,18 +911,18 @@ public class ShiroEvents extends ListenerAdapter {
 					} catch (IllegalArgumentException ignore) {
 					}
 
-					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild, null));
+					eb.setDescription(MiscHelper.replaceTags(gc.getByeMessage(), author, guild, null));
 
 					if (e.footer() != null && e.footer().name() != null)
 						eb.setFooter(e.footer().name(), e.footer().icon());
 					else if (e.footer() != null)
-						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.footer().icon(), guild.getIconUrl()));
+						eb.setFooter("ID do usuário: " + author.getId(), CollectionHelper.getOr(e.footer().icon(), guild.getIconUrl()));
 					else
 						eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
-									switch (Helper.rng(4)) {
+									switch (MathHelper.rng(4)) {
 										case 0 -> "Nãããoo...um membro deixou este servidor!";
 										case 1 -> "O quê? Temos um membro a menos neste servidor!";
 										case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
@@ -948,17 +932,17 @@ public class ShiroEvents extends ListenerAdapter {
 									}
 							)
 							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
-							.setColor(Helper.colorThief(image))
-							.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild, null))
+							.setColor(ImageHelper.colorThief(image))
+							.setDescription(MiscHelper.replaceTags(gc.getByeMessage(), author, guild, null))
 							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
 				TextChannel chn = gc.getByeChannel();
 				if (chn != null && chn.canTalk(guild.getSelfMember()))
-					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+					chn.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 
-				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
+				MiscHelper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
 		} catch (IOException ignore) {
 		}
@@ -977,7 +961,14 @@ public class ShiroEvents extends ListenerAdapter {
 
 		Guild guild = event.getGuild();
 		User author = event.getUser();
-		if (author.isBot() || StarboardDAO.isStarboarded(msg)) return;
+		Starboard sb = Starboard.query(Starboard.class, """
+				SELECT s
+				FROM Starboard s
+				WHERE s.guild = :gid
+				AND s.author = :uid
+				AND s.message = :mid
+				""", msg.getGuild().getId(), msg.getAuthor().getId(), msg.getId());
+		if (author.isBot() || sb != null) return;
 
 		int stars = msg.getReactions().stream()
 				.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("⭐"))
@@ -1005,9 +996,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 			chn.sendMessage(":star: | " + msg.getTextChannel().getAsMention())
 					.setEmbeds(eb.build())
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 
-			StarboardDAO.starboard(msg);
+			new Starboard(msg).save();
 		}
 	}
 
@@ -1025,10 +1016,10 @@ public class ShiroEvents extends ListenerAdapter {
 				switch (args[0].toLowerCase(Locale.ROOT)) {
 					case "send", "s" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = Helper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
+						String msgNoArgs = MiscHelper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
-							User u = Main.getInfo().getUserByID(args[1]);
+							User u = Main.getUserByID(args[1]);
 							if (u == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
@@ -1039,14 +1030,14 @@ public class ShiroEvents extends ListenerAdapter {
 
 							u.openPrivateChannel().queue(c -> {
 								try {
-									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue(null, Helper::doNothing);
+									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue(null, MiscHelper::doNothing);
 								} catch (ErrorResponseException ignore) {
 								}
 							});
 
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
+									Main.getUserByID(d).openPrivateChannel()
 											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " respondeu o usuário " + u.getName() + ":\n>>> " + msgNoArgs))
 											.queue();
 								}
@@ -1058,10 +1049,10 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 					case "block", "b" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = Helper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
+						String msgNoArgs = MiscHelper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
-							User u = Main.getInfo().getUserByID(args[1]);
+							User u = Main.getUserByID(args[1]);
 							if (u == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
@@ -1077,18 +1068,18 @@ public class ShiroEvents extends ListenerAdapter {
 									.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png")
 									.setTimestamp(Instant.now());
 
-							BlockDAO.block(new Block(u));
+							new Block(u).save();
 
 							u.openPrivateChannel().queue(c -> {
 								try {
-									c.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+									c.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 								} catch (ErrorResponseException ignore) {
 								}
 							});
 
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
+									Main.getUserByID(d).openPrivateChannel()
 											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + u.getName() + ". Razão: \n>>> " + msgNoArgs))
 											.queue();
 								}
@@ -1100,10 +1091,10 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 					case "alert", "a" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = Helper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
+						String msgNoArgs = MiscHelper.makeEmoteFromMention(content.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
-							User u = Main.getInfo().getUserByID(args[1]);
+							User u = Main.getUserByID(args[1]);
 							if (u == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
@@ -1121,14 +1112,14 @@ public class ShiroEvents extends ListenerAdapter {
 
 							u.openPrivateChannel().queue(c -> {
 								try {
-									c.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+									c.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 								} catch (ErrorResponseException ignore) {
 								}
 							});
 
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
+									Main.getUserByID(d).openPrivateChannel()
 											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + u.getName() + ". Razão: \n>>> " + msgNoArgs))
 											.queue();
 								}
@@ -1143,13 +1134,13 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		} else {
 			event.getAuthor().openPrivateChannel().queue(c -> {
-				Account acc = AccountDAO.getAccount(event.getAuthor().getId());
+				Account acc = Account.find(Account.class, event.getAuthor().getId());
 
-				if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
+				if (Block.find(Block.class, event.getAuthor().getId()) == null) {
 					if (!acc.isDMWarned()) {
 						c.sendMessage(":octagonal_sign: | Aviso: as mensagens enviadas neste canal serão monitoradas pela equipe de suporte.\nUse-o apenas para dúvidas ou assuntos referentes à Shiro, usá-lo para outros assuntos poderá fazer com que você seja bloqueado.\n**Comandos não funcionam aqui!**\n\n**Se ainda precisar de ajuda, por favor envie novamente a mensagem.**").queue();
 						acc.setDMWarned(true);
-						AccountDAO.saveAccount(acc);
+						acc.save();
 					} else {
 						c.sendMessage("Mensagem enviada à equipe de suporte, por favor aguarde...")
 								.queue(s -> {
@@ -1160,12 +1151,12 @@ public class ShiroEvents extends ListenerAdapter {
 											.setTimestamp(Instant.now());
 
 									for (String d : staffIds) {
-										Main.getInfo().getUserByID(d).openPrivateChannel()
+										Main.getUserByID(d).openPrivateChannel()
 												.flatMap(ch -> ch.sendMessageEmbeds(eb.build()))
 												.queue();
 									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
-								}, Helper::doNothing);
+								}, MiscHelper::doNothing);
 					}
 				}
 			});
@@ -1174,28 +1165,29 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
-		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
+		Message msg = Main.getInfo().getTrackedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg == null || msg.getAuthor().isBot()) return;
 
-		Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getAsMention() + ":```diff\n-" + msg.getContentRaw() + "```", msg.getGuild());
+		MiscHelper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getAsMention() + ":```diff\n-" + msg.getContentRaw() + "```", msg.getGuild());
 	}
 
 	@Override
 	public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
-		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
+		boolean blacklisted = Blacklist.find(Blacklist.class, mb.getId()) != null;
 
-		if (!blacklisted)
+		if (!blacklisted) {
 			voiceTimes.put(mb.getId() + mb.getGuild().getId(), VoiceTimeDAO.getVoiceTime(mb.getId(), mb.getGuild().getId()));
+		}
 	}
 
 	@Override
 	public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
-		boolean blacklisted = BlacklistDAO.isBlacklisted(mb.getUser());
+		boolean blacklisted = Blacklist.find(Blacklist.class, mb.getId()) != null;
 
 		if (!blacklisted) {
 			VoiceTime vt = voiceTimes.remove(mb.getId() + mb.getGuild().getId());
@@ -1211,7 +1203,7 @@ public class ShiroEvents extends ListenerAdapter {
 		String name = event.getNewNickname();
 		if (name == null) return;
 
-		boolean nonMentionable = !Helper.regex(name, "[A-z0-9]{4}").find();
+		boolean nonMentionable = !StringHelper.regex(name, "[A-z0-9]{4}").find();
 		boolean isHoister = name.charAt(0) < 65;
 
 		if (nonMentionable || isHoister) {
@@ -1227,17 +1219,17 @@ public class ShiroEvents extends ListenerAdapter {
 			if (!name.equals(event.getNewNickname())) {
 				if (name.length() < 2) {
 					String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
-					name = Helper.getRandomEntry(names);
+					name = CollectionHelper.getRandomEntry(names);
 				}
 
 				try {
-					event.getMember().modifyNickname(name).queue(null, Helper::doNothing);
+					event.getMember().modifyNickname(name).queue(null, MiscHelper::doNothing);
 				} catch (InsufficientPermissionException | HierarchyException ignore) {
 				}
 			}
 		}
 
-		Helper.logToChannel(event.getUser(), false, null, event.getUser().getAsMention() + " mudou o nome de `" + Helper.getOr(event.getOldNickname(), event.getMember().getUser().getName()) + "` para `" + Helper.getOr(event.getNewNickname(), event.getMember().getUser().getName()) + "`", event.getGuild());
+		MiscHelper.logToChannel(event.getUser(), false, null, event.getUser().getAsMention() + " mudou o nome de `" + CollectionHelper.getOr(event.getOldNickname(), event.getMember().getUser().getName()) + "` para `" + CollectionHelper.getOr(event.getNewNickname(), event.getMember().getUser().getName()) + "`", event.getGuild());
 	}
 
 	@Override
@@ -1246,7 +1238,7 @@ public class ShiroEvents extends ListenerAdapter {
 		if (event.isFromType(ChannelType.PRIVATE) && ShiroInfo.getStaff().contains(u.getId())) {
 			for (String d : ShiroInfo.getStaff()) {
 				if (!d.equals(u.getId())) {
-					Main.getInfo().getUserByID(d).openPrivateChannel()
+					Main.getUserByID(d).openPrivateChannel()
 							.flatMap(PrivateChannel::sendTyping)
 							.queue();
 				}
@@ -1264,14 +1256,14 @@ public class ShiroEvents extends ListenerAdapter {
 			ch.deleteMessagesByIds(h.stream()
 					.map(Message::getId)
 					.collect(Collectors.toList())
-			).queue(null, Helper::doNothing);
+			).queue(null, MiscHelper::doNothing);
 
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
-				msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-				Helper.logToChannel(member.getUser(), false, null, "SPAM detectado no canal " + ch.getAsMention(), guild, msg.getContentRaw());
+				msg.delete().queueAfter(20, TimeUnit.SECONDS, null, MiscHelper::doNothing);
+				MiscHelper.logToChannel(member.getUser(), false, null, "SPAM detectado no canal " + ch.getAsMention(), guild, msg.getContentRaw());
 			});
 
-			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
+			MutedMember m = CollectionHelper.getOr(MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
 
 			m.setReason("Auto-mute por SPAM no canal " + ch.getAsMention());
 			m.mute(gc.getMuteTime());
@@ -1279,15 +1271,15 @@ public class ShiroEvents extends ListenerAdapter {
 			List<PermissionOverrideAction> act = new ArrayList<>();
 			for (TextChannel chn : guild.getTextChannels()) {
 				if (guild.getSelfMember().hasPermission(chn, required)) {
-					act.add(chn.putPermissionOverride(member).deny(Helper.ALL_MUTE_PERMISSIONS));
+					act.add(chn.putPermissionOverride(member).deny(Constants.ALL_MUTE_PERMISSIONS));
 				}
 			}
 
 			RestAction.allOf(act)
 					.queue(s -> {
-						Helper.logToChannel(guild.getSelfMember().getUser(), false, null, member.getAsMention() + " foi silenciado por " + Helper.toStringDuration(gc.getMuteTime()) + ".\nRazão: `" + m.getReason() + "`", guild);
+						MiscHelper.logToChannel(guild.getSelfMember().getUser(), false, null, member.getAsMention() + " foi silenciado por " + StringHelper.toStringDuration(gc.getMuteTime()) + ".\nRazão: `" + m.getReason() + "`", guild);
 						MemberDAO.saveMutedMember(m);
-					}, Helper::doNothing);
+					}, MiscHelper::doNothing);
 		}
 	}
 
@@ -1306,11 +1298,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 				int value = Integer.parseInt(vals.get("value").replace(",", ""));
 
-				Account acc = AccountDAO.getAccount(from.getId());
+				Account acc = Account.find(Account.class, from.getId());
 				acc.addVCredit((long) Math.ceil(value * be.getRate()), this.getClass());
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
-				msg.getChannel().sendMessage("✅ | Obrigada, seus " + Helper.separate(value) + " " + Helper.separate(be.getCurrency()) + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " CR voláteis com sucesso!").queue();
+				msg.getChannel().sendMessage("✅ | Obrigada, seus " + StringHelper.separate(value) + " " + StringHelper.separate(be.getCurrency()) + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " CR voláteis com sucesso!").queue();
 			}
 		}
 	}

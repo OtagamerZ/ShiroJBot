@@ -20,13 +20,13 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.HttpHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -51,11 +51,11 @@ public class ProfileCommand implements Executable {
 		if (message.getMentionedMembers().isEmpty()) mb = member;
 		else mb = message.getMentionedMembers().get(0);
 
-		Account acc = AccountDAO.getAccount(mb.getId());
+		Account acc = Account.find(Account.class, mb.getId());
 
 		channel.sendMessage(I18n.getString("str_generating-profile")).queue(m -> {
 			try {
-				if (acc.hasAnimatedBg() && Objects.requireNonNull(Helper.getFileType(acc.getBg())).contains("gif")) {
+				if (acc.hasAnimatedBg() && Objects.requireNonNull(HttpHelper.getFileType(acc.getBg())).contains("gif")) {
 					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(mb, mb.getGuild()));
 					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
 							.addFile(pf, "perfil.gif")
@@ -63,7 +63,7 @@ public class ProfileCommand implements Executable {
 							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
 				} else
 					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
-							.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
+							.addFile(ImageHelper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
 							.flatMap(s -> m.delete())
 							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
 			} catch (IOException | NullPointerException | ImageReadException e) {

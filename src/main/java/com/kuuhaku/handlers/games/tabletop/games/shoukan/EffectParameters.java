@@ -23,7 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.utils.BondedList;
+import com.kuuhaku.utils.collections.BondedList;
 
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +100,7 @@ public class EffectParameters {
 		return shoukan.getChampionFromGrave(s);
 	}
 
-	public Equipment getEquipmentFromGrave(Side s) {
+	public Evogear getEquipmentFromGrave(Side s) {
 		return shoukan.getEquipmentFromGrave(s);
 	}
 

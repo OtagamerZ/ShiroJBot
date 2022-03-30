@@ -18,21 +18,19 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.BountyQuestDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.AddedAnime;
-import com.kuuhaku.model.persistent.Attributes;
-import com.kuuhaku.model.persistent.BountyQuest;
-import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.id.CompositeHeroId;
 import com.kuuhaku.model.records.BountyInfo;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -46,7 +44,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "hero")
 @IdClass(CompositeHeroId.class)
-public class Hero implements Cloneable {
+public class Hero extends DAO implements Cloneable {
     @Id
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int id;
@@ -86,7 +84,7 @@ public class Hero implements Cloneable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany
-    private Set<Equipment> inventory = new HashSet<>();
+    private Set<Evogear> inventory = new HashSet<>();
 
     @Column(columnDefinition = "VARCHAR(255)")
     private String quest;
@@ -135,7 +133,7 @@ public class Hero implements Cloneable {
         this.name = name;
         this.stats = new Attributes(race.getStartingStats());
         this.race = race;
-        this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
+        this.image = ImageHelper.atob(ImageHelper.scaleAndCenterImage(ImageHelper.removeAlpha(image), 225, 350), "jpg");
         this.energy = getMaxEnergy();
     }
 
@@ -152,14 +150,14 @@ public class Hero implements Cloneable {
     }
 
     public BufferedImage getImage() {
-        return image == null ? null : Helper.btoa(image);
+        return image == null ? null : ImageHelper.btoa(image);
     }
 
     public void setImage(BufferedImage image) {
         if (image.getWidth() == 225 && image.getHeight() == 350) {
-            this.image = Helper.atob(Helper.removeAlpha(image), "jpg");
+            this.image = ImageHelper.atob(ImageHelper.removeAlpha(image), "jpg");
         } else {
-            this.image = Helper.atob(Helper.scaleAndCenterImage(Helper.removeAlpha(image), 225, 350), "jpg");
+            this.image = ImageHelper.atob(ImageHelper.scaleAndCenterImage(ImageHelper.removeAlpha(image), 225, 350), "jpg");
         }
     }
 
@@ -171,7 +169,7 @@ public class Hero implements Cloneable {
         Integer[] out = new Integer[]{0, 0, 0, 0, 0};
         if (perks.contains(Perk.TABULA_RASA)) return new Attributes(out);
 
-        for (Equipment e : inventory) {
+        for (Evogear e : inventory) {
             out[0] += e.getAtk() / (e.getCharms().isEmpty() ? 100 : 125);
             out[1] += e.getDef() / (e.getCharms().isEmpty() ? 100 : 125);
 
@@ -194,7 +192,7 @@ public class Hero implements Cloneable {
     }
 
     public Attributes getStats() {
-        return new Attributes(Helper.mergeArrays(stats.getStats(), getEquipStats().getStats()));
+        return new Attributes(CollectionHelper.mergeArrays(stats.getStats(), getEquipStats().getStats()));
     }
 
     public void resetStats() {
@@ -206,7 +204,7 @@ public class Hero implements Cloneable {
     }
 
     public int getLevel() {
-        return Helper.revFibonacci(xp / 5) - 1;
+        return MathHelper.revFibonacci(xp / 5) - 1;
     }
 
     public int getXp() {
@@ -226,7 +224,7 @@ public class Hero implements Cloneable {
     }
 
     public int getXpToNext() {
-            return (int) Helper.getFibonacci(getLevel() + 2) * 5;
+            return (int) MathHelper.getFibonacci(getLevel() + 2) * 5;
     }
 
     public int getBonusPoints() {
@@ -260,13 +258,13 @@ public class Hero implements Cloneable {
         return Math.max(0, getMaxPerks() - perks.size());
     }
 
-    public Set<Equipment> getInventory() {
+    public Set<Evogear> getInventory() {
         return inventory;
     }
 
     public Set<String> getInventoryNames() {
         return inventory.stream()
-                .map(Equipment::getCard)
+                .map(Evogear::getCard)
                 .map(Card::getName)
                 .collect(Collectors.toSet());
     }
@@ -280,7 +278,7 @@ public class Hero implements Cloneable {
     public BountyInfo getQuest() {
         if (quest == null) return null;
 
-        return BountyQuestDAO.getBounty(quest).getInfo(this, questSeed);
+        return BountyQuest.find(BountyQuest.class, quest).getInfo(this, questSeed);
     }
 
     public void setQuest(BountyQuest quest, long seed) {
@@ -295,6 +293,7 @@ public class Hero implements Cloneable {
             };
         }
 
+        debuffs.removeIf(AppliedDebuff::expired);
         for (AppliedDebuff d : debuffs) {
             Debuff debuff = d.getDebuff();
             timeModif *= switch (debuff.getId()) {
@@ -364,13 +363,12 @@ public class Hero implements Cloneable {
     }
 
     public void randomizeSeed() {
-        this.seed = (long) Helper.rng(System.currentTimeMillis());
+        this.seed = (long) MathHelper.rng(System.currentTimeMillis());
     }
 
     public String getDescription() {
-        Champion ref = CardDAO.getChampion(effect);
-
-        return ref == null ? "Lendário herói " + race.toString().toLowerCase(Locale.ROOT) + " invocado por " + Helper.getUsername(uid) : ref.getDescription();
+        Champion ref = Champion.find(Champion.class, effect);
+        return ref == null ? "Lendário herói " + race.toString().toLowerCase(Locale.ROOT) + " invocado por " + MiscHelper.getUsername(uid) : ref.getDescription();
     }
 
     public void setReferenceChampion(int id) {
@@ -378,7 +376,7 @@ public class Hero implements Cloneable {
     }
 
     public Champion getReferenceChampion() {
-        return CardDAO.getChampion(effect);
+        return Champion.find(Champion.class, effect);
     }
 
     public int getMaxHp() {
@@ -391,7 +389,7 @@ public class Hero implements Cloneable {
     }
 
     public void setHitpoints(int hitpoints) {
-        this.hitpoints = Helper.clamp(hitpoints, 0, getMaxHp());
+        this.hitpoints = MathHelper.clamp(hitpoints, 0, getMaxHp());
     }
 
     public int bufferDamage(int dmg) {
@@ -405,11 +403,11 @@ public class Hero implements Cloneable {
     }
 
     public int getEnergy() {
-        return Helper.clamp(energy, 0, getMaxEnergy());
+        return MathHelper.clamp(energy, 0, getMaxEnergy());
     }
 
     public void setEnergy(int energy) {
-        this.energy = Helper.clamp(energy, 0, getMaxEnergy());
+        this.energy = MathHelper.clamp(energy, 0, getMaxEnergy());
     }
 
     public void rest() {
@@ -472,7 +470,7 @@ public class Hero implements Cloneable {
             };
         }
 
-        return (int) Math.max(0, Helper.roundTrunc(getStats().calcAtk() * atkModif, 25));
+        return (int) Math.max(0, MiscHelper.roundTrunc(getStats().calcAtk() * atkModif, 25));
     }
 
     public int getDef() {
@@ -486,7 +484,7 @@ public class Hero implements Cloneable {
             };
         }
 
-        return (int) Math.max(0, Helper.roundTrunc(getStats().calcDef() * defModif, 25));
+        return (int) Math.max(0, MiscHelper.roundTrunc(getStats().calcDef() * defModif, 25));
     }
 
     public int getDodge() {
@@ -516,12 +514,12 @@ public class Hero implements Cloneable {
     }
 
     public Champion toChampion() {
-        Champion ref = CardDAO.getChampion(effect);
+        Champion ref = Champion.find(Champion.class, effect);
         Champion c = new Champion(
                 new Card(uid, name, new AddedAnime("HERO", true), KawaiponRarity.ULTIMATE, image),
                 race, getMana(), getBlood(), getAtk(), getDef(), getDescription(), ref == null ? null : ref.getRawEffect()
         );
-        c.setAcc(AccountDAO.getAccount(uid));
+        c.setAcc(Account.find(Account.class, uid));
         c.setHero(this);
 
         return c;

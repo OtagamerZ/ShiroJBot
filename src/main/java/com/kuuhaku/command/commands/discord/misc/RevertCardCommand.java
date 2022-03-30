@@ -32,8 +32,9 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -66,14 +67,14 @@ public class RevertCardCommand implements Executable {
 
 		Card tc = CardDAO.getCard(args[0], true);
 		if (tc == null) {
-			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Card.getCards().stream().map(Card::getId).toList()) + "`?").queue();
 			return;
 		} else if (tc.getId().equals(tc.getAnime().getName())) {
 			channel.sendMessage("❌ | Você não pode converter cartas Ultimate.").queue();
 			return;
 		}
 
-		Champion c = CardDAO.getChampion(tc);
+		Champion c = Champion.getChampion(tc.getId());
 
 		if (c == null) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
@@ -106,8 +107,8 @@ public class RevertCardCommand implements Executable {
 			eb.setImage("attachment://card.png");
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessageEmbeds(eb.build()).addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "s_" + kc.getCard().getId(), "png"), "card.png")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+			channel.sendMessageEmbeds(eb.build()).addFile(ImageHelper.writeAndGet(kc.getCard().drawCard(false), "s_" + kc.getCard().getId(), "png"), "card.png")
+					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								kp.addCard(kc);
@@ -115,7 +116,7 @@ public class RevertCardCommand implements Executable {
 								KawaiponDAO.saveKawaipon(kp);
 
 								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Conversão realizada com sucesso!")).queue();
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

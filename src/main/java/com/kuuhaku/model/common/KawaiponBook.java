@@ -18,24 +18,26 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.NContract;
+import com.kuuhaku.model.records.AnimeState;
+import com.kuuhaku.model.records.RarityState;
+import com.kuuhaku.utils.functional.NContract;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,20 +54,21 @@ public class KawaiponBook {
 	private final BufferedImage slot;
 
 	public KawaiponBook() {
-		header = Helper.getResourceAsImage(this.getClass(), "kawaipon/header.png");
-		row = Helper.getResourceAsImage(this.getClass(), "kawaipon/row.png");
-		footer = Helper.getResourceAsImage(this.getClass(), "kawaipon/footer.png");
-		slot = Helper.getResourceAsImage(this.getClass(), "kawaipon/slot.png");
+		header = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/header.png");
+		row = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/row.png");
+		footer = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/footer.png");
+		slot = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/slot.png");
 
-		assert Helper.notNull(header, row, footer, slot);
+		assert LogicHelper.notNull(header, row, footer, slot);
 	}
 
 	public BufferedImage view(String uid, String name) throws InterruptedException {
-		List<Card> cards = CardDAO.getValidAnimeNames().stream()
+		List<String> animes = AddedAnime.queryAllNative(String.class, "SELECT a.name FROM AddedAnime a WHERE a.hidden = FALSE");
+		List<Card> cards = animes.stream()
 				.sorted(Comparator.comparing(String::toString, String.CASE_INSENSITIVE_ORDER))
-				.map(CardDAO::getUltimate)
+				.map(a -> Card.find(Card.class, a))
 				.collect(Collectors.toList());
-		List<List<Card>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
+		List<List<Card>> chunks = CollectionHelper.chunkify(cards, COLUMN_COUNT);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -87,7 +90,7 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		BufferedImage frame = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
+		BufferedImage frame = FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -133,11 +136,20 @@ public class KawaiponBook {
 	}
 
 	public BufferedImage view(String uid, AddedAnime anime, boolean foil) throws InterruptedException {
-		Map<String, Boolean> col = CardDAO.getCardsByAnime(uid, anime == null ? "" : anime.getName(), foil);
+		Map<String, Boolean> col = new HashMap<>();
+		List<AnimeState> states = Card.queryAllNative(AnimeState.class, "SELECT cs.name, cs.has FROM \"GetAnimeCompletionState\"(:id, :anime, :foil) cs",
+				uid,
+				anime == null ? "" : anime.getName(),
+				foil
+		);
+
+		for (AnimeState as : states) {
+			col.put(as.anime(), as.has());
+		}
 
 		List<KawaiponCard> cards;
 		if (anime == null)
-			cards = CardDAO.getAllCards().stream()
+			cards = Card.getCards().stream()
 					.sorted(Comparator
 							.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 							.thenComparing(c -> c.getAnime().getName(), String.CASE_INSENSITIVE_ORDER)
@@ -145,14 +157,14 @@ public class KawaiponBook {
 					.map(c -> new KawaiponCard(c, false))
 					.collect(Collectors.toList());
 		else
-			cards = CardDAO.getCardsByAnime(anime.getName()).stream()
+			cards = Card.getCards(anime.getName()).stream()
 					.sorted(Comparator
 							.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 							.thenComparing(c -> c.getAnime().getName(), String.CASE_INSENSITIVE_ORDER)
 							.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER))
 					.map(c -> new KawaiponCard(c, false))
 					.collect(Collectors.toList());
-		List<List<KawaiponCard>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
+		List<List<KawaiponCard>> chunks = CollectionHelper.chunkify(cards, COLUMN_COUNT);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -212,7 +224,7 @@ public class KawaiponBook {
 					g.setBackground(Color.black);
 					if (col.get(kc.getCard().getId())) {
 						g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-						RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
+						RarityColors rc = RarityColors.find(RarityColors.class, kc.getCard().getRarity());
 						g.setColor(foil ? rc.getSecondary() : rc.getPrimary());
 
 						g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
@@ -242,11 +254,20 @@ public class KawaiponBook {
 	}
 
 	public BufferedImage view(String uid, KawaiponRarity rarity, boolean foil) throws InterruptedException {
-		Map<String, Boolean> col = CardDAO.getCardsByRarity(uid, rarity == null ? "" : rarity.name(), foil);
+		Map<String, Boolean> col = new HashMap<>();
+		List<RarityState> states = Card.queryAllNative(RarityState.class, "SELECT rs.name, rs.has FROM \"GetRarityCompletionState\"(:id, :rarity, :foil) rs",
+				uid,
+				rarity == null ? "" : rarity.name(),
+				foil
+		);
+
+		for (RarityState as : states) {
+			col.put(as.rarity(), as.has());
+		}
 
 		List<KawaiponCard> cards;
 		if (rarity == null)
-			cards = CardDAO.getAllCards().stream()
+			cards = Card.getCards().stream()
 					.sorted(Comparator
 							.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 							.thenComparing(c -> c.getAnime().getName(), String.CASE_INSENSITIVE_ORDER)
@@ -254,14 +275,14 @@ public class KawaiponBook {
 					.map(c -> new KawaiponCard(c, false))
 					.collect(Collectors.toList());
 		else
-			cards = CardDAO.getCardsByRarity(rarity).stream()
+			cards = Card.getCards(rarity).stream()
 					.sorted(Comparator
 							.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 							.thenComparing(c -> c.getAnime().getName(), String.CASE_INSENSITIVE_ORDER)
 							.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER))
 					.map(c -> new KawaiponCard(c, false))
 					.collect(Collectors.toList());
-		List<List<KawaiponCard>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
+		List<List<KawaiponCard>> chunks = CollectionHelper.chunkify(cards, COLUMN_COUNT);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -321,7 +342,7 @@ public class KawaiponBook {
 					g.setBackground(Color.black);
 					if (col.get(kc.getCard().getId())) {
 						g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-						RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
+						RarityColors rc = RarityColors.find(RarityColors.class, kc.getCard().getRarity());
 						g.setColor(foil ? rc.getSecondary() : rc.getPrimary());
 
 						g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
@@ -359,7 +380,7 @@ public class KawaiponBook {
 							if (d instanceof Champion c) {
 								if (c.isFusion()) showAvailable.set(false);
 								return c.getMana();
-							} else if (d instanceof Equipment e) {
+							} else if (d instanceof Evogear e) {
 								showAvailable.set(false);
 								return e.getTier();
 							} else {
@@ -369,10 +390,10 @@ public class KawaiponBook {
 						})
 						.reversed()
 						.thenComparing(d -> d.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-					)
-					.collect(Collectors.toList());
+				)
+				.collect(Collectors.toList());
 
-		List<List<Drawable>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
+		List<List<Drawable>> chunks = CollectionHelper.chunkify(cards, COLUMN_COUNT);
 		chunks.removeIf(List::isEmpty);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
@@ -395,7 +416,7 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		Set<String> allCards = CardDAO.getCollectedCardNames(acc.getUid());
+		List<String> allCards = Kawaipon.queryAllNative(String.class, "SELECT kc.card_id FROM kawaiponcard kc WHERE kc.kawaipon_id = :uid", acc.getUid());
 		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;

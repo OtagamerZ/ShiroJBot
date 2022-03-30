@@ -28,8 +28,8 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,10 +54,10 @@ public class LeaveCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
-		for (Guild g : Main.getShiroShards().getGuilds()) {
+		for (Guild g : Main.getShiro().getGuilds()) {
 			servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())});
 		}
-		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
+		List<List<String[]>> svPages = CollectionHelper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();
 
@@ -78,9 +78,9 @@ public class LeaveCommand implements Executable {
 			guildToLeave.leave().queue();
 			channel.sendMessage("Ok, acabei de sair desse servidor!").queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
-			channel.sendMessage("Escolha o servidor que devo sair!\n").setEmbeds((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+			channel.sendMessage("Escolha o servidor que devo sair!\n").setEmbeds((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		} catch (NullPointerException ex) {
-			channel.sendMessage(I18n.getString("err_invalid-server")).setEmbeds((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+			channel.sendMessage(I18n.getString("err_invalid-server")).setEmbeds((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		}
 	}
 

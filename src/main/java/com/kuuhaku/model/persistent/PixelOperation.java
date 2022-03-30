@@ -18,11 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "pixeloperation")
-public class PixelOperation {
+public class PixelOperation extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

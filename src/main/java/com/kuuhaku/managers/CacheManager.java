@@ -29,11 +29,19 @@ public class CacheManager {
 			.counterEnable()
 			.create();
 
+	private final HTreeMap<String, String> emoteCache = db.hashMap("emote", Serializer.STRING, Serializer.STRING)
+			.counterEnable()
+			.create();
+
 	public HTreeMap<String, byte[]> getCardCache() {
 		return cardCache;
 	}
 
 	public HTreeMap<String, byte[]> getResourceCache() {
 		return resourceCache;
+	}
+
+	public HTreeMap<String, String> getEmoteCache() {
+		return emoteCache;
 	}
 }

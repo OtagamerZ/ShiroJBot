@@ -18,14 +18,14 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 
 import java.util.function.BiFunction;
 
 public enum PixelOp {
 	SUM((a, b) -> {
-		int[] aRgb = Helper.unpackRGB(a);
-		int[] bRgb = Helper.unpackRGB(b);
+		int[] aRgb = ImageHelper.unpackRGB(a);
+		int[] bRgb = ImageHelper.unpackRGB(b);
 		int[] out = new int[4];
 
 		for (int i = 0; i < out.length; i++) {
@@ -35,8 +35,8 @@ public enum PixelOp {
 		return out[0] << 24 | out[1] << 16 | out[2] << 8 | out[3];
 	}),
 	SUBTRACT((a, b) -> {
-		int[] aRgb = Helper.unpackRGB(a);
-		int[] bRgb = Helper.unpackRGB(b);
+		int[] aRgb = ImageHelper.unpackRGB(a);
+		int[] bRgb = ImageHelper.unpackRGB(b);
 		int[] out = new int[4];
 
 		for (int i = 0; i < out.length; i++) {
@@ -46,8 +46,8 @@ public enum PixelOp {
 		return out[0] << 24 | out[1] << 16 | out[2] << 8 | out[3];
 	}),
 	MULTIPLY((a, b) -> {
-		int[] aRgb = Helper.unpackRGB(a);
-		int[] bRgb = Helper.unpackRGB(b);
+		int[] aRgb = ImageHelper.unpackRGB(a);
+		int[] bRgb = ImageHelper.unpackRGB(b);
 		int[] out = new int[4];
 
 		for (int i = 0; i < out.length; i++) {
@@ -57,8 +57,8 @@ public enum PixelOp {
 		return out[0] << 24 | out[1] << 16 | out[2] << 8 | out[3];
 	}),
 	DIVIDE((a, b) -> {
-		int[] aRgb = Helper.unpackRGB(a);
-		int[] bRgb = Helper.unpackRGB(b);
+		int[] aRgb = ImageHelper.unpackRGB(a);
+		int[] bRgb = ImageHelper.unpackRGB(b);
 		int[] out = new int[4];
 
 		for (int i = 0; i < out.length; i++) {

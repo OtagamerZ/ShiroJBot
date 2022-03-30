@@ -19,23 +19,23 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.BotStatsDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.TempRoleDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
+import com.kuuhaku.model.persistent.BotStats;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.model.persistent.TempRole;
 import com.kuuhaku.model.persistent.VoiceTime;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import javax.websocket.DeploymentException;
@@ -46,36 +46,35 @@ import java.util.Collection;
 import java.util.List;
 
 public class MinuteEvent implements Job {
-	static JobDetail minute;
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		BotStatsDAO.register();
+		new BotStats().save();
 
-		if (!Main.getInfo().isEncoderConnected()) {
+		if (Main.getInfo().isEncoderDisconnected()) {
 			try {
-				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+				Main.getInfo().setEncoderClient(new EncoderClient(Constants.SOCKET_ROOT + "/encoder"));
 			} catch (URISyntaxException | DeploymentException | IOException e) {
-				Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 
-		Collection<VoiceTime> voiceTimes = ShiroInfo.getShiroEvents().getVoiceTimes().values();
+		Collection<VoiceTime> voiceTimes = Main.getEvents().getVoiceTimes().values();
 		for (VoiceTime vt : voiceTimes) {
 			vt.update();
 			VoiceTimeDAO.saveVoiceTime(vt);
 		}
 
-		for (Guild g : Main.getShiroShards().getGuilds()) {
+		for (Guild g : Main.getShiro().getGuilds()) {
 			for (Emote e : g.getEmotes()) {
 				if (e.getName().startsWith("TEMP_")) {
-					e.delete().queue(null, Helper::doNothing);
+					e.delete().queue(null, MiscHelper::doNothing);
 				}
 			}
 		}
 
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
-			Guild g = Main.getInfo().getGuildByID(m.getGuild());
+			Guild g = Main.getGuildByID(m.getGuild());
 
 			if (g == null) {
 				MemberDAO.removeMutedMember(m);
@@ -99,9 +98,9 @@ public class MinuteEvent implements Job {
 
 					RestAction.allOf(act)
 							.queue(s -> {
-								Helper.logToChannel(g.getSelfMember().getUser(), false, null, mb.getAsMention() + " foi dessilenciado por " + g.getSelfMember().getAsMention(), g);
+								MiscHelper.logToChannel(g.getSelfMember().getUser(), false, null, mb.getAsMention() + " foi dessilenciado por " + g.getSelfMember().getAsMention(), g);
 								MemberDAO.removeMutedMember(m);
-							}, Helper::doNothing);
+							}, MiscHelper::doNothing);
 				} catch (HierarchyException ignore) {
 				} catch (IllegalArgumentException | NullPointerException e) {
 					MemberDAO.removeMutedMember(m);
@@ -112,7 +111,7 @@ public class MinuteEvent implements Job {
 		List<TempRole> tempRoles = TempRoleDAO.getExpiredRoles();
 		for (TempRole role : tempRoles) {
 			try {
-				Guild g = Main.getInfo().getGuildByID(role.getSid());
+				Guild g = Main.getGuildByID(role.getSid());
 				Role r = g.getRoleById(role.getRid());
 
 				if (r != null)

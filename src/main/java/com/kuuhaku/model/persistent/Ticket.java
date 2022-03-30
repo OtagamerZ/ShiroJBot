@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.entities.Member;
 
 import javax.persistence.*;

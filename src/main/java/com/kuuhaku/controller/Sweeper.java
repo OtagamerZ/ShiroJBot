@@ -19,7 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.controller.postgresql.Manager;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import org.intellij.lang.annotations.Language;
 
 import javax.persistence.EntityManager;
@@ -31,8 +31,8 @@ public class Sweeper {
 	public static void sweep(Set<String> guildIDs, Set<String> memberIDs) {
 		EntityManager em = Manager.getEntityManager();
 
-		List<List<String>> gids = Helper.chunkify(guildIDs, 1000);
-		List<List<String>> mids = Helper.chunkify(memberIDs, 1000);
+		List<List<String>> gids = CollectionHelper.chunkify(guildIDs, 1000);
+		List<List<String>> mids = CollectionHelper.chunkify(memberIDs, 1000);
 
 		if (gids.size() > 0)
 			executeSweep(em, gids, "DELETE FROM GuildConfig WHERE guildId IN :ids");

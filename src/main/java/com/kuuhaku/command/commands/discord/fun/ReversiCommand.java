@@ -22,15 +22,16 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.reversi.Reversi;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -60,8 +61,8 @@ public class ReversiCommand implements Executable {
 			return;
 		}
 
-		Account uacc = AccountDAO.getAccount(author.getId());
-		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+		Account acc = Account.find(Account.class, author.getId());
+		Account tacc = Account.find(Account.class, message.getMentionedUsers().get(0).getId());
 		int bet = 0;
 		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
 			bet = Integer.parseInt(args[1]);
@@ -90,11 +91,11 @@ public class ReversiCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		int finalBet = bet;
-		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Reversi, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " CR)" : ""))
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Reversi, deseja aceitar?" + (bet != 0 ? " (aposta: " + StringHelper.separate(bet) + " CR)" : ""))
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							if (wrapper.getUser().getId().equals(message.getMentionedUsers().get(0).getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
-								s.delete().queue(null, Helper::doNothing);
+								s.delete().queue(null, MiscHelper::doNothing);
 
 								if (Main.getInfo().gameInProgress(wrapper.getUser().getId())) {
 									channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
@@ -104,12 +105,12 @@ public class ReversiCommand implements Executable {
 									return;
 								}
 
-								s.delete().queue(null, Helper::doNothing);
-								Game t = new Reversi(Main.getShiroShards(), channel, finalBet, author, message.getMentionedUsers().get(0));
+								s.delete().queue(null, MiscHelper::doNothing);
+								Game t = new Reversi(Main.getShiro(), channel, finalBet, author, message.getMentionedUsers().get(0));
 								t.start();
 							}
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
-						u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+						u -> LogicHelper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));
 	}

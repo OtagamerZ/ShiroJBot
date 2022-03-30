@@ -24,7 +24,8 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -41,10 +42,10 @@ public class AvatarCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
-		eb.setColor(Helper.getRandomColor());
+		eb.setColor(ImageHelper.getRandomColor());
 
 		if (args.length > 0) {
-			if (Helper.equalsAny(args[0], "guild", "server", "servidor")) {
+			if (LogicHelper.equalsAny(args[0], "guild", "server", "servidor")) {
 				if (guild.getIconUrl() == null) {
 					channel.sendMessage(I18n.getString("err_no-icon")).queue();
 					return;

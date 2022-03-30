@@ -20,13 +20,12 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.records.embed.Embed;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONUtils;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.json.JSONUtils;
 import com.squareup.moshi.JsonDataException;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
@@ -54,7 +53,7 @@ public class GuildConfig {
 	private String name = "";
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT 's!'")
-	private String prefix = ShiroInfo.getDefaultPrefix();
+	private String prefix = Constants.DEFAULT_PREFIX;
 
 	//CHANNELS
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
@@ -242,132 +241,132 @@ public class GuildConfig {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(welcomeChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(welcomeChannel, "1"));
 	}
 
 	public void setWelcomeChannel(String welcomeChannel) {
-		this.welcomeChannel = Helper.getOr(welcomeChannel, "");
+		this.welcomeChannel = CollectionHelper.getOr(welcomeChannel, "");
 	}
 
 	public TextChannel getByeChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(byeChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(byeChannel, "1"));
 	}
 
 	public void setByeChannel(String byeChannel) {
-		this.byeChannel = Helper.getOr(byeChannel, "");
+		this.byeChannel = CollectionHelper.getOr(byeChannel, "");
 	}
 
 	public TextChannel getSuggestionChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(suggestionChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(suggestionChannel, "1"));
 	}
 
 	public void setSuggestionChannel(String suggestionChannel) {
-		this.suggestionChannel = Helper.getOr(suggestionChannel, "");
+		this.suggestionChannel = CollectionHelper.getOr(suggestionChannel, "");
 	}
 
 	public TextChannel getLevelChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(levelChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(levelChannel, "1"));
 	}
 
 	public void setLevelChannel(String levelChannel) {
-		this.levelChannel = Helper.getOr(levelChannel, "");
+		this.levelChannel = CollectionHelper.getOr(levelChannel, "");
 	}
 
 	public TextChannel getLogChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(logChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(logChannel, "1"));
 	}
 
 	public void setLogChannel(String logChannel) {
-		this.logChannel = Helper.getOr(logChannel, "");
+		this.logChannel = CollectionHelper.getOr(logChannel, "");
 	}
 
 	public TextChannel getAlertChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(alertChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(alertChannel, "1"));
 	}
 
 	public void setAlertChannel(String alertChannel) {
-		this.alertChannel = Helper.getOr(alertChannel, "");
+		this.alertChannel = CollectionHelper.getOr(alertChannel, "");
 	}
 
 	public TextChannel getKawaiponChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(kawaiponChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(kawaiponChannel, "1"));
 	}
 
 	public void setKawaiponChannel(String kawaiponChannel) {
-		this.kawaiponChannel = Helper.getOr(kawaiponChannel, "");
+		this.kawaiponChannel = CollectionHelper.getOr(kawaiponChannel, "");
 	}
 
 	public TextChannel getDropChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(dropChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(dropChannel, "1"));
 	}
 
 	public void setDropChannel(String dropChannel) {
-		this.dropChannel = Helper.getOr(dropChannel, "");
+		this.dropChannel = CollectionHelper.getOr(dropChannel, "");
 	}
 
 	public TextChannel getGeneralChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(generalChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(generalChannel, "1"));
 	}
 
 	public void setGeneralChannel(String generalChannel) {
-		this.generalChannel = Helper.getOr(generalChannel, "");
+		this.generalChannel = CollectionHelper.getOr(generalChannel, "");
 	}
 
 	public TextChannel getStarboardChannel() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getTextChannelById(Helper.getOr(starboardChannel, "1"));
+		return g.getTextChannelById(CollectionHelper.getOr(starboardChannel, "1"));
 	}
 
 	public void setStarboardChannel(String starboardChannel) {
-		this.starboardChannel = Helper.getOr(starboardChannel, "");
+		this.starboardChannel = CollectionHelper.getOr(starboardChannel, "");
 	}
 
 	public Role getWelcomerRole() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getRoleById(Helper.getOr(welcomerRole, "1"));
+		return g.getRoleById(CollectionHelper.getOr(welcomerRole, "1"));
 	}
 
 	public void setWelcomerRole(String welcomerRole) {
-		this.welcomerRole = Helper.getOr(welcomerRole, "");
+		this.welcomerRole = CollectionHelper.getOr(welcomerRole, "");
 	}
 
 	public Role getJoinRole() {
 		Guild g = Main.getInfo().getGuildByID(guildId);
 		if (g == null) return null;
 
-		return g.getRoleById(Helper.getOr(joinRole, "1"));
+		return g.getRoleById(CollectionHelper.getOr(joinRole, "1"));
 	}
 
 	public void setJoinRole(String joinRole) {
-		this.joinRole = Helper.getOr(joinRole, "");
+		this.joinRole = CollectionHelper.getOr(joinRole, "");
 	}
 
 	public String getWelcomeMessage() {
@@ -375,7 +374,7 @@ public class GuildConfig {
 	}
 
 	public void setWelcomeMessage(String welcomeMessage) {
-		this.welcomeMessage = Helper.getOr(welcomeMessage, "Seja bem-vindo(a) ao %guild%, %user%!");
+		this.welcomeMessage = CollectionHelper.getOr(welcomeMessage, "Seja bem-vindo(a) ao %guild%, %user%!");
 	}
 
 	public String getByeMessage() {
@@ -383,7 +382,7 @@ public class GuildConfig {
 	}
 
 	public void setByeMessage(String byeMessage) {
-		this.byeMessage = Helper.getOr(byeMessage, "Ahh...%user% deixou este servidor!");
+		this.byeMessage = CollectionHelper.getOr(byeMessage, "Ahh...%user% deixou este servidor!");
 	}
 
 	public Set<ButtonChannel> getButtonConfigs() {
@@ -396,7 +395,7 @@ public class GuildConfig {
 
 	public Embed getEmbedTemplate() {
 		try {
-			return JSONUtils.fromJSON(Helper.getOr(embedTemplate, "{}"), Embed.class);
+			return JSONUtils.fromJSON(CollectionHelper.getOr(embedTemplate, "{}"), Embed.class);
 		} catch (JsonDataException e) {
 			return JSONUtils.fromJSON("{}", Embed.class);
 		}
@@ -410,7 +409,7 @@ public class GuildConfig {
 	}
 
 	public String getEmbedTemplateRaw() {
-		return Helper.getOr(embedTemplate, "");
+		return CollectionHelper.getOr(embedTemplate, "");
 	}
 
 	public String getGeneralTopic() {
@@ -418,7 +417,7 @@ public class GuildConfig {
 	}
 
 	public void setGeneralTopic(String generalTopic) {
-		this.generalTopic = Helper.getOr(generalTopic, "Contagem de membros em %count% e subindo!");
+		this.generalTopic = CollectionHelper.getOr(generalTopic, "Contagem de membros em %count% e subindo!");
 	}
 
 	public long getPollTime() {
@@ -747,7 +746,7 @@ public class GuildConfig {
 	}
 
 	public Set<Buff> getBuffs() {
-		List<Buff> removed = Helper.removeIf(
+		List<Buff> removed = CollectionHelper.removeIf(
 				buffs,
 				b -> b.getAcquiredAt().plus(b.getTime(), ChronoUnit.MILLIS).isBefore(ZonedDateTime.now(ZoneId.of("GMT-3")))
 		);
@@ -770,14 +769,5 @@ public class GuildConfig {
 
 	public void setBuffs(Set<Buff> buffs) {
 		this.buffs = buffs;
-	}
-
-	public boolean isPartner() {
-		Guild g = Main.getInfo().getGuildByID(guildId);
-		if (g == null) return false;
-
-		String owner = g.getOwnerId();
-
-		return ShiroInfo.getStaff().contains(owner) || TagDAO.getTagById(owner).isBeta();
 	}
 }

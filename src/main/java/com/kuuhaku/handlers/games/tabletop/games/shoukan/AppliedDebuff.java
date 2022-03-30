@@ -1,7 +1,5 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.controller.postgresql.DebuffDAO;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,7 +27,7 @@ public class AppliedDebuff {
 	}
 
 	public Debuff getDebuff() {
-		return DebuffDAO.getDebuff(debuff);
+		return Debuff.find(Debuff.class, debuff);
 	}
 
 	public ZonedDateTime getExpiration() {

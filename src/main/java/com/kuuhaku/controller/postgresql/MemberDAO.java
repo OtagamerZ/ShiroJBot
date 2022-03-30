@@ -21,7 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.model.persistent.id.CompositeMemberId;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -46,7 +46,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return Helper.getOr(em.find(Member.class, new CompositeMemberId(id, guild)), new Member(id, guild));
+			return CollectionHelper.getOr(em.find(Member.class, new CompositeMemberId(id, guild)), new Member(id, guild));
 		} finally {
 			em.close();
 		}

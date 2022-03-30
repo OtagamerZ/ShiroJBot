@@ -22,22 +22,23 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.Stash;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -66,7 +67,7 @@ public class ClearDeckCommand implements Executable {
 		}
 
 		Deck dk = KawaiponDAO.getDeck(author.getId());
-		ShoukanDeck sd = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+		ShoukanDeck sd = new ShoukanDeck(Account.find(Account.class, author.getId()));
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Por favor confirme!");
@@ -75,9 +76,9 @@ public class ClearDeckCommand implements Executable {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
-			File f = Helper.writeAndGet(sd.view(dk), "deque", "jpg");
+			File f = ImageHelper.writeAndGet(sd.view(dk), "deque", "jpg");
 			channel.sendMessageEmbeds(eb.build()).addFile(f)
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								if (!dk.isNovice()) {
@@ -88,7 +89,7 @@ public class ClearDeckCommand implements Executable {
 								}
 								dk.getChampions().clear();
 
-								for (Equipment e : dk.getEquipments()) {
+								for (Evogear e : dk.getEquipments()) {
 									Stash st = new Stash(author.getId(), e);
 									StashDAO.saveCard(st);
 								}
@@ -103,7 +104,7 @@ public class ClearDeckCommand implements Executable {
 								KawaiponDAO.saveDeck(dk);
 								s.delete().queue();
 								channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));

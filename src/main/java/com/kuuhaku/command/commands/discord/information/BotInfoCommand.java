@@ -26,8 +26,8 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -49,16 +49,16 @@ public class BotInfoCommand implements Executable {
 
 		eb.setTitle(I18n.getString("str_bot-info-title"))
 				.setThumbnail(Main.getSelfUser().getEffectiveAvatarUrl())
-				.addField(I18n.getString("str_bot-info-field-1"), Main.getInfo().getUserByID(ShiroInfo.getNiiChan()).getAsTag(), false);
+				.addField(I18n.getString("str_bot-info-field-1"), Main.getUserByID(ShiroInfo.getNiiChan()).getAsTag(), false);
 
 		StringBuilder sb = new StringBuilder();
 		for (String d : ShiroInfo.getDevelopers()) {
-			sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  ");
+			sb.append("`").append(Main.getUserByID(d).getAsTag()).append("`  ");
 		}
 		eb.addField(I18n.getString("str_bot-info-field-2"), sb.toString(), false)
 				.addField(I18n.getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(I18n.getString("date-format"))), false)
-				.addField(I18n.getString("str_bot-info-field-4"), I18n.getString(STR_BOT_INFO_SERVERS, Main.getShiroShards().getGuilds().size()), false)
-				.addField(I18n.getString("str_bot-info-field-5"), I18n.getString("str_bot-info-registered-users", Helper.separate(MemberDAO.getMemberCount())), false)
+				.addField(I18n.getString("str_bot-info-field-4"), I18n.getString(STR_BOT_INFO_SERVERS, Main.getShiro().getGuilds().size()), false)
+				.addField(I18n.getString("str_bot-info-field-5"), I18n.getString("str_bot-info-registered-users", StringHelper.separate(MemberDAO.getMemberCount())), false)
 				.addField(I18n.getString("str_bot-info-field-6"), ShiroInfo.getVersion(), false)
 				.addField("Links:", """
 								[%s](https://discordapp.com/invite/9sgkzna)
@@ -79,7 +79,7 @@ public class BotInfoCommand implements Executable {
 								)
 						, false
 				)
-				.setImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff&v=" + Helper.generateRandomHash(5));
+				.setImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff&v=" + StringHelper.generateRandomHash(5));
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}

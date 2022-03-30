@@ -18,10 +18,8 @@
 
 package com.kuuhaku.command.commands.discord.fun;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.annotations.Command;
@@ -36,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
-import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
+import static com.kuuhaku.utils.Constants.CANVAS_SIZE;
 
 @Command(
 		name = "chunk",
@@ -54,6 +52,7 @@ public class PixelChunkCommand implements Executable {
 			return;
 		}
 
+		PixelCanvas canvas = PixelCanvas.query("SELECT c FROM PixelCanvas c WHERE c.shelved = false");
 		String[] opts = args.length < 2 ? new String[]{} : args[1].split(";");
 		int[] offset;
 
@@ -72,7 +71,7 @@ public class PixelChunkCommand implements Executable {
 		};
 
 		if (args.length < 2) {
-			Main.getInfo().getCanvas().viewSection(message.getTextChannel(), Integer.parseInt(args[0])).queue();
+			canvas.viewSection(message.getTextChannel(), Integer.parseInt(args[0])).queue();
 			return;
 		}
 
@@ -97,7 +96,8 @@ public class PixelChunkCommand implements Executable {
 					channel.sendMessage(I18n.getString("err_canvas-invalid-zoom")).queue();
 					return;
 				}
-				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), true).queue();
+
+				canvas.viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), true).queue();
 				return;
 			}
 
@@ -120,17 +120,14 @@ public class PixelChunkCommand implements Executable {
 						opts[2]
 				);
 
-				CanvasDAO.saveOperation(op);
+				op.save();
 			} catch (NullPointerException e) {
 				throw new UnauthorizedException();
 			}
 
 			Color color = Color.decode(opts[2]);
-
-			PixelCanvas canvas = Main.getInfo().getCanvas();
 			canvas.addPixel(message.getTextChannel(), coords, color).queue();
-
-			CanvasDAO.saveCanvas(canvas);
+			canvas.save();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 		}

@@ -32,7 +32,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.*;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -73,9 +74,9 @@ public class Hitotsu extends Game {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+					channel.sendFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 				},
 				s -> {
@@ -86,18 +87,18 @@ public class Hitotsu extends Game {
 						getBoard().awardWinner(this, getCurrent().getId());
 						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
-								.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+								.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 								.queue(msg -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 								});
 					} else {
 						channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-								.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+								.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 								.queue(msg -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 									this.message = msg;
 									seats.get(getCurrent().getId()).showHand();
-									Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									Pages.buttonize(msg, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}
@@ -138,9 +139,9 @@ public class Hitotsu extends Game {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.queue(s -> {
 					this.message = s;
-					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
+					Main.getEvents().addHandler(channel.getGuild(), listener);
 					seats.get(getCurrent().getId()).showHand();
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -172,11 +173,11 @@ public class Hitotsu extends Game {
 				}
 			}
 		} catch (IllegalCardException e) {
-			channel.sendMessage("❌ | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue(null, MiscHelper::doNothing);
 		} catch (IndexOutOfBoundsException e) {
-			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, MiscHelper::doNothing);
 		} catch (NumberFormatException | IllegalChainException e) {
-			channel.sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue(null, MiscHelper::doNothing);
 		} catch (NoSuchElementException e) {
 			int lowest = 999;
 			for (Hand h : seats.values()) {
@@ -189,26 +190,26 @@ public class Hitotsu extends Game {
 			if (winners.size() == 1) {
 				Hand h = winners.get(0);
 				channel.sendMessage(h.getUser().getAsMention() + " é o jogador que possui menos cartas, temos um vencedor!! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+						.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 				getBoard().awardWinners(this, h.getUser().getId());
 				close();
 			} else if (winners.size() != getBoard().getPlayers().size()) {
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+						.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 				getBoard().awardWinners(this, winners.stream().map(h -> h.getUser().getId()).toArray(String[]::new));
 				close();
 			} else {
 				close();
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+						.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 			}
 		}
@@ -218,9 +219,9 @@ public class Hitotsu extends Game {
 		getBoard().awardWinner(this, getCurrent().getId());
 		close();
 		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
-				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+				.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 				.queue(msg -> {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 				});
 	}
 
@@ -293,47 +294,47 @@ public class Hitotsu extends Game {
 		}
 		resetTimer();
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+				.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 				.queue(s -> {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 		return false;
 	}
 
 	public void putAndShow(KawaiponCard c) {
-		Helper.darkenImage(0.5f, mount);
+		ImageHelper.darkenImage(0.5f, mount);
 
 		Graphics2D g2d = mount.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Helper.rng(-45, 45));
+		ImageHelper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, MathHelper.rng(-45, 45));
 
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+				.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 				.queue(s -> {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 
 		g2d.dispose();
 	}
 
 	public void justPut(KawaiponCard c) {
-		Helper.darkenImage(0.5f, mount);
+		ImageHelper.darkenImage(0.5f, mount);
 
 		Graphics2D g2d = mount.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Helper.rng(-45, 45));
+		ImageHelper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, MathHelper.rng(-45, 45));
 
 		g2d.dispose();
 	}
@@ -382,7 +383,7 @@ public class Hitotsu extends Game {
 	@Override
 	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		buttons.put(Helper.parseEmoji("\uD83D\uDCCB"), wrapper -> {
+		buttons.put(StringHelper.parseEmoji("\uD83D\uDCCB"), wrapper -> {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Suas cartas");
 
@@ -390,7 +391,7 @@ public class Hitotsu extends Game {
 				eb.addField("Carta atual", "(" + played.getLast().getCard().getAnime().toString() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName(), false);
 
 			List<Page> pages = new ArrayList<>();
-			List<List<KawaiponCard>> chunks = Helper.chunkify(seats.get(getCurrent().getId()).getCards(), 5);
+			List<List<KawaiponCard>> chunks = CollectionHelper.chunkify(seats.get(getCurrent().getId()).getCards(), 5);
 
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < chunks.size(); j++) {
@@ -413,24 +414,24 @@ public class Hitotsu extends Game {
 
 			wrapper.getUser().openPrivateChannel()
 					.flatMap(s -> s.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()))
-					.queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES));
+					.queue(s -> Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES));
 		});
-		buttons.put(Helper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
+		buttons.put(StringHelper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
 
 			User u = getCurrent();
 			resetTimer();
 			channel.sendMessage(u.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
-					.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+					.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						this.message = s;
 						seats.get(getCurrent().getId()).showHand();
-						Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
 		});
-		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, Helper::doNothing);
+		buttons.put(StringHelper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, MiscHelper::doNothing);
 			getBoard().leaveGame();
 			resetTimer();
 
@@ -438,18 +439,18 @@ public class Hitotsu extends Game {
 				getBoard().awardWinner(this, getCurrent().getId());
 				close();
 				channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+						.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 			} else {
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
+						.addFile(ImageHelper.writeAndGet(mount, String.valueOf(this.hashCode()), "png"))
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							this.message = s;
 							seats.get(getCurrent().getId()).showHand();
-							Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		});

@@ -24,8 +24,11 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -86,15 +89,15 @@ public class BanMemberCommand implements Executable {
 					acts.add(mb.ban(7));
 				}
 
-				channel.sendMessage("Você está prestes a banir " + Helper.parseAndJoin(m, IMentionable::getAsMention) + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
+				channel.sendMessage("Você está prestes a banir " + CollectionHelper.parseAndJoin(m, IMentionable::getAsMention) + ", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper ->
 										RestAction.allOf(acts)
 												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
 												.flatMap(r -> s.delete())
 												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
-								), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+								), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
-						), Helper::doNothing
+						), MiscHelper::doNothing
 				);
 			} else {
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
@@ -103,15 +106,15 @@ public class BanMemberCommand implements Executable {
 					acts.add(mb.ban(7, argsAsText));
 				}
 
-				channel.sendMessage("Você está prestes a banir " + Helper.parseAndJoin(m, IMentionable::getAsMention) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
+				channel.sendMessage("Você está prestes a banir " + CollectionHelper.parseAndJoin(m, IMentionable::getAsMention) + " pela razão \"" + argsAsText + "\", deseja confirmar?").queue(
+						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper ->
 										RestAction.allOf(acts)
 												.flatMap(r -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + finalArgsAsText + "`"))
 												.flatMap(r -> s.delete())
 												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
-								), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+								), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
-						), Helper::doNothing
+						), MiscHelper::doNothing
 				);
 			}
 		} else {
@@ -119,25 +122,25 @@ public class BanMemberCommand implements Executable {
 
 			if (argsAsText.isBlank()) {
 				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
+						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper ->
 										mm.ban(7)
 												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!"))
 												.flatMap(r -> s.delete())
 												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
-								), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+								), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
-						), Helper::doNothing
+						), MiscHelper::doNothing
 				);
 			} else {
 				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
-						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
+						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper ->
 										mm.ban(7, finalArgsAsText)
 												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + finalArgsAsText + "`"))
 												.flatMap(r -> s.delete())
 												.queue(null, t -> channel.sendMessage("❌ | Erro ao banir.").queue())
-								), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+								), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
-						), Helper::doNothing
+						), MiscHelper::doNothing
 				);
 			}
 		}

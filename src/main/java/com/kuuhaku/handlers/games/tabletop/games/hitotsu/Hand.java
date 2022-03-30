@@ -19,11 +19,11 @@
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.RarityColors;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
@@ -50,7 +50,7 @@ public class Hand {
 	}
 
 	public User getUser() {
-		return Main.getInfo().getUserByID(user);
+		return Main.getUserByID(user);
 	}
 
 	public List<KawaiponCard> getCards() {
@@ -75,20 +75,20 @@ public class Hand {
 			KawaiponCard kc = cards.get(i);
 			BufferedImage card = kc.getCard().drawCard(kc.isFoil());
 
-			Helper.drawRotated(g2d, card, 128, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
+			ImageHelper.drawRotated(g2d, card, 128, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 
-			RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
+			RarityColors rc = RarityColors.find(RarityColors.class, kc.getCard().getRarity());
 
 			g2d.setColor(kc.isFoil() ? rc.getSecondary() : rc.getPrimary());
 
-			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 128, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
+			ImageHelper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 128, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 		}
 
 		g2d.dispose();
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Escolha uma carta que seja do mesmo anime ou raridade da ultima jogada no monte, clique em \uD83D\uDCCB para ver detalhes sobre as cartas ou clique em \uD83D\uDCE4 para comprar uma carta e passar a vez.")
-						.addFile(Helper.writeAndGet(bi, "hand", "png")))
-				.queue(null, Helper::doNothing);
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png")))
+				.queue(null, MiscHelper::doNothing);
 	}
 }

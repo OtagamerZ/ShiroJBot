@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.kuuhaku.utils.XStringBuilder;
 import groovy.lang.GroovyShell;
@@ -107,7 +107,7 @@ public class CompileCommand implements Executable {
 					).queue();
 				}
 			} catch (ExecutionException | InterruptedException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}

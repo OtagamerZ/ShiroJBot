@@ -18,32 +18,19 @@
 
 package com.kuuhaku.command.commands.discord.dev;
 
-import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Tags;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.EmbedBuilder;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "transmitir",
 		aliases = {"broadcast", "bc"},
-		usage = "req_type-message",
+		usage = "req_text",
 		category = Category.DEV
 )
 @Requires({
@@ -55,58 +42,10 @@ public class BroadcastCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(I18n.getString("err_broadcast-no-type")).queue();
-			return;
-		} else if (args.length < 2) {
 			channel.sendMessage(I18n.getString("err_broadcast-no-message")).queue();
 			return;
 		}
 
-		Map<String, Boolean> result = new HashMap<>();
-		StringBuilder sb = new StringBuilder();
-		List<Page> pages = new ArrayList<>();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		switch (args[0].toLowerCase(Locale.ROOT)) {
-			case "geral" -> Helper.broadcast(argsAsText.replaceFirst("geral", "").trim(), channel);
-			case "beta" -> {
-				List<Tags> ps = TagDAO.getAllBetas();
-				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
-				for (List<Tags> p : psPages) {
-					result.clear();
-					eb.clear();
-					sb.setLength(0);
-
-					for (Tags t : p) {
-						User u = Helper.getOr(Main.getInfo().getUserByID(t.getUid()), null);
-
-						if (u == null) {
-							result.put("Desconhecido (" + t.getUid() + ")", false);
-						} else {
-							try {
-								u.openPrivateChannel().complete().sendMessage(argsAsText.replaceFirst("beta", "").trim()).complete();
-								result.put(u.getAsTag(), true);
-							} catch (ErrorResponseException e) {
-								result.put(u.getAsTag(), false);
-							}
-						}
-					}
-
-					sb.append("```diff\n");
-					for (Map.Entry<String, Boolean> entry : result.entrySet()) {
-						String key = entry.getKey();
-						Boolean value = entry.getValue();
-						sb.append(value ? "+ " : "- ").append(key).append("\n");
-					}
-					sb.append("```");
-
-					eb.setTitle("__**STATUS**__ ");
-					eb.setDescription(sb.toString());
-					pages.add(new InteractPage(eb.build()));
-				}
-				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
-			}
-			default -> channel.sendMessage(I18n.getString("err_broadcast-invalid-type")).queue();
-		}
+		MiscHelper.broadcast(argsAsText.replaceFirst("geral", "").trim(), channel);
 	}
 }

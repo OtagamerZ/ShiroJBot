@@ -32,10 +32,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.CustomAnswer;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.*;
+import com.kuuhaku.utils.helpers.*;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.json.JSONObject;
 import com.squareup.moshi.JsonDataException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -62,13 +62,13 @@ public class CustomAnswerCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !GuildDAO.getGuildById(guild.getId()).isAnyTell()) {
+		if (!MiscHelper.hasPermission(member, PrivilegeLevel.MOD) && !GuildDAO.getGuildById(guild.getId()).isAnyTell()) {
 			channel.sendMessage(I18n.getString("err_custom-answer-community-disabled")).queue();
 			return;
-		} else if (Helper.equalsAny(argsAsText, "lista", "list")) {
+		} else if (LogicHelper.equalsAny(argsAsText, "lista", "list")) {
 			List<Page> pages = new ArrayList<>();
 
-			List<List<CustomAnswer>> answers = Helper.chunkify(CustomAnswerDAO.getCAByGuild(guild.getId()), 10);
+			List<List<CustomAnswer>> answers = CollectionHelper.chunkify(CustomAnswerDAO.getCAByGuild(guild.getId()), 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(":pencil: Respostas deste servidor:");
@@ -92,7 +92,7 @@ public class CustomAnswerCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		} else if (StringUtils.isNumeric(argsAsText)) {
@@ -116,10 +116,10 @@ public class CustomAnswerCommand implements Executable {
 				eb.appendDescription("\nCom " + ca.getChance() + "% de chance de eu responder");
 
 			if (!ca.getUsers().isEmpty())
-				eb.appendDescription("\nApenas se for ativado por " + Helper.parseAndJoin(ca.getUsers(), Helper::getUsername));
+				eb.appendDescription("\nApenas se for ativado por " + CollectionHelper.parseAndJoin(ca.getUsers(), MiscHelper::getUsername));
 
 			if (!ca.getChannels().isEmpty())
-				eb.appendDescription("\nApenas se for ativado em " + Helper.parseAndJoin(ca.getChannels(), Helper::getUsername));
+				eb.appendDescription("\nApenas se for ativado em " + CollectionHelper.parseAndJoin(ca.getChannels(), MiscHelper::getUsername));
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;
@@ -131,10 +131,10 @@ public class CustomAnswerCommand implements Executable {
 			if (!jo.has("trigger") || !jo.has("answer")) {
 				channel.sendMessage("❌ | Você precisa especificar ao menos o gatilho (`trigger`) e a resposta (`answer`).").queue();
 				return;
-			} else if (!Helper.between(jo.getString("trigger").length(), 2, 129)) {
+			} else if (!MathHelper.between(jo.getString("trigger").length(), 2, 129)) {
 				channel.sendMessage("❌ | O gatilho tem que ter entre 2 e 128 caracteres.").queue();
 				return;
-			} else if (!Helper.between(jo.getString("answer").length(), 2, 1025)) {
+			} else if (!MathHelper.between(jo.getString("answer").length(), 2, 1025)) {
 				channel.sendMessage("❌ | A resposta tem que ter entre 2 e 1024 caracteres.").queue();
 				return;
 			}
@@ -149,7 +149,7 @@ public class CustomAnswerCommand implements Executable {
 			}
 
 			if (jo.has("chance")) {
-				ca.setChance(Helper.clamp(jo.getInt("chance"), 1, 100));
+				ca.setChance(MathHelper.clamp(jo.getInt("chance"), 1, 100));
 				msg += ", com uma chance de " + ca.getChance() + "%%";
 			}
 
@@ -167,7 +167,7 @@ public class CustomAnswerCommand implements Executable {
 					names.add(m.getAsMention());
 				}
 
-				msg += ", apenas quando " + Helper.properlyJoin().apply(names) + " usar" + (names.size() == 1 ? "" : "em") + " o gatilho";
+				msg += ", apenas quando " + CollectionHelper.properlyJoin().apply(names) + " usar" + (names.size() == 1 ? "" : "em") + " o gatilho";
 			}
 
 			if (jo.has("channels")) {
@@ -184,7 +184,7 @@ public class CustomAnswerCommand implements Executable {
 					names.add(tc.getAsMention());
 				}
 
-				msg += ", apenas o gatilho for usado " + (names.size() == 1 ? "no canal" : "nos canais") + " " + Helper.properlyJoin().apply(names);
+				msg += ", apenas o gatilho for usado " + (names.size() == 1 ? "no canal" : "nos canais") + " " + CollectionHelper.properlyJoin().apply(names);
 			}
 			msg += ".";
 

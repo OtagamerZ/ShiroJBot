@@ -19,18 +19,19 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
-import com.kuuhaku.controller.postgresql.TransactionDAO;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
+import com.kuuhaku.model.annotations.WhenNull;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.persistent.interfaces.Blacklistable;
 import com.kuuhaku.model.records.CompletionState;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.apache.commons.collections4.bag.HashBag;
 import org.hibernate.annotations.DynamicUpdate;
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
 @Entity
 @DynamicUpdate
 @Table(name = "account")
-public class Account {
+public class Account extends DAO implements Blacklistable {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
@@ -87,6 +88,9 @@ public class Account {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 3")
 	private int weeklyRolls = 3;
+
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 1.25")
+	private float coupleMult = 1.25f;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
@@ -157,6 +161,14 @@ public class Account {
 	private transient FrameColor cachedFrame = null;
 	private transient Card ultimateCard = null;
 
+	public Account() {
+	}
+
+	@WhenNull
+	public Account(String uid) {
+		this.uid = uid;
+	}
+
 	public String getUid() {
 		return uid;
 	}
@@ -184,7 +196,7 @@ public class Account {
 	public void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 
-		TransactionDAO.register(uid, from, credit);
+		new Transaction(uid, from.getSimpleName(), credit).save();
 		balance += credit;
 
 		if (hasPendingQuest()) {
@@ -197,13 +209,13 @@ public class Account {
 	public void addVCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		vBalance += credit;
-		TransactionDAO.register(uid, from, credit);
+		new Transaction(uid, from.getSimpleName(), credit).save();
 	}
 
 	public void addSCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		sBalance += credit;
-		TransactionDAO.register(uid, from, credit);
+		new Transaction(uid, from.getSimpleName(), credit).save();
 	}
 
 	public void setSBalance(long sBalance) {
@@ -214,11 +226,11 @@ public class Account {
 		this.spent += credit;
 		this.balance -= credit;
 
-		if (credit != 0) TransactionDAO.register(uid, from, -credit);
+		if (credit != 0) new Transaction(uid, from.getSimpleName(), -credit).save();
 	}
 
 	public void consumeCredit(long credit, Class<?> from) {
-		if (credit != 0) TransactionDAO.register(uid, from, -credit);
+		if (credit != 0) new Transaction(uid, from.getSimpleName(), -credit).save();
 		spent += credit;
 
 		long aux = credit;
@@ -235,9 +247,9 @@ public class Account {
 			}
 		}
 
-		LotteryValue lv = LotteryDAO.getLotteryValue();
+		LotteryValue lv = LotteryValue.find(LotteryValue.class, 0);
 		lv.addValue(Math.round(credit * 0.1));
-		LotteryDAO.saveLotteryValue(lv);
+		lv.save();
 	}
 
 	public void expireVCredit() {
@@ -287,6 +299,14 @@ public class Account {
 		this.weeklyRolls = weeklyRolls;
 	}
 
+	public float getCoupleMult() {
+		return coupleMult;
+	}
+
+	public void setCoupleMult(float coupleMult) {
+		this.coupleMult = coupleMult;
+	}
+
 	public boolean hasNoviceDeck() {
 		if (this.tutorial == null) return false;
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
@@ -306,19 +326,19 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		if (lastVoted == null) streak = 1;
 		else try {
-			Helper.logger(this.getClass()).info("""
+			MiscHelper.logger(this.getClass()).info("""
 																	
 							Voto anterior: %s
 							Hoje: %s
 							Acumula? %s
 									""".formatted(
-							lastVoted.format(Helper.FULL_DATE_FORMAT),
-							today.format(Helper.FULL_DATE_FORMAT),
+							lastVoted.format(Constants.FULL_DATE_FORMAT),
+							today.format(Constants.FULL_DATE_FORMAT),
 							today.isBefore(lastVoted.plusHours(24))
 					)
 			);
 
-			if (today.isBefore(lastVoted.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
+			if (today.isBefore(lastVoted.plusHours(24)) || streak == 0) streak = MathHelper.clamp(streak + 1, 0, 7);
 			else streak = 0;
 		} catch (DateTimeParseException ignore) {
 		}
@@ -326,7 +346,7 @@ public class Account {
 		lastVoted = today;
 		notified = false;
 		voted = true;
-		AccountDAO.saveAccount(this);
+		this.save();
 	}
 
 	public boolean hasVoted(boolean thenApply) {
@@ -338,7 +358,7 @@ public class Account {
 				} else {
 					if (thenApply) {
 						CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-						Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
+						Main.getInfo().getTopggClient().hasVoted(uid).thenAccept(voted -> {
 							if (voted) {
 								DiscordBotsListHandler.retry(uid);
 							}
@@ -354,7 +374,7 @@ public class Account {
 			} catch (DateTimeParseException | NullPointerException e) {
 				if (thenApply) {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-					Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
+					Main.getInfo().getTopggClient().hasVoted(uid).thenAccept(voted -> {
 						if (voted) {
 							DiscordBotsListHandler.retry(uid);
 						}
@@ -382,13 +402,13 @@ public class Account {
 					eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de CR!");
 					eb.setFooter("Data do último voto: " + lastVoted);
 
-					Main.getInfo().getUserByID(uid).openPrivateChannel()
+					Main.getUserByID(uid).openPrivateChannel()
 							.flatMap(s -> s.sendMessageEmbeds(eb.build()))
 							.queue(null, e -> remind = false);
 				} catch (NullPointerException ignore) {
 				} finally {
 					notified = true;
-					AccountDAO.saveAccount(this);
+					this.save();
 				}
 			}
 		}
@@ -495,10 +515,10 @@ public class Account {
 	public Card getUltimate() {
 		if (ultimate != null && !ultimate.isBlank()) {
 			try {
-				AddedAnime an = CardDAO.verifyAnime(ultimate);
+				AddedAnime an = AddedAnime.find(AddedAnime.class, ultimate);
 				if (getCompletion(an).any()) {
 					if (ultimateCard == null)
-						ultimateCard = CardDAO.getUltimate(ultimate);
+						ultimateCard = Card.find(Card.class, ultimate);
 
 					return ultimateCard;
 				}
@@ -631,17 +651,28 @@ public class Account {
 	}
 
 	public Map<String, CompletionState> getCompState() {
-		if (compState == null)
-			compState = CardDAO.getCompletionState(uid);
+		if (compState == null) {
+			compState = new HashMap<>();
+
+			List<CompletionState> states = DAO.queryAllNative(CompletionState.class, "SELECT cs.name, cs.all_normal, cs.all_foil FROM \"GetCompletionState\"(:uid) cs", uid);
+			for (CompletionState cs : states) {
+				compState.put(cs.anime(), cs);
+			}
+		}
 
 		return compState;
 	}
 
 	public CompletionState getCompletion(String anime) {
-		return getCompState().getOrDefault(anime, new CompletionState(false, false));
+		return getCompState().getOrDefault(anime, new CompletionState(anime, false, false));
 	}
 
 	public CompletionState getCompletion(AddedAnime anime) {
-		return getCompState().getOrDefault(anime.getName(), new CompletionState(false, false));
+		return getCompState().getOrDefault(anime.getName(), new CompletionState(anime.getName(), false, false));
+	}
+
+	@Override
+	public boolean isBlacklisted() {
+		return Blacklist.find(Blacklist.class, uid) != null;
 	}
 }

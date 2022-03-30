@@ -26,8 +26,9 @@ import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
@@ -59,8 +60,8 @@ public class DeclareWoCommand implements Executable {
 			return;
 		}
 
-		channel.sendMessage("Você está prestes a definir que `" + Helper.getUsername(args[1]) + "` não compareceu ao torneio `" + t.getName() + "`, deseja confirmar?").queue(
-				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+		channel.sendMessage("Você está prestes a definir que `" + MiscHelper.getUsername(args[1]) + "` não compareceu ao torneio `" + t.getName() + "`, deseja confirmar?").queue(
+				s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							if (p.getPhase() == 0 && !t.getBench().isEmpty()) {
 								String next = new ArrayList<>(t.getBench()).get(0);
 								p.setUid(next);
@@ -69,7 +70,7 @@ public class DeclareWoCommand implements Executable {
 								try {
 									Main.getInfo().getUserByID(next).openPrivateChannel()
 											.flatMap(c -> c.sendMessage("Um dos participantes não compareceu, você foi adicionado às chaves."))
-											.queue(null, Helper::doNothing);
+											.queue(null, MiscHelper::doNothing);
 								} catch (RuntimeException ignore) {
 								}
 							} else {
@@ -79,11 +80,11 @@ public class DeclareWoCommand implements Executable {
 
 							TournamentDAO.save(t);
 
-							s.delete().queue(null, Helper::doNothing);
+							s.delete().queue(null, MiscHelper::doNothing);
 							channel.sendMessage("✅ | W.O. registrado com sucesso!").queue();
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 						, u -> u.getId().equals(author.getId())
-				), Helper::doNothing
+				), MiscHelper::doNothing
 		);
 	}
 }

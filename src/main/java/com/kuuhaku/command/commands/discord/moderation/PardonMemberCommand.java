@@ -27,8 +27,10 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -70,7 +72,7 @@ public class PardonMemberCommand implements Executable {
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), guild.getId());
 		if (args.length < 2) {
-			List<List<String>> chunks = Helper.chunkify(m.getWarns(), 10);
+			List<List<String>> chunks = CollectionHelper.chunkify(m.getWarns(), 10);
 			if (chunks.isEmpty()) {
 				channel.sendMessage("❌ | Não há nenhum alerta para esse usuário.").queue();
 				return;
@@ -92,14 +94,14 @@ public class PardonMemberCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}
 
 		try {
 			int i = Integer.parseInt(args[1]);
-			if (!Helper.between(i, 0, m.getWarns().size())) {
+			if (!MathHelper.between(i, 0, m.getWarns().size())) {
 				channel.sendMessage("❌ | Alerta inexistente.").queue();
 				return;
 			}
@@ -108,7 +110,7 @@ public class PardonMemberCommand implements Executable {
 			MemberDAO.saveMember(m);
 
 			channel.sendMessage("✅ | Alerta perdoado com sucesso!").queue();
-			Helper.logToChannel(author, false, null, mb.getAsMention() + " teve um alerta perdoado.\nAlerta: `" + reason + "`", guild);
+			MiscHelper.logToChannel(author, false, null, mb.getAsMention() + " teve um alerta perdoado.\nAlerta: `" + reason + "`", guild);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-index")).queue();
 		}

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.controller.postgresql.DrawableDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
@@ -29,9 +30,9 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.UniqueList;
+import com.kuuhaku.utils.helpers.*;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.collections.UniqueList;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,7 +50,7 @@ import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrig
 
 @Entity
 @Table(name = "champion")
-public class Champion implements Drawable, Cloneable {
+public class Champion extends DrawableDAO implements Drawable, Cloneable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -149,7 +150,7 @@ public class Champion implements Drawable, Cloneable {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		Champion c = Helper.getOr(fakeCard, this);
+		Champion c = CollectionHelper.getOr(fakeCard, this);
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
@@ -163,7 +164,7 @@ public class Champion implements Drawable, Cloneable {
 			if (altImage == null) {
 				g2d.drawImage(c.getCard().drawCardNoBorder(acc), 0, 0, null);
 			} else {
-				g2d.drawImage(Helper.btoa(altImage), 0, 0, null);
+				g2d.drawImage(ImageHelper.btoa(altImage), 0, 0, null);
 			}
 			g2d.setClip(null);
 
@@ -218,21 +219,21 @@ public class Champion implements Drawable, Cloneable {
 			}
 
 			if (isDuelling()) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/duel.png"), 0, 0, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/duel.png"), 0, 0, null);
 			} else if (isStasis()) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/stasis.png"), 0, 0, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/stasis.png"), 0, 0, null);
 			} else if (isStunned()) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/stun.png"), 0, 0, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/stun.png"), 0, 0, null);
 			} else if (isSleeping()) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/sleep.png"), 0, 0, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/sleep.png"), 0, 0, null);
 			} else if (isDefending()) {
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/defense_mode.png"), 0, 0, null);
+				g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/defense_mode.png"), 0, 0, null);
 			} else if (hero != null) {
 				if (hero.getQuest() != null) {
 					if (!hero.hasArrived()) {
-						g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/expedition.png"), 0, 0, null);
+						g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/expedition.png"), 0, 0, null);
 					} else {
-						g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/arrived.png"), 0, 0, null);
+						g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "shoukan/arrived.png"), 0, 0, null);
 					}
 				}
 			}
@@ -345,21 +346,21 @@ public class Champion implements Drawable, Cloneable {
 		return linkedTo;
 	}
 
-	public void link(Equipment link) {
+	public void link(Evogear link) {
 		this.linkedTo.add(new CardLink(link.getIndexReference(), link, this));
 		link.link(this);
 
 		game.applyEffect(ON_EQUIP, this, side, getIndex(), new Source(this, side, getIndex()));
 	}
 
-	public void link(Equipment link, boolean fake) {
+	public void link(Evogear link, boolean fake) {
 		this.linkedTo.add(new CardLink(fake ? new AtomicInteger(-1) : link.getIndexReference(), link, this));
 		link.link(this);
 
 		game.applyEffect(ON_EQUIP, this, side, getIndex(), new Source(this, side, getIndex()));
 	}
 
-	public void unlink(Equipment link) {
+	public void unlink(Evogear link) {
 		int i = -1;
 		for (int j = 0; j < linkedTo.size(); j++) {
 			CardLink cl = linkedTo.get(j);
@@ -409,7 +410,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public Race getRace() {
-		return Helper.getOr(altRace, race);
+		return CollectionHelper.getOr(altRace, race);
 	}
 
 	public int getMana() {
@@ -474,8 +475,8 @@ public class Champion implements Drawable, Cloneable {
 			if (hero != null) {
 				for (Perk perk : hero.getPerks()) {
 					hBonus *= switch (perk) {
-						case MASOCHIST -> 1 + (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
-						case COWARD -> 1 - (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						case MASOCHIST -> 1 + (1 - MathHelper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						case COWARD -> 1 - (1 - MathHelper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
 						default -> 1;
 					};
 				}
@@ -487,7 +488,7 @@ public class Champion implements Drawable, Cloneable {
 			extraFac *= 1.1f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * extraFac)), 25);
+		return MiscHelper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * extraFac)), 25);
 	}
 
 	public int getDef() {
@@ -520,8 +521,8 @@ public class Champion implements Drawable, Cloneable {
 			if (hero != null) {
 				for (Perk perk : hero.getPerks()) {
 					hBonus *= switch (perk) {
-						case MASOCHIST -> 1 - (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
-						case COWARD -> 1 + (1 - Helper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						case MASOCHIST -> 1 - (1 - MathHelper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
+						case COWARD -> 1 + (1 - MathHelper.prcnt(hero.getHitpoints(), hero.getMaxHp())) / 2;
 						default -> 1;
 					};
 				}
@@ -533,7 +534,7 @@ public class Champion implements Drawable, Cloneable {
 			extraFac *= 1.1f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * extraFac)), 25);
+		return MiscHelper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * extraFac)), 25);
 	}
 
 	public void setAtk(int atk) {
@@ -623,7 +624,7 @@ public class Champion implements Drawable, Cloneable {
 	public int getFinAtk() {
 		return Math.max(0, getEffAtk() + getLinkedTo().stream()
 				.map(CardLink::asEquipment)
-				.mapToInt(Equipment::getAtk)
+				.mapToInt(Evogear::getAtk)
 				.sum()
 		);
 	}
@@ -650,14 +651,14 @@ public class Champion implements Drawable, Cloneable {
 		return linkedTo.stream()
 				.map(CardLink::asEquipment)
 				.filter(e -> e.getCharms().contains(Charm.DRAIN))
-				.mapToInt(e -> (int) Helper.getFibonacci(e.getTier()))
+				.mapToInt(e -> (int) MathHelper.getFibonacci(e.getTier()))
 				.sum();
 	}
 
 	public int getFinDef() {
 		return Math.max(0, getEffDef() + getLinkedTo().stream()
 				.map(CardLink::asEquipment)
-				.mapToInt(Equipment::getDef)
+				.mapToInt(Evogear::getDef)
 				.sum()
 		);
 	}
@@ -698,9 +699,9 @@ public class Champion implements Drawable, Cloneable {
 				.mapToDouble(e -> 7.5 * e.getTier())
 				.sum()
 		);
-		double d = Helper.clamp((bonus.getDodge() + mDodge + agiEquips + extra) * heroMod, 0, 100);
+		double d = MathHelper.clamp((bonus.getDodge() + mDodge + agiEquips + extra) * heroMod, 0, 100);
 		double parFac = !isAvailable() ? 0.75 : 1;
-		return (int) Helper.roundTrunc(d * parFac * 100, 5) / 100;
+		return (int) MiscHelper.roundTrunc(d * parFac * 100, 5) / 100;
 	}
 
 	public int getDodge() {
@@ -746,7 +747,7 @@ public class Champion implements Drawable, Cloneable {
 				.filter(e -> e.getCharms().contains(Charm.FORTIFY))
 				.mapToInt(e -> 5 * e.getTier())
 				.sum();
-		double d = Helper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
+		double d = MathHelper.clamp((bonus.getBlock() + mBlock + blockEquips + extra) * heroMod * (isDefending() ? 2 : 1), 0, 100);
 		return (int) d;
 	}
 
@@ -794,7 +795,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getDescription() {
-		return sealed ? "Carta selada." : Helper.getOr(altDescription, description);
+		return sealed ? "Carta selada." : CollectionHelper.getOr(altDescription, description);
 	}
 
 	public void setDescription(String description) {
@@ -806,7 +807,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean hasEffect() {
-		return Helper.getOr(altEffect, effect) != null && !sealed;
+		return CollectionHelper.getOr(altEffect, effect) != null && !sealed;
 	}
 
 	public boolean isFusion() {
@@ -818,7 +819,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getRawEffect() {
-		return sealed ? null : Helper.getOr(altEffect, effect);
+		return sealed ? null : CollectionHelper.getOr(altEffect, effect);
 	}
 
 	public void setRawEffect(String effect) {
@@ -845,7 +846,7 @@ public class Champion implements Drawable, Cloneable {
 			gs.setVariable("self", this);
 			gs.evaluate(effect);
 		} catch (Exception e) {
-			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
+			MiscHelper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
 
@@ -880,7 +881,7 @@ public class Champion implements Drawable, Cloneable {
 			try {
 				gs.evaluate(curse);
 			} catch (Exception e) {
-				Helper.logger(this.getClass()).warn("Erro ao executar maldição de " + card.getName(), e);
+				MiscHelper.logger(this.getClass()).warn("Erro ao executar maldição de " + card.getName(), e);
 			}
 		}
 	}
@@ -889,7 +890,7 @@ public class Champion implements Drawable, Cloneable {
 		for (CardLink cl : List.copyOf(linkedTo)) {
 			if (cl.isFake()) continue;
 
-			Equipment e = cl.asEquipment();
+			Evogear e = cl.asEquipment();
 			if (!e.hasEffect()) continue;
 
 			e.getEffect(ep);
@@ -1159,7 +1160,7 @@ public class Champion implements Drawable, Cloneable {
 
 		charms.addAll(linkedTo.stream()
 				.map(CardLink::asEquipment)
-				.map(Equipment::getCharms)
+				.map(Evogear::getCharms)
 				.flatMap(List::stream)
 				.toList()
 		);
@@ -1174,7 +1175,7 @@ public class Champion implements Drawable, Cloneable {
 
 		Field f = game.getArena().getField();
 		if (f != null) {
-			Champion c = Helper.getOr(fakeCard, this);
+			Champion c = CollectionHelper.getOr(fakeCard, this);
 			return f.getModifiers().getFloat(c.getRace().name()) > 0;
 		}
 
@@ -1187,7 +1188,7 @@ public class Champion implements Drawable, Cloneable {
 
 		Field f = game.getArena().getField();
 		if (f != null) {
-			Champion c = Helper.getOr(fakeCard, this);
+			Champion c = CollectionHelper.getOr(fakeCard, this);
 			return f.getModifiers().getFloat(c.getRace().name()) < 0;
 		}
 
@@ -1217,7 +1218,7 @@ public class Champion implements Drawable, Cloneable {
 
 	public Champion getAdjacent(Neighbor direction) {
 		int index = getIndex();
-		if (!Helper.between(index, 0, 5)) return null;
+		if (!MathHelper.between(index, 0, 5)) return null;
 
 		return switch (direction) {
 			case LEFT -> index > 0 ? game.getArena().getSlots().get(side).get(index - 1).getTop() : null;
@@ -1308,7 +1309,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getBase64() {
-		return Helper.atob(drawCard(false), "png");
+		return ImageHelper.atob(drawCard(false), "png");
 	}
 
 	@Override

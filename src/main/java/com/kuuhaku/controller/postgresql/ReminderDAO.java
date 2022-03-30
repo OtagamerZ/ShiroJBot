@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Reminder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -57,7 +57,7 @@ public class ReminderDAO {
 	}
 
 	public static Reminder getReminder(String uid, int index) {
-		return Helper.safeGet(getReminders(uid), index);
+		return CollectionHelper.safeGet(getReminders(uid), index);
 	}
 
 	public static void removeReminder(Reminder r) {

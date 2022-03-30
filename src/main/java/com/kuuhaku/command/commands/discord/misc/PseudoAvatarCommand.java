@@ -23,7 +23,8 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
@@ -43,7 +44,7 @@ public class PseudoAvatarCommand implements Executable {
 		if (args.length == 0) {
 			channel.sendMessage(I18n.getString("err_no-image")).queue();
 			return;
-		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
+		} else if (LogicHelper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoAvatar("");
 			MemberDAO.saveMember(mb);
 			channel.sendMessage("✅ | Pseudo-avatar limpo com sucesso!").queue();
@@ -51,7 +52,7 @@ public class PseudoAvatarCommand implements Executable {
 		}
 
 		try {
-			ImageIO.read(Helper.getImage(args[0]));
+			ImageIO.read(ImageHelper.getImage(args[0]));
 
 			mb.setPseudoAvatar(args[0]);
 			MemberDAO.saveMember(mb);

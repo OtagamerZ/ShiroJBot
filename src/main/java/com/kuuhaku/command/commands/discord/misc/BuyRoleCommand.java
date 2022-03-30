@@ -24,7 +24,6 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -33,8 +32,11 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,7 +56,7 @@ public class BuyRoleCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		List<PaidRole> prs = new ArrayList<>(gc.getPaidRoles());
 		prs.sort(Comparator.comparingInt(PaidRole::getPrice));
 
@@ -79,22 +81,22 @@ public class BuyRoleCommand implements Executable {
 				}
 
 				if (role.getDuration() > -1)
-					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention() + " (" + Helper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
+					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention() + " (" + StringHelper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
 				else
 					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 
-			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
+			List<List<Integer>> chunks = CollectionHelper.chunkify(fields.keySet(), 10);
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
 				for (int value : chunk)
-					eb.addField("Valor: " + Helper.separate(value) + " CR", fields.get(value), false);
+					eb.addField("Valor: " + StringHelper.separate(value) + " CR", fields.get(value), false);
 
 				pages.add(new InteractPage(eb.build()));
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}
@@ -102,7 +104,7 @@ public class BuyRoleCommand implements Executable {
 		try {
 			int id = Integer.parseInt(args[0]);
 
-			if (!Helper.between(id, 0, prs.size())) {
+			if (!MathHelper.between(id, 0, prs.size())) {
 				channel.sendMessage("❌ | Não existe nenhum cargo pago com esse ID.").queue();
 				return;
 			}
@@ -124,27 +126,27 @@ public class BuyRoleCommand implements Executable {
 
 			String msg;
 			if (pr.getDuration() > -1)
-				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " CR**, deseja confirmar? (" + Helper.toStringDuration(pr.getDuration()) + ")";
+				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + StringHelper.separate(pr.getPrice()) + " CR**, deseja confirmar? (" + StringHelper.toStringDuration(pr.getDuration()) + ")";
 			else
-				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " CR**, deseja confirmar?";
+				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + StringHelper.separate(pr.getPrice()) + " CR**, deseja confirmar?";
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(msg).queue(s ->
-					Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					Pages.buttonize(s, Collections.singletonMap(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								guild.addRoleToMember(member, r)
 										.flatMap(m -> channel.sendMessage("✅ | Cargo comprado com sucesso!"))
 										.queue(m -> {
 											if (!author.getId().equals(guild.getOwnerId())) {
-												Account facc = AccountDAO.getAccount(author.getId());
-												Account oacc = AccountDAO.getAccount(guild.getOwnerId());
+												Account facc = Account.find(Account.class, author.getId());
+												Account oacc = Account.find(Account.class, guild.getOwnerId());
 
 												facc.removeCredit(pr.getPrice(), BuyRoleCommand.class);
 												oacc.addCredit(pr.getPrice(), BuyRoleCommand.class);
 
-												AccountDAO.saveAccount(facc);
-												AccountDAO.saveAccount(oacc);
+												facc.save();
+												oacc.save();
 											}
 
 											GuildConfig fgc = GuildDAO.getGuildById(guild.getId());
@@ -156,9 +158,9 @@ public class BuyRoleCommand implements Executable {
 											}
 											GuildDAO.updateGuildSettings(fgc);
 
-											s.delete().queue(null, Helper::doNothing);
+											s.delete().queue(null, MiscHelper::doNothing);
 										}, t -> channel.sendMessage("❌ | Erro ao comprar o cargo.").queue());
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId()))
 			);

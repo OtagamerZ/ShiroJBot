@@ -20,14 +20,14 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.List;
 import java.util.Locale;
 
 @Command(
@@ -40,21 +40,22 @@ public class FrameBackgroundCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa especificar um anime com coleção completa para definir como imagem de fundo de seu deck Shoukan.").queue();
 			return;
 		}
 
-		if (Helper.equalsAny(args[0], "limpar", "clear")) {
+		if (LogicHelper.equalsAny(args[0], "limpar", "clear")) {
 			acc.setUltimate("");
-			AccountDAO.saveAccount(acc);
+			acc.save();
 			channel.sendMessage("✅ | Ultimate limpa com sucesso!").queue();
 		} else {
-			AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
+			AddedAnime anime = AddedAnime.find(AddedAnime.class, args[0].toUpperCase(Locale.ROOT));
+			List<String> animes = AddedAnime.queryAllNative(String.class, "SELECT a.name FROM AddedAnime a WHERE a.hidden = FALSE");
 			if (anime == null) {
-				channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+				channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + StringHelper.didYouMean(args[0], animes.toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 				return;
 			}
 
@@ -65,7 +66,7 @@ public class FrameBackgroundCommand implements Executable {
 			}
 
 			acc.setUltimate(anime.getName());
-			AccountDAO.saveAccount(acc);
+			acc.save();
 			channel.sendMessage("✅ | Ultimate definida com sucesso!").queue();
 		}
 	}

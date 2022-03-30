@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -44,7 +44,7 @@ public class PrefixCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		String p = args[0].trim();
 
-		if (!Helper.between(p.length(), 1, 6)) {
+		if (!MathHelper.between(p.length(), 1, 6)) {
 			channel.sendMessage("❌ | O prefixo deve possuir entre 1 e 5 caracteres.").queue();
 			return;
 		}

@@ -19,10 +19,10 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 
 import javax.persistence.Embeddable;
 import java.util.Arrays;
@@ -149,7 +149,7 @@ public class Attributes {
 
 		double fac = (1 - Math.exp(-0.045 * con + -0.01 * str + -0.015 * res));
 
-		return (int) Math.max(500, Helper.roundTrunc((750 + 2500 * fac + (100 * fac) * con) * hpModif, 5));
+		return (int) Math.max(500, MiscHelper.roundTrunc((750 + 2500 * fac + (100 * fac) * con) * hpModif, 5));
 	}
 
 	public int calcMaxEnergy() {
@@ -163,7 +163,7 @@ public class Attributes {
 		}
 		if (h.getPerks().contains(Perk.TABULA_RASA)) {
 			cost += h.getInventory().stream()
-					.mapToInt(Equipment::getTier)
+					.mapToInt(Evogear::getTier)
 					.sum();
 		}
 
@@ -179,13 +179,13 @@ public class Attributes {
 	public int calcAtk() {
 		double fac = (1 - Math.exp(-0.017 * str + -0.005 * agi));
 
-		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (7.5 * fac) * str, 25));
+		return (int) Math.max(0, MiscHelper.roundTrunc(100 + 2500 * fac + (7.5 * fac) * str, 25));
 	}
 
 	public int calcDef() {
 		double fac = (1 - Math.exp(-0.022 * res + -0.0075 * agi));
 
-		return (int) Math.max(0, Helper.roundTrunc(100 + 2500 * fac + (7.5 * fac) * res, 25));
+		return (int) Math.max(0, MiscHelper.roundTrunc(100 + 2500 * fac + (7.5 * fac) * res, 25));
 	}
 
 	public int calcDodge() {

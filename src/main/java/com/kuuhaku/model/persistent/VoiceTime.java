@@ -18,19 +18,16 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.model.common.Hashable;
 import com.kuuhaku.model.persistent.id.CompositeMemberId;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 
 import javax.persistence.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.zip.CRC32;
 
 @Entity
 @Table(name = "voicetime")
 @IdClass(CompositeMemberId.class)
-public class VoiceTime implements Hashable {
+public class VoiceTime {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String uid;
@@ -85,7 +82,7 @@ public class VoiceTime implements Hashable {
 	}
 
 	public String getReadableTime() {
-		return Helper.toStringDuration(time);
+		return StringHelper.toStringDuration(time);
 	}
 
 	@Override
@@ -99,14 +96,5 @@ public class VoiceTime implements Hashable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(uid, sid);
-	}
-
-	@Override
-	public String getHash() {
-		CRC32 crc = new CRC32();
-		crc.update(sid.getBytes(StandardCharsets.UTF_8));
-		crc.update(uid.getBytes(StandardCharsets.UTF_8));
-
-		return Long.toHexString(crc.getValue());
 	}
 }

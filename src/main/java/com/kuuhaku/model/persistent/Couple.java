@@ -18,22 +18,24 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.id.CompositeMemberId;
+
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "couple")
-public class Couple {
+@Table(name = "couple_n")
+@IdClass(CompositeMemberId.class)
+public class Couple extends DAO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	private String husbando;
 
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
-	private String husbando = "";
-
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
-	private String waifu = "";
+	@Id
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	private String waifu;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime marriedAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
@@ -44,10 +46,6 @@ public class Couple {
 	}
 
 	public Couple() {
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getHusbando() {

@@ -18,14 +18,21 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.ClanDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.model.common.interfaces.Prize;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -46,16 +53,18 @@ public abstract class Drop<P> implements Prize<P> {
 	private final P prize;
 	private String captcha;
 
+	private final int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+
 	protected Drop(P prize) {
-		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
-		anime = Helper.getRandomEntry(animes);
-		tier = Helper.getRandomEntry(ClanTier.values());
-		ranked = Helper.getRandomEntry(ArrayUtils.subarray(RankedTier.values(), 1, RankedTier.values().length));
+		List<AddedAnime> animes = AddedAnime.queryAll(AddedAnime.class, "SELECT a FROM AddedAnime a WHERE a.hidden = FALSE");;
+		anime = CollectionHelper.getRandomEntry(animes);
+		tier = CollectionHelper.getRandomEntry(ClanTier.values());
+		ranked = CollectionHelper.getRandomEntry(ArrayUtils.subarray(RankedTier.values(), 1, RankedTier.values().length));
 		values = new int[]{
-				Helper.rng(1, (int) CardDAO.getTotalCards(anime.getName())),
-				Helper.rng(1, 7),
-				Helper.rng(1, (int) CardDAO.getTotalCards() / 2),
-				Helper.rng(1, MemberDAO.getHighestLevel() / 2)
+				MathHelper.rng(1, Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card c WHERE c.anime_name = :anime", anime.getName()).intValue()),
+				MathHelper.rng(1, 7),
+				MathHelper.rng(1, Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue() / 2),
+				MathHelper.rng(1, MemberDAO.getHighestLevel() / 2)
 		};
 		condition = new ArrayList<>() {{
 			add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais",
@@ -68,10 +77,10 @@ public abstract class Drop<P> implements Prize<P> {
 					u -> MemberDAO.getMembersByUid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
 			add(Pair.of("Ter até 1.000 CR",
-					u -> AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
+					u -> Account.find(Account.class, u.getId()).getBalance() <= 1000));
 
 			add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais",
-					u -> AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
+					u -> Account.find(Account.class, u.getId()).getStreak() >= values[1]));
 
 			add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase(Locale.ROOT) + " ou superior",
 					u -> {
@@ -83,7 +92,7 @@ public abstract class Drop<P> implements Prize<P> {
 			add(Pair.of("Possuir ranking " + ranked.getName() + " no Shoukan ou superior",
 					u -> MatchMakingRatingDAO.getMMR(u.getId()).getTier().ordinal() >= ranked.ordinal()));
 		}};
-		chosen = Helper.getRandomEntry(condition);
+		chosen = CollectionHelper.getRandomEntry(condition);
 		this.prize = prize;
 	}
 
@@ -105,13 +114,13 @@ public abstract class Drop<P> implements Prize<P> {
 
 	@Override
 	public String getCaptcha() {
-		return Helper.noCopyPaste(getRealCaptcha());
+		return StringHelper.noCopyPaste(getRealCaptcha());
 	}
 
 	@Override
 	public String getRealCaptcha() {
 		if (captcha == null)
-			captcha = Helper.getOr(Helper.generateRandomHash(6), String.valueOf(System.currentTimeMillis()).substring(0, 6));
+			captcha = CollectionHelper.getOr(StringHelper.generateRandomHash(6), String.valueOf(System.currentTimeMillis()).substring(0, 6));
 		return captcha;
 	}
 
@@ -127,7 +136,7 @@ public abstract class Drop<P> implements Prize<P> {
 
 	@Override
 	public void awardInstead(User u, int prize) {
-		Account acc = AccountDAO.getAccount(u.getId());
+		Account acc = Account.find(Account.class, u.getId());
 		acc.addCredit(prize, this.getClass());
 
 		if (acc.hasPendingQuest()) {
@@ -136,6 +145,6 @@ public abstract class Drop<P> implements Prize<P> {
 			acc.setDailyProgress(pg);
 		}
 
-		AccountDAO.saveAccount(acc);
+		acc.save();
 	}
 }
