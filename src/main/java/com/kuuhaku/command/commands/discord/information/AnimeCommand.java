@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.utils.AnimeRequest;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
@@ -28,6 +27,7 @@ import com.kuuhaku.model.records.anime.Anime;
 import com.kuuhaku.model.records.anime.Media;
 import com.kuuhaku.utils.Constants;
 import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.HttpHelper;
 import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.json.JSONObject;
 import com.kuuhaku.utils.json.JSONUtils;
@@ -39,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Command(
@@ -60,7 +61,17 @@ public class AnimeCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Buscando anime...").queue(m -> {
 			try {
 				String query = IOUtils.toString(FileHelper.getResourceAsStream(this.getClass(), "anilist.graphql"), StandardCharsets.UTF_8);
-				JSONObject data = AnimeRequest.getData(argsAsText, query);
+				JSONObject data = HttpHelper.post("https://graphql.anilist.co",
+						new JSONObject() {{
+							put("query", query);
+							put("variables", new JSONObject() {{
+								put("anime", argsAsText);
+							}});
+						}}, Map.of(
+								"Content-Type", "application/json; charset=UTF-8",
+								"Accept", "application/json"
+						)
+				);
 
 				try {
 					Anime anime = JSONUtils.fromJSON(data.toString(), Anime.class);
@@ -106,7 +117,7 @@ public class AnimeCommand implements Executable {
 				} catch (IllegalStateException | IllegalArgumentException e) {
 					m.editMessage(I18n.getString("err_anime-not-found")).queue();
 					MiscHelper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
-					MiscHelper.logger(this.getClass()).warn(data.toString());
+					MiscHelper.logger(this.getClass()).debug(data.toString());
 				}
 			} catch (IOException e) {
 				MiscHelper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
