@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records.embed;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import java.awt.*;
 import java.util.List;
@@ -44,6 +44,6 @@ public record Embed(Title title,
 
 	@Override
 	public Boolean showDate() {
-		return Helper.getOr(showDate, false);
+		return CollectionHelper.getOr(showDate, false);
 	}
 }

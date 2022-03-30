@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -49,9 +48,9 @@ public class BiographyCommand implements Executable {
 
 		String text = String.join(" ", args);
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		acc.setBio(text);
-		AccountDAO.saveAccount(acc);
+		acc.save();
 		if (text.length() > 0) channel.sendMessage("✅ | Biografia definida com sucesso!").queue();
 		else channel.sendMessage("✅ | Biografia limpa com sucesso!").queue();
 	}

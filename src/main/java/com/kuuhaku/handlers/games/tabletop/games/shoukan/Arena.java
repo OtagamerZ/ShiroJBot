@@ -24,9 +24,9 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.utils.BondedList;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.NContract;
+import com.kuuhaku.utils.collections.BondedList;
+import com.kuuhaku.utils.helpers.*;
+import com.kuuhaku.utils.functional.NContract;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -44,7 +44,7 @@ public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, BondedList<Drawable>> graveyard;
 	private final BondedList<Drawable> banned;
-	private final BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
+	private final BufferedImage back = FileHelper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
 	private final BufferedImage front;
 	private Field field = null;
 	private boolean updateField = true;
@@ -120,7 +120,7 @@ public class Arena {
 				assert back != null;
 				Graphics2D g2d = back.createGraphics();
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-				BufferedImage arena = Helper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
+				BufferedImage arena = FileHelper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
 
 				assert arena != null;
 				g2d.drawImage(arena, 0, 0, null);
@@ -159,7 +159,7 @@ public class Arena {
 
 					String name;
 					if (h instanceof TeamHand th) {
-						name = Helper.parseAndJoin(th.getNames(), n -> StringUtils.abbreviate(n, 16));
+						name = CollectionHelper.parseAndJoin(th.getNames(), n -> StringUtils.abbreviate(n, 16));
 					} else {
 						name = StringUtils.abbreviate(h.getUser().getName(), 32);
 					}
@@ -181,7 +181,7 @@ public class Arena {
 						Profile.printCenteredString(name, 1253, 499, 998, g2d);
 
 					g2d.setBackground(Color.BLACK);
-					BufferedImage broken = Helper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
+					BufferedImage broken = FileHelper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
 					for (int i = 0; i < value.size(); i++) {
 						SlotColumn c = value.get(i);
 						switch (key) {
@@ -195,11 +195,11 @@ public class Arena {
 									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 372, null);
+											g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 372, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 372, null);
+											g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 372, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 372, null);
+											g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 372, null);
 									}
 
 									if (d.getHero() != null) {
@@ -212,7 +212,7 @@ public class Arena {
 								if (c.isUnavailable()) {
 									g2d.drawImage(broken, 499 + (257 * i), 0, null);
 								} else if (c.getBottom() != null) {
-									Equipment d = c.getBottom();
+									Evogear d = c.getBottom();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 								}
 							}
@@ -226,11 +226,11 @@ public class Arena {
 									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 998, null);
+											g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 998, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 998, null);
+											g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 998, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 998, null);
+											g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 998, null);
 									}
 
 									if (d.getHero() != null) {
@@ -243,7 +243,7 @@ public class Arena {
 								if (c.isUnavailable()) {
 									g2d.drawImage(broken, 499 + (257 * i), 1400, null);
 								} else if (c.getBottom() != null) {
-									Equipment d = c.getBottom();
+									Evogear d = c.getBottom();
 									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
 								}
 							}
@@ -295,7 +295,7 @@ public class Arena {
 							Integer[] count = {0, 0, 0};
 							for (Drawable d : grv) {
 								if (d instanceof Champion) count[0]++;
-								else if (d instanceof Equipment) count[1]++;
+								else if (d instanceof Evogear) count[1]++;
 								else count[2]++;
 							}
 
@@ -321,7 +321,7 @@ public class Arena {
 						}
 
 						if (h.getLockTime() > 0) {
-							BufferedImage lock = Helper.getResourceAsImage(this.getClass(), "shoukan/locked.png");
+							BufferedImage lock = FileHelper.getResourceAsImage(this.getClass(), "shoukan/locked.png");
 							g2d.drawImage(lock,
 									key == Side.TOP ? 137 : 1889,
 									key == Side.TOP ? 193 : 1206, null);
@@ -361,7 +361,7 @@ public class Arena {
 			for (int i = 0; i < lockNames.length; i++) {
 				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
 				BufferedImage icon;
-				icon = Helper.getResourceAsImage(this.getClass(), "shoukan/" + name + ".png");
+				icon = FileHelper.getResourceAsImage(this.getClass(), "shoukan/" + name + ".png");
 				g2d.drawImage(icon, 919 + (i * 166), 835, null);
 				if (locks.get(lockNames[i]) > 0)
 					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 860 + g2d.getFontMetrics().getHeight() / 2, g2d);
@@ -370,9 +370,9 @@ public class Arena {
 			g2d.dispose();
 
 			assert back != null;
-			return Helper.applyOverlay(back, front);
+			return ImageHelper.applyOverlay(back, front);
 		} catch (NullPointerException | InterruptedException | ExecutionException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
 	}
@@ -392,11 +392,11 @@ public class Arena {
 
 				String path = c.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 				if (c.isBuffed())
-					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 17 + (257 * slt.getIndex()), champs - 15, null);
+					g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 17 + (257 * slt.getIndex()), champs - 15, null);
 				else if (c.isNerfed())
-					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 17 + (257 * slt.getIndex()), champs - 15, null);
+					g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 17 + (257 * slt.getIndex()), champs - 15, null);
 				else if (c.getHero() != null)
-					g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 17 + (257 * slt.getIndex()), champs - 15, null);
+					g2d.drawImage(FileHelper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 17 + (257 * slt.getIndex()), champs - 15, null);
 
 				if (c.getHero() != null) {
 					g2d.setColor(Color.orange);
@@ -405,7 +405,7 @@ public class Arena {
 				}
 			}
 
-			Equipment e = slt.getBottom();
+			Evogear e = slt.getBottom();
 			if (e != null) {
 				g2d.drawImage(e.drawCard(false), 32 + (257 * slt.getIndex()), evos, null);
 			}
@@ -427,7 +427,7 @@ public class Arena {
 		g2d.drawImage(arena, 0, 370, null);
 		for (int i = 0; i < hs.size(); i++) {
 			BufferedImage h = hs.get(i).render();
-			h = Helper.scaleAndCenterImage(h, bi.getWidth(), h.getHeight());
+			h = ImageHelper.scaleAndCenterImage(h, bi.getWidth(), h.getHeight());
 
 			g2d.drawImage(h, bi.getWidth(), i == 0 ? 370 + arena.getHeight() + 10 : 10, null);
 		}

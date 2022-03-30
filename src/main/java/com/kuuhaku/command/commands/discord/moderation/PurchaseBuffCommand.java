@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -30,8 +29,9 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.guild.Buff;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -51,13 +51,13 @@ public class PurchaseBuffCommand implements Executable {
 
     @Override
     public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        Account acc = AccountDAO.getAccount(author.getId());
+        Account acc = Account.find(Account.class, author.getId());
 
         if (args.length < 2) {
             EmbedBuilder eb = new ColorlessEmbedBuilder()
                     .setTitle(":level_slider: | Melhorias de servidor")
                     .setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.")
-                    .setFooter("Seus CR: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+                    .setFooter("Seus CR: " + StringHelper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
             for (BuffType type : BuffType.values()) {
                 XStringBuilder sb = new XStringBuilder();
@@ -65,7 +65,7 @@ public class PurchaseBuffCommand implements Executable {
                     sb.appendNewLine("**Tier %s** (%s CR): `+%s%% %s` (%s dias)".formatted(
                             i,
                             type.getPrice(i),
-                            Helper.roundToString(type.getPowerMult() * i * 100, 2),
+                            MathHelper.roundToString(type.getPowerMult() * i * 100, 2),
                             switch (type) {
                                 case XP -> "ganho de XP";
                                 case CARD -> "chance de aparecer cartas";
@@ -93,7 +93,7 @@ public class PurchaseBuffCommand implements Executable {
 
         try {
             int tier = Integer.parseInt(args[1]);
-            if (!Helper.between(tier, 1, 4)) {
+            if (!MathHelper.between(tier, 1, 4)) {
                 channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3.").queue();
                 return;
             }
@@ -113,7 +113,7 @@ public class PurchaseBuffCommand implements Executable {
             }
 
             GuildDAO.updateGuildSettings(gc);
-            AccountDAO.saveAccount(acc);
+            acc.save();
             channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + TimeUnit.DAYS.convert(sb.getTime(), TimeUnit.MILLISECONDS) + " dias).").queue();
         } catch (IllegalArgumentException e) {
             channel.sendMessage("❌ | O tipo da melhoria deve ser `xp`, `card`, `drop` ou `foil`.").queue();

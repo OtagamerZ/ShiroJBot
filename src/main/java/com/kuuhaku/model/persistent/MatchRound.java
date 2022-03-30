@@ -18,15 +18,15 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.DrawableDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.utils.JSONArray;
+import com.kuuhaku.utils.json.JSONArray;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -154,25 +154,25 @@ public class MatchRound {
 	public List<Champion> getChampions() {
 		return new JSONArray(champions).stream()
 				.map(String::valueOf)
-				.collect(Collectors.collectingAndThen(Collectors.toList(), CardDAO::getChampions));
+				.collect(Collectors.collectingAndThen(Collectors.toList(), Champion::getChampions));
 	}
 
 
-	public List<Equipment> getEvogears() {
+	public List<Evogear> getEvogears() {
 		return new JSONArray(evogears).stream()
 				.map(String::valueOf)
-				.collect(Collectors.collectingAndThen(Collectors.toList(), CardDAO::getEquipments));
+				.collect(Collectors.collectingAndThen(Collectors.toList(), Evogear::getEvogears));
 	}
 
 	public List<Drawable> getHand() {
 		return new JSONArray(hand).stream()
 				.map(String::valueOf)
-				.collect(Collectors.collectingAndThen(Collectors.toList(), CardDAO::getDrawables));
+				.collect(Collectors.collectingAndThen(Collectors.toList(), DrawableDAO::getDrawables));
 	}
 
 	public List<Drawable> getDeque() {
 		return new JSONArray(deque).stream()
 				.map(String::valueOf)
-				.collect(Collectors.collectingAndThen(Collectors.toList(), CardDAO::getDrawables));
+				.collect(Collectors.collectingAndThen(Collectors.toList(), DrawableDAO::getDrawables));
 	}
 }

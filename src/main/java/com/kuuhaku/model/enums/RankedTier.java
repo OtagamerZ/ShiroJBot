@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -92,11 +92,11 @@ public enum RankedTier {
 	}
 
 	public RankedTier getNext() {
-		return Helper.getNext(this, values());
+		return CollectionHelper.getNext(this, values());
 	}
 
 	public RankedTier getPrevious() {
-		return Helper.getPrevious(this, values());
+		return CollectionHelper.getPrevious(this, values());
 	}
 
 	public static String getTierName(int tier, boolean enumName) {

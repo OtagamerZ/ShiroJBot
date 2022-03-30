@@ -21,7 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -33,7 +33,7 @@ public class KawaiponDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return Helper.getOr(em.find(Kawaipon.class, id), new Kawaipon(id));
+			return CollectionHelper.getOr(em.find(Kawaipon.class, id), new Kawaipon(id));
 		} finally {
 			em.close();
 		}

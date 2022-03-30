@@ -19,8 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArcadeMode;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
@@ -31,9 +29,9 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.BondedList;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.InfiniteList;
+import com.kuuhaku.utils.collections.BondedList;
+import com.kuuhaku.utils.collections.InfiniteList;
+import com.kuuhaku.utils.helpers.*;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -92,7 +90,7 @@ public class TeamHand extends Hand {
 				hero = null;
 			}
 
-			Account acc = AccountDAO.getAccount(user.getId());
+			Account acc = Account.find(Account.class, user.getId());
 			this.users.add(user.getId());
 			this.accs.add(acc);
 			this.heroes.add(hero);
@@ -102,22 +100,30 @@ public class TeamHand extends Hand {
 
 				if (getCombo().getRight() == Race.DIVINITY) {
 					if (d instanceof Champion c && !c.hasEffect() && !c.isFusion()) {
-						String[] de = CardDAO.getRandomEffect(c.getMana());
+						String[] de = Card.queryNative(String[].class, """
+								SELECT c.description
+									 , c.effect
+								FROM Champion c
+								WHERE c.fusion = false
+								AND c.effect IS NOT NULL
+								AND c.mana = :mana
+								ORDER BY RANDOM()
+								""", c.getMana());
 						c.setAltDescription(de[0]);
 						c.setAltEffect(de[1]);
 					}
 				}
 			};
 
-			boolean bestial = Helper.equalsAny(Race.BESTIAL, combo.getLeft(), combo.getRight());
+			boolean bestial = LogicHelper.equalsAny(Race.BESTIAL, combo.getLeft(), combo.getRight());
 			List<Drawable> extra = new ArrayList<>();
 			BondedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)
 					.map(Drawable::copy)
 					.peek(d -> {
 						if (bestial) {
-							if (Helper.chance(25)) {
-								if (combo.getLeft() == Race.BESTIAL && d instanceof Equipment) {
+							if (MathHelper.chance(25)) {
+								if (combo.getLeft() == Race.BESTIAL && d instanceof Evogear) {
 									extra.add(d.copy());
 								} else if (d instanceof Champion) {
 									extra.add(d.copy());
@@ -133,9 +139,9 @@ public class TeamHand extends Hand {
 			BondedList<Drawable> destinyDeck = new BondedList<>(bonding);
 
 			if (game.getRules().noEquip())
-				deque.removeIf(d -> d instanceof Equipment e && !e.isSpell());
+				deque.removeIf(d -> d instanceof Evogear e && !e.isSpell());
 			if (game.getRules().noSpell())
-				deque.removeIf(d -> d instanceof Equipment e && e.isSpell());
+				deque.removeIf(d -> d instanceof Evogear e && e.isSpell());
 			if (game.getRules().noField())
 				deque.removeIf(d -> d instanceof Field);
 
@@ -144,35 +150,35 @@ public class TeamHand extends Hand {
 					for (Drawable d : deque) {
 						if (d instanceof Champion c) {
 							c.addCurse("""
-								import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger
-																
-								if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-									int rng = Math.round(Math.random() * 100) as int
-									if (rng < 25) {
-										Hand h = ep.getHands().get(ep.getSide())
-										h.setHp(h.getHp() / 2)
-									} else if (rng < 50) {
-										Hand h = ep.getHands().get(ep.getSide().getOther())
-										h.setHp(h.getHp() / 2)
+									import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger
+																	
+									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
+										int rng = Math.round(Math.random() * 100) as int
+										if (rng < 25) {
+											Hand h = ep.getHands().get(ep.getSide())
+											h.setHp(h.getHp() / 2)
+										} else if (rng < 50) {
+											Hand h = ep.getHands().get(ep.getSide().getOther())
+											h.setHp(h.getHp() / 2)
+										}
 									}
-								}
-								""");
+									""");
 						}
 					}
 				}
 				case BLACKROCK -> {
 					deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
-						Champion c = CardDAO.getChampion(name);
+						Champion c = Champion.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));
 					}
 				}
-				case INSTAKILL -> deque.removeIf(d -> d instanceof Equipment e && e.hasEffect());
+				case INSTAKILL -> deque.removeIf(d -> d instanceof Evogear e && e.hasEffect());
 				case CARDMASTER -> {
 					deque.clear();
-					deque.addAll(CardDAO.getAllChampions(false));
-					deque.addAll(CardDAO.getAllAvailableEquipments());
-					deque.addAll(CardDAO.getAllAvailableFields());
+					deque.addAll(Champion.getChampions(false));
+					deque.addAll(Evogear.getEvogears(false));
+					deque.addAll(Field.getFields(false));
 				}
 			}
 
@@ -229,13 +235,13 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Evogear || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
 			else {
 				Drawable dr = getRealDeque().removeFirst().copy();
 				cards.add(dr);
 
-				if (dr instanceof Equipment e) {
+				if (dr instanceof Evogear e) {
 					if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
 					else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
@@ -258,7 +264,7 @@ public class TeamHand extends Hand {
 		List<Drawable> cards = getCards();
 
 		if (destinyDeck.size() > 0) {
-			Drawable dr = Helper.getRandomEntry(destinyDeck);
+			Drawable dr = CollectionHelper.getRandomEntry(destinyDeck);
 			destinyDeck.remove(dr);
 			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
@@ -274,13 +280,13 @@ public class TeamHand extends Hand {
 			List<Drawable> cards = getCards();
 
 			Drawable dr;
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Evogear || d instanceof Field).count() == 4 && getRealDeque().stream().anyMatch(d -> d instanceof Champion))
 				dr = drawChampion();
 			else {
 				dr = getRealDeque().removeFirst();
 				cards.add(dr.copy());
 
-				if (dr instanceof Equipment e) {
+				if (dr instanceof Evogear e) {
 					if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 						addMana(1);
 					else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
@@ -305,7 +311,7 @@ public class TeamHand extends Hand {
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
-			if (dr instanceof Equipment e) {
+			if (dr instanceof Evogear e) {
 				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
 				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
@@ -330,7 +336,7 @@ public class TeamHand extends Hand {
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
-			if (dr instanceof Equipment e) {
+			if (dr instanceof Evogear e) {
 				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
 				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
@@ -354,7 +360,7 @@ public class TeamHand extends Hand {
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
-			if (dr instanceof Equipment e) {
+			if (dr instanceof Evogear e) {
 				if (e.isSpell() && combo.getLeft() == Race.MYSTICAL)
 					addMana(1);
 				else if (!e.isSpell() && combo.getLeft() == Race.MACHINE)
@@ -403,7 +409,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && !e.isSpell()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Evogear e && !e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -423,7 +429,7 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Equipment e && e.isSpell()).findFirst().orElseThrow();
+			Drawable dr = getRealDeque().stream().filter(c -> c instanceof Evogear e && e.isSpell()).findFirst().orElseThrow();
 			getRealDeque().remove(dr);
 			cards.add(dr.copy());
 
@@ -443,8 +449,8 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 			Drawable dr = getRealDeque().stream()
-					.filter(c -> c instanceof Equipment e && !e.isSpell())
-					.max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef()))
+					.filter(c -> c instanceof Evogear e && !e.isSpell())
+					.max(Comparator.comparingInt(c -> attack ? ((Evogear) c).getAtk() : ((Evogear) c).getDef()))
 					.orElseThrow();
 
 			getRealDeque().remove(dr);
@@ -517,7 +523,7 @@ public class TeamHand extends Hand {
 	}
 
 	public User getUser() {
-		User u = Main.getInfo().getUserByID(users.getCurrent());
+		User u = Main.getUserByID(users.getCurrent());
 		if (!u.getId().equals(users.getCurrent())) return getUser();
 
 		return u;
@@ -529,7 +535,7 @@ public class TeamHand extends Hand {
 
 	public InfiniteList<User> getUsers() {
 		return users.stream()
-				.map(Main.getInfo()::getUserByID)
+				.map(Main::getUserByID)
 				.collect(Collectors.toCollection(InfiniteList::new));
 	}
 
@@ -589,13 +595,13 @@ public class TeamHand extends Hand {
 				).collect(Collectors.toList());
 	}
 
-	public List<Equipment> getSortedEquipments() {
+	public List<Evogear> getSortedEquipments() {
 		return getAvailableCards().stream()
-				.filter(d -> d instanceof Equipment)
-				.map(d -> (Equipment) d)
-				.sorted(Comparator.comparingInt(Equipment::getMana)
-						.thenComparing(Equipment::getAtk)
-						.thenComparing(Equipment::getDef)
+				.filter(d -> d instanceof Evogear)
+				.map(d -> (Evogear) d)
+				.sorted(Comparator.comparingInt(Evogear::getMana)
+						.thenComparing(Evogear::getAtk)
+						.thenComparing(Evogear::getDef)
 				).collect(Collectors.toList());
 	}
 
@@ -649,9 +655,9 @@ public class TeamHand extends Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Escolha uma carta para jogar (digite a posição da carta na mão, no campo e se ela posicionada em modo de ataque (`A`), defesa (`D`) ou virada para baixo (`B`). Ex: `0,0,a`), mude a postura de uma carta (digite apenas a posição da carta no campo) ou use os botões na mensagem enviada para avançar o turno, comprar uma carta ou render-se.")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public void showEnemyHand() {
@@ -676,9 +682,9 @@ public class TeamHand extends Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente.")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public void showEnemyDeck(int amount) {
@@ -703,14 +709,14 @@ public class TeamHand extends Hand {
 
 		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente.")
-						.addFile(Helper.writeAndGet(bi, "hand", "png"))
+						.addFile(ImageHelper.writeAndGet(bi, "hand", "png"))
 				)
-				.queue(null, Helper::doNothing);
+				.queue(null, MiscHelper::doNothing);
 	}
 
 	public int getCardCount() {
 		return (int) getCards().stream()
-				.filter(d -> !(d instanceof Equipment e) || !e.isEffectOnly())
+				.filter(d -> !(d instanceof Evogear e) || !e.isEffectOnly())
 				.count();
 	}
 
@@ -725,6 +731,7 @@ public class TeamHand extends Hand {
 	public List<String> getNames() {
 		return List.of(getUser().getName(), getUsers().peekNext().getName());
 	}
+
 	@Override
 	public float getBaseHealingFac() {
 		return 1 + (combo.getLeft() == Race.HUMAN ? 0.25f : 0);

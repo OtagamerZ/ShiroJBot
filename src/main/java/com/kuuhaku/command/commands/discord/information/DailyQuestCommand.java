@@ -20,14 +20,14 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -45,7 +45,7 @@ public class DailyQuestCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
 		if (!acc.hasPendingQuest()) {
@@ -57,22 +57,22 @@ public class DailyQuestCommand implements Executable {
 				.setTitle("Desafios diários de " + author.getName())
 				.setThumbnail("https://static.wikia.nocookie.net/dauntless_gamepedia_en/images/6/60/Quest_Main_Available_Icon_001.png")
 				.setDescription("Completar estes desafios lhe dará CR (2000 multiplicado pela dificuldade) ou 1 gema caso a dificuldade esteja acima de 3.8x.")
-				.addField("Modificador de dificuldade", Helper.roundToString(dq.getDifficultyMod(), 1) + "x", true);
+				.addField("Modificador de dificuldade", MathHelper.roundToString(dq.getDifficultyMod(), 1) + "x", true);
 
 		for (Map.Entry<DailyTask, Integer> task : dq.getTasks().entrySet()) {
 			eb.addField(
 					task.getKey().getName(),
 					(pg.getOrDefault(task.getKey(), 0) >= task.getValue() ? "`COMPLETADO`" : "%s | Atual: %s").formatted(
 							task.getKey().getDescription().formatted(
-									Helper.separate(task.getValue()),
+									StringHelper.separate(task.getValue()),
 									switch (task.getKey()) {
 										case ANIME_TASK -> dq.getChosenAnime().toString();
 										case RACE_TASK -> dq.getChosenRace().getName();
-										case OFFMETA_TASK -> Helper.roundToString(dq.getDivergence() * 100, 1);
+										case OFFMETA_TASK -> MathHelper.roundToString(dq.getDivergence() * 100, 1);
 										default -> "";
 									}
 							),
-							Helper.separate(pg.getOrDefault(task.getKey(), 0))
+							StringHelper.separate(pg.getOrDefault(task.getKey(), 0))
 					),
 					false
 			);

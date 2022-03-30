@@ -18,7 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -38,7 +38,7 @@ public class Manager {
 
 		if (emf == null) {
 			emf = Persistence.createEntityManagerFactory("shiro_remote", props);
-			Helper.logger(Manager.class).info("✅ | Ligação à base de dados PostgreSQL estabelecida.");
+			MiscHelper.logger(Manager.class).info("✅ | Ligação à base de dados PostgreSQL estabelecida.");
 		}
 
 		emf.getCache().evictAll();

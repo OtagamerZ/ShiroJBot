@@ -22,8 +22,8 @@ import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -121,7 +121,7 @@ public abstract class Game {
 	}
 
 	public User getCurrent() {
-		return Helper.getOr(handler.getUserById(board.getPlayers().getCurrent().getId()), new UserById(0));
+		return CollectionHelper.getOr(handler.getUserById(board.getPlayers().getCurrent().getId()), new UserById(0));
 	}
 
 	public User getPlayerById(String id) {

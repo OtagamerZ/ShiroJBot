@@ -20,8 +20,6 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.BountyQuestDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
@@ -34,8 +32,8 @@ import com.kuuhaku.model.enums.Reward;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.BountyQuest;
 import com.kuuhaku.model.records.BountyInfo;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -63,14 +61,14 @@ public class BountyRewardCommand implements Executable {
 		}
 
 		BountyInfo info = h.getQuest();
-		BountyQuest q = BountyQuestDAO.getBounty(info.id());
+		BountyQuest q = BountyQuest.find(BountyQuest.class, info.id());
 
 		int lvl = h.getLevel();
 		int diff = q.getDifficulty().getValue();
-		double modDiff = Helper.prcnt(diff - info.diff(), diff);
+		double modDiff = MathHelper.prcnt(diff - info.diff(), diff);
 
 		EmbedBuilder eb = new EmbedBuilder();
-		if (info.diff() == 0 || Helper.chance(100 * modDiff)) {
+		if (info.diff() == 0 || MathHelper.chance(100 * modDiff)) {
 			eb.setColor(Color.green);
 
 			boolean padoru = Event.getCurrent() == Event.XMAS;
@@ -95,8 +93,8 @@ public class BountyRewardCommand implements Executable {
 			boolean opt = h.getPerks().contains(Perk.OPTIMISTIC);
 			int expXp = (int) Math.round(info.rewards().getOrDefault(Reward.XP, 0) / 2d * (opt ? 1.25 : 1));
 
-			if (expXp > 0 && Helper.chance(66)) {
-				expXp = Helper.rng(expXp);
+			if (expXp > 0 && MathHelper.chance(66)) {
+				expXp = MathHelper.rng(expXp);
 
 				if (expXp > 0) {
 					h.setXp(h.getXp() + expXp);
@@ -110,7 +108,7 @@ public class BountyRewardCommand implements Executable {
 			boolean pes = h.getPerks().contains(Perk.PESSIMISTIC);
 			Set<Danger> dangers = q.getDangers();
 			for (Danger danger : dangers) {
-				if (Helper.chance(50 - (pes ? 25 : 0))) {
+				if (MathHelper.chance(50 - (pes ? 25 : 0))) {
 					eb.addField(danger.toString(), danger.apply(h), true);
 				}
 			}
@@ -119,7 +117,7 @@ public class BountyRewardCommand implements Executable {
 			if (!debuffs.isEmpty()) {
 				XStringBuilder sb = new XStringBuilder();
 				for (Debuff debuff : debuffs) {
-					if (Helper.chance(50 - (pes ? 25 : 0))) {
+					if (MathHelper.chance(50 - (pes ? 25 : 0))) {
 						sb.appendNewLine("- " + debuff.getName());
 						h.addDebuff(debuff);
 					}
@@ -129,7 +127,7 @@ public class BountyRewardCommand implements Executable {
 			}
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		boolean save = false;
 
 		if (h.getLevel() >= 10) {
@@ -138,7 +136,7 @@ public class BountyRewardCommand implements Executable {
 			save = acc.getAchievements().add(Achievement.LEGENDARY_HERO);
 		}
 
-		if (save) AccountDAO.saveAccount(acc);
+		if (save) acc.save();
 
 		if (!h.hasDied() && h.getLevel() > lvl) {
 			h.setEnergy(h.getMaxEnergy());

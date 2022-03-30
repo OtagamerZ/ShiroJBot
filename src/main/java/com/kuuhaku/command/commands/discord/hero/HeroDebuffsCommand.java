@@ -27,7 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -65,7 +65,7 @@ public class HeroDebuffsCommand implements Executable {
 			Debuff debuff = d.getDebuff();
 			eb.addField(
 					debuff.getName(),
-					debuff.getDescription() + "\n**Expira:** " + Helper.TIMESTAMP.formatted(d.getExpiration().toEpochSecond()),
+					debuff.getDescription() + "\n**Expira:** " + Constants.TIMESTAMP.formatted(d.getExpiration().toEpochSecond()),
 					false
 			);
 		}

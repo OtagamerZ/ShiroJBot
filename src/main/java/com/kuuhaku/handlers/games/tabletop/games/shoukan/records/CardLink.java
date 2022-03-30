@@ -1,11 +1,12 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.records;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.CardType;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,8 +22,8 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 		throw new ClassCastException("Wrong Drawable type: " + linked.getClass().getSimpleName() + " " + linked.getCard().getName() + ".");
 	}
 
-	public Equipment asEquipment() {
-		if (linked instanceof Equipment e)
+	public Evogear asEquipment() {
+		if (linked instanceof Evogear e)
 			return e;
 
 		throw new ClassCastException("Wrong Drawable type: " + linked.getClass().getSimpleName() + " " + linked.getCard().getName() + ".");
@@ -41,7 +42,7 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 
 	public boolean isInvalid() {
 		try {
-			if (linked == null || (!Helper.between(getIndex(), 0, 5) && getIndex() != -1)) return true;
+			if (linked == null || (!MathHelper.between(getIndex(), 0, 5) && getIndex() != -1)) return true;
 			else if (linked.getSide() != self.getSide()) return true;
 			else if (isFake()) return false;
 
@@ -54,16 +55,16 @@ public record CardLink(AtomicInteger index, Drawable linked, Drawable self) {
 
 			return !linked.equals(d);
 		} catch (IndexOutOfBoundsException e) {
-			Helper.logger(this.getClass()).error(e + ": [" + getIndex() + ", " + linked.getCard().getId() + "]");
+			MiscHelper.logger(this.getClass()).error(e + ": [" + getIndex() + ", " + linked.getCard().getId() + "]");
 			return true;
 		}
 	}
 
 	public void sync() {
 		if (linked instanceof Champion c) {
-			c.link((Equipment) self);
+			c.link((Evogear) self);
 		} else {
-			((Equipment) linked).link((Champion) self);
+			((Evogear) linked).link((Champion) self);
 		}
 	}
 

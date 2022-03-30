@@ -20,11 +20,10 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,8 +51,8 @@ public class TransferCommand implements Executable {
 			return;
 		}
 
-		Account from = AccountDAO.getAccount(author.getId());
-		Account to = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+		Account from = Account.find(Account.class, author.getId());
+		Account to = Account.find(Account.class, message.getMentionedUsers().get(0).getId());
 
 		int value = Integer.parseInt(args[1]);
 
@@ -68,9 +67,9 @@ public class TransferCommand implements Executable {
 		to.addCredit(value, this.getClass());
 		from.removeCredit(value, this.getClass());
 
-		AccountDAO.saveAccount(to);
-		AccountDAO.saveAccount(from);
+		to.save();
+		from.save();
 
-		channel.sendMessage("✅ | **" + Helper.separate(value) + "** CR transferidos com sucesso!").queue();
+		channel.sendMessage("✅ | **" + StringHelper.separate(value) + "** CR transferidos com sucesso!").queue();
 	}
 }

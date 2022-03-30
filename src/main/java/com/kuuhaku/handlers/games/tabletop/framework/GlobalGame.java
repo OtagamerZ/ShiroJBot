@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
@@ -31,8 +30,9 @@ import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.MatchRound;
 import com.kuuhaku.model.records.MatchInfo;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -161,7 +161,7 @@ public abstract class GlobalGame {
 	}
 
 	public User getCurrent() {
-		return Helper.getOr(handler.getUserById(board.getPlayers().getCurrent().getId()), new UserById(0));
+		return CollectionHelper.getOr(handler.getUserById(board.getPlayers().getCurrent().getId()), new UserById(0));
 	}
 
 	public User getPlayerById(String id) {
@@ -225,7 +225,7 @@ public abstract class GlobalGame {
 			List<MatchInfo> stats = List.copyOf(history.getStats().values());
 			for (MatchInfo stat : stats) {
 				MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(stat.id());
-				long theirMMR = Helper.getAverageMMR(
+				long theirMMR = MatchMakingRating.getAverageMMR(
 						stats.stream()
 								.filter(mi -> mi.side() != stat.side())
 								.map(MatchInfo::id)
@@ -235,13 +235,13 @@ public abstract class GlobalGame {
 				long mmr = Math.round(250 * stat.manaEff() + (125 * stat.damageEff() + 125 * stat.sustainEff()));
 
 				if (stat.winner()) {
-					mmr *= Helper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
+					mmr *= MathHelper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
 
 					yourMMR.addMMR(mmr / (wo ? 2 : 1), theirMMR, ranked);
 					yourMMR.addWin();
 					if (ranked) yourMMR.increaseRankPoints(theirMMR);
 
-					Account acc = AccountDAO.getAccount(yourMMR.getUid());
+					Account acc = Account.find(Account.class, yourMMR.getUid());
 					if (acc.hasPendingQuest() && !wo) {
 						Map<DailyTask, Integer> pg = acc.getDailyProgress();
 						pg.merge(DailyTask.WINS_TASK, 1, Integer::sum);
@@ -253,10 +253,10 @@ public abstract class GlobalGame {
 						}
 
 						acc.setDailyProgress(pg);
-						AccountDAO.saveAccount(acc);
+						acc.save();
 					}
 				} else {
-					mmr /= Helper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
+					mmr /= MathHelper.clamp(stat.manaEff() / 2 + (stat.damageEff() + stat.sustainEff()) / 2, 0.5, 2);
 
 					yourMMR.removeMMR(mmr * (wo ? 2 : 1), theirMMR, ranked);
 					yourMMR.addLoss();

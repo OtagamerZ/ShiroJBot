@@ -20,14 +20,12 @@ package com.kuuhaku.command.commands.discord.hero;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -58,9 +56,9 @@ public class EquipHeroCommand implements Executable {
 		}
 
 		String name = args[0];
-		Equipment e = CardDAO.getEquipment(name);
+		Evogear e = Evogear.getEvogear(name);
 		if (e == null) {
-			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(name, CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + StringHelper.didYouMean(name, Evogear.getEvogears().stream().map(d -> d.getCard().getId()).toList()) + "`?").queue();
 			return;
 		} else if (!dk.getEquipments().contains(e)) {
 			channel.sendMessage("❌ | Você não pode equipar uma carta que não possui!").queue();

@@ -24,8 +24,9 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -57,7 +58,7 @@ public class RegenRulesCommand implements Executable {
 			}
 
 			String text;
-			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
+			if (guild.getId().equals(ShiroInfo.getSupportServerId()))
 				text = """
 						%s
 										
@@ -73,22 +74,22 @@ public class RegenRulesCommand implements Executable {
 				return;
 			}
 
-			if (guild.getId().equals(ShiroInfo.getSupportServerID())) {
-				channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").complete();
-				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
+			if (guild.getId().equals(ShiroInfo.getSupportServerId())) {
+				channel.sendFile(ImageHelper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").complete();
+				channel.sendFile(ImageHelper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
 				channel.sendMessage("Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
 			} else {
 				if (guild.getBannerUrl() != null)
-					channel.sendFile(Helper.getImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=1024" : null), "title.png").complete();
-				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
+					channel.sendFile(ImageHelper.getImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=1024" : null), "title.png").complete();
+				channel.sendFile(ImageHelper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
 				channel.sendMessage("Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
 			}
 
-			channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
+			channel.sendFile(ImageHelper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
 
 			channel.sendMessage(text).complete();
 		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

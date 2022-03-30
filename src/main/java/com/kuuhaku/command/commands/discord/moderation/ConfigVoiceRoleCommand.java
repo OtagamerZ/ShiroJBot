@@ -30,8 +30,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.VoiceRole;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -88,17 +90,17 @@ public class ConfigVoiceRoleCommand implements Executable {
 			}
 			GuildDAO.updateGuildSettings(gc);
 
-			List<List<Long>> chunks = Helper.chunkify(fields.keySet(), 10);
+			List<List<Long>> chunks = CollectionHelper.chunkify(fields.keySet(), 10);
 			for (List<Long> chunk : chunks) {
 				eb.clearFields();
 				for (long time : chunk)
-					eb.addField("Tempo: " + Helper.toStringDuration(time), fields.get(time), true);
+					eb.addField("Tempo: " + StringHelper.toStringDuration(time), fields.get(time), true);
 
 				pages.add(new InteractPage(eb.build()));
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}
@@ -110,15 +112,15 @@ public class ConfigVoiceRoleCommand implements Executable {
 				return;
 			}
 
-			long time = args.length > 1 ? Helper.stringToDurationMillis(Arrays.stream(args).skip(1).collect(Collectors.joining(" "))) : -1;
-			if (Helper.between(time, 0, 60000)) {
+			long time = args.length > 1 ? StringHelper.stringToDurationMillis(Arrays.stream(args).skip(1).collect(Collectors.joining(" "))) : -1;
+			if (MathHelper.between(time, 0, 60000)) {
 				channel.sendMessage("❌ | A duração mínima é 1 minuto.").queue();
 				return;
 			}
 
 			gc.addVoiceRole(r.getId(), time);
 
-			channel.sendMessage("✅ | Membros com tempo em canais de voz maior que " + Helper.toStringDuration(time) + " receberão o cargo `" + r.getName() + "`!").queue();
+			channel.sendMessage("✅ | Membros com tempo em canais de voz maior que " + StringHelper.toStringDuration(time) + " receberão o cargo `" + r.getName() + "`!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-level")).queue();

@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -41,7 +41,7 @@ public class UnlockChannelCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!Helper.hasPermission(member, Permission.MANAGE_CHANNEL, channel)) {
+		if (!MiscHelper.hasPermission(member, Permission.MANAGE_CHANNEL, channel)) {
 			channel.sendMessage("❌ | Você não possui permissão para gerenciar canais.").queue();
 			return;
 		}
@@ -60,12 +60,12 @@ public class UnlockChannelCommand implements Executable {
 			RestAction.allOf(acts)
 					.mapToResult()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		} else {
 			channel.getManager()
 					.sync()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, Helper::doNothing);
+					.queue(null, MiscHelper::doNothing);
 		}
 	}
 }

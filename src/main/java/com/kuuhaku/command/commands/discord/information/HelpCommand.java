@@ -31,8 +31,10 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,6 +56,7 @@ import java.util.stream.Collectors;
 		Permission.MESSAGE_ADD_REACTION
 })
 public class HelpCommand implements Executable {
+	private static final String HOME = "674261700366827539";
 	private static final String STR_COMMAND_LIST_TITLE = "str_command-list-title";
 	private static final String STR_COMMAND_LIST_DESCRIPTION = "str_command-list-description";
 
@@ -65,7 +68,7 @@ public class HelpCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && args.length == 0) {
+		if (MiscHelper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && args.length == 0) {
 			eb.setTitle(I18n.getString(STR_COMMAND_LIST_TITLE));
 			eb.setDescription(
 					I18n.getString(STR_COMMAND_LIST_DESCRIPTION,
@@ -76,29 +79,29 @@ public class HelpCommand implements Executable {
 			);
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(guild, author))
-					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
+					eb.addField(cat.getEmote() + " | " + cat.getName(), Constants.VOID, true);
 			}
 
-			eb.addField(I18n.getString("str_tips"), Helper.VOID, true);
+			eb.addField(I18n.getString("str_tips"), Constants.VOID, true);
 
 			eb.setColor(Color.PINK);
 			eb.setFooter(ShiroInfo.getFullName(), null);
-			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
+			eb.setThumbnail(Objects.requireNonNull(Main.getShiro().getEmoteById(HOME)).getImageUrl());
 
-			categories.put(Helper.parseEmoji(Helper.HOME), new InteractPage(eb.build()));
+			categories.put(StringHelper.parseEmoji(HOME), new InteractPage(eb.build()));
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new ColorlessEmbedBuilder();
 				ceb.setTitle(cat.getName());
 				ceb.setFooter(ShiroInfo.getFullName(), null);
-				ceb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(cat.getEmoteId())).getImageUrl());
+				ceb.setThumbnail(Objects.requireNonNull(Main.getShiro().getEmoteById(cat.getEmoteId())).getImageUrl());
 
 				ceb.setDescription(I18n.getString("str_prefix", prefix, cat.getCommands().size()));
 
 				if (!cat.isEnabled(guild, author))
 					continue;
 				if (cat.getCommands().isEmpty()) {
-					ceb.addField(Helper.VOID, I18n.getString("str_empty-category", cat.getDescription()), false);
+					ceb.addField(Constants.VOID, I18n.getString("str_empty-category", cat.getDescription()), false);
 					continue;
 				}
 
@@ -107,25 +110,25 @@ public class HelpCommand implements Executable {
 						.map(cmd -> (gc.getDisabledCommands().contains(cmd.getCommand().getClass().getName()) ? "||~~`%s`~~||" : "`%s`").formatted(cmd.getName()))
 						.collect(Collectors.joining(" ▪ "));
 
-				ceb.addField(Helper.VOID, cat.getDescription() + "\n\n" + cmds, false);
-				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
-				categories.put(Helper.parseEmoji(cat.getEmoteId()), new InteractPage(ceb.build()));
+				ceb.addField(Constants.VOID, cat.getDescription() + "\n\n" + cmds, false);
+				ceb.addField(Constants.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
+				categories.put(StringHelper.parseEmoji(cat.getEmoteId()), new InteractPage(ceb.build()));
 			}
 
 			EmbedBuilder ceb = new ColorlessEmbedBuilder()
 					.setTitle(I18n.getString("str_tips-and-tricks"))
 					.setFooter(ShiroInfo.getFullName(), null)
-					.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getShiroShards().getEmoteById("684039810079522846")).getImageUrl()))
-					.addField(Helper.VOID, I18n.getString("str_quick-emote-tip", prefix), false)
-					.addField(Helper.VOID, I18n.getString("str_pagination-tip"), false)
-					.addField(Helper.VOID, I18n.getString("str_waifu-tip", prefix), false)
-					.addField(Helper.VOID, I18n.getString("str_kawaipon-tip", prefix), false)
-					.addField(Helper.VOID, I18n.getString("str_edit-message-tip", prefix), false)
-					.addField(Helper.VOID, I18n.getString("str_placeholder-tip", prefix), false);
+					.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getShiro().getEmoteById("684039810079522846")).getImageUrl()))
+					.addField(Constants.VOID, I18n.getString("str_quick-emote-tip", prefix), false)
+					.addField(Constants.VOID, I18n.getString("str_pagination-tip"), false)
+					.addField(Constants.VOID, I18n.getString("str_waifu-tip", prefix), false)
+					.addField(Constants.VOID, I18n.getString("str_kawaipon-tip", prefix), false)
+					.addField(Constants.VOID, I18n.getString("str_edit-message-tip", prefix), false)
+					.addField(Constants.VOID, I18n.getString("str_placeholder-tip", prefix), false);
 
-			categories.put(Helper.parseEmoji("684039810079522846"), new InteractPage(ceb.build()));
+			categories.put(StringHelper.parseEmoji("684039810079522846"), new InteractPage(ceb.build()));
 
-			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
+			channel.sendMessageEmbeds(eb.build()).queue(s -> Pages.categorize(s, categories, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), MiscHelper::doNothing);
 			return;
 		} else if (args.length == 0) {
 			eb.setTitle(I18n.getString(STR_COMMAND_LIST_TITLE));
@@ -149,7 +152,7 @@ public class HelpCommand implements Executable {
 			}
 
 			eb.setFooter(ShiroInfo.getFullName(), null);
-			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
+			eb.setThumbnail(Objects.requireNonNull(Main.getShiro().getEmoteById(HOME)).getImageUrl());
 
 			channel.sendMessageEmbeds(eb.build()).queue();
 			return;

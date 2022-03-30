@@ -20,12 +20,13 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
@@ -45,17 +46,17 @@ public class BackgroundCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		String img;
 		if (!argsAsText.isBlank()) img = argsAsText;
-		else img = Helper.getImageFrom(message);
+		else img = MiscHelper.getImageFrom(message);
 
 		if (img == null) {
 			channel.sendMessage(I18n.getString("err_no-image")).queue();
 			return;
-		} else if (Helper.containsAny(argsAsText, "google", "goo.gl")) {
+		} else if (LogicHelper.containsAny(argsAsText, "google", "goo.gl")) {
 			channel.sendMessage("❌ | Você pegou o link da **pesquisa do Google** bobo!").queue();
 			return;
 		}
 
-		try (InputStream is = Helper.getImage(img)) {
+		try (InputStream is = ImageHelper.getImage(img)) {
 			BufferedImage bi = ImageIO.read(is);
 			if (bi == null) {
 				channel.sendMessage(I18n.getString("err_invalid-image")).queue();
@@ -69,9 +70,9 @@ public class BackgroundCommand implements Executable {
 				return;
 			}
 
-			Account acc = AccountDAO.getAccount(author.getId());
+			Account acc = Account.find(Account.class, author.getId());
 			acc.setBackground(img);
-			AccountDAO.saveAccount(acc);
+			acc.save();
 			if (img.contains("discord"))
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
 			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();

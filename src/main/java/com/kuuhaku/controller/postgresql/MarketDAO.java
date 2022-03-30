@@ -20,7 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Market;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -139,9 +139,9 @@ public class MarketDAO {
 		if (!params[6].isBlank()) q.setParameter("foil", foil);
 		if (!params[10].isBlank()) q.setParameter("seller", seller);
 		if (!params[11].isBlank()) {
-			q.setParameter("cbase", Helper.BASE_CARD_PRICE);
-			q.setParameter("ebase", Helper.BASE_EQUIPMENT_PRICE);
-			q.setParameter("fbase", Helper.BASE_FIELD_PRICE);
+			q.setParameter("cbase", Constants.BASE_CARD_PRICE);
+			q.setParameter("ebase", Constants.BASE_EQUIPMENT_PRICE);
+			q.setParameter("fbase", Constants.BASE_FIELD_PRICE);
 		}
 
 		try {

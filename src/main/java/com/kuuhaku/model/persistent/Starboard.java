@@ -18,13 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
 import net.dv8tion.jda.api.entities.Message;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "starboard")
-public class Starboard {
+public class Starboard extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

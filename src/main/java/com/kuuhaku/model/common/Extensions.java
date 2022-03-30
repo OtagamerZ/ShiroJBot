@@ -19,7 +19,7 @@
 package com.kuuhaku.model.common;
 
 import com.github.kevinsawicki.http.HttpRequest;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 
@@ -56,6 +56,6 @@ public class Extensions {
 	}
 
 	public static boolean checkExtension(String str) {
-		return Helper.containsAny(str, list);
+		return LogicHelper.containsAny(str, list);
 	}
 }

@@ -27,8 +27,8 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -53,14 +53,14 @@ public class SnipeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		List<Message> c = List.copyOf(Main.getInfo().retrieveCache(guild).values());
+		List<Message> c = List.copyOf(Main.getInfo().getTrackedMessages(guild).values());
 		List<String> hist = channel.getHistory()
 				.retrievePast(100)
 				.complete().stream()
 				.map(Message::getId)
 				.toList();
 
-		List<List<Message>> chunks = Helper.chunkify(
+		List<List<Message>> chunks = CollectionHelper.chunkify(
 				c.stream()
 						.filter(m -> m.getChannel().getId().equals(channel.getId()))
 						.filter(m -> !hist.contains(m.getId()))
@@ -78,14 +78,14 @@ public class SnipeCommand implements Executable {
 			eb.clearFields();
 
 			for (Message msg : chunk) {
-				eb.addField("(" + Helper.TIMESTAMP.formatted(msg.getTimeCreated().toEpochSecond()) + ") " + msg.getAuthor().getAsTag() + " disse:", StringUtils.abbreviate(msg.getContentRaw(), 100), false);
+				eb.addField("(" + Constants.TIMESTAMP.formatted(msg.getTimeCreated().toEpochSecond()) + ") " + msg.getAuthor().getAsTag() + " disse:", StringUtils.abbreviate(msg.getContentRaw(), 100), false);
 			}
 
 			pages.add(new InteractPage(eb.build()));
 		}
 
 		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

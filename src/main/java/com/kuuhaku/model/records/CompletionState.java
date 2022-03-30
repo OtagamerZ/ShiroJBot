@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records;
 
-public record CompletionState(boolean normal, boolean foil) {
+public record CompletionState(String anime, boolean normal, boolean foil) {
 	public boolean any() {
 		return normal || foil;
 	}

@@ -30,8 +30,10 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -73,16 +75,16 @@ public class TournamentPlayersCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Torneio " + t.getName() + " (Chave de " + t.getSize() + ")")
-					.setColor(Helper.textToColor(t.getName()))
+					.setColor(ImageHelper.textToColor(t.getName()))
 					.setFooter("Jogadores: " + t.getParticipants().size());
 
-			List<List<Participant>> chunks = Helper.chunkify(t.getParticipants(), 10);
+			List<List<Participant>> chunks = CollectionHelper.chunkify(t.getParticipants(), 10);
 			List<Page> pages = new ArrayList<>();
 
 			for (List<Participant> chunk : chunks) {
 				eb.setDescription(chunk.stream()
 						.map(Participant::getUid)
-						.map(id -> Helper.getUsername(id) + " **(" + MatchMakingRatingDAO.getMMR(id).getTier() + ")**")
+						.map(id -> MiscHelper.getUsername(id) + " **(" + MatchMakingRatingDAO.getMMR(id).getTier() + ")**")
 						.collect(Collectors.joining("\n"))
 				);
 
@@ -90,7 +92,7 @@ public class TournamentPlayersCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(
-					s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
+					s -> Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES)
 			);
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | ID inválido.").queue();

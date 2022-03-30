@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
 
@@ -59,7 +59,7 @@ public class Stash {
 		this.type = CardType.KAWAIPON;
 	}
 
-	public Stash(String owner, Equipment card) {
+	public Stash(String owner, Evogear card) {
 		this.owner = owner;
 		this.card = card.getCard();
 		this.foil = false;
@@ -95,8 +95,8 @@ public class Stash {
 	@SuppressWarnings("unchecked")
 	public <T> T getCard() {
 		return (T) switch (type) {
-			case EVOGEAR -> CardDAO.getEquipment(card);
-			case FIELD -> CardDAO.getField(card);
+			case EVOGEAR -> Evogear.getEvogear(card.getId());
+			case FIELD -> Field.getField(card.getId());
 			default -> new KawaiponCard(card, foil);
 		};
 	}

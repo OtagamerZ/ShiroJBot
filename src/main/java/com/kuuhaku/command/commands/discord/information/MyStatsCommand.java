@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.information;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
@@ -34,15 +35,17 @@ import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.MatchMakingRating;
-import com.kuuhaku.model.persistent.VoiceTime;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -72,9 +75,9 @@ public class MyStatsCommand implements Executable, Slashed {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		{
-			VoiceTime vt = Helper.getOr(ShiroInfo.getShiroEvents().getVoiceTimes().get(mb.getUid() + mb.getSid()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
+			VoiceTime vt = CollectionHelper.getOr(Main.getEvents().getVoiceTimes().get(mb.getUid() + mb.getSid()), VoiceTimeDAO.getVoiceTime(author.getId(), guild.getId()));
 			if (vt.getTime() > 0)
-				eb.addField(":timer: | Tempo em canais de voz:", Helper.toStringDuration(vt.getTime()), false);
+				eb.addField(":timer: | Tempo em canais de voz:", StringHelper.toStringDuration(vt.getTime()), false);
 
 			StringBuilder badges = new StringBuilder();
 			for (Tag t : tags) {
@@ -85,7 +88,7 @@ public class MyStatsCommand implements Executable, Slashed {
 			if (mb.getLevel() >= 5)
 				eb.setThumbnail(TagIcons.getLevelEmote(mb.getLevel()).getImageUrl());
 
-			categories.put(Helper.parseEmoji("\uD83D\uDD23"), new InteractPage(eb.build()));
+			categories.put(StringHelper.parseEmoji("\uD83D\uDD23"), new InteractPage(eb.build()));
 		}
 
 		eb.clear();
@@ -94,15 +97,17 @@ public class MyStatsCommand implements Executable, Slashed {
 			boolean waifu = guild.getMembers().stream().map(Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 
 			int xp = (int) (15
-					* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
-					* Helper.getBuffMult(gc, BuffType.XP)
+					* (waifu ? Account.find(Account.class, author.getId()).getCoupleMult() : 1)
+					* MiscHelper.getBuffMult(gc, BuffType.XP)
 			);
 
-			float collection = Helper.prcnt(kp.getCards().size(), CardDAO.getTotalCards() * 2);
-			if (collection >= 1) xp *= 2;
-			else if (collection >= 0.75) xp *= 1.75;
-			else if (collection >= 0.5) xp *= 1.5;
-			else if (collection >= 0.25) xp *= 1.25;
+			int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
+			float progress = kp.getCards().size() / (total * 2f);
+
+			if (progress >= 1) xp *= 2;
+			else if (progress >= 0.75) xp *= 1.75;
+			else if (progress >= 0.5) xp *= 1.5;
+			else if (progress >= 0.25) xp *= 1.25;
 
 			String mult = """
 					**XP por mensagem:** %s (Base: 15)
@@ -112,15 +117,15 @@ public class MyStatsCommand implements Executable, Slashed {
 					"""
 					.formatted(
 							xp,
-							Helper.roundToString((3 - Helper.clamp(guild.getMemberCount() / 5000, 0, 1)) * Helper.getBuffMult(gc, BuffType.CARD), 1),
-							Helper.roundToString((2.5 - Helper.clamp(guild.getMemberCount() * 0.75f / 5000, 0, 0.75)) * Helper.getBuffMult(gc, BuffType.DROP), 1),
-							Helper.roundToString(0.5 * Helper.getBuffMult(gc, BuffType.FOIL), 1)
+							MathHelper.roundToString((3 - MathHelper.clamp(guild.getMemberCount() / 5000, 0, 1)) * MiscHelper.getBuffMult(gc, BuffType.CARD), 1),
+							MathHelper.roundToString((2.5 - MathHelper.clamp(guild.getMemberCount() * 0.75f / 5000, 0, 0.75)) * MiscHelper.getBuffMult(gc, BuffType.DROP), 1),
+							MathHelper.roundToString(0.5 * MiscHelper.getBuffMult(gc, BuffType.FOIL), 1)
 					);
 
 			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false)
 					.setThumbnail(author.getEffectiveAvatarUrl());
 
-			categories.put(Helper.parseEmoji("\uD83D\uDCC8"), new InteractPage(eb.build()));
+			categories.put(StringHelper.parseEmoji("\uD83D\uDCC8"), new InteractPage(eb.build()));
 		}
 
 		eb.clear();
@@ -155,13 +160,13 @@ public class MyStatsCommand implements Executable, Slashed {
 				eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
 			}
 
-			eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(mmr.getTier().ordinal(), true).toLowerCase(Locale.ROOT) + ".png");
+			eb.setThumbnail(Constants.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(mmr.getTier().ordinal(), true).toLowerCase(Locale.ROOT) + ".png");
 
-			categories.put(Helper.parseEmoji("\uD83D\uDCCB"), new InteractPage(eb.build()));
+			categories.put(StringHelper.parseEmoji("\uD83D\uDCCB"), new InteractPage(eb.build()));
 		}
 
-		channel.sendMessageEmbeds((MessageEmbed) categories.get(Helper.parseEmoji("\uD83D\uDD23")).getContent()).queue(s ->
-				Pages.categorize(s, categories, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
+		channel.sendMessageEmbeds((MessageEmbed) categories.get(StringHelper.parseEmoji("\uD83D\uDD23")).getContent()).queue(s ->
+				Pages.categorize(s, categories, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES)
 		);
 	}
 }

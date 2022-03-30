@@ -29,8 +29,9 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -59,7 +60,7 @@ public class TournamentCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			List<List<Tournament>> chunks = Helper.chunkify(TournamentDAO.getTournaments(), 10);
+			List<List<Tournament>> chunks = CollectionHelper.chunkify(TournamentDAO.getTournaments(), 10);
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -90,7 +91,7 @@ public class TournamentCommand implements Executable {
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(
-					s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES)
+					s -> Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES)
 			);
 			return;
 		}
@@ -105,7 +106,7 @@ public class TournamentCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Torneio " + t.getName() + " (Chave de " + t.getSize() + ")")
 					.setDescription(t.getDescription())
-					.setColor(Helper.textToColor(t.getName()))
+					.setColor(ImageHelper.textToColor(t.getName()))
 					.addField(
 							"Jogadores: " + t.getParticipants().size(),
 							t.isClosed()
@@ -135,7 +136,7 @@ public class TournamentCommand implements Executable {
 
 			if (t.isClosed()) {
 				channel.sendMessageEmbeds(eb.build())
-						.addFile(Helper.writeAndGet(t.view(), "brackets", "jpg"))
+						.addFile(ImageHelper.writeAndGet(t.view(), "brackets", "jpg"))
 						.setActionRows(ActionRow.of(
 								Button.link("https://discord.gg/9sgkzna", "Servidor")
 						))

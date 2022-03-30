@@ -20,15 +20,17 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.AnimeRequest;
+import com.kuuhaku.utils.AnimeRequest;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.records.anime.Anime;
 import com.kuuhaku.model.records.anime.Media;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
-import com.kuuhaku.utils.JSONUtils;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.json.JSONObject;
+import com.kuuhaku.utils.json.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -57,7 +59,7 @@ public class AnimeCommand implements Executable {
 
 		channel.sendMessage("<a:loading:697879726630502401> Buscando anime...").queue(m -> {
 			try {
-				String query = IOUtils.toString(Helper.getResourceAsStream(this.getClass(), "anilist.graphql"), StandardCharsets.UTF_8);
+				String query = IOUtils.toString(FileHelper.getResourceAsStream(this.getClass(), "anilist.graphql"), StandardCharsets.UTF_8);
 				JSONObject data = AnimeRequest.getData(argsAsText, query);
 
 				try {
@@ -95,7 +97,7 @@ public class AnimeCommand implements Executable {
 							.addField("Popularidade:", String.valueOf(media.popularity()), true)
 							.addField("Assista em:", "Link indisponível", true)
 							.setDescription(
-									StringUtils.abbreviate(Helper.htmlConverter.convert(media.description()), 2048)
+									StringUtils.abbreviate(Constants.HTML_CONVERTER.convert(media.description()), 2048)
 							);
 					eb.addField("Gêneros:", media.genres().stream().map(s -> "`" + s + "`").collect(Collectors.joining(", ")), false);
 
@@ -103,11 +105,11 @@ public class AnimeCommand implements Executable {
 					channel.sendMessageEmbeds(eb.build()).queue();
 				} catch (IllegalStateException | IllegalArgumentException e) {
 					m.editMessage(I18n.getString("err_anime-not-found")).queue();
-					Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
-					Helper.logger(this.getClass()).warn(data.toString());
+					MiscHelper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+					MiscHelper.logger(this.getClass()).warn(data.toString());
 				}
 			} catch (IOException e) {
-				Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}

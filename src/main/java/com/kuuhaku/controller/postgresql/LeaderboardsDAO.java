@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Leaderboards;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
@@ -75,7 +75,7 @@ public class LeaderboardsDAO {
 		q.setMaxResults(10);
 
 		try {
-			return Helper.map(Leaderboards.class, q.getResultList());
+			return CollectionHelper.map(Leaderboards.class, q.getResultList());
 		} finally {
 			em.close();
 		}
@@ -99,7 +99,7 @@ public class LeaderboardsDAO {
 		q.setMaxResults(10);
 
 		try {
-			return Helper.map(Leaderboards.class, q.getResultList());
+			return CollectionHelper.map(Leaderboards.class, q.getResultList());
 		} finally {
 			em.close();
 		}
@@ -124,7 +124,7 @@ public class LeaderboardsDAO {
 		q.setMaxResults(10);
 
 		try {
-			return Helper.map(Leaderboards.class, q.getResultList());
+			return CollectionHelper.map(Leaderboards.class, q.getResultList());
 		} finally {
 			em.close();
 		}

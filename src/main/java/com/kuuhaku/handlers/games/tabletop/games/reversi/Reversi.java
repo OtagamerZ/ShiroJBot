@@ -26,8 +26,11 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.*;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.reversi.pieces.Disk;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -78,17 +81,17 @@ public class Reversi extends Game {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					channel.sendFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 				},
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					channel.sendFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 				}
 		);
@@ -97,12 +100,12 @@ public class Reversi extends Game {
 	@Override
 	public void start() {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!")
-				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+				.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message = s;
-					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
+					Main.getEvents().addHandler(channel.getGuild(), listener);
 					Main.getInfo().setGameInProgress(listener.mutex, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -131,14 +134,14 @@ public class Reversi extends Game {
 			Spot s = Spot.of(command);
 
 			if (!((Disk) pieces.get(getCurrent().getId())).validate(getBoard(), s, null)) {
-				channel.sendMessage("❌ | Casa inválida!").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Casa inválida!").queue(null, MiscHelper::doNothing);
 				return;
 			}
 
 			if (getBoard().getPieceAt(s) == null) {
 				getBoard().setPieceAt(s, pieces.get(getCurrent().getId()));
 			} else {
-				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, MiscHelper::doNothing);
 				return;
 			}
 
@@ -153,43 +156,43 @@ public class Reversi extends Game {
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).findFirst().orElseThrow());
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
-							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
-							.queue(null, Helper::doNothing);
+							.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+							.queue(null, MiscHelper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).findFirst().orElseThrow());
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
-							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
-							.queue(null, Helper::doNothing);
+							.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+							.queue(null, MiscHelper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else {
 					close();
 					channel.sendMessage("Temos um empate!")
-							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
-							.queue(null, Helper::doNothing);
+							.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+							.queue(null, MiscHelper::doNothing);
 				}
 			} else {
 				resetTimer();
 				draw = false;
 				channel.sendMessage("Turno de %s (:white_circle: %d | :black_circle: %d).".formatted(getCurrent().getAsMention(), whiteCount, blackCount))
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+						.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							this.message = msg;
-							Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(msg, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			channel.sendMessage("❌ | Coordenada inválida.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Coordenada inválida.").queue(null, MiscHelper::doNothing);
 		}
 	}
 
 	@Override
 	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		buttons.put(Helper.parseEmoji("▶️"), wrapper -> {
+		buttons.put(StringHelper.parseEmoji("▶️"), wrapper -> {
 			int whiteCount = 0;
 			int blackCount = 0;
 			for (int i = 0; i < getBoard().getSize().getHeight(); i++) {
@@ -203,9 +206,9 @@ public class Reversi extends Game {
 					getBoard().awardWinner(this, winner.getId());
 					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
-							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 					return;
 				} else if (whiteCount < blackCount) {
@@ -213,17 +216,17 @@ public class Reversi extends Game {
 					getBoard().awardWinner(this, winner.getId());
 					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
-							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 					return;
 				} else {
 					close();
 					channel.sendMessage("Temos um empate!")
-							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+							.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 					return;
 				}
@@ -233,20 +236,20 @@ public class Reversi extends Game {
 			resetTimer();
 			draw = true;
 			channel.sendMessage("%s passou a vez, agora é você %s (:white_circle: %d | :black_circle: %d).".formatted(current.getName(), getCurrent().getAsMention(), whiteCount, blackCount))
-					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						this.message = s;
-						Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
 		});
-		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
+		buttons.put(StringHelper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 			getBoard().awardWinner(this, getBoard().getPlayers().peekNext().getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 					.queue(msg -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 					});
 		});
 

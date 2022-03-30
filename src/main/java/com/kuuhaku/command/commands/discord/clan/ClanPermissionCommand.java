@@ -29,8 +29,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -85,7 +87,7 @@ public class ClanPermissionCommand implements Executable {
 			}
 
 			MessageAction ma = channel.sendMessageEmbeds(eb.build());
-			if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
+			if (c.getIcon() != null) ma = ma.addFile(ImageHelper.writeAndGet(c.getIcon(), "icon", "png"));
 			ma.queue();
 		} else {
 			ClanHierarchy ch = ClanHierarchy.getByName(args[0]);
@@ -107,10 +109,10 @@ public class ClanPermissionCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			MessageAction ma = channel.sendMessageEmbeds(eb.build());
-			if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
+			if (c.getIcon() != null) ma = ma.addFile(ImageHelper.writeAndGet(c.getIcon(), "icon", "png"));
 			ma.queue(s -> Pages.buttonize(s,
 					new LinkedHashMap<>() {{
-						put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+						put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(1)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.ALTER_HIERARCHY);
 							if (!enabled) p.add(ClanPermission.ALTER_HIERARCHY);
@@ -118,9 +120,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 						});
-						put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+						put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(2)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.KICK);
 							if (!enabled) p.add(ClanPermission.KICK);
@@ -128,9 +130,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 						});
-						put(Helper.parseEmoji(Helper.getNumericEmoji(3)), wrapper -> {
+						put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(3)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.WITHDRAW);
 							if (!enabled) p.add(ClanPermission.WITHDRAW);
@@ -138,9 +140,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 						});
-						put(Helper.parseEmoji(Helper.getNumericEmoji(4)), wrapper -> {
+						put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(4)), wrapper -> {
 							EnumSet<ClanPermission> p = c.getPermissions(ch);
 							boolean enabled = p.contains(ClanPermission.INVITE);
 							if (!enabled) p.add(ClanPermission.INVITE);
@@ -148,9 +150,9 @@ public class ClanPermissionCommand implements Executable {
 							c.setPermissions(ch, p);
 
 							refreshPermField(eb, ch, p);
-							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							wrapper.getMessage().editMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 						});
-					}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+					}}, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 					u -> u.getId().equals(author.getId()),
 					ms -> {
 						ClanDAO.saveClan(c);

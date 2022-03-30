@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
@@ -56,7 +56,7 @@ public class DestinyCardsCommand implements Executable {
 			try {
 				Integer[] values = Arrays.stream(inds).map(Integer::parseInt).toArray(Integer[]::new);
 				for (Integer value : values) {
-					if (!Helper.between(value, 1, 37)) {
+					if (!MathHelper.between(value, 1, 37)) {
 						channel.sendMessage("❌ | Posições inválidas, elas devem ser números inteiros entre 1 e 36.").queue();
 						return;
 					}

@@ -22,14 +22,15 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.CreditItem;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -49,17 +50,17 @@ public class CreditStoreCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 
 		if (args.length < 1) {
-			Helper.generateStore(
+			MiscHelper.generateStore(
 					author,
 					channel,
 					":coin: | Loja de CR",
 					"Esta loja possui vários artefatos que podem lhe dar uma vantagem rápida em certas coisas, a um preço justo claro!",
 					Color.orange,
 					List.of(CreditItem.values()),
-					ci -> new MessageEmbed.Field("`ID: %s` | %s (%s CR)".formatted(ci.ordinal(), ci.getName(), Helper.separate(ci.getPrice())), ci.getDesc(), true)
+					ci -> new MessageEmbed.Field("`ID: %s` | %s (%s CR)".formatted(ci.ordinal(), ci.getName(), StringHelper.separate(ci.getPrice())), ci.getDesc(), true)
 			).queue();
 			return;
 		}
@@ -67,7 +68,7 @@ public class CreditStoreCommand implements Executable {
 		try {
 			int i = Integer.parseInt(args[0]);
 
-			if (!Helper.between(i, 0, CreditItem.values().length)) {
+			if (!MathHelper.between(i, 0, CreditItem.values().length)) {
 				channel.sendMessage("❌ | Esse item não existe.").queue();
 				return;
 			}
@@ -80,17 +81,17 @@ public class CreditStoreCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar?").queue(s ->
-					Pages.buttonize(s, Collections.singletonMap(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					Pages.buttonize(s, Collections.singletonMap(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								if (ci.getEffect().apply(wrapper.getMember(), channel, args)) {
-									Account facc = AccountDAO.getAccount(author.getId());
+									Account facc = Account.find(Account.class, author.getId());
 									facc.consumeCredit(ci.getPrice(), CreditStoreCommand.class);
-									AccountDAO.saveAccount(facc);
+									facc.save();
 
 									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Item comprado com sucesso!")).queue();
 								}
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId()))
 			);

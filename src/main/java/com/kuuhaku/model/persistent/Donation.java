@@ -18,8 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.DonationBundle;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -27,7 +28,7 @@ import java.time.ZoneId;
 
 @Entity
 @Table(name = "donation")
-public class Donation {
+public class Donation extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -56,7 +57,7 @@ public class Donation {
 		this.bundle = bundle;
 		this.value = value;
 		this.status = status;
-		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.FULL_DATE_FORMAT);
+		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Constants.FULL_DATE_FORMAT);
 	}
 
 	public Donation() {

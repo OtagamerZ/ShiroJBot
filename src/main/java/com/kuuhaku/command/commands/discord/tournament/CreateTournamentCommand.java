@@ -25,8 +25,9 @@ import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.tournament.Tournament;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -51,14 +52,14 @@ public class CreateTournamentCommand implements Executable {
 
 		Tournament t = new Tournament(argsAsText);
 		channel.sendMessage("Você está prestes a criar um novo torneio chamado `" + argsAsText + "`, deseja confirmar?").queue(
-				s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							TournamentDAO.save(t);
 
-							s.delete().queue(null, Helper::doNothing);
+							s.delete().queue(null, MiscHelper::doNothing);
 							channel.sendMessage("✅ | Torneio criado com sucesso (para iniciá-lo use `" + prefix + "liberarchaves`)!").queue();
-						}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+						}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 						, u -> u.getId().equals(author.getId())
-				), Helper::doNothing
+				), MiscHelper::doNothing
 		);
 	}
 }

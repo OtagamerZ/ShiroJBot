@@ -18,16 +18,15 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Stash;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
@@ -36,53 +35,59 @@ import java.util.function.BiFunction;
 
 public enum Reward {
 	XP("XP", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " XP";
+		if (h == null) return StringHelper.separate(v) + " XP";
 		int r = Math.abs(v);
 
 		if (v >= 0) h.addXp(r);
 		else h.removeXp(r);
 		KawaiponDAO.saveHero(h);
 
-		return Helper.separate(v < 0 ? -r : r) + " XP";
+		return StringHelper.separate(v < 0 ? -r : r) + " XP";
 	}),
 	EP("EP", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " EP";
+		if (h == null) return StringHelper.separate(v) + " EP";
 		int r = Math.abs(v);
 
 		if (v >= 0) h.rest(r);
 		else h.removeEnergy(r);
 		KawaiponDAO.saveHero(h);
 
-		return Helper.separate(v < 0 ? -r : r) + " EP";
+		return StringHelper.separate(v < 0 ? -r : r) + " EP";
 	}),
 	CREDIT("CR", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " CR";
+		if (h == null) return StringHelper.separate(v) + " CR";
 		int r = Math.abs(v);
 
-		Account acc = AccountDAO.getAccount(h.getUid());
+		Account acc = Account.find(Account.class, h.getUid());
 		if (v >= 0) acc.addCredit(r, Reward.class);
 		else acc.removeCredit(r, Reward.class);
-		AccountDAO.saveAccount(acc);
+		acc.save();
 
-		return Helper.separate(v < 0 ? -r : r) + " CR";
+		return StringHelper.separate(v < 0 ? -r : r) + " CR";
 	}),
 	GEM("Gemas", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " gema" + (Math.abs(v) == 1 ? "" : "s");
+		if (h == null) return StringHelper.separate(v) + " gema" + (Math.abs(v) == 1 ? "" : "s");
 		int r = Math.abs(v);
 
-		Account acc = AccountDAO.getAccount(h.getUid());
+		Account acc = Account.find(Account.class, h.getUid());
 		if (v >= 0) acc.addGem(r);
 		else acc.removeGem(r);
-		AccountDAO.saveAccount(acc);
+		acc.save();
 
-		return Helper.separate(v < 0 ? -r : r) + " gema" + (Math.abs(v) == 1 ? "" : "s");
+		return StringHelper.separate(v < 0 ? -r : r) + " gema" + (Math.abs(v) == 1 ? "" : "s");
 	}),
 	EQUIPMENT("Equipamento", (h, v) -> {
-		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
+		if (h == null) return MathHelper.clamp(v, 0, 100) + "% de chance";
 		String r = "Nenhum";
 
-		if (Helper.chance(Helper.clamp(v, 0, 100))) {
-			Equipment e = CardDAO.getRandomEquipment(false);
+		if (MathHelper.chance(MathHelper.clamp(v, 0, 100))) {
+			Evogear e = Evogear.queryNative(Evogear.class, """
+					SELECT e
+					FROM Evogear e
+					WHERE (e.charms NOT LIKE '%SPELL%' AND e.charms NOT LIKE '%CURSE%')
+					ORDER BY RANDOM()
+					LIMIT 1
+					""");
 			assert e != null;
 			StashDAO.saveCard(new Stash(h.getUid(), e));
 
@@ -92,11 +97,17 @@ public enum Reward {
 		return r;
 	}),
 	SPELL("Magia", (h, v) -> {
-		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
+		if (h == null) return MathHelper.clamp(v, 0, 100) + "% de chance";
 		String r = "Nenhum";
 
-		if (Helper.chance(Helper.clamp(v, 0, 100))) {
-			Equipment e = CardDAO.getRandomEquipment(true);
+		if (MathHelper.chance(MathHelper.clamp(v, 0, 100))) {
+			Evogear e = Evogear.queryNative(Evogear.class, """
+					SELECT e
+					FROM Evogear e
+					WHERE (e.charms LIKE '%SPELL%' OR e.charms LIKE '%CURSE%')
+					ORDER BY RANDOM()
+					LIMIT 1
+					""");
 			assert e != null;
 			StashDAO.saveCard(new Stash(h.getUid(), e));
 
@@ -106,10 +117,10 @@ public enum Reward {
 		return r;
 	}),
 	CLEANSE("Purificação", (h, v) -> {
-		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
+		if (h == null) return MathHelper.clamp(v, 0, 100) + "% de chance";
 		String r = "Falhou";
 
-		if (Helper.chance(Helper.clamp(v, 0, 100))) {
+		if (MathHelper.chance(MathHelper.clamp(v, 0, 100))) {
 			for (AppliedDebuff d : h.getDebuffs()) {
 				d.setExpiration(ZonedDateTime.now(ZoneId.of("GMT-3")));
 			}

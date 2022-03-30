@@ -24,19 +24,19 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -106,34 +106,34 @@ public class StoreCardCommand implements Executable {
 
 			Map<Emoji, ThrowingConsumer<ButtonWrapper>> btns = new LinkedHashMap<>();
 			if (matches.contains(CardType.KAWAIPON)) {
-				btns.put(Helper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
+				btns.put(StringHelper.parseEmoji("\uD83C\uDDF0"), wrapper -> {
 					chooseVersion(author, channel, kp, name, chosen);
-					wrapper.getMessage().delete().queue(null, Helper::doNothing);
+					wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.SENSHI)) {
-				btns.put(Helper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
-					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.SENSHI, false));
-					wrapper.getMessage().delete().queue(null, Helper::doNothing);
+				btns.put(StringHelper.parseEmoji("\uD83C\uDDE8"), wrapper -> {
+					chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.SENSHI, false));
+					wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.EVOGEAR)) {
-				btns.put(Helper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
-					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
-					wrapper.getMessage().delete().queue(null, Helper::doNothing);
+				btns.put(StringHelper.parseEmoji("\uD83C\uDDEA"), wrapper -> {
+					chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.EVOGEAR, false));
+					wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.FIELD)) {
-				btns.put(Helper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
-					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
-					wrapper.getMessage().delete().queue(null, Helper::doNothing);
+				btns.put(StringHelper.parseEmoji("\uD83C\uDDEB"), wrapper -> {
+					chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), CardType.FIELD, false));
+					wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 				});
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessageEmbeds(eb.build())
 					.queue(s -> Pages.buttonize(s, btns, true,
-							ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES,
+							Constants.USE_BUTTONS, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -147,7 +147,7 @@ public class StoreCardCommand implements Executable {
 			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 			switch (type) {
 				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-				case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
+				case SENSHI, EVOGEAR, FIELD -> chosen.complete(Triple.of(Card.find(Card.class, name.toUpperCase(Locale.ROOT)), type, false));
 				case NONE -> chosen.complete(null);
 			}
 		}
@@ -168,7 +168,7 @@ public class StoreCardCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(msg)
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								s.delete().queue();
 
@@ -182,7 +182,7 @@ public class StoreCardCommand implements Executable {
 
 								Stash m = switch (off.getMiddle()) {
 									case EVOGEAR -> {
-										Equipment e = fDk.getEquipment(off.getLeft());
+										Evogear e = fDk.getEquipment(off.getLeft());
 										fDk.removeEquipment(e);
 										if (e == null) yield null;
 
@@ -219,12 +219,12 @@ public class StoreCardCommand implements Executable {
 								KawaiponDAO.saveKawaipon(finalKp);
 
 								channel.sendMessage("✅ | Carta armazenada com sucesso!").queue();
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
 		} catch (InterruptedException | ExecutionException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
@@ -238,15 +238,15 @@ public class StoreCardCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
-								put(Helper.parseEmoji(Helper.getNumericEmoji(1)), wrapper -> {
+								put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(1)), wrapper -> {
 									chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, false));
-									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 								});
-								put(Helper.parseEmoji(Helper.getNumericEmoji(2)), wrapper -> {
+								put(StringHelper.parseEmoji(StringHelper.getNumericEmoji(2)), wrapper -> {
 									chosen.complete(Triple.of(kcs.get(1).getCard(), CardType.KAWAIPON, true));
-									wrapper.getMessage().delete().queue(null, Helper::doNothing);
+									wrapper.getMessage().delete().queue(null, MiscHelper::doNothing);
 								});
-							}}, ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}}, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());

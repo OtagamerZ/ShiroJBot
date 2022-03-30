@@ -18,14 +18,15 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.TriFunction;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.functional.TriFunction;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -37,7 +38,7 @@ public enum GemItem {
 			"Converter para CR", "Converte N gemas em 10.000 CR cada",
 			1,
 			(mb, chn, args) -> {
-				Account acc = AccountDAO.getAccount(mb.getId());
+				Account acc = Account.find(Account.class, mb.getId());
 
 				int amount = 1;
 				if (args.length > 1) {
@@ -54,7 +55,7 @@ public enum GemItem {
 
 				acc.addCredit(10000L * amount, GemItem.class);
 				acc.removeGem(amount - 1);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
 				chn.sendMessage(amount + " gemas convertidas em " + (10000 * amount) + " creditos!").queue();
 				return true;
@@ -71,7 +72,7 @@ public enum GemItem {
 
 				Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
 				Card c = CardDAO.getCard(args[1], false);
-				CardStatus cs = Helper.checkStatus(kp);
+				CardStatus cs = MiscHelper.checkStatus(kp);
 
 				if (cs == CardStatus.NO_CARDS) {
 					chn.sendMessage("❌ | Você já coletou todas as cartas que existem, parabéns!").queue();
@@ -79,7 +80,7 @@ public enum GemItem {
 				} else if (c == null) {
 					chn.sendMessage("❌ | Essa carta não existe.").queue();
 					return false;
-				} else if (args.length > 2 && !Helper.equalsAny(args[2], "N", "C")) {
+				} else if (args.length > 2 && !LogicHelper.equalsAny(args[2], "N", "C")) {
 					chn.sendMessage("❌ | O tipo da carta deve ser `N` ou `C` (`N` = normal, `C` = cromada).").queue();
 					return false;
 				}
@@ -105,7 +106,7 @@ public enum GemItem {
 						.filter(cd -> !kp.getCards().contains(new KawaiponCard(cd, foil)))
 						.collect(Collectors.toList());
 
-				Card chosen = Helper.getRandomEntry(cards);
+				Card chosen = CollectionHelper.getRandomEntry(cards);
 
 				card.setCard(chosen);
 				KawaiponDAO.saveKawaipon(kp);
@@ -118,7 +119,7 @@ public enum GemItem {
 			"Aleatorizar seed (max: 3 por semana)", "Aleatoriza a seed do seu herói atual (altera missões, efeitos e perks disponíveis)",
 			1,
 			(mb, chn, args) -> {
-				Account acc = AccountDAO.getAccount(mb.getId());
+				Account acc = Account.find(Account.class, mb.getId());
 				if (acc.getWeeklyRolls() <= 0) {
 					chn.sendMessage("❌ | Você não possui rolls semanais restantes.").queue();
 					return false;
@@ -131,7 +132,7 @@ public enum GemItem {
 				}
 
 				acc.setWeeklyRolls(acc.getWeeklyRolls() - 1);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
 				h.randomizeSeed();
 				KawaiponDAO.saveHero(h);
@@ -143,10 +144,10 @@ public enum GemItem {
 			"Aumentar capacidade do armazém pessoal", "Aumenta a quantidade máxima de cartas armazenadas em seu estoque pessoal em 15",
 			2,
 			(mb, chn, args) -> {
-				Account acc = AccountDAO.getAccount(mb.getId());
+				Account acc = Account.find(Account.class, mb.getId());
 
 				acc.setCardStashCapacity(acc.getCardStashCapacity() + 15);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
 				return true;
 			}
@@ -194,7 +195,7 @@ public enum GemItem {
 
 				Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
 				Card c = CardDAO.getCard(args[1], false);
-				CardStatus cs = Helper.checkStatus(kp);
+				CardStatus cs = MiscHelper.checkStatus(kp);
 
 				if (cs == CardStatus.FOIL_CARDS) {
 					chn.sendMessage("❌ | Você já coletou todas as cartas cromadas que existem, parabéns!").queue();
@@ -240,7 +241,7 @@ public enum GemItem {
 			"Fundo de perfil animado", "Permite usar GIFs como fundo de perfil",
 			10,
 			(mb, chn, args) -> {
-				Account acc = AccountDAO.getAccount(mb.getId());
+				Account acc = Account.find(Account.class, mb.getId());
 
 				if (acc.hasAnimatedBg()) {
 					chn.sendMessage("❌ | Você já possui fundo animado habilitado.").queue();
@@ -248,7 +249,7 @@ public enum GemItem {
 				}
 
 				acc.setAnimatedBg(true);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
 				return true;
 			}
@@ -257,7 +258,7 @@ public enum GemItem {
 			"Aumentar capacidade de decks reserva", "Libera 1 espaço extra nos seus decks reserva (máximo 10 slots)",
 			15,
 			(mb, chn, args) -> {
-				Account acc = AccountDAO.getAccount(mb.getId());
+				Account acc = Account.find(Account.class, mb.getId());
 
 				if (acc.getDeckStashCapacity() >= 10) {
 					chn.sendMessage("❌ | Você já alcançou a capacidade máxima de decks reserva.").queue();
@@ -265,7 +266,7 @@ public enum GemItem {
 				}
 
 				acc.setDeckStashCapacity(acc.getDeckStashCapacity() + 1);
-				AccountDAO.saveAccount(acc);
+				acc.save();
 
 				return true;
 			}

@@ -28,8 +28,11 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
@@ -51,12 +54,12 @@ public class EmbedCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
-			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
+			if (MiscHelper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && LogicHelper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 				gc.setEmbedTemplate(null);
 				GuildDAO.updateGuildSettings(gc);
 
-				m.delete().queue(null, Helper::doNothing);
+				m.delete().queue(null, MiscHelper::doNothing);
 				channel.sendMessage("✅ | Embed de servidor limpo com sucesso!").queue();
 				return;
 			}
@@ -65,7 +68,7 @@ public class EmbedCommand implements Executable {
 				AutoEmbedBuilder eb = null;
 				if (message.getAttachments().size() > 0) {
 					Message.Attachment att = message.getAttachments().get(0);
-					if (Helper.getOr(att.getFileExtension(), "").equals("txt") && StorageUnit.KB.convert(att.getSize(), StorageUnit.B) <= 16) {
+					if (CollectionHelper.getOr(att.getFileExtension(), "").equals("txt") && StorageUnit.KB.convert(att.getSize(), StorageUnit.B) <= 16) {
 						try (InputStream is = att.retrieveInputStream().get()) {
 							eb = new AutoEmbedBuilder(IOUtils.toString(is, StandardCharsets.UTF_8));
 						}
@@ -77,12 +80,12 @@ public class EmbedCommand implements Executable {
 
 				if (eb == null) eb = new AutoEmbedBuilder(argsAsText);
 
-				if (Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+				if (MiscHelper.hasPermission(member, PrivilegeLevel.MOD)) {
 					AutoEmbedBuilder finalEb = eb;
 					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
 							.setEmbeds(eb.build())
 							.queue(s ->
-									Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+									Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 												gc.setEmbedTemplate(finalEb.getEmbed());
 												GuildDAO.updateGuildSettings(gc);
@@ -91,13 +94,13 @@ public class EmbedCommand implements Executable {
 														.flatMap(r -> m.delete())
 														.flatMap(r -> s.delete())
 														.queue();
-											}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES
+											}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
 											, ms -> channel.sendMessageEmbeds(finalEb.build())
 													.flatMap(r -> m.delete())
 													.flatMap(r -> ms.delete())
-													.queue(null, Helper::doNothing)
-									), Helper::doNothing
+													.queue(null, MiscHelper::doNothing)
+									), MiscHelper::doNothing
 							);
 				}
 				else

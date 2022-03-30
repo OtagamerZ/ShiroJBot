@@ -20,12 +20,12 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Locale;
@@ -45,9 +45,8 @@ public class JankenponCommand implements Executable {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
-
-		int pcOption = Helper.rng(2);
+		Account acc = Account.find(Account.class, author.getId());
+		int pcOption = MathHelper.rng(2);
 		int win = 2;
 
 		switch (args[0].toLowerCase(Locale.ROOT)) {
@@ -89,11 +88,11 @@ public class JankenponCommand implements Executable {
 						yield "\nVocê perdeu!";
 					}
 					case 1 -> {
-						int crd = Helper.rng(35, 125);
+						int crd = MathHelper.rng(35, 125);
 						acc.addCredit(crd, this.getClass());
-						AccountDAO.saveAccount(acc);
+						acc.save();
 						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);
-						yield "\nVocê ganhou! Aqui, " + Helper.separate(crd) + " CR por ter jogado comigo!";
+						yield "\nVocê ganhou! Aqui, " + StringHelper.separate(crd) + " CR por ter jogado comigo!";
 					}
 					case 2 -> "\nEmpate!";
 					default -> throw new IllegalStateException("Unexpected value: " + finalWin);

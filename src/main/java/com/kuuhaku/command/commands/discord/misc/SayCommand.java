@@ -27,7 +27,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -58,18 +59,18 @@ public class SayCommand implements Executable {
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 		try {
-			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-			String s = Helper.sendEmotifiedString(guild, Helper.replaceTags(argsAsText, author, guild, message));
+			Webhook wh = MiscHelper.getOrCreateWebhook(channel, "Shiro");
+			String s = MiscHelper.sendEmotifiedString(guild, MiscHelper.replaceTags(argsAsText, author, guild, message));
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 					.setAllowedMentions(AllowedMentions.none())
 					.setContent(s);
 
-			String avatar = Helper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
-			String name = Helper.getOr(m.getPseudoName(), author.getName());
+			String avatar = CollectionHelper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
+			String name = CollectionHelper.getOr(m.getPseudoName(), author.getName());
 
 			try {
-				Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
+				Member nii = guild.getMember(Main.getUserByID(ShiroInfo.getNiiChan()));
 				wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
 				wmb.setAvatarUrl(avatar);
 			} catch (RuntimeException e) {
@@ -81,15 +82,15 @@ public class SayCommand implements Executable {
 			assert wh != null;
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			try {
-				message.delete().queue(null, Helper::doNothing);
+				message.delete().queue(null, MiscHelper::doNothing);
 				wc.send(wmb.build()).get();
 			} catch (InterruptedException | ExecutionException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException e) {
-			channel.sendMessage(Helper.replaceTags(argsAsText, author, guild, message)).allowedMentions(List.of()).queue();
+			channel.sendMessage(MiscHelper.replaceTags(argsAsText, author, guild, message)).allowedMentions(List.of()).queue();
 			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
-				message.delete().queue(null, Helper::doNothing);
+				message.delete().queue(null, MiscHelper::doNothing);
 		}
 	}
 }

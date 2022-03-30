@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Locale;
@@ -45,7 +45,7 @@ public class DeckNameCommand implements Executable {
 
 			channel.sendMessage("✅ | Nome do deck atual limpo com sucesso.").queue();
 		} else {
-			if (!Helper.between(args[0].length(), 1, 21)) {
+			if (!MathHelper.between(args[0].length(), 1, 21)) {
 				channel.sendMessage("❌ | Nome inválido, ele deve ter entre 1 e 20 caractéres.").queue();
 				return;
 			}

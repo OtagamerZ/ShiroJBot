@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Blacklist;
@@ -41,8 +40,8 @@ public class BlacklistCommand implements Executable {
 			resolveBlacklistByMention(message, channel);
 		} else {
 			try {
-				if (Main.getInfo().getUserByID(args[0]) != null) {
-					resolveBlacklistById(message.getAuthor(), args, channel);
+				if (Main.getUserByID(args[0]) != null) {
+					resolveBlacklistById(message.getAuthor(), args[0], channel);
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
 				channel.sendMessage(I18n.getString("err_no-user")).queue();
@@ -50,17 +49,14 @@ public class BlacklistCommand implements Executable {
 		}
 	}
 
-	private void resolveBlacklistById(User author, String[] args, MessageChannel channel) {
-		Blacklist bl = new Blacklist(args[0], author.getId());
-		BlacklistDAO.blacklist(bl);
+	private void resolveBlacklistById(User author, String id, MessageChannel channel) {
+		Blacklist bl = new Blacklist(id, author.getId());
+		bl.save();
 
 		channel.sendMessage("✅ | Usuário adicionado à lista negra com sucesso").queue();
 	}
 
 	private void resolveBlacklistByMention(Message message, MessageChannel channel) {
-		Blacklist bl = new Blacklist(message.getMentionedUsers().get(0).getId(), message.getAuthor().getId());
-		BlacklistDAO.blacklist(bl);
-
-		channel.sendMessage("✅ | Usuário adicionado à lista negra com sucesso").queue();
+		resolveBlacklistById(message.getAuthor(), message.getMentionedUsers().get(0).getId(), channel);
 	}
 }

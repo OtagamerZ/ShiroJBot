@@ -29,7 +29,8 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -82,19 +83,19 @@ public class MyHeroCommand implements Executable {
 		for (int i = 0; i < 5; i++) {
 			switch (i) {
 				case 0 -> stats.append("**S**TR: %s%s\n".formatted(
-						raw[0], equip[0] != 0 ? " (" + Helper.sign(equip[0]) + ")" : ""
+						raw[0], equip[0] != 0 ? " (" + StringHelper.sign(equip[0]) + ")" : ""
 				));
 				case 1 -> stats.append("**R**ES: %s%s\n".formatted(
-						raw[1], equip[1] != 0 ? " (" + Helper.sign(equip[1]) + ")" : ""
+						raw[1], equip[1] != 0 ? " (" + StringHelper.sign(equip[1]) + ")" : ""
 				));
 				case 2 -> stats.append("**A**GI: %s%s\n".formatted(
-						raw[2], equip[2] != 0 ? " (" + Helper.sign(equip[2]) + ")" : ""
+						raw[2], equip[2] != 0 ? " (" + StringHelper.sign(equip[2]) + ")" : ""
 				));
 				case 3 -> stats.append("**W**IS: %s%s\n".formatted(
-						raw[3], equip[3] != 0 ? " (" + Helper.sign(equip[3]) + ")" : ""
+						raw[3], equip[3] != 0 ? " (" + StringHelper.sign(equip[3]) + ")" : ""
 				));
 				case 4 -> stats.append("**C**ON: %s%s\n".formatted(
-						raw[4], equip[4] != 0 ? " (" + Helper.sign(equip[4]) + ")" : ""
+						raw[4], equip[4] != 0 ? " (" + StringHelper.sign(equip[4]) + ")" : ""
 				));
 			}
 		}
@@ -119,12 +120,12 @@ public class MyHeroCommand implements Executable {
 				.setImage("attachment://hero.png");
 
 		if (h.isQuesting())
-			eb.setFooter("\uD83E\uDDED | " + h.getQuest() + ": " + Helper.toStringDuration(h.getQuestEnd() - System.currentTimeMillis()));
+			eb.setFooter("\uD83E\uDDED | " + h.getQuest() + ": " + StringHelper.toStringDuration(h.getQuestEnd() - System.currentTimeMillis()));
 
 		Champion c = h.toChampion();
 
 		channel.sendMessageEmbeds(eb.build())
-				.addFile(Helper.getBytes(c.drawCard(false), "png"), "hero.png")
+				.addFile(ImageHelper.getBytes(c.drawCard(false), "png"), "hero.png")
 				.queue();
 	}
 }

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 public enum ClanTier {
 	PARTY("Grupo", 10, 50_000, 10_000),
@@ -59,6 +59,6 @@ public enum ClanTier {
 	}
 
 	public ClanTier getNext() {
-		return Helper.getNext(this, values());
+		return CollectionHelper.getNext(this, values());
 	}
 }

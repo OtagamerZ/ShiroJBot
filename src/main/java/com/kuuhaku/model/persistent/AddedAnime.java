@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.DAO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "addedanime")
-public class AddedAnime {
+public class AddedAnime extends DAO {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String name;
@@ -71,7 +71,7 @@ public class AddedAnime {
 
 	@Override
 	public String toString() {
-		Card c = CardDAO.getUltimate(name);
+		Card c = Card.find(Card.class, name);
 		if (c == null) return null;
 		return c.getName();
 	}

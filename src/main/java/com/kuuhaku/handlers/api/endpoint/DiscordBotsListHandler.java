@@ -19,13 +19,14 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -46,7 +47,7 @@ public class DiscordBotsListHandler {
 
 		int credit = body.getBoolean("isWeekend") ? 500 : 250;
 
-		Account acc = AccountDAO.getAccount(body.getString("user"));
+		Account acc = Account.find(Account.class, body.getString("user"));
 		if (acc.hasVoted(false)) return;
 
 		if (!body.getString("type").equals("test")) {
@@ -54,63 +55,63 @@ public class DiscordBotsListHandler {
 			acc.voted();
 		}
 
-		User u = Main.getInfo().getUserByID(body.getString("user"));
+		User u = Main.getUserByID(body.getString("user"));
 		try {
 			if (u != null) {
 				MessageChannel chn = u.openPrivateChannel().complete();
-				Helper.logger(this.getClass()).info(u.getName() + " acabou de votar!");
+				MiscHelper.logger(this.getClass()).info(u.getName() + " acabou de votar!");
 
-				File icon = Helper.getResourceAsFile(this.getClass(), "assets/gem/gem_" + acc.getStreak() + ".png");
+				File icon = FileHelper.getResourceAsFile(this.getClass(), "assets/gem/gem_" + acc.getStreak() + ".png");
 				assert icon != null;
 
 				EmbedBuilder eb = new EmbedBuilder()
 						.setThumbnail("attachment://gem.png")
 						.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + (100 * acc.getStreak()) + "c)")
-						.setDescription("Como agradecimento, aqui estão " + Helper.separate(credit) + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " CR para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)")
-						.setFooter("Seus CR: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif")
+						.setDescription("Como agradecimento, aqui estão " + StringHelper.separate(credit) + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " CR para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)")
+						.setFooter("Seus CR: " + StringHelper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif")
 						.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true)
 						.setColor(Color.cyan);
 
 				chn.sendMessageEmbeds(eb.build())
 						.addFile(icon, "gem.png")
-						.queue(null, Helper::doNothing);
+						.queue(null, MiscHelper::doNothing);
 			}
 		} catch (RuntimeException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		} finally {
 			if (u != null) UpvoteDAO.voted(u);
 		}
 	}
 
 	public static void retry(String uid) {
-		Main.getInfo().getDblApi().getVotingMultiplier()
+		Main.getInfo().getTopggClient().getVotingMultiplier()
 				.thenAccept(mult -> {
 					int credit = mult.isWeekend() ? 500 : 250;
 
-					Account acc = AccountDAO.getAccount(uid);
+					Account acc = Account.find(Account.class, uid);
 
 					acc.addCredit(credit + (100L * (acc.getStreak() + 1)), DiscordBotsListHandler.class);
 					acc.voted();
 
-					User u = Main.getInfo().getUserByID(uid);
+					User u = Main.getUserByID(uid);
 					try {
 						if (u != null) {
 							MessageChannel chn = u.openPrivateChannel().complete();
-							Helper.logger(DiscordBotsListHandler.class).info(u.getName() + " teve o voto contabilizado!");
+							MiscHelper.logger(DiscordBotsListHandler.class).info(u.getName() + " teve o voto contabilizado!");
 
 							EmbedBuilder eb = new EmbedBuilder();
 
 							eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
 							eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + (100 * acc.getStreak()) + "c)");
-							eb.setDescription("Como agradecimento, aqui estão " + Helper.separate(credit) + (mult.isWeekend() ? " (bônus x2)" : "") + " CR para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)");
-							eb.setFooter("Seus CR: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+							eb.setDescription("Como agradecimento, aqui estão " + StringHelper.separate(credit) + (mult.isWeekend() ? " (bônus x2)" : "") + " CR para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)");
+							eb.setFooter("Seus CR: " + StringHelper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 							eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
 							eb.setColor(Color.cyan);
 
-							chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+							chn.sendMessageEmbeds(eb.build()).queue(null, MiscHelper::doNothing);
 						}
 					} catch (RuntimeException e) {
-						Helper.logger(DiscordBotsListHandler.class).error(e + " | " + e.getStackTrace()[0]);
+						MiscHelper.logger(DiscordBotsListHandler.class).error(e + " | " + e.getStackTrace()[0]);
 					} finally {
 						if (u != null) UpvoteDAO.voted(u);
 					}

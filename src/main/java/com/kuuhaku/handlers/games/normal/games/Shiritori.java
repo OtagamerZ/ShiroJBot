@@ -26,8 +26,11 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.normal.framework.Game;
 import com.kuuhaku.handlers.games.normal.framework.Player;
 import com.kuuhaku.handlers.games.normal.framework.Table;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.FileHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -45,7 +48,7 @@ import java.util.function.Predicate;
 public class Shiritori extends Game {
 	private final TextChannel channel;
 	private final SimpleMessageListener listener;
-	private final File list = Helper.getResourceAsFile(this.getClass(), "shiritori/ptBR_dict.txt");
+	private final File list = FileHelper.getResourceAsFile(this.getClass(), "shiritori/ptBR_dict.txt");
 	private final Set<String> used = new HashSet<>();
 	private Message message = null;
 	private String word;
@@ -73,14 +76,14 @@ public class Shiritori extends Game {
 						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.queue(msg -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 								});
 					} else {
 						channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
 								.queue(msg -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 									this.message = msg;
-									Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									Pages.buttonize(msg, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
 					}
 				}
@@ -92,9 +95,9 @@ public class Shiritori extends Game {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa, digite uma palavra para começar!")
 				.queue(s -> {
 					this.message = s;
-					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
+					Main.getEvents().addHandler(channel.getGuild(), listener);
 					Main.getInfo().setGameInProgress(listener.mutex, getTable().getPlayers().stream().map(Player::getId).toArray(String[]::new));
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -118,7 +121,7 @@ public class Shiritori extends Game {
 		if (word != null && !word.endsWith(command.substring(0, 2))) {
 			channel.sendMessage("❌ | Palavra não permitida. Só são permitidas palavras onde as duas primeiras letras sejam as mesmas que as 2 últimas letras da palavra anterior (ex: maca**co** -> **co**lmeia).").queue();
 		} else if (used.contains(command)) {
-			channel.sendMessage(":negative_squared_cross_mark: | " + getCurrent().getAsMention() + " escreveu uma palavra já usada, ESTÁ FORA!").queue(null, Helper::doNothing);
+			channel.sendMessage(":negative_squared_cross_mark: | " + getCurrent().getAsMention() + " escreveu uma palavra já usada, ESTÁ FORA!").queue(null, MiscHelper::doNothing);
 			getTable().leaveGame();
 			resetTimer();
 
@@ -127,26 +130,26 @@ public class Shiritori extends Game {
 				close();
 				channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 			} else {
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							this.message = s;
-							Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
-		} else if (Helper.findStringInFile(list, command) > -1) {
+		} else if (FileHelper.findStringInFile(list, command) > -1) {
 			used.add(command);
 			word = command;
 
 			resetTimer();
 			channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						this.message = s;
-						Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
 		} else {
 			channel.sendMessage("❌ | Palavra inválida, veja se escreveu-a corretamente.").queue();
@@ -166,8 +169,8 @@ public class Shiritori extends Game {
 	@Override
 	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, Helper::doNothing);
+		buttons.put(StringHelper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, MiscHelper::doNothing);
 			getTable().leaveGame();
 			resetTimer();
 
@@ -176,14 +179,14 @@ public class Shiritori extends Game {
 				close();
 				channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 			} else {
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez (palavra atual: " + getHighlightedWord() + ").")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							this.message = s;
-							Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		});

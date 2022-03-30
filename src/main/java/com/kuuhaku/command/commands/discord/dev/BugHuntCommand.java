@@ -21,13 +21,11 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;
@@ -46,12 +44,11 @@ public class BugHuntCommand implements Executable {
 			resolveBugHuntByMention(message, channel);
 		} else {
 			try {
-				if (Main.getInfo().getUserByID(args[0]) != null) {
+				if (Main.getUserByID(args[0]) != null) {
 					try {
-						resolveBugHuntById(args, channel);
+						resolveBugHuntById(args[0], channel);
 					} catch (NoResultException e) {
-						TagDAO.addUserTagsToDB(args[0]);
-						resolveBugHuntById(args, channel);
+						resolveBugHuntById(args[0], channel);
 					}
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
@@ -60,8 +57,8 @@ public class BugHuntCommand implements Executable {
 		}
 	}
 
-	private void resolveBugHuntById(String[] args, MessageChannel channel) {
-		Account acc = AccountDAO.getAccount(args[0]);
+	private void resolveBugHuntById(String id, MessageChannel channel) {
+		Account acc = Account.find(Account.class, id);
 
 		acc.addBug();
 
@@ -74,35 +71,16 @@ public class BugHuntCommand implements Executable {
 
 			acc.addCredit(cr, this.getClass());
 			acc.setCardStashCapacity(acc.getCardStashCapacity() + slots);
-			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR e +" + slots + " espaços no armazém)").queue();
+			channel.sendMessage("<@" + id + "> ajudou a matar um bug! (+" + StringHelper.separate(cr) + " CR e +" + slots + " espaços no armazém)").queue();
 		} else {
 			acc.addCredit(cr, this.getClass());
-			channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR)").queue();
+			channel.sendMessage("<@" + id + "> ajudou a matar um bug! (+" + StringHelper.separate(cr) + " CR)").queue();
 		}
 
-		AccountDAO.saveAccount(acc);
+		acc.save();
 	}
 
 	private void resolveBugHuntByMention(Message message, MessageChannel channel) {
-		Account acc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
-
-		acc.addBug();
-
-		boolean staff = ShiroInfo.getStaff().contains(acc.getUid());
-		int cr = 1000 * (staff ? 2 : 1);
-
-		if (acc.getBugs() % 5 == 0) {
-			cr *= 2.5;
-			int slots = 10 * (staff ? 2 : 1);
-
-			acc.addCredit(cr, this.getClass());
-			acc.setCardStashCapacity(acc.getCardStashCapacity() + slots);
-			channel.sendMessage("<@" + acc.getUid() + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR e +" + slots + " espaços no armazém)").queue();
-		} else {
-			acc.addCredit(cr, this.getClass());
-			channel.sendMessage("<@" + acc.getUid() + "> ajudou a matar um bug! (+" + Helper.separate(cr) + " CR)").queue();
-		}
-
-		AccountDAO.saveAccount(acc);
+		resolveBugHuntById(message.getMentionedUsers().get(0).getId(), channel);
 	}
 }

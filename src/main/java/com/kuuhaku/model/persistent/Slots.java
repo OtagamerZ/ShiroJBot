@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.model.common.GamblePool;
 import com.kuuhaku.model.enums.Slot;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.*;
 
@@ -65,7 +65,7 @@ public class Slots {
 	}
 
 	public static Slot getSlot() {
-		return Helper.getRandomEntry(slots);
+		return CollectionHelper.getRandomEntry(slots);
 	}
 
 	public static Slot[] getSlots() {

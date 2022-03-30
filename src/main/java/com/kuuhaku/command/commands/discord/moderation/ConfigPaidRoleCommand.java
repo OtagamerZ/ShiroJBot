@@ -30,8 +30,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -85,23 +87,23 @@ public class ConfigPaidRoleCommand implements Executable {
 				}
 
 				if (role.getDuration() > -1)
-					fields.merge(role.getPrice(), r.getAsMention() + " (" + Helper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
+					fields.merge(role.getPrice(), r.getAsMention() + " (" + StringHelper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
 				else
 					fields.merge(role.getPrice(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 			GuildDAO.updateGuildSettings(gc);
 
-			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
+			List<List<Integer>> chunks = CollectionHelper.chunkify(fields.keySet(), 10);
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
 				for (int value : chunk)
-					eb.addField("Valor: " + Helper.separate(value) + " CR", fields.get(value), false);
+					eb.addField("Valor: " + StringHelper.separate(value) + " CR", fields.get(value), false);
 
 				pages.add(new InteractPage(eb.build()));
 			}
 
 			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+					Pages.paginate(s, pages, Constants.USE_BUTTONS, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
 			return;
 		}
@@ -119,8 +121,8 @@ public class ConfigPaidRoleCommand implements Executable {
 				return;
 			}
 
-			long time = args.length > 2 ? Helper.stringToDurationMillis(Arrays.stream(args).skip(2).collect(Collectors.joining(" "))) : -1;
-			if (Helper.between(time, 0, 60000)) {
+			long time = args.length > 2 ? StringHelper.stringToDurationMillis(Arrays.stream(args).skip(2).collect(Collectors.joining(" "))) : -1;
+			if (MathHelper.between(time, 0, 60000)) {
 				channel.sendMessage("❌ | A duração mínima é 1 minuto.").queue();
 				return;
 			}
@@ -128,9 +130,9 @@ public class ConfigPaidRoleCommand implements Executable {
 			gc.addPaidRole(r.getId(), value, time);
 
 			if (time > -1)
-				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " CR**! (" + Helper.toStringDuration(time) + ")").queue();
+				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + StringHelper.separate(value) + " CR**! (" + StringHelper.toStringDuration(time) + ")").queue();
 			else
-				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " CR**!").queue();
+				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + StringHelper.separate(value) + " CR**!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-price")).queue();

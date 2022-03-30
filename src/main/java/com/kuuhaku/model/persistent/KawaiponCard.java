@@ -18,15 +18,18 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.utils.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "kawaiponcard")
-public class KawaiponCard {
+public class KawaiponCard extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -43,7 +46,7 @@ public class KawaiponCard {
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
 		this.foil = foil;
-		this.hash = Helper.hash(Helper.generateToken((foil ? "*" : "") + card.getId() + "_" + System.currentTimeMillis(), 256), "SHA-256");
+		this.hash = StringHelper.hash(MiscHelper.generateToken((foil ? "*" : "") + card.getId() + "_" + System.currentTimeMillis(), 256), "SHA-256");
 	}
 
 	public KawaiponCard() {
@@ -107,6 +110,6 @@ public class KawaiponCard {
 	}
 
 	public String getBase64() {
-		return Helper.atob(card.drawCard(foil), "png");
+		return ImageHelper.atob(card.drawCard(foil), "png");
 	}
 }

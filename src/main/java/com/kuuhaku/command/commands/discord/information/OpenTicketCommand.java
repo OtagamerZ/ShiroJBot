@@ -30,8 +30,10 @@ import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -79,7 +81,7 @@ public class OpenTicketCommand implements Executable, Slashed {
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `" + StringUtils.abbreviate(mensagem, 20) + "` (ele será enviado ao suporte)?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							int number = TicketDAO.openTicket(mensagem, member);
@@ -87,7 +89,7 @@ public class OpenTicketCommand implements Executable, Slashed {
 							EmbedBuilder eb = new EmbedBuilder()
 									.setTitle("Ticket Nº " + number + "")
 									.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
-									.addField("Enviado em:", Helper.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+									.addField("Enviado em:", Constants.FULL_DATE_FORMAT.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
 									.addField("Descrição:", "```" + mensagem + "```", false)
 									.setFooter(author.getId())
 									.setColor(Color.yellow);
@@ -110,14 +112,14 @@ public class OpenTicketCommand implements Executable, Slashed {
 
 							author.openPrivateChannel()
 									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado sobre o progresso dele."))
-									.queue(null, Helper::doNothing);
+									.queue(null, MiscHelper::doNothing);
 
 							t.setMsgIds(ids);
 							TicketDAO.updateTicket(t);
 
-							s.delete().queue(null, Helper::doNothing);
+							s.delete().queue(null, MiscHelper::doNothing);
 							channel.sendMessage(I18n.getString("str_successfully-opened-ticket")).queue();
-						}), ShiroInfo.USE_BUTTONS, true, 60, TimeUnit.SECONDS,
+						}), Constants.USE_BUTTONS, true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 				));

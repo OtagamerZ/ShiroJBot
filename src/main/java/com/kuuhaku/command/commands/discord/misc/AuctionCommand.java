@@ -22,17 +22,16 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
@@ -90,7 +89,7 @@ public class AuctionCommand implements Executable {
 				Card c = CardDAO.getCard(args[0], false);
 
 				if (c == null) {
-					channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+					channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Card.getCards().stream().map(Card::getId).toArray(String[]::new)) + "`?").queue();
 					return;
 				}
 
@@ -104,10 +103,9 @@ public class AuctionCommand implements Executable {
 				obj = card;
 			}
 			case 2 -> {
-				Equipment c = CardDAO.getEquipment(args[0]);
-
+				Evogear c = Evogear.getEvogear(args[0]);
 				if (c == null) {
-					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
+					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Evogear.getEvogears().stream().map(d -> d.getCard().getId()).toList()) + "`?").queue();
 					return;
 				} else if (!dk.getEquipments().contains(c)) {
 					channel.sendMessage("❌ | Você não pode leiloar um equipamento que não possui!").queue();
@@ -117,10 +115,10 @@ public class AuctionCommand implements Executable {
 				obj = c;
 			}
 			default -> {
-				Field f = CardDAO.getField(args[0]);
+				Field f = Field.getField(args[0]);
 
 				if (f == null) {
-					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
+					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + StringHelper.didYouMean(args[0], Field.getFields().stream().map(d -> d.getCard().getId()).toList()) + "`?").queue();
 					return;
 				} else if (!dk.getFields().contains(f)) {
 					channel.sendMessage("❌ | Você não pode leiloar uma arena que não possui!").queue();
@@ -134,13 +132,13 @@ public class AuctionCommand implements Executable {
 		try {
 			int price = Integer.parseInt(args[2]);
 			int min = switch (type) {
-				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
-				case 2 -> Helper.BASE_EQUIPMENT_PRICE / 2;
-				default -> Helper.BASE_FIELD_PRICE / 2;
+				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (Constants.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+				case 2 -> Constants.BASE_EQUIPMENT_PRICE / 2;
+				default -> Constants.BASE_FIELD_PRICE / 2;
 			};
 
 			if (price < min) {
-				channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + Helper.separate(min) + " CR.").queue();
+				channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + StringHelper.separate(min) + " CR.").queue();
 				return;
 			}
 
@@ -163,7 +161,7 @@ public class AuctionCommand implements Executable {
 							if (offer >= price && (highest.get() == null || offer > highest.get().getRight())) {
 								Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
 								Deck dk = offerer.getDeck();
-								AtomicReference<Account> oacc = new AtomicReference<>(AccountDAO.getAccount(evt.getAuthor().getId()));
+								AtomicReference<Account> oacc = new AtomicReference<>(Account.find(Account.class, evt.getAuthor().getId()));
 
 								switch (type) {
 									case 1 -> {
@@ -173,7 +171,7 @@ public class AuctionCommand implements Executable {
 										}
 									}
 									case 2 -> {
-										if (dk.checkEquipment((Equipment) obj, channel)) return;
+										if (dk.checkEquipment((Evogear) obj, channel)) return;
 									}
 									default -> {
 										if (dk.checkField((Field) obj, channel)) return;
@@ -189,12 +187,12 @@ public class AuctionCommand implements Executable {
 								phase.set(1);
 
 								Main.getInfo().getConfirmationPending().put(author.getId() + "_L", true);
-								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " CR**!").queue();
+								channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + StringHelper.separate(offer) + " CR**!").queue();
 
 								event.get().cancel(true);
 								event.set(exec.scheduleWithFixedDelay(() -> {
 									if (phase.get() == 4 && highest.get() != null) {
-										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + Helper.separate(highest.get().getRight()) + "** CR!").queue();
+										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + StringHelper.separate(highest.get().getRight()) + "** CR!").queue();
 
 										if (!author.getId().equals(highest.get().getLeft().getId())) {
 											Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
@@ -203,8 +201,8 @@ public class AuctionCommand implements Executable {
 											Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
 											Deck bdk = buyer.getDeck();
 
-											Account acc = AccountDAO.getAccount(author.getId());
-											Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
+											Account acc = Account.find(Account.class, author.getId());
+											Account bacc = Account.find(Account.class, highest.get().getLeft().getId());
 
 											acc.addCredit(highest.get().getRight(), AuctionCommand.class);
 											bacc.removeCredit(highest.get().getRight(), AuctionCommand.class);
@@ -215,8 +213,8 @@ public class AuctionCommand implements Executable {
 													buyer.addCard((KawaiponCard) obj);
 												}
 												case 2 -> {
-													sdk.removeEquipment((Equipment) obj);
-													bdk.addEquipment((Equipment) obj);
+													sdk.removeEquipment((Evogear) obj);
+													bdk.addEquipment((Evogear) obj);
 												}
 												default -> {
 													sdk.removeField((Field) obj);
@@ -226,8 +224,8 @@ public class AuctionCommand implements Executable {
 
 											KawaiponDAO.saveKawaipon(k);
 											KawaiponDAO.saveKawaipon(buyer);
-											AccountDAO.saveAccount(acc);
-											AccountDAO.saveAccount(bacc);
+											acc.save();
+											bacc.save();
 										}
 
 										Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -240,7 +238,7 @@ public class AuctionCommand implements Executable {
 											case 2 -> channel.sendMessage("""
 													Dou-lhe 2...
 													Vamos lá pessoal, será que eu ouvi um %s?
-													""".formatted(Helper.separate(highest.get().getRight() + 250))).queue();
+													""".formatted(StringHelper.separate(highest.get().getRight() + 250))).queue();
 											case 3 -> channel.sendMessage("Dou-lhe 3...").queue();
 										}
 
@@ -249,7 +247,7 @@ public class AuctionCommand implements Executable {
 								}, 5, 5, TimeUnit.SECONDS));
 							}
 						} catch (NumberFormatException e) {
-							channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
+							channel.sendMessage("❌ | O valor máximo é " + StringHelper.separate(Integer.MAX_VALUE) + " CR!").queue();
 						}
 					}
 				}
@@ -257,7 +255,7 @@ public class AuctionCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Esta carta será vendida para quem oferecer o maior valor. Deseja mesmo leiloá-la?")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
+					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								if (wrapper.getUser().getId().equals(author.getId())) {
 									Main.getInfo().getConfirmationPending().put(author.getId() + "_L", true);
 									event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
@@ -266,15 +264,15 @@ public class AuctionCommand implements Executable {
 											}
 									));
 
-									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que **" + Helper.separate(price) + " CR** dentro de 30 segundos irei fechá-lo!")).queue();
-									ShiroInfo.getShiroEvents().addHandler(guild, listener);
+									s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que **" + StringHelper.separate(price) + " CR** dentro de 30 segundos irei fechá-lo!")).queue();
+									Main.getEvents().addHandler(guild, listener);
 								}
-							}), ShiroInfo.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
+							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
 		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " CR!").queue();
+			channel.sendMessage("❌ | O valor máximo é " + StringHelper.separate(Integer.MAX_VALUE) + " CR!").queue();
 		}
 	}
 }

@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ReminderDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Reminder;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
@@ -56,7 +56,7 @@ public class ReminderCommand implements Executable {
 		}
 
 		boolean repeating = argsAsText.toLowerCase(Locale.ROOT).contains("-r");
-		long time = Helper.stringToDurationMillis(argsAsText);
+		long time = StringHelper.stringToDurationMillis(argsAsText);
 		if (time < (repeating ? 600_000 : 60_000)) {
 			channel.sendMessage("❌ | O tempo deve ser maior que " + (repeating ? 10 : 1) + " minuto" + (repeating ? "s" : "") + ".").queue();
 			return;

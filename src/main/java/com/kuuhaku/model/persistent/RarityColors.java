@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.KawaiponRarity;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ import java.awt.*;
 
 @Entity
 @Table(name = "raritycolors")
-public class RarityColors {
+public class RarityColors extends DAO {
 	@Id
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity;

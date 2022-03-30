@@ -20,11 +20,10 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -46,14 +45,14 @@ public class AfkCommand implements Executable {
 
 		if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && !member.getEffectiveName().startsWith("[AFK]")) {
 			try {
-				member.modifyNickname("[AFK] " + member.getEffectiveName()).queue(null, Helper::doNothing);
+				member.modifyNickname("[AFK] " + member.getEffectiveName()).queue(null, MiscHelper::doNothing);
 			} catch (Exception ignore) {
 			}
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		acc.setAfkMessage(text);
-		AccountDAO.saveAccount(acc);
+		acc.save();
 		if (args.length == 0)
 			channel.sendMessage("✅ | Você permanecerá no modo AFK até falar algo no chat.").queue();
 		else

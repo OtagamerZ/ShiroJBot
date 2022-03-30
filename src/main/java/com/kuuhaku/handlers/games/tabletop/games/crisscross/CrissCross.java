@@ -28,8 +28,11 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Cross;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -68,17 +71,17 @@ public class CrissCross extends Game {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					channel.sendFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 				},
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					channel.sendFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+								if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							});
 				}
 		);
@@ -87,12 +90,12 @@ public class CrissCross extends Game {
 	@Override
 	public void start() {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!")
-				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+				.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message = s;
-					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
+					Main.getEvents().addHandler(channel.getGuild(), listener);
 					Main.getInfo().setGameInProgress(listener.mutex, getBoard().getPlayers().stream().map(Player::getId).toArray(String[]::new));
-					Pages.buttonize(s, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					Pages.buttonize(s, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
 
@@ -122,7 +125,7 @@ public class CrissCross extends Game {
 			if (getBoard().getPieceAt(s) == null) {
 				getBoard().setPieceAt(s, pieces.get(getCurrent().getId()));
 			} else {
-				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, MiscHelper::doNothing);
 				return;
 			}
 
@@ -148,42 +151,42 @@ public class CrissCross extends Game {
 				getBoard().awardWinner(this, winner);
 				close();
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+						.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 			} else if (fullRows == 3) {
 				close();
 				channel.sendMessage("Temos um empate!")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+						.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 						});
 			} else {
 				resetTimer();
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+						.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 							this.message = msg;
-							Pages.buttonize(msg, getButtons(), ShiroInfo.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(msg, getButtons(), Constants.USE_BUTTONS, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			channel.sendMessage("❌ | Coordenada inválida.").queue(null, Helper::doNothing);
+			channel.sendMessage("❌ | Coordenada inválida.").queue(null, MiscHelper::doNothing);
 		}
 	}
 
 	@Override
 	public Map<Emoji, ThrowingConsumer<ButtonWrapper>> getButtons() {
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		buttons.put(Helper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
+		buttons.put(StringHelper.parseEmoji("\uD83C\uDFF3️"), wrapper -> {
 			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
+					.addFile(ImageHelper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 					.queue(msg -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						if (this.message != null) this.message.delete().queue(null, MiscHelper::doNothing);
 					});
 		});
 

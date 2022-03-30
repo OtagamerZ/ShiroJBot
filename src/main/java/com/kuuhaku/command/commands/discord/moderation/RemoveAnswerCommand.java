@@ -24,7 +24,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.CustomAnswer;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.LogicHelper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,7 +43,7 @@ public class RemoveAnswerCommand implements Executable {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa especificar um ID.").queue();
 			return;
-		} else if (Helper.equalsAny(args[0], "nada", "nothing")) {
+		} else if (LogicHelper.equalsAny(args[0], "nada", "nothing")) {
 			List<CustomAnswer> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
 			for (CustomAnswer ca : cas) {
 				CustomAnswerDAO.deleteCustomAnswer(ca);

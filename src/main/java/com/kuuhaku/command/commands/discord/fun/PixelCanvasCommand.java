@@ -18,10 +18,8 @@
 
 package com.kuuhaku.command.commands.discord.fun;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.annotations.Command;
@@ -36,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
-import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
+import static com.kuuhaku.utils.Constants.CANVAS_SIZE;
 
 @Command(
 		name = "canvas",
@@ -49,8 +47,10 @@ public class PixelCanvasCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		PixelCanvas canvas = PixelCanvas.query("SELECT c FROM PixelCanvas c WHERE c.shelved = false");
+
 		if (args.length < 1) {
-			Main.getInfo().getCanvas().viewCanvas(message.getTextChannel()).queue();
+			canvas.viewCanvas(message.getTextChannel()).queue();
 			return;
 		}
 
@@ -77,7 +77,8 @@ public class PixelCanvasCommand implements Executable {
 					channel.sendMessage(I18n.getString("err_canvas-invalid-zoom")).queue();
 					return;
 				}
-				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), false).queue();
+
+				canvas.viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), false).queue();
 				return;
 			}
 
@@ -100,17 +101,14 @@ public class PixelCanvasCommand implements Executable {
 						opts[2]
 				);
 
-				CanvasDAO.saveOperation(op);
+				op.save();
 			} catch (NullPointerException e) {
 				throw new UnauthorizedException();
 			}
 
 			Color color = Color.decode(opts[2]);
-
-			PixelCanvas canvas = Main.getInfo().getCanvas();
 			canvas.addPixel(message.getTextChannel(), coords, color).queue();
-
-			CanvasDAO.saveCanvas(canvas);
+			canvas.save();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 		}

@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
@@ -30,8 +29,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.Constants;
+import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -56,7 +57,7 @@ public class TutorialCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = Account.find(Account.class, author.getId());
 		if (acc.hasCompletedTutorial()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
 			return;
@@ -69,7 +70,7 @@ public class TutorialCommand implements Executable {
 			Main.getInfo().getConfirmationPending().remove(author.getId());
 
 			acc.setTutorialStage(stage.get());
-			AccountDAO.saveAccount(acc);
+			acc.save();
 			Main.getInfo().getIgnore().remove(author.getId());
 		};
 		try {
@@ -81,8 +82,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(firstStep()).complete();
 				Pages.buttonize(
 						msg,
-						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
+						Map.of(StringHelper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						Constants.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -94,14 +95,14 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
 			if (stage.get() < 2) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(secondStep(prefix)).complete();
-				Helper.awaitMessage(author,
+				MiscHelper.awaitMessage(author,
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "atm")) {
@@ -121,7 +122,7 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
@@ -130,8 +131,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(thirdStep()).complete();
 				Pages.buttonize(
 						msg,
-						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
+						Map.of(StringHelper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						Constants.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -143,7 +144,7 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
@@ -154,14 +155,14 @@ public class TutorialCommand implements Executable {
 						.setAuthor("Uma carta " + kc.getCard().getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 						.setTitle(kc.getName() + " (" + kc.getCard().getAnime().toString() + ")")
 						.setColor(Color.orange)
-						.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + Helper.separate(kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE) + " CR).", null)
+						.setFooter("Digite `" + prefix + "coletar` para adquirir esta carta (necessário: " + StringHelper.separate(kc.getCard().getRarity().getIndex() * Constants.BASE_CARD_PRICE) + " CR).", null)
 						.setImage("attachment://kawaipon.png");
 
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(fourthStep(prefix), eb.build())
-						.addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "kp_" + kc.getCard().getId(), "png"), "kawaipon.png")
+						.addFile(ImageHelper.writeAndGet(kc.getCard().drawCard(false), "kp_" + kc.getCard().getId(), "png"), "kawaipon.png")
 						.complete();
-				Helper.awaitMessage(author,
+				MiscHelper.awaitMessage(author,
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "coletar")) {
@@ -169,7 +170,7 @@ public class TutorialCommand implements Executable {
 								kp.getCards().add(kc);
 								KawaiponDAO.saveKawaipon(kp);
 
-								AccountDAO.saveAccount(acc);
+								acc.save();
 
 								channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
 								Executors.newSingleThreadScheduledExecutor().schedule(() -> next.get().complete(true), 1, TimeUnit.SECONDS);
@@ -187,14 +188,14 @@ public class TutorialCommand implements Executable {
 
 				if (!next.get().get()) return;
 				Main.getInfo().getIgnore().remove(author.getId());
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
 			if (stage.get() < 5) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(fifthStep(prefix)).complete();
-				Helper.awaitMessage(author,
+				MiscHelper.awaitMessage(author,
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps no_game_no_life")) {
@@ -212,7 +213,7 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
@@ -221,8 +222,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(sixthStep(prefix)).complete();
 				Pages.buttonize(
 						msg,
-						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
+						Map.of(StringHelper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						Constants.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -234,14 +235,14 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
 			if (stage.get() < 7) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(seventhStep(prefix)).complete();
-				Helper.awaitMessage(author,
+				MiscHelper.awaitMessage(author,
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps elegiveis")) {
@@ -259,14 +260,14 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
 			if (stage.get() < 8) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(eightStep(prefix)).complete();
-				Helper.awaitMessage(author,
+				MiscHelper.awaitMessage(author,
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps evogear")) {
@@ -284,14 +285,14 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
 			if (stage.get() < 9) {
 				next.set(new CompletableFuture<>());
 				msg = channel.sendMessageEmbeds(ninethStep(prefix)).complete();
-				Helper.awaitMessage(author,
+				MiscHelper.awaitMessage(author,
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "kps campo")) {
@@ -309,7 +310,7 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
@@ -318,8 +319,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(tenthStep(prefix)).complete();
 				Pages.buttonize(
 						msg,
-						Map.of(Helper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
+						Map.of(StringHelper.parseEmoji("▶️"), wrapper -> next.get().complete(true)),
+						Constants.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -331,7 +332,7 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 			}
 
@@ -340,8 +341,8 @@ public class TutorialCommand implements Executable {
 				msg = channel.sendMessageEmbeds(finalStep(prefix)).complete();
 				Pages.buttonize(
 						msg,
-						Map.of(Helper.parseEmoji("✅"), wrapper -> next.get().complete(true)),
-						ShiroInfo.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
+						Map.of(StringHelper.parseEmoji("✅"), wrapper -> next.get().complete(true)),
+						Constants.USE_BUTTONS, true, 5, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						s -> {
 							next.get().complete(false);
@@ -353,7 +354,7 @@ public class TutorialCommand implements Executable {
 				);
 
 				if (!next.get().get()) return;
-				msg.delete().queue(null, Helper::doNothing);
+				msg.delete().queue(null, MiscHelper::doNothing);
 				stage.getAndIncrement();
 
 				Main.getInfo().getConfirmationPending().remove(author.getId());
@@ -361,7 +362,7 @@ public class TutorialCommand implements Executable {
 				acc.addSCredit(25000, this.getClass());
 				acc.completeTutorial();
 				acc.setTutorialStage(stage.get());
-				AccountDAO.saveAccount(acc);
+				acc.save();
 				channel.sendMessage(author.getAsMention() + " recebeu **25.000** CR de iniciante!").queue();
 			}
 		} catch (ExecutionException | InterruptedException ignore) {

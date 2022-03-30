@@ -24,7 +24,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class RemoveRuleCommand implements Executable {
 
 		try {
 			int i = Integer.parseInt(args[0]);
-			if (!Helper.between(i, 0, rules.size())) {
+			if (!MathHelper.between(i, 0, rules.size())) {
 				channel.sendMessage("❌ | Regra inexistente.").queue();
 				return;
 			}
