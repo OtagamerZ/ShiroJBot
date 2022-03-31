@@ -111,6 +111,8 @@ public class BuyCardCommand implements Executable {
 								op.getDescription()
 						));
 					}
+
+					eb.setDescription(sb.toString());
 				}
 
 				for (Market m : cards) {
