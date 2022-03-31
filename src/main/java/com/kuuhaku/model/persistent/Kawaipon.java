@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
+import com.kuuhaku.model.annotations.WhenNull;
 import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.*;
@@ -58,6 +59,7 @@ public class Kawaipon extends DAO implements Cloneable {
 	public Kawaipon() {
 	}
 
+	@WhenNull
 	public Kawaipon(String uid) {
 		this.uid = uid;
 	}
@@ -156,8 +158,8 @@ public class Kawaipon extends DAO implements Cloneable {
 			}
 
 			if (update) {
-				KawaiponDAO.saveKawaipon(this);
-				decks = KawaiponDAO.getKawaipon(uid).getDecks();
+				this.save();
+				decks = Kawaipon.find(Kawaipon.class, uid).getDecks();
 			}
 		}
 

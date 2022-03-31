@@ -24,7 +24,6 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -32,8 +31,8 @@ import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Constants;
 import com.kuuhaku.utils.helpers.CollectionHelper;
-import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.helpers.ImageHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -64,7 +63,7 @@ public class TournamentPlayersCommand implements Executable {
 		}
 
 		try {
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;

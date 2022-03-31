@@ -24,7 +24,6 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -68,7 +67,8 @@ public class CustomAnswerCommand implements Executable {
 		} else if (LogicHelper.equalsAny(argsAsText, "lista", "list")) {
 			List<Page> pages = new ArrayList<>();
 
-			List<List<CustomAnswer>> answers = CollectionHelper.chunkify(CustomAnswerDAO.getCAByGuild(guild.getId()), 10);
+			List<CustomAnswer> cas = CustomAnswer.queryAll(CustomAnswer.class, "SELECT c FROM CustomAnswer c WHERE c.guildId = :guild", guild.getId());
+			List<List<CustomAnswer>> answers = CollectionHelper.chunkify(cas, 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(":pencil: Respostas deste servidor:");
@@ -96,8 +96,7 @@ public class CustomAnswerCommand implements Executable {
 			);
 			return;
 		} else if (StringUtils.isNumeric(argsAsText)) {
-			CustomAnswer ca = CustomAnswerDAO.getCAByIDAndGuild(Integer.parseInt(args[0]), guild.getId());
-
+			CustomAnswer ca = CustomAnswer.query(CustomAnswer.class, "SELECT c FROM CustomAnswer c WHERE c.id = :id AND c.guildId = :guild", args[0], guild.getId());
 			if (ca == null) {
 				channel.sendMessage(I18n.getString("err_custom-answer-not-found")).queue();
 				return;
@@ -188,7 +187,7 @@ public class CustomAnswerCommand implements Executable {
 			}
 			msg += ".";
 
-			CustomAnswerDAO.addCustomAnswer(ca);
+			ca.save();
 			Main.getInfo().registerCustomAnswer(ca);
 			channel.sendMessage(msg.formatted(StringUtils.abbreviate(ca.getAnswer().replace("\n", " "), 100), ca.getTrigger().replace("\n", " "))).queue();
 		} catch (JsonDataException | IllegalStateException e) {

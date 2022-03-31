@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Phase;
@@ -62,7 +61,7 @@ public class ManualResultCommand implements Executable {
 		}
 
 		try {
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 
 			int phase = Integer.parseInt(args[1]);
 			if (phase == t.getBracket().getPhases().size() - 1) {
@@ -73,7 +72,7 @@ public class ManualResultCommand implements Executable {
 					return;
 				}
 
-				User winner = Main.getInfo().getUserByID(match.get(index).getUid());
+				User winner = Main.getUserByID(match.get(index).getUid());
 				String matchName = match.stream()
 						.map(Participant::getUid)
 						.map(MiscHelper::getUsername)
@@ -82,7 +81,7 @@ public class ManualResultCommand implements Executable {
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									t.setTPResult(index);
-									TournamentDAO.save(t);
+									t.save();
 
 									s.delete().queue(null, MiscHelper::doNothing);
 									channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();
@@ -100,7 +99,7 @@ public class ManualResultCommand implements Executable {
 					return;
 				}
 
-				User winner = Main.getInfo().getUserByID(p.getParticipants(t).get(index).getUid());
+				User winner = Main.getUserByID(p.getParticipants(t).get(index).getUid());
 				String matchName = Arrays.stream(new String[]{match.getLeft().getUid(), match.getRight().getUid()})
 						.map(s -> s.equals("BYE") ? "_" + s + "_" : MiscHelper.getUsername(s))
 						.collect(Collectors.joining(" VS "));
@@ -108,7 +107,7 @@ public class ManualResultCommand implements Executable {
 				channel.sendMessage("Você está prestes a definir `" + winner.getName() + "` como vencedor da partida `" + matchName + "`, deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 									t.setResult(phase, index);
-									TournamentDAO.save(t);
+									t.save();
 
 									s.delete().queue(null, MiscHelper::doNothing);
 									channel.sendMessage("✅ | Resultado registrado com sucesso!").queue();

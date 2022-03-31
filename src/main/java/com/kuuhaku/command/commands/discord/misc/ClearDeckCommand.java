@@ -101,7 +101,7 @@ public class ClearDeckCommand implements Executable {
 								}
 								dk.getFields().clear();
 
-								KawaiponDAO.saveDeck(dk);
+								dk.save();
 								s.delete().queue();
 								channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
 							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

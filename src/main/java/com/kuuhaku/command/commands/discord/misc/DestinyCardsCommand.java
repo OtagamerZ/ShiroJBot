@@ -71,6 +71,6 @@ public class DestinyCardsCommand implements Executable {
 			}
 		}
 
-		KawaiponDAO.saveDeck(dk);
+		dk.save();
 	}
 }

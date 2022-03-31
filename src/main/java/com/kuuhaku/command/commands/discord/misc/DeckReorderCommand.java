@@ -152,7 +152,7 @@ public class DeckReorderCommand implements Executable {
 			}
 		}
 
-		KawaiponDAO.saveDeck(dk);
+		dk.save();
 		channel.sendMessage("Deck reorganizado com sucesso!").queue();
 	}
 }

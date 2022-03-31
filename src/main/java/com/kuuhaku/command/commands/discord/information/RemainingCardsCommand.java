@@ -23,7 +23,6 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -73,7 +72,7 @@ public class RemainingCardsCommand implements Executable {
 			return;
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		List<Page> pages = new ArrayList<>();
 		List<Card> collected = kp.getNormalCards().stream()
 				.map(KawaiponCard::getCard)

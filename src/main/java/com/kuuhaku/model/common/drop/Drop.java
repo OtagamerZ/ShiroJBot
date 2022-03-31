@@ -19,17 +19,13 @@
 package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.common.interfaces.Prize;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedTier;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.AddedAnime;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.helpers.CollectionHelper;
 import com.kuuhaku.utils.helpers.MathHelper;
 import com.kuuhaku.utils.helpers.StringHelper;
@@ -68,10 +64,10 @@ public abstract class Drop<P> implements Prize<P> {
 		};
 		condition = new ArrayList<>() {{
 			add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais",
-					u -> KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
+					u -> Kawaipon.find(Kawaipon.class, u.getId()).getCards().size() >= values[2]));
 
 			add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + " ou mais",
-					u -> KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
+					u -> Kawaipon.find(Kawaipon.class, u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
 
 			add(Pair.of("Ser level " + values[3] + " ou maior",
 					u -> MemberDAO.getMembersByUid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));

@@ -166,9 +166,9 @@ public class TutorialCommand implements Executable {
 						channel,
 						m -> {
 							if (m.getContentRaw().equalsIgnoreCase(prefix + "coletar")) {
-								Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+								Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 								kp.getCards().add(kc);
-								KawaiponDAO.saveKawaipon(kp);
+								kp.save();
 
 								acc.save();
 

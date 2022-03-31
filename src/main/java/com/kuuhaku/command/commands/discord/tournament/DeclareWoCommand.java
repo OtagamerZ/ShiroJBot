@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
@@ -53,7 +52,7 @@ public class DeclareWoCommand implements Executable {
 			return;
 		}
 
-		Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+		Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 		Participant p = t.getLookup(args[1]);
 		if (p == null) {
 			channel.sendMessage("❌ | Não há nenhum participante com esse ID.").queue();
@@ -68,7 +67,7 @@ public class DeclareWoCommand implements Executable {
 								t.getBench().remove(next);
 
 								try {
-									Main.getInfo().getUserByID(next).openPrivateChannel()
+									Main.getUserByID(next).openPrivateChannel()
 											.flatMap(c -> c.sendMessage("Um dos participantes não compareceu, você foi adicionado às chaves."))
 											.queue(null, MiscHelper::doNothing);
 								} catch (RuntimeException ignore) {
@@ -78,7 +77,7 @@ public class DeclareWoCommand implements Executable {
 								t.setResult(p.getPhase(), p.getIndex() % 2 == 0 ? p.getIndex() + 1 : p.getIndex() - 1);
 							}
 
-							TournamentDAO.save(t);
+							t.save();
 
 							s.delete().queue(null, MiscHelper::doNothing);
 							channel.sendMessage("✅ | W.O. registrado com sucesso!").queue();

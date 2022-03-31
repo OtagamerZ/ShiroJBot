@@ -18,12 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "upvote")
-public class Upvote {
+public class Upvote extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

@@ -20,11 +20,10 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.enums.RankedTier;
-import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -182,8 +181,9 @@ public class MatchMakingRating {
 					acc.addCredit(30000, this.getClass());
 					acc.save();
 
-					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + uid);
-					DynamicParameterDAO.setParam("freeSynth_" + uid, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+					DynamicParameter fr = DynamicParameter.find(DynamicParameter.class, "freeSynth_" + uid);
+					fr.setValue(NumberUtils.toInt(fr.getValue()) + 5);
+					fr.save();
 				} else {
 					Main.getUserByID(uid).openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)!".formatted(tier.getTier(), tier.getName())))

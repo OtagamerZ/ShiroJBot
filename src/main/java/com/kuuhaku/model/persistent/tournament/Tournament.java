@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.tournament;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.records.TournamentMatch;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tournament")
-public class Tournament {
+public class Tournament extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

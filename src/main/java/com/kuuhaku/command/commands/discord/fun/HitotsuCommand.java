@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.hitotsu.Hitotsu;
 import com.kuuhaku.model.annotations.Command;
@@ -60,15 +59,14 @@ public class HitotsuCommand implements Executable {
 			return;
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		if (kp.getCards().size() < 25) {
 			channel.sendMessage("❌ | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
 		}
 
 		for (User u : message.getMentionedUsers()) {
-			Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
+			Kawaipon k = Kawaipon.find(Kawaipon.class, u.getId());
 			if (k.getCards().size() < 25) {
 				channel.sendMessage(I18n.getString("err_not-enough-cards-mention", u.getAsMention())).queue();
 				return;

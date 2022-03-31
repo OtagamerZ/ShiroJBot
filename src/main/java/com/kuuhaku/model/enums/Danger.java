@@ -44,9 +44,9 @@ public enum Danger {
 	}),
 	DEATH("Penalidade de morte", h -> {
 		h.setDied(true);
-		Kawaipon kp = KawaiponDAO.getKawaipon(h.getUid());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, h.getUid());
 		kp.getHeroes().remove(h);
-		KawaiponDAO.saveKawaipon(kp);
+		kp.save();
 
 		return "Seu herói morreu durante a missão";
 	}),

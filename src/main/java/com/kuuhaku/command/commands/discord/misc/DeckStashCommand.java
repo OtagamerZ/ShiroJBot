@@ -47,7 +47,7 @@ public class DeckStashCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		Account acc = Account.find(Account.class, author.getId());
 		List<Deck> decks = kp.getDecks();
 
@@ -85,7 +85,7 @@ public class DeckStashCommand implements Executable {
 			}
 
 			kp.setDeck(slot);
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 
 			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();
 		} catch (NumberFormatException e) {
@@ -106,7 +106,7 @@ public class DeckStashCommand implements Executable {
 			}
 
 			kp.setDeck(slot);
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 
 			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();
 		}
