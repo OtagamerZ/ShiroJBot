@@ -116,10 +116,10 @@ public class StashDAO {
 			put("n", "AND c.id LIKE UPPER(:nome)");
 			put("r", "AND c.rarity LIKE UPPER(:raridade)");
 			put("a", "AND a.id LIKE UPPER(:anime)");
-			put("c", "AND m.foil = TRUE");
-			put("k", "AND m.type = 'KAWAIPON'");
-			put("e", "AND m.type = 'EVOGEAR'");
-			put("f", "AND m.type = 'FIELD'");
+			put("c", "AND s.foil = TRUE");
+			put("k", "AND s.type = 'KAWAIPON'");
+			put("e", "AND s.type = 'EVOGEAR'");
+			put("f", "AND s.type = 'FIELD'");
 		}};
 
 		Map<String, Function<String, Object>> parser = new HashMap<>() {{
@@ -170,13 +170,13 @@ public class StashDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("n", "AND c.id LIKE UPPER(:nome)");
 			put("r", "AND c.rarity LIKE UPPER(:raridade)");
 			put("a", "AND a.id LIKE UPPER(:anime)");
-			put("c", "AND m.foil = TRUE");
-			put("k", "AND m.type = 'KAWAIPON'");
-			put("e", "AND m.type = 'EVOGEAR'");
-			put("f", "AND m.type = 'FIELD'");
+			put("c", "AND s.foil = TRUE");
+			put("k", "AND s.type = 'KAWAIPON'");
+			put("e", "AND s.type = 'EVOGEAR'");
+			put("f", "AND s.type = 'FIELD'");
 		}};
 
 		Map<String, Function<String, Object>> parser = new HashMap<>() {{
