@@ -113,7 +113,7 @@ public class StashDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("n", "AND c.id LIKE UPPER(:nome)");
 			put("r", "AND c.rarity LIKE UPPER(:raridade)");
 			put("a", "AND a.id LIKE UPPER(:anime)");
 			put("c", "AND m.foil = TRUE");

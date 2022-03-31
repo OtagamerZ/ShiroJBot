@@ -85,12 +85,12 @@ public class MarketDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("n", "AND c.id LIKE UPPER(:nome)");
 			put("r", "AND c.rarity LIKE UPPER(:raridade)");
 			put("a", "AND a.id LIKE UPPER(:anime)");
 			put("j", "AND m.emoji = :emoji");
-			put(">", "AND m.price > :min");
-			put("<", "AND m.price < :max");
+			put("g", "AND m.price >= :min");
+			put("l", "AND m.price <= :max");
 			put("c", "AND m.foil = TRUE");
 			put("m", "AND m.seller = '%s'".formatted(u.getId()));
 			put("k", "AND m.type = 'KAWAIPON'");
@@ -100,8 +100,8 @@ public class MarketDAO {
 
 		Map<String, Function<String, Object>> parser = new HashMap<>() {{
 			put("r", KawaiponRarity::getByName);
-			put(">", NumberUtils::toInt);
-			put("<", NumberUtils::toInt);
+			put("g", NumberUtils::toInt);
+			put("l", NumberUtils::toInt);
 		}};
 
 		List<Consumer<Query>> params = new ArrayList<>();
@@ -148,12 +148,12 @@ public class MarketDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("n", "AND c.id LIKE UPPER(:nome)");
 			put("r", "AND c.rarity LIKE UPPER(:raridade)");
 			put("a", "AND a.id LIKE UPPER(:anime)");
 			put("j", "AND m.emoji = :emoji");
-			put("g", "AND m.price > :min");
-			put("l", "AND m.price < :max");
+			put("g", "AND m.price >= :min");
+			put("l", "AND m.price <= :max");
 			put("c", "AND m.foil = TRUE");
 			put("m", "AND m.seller = '%s'".formatted(u.getId()));
 			put("k", "AND m.type = 'KAWAIPON'");
