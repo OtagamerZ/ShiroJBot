@@ -206,7 +206,7 @@ public abstract class DAO {
 		try {
 			em.getTransaction().begin();
 
-			T obj = em.find(klass, id, LockModeType.PESSIMISTIC_READ);
+			T obj = em.find(klass, id, LockModeType.PESSIMISTIC_WRITE);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;

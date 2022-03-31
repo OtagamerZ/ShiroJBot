@@ -43,7 +43,7 @@ public class SelectHeroCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		List<Hero> heroes = kp.getHeroes();
 
 		if (heroes.isEmpty()) {
@@ -98,7 +98,7 @@ public class SelectHeroCommand implements Executable {
 
 			chosen.setResting(false);
 			kp.setHero(id);
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 
 			channel.sendMessage("✅ | Herói alternado com sucesso.").queue();
 		} catch (NumberFormatException e) {

@@ -22,7 +22,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
@@ -65,7 +64,7 @@ public class MyBuffsCommand implements Executable, Slashed {
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + MathHelper.roundToString(mult * 100 - 100, 0) + "% XP ganho", false);
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
 		float progress = kp.getCards().size() / (total * 2f);
 

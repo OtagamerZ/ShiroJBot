@@ -18,26 +18,24 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.utils.helpers.MiscHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Manager {
 	private static EntityManagerFactory emf;
 
 	public static EntityManager getEntityManager() {
-		Map<String, String> props = new HashMap<>();
-		props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
-		props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
-		props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_IP") + "/shiro?sslmode=require");
-
 		if (emf == null) {
-			emf = Persistence.createEntityManagerFactory("shiro_remote", props);
+			emf = Persistence.createEntityManagerFactory("shiro_remote", Map.of(
+					"javax.persistence.jdbc.user", System.getenv("DB_LOGIN"),
+					"javax.persistence.jdbc.password", System.getenv("DB_PASS"),
+					"javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_IP") + "/shiro?sslmode=require"
+			));
 			MiscHelper.logger(Manager.class).info("✅ | Ligação à base de dados PostgreSQL estabelecida.");
 		}
 
@@ -48,12 +46,8 @@ public class Manager {
 
 	public static long ping() {
 		long curr = System.currentTimeMillis();
-		EntityManager em = getEntityManager();
 
-		Query q = em.createQuery("SELECT v FROM Version v");
-
-		q.getSingleResult();
-		em.close();
+		DAO.queryUnmapped("SELECT 1");
 
 		return System.currentTimeMillis() - curr;
 	}

@@ -20,12 +20,7 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.Couple;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.records.ClanRanking;
 import com.kuuhaku.utils.helpers.ImageHelper;
 import com.kuuhaku.utils.helpers.MathHelper;
@@ -68,49 +63,49 @@ public enum Tag {
 	CARTAS_NORMAIS_25(TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons normais.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total, 0.25, 0.5);
+				return MathHelper.between(Kawaipon.find(Kawaipon.class, user.getId()).getNormalCards().size() / (float) total, 0.25, 0.5);
 			}),
 
 	CARTAS_NORMAIS_50(TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons normais.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total, 0.5, 0.75);
+				return MathHelper.between(Kawaipon.find(Kawaipon.class, user.getId()).getNormalCards().size() / (float) total, 0.5, 0.75);
 			}),
 
 	CARTAS_NORMAIS_75(TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons normais.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total, 0.75, 1);
+				return MathHelper.between(Kawaipon.find(Kawaipon.class, user.getId()).getNormalCards().size() / (float) total, 0.75, 1);
 			}),
 
 	CARTAS_NORMAIS_100(TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons normais.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return KawaiponDAO.getKawaipon(user.getId()).getNormalCards().size() / (float) total >= 1;
+				return Kawaipon.find(Kawaipon.class, user.getId()).getNormalCards().size() / (float) total >= 1;
 			}),
 
 	CARTAS_CROMADAS_25(TagIcons.FOIL25, "Usuário que completou 25% da coleção de Kawaipons cromados.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total, 0.25, 0.5);
+				return MathHelper.between(Kawaipon.find(Kawaipon.class, user.getId()).getFoilCards().size() / (float) total, 0.25, 0.5);
 			}),
 
 	CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total, 0.5, 0.75);
+				return MathHelper.between(Kawaipon.find(Kawaipon.class, user.getId()).getFoilCards().size() / (float) total, 0.5, 0.75);
 			}),
 
 	CARTAS_CROMADAS_75(TagIcons.FOIL75, "Usuário que completou 75% da coleção de Kawaipons cromados.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return MathHelper.between(KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total, 0.75, 1);
+				return MathHelper.between(Kawaipon.find(Kawaipon.class, user.getId()).getFoilCards().size() / (float) total, 0.75, 1);
 			}),
 
 	CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
 			(user, member) -> {
 				int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
-				return KawaiponDAO.getKawaipon(user.getId()).getFoilCards().size() / (float) total >= 1;
+				return Kawaipon.find(Kawaipon.class, user.getId()).getFoilCards().size() / (float) total >= 1;
 			}),
 
 	CLA_VITORIOSO(TagIcons.CLAN_CHAMPION, "Seu clã está em primeiro lugar.",
@@ -124,7 +119,7 @@ public enum Tag {
 			(user, member) -> Account.find(Account.class, user.getId()).getBugs() > 25),
 
 	PADORU_PADORU(TagIcons.PADORU, "Você cantou tão bem que Nero te deu um emblema.",
-			(user, member) -> !DynamicParameterDAO.getValue("padoru_" + user.getId()).isBlank());
+			(user, member) -> !DynamicParameter.find(DynamicParameter.class, "padoru_" + user.getId()).getValue().isBlank());
 
 	private final TagIcons emote;
 	private final String description;

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.tournament;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import net.dv8tion.jda.api.entities.*;
@@ -45,14 +44,14 @@ public class SetTournamentDescriptionCommand implements Executable {
 		try {
 			String[] r = argsAsText.split(";");
 
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(r[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(r[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
 			}
 
 			t.setDescription(r[1]);
-			TournamentDAO.save(t);
+			t.save();
 
 			channel.sendMessage("✅ | Descrição adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {

@@ -114,9 +114,9 @@ public class SummonHeroCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-							kp.getHeroes().add(new Hero(author, name, r, image));
-							KawaiponDAO.saveKawaipon(kp);
+							Kawaipon.apply(Kawaipon.class, author.getId(), kp ->
+									kp.getHeroes().add(new Hero(author, name, r, image))
+							);
 
 							acc.removeGem((int) Math.pow(2, heroes));
 							acc.getAchievements().add(Achievement.A_HERO_IS_BORN);

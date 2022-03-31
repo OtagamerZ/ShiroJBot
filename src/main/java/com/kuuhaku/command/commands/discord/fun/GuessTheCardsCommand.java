@@ -22,13 +22,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Leaderboards;
 import com.kuuhaku.utils.helpers.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -152,9 +152,13 @@ public class GuessTheCardsCommand implements Executable {
 															names.get(1),
 															names.get(2)
 													)).queue();
-									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
-									if (lost > 0)
-										LeaderboardsDAO.submit(author, GuessTheNumberCommand.class, -lost);
+									int lost = Leaderboards.queryNative(Number.class, "SELECT COALESCE(SUM(l.score), 0) FROM Leaderboards l WHERE l.uid = :uid AND l.minigame = :game LIMIT 10",
+											author.getId(),
+											getThis().getSimpleName()
+									).intValue();
+									if (lost > 0) {
+										new Leaderboards(author, getThis(), -lost).save();
+									}
 								}
 								case 1 -> {
 									channel.sendMessage(
@@ -164,8 +168,11 @@ public class GuessTheCardsCommand implements Executable {
 															names.get(1),
 															StringHelper.separate(reward)
 													)).queue();
-									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
-									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 1 - lost);
+									int lost = Leaderboards.queryNative(Number.class, "SELECT COALESCE(SUM(l.score), 0) FROM Leaderboards l WHERE l.uid = :uid AND l.minigame = :game LIMIT 10",
+											author.getId(),
+											getThis().getSimpleName()
+									).intValue();
+									new Leaderboards(author, getThis(), 1 - lost).save();
 								}
 								case 2 -> {
 									channel.sendMessage(
@@ -174,14 +181,17 @@ public class GuessTheCardsCommand implements Executable {
 															names.get(0),
 															StringHelper.separate(reward)
 													)).queue();
-									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
-									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 2 - lost);
+									int lost = Leaderboards.queryNative(Number.class, "SELECT COALESCE(SUM(l.score), 0) FROM Leaderboards l WHERE l.uid = :uid AND l.minigame = :game LIMIT 10",
+											author.getId(),
+											getThis().getSimpleName()
+									).intValue();
+									new Leaderboards(author, getThis(), 2 - lost).save();
 								}
 								case 3 -> {
 									channel.sendMessage(
 											"Você acertou todos os nomes, parabéns! (Recebeu %s CR)."
 													.formatted(StringHelper.separate(reward))).queue();
-									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 3);
+									new Leaderboards(author, getThis(), 3).save();
 								}
 							}
 

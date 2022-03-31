@@ -24,7 +24,6 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -32,8 +31,8 @@ import com.kuuhaku.model.persistent.tournament.Participant;
 import com.kuuhaku.model.persistent.tournament.Tournament;
 import com.kuuhaku.utils.Constants;
 import com.kuuhaku.utils.helpers.CollectionHelper;
-import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.helpers.MathHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -59,7 +58,8 @@ public class CloseBracketsCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			List<List<Tournament>> chunks = CollectionHelper.chunkify(TournamentDAO.getOpenTournaments(), 10);
+			List<Tournament> tns = Tournament.queryAll(Tournament.class, "SELECT t FROM Tournament t JOIN t.participants p WHERE t.closed = FALSE");
+			List<List<Tournament>> chunks = CollectionHelper.chunkify(tns, 10);
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -94,14 +94,14 @@ public class CloseBracketsCommand implements Executable {
 		}
 
 		try {
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
 			} else if (MathHelper.prcnt(t.getParticipants().size(), t.getSize()) < 0.75) {
 				channel.sendMessage("❌ | É necessário ter no mínimo 75% das vagas preenchidas para poder fechar as chaves.").queue();
 				return;
-			} else if (TournamentDAO.getClosedTournaments().size() > 0) {
+			} else if (Tournament.queryNative(Number.class, "SELECT COUNT(1) FROM Tournament t WHERE t.closed = TRUE AND t.finished = FALSE").intValue() > 0) {
 				channel.sendMessage("❌ | Já existe um torneio fechado.").queue();
 				return;
 			}
@@ -109,11 +109,11 @@ public class CloseBracketsCommand implements Executable {
 			channel.sendMessage("Você está prestes a liberar as chaves do torneio `" + t.getName() + "`, deseja confirmar (novas inscrições serão fechadas)?").queue(
 					s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								t.close();
-								TournamentDAO.save(t);
+								t.save();
 
 								for (Participant p : t.getParticipants()) {
 									try {
-										Main.getInfo().getUserByID(p.getUid()).openPrivateChannel()
+										Main.getUserByID(p.getUid()).openPrivateChannel()
 												.flatMap(c -> c.sendMessage("As chaves do torneio `" + t.getName() + "` foram liberadas, fale com o organizador para mais detalhes."))
 												.queue(null, MiscHelper::doNothing);
 									} catch (Exception ignore) {

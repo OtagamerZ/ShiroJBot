@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.tournament;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.tournament.Tournament;
@@ -53,7 +52,7 @@ public class CreateTournamentCommand implements Executable {
 		Tournament t = new Tournament(argsAsText);
 		channel.sendMessage("Você está prestes a criar um novo torneio chamado `" + argsAsText + "`, deseja confirmar?").queue(
 				s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
-							TournamentDAO.save(t);
+							t.save();
 
 							s.delete().queue(null, MiscHelper::doNothing);
 							channel.sendMessage("✅ | Torneio criado com sucesso (para iniciá-lo use `" + prefix + "liberarchaves`)!").queue();

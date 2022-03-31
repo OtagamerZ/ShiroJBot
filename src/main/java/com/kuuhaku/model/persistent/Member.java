@@ -100,7 +100,7 @@ public class Member extends DAO implements Blacklistable {
 			bonuses.add(new Bonus(1, "Waifu", Account.find(Account.class, u.getId()).getCoupleMult()));
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, u.getId());
 		int curr = kp.getCards().size();
 		int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
 		float completed = curr / (total * 2f);
@@ -132,7 +132,7 @@ public class Member extends DAO implements Blacklistable {
 			mult.updateAndGet(v -> v * Account.find(Account.class, uid).getCoupleMult());
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(uid);
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, uid);
 		int curr = kp.getCards().size();
 		int total = Card.queryNative(Number.class, "SELECT COUNT(1) FROM Card").intValue();
 		float completed = curr / (total * 2f);
@@ -284,14 +284,15 @@ public class Member extends DAO implements Blacklistable {
 			put("uid", uid);
 			put("sid", sid);
 			put("pseudoName", pseudoName);
-			put("profileColor", acc.getProfileColor());
-			put("bg", acc.getBg());
-			put("bio", acc.getBio());
 			put("pseudoAvatar", pseudoAvatar);
-			put("level", getLevel());
+			put("profileColor", acc.getProfileColor());
 			put("xp", xp);
+			put("level", getLevel());
 			put("lastVoted", lastVoted);
+			put("lastEarntXp", lastEarntXp);
 			put("rulesSent", rulesSent);
+			put("trophy", trophy);
+			put("warns", warns);
 		}};
 	}
 

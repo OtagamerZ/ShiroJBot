@@ -19,7 +19,6 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.common.MatchMaking;
@@ -114,7 +113,7 @@ public class ShiroInfo {
 	private final ExpiringMap<String, Prize<?>> currentDrop = CollectionHelper.makeExpMap(1, TimeUnit.MINUTES).build();
 
 	private final Map<Pair<String, String>, RandomList<CustomAnswer>> customAnswers = new RefreshingMap<>(() -> {
-		List<CustomAnswer> cas = CustomAnswerDAO.getCustomAnswers();
+		List<CustomAnswer> cas = CustomAnswer.findAll(CustomAnswer.class);
 		Map<Pair<String, String>, RandomList<CustomAnswer>> out = new HashMap<>();
 
 		for (CustomAnswer ca : cas) {

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.tournament;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.records.Rules;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.tournament.Tournament;
@@ -51,7 +50,7 @@ public class SetTournamentRulesCommand implements Executable {
 		try {
 			String[] r = argsAsText.split(";");
 
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(r[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(r[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
@@ -60,7 +59,7 @@ public class SetTournamentRulesCommand implements Executable {
 			JSONObject custom = CollectionHelper.getOr(StringHelper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
 
 			t.setCustomRules(new Rules(custom, true));
-			TournamentDAO.save(t);
+			t.save();
 
 			channel.sendMessage("✅ | Regras definidas com sucesso!").queue();
 		} catch (NumberFormatException e) {

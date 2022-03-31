@@ -21,11 +21,11 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Leaderboards;
 import com.kuuhaku.utils.helpers.MathHelper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -102,7 +102,7 @@ public class FaceoffCommand implements Executable {
 						acc.addCredit(prize, this.getClass());
 						acc.save();
 
-						LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
+						new Leaderboards(author, getThis(), (int) react).save();
 					}
 				}
 			});

@@ -105,7 +105,7 @@ public class Hitotsu extends Game {
 		);
 
 		for (User u : players) {
-			Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+			Kawaipon kp = Kawaipon.find(Kawaipon.class, u.getId());
 			available.addAll(kp.getCards());
 		}
 

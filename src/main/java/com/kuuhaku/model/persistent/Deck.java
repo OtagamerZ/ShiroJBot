@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.postgresql.DrawableDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "deck")
-public class Deck {
+public class Deck extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

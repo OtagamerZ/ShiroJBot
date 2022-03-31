@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.annotations.WhenNull;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,7 +28,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "dynamicparameter")
-public class DynamicParameter {
+public class DynamicParameter extends DAO {
 	@Id
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	private String param = "";
@@ -36,8 +39,14 @@ public class DynamicParameter {
 	public DynamicParameter() {
 	}
 
+	@WhenNull
 	public DynamicParameter(String param) {
 		this.param = param;
+	}
+
+	public DynamicParameter(String param, Object value) {
+		this.param = param;
+		this.value = String.valueOf(value);
 	}
 
 	public String getParam() {
@@ -52,7 +61,7 @@ public class DynamicParameter {
 		return value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setValue(Object value) {
+		this.value = String.valueOf(value);
 	}
 }

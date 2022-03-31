@@ -23,7 +23,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -80,7 +79,7 @@ public class AuctionCommand implements Executable {
 			return;
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		Deck dk = kp.getDeck();
 		Object obj;
 		boolean foil = args[1].equalsIgnoreCase("C");
@@ -159,7 +158,7 @@ public class AuctionCommand implements Executable {
 							int offer = Integer.parseInt(raw);
 
 							if (offer >= price && (highest.get() == null || offer > highest.get().getRight())) {
-								Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
+								Kawaipon offerer = Kawaipon.find(Kawaipon.class, evt.getAuthor().getId());
 								Deck dk = offerer.getDeck();
 								AtomicReference<Account> oacc = new AtomicReference<>(Account.find(Account.class, evt.getAuthor().getId()));
 
@@ -195,10 +194,10 @@ public class AuctionCommand implements Executable {
 										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + StringHelper.separate(highest.get().getRight()) + "** CR!").queue();
 
 										if (!author.getId().equals(highest.get().getLeft().getId())) {
-											Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
-											Deck sdk = k.getDeck();
+											Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
+											Deck sdk = kp.getDeck();
 
-											Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
+											Kawaipon buyer = Kawaipon.find(Kawaipon.class, highest.get().getLeft().getId());
 											Deck bdk = buyer.getDeck();
 
 											Account acc = Account.find(Account.class, author.getId());
@@ -209,7 +208,7 @@ public class AuctionCommand implements Executable {
 
 											switch (type) {
 												case 1 -> {
-													k.removeCard((KawaiponCard) obj);
+													kp.removeCard((KawaiponCard) obj);
 													buyer.addCard((KawaiponCard) obj);
 												}
 												case 2 -> {
@@ -222,8 +221,8 @@ public class AuctionCommand implements Executable {
 												}
 											}
 
-											KawaiponDAO.saveKawaipon(k);
-											KawaiponDAO.saveKawaipon(buyer);
+											kp.save();
+											buyer.save();
 											acc.save();
 											bacc.save();
 										}

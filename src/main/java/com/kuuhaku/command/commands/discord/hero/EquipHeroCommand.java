@@ -77,7 +77,7 @@ public class EquipHeroCommand implements Executable {
 		dk.removeEquipment(e);
 		h.getInventory().add(e);
 
-		KawaiponDAO.saveDeck(dk);
+		dk.save();
 		KawaiponDAO.saveHero(h);
 
 		channel.sendMessage("Equipado com sucesso!").queue();

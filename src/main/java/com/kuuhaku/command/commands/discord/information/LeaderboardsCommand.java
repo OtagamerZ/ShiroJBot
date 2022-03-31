@@ -22,11 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.command.commands.discord.fun.ColorNameCommand;
-import com.kuuhaku.command.commands.discord.fun.GuessTheCardsCommand;
-import com.kuuhaku.command.commands.discord.fun.GuessTheNumberCommand;
-import com.kuuhaku.command.commands.discord.fun.JankenponCommand;
-import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -63,16 +58,28 @@ public class LeaderboardsCommand implements Executable {
 			return;
 		}
 
-		sendLeaderboards(cmd,
-				switch (cmd.getCommand().getClass().getSimpleName()) {
-					case "FaceoffCommand" -> LeaderboardsDAO.getFaceoffLeaderboards();
-					case "SlotsCommand" -> LeaderboardsDAO.getSlotsLeaderboards();
-					case "GuessTheCardsCommand" -> LeaderboardsDAO.getCommonLeaderboards(GuessTheCardsCommand.class);
-					case "GuessTheNumberCommand" -> LeaderboardsDAO.getCommonLeaderboards(GuessTheNumberCommand.class);
-					case "JankenponCommand" -> LeaderboardsDAO.getCommonLeaderboards(JankenponCommand.class);
-					case "ColorNameCommand" -> LeaderboardsDAO.getCommonLeaderboards(ColorNameCommand.class);
-					default -> null;
-				}, channel);
+		String order;
+		if (cmd.getClass().getSimpleName().equals("FaceoffCommand")) {
+			order = "ORDER BY score, id DESC";
+		} else {
+			order = "ORDER BY score DESC, id DESC";
+		}
+
+		List<Leaderboards> lb = Leaderboards.queryAllNative(Leaderboards.class, """
+				SELECT MAX(l.id) AS id
+					 , l.uid
+					 , MAX(l.usr) AS usr
+					 , l.minigame
+					 , CASE l.minigame
+					 	WHEN 'FaceoffCommand' THEN MIN(l.score)
+					 	ELSE SUM(l.score)
+					 END AS score
+				FROM Leaderboards l
+				WHERE l.minigame = :game
+				GROUP BY l.uid, l.minigame
+				""" + order, cmd.getCommand().getClass().getSimpleName());
+
+		sendLeaderboards(cmd, lb, channel);
 	}
 
 	private void sendLeaderboards(PreparedCommand cmd, List<Leaderboards> lb, TextChannel channel) {

@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.helpers.LogicHelper;
@@ -44,9 +43,9 @@ public class RemoveAnswerCommand implements Executable {
 			channel.sendMessage("❌ | Você precisa especificar um ID.").queue();
 			return;
 		} else if (LogicHelper.equalsAny(args[0], "nada", "nothing")) {
-			List<CustomAnswer> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
+			List<CustomAnswer> cas = CustomAnswer.queryAll(CustomAnswer.class, "SELECT c FROM CustomAnswer c WHERE c.guildId = :guild", guild.getId());
 			for (CustomAnswer ca : cas) {
-				CustomAnswerDAO.deleteCustomAnswer(ca);
+				ca.delete();
 			}
 
 			channel.sendMessage("Não vou mais responder nenhuma das mensagens configuradas até então.").queue();
@@ -57,10 +56,9 @@ public class RemoveAnswerCommand implements Executable {
 		}
 
 		try {
-			CustomAnswer ca = CustomAnswerDAO.getCAByIDAndGuild(Integer.parseInt(args[0]), guild.getId());
-
+			CustomAnswer ca = CustomAnswer.query(CustomAnswer.class, "SELECT c FROM CustomAnswer c WHERE c.id = :id AND c.guildId = :guild", args[0], guild.getId());
 			if (ca != null) {
-				CustomAnswerDAO.deleteCustomAnswer(ca);
+				ca.delete();
 				Main.getInfo().removeCustomAnswer(ca);
 				channel.sendMessage("Não vou mais responder com a resposta de ID " + args[0] + ".").queue();
 			} else {

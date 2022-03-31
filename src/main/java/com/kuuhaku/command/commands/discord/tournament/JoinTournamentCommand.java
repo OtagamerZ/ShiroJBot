@@ -23,7 +23,6 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -56,7 +55,8 @@ public class JoinTournamentCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			List<List<Tournament>> chunks = CollectionHelper.chunkify(TournamentDAO.getOpenTournaments(), 10);
+			List<Tournament> tns = Tournament.queryAll(Tournament.class, "SELECT t FROM Tournament t JOIN t.participants p WHERE t.closed = FALSE");
+			List<List<Tournament>> chunks = CollectionHelper.chunkify(tns, 10);
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -91,7 +91,7 @@ public class JoinTournamentCommand implements Executable {
 		}
 
 		try {
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
@@ -103,7 +103,7 @@ public class JoinTournamentCommand implements Executable {
 			channel.sendMessage("Você está prestes a inscrever-se no torneio `" + t.getName() + "`, deseja confirmar?").queue(
 					s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								t.register(author.getId());
-								TournamentDAO.save(t);
+								t.save();
 
 								s.delete().queue(null, MiscHelper::doNothing);
 								channel.sendMessage("✅ | Inscrição realizada com sucesso! Você será notificado quando as chaves forem liberadas.").queue();
