@@ -65,7 +65,7 @@ public class UnequipHeroCommand implements Executable {
 		dk.addEquipment(e);
 		h.getInventory().remove(e);
 
-		KawaiponDAO.saveDeck(dk);
+		dk.save();
 		KawaiponDAO.saveHero(h);
 
 		channel.sendMessage("Desequipado com sucesso!").queue();

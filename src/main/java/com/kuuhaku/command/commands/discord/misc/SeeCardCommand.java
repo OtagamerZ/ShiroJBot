@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -64,7 +63,7 @@ public class SeeCardCommand implements Executable {
 		}
 
 		Account acc = Account.find(Account.class, author.getId());
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		boolean shoukan = args.length > 1 && args[1].equalsIgnoreCase("S");
 
 		if (shoukan) {

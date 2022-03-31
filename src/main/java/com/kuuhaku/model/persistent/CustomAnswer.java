@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.utils.helpers.CollectionHelper;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "customanswer")
-public class CustomAnswer {
+public class CustomAnswer extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

@@ -21,11 +21,11 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Leaderboards;
 import com.kuuhaku.utils.helpers.LogicHelper;
 import com.kuuhaku.utils.helpers.MathHelper;
 import com.kuuhaku.utils.helpers.StringHelper;
@@ -105,8 +105,11 @@ public class GuessTheNumberCommand implements Executable {
 					success.accept(null);
 					timeout.cancel(true);
 					timeout = null;
-					int lost = chances == 4 ? 0 : LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
-					LeaderboardsDAO.submit(author, GuessTheNumberCommand.class, chances - lost);
+					int lost = chances == 4 ? 0 : Leaderboards.queryNative(Number.class, "SELECT COALESCE(SUM(l.score), 0) FROM Leaderboards l WHERE l.uid = :uid AND l.minigame = :game LIMIT 10",
+							author.getId(),
+							getThis().getSimpleName()
+					).intValue();
+					new Leaderboards(author, getThis(), chances - lost).save();
 				} else {
 					if (chances > 0) {
 						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse número está " + hint + "o número escolhido por mim.").queue();
@@ -116,9 +119,13 @@ public class GuessTheNumberCommand implements Executable {
 						success.accept(null);
 						timeout.cancel(true);
 						timeout = null;
-						int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
-						if (lost > 0)
-							LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, -lost);
+						int lost = Leaderboards.queryNative(Number.class, "SELECT COALESCE(SUM(l.score), 0) FROM Leaderboards l WHERE l.uid = :uid AND l.minigame = :game LIMIT 10",
+								author.getId(),
+								getThis().getSimpleName()
+						).intValue();
+						if (lost > 0) {
+							new Leaderboards(author, getThis(), -lost).save();
+						}
 					}
 				}
 			}

@@ -82,7 +82,7 @@ public class TradeOffer {
 	}
 
 	public Kawaipon getKawaipon() {
-		return KawaiponDAO.getKawaipon(uid);
+		return Kawaipon.find(Kawaipon.class, uid);
 	}
 
 	public boolean hasAccepted() {
@@ -149,7 +149,7 @@ public class TradeOffer {
 			}
 		}
 
-		KawaiponDAO.saveKawaipon(kp);
+		kp.save();
 	}
 
 	public void rollback(TradeCard card) {
@@ -199,7 +199,7 @@ public class TradeOffer {
 		}
 
 		cards.remove(card);
-		KawaiponDAO.saveKawaipon(kp);
+		kp.save();
 	}
 
 	public void commit(String uid) {

@@ -313,7 +313,7 @@ public class TradeCommand implements Executable {
 
 									to.getCards().add(tc);
 
-									KawaiponDAO.saveKawaipon(finalKp);
+									finalKp.save();
 								} catch (InterruptedException | ExecutionException e) {
 									MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 								}

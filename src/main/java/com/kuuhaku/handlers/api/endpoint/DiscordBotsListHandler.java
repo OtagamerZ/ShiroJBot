@@ -20,9 +20,9 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.TokenDAO;
-import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Upvote;
 import com.kuuhaku.utils.helpers.FileHelper;
 import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.helpers.StringHelper;
@@ -79,7 +79,7 @@ public class DiscordBotsListHandler {
 		} catch (RuntimeException e) {
 			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		} finally {
-			if (u != null) UpvoteDAO.voted(u);
+			if (u != null) new Upvote(u.getId(), u.getName()).save();
 		}
 	}
 
@@ -113,7 +113,7 @@ public class DiscordBotsListHandler {
 					} catch (RuntimeException e) {
 						MiscHelper.logger(DiscordBotsListHandler.class).error(e + " | " + e.getStackTrace()[0]);
 					} finally {
-						if (u != null) UpvoteDAO.voted(u);
+						if (u != null) new Upvote(u.getId(), u.getName()).save();
 					}
 				});
 	}

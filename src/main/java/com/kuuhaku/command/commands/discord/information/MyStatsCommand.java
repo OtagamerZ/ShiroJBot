@@ -67,7 +67,7 @@ public class MyStatsCommand implements Executable, Slashed {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		Set<Tag> tags = Tag.getTags(member);
 

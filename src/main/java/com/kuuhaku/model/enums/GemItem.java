@@ -19,14 +19,13 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.helpers.CollectionHelper;
-import com.kuuhaku.utils.helpers.MiscHelper;
 import com.kuuhaku.utils.functional.TriFunction;
+import com.kuuhaku.utils.helpers.CollectionHelper;
 import com.kuuhaku.utils.helpers.LogicHelper;
+import com.kuuhaku.utils.helpers.MiscHelper;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -70,7 +69,7 @@ public enum GemItem {
 					return false;
 				}
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
+				Kawaipon kp = Kawaipon.find(Kawaipon.class, mb.getId());
 				Card c = CardDAO.getCard(args[1], false);
 				CardStatus cs = MiscHelper.checkStatus(kp);
 
@@ -109,7 +108,7 @@ public enum GemItem {
 				Card chosen = CollectionHelper.getRandomEntry(cards);
 
 				card.setCard(chosen);
-				KawaiponDAO.saveKawaipon(kp);
+				kp.save();
 
 				chn.sendMessage("Você rodou a carta " + card.getName() + " e obteve....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
 				return true;
@@ -193,7 +192,7 @@ public enum GemItem {
 					return false;
 				}
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
+				Kawaipon kp = Kawaipon.find(Kawaipon.class, mb.getId());
 				Card c = CardDAO.getCard(args[1], false);
 				CardStatus cs = MiscHelper.checkStatus(kp);
 
@@ -216,7 +215,7 @@ public enum GemItem {
 				}
 
 				card.setFoil(true);
-				KawaiponDAO.saveKawaipon(kp);
+				kp.save();
 
 				return true;
 			}
@@ -225,14 +224,14 @@ public enum GemItem {
 			"Bênção dos deuses", "Sua próxima síntese normal estará garantida de ser uma das últimas 10 cartas adicionados.",
 			6,
 			(mb, chn, args) -> {
-				DynamicParameter dp = DynamicParameterDAO.getParam("blessing_" + mb.getId());
-
+				DynamicParameter dp = DynamicParameter.find(DynamicParameter.class, "blessing_" + mb.getId());
 				if (!dp.getValue().isBlank()) {
 					chn.sendMessage("❌ | Você já possui uma bênção ativa.").queue();
 					return false;
 				}
 
-				DynamicParameterDAO.setParam("blessing_" + mb.getId(), "gods");
+				dp.setValue("gods");
+				dp.save();
 
 				return true;
 			}

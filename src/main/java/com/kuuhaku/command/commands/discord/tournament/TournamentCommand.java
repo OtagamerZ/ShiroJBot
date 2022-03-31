@@ -23,7 +23,6 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -60,7 +59,7 @@ public class TournamentCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			List<List<Tournament>> chunks = CollectionHelper.chunkify(TournamentDAO.getTournaments(), 10);
+			List<List<Tournament>> chunks = CollectionHelper.chunkify(Tournament.findAll(Tournament.class), 10);
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -97,7 +96,7 @@ public class TournamentCommand implements Executable {
 		}
 
 		try {
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;

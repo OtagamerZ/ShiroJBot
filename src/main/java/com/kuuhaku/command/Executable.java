@@ -21,5 +21,9 @@ package com.kuuhaku.command;
 import net.dv8tion.jda.api.entities.*;
 
 public interface Executable {
+	default Class<? extends Executable> getThis() {
+		return getClass();
+	}
+
 	void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix);
 }

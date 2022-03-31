@@ -23,9 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.Kawaipon;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -37,7 +35,7 @@ public class HeroRestCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		Hero h = KawaiponDAO.getHero(author.getId());
 
 		if (h == null) {
@@ -52,7 +50,7 @@ public class HeroRestCommand implements Executable {
 		h.setResting(true);
 		channel.sendMessage(":beach: | Seu herói estará descansando até você chamá-lo novamente.").queue();
 
-		KawaiponDAO.saveKawaipon(kp);
+		kp.save();
 		KawaiponDAO.saveHero(h);
 	}
 }

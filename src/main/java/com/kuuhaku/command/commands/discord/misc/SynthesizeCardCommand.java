@@ -24,8 +24,6 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear;
@@ -91,7 +89,7 @@ public class SynthesizeCardCommand implements Executable {
 			default -> CardType.KAWAIPON;
 		};
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		Deck dk = kp.getDeck();
 
 		if (names.length < 3) {
@@ -132,9 +130,11 @@ public class SynthesizeCardCommand implements Executable {
 			default -> tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
 		};
 
-		DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
+		DynamicParameter dp = DynamicParameter.find(DynamicParameter.class, "freeSynth_" + author.getId());
 		int freeRolls = NumberUtils.toInt(dp.getValue());
-		boolean blessed = !DynamicParameterDAO.getValue(author.getId() + "_blessing").isBlank();
+
+		DynamicParameter bless = DynamicParameter.find(DynamicParameter.class, "blessing_" + author.getId());
+		boolean blessed = !bless.getValue().isBlank();
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		switch (type) {
@@ -157,12 +157,17 @@ public class SynthesizeCardCommand implements Executable {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										s.delete().queue();
 
-										if (dp.getValue().isBlank()) {
+										if (freeRolls == 0) {
 											for (Card t : tributes) {
 												kp.removeCard(new KawaiponCard(t, true));
 											}
 										} else {
-											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											if (freeRolls > 1) {
+												dp.setValue(freeRolls - 1);
+												dp.save();
+											} else {
+												dp.delete();
+											}
 										}
 
 										if (dk.checkFieldError(f) > 0) {
@@ -178,11 +183,9 @@ public class SynthesizeCardCommand implements Executable {
 											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o campo **" + f.getCard().getName() + "**!").queue();
 										}
 
-										if (blessed) {
-											DynamicParameterDAO.clearParam("blessing_" + author.getId());
-										}
+										if (blessed) bless.delete();
 
-										KawaiponDAO.saveKawaipon(kp);
+										kp.save();
 									});
 
 									Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -233,12 +236,17 @@ public class SynthesizeCardCommand implements Executable {
 
 										String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-										if (dp.getValue().isBlank()) {
+										if (freeRolls == 0) {
 											for (Card t : tributes) {
 												dk.removeEquipment(dk.getEquipment(t));
 											}
 										} else {
-											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											if (freeRolls > 1) {
+												dp.setValue(freeRolls - 1);
+												dp.save();
+											} else {
+												dp.delete();
+											}
 										}
 
 										if (dk.checkEquipmentError(e) != 0) {
@@ -261,11 +269,9 @@ public class SynthesizeCardCommand implements Executable {
 											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o evogear **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 										}
 
-										if (blessed) {
-											DynamicParameterDAO.clearParam("blessing_" + author.getId());
-										}
+										if (blessed) bless.delete();
 
-										KawaiponDAO.saveKawaipon(kp);
+										kp.save();
 									});
 
 									Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
@@ -321,12 +327,17 @@ public class SynthesizeCardCommand implements Executable {
 
 										String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-										if (dp.getValue().isBlank()) {
+										if (freeRolls == 0) {
 											for (Card t : tributes) {
 												kp.removeCard(new KawaiponCard(t, false));
 											}
 										} else {
-											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											if (freeRolls > 1) {
+												dp.setValue(freeRolls - 1);
+												dp.save();
+											} else {
+												dp.delete();
+											}
 										}
 
 										if (dk.checkEquipmentError(e) != 0) {
@@ -349,11 +360,9 @@ public class SynthesizeCardCommand implements Executable {
 											channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o evogear **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 										}
 
-										if (blessed) {
-											DynamicParameterDAO.clearParam("blessing_" + author.getId());
-										}
+										if (blessed) bless.delete();
 
-										KawaiponDAO.saveKawaipon(kp);
+										kp.save();
 									});
 
 									Pages.buttonize(s, buttons, Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,
