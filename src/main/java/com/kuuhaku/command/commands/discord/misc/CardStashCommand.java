@@ -95,7 +95,7 @@ public class CardStashCommand implements Executable {
 							.appendNewLine("**Parâmetros de pesquisa:**");
 
 					for (Option op : opt.getOptions()) {
-						sb.appendNewLine("`-%s/--%s` - %s".formatted(
+						sb.appendNewLine("`-%s --%s` - %s".formatted(
 								op.getOpt(),
 								op.getLongOpt(),
 								op.getDescription()
