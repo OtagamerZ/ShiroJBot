@@ -19,12 +19,21 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.Market;
 import com.kuuhaku.model.persistent.Stash;
+import com.kuuhaku.utils.XStringBuilder;
+import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class StashDAO {
 	@SuppressWarnings("unchecked")
@@ -90,41 +99,117 @@ public class StashDAO {
 		em.close();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Stash> getStashedCards(int page, String name, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String owner) {
+	public static int getTotalCards(User u, CommandLine args) {
 		EntityManager em = Manager.getEntityManager();
 
-		String query = """
-				SELECT s
-				FROM Stash s
-				JOIN s.card c
-				JOIN c.anime a
-				WHERE s.owner = :owner
-				%s
-				""";
+		XStringBuilder sb = new XStringBuilder(
+				"""
+						SELECT COUNT(*)
+						FROM Stash s
+						JOIN s.card c
+						JOIN c.anime a
+						WHERE s.owner = '%s'
+						""".formatted(u.getId())
+		);
 
-		String[] params = {
-				name != null ? "AND c.id LIKE UPPER(:name)" : "",
-				rarity != null ? "AND c.rarity LIKE UPPER(:rarity)" : "",
-				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
-				foil ? "AND s.foil = :foil" : "",
-				onlyKp ? "AND c.rarity <> 'EQUIPMENT' AND c.rarity <> 'FIELD'" : "",
-				onlyEq ? "AND c.rarity = 'EQUIPMENT'" : "",
-				onlyFd ? "AND c.rarity = 'FIELD'" : "",
-				"ORDER BY s.foil DESC, c.rarity DESC, a.id, c.id"
-		};
+		Map<String, String> conditions = new HashMap<>() {{
+			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("r", "AND c.rarity LIKE UPPER(:raridade)");
+			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("c", "AND m.foil = TRUE");
+			put("k", "AND m.type = 'KAWAIPON'");
+			put("e", "AND m.type = 'EVOGEAR'");
+			put("f", "AND m.type = 'FIELD'");
+		}};
 
-		Query q = em.createQuery(query.formatted(String.join("\n", params)), Stash.class);
-		q.setParameter("owner", owner);
+		Map<String, Function<String, Object>> parser = new HashMap<>() {{
+			put("r", KawaiponRarity::getByName);
+		}};
+
+		List<Consumer<Query>> params = new ArrayList<>();
+
+		for (Option op : args.getOptions()) {
+			if (op.hasArg()) {
+				String arg = op.getValue();
+				if (arg != null) {
+					sb.appendNewLine(conditions.get(op.getOpt()));
+					params.add(q -> q.setParameter(
+							op.getLongOpt(),
+							parser.getOrDefault(op.getOpt(), s -> s).apply(arg)
+					));
+				}
+			} else {
+				sb.appendNewLine(conditions.get(op.getOpt()));
+			}
+		}
+
+		Query q = em.createQuery(sb.toString(), Number.class);
+		for (Consumer<Query> param : params) {
+			param.accept(q);
+		}
+
+		try {
+			return ((Number) q.getSingleResult()).intValue();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Stash> getStashedCards(int page, User u, CommandLine args) {
+		EntityManager em = Manager.getEntityManager();
+
+		XStringBuilder sb = new XStringBuilder(
+				"""
+						SELECT s
+						FROM Stash s
+						JOIN s.card c
+						JOIN c.anime a
+						WHERE s.owner = '%s'
+						""".formatted(u.getId())
+		);
+
+		Map<String, String> conditions = new HashMap<>() {{
+			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("r", "AND c.rarity LIKE UPPER(:raridade)");
+			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("c", "AND m.foil = TRUE");
+			put("k", "AND m.type = 'KAWAIPON'");
+			put("e", "AND m.type = 'EVOGEAR'");
+			put("f", "AND m.type = 'FIELD'");
+		}};
+
+		Map<String, Function<String, Object>> parser = new HashMap<>() {{
+			put("r", KawaiponRarity::getByName);
+		}};
+
+		List<Consumer<Query>> params = new ArrayList<>();
+
+		for (Option op : args.getOptions()) {
+			if (op.hasArg()) {
+				String arg = op.getValue();
+				if (arg != null) {
+					sb.appendNewLine(conditions.get(op.getOpt()));
+					params.add(q -> q.setParameter(
+							op.getLongOpt(),
+							parser.getOrDefault(op.getOpt(), s -> s).apply(arg)
+					));
+				}
+			} else {
+				sb.appendNewLine(conditions.get(op.getOpt()));
+			}
+		}
+
+		sb.appendNewLine("ORDER BY m.price, m.foil DESC, c.rarity DESC, a.id, c.id");
+		Query q = em.createQuery(sb.toString(), Market.class);
 		if (page > -1) {
 			q.setFirstResult(6 * page);
 			q.setMaxResults(6);
 		}
 
-		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
-		if (!params[1].isBlank()) q.setParameter("rarity", Objects.requireNonNull(rarity).name());
-		if (!params[2].isBlank()) q.setParameter("anime", "%" + anime + "%");
-		if (!params[3].isBlank()) q.setParameter("foil", foil);
+		for (Consumer<Query> param : params) {
+			param.accept(q);
+		}
 
 		try {
 			return q.getResultList();

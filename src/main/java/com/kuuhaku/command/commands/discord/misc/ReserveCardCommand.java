@@ -35,24 +35,22 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Event;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.Market;
 import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import com.vdurmont.emoji.EmojiManager;
+import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
 		name = "reservar",
@@ -71,108 +69,50 @@ public class ReserveCardCommand implements Executable {
 		boolean blackfriday = Event.getCurrent() == Event.BLACKFRIDAY;
 		Account buyer = AccountDAO.getAccount(author.getId());
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
-			AtomicReference<String> byName = new AtomicReference<>(null);
-			AtomicReference<String> byRarity = new AtomicReference<>(null);
-			AtomicReference<String> byAnime = new AtomicReference<>(null);
-			AtomicReference<String> byEmoji = new AtomicReference<>(null);
-			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
-			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
-			AtomicBoolean onlyFoil = new AtomicBoolean();
-			AtomicBoolean onlyMine = new AtomicBoolean();
-			AtomicBoolean onlyKawaipon = new AtomicBoolean();
-			AtomicBoolean onlyEquip = new AtomicBoolean();
-			AtomicBoolean onlyField = new AtomicBoolean();
+			Options opt = new Options()
+					.addOption("n", "nome", true, "Busca por nome")
+					.addOption("r", "raridade", true, "Busca por raridade")
+					.addOption("a", "anime", true, "Busca por anime")
+					.addOption("j", "emoji", true, "Busca por emoji")
+					.addOption(">", "min", true, "Define um valor mínimo")
+					.addOption("<", "max", true, "Define um valor máximo")
+					.addOption("c", "cromada", false, "Apenas cartas cromadas")
+					.addOption("m", "minhas", false, "Apenas cartas suas")
+					.addOption("k", "kawaipon", false, "Apenas cartas kawaipon")
+					.addOption("e", "evogear", false, "Apenas cartas evogear")
+					.addOption("f", "campo", false, "Apenas cartas de campo");
 
-			if (args.length > 0) {
-				List<String> params = List.of(args);
-
-				params.stream()
-						.filter(s -> s.startsWith("-n") && s.length() > 2)
-						.findFirst()
-						.ifPresent(name -> byName.set(name.substring(2)));
-
-				params.stream()
-						.filter(s -> s.startsWith("-r") && s.length() > 2)
-						.findFirst()
-						.ifPresent(rarity -> byRarity.set(rarity.substring(2)));
-
-				params.stream()
-						.filter(s -> s.startsWith("-a") && s.length() > 2)
-						.findFirst()
-						.ifPresent(anime -> byAnime.set(anime.substring(2)));
-
-				params.stream()
-						.filter(s -> s.startsWith("-j") && s.length() > 2)
-						.filter(s -> EmojiManager.isEmoji(s.substring(2)))
-						.findFirst()
-						.ifPresent(emoji -> byEmoji.set(emoji.substring(2)));
-
-				minPrice.set(params.stream()
-						.filter(s -> s.startsWith("-min") && s.length() > 4)
-						.filter(s -> StringUtils.isNumeric(s.substring(4)))
-						.mapToInt(s -> Integer.parseInt(s.substring(4)))
-						.findFirst()
-						.orElse(-1));
-
-				maxPrice.set(params.stream()
-						.filter(s -> s.startsWith("-max") && s.length() > 4)
-						.filter(s -> StringUtils.isNumeric(s.substring(4)))
-						.mapToInt(s -> Integer.parseInt(s.substring(4)))
-						.findFirst()
-						.orElse(-1));
-
-				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
-
-				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
-
-				onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase) || byAnime.get() != null || byRarity.get() != null || onlyFoil.get());
-
-				onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
-
-				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
+			DefaultParser parser = new DefaultParser(false);
+			CommandLine cli;
+			try {
+				cli = parser.parse(opt, args, true);
+			} catch (ParseException e) {
+				cli = new CommandLine.Builder().build();
 			}
+			CommandLine finalCli = cli;
 
-			int total = MarketDAO.getTotalOffers();
+			int total = MarketDAO.getTotalOffers(author, finalCli);
 			ThrowingFunction<Integer, Page> load = i -> {
-				List<Market> cards = MarketDAO.getOffers(i,
-						byName.get(),
-						minPrice.get(),
-						maxPrice.get(),
-						byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
-						byAnime.get(),
-						byEmoji.get(),
-						onlyFoil.get(),
-						onlyKawaipon.get(),
-						onlyEquip.get(),
-						onlyField.get(),
-						onlyMine.get() ? author.getId() : null
-				);
-
+				List<Market> cards = MarketDAO.getOffers(i, author, finalCli);
 				if (cards.isEmpty()) return null;
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setAuthor("Cartas anunciadas: " + Helper.separate(total) + " | Página " + (i + 1))
+						.setAuthor("Resultados: " + Helper.separate(total) + " | Página " + (i + 1))
 						.setTitle(":scales: | Mercado de cartas")
 						.setFooter("Seus CR: " + Helper.separate(buyer.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 				if (i == 0) {
-					eb.setDescription("""
-							Use `%scomprar ID` para comprar uma carta.
+					XStringBuilder sb = new XStringBuilder()
+							.append("Use `%scomprar ID` para comprar uma carta.\n".formatted(prefix))
+							.appendNewLine("**Parâmetros de pesquisa:**");
 
-							**Parâmetros de pesquisa:**
-							`-n` - Busca cartas por nome
-							`-r` - Busca cartas por raridade
-							`-a` - Busca cartas por anime
-							`-j` - Busca cartas por emoji
-							`-c` - Busca apenas cartas cromadas
-							`-k` - Busca apenas cartas kawaipon
-							`-e` - Busca apenas cartas-equipamento
-							`-f` - Busca apenas cartas de campo
-							`-m` - Busca apenas suas cartas anunciadas
-							`-min` - Define um preço mínimo
-							`-max` - Define um preço máximo
-							""".formatted(prefix)
-					);
+					for (Option op : opt.getOptions()) {
+						sb.appendNewLine("`-%s/--%s` - %s".formatted(
+								op.getOpt(),
+								op.getLongOpt(),
+								op.getDescription()
+						));
+					}
 				}
 
 				for (Market m : cards) {

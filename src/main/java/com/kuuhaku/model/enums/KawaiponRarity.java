@@ -74,6 +74,8 @@ public enum KawaiponRarity {
 	}
 
 	public static KawaiponRarity getByName(String name) {
+		if (name == null) return null;
+
 		return switch (StringUtils.stripAccents(name.toLowerCase(Locale.ROOT))) {
 			case "comum" -> COMMON;
 			case "incomum" -> UNCOMMON;

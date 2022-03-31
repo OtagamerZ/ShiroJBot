@@ -20,11 +20,20 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Market;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.XStringBuilder;
+import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class MarketDAO {
 	@SuppressWarnings("unchecked")
@@ -62,10 +71,60 @@ public class MarketDAO {
 		em.close();
 	}
 
-	public static int getTotalOffers() {
+	public static int getTotalOffers(User u, CommandLine args) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(*) FROM Market m WHERE buyer = ''");
+		XStringBuilder sb = new XStringBuilder(
+				"""
+						SELECT COUNT(*)
+						FROM Market m
+						JOIN m.card c
+						JOIN c.anime a
+						WHERE m.buyer = ''
+						"""
+		);
+
+		Map<String, String> conditions = new HashMap<>() {{
+			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("r", "AND c.rarity LIKE UPPER(:raridade)");
+			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("j", "AND m.emoji = :emoji");
+			put(">", "AND m.price > :min");
+			put("<", "AND m.price < :max");
+			put("c", "AND m.foil = TRUE");
+			put("m", "AND m.seller = '%s'".formatted(u.getId()));
+			put("k", "AND m.type = 'KAWAIPON'");
+			put("e", "AND m.type = 'EVOGEAR'");
+			put("f", "AND m.type = 'FIELD'");
+		}};
+
+		Map<String, Function<String, Object>> parser = new HashMap<>() {{
+			put("r", KawaiponRarity::getByName);
+			put(">", NumberUtils::toInt);
+			put("<", NumberUtils::toInt);
+		}};
+
+		List<Consumer<Query>> params = new ArrayList<>();
+
+		for (Option op : args.getOptions()) {
+			if (op.hasArg()) {
+				String arg = op.getValue();
+				if (arg != null) {
+					sb.appendNewLine(conditions.get(op.getOpt()));
+					params.add(q -> q.setParameter(
+							op.getLongOpt(),
+							parser.getOrDefault(op.getOpt(), s -> s).apply(arg)
+					));
+				}
+			} else {
+				sb.appendNewLine(conditions.get(op.getOpt()));
+			}
+		}
+
+		Query q = em.createQuery(sb.toString(), Number.class);
+		for (Consumer<Query> param : params) {
+			param.accept(q);
+		}
 
 		try {
 			return ((Number) q.getSingleResult()).intValue();
@@ -75,73 +134,65 @@ public class MarketDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Market> getOffers(int page, String name, int min, int max, KawaiponRarity rarity, String anime, String emoji, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String seller) {
+	public static List<Market> getOffers(int page, User u, CommandLine args) {
 		EntityManager em = Manager.getEntityManager();
 
-		String query = """
-				SELECT m
-				FROM Market m
-				JOIN m.card c
-				JOIN c.anime a
-				WHERE m.buyer = ''
-				%s
-				""";
+		XStringBuilder sb = new XStringBuilder(
+				"""
+						SELECT m
+						FROM Market m
+						JOIN m.card c
+						JOIN c.anime a
+						WHERE m.buyer = ''
+						"""
+		);
 
-		String priceCheck = """
-				AND m.price <= CASE c.rarity
-					WHEN 'COMMON'     THEN 1
-					WHEN 'UNCOMMON'   THEN 2
-					WHEN 'RARE'       THEN 3
-					WHEN 'ULTRA_RARE' THEN 4
-					WHEN 'LEGENDARY'  THEN 5
-					WHEN 'EQUIPMENT'  THEN 1
-					WHEN 'FIELD'      THEN 1
-				END *
-				CASE c.rarity
-					WHEN 'COMMON'     THEN (:cbase * CASE m.foil WHEN TRUE THEN 50 ELSE 25 END)
-					WHEN 'UNCOMMON'   THEN (:cbase * CASE m.foil WHEN TRUE THEN 50 ELSE 25 END)
-					WHEN 'RARE'       THEN (:cbase * CASE m.foil WHEN TRUE THEN 50 ELSE 25 END)
-					WHEN 'ULTRA_RARE' THEN (:cbase * CASE m.foil WHEN TRUE THEN 50 ELSE 25 END)
-					WHEN 'LEGENDARY'  THEN (:cbase * CASE m.foil WHEN TRUE THEN 50 ELSE 25 END)
-					WHEN 'EQUIPMENT'  THEN (:ebase * 25)
-					WHEN 'FIELD'      THEN (:fbase * 25)
-				END
-				""";
+		Map<String, String> conditions = new HashMap<>() {{
+			put("n", "AND m.card_id LIKE UPPER(:nome)");
+			put("r", "AND c.rarity LIKE UPPER(:raridade)");
+			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("j", "AND m.emoji = :emoji");
+			put(">", "AND m.price > :min");
+			put("<", "AND m.price < :max");
+			put("c", "AND m.foil = TRUE");
+			put("m", "AND m.seller = '%s'".formatted(u.getId()));
+			put("k", "AND m.type = 'KAWAIPON'");
+			put("e", "AND m.type = 'EVOGEAR'");
+			put("f", "AND m.type = 'FIELD'");
+		}};
 
-		String[] params = {
-				name != null ? "AND c.id LIKE UPPER(:name)" : "",
-				min > -1 ? "AND m.price > :min" : "",
-				max > -1 ? "AND m.price < :max" : "",
-				rarity != null ? "AND c.rarity LIKE UPPER(:rarity)" : "",
-				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
-				emoji != null ? "AND m.emoji = :emoji" : "",
-				foil ? "AND m.foil = :foil" : "",
-				onlyKp ? "AND c.rarity <> 'EQUIPMENT' AND c.rarity <> 'FIELD'" : "",
-				onlyEq ? "AND c.rarity = 'EQUIPMENT'" : "",
-				onlyFd ? "AND c.rarity = 'FIELD'" : "",
-				seller != null ? "AND m.seller = :seller" : "",
-				seller == null ? priceCheck : "",
-				"ORDER BY m.price, m.foil DESC, c.rarity DESC, a.id, c.id"
-		};
+		Map<String, Function<String, Object>> parser = new HashMap<>() {{
+			put("r", KawaiponRarity::getByName);
+			put(">", NumberUtils::toInt);
+			put("<", NumberUtils::toInt);
+		}};
 
-		Query q = em.createQuery(query.formatted(String.join("\n", params)), Market.class);
+		List<Consumer<Query>> params = new ArrayList<>();
+
+		for (Option op : args.getOptions()) {
+			if (op.hasArg()) {
+				String arg = op.getValue();
+				if (arg != null) {
+					sb.appendNewLine(conditions.get(op.getOpt()));
+					params.add(q -> q.setParameter(
+							op.getLongOpt(),
+							parser.getOrDefault(op.getOpt(), s -> s).apply(arg)
+					));
+				}
+			} else {
+				sb.appendNewLine(conditions.get(op.getOpt()));
+			}
+		}
+
+		sb.appendNewLine("ORDER BY m.price, m.foil DESC, c.rarity DESC, a.id, c.id");
+		Query q = em.createQuery(sb.toString(), Market.class);
 		if (page > -1) {
 			q.setFirstResult(6 * page);
 			q.setMaxResults(6);
 		}
 
-		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
-		if (!params[1].isBlank()) q.setParameter("min", min);
-		if (!params[2].isBlank()) q.setParameter("max", max);
-		if (!params[3].isBlank()) q.setParameter("rarity", rarity.name());
-		if (!params[4].isBlank()) q.setParameter("anime", "%" + anime + "%");
-		if (!params[5].isBlank()) q.setParameter("emoji", emoji);
-		if (!params[6].isBlank()) q.setParameter("foil", foil);
-		if (!params[10].isBlank()) q.setParameter("seller", seller);
-		if (!params[11].isBlank()) {
-			q.setParameter("cbase", Helper.BASE_CARD_PRICE);
-			q.setParameter("ebase", Helper.BASE_EQUIPMENT_PRICE);
-			q.setParameter("fbase", Helper.BASE_FIELD_PRICE);
+		for (Consumer<Query> param : params) {
+			param.accept(q);
 		}
 
 		try {
