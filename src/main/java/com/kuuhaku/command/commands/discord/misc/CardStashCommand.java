@@ -101,6 +101,8 @@ public class CardStashCommand implements Executable {
 								op.getDescription()
 						));
 					}
+
+					eb.setDescription(sb.toString());
 				}
 
 				for (Stash s : cards) {
