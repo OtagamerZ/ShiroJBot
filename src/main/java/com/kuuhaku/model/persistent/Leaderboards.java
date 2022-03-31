@@ -18,11 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.DAO;
+import net.dv8tion.jda.api.entities.User;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "leaderboards")
-public class Leaderboards {
+public class Leaderboards extends DAO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -59,6 +62,13 @@ public class Leaderboards {
 		this.uid = uid;
 		this.usr = usr;
 		this.minigame = minigame;
+		this.score = score;
+	}
+
+	public Leaderboards(User author, Class<?> minigame, int score) {
+		this.uid = author.getId();
+		this.usr = author.getName();
+		this.minigame = minigame.getSimpleName();
 		this.score = score;
 	}
 

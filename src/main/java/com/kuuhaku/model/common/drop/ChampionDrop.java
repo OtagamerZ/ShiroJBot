@@ -52,7 +52,7 @@ public class ChampionDrop extends Drop<Champion> {
 			mainPrize = false;
 			return;
 		}
-		KawaiponDAO.saveDeck(dk);
+		dk.save();
 
 		Account acc = Account.find(Account.class, u.getId());
 		if (acc.hasPendingQuest()) {

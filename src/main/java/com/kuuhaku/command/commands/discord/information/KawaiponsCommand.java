@@ -65,7 +65,7 @@ public class KawaiponsCommand implements Executable {
         channel.sendMessage(I18n.getString("str_generating-collection")).queue(m -> {
             try {
                 Account acc = Account.find(Account.class, author.getId());
-                Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+                Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 
                 if (kp.getCards().isEmpty()) {
                     m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();

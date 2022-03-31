@@ -81,7 +81,7 @@ public class ShoukanCommand implements Executable {
 		boolean practice = args.length > 0 && LogicHelper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && LogicHelper.equalsAny(args[0], "ranqueada", "ranked");
 		boolean tournament = args.length > 0 && LogicHelper.equalsAny(args[0], "torneio", "tournament");
-		Deck d = KawaiponDAO.getDeck(author.getId());
+		Deck d = Deck.query(Deck.class, "SELECT d FROM Kawaipon k JOIN k.decks d WHERE d.id = k.activeDeck AND k.uid = :uid", author.getId());
 
 		if (practice) {
 			JSONObject custom = CollectionHelper.getOr(StringHelper.findJson(argsAsText.toLowerCase(Locale.ROOT)), new JSONObject());
@@ -222,7 +222,7 @@ public class ShoukanCommand implements Executable {
 				}
 			}
 		} else if (tournament) {
-			List<Tournament> curr = TournamentDAO.getUserTournaments(author.getId());
+			List<Tournament> curr = Tournament.queryAll(Tournament.class, "SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed = TRUE AND t.finished = FALSE", author.getId());
 			if (curr.isEmpty()) {
 				channel.sendMessage("❌ | Você não está registrado em nenhum torneio ou as chaves ainda não foram liberadas.").queue();
 				return;

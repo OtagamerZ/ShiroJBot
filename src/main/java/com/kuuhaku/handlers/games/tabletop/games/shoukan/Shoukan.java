@@ -3083,10 +3083,9 @@ public class Shoukan extends GlobalGame {
 					case BOTTOM -> tourMatch.botIndex();
 				};
 
-				Tournament t = TournamentDAO.getTournament(tourMatch.id());
+				Tournament t = Tournament.find(Tournament.class, tourMatch.id());
 				t.setResult(tourMatch.phase(), winner);
-
-				TournamentDAO.save(t);
+				t.save();
 			}
 		}
 

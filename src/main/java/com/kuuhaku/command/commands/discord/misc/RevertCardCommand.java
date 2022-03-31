@@ -57,7 +57,7 @@ public class RevertCardCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
@@ -93,12 +93,12 @@ public class RevertCardCommand implements Executable {
 
 		if (dk.isNovice()) {
 			dk.removeChampion(c);
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 			channel.sendMessage("✅ | Carta removida com sucesso!").queue();
 		} else if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 			kp.addCard(kc);
 			dk.removeChampion(c);
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 			channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
 		} else {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -113,7 +113,7 @@ public class RevertCardCommand implements Executable {
 
 								kp.addCard(kc);
 								dk.removeChampion(c);
-								KawaiponDAO.saveKawaipon(kp);
+								kp.save();
 
 								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Conversão realizada com sucesso!")).queue();
 							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

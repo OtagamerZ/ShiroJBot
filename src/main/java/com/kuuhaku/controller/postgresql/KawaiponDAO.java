@@ -59,19 +59,6 @@ public class KawaiponDAO {
 		em.close();
 	}
 
-	@SuppressWarnings({"unchecked", "SqlResolve"})
-	public static List<Object[]> getCardRank() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetKawaiponRanking\" k");
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
 	public static Deck getDeck(String id) {
 		EntityManager em = Manager.getEntityManager();
 

@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -29,6 +28,7 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Leaderboards;
 import com.kuuhaku.utils.helpers.ImageHelper;
 import com.kuuhaku.utils.helpers.MathHelper;
 import com.kuuhaku.utils.helpers.MiscHelper;
@@ -227,7 +227,7 @@ public class ColorNameCommand implements Executable {
 								acc.addCredit(prize, this.getClass());
 								acc.save();
 
-								LeaderboardsDAO.submit(author, ColorNameCommand.class, hit);
+								new Leaderboards(author, getThis(), hit).save();
 							}
 						}
 					});

@@ -47,7 +47,7 @@ public class CatchKawaiponCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = Account.find(Account.class, author.getId());
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		TextChannel chn = gc.getKawaiponChannel();
@@ -76,7 +76,7 @@ public class CatchKawaiponCommand implements Executable {
 		Main.getInfo().getCurrentCard().remove(guild.getId());
 		try {
 			kp.addCard(kc);
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 
 			acc.consumeCredit(cost, this.getClass());
 

@@ -171,7 +171,7 @@ public class CardStashCommand implements Executable {
             return;
         }
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		switch (s.getType()) {
 			case EVOGEAR -> {
 				Deck dk = kp.getDeck();
@@ -197,7 +197,7 @@ public class CardStashCommand implements Executable {
 				kp.addCard(s.getCard());
 			}
 		}
-		KawaiponDAO.saveKawaipon(kp);
+		kp.save();
 		StashDAO.removeCard(s);
 
 		channel.sendMessage("✅ | Carta `" + s.getRawCard().getName() + "` retirada com sucesso!").queue();

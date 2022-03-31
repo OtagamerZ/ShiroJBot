@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Upvote;
@@ -58,10 +57,10 @@ public class DrawRaffleCommand implements Executable {
 		try {
 			int days = Integer.parseInt(args[0]);
 			int amount = Math.max(1, args.length > 1 ? Integer.parseInt(args[1]) : 1);
-			List<String> votes = UpvoteDAO.getVotes().stream()
+			List<String> votes = Upvote.findAll(Upvote.class).stream()
 					.filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)))
 					.map(Upvote::getUid)
-					.map(Main.getInfo()::getUserByID)
+					.map(Main::getUserByID)
 					.filter(Objects::nonNull)
 					.map(u -> u.getAsMention() + " (" + StringHelper.bugText(u.getName()) + ")")
 					.collect(Collectors.toList());

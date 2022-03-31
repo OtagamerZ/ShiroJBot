@@ -245,7 +245,7 @@ public class BuyCardCommand implements Executable {
 			User sellerU = Main.getUserByID(m.getSeller());
 
 			if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+				Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 				switch (m.getType()) {
 					case EVOGEAR -> {
 						Deck dk = kp.getDeck();
@@ -271,7 +271,7 @@ public class BuyCardCommand implements Executable {
 						kp.addCard(m.getCard());
 					}
 				}
-				KawaiponDAO.saveKawaipon(kp);
+				kp.save();
 
 				m.setBuyer(author.getId());
 				MarketDAO.saveCard(m);
@@ -293,7 +293,7 @@ public class BuyCardCommand implements Executable {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage("Você está prestes a comprar a carta `" + name + "` por **" + StringHelper.separate(price) + " CR**, deseja confirmar?")
 						.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
-									Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+									Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 									switch (finalM.getType()) {
 										case EVOGEAR -> {
 											Deck dk = kp.getDeck();
@@ -321,7 +321,7 @@ public class BuyCardCommand implements Executable {
 									}
 
 									Main.getInfo().getConfirmationPending().remove(author.getId());
-									KawaiponDAO.saveKawaipon(kp);
+									kp.save();
 
 									Market mkt = MarketDAO.getCard(Integer.parseInt(args[0]));
 									if (mkt == null) {
@@ -350,7 +350,7 @@ public class BuyCardCommand implements Executable {
 						));
 			}
 		} else {
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 			switch (m.getType()) {
 				case EVOGEAR -> {
 					Deck dk = kp.getDeck();
@@ -376,7 +376,7 @@ public class BuyCardCommand implements Executable {
 					kp.addCard(m.getCard());
 				}
 			}
-			KawaiponDAO.saveKawaipon(kp);
+			kp.save();
 
 			m = MarketDAO.getCard(Integer.parseInt(args[0]));
 			if (m == null) {

@@ -59,7 +59,7 @@ public class StoreCardCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		Deck dk = kp.getDeck();
 
 		if (dk.isNovice()) {
@@ -172,7 +172,7 @@ public class StoreCardCommand implements Executable {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								s.delete().queue();
 
-								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+								Kawaipon finalKp = Kawaipon.find(Kawaipon.class, author.getId());
 								Deck fDk = finalKp.getDeck();
 
 								if (fDk.isNovice() && off.getMiddle() == CardType.SENSHI) {
@@ -216,7 +216,7 @@ public class StoreCardCommand implements Executable {
 								}
 
 								StashDAO.saveCard(m);
-								KawaiponDAO.saveKawaipon(finalKp);
+								finalKp.save();
 
 								channel.sendMessage("✅ | Carta armazenada com sucesso!").queue();
 							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

@@ -55,6 +55,6 @@ public class DeckNameCommand implements Executable {
 			channel.sendMessage("✅ | Nome do deck atual definido com sucesso.").queue();
 		}
 
-		KawaiponDAO.saveDeck(dk);
+		dk.save();
 	}
 }

@@ -20,10 +20,10 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Leaderboards;
 import com.kuuhaku.utils.helpers.MathHelper;
 import com.kuuhaku.utils.helpers.StringHelper;
 import net.dv8tion.jda.api.entities.*;
@@ -82,16 +82,20 @@ public class JankenponCommand implements Executable {
 		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + pcChoice + (
 				switch (finalWin) {
 					case 0 -> {
-						int lost = LeaderboardsDAO.getUserScore(author.getId(), JankenponCommand.class);
-						if (lost > 0)
-							LeaderboardsDAO.submit(author, JankenponCommand.class, -lost);
+						int lost = Leaderboards.queryNative(Number.class, "SELECT COALESCE(SUM(l.score), 0) FROM Leaderboards l WHERE l.uid = :uid AND l.minigame = :game LIMIT 10",
+								author.getId(),
+								getThis().getSimpleName()
+						).intValue();
+						if (lost > 0) {
+							new Leaderboards(author, getThis(), -lost).save();
+						}
 						yield "\nVocê perdeu!";
 					}
 					case 1 -> {
 						int crd = MathHelper.rng(35, 125);
 						acc.addCredit(crd, this.getClass());
 						acc.save();
-						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);
+						new Leaderboards(author, getThis(), 1).save();
 						yield "\nVocê ganhou! Aqui, " + StringHelper.separate(crd) + " CR por ter jogado comigo!";
 					}
 					case 2 -> "\nEmpate!";

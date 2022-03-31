@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -46,7 +45,7 @@ public class DismissHeroCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon kp = Kawaipon.find(Kawaipon.class, author.getId());
 		List<Hero> heroes = kp.getHeroes();
 
 		if (heroes.isEmpty()) {
@@ -104,9 +103,7 @@ public class DismissHeroCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
-								Kawaipon fKp = KawaiponDAO.getKawaipon(author.getId());
-								fKp.getHeroes().remove(chosen);
-								KawaiponDAO.saveKawaipon(fKp);
+								Kawaipon.apply(Kawaipon.class, author.getId(), k -> k.getHeroes().remove(chosen));
 
 								s.delete().mapToResult().flatMap(d -> channel.sendMessage("✅ | Herói retornado com sucesso!")).queue();
 							}), Constants.USE_BUTTONS, true, 1, TimeUnit.MINUTES,

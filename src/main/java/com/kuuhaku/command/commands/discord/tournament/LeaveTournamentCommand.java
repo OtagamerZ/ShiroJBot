@@ -23,7 +23,6 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.TournamentDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -56,7 +55,8 @@ public class LeaveTournamentCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			List<List<Tournament>> chunks = CollectionHelper.chunkify(TournamentDAO.getTournaments(author.getId()), 10);
+			List<Tournament> tns = Tournament.queryAll(Tournament.class, "SELECT t FROM Tournament t JOIN t.participants p WHERE p.uid = :id AND t.closed = FALSE", author.getId());
+			List<List<Tournament>> chunks = CollectionHelper.chunkify(tns, 10);
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -67,7 +67,7 @@ public class LeaveTournamentCommand implements Executable {
 
 				for (Tournament tn : chunk) {
 					eb.addField(
-							"`ID: " + tn.getId() + "` | " + tn.getName() + (tn.isClosed() ? " (FECHADO)" : ""),
+							"`ID: " + tn.getId() + "` | " + tn.getName(),
 							"Jogadores: %s | Chave de %s".formatted(
 									tn.getParticipants().size(),
 									tn.getSize()
@@ -91,7 +91,7 @@ public class LeaveTournamentCommand implements Executable {
 		}
 
 		try {
-			Tournament t = TournamentDAO.getTournament(Integer.parseInt(args[0]));
+			Tournament t = Tournament.find(Tournament.class, Integer.parseInt(args[0]));
 			if (t == null) {
 				channel.sendMessage("❌ | Torneio inexistente.").queue();
 				return;
@@ -103,7 +103,7 @@ public class LeaveTournamentCommand implements Executable {
 			channel.sendMessage("Você está prestes a sair do torneio `" + t.getName() + "`, deseja confirmar?").queue(
 					s -> Pages.buttonize(s, Map.of(StringHelper.parseEmoji(Constants.ACCEPT), wrapper -> {
 								t.leave(author.getId());
-								TournamentDAO.save(t);
+								t.save();
 
 								s.delete().queue(null, MiscHelper::doNothing);
 								channel.sendMessage("✅ | Você saiu do torneio com sucesso!").queue();

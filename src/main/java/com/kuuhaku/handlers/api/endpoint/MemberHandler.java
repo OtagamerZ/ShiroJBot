@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.controller.postgresql.MemberDAO;
-import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.utils.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberHandler {
 	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
-	public Member requestProfileById(@RequestParam(value = "id") String id, @RequestParam(value = "server") String server) {
-		return MemberDAO.getMember(id, server);
+	public JSONObject requestProfileById(@RequestParam(value = "id") String id, @RequestParam(value = "server") String server) {
+		return MemberDAO.getMember(id, server).toJson();
 	}
 }
