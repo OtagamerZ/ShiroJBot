@@ -32,20 +32,19 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
 		name = "retirar",
@@ -63,74 +62,45 @@ public class CardStashCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
-			AtomicReference<String> byName = new AtomicReference<>(null);
-			AtomicReference<String> byRarity = new AtomicReference<>(null);
-			AtomicReference<String> byAnime = new AtomicReference<>(null);
-			AtomicBoolean onlyFoil = new AtomicBoolean();
-			AtomicBoolean onlyKawaipon = new AtomicBoolean();
-			AtomicBoolean onlyEquip = new AtomicBoolean();
-			AtomicBoolean onlyField = new AtomicBoolean();
+			Options opt = new Options()
+					.addOption("n", "nome", true, "Busca por nome")
+					.addOption("r", "raridade", true, "Busca por raridade")
+					.addOption("a", "anime", true, "Busca por anime")
+					.addOption("c", "cromada", false, "Apenas cartas cromadas")
+					.addOption("k", "kawaipon", false, "Apenas cartas kawaipon")
+					.addOption("e", "evogear", false, "Apenas cartas evogear")
+					.addOption("f", "campo", false, "Apenas cartas de campo");
 
-			if (args.length > 0) {
-				List<String> params = List.of(args);
-
-				params.stream()
-						.filter(s -> s.startsWith("-n") && s.length() > 2)
-						.findFirst()
-						.ifPresent(name -> byName.set(name.substring(2)));
-
-				params.stream()
-						.filter(s -> s.startsWith("-r") && s.length() > 2)
-						.findFirst()
-						.ifPresent(rarity -> byRarity.set(rarity.substring(2)));
-
-				params.stream()
-						.filter(s -> s.startsWith("-a") && s.length() > 2)
-						.findFirst()
-						.ifPresent(anime -> byAnime.set(anime.substring(2)));
-
-				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
-
-				onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase) || byAnime.get() != null || byRarity.get() != null || onlyFoil.get());
-
-				onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
-
-				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
+			DefaultParser parser = new DefaultParser(false);
+			CommandLine cli;
+			try {
+				cli = parser.parse(opt, args, true);
+			} catch (ParseException e) {
+				cli = new CommandLine.Builder().build();
 			}
+			CommandLine finalCli = cli;
 
-			int total = acc.getCardStashCapacity() - StashDAO.getRemainingSpace(author.getId());
+			int total = StashDAO.getTotalCards(author, finalCli);
 			ThrowingFunction<Integer, Page> load = i -> {
-				List<Stash> cards = StashDAO.getStashedCards(i,
-						byName.get(),
-						byRarity.get() == null ? null : KawaiponRarity.getByName(byRarity.get()),
-						byAnime.get(),
-						onlyFoil.get(),
-						onlyKawaipon.get(),
-						onlyEquip.get(),
-						onlyField.get(),
-						author.getId()
-				);
-
+				List<Stash> cards = StashDAO.getStashedCards(i, author, finalCli);
 				if (cards.isEmpty()) return null;
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
-						.setAuthor("Cartas armazenadas: " + Helper.separate(total) + "/" + Helper.separate(acc.getCardStashCapacity()) + " | Página " + (i + 1))
-						.setTitle(":package: | Armazém de cartas");
+						.setAuthor("Resultados: " + Helper.separate(total) + " | Página " + (i + 1))
+						.setTitle(":package: | Armazém de cartas (Disponível: " + StashDAO.getRemainingSpace(author.getId()) + " slots)");
 
 				if (i == 0) {
-					eb.setDescription("""
-							Use `%sretirar ID` para retirar a carta do armazém.
-							       
-							**Parâmetros de pesquisa:**
-							`-n` - Busca cartas por nome
-							`-r` - Busca cartas por raridade
-							`-a` - Busca cartas por anime
-							`-c` - Busca apenas cartas cromadas
-							`-k` - Busca apenas cartas kawaipon
-							`-e` - Busca apenas cartas-equipamento
-							`-f` - Busca apenas cartas de campo
-							""".formatted(prefix)
-					);
+					XStringBuilder sb = new XStringBuilder()
+							.append("Use `%sretirar ID` para retirar a carta do armazém.\n".formatted(prefix))
+							.appendNewLine("**Parâmetros de pesquisa:**");
+
+					for (Option op : opt.getOptions()) {
+						sb.appendNewLine("`-%s/--%s` - %s".formatted(
+								op.getOpt(),
+								op.getLongOpt(),
+								op.getDescription()
+						));
+					}
 				}
 
 				for (Stash s : cards) {
