@@ -113,9 +113,9 @@ public class StashDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND c.id LIKE UPPER(:nome)");
-			put("r", "AND c.rarity LIKE UPPER(:raridade)");
-			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("n", "AND c.id LIKE '%'||UPPER(:nome)||'%'");
+			put("r", "AND c.rarity = :raridade");
+			put("a", "AND a.id LIKE '%'||UPPER(:anime)||'%'");
 			put("c", "AND s.foil = TRUE");
 			put("k", "AND s.type = 'KAWAIPON'");
 			put("e", "AND s.type = 'EVOGEAR'");
@@ -171,7 +171,7 @@ public class StashDAO {
 
 		Map<String, String> conditions = new HashMap<>() {{
 			put("n", "AND c.id LIKE '%'||UPPER(:nome)||'%'");
-			put("r", "AND c.rarity LIKE UPPER(:raridade)");
+			put("r", "AND c.rarity = :raridade");
 			put("a", "AND a.id LIKE '%'||UPPER(:anime)||'%'");
 			put("c", "AND s.foil = TRUE");
 			put("k", "AND s.type = 'KAWAIPON'");
