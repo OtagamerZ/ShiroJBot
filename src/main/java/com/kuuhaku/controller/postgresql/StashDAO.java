@@ -201,7 +201,7 @@ public class StashDAO {
 		}
 
 		sb.appendNewLine("ORDER BY s.foil DESC, c.rarity DESC, a.id, c.id");
-		Query q = em.createQuery(sb.toString(), Market.class);
+		Query q = em.createQuery(sb.toString(), Stash.class);
 		if (page > -1) {
 			q.setFirstResult(6 * page);
 			q.setMaxResults(6);
