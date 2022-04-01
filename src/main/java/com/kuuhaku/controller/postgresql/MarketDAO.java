@@ -85,9 +85,9 @@ public class MarketDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND c.id LIKE UPPER(:nome)");
+			put("n", "AND c.id LIKE '%'||UPPER(:nome)||'%'");
 			put("r", "AND c.rarity LIKE UPPER(:raridade)");
-			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("a", "AND a.id LIKE '%'||UPPER(:anime)||'%'");
 			put("j", "AND m.emoji = :emoji");
 			put("g", "AND m.price >= :min");
 			put("l", "AND m.price <= :max");
