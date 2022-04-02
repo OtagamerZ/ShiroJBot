@@ -100,7 +100,7 @@ public class SynthesizeCardCommand implements Executable {
 			return;
 		}
 
-		List<Card> tributes = new ArrayList<>();
+		Set<Card> tributes = new HashSet<>();
 		for (String name : names) {
 			name = name.trim();
 			Card c = CardDAO.getRawCard(name);
@@ -120,7 +120,10 @@ public class SynthesizeCardCommand implements Executable {
 				return;
 			}
 
-			tributes.add(c);
+			if (!tributes.add(c)) {
+				channel.sendMessage("❌ | Você deve informar 3 cartas diferentes.").queue();
+				return;
+			}
 		}
 
 		int score = switch (type) {
