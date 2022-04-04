@@ -113,9 +113,9 @@ public class StashDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND c.id LIKE UPPER(:nome)");
-			put("r", "AND c.rarity LIKE UPPER(:raridade)");
-			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("n", "AND c.id LIKE '%'||UPPER(:nome)||'%'");
+			put("r", "AND c.rarity = :raridade");
+			put("a", "AND a.id LIKE '%'||UPPER(:anime)||'%'");
 			put("c", "AND s.foil = TRUE");
 			put("k", "AND s.type = 'KAWAIPON'");
 			put("e", "AND s.type = 'EVOGEAR'");
@@ -170,9 +170,9 @@ public class StashDAO {
 		);
 
 		Map<String, String> conditions = new HashMap<>() {{
-			put("n", "AND c.id LIKE UPPER(:nome)");
-			put("r", "AND c.rarity LIKE UPPER(:raridade)");
-			put("a", "AND a.id LIKE UPPER(:anime)");
+			put("n", "AND c.id LIKE '%'||UPPER(:nome)||'%'");
+			put("r", "AND c.rarity = :raridade");
+			put("a", "AND a.id LIKE '%'||UPPER(:anime)||'%'");
 			put("c", "AND s.foil = TRUE");
 			put("k", "AND s.type = 'KAWAIPON'");
 			put("e", "AND s.type = 'EVOGEAR'");
@@ -200,8 +200,8 @@ public class StashDAO {
 			}
 		}
 
-		sb.appendNewLine("ORDER BY m.price, m.foil DESC, c.rarity DESC, a.id, c.id");
-		Query q = em.createQuery(sb.toString(), Market.class);
+		sb.appendNewLine("ORDER BY s.foil DESC, c.rarity DESC, a.id, c.id");
+		Query q = em.createQuery(sb.toString(), Stash.class);
 		if (page > -1) {
 			q.setFirstResult(6 * page);
 			q.setMaxResults(6);
