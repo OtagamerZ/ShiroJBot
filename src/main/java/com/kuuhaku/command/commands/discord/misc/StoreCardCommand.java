@@ -62,10 +62,7 @@ public class StoreCardCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Deck dk = kp.getDeck();
 
-		if (dk.isNovice()) {
-			channel.sendMessage("❌ | Você não pode fazer esta operação com o deck de iniciante!").queue();
-			return;
-		} else if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
+		if (StashDAO.getRemainingSpace(author.getId()) <= 0) {
 			channel.sendMessage("❌ | Você não possui mais espaço em seu armazém. Compre mais espaço para ele na loja de gemas ou retire alguma carta.").queue();
 			return;
 		} else if (args.length < 1) {
