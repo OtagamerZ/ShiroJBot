@@ -127,13 +127,9 @@ public abstract class GlobalGame {
 			p = board.getPlayers().getNext();
 		}
 
-		if (round > 0)
-			timeout = executor.schedule(() ->
-					channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-							.queue(onWO), 3, TimeUnit.MINUTES);
-		else timeout = executor.schedule(() ->
-				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-						.queue(onExpiration), 3, TimeUnit.MINUTES);
+		timeout = executor.schedule(() ->
+				channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+						.queue(onWO), 3, TimeUnit.MINUTES);
 	}
 
 	public void resetTimerKeepTurn() {
