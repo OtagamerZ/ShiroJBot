@@ -76,11 +76,8 @@ public abstract class Game {
 			p = table.getPlayers().getNext();
 		}
 
-		if (round > 0)
-			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(time, TimeUnit.SECONDS, onWO);
-		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(time, TimeUnit.SECONDS, onExpiration);
+		timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+				.queueAfter(time, TimeUnit.SECONDS, onWO);
 	}
 
 	public void resetTimerKeepTurn() {
@@ -131,8 +128,8 @@ public abstract class Game {
 		if (o == null || getClass() != o.getClass()) return false;
 		Game game = (Game) o;
 		return handler.equals(game.handler) &&
-			   table.equals(game.table) &&
-			   channel.equals(game.channel);
+				table.equals(game.table) &&
+				channel.equals(game.channel);
 	}
 
 	@Override

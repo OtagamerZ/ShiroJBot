@@ -84,11 +84,8 @@ public abstract class Game {
 			p = board.getPlayers().getNext();
 		}
 
-		if (round > 0)
-			timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, onWO);
-		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
+		timeout = channel.sendMessage(getCurrent().getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+				.queueAfter(3, TimeUnit.MINUTES, onWO);
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {

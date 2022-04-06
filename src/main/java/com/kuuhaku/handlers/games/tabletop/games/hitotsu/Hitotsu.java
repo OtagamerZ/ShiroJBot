@@ -135,6 +135,7 @@ public class Hitotsu extends Game {
 
 	@Override
 	public void start() {
+		resetTimerKeepTurn();
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.queue(s -> {
 					this.message = s;

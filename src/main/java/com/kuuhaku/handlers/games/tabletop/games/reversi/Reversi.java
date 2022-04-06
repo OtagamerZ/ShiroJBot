@@ -96,6 +96,7 @@ public class Reversi extends Game {
 
 	@Override
 	public void start() {
+		resetTimerKeepTurn();
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!")
 				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {

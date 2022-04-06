@@ -267,6 +267,7 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void start() {
+		resetTimerKeepTurn();
 		Hand h = hands.get(getCurrentSide());
 		h.addMana(h.getManaPerTurn());
 		if (!h.isSuppressed()) {

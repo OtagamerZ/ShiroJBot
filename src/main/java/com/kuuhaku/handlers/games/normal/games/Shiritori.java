@@ -89,6 +89,7 @@ public class Shiritori extends Game {
 
 	@Override
 	public void start() {
+		resetTimerKeepTurn();
 		channel.sendMessage(getCurrent().getAsMention() + " você começa, digite uma palavra para começar!")
 				.queue(s -> {
 					this.message = s;
