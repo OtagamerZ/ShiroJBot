@@ -41,20 +41,22 @@ public class VoteCommand implements Executable {
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		if (acc.hasVoted(true)) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.addField("Acúmulos de voto", acc.getStreak() + " acúmulos", false);
+		channel.sendMessage("<a:loading:697879726630502401> Verificando voto....").queue(s -> {
+			if (acc.hasVoted(true)) {
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.addField("Acúmulos de voto", acc.getStreak() + " acúmulos", false);
 
-			channel.sendMessage("Você já votou nas últimas 12 horas, volte mais tarde para poder votar novamente.")
-					.setEmbeds(eb.build())
-					.queue();
-		} else {
-			channel.sendMessage("""
+				s.editMessage("Você já votou nas últimas 12 horas, volte mais tarde para poder votar novamente.")
+						.setEmbeds(eb.build())
+						.queue();
+			} else {
+				s.editMessage("""
 					Vote em mim para receber CR e acúmulos de voto!
 					https://top.gg/bot/572413282653306901/vote
 										
 					Se você votar e não receber a notificação, basta usar este comando novamente para eu verificar seu voto.
 					""").queue();
-		}
+			}
+		});
 	}
 }
