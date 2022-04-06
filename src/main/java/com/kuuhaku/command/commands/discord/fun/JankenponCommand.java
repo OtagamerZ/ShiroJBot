@@ -89,7 +89,9 @@ public class JankenponCommand implements Executable {
 						yield "\nVocê perdeu!";
 					}
 					case 1 -> {
-						int crd = Helper.rng(35, 125);
+						int streak = LeaderboardsDAO.getUserScore(author.getId(), JankenponCommand.class);
+
+						int crd = Helper.rng(35, 125) * streak;
 						acc.addCredit(crd, this.getClass());
 						AccountDAO.saveAccount(acc);
 						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);

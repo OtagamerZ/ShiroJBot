@@ -48,7 +48,7 @@ public class LeaderboardsDAO {
 				""", Long.class);
 		q.setParameter("uid", id);
 		q.setParameter("minigame", minigame.getSimpleName());
-		q.setMaxResults(10);
+		q.setMaxResults(1);
 
 		try {
 			return ((Long) q.getSingleResult()).intValue();
