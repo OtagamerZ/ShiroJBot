@@ -28,25 +28,27 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.TriFunction;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.function.BiFunction;
 
 public enum Reward {
-	XP("XP", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " XP";
+	XP("XP", (h, v, apply) -> {
+		if (!apply) return Helper.separate(v) + " XP";
 		int r = Math.abs(v);
 
+		v = (int) (v * (1 + h.getLevel() * 0.01));
+		
 		if (v >= 0) h.addXp(r);
 		else h.removeXp(r);
 		KawaiponDAO.saveHero(h);
 
 		return Helper.separate(v < 0 ? -r : r) + " XP";
 	}),
-	EP("EP", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " EP";
+	EP("EP", (h, v, apply) -> {
+		if (!apply) return Helper.separate(v) + " EP";
 		int r = Math.abs(v);
 
 		if (v >= 0) h.rest(r);
@@ -55,8 +57,8 @@ public enum Reward {
 
 		return Helper.separate(v < 0 ? -r : r) + " EP";
 	}),
-	CREDIT("CR", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " CR";
+	CREDIT("CR", (h, v, apply) -> {
+		if (!apply) return Helper.separate(v) + " CR";
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
@@ -66,8 +68,8 @@ public enum Reward {
 
 		return Helper.separate(v < 0 ? -r : r) + " CR";
 	}),
-	GEM("Gemas", (h, v) -> {
-		if (h == null) return Helper.separate(v) + " gema" + (Math.abs(v) == 1 ? "" : "s");
+	GEM("Gemas", (h, v, apply) -> {
+		if (!apply) return Helper.separate(v) + " gema" + (Math.abs(v) == 1 ? "" : "s");
 		int r = Math.abs(v);
 
 		Account acc = AccountDAO.getAccount(h.getUid());
@@ -77,8 +79,8 @@ public enum Reward {
 
 		return Helper.separate(v < 0 ? -r : r) + " gema" + (Math.abs(v) == 1 ? "" : "s");
 	}),
-	EQUIPMENT("Equipamento", (h, v) -> {
-		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
+	EQUIPMENT("Equipamento", (h, v, apply) -> {
+		if (!apply) return Helper.clamp(v, 0, 100) + "% de chance";
 		String r = "Nenhum";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
@@ -91,8 +93,8 @@ public enum Reward {
 
 		return r;
 	}),
-	SPELL("Magia", (h, v) -> {
-		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
+	SPELL("Magia", (h, v, apply) -> {
+		if (!apply) return Helper.clamp(v, 0, 100) + "% de chance";
 		String r = "Nenhum";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
@@ -105,8 +107,8 @@ public enum Reward {
 
 		return r;
 	}),
-	CLEANSE("Purificação", (h, v) -> {
-		if (h == null) return Helper.clamp(v, 0, 100) + "% de chance";
+	CLEANSE("Purificação", (h, v, apply) -> {
+		if (!apply) return Helper.clamp(v, 0, 100) + "% de chance";
 		String r = "Falhou";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
@@ -121,15 +123,15 @@ public enum Reward {
 	;
 
 	private final String name;
-	private final BiFunction<Hero, Integer, String> evt;
+	private final TriFunction<Hero, Integer, Boolean, String> evt;
 
-	Reward(String name, BiFunction<Hero, Integer, String> evt) {
+	Reward(String name, TriFunction<Hero, Integer, Boolean, String> evt) {
 		this.name = name;
 		this.evt = evt;
 	}
 
-	public String apply(Hero h, int value) {
-		return evt.apply(h, value);
+	public String apply(Hero h, int value, boolean apply) {
+		return evt.apply(h, value, apply);
 	}
 
 	@Override
