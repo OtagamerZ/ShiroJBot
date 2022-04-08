@@ -28,7 +28,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -567,7 +566,7 @@ public class Deck {
 				.formatted(
 						champions.size(),
 						combo.getLeft(), combo.getLeft().getMajorDesc(),
-						combo.getRight(), combo.getRight().getMinorDesc(),
+						combo.getRight() + (combo.getMiddle() ? " **PACTO**" : ""), combo.getRight().getMinorDesc(),
 						getEvoWeight(),
 						Helper.round(getAverageCost(), 2),
 						Helper.roundToString(divs[0] * 100, 1),
