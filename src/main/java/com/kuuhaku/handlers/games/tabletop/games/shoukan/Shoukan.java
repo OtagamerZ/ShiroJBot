@@ -1818,7 +1818,7 @@ public class Shoukan extends GlobalGame {
 		return hands;
 	}
 
-	public Map<Side, Pair<Race, Race>> getCombos() {
+	public Map<Side, Triple<Race, Boolean, Race>> getCombos() {
 		return combos;
 	}
 
