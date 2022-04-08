@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2021  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,76 +18,49 @@
 
 package com.kuuhaku.model.persistent.guild;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.awt.*;
-import java.util.Locale;
-import java.util.Objects;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.id.ColorRoleId;
+import net.dv8tion.jda.api.entities.Role;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 
 @Entity
-@Table(name = "colorrole")
-public class ColorRole {
-	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String name;
+@Table(name = "color_role")
+public class ColorRole extends DAO {
+	@EmbeddedId
+	private ColorRoleId id;
 
-	@Column(columnDefinition = "VARCHAR(7) NOT NULL")
-	private String hex;
+	@Column(name = "role", nullable = false)
+	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.RoleStringType")
+	private Role role;
 
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String id;
+	@ManyToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "gid")
+	@Fetch(FetchMode.JOIN)
+	@MapsId("gid")
+	private GuildSettings settings;
 
 	public ColorRole() {
 	}
 
-	public ColorRole(String id, String hex, String name) {
-		this.id = id;
-		this.hex = hex;
-		this.name = name;
+	public ColorRole(GuildSettings settings, String name, Role role) {
+		this.id = new ColorRoleId(name, role.getGuild().getId());
+		this.role = role;
+		this.settings = settings;
 	}
 
-	public ColorRole(String id, Color color, String name) {
-		this.id = id;
-		this.hex = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Color getColor() {
-		return Color.decode(hex);
-	}
-
-	public void setColor(Color color) {
-		this.hex = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
-	}
-
-	public String getId() {
+	public ColorRoleId getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public Role getRole() {
+		return role;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		ColorRole colorRole = (ColorRole) o;
-		return Objects.equals(name.toLowerCase(Locale.ROOT), colorRole.name.toLowerCase(Locale.ROOT));
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name.toLowerCase(Locale.ROOT));
+	public GuildSettings getSettings() {
+		return settings;
 	}
 }

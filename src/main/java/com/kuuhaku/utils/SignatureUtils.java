@@ -1,66 +1,96 @@
 package com.kuuhaku.utils;
 
-import com.kuuhaku.command.Executable;
-import com.kuuhaku.model.annotations.Signature;
-import com.kuuhaku.utils.helpers.StringHelper;
+import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.interfaces.Executable;
+import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.enums.I18N;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class SignatureUtils {
-	@Language("RegExp")
-	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-z]+):(?<type>[A-Z]+):(?<required>R)?>(?:\\[(?<options>.*)])?$";
+	@Language("RegExp") //TODO Nome deve ser pego do I18N
+	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$";
 
-	public static Map<String, String> parse(Class<? extends Executable> klass, String input) {
+	public static Map<String, String> parse(I18N locale, Executable exec, String input) throws InvalidSignatureException {
 		Map<String, String> out = new LinkedHashMap<>();
-		Signature annot = klass.getDeclaredAnnotation(Signature.class);
+		List<String> failed = new ArrayList<>();
+		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
 		if (annot == null) return out;
 
 		String[] signatures = annot.value();
 
+		boolean fail;
+		List<String> supplied = new ArrayList<>();
 		for (String sig : signatures) {
+			fail = false;
 			String str = input;
 			String[] args = sig.split(" +");
 
+			int i = 0;
 			for (String arg : args) {
-				Map<String, String> groups = StringHelper.extractNamedGroups(arg, ARGUMENT_PATTERN);
+				i++;
+				Map<String, String> groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
 				String name = groups.get("name");
 				boolean required = groups.containsKey("required");
+				String wrap = required ? "[%s]" : "%s";
 
 				try {
-					Signature.Type type = Signature.Type.valueOf(groups.get("type"));
+					Signature.Type type = Signature.Type.valueOf(groups.get("type").toUpperCase(Locale.ROOT));
 
 					if (type == Signature.Type.TEXT) {
-						out.put(name, str);
-						str = "";
+						if (str.isBlank() && required) {
+							fail = true;
+							supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+							continue;
+						}
+
+						if (i == args.length) {
+							out.put(name, str.replaceFirst("\"(.*)\"", "$1"));
+							str = "";
+						} else {
+							out.put(name, Utils.extract(str, type.getRegex(), "text"));
+							str = str.replaceFirst(type.getRegex(), "").trim();
+						}
 					} else {
 						List<String> opts = Arrays.stream(groups.getOrDefault("options", "").split(","))
 								.filter(s -> !s.isBlank())
 								.map(String::toLowerCase)
 								.toList();
 
-						String s = str.split(" +")[0].trim();
+						String s = str.split("\s+")[0].trim();
 						str = str.replaceFirst(Pattern.quote(s), "").trim();
 
 						if (type.validate(s) && (opts.isEmpty() || opts.contains(s.toLowerCase(Locale.ROOT)))) {
-							out.put(name, str);
+							switch (type) {
+								case CHANNEL -> s = s.replaceAll("[<#>]", "");
+								case USER, ROLE -> s = s.replaceAll("[<@!>]", "");
+							}
+
+							if (!fail) out.put(name, s);
+							supplied.add(s);
 						} else if (required) {
-							out.clear();
-							break;
+							fail = true;
+							supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
 						}
 					}
 				} catch (IllegalArgumentException e) {
 					if (required) {
-						out.clear();
-						break;
+						fail = true;
+						supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
 					}
 				}
 			}
 
-			if (!out.isEmpty()) return out;
+			if (fail) {
+				out.clear();
+				failed.add(String.join(" ", supplied));
+				supplied.clear();
+			} else return out;
 		}
 
-		return out;
+		if (annot.allowEmpty()) return Map.of();
+		else throw new InvalidSignatureException(failed.get(0));
 	}
 }

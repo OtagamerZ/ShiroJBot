@@ -1,14 +1,13 @@
 package com.kuuhaku.controller;
 
-import com.kuuhaku.controller.postgresql.Manager;
-import com.kuuhaku.model.annotations.WhenNull;
-import com.kuuhaku.model.persistent.interfaces.Blacklistable;
+import com.kuuhaku.interfaces.Blacklistable;
+import com.kuuhaku.interfaces.annotations.WhenNull;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -25,15 +24,16 @@ public abstract class DAO {
 			}
 
 			if (t == null) {
-				for (Method method : klass.getMethods()) {
+				for (Constructor<?> method : klass.getConstructors()) {
 					if (method.isAnnotationPresent(WhenNull.class)) {
 						Class<?>[] params = method.getParameterTypes();
 						if (params.length > 0 && params[0] == id.getClass()) {
 							try {
-								t = klass.cast(method.invoke(null, id));
+								t = klass.cast(method.newInstance(id));
+								t.save();
 								break;
-							} catch (InvocationTargetException | IllegalAccessException e) {
-								throw new IllegalStateException("This exception should never be thrown");
+							} catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+								throw new IllegalStateException("Failed to instantiate class", e);
 							}
 						}
 					}
@@ -79,7 +79,7 @@ public abstract class DAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Query q = em.createNativeQuery(query, klass);
+			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
 				q.setParameter(i, params[i]);
@@ -114,7 +114,12 @@ public abstract class DAO {
 			}
 
 			try {
-				return (Object[]) q.getSingleResult();
+				Object obj = q.getSingleResult();
+				if (obj.getClass().isArray()) {
+					return (Object[]) obj;
+				} else {
+					return new Object[]{obj};
+				}
 			} catch (NoResultException e) {
 				return null;
 			}
@@ -167,7 +172,7 @@ public abstract class DAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Query q = em.createNativeQuery(query, klass);
+			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
 				q.setParameter(i, params[i]);
 			}
@@ -194,7 +199,14 @@ public abstract class DAO {
 				q.setParameter(i, params[i]);
 			}
 
-			return (List<Object[]>) q.getResultList();
+			return (List<Object[]>) q.getResultStream()
+					.map(o -> {
+						if (o.getClass().isArray()) {
+							return (Object[]) o;
+						} else {
+							return new Object[]{o};
+						}
+					}).toList();
 		} finally {
 			em.close();
 		}
