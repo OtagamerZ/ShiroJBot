@@ -17,99 +17,51 @@
   ~ along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
-     http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-             version="2.0">
-
-    <persistence-unit name="shiro_remote">
-
-        <!-- provedor/implementacao do JPA -->
+<persistence version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="main">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <!-- entidade mapeada -->
-        <class>com.kuuhaku.model.persistent.Member</class>
-        <class>com.kuuhaku.model.persistent.Username</class>
-        <class>com.kuuhaku.model.persistent.CustomAnswer</class>
-        <class>com.kuuhaku.model.persistent.Block</class>
-        <class>com.kuuhaku.model.persistent.PixelCanvas</class>
-        <class>com.kuuhaku.model.persistent.Log</class>
-        <class>com.kuuhaku.model.persistent.Token</class>
-        <class>com.kuuhaku.model.persistent.Account</class>
-        <class>com.kuuhaku.model.persistent.Slots</class>
-        <class>com.kuuhaku.model.persistent.Version</class>
-        <class>com.kuuhaku.model.persistent.MutedMember</class>
-        <class>com.kuuhaku.model.persistent.RarityColors</class>
-        <class>com.kuuhaku.model.persistent.Ticket</class>
-        <class>com.kuuhaku.model.persistent.Couple</class>
-        <class>com.kuuhaku.model.persistent.Upvote</class>
-        <class>com.kuuhaku.model.persistent.Blacklist</class>
-        <class>com.kuuhaku.model.persistent.Kawaipon</class>
-        <class>com.kuuhaku.model.persistent.Card</class>
-        <class>com.kuuhaku.model.persistent.KawaiponCard</class>
-        <class>com.kuuhaku.model.persistent.Market</class>
-        <class>com.kuuhaku.model.persistent.Transaction</class>
-        <class>com.kuuhaku.model.persistent.DynamicParameter</class>
-        <class>com.kuuhaku.model.persistent.PixelOperation</class>
-        <class>com.kuuhaku.model.persistent.Lottery</class>
-        <class>com.kuuhaku.model.persistent.LotteryValue</class>
-        <class>com.kuuhaku.model.persistent.Donation</class>
-        <class>com.kuuhaku.model.persistent.MatchHistory</class>
-        <class>com.kuuhaku.model.persistent.MatchRound</class>
-        <class>com.kuuhaku.model.persistent.Trophy</class>
-        <class>com.kuuhaku.model.persistent.MatchMakingRating</class>
-        <class>com.kuuhaku.model.persistent.Deck</class>
-        <class>com.kuuhaku.model.persistent.GiftCode</class>
-        <class>com.kuuhaku.model.persistent.Clan</class>
-        <class>com.kuuhaku.model.persistent.ClanMember</class>
-        <class>com.kuuhaku.model.persistent.AddedAnime</class>
-        <class>com.kuuhaku.model.persistent.BotStats</class>
-        <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
-        <class>com.kuuhaku.model.persistent.guild.Buff</class>
-        <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
-        <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
+        <!-- SHIRO -->
+        <class>com.kuuhaku.model.persistent.shiro.Staff</class>
+
+        <!-- GUILD -->
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
-        <class>com.kuuhaku.model.persistent.guild.VoiceRole</class>
-        <class>com.kuuhaku.model.persistent.guild.buttons.ButtonChannel</class>
-        <class>com.kuuhaku.model.persistent.guild.buttons.ButtonMessage</class>
-        <class>com.kuuhaku.model.persistent.guild.buttons.Button</class>
-        <class>com.kuuhaku.model.persistent.Leaderboards</class>
-        <class>com.kuuhaku.model.persistent.VoiceTime</class>
-        <class>com.kuuhaku.model.persistent.Starboard</class>
-        <class>com.kuuhaku.model.persistent.Stash</class>
-        <class>com.kuuhaku.model.persistent.TempRole</class>
-        <class>com.kuuhaku.model.persistent.BountyQuest</class>
-        <class>com.kuuhaku.model.persistent.tournament.Bracket</class>
-        <class>com.kuuhaku.model.persistent.tournament.Participant</class>
-        <class>com.kuuhaku.model.persistent.tournament.Phase</class>
-        <class>com.kuuhaku.model.persistent.tournament.Tournament</class>
-        <class>com.kuuhaku.model.persistent.Trade</class>
-        <class>com.kuuhaku.model.persistent.TradeOffer</class>
-        <class>com.kuuhaku.model.persistent.TradeCard</class>
-        <class>com.kuuhaku.model.persistent.RaidInfo</class>
-        <class>com.kuuhaku.model.persistent.RaidMember</class>
-        <class>com.kuuhaku.model.persistent.Checklist</class>
-        <class>com.kuuhaku.model.persistent.Checkitem</class>
-        <class>com.kuuhaku.model.persistent.Reminder</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Evogear</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff</class>
-        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff</class>
+        <class>com.kuuhaku.model.persistent.guild.GoodbyeSettings</class>
+        <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
+        <class>com.kuuhaku.model.persistent.guild.GuildSettings</class>
+        <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
+        <class>com.kuuhaku.model.persistent.guild.WelcomeSettings</class>
+
+        <!-- USER -->
+        <class>com.kuuhaku.model.persistent.user.Account</class>
+        <class>com.kuuhaku.model.persistent.user.AccountSettings</class>
+        <class>com.kuuhaku.model.persistent.user.Anime</class>
+        <class>com.kuuhaku.model.persistent.user.Card</class>
+        <class>com.kuuhaku.model.persistent.user.DynamicProperty</class>
+        <class>com.kuuhaku.model.persistent.user.Kawaipon</class>
+        <class>com.kuuhaku.model.persistent.user.KawaiponCard</class>
+        <class>com.kuuhaku.model.persistent.user.Profile</class>
+        <class>com.kuuhaku.model.persistent.user.ProfileSettings</class>
+        <class>com.kuuhaku.model.persistent.user.Transaction</class>
+        <class>com.kuuhaku.model.persistent.user.VoiceData</class>
+
+        <!-- SHOUKAN -->
+        <class>com.kuuhaku.model.persistent.shoukan.Deck</class>
+        <class>com.kuuhaku.model.persistent.shoukan.Evogear</class>
+        <class>com.kuuhaku.model.persistent.shoukan.Field</class>
+        <class>com.kuuhaku.model.persistent.shoukan.Senshi</class>
+        <class>com.kuuhaku.model.persistent.id.ColorRoleId</class>
 
         <properties>
-            <!-- dados da conexao -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
-            <!--  propriedades do hibernate -->
-            <property name="hibernate.dialect" value="com.kuuhaku.controller.postgresql.custom.PGDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="hibernate.jdbc.batch_size" value="30"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
 
-            <!--  propriedade do C3P0 -->
             <property name="hibernate.c3p0.min_size" value="1"/>
             <property name="hibernate.c3p0.max_size" value="5"/>
             <property name="hibernate.c3p0.timeout" value="300"/>
@@ -118,7 +70,6 @@
             <property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
             <property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
 
-            <!--  atualiza o banco, gera as tabelas se for preciso -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>

@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class CacheManager {
-	private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
+	private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(3);
 	private final DB db = DBMaker.memoryDB().make();
 
 	private final HTreeMap<String, byte[]> cardCache = db.hashMap("card", Serializer.STRING, Serializer.BYTE_ARRAY)
@@ -29,8 +29,13 @@ public class CacheManager {
 			.counterEnable()
 			.create();
 
-	private final HTreeMap<String, String> emoteCache = db.hashMap("emote", Serializer.STRING, Serializer.STRING)
-			.counterEnable()
+	private final HTreeMap<String, String> emoteCache = db.hashMap("emote", Serializer.STRING, Serializer.STRING).create();
+
+	private final HTreeMap<String, String> localeCache = db.hashMap("locale", Serializer.STRING, Serializer.STRING)
+			.expireAfterCreate(30, TimeUnit.MINUTES)
+			.expireAfterGet(30, TimeUnit.MINUTES)
+			.expireExecutor(exec)
+			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
 			.create();
 
 	public HTreeMap<String, byte[]> getCardCache() {
@@ -43,5 +48,9 @@ public class CacheManager {
 
 	public HTreeMap<String, String> getEmoteCache() {
 		return emoteCache;
+	}
+
+	public HTreeMap<String, String> getLocaleCache() {
+		return localeCache;
 	}
 }

@@ -18,11 +18,14 @@
 
 package com.kuuhaku.utils.json;
 
-import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.Utils;
 
+import java.io.Serial;
 import java.util.*;
 
 public class JSONObject extends HashMap<String, Object> {
+	@Serial
+	private static final long serialVersionUID = 6263175813447647494L;
 
 	public JSONObject() {
 	}
@@ -51,7 +54,7 @@ public class JSONObject extends HashMap<String, Object> {
 	}
 
 	public Object get(String key, Object or) {
-		return CollectionHelper.getOr(get(key), or);
+		return Utils.getOr(get(key), or);
 	}
 
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) {
@@ -80,7 +83,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public boolean getBoolean(String key, boolean or) {
 		try {
-			return CollectionHelper.getOr(get(key), or);
+			return Utils.getOr(get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -96,7 +99,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public double getDouble(String key, double or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(key)).doubleValue(), or);
+			return Utils.getOr(((Number) get(key)).doubleValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -112,7 +115,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key, float or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(key)).floatValue(), or);
+			return Utils.getOr(((Number) get(key)).floatValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -128,7 +131,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key, int or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(key)).intValue(), or);
+			return Utils.getOr(((Number) get(key)).intValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -144,7 +147,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key, long or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(key)).longValue(), or);
+			return Utils.getOr(((Number) get(key)).longValue(), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
@@ -160,7 +163,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public String getString(String key, String or) {
 		try {
-			return CollectionHelper.getOr(String.valueOf(get(key)), or);
+			return Utils.getOr(String.valueOf(get(key)), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
