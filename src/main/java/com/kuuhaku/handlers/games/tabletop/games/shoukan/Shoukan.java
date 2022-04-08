@@ -272,7 +272,7 @@ public class Shoukan extends GlobalGame {
 		h.addMana(h.getManaPerTurn());
 		if (!h.isSuppressed()) {
 			if (h.getCombo().getLeft() == Race.DIVINITY) {
-				h.addMana((int) Math.round(5 - h.getAvgCost()));
+				h.addMana((int) Math.round(4 - h.getAvgCost()));
 			}
 		}
 
@@ -2120,7 +2120,7 @@ public class Shoukan extends GlobalGame {
 
 					arena.getBanned().addAll(grv);
 					grv.clear();
-					synthCd[getCurrentSide() == Side.TOP ? 1 : 0] = 5;
+					synthCd[getCurrentSide() == Side.TOP ? 1 : 0] = 4;
 					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
@@ -2239,46 +2239,52 @@ public class Shoukan extends GlobalGame {
 					h.get().decreaseBlindTime();
 					slots = arena.getSlots().get(getCurrentSide());
 
-					if (getRound() >= 75) {
-						if (Helper.equalsAny(getRound(), 75, 100, 125)) {
-							if (getRound() == 75) {
-								channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
-							} else if (getRound() == 100) {
-								channel.sendMessage(":warning: | ALERTA: Morte-súbita II ativada, os jogadores perderão 25% do HP atual a cada turno!").queue();
-							} else {
-								channel.sendMessage(":warning: | ALERTA: Morte-súbita III ativada, se a partida não acabar neste turno será declarado empate!").queue();
-							}
+					if (getRound() == 10 || getRound() == 11) {
+						if (h.get().getCombo().getRight() == Race.CREATURE) {
+							h.get().setMaxCards(h.get().getMaxCards() + 1);
 						}
+					}
 
-						if (Helper.between(getRound(), 75, 126)) {
-							h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
-							if (postCombat()) return;
-						} else {
-							draw = true;
-							String msg = "Declaro empate! (" + getRound() + " turnos)";
-
-							for (List<SlotColumn> sides : arena.getSlots().values()) {
-								for (SlotColumn slts : sides) {
-									if (slts.getTop() != null)
-										slts.getTop().setFlipped(false, false);
-
-									if (slts.getBottom() != null)
-										slts.getBottom().setFlipped(false, false);
+					if (getRound() >= 75) {
+							if (Helper.equalsAny(getRound(), 75, 100, 125)) {
+								if (getRound() == 75) {
+									channel.sendMessage(":warning: | ALERTA: Morte-súbita I ativada, os jogadores perderão 10% do HP atual a cada turno!").queue();
+								} else if (getRound() == 100) {
+									channel.sendMessage(":warning: | ALERTA: Morte-súbita II ativada, os jogadores perderão 25% do HP atual a cada turno!").queue();
+								} else {
+									channel.sendMessage(":warning: | ALERTA: Morte-súbita III ativada, se a partida não acabar neste turno será declarado empate!").queue();
 								}
 							}
 
-							close();
-							channel.sendMessage(msg)
-									.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
-									.queue(mm ->
-											this.message.compute(mm.getChannel().getId(), (id, m) -> {
-												if (m != null) m.delete().queue(null, Helper::doNothing);
-												return mm;
-											})
-									);
-							return;
+							if (Helper.between(getRound(), 75, 126)) {
+								h.get().removeHp((int) Math.ceil(h.get().getHp() * (getRound() >= 100 ? 0.25 : 0.10)));
+								if (postCombat()) return;
+							} else {
+								draw = true;
+								String msg = "Declaro empate! (" + getRound() + " turnos)";
+
+								for (List<SlotColumn> sides : arena.getSlots().values()) {
+									for (SlotColumn slts : sides) {
+										if (slts.getTop() != null)
+											slts.getTop().setFlipped(false, false);
+
+										if (slts.getBottom() != null)
+											slts.getBottom().setFlipped(false, false);
+									}
+								}
+
+								close();
+								channel.sendMessage(msg)
+										.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+										.queue(mm ->
+												this.message.compute(mm.getChannel().getId(), (id, m) -> {
+													if (m != null) m.delete().queue(null, Helper::doNothing);
+													return mm;
+												})
+										);
+								return;
+							}
 						}
-					}
 
 					if (h.get().getBleeding() > 0) {
 						h.get().removeHp(h.get().getBleeding() / (h.get().getCombo().getLeft() == Race.HUMAN ? 10 : 5));
@@ -2312,7 +2318,7 @@ public class Shoukan extends GlobalGame {
 						}
 
 						if (h.get().getCombo().getLeft() == Race.DIVINITY) {
-							h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
+							h.get().addMana((int) Math.round(4 - h.get().getAvgCost()));
 						}
 					}
 
@@ -2444,6 +2450,12 @@ public class Shoukan extends GlobalGame {
 			h.get().decreaseBlindTime();
 			slots = arena.getSlots().get(getCurrentSide());
 
+			if (getRound() == 10 || getRound() == 11) {
+				if (h.get().getCombo().getRight() == Race.CREATURE) {
+					h.get().setMaxCards(h.get().getMaxCards() + 1);
+				}
+			}
+
 			if (getRound() >= 75) {
 				if (Helper.equalsAny(getRound(), 75, 100, 125)) {
 					if (getRound() == 75) {
@@ -2517,7 +2529,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (h.get().getCombo().getLeft() == Race.DIVINITY) {
-					h.get().addMana((int) Math.round(5 - h.get().getAvgCost()));
+					h.get().addMana((int) Math.round(4 - h.get().getAvgCost()));
 				}
 			}
 

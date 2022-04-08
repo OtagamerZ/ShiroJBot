@@ -213,11 +213,7 @@ public class TeamHand extends Hand {
 		setBaseManaPerTurn(Math.max(baseManaPerTurn + manaMod, 0));
 		setManaPerTurn(getBaseManaPerTurn());
 
-		setMaxCards(Math.max(maxCards
-						+ (combo.getLeft() == Race.CREATURE ? 2 : 0)
-						+ (combo.getRight() == Race.CREATURE ? 1 : 0)
-				, 1)
-		);
+		setMaxCards(Math.max(maxCards + (combo.getRight() == Race.CREATURE ? 1 : 0), 1));
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
 			redrawHand();

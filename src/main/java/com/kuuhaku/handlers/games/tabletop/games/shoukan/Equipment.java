@@ -301,7 +301,8 @@ public class Equipment implements Drawable, Cloneable {
 
 		float mult = 1;
 		if (game != null && game.getCombos().get(side).getRight() == Race.MACHINE) {
-			mult *= 1.25;
+			Hand h = game.getHands().get(side);
+			mult *= 1.10 + h.getRaceCount().get(Race.MACHINE) * 0.01;
 		}
 
 		return Math.round((altAtk + bonus.getAtk()) * mult);
@@ -312,7 +313,8 @@ public class Equipment implements Drawable, Cloneable {
 
 		float mult = 1;
 		if (game != null && game.getCombos().get(side).getRight() == Race.MACHINE) {
-			mult *= 1.25;
+			Hand h = game.getHands().get(side);
+			mult *= 1.10 + h.getRaceCount().get(Race.MACHINE) * 0.01;
 		}
 
 		return Math.round((altDef + bonus.getDef()) * mult);
@@ -353,7 +355,8 @@ public class Equipment implements Drawable, Cloneable {
 	public int getMana() {
 		float mult = 1;
 		if (isSpell() && game != null && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
-			mult *= 0.75;
+			Hand h = game.getHands().get(side);
+			mult *= 0.90 - h.getRaceCount().get(Race.MYSTICAL) * 0.01;
 		}
 
 		return Math.round((mana + bonus.getMana()) * mult);
@@ -366,7 +369,8 @@ public class Equipment implements Drawable, Cloneable {
 	public int getBlood() {
 		float mult = 1;
 		if (isSpell() && game != null && game.getCombos().get(side).getRight() == Race.MYSTICAL) {
-			mult *= 0.75;
+			Hand h = game.getHands().get(side);
+			mult *= 0.90 - h.getRaceCount().get(Race.MYSTICAL) * 0.01;
 		}
 
 		return Math.round((blood + bonus.getBlood()) * mult);
