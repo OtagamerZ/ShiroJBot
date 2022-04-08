@@ -84,7 +84,7 @@ public class BountyRewardCommand implements Executable {
 				int val = Math.round(e.getValue() * (padoru ? 1.5f : 1));
 				if (val == 0) continue;
 
-				eb.addField(rew.toString(), rew.apply(h, val), true);
+				eb.addField(rew.toString(), rew.apply(h, val, true), true);
 			}
 
 			h = KawaiponDAO.getHero(author.getId());

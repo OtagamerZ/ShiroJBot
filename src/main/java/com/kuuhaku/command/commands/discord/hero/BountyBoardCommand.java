@@ -105,7 +105,7 @@ public class BountyBoardCommand implements Executable {
 				int val = entry.getValue();
 				if (val == 0) continue;
 
-				sb.appendNewLine(rew).append(" | ").append(rew.apply(null, val));
+				sb.appendNewLine(rew).append(" | ").append(rew.apply(h, val, false));
 			}
 
 			if (!sb.isBlank()) {
