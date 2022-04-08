@@ -35,6 +35,7 @@ import com.kuuhaku.utils.UniqueList;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -452,7 +453,7 @@ public class Champion implements Drawable, Cloneable {
 
 		if (game != null) {
 			Side s = game.getSideById(acc.getUid());
-			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
+			Triple<Race, Boolean, Race> combos = game.getCombos().getOrDefault(s, Triple.of(Race.NONE, false, Race.NONE));
 
 			if (linkedTo.stream().noneMatch(sl -> sl.asEquipment().getCharms().contains(Charm.LINK)) && bonus.getCharm() != Charm.LINK) {
 				Field f = game.getArena().getField();
@@ -498,7 +499,7 @@ public class Champion implements Drawable, Cloneable {
 
 		if (game != null) {
 			Side s = game.getSideById(acc.getUid());
-			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
+			Triple<Race, Boolean, Race> combos = game.getCombos().getOrDefault(s, Triple.of(Race.NONE, false, Race.NONE));
 
 			if (linkedTo.stream().noneMatch(sl -> sl.asEquipment().getCharms().contains(Charm.LINK)) && bonus.getCharm() != Charm.LINK) {
 				Field f = game.getArena().getField();
