@@ -28,7 +28,7 @@ import com.kuuhaku.utils.BondedList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,7 +38,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_GRAVEYARD;
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_SACRIFICE;
 
 public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
@@ -309,7 +310,7 @@ public class Arena {
 									key == Side.TOP ? 137 : 1889,
 									key == Side.TOP ? 193 : 1206, null);
 
-							Pair<Race, Race> combo = h.getCombo();
+							Triple<Race, Boolean, Race> combo = h.getCombo();
 							if (combo.getLeft() != Race.NONE)
 								g2d.drawImage(combo.getLeft().getIcon(),
 										key == Side.TOP ? 137 : 1889,

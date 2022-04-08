@@ -23,7 +23,7 @@ import com.kuuhaku.utils.Helper;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
@@ -139,8 +139,8 @@ public enum Race {
         return Arrays.stream(values()).filter(c -> Helper.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
     }
 
-    public static Pair<Race, Race> getCombo(List<Champion> champs) {
-        if (champs.isEmpty()) return Pair.of(NONE, NONE);
+    public static Triple<Race, Boolean, Race> getCombo(List<Champion> champs) {
+        if (champs.isEmpty()) return Triple.of(NONE, false, NONE);
 
         List<Race> order = champs.stream()
                 .map(Champion::getRace)
@@ -183,7 +183,7 @@ public enum Race {
             }
         }
 
-        return Pair.of(major, minor == DEMON ? major : minor);
+        return Triple.of(major, minor == DEMON, minor == DEMON ? major : minor);
     }
 
     public static Race[] validValues() {

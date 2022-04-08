@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -220,7 +221,7 @@ public class Deck {
 					.collect(Collectors.joining(","));
 	}
 
-	public Pair<Race, Race> getCombo() {
+	public Triple<Race, Boolean, Race> getCombo() {
 		return Race.getCombo(champions);
 	}
 

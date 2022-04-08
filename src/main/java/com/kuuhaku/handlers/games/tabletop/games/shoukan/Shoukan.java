@@ -60,6 +60,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.annotation.Nonnull;
 import javax.websocket.DeploymentException;
@@ -83,7 +84,7 @@ import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrig
 
 public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
-	private final Map<Side, Pair<Race, Race>> combos;
+	private final Map<Side, Triple<Race, Boolean, Race>> combos;
 	private final GameChannel channel;
 	private final Arena arena;
 	private final Rules rules;
