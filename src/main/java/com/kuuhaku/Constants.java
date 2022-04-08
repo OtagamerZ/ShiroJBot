@@ -1,0 +1,61 @@
+/*
+ * This file is part of Shiro J Bot.
+ * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+package com.kuuhaku;
+
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.Role;
+import com.kuuhaku.model.persistent.shiro.Staff;
+import com.kuuhaku.utils.Utils;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.security.SecureRandom;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
+public class Constants {
+	protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
+	public static final String OWNER = "350836145921327115";
+	public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
+	public static final Logger LOGGER = LogManager.getLogger("shiro");
+
+	public static final long MILLIS_IN_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
+	public static final long MILLIS_IN_HOUR = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
+	public static final long MILLIS_IN_MINUTE = TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
+	public static final long MILLIS_IN_SECOND = TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
+	public static final double GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
+
+	public static final String TIMESTAMP = "<t:%s:R>";
+	public static final String VOID = "\u200B";
+	public static final String ACCEPT = "✅";
+
+	public static final Random DEFAULT_RNG = new Random();
+	public static final Random DEFAULT_SECURE_RNG = new SecureRandom();
+
+	//public static final File COLLECTIONS_FOLDER = new File(System.getenv("COLLECTIONS_PATH"));
+	//public static final File TEMPORARY_FOLDER = new File(System.getenv("TEMPORARY_PATH"));
+
+	public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> Utils.getOr(DAO.find(Staff.class, m.getId()), new Staff()).getRole().allowed(Role.DEVELOPER);
+	public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> Utils.getOr(DAO.find(Staff.class, m.getId()), new Staff()).getRole().allowed(Role.SUPPORT);
+	public static final Function<Member, Boolean> MOD_PRIVILEGE = m -> SUP_PRIVILEGE.apply(m) || m.hasPermission(Permission.KICK_MEMBERS);
+	public static final Function<Member, Boolean> USER_PRIVILEGE = m -> true;
+}

@@ -18,29 +18,25 @@
 
 package com.kuuhaku.managers;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Executable;
-import com.kuuhaku.model.annotations.Signature;
-import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.model.annotations.*;
-import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.records.SlashParam;
-import com.kuuhaku.utils.helpers.MiscHelper;
-import com.kuuhaku.utils.helpers.LogicHelper;
-import com.kuuhaku.utils.json.JSONUtils;
+import com.kuuhaku.Constants;
+import com.kuuhaku.interfaces.Executable;
+import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.records.PreparedCommand;
+import com.kuuhaku.utils.Utils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.reflections8.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 public class CommandManager {
-	private final Reflections refl = new Reflections("com.kuuhaku.command.commands");
+	private final Reflections refl = new Reflections("com.kuuhaku.command");
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
-	private final Map<String, Set<Class<?>>> slashes = new HashMap<>();
 
 	public CommandManager() {
 		Set<String> names = new HashSet<>();
@@ -48,12 +44,12 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (!names.add(params.name())) {
-				MiscHelper.logger(this.getClass()).warn("Detectado comando com nome existente: " + params.name());
+				Constants.LOGGER.warn("Detected commands with the same name: " + params.name());
 			}
 
 			for (String alias : params.aliases()) {
 				if (!names.add(alias)) {
-					MiscHelper.logger(this.getClass()).warn("Detectado comando com alias existente: " + alias);
+					Constants.LOGGER.warn("Detected commands using the same alias: " + alias);
 				}
 			}
 		}
@@ -86,37 +82,12 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (name.equalsIgnoreCase(params.name()) || LogicHelper.equalsAny(name, params.aliases())) {
+			if (name.equalsIgnoreCase(params.name()) || Utils.equalsAny(name, params.aliases())) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
 						params.name(),
 						params.aliases(),
-						params.usage(),
-						"cmd_" + cmd.getSimpleName()
-								.replaceFirst("(Command|Reaction)$", "")
-								.replaceAll("[a-z](?=[A-Z])", "$0-")
-								.toLowerCase(Locale.ROOT),
-						params.category(),
-						req == null ? new Permission[0] : req.value(),
-						buildCommand(cmd)
-				);
-			}
-		}
-
-		return null;
-	}
-
-	public PreparedCommand getSlash(String name, String sub) {
-		for (Class<?> cmd : slashes.get(name)) {
-			Command params = cmd.getDeclaredAnnotation(Command.class);
-			SlashCommand slash = cmd.getDeclaredAnnotation(SlashCommand.class);
-			if (slash.name().equals(sub)) {
-				Requires req = cmd.getDeclaredAnnotation(Requires.class);
-				return new PreparedCommand(
-						params.name(),
-						params.aliases(),
-						params.usage(),
-						"cmd_" + cmd.getSimpleName()
+						"cmd/" + cmd.getSimpleName()
 								.replaceFirst("(Command|Reaction)$", "")
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
 								.toLowerCase(Locale.ROOT),
@@ -135,8 +106,7 @@ public class CommandManager {
 		commands.add(new PreparedCommand(
 				params.name(),
 				params.aliases(),
-				params.usage(),
-				"cmd_" + cmd.getSimpleName()
+				"cmd/" + cmd.getSimpleName()
 						.replaceFirst("(Command|Reaction)$", "")
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
 						.toLowerCase(Locale.ROOT),
@@ -150,80 +120,9 @@ public class CommandManager {
 		try {
 			return (Executable) klass.getConstructor().newInstance();
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-			MiscHelper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			Constants.LOGGER.error(e, e);
 			return null;
 		}
-	}
-
-	public void registerCommands() {
-		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(SlashCommand.class);
-		for (Class<?> cmd : cmds) {
-			if (cmd.isAnnotationPresent(SlashGroup.class)) {
-				SlashGroup group = cmd.getDeclaredAnnotation(SlashGroup.class);
-				slashes.computeIfAbsent(group.value(), k -> new HashSet<>()).add(cmd);
-			} else {
-				slashes.computeIfAbsent(null, k -> new HashSet<>()).add(cmd);
-			}
-		}
-
-		List<CommandData> cds = new ArrayList<>();
-		for (Map.Entry<String, Set<Class<?>>> entries : slashes.entrySet()) {
-			String group = entries.getKey();
-			if (group != null) {
-				List<SubcommandData> sds = new ArrayList<>();
-				for (Class<?> klass : entries.getValue()) {
-					SlashCommand cmd = klass.getDeclaredAnnotation(SlashCommand.class);
-					SubcommandData sd = new SubcommandData(
-							cmd.name(),
-							I18n.getString(
-									"cmd_" + klass.getSimpleName()
-											.replaceFirst("(Command|Reaction)$", "")
-											.replaceAll("[a-z](?=[A-Z])", "$0-")
-											.toLowerCase(Locale.ROOT)
-							)
-					);
-					List<SlashParam> params = new ArrayList<>();
-					for (String arg : cmd.args()) {
-						params.add(JSONUtils.fromJSON(arg, SlashParam.class));
-					}
-
-					for (SlashParam param : params) {
-						sd.addOption(param.type(), param.name(), param.description(), param.required());
-					}
-
-					sds.add(sd);
-				}
-
-				cds.add(new CommandData(group, "Categoria " + group.toUpperCase())
-						.addSubcommands(sds));
-			} else {
-				for (Class<?> klass : entries.getValue()) {
-					SlashCommand cmd = klass.getDeclaredAnnotation(SlashCommand.class);
-					CommandData cd = new CommandData(
-							cmd.name(),
-							I18n.getString(
-									"cmd_" + klass.getSimpleName()
-											.replaceFirst("(Command|Reaction)$", "")
-											.replaceAll("[a-z](?=[A-Z])", "$0-")
-											.toLowerCase(Locale.ROOT)
-							)
-					);
-					List<SlashParam> params = new ArrayList<>();
-					for (String arg : cmd.args()) {
-						params.add(JSONUtils.fromJSON(arg, SlashParam.class));
-					}
-
-					for (SlashParam param : params) {
-						cd.addOption(param.type(), param.name(), param.description(), param.required());
-					}
-
-					cds.add(cd);
-				}
-			}
-		}
-
-		Main.getDefaultShard().updateCommands().addCommands(cds).complete();
-		MiscHelper.logger(this.getClass()).info(slashes.values().stream().mapToLong(Set::size).sum() + " comandos Slash registrados.");
 	}
 
 	public String[] getCommandSignature(Class<?> klass) {
