@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2021  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,56 +18,57 @@
 
 package com.kuuhaku.model.persistent.guild;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Objects;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.id.LevelRoleId;
+import net.dv8tion.jda.api.entities.Role;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 
 @Entity
-@Table(name = "levelrole")
-public class LevelRole {
-	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	private String id;
+@Table(name = "color_role")
+public class LevelRole extends DAO {
+	@EmbeddedId
+	private LevelRoleId id;
 
-	@Column(columnDefinition = "INT NOT NULL")
+	@Column(name = "level", nullable = false)
 	private int level;
+
+	@Column(name = "role", nullable = false)
+	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.RoleStringType")
+	private Role role;
+
+	@ManyToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "gid")
+	@Fetch(FetchMode.JOIN)
+	@MapsId("gid")
+	private GuildSettings settings;
 
 	public LevelRole() {
 	}
 
-	public LevelRole(String id, int level) {
-		this.id = id;
+	public LevelRole(GuildSettings settings, int level, Role role) {
+		this.id = new LevelRoleId(role.getGuild().getId());
 		this.level = level;
+		this.role = role;
+		this.settings = settings;
 	}
 
-	public String getId() {
+	public LevelRoleId getId() {
 		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public int getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) {
-		this.level = level;
+	public Role getRole() {
+		return role;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		LevelRole levelRole = (LevelRole) o;
-		return Objects.equals(id, levelRole.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	public GuildSettings getSettings() {
+		return settings;
 	}
 }

@@ -18,11 +18,14 @@
 
 package com.kuuhaku.utils.json;
 
-import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.Utils;
 
+import java.io.Serial;
 import java.util.*;
 
 public class JSONArray extends ArrayList<Object> {
+	@Serial
+	private static final long serialVersionUID = -2826952916406184142L;
 
 	public JSONArray() {
 	}
@@ -51,7 +54,7 @@ public class JSONArray extends ArrayList<Object> {
 	}
 
 	public Object get(int index, Object or) {
-		return CollectionHelper.getOr(get(index), or);
+		return Utils.getOr(get(index), or);
 	}
 
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) {
@@ -80,7 +83,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public boolean getBoolean(int index, boolean or) {
 		try {
-			return CollectionHelper.getOr(get(index), or);
+			return Utils.getOr(get(index), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -96,7 +99,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public double getDouble(int index, double or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(index)).doubleValue(), or);
+			return Utils.getOr(((Number) get(index)).doubleValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -112,7 +115,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public float getFloat(int index, float or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(index)).floatValue(), or);
+			return Utils.getOr(((Number) get(index)).floatValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -124,7 +127,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public int getInt(int index, int or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(index)).intValue(), or);
+			return Utils.getOr(((Number) get(index)).intValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -140,7 +143,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public long getLong(int index, long or) {
 		try {
-			return CollectionHelper.getOr(((Number) get(index)).longValue(), or);
+			return Utils.getOr(((Number) get(index)).longValue(), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
@@ -156,7 +159,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public String getString(int index, String or) {
 		try {
-			return CollectionHelper.getOr(String.valueOf(get(index)), or);
+			return Utils.getOr(String.valueOf(get(index)), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}

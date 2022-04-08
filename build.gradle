@@ -28,8 +28,6 @@ plugins {
 	id "java"
 	id "idea"
 	id "application"
-	id "org.springframework.boot" version "2.5.1"
-	id "io.spring.dependency-management" version "1.0.11.RELEASE"
 	id "io.freefair.aspectj" version "6.4.1"
 }
 
@@ -57,7 +55,6 @@ applicationDefaultJvmArgs = [
 ]
 
 repositories {
-	jcenter()
 	mavenCentral()
 	maven { url "https://jitpack.io" }
 	maven { url "https://m2.dv8tion.net/releases" }
@@ -86,7 +83,6 @@ dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "4.4.0_350"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "3.0.6"
-	implementation group: "club.minnced", name: "discord-webhooks", version: "0.3.1"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.2.12"
@@ -97,20 +93,11 @@ dependencies {
 	//Compiler
 	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.0"
 
-	//Rest API
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.5.1") {
-		exclude module: "spring-boot-starter-logging"
-	}
-	implementation("org.springframework.boot:spring-boot-starter-web:2.5.1") {
-		exclude module: "spring-boot-starter-logging"
-	}
-
 	//Websocket API
 	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.1"
 
 	//Wrappers
 	implementation group: "com.graphql-java", name: "graphql-java", version: "2019-05-08T02-56-27-cca4316"
-	implementation group: "com.github.philippheuer.events4j", name: "events4j", version: "0.6.0"
 	implementation group: "org.discordbots", name: "DBL-Java-Library", version: "2.0.1"
 
 	//Apache Commons
@@ -118,8 +105,8 @@ dependencies {
 	implementation group: "org.apache.commons", name: "commons-text", version: "1.9"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
 	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0-alpha2"
-	implementation group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.13"
 	implementation group: "org.apache.commons", name: "commons-compress", version: "1.21"
+	implementation group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.13"
 	implementation group: "commons-validator", name: "commons-validator", version: "1.7"
 	implementation group: "commons-codec", name: "commons-codec", version: "1.15"
 
@@ -129,7 +116,6 @@ dependencies {
 	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.17.1"
 	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.17.1"
 	implementation group: "org.apache.logging.log4j", name: "log4j-jcl", version: "2.17.1"
-	implementation group: "org.springframework.boot", name: "spring-boot-starter-log4j2", version: "2.5.1"
 	implementation group: "com.lmax", name: "disruptor", version: "3.4.4"
 
 	//Util
@@ -165,18 +151,13 @@ idea {
 	}
 }
 
-sourceSets {
-	main {
-		aspectj.srcDir "src/main/java"
-		java.srcDirs = ["src/main/java"]
-	}
-
-	test {
-		aspectj.srcDir "src/test/java"
-		java.srcDirs = ["src/test/java"]
-	}
+sourceSets.main {
+	aspectj.srcDir "src/main/java"
+	java.srcDirs = files()
 }
 
 test {
 	useJUnitPlatform()
 }
+
+compileJava.options.encoding = 'UTF-8'

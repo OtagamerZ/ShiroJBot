@@ -18,10 +18,10 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.model.records.embed.Field;
-import com.kuuhaku.utils.Constants;
-import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 
 public class AutoEmbedBuilder extends EmbedBuilder {
 	private final Embed e;
@@ -53,7 +54,7 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		}
 
 		setColor(e.getParsedColor());
-		setDescription(CollectionHelper.getOr(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH), Constants.VOID));
+		setDescription(Utils.getOr(StringUtils.abbreviate(e.body(), MessageEmbed.TEXT_MAX_LENGTH), Constants.VOID));
 		setThumbnail(e.thumbnail());
 		if (e.image() != null) try {
 			setImage(e.image().getRandomImage());
@@ -86,7 +87,29 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		this(JSONUtils.fromJSON(json, Embed.class));
 	}
 
+	public AutoEmbedBuilder() {
+		this("{}");
+	}
+
 	public Embed getEmbed() {
 		return e;
+	}
+
+	@Override
+	public String toString() {
+		return JSONUtils.toJSON(e);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AutoEmbedBuilder that = (AutoEmbedBuilder) o;
+		return Objects.equals(e, that.e);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(e);
 	}
 }

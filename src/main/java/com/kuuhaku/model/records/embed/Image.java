@@ -18,25 +18,25 @@
 
 package com.kuuhaku.model.records.embed;
 
-import com.kuuhaku.utils.helpers.CollectionHelper;
+import com.kuuhaku.utils.Utils;
 
 import java.util.List;
 
 public record Image(List<String> image, List<String> join, List<String> leave) {
 	public String getRandomImage() {
-		List<String> imgs = CollectionHelper.getOr(image, List.of());
+		List<String> imgs = Utils.getOr(image, List.of());
 		if (imgs.isEmpty()) return null;
 
-		return CollectionHelper.getRandomEntry(imgs);
+		return Utils.getRandomEntry(imgs);
 	}
 
 	public String getRandomJoin() {
 		if (join == null || join.isEmpty()) return getRandomImage();
-		return CollectionHelper.getRandomEntry(join);
+		return Utils.getRandomEntry(join);
 	}
 
 	public String getRandomLeave() {
 		if (leave == null || leave.isEmpty()) return getRandomImage();
-		return CollectionHelper.getRandomEntry(leave);
+		return Utils.getRandomEntry(leave);
 	}
 }

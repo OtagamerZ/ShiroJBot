@@ -18,7 +18,7 @@
 
 package com.kuuhaku.utils.json;
 
-import com.kuuhaku.utils.helpers.MiscHelper;
+import com.kuuhaku.Constants;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
@@ -45,8 +45,8 @@ public class JSONUtils {
 		try {
 			return moshi.adapter(klass).nullSafe().fromJson(json);
 		} catch (IOException e) {
-			MiscHelper.logger(JSONUtils.class).debug(e + " | " + e.getStackTrace()[0]);
-			MiscHelper.logger(JSONUtils.class).debug(json);
+			Constants.LOGGER.debug(e, e);
+			Constants.LOGGER.debug(json);
 			return null;
 		}
 	}
@@ -56,8 +56,8 @@ public class JSONUtils {
 		try {
 			return (Map<String, Object>) moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			MiscHelper.logger(JSONUtils.class).debug(e + " | " + e.getStackTrace()[0]);
-			MiscHelper.logger(JSONUtils.class).debug(json);
+			Constants.LOGGER.debug(e, e);
+			Constants.LOGGER.debug(json);
 			return new HashMap<>();
 		}
 	}
@@ -67,8 +67,8 @@ public class JSONUtils {
 		try {
 			return (List<Object>) moshi.adapter(Types.newParameterizedType(List.class, Object.class)).fromJson(json);
 		} catch (IOException e) {
-			MiscHelper.logger(JSONUtils.class).debug(e + " | " + e.getStackTrace()[0]);
-			MiscHelper.logger(JSONUtils.class).debug(json);
+			Constants.LOGGER.debug(e, e);
+			Constants.LOGGER.debug(json);
 			return new ArrayList<>();
 		}
 	}
