@@ -544,7 +544,7 @@ public class Deck {
 
 	@Override
 	public String toString() {
-		Pair<Race, Race> combo = getCombo();
+		Triple<Race, Boolean, Race> combo = getCombo();
 		double[] divs = getMetaDivergence();
 		Map<Class, Integer> comp = getComposition();
 		String[] data = new String[14];
