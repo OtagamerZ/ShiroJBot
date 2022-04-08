@@ -37,6 +37,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -61,7 +62,7 @@ public class Hand {
 	private final BondedList<Drawable> destinyDeck;
 	private final BondedList<Drawable> discardBatch;
 	private final Hero hero;
-	private final Pair<Race, Race> combo;
+	private final Triple<Race, Boolean, Race> combo;
 	private final double divergence;
 	private final double avgCost;
 	private int baseHp;
@@ -473,7 +474,7 @@ public class Hand {
 		return raceCount;
 	}
 
-	public Pair<Race, Race> getCombo() {
+	public Triple<Race, Boolean, Race> getCombo() {
 		return combo;
 	}
 
@@ -805,8 +806,7 @@ public class Hand {
 	public void removeHp(int value, boolean trigger) {
 		if (value <= 0) return;
 
-		if (combo.getLeft() == Race.DEMON)
-			value *= 1.25f;
+		if (combo.getMiddle()) value *= 1.25f;
 
 		if (hp > 1) {
 			if (hp > baseHp * (2 / 3f)) {

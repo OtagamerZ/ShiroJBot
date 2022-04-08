@@ -36,6 +36,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.InfiniteList;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -51,7 +52,7 @@ import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrig
 
 public class TeamHand extends Hand {
 	private final Map<Race, Long> raceCount;
-	private final Pair<Race, Race> combo;
+	private final Triple<Race, Boolean, Race> combo;
 	private final InfiniteList<String> users = new InfiniteList<>();
 	private final InfiniteList<Account> accs = new InfiniteList<>();
 	private final InfiniteList<BondedList<Drawable>> decks = new InfiniteList<>();
@@ -536,7 +537,7 @@ public class TeamHand extends Hand {
 		return raceCount;
 	}
 
-	public Pair<Race, Race> getCombo() {
+	public Triple<Race, Boolean, Race> getCombo() {
 		return combo;
 	}
 

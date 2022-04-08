@@ -30,7 +30,7 @@ import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -103,7 +103,7 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(h.getName(), 15), 225, 1769, 2834, g2d);
 		}
 
-		Pair<Race, Race> combo = dk.getCombo();
+		Triple<Race, Boolean, Race> combo = dk.getCombo();
 		if (combo.getLeft() != Race.NONE)
 			g2d.drawImage(combo.getLeft().getIcon(), 1233, 122, 128, 128, null);
 		if (combo.getRight() != Race.NONE)
