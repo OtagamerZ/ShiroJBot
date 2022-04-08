@@ -848,10 +848,6 @@ public class Shoukan extends GlobalGame {
 
 				int before = op.getHp();
 				float fac = (getRound() < 2 ? 0.5f : 1) * (1 - op.getMitigation());
-				if (h.getCombo().getRight() == Race.DEMON)
-					fac *= 1.25f;
-				if (op.getCombo().getRight() == Race.DEMON)
-					fac *= 1.33f;
 
 				if (op.getMana() > 0) {
 					int toSteal = Math.min(op.getMana(), ally.getManaDrain());
@@ -1070,11 +1066,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(ON_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			fac *= 1 - op.getMitigation();
-			if (you.getCombo().getRight() == Race.DEMON)
-				fac *= 1.25f;
-			if (op.getCombo().getRight() == Race.DEMON)
-				fac *= 1.33f;
-
 			boolean applyDamage = !(defr.getBonus().popFlag(defr, Flag.NODAMAGE) || rules.noDamage());
 			boolean noDmg = (defr.getHero() == null && defr.isDefending()) && !(defr.isSleeping() || defr.isStunned());
 
@@ -1153,11 +1144,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(POST_DEFENSE, defr, target.side(), target.index(), source, target)) return;
 
 			fac *= 1 - you.getMitigation();
-			if (op.getCombo().getRight() == Race.DEMON)
-				fac *= 1.25f;
-			if (you.getCombo().getRight() == Race.DEMON)
-				fac *= 1.33f;
-
 			boolean applyDamage = !(atkr.getBonus().popFlag(atkr, Flag.NODAMAGE) || rules.noDamage());
 			int dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 
@@ -1224,11 +1210,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(ON_DEATH, defr, target.side(), target.index(), source, target)) return;
 
 			fac *= 1 - op.getMitigation();
-			if (you.getCombo().getRight() == Race.DEMON)
-				fac *= 1.25f;
-			if (op.getCombo().getRight() == Race.DEMON)
-				fac *= 1.33f;
-
 			boolean noDmg = (defr.getHero() == null && defr.isDefending()) && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
@@ -1285,11 +1266,6 @@ public class Shoukan extends GlobalGame {
 			}
 
 			fac *= 1 - you.getMitigation();
-			if (op.getCombo().getRight() == Race.DEMON)
-				fac *= 1.25f;
-			if (you.getCombo().getRight() == Race.DEMON)
-				fac *= 1.33f;
-
 			dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : 0) * fac);
 
 			h = atkr.getHero();

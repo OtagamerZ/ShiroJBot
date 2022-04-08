@@ -140,7 +140,7 @@ public class Hand {
 		this.deque = new BondedList<>(bonding);
 		this.cards = new BondedList<>(bonding);
 		this.destinyDeck = new BondedList<>(bonding);
-		this.combo = Race.getCombo(dk.getChampions());
+		this.combo = dk.getCombo();
 		this.divergence = dk.getAverageDivergence();
 		this.avgCost = dk.getAverageCost();
 		this.mitigation = Math.min(
@@ -804,6 +804,9 @@ public class Hand {
 
 	public void removeHp(int value, boolean trigger) {
 		if (value <= 0) return;
+
+		if (combo.getLeft() == Race.DEMON)
+			value *= 1.25f;
 
 		if (hp > 1) {
 			if (hp > baseHp * (2 / 3f)) {

@@ -80,7 +80,7 @@ public enum Race {
     ),
     DEMON("Demônio",
             "-1500 HP, +1 mana para cada 20% de HP perdido do oponente, cura 10% do HP perdido por turno enquanto abaixo de 33%",
-            "+25% dano direto causado, +33% dano direto sofrido",
+            "Perdas de HP são 25% maiores, recebe o efeito secundário da sua raça primária",
             "Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos.\n\n**Alinhamento: maligno.**",
             new Integer[]{4, 2, 2, 1, 1}
     ),
@@ -183,7 +183,7 @@ public enum Race {
             }
         }
 
-        return Pair.of(major, minor);
+        return Pair.of(major, minor == DEMON ? major : minor);
     }
 
     public static Race[] validValues() {
