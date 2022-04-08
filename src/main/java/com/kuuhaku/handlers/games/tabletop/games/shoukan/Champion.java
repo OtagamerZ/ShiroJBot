@@ -1065,7 +1065,13 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void reduceStasis() {
-		this.stasis = Math.max(stasis - 1, 0);
+		int dec = 1;
+		if (game.getCombos().get(side).getLeft() == Race.CREATURE) {
+			Field f = game.getArena().getField();
+			if (f != null && f.isDay()) dec *= 2;
+		}
+
+		this.stasis = Math.max(stasis - dec, 0);
 	}
 
 	public void reduceStasis(int val) {
@@ -1091,7 +1097,13 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void reduceStun() {
-		this.stun = Math.max(stun - 1, 0);
+		int dec = 1;
+		if (game.getCombos().get(side).getLeft() == Race.CREATURE) {
+			Field f = game.getArena().getField();
+			if (f != null && f.isDay()) dec *= 2;
+		}
+
+		this.stun = Math.max(stun - dec, 0);
 	}
 
 	public void reduceStun(int val) {
@@ -1117,7 +1129,13 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void reduceSleep() {
-		this.sleep = Math.max(sleep - 1, 0);
+		int dec = 1;
+		if (game.getCombos().get(side).getLeft() == Race.CREATURE) {
+			Field f = game.getArena().getField();
+			if (f != null && f.isDay()) dec *= 2;
+		}
+
+		this.sleep = Math.max(sleep - dec, 0);
 	}
 
 	public void reduceSleep(int val) {
