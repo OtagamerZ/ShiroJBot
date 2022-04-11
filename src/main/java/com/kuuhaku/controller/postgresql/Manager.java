@@ -28,20 +28,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Manager {
-	private static EntityManagerFactory emf;
+	private static EntityManagerFactory emf = null;
 
 	public static EntityManager getEntityManager() {
-		Map<String, String> props = new HashMap<>();
-		props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
-		props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
-		props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_IP") + "/shiro?sslmode=require");
-
 		if (emf == null) {
+			Map<String, String> props = new HashMap<>();
+			props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
+			props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
+			props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_IP") + "/shiro?sslmode=require");
+
 			emf = Persistence.createEntityManagerFactory("shiro_remote", props);
 			Helper.logger(Manager.class).info("✅ | Ligação à base de dados PostgreSQL estabelecida.");
 		}
-
-		emf.getCache().evictAll();
 
 		return emf.createEntityManager();
 	}
