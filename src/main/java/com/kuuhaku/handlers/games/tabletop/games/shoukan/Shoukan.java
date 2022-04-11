@@ -848,7 +848,7 @@ public class Shoukan extends GlobalGame {
 				Hand op = hands.get(getNextSide());
 
 				int before = op.getHp();
-				float fac = (getRound() < 2 ? 0.5f : 1) * (1 - op.getMitigation());
+				float fac = getRound() < 2 ? 0.5f : 1;
 
 				if (op.getMana() > 0) {
 					int toSteal = Math.min(op.getMana(), ally.getManaDrain());
@@ -1066,7 +1066,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(POST_ATTACK, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(ON_DEATH, defr, target.side(), target.index(), source, target)) return;
 
-			fac *= 1 - op.getMitigation();
 			boolean applyDamage = !(defr.getBonus().popFlag(defr, Flag.NODAMAGE) || rules.noDamage());
 			boolean noDmg = (defr.getHero() == null && defr.isDefending()) && !(defr.isSleeping() || defr.isStunned());
 
@@ -1144,7 +1143,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(POST_DEFENSE, defr, target.side(), target.index(), source, target)) return;
 
-			fac *= 1 - you.getMitigation();
 			boolean applyDamage = !(atkr.getBonus().popFlag(atkr, Flag.NODAMAGE) || rules.noDamage());
 			int dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : hPower - yPower) * fac);
 
@@ -1210,7 +1208,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEffect(ON_SUICIDE, atkr, source.side(), target.index(), source, target)) return;
 			if (applyEffect(ON_DEATH, defr, target.side(), target.index(), source, target)) return;
 
-			fac *= 1 - op.getMitigation();
 			boolean noDmg = (defr.getHero() == null && defr.isDefending()) && !(defr.isSleeping() || defr.isStunned());
 
 			int dmg;
@@ -1266,7 +1263,6 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			fac *= 1 - you.getMitigation();
 			dmg = Math.round((defr.getBonus().popFlag(defr, Flag.ALLDAMAGE) ? hPower : 0) * fac);
 
 			h = atkr.getHero();

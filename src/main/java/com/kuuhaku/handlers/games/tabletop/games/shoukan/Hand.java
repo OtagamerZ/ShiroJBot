@@ -36,7 +36,6 @@ import com.kuuhaku.utils.BondedList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import javax.imageio.ImageIO;
@@ -81,6 +80,7 @@ public class Hand {
 	private float healingFac = 1;
 	private int bleeding = 0;
 	private int regeneration = 0;
+	private boolean heroDefense = false;
 	private Message old = null;
 
 	@ExecTime
@@ -805,6 +805,10 @@ public class Hand {
 
 	public void removeHp(int value, boolean trigger) {
 		if (value <= 0) return;
+		value *= 1 - getMitigation();
+		if (heroDefense) {
+			value /= 2;
+		}
 
 		if (combo.getMiddle()) value *= 1.25f;
 
@@ -1090,6 +1094,14 @@ public class Hand {
 
 	public void decreaseRegeneration() {
 		regeneration = Math.max(0, (int) (regeneration * 0.5));
+	}
+
+	public boolean isHeroDefense() {
+		return heroDefense;
+	}
+
+	public void setHeroDefense(boolean heroDefense) {
+		this.heroDefense = heroDefense;
 	}
 
 	protected void triggerEffect(EffectTrigger trigger) {

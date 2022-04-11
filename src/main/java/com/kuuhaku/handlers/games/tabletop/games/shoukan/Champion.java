@@ -837,8 +837,13 @@ public class Champion implements Drawable, Cloneable {
 		String effect = getRawEffect();
 		if (triggerLock || effect == null || !effect.contains(ep.getTrigger().name())) return;
 
+		Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
 			triggerLock = true;
+
+			if (hero != null) {
+				other.setHeroDefense(true);
+			}
 
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
@@ -846,6 +851,8 @@ public class Champion implements Drawable, Cloneable {
 			gs.evaluate(effect);
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
+		} finally {
+			other.setHeroDefense(false);
 		}
 	}
 
