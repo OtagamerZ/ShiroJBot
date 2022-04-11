@@ -74,13 +74,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		cmdManager = new CommandManager();
 		cacheManager = new CacheManager();
 
-		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
-
-		shiroShards = DefaultShardManagerBuilder.create(ShiroInfo.getBotToken(), intents)
+		shiroShards = DefaultShardManagerBuilder.create(ShiroInfo.getBotToken(), EnumSet.allOf(GatewayIntent.class))
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setEventPool(Executors.newFixedThreadPool(20), true)
+				.addEventListeners(ShiroInfo.getShiroEvents())
 				.build();
 
 		List<JDA> shards = shiroShards.getShards().stream()
@@ -96,8 +95,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
 			}
 		}
-
-		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 
 		try {
 			PaginatorBuilder.createPaginator()
