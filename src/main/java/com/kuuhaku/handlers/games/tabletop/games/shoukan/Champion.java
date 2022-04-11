@@ -34,7 +34,6 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.UniqueList;
 import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import javax.persistence.*;
@@ -488,7 +487,7 @@ public class Champion implements Drawable, Cloneable {
 			extraFac *= 1.1f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * extraFac)), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altAtk + bonus.getAtk()) * fBonus * cBonus * hBonus * extraFac)), 25);
 	}
 
 	public int getDef() {
@@ -534,7 +533,7 @@ public class Champion implements Drawable, Cloneable {
 			extraFac *= 1.1f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * extraFac)), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altDef + bonus.getDef()) * fBonus * cBonus * hBonus * extraFac)), 25);
 	}
 
 	public void setAtk(int atk) {
