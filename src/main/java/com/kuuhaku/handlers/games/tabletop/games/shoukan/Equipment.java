@@ -104,7 +104,6 @@ public class Equipment implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient String altCharms = null;
 	private transient boolean triggerLock = false;
-
 	public Equipment() {
 	}
 
@@ -530,10 +529,12 @@ public class Equipment implements Drawable, Cloneable {
 		return !effectOnly;
 	}
 
+	@Override
 	public boolean isTriggerLocked() {
 		return triggerLock;
 	}
 
+	@Override
 	public void unlockTrigger() {
 		this.triggerLock = false;
 	}
