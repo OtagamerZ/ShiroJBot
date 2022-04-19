@@ -912,9 +912,8 @@ public class Shoukan extends GlobalGame {
 							SlotColumn sc = getFirstAvailableSlot(s, false);
 							if (sc == null) break;
 
-							e.bind(hd);
-							c.link(e);
 							sc.setBottom(e);
+							c.link(e);
 							it.remove();
 						}
 					}
@@ -1113,7 +1112,7 @@ public class Shoukan extends GlobalGame {
 
 			int extra = Math.round(dmg * fac - dmg);
 			String msg;
-			if (applyDamage) {
+			if (applyDamage && hBefore - op.getHp() != 0) {
 				msg = "%s derrotou %s (%d > %d), causando %s de dano!%s".formatted(
 						atkr.getName(),
 						defr.getName(),
@@ -1180,7 +1179,7 @@ public class Shoukan extends GlobalGame {
 
 			int extra = Math.round(dmg * fac - dmg);
 			String msg;
-			if (applyDamage) {
+			if (applyDamage && yBefore - you.getHp() != 0) {
 				msg = "%s não conseguiu derrotar %s (%s), sofrendo %s de dano!%s".formatted(
 						atkr.getName(),
 						defr.getName(),
