@@ -18,39 +18,46 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.utils.IO;
+
+import java.awt.*;
+
 public enum Rarity {
-	COMMON(1),
-	UNCOMMON(2),
-	RARE(3),
-	ULTRA_RARE(4),
-	LEGENDARY(5),
-	ULTIMATE(-1),
-	EVOGEAR(-1),
-	FIELD(-1),
-	FUSION(-1);
+	COMMON(1, 0xFFFFFF),
+	UNCOMMON(2, 0x03BB85),
+	RARE(3, 0x70D1F4),
+	ULTRA_RARE(4, 0x9966CC),
+	LEGENDARY(5, 0xDC9018),
+	ULTIMATE(-1, 0xD400AA),
+	EVOGEAR(-1, 0x0),
+	FIELD(-1, 0x0),
+	FUSION(-1, 0x0);
 
 	private final int index;
+	private final int color;
 
-	Rarity(int index) {
+	Rarity(int index, int color) {
 		this.index = index;
+		this.color = color;
 	}
 
 	public int getIndex() {
 		return index;
 	}
 
-	@Override
-	public String toString() {
-		return switch (this) {
-			case COMMON -> "Comum";
-			case UNCOMMON -> "Incomum";
-			case RARE -> "Rara";
-			case ULTRA_RARE -> "Ultra rara";
-			case LEGENDARY -> "Lendária";
-			case ULTIMATE -> "Ultimate";
-			case EVOGEAR -> "Evogear";
-			case FIELD -> "Campo";
-			case FUSION -> "Fusão";
-		};
+	public Color getColor(boolean foil) {
+		int color = this.color;
+		if (foil) {
+			int[] rgb = IO.unpackRGB(color);
+
+			float[] hsv;
+			hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+			hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
+
+			rgb = IO.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+			color = IO.packRGB(255, rgb[1], rgb[2], rgb[3]);
+		}
+
+		return new Color(color);
 	}
 }

@@ -52,11 +52,11 @@ public class WelcomeSettings extends DAO {
 		this.gid = config.getGid();
 		this.message = config.getLocale().get("default/welcome_message");
 		this.headers.addAll(Set.of(
-				config.getLocale().get("default/welcome_header_1"),
-				config.getLocale().get("default/welcome_header_2"),
-				config.getLocale().get("default/welcome_header_3"),
-				config.getLocale().get("default/welcome_header_4"),
-				config.getLocale().get("default/welcome_header_5")
+				"default/welcome_header_1",
+				"default/welcome_header_2",
+				"default/welcome_header_3",
+				"default/welcome_header_4",
+				"default/welcome_header_5"
 		));
 	}
 

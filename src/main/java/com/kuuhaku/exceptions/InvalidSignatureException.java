@@ -24,7 +24,19 @@ public class InvalidSignatureException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = -5088005722085511782L;
 
+	private final String[] options;
+
 	public InvalidSignatureException(String message) {
 		super(message);
+		options = new String[0];
+	}
+
+	public InvalidSignatureException(String message, String[] options) {
+		super(message);
+		this.options = options;
+	}
+
+	public String[] getOptions() {
+		return options;
 	}
 }

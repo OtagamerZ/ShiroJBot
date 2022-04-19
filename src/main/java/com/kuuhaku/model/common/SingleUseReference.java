@@ -16,25 +16,33 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.model.common;
 
-import com.kuuhaku.model.persistent.shiro.Card;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
-import javax.persistence.*;
+public class SingleUseReference<T> {
+	private final AtomicReference<T> ref;
 
-@Entity
-@Table(name = "field")
-public class Field {
-	@Id
-	@Column(name = "card_id", nullable = false)
-	private String id;
+	public SingleUseReference(T obj) {
+		ref = new AtomicReference<>(obj);
+	}
 
-	@OneToOne(optional = false, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "card_id")
-	@Fetch(FetchMode.JOIN)
-	@MapsId("id")
-	private Card card;
+	public <R> R peekProperty(Function<T, R> retriever) {
+		if (ref.get() == null) return null;
 
+		return retriever.apply(ref.get());
+	}
+
+	public synchronized boolean isValid() {
+		return ref.get() != null;
+	}
+
+	public synchronized T get() {
+		try {
+			return ref.get();
+		} finally {
+			ref.set(null);
+		}
+	}
 }

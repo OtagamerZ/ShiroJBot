@@ -22,10 +22,9 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
 
 public interface Executable {
 	default Logger logger() {
@@ -36,5 +35,5 @@ public interface Executable {
 		return this;
 	}
 
-	void execute(JDA bot, I18N locale, EventData event, MessageData.Guild data, Map<String, String> args);
+	void execute(JDA bot, I18N locale, EventData event, MessageData.Guild data, JSONObject args);
 }

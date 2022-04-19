@@ -26,11 +26,11 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.utils.json.JSONObject;
 import groovy.lang.GroovyShell;
+import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -43,17 +43,17 @@ public class CompileCommand implements Executable {
 	private static final ExecutorService exec = Executors.newFixedThreadPool(2);
 
 	@Override
-	public void execute(JDA bot, I18N locale, EventData event, MessageData.Guild data, Map<String, String> args) {
-		data.channel().sendMessage(locale.get("str/compiling")).queue(m -> {
+	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		event.channel().sendMessage(locale.get("str/compiling")).queue(m -> {
 			Future<Pair<String, Long>> execute = exec.submit(() -> {
 				AtomicLong time = new AtomicLong();
 
 				try {
-					String code = args.get("code").replaceAll("```(?:.*\n)?", "").trim();
+					String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
 					Future<GroovyShell> fut = exec.submit(() -> {
 						GroovyShell gs = new GroovyShell();
-						gs.setVariable("msg", data.message());
+						gs.setVariable("msg", event.message());
 
 						time.set(System.currentTimeMillis());
 						gs.evaluate(code);
@@ -62,9 +62,9 @@ public class CompileCommand implements Executable {
 						return gs;
 					});
 
-					return Pair.of(String.valueOf(fut.get(1, TimeUnit.MINUTES).getVariable("out")), time.get());
+					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES).getVariable("out")), time.get());
 				} catch (TimeoutException e) {
-					return Pair.of(locale.get("str/compiling"), -1L);
+					return new Pair<>(locale.get("error/timeout"), -1L);
 				} catch (Exception e) {
 					Throwable t = e;
 					while (t.getCause() != null) {
@@ -78,25 +78,25 @@ public class CompileCommand implements Executable {
 						}
 					}
 
-					return Pair.of(sb.toString(), -1L);
+					return new Pair<>(sb.toString(), -1L);
 				}
 			});
 
 			try {
 				Pair<String, Long> out = execute.get();
-				if (out.getRight() > -1) {
+				if (out.getSecond() > -1) {
 					m.editMessage("""
 							```
 							(%s ms) Out -> %s
 							```
-							""".formatted(out.getRight(), out.getLeft().replace("`", "'"))
+							""".formatted(out.getFirst(), out.getFirst().replace("`", "'"))
 					).queue();
 				} else {
 					m.editMessage("""
 							```
 							Err -> %s
 							```
-							""".formatted(out.getLeft().replace("`", "'"))
+							""".formatted(out.getFirst().replace("`", "'"))
 					).queue();
 				}
 			} catch (ExecutionException | InterruptedException e) {

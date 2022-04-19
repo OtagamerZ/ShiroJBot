@@ -25,6 +25,8 @@
 
         <!-- SHIRO -->
         <class>com.kuuhaku.model.persistent.shiro.Staff</class>
+        <class>com.kuuhaku.model.persistent.shiro.Anime</class>
+        <class>com.kuuhaku.model.persistent.shiro.Card</class>
 
         <!-- GUILD -->
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
@@ -33,12 +35,11 @@
         <class>com.kuuhaku.model.persistent.guild.GuildSettings</class>
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
         <class>com.kuuhaku.model.persistent.guild.WelcomeSettings</class>
+        <class>com.kuuhaku.model.persistent.guild.StarredMessage</class>
 
         <!-- USER -->
         <class>com.kuuhaku.model.persistent.user.Account</class>
         <class>com.kuuhaku.model.persistent.user.AccountSettings</class>
-        <class>com.kuuhaku.model.persistent.user.Anime</class>
-        <class>com.kuuhaku.model.persistent.user.Card</class>
         <class>com.kuuhaku.model.persistent.user.DynamicProperty</class>
         <class>com.kuuhaku.model.persistent.user.Kawaipon</class>
         <class>com.kuuhaku.model.persistent.user.KawaiponCard</class>
@@ -71,6 +72,9 @@
             <property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.connection.characterEncoding" value="utf8"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
+            <property name="hibernate.connection.charSet" value="UTF-8"/>
         </properties>
     </persistence-unit>
 </persistence>

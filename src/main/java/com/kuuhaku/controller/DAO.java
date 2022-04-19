@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public abstract class DAO {
 	public static <T extends DAO, ID> T find(@Nonnull Class<T> klass, @Nonnull ID id) {
@@ -53,7 +54,7 @@ public abstract class DAO {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 
 			T t;
@@ -74,7 +75,6 @@ public abstract class DAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T queryNative(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -82,12 +82,12 @@ public abstract class DAO {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 
 			T t;
 			try {
-				t = (T) q.getSingleResult();
+				t = klass.cast(q.getSingleResult());
 				if (t instanceof Blacklistable lock) {
 					if (lock.isBlacklisted()) {
 						t = null;
@@ -110,7 +110,7 @@ public abstract class DAO {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 
 			try {
@@ -152,7 +152,7 @@ public abstract class DAO {
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -167,39 +167,40 @@ public abstract class DAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> List<T> queryAllNative(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
-				return (List<T>) q.getResultStream()
+				return ((Stream<?>) q.getResultStream())
+						.map(klass::cast)
 						.filter(o -> !((Blacklistable) o).isBlacklisted())
 						.toList();
 			} else {
-				return (List<T>) q.getResultList();
+				return ((Stream<?>) q.getResultStream())
+						.map(klass::cast)
+						.toList();
 			}
 		} finally {
 			em.close();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<Object[]> queryAllUnmapped(@Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 
-			return (List<Object[]>) q.getResultStream()
+			return ((Stream<?>) q.getResultStream())
 					.map(o -> {
 						if (o.getClass().isArray()) {
 							return (Object[]) o;
@@ -246,7 +247,7 @@ public abstract class DAO {
 			Query q = em.createQuery(query);
 			q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 			q.executeUpdate();
 
@@ -269,7 +270,7 @@ public abstract class DAO {
 			Query q = em.createQuery(query);
 			q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i, params[i]);
+				q.setParameter(i+1, params[i]);
 			}
 			q.executeUpdate();
 

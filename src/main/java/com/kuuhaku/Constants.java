@@ -32,11 +32,13 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-public class Constants {
+public abstract class Constants {
 	protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
 	public static final String OWNER = "350836145921327115";
 	public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
 	public static final Logger LOGGER = LogManager.getLogger("shiro");
+
+	public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
 
 	public static final long MILLIS_IN_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 	public static final long MILLIS_IN_HOUR = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
@@ -45,6 +47,7 @@ public class Constants {
 	public static final double GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
 
 	public static final String TIMESTAMP = "<t:%s:R>";
+	public static final String TIMESTAMP_R = "<t:%s:R>";
 	public static final String VOID = "\u200B";
 	public static final String ACCEPT = "✅";
 

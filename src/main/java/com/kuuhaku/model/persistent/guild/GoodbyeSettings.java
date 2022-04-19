@@ -52,11 +52,11 @@ public class GoodbyeSettings extends DAO {
 		this.gid = config.getGid();
 		this.message = config.getLocale().get("default/goodbye_message");
 		this.headers.addAll(Set.of(
-				config.getLocale().get("default/goodbye_header_1"),
-				config.getLocale().get("default/goodbye_header_2"),
-				config.getLocale().get("default/goodbye_header_3"),
-				config.getLocale().get("default/goodbye_header_4"),
-				config.getLocale().get("default/goodbye_header_5")
+				"default/goodbye_header_1",
+				"default/goodbye_header_2",
+				"default/goodbye_header_3",
+				"default/goodbye_header_4",
+				"default/goodbye_header_5"
 		));
 	}
 

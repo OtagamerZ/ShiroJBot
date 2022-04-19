@@ -32,7 +32,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-public class Calc {
+public abstract class Calc {
 	public static double round(double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 

@@ -16,26 +16,49 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.info;
+package com.kuuhaku.command.misc;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Spawn;
 import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "ping",
-		category = Category.INFO
+		name = "collect",
+		category = Category.MISC
 )
-public class PingCommand implements Executable {
+public class CollectCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		bot.getRestPing()
-				.flatMap(t -> event.channel().sendMessage("Pong! (%s ms)".formatted(t)))
-				.queue();
+		Account acc = data.profile().getAccount();
+		Kawaipon kp = acc.getKawaipon();
+
+		SingleUseReference<KawaiponCard> card = Spawn.getSpawnedCard(event.guild());
+		if (!card.isValid()) {
+			event.channel().sendMessage(locale.get("error/no_card")).queue();
+			return;
+		} else if (card.peekProperty(kc -> kp.getCards().contains(kc))) {
+			event.channel().sendMessage(locale.get("error/already_owned")).queue();
+			return;
+		} else if (card.peekProperty(kc -> acc.getBalance() < kc.getPrice())) {
+			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
+			return;
+		}
+
+		KawaiponCard kc = card.get();
+
+		acc.consumeCR(kc.getPrice(), "Collected " + kc.getName());
+		kc.collect(kp);
+
+		event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc.getName())).queue();
 	}
 }

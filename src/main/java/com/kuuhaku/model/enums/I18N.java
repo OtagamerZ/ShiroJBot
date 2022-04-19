@@ -20,14 +20,21 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public enum I18N {
-	PT, EN;
+	PT(ZoneId.of("GMT-3")),
+	EN(ZoneId.of("GMT-4"));
 
 	private final Locale locale = new Locale(name().toLowerCase(Locale.ROOT));
+	private final ZoneId zone;
+
+	I18N(ZoneId zone) {
+		this.zone = zone;
+	}
 
 	public static String get(I18N code, String key) {
 		return code.get(key);
@@ -39,6 +46,7 @@ public enum I18N {
 
 	public String get(String key) {
 		if (key == null) return "";
+		else if (key.contains(" ") && !key.contains("/")) return key;
 
 		String lower = key.toLowerCase(Locale.ROOT);
 		if (!key.equals(lower)) return get(lower);
@@ -62,6 +70,7 @@ public enum I18N {
 
 	public String get(String key, Object... args) {
 		if (key == null) return "";
+		else if (key.contains(" ") && !key.contains("/")) return key;
 
 		String lower = key.toLowerCase(Locale.ROOT);
 		if (!key.equals(lower)) return get(lower, args);
@@ -81,5 +90,13 @@ public enum I18N {
 				return key;
 			}
 		}).formatted(args);
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public ZoneId getZone() {
+		return zone;
 	}
 }

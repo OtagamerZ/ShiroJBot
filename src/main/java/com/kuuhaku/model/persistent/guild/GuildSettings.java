@@ -21,7 +21,9 @@ package com.kuuhaku.model.persistent.guild;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.EmbedConverter;
+import com.kuuhaku.model.persistent.converter.GuildFeatureConverter;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.Fetch;
@@ -29,10 +31,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "guild_settings")
@@ -44,23 +43,23 @@ public class GuildSettings extends DAO {
 	@Column(name = "anti_raid_threshold", nullable = false)
 	private int antiRaidThreshold = 0;
 
-	@Column(name = "kawaipon_enabled", nullable = false)
-	private boolean kawaiponEnabled;
-
 	@ElementCollection
 	@Column(name = "kawaipon_channels")
 	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<TextChannel> kawaiponChannels = new ArrayList<>();
 
-	@Column(name = "drop_enabled", nullable = false)
-	private boolean dropEnabled;
-
 	@ElementCollection
 	@Column(name = "drop_channels")
 	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<TextChannel> dropChannels = new ArrayList<>();
+
+	@ElementCollection
+	@Column(name = "denied_channels")
+	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
+	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
+	private List<TextChannel> deniedChannels = new ArrayList<>();
 
 	@Convert(converter = EmbedConverter.class)
 	@Column(name = "embed", nullable = false)
@@ -92,6 +91,17 @@ public class GuildSettings extends DAO {
 	@CollectionTable(name = "guild_settings_disabledcommands", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> disabledCommands = new HashSet<>();
 
+	@Column(name = "starboard_threshold", nullable = false)
+	private int starboardThreshold = 5;
+
+	@Column(name = "starboard_channel")
+	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
+	private TextChannel starboardChannel;
+
+	@Convert(converter = GuildFeatureConverter.class)
+	@Column(name = "feature_flags", nullable = false)
+	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
+
 	public GuildSettings() {
 	}
 
@@ -111,28 +121,24 @@ public class GuildSettings extends DAO {
 		this.antiRaidThreshold = antiRaidThreshold;
 	}
 
-	public boolean isKawaiponEnabled() {
-		return kawaiponEnabled;
-	}
-
-	public void setKawaiponEnabled(boolean kawaiponEnabled) {
-		this.kawaiponEnabled = kawaiponEnabled;
-	}
-
 	public List<TextChannel> getKawaiponChannels() {
 		return kawaiponChannels;
 	}
 
-	public boolean isDropEnabled() {
-		return dropEnabled;
-	}
-
-	public void setDropEnabled(boolean dropEnabled) {
-		this.dropEnabled = dropEnabled;
-	}
-
 	public List<TextChannel> getDropChannels() {
 		return dropChannels;
+	}
+
+	public List<TextChannel> getDeniedChannels() {
+		return deniedChannels;
+	}
+
+	public AutoEmbedBuilder getEmbed() {
+		return embed;
+	}
+
+	public void setEmbed(AutoEmbedBuilder embed) {
+		this.embed = embed;
 	}
 
 	public Role getJoinRole() {
@@ -165,5 +171,29 @@ public class GuildSettings extends DAO {
 
 	public Set<String> getDisabledCommands() {
 		return disabledCommands;
+	}
+
+	public int getStarboardThreshold() {
+		return starboardThreshold;
+	}
+
+	public void setStarboardThreshold(int starboardThreshold) {
+		this.starboardThreshold = starboardThreshold;
+	}
+
+	public TextChannel getStarboardChannel() {
+		return starboardChannel;
+	}
+
+	public void setStarboardChannel(TextChannel starboardChannel) {
+		this.starboardChannel = starboardChannel;
+	}
+
+	public boolean isFeatureEnabled(GuildFeature feature) {
+		return featureFlags.contains(feature);
+	}
+
+	public EnumSet<GuildFeature> getFeatures() {
+		return featureFlags;
 	}
 }

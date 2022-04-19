@@ -16,25 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.model.records;
 
-import com.kuuhaku.model.persistent.shiro.Card;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "field")
-public class Field {
-	@Id
-	@Column(name = "card_id", nullable = false)
-	private String id;
-
-	@OneToOne(optional = false, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "card_id")
-	@Fetch(FetchMode.JOIN)
-	@MapsId("id")
-	private Card card;
-
+public record FailedSignature(String line, String[] options) {
 }

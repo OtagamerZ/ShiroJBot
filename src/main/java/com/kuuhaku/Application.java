@@ -20,9 +20,12 @@ package com.kuuhaku;
 
 import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.model.PaginatorBuilder;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listeners.GuildListener;
 import com.kuuhaku.utils.Utils;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -31,6 +34,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import javax.security.auth.login.LoginException;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 public class Application implements Thread.UncaughtExceptionHandler {
@@ -39,11 +43,11 @@ public class Application implements Thread.UncaughtExceptionHandler {
 	public Application() {
 		long latency = Manager.ping();
 		if (latency <= 100) {
-			Constants.LOGGER.info("Database latency: " + latency);
+			Constants.LOGGER.info("Database latency: " + latency + "ms");
 		} else if (latency <= 250) {
-			Constants.LOGGER.warn("Database latency: " + latency);
+			Constants.LOGGER.warn("Database latency: " + latency + "ms");
 		} else {
-			Constants.LOGGER.error("Database latency: " + latency);
+			Constants.LOGGER.error("Database latency: " + latency + "ms");
 		}
 
 		ShardManager sm = null;
@@ -75,6 +79,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 								Constants.LOGGER.error("Failed to initialize shard " + id + ": " + e);
 							}
 						})
+						.forEach(this::setRandomAction)
 		);
 
 		try {
@@ -96,6 +101,22 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 	public ShardManager getShiro() {
 		return shiro;
+	}
+
+	public void setRandomAction(JDA jda) {
+		final List<Activity> activities = List.of(
+				//Activity.watching(Utils.separate(shiro.getGuildCache().size()) + " servidores, e estou apenas começando!"),
+				//Activity.competing("Shoukan ranqueado!"),
+				Activity.watching(DAO.queryNative(String.class, """
+						SELECT c.name||' pela '||(SELECT COUNT(1) FROM Card x WHERE x.anime_id = c.anime_id)||'ª vez!'
+						FROM Card c
+						WHERE c.rarity = 'ULTIMATE'
+						ORDER BY random()
+						"""))
+				//Activity.playing("com minhas cartas Kawaipon!")
+		);
+
+		jda.getPresence().setActivity(Utils.getRandomEntry(activities));
 	}
 
 	@Override

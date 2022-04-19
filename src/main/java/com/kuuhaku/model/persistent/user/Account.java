@@ -122,32 +122,44 @@ public class Account extends DAO implements Blacklistable {
 		return balance;
 	}
 
+	protected void setBalance(long balance) {
+		this.balance = balance;
+	}
+
 	public long getDebit() {
 		return debit;
+	}
+
+	protected void setDebit(long debit) {
+		this.debit = debit;
 	}
 
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
 
-		debit -= value;
-		if (debit < 0) {
-			balance = -debit;
-			debit = 0;
-		}
+		apply(this.getClass(), uid, a -> {
+			a.setDebit(a.getDebit() - value);
+			if (a.getDebit() < 0) {
+				a.setBalance(-a.getDebit());
+				a.setDebit(0);
+			}
 
-		addTransaction(value, true, reason);
+			a.addTransaction(value, true, reason);
+		});
 	}
 
 	public void consumeCR(long value, String reason) {
 		if (value <= 0) return;
 
-		balance -= value;
-		if (balance < 0) {
-			debit = -balance;
-			balance = 0;
-		}
+		apply(this.getClass(), uid, a -> {
+			a.setBalance(a.getBalance() - value);
+			if (a.getBalance() < 0) {
+				a.setDebit(-a.getDebit());
+				a.setBalance(0);
+			}
 
-		addTransaction(value, false, reason);
+			a.addTransaction(value, false, reason);
+		});
 	}
 
 	public int getGems() {
