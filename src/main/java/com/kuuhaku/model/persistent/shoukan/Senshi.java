@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.model.enums.Race;
-import com.kuuhaku.model.persistent.user.Card;
+import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

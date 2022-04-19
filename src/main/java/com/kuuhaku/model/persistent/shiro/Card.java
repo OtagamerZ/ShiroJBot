@@ -16,13 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.user;
+package com.kuuhaku.model.persistent.shiro;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.ImageFilters;
 import org.apache.commons.io.FileUtils;
@@ -254,11 +255,11 @@ public class Card extends DAO {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Card card = (Card) o;
-		return Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(anime, card.anime) && rarity == card.rarity;
+		return Objects.equals(id, card.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, anime, rarity);
+		return Objects.hash(id);
 	}
 }

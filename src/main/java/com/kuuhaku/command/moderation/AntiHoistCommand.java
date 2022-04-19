@@ -16,26 +16,35 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.info;
+package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "ping",
-		category = Category.INFO
+		name = "antihoist",
+		category = Category.MODERATION
 )
-public class PingCommand implements Executable {
+public class AntiHoistCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		bot.getRestPing()
-				.flatMap(t -> event.channel().sendMessage("Pong! (%s ms)".formatted(t)))
-				.queue();
+        GuildSettings settings = data.config().getSettings();
+        if (settings.isFeatureEnabled(GuildFeature.ANTI_HOIST)) {
+            settings.getFeatures().remove(GuildFeature.ANTI_HOIST);
+            event.channel().sendMessage(locale.get("success/anti_hoist_disable")).queue();
+        } else {
+            settings.getFeatures().add(GuildFeature.ANTI_HOIST);
+            event.channel().sendMessage(locale.get("success/anti_hoist_enable")).queue();
+        }
+
+        settings.save();
 	}
 }

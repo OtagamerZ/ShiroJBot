@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Card;
+import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

@@ -20,67 +20,53 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.WelcomeSettings;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 @Command(
-		name = "welcome",
+		name = "starboard",
 		category = Category.MODERATION
 )
-@Signature(allowEmpty = true, value = {
+@Signature(value = {
 		"<action:word:r>[limpar,clear]",
 		"<channel:channel:r>",
-		"<message:text:r>"
+		"<value:number:r>"
 })
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
-public class WelcomeCommand implements Executable {
+public class StarboardCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		WelcomeSettings settings = data.config().getWelcomeSettings();
+		GuildSettings settings = data.config().getSettings();
 		if (args.containsKey("action")) {
-			settings.setMessage(locale.get("default/welcome_message"));
-			settings.setChannel(null);
+			settings.setStarboardThreshold(5);
+			settings.setStarboardChannel(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/welcome_clear")).queue();
+			event.channel().sendMessage(locale.get("success/starboard_clear")).queue();
 			return;
 		} else if (args.containsKey("channel")) {
-			settings.setChannel(event.message().getMentionedChannels().get(0));
+			settings.setStarboardChannel(event.message().getMentionedChannels().get(0));
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/welcome_channel_save")).queue();
+			event.channel().sendMessage(locale.get("success/starboard_channel_save")).queue();
 			return;
 		}
 
-		String msg = args.getString("message");
-		if (msg == null) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setDescription(settings.getMessage());
-
-			TextChannel chn = settings.getChannel();
-			event.channel().sendMessage(locale.get("str/current_welcome_message",
-					chn == null ? "`" + locale.get("str/none") + "`" : chn.getAsMention()
-			)).setEmbeds(eb.build()).queue();
+		int value = args.getInt("value");
+		if (!Utils.between(value, 3, 51)) {
+			event.channel().sendMessage(locale.get("error/invalid_value_range").formatted(3, 50)).queue();
 			return;
 		}
 
-		settings.setMessage(msg);
+		settings.setStarboardThreshold(value);
 		settings.save();
 
-		event.channel().sendMessage(locale.get("success/welcome_message_save")).queue();
+		event.channel().sendMessage(locale.get("success/starboard_threshold_save")).queue();
 	}
 }

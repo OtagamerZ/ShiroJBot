@@ -4,6 +4,8 @@ import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.records.FailedSignature;
+import com.kuuhaku.utils.json.JSONObject;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
@@ -13,9 +15,9 @@ public abstract class SignatureUtils {
 	@Language("RegExp") //TODO Nome deve ser pego do I18N
 	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$";
 
-	public static Map<String, String> parse(I18N locale, Executable exec, String input) throws InvalidSignatureException {
-		Map<String, String> out = new LinkedHashMap<>();
-		List<String> failed = new ArrayList<>();
+	public static JSONObject parse(I18N locale, Executable exec, String input) throws InvalidSignatureException {
+		JSONObject out = new JSONObject();
+		List<FailedSignature> failed = new ArrayList<>();
 		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
 		if (annot == null) return out;
 
@@ -27,6 +29,7 @@ public abstract class SignatureUtils {
 			fail = false;
 			String str = input;
 			String[] args = sig.split(" +");
+			String[] failOpts = new String[0];
 
 			int i = 0;
 			for (String arg : args) {
@@ -73,6 +76,7 @@ public abstract class SignatureUtils {
 						} else if (required) {
 							fail = true;
 							supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+							failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
 						}
 					}
 				} catch (IllegalArgumentException e) {
@@ -85,12 +89,15 @@ public abstract class SignatureUtils {
 
 			if (fail) {
 				out.clear();
-				failed.add(String.join(" ", supplied));
+				failed.add(new FailedSignature(String.join(" ", supplied), failOpts));
 				supplied.clear();
 			} else return out;
 		}
 
-		if (annot.allowEmpty()) return Map.of();
-		else throw new InvalidSignatureException(failed.get(0));
+		if (annot.allowEmpty()) return new JSONObject();
+		else {
+			FailedSignature first = failed.get(0);
+			throw new InvalidSignatureException(first.line(), first.options());
+		}
 	}
 }

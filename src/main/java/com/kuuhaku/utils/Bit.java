@@ -16,25 +16,22 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.utils;
 
-import com.kuuhaku.model.persistent.shiro.Card;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+public abstract class Bit {
+	public static int set(int flags, int index, boolean value) {
+		if (!Utils.between(index, 0, 32)) return flags;
 
-import javax.persistence.*;
+		if (value) {
+			return flags |= 1 << index;
+		} else {
+			return flags &= ~(1 << index);
+		}
+	}
 
-@Entity
-@Table(name = "field")
-public class Field {
-	@Id
-	@Column(name = "card_id", nullable = false)
-	private String id;
+	public static boolean get(int flags, int index) {
+		if (!Utils.between(index, 0, 32)) return false;
 
-	@OneToOne(optional = false, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "card_id")
-	@Fetch(FetchMode.JOIN)
-	@MapsId("id")
-	private Card card;
-
+		return ((flags >> index) & 1) == 1;
+	}
 }

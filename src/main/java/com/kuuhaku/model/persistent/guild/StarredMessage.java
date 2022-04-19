@@ -16,54 +16,30 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.user;
+package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 
-import javax.persistence.*;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "anime")
-public class Anime extends DAO {
+@Table(name = "starred_message")
+public class StarredMessage extends DAO {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Column(name = "visible", nullable = false)
-	private boolean visible = true;
-
-	@OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Card> cards = new LinkedHashSet<>();
-
-	public Set<Card> getCards() {
-		return cards;
+	public StarredMessage() {
 	}
 
-	public void setCards(Set<Card> cards) {
-		this.cards = cards;
+	public StarredMessage(String id) {
+		this.id = id;
 	}
 
 	public String getId() {
 		return id;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Anime anime = (Anime) o;
-		return Objects.equals(id, anime.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
 	}
 }

@@ -23,7 +23,7 @@ import com.kuuhaku.model.enums.PixelOp;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class ImageFilters {
+public abstract class ImageFilters {
 	public static BufferedImage noise(BufferedImage in) {
 		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);

@@ -25,13 +25,27 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
+import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.Language;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -39,8 +53,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.CRC32;
 
-public class Utils {
+public abstract class Utils {
 	public static String toStringDuration(long millis) {
 		long days = millis / Constants.MILLIS_IN_DAY;
 		millis %= Constants.MILLIS_IN_DAY;
@@ -312,7 +327,9 @@ public class Utils {
 
 	public static <T> T getRandomEntry(Collection<T> col) {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
+
 		List<T> list = List.copyOf(col);
+		if (list.size() == 1) return list.get(0);
 
 		return list.get(Calc.rng(list.size() - 1));
 	}
@@ -320,6 +337,8 @@ public class Utils {
 	@SafeVarargs
 	public static <T> T getRandomEntry(T... array) {
 		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
+		else if (array.length == 1) return array[0];
+
 		List<T> list = List.of(array);
 
 		return list.get(Calc.rng(list.size() - 1));
@@ -327,7 +346,9 @@ public class Utils {
 
 	public static <T> T getRandomEntry(Random random, Collection<T> col) {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
+
 		List<T> list = List.copyOf(col);
+		if (list.size() == 1) return list.get(0);
 
 		return list.get(Calc.rng(list.size() - 1, random));
 	}
@@ -335,6 +356,8 @@ public class Utils {
 	@SafeVarargs
 	public static <T> T getRandomEntry(Random random, T... array) {
 		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
+		else if (array.length == 1) return array[0];
+
 		List<T> list = List.of(array);
 
 		return list.get(Calc.rng(list.size() - 1, random));
@@ -410,5 +433,157 @@ public class Utils {
 
 	public static void doNothing(Throwable thr) {
 
+	}
+
+	public static double clamp(double val, double min, double max) {
+		return Math.max(min, Math.min(val, max));
+	}
+
+	public static float clamp(float val, float min, float max) {
+		return Math.max(min, Math.min(val, max));
+	}
+
+	public static long clamp(long val, long min, long max) {
+		return Math.max(min, Math.min(val, max));
+	}
+
+	public static int clamp(int val, int min, int max) {
+		return Math.max(min, Math.min(val, max));
+	}
+
+	public static boolean between(int val, int from, int to) {
+		return val >= from && val < to;
+	}
+
+	public static boolean between(float val, float from, float to) {
+		return val >= from && val < to;
+	}
+
+	public static boolean between(long val, long from, long to) {
+		return val >= from && val < to;
+	}
+
+	public static boolean between(double val, double from, double to) {
+		return val >= from && val < to;
+	}
+
+	public static <T extends Collection<String>> Function<T, String> properlyJoin(String connector) {
+		return objs -> {
+			List<String> ls = List.copyOf(objs);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < ls.size(); i++) {
+				if (i == ls.size() - 1 && ls.size() > 1) sb.append(" ").append(connector).append(" ");
+				else if (i > 0) sb.append(", ");
+
+				sb.append(ls.get(i));
+			}
+
+			return sb.toString();
+		};
+	}
+
+	public static Color colorThief(String url) {
+		try {
+			return colorThief(ImageIO.read(getImage(url)));
+		} catch (IOException e) {
+			return getRandomColor();
+		}
+	}
+
+	public static Color colorThief(BufferedImage image) {
+		try {
+			if (image != null) {
+				int[] colors = ColorThief.getColor(image, 5, false);
+				return new Color(colors[0], colors[1], colors[2]);
+			} else return getRandomColor();
+		} catch (NullPointerException e) {
+			return getRandomColor();
+		}
+	}
+
+	public static InputStream getImage(String link) throws IOException {
+		return new URL(link).openStream();
+	}
+
+	public static String getRandomHexColor() {
+		return "#%06x".formatted(Calc.rng(0xFFFFFF));
+	}
+
+	public static String getRandomHexColor(long seed) {
+		return "#%06x".formatted(Calc.rng(0xFFFFFF, seed));
+	}
+
+	public static Color getRandomColor() {
+		return Color.decode(getRandomHexColor());
+	}
+
+	public static Color getRandomColor(long seed) {
+		return Color.decode(getRandomHexColor(seed));
+	}
+
+	public static Color textToColor(String text) {
+		CRC32 crc = new CRC32();
+		crc.update(text.getBytes(StandardCharsets.UTF_8));
+		return Color.decode("#%06x".formatted(crc.getValue() & 0xFFFFFF));
+	}
+
+	public static String replaceTags(Member mb, Guild guild, String str) {
+		Map<String, String> replacements = new HashMap<>(){{
+			if (mb != null) {
+				put("%user%", mb.getAsMention());
+				put("%user.id%", mb.getId());
+				put("%user.name%", mb.getEffectiveName());
+				put("%user.tag%", mb.getUser().getAsTag());
+			}
+
+			if (guild != null) {
+				GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
+
+				put("%guild%", guild.getName());
+				put("%guild.users%", separate(guild.getMemberCount(), config.getLocale().getLocale()));
+
+				Member owner = guild.getOwner();
+				if (owner != null) {
+					put("%guild.owner%", owner.getAsMention());
+					put("%guild.owner.id%", owner.getId());
+					put("%guild.owner.name%", owner.getEffectiveName());
+					put("%guild.owner.tag%", owner.getUser().getAsTag());
+				}
+			}
+
+			put("%now%", Constants.TIMESTAMP.formatted(System.currentTimeMillis() / 1000));
+		}};
+
+		for (Map.Entry<String, String> rep : replacements.entrySet()) {
+			str = str.replace(rep.getKey(), rep.getValue());
+		}
+
+		return str;
+	}
+
+	public static String separate(Object value) {
+		try {
+			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
+			DecimalFormat df = new DecimalFormat();
+			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(I18N.PT.getLocale()));
+			df.setGroupingSize(3);
+
+			return df.format(n);
+		} catch (NumberFormatException e) {
+			return String.valueOf(value);
+		}
+	}
+
+	public static String separate(Object value, Locale locale) {
+		try {
+			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
+			DecimalFormat df = new DecimalFormat();
+			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(locale));
+			df.setGroupingSize(3);
+
+			return df.format(n);
+		} catch (NumberFormatException e) {
+			return String.valueOf(value);
+		}
 	}
 }

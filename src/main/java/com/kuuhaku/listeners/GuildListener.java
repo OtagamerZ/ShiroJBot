@@ -18,36 +18,39 @@
 
 package com.kuuhaku.listeners;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
-import com.kuuhaku.utils.Calc;
-import com.kuuhaku.utils.SignatureUtils;
-import com.kuuhaku.utils.Utils;
-import com.kuuhaku.utils.XStringBuilder;
-import net.dv8tion.jda.api.JDA;
+import com.kuuhaku.utils.*;
+import com.kuuhaku.utils.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.jodah.expiringmap.ExpiringMap;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -55,6 +58,117 @@ import java.util.concurrent.TimeUnit;
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final ConcurrentMap<String, ExpiringMap<String, Message>> messages = new ConcurrentHashMap<>();
+
+	@Override
+	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
+		if (event.getUser().isBot()) return;
+
+		MessageReaction.ReactionEmote reaction = event.getReactionEmote();
+		if (reaction.isEmoji() && reaction.getEmoji().equals("\u2b50")) {
+			GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
+			Message msg = Pages.subGet(event.getChannel().retrieveMessageById(event.getMessageId()));
+
+			TextChannel channel = config.getSettings().getStarboardChannel();
+			if (channel == null) return;
+
+			int stars = (int) msg.getReactions().stream()
+					.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("\u2b50"))
+					.flatMap(r -> r.retrieveUsers().stream())
+					.filter(u -> !u.isBot() && !u.getId().equals(msg.getAuthor().getId()))
+					.count();
+
+			if (stars >= config.getSettings().getStarboardThreshold() && DAO.find(StarredMessage.class, msg.getId()) == null) {
+				new StarredMessage(msg.getId()).save();
+
+				Message.Attachment img = null;
+				for (Message.Attachment att : msg.getAttachments()) {
+					if (att.isImage()) {
+						img = att;
+						break;
+					}
+				}
+
+				Message ref = msg.getReferencedMessage();
+				Member author = msg.getMember();
+				assert author != null;
+
+				EmbedBuilder eb = new EmbedBuilder()
+						.setColor(Color.orange)
+						.setTitle(config.getLocale().get("str/highlight").formatted(author.getEffectiveName()), msg.getJumpUrl())
+						.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
+
+				if (ref != null) {
+					eb.setAuthor(
+							StringUtils.abbreviate(ref.getContentRaw(), 128),
+							ref.getJumpUrl(),
+							"https://getmeroof.com/gmr-assets/reply.png"
+					);
+				}
+				if (img != null) {
+					eb.setImage(img.getUrl());
+				}
+
+				channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
+			}
+		}
+	}
+
+	@Override
+	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+		if (event.getUser().isBot()) return;
+
+		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
+
+		WelcomeSettings ws = config.getWelcomeSettings();
+		TextChannel channel = ws.getChannel();
+		if (channel != null) {
+			Member mb = event.getMember();
+
+			Role join = config.getSettings().getJoinRole();
+			if (join != null && event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+				event.getGuild().addRoleToMember(mb, join).queue();
+			}
+
+			buildAndSendJLEmbed(config, channel, mb, ws.getMessage(), ws.getHeaders());
+		}
+	}
+
+	@Override
+	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+		if (event.getUser().isBot()) return;
+
+		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
+
+		GoodbyeSettings gs = config.getGoodbyeSettings();
+		TextChannel channel = gs.getChannel();
+		if (channel != null) {
+			Member mb = event.getMember();
+			if (mb != null) {
+				buildAndSendJLEmbed(config, channel, mb, gs.getMessage(), gs.getHeaders());
+			}
+		}
+	}
+
+	private void buildAndSendJLEmbed(GuildConfig config, TextChannel channel, Member mb, String message, Set<String> headers) {
+		GuildSettings settings = config.getSettings();
+
+		EmbedBuilder eb = new AutoEmbedBuilder(Utils.replaceTags(mb, mb.getGuild(), settings.getEmbed().toString()))
+				.setDescription(Utils.replaceTags(mb, mb.getGuild(), message))
+				.setTitle(Utils.replaceTags(mb, mb.getGuild(), config.getLocale().get(Utils.getRandomEntry(headers))));
+
+		MessageEmbed temp = eb.build();
+		if (temp.getThumbnail() == null) {
+			eb.setThumbnail(mb.getEffectiveAvatarUrl());
+		}
+		if (temp.getFooter() == null) {
+			eb.setFooter("ID: " + mb.getId());
+		}
+		if (temp.getColor() == null) {
+			eb.setColor(Utils.colorThief(mb.getEffectiveAvatarUrl()));
+		}
+
+		channel.sendMessageEmbeds(eb.build()).queue();
+	}
 
 	@Override
 	public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
@@ -67,14 +181,19 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (event.getJDA().getStatus() != JDA.Status.CONNECTED) return;
 		if (!event.getChannel().getId().equals("718666970119143436")) return;
-		else if (event.getAuthor().isBot()) return;
+		if (event.getAuthor().isBot()) return;
 
 		String content = event.getMessage().getContentRaw();
+		MessageData.Guild data;
+		try {
+			data = new MessageData.Guild(event);
+		} catch (NullPointerException e) {
+			return;
+		}
 
-		MessageData.Guild data = new MessageData.Guild(event);
 		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+		I18N locale = config.getLocale();
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
 			config.setName(data.guild().getName());
 			config.save();
@@ -90,6 +209,26 @@ public class GuildListener extends ListenerAdapter {
 		EventData ed = new EventData(config, profile);
 		if (content.toLowerCase(Locale.ROOT).startsWith(config.getPrefix())) {
 			processCommand(data, ed, content);
+		}
+
+		KawaiponCard kc = Spawn.getKawaipon(event.getGuild());
+		if (kc != null) {
+			List<TextChannel> channels = config.getSettings().getKawaiponChannels();
+
+			if (!channels.isEmpty()) {
+				EmbedBuilder eb = new EmbedBuilder()
+						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
+						.setTitle(kc.getName() + " (" + kc.getCard().getAnime() + ")")
+						.setColor(kc.getCard().getRarity().getColor(kc.isFoil()))
+						.setImage("attachment://card.png")
+						.setFooter(locale.get("str/card_instructions", config.getPrefix(), "collect", kc.getPrice()));
+
+				Utils.getRandomEntry(channels).sendMessageEmbeds(eb.build())
+						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isFoil()), "png"), "card.png")
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.queue();
+			}
 		}
 
 		messages.computeIfAbsent(data.guild().getId(), k ->
@@ -109,13 +248,20 @@ public class GuildListener extends ListenerAdapter {
 		if (pc != null) {
 			Permission[] missing = pc.getMissingPerms(data.channel());
 
-			if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
-				data.channel().sendMessage(locale.get("error/disabled_category")).queue();
-				return;
-			} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
-				data.channel().sendMessage(locale.get("error/disabled_command")).queue();
-				return;
-			} else if (missing.length > 0) {
+			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
+				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.getId().equals(data.channel().getId()))) {
+					data.channel().sendMessage(locale.get("error/denied_channel")).queue();
+					return;
+				} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
+					data.channel().sendMessage(locale.get("error/disabled_category")).queue();
+					return;
+				} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
+					data.channel().sendMessage(locale.get("error/disabled_command")).queue();
+					return;
+				}
+			}
+
+			if (missing.length > 0) {
 				XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
 				for (Permission perm : missing) {
 					sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
@@ -137,7 +283,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			try {
-				Map<String, String> params = SignatureUtils.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+				JSONObject params = SignatureUtils.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
 				pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 
@@ -145,11 +291,25 @@ public class GuildListener extends ListenerAdapter {
 					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
 				}
 			} catch (InvalidSignatureException e) {
-				data.channel().sendMessage(locale.get("error/invalid_signature") + "```css\n%s%s %s```".formatted(
-						event.config().getPrefix(),
-						name,
-						e.getMessage().replace("`", "'")
-				)).queue();
+				String error;
+
+				if (e.getOptions().length > 0) {
+					error = locale.get("error/invalid_option").formatted(
+							Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
+					) + "```css\n%s%s %s```".formatted(
+							event.config().getPrefix(),
+							name,
+							e.getMessage().replace("`", "'")
+					);
+				} else {
+					error = locale.get("error/invalid_signature") + "```css\n%s%s %s```".formatted(
+							event.config().getPrefix(),
+							name,
+							e.getMessage().replace("`", "'")
+					);
+				}
+
+				data.channel().sendMessage(error).queue();
 			}
 		}
 	}
