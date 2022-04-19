@@ -38,11 +38,11 @@ public class Manager {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(
 					"javax.persistence.jdbc.user", DB_LOGIN,
 					"javax.persistence.jdbc.password", DB_PASS,
-					"javax.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require".formatted(
+					"javax.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 							SERVER_IP, DB_NAME
 					)
 			));
-			Constants.LOGGER.info("Connected to database sucessfully");
+			Constants.LOGGER.info("Connected to database successfully");
 		}
 
 		return emf.createEntityManager();

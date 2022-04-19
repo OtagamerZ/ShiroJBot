@@ -19,6 +19,8 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.utils.Calc;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -35,16 +37,19 @@ public class KawaiponCard extends DAO {
 	private int id;
 
 	@Column(name = "uuid", nullable = false, unique = true, length = 36)
-	private String uuid = UUID.randomUUID().toString();
+	private String uuid;
 
 	@Column(name = "foil", nullable = false)
 	private boolean foil;
+
+	@Column(name = "quality", nullable = false)
+	private double quality = Calc.round(Calc.rng(20d), 1);
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
 	private Card card;
 
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
@@ -52,8 +57,14 @@ public class KawaiponCard extends DAO {
 	public KawaiponCard() {
 	}
 
+	public KawaiponCard(Card card, boolean foil) {
+		this.card = card;
+		this.foil = foil;
+	}
+
 	public KawaiponCard(Kawaipon kawaipon, Card card, boolean foil) {
 		this.kawaipon = kawaipon;
+		this.uuid = UUID.randomUUID().toString();
 		this.card = card;
 		this.foil = foil;
 	}
@@ -62,7 +73,7 @@ public class KawaiponCard extends DAO {
 		return id;
 	}
 
-	public String getUuid() {
+	public String getUUID() {
 		return uuid;
 	}
 
@@ -74,12 +85,31 @@ public class KawaiponCard extends DAO {
 		this.foil = foil;
 	}
 
+	public double getQuality() {
+		return quality;
+	}
+
 	public Card getCard() {
 		return card;
 	}
 
+	public String getName() {
+		return (foil ? "« %s »" : "%s").formatted(card.getName());
+	}
+
+	public int getPrice() {
+		return Math.max(0, card.getRarity().getIndex() * 300);
+	}
+
 	public Kawaipon getKawaipon() {
 		return kawaipon;
+	}
+
+	public void collect(Kawaipon kawaipon) {
+		this.kawaipon = kawaipon;
+		if (kawaipon.addCard(card, foil)) {
+			kawaipon.save();
+		}
 	}
 
 	@Override

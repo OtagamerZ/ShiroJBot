@@ -91,6 +91,10 @@ public class Profile extends DAO implements Blacklistable {
 		xp += value;
 	}
 
+	public int getLevel() {
+		return (int) Math.ceil(Math.sqrt(xp / 100d));
+	}
+
 	public List<VoiceData> getVoiceData() {
 		return voiceData;
 	}

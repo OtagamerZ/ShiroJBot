@@ -16,25 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.model.enums;
 
-import com.kuuhaku.model.persistent.shiro.Card;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+public enum GuildFeature {
+	ANTI_RAID,  //0x1
+	ANTI_LINK,  //0x2
+	ANTI_SPAM,  //0x3
+	ANTI_HOIST, //0x4
+	ANTI_ZALGO, //0x5
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "field")
-public class Field {
-	@Id
-	@Column(name = "card_id", nullable = false)
-	private String id;
-
-	@OneToOne(optional = false, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "card_id")
-	@Fetch(FetchMode.JOIN)
-	@MapsId("id")
-	private Card card;
-
+	NQN_MODE,   //0x6
 }

@@ -21,10 +21,10 @@ package com.kuuhaku.model.enums;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
+import kotlin.Pair;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
@@ -141,7 +141,7 @@ public enum Race {
     }
 
     public static Pair<Race, Race> getCombo(List<Senshi> senshi) {
-        if (senshi.isEmpty()) return Pair.of(NONE, NONE);
+        if (senshi.isEmpty()) return new Pair<>(NONE, NONE);
 
         List<Race> order = senshi.stream()
                 .map(Senshi::getRace)
@@ -184,7 +184,7 @@ public enum Race {
             }
         }
 
-        return Pair.of(major, minor);
+        return new Pair<>(major, minor);
     }
 
     public static Race[] validValues() {

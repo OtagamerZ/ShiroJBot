@@ -94,6 +94,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return ((Number) get(key)).doubleValue();
 		} catch (NullPointerException e) {
 			return 0;
+		} catch (ClassCastException e) {
+			try {
+				return Double.parseDouble((String) get(key));
+			} catch (NumberFormatException ex) {
+				return 0;
+			}
 		}
 	}
 
@@ -102,6 +108,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return Utils.getOr(((Number) get(key)).doubleValue(), or);
 		} catch (NullPointerException e) {
 			return or;
+		} catch (ClassCastException e) {
+			try {
+				return Double.parseDouble((String) get(key));
+			} catch (NumberFormatException ex) {
+				return or;
+			}
 		}
 	}
 
@@ -110,6 +122,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return ((Number) get(key)).floatValue();
 		} catch (NullPointerException e) {
 			return 0;
+		} catch (ClassCastException e) {
+			try {
+				return Float.parseFloat((String) get(key));
+			} catch (NumberFormatException ex) {
+				return 0;
+			}
 		}
 	}
 
@@ -118,6 +136,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return Utils.getOr(((Number) get(key)).floatValue(), or);
 		} catch (NullPointerException e) {
 			return or;
+		} catch (ClassCastException e) {
+			try {
+				return Float.parseFloat((String) get(key));
+			} catch (NumberFormatException ex) {
+				return or;
+			}
 		}
 	}
 
@@ -126,6 +150,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return ((Number) get(key)).intValue();
 		} catch (NullPointerException e) {
 			return 0;
+		} catch (ClassCastException e) {
+			try {
+				return Integer.parseInt((String) get(key));
+			} catch (NumberFormatException ex) {
+				return 0;
+			}
 		}
 	}
 
@@ -134,6 +164,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return Utils.getOr(((Number) get(key)).intValue(), or);
 		} catch (NullPointerException e) {
 			return or;
+		} catch (ClassCastException e) {
+			try {
+				return Integer.parseInt((String) get(key));
+			} catch (NumberFormatException ex) {
+				return or;
+			}
 		}
 	}
 
@@ -142,6 +178,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return ((Number) get(key)).longValue();
 		} catch (NullPointerException e) {
 			return 0;
+		} catch (ClassCastException e) {
+			try {
+				return Long.parseLong((String) get(key));
+			} catch (NumberFormatException ex) {
+				return 0;
+			}
 		}
 	}
 
@@ -150,6 +192,12 @@ public class JSONObject extends HashMap<String, Object> {
 			return Utils.getOr(((Number) get(key)).longValue(), or);
 		} catch (NullPointerException e) {
 			return or;
+		} catch (ClassCastException e) {
+			try {
+				return Long.parseLong((String) get(key));
+			} catch (NumberFormatException ex) {
+				return or;
+			}
 		}
 	}
 

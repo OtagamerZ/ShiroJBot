@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Utils;
+import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -35,7 +36,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Command(
@@ -49,12 +49,12 @@ import java.util.Objects;
 })
 public class KickCommand implements Executable {
 	@Override
-	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, Map<String, String> args) {
+	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<Member> members;
 		if (args.containsKey("users")) {
 			members = event.message().getMentionedMembers(event.guild());
 		} else {
-			members = Arrays.stream(args.get("ids").split(" +"))
+			members = Arrays.stream(args.getString("ids").split(" +"))
 					.filter(StringUtils::isNumeric)
 					.map(event.guild()::getMemberById)
 					.filter(Objects::nonNull)
@@ -75,8 +75,8 @@ public class KickCommand implements Executable {
 						members.size() == 1 ? locale.get("str/that") : locale.get("str/those"),
 						members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
 				), event.channel(), wrapper ->
-						RestAction.allOf(members.stream().map(m -> m.kick(args.get("reason"))).toList())
-								.flatMap(s -> event.channel().sendMessage(locale.get("sucess/kick",
+						RestAction.allOf(members.stream().map(m -> m.kick(args.getString("reason"))).toList())
+								.flatMap(s -> event.channel().sendMessage(locale.get("success/kick",
 												s.size(),
 												s.size() == 1 ? "" : "s",
 												args.get("reason")

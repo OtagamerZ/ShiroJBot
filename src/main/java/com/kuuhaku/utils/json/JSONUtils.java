@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
-import dev.zacsweers.moshix.records.RecordsJsonAdapterFactory;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
@@ -33,7 +32,6 @@ import java.util.Map;
 
 public class JSONUtils {
 	private static final Moshi moshi = new Moshi.Builder()
-			.add(new RecordsJsonAdapterFactory())
 			.add(OffsetDateTime.class, new Rfc3339DateJsonAdapter())
 			.build();
 

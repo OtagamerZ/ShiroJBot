@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.function.BiConsumer;
 
-public class IO {
+public abstract class IO {
 	public static URL getResource(Class<?> klass, String path) {
 		URL url = klass.getClassLoader().getResource(path);
 		if (url == null) throw new NullPointerException();

@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -67,7 +68,7 @@ public class Kawaipon extends DAO {
 		return cards;
 	}
 
-	public void addCard(Card card, boolean foil) {
-		cards.add(new KawaiponCard(this, card, foil));
+	public boolean addCard(Card card, boolean foil) {
+		return cards.add(new KawaiponCard(this, card, foil));
 	}
 }
