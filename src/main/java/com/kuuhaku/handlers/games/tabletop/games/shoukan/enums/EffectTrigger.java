@@ -65,6 +65,8 @@ public enum EffectTrigger {
 	// ------
 
 	// HAND
+	ON_SELF_DISCARD(false, false),
+
 	ON_DAMAGE(false),
 	ON_HEAL(false),
 	ON_MANUAL_DRAW(false),
