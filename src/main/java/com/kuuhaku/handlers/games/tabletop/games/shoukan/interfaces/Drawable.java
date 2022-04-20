@@ -80,13 +80,6 @@ public interface Drawable {
 
 	Set<String> getTags();
 
-	default boolean isTriggerLocked() {
-		return false;
-	}
-	default void unlockTrigger() {
-
-	}
-
 	default void reset() {
 
 	}

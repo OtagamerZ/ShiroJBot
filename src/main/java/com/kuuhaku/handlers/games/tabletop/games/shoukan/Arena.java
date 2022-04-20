@@ -81,7 +81,7 @@ public class Arena {
 					d.reset();
 				}),
 				Side.BOTTOM, new BondedList<>(d -> {
-					if (game.getCurrentSide() == Side.TOP) {
+					if (game.getCurrentSide() == Side.BOTTOM) {
 						game.applyEffect(ON_SACRIFICE, d, Side.BOTTOM, d.getIndex());
 					}
 

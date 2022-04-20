@@ -1153,12 +1153,14 @@ public class Champion implements Drawable, Cloneable {
 		this.sleep = Math.max(sleep - val, 0);
 	}
 
-	@Override
 	public boolean isTriggerLocked() {
 		return triggerLock;
 	}
 
-	@Override
+	public void lockTrigger() {
+		this.triggerLock = true;
+	}
+
 	public void unlockTrigger() {
 		this.triggerLock = false;
 		for (CardLink link : linkedTo) {

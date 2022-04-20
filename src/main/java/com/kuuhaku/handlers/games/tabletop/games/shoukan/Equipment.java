@@ -524,21 +524,21 @@ public class Equipment implements Drawable, Cloneable {
 			Helper.logger(this.getClass()).warn("Erro ao executar efeito de " + card.getName(), e);
 		}
 	}
-
 	public boolean canGoToGrave() {
 		return !effectOnly;
 	}
 
-	@Override
 	public boolean isTriggerLocked() {
 		return triggerLock;
 	}
 
-	@Override
+	public void lockTrigger() {
+		this.triggerLock = true;
+	}
+
 	public void unlockTrigger() {
 		this.triggerLock = false;
 	}
-
 	@Override
 	public void reset() {
 		flipped = false;

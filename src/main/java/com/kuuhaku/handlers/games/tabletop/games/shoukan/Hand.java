@@ -93,6 +93,8 @@ public class Hand {
 		this.game = game;
 		this.side = side;
 		this.discardBatch = new BondedList<>(d -> {
+			game.applyEffect(ON_DISCARD, d, side, -1);
+
 			Side[] sides = {side, side.getOther()};
 			for (int i = 0; i < 5; i++) {
 				for (Side s : sides) {
