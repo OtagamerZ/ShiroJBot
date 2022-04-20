@@ -458,13 +458,15 @@ public class Champion implements Drawable, Cloneable {
 				Field f = game.getArena().getField();
 				if (f != null) {
 					boolean capped = hero != null && hero.getPerks().contains(Perk.REAPER);
-					fBonus = 1 + f.getModifiers().getFloat(getRace().name());
-					if (capped) fBonus = Math.min(fBonus, 1);
+					fBonus = f.getModifiers().getFloat(getRace().name());
+					if (capped) fBonus = Math.min(fBonus, 0);
 
 					if (combos.getLeft() == Race.ELF) {
 						if (fBonus < 1) fBonus /= 2;
 						else if (fBonus > 1) fBonus *= 1.25;
 					}
+
+					fBonus += 1;
 				}
 			}
 
@@ -511,6 +513,8 @@ public class Champion implements Drawable, Cloneable {
 						if (fBonus < 1) fBonus /= 2;
 						else if (fBonus > 1) fBonus *= 1.25;
 					}
+
+					fBonus++;
 				}
 			}
 
