@@ -27,6 +27,8 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.ImageFilters;
 import org.apache.commons.io.FileUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -51,6 +53,7 @@ public class Card extends DAO {
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "anime_id")
+	@Fetch(FetchMode.JOIN)
 	private Anime anime;
 
 	@Enumerated(EnumType.STRING)

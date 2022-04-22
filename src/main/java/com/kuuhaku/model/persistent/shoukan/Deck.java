@@ -67,6 +67,7 @@ public class Deck extends DAO {
 
 	@ManyToOne
 	@JoinColumn(name = "cover_id")
+	@Fetch(FetchMode.JOIN)
 	private Card cover;
 
 	@Column(name = "use_foil", nullable = false)

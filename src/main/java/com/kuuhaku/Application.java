@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.AllowedMentions;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
@@ -36,6 +37,9 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
+import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
 
 public class Application implements Thread.UncaughtExceptionHandler {
 	private final ShardManager shiro;
@@ -82,6 +86,8 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						.forEach(this::setRandomAction)
 		);
 
+		AllowedMentions.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
+
 		try {
 			PaginatorBuilder.createPaginator()
 					.setHandler(shiro)
@@ -103,17 +109,26 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return shiro;
 	}
 
+	public JDA getMainShard() {
+		return shiro.getShards().get(0);
+	}
+
+	public String getId() {
+		return getMainShard().getSelfUser().getId();
+	}
+
 	public void setRandomAction(JDA jda) {
 		final List<Activity> activities = List.of(
-				//Activity.watching(Utils.separate(shiro.getGuildCache().size()) + " servidores, e estou apenas começando!"),
-				//Activity.competing("Shoukan ranqueado!"),
+				Activity.watching(Utils.separate(shiro.getGuildCache().size()) + " servidores, e estou apenas começando!"),
+				Activity.competing("Shoukan ranqueado!"),
 				Activity.watching(DAO.queryNative(String.class, """
 						SELECT c.name||' pela '||(SELECT COUNT(1) FROM Card x WHERE x.anime_id = c.anime_id)||'ª vez!'
 						FROM Card c
 						WHERE c.rarity = 'ULTIMATE'
 						ORDER BY random()
-						"""))
-				//Activity.playing("com minhas cartas Kawaipon!")
+						""")),
+				Activity.playing("com minhas cartas Kawaipon!"),
+				Activity.of(Activity.ActivityType.DEFAULT, "Use s!help para ver os meus comandos!")
 		);
 
 		jda.getPresence().setActivity(Utils.getRandomEntry(activities));

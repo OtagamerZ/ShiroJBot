@@ -21,19 +21,23 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.utils.Utils;
 import net.dv8tion.jda.api.entities.Member;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
+@DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "profile")
 public class Profile extends DAO implements Blacklistable {
@@ -43,7 +47,8 @@ public class Profile extends DAO implements Blacklistable {
 	@Column(name = "xp", nullable = false)
 	private long xp;
 
-	@OneToMany(mappedBy = "profile", orphanRemoval = true)
+	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<VoiceData> voiceData = new ArrayList<>();
 
 	@ElementCollection
@@ -52,10 +57,16 @@ public class Profile extends DAO implements Blacklistable {
 	private List<String> warns = new ArrayList<>();
 
 	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "uid")
+	@JoinColumn(name = "uid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")
 	private Account account;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "gid", nullable = false)
+	@Fetch(FetchMode.JOIN)
+	@MapsId("gid")
+	private GuildConfig guild;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumns({
@@ -76,6 +87,7 @@ public class Profile extends DAO implements Blacklistable {
 	public Profile(ProfileId id) {
 		this.id = id;
 		this.account = DAO.find(Account.class, id.getUid());
+		this.guild = DAO.find(GuildConfig.class, id.getGid());
 		this.settings = new ProfileSettings(id);
 	}
 
@@ -107,6 +119,10 @@ public class Profile extends DAO implements Blacklistable {
 		return account;
 	}
 
+	public GuildConfig getGuild() {
+		return guild;
+	}
+
 	public ProfileSettings getSettings() {
 		return Utils.getOr(settings, new ProfileSettings(id));
 	}
@@ -114,5 +130,18 @@ public class Profile extends DAO implements Blacklistable {
 	@Override
 	public boolean isBlacklisted() {
 		return account.isBlacklisted();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Profile profile = (Profile) o;
+		return Objects.equals(id, profile.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

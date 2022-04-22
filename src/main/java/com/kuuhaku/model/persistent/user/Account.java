@@ -26,19 +26,21 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.utils.Utils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
+@DynamicUpdate
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account")
 public class Account extends DAO implements Blacklistable {
 	@Id
@@ -57,7 +59,8 @@ public class Account extends DAO implements Blacklistable {
 	@Column(name = "gems", nullable = false)
 	private int gems;
 
-	@OneToMany(mappedBy = "account", orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Profile> profiles = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -66,9 +69,14 @@ public class Account extends DAO implements Blacklistable {
 	private AccountSettings settings;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
+	@PrimaryKeyJoinColumn(name = "uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
+
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@PrimaryKeyJoinColumn(name = "uid")
+	@Fetch(FetchMode.JOIN)
+	private Stash stash;
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
@@ -79,6 +87,7 @@ public class Account extends DAO implements Blacklistable {
 	private List<Transaction> transactions = new ArrayList<>();
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
 	@Column(name = "blacklisted", nullable = false)
@@ -95,10 +104,15 @@ public class Account extends DAO implements Blacklistable {
 		this.uid = uid;
 		this.settings = new AccountSettings(uid);
 		this.kawaipon = new Kawaipon(this);
+		this.stash = new Stash(this);
 	}
 
 	public String getUid() {
 		return uid;
+	}
+
+	public User getUser() {
+		return Main.getApp().getMainShard().getUserById(uid);
 	}
 
 	public String getName() {
@@ -140,7 +154,7 @@ public class Account extends DAO implements Blacklistable {
 		apply(this.getClass(), uid, a -> {
 			a.setDebit(a.getDebit() - value);
 			if (a.getDebit() < 0) {
-				a.setBalance(-a.getDebit());
+				a.setBalance(-a.getDebit() + a.getBalance());
 				a.setDebit(0);
 			}
 
@@ -154,7 +168,7 @@ public class Account extends DAO implements Blacklistable {
 		apply(this.getClass(), uid, a -> {
 			a.setBalance(a.getBalance() - value);
 			if (a.getBalance() < 0) {
-				a.setDebit(-a.getDebit());
+				a.setDebit(-a.getBalance() + a.getDebit());
 				a.setBalance(0);
 			}
 
@@ -188,12 +202,16 @@ public class Account extends DAO implements Blacklistable {
 		profiles.add(new Profile(member));
 	}
 
-	public AccountSettings getProfileSettings() {
+	public AccountSettings getSettings() {
 		return Utils.getOr(settings, new AccountSettings(uid));
 	}
 
 	public Kawaipon getKawaipon() {
 		return Utils.getOr(kawaipon, new Kawaipon(this));
+	}
+
+	public Stash getStash() {
+		return stash;
 	}
 
 	public List<Deck> getDecks() {
@@ -250,5 +268,18 @@ public class Account extends DAO implements Blacklistable {
 	public boolean isOldUser() {
 		ZonedDateTime old = ZonedDateTime.of(LocalDateTime.of(2022, 2, 12, 0, 0), ZoneId.of("GMT-3"));
 		return createdAt.isBefore(old);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Account account = (Account) o;
+		return Objects.equals(uid, account.uid);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uid);
 	}
 }

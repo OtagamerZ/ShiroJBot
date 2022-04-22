@@ -47,7 +47,7 @@ public class CollectCommand implements Executable {
 			event.channel().sendMessage(locale.get("error/no_card")).queue();
 			return;
 		} else if (card.peekProperty(kc -> kp.getCards().contains(kc))) {
-			event.channel().sendMessage(locale.get("error/already_owned")).queue();
+			event.channel().sendMessage(locale.get("error/owned")).queue();
 			return;
 		} else if (card.peekProperty(kc -> acc.getBalance() < kc.getPrice())) {
 			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
@@ -56,9 +56,9 @@ public class CollectCommand implements Executable {
 
 		KawaiponCard kc = card.get();
 
-		acc.consumeCR(kc.getPrice(), "Collected " + kc.getName());
+		acc.consumeCR(kc.getPrice(), "Collected " + kc);
 		kc.collect(kp);
 
-		event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc.getName())).queue();
+		event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc)).queue();
 	}
 }

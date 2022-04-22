@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.JDA;
     name = "${NAME.replaceFirst("Command", "").toLowerCase()}",
     category = Category.${CATEGORY}
 )
-public class ${NAME} implements Executable {
+public class ${NAME}Command implements Executable {
     @Override
     public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
         
