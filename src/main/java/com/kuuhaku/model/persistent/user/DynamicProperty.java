@@ -35,7 +35,7 @@ public class DynamicProperty extends DAO {
 	private String value;
 
 	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "account_uid")
+	@JoinColumn(name = "uid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")
 	private Account account;

@@ -19,6 +19,8 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Utils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
 import java.util.Locale;
@@ -74,6 +76,13 @@ public enum I18N {
 
 		String lower = key.toLowerCase(Locale.ROOT);
 		if (!key.equals(lower)) return get(lower, args);
+
+		for (int i = 0; i < args.length; i++) {
+			Object arg = args[i];
+			if (StringUtils.isNumeric(String.valueOf(arg))) {
+				args[i] = Utils.separate(arg, locale);
+			}
+		}
 
 		return Main.getCacheManager().getLocaleCache().computeIfAbsent(name() + "-" + key, k -> {
 			try {

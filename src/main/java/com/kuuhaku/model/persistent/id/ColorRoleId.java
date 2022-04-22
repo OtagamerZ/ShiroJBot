@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.id;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,7 +29,10 @@ public class ColorRoleId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = -1696717434982919336L;
 
+	@Column(name = "color")
 	private String color;
+
+	@Column(name = "gid")
 	private String gid;
 
 	public ColorRoleId() {

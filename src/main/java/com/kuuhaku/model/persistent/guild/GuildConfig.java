@@ -22,10 +22,13 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Profile;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "guild_config")
@@ -58,6 +61,10 @@ public class GuildConfig extends DAO {
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;
+
+	@OneToMany(mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<Profile> profiles = new LinkedHashSet<>();
 
 	public GuildConfig() {
 	}
@@ -108,5 +115,9 @@ public class GuildConfig extends DAO {
 
 	public GoodbyeSettings getGoodbyeSettings() {
 		return goodbyeSettings;
+	}
+
+	public Set<Profile> getProfiles() {
+		return profiles;
 	}
 }

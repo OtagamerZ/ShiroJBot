@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.id;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,7 +29,10 @@ public class DynamicPropertyId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 2416077777517157918L;
 
+	@Column(name = "uid")
 	private String uid;
+
+	@Column(name = "id")
 	private String id;
 
 	public DynamicPropertyId() {

@@ -24,6 +24,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
@@ -53,11 +54,13 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final ConcurrentMap<String, ExpiringMap<String, Message>> messages = new ConcurrentHashMap<>();
+	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
 	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
@@ -181,7 +184,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (!event.getChannel().getId().equals("718666970119143436")) return;
+		if (!Utils.equalsAny(event.getChannel().getId(), "718666970119143436", "606127567220637697")) return;
 		if (event.getAuthor().isBot()) return;
 
 		String content = event.getMessage().getContentRaw();
@@ -211,6 +214,13 @@ public class GuildListener extends ListenerAdapter {
 			processCommand(data, ed, content);
 		}
 
+		if (data.message().getContentRaw().matches("<@!?" + Main.getApp().getId() + ">")) {
+			data.channel().sendMessage(locale.get("str/mentioned",
+					data.user().getAsMention(),
+					config.getPrefix()
+			)).queue();
+		}
+
 		KawaiponCard kc = Spawn.getKawaipon(event.getGuild());
 		if (kc != null) {
 			List<TextChannel> channels = config.getSettings().getKawaiponChannels();
@@ -218,10 +228,10 @@ public class GuildListener extends ListenerAdapter {
 			if (!channels.isEmpty()) {
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
-						.setTitle(kc.getName() + " (" + kc.getCard().getAnime() + ")")
+						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
 						.setColor(kc.getCard().getRarity().getColor(kc.isFoil()))
 						.setImage("attachment://card.png")
-						.setFooter(locale.get("str/card_instructions", config.getPrefix(), "collect", kc.getPrice()));
+						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
 
 				Utils.getRandomEntry(channels).sendMessageEmbeds(eb.build())
 						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isFoil()), "png"), "card.png")
@@ -316,5 +326,13 @@ public class GuildListener extends ListenerAdapter {
 
 	public static List<Message> getMessages(Guild guild) {
 		return List.copyOf(Utils.getOr(messages.get(guild.getId()), Map.<String, Message>of()).values());
+	}
+
+	public static Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
+		return Collections.unmodifiableMap(toHandle);
+	}
+
+	public static void addHandler(Guild guild, SimpleMessageListener sml) {
+		toHandle.computeIfAbsent(guild.getId(), k -> new CopyOnWriteArrayList<>()).add(sml);
 	}
 }

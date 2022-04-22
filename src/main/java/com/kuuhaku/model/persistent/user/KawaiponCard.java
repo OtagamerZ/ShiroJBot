@@ -18,7 +18,9 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.utils.Calc;
 import org.hibernate.annotations.Fetch;
@@ -43,13 +45,14 @@ public class KawaiponCard extends DAO {
 	private boolean foil;
 
 	@Column(name = "quality", nullable = false)
-	private double quality = Calc.round(Calc.rng(20d), 1);
+	private double quality = Calc.round(Math.max(0, Math.pow(Constants.DEFAULT_RNG.nextDouble(), 4) * 25 - 5), 1);
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
+	@Fetch(FetchMode.JOIN)
 	private Card card;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
@@ -65,6 +68,13 @@ public class KawaiponCard extends DAO {
 	public KawaiponCard(Kawaipon kawaipon, Card card, boolean foil) {
 		this.kawaipon = kawaipon;
 		this.uuid = UUID.randomUUID().toString();
+		this.card = card;
+		this.foil = foil;
+	}
+
+	public KawaiponCard(String uuid, Kawaipon kawaipon, Card card, boolean foil) {
+		this.kawaipon = kawaipon;
+		this.uuid = uuid;
 		this.card = card;
 		this.foil = foil;
 	}
@@ -105,11 +115,25 @@ public class KawaiponCard extends DAO {
 		return kawaipon;
 	}
 
+	public void store() {
+		Stash stash = DAO.find(Stash.class, kawaipon.getUid());
+
+		stash.getCards().add(new StashedCard(stash, card, CardType.KAWAIPON, quality, foil));
+		stash.save();
+
+		delete();
+	}
+
 	public void collect(Kawaipon kawaipon) {
 		this.kawaipon = kawaipon;
 		if (kawaipon.addCard(card, foil)) {
 			kawaipon.save();
 		}
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 	@Override

@@ -16,60 +16,25 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.id;
+package com.kuuhaku.model.records;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import java.io.Serial;
-import java.io.Serializable;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+
 import java.util.Objects;
 
-@Embeddable
-public class LevelRoleId implements Serializable {
-	@Serial
-	private static final long serialVersionUID = -7709129291113066206L;
-
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
-
-	private String gid;
-
-	public LevelRoleId() {
-	}
-
-	public LevelRoleId(String gid) {
-		this.gid = gid;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getGid() {
-		return gid;
-	}
-
-	public void setGid(String gid) {
-		this.gid = gid;
-	}
-
+public record ChannelReference(Guild guild, TextChannel channel) {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LevelRoleId that = (LevelRoleId) o;
-		return id == that.id && Objects.equals(gid, that.gid);
+		ChannelReference that = (ChannelReference) o;
+		return Objects.equals(guild.getId(), that.guild.getId())
+			   && Objects.equals(channel.getId(), that.channel.getId());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, gid);
+		return Objects.hash(guild.getId(), channel.getId());
 	}
 }

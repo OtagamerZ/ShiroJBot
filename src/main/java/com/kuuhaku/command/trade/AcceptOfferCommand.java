@@ -16,49 +16,47 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.moderation;
+package com.kuuhaku.command.trade;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.GuildSettings;
+import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 @Command(
-		name = "deny",
-		category = Category.MODERATION
+		name = "accept",
+		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = {"<channel:channel:r>"})
-public class DenyCommand implements Executable {
+public class AcceptOfferCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GuildSettings settings = data.config().getSettings();
-
-		TextChannel channel;
-		if (args.containsKey("channel")) {
-			channel = event.message().getMentionedChannels().get(0);
-		} else {
-			channel = event.channel();
-		}
-
-		if (settings.getDeniedChannels().stream().anyMatch(t -> t.getId().equals(channel.getId()))) {
-			event.channel().sendMessage(locale.get("error/denied").formatted(
-					channel == event.channel() ? "this channel" : channel.getAsMention()
-			)).queue();
+		Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
+		if (trade == null) {
+			event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
 			return;
 		}
 
-		settings.getDeniedChannels().add(channel);
-		settings.save();
+		User other;
+		if (trade.getLeft().getUid().equals(event.user().getId())) {
+			other = trade.getRight().getUser();
+		} else {
+			other = trade.getLeft().getUser();
+		}
 
-		event.channel().sendMessage(locale.get("success/commands_denied").formatted(
-				channel == event.channel() ? "this channel" : channel.getAsMention()
-		)).queue();
+		Utils.confirm(
+				locale.get("question/trade_close", other.getAsMention(), event.user().getAsMention()), event.channel(),
+				wrapper -> {
+					trade.accept();
+					event.channel().sendMessage(locale.get("success/trade_accept")).queue();
+				}, trade.getLeft().getUser(), trade.getRight().getUser()
+		);
 	}
 }

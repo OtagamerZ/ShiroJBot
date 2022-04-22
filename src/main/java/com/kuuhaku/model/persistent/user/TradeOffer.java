@@ -16,62 +16,63 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shiro;
+package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.CardType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-@Table(name = "anime")
-public class Anime extends DAO {
+@Table(name = "trade_offer")
+public class TradeOffer extends DAO {
 	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
+	@Column(name = "uuid", nullable = false, length = 36)
+	private String uuid;
 
-	@Column(name = "visible", nullable = false)
-	private boolean visible = true;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private CardType type;
 
-	@OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<Card> cards = new LinkedHashSet<>();
+	@ManyToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "trade_id")
+	@Fetch(FetchMode.JOIN)
+	private Trade trade;
 
-	public Set<Card> getCards() {
-		return cards;
+	public TradeOffer() {
 	}
 
-	public void setCards(Set<Card> cards) {
-		this.cards = cards;
+	public TradeOffer(String uuid, CardType type, Trade trade) {
+		this.uuid = uuid;
+		this.type = type;
+		this.trade = trade;
 	}
 
-	public String getId() {
-		return id;
+	public String getUUID() {
+		return uuid;
 	}
 
-	public boolean isVisible() {
-		return visible;
+	public CardType getType() {
+		return type;
 	}
 
-	@Override
-	public String toString() {
-		return DAO.queryNative(String.class, "SELECT c.name FROM Card c WHERE c.anime_id = ?1 AND c.rarity = 'ULTIMATE'", id);
+	public Trade getTrade() {
+		return trade;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Anime anime = (Anime) o;
-		return Objects.equals(id, anime.id);
+		TradeOffer that = (TradeOffer) o;
+		return Objects.equals(uuid, that.uuid) && type == that.type;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(uuid, type);
 	}
 }
