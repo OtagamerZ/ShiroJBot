@@ -26,6 +26,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
+import java.nio.charset.Charset;
 import java.time.LocalDate;
 
 public class Main {
@@ -53,6 +54,7 @@ public class Main {
 				Architecture: %s
 				CPU: %s cores
 				Memory: %s GiB (Allocated: %s GiB)
+				Charset: %s
 				----------------------------------------------------------
 				END OF SUMMARY
 				----------------------------------------------------------
@@ -64,7 +66,8 @@ public class Main {
 						info.getArch(),
 						Runtime.getRuntime().availableProcessors(),
 						Math.round(info.getTotalMemorySize() / Math.pow(1024, 3)),
-						Math.round(Runtime.getRuntime().maxMemory() / Math.pow(1024, 3))
+						Math.round(Runtime.getRuntime().maxMemory() / Math.pow(1024, 3)),
+						Charset.defaultCharset()
 				)
 		);
 

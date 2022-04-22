@@ -18,6 +18,7 @@
 
 package com.kuuhaku.utils;
 
+import com.github.ygimenez.exception.InvalidStateException;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.InteractPage;
@@ -26,16 +27,26 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.listeners.GuildListener;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.Stash;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.intellij.lang.annotations.Language;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -47,7 +58,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -298,20 +310,22 @@ public abstract class Utils {
 		return pages;
 	}
 
-	public static void paginate(List<Page> pages, TextChannel channel, User... allowed) {
-		paginate(pages, 1, false, channel, allowed);
+	public static Message paginate(List<Page> pages, TextChannel channel, User... allowed) {
+		return paginate(pages, 1, false, channel, allowed);
 	}
 
-	public static void paginate(List<Page> pages, int skip, TextChannel channel, User... allowed) {
-		paginate(pages, skip, false, channel, allowed);
+	public static Message paginate(List<Page> pages, int skip, TextChannel channel, User... allowed) {
+		return paginate(pages, skip, false, channel, allowed);
 	}
 
-	public static void paginate(List<Page> pages, int skip, boolean fast, TextChannel channel, User... allowed) {
-		channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
-						Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
-				)
+	public static Message paginate(List<Page> pages, int skip, boolean fast, TextChannel channel, User... allowed) {
+		Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()));
+
+		Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
+				Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
 		);
+
+		return msg;
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
@@ -323,6 +337,59 @@ public abstract class Utils {
 						u -> Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
 				)
 		);
+	}
+
+	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
+		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
+						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+							w.getMessage().delete().queue(null, Utils::doNothing);
+							action.accept(w);
+						}), true, true, 1, TimeUnit.MINUTES,
+						u -> Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
+				)
+		);
+	}
+
+	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
+		CompletableFuture<Message> result = new CompletableFuture<>();
+
+		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (event.getAuthor().getId().equals(u.getId())) {
+					if (act.apply(event.getMessage())) {
+						result.complete(event.getMessage());
+						close();
+					}
+				}
+			}
+		});
+
+		return result;
+	}
+
+	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit) {
+		CompletableFuture<Message> result = new CompletableFuture<>();
+
+		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
+			final ScheduledFuture<?> timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+				result.complete(null);
+				close();
+			}, time, unit);
+
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (event.getAuthor().getId().equals(u.getId())) {
+					if (act.apply(event.getMessage())) {
+						result.complete(event.getMessage());
+						timeout.cancel(true);
+						close();
+					}
+				}
+			}
+		});
+
+		return result;
 	}
 
 	public static <T> T getRandomEntry(Collection<T> col) {
@@ -528,7 +595,7 @@ public abstract class Utils {
 	}
 
 	public static String replaceTags(Member mb, Guild guild, String str) {
-		Map<String, String> replacements = new HashMap<>(){{
+		Map<String, String> replacements = new HashMap<>() {{
 			if (mb != null) {
 				put("%user%", mb.getAsMention());
 				put("%user.id%", mb.getId());
@@ -585,5 +652,100 @@ public abstract class Utils {
 		} catch (NumberFormatException e) {
 			return String.valueOf(value);
 		}
+	}
+
+	public static CompletionStage<StashedCard> selectOption(I18N locale, TextChannel channel, Stash stash, Card card) {
+		List<StashedCard> matches = stash.getCards().stream()
+				.filter(sc -> sc.getCard().equals(card))
+				.sorted(
+						Comparator.comparing(StashedCard::getType)
+								.thenComparing(StashedCard::getQuality, Comparator.reverseOrder())
+								.thenComparing(sc -> sc.getCard().getId())
+				).toList();
+
+		if (matches.isEmpty()) return CompletableFuture.failedStage(new InvalidStateException());
+		if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(locale.get("str/choose_option"));
+
+		AtomicInteger i = new AtomicInteger();
+		List<Page> pages = generatePages(eb, matches, 10, sc -> {
+			XStringBuilder sb = new XStringBuilder(locale.get("type/" + sc.getType().name()));
+
+			if (sc.getType() == CardType.KAWAIPON) {
+				sb.append(" " + locale.get("kind/" + (sc.isFoil() ? "foil" : "normal")));
+
+				if (sc.getQuality() > 0) {
+					sb.append(" (" + locale.get("str/quality", sc.getQuality()) + ")");
+				}
+			}
+
+			return new MessageEmbed.Field(
+					"`" + i.getAndIncrement() + "` | " + sc.getCard(),
+					sb.toString(),
+					false
+			);
+		});
+
+		User u = stash.getAccount().getUser();
+		Message msg = paginate(pages, channel, u);
+
+		CompletableFuture<StashedCard> out = new CompletableFuture<>();
+		awaitMessage(u, channel,
+				m -> {
+					try {
+						int indx = Integer.parseInt(m.getContentRaw());
+						out.complete(matches.get(indx));
+						msg.delete().queue(null, Utils::doNothing);
+
+						return true;
+					} catch (NumberFormatException | IndexOutOfBoundsException e) {
+						return false;
+					}
+				}, 1, TimeUnit.MINUTES
+		);
+
+		return out;
+	}
+
+	public static String didYouMean(String word, String... options) {
+		String match = "";
+		int threshold = 999;
+		LevenshteinDistance checker = new LevenshteinDistance();
+
+		for (String w : options) {
+			if (word.equalsIgnoreCase(w)) {
+				return word;
+			} else {
+				int diff = checker.apply(word.toLowerCase(Locale.ROOT), w.toLowerCase(Locale.ROOT));
+				if (diff < threshold) {
+					match = w;
+					threshold = diff;
+				}
+			}
+		}
+
+		return match;
+	}
+
+	public static String didYouMean(String word, Collection<String> options) {
+		String match = "";
+		int threshold = 999;
+		LevenshteinDistance checker = new LevenshteinDistance();
+
+		for (String w : options) {
+			if (word.equalsIgnoreCase(w)) {
+				return word;
+			} else {
+				int diff = checker.apply(word.toLowerCase(Locale.ROOT), w.toLowerCase(Locale.ROOT));
+				if (diff < threshold) {
+					match = w;
+					threshold = diff;
+				}
+			}
+		}
+
+		return match;
 	}
 }

@@ -47,6 +47,10 @@
         <class>com.kuuhaku.model.persistent.user.ProfileSettings</class>
         <class>com.kuuhaku.model.persistent.user.Transaction</class>
         <class>com.kuuhaku.model.persistent.user.VoiceData</class>
+        <class>com.kuuhaku.model.persistent.user.Trade</class>
+        <class>com.kuuhaku.model.persistent.user.TradeOffer</class>
+        <class>com.kuuhaku.model.persistent.user.Stash</class>
+        <class>com.kuuhaku.model.persistent.user.StashedCard</class>
 
         <!-- SHOUKAN -->
         <class>com.kuuhaku.model.persistent.shoukan.Deck</class>

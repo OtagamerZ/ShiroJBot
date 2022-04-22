@@ -48,7 +48,7 @@ public class AllowCommand implements Executable {
 		}
 
 		if (settings.getDeniedChannels().stream().noneMatch(t -> t.getId().equals(channel.getId()))) {
-			event.channel().sendMessage(locale.get("error/already_allowed").formatted(
+			event.channel().sendMessage(locale.get("error/allowed").formatted(
 					channel == event.channel() ? "this channel" : channel.getAsMention()
 			)).queue();
 			return;

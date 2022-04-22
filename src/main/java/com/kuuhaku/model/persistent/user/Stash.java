@@ -16,62 +16,62 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shiro;
+package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.annotations.WhenNull;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "anime")
-public class Anime extends DAO {
+@Table(name = "stash")
+public class Stash extends DAO {
 	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
+	@Column(name = "uid", nullable = false)
+	private String uid;
 
-	@Column(name = "visible", nullable = false)
-	private boolean visible = true;
+	@OneToOne(mappedBy = "stash", orphanRemoval = true)
+	private Account account;
 
-	@OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "stash", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<Card> cards = new LinkedHashSet<>();
+	private Set<StashedCard> cards = new LinkedHashSet<>();
 
-	public Set<Card> getCards() {
+	public Stash() {
+	}
+
+	public Stash(Account account) {
+		this.uid = account.getUid();
+		this.account = account;
+	}
+
+	@WhenNull
+	public Stash(String uid) {
+		this.uid = uid;
+		this.account = DAO.find(Account.class, uid);
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public Set<StashedCard> getCards() {
 		return cards;
 	}
 
-	public void setCards(Set<Card> cards) {
-		this.cards = cards;
+	public int getMaxCapacity() {
+		return 250;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	@Override
-	public String toString() {
-		return DAO.queryNative(String.class, "SELECT c.name FROM Card c WHERE c.anime_id = ?1 AND c.rarity = 'ULTIMATE'", id);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Anime anime = (Anime) o;
-		return Objects.equals(id, anime.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	public int getCapacity() {
+		return getMaxCapacity() - cards.size();
 	}
 }

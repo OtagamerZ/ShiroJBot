@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 		name = "eval",
 		category = Category.DEV
 )
-@Signature({"<code:TEXT:R>"})
+@Signature({"<code:text:r>"})
 public class CompileCommand implements Executable {
 	private static final ExecutorService exec = Executors.newFixedThreadPool(2);
 
@@ -51,18 +51,18 @@ public class CompileCommand implements Executable {
 				try {
 					String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
-					Future<GroovyShell> fut = exec.submit(() -> {
+					Future<?> fut = exec.submit(() -> {
 						GroovyShell gs = new GroovyShell();
 						gs.setVariable("msg", event.message());
 
 						time.set(System.currentTimeMillis());
-						gs.evaluate(code);
+						Object out = gs.evaluate(code);
 						time.getAndUpdate(t -> System.currentTimeMillis() - t);
 
-						return gs;
+						return out;
 					});
 
-					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES).getVariable("out")), time.get());
+					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.get());
 				} catch (TimeoutException e) {
 					return new Pair<>(locale.get("error/timeout"), -1L);
 				} catch (Exception e) {
@@ -89,7 +89,7 @@ public class CompileCommand implements Executable {
 							```
 							(%s ms) Out -> %s
 							```
-							""".formatted(out.getFirst(), out.getFirst().replace("`", "'"))
+							""".formatted(out.getSecond(), out.getFirst().replace("`", "'"))
 					).queue();
 				} else {
 					m.editMessage("""

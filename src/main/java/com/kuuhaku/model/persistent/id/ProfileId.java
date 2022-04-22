@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.id;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,7 +29,10 @@ public class ProfileId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 381070679371267271L;
 
+	@Column(name = "uid")
 	private String uid;
+
+	@Column(name = "gid")
 	private String gid;
 
 	public ProfileId() {

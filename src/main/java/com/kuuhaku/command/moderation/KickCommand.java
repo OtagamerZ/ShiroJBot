@@ -42,11 +42,11 @@ import java.util.Objects;
 		name = "kick",
 		category = Category.MODERATION
 )
-@Requires({Permission.KICK_MEMBERS})
 @Signature({
 		"<reason:text:r> <users:user:r>",
 		"<reason:text:r> <ids:text:r>"
 })
+@Requires({Permission.KICK_MEMBERS})
 public class KickCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -72,7 +72,7 @@ public class KickCommand implements Executable {
 		}
 
 		Utils.confirm(locale.get("question/kick",
-						members.size() == 1 ? locale.get("str/that") : locale.get("str/those"),
+						members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
 						members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
 				), event.channel(), wrapper ->
 						RestAction.allOf(members.stream().map(m -> m.kick(args.getString("reason"))).toList())
