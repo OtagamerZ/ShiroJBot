@@ -66,11 +66,11 @@ public abstract class Spawn {
 			Map<Rarity, Set<Card>> cPool = Utils.getRandomEntry(animes).getCards().stream()
 					.collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
 
-			RandomList<Rarity> rPool = new RandomList<>();
+			RandomList<Rarity> rPool = new RandomList<>(3 - rarityBonus);
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
 
-				rPool.add(r, Math.pow(6 - r.getIndex(), rarityBonus));
+				rPool.add(r, 6 - r.getIndex());
 			}
 
 			card = new KawaiponCard(Utils.getRandomEntry(cPool.get(rPool.get())), Calc.chance(0.005 * rarityBonus));

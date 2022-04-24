@@ -1,21 +1,29 @@
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.utils.Calc;
-
 import javax.annotation.Nonnull;
 import java.util.*;
 
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
 	private final Random rng;
+	private final double fac;
 	private double total = 0;
 
 	public RandomList() {
-		this.rng = new Random();
+		this(new Random(), 1);
 	}
 
 	public RandomList(Random rng) {
+		this(rng, 1);
+	}
+
+	public RandomList(double fac) {
+		this(new Random(), 1);
+	}
+
+	public RandomList(Random rng, double fac) {
 		this.rng = rng;
+		this.fac = fac;
 	}
 
 	public void add(@Nonnull T item) {
@@ -32,7 +40,7 @@ public class RandomList<T> {
 	public T get() {
 		if (map.isEmpty()) return null;
 
-		return map.higherEntry(Calc.rng(total, rng)).getValue();
+		return map.higherEntry(Math.pow(rng.nextDouble(), fac) * total).getValue();
 	}
 
 	public void remove(@Nonnull T item) {
