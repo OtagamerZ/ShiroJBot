@@ -215,22 +215,6 @@ public abstract class Calc {
 		return Arrays.stream(values).average().orElse(0);
 	}
 
-	public static int hip(int cat1, int cat2) {
-		return (int) Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
-	}
-
-	public static long hip(long cat1, long cat2) {
-		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
-	}
-
-	public static float hip(float cat1, float cat2) {
-		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
-	}
-
-	public static double hip(double cat1, double cat2) {
-		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
-	}
-
 	public static long getFibonacci(int nth) {
 		if (nth <= 1) return nth;
 
