@@ -77,7 +77,7 @@ public class GuildListener extends ListenerAdapter {
 			int stars = (int) msg.getReactions().stream()
 					.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("\u2b50"))
 					.flatMap(r -> r.retrieveUsers().stream())
-					.filter(u -> !u.isBot() && !u.getId().equals(msg.getAuthor().getId()))
+					.filter(u -> !u.isBot() && !u.equals(msg.getAuthor()))
 					.count();
 
 			if (stars >= config.getSettings().getStarboardThreshold() && DAO.find(StarredMessage.class, msg.getId()) == null) {
@@ -259,7 +259,7 @@ public class GuildListener extends ListenerAdapter {
 			Permission[] missing = pc.getMissingPerms(data.channel());
 
 			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
-				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.getId().equals(data.channel().getId()))) {
+				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
 					data.channel().sendMessage(locale.get("error/denied_channel")).queue();
 					return;
 				} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {

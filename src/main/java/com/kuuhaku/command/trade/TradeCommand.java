@@ -58,7 +58,7 @@ public class TradeCommand implements Executable {
 		}
 
 		User other = event.message().getMentionedUsers().get(0);
-		if (other.getId().equals(event.user().getId())) {
+		if (other.equals(event.user())) {
 			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
 			return;
 		}
@@ -67,7 +67,7 @@ public class TradeCommand implements Executable {
 		Utils.confirm(
 				locale.get("question/trade_open", other.getAsMention(), event.user().getAsMention()), event.channel(),
 				wrapper -> {
-					if (!wrapper.getUser().getId().equals(other.getId())) return;
+					if (!wrapper.getUser().equals(other)) return;
 
 					trade.save();
 					event.channel().sendMessage(locale.get("success/trade_open", data.config().getPrefix())).queue();
