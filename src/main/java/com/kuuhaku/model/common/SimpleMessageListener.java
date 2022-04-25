@@ -50,7 +50,7 @@ public abstract class SimpleMessageListener extends ListenerAdapter implements C
 	}
 
 	public boolean checkChannel(TextChannel channel) {
-		return this.channel.getChannels().stream().anyMatch(tc -> tc.getId().equals(channel.getId()));
+		return this.channel.getChannels().stream().anyMatch(tc -> tc.equals(channel));
 	}
 
 	public boolean checkChannel(String channel) {

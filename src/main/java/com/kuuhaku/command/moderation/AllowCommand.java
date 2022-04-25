@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 		name = "allow",
 		category = Category.MODERATION
 )
-@Signature(allowEmpty = true, value = {"<channel:channel:r>"})
+@Signature({"<channel:channel>"})
 public class AllowCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -47,7 +47,7 @@ public class AllowCommand implements Executable {
 			channel = event.channel();
 		}
 
-		if (settings.getDeniedChannels().stream().noneMatch(t -> t.getId().equals(channel.getId()))) {
+		if (settings.getDeniedChannels().stream().noneMatch(t -> t.equals(channel))) {
 			event.channel().sendMessage(locale.get("error/allowed").formatted(
 					channel == event.channel() ? "this channel" : channel.getAsMention()
 			)).queue();

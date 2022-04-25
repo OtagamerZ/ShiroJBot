@@ -88,7 +88,7 @@ public abstract class ImageFilters {
 				new BufferedImage(out.getWidth(), out.getHeight(), BufferedImage.TYPE_INT_ARGB)
 		};
 
-		int diag = Calc.hip(offset, offset);
+		int diag = (int) Math.hypot(offset, offset);
 		IO.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];

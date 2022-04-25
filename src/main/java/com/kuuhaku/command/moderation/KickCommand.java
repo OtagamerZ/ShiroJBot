@@ -62,7 +62,7 @@ public class KickCommand implements Executable {
 		}
 
 		for (Member mb : members) {
-			if (mb.getId().equals(event.user().getId())) {
+			if (mb.equals(event.member())) {
 				event.channel().sendMessage(locale.get("error/cant_kick_yourself")).queue();
 				return;
 			} else if (!event.member().canInteract(mb)) {

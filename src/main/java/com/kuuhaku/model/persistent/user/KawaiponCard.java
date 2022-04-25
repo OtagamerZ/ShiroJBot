@@ -65,6 +65,12 @@ public class KawaiponCard extends DAO {
 		this.foil = foil;
 	}
 
+	public KawaiponCard(Card card, boolean foil, double quality) {
+		this.card = card;
+		this.foil = foil;
+		this.quality = quality;
+	}
+
 	public KawaiponCard(Kawaipon kawaipon, Card card, boolean foil) {
 		this.kawaipon = kawaipon;
 		this.uuid = UUID.randomUUID().toString();
@@ -115,13 +121,18 @@ public class KawaiponCard extends DAO {
 		return kawaipon;
 	}
 
+	public void setKawaipon(Kawaipon kawaipon) {
+		this.kawaipon = kawaipon;
+	}
+
 	public void store() {
 		Stash stash = DAO.find(Stash.class, kawaipon.getUid());
 
-		stash.getCards().add(new StashedCard(stash, card, CardType.KAWAIPON, quality, foil));
+		stash.getCards().add(new StashedCard(stash, uuid, card, CardType.KAWAIPON, quality, foil));
 		stash.save();
 
-		delete();
+		kawaipon.getCards().remove(this);
+		kawaipon.save();
 	}
 
 	public void collect(Kawaipon kawaipon) {
