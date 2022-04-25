@@ -2,6 +2,7 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.utils.Utils;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
@@ -87,10 +88,14 @@ public abstract class DAO {
 
 			T t;
 			try {
-				t = klass.cast(q.getSingleResult());
-				if (t instanceof Blacklistable lock) {
-					if (lock.isBlacklisted()) {
-						t = null;
+				if (Number.class.isAssignableFrom(klass)) {
+					t = klass.cast(Utils.fromNumber(klass, (Number) q.getSingleResult()));
+				} else {
+					t = klass.cast(q.getSingleResult());
+					if (t instanceof Blacklistable lock) {
+						if (lock.isBlacklisted()) {
+							t = null;
+						}
 					}
 				}
 			} catch (NoResultException e) {
@@ -180,6 +185,11 @@ public abstract class DAO {
 				return ((Stream<?>) q.getResultStream())
 						.map(klass::cast)
 						.filter(o -> !((Blacklistable) o).isBlacklisted())
+						.toList();
+			} else if (Number.class.isAssignableFrom(klass)) {
+				return ((Stream<?>) q.getResultStream())
+						.map(o -> Utils.fromNumber(klass, (Number) o))
+						.map(klass::cast)
 						.toList();
 			} else {
 				return ((Stream<?>) q.getResultStream())

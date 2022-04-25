@@ -44,7 +44,7 @@ import java.util.List;
 		name = "snipe",
 		category = Category.MODERATION
 )
-@Signature(allowEmpty = true, value = {"<channel:channel>"})
+@Signature({"<channel:channel>"})
 @Requires({Permission.MESSAGE_HISTORY})
 public class SnipeCommand implements Executable {
 	@Override
@@ -62,7 +62,7 @@ public class SnipeCommand implements Executable {
 				.map(Message::getId)
 				.toList();
 		List<Message> messages = GuildListener.getMessages(event.guild()).stream()
-				.filter(m -> m.getChannel().getId().equals(channel.getId()))
+				.filter(m -> m.getChannel().equals(channel))
 				.filter(m -> !hist.contains(m.getId()))
 				.toList();
 

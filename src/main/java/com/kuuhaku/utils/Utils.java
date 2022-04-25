@@ -37,9 +37,14 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Stash;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import de.androidpit.colorthief.ColorThief;
+import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -322,7 +327,7 @@ public abstract class Utils {
 		Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()));
 
 		Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
-				Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
+				Arrays.asList(allowed).contains(u)
 		);
 
 		return msg;
@@ -334,7 +339,7 @@ public abstract class Utils {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
+						u -> Arrays.asList(allowed).contains(u)
 				)
 		);
 	}
@@ -345,7 +350,7 @@ public abstract class Utils {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Stream.of(allowed).anyMatch(a -> a.getId().equals(u.getId()))
+						u -> Arrays.asList(allowed).contains(u)
 				)
 		);
 	}
@@ -356,7 +361,7 @@ public abstract class Utils {
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getAuthor().getId().equals(u.getId())) {
+				if (event.getAuthor().equals(u)) {
 					if (act.apply(event.getMessage())) {
 						result.complete(event.getMessage());
 						close();
@@ -379,7 +384,7 @@ public abstract class Utils {
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getAuthor().getId().equals(u.getId())) {
+				if (event.getAuthor().equals(u)) {
 					if (act.apply(event.getMessage())) {
 						result.complete(event.getMessage());
 						timeout.cancel(true);
@@ -729,14 +734,14 @@ public abstract class Utils {
 		return match;
 	}
 
-	public static String didYouMean(String word, Collection<String> options) {
+	public static Pair<String, Double> didYouMean(String word, Collection<String> options) {
 		String match = "";
-		int threshold = 999;
+		int threshold = Integer.MAX_VALUE;
 		LevenshteinDistance checker = new LevenshteinDistance();
 
 		for (String w : options) {
 			if (word.equalsIgnoreCase(w)) {
-				return word;
+				return new Pair<>(w, 100d);
 			} else {
 				int diff = checker.apply(word.toLowerCase(Locale.ROOT), w.toLowerCase(Locale.ROOT));
 				if (diff < threshold) {
@@ -746,6 +751,47 @@ public abstract class Utils {
 			}
 		}
 
-		return match;
+		int size = Math.max(word.length(), match.length());
+		if (size == 0) return new Pair<>(match, 0d);
+		else return new Pair<>(match, (size - threshold) * 100d / size);
+	}
+
+	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean store) {
+		String[] longOp = {"name", "rarity", "anime", "foil", "kawaipon", "evogear", "field", "min", "max", "mine"};
+		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "gt", "lt", "m"};
+
+		Options opt = new Options();
+		for (int i = 0; i < (store ? longOp.length : longOp.length - 3); i++) {
+			String lOp = longOp[i];
+			String sOp = shortOp[i];
+			opt.addOption(sOp, lOp, "nragtlt".contains(sOp), locale.get("search/" + lOp));
+		}
+
+		DefaultParser parser = new DefaultParser(false);
+		try {
+			return new Pair<>(parser.parse(opt, args, true), opt);
+		} catch (ParseException e) {
+			return new Pair<>(new CommandLine.Builder().build(), opt);
+		}
+	}
+
+	public static <T> T fromNumber(Class<T> klass, Number n) {
+		if (!Number.class.isAssignableFrom(klass)) throw new ClassCastException();
+
+		if (klass == Short.class) {
+			return klass.cast(n.shortValue());
+		} else if (klass == Integer.class) {
+			return klass.cast(n.intValue());
+		} else if (klass == Long.class) {
+			return klass.cast(n.longValue());
+		} else if (klass == Float.class) {
+			return klass.cast(n.floatValue());
+		} else if (klass == Double.class) {
+			return klass.cast(n.doubleValue());
+		} else if (klass == Byte.class) {
+			return klass.cast(n.byteValue());
+		}
+
+		throw new ClassCastException();
 	}
 }

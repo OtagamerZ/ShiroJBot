@@ -23,22 +23,30 @@ import com.kuuhaku.utils.IO;
 import java.awt.*;
 
 public enum Rarity {
-	COMMON(1, 0xFFFFFF),
-	UNCOMMON(2, 0x03BB85),
-	RARE(3, 0x70D1F4),
-	ULTRA_RARE(4, 0x9966CC),
-	LEGENDARY(5, 0xDC9018),
-	ULTIMATE(-1, 0xD400AA),
-	EVOGEAR(-1, 0x0),
-	FIELD(-1, 0x0),
-	FUSION(-1, 0x0);
+	COMMON(1, 0xFFFFFF, "<:common:726171819664736268>"),
+	UNCOMMON(2, 0x03BB85, "<:uncommon:726171819400232962>"),
+	RARE(3, 0x70D1F4, "<:rare:726171819853480007>"),
+	ULTRA_RARE(4, 0x9966CC, "<:ultra_rare:726171819786240091>"),
+	LEGENDARY(5, 0xDC9018, "<:legendary:726171819945623682>"),
+	ULTIMATE(-1, 0xD400AA, ""),
+	EVOGEAR(),
+	FIELD(),
+	FUSION();
 
 	private final int index;
 	private final int color;
+	private final String emote;
 
-	Rarity(int index, int color) {
+	Rarity(int index, int color, String emote) {
 		this.index = index;
 		this.color = color;
+		this.emote = emote;
+	}
+
+	Rarity() {
+		this.index = -1;
+		this.color = 0x0;
+		this.emote = "";
 	}
 
 	public int getIndex() {
@@ -59,5 +67,9 @@ public enum Rarity {
 		}
 
 		return new Color(color);
+	}
+
+	public String getEmote() {
+		return emote;
 	}
 }

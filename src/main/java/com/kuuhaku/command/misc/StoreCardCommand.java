@@ -24,13 +24,19 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.Stash;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+
+import java.util.List;
+import java.util.Locale;
 
 @Command(
 		name = "store",
@@ -40,24 +46,33 @@ import net.dv8tion.jda.api.JDA;
 public class StoreCardCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-        Stash stash = DAO.find(Stash.class, event.user().getId());
-        if (stash.getCapacity() <= 0) {
-            event.channel().sendMessage(locale.get("error/stash_full")).queue();
-            return;
-        }
+		Stash stash = DAO.find(Stash.class, event.user().getId());
+		if (stash.getCapacity() <= 0) {
+			event.channel().sendMessage(locale.get("error/stash_full")).queue();
+			return;
+		}
+
+		Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
+		if (card == null) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM Card");
+
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(Locale.ROOT), names);
+			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+			return;
+		}
 
 		Kawaipon kp = stash.getAccount().getKawaipon();
-		KawaiponCard card = kp.getCards().stream()
-				.filter(kc -> kc.getCard().getId().equalsIgnoreCase(args.getString("card")))
-				.filter(kc -> kc.isFoil() == args.getString("kind", "n").equalsIgnoreCase("f"))
+		KawaiponCard kc = kp.getCards().stream()
+				.filter(c -> c.getCard().equals(card))
+				.filter(c -> c.isFoil() == args.getString("kind", "n").equalsIgnoreCase("f"))
 				.findFirst().orElse(null);
 
-		if (card == null) {
+		if (kc == null) {
 			event.channel().sendMessage(locale.get("error/not_owned")).queue();
 			return;
 		}
 
-		card.store();
+		kc.store();
 		event.channel().sendMessage(locale.get("success/card_stored")).queue();
 	}
 }
