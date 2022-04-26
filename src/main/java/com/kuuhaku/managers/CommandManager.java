@@ -43,8 +43,13 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (!names.add(params.name())) {
-				Constants.LOGGER.warn("Detected commands with the same name: " + params.name());
+			String full = params.name();
+			if (!params.subname().isBlank()) {
+				full += "." + params.subname();
+			}
+
+			if (!names.add(full)) {
+				Constants.LOGGER.warn("Detected commands with the same name: " + full);
 			}
 
 			for (String alias : params.aliases()) {
@@ -82,10 +87,15 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (name.equalsIgnoreCase(params.name()) || Utils.equalsAny(name, params.aliases())) {
+			String full = params.name();
+			if (!params.subname().isBlank()) {
+				full += "." + params.subname();
+			}
+
+			if (name.equalsIgnoreCase(full) || Utils.equalsAny(name, params.aliases())) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
-						params.name(),
+						full,
 						params.aliases(),
 						"cmd/" + cmd.getSimpleName()
 								.replaceFirst("(Command|Reaction)$", "")
@@ -102,9 +112,14 @@ public class CommandManager {
 	}
 
 	private void extractCommand(Set<PreparedCommand> commands, Class<?> cmd, Command params) {
+		String full = params.name();
+		if (!params.subname().isBlank()) {
+			full += "." + params.subname();
+		}
+
 		Requires req = cmd.getDeclaredAnnotation(Requires.class);
 		commands.add(new PreparedCommand(
-				params.name(),
+				full,
 				params.aliases(),
 				"cmd/" + cmd.getSimpleName()
 						.replaceFirst("(Command|Reaction)$", "")

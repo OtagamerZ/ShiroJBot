@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.CardType;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -30,25 +28,27 @@ import java.util.Objects;
 @Table(name = "trade_offer")
 public class TradeOffer extends DAO {
 	@Id
-	@Column(name = "uuid", nullable = false, length = 36)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private int id;
+
+	@Column(name = "uuid", nullable = false, unique = true, length = 36)
 	private String uuid;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private CardType type;
 
-	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "trade_id")
-	@Fetch(FetchMode.JOIN)
-	private Trade trade;
-
 	public TradeOffer() {
 	}
 
-	public TradeOffer(String uuid, CardType type, Trade trade) {
+	public TradeOffer(String uuid, CardType type) {
 		this.uuid = uuid;
 		this.type = type;
-		this.trade = trade;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getUUID() {
@@ -57,10 +57,6 @@ public class TradeOffer extends DAO {
 
 	public CardType getType() {
 		return type;
-	}
-
-	public Trade getTrade() {
-		return trade;
 	}
 
 	@Override

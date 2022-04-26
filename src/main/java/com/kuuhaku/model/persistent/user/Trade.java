@@ -47,7 +47,8 @@ public class Trade extends DAO {
 	@Column(name = "left_value", nullable = false)
 	private int leftValue;
 
-	@OneToMany(mappedBy = "trade", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "left_id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private List<TradeOffer> leftOffers = new ArrayList<>();
 
@@ -59,7 +60,8 @@ public class Trade extends DAO {
 	@Column(name = "right_value", nullable = false)
 	private int rightValue;
 
-	@OneToMany(mappedBy = "trade", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "right_id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private List<TradeOffer> rightOffers = new ArrayList<>();
 
@@ -132,8 +134,22 @@ public class Trade extends DAO {
 
 	public void accept() {
 		left.addCR(rightValue, "Trade Nº" + id + " commit");
+		DAO.applyNative("""
+				UPDATE stashed_card sc
+				SET stash_uid = of.left_uid
+				  , trade_id = NULL
+				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.right_id = t.id) of
+				WHERE of.id = ?1
+				""", id);
 
 		right.addCR(leftValue, "Trade Nº" + id + " commit");
+		DAO.applyNative("""
+				UPDATE stashed_card sc
+				SET stash_uid = of.right_uid
+				  , trade_id = NULL
+				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.left_id = t.id) of
+				WHERE of.id = ?1
+				""", id);
 
 		closed = true;
 		save();
@@ -141,23 +157,32 @@ public class Trade extends DAO {
 
 	public void cancel() {
 		left.addCR(leftValue, "Trade Nº" + id + " rollback");
+		DAO.applyNative("""
+				UPDATE stashed_card sc
+				SET trade_id = NULL
+				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.left_id = t.id) of
+				WHERE of.id = ?1
+				""", id);
 
 		right.addCR(rightValue, "Trade Nº" + id + " rollback");
+		DAO.applyNative("""
+				UPDATE stashed_card sc
+				SET trade_id = NULL
+				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.right_id = t.id) of
+				WHERE of.id = ?1
+				""", id);
 
 		closed = true;
 		save();
 	}
 
 	public String toString(I18N locale, boolean left) {
-		Account account;
 		int value;
 		List<TradeOffer> offers;
 		if (left) {
-			account = this.left;
 			value = this.leftValue;
 			offers = this.leftOffers;
 		} else {
-			account = this.right;
 			value = this.rightValue;
 			offers = this.rightOffers;
 		}
@@ -173,7 +198,7 @@ public class Trade extends DAO {
 				sb.appendNewLine("\n[" + locale.get("type/" + type.name()) + "]");
 			}
 
-			sb.appendIndentNewLine(DAO.queryUnmapped(type.getQuery(), offer.getUUID()), 1);
+			sb.appendNewLine("- " + DAO.query(type.getKlass(), type.getQuery(), offer.getUUID()));
 		}
 
 		sb.appendNewLine("```");
