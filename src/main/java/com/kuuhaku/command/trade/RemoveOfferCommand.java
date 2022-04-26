@@ -32,7 +32,8 @@ import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "remove",
+		name = "trade",
+		subname = "remove",
 		category = Category.MISC
 )
 @Signature({

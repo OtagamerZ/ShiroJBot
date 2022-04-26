@@ -29,8 +29,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Command {
 	String name();
-
+	String subname() default "";
 	String[] aliases() default {};
-
 	Category category();
 }

@@ -30,7 +30,8 @@ import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "cancel",
+		name = "trade",
+		subname = "cancel",
 		category = Category.MISC
 )
 public class CancelOfferCommand implements Executable {

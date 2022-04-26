@@ -30,12 +30,12 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.listeners.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Stash;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.Trade;
 import de.androidpit.colorthief.ColorThief;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -666,6 +666,7 @@ public abstract class Utils {
 						Comparator.comparing(StashedCard::getType)
 								.thenComparing(StashedCard::getQuality, Comparator.reverseOrder())
 								.thenComparing(sc -> sc.getCard().getId())
+								.thenComparing(StashedCard::getUUID)
 				).toList();
 
 		if (matches.isEmpty()) return CompletableFuture.failedStage(new InvalidStateException());
@@ -676,19 +677,20 @@ public abstract class Utils {
 
 		AtomicInteger i = new AtomicInteger();
 		List<Page> pages = generatePages(eb, matches, 10, sc -> {
-			XStringBuilder sb = new XStringBuilder(locale.get("type/" + sc.getType().name()));
-
-			if (sc.getType() == CardType.KAWAIPON) {
-				sb.append(" " + locale.get("kind/" + (sc.isFoil() ? "foil" : "normal")));
-
-				if (sc.getQuality() > 0) {
-					sb.append(" (" + locale.get("str/quality", sc.getQuality()) + ")");
-				}
-			}
+			Trade t = sc.getTrade();
 
 			return new MessageEmbed.Field(
-					"`" + i.getAndIncrement() + "` | " + sc.getCard(),
-					sb.toString(),
+					"`%s` | %s%s".formatted(
+							i.getAndIncrement(),
+							sc,
+							t == null ? "" : (" (" + locale.get("str/trade_n", t.getId()) + ")")
+					),
+					"%s%s (%s | %s)".formatted(
+							sc.getCard().getRarity().getEmote(),
+							locale.get("type/" + sc.getType()),
+							locale.get("rarity/" + sc.getCard().getRarity()),
+							sc.getCard().getAnime()
+					),
 					false
 			);
 		});
@@ -705,7 +707,7 @@ public abstract class Utils {
 						msg.delete().queue(null, Utils::doNothing);
 
 						return true;
-					} catch (NumberFormatException | IndexOutOfBoundsException e) {
+					} catch (RuntimeException e) {
 						return false;
 					}
 				}, 1, TimeUnit.MINUTES

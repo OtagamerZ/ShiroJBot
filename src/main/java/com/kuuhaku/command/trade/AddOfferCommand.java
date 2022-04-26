@@ -24,15 +24,21 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Trade;
+import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.List;
+import java.util.Locale;
+
 @Command(
-		name = "offer",
+		name = "trade",
+		subname = "add",
 		category = Category.MISC
 )
 @Signature({
@@ -74,7 +80,40 @@ public class AddOfferCommand implements Executable {
 
 			event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), offer + " ₵R")).queue();
 		} else {
-			//TODO
+			Stash stash = DAO.find(Stash.class, event.user().getId());
+			if (stash.getCards().isEmpty()) {
+				event.channel().sendMessage(locale.get("error/empty_stash")).queue();
+				return;
+			}
+
+			Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
+			if (card == null) {
+				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
+
+				Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(Locale.ROOT), names);
+				event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+				return;
+			}
+
+			Utils.selectOption(locale, event.channel(), stash, card)
+					.thenAccept(sc -> {
+						if (sc.getTrade() != null) {
+							event.channel().sendMessage(locale.get("error/card_in_trade")).queue();
+							return;
+						}
+
+						trade.getSelfOffers(event.user().getId()).add(new TradeOffer(sc.getUUID(), sc.getType()));
+						trade.save();
+
+						sc.setTrade(trade);
+						sc.save();
+
+						event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), sc)).queue();
+					})
+					.exceptionally(t -> {
+						event.channel().sendMessage(locale.get("error/not_owned")).queue();
+						return null;
+					});
 		}
 	}
 }
