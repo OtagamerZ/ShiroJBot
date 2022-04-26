@@ -32,7 +32,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 
 @Command(
-		name = "accept",
+		name = "trade",
+		subname = "accept",
 		category = Category.MISC
 )
 public class AcceptOfferCommand implements Executable {

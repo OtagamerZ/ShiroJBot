@@ -55,6 +55,11 @@ public class StashedCard extends DAO {
 	@Fetch(FetchMode.JOIN)
 	private Stash stash;
 
+	@ManyToOne
+	@PrimaryKeyJoinColumn(name = "trade_id")
+	@Fetch(FetchMode.JOIN)
+	private Trade trade;
+
 	public StashedCard() {
 
 	}
@@ -84,6 +89,10 @@ public class StashedCard extends DAO {
 		return card;
 	}
 
+	public String getName() {
+		return (foil ? "« %s »" : "%s").formatted(card.getName());
+	}
+
 	public CardType getType() {
 		return type;
 	}
@@ -98,6 +107,19 @@ public class StashedCard extends DAO {
 
 	public Stash getStash() {
 		return stash;
+	}
+
+	public Trade getTrade() {
+		return trade;
+	}
+
+	public void setTrade(Trade trade) {
+		this.trade = trade;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 	@Override

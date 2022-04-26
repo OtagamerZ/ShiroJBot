@@ -59,7 +59,7 @@ public class Anime extends DAO {
 
 	@Override
 	public String toString() {
-		return DAO.queryNative(String.class, "SELECT c.name FROM Card c WHERE c.anime_id = ?1 AND c.rarity = 'ULTIMATE'", id);
+		return DAO.queryNative(String.class, "SELECT c.name FROM card c WHERE c.anime_id = ?1 AND c.rarity = 'ULTIMATE'", id);
 	}
 
 	@Override

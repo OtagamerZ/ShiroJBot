@@ -28,10 +28,7 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
-import com.kuuhaku.model.persistent.user.Stash;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Utils;
@@ -67,7 +64,7 @@ public class RetrieveCardCommand implements Executable {
 
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
 		if (card == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM Card");
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
 
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(Locale.ROOT), names);
 			if (sug.getSecond() > 75) {
@@ -127,14 +124,18 @@ public class RetrieveCardCommand implements Executable {
 			List<Page> pages = Utils.generatePages(eb, results, 10, c -> {
 				switch (c.getType()) {
 					case KAWAIPON -> {
-						KawaiponCard kc = new KawaiponCard(c.getCard(), c.isFoil(), c.getQuality());
+						Trade t = c.getTrade();
+
 						return new MessageEmbed.Field(
-								kc.getName(),
+								"%s%s".formatted(
+										c,
+										t == null ? "" : (" (" + locale.get("str/trade_n", t.getId()) + ")")
+								),
 								"%s%s (%s | %s)".formatted(
 										c.getCard().getRarity().getEmote(),
 										locale.get("type/" + c.getType()),
-										locale.get("rarity/" + kc.getCard().getRarity()),
-										kc.getCard().getAnime()
+										locale.get("rarity/" + c.getCard().getRarity()),
+										c.getCard().getAnime()
 								),
 								false
 						);
@@ -161,8 +162,12 @@ public class RetrieveCardCommand implements Executable {
 
 		Utils.selectOption(locale, event.channel(), stash, card)
 				.thenAccept(sc -> {
-					Kawaipon kp = stash.getAccount().getKawaipon();
+					if (sc.getTrade() != null) {
+						event.channel().sendMessage(locale.get("error/card_in_trade")).queue();
+						return;
+					}
 
+					Kawaipon kp = stash.getAccount().getKawaipon();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
 							KawaiponCard kc = kp.getCards().stream()
@@ -189,7 +194,7 @@ public class RetrieveCardCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
 				})
 				.exceptionally(t -> {
-					event.channel().sendMessage("error/not_owned").queue();
+					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
 	}
