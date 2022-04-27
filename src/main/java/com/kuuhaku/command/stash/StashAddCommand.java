@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.misc;
+package com.kuuhaku.command.stash;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -39,11 +39,12 @@ import java.util.List;
 import java.util.Locale;
 
 @Command(
-		name = "store",
+		name = "stash",
+		subname = "add",
 		category = Category.MISC
 )
 @Signature({"<card:word:r> <kind:word>[n,f]"})
-public class StoreCardCommand implements Executable {
+public class StashAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Stash stash = DAO.find(Stash.class, event.user().getId());

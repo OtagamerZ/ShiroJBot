@@ -6,12 +6,15 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.FailedSignature;
 import com.kuuhaku.utils.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public abstract class SignatureUtils {
+public abstract class SignatureParser {
 	@Language("RegExp") //TODO Nome deve ser pego do I18N
 	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$";
 
@@ -64,6 +67,7 @@ public abstract class SignatureUtils {
 
 						String s = str.split("\s+")[0].trim();
 						str = str.replaceFirst(Pattern.quote(s), "").trim();
+						s = StringUtils.stripAccents(s);
 
 						if (type.validate(s) && (opts.isEmpty() || opts.contains(s.toLowerCase(Locale.ROOT)))) {
 							switch (type) {
@@ -75,8 +79,12 @@ public abstract class SignatureUtils {
 							supplied.add(s);
 						} else if (required) {
 							fail = true;
-							supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
-							failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
+							if (opts.isEmpty()) {
+								supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+							} else {
+								supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
+								failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
+							}
 						}
 					}
 				} catch (IllegalArgumentException e) {
