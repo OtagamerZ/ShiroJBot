@@ -21,38 +21,29 @@ package com.kuuhaku.command.trade;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
 @Command(
 		name = "trade",
-		subname = "see",
+		subname = "cancel",
 		category = Category.MISC
 )
-@Requires({Permission.MESSAGE_EMBED_LINKS})
-public class SeeOffersCommand implements Executable {
+public class TradeCancelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-        Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
-        if (trade == null) {
-            event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
-            return;
-        }
+		Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
+		if (trade == null) {
+			event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
+			return;
+		}
 
-        EmbedBuilder eb = new ColorlessEmbedBuilder()
-                .setAuthor(locale.get("str/trade_title", trade.getLeft().getName(), trade.getRight().getName()))
-                .addField(trade.getLeft().getName(), trade.toString(locale, true), true)
-                .addField(trade.getRight().getName(), trade.toString(locale, false), true);
-
-        event.channel().sendMessageEmbeds(eb.build()).queue();
+		trade.cancel();
+		event.channel().sendMessage(locale.get("success/trade_cancel")).queue();
 	}
 }
