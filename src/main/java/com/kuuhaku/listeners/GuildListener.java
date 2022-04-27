@@ -209,6 +209,16 @@ public class GuildListener extends ListenerAdapter {
 			account.save();
 		}
 
+		if (toHandle.containsKey(data.guild().getId())) {
+			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
+			for (SimpleMessageListener evt : evts) {
+				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
+					evt.onGuildMessageReceived(event);
+				}
+			}
+			evts.removeIf(SimpleMessageListener::isClosed);
+		}
+
 		EventData ed = new EventData(config, profile);
 		if (content.toLowerCase(Locale.ROOT).startsWith(config.getPrefix())) {
 			processCommand(data, ed, content);
@@ -219,16 +229,6 @@ public class GuildListener extends ListenerAdapter {
 					data.user().getAsMention(),
 					config.getPrefix()
 			)).queue();
-		}
-
-		if (toHandle.containsKey(data.guild().getId())) {
-			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
-			for (SimpleMessageListener evt : evts) {
-				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
-					evt.onGuildMessageReceived(event);
-				}
-			}
-			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
 		KawaiponCard kc = Spawn.getKawaipon(event.getGuild());
@@ -261,8 +261,8 @@ public class GuildListener extends ListenerAdapter {
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
 		I18N locale = event.config().getLocale();
-		String[] args = content.toLowerCase(Locale.ROOT).split("\s+");
-		String name = args[0].replaceFirst(event.config().getPrefix(), "");
+		String[] args = content.toLowerCase(Locale.ROOT).split("\\s+");
+		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
 		PreparedCommand pc = Main.getCommandManager().getCommand(name);
 		if (pc != null) {
@@ -303,7 +303,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			try {
-				JSONObject params = SignatureUtils.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+				JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
 				pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 

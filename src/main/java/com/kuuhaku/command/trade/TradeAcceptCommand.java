@@ -26,15 +26,17 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.User;
 
 @Command(
 		name = "trade",
-		subname = "cancel",
+		subname = "accept",
 		category = Category.MISC
 )
-public class CancelOfferCommand implements Executable {
+public class TradeAcceptCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
@@ -43,7 +45,19 @@ public class CancelOfferCommand implements Executable {
 			return;
 		}
 
-		trade.cancel();
-		event.channel().sendMessage(locale.get("success/trade_cancel")).queue();
+		User other;
+		if (trade.getLeft().getUid().equals(event.user().getId())) {
+			other = trade.getRight().getUser();
+		} else {
+			other = trade.getLeft().getUser();
+		}
+
+		Utils.confirm(
+				locale.get("question/trade_close", other.getAsMention(), event.user().getAsMention()), event.channel(),
+				wrapper -> {
+					trade.accept();
+					event.channel().sendMessage(locale.get("success/trade_accept")).queue();
+				}, trade.getLeft().getUser(), trade.getRight().getUser()
+		);
 	}
 }

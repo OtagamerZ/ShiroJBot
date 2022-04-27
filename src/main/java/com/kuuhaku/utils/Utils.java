@@ -361,11 +361,9 @@ public abstract class Utils {
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getAuthor().equals(u)) {
-					if (act.apply(event.getMessage())) {
-						result.complete(event.getMessage());
-						close();
-					}
+				if (event.getAuthor().equals(u) && act.apply(event.getMessage())) {
+					result.complete(event.getMessage());
+					close();
 				}
 			}
 		});
@@ -384,12 +382,10 @@ public abstract class Utils {
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getAuthor().equals(u)) {
-					if (act.apply(event.getMessage())) {
-						result.complete(event.getMessage());
-						timeout.cancel(true);
-						close();
-					}
+				if (event.getAuthor().equals(u) && act.apply(event.getMessage())) {
+					result.complete(event.getMessage());
+					timeout.cancel(true);
+					close();
 				}
 			}
 		});
@@ -685,11 +681,12 @@ public abstract class Utils {
 							sc,
 							t == null ? "" : (" (" + locale.get("str/trade_n", t.getId()) + ")")
 					),
-					"%s%s (%s | %s)".formatted(
+					"%s%s (%s | %s)%s".formatted(
 							sc.getCard().getRarity().getEmote(),
 							locale.get("type/" + sc.getType()),
 							locale.get("rarity/" + sc.getCard().getRarity()),
-							sc.getCard().getAnime()
+							sc.getCard().getAnime(),
+							sc.getQuality() > 0 ? ("\n" + roundToString(sc.getQuality(), 1) + "%") : ""
 					),
 					false
 			);
@@ -708,7 +705,8 @@ public abstract class Utils {
 
 						return true;
 					} catch (RuntimeException e) {
-						return false;
+						out.complete(null);
+						return true;
 					}
 				}, 1, TimeUnit.MINUTES
 		);
