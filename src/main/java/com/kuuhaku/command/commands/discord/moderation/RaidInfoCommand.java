@@ -31,21 +31,23 @@ import com.kuuhaku.model.persistent.RaidInfo;
 import com.kuuhaku.model.persistent.RaidMember;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.codec.binary.Hex;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "raids",
 		aliases = {"raidinfo"},
-		usage = "req_id-opt",
+		usage = "req_id-opt-dump",
 		category = Category.MODERATION
 )
 public class RaidInfoCommand implements Executable {
@@ -57,16 +59,6 @@ public class RaidInfoCommand implements Executable {
 			if (chunks.isEmpty()) {
 				channel.sendMessage("❌ | Este servidor não sofreu nenhuma raid ainda.").queue();
 				return;
-			}
-
-			Set<String> bans;
-			if (guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)) {
-				bans = guild.retrieveBanList().complete().stream()
-						.map(Guild.Ban::getUser)
-						.map(User::getId)
-						.collect(Collectors.toSet());
-			} else {
-				bans = new HashSet<>();
 			}
 
 			List<Page> pages = new ArrayList<>();
@@ -82,14 +74,10 @@ public class RaidInfoCommand implements Executable {
 									Ocorrido: %s
 									Duração: %s
 									Usuários detectados: %s
-									Usuários perdoados: %s
 									""".formatted(
 									Helper.TIMESTAMP.formatted(r.getOccurrence().toEpochSecond()),
 									Helper.toStringDuration(r.getDuration()),
-									r.getMembers().size(),
-									r.getMembers().stream()
-											.filter(u -> !bans.contains(u.getUid()))
-											.count()
+									r.getMembers().size()
 							),
 							false
 					);
@@ -112,43 +100,72 @@ public class RaidInfoCommand implements Executable {
 				return;
 			}
 
-			List<List<RaidMember>> chunks = Helper.chunkify(r.getMembers(), 10);
+			if (args.length < 2) {
+				List<List<RaidMember>> chunks = Helper.chunkify(r.getMembers(), 10);
 
-			Set<String> bans = new HashSet<>();
-			if (guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)) {
-				bans = guild.retrieveBanList().complete().stream()
-						.map(Guild.Ban::getUser)
-						.map(User::getId)
-						.collect(Collectors.toSet());
-			}
+				List<Page> pages = new ArrayList<>();
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle(":octagonal_sign: | Raid ocorrida em " + Helper.FULL_DATE_FORMAT.format(r.getOccurrence()));
+				for (List<RaidMember> chunk : chunks) {
+					eb.clearFields();
 
-			List<Page> pages = new ArrayList<>();
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(":octagonal_sign: | Raid ocorrida em " + Helper.FULL_DATE_FORMAT.format(r.getOccurrence()));
-			for (List<RaidMember> chunk : chunks) {
-				eb.clearFields();
+					for (RaidMember m : chunk) {
+						String status;
+						if (guild.getMemberById(m.getUid()) != null) {
+							status = ":green_circle: No servidor";
+						} else {
+							status = ":red_circle: Banido";
+						}
 
-				for (RaidMember m : chunk) {
-					String status;
-					if (bans.contains(m.getUid())) {
-						status = ":red_circle: Banido";
-					} else if (guild.getMemberById(m.getUid()) != null) {
-						status = ":green_circle: No servidor";
-					} else {
-						status = ":orange_circle: Expulso/Ausente";
+						eb.addField(m.getName(), "ID: `" + m.getUid() + "`\nStatus: " + status, false);
 					}
 
-					eb.addField(m.getName(), "ID: `" + m.getUid() + "`\nStatus: " + status, false);
+					pages.add(new InteractPage(eb.build()));
 				}
 
-				pages.add(new InteractPage(eb.build()));
-			}
+				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				);
+			} else {
+				MessageDigest digest = MessageDigest.getInstance("SHA-1");
+				digest.update(ShiroInfo.getNiiChan().getBytes(StandardCharsets.UTF_8));
+				digest.update(r.getSid().getBytes(StandardCharsets.UTF_8));
+				for (RaidMember rm : r.getMembers()) {
+					digest.update((rm.getName() + " " + rm.getId()).getBytes(StandardCharsets.UTF_8));
+				}
 
-			channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
-			);
+				XStringBuilder sb = new XStringBuilder("""
+						Shiro J. Bot - v%s
+						Criada por KuuHaKu (%s)
+						---------- RELATÓRIO R.A.ID ----------
+						Servidor: %s
+						Data: %s
+						Duração: %s
+						Usuários detectados: %s
+						Checksum (SHA-1): %s
+						-------------- USUÁRIOS --------------
+						
+						""".formatted(
+						ShiroInfo.getVersion(),
+						ShiroInfo.getNiiChan(),
+						guild.getName(),
+						Helper.FULL_DATE_FORMAT.format(r.getOccurrence()),
+						Helper.toStringDuration(r.getDuration()),
+						r.getMembers().size(),
+						Hex.encodeHexString(digest.digest())
+				));
+
+				for (RaidMember rm : r.getMembers()) {
+					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
+				}
+
+				String filename = "raid_report_%s.txt".formatted(r.getOccurrence().format(DateTimeFormatter.BASIC_ISO_DATE));
+				channel.sendFile(sb.toString().getBytes(StandardCharsets.UTF_8), filename).queue();
+			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-index")).queue();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
