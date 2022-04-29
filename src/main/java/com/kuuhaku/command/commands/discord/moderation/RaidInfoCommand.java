@@ -101,7 +101,46 @@ public class RaidInfoCommand implements Executable {
 				return;
 			}
 
-			if (args.length < 2) {
+			if (args.length > 1 && args[1].equalsIgnoreCase("dump")) {
+				MessageDigest checksum = MessageDigest.getInstance("SHA-1");
+				checksum.update(ShiroInfo.getNiiChan().getBytes(StandardCharsets.UTF_8));
+				checksum.update(r.getSid().getBytes(StandardCharsets.UTF_8));
+				for (RaidMember rm : r.getMembers()) {
+					checksum.update((rm.getName() + " " + rm.getId()).getBytes(StandardCharsets.UTF_8));
+				}
+
+				XStringBuilder sb = new XStringBuilder("""
+						Shiro J. Bot - v%s
+						Criada por KuuHaKu (%s)
+												
+						---------- RELATÓRIO R.A.ID ----------
+						Servidor: %s
+						Data: %s
+						Duração: %s
+						Usuários detectados: %s
+						-------------- USUÁRIOS --------------
+						
+						""".formatted(
+						ShiroInfo.getVersion(),
+						ShiroInfo.getNiiChan(),
+						guild.getName(),
+						Helper.FULL_DATE_FORMAT.format(r.getOccurrence()),
+						Helper.toStringDuration(r.getDuration()),
+						r.getMembers().size()
+				));
+
+				for (RaidMember rm : r.getMembers()) {
+					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
+				}
+
+				sb.appendNewLine("------------ AUTENTICAÇÃO ------------\n");
+				sb.appendNewLine("Validação (SHA-1): " + Hex.encodeHexString(checksum.digest()));
+				sb.appendNewLine("Checksum (MD5): " + DigestUtils.md5Hex(sb.toString()));
+				sb.appendNewLine("Checksum (SHA-256): " + DigestUtils.sha256Hex(sb.toString()));
+
+				String filename = "raid_report_%s.txt".formatted(r.getOccurrence().format(DateTimeFormatter.BASIC_ISO_DATE));
+				channel.sendFile(sb.toString().getBytes(StandardCharsets.UTF_8), filename).queue();
+			} else {
 				List<List<RaidMember>> chunks = Helper.chunkify(r.getMembers(), 10);
 
 				List<Page> pages = new ArrayList<>();
@@ -127,43 +166,6 @@ public class RaidInfoCommand implements Executable {
 				channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 						Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 				);
-			} else {
-				MessageDigest digest = MessageDigest.getInstance("SHA-1");
-				digest.update(ShiroInfo.getNiiChan().getBytes(StandardCharsets.UTF_8));
-				digest.update(r.getSid().getBytes(StandardCharsets.UTF_8));
-				for (RaidMember rm : r.getMembers()) {
-					digest.update((rm.getName() + " " + rm.getId()).getBytes(StandardCharsets.UTF_8));
-				}
-
-				XStringBuilder sb = new XStringBuilder("""
-						Shiro J. Bot - v%s
-						Criada por KuuHaKu (%s)
-						---------- RELATÓRIO R.A.ID ----------
-						Servidor: %s
-						Data: %s
-						Duração: %s
-						Usuários detectados: %s
-						Checksum (SHA-1): %s
-						-------------- USUÁRIOS --------------
-						""".formatted(
-						ShiroInfo.getVersion(),
-						ShiroInfo.getNiiChan(),
-						guild.getName(),
-						Helper.FULL_DATE_FORMAT.format(r.getOccurrence()),
-						Helper.toStringDuration(r.getDuration()),
-						r.getMembers().size(),
-						Hex.encodeHexString(digest.digest())
-				));
-
-				for (RaidMember rm : r.getMembers()) {
-					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
-				}
-
-				sb.appendNewLine("--------------------------------------");
-				sb.appendNewLine("Chave autenticadora (SHA-256): " + DigestUtils.sha256Hex(sb.toString()));
-
-				String filename = "raid_report_%s.txt".formatted(r.getOccurrence().format(DateTimeFormatter.BASIC_ISO_DATE));
-				channel.sendFile(sb.toString().getBytes(StandardCharsets.UTF_8), filename).queue();
 			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage(I18n.getString("err_invalid-index")).queue();
