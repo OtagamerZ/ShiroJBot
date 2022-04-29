@@ -133,9 +133,9 @@ public class RaidInfoCommand implements Executable {
 					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
 				}
 
-				sb.appendNewLine("------------ AUTENTICAÇÃO ------------\n");
-				sb.appendNewLine("Validação (SHA-1): " + Hex.encodeHexString(checksum.digest()));
-				sb.appendNewLine("Checksum (MD5): " + DigestUtils.md5Hex(sb.toString()));
+				sb.appendNewLine("\n------------ AUTENTICAÇÃO ------------\n");
+				sb.appendNewLine("Validação  (SHA-1): " + Hex.encodeHexString(checksum.digest()));
+				sb.appendNewLine("Checksum     (MD5): " + DigestUtils.md5Hex(sb.toString()));
 				sb.appendNewLine("Checksum (SHA-256): " + DigestUtils.sha256Hex(sb.toString()));
 
 				String filename = "raid_report_%s.txt".formatted(r.getOccurrence().format(DateTimeFormatter.BASIC_ISO_DATE));
