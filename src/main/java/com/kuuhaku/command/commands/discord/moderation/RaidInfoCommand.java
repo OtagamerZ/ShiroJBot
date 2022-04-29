@@ -119,7 +119,6 @@ public class RaidInfoCommand implements Executable {
 						Duração: %s
 						Usuários detectados: %s
 						-------------- USUÁRIOS --------------
-						
 						""".formatted(
 						ShiroInfo.getVersion(),
 						ShiroInfo.getNiiChan(),
@@ -133,7 +132,7 @@ public class RaidInfoCommand implements Executable {
 					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
 				}
 
-				sb.appendNewLine("\n------------ AUTENTICAÇÃO ------------\n");
+				sb.appendNewLine("\n------------ AUTENTICAÇÃO ------------");
 				sb.appendNewLine("Validação (SHA-1):\t" + Hex.encodeHexString(checksum.digest()));
 				sb.appendNewLine("Checksum (MD5):\t\t" + DigestUtils.md5Hex(sb.toString()));
 				sb.appendNewLine("Checksum (SHA-256):\t" + DigestUtils.sha256Hex(sb.toString()));
