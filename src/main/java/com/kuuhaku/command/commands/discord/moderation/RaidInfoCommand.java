@@ -35,6 +35,7 @@ import com.kuuhaku.utils.XStringBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -144,7 +145,6 @@ public class RaidInfoCommand implements Executable {
 						Usuários detectados: %s
 						Checksum (SHA-1): %s
 						-------------- USUÁRIOS --------------
-						
 						""".formatted(
 						ShiroInfo.getVersion(),
 						ShiroInfo.getNiiChan(),
@@ -158,6 +158,9 @@ public class RaidInfoCommand implements Executable {
 				for (RaidMember rm : r.getMembers()) {
 					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
 				}
+
+				sb.appendNewLine("--------------------------------------");
+				sb.appendNewLine("Chave autenticadora (SHA-256): " + DigestUtils.sha256Hex(sb.toString()));
 
 				String filename = "raid_report_%s.txt".formatted(r.getOccurrence().format(DateTimeFormatter.BASIC_ISO_DATE));
 				channel.sendFile(sb.toString().getBytes(StandardCharsets.UTF_8), filename).queue();
