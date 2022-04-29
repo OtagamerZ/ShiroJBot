@@ -110,7 +110,7 @@ public class RaidInfoCommand implements Executable {
 				}
 
 				XStringBuilder sb = new XStringBuilder("""
-						Shiro J. Bot - v%s
+						Shiro J. Bot - %s
 						Criada por KuuHaKu (%s)
 												
 						---------- RELATÓRIO R.A.ID ----------
