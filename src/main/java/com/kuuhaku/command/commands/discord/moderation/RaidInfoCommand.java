@@ -132,10 +132,13 @@ public class RaidInfoCommand implements Executable {
 					sb.appendNewLine(rm.getUid() + "\t" + rm.getName());
 				}
 
+				String md5 = DigestUtils.md5Hex(sb.toString());
+				String sha256 = DigestUtils.sha256Hex(sb.toString());
+
 				sb.appendNewLine("\n------------ AUTENTICAÇÃO ------------");
 				sb.appendNewLine("Validação (SHA-1):\t" + Hex.encodeHexString(checksum.digest()));
-				sb.appendNewLine("Checksum (MD5):\t\t" + DigestUtils.md5Hex(sb.toString()));
-				sb.appendNewLine("Checksum (SHA-256):\t" + DigestUtils.sha256Hex(sb.toString()));
+				sb.appendNewLine("Checksum (MD5):\t\t" + md5);
+				sb.appendNewLine("Checksum (SHA-256):\t" + sha256);
 
 				String filename = "raid_report_%s.txt".formatted(r.getOccurrence().format(DateTimeFormatter.BASIC_ISO_DATE));
 				channel.sendFile(sb.toString().getBytes(StandardCharsets.UTF_8), filename).queue();
