@@ -462,8 +462,8 @@ public class Champion implements Drawable, Cloneable {
 					if (capped) fBonus = Math.min(fBonus, 0);
 
 					if (combos.getLeft() == Race.ELF) {
-						if (fBonus < 1) fBonus /= 2;
-						else if (fBonus > 1) fBonus *= 1.25;
+						if (fBonus < 0) fBonus /= 2;
+						else if (fBonus > 0) fBonus *= 1.25;
 					}
 
 					fBonus++;
@@ -510,8 +510,8 @@ public class Champion implements Drawable, Cloneable {
 					if (capped) fBonus = Math.min(fBonus, 1);
 
 					if (combos.getLeft() == Race.ELF) {
-						if (fBonus < 1) fBonus /= 2;
-						else if (fBonus > 1) fBonus *= 1.25;
+						if (fBonus < 0) fBonus /= 2;
+						else if (fBonus > 0) fBonus *= 1.25;
 					}
 
 					fBonus++;
