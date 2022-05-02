@@ -2046,16 +2046,15 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					List<Drawable> grv = arena.getGraveyard().get(getCurrentSide());
-					if (grv.size() < 3) {
+					Hand h = hands.get(getCurrentSide());
+					List<Drawable> dsc = h.getDiscardBatch();
+					if (dsc.size() < 3) {
 						channel.sendMessage("❌ | Você não possui almas suficiente para sintetizar.").queue(null, Helper::doNothing);
 						return;
 					}
-					grv = grv.subList(0, 3);
+					dsc = dsc.subList(0, 3);
 
-					Hand h = hands.get(getCurrentSide());
-
-					int score = grv.stream()
+					int score = dsc.stream()
 							.mapToInt(c -> switch (c.getCard().getRarity()) {
 										case FIELD -> 5;
 										case EQUIPMENT -> ((Equipment) c).getTier();
@@ -2090,9 +2089,9 @@ public class Shoukan extends GlobalGame {
 
 					h.getCards().add(Helper.getRandomEntry(chosenTier));
 
-					arena.getBanned().addAll(grv);
-					grv.clear();
-					synthCd[getCurrentSide() == Side.TOP ? 1 : 0] = 4;
+					arena.getBanned().addAll(dsc);
+					dsc.clear();
+					synthCd[getCurrentSide() == Side.TOP ? 1 : 0] = 3;
 					reportEvent(h, getCurrent().getName() + " sacrificou 3 almas para sintetizar um evogear.", true, false);
 				});
 			}
