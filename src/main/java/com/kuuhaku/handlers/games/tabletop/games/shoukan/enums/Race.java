@@ -73,7 +73,7 @@ public enum Race {
             new Integer[]{3, 3, 3, 1, 0}
     ),
     SPIRIT("Espírito",
-            "Adiciona a habilidade de consumir as últimas 3 cartas do cemitério para sintetizar um evogear aleatório (tempo de recarga: 4 turnos)",
+            "Adiciona a habilidade de consumir as últimas 3 cartas do cemitério para sintetizar um evogear aleatório (tempo de recarga: 3 turnos)",
             "+1% defesa por carta no cemitério",
             "Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta.\n\n**Alinhamento: maligno.**",
             new Integer[]{2, 4, 2, 2, 0}
