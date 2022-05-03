@@ -20,8 +20,7 @@ package com.kuuhaku;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Role;
-import com.kuuhaku.model.persistent.shiro.Staff;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.model.persistent.user.Account;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.logging.log4j.LogManager;
@@ -57,8 +56,8 @@ public abstract class Constants {
 	//public static final File COLLECTIONS_FOLDER = new File(System.getenv("COLLECTIONS_PATH"));
 	//public static final File TEMPORARY_FOLDER = new File(System.getenv("TEMPORARY_PATH"));
 
-	public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> Utils.getOr(DAO.find(Staff.class, m.getId()), new Staff()).getRole().allowed(Role.DEVELOPER);
-	public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> Utils.getOr(DAO.find(Staff.class, m.getId()), new Staff()).getRole().allowed(Role.SUPPORT);
+	public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).getRole().allowed(Role.DEVELOPER);
+	public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).getRole().allowed(Role.SUPPORT);
 	public static final Function<Member, Boolean> MOD_PRIVILEGE = m -> SUP_PRIVILEGE.apply(m) || m.hasPermission(Permission.KICK_MEMBERS);
 	public static final Function<Member, Boolean> USER_PRIVILEGE = m -> true;
 }

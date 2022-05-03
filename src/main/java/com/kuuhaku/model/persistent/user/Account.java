@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.utils.Utils;
 import net.dv8tion.jda.api.entities.Member;
@@ -49,6 +50,10 @@ public class Account extends DAO implements Blacklistable {
 
 	@Column(name = "name")
 	private String name;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false)
+	private Role role = Role.USER;
 
 	@Column(name = "balance", nullable = false)
 	private long balance;
@@ -130,6 +135,10 @@ public class Account extends DAO implements Blacklistable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Role getRole() {
+		return role;
 	}
 
 	public long getBalance() {

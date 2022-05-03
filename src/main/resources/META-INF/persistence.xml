@@ -24,7 +24,6 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- SHIRO -->
-        <class>com.kuuhaku.model.persistent.shiro.Staff</class>
         <class>com.kuuhaku.model.persistent.shiro.Anime</class>
         <class>com.kuuhaku.model.persistent.shiro.Card</class>
 
