@@ -21,13 +21,13 @@ package com.kuuhaku.command.commands.discord.support;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -66,16 +66,9 @@ public class InviteCommand implements Executable {
 				return;
 			}
 
-			String role = "";
-			if (ShiroInfo.getSupports().containsKey(author.getId())) {
-				role = "SUPORTE";
-			} else if (ShiroInfo.getDevelopers().contains(author.getId())) {
-				role = "DESENVOLVEDOR";
-			}
-
-			String finalRole = role;
+			String role = StaffDAO.getUser(author.getId()).toString();
 			Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
-					.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " **(" + finalRole + ")**\nPor favor seja detalhado e lembre-se que ajudaremos apenas sobre assuntos relacionados à Shiro.\n\n**Atenção:** nossa equipe jamais pedirá informações confidenciais como senhas ou emais, nunca forneça-os!"))
+					.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " será atendido por " + author.getAsTag() + " **(" + role + ")**\nPor favor seja detalhado e lembre-se que ajudaremos apenas sobre assuntos relacionados à Shiro.\n\n**Atenção:** nossa equipe jamais pedirá informações confidenciais como senhas ou emais, nunca forneça-os!"))
 					.queue(null, Helper::doNothing);
 
 			channel.sendMessage("Aqui está!\nhttps://discord.gg/" + t.getInvite()).queue();

@@ -20,10 +20,11 @@ package com.kuuhaku.command;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
+import com.kuuhaku.model.enums.StaffType;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
@@ -78,8 +79,8 @@ public enum Category {
 	public boolean isEnabled(Guild g, User u) {
 		return switch (this) {
 			case NSFW -> false;
-			case DEV -> ShiroInfo.getDevelopers().contains(u.getId());
-			case SUPPORT -> ShiroInfo.getStaff().contains(u.getId());
+			case DEV -> StaffDAO.getUser(u.getId()).getType().isAllowed(StaffType.DEVELOPER);
+			case SUPPORT -> StaffDAO.getUser(u.getId()).getType().isAllowed(StaffType.SUPPORT);
 			default -> true;
 		};
 	}

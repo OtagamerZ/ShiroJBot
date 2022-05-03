@@ -94,6 +94,7 @@
         <class>com.kuuhaku.model.persistent.Checklist</class>
         <class>com.kuuhaku.model.persistent.Checkitem</class>
         <class>com.kuuhaku.model.persistent.Reminder</class>
+        <class>com.kuuhaku.model.persistent.Staff</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>

@@ -189,9 +189,9 @@ public abstract class Helper {
 			return PrivilegeLevel.USER;
 		else if (ShiroInfo.getNiiChan().equals(member.getId()))
 			return PrivilegeLevel.NIICHAN;
-		else if (ShiroInfo.getDevelopers().contains(member.getId()))
+		else if (StaffDAO.getUser(member.getId()).getType().isAllowed(StaffType.DEVELOPER))
 			return PrivilegeLevel.DEV;
-		else if (ShiroInfo.getSupports().containsKey(member.getId()))
+		else if (StaffDAO.getUser(member.getId()).getType().isAllowed(StaffType.SUPPORT))
 			return PrivilegeLevel.SUPPORT;
 		else if (member.hasPermission(Permission.MESSAGE_MANAGE))
 			return PrivilegeLevel.MOD;
