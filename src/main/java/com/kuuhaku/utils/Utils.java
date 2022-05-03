@@ -210,12 +210,11 @@ public abstract class Utils {
 			}
 		}
 
-		return out.stream()
-				.filter(Objects::nonNull).collect(Collectors.toList());
+		return out.stream().filter(Objects::nonNull).toList();
 	}
 
 	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
-		List<String> names = extractGroups(regex, "\\(\\?<([a-zA-Z][A-z0-9]*)>");
+		List<String> names = extractGroups(regex, "\\(\\?<([a-zA-Z][A-z\\d]*)>");
 		Map<String, String> out = new HashMap<>();
 		Matcher m = Pattern.compile(regex).matcher(text);
 
@@ -225,7 +224,7 @@ public abstract class Utils {
 			}
 		}
 
-		return out.entrySet().stream()
+		return out.entrySet().parallelStream()
 				.filter(e -> e.getValue() != null)
 				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
