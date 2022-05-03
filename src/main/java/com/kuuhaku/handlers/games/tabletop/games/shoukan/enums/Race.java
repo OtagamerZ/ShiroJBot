@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public enum Race {
     HUMAN("Humano",
-            "+25% poder de cura, -50% dano sofrido de sangramento",
+            "+33% poder de cura, -50% dano sofrido de sangramento",
             "Campeões com 1 ou 2 de custo no deck reduzem o dano sofrido em (**SOLO** | 1%/**DUO** | 0,5%), 3/4 disso adicionado à esquiva de suas cartas",
             "Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia.\n\n**Alinhamento: benigno.**",
             new Integer[]{2, 2, 2, 2, 2}
@@ -73,7 +73,7 @@ public enum Race {
             new Integer[]{3, 3, 3, 1, 0}
     ),
     SPIRIT("Espírito",
-            "Adiciona a habilidade de consumir as últimas 3 cartas do cemitério para sintetizar um evogear aleatório (tempo de recarga: 3 turnos)",
+            "Adiciona a habilidade de consumir as últimas 3 cartas descartadas para sintetizar um evogear aleatório (tempo de recarga: 3 turnos)",
             "+1% defesa por carta no cemitério",
             "Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta.\n\n**Alinhamento: maligno.**",
             new Integer[]{2, 4, 2, 2, 0}

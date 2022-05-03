@@ -984,7 +984,7 @@ public class Hand {
 	}
 
 	public float getBaseHealingFac() {
-		return 1 + (combo.getLeft() == Race.HUMAN ? 0.25f : 0);
+		return 1 + (combo.getLeft() == Race.HUMAN ? 0.33f : 0);
 	}
 
 	public float getHealingFac() {
