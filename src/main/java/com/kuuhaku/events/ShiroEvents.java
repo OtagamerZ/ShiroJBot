@@ -74,7 +74,6 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
@@ -164,27 +163,6 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 
 		if (member == null || !channel.canTalk()) return;
-
-		if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId()) && rawMessage.length() > 1) {
-			try {
-				if (rawMessage.replace(";", "").length() == 0) {
-					channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
-				} else {
-					MessageAction send = channel.sendMessage(Helper.replaceTags(rawMessage.substring(1), author, guild, message));
-					for (Message.Attachment a : message.getAttachments()) {
-						try {
-							//noinspection ResultOfMethodCallIgnored
-							send.addFile(a.downloadToFile().get());
-						} catch (InterruptedException | ExecutionException ignore) {
-						}
-					}
-					send.queue();
-					message.delete().queue();
-				}
-			} catch (InsufficientPermissionException | ExecutionException | InterruptedException ignore) {
-			}
-			return;
-		}
 
 		if (!author.isBot()) {
 			try {
@@ -644,8 +622,9 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		for (String d : ShiroInfo.getDevelopers()) {
-			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+		List<Staff> staff = StaffDAO.getStaff(StaffType.DEVELOPER);
+		for (Staff d : staff) {
+			Main.getInfo().getUserByID(d.getUid()).openPrivateChannel().queue(c -> {
 				String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 				c.sendMessage(msg).queue();
 			});
@@ -655,8 +634,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(@Nonnull GuildLeaveEvent event) {
-		for (String d : ShiroInfo.getDevelopers()) {
-			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+		List<Staff> staff = StaffDAO.getStaff(StaffType.DEVELOPER);
+		for (Staff d : staff) {
+			Main.getInfo().getUserByID(d.getUid()).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 				GuildDAO.removeGuildFromDB(gc);
 				String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
@@ -1020,8 +1000,8 @@ public class ShiroEvents extends ListenerAdapter {
 		String content = msg.getContentRaw();
 		String[] args = content.split(" ");
 
-		List<String> staffIds = ShiroInfo.getStaff();
-		if (staffIds.contains(event.getAuthor().getId())) {
+		List<Staff> staff = StaffDAO.getStaff(StaffType.SUPPORT);
+		if (staff.stream().anyMatch(s -> s.getUid().equals(event.getAuthor().getId()))) {
 			try {
 				switch (args[0].toLowerCase(Locale.ROOT)) {
 					case "send", "s" -> {
@@ -1045,9 +1025,9 @@ public class ShiroEvents extends ListenerAdapter {
 								}
 							});
 
-							for (String d : staffIds) {
-								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
+							for (Staff stf : staff) {
+								if (!stf.getUid().equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " respondeu o usuário " + u.getName() + ":\n>>> " + msgNoArgs))
 											.queue();
 								}
@@ -1087,9 +1067,9 @@ public class ShiroEvents extends ListenerAdapter {
 								}
 							});
 
-							for (String d : staffIds) {
-								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
+							for (Staff stf : staff) {
+								if (!stf.getUid().equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + u.getName() + ". Razão: \n>>> " + msgNoArgs))
 											.queue();
 								}
@@ -1127,9 +1107,9 @@ public class ShiroEvents extends ListenerAdapter {
 								}
 							});
 
-							for (String d : staffIds) {
-								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel()
+							for (Staff stf : staff) {
+								if (!stf.getUid().equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + u.getName() + ". Razão: \n>>> " + msgNoArgs))
 											.queue();
 								}
@@ -1160,8 +1140,8 @@ public class ShiroEvents extends ListenerAdapter {
 											.setFooter(event.getAuthor().getId())
 											.setTimestamp(Instant.now());
 
-									for (String d : staffIds) {
-										Main.getInfo().getUserByID(d).openPrivateChannel()
+									for (Staff stf : staff) {
+											Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 												.flatMap(ch -> ch.sendMessageEmbeds(eb.build()))
 												.queue();
 									}
@@ -1244,10 +1224,11 @@ public class ShiroEvents extends ListenerAdapter {
 	@Override
 	public void onUserTyping(@Nonnull UserTypingEvent event) {
 		User u = event.getUser();
-		if (event.isFromType(ChannelType.PRIVATE) && ShiroInfo.getStaff().contains(u.getId())) {
-			for (String d : ShiroInfo.getStaff()) {
-				if (!d.equals(u.getId())) {
-					Main.getInfo().getUserByID(d).openPrivateChannel()
+		if (event.isFromType(ChannelType.PRIVATE) && StaffDAO.getUser(u.getId()).getType().isAllowed(StaffType.SUPPORT)) {
+			List<Staff> staff = StaffDAO.getStaff(StaffType.SUPPORT);
+			for (Staff stf : staff) {
+				if (!stf.getUid().equals(u.getId())) {
+					Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 							.flatMap(PrivateChannel::sendTyping)
 							.queue();
 				}

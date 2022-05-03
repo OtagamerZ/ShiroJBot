@@ -21,12 +21,14 @@ package com.kuuhaku.command.commands.discord.support;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.StaffType;
+import com.kuuhaku.model.persistent.Staff;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Command(
 		name = "resolver",
@@ -73,26 +76,20 @@ public class MarkTicketCommand implements Executable {
 		eb.addField("Fechado em:", Helper.FULL_DATE_FORMAT.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
-		for (String dev : ShiroInfo.getStaff()) {
-			Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
+		List<Staff> staff = StaffDAO.getStaff(StaffType.SUPPORT);
+		for (Staff stf : staff) {
+			Message msg = Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 					.flatMap(m -> m.sendMessageEmbeds(eb.build()))
 					.complete();
-			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
+			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(stf.getUid())))
 					.flatMap(Message::delete)
 					.queue(null, Helper::doNothing);
 			t.solved();
 		}
 
-		String role = "";
-		if (ShiroInfo.getSupports().containsKey(author.getId())) {
-			role = "SUPORTE";
-		} else if (ShiroInfo.getDevelopers().contains(author.getId())) {
-			role = "DESENVOLVEDOR";
-		}
-
-		String finalRole = role;
+		String role = StaffDAO.getUser(author.getId()).toString();
 		Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
-				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getAsTag() + " **(" + finalRole + ")**"))
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getAsTag() + " **(" + role + ")**"))
 				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);

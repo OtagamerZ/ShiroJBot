@@ -44,6 +44,7 @@ import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.Achievement;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.enums.StaffType;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
@@ -180,7 +181,7 @@ public class Shoukan extends GlobalGame {
 				arena.setField(f);
 			}
 
-			if (ShiroInfo.getStaff().contains(players[0].getId())) {
+			if (StaffDAO.getUser(players[0].getId()).getType().isAllowed(StaffType.TESTER)) {
 				for (Object o : rules.test()) {
 					String id = String.valueOf(o).toUpperCase(Locale.ROOT);
 					CardType type = CardDAO.identifyType(id);

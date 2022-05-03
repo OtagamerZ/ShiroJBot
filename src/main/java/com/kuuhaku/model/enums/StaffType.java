@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2021  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,28 @@
 
 package com.kuuhaku.model.enums;
 
-public enum SupportTier {
-	NORMAL(20000),
-	SENIOR(40000);
+public enum StaffType {
+	NONE,
+	TESTER,
+	REVIEWER,
+	SUPPORT,
+	OVERSEER,
+	DEVELOPER;
 
-	private final int salary;
-
-	SupportTier(int salary) {
-		this.salary = salary;
+	public boolean isAllowed(StaffType type) {
+		if (this == DEVELOPER || this == type) return true;
+		else return this == OVERSEER && type != DEVELOPER;
 	}
 
-	public int getSalary() {
-		return salary;
+	@Override
+	public String toString() {
+		return switch (this) {
+			case NONE -> "NENHUM";
+			case TESTER -> "TESTER";
+			case REVIEWER -> "REVISOR";
+			case SUPPORT -> "SUPORTE";
+			case OVERSEER -> "SUPERVISOR";
+			case DEVELOPER -> "DESENVOLVEDOR";
+		};
 	}
 }

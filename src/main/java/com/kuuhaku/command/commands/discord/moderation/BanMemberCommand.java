@@ -21,9 +21,11 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.StaffType;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -69,7 +71,7 @@ public class BanMemberCommand implements Executable {
 			} else if (!guild.getSelfMember().canInteract(mb)) {
 				channel.sendMessage(I18n.getString("err_cannot-ban-high-role-me")).queue();
 				return;
-			} else if (ShiroInfo.getStaff().contains(mb.getId())) {
+			} else if (StaffDAO.getUser(mb.getId()).getType() != StaffType.NONE) {
 				channel.sendMessage(I18n.getString("err_cannot-ban-staff")).queue();
 				return;
 			}

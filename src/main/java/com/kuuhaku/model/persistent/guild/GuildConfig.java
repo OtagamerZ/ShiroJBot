@@ -20,8 +20,10 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.GuildDAO;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.enums.BuffType;
+import com.kuuhaku.model.enums.StaffType;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.utils.Helper;
@@ -778,6 +780,6 @@ public class GuildConfig {
 
 		String owner = g.getOwnerId();
 
-		return ShiroInfo.getStaff().contains(owner) || TagDAO.getTagById(owner).isBeta();
+		return StaffDAO.getUser(owner).getType() != StaffType.NONE || TagDAO.getTagById(owner).isBeta();
 	}
 }

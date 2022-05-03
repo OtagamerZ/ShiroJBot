@@ -20,18 +20,14 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
-import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.model.persistent.Lottery;
 import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.postgresql.util.PSQLException;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -39,7 +35,6 @@ import org.quartz.JobExecutionContext;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class MonthlyEvent implements Job {
 	static JobDetail monthly;
@@ -100,11 +95,5 @@ public class MonthlyEvent implements Job {
 		}
 
 		LotteryDAO.closeLotteries();
-
-		for (Map.Entry<String, SupportTier> entry : ShiroInfo.getSupports().entrySet()) {
-			Account acc = AccountDAO.getAccount(entry.getKey());
-			acc.addCredit(entry.getValue().getSalary(), MonthlyEvent.class);
-			AccountDAO.saveAccount(acc);
-		}
 	}
 }

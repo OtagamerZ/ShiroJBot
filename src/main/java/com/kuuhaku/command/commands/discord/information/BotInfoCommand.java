@@ -22,10 +22,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.StaffType;
+import com.kuuhaku.model.persistent.Staff;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -33,6 +36,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Command(
 		name = "info",
@@ -52,8 +56,9 @@ public class BotInfoCommand implements Executable {
 				.addField(I18n.getString("str_bot-info-field-1"), Main.getInfo().getUserByID(ShiroInfo.getNiiChan()).getAsTag(), false);
 
 		StringBuilder sb = new StringBuilder();
-		for (String d : ShiroInfo.getDevelopers()) {
-			sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  ");
+		List<Staff> staff = StaffDAO.getStaff(StaffType.DEVELOPER);
+		for (Staff d : staff) {
+			sb.append("`").append(Main.getInfo().getUserByID(d.getUid()).getAsTag()).append("`  ");
 		}
 		eb.addField(I18n.getString("str_bot-info-field-2"), sb.toString(), false)
 				.addField(I18n.getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(I18n.getString("date-format"))), false)

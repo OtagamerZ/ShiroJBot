@@ -23,12 +23,15 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.Slashed;
+import com.kuuhaku.controller.postgresql.StaffDAO;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.annotations.SlashCommand;
 import com.kuuhaku.model.annotations.SlashGroup;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.StaffType;
+import com.kuuhaku.model.persistent.Staff;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -84,14 +87,14 @@ public class RequestAssistCommand implements Executable, Slashed {
 							}
 
 							Ticket t = TicketDAO.getTicket(number);
-							List<String> staff = ShiroInfo.getStaff();
+							List<Staff> staff = StaffDAO.getStaff(StaffType.SUPPORT);
 							Map<String, String> ids = new HashMap<>();
-							for (String dev : staff) {
+							for (Staff stf : staff) {
 								try {
-									Main.getInfo().getUserByID(dev).openPrivateChannel()
+									Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 											.flatMap(m -> m.sendMessageEmbeds(eb.build()))
 											.flatMap(m -> {
-												ids.put(dev, m.getId());
+												ids.put(stf.getUid(), m.getId());
 												return m.pin();
 											})
 											.submit().get();
