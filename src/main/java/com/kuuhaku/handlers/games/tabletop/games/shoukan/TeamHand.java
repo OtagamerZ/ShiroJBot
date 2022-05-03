@@ -723,7 +723,7 @@ public class TeamHand extends Hand {
 	}
 	@Override
 	public float getBaseHealingFac() {
-		return 1 + (combo.getLeft() == Race.HUMAN ? 0.25f : 0);
+		return 1 + (combo.getLeft() == Race.HUMAN ? 0.33f : 0);
 	}
 
 	@Override
