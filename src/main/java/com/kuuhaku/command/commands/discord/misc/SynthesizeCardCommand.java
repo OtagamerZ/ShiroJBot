@@ -50,6 +50,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -133,7 +134,7 @@ public class SynthesizeCardCommand implements Executable {
 		};
 
 		DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
-		int freeRolls = NumberUtils.toInt(dp.getValue());
+		AtomicInteger freeRolls = new AtomicInteger(NumberUtils.toInt(dp.getValue()));
 		boolean blessed = !DynamicParameterDAO.getValue(author.getId() + "_blessing").isBlank();
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
@@ -150,7 +151,7 @@ public class SynthesizeCardCommand implements Executable {
 
 				Field f = Helper.getRandomEntry(pool);
 
-				channel.sendMessage("Você está prester a sintetizar um campo usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
+				channel.sendMessage("Você está prester a sintetizar um campo usando essas cartas **CROMADAS** (" + (freeRolls.get() > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 						.queue(s -> {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
 									buttons.put(Helper.parseEmoji(Helper.ACCEPT), wrapper -> {
@@ -162,7 +163,11 @@ public class SynthesizeCardCommand implements Executable {
 												kp.removeCard(new KawaiponCard(t, true));
 											}
 										} else {
-											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											if (freeRolls.decrementAndGet() <= 0) {
+												DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											} else {
+												DynamicParameterDAO.setParam("freeSynth_" + author.getId(), freeRolls.toString());
+											}
 										}
 
 										if (dk.checkFieldError(f) > 0) {
@@ -223,7 +228,7 @@ public class SynthesizeCardCommand implements Executable {
 						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(bag.getCount(4) * 100 / 3d, 1)) + "%", false);
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage("Você está prester a resintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
+				channel.sendMessage("Você está prester a resintetizar um evogear usando essas cartas (" + (freeRolls.get() > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 						.setEmbeds(eb.build())
 						.queue(s -> {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
@@ -238,7 +243,11 @@ public class SynthesizeCardCommand implements Executable {
 												dk.removeEquipment(dk.getEquipment(t));
 											}
 										} else {
-											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											if (freeRolls.decrementAndGet() <= 0) {
+												DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											} else {
+												DynamicParameterDAO.setParam("freeSynth_" + author.getId(), freeRolls.toString());
+											}
 										}
 
 										if (dk.checkEquipmentError(e) != 0) {
@@ -311,7 +320,7 @@ public class SynthesizeCardCommand implements Executable {
 						.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Evogear tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tiers[3] * 100, 1)) + "%", false);
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage("Você está prester a sintetizar um evogear usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
+				channel.sendMessage("Você está prester a sintetizar um evogear usando essas cartas (" + (freeRolls.get() > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 						.setEmbeds(eb.build())
 						.queue(s -> {
 									Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new HashMap<>();
@@ -326,7 +335,11 @@ public class SynthesizeCardCommand implements Executable {
 												kp.removeCard(new KawaiponCard(t, false));
 											}
 										} else {
-											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											if (freeRolls.decrementAndGet() <= 0) {
+												DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+											} else {
+												DynamicParameterDAO.setParam("freeSynth_" + author.getId(), freeRolls.toString());
+											}
 										}
 
 										if (dk.checkEquipmentError(e) != 0) {
