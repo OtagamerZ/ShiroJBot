@@ -2748,7 +2748,8 @@ public class Shoukan extends GlobalGame {
 				if (duelists.getAttacker() != null) {
 					Champion c = duelists.getAttacker();
 
-					if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) activate = false;
+					if (c.getBonus().popFlag(Flag.NOEFFECT)) activate = false;
+					else if (c.isDuelling() && !c.getNemesis().equals(duelists.getDefender())) activate = false;
 				}
 
 				if (duelists.getDefender() != null) {
