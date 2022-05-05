@@ -92,8 +92,15 @@ public class Bonus implements Cloneable {
 	}
 
 	public void setFlag(Flag flag, boolean on) {
-		if (on) flags.add(flag);
-		else flags.remove(flag);
+		if (on) {
+			if (flag == Flag.NOEFFECT) {
+				flags.clear();
+			}
+
+			flags.add(flag);
+		} else {
+			flags.remove(flag);
+		}
 	}
 
 	public EnumSet<Flag> getPFlags() {
@@ -101,8 +108,15 @@ public class Bonus implements Cloneable {
 	}
 
 	public void setPFlag(Flag flag, boolean on) {
-		if (on) pFlags.add(flag);
-		else pFlags.remove(flag);
+		if (on) {
+			if (flag == Flag.NOEFFECT) {
+				pFlags.clear();
+			}
+
+			pFlags.add(flag);
+		} else {
+			pFlags.remove(flag);
+		}
 	}
 
 	public int getAtk() {
