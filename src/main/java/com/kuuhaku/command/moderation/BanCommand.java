@@ -46,7 +46,7 @@ import java.util.Objects;
 		"<reason:text:r> <users:user:r>",
 		"<reason:text:r> <ids:text:r>"
 })
-@Requires({Permission.BAN_MEMBERS})
+@Requires(Permission.BAN_MEMBERS)
 public class BanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

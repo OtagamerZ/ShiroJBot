@@ -22,8 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Rarity;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.ImageFilters;
 import org.apache.commons.io.FileUtils;
@@ -90,8 +88,8 @@ public class Card extends DAO {
 				Graphics2D g2d = canvas.createGraphics();
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-				g2d.drawImage(foil ? adjust(card, false) : card, 15, 15, null);
-				g2d.drawImage(foil ? adjust(frame, true) : frame, 0, 0, null);
+				g2d.drawImage(foil ? foil(card, false) : card, 15, 15, null);
+				g2d.drawImage(foil ? foil(frame, true) : frame, 0, 0, null);
 
 				g2d.dispose();
 
@@ -179,32 +177,14 @@ public class Card extends DAO {
 			assert cardBytes != null;
 
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				return foil ? adjust(ImageIO.read(bais), false) : ImageIO.read(bais);
+				return foil ? foil(ImageIO.read(bais), false) : ImageIO.read(bais);
 			}
 		} catch (IOException e) {
 			return null;
 		}
 	}
 
-	public BufferedImage drawCardNoBorder(Account acc) {
-		Deck current = acc.getCurrentDeck();
-		boolean foil = current != null && current.isUsingFoil();
-
-		try {
-			byte[] cardBytes = getImageBytes();
-			assert cardBytes != null;
-
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				return foil && false
-						? adjust(ImageIO.read(bais), false)
-						: ImageIO.read(bais);
-			}
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	private BufferedImage adjust(BufferedImage bi, boolean border) {
+	private BufferedImage foil(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		for (int y = 0; y < bi.getHeight(); y++) {
@@ -251,6 +231,11 @@ public class Card extends DAO {
 		}
 
 		return cardBytes;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 	@Override

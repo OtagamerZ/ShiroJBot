@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.trade;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -39,12 +38,12 @@ import net.dv8tion.jda.api.entities.User;
 		name = "trade",
 		category = Category.MISC
 )
-@Signature({"<user:user:r>"})
-@Requires({Permission.MESSAGE_EMBED_LINKS})
+@Signature("<user:user:r>")
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TradeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Trade check = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
+		Trade check = Trade.getPending().get(event.user().getId());
 		if (check != null) {
 			Account other;
 			if (check.getLeft().getUid().equals(event.user().getId())) {
@@ -69,7 +68,7 @@ public class TradeCommand implements Executable {
 				wrapper -> {
 					if (!wrapper.getUser().equals(other)) return;
 
-					trade.save();
+					Trade.getPending().put(trade, event.user().getId(), other.getId());
 					event.channel().sendMessage(locale.get("success/trade_open", data.config().getPrefix())).queue();
 				},
 				event.user(), other

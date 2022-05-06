@@ -24,12 +24,17 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Trade;
+import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+
+import java.util.List;
+import java.util.Locale;
 
 @Command(
 		name = "trade",
@@ -43,17 +48,13 @@ import net.dv8tion.jda.api.JDA;
 public class TradeRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
+		Trade trade = Trade.getPending().get(event.user().getId());
 		if (trade == null) {
 			event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
 			return;
-		}
-
-		Account other;
-		if (trade.getLeft().getUid().equals(event.user().getId())) {
-			other = trade.getRight();
-		} else {
-			other = trade.getLeft();
+		} else if (trade.isFinalizing()) {
+			event.channel().sendMessage(locale.get("error/trade_finalizing")).queue();
+			return;
 		}
 
 		if (args.containsKey("value")) {
@@ -66,13 +67,39 @@ public class TradeRemoveCommand implements Executable {
 				return;
 			}
 
-			trade.getSelf(event.user().getId()).addCR(offer, "Trade Nº" + trade.getId() + " offer remove");
 			trade.addSelfValue(event.user().getId(), -offer);
-			trade.save();
-
 			event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), offer + " ₵R")).queue();
 		} else {
-			//TODO
+			List<Integer> selfOffer = trade.getSelfOffers(event.user().getId());
+			List<StashedCard> stash = DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.stash.uid = ?1 AND s.id IN ?2", event.user().getId(), selfOffer);
+			if (stash.isEmpty()) {
+				event.channel().sendMessage(locale.get("error/empty_offer")).queue();
+				return;
+			}
+
+			Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
+			if (card == null) {
+				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
+
+				Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(Locale.ROOT), names);
+				event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+				return;
+			}
+
+			Utils.selectOption(locale, event.channel(), stash, card, event.user())
+					.thenAccept(sc -> {
+						if (sc == null) {
+							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+							return;
+						}
+
+						selfOffer.remove(sc.getId());
+						event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), sc)).queue();
+					})
+					.exceptionally(t -> {
+						event.channel().sendMessage(locale.get("error/not_owned")).queue();
+						return null;
+					});
 		}
 	}
 }

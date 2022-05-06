@@ -9,13 +9,12 @@ import com.kuuhaku.utils.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class SignatureParser {
-	@Language("RegExp") //TODO Nome deve ser pego do I18N
+	@Language("RegExp")
 	private static final String ARGUMENT_PATTERN = "^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$";
 
 	public static JSONObject parse(I18N locale, Executable exec, String input) throws InvalidSignatureException {
@@ -107,5 +106,33 @@ public abstract class SignatureParser {
 			FailedSignature first = failed.get(0);
 			throw new InvalidSignatureException(first.line(), first.options());
 		}
+	}
+
+	public static List<String> extract(I18N locale, Executable exec) {
+		List<String> out = new ArrayList<>();
+		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
+		if (annot == null) return out;
+
+		String[] signatures = annot.value();
+
+		List<String> supplied = new ArrayList<>();
+		for (String sig : signatures) {
+			String[] args = sig.split(" +");
+
+			supplied.add("%1$s%2$s");
+			for (String arg : args) {
+				Map<String, String> groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
+				String name = groups.get("name");
+				boolean required = groups.containsKey("required");
+				String wrap = required ? "[%s]" : "%s";
+
+				supplied.add(wrap.formatted(locale.get("signature/" + name)));
+			}
+
+			out.add(String.join(" ", supplied));
+			supplied.clear();
+		}
+
+		return out;
 	}
 }

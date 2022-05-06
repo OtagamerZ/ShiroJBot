@@ -44,8 +44,8 @@ import java.util.List;
 		name = "snipe",
 		category = Category.MODERATION
 )
-@Signature({"<channel:channel>"})
-@Requires({Permission.MESSAGE_HISTORY})
+@Signature("<channel:channel>")
+@Requires(Permission.MESSAGE_HISTORY)
 public class SnipeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

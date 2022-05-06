@@ -29,10 +29,10 @@ public class DynamicPropertyId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 2416077777517157918L;
 
-	@Column(name = "uid")
+	@Column(name = "uid", nullable = false)
 	private String uid;
 
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private String id;
 
 	public DynamicPropertyId() {

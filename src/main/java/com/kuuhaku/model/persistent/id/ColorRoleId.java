@@ -29,10 +29,10 @@ public class ColorRoleId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = -1696717434982919336L;
 
-	@Column(name = "color")
+	@Column(name = "color", nullable = false)
 	private String color;
 
-	@Column(name = "gid")
+	@Column(name = "gid", nullable = false)
 	private String gid;
 
 	public ColorRoleId() {

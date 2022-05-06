@@ -170,4 +170,18 @@ public abstract class ImageFilters {
 
 		return out;
 	}
+
+	public static BufferedImage silhouette(BufferedImage in) {
+		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		IO.forEachPixel(source, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
+			int[] color = IO.unpackRGB(rgb);
+
+			out.setRGB(x, y, IO.packRGB(color[0], 0, 0, 0));
+		});
+
+		return out;
+	}
 }

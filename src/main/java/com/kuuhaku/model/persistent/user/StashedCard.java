@@ -21,105 +21,82 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.utils.Utils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "stashed_card")
 public class StashedCard extends DAO {
 	@Id
-	@Column(name = "uuid", nullable = false, length = 36)
-	private String uuid = UUID.randomUUID().toString();
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private int id;
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
 	@Fetch(FetchMode.JOIN)
 	private Card card;
 
+	@OneToOne(mappedBy = "stashEntry")
+	private KawaiponCard kawaiponCard;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private CardType type;
 
-	@Column(name = "foil", nullable = false)
-	private boolean foil;
-
-	@Column(name = "quality", nullable = false)
-	private double quality;
-
 	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "stash_uid")
+	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
-	private Stash stash;
-
-	@ManyToOne
-	@PrimaryKeyJoinColumn(name = "trade_id")
-	@Fetch(FetchMode.JOIN)
-	private Trade trade;
+	private Kawaipon kawaipon;
 
 	public StashedCard() {
 
 	}
 
-	public StashedCard(Stash stash, Card card, CardType type, double quality, boolean foil) {
+	public StashedCard(Kawaipon kawaipon, Card card, CardType type) {
 		this.card = card;
 		this.type = type;
-		this.foil = foil;
-		this.quality = quality;
-		this.stash = stash;
+		this.kawaipon = kawaipon;
 	}
 
-	public StashedCard(Stash stash, String uuid, Card card, CardType type, double quality, boolean foil) {
-		this.uuid = uuid;
-		this.card = card;
-		this.type = type;
-		this.foil = foil;
-		this.quality = quality;
-		this.stash = stash;
+	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
+		this.card = card.getCard();
+		this.kawaiponCard = card;
+		this.type = CardType.KAWAIPON;
+		this.kawaipon = kawaipon;
 	}
 
-	public String getUUID() {
-		return uuid;
+	public int getId() {
+		return id;
 	}
 
 	public Card getCard() {
 		return card;
 	}
 
-	public String getName() {
-		return (foil ? "« %s »" : "%s").formatted(card.getName());
+	public KawaiponCard getKawaiponCard() {
+		return kawaiponCard;
 	}
 
 	public CardType getType() {
 		return type;
 	}
 
-	public boolean isFoil() {
-		return foil;
+	public Kawaipon getKawaipon() {
+		return kawaipon;
 	}
 
-	public double getQuality() {
-		return quality;
-	}
-
-	public Stash getStash() {
-		return stash;
-	}
-
-	public Trade getTrade() {
-		return trade;
-	}
-
-	public void setTrade(Trade trade) {
-		this.trade = trade;
+	public void setKawaipon(Kawaipon kawaipon) {
+		this.kawaipon = kawaipon;
 	}
 
 	@Override
 	public String toString() {
-		return getName();
+		return Utils.getOr(kawaiponCard, (Object) card).toString();
 	}
 
 	@Override
@@ -127,11 +104,11 @@ public class StashedCard extends DAO {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		StashedCard that = (StashedCard) o;
-		return Objects.equals(uuid, that.uuid) && type == that.type;
+		return id == that.id && Objects.equals(card, that.card) && type == that.type;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uuid, type);
+		return Objects.hash(id, card, type);
 	}
 }

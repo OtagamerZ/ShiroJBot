@@ -19,65 +19,38 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.MultiMap;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.XStringBuilder;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Entity
-@Table(name = "trade")
-public class Trade extends DAO {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
-	private int id;
+public class Trade {
+	private static final MultiMap<String, Trade> pending = new MultiMap<>(ConcurrentHashMap::new);
 
-	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "left_uid")
-	@Fetch(FetchMode.JOIN)
 	private Account left;
-
-	@Column(name = "left_value", nullable = false)
 	private int leftValue;
+	private List<Integer> leftOffers = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "left_id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private List<TradeOffer> leftOffers = new ArrayList<>();
-
-	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "right_uid")
-	@Fetch(FetchMode.JOIN)
 	private Account right;
-
-	@Column(name = "right_value", nullable = false)
 	private int rightValue;
+	private List<Integer> rightOffers = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "right_id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private List<TradeOffer> rightOffers = new ArrayList<>();
-
-	@Column(name = "closed", nullable = false)
-	private boolean closed;
-
-	public Trade() {
-	}
+	private boolean finalizing = false;
 
 	public Trade(String left, String right) {
 		this.left = DAO.find(Account.class, left);
 		this.right = DAO.find(Account.class, right);
 	}
 
-	public int getId() {
-		return id;
+	public static MultiMap<String, Trade> getPending() {
+		return pending;
 	}
 
 	public Account getLeft() {
@@ -92,7 +65,7 @@ public class Trade extends DAO {
 		leftValue += value;
 	}
 
-	public List<TradeOffer> getLeftOffers() {
+	public List<Integer> getLeftOffers() {
 		return leftOffers;
 	}
 
@@ -108,7 +81,7 @@ public class Trade extends DAO {
 		rightValue += value;
 	}
 
-	public List<TradeOffer> getRightOffers() {
+	public List<Integer> getRightOffers() {
 		return rightOffers;
 	}
 
@@ -128,81 +101,84 @@ public class Trade extends DAO {
 		}
 	}
 
-	public List<TradeOffer> getSelfOffers(String id) {
+	public List<Integer> getSelfOffers(String id) {
 		return left.getUid().equals(id) ? leftOffers : rightOffers;
 	}
 
-	public void accept() {
-		left.addCR(rightValue, "Trade Nº" + id + " commit");
-		DAO.applyNative("""
-				UPDATE stashed_card sc
-				SET stash_uid = of.left_uid
-				  , trade_id = NULL
-				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.right_id = t.id) of
-				WHERE of.id = ?1
-				""", id);
+	public boolean validate() {
+		if (left.getBalance() < leftValue || right.getBalance() < rightValue) return false;
 
-		right.addCR(leftValue, "Trade Nº" + id + " commit");
-		DAO.applyNative("""
-				UPDATE stashed_card sc
-				SET stash_uid = of.right_uid
-				  , trade_id = NULL
-				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.left_id = t.id) of
-				WHERE of.id = ?1
-				""", id);
+		@Language("PostgreSQL")
+		String query = """
+				SELECT COUNT(1)
+				FROM stashed_card sc
+				WHERE sc.kawaipon_uid = ?1
+				AND sc.id IN ?2
+				""";
 
-		closed = true;
-		save();
+		if (DAO.queryNative(Integer.class, query, left.getUid(), leftOffers) != leftOffers.size()) {
+			return false;
+		}
+
+		return DAO.queryNative(Integer.class, query, right.getUid(), rightOffers) == rightOffers.size();
 	}
 
-	public void cancel() {
-		left.addCR(leftValue, "Trade Nº" + id + " rollback");
-		DAO.applyNative("""
-				UPDATE stashed_card sc
-				SET trade_id = NULL
-				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.left_id = t.id) of
-				WHERE of.id = ?1
-				""", id);
+	public void accept() {
+		left.addCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
+		DAO.apply("""
+				UPDATE StashedCard sc
+				SET kawaipon = ?1
+				WHERE sc.id IN ?2
+				""", left.getKawaipon(), rightOffers);
 
-		right.addCR(rightValue, "Trade Nº" + id + " rollback");
-		DAO.applyNative("""
-				UPDATE stashed_card sc
-				SET trade_id = NULL
-				FROM (SELECT * FROM trade t INNER JOIN trade_offer of ON of.right_id = t.id) of
-				WHERE of.id = ?1
-				""", id);
-
-		closed = true;
-		save();
+		right.addCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
+		DAO.apply("""    
+				UPDATE StashedCard sc
+				SET kawaipon = ?1
+				WHERE sc.id IN ?2
+				""", right.getKawaipon(), leftOffers);
 	}
 
 	public String toString(I18N locale, boolean left) {
 		int value;
-		List<TradeOffer> offers;
+		List<StashedCard> offers;
 		if (left) {
 			value = this.leftValue;
-			offers = this.leftOffers;
+			offers = this.leftOffers.stream()
+					.map(id -> DAO.find(StashedCard.class, id))
+					.sorted(Comparator.comparing(StashedCard::getType))
+					.toList();
 		} else {
 			value = this.rightValue;
-			offers = this.rightOffers;
+			offers = this.rightOffers.stream()
+					.map(id -> DAO.find(StashedCard.class, id))
+					.sorted(Comparator.comparing(StashedCard::getType))
+					.toList();
 		}
 
 		XStringBuilder sb = new XStringBuilder("```asciidoc");
-		sb.appendNewLine("= " + Utils.separate(value, locale.getLocale()) + " ₵R =");
+		sb.appendNewLine("= " + Utils.separate(value) + " ₵R =");
 
-		offers.sort(Comparator.comparing(TradeOffer::getType));
 		CardType type = null;
-		for (TradeOffer offer : offers) {
-			if (type != offer.getType()) {
-				type = offer.getType();
+		for (StashedCard card : offers) {
+			if (type != card.getType()) {
+				type = card.getType();
 				sb.appendNewLine("\n[" + locale.get("type/" + type.name()) + "]");
 			}
 
-			sb.appendNewLine("- " + DAO.query(type.getKlass(), type.getQuery(), offer.getUUID()));
+			sb.appendNewLine("- " + card);
 		}
 
 		sb.appendNewLine("```");
 
 		return sb.toString();
+	}
+
+	public boolean isFinalizing() {
+		return finalizing;
+	}
+
+	public void setFinalizing(boolean finalizing) {
+		this.finalizing = finalizing;
 	}
 }

@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.trade;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.enums.Category;
@@ -37,13 +36,16 @@ import net.dv8tion.jda.api.JDA;
 public class TradeCancelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
+		Trade trade = Trade.getPending().get(event.user().getId());
 		if (trade == null) {
 			event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
 			return;
+		} else if (trade.isFinalizing()) {
+			event.channel().sendMessage(locale.get("error/trade_finalizing")).queue();
+			return;
 		}
 
-		trade.cancel();
+		Trade.getPending().remove(event.user().getId());
 		event.channel().sendMessage(locale.get("success/trade_cancel")).queue();
 	}
 }

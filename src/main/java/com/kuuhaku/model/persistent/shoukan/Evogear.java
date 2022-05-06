@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.utils.json.JSONArray;
@@ -28,7 +29,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "evogear")
-public class Evogear {
+public class Evogear extends DAO {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;

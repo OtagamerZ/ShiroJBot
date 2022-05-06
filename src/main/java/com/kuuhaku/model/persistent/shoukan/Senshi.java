@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Race;
 import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
@@ -27,7 +28,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "senshi")
-public class Senshi {
+public class Senshi extends DAO {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;

@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 		name = "eval",
 		category = Category.DEV
 )
-@Signature({"<code:text:r>"})
+@Signature("<code:text:r>")
 public class CompileCommand implements Executable {
 	private static final ExecutorService exec = Executors.newFixedThreadPool(2);
 
