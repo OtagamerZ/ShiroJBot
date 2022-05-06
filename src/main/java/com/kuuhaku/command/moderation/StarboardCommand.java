@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.JDA;
 		name = "starboard",
 		category = Category.MODERATION
 )
-@Signature(value = {
+@Signature({
 		"<action:word:r>[limpar,clear]",
 		"<channel:channel:r>",
 		"<value:number:r>"

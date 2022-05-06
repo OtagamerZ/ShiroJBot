@@ -34,7 +34,7 @@ import java.util.Locale;
 		name = "locale",
 		category = Category.MODERATION
 )
-@Signature({"<locale:word:r>[pt,en]"})
+@Signature("<locale:word:r>[pt,en]")
 public class LocaleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

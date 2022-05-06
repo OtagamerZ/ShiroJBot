@@ -24,6 +24,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
@@ -184,8 +185,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (!Utils.equalsAny(event.getChannel().getId(), "718666970119143436", "606127567220637697")) return;
-		if (event.getAuthor().isBot()) return;
+		if (!Utils.equalsAny(event.getChannel().getId(), "718666970119143436", "615938347453382656", "971503733202628698")) return;
+		if (event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
@@ -307,7 +308,7 @@ public class GuildListener extends ListenerAdapter {
 
 				pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 
-				if (!Constants.SUP_PRIVILEGE.apply(data.member())) {
+				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
 					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
 				}
 			} catch (InvalidSignatureException e) {
@@ -321,15 +322,21 @@ public class GuildListener extends ListenerAdapter {
 							name,
 							e.getMessage().replace("`", "'")
 					);
-				} else {
-					error = locale.get("error/invalid_signature") + "```css\n%s%s %s```".formatted(
-							event.config().getPrefix(),
-							name,
-							e.getMessage().replace("`", "'")
-					);
-				}
 
-				data.channel().sendMessage(error).queue();
+					data.channel().sendMessage(error).queue();
+				} else {
+					error = locale.get("error/invalid_signature");
+
+					List<String> signatures = SignatureParser.extract(locale, pc.command());
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setAuthor(locale.get("str/command_signatures"))
+							.setDescription("```css\n" + String.join("\n", signatures).formatted(
+									event.config().getPrefix(),
+									name
+							) + "\n```");
+
+					data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+				}
 			}
 		}
 	}

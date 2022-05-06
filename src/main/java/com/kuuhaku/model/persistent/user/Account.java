@@ -27,12 +27,13 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.utils.Utils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -42,7 +43,7 @@ import java.util.*;
 @Entity
 @DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "account")
+@Table(name = "account", indexes = @Index(columnList = "debit, balance DESC"))
 public class Account extends DAO implements Blacklistable {
 	@Id
 	@Column(name = "uid", nullable = false)
@@ -78,11 +79,6 @@ public class Account extends DAO implements Blacklistable {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "uid")
-	@Fetch(FetchMode.JOIN)
-	private Stash stash;
-
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Deck> decks = new ArrayList<>();
@@ -109,7 +105,6 @@ public class Account extends DAO implements Blacklistable {
 		this.uid = uid;
 		this.settings = new AccountSettings(uid);
 		this.kawaipon = new Kawaipon(this);
-		this.stash = new Stash(this);
 	}
 
 	public String getUid() {
@@ -121,15 +116,6 @@ public class Account extends DAO implements Blacklistable {
 	}
 
 	public String getName() {
-		if (Utils.getOr(name, "").isBlank()) {
-			User usr = Main.getApp().getShiro().getUserById(uid);
-			if (usr != null) {
-				name = usr.getName();
-			} else {
-				name = "";
-			}
-		}
-
 		return name;
 	}
 
@@ -212,15 +198,11 @@ public class Account extends DAO implements Blacklistable {
 	}
 
 	public AccountSettings getSettings() {
-		return Utils.getOr(settings, new AccountSettings(uid));
+		return Utils.getOr(settings, DAO.find(AccountSettings.class, uid));
 	}
 
 	public Kawaipon getKawaipon() {
-		return Utils.getOr(kawaipon, new Kawaipon(this));
-	}
-
-	public Stash getStash() {
-		return stash;
+		return Utils.getOr(kawaipon, DAO.find(Kawaipon.class, uid));
 	}
 
 	public List<Deck> getDecks() {

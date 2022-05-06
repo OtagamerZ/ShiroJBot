@@ -20,6 +20,7 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
@@ -33,17 +34,35 @@ import net.dv8tion.jda.api.JDA;
 		name = "antiraid",
 		category = Category.MODERATION
 )
+@Signature("<value:number>")
 public class AntiRaidCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
         GuildSettings settings = data.config().getSettings();
-        if (settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
-            settings.getFeatures().remove(GuildFeature.ANTI_RAID);
-            event.channel().sendMessage(locale.get("success/anti_raid_disable")).queue();
-        } else {
-            settings.getFeatures().add(GuildFeature.ANTI_RAID);
-            event.channel().sendMessage(locale.get("success/anti_raid_enable")).queue();
-        }
+        if (args.containsKey("value")) {
+			int thr = args.getInt("value");
+			if (thr < 5) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 5)).queue();
+				return;
+			}
+
+			settings.setAntiRaidThreshold(thr);
+
+			String msg = locale.get("success/anti_raid_threshold", thr);
+			if (!settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
+				msg += "\n" + locale.get("success/anti_raid_enable");
+			}
+
+			event.channel().sendMessage(msg).queue();
+		} else {
+			if (settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
+				settings.getFeatures().remove(GuildFeature.ANTI_RAID);
+				event.channel().sendMessage(locale.get("success/anti_raid_disable")).queue();
+			} else {
+				settings.getFeatures().add(GuildFeature.ANTI_RAID);
+				event.channel().sendMessage(locale.get("success/anti_raid_enable")).queue();
+			}
+		}
 
         settings.save();
 	}

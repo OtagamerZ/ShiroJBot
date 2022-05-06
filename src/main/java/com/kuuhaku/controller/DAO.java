@@ -3,7 +3,6 @@ package com.kuuhaku.controller;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.utils.Utils;
-import org.hibernate.jpa.QueryHints;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
@@ -256,7 +255,6 @@ public abstract class DAO {
 			em.getTransaction().begin();
 
 			Query q = em.createQuery(query);
-			q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
 			for (int i = 0; i < params.length; i++) {
 				q.setParameter(i+1, params[i]);
 			}
@@ -279,7 +277,6 @@ public abstract class DAO {
 			em.getTransaction().begin();
 
 			Query q = em.createNativeQuery(query);
-			q.setHint(QueryHints.HINT_NATIVE_LOCKMODE, LockModeType.PESSIMISTIC_WRITE);
 			for (int i = 0; i < params.length; i++) {
 				q.setParameter(i+1, params[i]);
 			}

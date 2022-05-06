@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent.id;
 
+import com.kuuhaku.controller.DAO;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
@@ -32,15 +34,19 @@ public class LevelRoleId implements Serializable {
 	private static final long serialVersionUID = -7709129291113066206L;
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private int id;
 
+	@Column(name = "gid", nullable = false)
 	private String gid;
 
 	public LevelRoleId() {
 	}
 
 	public LevelRoleId(String gid) {
+		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS level_role_id_seq");
+
+		this.id = DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')");
 		this.gid = gid;
 	}
 

@@ -16,59 +16,66 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.user;
+package com.kuuhaku.model.persistent.id;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.enums.CardType;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "trade_offer")
-public class TradeOffer extends DAO {
-	@Id
+@Embeddable
+public class TradeOfferId implements Serializable {
+	@Serial
+	private static final long serialVersionUID = -4714845905082735314L;
+
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Column(name = "uuid", nullable = false, unique = true, length = 36)
-	private String uuid;
+	@Column(name = "trade_id", nullable = false)
+	private int tradeId;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "type", nullable = false)
-	private CardType type;
-
-	public TradeOffer() {
+	public TradeOfferId() {
 	}
 
-	public TradeOffer(String uuid, CardType type) {
-		this.uuid = uuid;
-		this.type = type;
+	public TradeOfferId(int tradeId) {
+		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS trade_offer_id_seq");
+
+		this.id = DAO.queryNative(Integer.class, "SELECT nextval('trade_offer_id_seq')");
+		this.tradeId = tradeId;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public String getUUID() {
-		return uuid;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public CardType getType() {
-		return type;
+	public int getTradeId() {
+		return tradeId;
+	}
+
+	public void setTradeId(int tradeId) {
+		this.tradeId = tradeId;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		TradeOffer that = (TradeOffer) o;
-		return Objects.equals(uuid, that.uuid) && type == that.type;
+		TradeOfferId that = (TradeOfferId) o;
+		return id == that.id && tradeId == that.tradeId;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uuid, type);
+		return Objects.hash(id, tradeId);
 	}
 }

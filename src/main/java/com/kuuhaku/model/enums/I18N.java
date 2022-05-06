@@ -80,7 +80,7 @@ public enum I18N {
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
 			if (StringUtils.isNumeric(String.valueOf(arg))) {
-				args[i] = Utils.separate(arg, locale);
+				args[i] = Utils.separate(arg);
 			}
 		}
 

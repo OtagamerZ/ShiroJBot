@@ -26,8 +26,6 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
-import com.kuuhaku.model.persistent.user.Stash;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Utils;
@@ -43,12 +41,12 @@ import java.util.Locale;
 		subname = "get",
 		category = Category.MISC
 )
-@Signature({"<card:word:r>"})
+@Signature("<card:word:r>")
 public class StashGetCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Stash stash = DAO.find(Stash.class, event.user().getId());
-		if (stash.getCards().isEmpty()) {
+		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		if (kp.getCards().isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 			return;
 		}
@@ -62,30 +60,22 @@ public class StashGetCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), stash, card)
+		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
-					} else if (sc.getTrade() != null) {
-						event.channel().sendMessage(locale.get("error/card_in_trade")).queue();
-						return;
 					}
 
-					Kawaipon kp = stash.getAccount().getKawaipon();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							KawaiponCard kc = kp.getCards().stream()
-									.filter(c -> c.getCard().equals(card))
-									.filter(c -> c.isFoil() == args.getString("kind").equalsIgnoreCase("f"))
-									.findFirst().orElse(null);
-
-							if (kc != null) {
+							boolean foil = args.getString("kind").equalsIgnoreCase("f");
+							if (kp.hasCard(card, foil)) {
 								event.channel().sendMessage(locale.get("error/in_collection")).queue();
 								return;
 							}
 
-							new KawaiponCard(sc.getUUID(), kp, card, sc.isFoil()).save();
+							sc.delete();
 						}
 						case EVOGEAR -> {
 							//TODO
@@ -95,9 +85,6 @@ public class StashGetCommand implements Executable {
 						}
 					}
 
-					Stash sth = sc.getStash();
-					sth.getCards().remove(sc);
-					sth.save();
 					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
 				})
 				.exceptionally(t -> {

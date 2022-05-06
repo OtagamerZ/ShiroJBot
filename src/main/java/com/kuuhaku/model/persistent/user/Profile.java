@@ -30,6 +30,7 @@ import org.hibernate.annotations.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ import java.util.Objects;
 @Entity
 @DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "profile")
+@Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
 public class Profile extends DAO implements Blacklistable {
 	@EmbeddedId
 	private ProfileId id;
@@ -124,7 +125,7 @@ public class Profile extends DAO implements Blacklistable {
 	}
 
 	public ProfileSettings getSettings() {
-		return Utils.getOr(settings, new ProfileSettings(id));
+		return Utils.getOr(settings, DAO.find(ProfileSettings.class, id));
 	}
 
 	@Override
