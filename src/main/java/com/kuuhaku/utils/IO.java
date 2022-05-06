@@ -32,6 +32,8 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Base64;
 import java.util.function.BiConsumer;
 
@@ -104,10 +106,10 @@ public abstract class IO {
 		}
 	}
 
-	public static byte[] getBytes(BufferedImage image, String encode, float compression) {
+	public static byte[] getBytes(BufferedImage image, String encoding, float compression) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
-				ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
+				ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
 				ImageOutputStream ios = ImageIO.createImageOutputStream(bos);
 				writer.setOutput(ios);
 
@@ -229,6 +231,14 @@ public abstract class IO {
 						packRGB(fac, rgb[1], rgb[2], rgb[3])
 				);
 			}
+		}
+	}
+
+	public static String readString(Path path) {
+		try {
+			return Files.readString(path);
+		} catch (IOException e) {
+			return null;
 		}
 	}
 }

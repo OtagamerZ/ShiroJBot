@@ -27,6 +27,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
@@ -41,6 +42,13 @@ public class Kawaipon extends DAO {
 	@OneToMany(mappedBy = "kawaipon", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<KawaiponCard> cards = new LinkedHashSet<>();
+
+	@OneToMany(mappedBy = "kawaipon", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<StashedCard> stash = new LinkedHashSet<>();
+
+	@Column(name = "stash_capacity", nullable = false)
+	private int stashCapacity = 250;
 
 	public Kawaipon() {
 	}
@@ -68,7 +76,34 @@ public class Kawaipon extends DAO {
 		return cards;
 	}
 
-	public boolean addCard(Card card, boolean foil) {
-		return cards.add(new KawaiponCard(this, card, foil));
+	public Set<StashedCard> getStash() {
+		return stash;
+	}
+
+	public int getMaxCapacity() {
+		return stashCapacity;
+	}
+
+	public int getCapacity() {
+		return getMaxCapacity() - stash.size();
+	}
+
+	public Set<KawaiponCard> getCollection() {
+		return cards.parallelStream()
+				.filter(c -> c.getStashEntry() == null)
+				.collect(Collectors.toSet());
+	}
+
+	public KawaiponCard getCard(Card card, boolean foil) {
+		return cards.parallelStream()
+				.filter(c -> c.getStashEntry() == null)
+				.filter(c -> c.getCard().equals(card) && c.isFoil() == foil)
+				.findFirst().orElse(null);
+	}
+
+	public boolean hasCard(Card card, boolean foil) {
+		return cards.parallelStream()
+				.filter(c -> c.getStashEntry() == null)
+				.anyMatch(c -> c.getCard().equals(card) && c.isFoil() == foil);
 	}
 }

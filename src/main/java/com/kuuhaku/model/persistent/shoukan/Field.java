@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -26,7 +27,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "field")
-public class Field {
+public class Field extends DAO {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;

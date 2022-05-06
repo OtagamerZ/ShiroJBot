@@ -19,13 +19,19 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.utils.IO;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
+import java.util.stream.Stream;
 
-public class Manager {
+public abstract class Manager {
 	private static final String SERVER_IP = System.getenv("SERVER_IP");
 	private static final String DB_NAME = System.getenv("DB_NAME");
 	private static final String DB_LOGIN = System.getenv("DB_LOGIN");
@@ -43,6 +49,18 @@ public class Manager {
 					)
 			));
 			Constants.LOGGER.info("Connected to database successfully");
+
+			File initDir = IO.getResourceAsFile(Manager.class, "database");
+			if (initDir != null && initDir.isDirectory()) {
+				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
+					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
+							.peek(p -> Constants.LOGGER.info("Applying script " + p.getFileName()))
+							.map(IO::readString)
+							.forEach(DAO::applyNative);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
 		}
 
 		return emf.createEntityManager();

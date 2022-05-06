@@ -57,7 +57,7 @@ public abstract class Spawn {
 		}
 
 		double fac = 0.5 - Math.abs(illum.getSecond().getPhase()) / 360;
-		double dropRate = 5 * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
+		double dropRate = 50 * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
 		double rarityBonus = 1 + fac;
 
 		KawaiponCard card = null;

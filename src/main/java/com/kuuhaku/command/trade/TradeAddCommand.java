@@ -48,17 +48,13 @@ import java.util.Locale;
 public class TradeAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Trade trade = DAO.query(Trade.class, "SELECT t FROM Trade t WHERE ?1 IN (t.left.uid, t.right.uid) AND t.closed = FALSE", event.user().getId());
+		Trade trade = Trade.getPending().get(event.user().getId());
 		if (trade == null) {
 			event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
 			return;
-		}
-
-		Account other;
-		if (trade.getLeft().getUid().equals(event.user().getId())) {
-			other = trade.getRight();
-		} else {
-			other = trade.getLeft();
+		} else if (trade.isFinalizing()) {
+			event.channel().sendMessage(locale.get("error/trade_finalizing")).queue();
+			return;
 		}
 
 		if (args.containsKey("value")) {
@@ -74,14 +70,11 @@ public class TradeAddCommand implements Executable {
 				return;
 			}
 
-			acc.consumeCR(offer, "Trade Nº" + trade.getId() + " offer add");
 			trade.addSelfValue(event.user().getId(), offer);
-			trade.save();
-
 			event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), offer + " ₵R")).queue();
 		} else {
-			Stash stash = DAO.find(Stash.class, event.user().getId());
-			if (stash.getCards().isEmpty()) {
+			Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+			if (kp.getStash().isEmpty()) {
 				event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 				return;
 			}
@@ -95,22 +88,14 @@ public class TradeAddCommand implements Executable {
 				return;
 			}
 
-			Utils.selectOption(locale, event.channel(), stash, card)
+			Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 							return;
-						} else if (sc.getTrade() != null) {
-							event.channel().sendMessage(locale.get("error/card_in_trade")).queue();
-							return;
 						}
 
-						trade.getSelfOffers(event.user().getId()).add(new TradeOffer(sc.getUUID(), sc.getType()));
-						trade.save();
-
-						sc.setTrade(trade);
-						sc.save();
-
+						trade.getSelfOffers(event.user().getId()).add(sc.getId());
 						event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), sc)).queue();
 					})
 					.exceptionally(t -> {

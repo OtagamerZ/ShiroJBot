@@ -33,9 +33,8 @@ import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.user.Stash;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.persistent.user.Trade;
 import de.androidpit.colorthief.ColorThief;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -60,7 +59,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
@@ -236,7 +234,7 @@ public abstract class Utils {
 	}
 
 	public static String underline(String text) {
-		return String.join("\u0332", text.split("")) + "\u0332";
+		return text.replaceAll("([A-Za-z])", "$1\u0332");
 	}
 
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
@@ -345,6 +343,17 @@ public abstract class Utils {
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
 		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
+						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+							w.getMessage().delete().queue(null, Utils::doNothing);
+							action.accept(w);
+						}), true, true, 1, TimeUnit.MINUTES,
+						u -> Arrays.asList(allowed).contains(u)
+				)
+		);
+	}
+
+	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
+		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
@@ -607,7 +616,7 @@ public abstract class Utils {
 				GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
 
 				put("%guild%", guild.getName());
-				put("%guild.users%", separate(guild.getMemberCount(), config.getLocale().getLocale()));
+				put("%guild.users%", separate(guild.getMemberCount()));
 
 				Member owner = guild.getOwner();
 				if (owner != null) {
@@ -632,7 +641,6 @@ public abstract class Utils {
 		try {
 			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
 			DecimalFormat df = new DecimalFormat();
-			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(I18N.PT.getLocale()));
 			df.setGroupingSize(3);
 
 			return df.format(n);
@@ -641,27 +649,13 @@ public abstract class Utils {
 		}
 	}
 
-	public static String separate(Object value, Locale locale) {
-		try {
-			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
-			DecimalFormat df = new DecimalFormat();
-			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(locale));
-			df.setGroupingSize(3);
-
-			return df.format(n);
-		} catch (NumberFormatException e) {
-			return String.valueOf(value);
-		}
-	}
-
-	public static CompletionStage<StashedCard> selectOption(I18N locale, TextChannel channel, Stash stash, Card card) {
-		List<StashedCard> matches = stash.getCards().stream()
+	public static CompletionStage<StashedCard> selectOption(I18N locale, TextChannel channel, Collection<StashedCard> cards, Card card, User user) {
+		List<StashedCard> matches = cards.stream()
 				.filter(sc -> sc.getCard().equals(card))
 				.sorted(
 						Comparator.comparing(StashedCard::getType)
-								.thenComparing(StashedCard::getQuality, Comparator.reverseOrder())
+								.thenComparing(StashedCard::getId, Comparator.reverseOrder())
 								.thenComparing(sc -> sc.getCard().getId())
-								.thenComparing(StashedCard::getUUID)
 				).toList();
 
 		if (matches.isEmpty()) return CompletableFuture.failedStage(new InvalidStateException());
@@ -672,30 +666,25 @@ public abstract class Utils {
 
 		AtomicInteger i = new AtomicInteger();
 		List<Page> pages = generatePages(eb, matches, 10, sc -> {
-			Trade t = sc.getTrade();
+			KawaiponCard kc = sc.getKawaiponCard();
 
 			return new MessageEmbed.Field(
-					"`%s` | %s%s".formatted(
-							i.getAndIncrement(),
-							sc,
-							t == null ? "" : (" (" + locale.get("str/trade_n", t.getId()) + ")")
-					),
+					"`%s` | %s".formatted(i.getAndIncrement(), sc),
 					"%s%s (%s | %s)%s".formatted(
 							sc.getCard().getRarity().getEmote(),
 							locale.get("type/" + sc.getType()),
 							locale.get("rarity/" + sc.getCard().getRarity()),
 							sc.getCard().getAnime(),
-							sc.getQuality() > 0 ? ("\n" + roundToString(sc.getQuality(), 1) + "%") : ""
+							kc != null ? ("\n" + locale.get("str/quality", kc.getQuality())) : ""
 					),
 					false
 			);
 		});
 
-		User u = stash.getAccount().getUser();
-		Message msg = paginate(pages, channel, u);
+		Message msg = paginate(pages, channel, user);
 
 		CompletableFuture<StashedCard> out = new CompletableFuture<>();
-		awaitMessage(u, channel,
+		awaitMessage(user, channel,
 				m -> {
 					try {
 						int indx = Integer.parseInt(m.getContentRaw());

@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 		name = "allow",
 		category = Category.MODERATION
 )
-@Signature({"<channel:channel>"})
+@Signature("<channel:channel>")
 public class AllowCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

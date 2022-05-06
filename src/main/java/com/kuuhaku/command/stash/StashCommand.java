@@ -22,14 +22,15 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Stash;
+import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Utils;
@@ -38,6 +39,7 @@ import com.kuuhaku.utils.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -54,11 +56,12 @@ import java.util.*;
 		"<action:word:r>[help]",
 		"<params:text>"
 })
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class StashCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Stash stash = DAO.find(Stash.class, event.user().getId());
-		if (stash.getCards().isEmpty()) {
+		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		if (kp.getCards().isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 			return;
 		}
@@ -115,7 +118,7 @@ public class StashCommand implements Executable {
 			}
 		}
 
-		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.stash_uid = ?1", event.user().getId());
+		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.kawaipon_uid = ?1", event.user().getId());
 		List<StashedCard> results = DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/search_result", results.size(), total));
@@ -123,19 +126,16 @@ public class StashCommand implements Executable {
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			switch (sc.getType()) {
 				case KAWAIPON -> {
-					Trade t = sc.getTrade();
+					KawaiponCard kc = sc.getKawaiponCard();
 
 					return new MessageEmbed.Field(
-							"%s%s".formatted(
-									sc,
-									t == null ? "" : (" (" + locale.get("str/trade_n", t.getId()) + ")")
-							),
+							sc.toString(),
 							"%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
-									sc.getQuality() > 0 ? ("\n" + Utils.roundToString(sc.getQuality(), 1) + "%") : ""
+									kc != null ? ("\n" + locale.get("str/quality", kc.getQuality())) : ""
 							),
 							false
 					);

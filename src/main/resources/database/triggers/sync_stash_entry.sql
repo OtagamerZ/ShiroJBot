@@ -16,36 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.enums;
+CREATE OR REPLACE FUNCTION t_sync_stash_entry()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    UPDATE kawaipon_card kc
+    SET kawaipon_uid = NEW.kawaipon_uid
+    WHERE kc.stash_entry = NEW.id;
 
-import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.user.StashedCard;
-import org.intellij.lang.annotations.Language;
+    RETURN NEW;
+END;
+$$;
 
-public enum CardType {
-	NONE,
-	KAWAIPON(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.kawaiponCard.uuid = ?1"),
-	EVOGEAR,
-	FIELD;
-
-	private final Class<? extends DAO> klass;
-	private final String query;
-
-	CardType() {
-		this.klass = null;
-		this.query = null;
-	}
-
-	CardType(Class<? extends DAO> klass, @Language("JPAQL") String query) {
-		this.klass = klass;
-		this.query = query;
-	}
-
-	public Class<? extends DAO> getKlass() {
-		return klass;
-	}
-
-	public String getQuery() {
-		return query;
-	}
-}
+DROP TRIGGER IF EXISTS sync_stash_entry ON stashed_card;
+CREATE TRIGGER sync_stash_entry
+    BEFORE UPDATE OF kawaipon_uid
+    ON stashed_card
+    FOR EACH ROW
+    WHEN ( OLD.kawaipon_uid <> NEW.kawaipon_uid )
+EXECUTE PROCEDURE t_sync_stash_entry();

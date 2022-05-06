@@ -20,10 +20,16 @@ package com.kuuhaku.model.enums;
 
 public enum Role {
 	USER,
+	REVIEWER,
+	TESTER,
 	SUPPORT,
+	OVERSEER,
 	DEVELOPER;
 
 	public boolean allowed(Role level) {
-		return ordinal() >= level.ordinal();
+		return switch (this) {
+			case REVIEWER, TESTER, SUPPORT -> this == level;
+			default -> ordinal() >= level.ordinal();
+		};
 	}
 }
