@@ -44,7 +44,7 @@ public class KawaiponCard extends DAO {
 	private boolean foil;
 
 	@Column(name = "quality", nullable = false)
-	private double quality = Calc.round(Math.max(0, Math.pow(Constants.DEFAULT_RNG.nextDouble(), 4) * 25 - 5), 1);
+	private double quality = Calc.round(Math.max(0, Math.pow(Constants.DEFAULT_RNG.nextDouble(), 4) * 30 - 10), 1);
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")

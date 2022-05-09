@@ -16,23 +16,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.interfaces;
+package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.persistent.shiro.Card;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public interface Drawable {
-	Card getCard();
-
-	int getIndex();
-
-	AtomicInteger getIndexRef();
-
-	Side getSide();
-
-	boolean isSolid();
-
-	void setSolid(boolean solid);
+public record GameData(Side side, AtomicInteger index) {
 }
