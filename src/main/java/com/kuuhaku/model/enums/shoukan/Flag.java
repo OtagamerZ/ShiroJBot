@@ -16,23 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.interfaces;
+package com.kuuhaku.model.enums.shoukan;
 
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.persistent.shiro.Card;
+public enum Flag {
+	NO_DEATH,   // Cannot die
+	NO_EQUIP,   // Cannot receive equipment stats
+	NO_CONVERT, // Cannot be converted
+	NO_COMBAT,  // Cannot attack
+	NO_EFFECT,  // Cannot activate effect
 
-import java.util.concurrent.atomic.AtomicInteger;
+	IGNORE_EQUIP,  // Ignores target equipment stats
+	IGNORE_FIELD,  // Ignores field modifiers
+	IGNORE_COMBAT, // Cannot be attacked
+	IGNORE_EFFECT, // Cannot be targeted by effects
 
-public interface Drawable {
-	Card getCard();
-
-	int getIndex();
-
-	AtomicInteger getIndexRef();
-
-	Side getSide();
-
-	boolean isSolid();
-
-	void setSolid(boolean solid);
+	HIDE_STATS,  // Stats are hidden
+	SEALED,      // Effect is disabled
+	TRUE_HIT,    // Ignores dodge chance
+	TRUE_STRIKE, // Ignores block chance
+	TRUE_DODGE,  // Will dodge
+	TRUE_BLOCK,  // Will block
 }

@@ -19,16 +19,19 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.Drawable;
 import com.kuuhaku.model.enums.Race;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Table(name = "senshi")
-public class Senshi extends DAO {
+public class Senshi extends DAO implements Drawable {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -46,6 +49,8 @@ public class Senshi extends DAO {
 	@Embedded
 	private CardAttributes attributes;
 
+	private transient boolean solid = false;
+
 	public String getId() {
 		return id;
 	}
@@ -60,5 +65,30 @@ public class Senshi extends DAO {
 
 	public CardAttributes getAttributes() {
 		return attributes;
+	}
+
+	@Override
+	public int getIndex() {
+		return 0;
+	}
+
+	@Override
+	public AtomicInteger getIndexRef() {
+		return null;
+	}
+
+	@Override
+	public Side getSide() {
+		return null;
+	}
+
+	@Override
+	public boolean isSolid() {
+		return solid;
+	}
+
+	@Override
+	public void setSolid(boolean solid) {
+		this.solid = solid;
 	}
 }
