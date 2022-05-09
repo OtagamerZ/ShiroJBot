@@ -16,23 +16,39 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.interfaces;
+package com.kuuhaku.model.enums.shoukan;
 
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.persistent.shiro.Card;
+public enum Trigger {
+	// Triggers on render
+	ON_TICK,
 
-import java.util.concurrent.atomic.AtomicInteger;
+	// Triggers on each phase
+	ON_PLAN,
+	ON_COMBAT,
 
-public interface Drawable {
-	Card getCard();
+	// Triggers before combat
+	ON_ATTACK,
+	ON_DEFEND,
 
-	int getIndex();
+	// Triggers after combat
+	ON_HIT,
+	ON_BLOCK,
+	ON_DODGE,
 
-	AtomicInteger getIndexRef();
+	// Triggers on attribute clash
+	ON_CLASH,
 
-	Side getSide();
+	// Triggers when card attacks someone stronger
+	ON_SACRIFICE,
 
-	boolean isSolid();
+	// Triggers when added to each stack
+	ON_GRAVEYARD,
+	ON_BAN,
+	ON_HAND,
+	ON_DECK,
 
-	void setSolid(boolean solid);
+	// Triggers on player action
+	ON_DRAW,
+	ON_DISCARD,
+	ON_SUMMON
 }

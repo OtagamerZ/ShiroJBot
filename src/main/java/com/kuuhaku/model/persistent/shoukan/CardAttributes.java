@@ -18,14 +18,14 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.utils.json.JSONArray;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.EnumMap;
 
 @Embeddable
 public class CardAttributes implements Serializable {
@@ -54,14 +54,16 @@ public class CardAttributes implements Serializable {
 	@Column(name = "tags", nullable = false)
 	private JSONArray tags = new JSONArray();
 
+	@ElementCollection
 	@Column(name = "description", nullable = false, length = 140)
-	private String description;
+	@CollectionTable(name = "card_description")
+	private EnumMap<I18N, String> description = new EnumMap<>(I18N.class);
 
 	@Column(name = "effect", nullable = false, columnDefinition = "TEXT")
 	private String effect;
 
-	public String getDescription() {
-		return description;
+	public String getDescription(I18N locale) {
+		return description.getOrDefault(locale, "");
 	}
 
 	public String getEffect() {
