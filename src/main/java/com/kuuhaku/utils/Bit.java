@@ -19,19 +19,31 @@
 package com.kuuhaku.utils;
 
 public abstract class Bit {
-	public static int set(int flags, int index, boolean value) {
-		if (!Utils.between(index, 0, 32)) return flags;
-
-		if (value) {
-			return flags |= 1 << index;
-		} else {
-			return flags &= ~(1 << index);
-		}
+	public static int set(int bits, int index, boolean value) {
+		return set(bits, index, Utils.toInt(value), 1);
 	}
 
-	public static boolean get(int flags, int index) {
-		if (!Utils.between(index, 0, 32)) return false;
+	public static int set(int bits, int index, int value, int size) {
+		index *= size;
+		if (!Utils.between(index, 0, Integer.SIZE)) return bits;
 
-		return ((flags >> index) & 1) == 1;
+		int mask = ((1 << size) - 1) << index;
+		return (bits & ~mask) | value << index;
+	}
+
+	public static boolean on(int bits, int index) {
+		return get(bits, index, 1) > 0;
+	}
+
+	public static boolean on(int bits, int index, int size) {
+		return get(bits, index, size) > 0;
+	}
+
+	public static int get(int bits, int index, int size) {
+		index *= size;
+		if (!Utils.between(index, 0, Integer.SIZE)) return 0;
+
+		int mask = (1 << size) - 1;
+		return (bits >> index) & mask;
 	}
 }

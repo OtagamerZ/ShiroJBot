@@ -18,17 +18,13 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
-import kotlin.Pair;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Locale;
 
 public enum Race {
     HUMAN("Humano",
@@ -133,58 +129,11 @@ public enum Race {
     }
 
     public BufferedImage getIcon() {
-        return IO.getResourceAsImage(this.getClass(), "shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png");
+        return IO.getResourceAsImage("shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png");
     }
 
     public static Race getByName(String name) {
         return Arrays.stream(values()).filter(c -> Utils.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
-    }
-
-    public static Pair<Race, Race> getCombo(List<Senshi> senshi) {
-        if (senshi.isEmpty()) return new Pair<>(NONE, NONE);
-
-        List<Race> order = senshi.stream()
-                .map(Senshi::getRace)
-                .collect(Collectors.collectingAndThen(Collectors.toCollection(LinkedHashSet::new), ArrayList::new));
-        Bag<Race> races = senshi.stream()
-                .map(Senshi::getRace)
-                .collect(Collectors.toCollection(HashBag::new));
-
-        Race major = NONE;
-        for (Race race : races) {
-            if (major == NONE) {
-                major = race;
-                continue;
-            }
-
-            int count = races.getCount(race);
-            if (count > races.getCount(major)) {
-                major = race;
-            } else if (count == races.getCount(major) && order.indexOf(race) < order.indexOf(major)) {
-                major = race;
-            }
-        }
-
-        Race minor = NONE;
-        if (order.size() > 1) {
-            for (Race race : races) {
-                if (race == major) continue;
-
-                if (minor == NONE) {
-                    minor = race;
-                    continue;
-                }
-
-                int count = races.getCount(race);
-                if (count > races.getCount(minor)) {
-                    minor = race;
-                } else if (count == races.getCount(minor) && order.indexOf(race) < order.indexOf(minor)) {
-                    minor = race;
-                }
-            }
-        }
-
-        return new Pair<>(major, minor);
     }
 
     public static Race[] validValues() {

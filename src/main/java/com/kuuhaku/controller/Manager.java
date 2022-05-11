@@ -50,7 +50,7 @@ public abstract class Manager {
 			));
 			Constants.LOGGER.info("Connected to database successfully");
 
-			File initDir = IO.getResourceAsFile(Manager.class, "database");
+			File initDir = IO.getResourceAsFile("database");
 			if (initDir != null && initDir.isDirectory()) {
 				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
 					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))

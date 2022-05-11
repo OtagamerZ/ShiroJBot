@@ -74,7 +74,7 @@ public enum Charm {
 
     public BufferedImage getIcon() {
         if (Utils.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
-        return IO.getResourceAsImage(this.getClass(), "shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
+        return IO.getResourceAsImage("shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
     }
 
     public static BufferedImage getIcon(List<Charm> charms) {
@@ -87,7 +87,7 @@ public enum Charm {
 		if (icons.isEmpty()) return null;
 		else if (icons.size() == 1) return icons.get(0);
 
-		BufferedImage mask = IO.getResourceAsImage(Charm.class, "shoukan/charm/mask.png");
+		BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
         assert mask != null;
 
         BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
@@ -97,7 +97,7 @@ public enum Charm {
 			IO.applyMask(icon, mask, i, true);
 			g2d.drawImage(icon, 0, 0, null);
 		}
-		g2d.drawImage(IO.getResourceAsImage(Charm.class, "shoukan/charm/div.png"), 0, 0, null);
+		g2d.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
 		g2d.dispose();
 
         return bi;
