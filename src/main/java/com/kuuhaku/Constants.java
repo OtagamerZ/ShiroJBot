@@ -26,7 +26,9 @@ import net.dv8tion.jda.api.entities.Member;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.security.SecureRandom;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -63,4 +65,17 @@ public abstract class Constants {
 	public static final Function<Member, Boolean> STF_PRIVILEGE = m -> SUP_PRIVILEGE.apply(m) || TST_PRIVILEGE.apply(m) || REV_PRIVILEGE.apply(m);
 	public static final Function<Member, Boolean> MOD_PRIVILEGE = m -> SUP_PRIVILEGE.apply(m) || m.hasPermission(Permission.KICK_MEMBERS);
 	public static final Function<Member, Boolean> USER_PRIVILEGE = m -> true;
+
+	public static final Map<RenderingHints.Key, Object> HD_HINTS = Map.of(
+			RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON,
+			RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY,
+			RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON,
+			RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC
+	);
+	public static final Map<RenderingHints.Key, Object> SD_HINTS = Map.of(
+			RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON,
+			RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED,
+			RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF,
+			RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR
+	);
 }

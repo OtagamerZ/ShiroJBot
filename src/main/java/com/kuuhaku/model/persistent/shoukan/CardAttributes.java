@@ -21,11 +21,14 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.utils.json.JSONArray;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.EnumMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Embeddable
 public class CardAttributes implements Serializable {
@@ -54,75 +57,50 @@ public class CardAttributes implements Serializable {
 	@Column(name = "tags", nullable = false)
 	private JSONArray tags = new JSONArray();
 
-	@ElementCollection
-	@Column(name = "description", nullable = false, length = 140)
-	@CollectionTable(name = "card_description")
-	private EnumMap<I18N, String> description = new EnumMap<>(I18N.class);
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "card_id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedDescription> descriptions = new LinkedHashSet<>();
 
-	@Column(name = "effect", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
-
-	public String getDescription(I18N locale) {
-		return description.getOrDefault(locale, "");
-	}
-
-	public String getEffect() {
-		return effect;
-	}
 
 	public int getMana() {
 		return mana;
-	}
-
-	public void setMana(int mana) {
-		this.mana = mana;
 	}
 
 	public int getBlood() {
 		return blood;
 	}
 
-	public void setBlood(int blood) {
-		this.blood = blood;
-	}
-
 	public int getAtk() {
 		return atk;
-	}
-
-	public void setAtk(int atk) {
-		this.atk = atk;
 	}
 
 	public int getDef() {
 		return def;
 	}
 
-	public void setDef(int def) {
-		this.def = def;
-	}
-
 	public int getDodge() {
 		return dodge;
-	}
-
-	public void setDodge(int dodge) {
-		this.dodge = dodge;
 	}
 
 	public int getBlock() {
 		return block;
 	}
 
-	public void setBlock(int block) {
-		this.block = block;
-	}
-
 	public JSONArray getTags() {
 		return tags;
 	}
 
-	public void setTags(JSONArray tags) {
-		this.tags = tags;
+	public String getDescription(I18N locale) {
+		return descriptions.stream()
+				.filter(ld -> ld.getLocale() == locale)
+				.map(LocalizedDescription::getDescription)
+				.findFirst().orElse("");
+	}
+
+	public String getEffect() {
+		return effect;
 	}
 }

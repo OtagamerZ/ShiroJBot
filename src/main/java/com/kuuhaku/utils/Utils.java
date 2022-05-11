@@ -782,4 +782,8 @@ public abstract class Utils {
 
 		throw new ClassCastException();
 	}
+
+	public static int toInt(boolean val) {
+		return val ? 1 : 0;
+	}
 }
