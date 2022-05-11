@@ -18,6 +18,11 @@
 
 package com.kuuhaku.model.enums.shoukan;
 
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.utils.IO;
+
+import java.awt.image.BufferedImage;
+
 public enum Race {
 	// Pure races
 	HUMAN(0x1),
@@ -67,7 +72,40 @@ public enum Race {
 		this.flag = flag;
 	}
 
+	public String getName(I18N locale) {
+		return locale.get("race/" + name());
+	}
+
+	public String getMajor(I18N locale) {
+		return locale.get("major/" + name());
+	}
+
+	public String getMinor(I18N locale) {
+		return locale.get("minor/" + name());
+	}
+
+	public String getSynergy(I18N locale) {
+		return locale.get("synergy/" + name());
+	}
+
 	public boolean isRace(Race race) {
 		return (this.flag & race.flag) == race.flag;
+	}
+
+	public Race fuse(Race with) {
+		int res = this.flag | with.flag;
+		for (Race r : values()) {
+			if (r.flag == res) return r;
+		}
+
+		return NONE;
+	}
+
+	public BufferedImage getImage() {
+		return IO.getResourceAsImage("shoukan/race/full/" + name() + ".png");
+	}
+
+	public BufferedImage getIcon() {
+		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
 	}
 }

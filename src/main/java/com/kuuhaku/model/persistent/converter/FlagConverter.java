@@ -46,7 +46,7 @@ public abstract class FlagConverter<T extends Enum<T>> implements AttributeConve
 	public EnumSet<T> convertToEntityAttribute(Integer flags) {
 		EnumSet<T> out = EnumSet.noneOf(klass);
 		for (T flag : klass.getEnumConstants()) {
-			if (Bit.get(flags, flag.ordinal())) {
+			if (Bit.on(flags, flag.ordinal())) {
 				out.add(flag);
 			}
 		}

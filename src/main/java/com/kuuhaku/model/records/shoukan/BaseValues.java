@@ -21,7 +21,5 @@ package com.kuuhaku.model.records.shoukan;
 import java.util.function.Function;
 
 public record BaseValues(int hp, Function<Integer, Integer> mpGain, int handCapacity) {
-	public int getMana(int turn) {
-		return mpGain.apply(turn);
-	}
+
 }

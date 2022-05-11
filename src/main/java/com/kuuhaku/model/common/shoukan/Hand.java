@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.records.shoukan.BaseValues;
+import com.kuuhaku.model.records.shoukan.Origin;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,6 +30,7 @@ import java.util.List;
 public class Hand {
 	private final String uid;
 	private final Side side;
+	private final Origin origin;
 
 	private final List<Drawable> cards = new ArrayList<>();
 	private final LinkedList<Drawable> deck = new LinkedList<>();
@@ -39,9 +41,10 @@ public class Hand {
 	private int hp = 5000;
 	private int mp = 5;
 
-	public Hand(String uid, Side side, BaseValues base) {
+	public Hand(String uid, Side side, Origin origin, BaseValues base) {
 		this.uid = uid;
 		this.side = side;
+		this.origin = origin;
 		this.base = base;
 	}
 
@@ -51,6 +54,10 @@ public class Hand {
 
 	public Side getSide() {
 		return side;
+	}
+
+	public Origin getOrigin() {
+		return origin;
 	}
 
 	public BaseValues getBase() {

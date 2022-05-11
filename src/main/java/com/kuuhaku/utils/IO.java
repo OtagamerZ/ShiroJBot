@@ -38,21 +38,21 @@ import java.util.Base64;
 import java.util.function.BiConsumer;
 
 public abstract class IO {
-	public static URL getResource(Class<?> klass, String path) {
-		URL url = klass.getClassLoader().getResource(path);
+	public static URL getResource(String path) {
+		URL url = IO.class.getClassLoader().getResource(path);
 		if (url == null) throw new NullPointerException();
 		else return url;
 	}
 
-	public static InputStream getResourceAsStream(Class<?> klass, String path) {
-		InputStream is = klass.getClassLoader().getResourceAsStream(path);
+	public static InputStream getResourceAsStream(String path) {
+		InputStream is = IO.class.getClassLoader().getResourceAsStream(path);
 		if (is == null) throw new NullPointerException();
 		else return is;
 	}
 
-	public static BufferedImage getResourceAsImage(Class<?> klass, String path) {
+	public static BufferedImage getResourceAsImage(String path) {
 		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(path, s -> {
-			InputStream is = klass.getClassLoader().getResourceAsStream(path);
+			InputStream is = IO.class.getClassLoader().getResourceAsStream(path);
 
 			if (is == null) return new byte[0];
 			else {
@@ -72,9 +72,9 @@ public abstract class IO {
 		}
 	}
 
-	public static File getResourceAsFile(Class<?> klass, String path) {
+	public static File getResourceAsFile(String path) {
 		try {
-			return new File(getResource(klass, path).toURI());
+			return new File(getResource(path).toURI());
 		} catch (URISyntaxException e) {
 			return null;
 		}

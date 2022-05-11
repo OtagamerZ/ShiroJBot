@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.FrameColor;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
@@ -65,6 +66,10 @@ public class Deck extends DAO {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Field> field = new ArrayList<>();
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "frame", nullable = false)
+	private FrameColor frame = FrameColor.PINK;
+
 	@ManyToOne
 	@JoinColumn(name = "cover_id")
 	@Fetch(FetchMode.JOIN)
@@ -106,6 +111,14 @@ public class Deck extends DAO {
 
 	public List<Field> getField() {
 		return field;
+	}
+
+	public FrameColor getFrame() {
+		return frame;
+	}
+
+	public void setFrame(FrameColor frame) {
+		this.frame = frame;
 	}
 
 	public Card getCover() {

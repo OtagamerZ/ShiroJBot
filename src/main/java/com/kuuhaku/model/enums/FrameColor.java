@@ -165,21 +165,18 @@ public enum FrameColor {
 	}
 
 	public BufferedImage getFront(boolean desc) {
-		return IO.getResourceAsImage(this.getClass(), "shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
+		return IO.getResourceAsImage("shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
 	}
 
-	public BufferedImage getBack(Account acc) {
-		Deck current = acc.getCurrentDeck();
-
-
-		BufferedImage cover = IO.getResourceAsImage(this.getClass(), "shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (current.getCover() != null ? "_t" : "") + ".png");
+	public BufferedImage getBack(Deck deck) {
+		BufferedImage cover = IO.getResourceAsImage("shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (deck.getCover() != null ? "_t" : "") + ".png");
 		assert cover != null;
 
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = canvas.createGraphics();
 
-		if (current.getCover() != null) {
-			g2d.drawImage(current.getCover().drawCardNoBorder(), 15, 16, 195, 318, null);
+		if (deck.getCover() != null) {
+			g2d.drawImage(deck.getCover().drawCardNoBorder(), 15, 16, 195, 318, null);
 		}
 
 		g2d.drawImage(cover, 0, 0, null);
@@ -197,6 +194,18 @@ public enum FrameColor {
 
 	public static FrameColor getByName(String name) {
 		return Arrays.stream(values()).filter(fc -> Utils.equalsAny(name, fc.name(), fc.toString())).findFirst().orElse(null);
+	}
+
+	public Shape getBoundary() {
+		if (name().startsWith("LEGACY")) {
+			return new Rectangle(225, 350);
+		}
+
+		return new Polygon(
+				new int[]{1, 14, 211, 224, 224, 211, 14, 1},
+				new int[]{14, 1, 1, 14, 336, 349, 349, 336},
+				8
+		);
 	}
 
 	@Override

@@ -54,6 +54,7 @@
         <class>com.kuuhaku.model.persistent.shoukan.Evogear</class>
         <class>com.kuuhaku.model.persistent.shoukan.Field</class>
         <class>com.kuuhaku.model.persistent.shoukan.Senshi</class>
+        <class>com.kuuhaku.model.persistent.shoukan.LocalizedDescription</class>
         <class>com.kuuhaku.model.persistent.id.ColorRoleId</class>
 
         <properties>

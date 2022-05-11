@@ -82,7 +82,7 @@ public class Card extends DAO {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = IO.getResourceAsImage(this.getClass(), "kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
+				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
@@ -109,9 +109,9 @@ public class Card extends DAO {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = IO.getResourceAsImage(this.getClass(), "kawaipon/frames/new/ultimate.png");
-				BufferedImage nBar = IO.getResourceAsImage(this.getClass(), "kawaipon/frames/new/normal_bar.png");
-				BufferedImage fBar = IO.getResourceAsImage(this.getClass(), "kawaipon/frames/new/foil_bar.png");
+				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/ultimate.png");
+				BufferedImage nBar = IO.getResourceAsImage("kawaipon/frames/new/normal_bar.png");
+				BufferedImage fBar = IO.getResourceAsImage("kawaipon/frames/new/foil_bar.png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
@@ -224,7 +224,7 @@ public class Card extends DAO {
 				}
 			});
 		} else {
-			f = IO.getResourceAsFile(this.getClass(), "kawaipon/not_found.png");
+			f = IO.getResourceAsFile("kawaipon/not_found.png");
 			assert f != null;
 
 			cardBytes = FileUtils.readFileToByteArray(f);
