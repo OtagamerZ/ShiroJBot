@@ -70,7 +70,7 @@ public class TradeCommand implements Executable {
 
 					Trade.getPending().put(trade, event.user().getId(), other.getId());
 					event.channel().sendMessage(locale.get("success/trade_open", data.config().getPrefix())).queue();
-				},
+				}, m -> trade.setFinalizing(false),
 				event.user(), other
 		);
 	}
