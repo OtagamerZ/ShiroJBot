@@ -108,7 +108,7 @@ public class StashCommand implements Executable {
 		List<Object> params = new ArrayList<>() {{
 			add(event.user().getId());
 		}};
-		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.stash.uid = ?1");
+		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
 		for (Map.Entry<String, String> entry : filters.entrySet()) {
 			String opt = cli.getFirst().getOptionValue(entry.getKey());
 
