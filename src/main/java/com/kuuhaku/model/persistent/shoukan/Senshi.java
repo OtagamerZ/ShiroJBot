@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.utils.Bit;
 import com.kuuhaku.utils.Graph;
 import kotlin.Pair;
@@ -122,7 +123,7 @@ public class Senshi extends DAO implements Drawable {
 
 	@Override
 	public int getHPCost() {
-		return 5;
+		return base.getBlood();
 	}
 
 	@Override
@@ -171,6 +172,52 @@ public class Senshi extends DAO implements Drawable {
 	@Override
 	public void setFlipped(boolean flipped) {
 		state = Bit.set(state, 1, flipped);
+	}
+
+	public boolean isStunned() {
+		return Bit.on(state, 1, 4);
+	}
+
+	public void setStun(int time) {
+		int curr = Bit.get(state, 1, 4);
+		state = Bit.set(state, 1, Math.max(curr, time), 4);
+	}
+
+	public void reduceStun(int time) {
+		int curr = Bit.get(state, 1, 4);
+		state = Bit.set(state, 1, Math.max(0, curr - time), 4);
+	}
+
+	public boolean isSleeping() {
+		return Bit.on(state, 2, 4);
+	}
+
+	public void setSleep(int time) {
+		int curr = Bit.get(state, 2, 4);
+		state = Bit.set(state, 2, Math.max(curr, time), 4);
+	}
+
+	public void reduceSleep(int time) {
+		int curr = Bit.get(state, 2, 4);
+		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
+	}
+
+	public boolean isStasis() {
+		return Bit.on(state, 3, 4);
+	}
+
+	public void setStasis(int time) {
+		int curr = Bit.get(state, 3, 4);
+		state = Bit.set(state, 3, Math.max(curr, time), 4);
+	}
+
+	public void reduceStasis(int time) {
+		int curr = Bit.get(state, 3, 4);
+		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
+	}
+
+	public void execute(EffectParameters ep) {
+		base.execute(this, ep);
 	}
 
 	@Override

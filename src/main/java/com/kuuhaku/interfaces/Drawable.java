@@ -89,7 +89,7 @@ public interface Drawable {
 			String val = String.valueOf(getMPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.CYAN);
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 3, y - 3 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			y += icon.getHeight() + 5;
 		}
 
@@ -101,8 +101,7 @@ public interface Drawable {
 			String val = String.valueOf(getHPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.RED);
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-			y += icon.getHeight() + 5;
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 3, y - 3 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
 	}
 
@@ -135,6 +134,29 @@ public interface Drawable {
 			g2d.setColor(Color.RED);
 			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			y -= icon.getHeight() + 5;
+		}
+
+		if (getBlock() > 0) {
+			icon = IO.getResourceAsImage("shoukan/icons/block.png");
+			assert icon != null;
+			int x = 25;
+
+			String val = getBlock() + "%";
+			g2d.drawImage(icon, x, y, null);
+			g2d.setColor(Color.GRAY);
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			y -= icon.getHeight() + 5;
+		}
+
+		if (getDodge() > 0) {
+			icon = IO.getResourceAsImage("shoukan/icons/dodge.png");
+			assert icon != null;
+			int x = 25;
+
+			String val = getDodge() + "%";
+			g2d.drawImage(icon, x, y, null);
+			g2d.setColor(Color.ORANGE);
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
 	}
 }
