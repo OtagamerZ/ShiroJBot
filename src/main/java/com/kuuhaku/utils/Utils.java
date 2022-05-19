@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -341,6 +342,17 @@ public abstract class Utils {
 		);
 	}
 
+	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) {
+		channel.sendMessage(text).queue(s -> Pages.buttonize(s,
+						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+							w.getMessage().delete().queue(null, Utils::doNothing);
+							action.accept(w);
+						}), true, true, 1, TimeUnit.MINUTES,
+						u -> Arrays.asList(allowed).contains(u), onCancel
+				)
+		);
+	}
+
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
 		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
@@ -352,6 +364,17 @@ public abstract class Utils {
 		);
 	}
 
+	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) {
+		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
+						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+							w.getMessage().delete().queue(null, Utils::doNothing);
+							action.accept(w);
+						}), true, true, 1, TimeUnit.MINUTES,
+						u -> Arrays.asList(allowed).contains(u), onCancel
+				)
+		);
+	}
+
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
 		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
@@ -359,6 +382,17 @@ public abstract class Utils {
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u)
+				)
+		);
+	}
+
+	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) {
+		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
+						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+							w.getMessage().delete().queue(null, Utils::doNothing);
+							action.accept(w);
+						}), true, true, 1, TimeUnit.MINUTES,
+						u -> Arrays.asList(allowed).contains(u), onCancel
 				)
 		);
 	}
@@ -785,5 +819,14 @@ public abstract class Utils {
 
 	public static int toInt(boolean val) {
 		return val ? 1 : 0;
+	}
+
+	public static <T> List<T> generate(int amount, Function<Integer, T> generator) {
+		List<T> out = new ArrayList<>();
+		for (int i = 0; i < amount; i++) {
+			out.add(generator.apply(i));
+		}
+
+		return out;
 	}
 }
