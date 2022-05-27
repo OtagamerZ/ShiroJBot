@@ -13,11 +13,11 @@ import java.time.temporal.ChronoUnit;
 @IdClass(AppliedDebuffId.class)
 public class AppliedDebuff {
 	@Id
-	@Column(columnDefinition = "INT NOT NULL")
+	@Column(name = "hero_id", columnDefinition = "INT NOT NULL")
 	private int heroId;
 
 	@Id
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	@Column(name = "hero_uid", columnDefinition = "VARCHAR(255) NOT NULL")
 	private String heroUid;
 
 	@Id
