@@ -105,8 +105,8 @@ public class Hero implements Cloneable {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumns({
-			@JoinColumn(nullable = false, name = "hero_id", referencedColumnName = "id"),
-			@JoinColumn(nullable = false, name = "hero_uid", referencedColumnName = "uid")
+			@JoinColumn(nullable = false, name = "heroId", referencedColumnName = "id"),
+			@JoinColumn(nullable = false, name = "heroUid", referencedColumnName = "uid")
 	})
 	private Set<AppliedDebuff> debuffs = new HashSet<>();
 
