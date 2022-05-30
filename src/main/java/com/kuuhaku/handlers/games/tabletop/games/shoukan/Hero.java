@@ -103,13 +103,6 @@ public class Hero implements Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean resting = false;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(nullable = false, name = "heroId", referencedColumnName = "id"),
-			@JoinColumn(nullable = false, name = "heroUid", referencedColumnName = "uid")
-	})
-	private Set<AppliedDebuff> debuffs = new HashSet<>();
-
 	private transient int hitpoints = -1;
 	private transient boolean died = false;
 
@@ -295,15 +288,6 @@ public class Hero implements Cloneable {
 			};
 		}
 
-		debuffs.removeIf(AppliedDebuff::expired);
-		for (AppliedDebuff d : debuffs) {
-			Debuff debuff = d.getDebuff();
-			timeModif *= switch (debuff.getId()) {
-				case "D_TIREDNESS" -> 1.5;
-				default -> 1;
-			};
-		}
-
 		this.questEnd = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(Math.round(getQuest().time() * timeModif), TimeUnit.MINUTES);
 	}
 
@@ -340,24 +324,6 @@ public class Hero implements Cloneable {
 
 	public void toggleResting() {
 		this.resting = !this.resting;
-	}
-
-	public Set<AppliedDebuff> getDebuffs() {
-		debuffs.removeIf(AppliedDebuff::expired);
-
-		return debuffs;
-	}
-
-	public void setDebuffs(Set<AppliedDebuff> debuffs) {
-		debuffs.removeIf(AppliedDebuff::expired);
-
-		this.debuffs = debuffs;
-	}
-
-	public void addDebuff(Debuff debuff) {
-		debuffs.removeIf(AppliedDebuff::expired);
-
-		this.debuffs.add(new AppliedDebuff(this, debuff, debuff.getDuration()));
 	}
 
 	public long getSeed() {

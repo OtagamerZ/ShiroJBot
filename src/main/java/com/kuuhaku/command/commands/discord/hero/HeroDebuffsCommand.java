@@ -21,13 +21,10 @@ package com.kuuhaku.command.commands.discord.hero;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -53,22 +50,13 @@ public class HeroDebuffsCommand implements Executable {
 		} else if (h.isUnavailable()) {
 			channel.sendMessage("❌ | Este herói está em uma missão.").queue();
 			return;
-		} else if (h.getDebuffs().isEmpty()) {
+		} else if (true) {
 			channel.sendMessage("❌ | Seu herói não possui nenhuma maldição ainda.").queue();
 			return;
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Maldições de " + h.getName());
-
-		for (AppliedDebuff d : h.getDebuffs()) {
-			Debuff debuff = d.getDebuff();
-			eb.addField(
-					debuff.getName(),
-					debuff.getDescription() + "\n**Expira:** " + Helper.TIMESTAMP.formatted(d.getExpiration().toEpochSecond()),
-					false
-			);
-		}
 
 		channel.sendMessageEmbeds(eb.build()).queue();
 	}
