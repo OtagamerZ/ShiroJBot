@@ -22,7 +22,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Account;
@@ -30,9 +29,6 @@ import com.kuuhaku.model.persistent.Stash;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TriFunction;
 import org.apache.commons.lang3.StringUtils;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 public enum Reward {
 	XP("XP", (h, v, apply) -> {
@@ -112,9 +108,6 @@ public enum Reward {
 		String r = "Falhou";
 
 		if (Helper.chance(Helper.clamp(v, 0, 100))) {
-			for (AppliedDebuff d : h.getDebuffs()) {
-				d.setExpiration(ZonedDateTime.now(ZoneId.of("GMT-3")));
-			}
 			r = "Sucesso";
 		}
 

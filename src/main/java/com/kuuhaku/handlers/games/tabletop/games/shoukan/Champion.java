@@ -1243,9 +1243,6 @@ public class Champion implements Drawable, Cloneable {
 		if (hero == null) return;
 
 		this.hero = hero;
-		for (AppliedDebuff d : hero.getDebuffs()) {
-			addCurse(d.getDebuff().getEffect());
-		}
 	}
 
 	public Champion getAdjacent(Neighbor direction) {

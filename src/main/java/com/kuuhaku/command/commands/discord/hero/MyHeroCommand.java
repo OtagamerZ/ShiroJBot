@@ -21,9 +21,7 @@ package com.kuuhaku.command.commands.discord.hero;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Debuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Perk;
 import com.kuuhaku.model.annotations.Command;
@@ -64,11 +62,6 @@ public class MyHeroCommand implements Executable {
 		for (int i = 0; i < h.getAvailablePerks(); i++) {
 			perks.add("`Perk disponível`");
 		}
-
-		List<String> debuffs = h.getDebuffs().stream()
-				.map(AppliedDebuff::getDebuff)
-				.map(Debuff::getName)
-				.toList();
 
 		List<String> equips = new ArrayList<>(h.getInventoryNames());
 		for (int i = 0; i < h.getInventoryCap(); i++) {
@@ -115,7 +108,6 @@ public class MyHeroCommand implements Executable {
 				.addField(":bar_chart: | Atributos:", stats.toString(), true)
 				.addField(":toolbox: | Equipamentos:", String.join("\n", equips), true)
 				.addField(":books: | Perks:", String.join("\n", perks), true)
-				.addField(":skull_crossbones: | Maldições:", String.join("\n", debuffs), true)
 				.setImage("attachment://hero.png");
 
 		if (h.isQuesting())

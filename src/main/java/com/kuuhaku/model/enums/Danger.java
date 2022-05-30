@@ -19,12 +19,10 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.AppliedDebuff;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hero;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 
-import java.time.temporal.ChronoUnit;
 import java.util.function.Function;
 
 public enum Danger {
@@ -56,10 +54,6 @@ public enum Danger {
 		return "Seu herói perdeu um dos equipamentos durante a missão";
 	}),
 	AGGRAVATE("Agravamento", h -> {
-		for (AppliedDebuff d : h.getDebuffs()) {
-			d.setExpiration(d.getExpiration().plus(d.getDebuff().getDuration(), ChronoUnit.SECONDS));
-		}
-
 		return "Suas maldições tiveram a duração aumentada";
 	}),
 	;

@@ -121,7 +121,6 @@ public class BountyRewardCommand implements Executable {
 				for (Debuff debuff : debuffs) {
 					if (Helper.chance(50 - (pes ? 25 : 0))) {
 						sb.appendNewLine("- " + debuff.getName());
-						h.addDebuff(debuff);
 					}
 				}
 

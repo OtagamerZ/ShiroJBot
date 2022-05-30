@@ -37,6 +37,14 @@ public class AppliedDebuff {
 		this.expiration = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(duration, ChronoUnit.SECONDS);
 	}
 
+	public int getHeroId() {
+		return heroId;
+	}
+
+	public String getHeroUid() {
+		return heroUid;
+	}
+
 	public Debuff getDebuff() {
 		return DebuffDAO.getDebuff(debuff);
 	}
