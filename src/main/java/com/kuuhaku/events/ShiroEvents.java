@@ -22,6 +22,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Slashed;
@@ -443,7 +444,8 @@ public class ShiroEvents extends ListenerAdapter {
 								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 							}
 						}, Helper::doNothing);
-					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException ignore) {
+					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException |
+							 NullPointerException | InterruptedException | ExecutionException ignore) {
 					}
 			}
 
@@ -666,11 +668,26 @@ public class ShiroEvents extends ListenerAdapter {
 
 			arc.put(System.currentTimeMillis(), new UserData(author));
 			if (arc.size() >= gc.getAntiRaidLimit()) {
-				Main.getInfo().getAntiRaidStreak().put(guild.getId(), new RaidData(System.currentTimeMillis(), arc));
+				Main.getInfo().getAntiRaidStreak()
+						.compute(guild.getId(), (k, v) -> {
+							if (v == null) {
+								return new RaidData(System.currentTimeMillis(), arc);
+							} else {
+								v.users().addAll(arc.values());
+								return v;
+							}
+						});
 
 				TextChannel chn = gc.getGeneralChannel();
 				if (chn != null && chn.canTalk()) {
-					EmbedBuilder eb = new EmbedBuilder()
+					Message last;
+					if (chn.hasLatestMessage()) {
+						last = Pages.subGet(chn.retrieveMessageById(chn.getLatestMessageId()));
+					} else {
+						last = null;
+					}
+
+					MessageEmbed eb = new EmbedBuilder()
 							.setColor(Color.red)
 							.setTitle("**⚠️ | RAID DETECTADA - SISTEMA R.A.ID ATIVADO | ⚠️**")
 							.setDescription("""
@@ -681,26 +698,45 @@ public class ShiroEvents extends ListenerAdapter {
 									Notificando administradores do servidor...**Ok**
 									""")
 							.setFooter("Aguarde, o sistema será encerrado em breve")
-							.setImage("https://i.imgur.com/KkhWWJf.gif");
+							.setImage("https://i.imgur.com/KkhWWJf.gif")
+							.build();
 
-					chn.sendMessageEmbeds(eb.build()).queue(null, Helper::doNothing);
+					chn.sendMessageEmbeds(eb)
+							.setCheck(() -> {
+								if (last != null) {
+									MessageEmbed embed = Helper.safeGet(last.getEmbeds(), 0);
+									if (embed != null) {
+										return !embed.getTitle().equals(eb.getTitle());
+									}
+								}
+
+								return true;
+							})
+							.queue(null, Helper::doNothing);
 				}
 
-				List<Role> admRoles = guild.getRoles().stream()
+				Set<Member> admins = guild.getRoles().stream()
 						.filter(r -> r.hasPermission(Permission.ADMINISTRATOR))
-						.toList();
-
-				Set<Member> admins = new HashSet<>();
-				for (Role admRole : admRoles) {
-					admins.addAll(guild.getMembersWithRoles(admRole));
-				}
+						.map(guild::getMembersWithRoles)
+						.flatMap(List::stream)
+						.collect(Collectors.toSet());
 
 				for (Member admin : admins) {
 					if (admin.getUser().isBot()) continue;
 
 					admin.getUser().openPrivateChannel()
-							.flatMap(s -> s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado."))
-							.queue(null, Helper::doNothing);
+							.flatMap(s -> {
+								if (s.hasLatestMessage()) {
+									return s.retrieveMessageById(s.getLatestMessageId());
+								} else {
+									return s.sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado.");
+								}
+							})
+							.queue(m -> {
+								if (!m.getContentRaw().startsWith("**ALERTA:**")) {
+									m.getPrivateChannel().sendMessage("**ALERTA:** Seu servidor " + guild.getName() + " está sofrendo uma raid. Mas não se preocupe, se você recebeu esta mensagem é porque o sistema antiraid foi ativado.").queue();
+								}
+							}, Helper::doNothing);
 				}
 
 				for (TextChannel tc : guild.getTextChannels()) {
@@ -780,8 +816,10 @@ public class ShiroEvents extends ListenerAdapter {
 											case 0 -> "Opa, parece que temos um novo membro?";
 											case 1 -> "Mais um membro para nosso lindo servidor!";
 											case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
-											case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
-											case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+											case 3 ->
+													"Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+											case 4 ->
+													"Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
 											default -> "";
 										},
 										e.title() != null ? e.title().url() : null
@@ -793,8 +831,10 @@ public class ShiroEvents extends ListenerAdapter {
 											case 0 -> "Opa, parece que temos um novo membro?";
 											case 1 -> "Mais um membro para nosso lindo servidor!";
 											case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
-											case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
-											case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+											case 3 ->
+													"Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+											case 4 ->
+													"Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
 											default -> "";
 										}
 								);
@@ -877,7 +917,8 @@ public class ShiroEvents extends ListenerAdapter {
 											case 1 -> "O quê? Temos um membro a menos neste servidor!";
 											case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
 											case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
-											case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+											case 4 ->
+													"Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
 											default -> "";
 										},
 										e.title() != null ? e.title().url() : null
@@ -890,7 +931,8 @@ public class ShiroEvents extends ListenerAdapter {
 											case 1 -> "O quê? Temos um membro a menos neste servidor!";
 											case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
 											case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
-											case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+											case 4 ->
+													"Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
 											default -> "";
 										}
 								);
@@ -1141,7 +1183,7 @@ public class ShiroEvents extends ListenerAdapter {
 											.setTimestamp(Instant.now());
 
 									for (Staff stf : staff) {
-											Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
+										Main.getInfo().getUserByID(stf.getUid()).openPrivateChannel()
 												.flatMap(ch -> ch.sendMessageEmbeds(eb.build()))
 												.queue();
 									}
