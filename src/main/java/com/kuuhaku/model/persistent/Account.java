@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.records.CompletionState;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.apache.commons.collections4.bag.HashBag;
 import org.hibernate.annotations.DynamicUpdate;
@@ -364,7 +365,7 @@ public class Account {
 									new JSONObject() {{
 										put("userId", uid);
 									}}
-							)
+							, ShiroInfo.getDblToken())
 					).thenApply(payload -> {
 						boolean voted = payload.getInt("voted") == 1;
 						if (voted) {
