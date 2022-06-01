@@ -343,7 +343,7 @@ public class Account {
 										new JSONObject() {{
 											put("userId", uid);
 										}}
-								)
+								, ShiroInfo.getDblToken())
 						).thenApply(payload -> {
 							boolean voted = payload.getInt("voted") == 1;
 							if (voted) {
