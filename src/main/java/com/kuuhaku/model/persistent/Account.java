@@ -337,13 +337,19 @@ public class Account {
 					return true;
 				} else {
 					if (thenApply) {
-						CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-						Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
+						CompletableFuture<Boolean> voteCheck = CompletableFuture.supplyAsync(() ->
+								Helper.get("https://top.gg/api/bots/572413282653306901/check",
+										new JSONObject() {{
+											put("userId", uid);
+										}}
+								)
+						).thenApply(payload -> {
+							boolean voted = payload.getInt("voted") == 1;
 							if (voted) {
 								DiscordBotsListHandler.retry(uid);
 							}
 
-							voteCheck.complete(voted);
+							return voted;
 						});
 
 						return voteCheck.get(1, TimeUnit.MINUTES);
@@ -353,12 +359,19 @@ public class Account {
 				}
 			} catch (DateTimeParseException | NullPointerException e) {
 				if (thenApply) {
-					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-					Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
+					CompletableFuture<Boolean> voteCheck = CompletableFuture.supplyAsync(() ->
+							Helper.get("https://top.gg/api/bots/572413282653306901/check",
+									new JSONObject() {{
+										put("userId", uid);
+									}}
+							)
+					).thenApply(payload -> {
+						boolean voted = payload.getInt("voted") == 1;
 						if (voted) {
 							DiscordBotsListHandler.retry(uid);
 						}
-						voteCheck.complete(voted);
+
+						return voted;
 					});
 
 					return voteCheck.get(1, TimeUnit.MINUTES);
