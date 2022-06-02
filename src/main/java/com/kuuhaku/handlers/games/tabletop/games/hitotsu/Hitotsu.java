@@ -194,7 +194,7 @@ public class Hitotsu extends Game {
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
-				getBoard().awardWinners(this, h.getUser().getId());
+				getBoard().awardWinner(this, h.getUser().getId());
 				close();
 			} else if (winners.size() != getBoard().getPlayers().size()) {
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
@@ -243,8 +243,6 @@ public class Hitotsu extends Game {
 
 		User winner = seats.values().stream().filter(h -> h.getCards().isEmpty()).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
-			getBoard().awardWinner(this, winner.getId());
-			close();
 			return true;
 		}
 
@@ -283,8 +281,6 @@ public class Hitotsu extends Game {
 
 		User winner = seats.values().stream().filter(h -> h.getCards().isEmpty()).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
-			getBoard().awardWinner(this, winner.getId());
-			close();
 			return true;
 		}
 
