@@ -44,7 +44,7 @@ public class RaidDAO {
 	public static List<RaidInfo> getRaids(String sid) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT r FROM RaidInfo r WHERE r.sid = :sid", RaidInfo.class);
+		Query q = em.createQuery("SELECT r FROM RaidInfo r WHERE r.sid = :sid ORDER BY r.id", RaidInfo.class);
 		q.setParameter("sid", sid);
 
 		try {
