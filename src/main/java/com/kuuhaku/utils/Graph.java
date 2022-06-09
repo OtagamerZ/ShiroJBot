@@ -18,9 +18,14 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.exceptions.InvalidValueException;
+
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.stream.DoubleStream;
 
 public abstract class Graph {
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, int width, Color color) {
@@ -30,7 +35,7 @@ public abstract class Graph {
 		TextLayout layout = new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext());
 		Shape outline = layout.getOutline(AffineTransform.getTranslateInstance(x, y));
 
-		g2d.setStroke(new BasicStroke(width));
+		g2d.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, null, 0));
 		g2d.setColor(color);
 		g2d.draw(outline);
 
@@ -67,5 +72,45 @@ public abstract class Graph {
 				}
 			}
 		}
+	}
+
+	public static void applyTransformed(Graphics2D g2d, int x, int y, Consumer<Graphics2D> action) {
+		applyTransformed(g2d, x, y, 0, new Point(), 1, action);
+	}
+
+	public static void applyTransformed(Graphics2D g2d, double ang, Point axis, Consumer<Graphics2D> action) {
+		applyTransformed(g2d, 0, 0, ang, axis, 1, action);
+	}
+
+	public static void applyTransformed(Graphics2D g2d, double scale, Consumer<Graphics2D> action) {
+		applyTransformed(g2d, 0, 0, 0, new Point(), scale, action);
+	}
+
+	public static void applyTransformed(Graphics2D g2d, int x, int y, double ang, Point axis, double scale, Consumer<Graphics2D> action) {
+		AffineTransform trans = g2d.getTransform();
+		g2d.translate(x, y);
+		g2d.rotate(Math.toRadians(ang), axis.x, axis.y);
+		g2d.scale(scale, scale);
+		action.accept(g2d);
+		g2d.setTransform(trans);
+	}
+
+	public static Polygon makePoly(int... xy) {
+		if (xy.length % 2 != 0) throw new InvalidValueException("Supplied coordinate count must be even.");
+
+		Polygon poly = new Polygon();
+		for (int i = 0; i < xy.length; i += 2) {
+			poly.addPoint(xy[i], xy[i + 1]);
+		}
+
+		return poly;
+	}
+
+	public static Polygon makePoly(Dimension size, double... xy) {
+		AtomicInteger i = new AtomicInteger();
+
+		return makePoly(DoubleStream.of(xy)
+				.mapToInt(d -> (int) ((i.getAndIncrement() % 2 == 0 ? size.width : size.height) * d))
+				.toArray());
 	}
 }

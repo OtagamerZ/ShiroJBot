@@ -18,6 +18,7 @@
 
 package com.kuuhaku.interfaces;
 
+import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -27,7 +28,6 @@ import com.kuuhaku.utils.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public interface Drawable {
 	int MAX_NAME_LENGTH = 16;
@@ -35,10 +35,17 @@ public interface Drawable {
 
 	Card getCard();
 
-	int getIndex();
-	AtomicInteger getIndexRef();
+	Card getVanity();
+
+	SlotColumn getSlot();
+
+	void setSlot(SlotColumn slot);
 
 	Side getSide();
+
+	default String getDescription(I18N locale) {
+		return "";
+	}
 
 	default int getMPCost() {
 		return 0;
@@ -69,6 +76,8 @@ public interface Drawable {
 
 	boolean isFlipped();
 	void setFlipped(boolean flipped);
+
+	void reset();
 
 	BufferedImage render(I18N locale, Deck deck);
 

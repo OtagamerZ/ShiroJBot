@@ -20,8 +20,15 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Race;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
 public record Origin(Race major, Race minor) {
 	public Race synergy() {
 		return major.fuse(minor);
+	}
+
+	public List<BufferedImage> images() {
+		return List.of(major.getImage(), minor.getImage(), synergy().getImage());
 	}
 }

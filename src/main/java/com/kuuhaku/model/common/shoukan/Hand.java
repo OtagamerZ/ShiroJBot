@@ -18,10 +18,13 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
+import com.kuuhaku.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -37,6 +40,8 @@ public class Hand {
 	private final LinkedList<Drawable> graveyard = new LinkedList<>();
 
 	private final BaseValues base;
+
+	private String name;
 
 	private int hp = 5000;
 	private int mp = 5;
@@ -60,10 +65,6 @@ public class Hand {
 		return origin;
 	}
 
-	public BaseValues getBase() {
-		return base;
-	}
-
 	public List<Drawable> getCards() {
 		return cards;
 	}
@@ -78,5 +79,37 @@ public class Hand {
 
 	public LinkedList<Drawable> getGraveyard() {
 		return graveyard;
+	}
+
+	public BaseValues getBase() {
+		return base;
+	}
+
+	public String getName() {
+		if (name == null) {
+			name = Utils.getOr(DAO.find(Account.class, uid).getName(), "???");
+		}
+
+		return name;
+	}
+
+	public int getHp() {
+		return hp;
+	}
+
+	public void setHp(int hp) {
+		this.hp = hp;
+	}
+
+	public double getHpPrcnt() {
+		return hp / (double) base.hp();
+	}
+
+	public int getMp() {
+		return mp;
+	}
+
+	public void setMp(int mp) {
+		this.mp = mp;
 	}
 }

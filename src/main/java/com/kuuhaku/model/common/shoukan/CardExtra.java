@@ -18,13 +18,20 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.id.LocalizedDescId;
+import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.model.records.shoukan.AttrMod;
 import com.kuuhaku.utils.json.JSONObject;
 
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -43,20 +50,25 @@ public class CardExtra {
 
 	private JSONObject data = new JSONObject();
 
+	private Race race = null;
+	private Card vanity = null;
+
 	private String write = "";
+	private String description = null;
+	private String effect = null;
 
 	public int getMana() {
 		return sum(mana);
 	}
 
 	public void setMana(Drawable source, int mana) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), mana);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
 
 	public void setMana(Drawable source, int mana, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), mana, expiration);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana, expiration);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
@@ -66,13 +78,13 @@ public class CardExtra {
 	}
 
 	public void setBlood(Drawable source, int blood) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), blood);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
 
 	public void setBlood(Drawable source, int blood, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), blood, expiration);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood, expiration);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
@@ -82,13 +94,13 @@ public class CardExtra {
 	}
 
 	public void setAtk(Drawable source, int atk) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), atk);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
 
 	public void setAtk(Drawable source, int atk, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), atk, expiration);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk, expiration);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
@@ -98,13 +110,13 @@ public class CardExtra {
 	}
 
 	public void setDef(Drawable source, int def) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), def);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), def);
 		this.def.remove(mod);
 		this.def.add(mod);
 	}
 
 	public void setDef(Drawable source, int def, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), def, expiration);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), def, expiration);
 		this.def.remove(mod);
 		this.def.add(mod);
 	}
@@ -114,13 +126,13 @@ public class CardExtra {
 	}
 
 	public void setDodge(Drawable source, int dodge) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), dodge);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
 
 	public void setDodge(Drawable source, int dodge, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), dodge, expiration);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge, expiration);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
@@ -130,15 +142,83 @@ public class CardExtra {
 	}
 
 	public void setBlock(Drawable source, int block) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), block);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block);
 		this.block.remove(mod);
 		this.block.add(mod);
 	}
 
 	public void setBlock(Drawable source, int block, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getIndex(), block, expiration);
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block, expiration);
 		this.block.remove(mod);
 		this.block.add(mod);
+	}
+
+	public void setFlag(Flag flag, boolean value) {
+		if (value) {
+			flags.add(flag);
+		} else {
+			flags.remove(flag);
+		}
+	}
+
+	public void setFlag(Flag flag, boolean value, boolean permanent) {
+		if (value) {
+			(permanent ? permFlags : flags).add(flag);
+		} else {
+			(permanent ? permFlags : flags).remove(flag);
+		}
+	}
+
+	public boolean hasFlag(Flag flag) {
+		return flags.contains(flag) || permFlags.contains(flag);
+	}
+
+	public boolean popFlag(Flag flag) {
+		return flags.remove(flag) || permFlags.contains(flag);
+	}
+
+	public JSONObject getData() {
+		return data;
+	}
+
+	public Race getRace() {
+		return race;
+	}
+
+	public void setRace(Race race) {
+		this.race = race;
+	}
+
+	public Card getVanity() {
+		return vanity;
+	}
+
+	public void setVanity(Card vanity) {
+		this.vanity = vanity;
+	}
+
+	public String getWrite() {
+		return write;
+	}
+
+	public void setWrite(String write) {
+		this.write = write;
+	}
+
+	public String getDescription(I18N locale) {
+		return DAO.find(LocalizedDescription.class, new LocalizedDescId(description, locale)).getDescription();
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getEffect() {
+		return effect;
+	}
+
+	public void setEffect(String effect) {
+		this.effect = effect;
 	}
 
 	public void expireMods() {
@@ -165,5 +245,18 @@ public class CardExtra {
 		}
 
 		return (int) Math.round(out);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CardExtra cardExtra = (CardExtra) o;
+		return Objects.equals(mana, cardExtra.mana) && Objects.equals(blood, cardExtra.blood) && Objects.equals(atk, cardExtra.atk) && Objects.equals(def, cardExtra.def) && Objects.equals(dodge, cardExtra.dodge) && Objects.equals(block, cardExtra.block) && Objects.equals(flags, cardExtra.flags) && Objects.equals(permFlags, cardExtra.permFlags) && Objects.equals(data, cardExtra.data) && race == cardExtra.race && Objects.equals(vanity, cardExtra.vanity) && Objects.equals(write, cardExtra.write) && Objects.equals(description, cardExtra.description) && Objects.equals(effect, cardExtra.effect);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(mana, blood, atk, def, dodge, block, flags, permFlags, data, race, vanity, write, description, effect);
 	}
 }

@@ -187,8 +187,18 @@ public abstract class Utils {
 		return Pattern.compile(regex).matcher(text);
 	}
 
+	public static Matcher regex(String text, Pattern pattern) {
+		return pattern.matcher(text);
+	}
+
 	public static String extract(String text, @Language("RegExp") String regex) {
 		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.find()) return m.group();
+		else return null;
+	}
+
+	public static String extract(String text, Pattern pattern) {
+		Matcher m = pattern.matcher(text);
 		if (m.find()) return m.group();
 		else return null;
 	}
@@ -199,9 +209,40 @@ public abstract class Utils {
 		else return null;
 	}
 
+	public static String extract(String text, Pattern pattern, int group) {
+		Matcher m = pattern.matcher(text);
+		if (m.find()) return m.group(group);
+		else return null;
+	}
+
+	public static String extract(String text, @Language("RegExp") String regex, String group) {
+		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.find()) return m.group(group);
+		else return null;
+	}
+
+	public static String extract(String text, Pattern pattern, String group) {
+		Matcher m = pattern.matcher(text);
+		if (m.find()) return m.group(group);
+		else return null;
+	}
+
 	public static List<String> extractGroups(String text, @Language("RegExp") String regex) {
 		List<String> out = new ArrayList<>();
 		Matcher m = Pattern.compile(regex).matcher(text);
+
+		while (m.find()) {
+			for (int i = 0; i < m.groupCount(); i++) {
+				out.add(m.group(i + 1));
+			}
+		}
+
+		return out.stream().filter(Objects::nonNull).toList();
+	}
+
+	public static List<String> extractGroups(String text, Pattern pattern) {
+		List<String> out = new ArrayList<>();
+		Matcher m = pattern.matcher(text);
 
 		while (m.find()) {
 			for (int i = 0; i < m.groupCount(); i++) {
@@ -228,10 +269,20 @@ public abstract class Utils {
 				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
-	public static String extract(String text, @Language("RegExp") String regex, String group) {
-		Matcher m = Pattern.compile(regex).matcher(text);
-		if (m.find()) return m.group(group);
-		else return null;
+	public static Map<String, String> extractNamedGroups(String text, Pattern pattern) {
+		List<String> names = extractGroups(pattern.toString(), "\\(\\?<([a-zA-Z][A-z\\d]*)>");
+		Map<String, String> out = new HashMap<>();
+		Matcher m = pattern.matcher(text);
+
+		while (m.find()) {
+			for (String name : names) {
+				out.putIfAbsent(name, m.group(name));
+			}
+		}
+
+		return out.entrySet().parallelStream()
+				.filter(e -> e.getValue() != null)
+				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
 	public static String underline(String text) {
