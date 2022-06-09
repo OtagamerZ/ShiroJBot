@@ -21,6 +21,8 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -29,6 +31,8 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.utils.Bit;
 import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.Utils;
+import groovy.lang.GroovyShell;
 import kotlin.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
@@ -40,7 +44,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Table(name = "senshi")
@@ -63,6 +66,8 @@ public class Senshi extends DAO implements Drawable {
 	private CardAttributes base;
 
 	private transient Pair<Integer, BufferedImage> cache = null;
+	private transient CardExtra stats = new CardExtra();
+	private transient SlotColumn slot = null;
 	private transient boolean solid = false;
 	private transient int state = 0x0;
 	/*
@@ -83,12 +88,21 @@ public class Senshi extends DAO implements Drawable {
 		return card;
 	}
 
+	@Override
+	public Card getVanity() {
+		return Utils.getOr(stats.getVanity(), card);
+	}
+
 	public Race getRace() {
-		return race;
+		return Utils.getOr(stats.getRace(), race);
 	}
 
 	public CardAttributes getBase() {
 		return base;
+	}
+
+	public CardExtra getStats() {
+		return stats;
 	}
 
 	public List<String> getTags() {
@@ -102,13 +116,13 @@ public class Senshi extends DAO implements Drawable {
 	}
 
 	@Override
-	public int getIndex() {
-		return 0;
+	public SlotColumn getSlot() {
+		return slot;
 	}
 
 	@Override
-	public AtomicInteger getIndexRef() {
-		return null;
+	public void setSlot(SlotColumn slot) {
+		this.slot = slot;
 	}
 
 	@Override
@@ -117,33 +131,38 @@ public class Senshi extends DAO implements Drawable {
 	}
 
 	@Override
+	public String getDescription(I18N locale) {
+		return Utils.getOr(stats.getDescription(locale), base.getDescription(locale));
+	}
+
+	@Override
 	public int getMPCost() {
-		return base.getMana();
+		return base.getMana() + stats.getMana();
 	}
 
 	@Override
 	public int getHPCost() {
-		return base.getBlood();
+		return base.getBlood() + stats.getBlood();
 	}
 
 	@Override
 	public int getDmg() {
-		return base.getAtk();
+		return base.getAtk() + stats.getAtk();
 	}
 
 	@Override
 	public int getDef() {
-		return base.getDef();
+		return base.getDef() + stats.getDef();
 	}
 
 	@Override
 	public int getDodge() {
-		return base.getDodge();
+		return base.getDodge() + stats.getDodge();
 	}
 
 	@Override
 	public int getBlock() {
-		return base.getBlock();
+		return base.getBlock() + stats.getBlock();
 	}
 
 	@Override
@@ -217,7 +236,32 @@ public class Senshi extends DAO implements Drawable {
 	}
 
 	public void execute(EffectParameters ep) {
-		base.execute(this, ep);
+		String effect = Utils.getOr(stats.getEffect(), base.getEffect());
+		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return;
+
+		//Hand other = ep.getHands().get(ep.getOtherSide());
+		try {
+			base.lock();
+
+			/*if (hero != null) {
+				other.setHeroDefense(true);
+			}*/
+
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("ep", ep);
+			gs.setVariable("self", this);
+			gs.evaluate(effect);
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Erro ao executar efeito de " + card.getName(), e);
+		} finally {
+			//other.setHeroDefense(false);
+		}
+	}
+
+	@Override
+	public void reset() {
+		stats = new CardExtra();
+		slot = null;
 	}
 
 	@Override
@@ -226,9 +270,9 @@ public class Senshi extends DAO implements Drawable {
 		if (cache == null || cache.getFirst() != hash) {
 			if (isFlipped()) return deck.getFrame().getBack(deck);
 
-			String desc = base.getDescription(locale);
+			String desc = getDescription(locale);
 
-			BufferedImage img = card.drawCardNoBorder(deck.isUsingFoil());
+			BufferedImage img = getVanity().drawCardNoBorder(deck.isUsingFoil());
 			BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = out.createGraphics();
 			g2d.setRenderingHints(Constants.HD_HINTS);
@@ -238,7 +282,7 @@ public class Senshi extends DAO implements Drawable {
 			g2d.setClip(null);
 
 			g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-			g2d.drawImage(race.getIcon(), 10, 12, null);
+			g2d.drawImage(getRace().getIcon(), 10, 12, null);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
@@ -264,6 +308,19 @@ public class Senshi extends DAO implements Drawable {
 
 	@Override
 	public int renderHashCode(I18N locale) {
-		return Objects.hash(card, race, base, state, locale);
+		return Objects.hash(stats, state, locale);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Senshi senshi = (Senshi) o;
+		return Objects.equals(id, senshi.id) && Objects.equals(card, senshi.card) && race == senshi.race;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, card, race);
 	}
 }

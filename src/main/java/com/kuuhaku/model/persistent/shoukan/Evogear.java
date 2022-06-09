@@ -47,19 +47,5 @@ public class Evogear extends DAO {
 	@Embedded
 	private CardAttributes attributes;
 
-	public String getId() {
-		return id;
-	}
 
-	public Card getCard() {
-		return card;
-	}
-
-	public JSONArray getCharms() {
-		return charms;
-	}
-
-	public CardAttributes getAttributes() {
-		return attributes;
-	}
 }

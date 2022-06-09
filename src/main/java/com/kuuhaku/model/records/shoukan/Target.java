@@ -23,10 +23,10 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 
 public record Target(Drawable card, int index, Trigger trigger) {
 	public Target(Drawable card) {
-		this(card, card.getIndex(), null);
+		this(card, card.getSlot().getIndex(), null);
 	}
 
 	public Target(Drawable card, Trigger trigger) {
-		this(card, card.getIndex(), trigger);
+		this(card, card.getSlot().getIndex(), trigger);
 	}
 }

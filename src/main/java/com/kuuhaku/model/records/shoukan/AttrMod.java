@@ -32,17 +32,21 @@ public record AttrMod(Drawable source, int index, double value, AtomicInteger ex
 		this(source, index, value, null);
 	}
 
+	public boolean isExpired() {
+		return expiration != null && expiration.get() <= 0;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (index < 0) return false;
 		AttrMod attrMod = (AttrMod) o;
-		return index == attrMod.index && Objects.equals(source, attrMod.source) && Objects.equals(expiration, attrMod.expiration);
+		return index == attrMod.index && Objects.equals(source, attrMod.source);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source, index, expiration);
+		return Objects.hash(source, index);
 	}
 }
