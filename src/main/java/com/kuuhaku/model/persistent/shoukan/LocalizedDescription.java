@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Drawable;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.id.LocalizedDescId;
@@ -30,7 +31,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "card_descriptions")
-public class LocalizedDescription {
+public class LocalizedDescription extends DAO {
 	@EmbeddedId
 	private LocalizedDescId id;
 

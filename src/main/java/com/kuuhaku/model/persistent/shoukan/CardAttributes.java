@@ -18,14 +18,10 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
-import com.kuuhaku.Constants;
-import com.kuuhaku.interfaces.Drawable;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONArray;
-import groovy.lang.GroovyShell;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -111,26 +107,8 @@ public class CardAttributes implements Serializable {
 		return Utils.getOr(effect, "");
 	}
 
-	public void execute(Drawable card, EffectParameters ep) {
-		if (getEffect().isBlank() || !getEffect().contains(ep.trigger().name()) || lock) return;
-
-		//Hand other = ep.getHands().get(ep.getOtherSide());
-		try {
-			lock();
-
-			/*if (hero != null) {
-				other.setHeroDefense(true);
-			}*/
-
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", card);
-			gs.evaluate(effect);
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Erro ao executar efeito de " + card.getCard().getName(), e);
-		} finally {
-			//other.setHeroDefense(false);
-		}
+	public boolean isLocked() {
+		return lock;
 	}
 
 	public void lock() {

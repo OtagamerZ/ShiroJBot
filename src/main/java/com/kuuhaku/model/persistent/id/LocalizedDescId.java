@@ -33,7 +33,7 @@ public class LocalizedDescId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = -6914298265904559282L;
 
-	@Column(name = "card_id", nullable = false)
+	@Column(name = "id", nullable = false)
 	private String id;
 
 	@Enumerated(EnumType.STRING)

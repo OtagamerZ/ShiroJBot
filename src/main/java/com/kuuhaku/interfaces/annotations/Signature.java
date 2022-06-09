@@ -25,6 +25,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.regex.Pattern;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -44,17 +45,21 @@ public @interface Signature {
 		CHANNEL(Message.MentionType.CHANNEL.getPattern().pattern()),
 		EMOTE(Message.MentionType.EMOTE.getPattern().pattern());
 
-		private final String regex;
+		private final Pattern regex;
 
 		Type(@Language("RegExp") String regex) {
-			this.regex = regex;
+			this.regex = Pattern.compile(regex);
 		}
 
 		public boolean validate(String value) {
-			return !value.isBlank() && value.matches(regex);
+			return !value.isBlank() && regex.matcher(value).matches();
 		}
 
 		public String getRegex() {
+			return regex.toString();
+		}
+
+		public Pattern getPattern() {
 			return regex;
 		}
 	}
