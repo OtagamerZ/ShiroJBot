@@ -23,11 +23,15 @@ import com.kuuhaku.model.common.shoukan.Arena;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.utils.IO;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestMain {
@@ -39,7 +43,8 @@ public class TestMain {
 		I18N locale = I18N.EN;
 		Senshi card = DAO.find(Senshi.class, "NAJENDA");
 		Deck deck = new Deck();
-		BufferedImage bi = new Arena().render();
+		Arena arena = new Arena();
+		BufferedImage bi = arena.render(locale);
 
 		AtomicInteger renders = new AtomicInteger();
 		JLabel fps = new JLabel("0");
@@ -69,5 +74,11 @@ public class TestMain {
 		frame.setVisible(true);
 
 		time.start();
+
+		try {
+			Files.write(Path.of("C:\\Users\\DEV202\\Desktop\\field.png"), IO.getBytes(bi, "png"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

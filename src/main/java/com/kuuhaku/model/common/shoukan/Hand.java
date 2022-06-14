@@ -20,34 +20,43 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
+import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hand {
 	private final String uid;
+	private final Deck userDeck;
+
 	private final Side side;
 	private final Origin origin;
 
 	private final List<Drawable> cards = new ArrayList<>();
 	private final LinkedList<Drawable> deck = new LinkedList<>();
 	private final LinkedList<Drawable> graveyard = new LinkedList<>();
+	private final Set<Timed<Lock>> locks = new HashSet<>();
 
 	private final BaseValues base;
 
 	private String name;
 
 	private int hp = 5000;
+	private int regen = 0;
 	private int mp = 5;
+
+	private transient Account account;
 
 	public Hand(String uid, Side side, Origin origin, BaseValues base) {
 		this.uid = uid;
+		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
 		this.side = side;
 		this.origin = origin;
 		this.base = base;
@@ -55,6 +64,10 @@ public class Hand {
 
 	public String getUid() {
 		return uid;
+	}
+
+	public Deck getUserDeck() {
+		return userDeck;
 	}
 
 	public Side getSide() {
@@ -81,6 +94,18 @@ public class Hand {
 		return graveyard;
 	}
 
+	public Set<Timed<Lock>> getLocks() {
+		return locks;
+	}
+
+	public int getLockTime(Lock lock) {
+		return locks.stream()
+				.filter(t -> t.obj().equals(lock))
+				.map(Timed::time)
+				.mapToInt(AtomicInteger::get)
+				.findFirst().orElse(0);
+	}
+
 	public BaseValues getBase() {
 		return base;
 	}
@@ -105,11 +130,31 @@ public class Hand {
 		return hp / (double) base.hp();
 	}
 
+	public int getRegen() {
+		return regen;
+	}
+
+	public void setRegen(int regen) {
+		this.regen = regen;
+	}
+
+	public double getRegenPrcnt() {
+		return regen / (double) base.hp();
+	}
+
 	public int getMp() {
 		return mp;
 	}
 
 	public void setMp(int mp) {
 		this.mp = mp;
+	}
+
+	public Account getAccount() {
+		if (account == null) {
+			account = DAO.find(Account.class, uid);
+		}
+
+		return account;
 	}
 }

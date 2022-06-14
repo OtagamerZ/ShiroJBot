@@ -18,16 +18,31 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.IO;
+import com.kuuhaku.utils.json.JSONObject;
+import kotlin.Pair;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "field")
-public class Field extends DAO {
+public class Field extends DAO implements Drawable {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -38,4 +53,117 @@ public class Field extends DAO {
 	@MapsId("id")
 	private Card card;
 
+	@Convert(converter = JSONObjectConverter.class)
+	@Column(name = "modifiers", nullable = false)
+	private JSONObject modifiers = new JSONObject();
+
+	private transient Pair<Integer, BufferedImage> cache = null;
+	private transient Side side = null;
+	private transient boolean solid = false;
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public Card getCard() {
+		return card;
+	}
+
+	@Override
+	public Side getSide() {
+		return side;
+	}
+
+	@Override
+	public void setSide(Side side) {
+		this.side = side;
+	}
+
+	@Override
+	public boolean isSolid() {
+		return solid;
+	}
+
+	@Override
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+
+	@Override
+	public void reset() {
+
+	}
+
+	@Override
+	public BufferedImage render(I18N locale, Deck deck) {
+		int hash = renderHashCode(locale);
+		if (cache == null || cache.getFirst() != hash) {
+			BufferedImage img = getVanity().drawCardNoBorder(false);
+			BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = out.createGraphics();
+			g2d.setRenderingHints(Constants.HD_HINTS);
+
+			g2d.setClip(deck.getFrame().getBoundary());
+			g2d.drawImage(img, 0, 0, null);
+			g2d.setClip(null);
+
+			g2d.drawImage(deck.getFrame().getFront(false), 0, 0, null);
+
+			g2d.setFont(new Font("Arial", Font.BOLD, 20));
+			g2d.setColor(deck.getFrame().getPrimaryColor());
+			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 38, 30, 2, deck.getFrame().getBackgroundColor());
+
+			g2d.setFont(new Font("Arial", Font.BOLD, 18));
+			FontMetrics m = g2d.getFontMetrics();
+
+			int i = 0;
+			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
+				Race r = Race.valueOf(entry.getKey());
+				double mod = (double) entry.getValue();
+				int y = 279 - 25 * ++i;
+
+				BufferedImage icon = r.getIcon();
+				g2d.drawImage(icon, 23, y, null);
+				g2d.setColor(r.getColor());
+				Graph.drawOutlinedString(g2d, (int) ((1 + mod) * 100) + "%", 23, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			}
+
+			g2d.dispose();
+
+			cache = new Pair<>(hash, out);
+		}
+
+		return cache.getSecond();
+	}
+
+	public BufferedImage renderBackground() {
+		BufferedImage bi = IO.getResourceAsImage("shoukan/arenas/field_bg.png");
+		assert bi != null;
+
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.SD_HINTS);
+		g2d.drawImage(IO.getResourceAsImage("shoukan/arenas/" + id + ".png"), 0, 0, null);
+
+		return bi;
+	}
+
+	@Override
+	public int renderHashCode(I18N locale) {
+		return Objects.hash(side, locale);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Field field = (Field) o;
+		return Objects.equals(id, field.id) && Objects.equals(card, field.card) && Objects.equals(modifiers, field.modifiers);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, card, modifiers);
+	}
 }

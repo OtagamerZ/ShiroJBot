@@ -74,6 +74,10 @@ public abstract class Graph {
 		}
 	}
 
+	public static void applyTransformed(Graphics2D g2d, Consumer<Graphics2D> action) {
+		applyTransformed(g2d, 0, 0, 0, new Point(), 1, action);
+	}
+
 	public static void applyTransformed(Graphics2D g2d, int x, int y, Consumer<Graphics2D> action) {
 		applyTransformed(g2d, x, y, 0, new Point(), 1, action);
 	}
@@ -91,7 +95,7 @@ public abstract class Graph {
 		g2d.translate(x, y);
 		g2d.rotate(Math.toRadians(ang), axis.x, axis.y);
 		g2d.scale(scale, scale);
-		action.accept(g2d);
+		action.accept((Graphics2D) g2d.create());
 		g2d.setTransform(trans);
 	}
 
