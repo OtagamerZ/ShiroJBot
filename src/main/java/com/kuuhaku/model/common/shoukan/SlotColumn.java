@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.utils.Bit;
 
@@ -30,7 +29,7 @@ public class SlotColumn {
 	private final int index;
 
 	private Senshi top = null;
-	private Evogear bottom = null;
+	private Senshi bottom = null;
 	private byte state = 0x0;
 	/*
 	0xF F
@@ -56,16 +55,24 @@ public class SlotColumn {
 		return top;
 	}
 
+	public boolean hasTop() {
+		return top != null;
+	}
+
 	public void setTop(Senshi top) {
 		this.top = top;
 	}
 
-	public Evogear getBottom() {
+	public Senshi getBottom() {
 		return bottom;
 	}
 
-	public void setBottom(Evogear bottom) {
+	public void setBottom(Senshi bottom) {
 		this.bottom = bottom;
+	}
+
+	public boolean hasBottom() {
+		return bottom != null;
 	}
 
 	public boolean isLocked() {
@@ -86,11 +93,11 @@ public class SlotColumn {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		SlotColumn that = (SlotColumn) o;
-		return index == that.index && side == that.side;
+		return index == that.index && state == that.state && side == that.side && Objects.equals(top, that.top) && Objects.equals(bottom, that.bottom);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(side, index);
+		return Objects.hash(side, index, top, bottom, state);
 	}
 }

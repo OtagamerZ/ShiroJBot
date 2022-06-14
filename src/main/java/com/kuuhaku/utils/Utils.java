@@ -880,4 +880,10 @@ public abstract class Utils {
 
 		return out;
 	}
+
+	public static String sign(Number n) {
+		if (n.doubleValue() > 0) return "+" + n;
+
+		return String.valueOf(n);
+	}
 }

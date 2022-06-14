@@ -21,18 +21,19 @@ package com.kuuhaku.model.enums.shoukan;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.utils.IO;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public enum Race {
 	// Pure races
-	HUMAN(0x1),
-	CREATURE(0x2),
-	MACHINE(0x4),
-	DIVINITY(0x8),
-	SPIRIT(0x10),
-	UNDEAD(0x20),
-	MYSTICAL(0x40),
-	DEMON(0x80),
+	HUMAN(0x1, 0x6413FE),
+	CREATURE(0x2, 0x502600),
+	MACHINE(0x4, 0xFF6B00),
+	DIVINITY(0x8, 0xFFD500),
+	SPIRIT(0x10, 0xFFFFFF),
+	UNDEAD(0x20, 0xFF00D1),
+	MYSTICAL(0x40, 0x00B3FF),
+	DEMON(0x80, 0xFF0000),
 
 	// Semi-races
 	WEREBEAST(HUMAN.flag | CREATURE.flag),
@@ -67,9 +68,15 @@ public enum Race {
 	NONE(0x0);
 
 	private final int flag;
+	private final Color color;
 
 	Race(int flag) {
+		this(flag, 0);
+	}
+
+	Race(int flag, int color) {
 		this.flag = flag;
+		this.color = new Color(color);
 	}
 
 	public String getName(I18N locale) {
@@ -107,5 +114,9 @@ public enum Race {
 
 	public BufferedImage getIcon() {
 		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
+	}
+
+	public Color getColor() {
+		return color;
 	}
 }

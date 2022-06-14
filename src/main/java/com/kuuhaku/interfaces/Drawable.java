@@ -33,15 +33,24 @@ public interface Drawable {
 	int MAX_NAME_LENGTH = 16;
 	int MAX_DESC_LENGTH = 215;
 
+	String getId();
+
 	Card getCard();
 
-	Card getVanity();
+	default Card getVanity() {
+		return getCard();
+	}
 
-	SlotColumn getSlot();
+	default SlotColumn getSlot() {
+		return null;
+	}
 
-	void setSlot(SlotColumn slot);
+	default void setSlot(SlotColumn slot) {
+	}
 
 	Side getSide();
+
+	void setSide(Side side);
 
 	default String getDescription(I18N locale) {
 		return "";
@@ -72,10 +81,16 @@ public interface Drawable {
 	}
 
 	boolean isSolid();
+
 	void setSolid(boolean solid);
 
-	boolean isFlipped();
-	void setFlipped(boolean flipped);
+	default boolean isFlipped() {
+		return false;
+	}
+
+	default void setFlipped(boolean flipped) {
+
+	}
 
 	void reset();
 
