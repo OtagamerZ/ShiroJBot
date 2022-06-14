@@ -66,7 +66,9 @@ public class Senshi extends DAO implements Drawable {
 	private CardAttributes base;
 
 	private transient Pair<Integer, BufferedImage> cache = null;
+	private transient List<Evogear> equipments = new ArrayList<>();
 	private transient CardExtra stats = new CardExtra();
+	private transient Side side = null;
 	private transient SlotColumn slot = null;
 	private transient boolean solid = false;
 	private transient int state = 0x0;
@@ -80,10 +82,12 @@ public class Senshi extends DAO implements Drawable {
 	        └─── (0 - 15) stasis
 	 */
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public Card getCard() {
 		return card;
 	}
@@ -115,6 +119,10 @@ public class Senshi extends DAO implements Drawable {
 		return out;
 	}
 
+	public List<Evogear> getEquipments() {
+		return equipments;
+	}
+
 	@Override
 	public SlotColumn getSlot() {
 		return slot;
@@ -127,7 +135,12 @@ public class Senshi extends DAO implements Drawable {
 
 	@Override
 	public Side getSide() {
-		return null;
+		return side;
+	}
+
+	@Override
+	public void setSide(Side side) {
+		this.side = side;
 	}
 
 	@Override
@@ -308,7 +321,7 @@ public class Senshi extends DAO implements Drawable {
 
 	@Override
 	public int renderHashCode(I18N locale) {
-		return Objects.hash(stats, state, locale);
+		return Objects.hash(stats, state, side, locale);
 	}
 
 	@Override

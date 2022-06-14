@@ -19,49 +19,59 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Arena {
 	private final Point MARGIN = new Point(25, 25);
-	private final Dimension SIZE = new Dimension(
-			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 2 /* side stacks */,
+	public final Dimension SIZE = new Dimension(
+			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
 			(350 + MARGIN.y) * 4 /* slots */ + MARGIN.y * 10
 	);
 	private final Point CENTER = new Point(SIZE.width / 2, SIZE.height / 2);
 	private final Dimension BAR_SIZE = new Dimension(SIZE.width / 2, 100);
 	/*
-          ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
-          │  │ │  │ │  │ │  │ │  │
-    ┌──┐  └──┘ └──┘ └──┘ └──┘ └──┘  ┌──┐
-    │  │  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  │  │
-    └──┘  │  │ │  │ │  │ │  │ │  │  └──┘
-	┌──┐  └──┘ └──┘ └──┘ └──┘ └──┘  ┌──┐
-	│  │  ---------- 50 ----------  │  │
-	└──┘  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  └──┘
-	┌──┐  │  │ │  │ │  │ │  │ │  │  ┌──┐
-    │  │  └──┘ └──┘ └──┘ └──┘ └──┘  │  │
-    └──┘  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  └──┘
-          │  │ │  │ │  │ │  │ │  │
-          └──┘ └──┘ └──┘ └──┘ └──┘
+              ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
+              │  │ │  │ │  │ │  │ │  │
+    ┌──┐      └──┘ └──┘ └──┘ └──┘ └──┘      ┌──┐
+    │  │      ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐      │  │
+    └──┘      │  │ │  │ │  │ │  │ │  │      └──┘
+	┌──┐      └──┘ └──┘ └──┘ └──┘ └──┘      ┌──┐
+	│  │      ---------- 50 ----------      │  │
+	└──┘      ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐      └──┘
+	┌──┐      │  │ │  │ │  │ │  │ │  │      ┌──┐
+    │  │      └──┘ └──┘ └──┘ └──┘ └──┘      │  │
+    └──┘      ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐      └──┘
+              │  │ │  │ │  │ │  │ │  │
+              └──┘ └──┘ └──┘ └──┘ └──┘
 	*/
 
 	private final Map<Side, List<SlotColumn>> slots;
 	private final List<Drawable> banned = new BondedLinkedList<>(Drawable::reset);
+	private final Field field = DAO.find(Field.class, "DEFAULT");
 
 	public Arena() {
 		slots = Map.of(
@@ -78,18 +88,20 @@ public class Arena {
 		return slots.get(side);
 	}
 
-	public BufferedImage render() {
+	public BufferedImage render(I18N locale) {
+		Map<Side, Hand> temp = Map.of(
+				Side.TOP, new Hand("350836145921327115", Side.TOP, new Origin(Race.HUMAN, Race.MACHINE), new BaseValues()),
+				Side.BOTTOM, new Hand("572413282653306901", Side.BOTTOM, new Origin(Race.MYSTICAL, Race.DEMON), new BaseValues())
+		);
+
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.HD_HINTS);
+		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		Graph.applyTransformed(g2d, 0, 0, drawBar(new Hand("350836145921327115", Side.TOP, new Origin(Race.HUMAN, Race.MACHINE), new BaseValues())));
+		Graph.applyTransformed(g2d, drawBar(temp.get(Side.TOP)));
 
-		/*
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
-			g1.setColor(Color.BLACK);
-			g1.fillRect(0, 0, SIZE.width, SIZE.height);
-			g1.setColor(Color.WHITE);
+			g1.drawImage(field.renderBackground(), 0, 0, null);
 
 			for (Side side : Side.values()) {
 				int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
@@ -98,7 +110,8 @@ public class Arena {
 					case BOTTOM -> CENTER.y + MARGIN.y * 5;
 				};
 
-				Graph.applyTransformed(g1, xOffset, yOffset, g -> {
+				Deck deck = temp.get(side).getUserDeck();
+				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
 						int x = (225 + MARGIN.x) * slot.getIndex();
 						int y = switch (side) {
@@ -106,22 +119,35 @@ public class Arena {
 							case BOTTOM -> -350 / 4 - MARGIN.y;
 						};
 
-						Graph.applyTransformed(g, x, y, g2 -> {
-							Dimension resized = new Dimension(225 / 4, 350 / 4);
-							int middle = 225 / 2 - resized.width / 2;
+						if (slot.hasTop()) {
+							Senshi top = slot.getTop();
 
-							for (int i = 0; i < 3; i++) {
-								g2.fillRect(middle + (resized.width + MARGIN.x / 2) * (i - 1), 0, resized.width, resized.height);
+							g2.drawImage(top.render(locale, deck), x, 0, null);
+							if (!top.getEquipments().isEmpty()) {
+								Graph.applyTransformed(g2, x, y, g3 -> {
+									Dimension resized = new Dimension(225 / 4, 350 / 4);
+									int middle = 225 / 2 - resized.width / 2;
+
+									for (int i = 0; i < 3; i++) {
+										// TODO Add equipment render
+										g3.drawImage(null,
+												middle + (resized.width + MARGIN.x / 2) * (i - 1), 0,
+												resized.width, resized.height,
+												null
+										);
+									}
+								});
 							}
-						});
+						}
 
-						g.fillRect(x, 0, 225, 350);
-						g.fillRect(x, 350 + MARGIN.y, 225, 350);
+						if (slot.hasBottom()) {
+							g2.drawImage(slot.getBottom().render(locale, deck), x, 350 + MARGIN.y, null);
+						}
 					}
 				});
 			}
 
-			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
+			/*Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
 				g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
 				g2.fillRect(0, CENTER.y - 350 / 2, 225, 350);
 				g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
@@ -131,17 +157,10 @@ public class Arena {
 				g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
 				g2.fillRect(0, CENTER.y - 350 / 2, 225, 350);
 				g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
-			});
-
-			g1.setColor(Color.RED);
-			g1.setStroke(new BasicStroke(2));
-			g1.drawLine(0, CENTER.y, SIZE.width, CENTER.y);
-			g1.drawLine(CENTER.x, 0, CENTER.x, SIZE.height);
-			g1.drawRect(0, 0, SIZE.width - 1, SIZE.height - 1);
+			});*/
 		});
-		*/
 
-		Graph.applyTransformed(g2d, 0, 0, drawBar(new Hand("572413282653306901", Side.BOTTOM, new Origin(Race.MYSTICAL, Race.DEMON), new BaseValues())));
+		Graph.applyTransformed(g2d, drawBar(temp.get(Side.BOTTOM)));
 
 		return bi;
 	}
@@ -158,7 +177,7 @@ public class Arena {
 			Point padUnit = new Point((int) (BAR_SIZE.width * padPrcnt.getX()), (int) (BAR_SIZE.height * padPrcnt.getY()));
 
 			Graph.applyTransformed(g2d, BAR_SIZE.height * 2, 0, g1 -> {
-				g1.setColor(Color.BLACK);
+				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				Polygon boundaries = Graph.makePoly(BAR_SIZE,
 						0, 1,
 						1, 1,
@@ -190,7 +209,6 @@ public class Arena {
 				g1.setColor(Color.DARK_GRAY);
 				g1.fill(bar);
 
-				hand.setHp(3500);
 				double fac = hand.getHpPrcnt();
 				if (fac >= 2 / 3d) {
 					g1.setColor(new Color(69, 173, 28));
@@ -200,17 +218,28 @@ public class Arena {
 					g1.setColor(new Color(173, 28, 28));
 				}
 
-				bar.translate((int) (-bar.width * (1 - Math.min(fac, 1))), 0);
+				bar.setSize((int) (boundaries.getBounds().width * Math.min(fac, 1)), bar.height);
 				g1.fill(bar);
 				if (fac > 1) {
 					g1.setColor(new Color(0, 255, 149));
-					bar.translate((int) (-bar.width * (1 - (fac - 1))), 0);
+					bar.setSize((int) (boundaries.getBounds().width * Math.min(fac - 1, 1)), bar.height);
 					g1.fill(bar);
+				}
+
+				if (hand.getRegen() != 0) {
+					fac = hand.getRegenPrcnt();
+					bar.setSize((int) (boundaries.getBounds().width * Math.min(Math.abs(fac), 1)), bar.height);
+					g1.setPaint(new TexturePaint(
+							IO.getResourceAsImage("shoukan/" + (fac > 0 ? "regen" : "degen") + "_overlay.png"),
+							new Rectangle2D.Double(0, 0, bar.height, bar.height)
+					));
+					g1.fill(bar);
+					g1.setPaint(null);
 				}
 
 				Color manaOver1 = new Color(46, 95, 255);
 				Color manaOver2 = new Color(77, 21, 255);
-				g1.setStroke(new BasicStroke(10));
+				g1.setStroke(new BasicStroke(14));
 				for (int i = 0; i < 33; i++) {
 					g1.setColor(Color.CYAN);
 					if (hand.getMp() > 66 + i) {
@@ -221,7 +250,7 @@ public class Arena {
 						g1.setColor(Color.DARK_GRAY);
 					}
 
-					int x = (int) (boundaries.getBounds().x + boundaries.getBounds().width * (0.695 - padPrcnt.getX()) - boundaries.getBounds().width * 0.015 * (32 - i));
+					int x = (int) (boundaries.getBounds().x + boundaries.getBounds().width * (0.695 - padPrcnt.getX()) - boundaries.getBounds().width * 0.016 * (32 - i));
 
 					g1.drawLine(
 							x, boundaries.getBounds().y,
@@ -231,20 +260,79 @@ public class Arena {
 
 				g1.setClip(null);
 
-				Point pos = new Point(padUnit.x + 2, BAR_SIZE.height / 2 - 3);
+				Point pos = new Point(padUnit.x + 4, BAR_SIZE.height / 2 - 3);
 				if (reversed) {
-					Graph.applyTransformed(g1, -1, g2 ->
-							drawValuesInverted(g1, hand, pos.x, pos.y, BAR_SIZE.height / 3 + padUnit.y)
-					);
+					Graph.applyTransformed(g1, -1, g2 -> {
+						drawValuesInverted(g2, hand, pos.x, (int) (pos.y + padUnit.y * 1.6), BAR_SIZE.height / 3 + 10 + padUnit.y);
+
+						int rad = bi.getHeight() / 2 - padUnit.y;
+						g2.setColor(Color.RED);
+						g2.setFont(new Font("Arial", Font.BOLD, rad / 3 * 2));
+						for (int i = 0; i < Lock.values().length; i++) {
+							Lock lock = Lock.values()[i];
+							int time = hand.getLockTime(lock);
+
+							Graph.applyTransformed(g2, (int) -(BAR_SIZE.width * 0.65 + padUnit.x + (rad + padUnit.x * 4) * (Lock.values().length - i)), -(rad + padUnit.y / 2), g3 -> {
+								g3.drawImage(lock.getImage(time > 0), 0, 0, rad, rad, null);
+								if (time > 0) {
+									Graph.drawOutlinedString(g3, String.valueOf(time), rad + padUnit.x / 2, rad / 2 * 2, 6, Color.black);
+								}
+							});
+						}
+					});
 				} else {
 					drawValues(g1, hand, pos.x, pos.y, BAR_SIZE.height / 3 - 3 + padUnit.y);
+
+					int rad = bi.getHeight() / 2 - padUnit.y;
+					g1.setColor(Color.RED);
+					g1.setFont(new Font("Arial", Font.BOLD, rad / 3 * 2));
+					for (int i = 0; i < Lock.values().length; i++) {
+						Lock lock = Lock.values()[i];
+						int time = hand.getLockTime(lock);
+
+						Graph.applyTransformed(g1, (int) (SIZE.width * 0.35 + (rad + padUnit.x * 4) * i), padUnit.y / 2, g2 -> {
+							g2.drawImage(lock.getImage(time > 0), 0, 0, rad, rad, null);
+							if (time > 0) {
+								Graph.drawOutlinedString(g2, String.valueOf(time), rad + padUnit.x / 2, rad / 2 * 2, 6, Color.black);
+							}
+						});
+					}
 				}
 			});
 
 			g2d.setColor(Color.BLACK);
-			g2d.fillRect(0, 0, BAR_SIZE.height * 2, BAR_SIZE.height);
+			g2d.fillPolygon(Graph.makePoly(
+					BAR_SIZE.height / 3, 0,
+					BAR_SIZE.height * 2, 0,
+					BAR_SIZE.height * 2, BAR_SIZE.height,
+					0, BAR_SIZE.height,
+					0, BAR_SIZE.height / 3
+			));
+
+			int rad = BAR_SIZE.height - padUnit.y * 2;
+			List<BufferedImage> images = hand.getOrigin().images();
+			if (reversed) {
+				for (int i = 0; i < 2; i++) {
+					g2d.drawImage(images.get(i),
+							padUnit.x * 2 + (rad + padUnit.x) * i + rad, padUnit.y + rad,
+							-rad, -rad, null
+					);
+				}
+			} else {
+				for (int i = 0; i < 2; i++) {
+					g2d.drawImage(images.get(i),
+							padUnit.x * 2 + (rad + padUnit.x) * i, padUnit.y,
+							rad, rad, null
+					);
+				}
+			}
 
 			g2d.dispose();
+
+			int x;
+			int y;
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 * 2));
 
 			if (reversed) {
 				g.drawImage(bi,
@@ -252,78 +340,17 @@ public class Arena {
 						-bi.getWidth(), -bi.getHeight(),
 						null
 				);
+
+				x = MARGIN.x;
+				y = SIZE.height + BAR_SIZE.height + (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			} else {
 				g.drawImage(bi, 0, 0, null);
-			}
-			/*
-			g.setColor(Color.black);
-			int rad = BAR_SIZE.height - vPadUnit * 2;
-			List<BufferedImage> images = hand.getOrigin().images();
-			g.setRenderingHints(Constants.HD_HINTS);
 
-			if (reversed) {
-				int x = SIZE.width - (hPadUnit + (rad + hPadUnit) * 2);
-				g.fillRect(x, BAR_SIZE.height + SIZE.height, SIZE.width - x, BAR_SIZE.height);
-				g.drawImage(bi, x, BAR_SIZE.height * 2 + SIZE.height, -BAR_SIZE.width, -BAR_SIZE.height, null);
-
-				for (int i = 0; i < 2; i++) {
-					x = SIZE.width - (hPadUnit / 2 + (rad + hPadUnit) * (i + 1));
-
-					g.drawImage(images.get(i), x, BAR_SIZE.height + SIZE.height + vPadUnit, rad, rad, null);
-				}
-			} else {
-				int x = hPadUnit + (rad + hPadUnit) * 2;
-
-				g.fillRect(0, 0, x, BAR_SIZE.height);
-				g.drawImage(bi, x, 0, BAR_SIZE.width, BAR_SIZE.height, null);
-
-				for (int i = 0; i < 2; i++) {
-					x = hPadUnit / 2 + (rad + hPadUnit) * i;
-
-					g.drawImage(images.get(i), x, vPadUnit, rad, rad, null);
-				}
-			}
-
-			int x;
-			int y;
-
-			g.setColor(Color.cyan);
-			g.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 2));
-			String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMp()), 2, "0");
-			if (reversed) {
-				x = (int) (BAR_SIZE.width * 2 * (1 - hPad) - g.getFontMetrics().stringWidth(mpText)) - (hPadUnit + (rad + hPadUnit) * 2);
-				y = SIZE.height + BAR_SIZE.height + boundaries.getBounds().y + boundaries.getBounds().height - 2;
-			} else {
-				x = hPadUnit * 3 + (rad + hPadUnit) * 2;
-				y = boundaries.getBounds().y + boundaries.getBounds().height / 2 - 2;
-			}
-
-			Graph.drawOutlinedString(g, mpText, x, y, 6, Color.black);
-
-			g.setColor(Color.white);
-			g.setFont(new Font("Arial", Font.PLAIN, BAR_SIZE.height / 3));
-			String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHp()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
-			if (reversed) {
-				x = (int) (BAR_SIZE.width * 2 * (1 - hPad) - g.getFontMetrics().stringWidth(hpText)) - (hPadUnit + (rad + hPadUnit) * 2);
-				y = SIZE.height + BAR_SIZE.height + (BAR_SIZE.height / 2 - vPadUnit - 4);
-			} else {
-				x = hPadUnit * 3 + (rad + hPadUnit) * 2;
-				y = boundaries.getBounds().y + boundaries.getBounds().height - 4;
-			}
-
-			Graph.drawOutlinedString(g, hpText, x, y, 6, Color.black);
-
-			g.setFont(new Font("Arial", Font.PLAIN, BAR_SIZE.height));
-			if (reversed) {
-				x = 0;
-				y = (int) (SIZE.height + BAR_SIZE.height * 1.9);
-			} else {
-				x = SIZE.width - g.getFontMetrics().stringWidth(hand.getName());
-				y = (int) (BAR_SIZE.height * 0.75);
+				x = SIZE.width - MARGIN.x - g.getFontMetrics().stringWidth(hand.getName());
+				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
 			Graph.drawOutlinedString(g, hand.getName(), x, y, 10, Color.black);
-			 */
 		};
 	}
 
@@ -334,26 +361,66 @@ public class Arena {
 		Graph.drawOutlinedString(g2d, mpText, x, y, 6, Color.BLACK);
 
 		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3));
+		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
 		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHp()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
-		Graph.drawOutlinedString(g2d, hpText, x, y + spacing, 6, Color.BLACK);
+		Graph.drawOutlinedString(g2d, hpText, x, y + spacing, 6, new Color(0, 0, 0, 200));
+
+		if (hand.getRegen() != 0) {
+			boolean degen = hand.getRegen() < 0;
+
+			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
+			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
+			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(hand.getRegen()), 4, "0");
+
+			Graph.drawOutlinedString(g2d, regText,
+					x + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y + spacing,
+					6, new Color(0, 0, 0, 200)
+			);
+		}
 	}
 
 	private void drawValuesInverted(Graphics2D g2d, Hand hand, int x, int y, int spacing) {
 		x = -x;
+		y = -y;
 
 		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3));
+		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
 		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHp()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 
 		int offset = g2d.getFontMetrics().stringWidth(hpText);
-		Graph.drawOutlinedString(g2d, hpText, x - offset, y, 6, Color.BLACK);
+		Graph.drawOutlinedString(g2d, hpText, x - offset, y, 6, new Color(0, 0, 0, 200));
+
+		if (hand.getRegen() != 0) {
+			boolean degen = hand.getRegen() < 0;
+
+			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
+			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
+			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(hand.getRegen()), 4, "0");
+
+			Graph.drawOutlinedString(g2d, regText,
+					x - offset + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y,
+					6, new Color(0, 0, 0, 200)
+			);
+		}
 
 		g2d.setColor(Color.CYAN);
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 2));
 		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMp()), 2, "0");
 
 		offset = g2d.getFontMetrics().stringWidth(mpText);
-		Graph.drawOutlinedString(g2d, mpText, x - offset, y - spacing, 6, Color.BLACK);
+		Graph.drawOutlinedString(g2d, mpText, x - offset, y + spacing, 6, Color.BLACK);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Arena arena = (Arena) o;
+		return Objects.equals(slots, arena.slots) && Objects.equals(banned, arena.banned);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(slots, banned);
 	}
 }
