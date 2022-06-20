@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.records.shoukan.ValueMod;
 
 import java.util.HashSet;

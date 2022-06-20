@@ -20,6 +20,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.luciad.imageio.webp.WebPWriteParam;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -65,7 +66,6 @@ public abstract class IO {
 		});
 
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			//return Helper.toCompatibleImage(ImageIO.read(bais));
 			return ImageIO.read(bais);
 		} catch (IOException e) {
 			return null;
@@ -80,11 +80,25 @@ public abstract class IO {
 		}
 	}
 
+	public static BufferedImage getImage(String url) {
+		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(url, s -> {
+			try {
+				return getBytes(ImageIO.read(new URL(url)), url.split("\\.")[1]);
+			} catch (IOException e) {
+				return new byte[0];
+			}
+		});
+
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+			return ImageIO.read(bais);
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
 	public static byte[] getBytes(BufferedImage image) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
-				ImageIO.write(image, "jpg", bos);
-			}
+			ImageIO.write(image, "jpg", baos);
 
 			return baos.toByteArray();
 		} catch (IOException e) {
@@ -95,9 +109,7 @@ public abstract class IO {
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
-				ImageIO.write(image, encoding, bos);
-			}
+			ImageIO.write(image, encoding, baos);
 
 			return baos.toByteArray();
 		} catch (IOException e) {
@@ -106,22 +118,28 @@ public abstract class IO {
 		}
 	}
 
-	public static byte[] getBytes(BufferedImage image, String encoding, float compression) {
+	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
-				ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
-				ImageOutputStream ios = ImageIO.createImageOutputStream(bos);
-				writer.setOutput(ios);
+			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
+			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+			writer.setOutput(ios);
 
-				ImageWriteParam param = writer.getDefaultWriteParam();
-				if (param.canWriteCompressed()) {
-					param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-					param.setCompressionQuality(compression);
+			ImageWriteParam param = writer.getDefaultWriteParam();
+			if (param.canWriteCompressed()) {
+				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				if (encoding.equalsIgnoreCase("webp")) {
+					param.setCompressionType(param.getCompressionTypes()[WebPWriteParam.LOSSLESS_COMPRESSION]);
 				}
 
-				writer.write(null, new IIOImage(image, null, null), param);
+				param.setCompressionQuality(quality);
 			}
 
+			try {
+				writer.write(null, new IIOImage(image, null, null), param);
+			} finally {
+				writer.dispose();
+				ios.flush();
+			}
 
 			return baos.toByteArray();
 		} catch (IOException e) {

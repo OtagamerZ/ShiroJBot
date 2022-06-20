@@ -20,14 +20,16 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONObject;
 import kotlin.Pair;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +39,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,8 +60,12 @@ public class Field extends DAO implements Drawable {
 	@Column(name = "modifiers", nullable = false)
 	private JSONObject modifiers = new JSONObject();
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private FieldType type = FieldType.NONE;
+
 	private transient Pair<Integer, BufferedImage> cache = null;
-	private transient Side side = null;
+	private transient Hand hand = null;
 	private transient boolean solid = false;
 
 	@Override
@@ -72,13 +79,13 @@ public class Field extends DAO implements Drawable {
 	}
 
 	@Override
-	public Side getSide() {
-		return side;
+	public Hand getHand() {
+		return hand;
 	}
 
 	@Override
-	public void setSide(Side side) {
-		this.side = side;
+	public void setHand(Hand hand) {
+		this.hand = hand;
 	}
 
 	@Override
@@ -113,7 +120,14 @@ public class Field extends DAO implements Drawable {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 38, 30, 2, deck.getFrame().getBackgroundColor());
+			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+
+			if (type != FieldType.NONE) {
+				BufferedImage icon = IO.getResourceAsImage("shoukan/icons/" + type.name().toLowerCase(Locale.ROOT) + ".png");
+				assert icon != null;
+
+				g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);
+			}
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 18));
 			FontMetrics m = g2d.getFontMetrics();
@@ -122,12 +136,17 @@ public class Field extends DAO implements Drawable {
 			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
 				Race r = Race.valueOf(entry.getKey());
 				double mod = (double) entry.getValue();
-				int y = 279 - 25 * ++i;
+				if (mod == 0) continue;
+
+				int y = 279 - 25 * i++;
 
 				BufferedImage icon = r.getIcon();
 				g2d.drawImage(icon, 23, y, null);
 				g2d.setColor(r.getColor());
-				Graph.drawOutlinedString(g2d, (int) ((1 + mod) * 100) + "%", 23, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+				Graph.drawOutlinedString(g2d, Utils.sign((int) ((1 + mod) * 100)) + "%",
+						23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
+						2, Color.BLACK
+				);
 			}
 
 			g2d.dispose();
@@ -139,7 +158,7 @@ public class Field extends DAO implements Drawable {
 	}
 
 	public BufferedImage renderBackground() {
-		BufferedImage bi = IO.getResourceAsImage("shoukan/arenas/field_bg.png");
+		BufferedImage bi = IO.getResourceAsImage("shoukan/backdrop.jpg");
 		assert bi != null;
 
 		Graphics2D g2d = bi.createGraphics();
@@ -151,7 +170,7 @@ public class Field extends DAO implements Drawable {
 
 	@Override
 	public int renderHashCode(I18N locale) {
-		return Objects.hash(side, locale);
+		return Objects.hash(hand, locale);
 	}
 
 	@Override

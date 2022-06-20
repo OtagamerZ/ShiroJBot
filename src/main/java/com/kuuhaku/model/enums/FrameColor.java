@@ -90,15 +90,15 @@ public enum FrameColor {
 
 	public Color getThemeColor() {
 		return switch (this) {
-			case PINK, LEGACY_PINK -> new Color(232, 116, 188);
-			case PURPLE, LEGACY_PURPLE -> new Color(174, 116, 232);
-			case BLUE, LEGACY_BLUE -> new Color(116, 126, 232);
-			case CYAN, LEGACY_CYAN -> new Color(116, 197, 232);
-			case GREEN, LEGACY_GREEN -> new Color(139, 232, 116);
-			case YELLOW, LEGACY_YELLOW -> new Color(232, 222, 116);
-			case ORANGE -> new Color(243, 149, 73);
-			case RED, LEGACY_RED -> new Color(232, 116, 116);
-			case GRAY, LEGACY_GRAY -> new Color(190, 190, 190);
+			case PINK, LEGACY_PINK -> new Color(0xE874BC);
+			case PURPLE, LEGACY_PURPLE -> new Color(0xAE74E8);
+			case BLUE, LEGACY_BLUE -> new Color(0x747EE8);
+			case CYAN, LEGACY_CYAN -> new Color(0x74C5E8);
+			case GREEN, LEGACY_GREEN -> new Color(0x8BE874);
+			case YELLOW, LEGACY_YELLOW -> new Color(0xE8DE74);
+			case ORANGE -> new Color(0xF39549);
+			case RED, LEGACY_RED -> new Color(0xE87474);
+			case GRAY, LEGACY_GRAY -> new Color(0xBEBEBE);
 
 			/*case RAINBOW, GLITCH -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;

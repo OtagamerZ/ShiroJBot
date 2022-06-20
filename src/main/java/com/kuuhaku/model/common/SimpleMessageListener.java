@@ -23,12 +23,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.io.Closeable;
 
-public abstract class SimpleMessageListener extends ListenerAdapter implements Closeable {
+public abstract class SimpleMessageListener extends ListenerAdapter {
 	private final GameChannel channel;
 	public Object mutex = new Object();
-	private boolean closed = false;
 
 	public SimpleMessageListener(TextChannel... channels) {
 		this.channel = new GameChannel(channels);
@@ -58,12 +56,10 @@ public abstract class SimpleMessageListener extends ListenerAdapter implements C
 	}
 
 	public boolean isClosed() {
-		return closed;
+		return mutex == null;
 	}
 
-	@Override
 	public void close() {
 		mutex = null;
-		closed = true;
 	}
 }

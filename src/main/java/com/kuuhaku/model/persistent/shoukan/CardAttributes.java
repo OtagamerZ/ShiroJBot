@@ -59,7 +59,7 @@ public class CardAttributes implements Serializable {
 	private JSONArray tags = new JSONArray();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "card_id")
+	@JoinColumn(name = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new LinkedHashSet<>();
 
