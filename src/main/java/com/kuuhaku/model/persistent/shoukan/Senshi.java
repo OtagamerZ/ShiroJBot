@@ -20,13 +20,14 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.utils.Bit;
@@ -47,7 +48,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "senshi")
-public class Senshi extends DAO implements Drawable {
+public class Senshi extends DAO implements Drawable, EffectHolder {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -68,8 +69,8 @@ public class Senshi extends DAO implements Drawable {
 	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient List<Evogear> equipments = new ArrayList<>();
 	private transient CardExtra stats = new CardExtra();
-	private transient Side side = null;
 	private transient SlotColumn slot = null;
+	private transient Hand hand = null;
 	private transient boolean solid = false;
 	private transient int state = 0x0;
 	/*
@@ -115,7 +116,7 @@ public class Senshi extends DAO implements Drawable {
 		for (Object tag : base.getTags()) {
 			out.add("tag/" + tag);
 		}
-		
+
 		return out;
 	}
 
@@ -134,13 +135,13 @@ public class Senshi extends DAO implements Drawable {
 	}
 
 	@Override
-	public Side getSide() {
-		return side;
+	public Hand getHand() {
+		return hand;
 	}
 
 	@Override
-	public void setSide(Side side) {
-		this.side = side;
+	public void setHand(Hand hand) {
+		this.hand = hand;
 	}
 
 	@Override
@@ -248,9 +249,10 @@ public class Senshi extends DAO implements Drawable {
 		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
 	}
 
-	public void execute(EffectParameters ep) {
+	@Override
+	public boolean execute(EffectParameters ep) {
 		String effect = Utils.getOr(stats.getEffect(), base.getEffect());
-		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return;
+		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -263,9 +265,13 @@ public class Senshi extends DAO implements Drawable {
 			GroovyShell gs = new GroovyShell();
 			gs.setVariable("ep", ep);
 			gs.setVariable("self", this);
+			gs.setVariable("pow", 1 + stats.getPower());
 			gs.evaluate(effect);
+
+			return true;
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Erro ao executar efeito de " + card.getName(), e);
+			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			return false;
 		} finally {
 			//other.setHeroDefense(false);
 		}
@@ -306,10 +312,32 @@ public class Senshi extends DAO implements Drawable {
 			g2d.drawString(getTags().stream().map(locale::get).toList().toString(), 7, 275);
 
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
-			Graph.drawMultilineString(g2d, StringUtils.abbreviate(desc, Drawable.MAX_DESC_LENGTH), 7, 285, 211);
+			Graph.drawMultilineString(g2d,
+					StringUtils.abbreviate(desc, Drawable.MAX_DESC_LENGTH), 7, 285, 211,
+					s -> {
+						String str = Utils.extract(s, "\\{(\\d+)}", 1);
+
+						if (str != null) {
+							double val = Double.parseDouble(str);
+
+							g2d.setColor(Color.ORANGE);
+							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
+						}
+
+						g2d.setColor(deck.getFrame().getSecondaryColor());
+						return s;
+					},
+					(str, x, y) -> {
+						if (str.startsWith("\u200B")) {
+							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
+						} else {
+							g2d.drawString(str, x, y);
+						}
+					}
+			);
 
 			drawCosts(g2d);
-			drawAttributes(g2d);
+			drawAttributes(g2d, !desc.isEmpty());
 
 			g2d.dispose();
 
@@ -321,7 +349,7 @@ public class Senshi extends DAO implements Drawable {
 
 	@Override
 	public int renderHashCode(I18N locale) {
-		return Objects.hash(stats, state, side, locale);
+		return Objects.hash(stats, state, hand, locale);
 	}
 
 	@Override

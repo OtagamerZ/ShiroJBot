@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;

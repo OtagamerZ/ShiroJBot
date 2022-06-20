@@ -18,18 +18,37 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.utils.Bit;
+import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONArray;
+import groovy.lang.GroovyShell;
+import kotlin.Pair;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "evogear")
-public class Evogear extends DAO {
+public class Evogear extends DAO implements Drawable, EffectHolder {
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -45,7 +64,213 @@ public class Evogear extends DAO {
 	private JSONArray charms = new JSONArray();
 
 	@Embedded
-	private CardAttributes attributes;
+	private CardAttributes base;
 
+	private transient Pair<Integer, BufferedImage> cache = null;
+	private transient CardExtra stats = new CardExtra();
+	private transient Hand hand = null;
+	private transient boolean solid = false;
+	private transient byte state = 0x0;
+	/*
+	0x0F
+	   └ 0001
+	       └ flipped
+	 */
 
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public Card getCard() {
+		return card;
+	}
+
+	public CardAttributes getBase() {
+		return base;
+	}
+
+	public CardExtra getStats() {
+		return stats;
+	}
+
+	public java.util.List<String> getTags() {
+		List<String> out = new ArrayList<>();
+		for (Object tag : base.getTags()) {
+			out.add("tag/" + tag);
+		}
+
+		return out;
+	}
+
+	@Override
+	public Hand getHand() {
+		return hand;
+	}
+
+	@Override
+	public void setHand(Hand hand) {
+		this.hand = hand;
+	}
+
+	@Override
+	public String getDescription(I18N locale) {
+		return Utils.getOr(stats.getDescription(locale), base.getDescription(locale));
+	}
+
+	@Override
+	public int getMPCost() {
+		return base.getMana() + stats.getMana();
+	}
+
+	@Override
+	public int getHPCost() {
+		return base.getBlood() + stats.getBlood();
+	}
+
+	@Override
+	public int getDmg() {
+		return base.getAtk() + stats.getAtk();
+	}
+
+	@Override
+	public int getDef() {
+		return base.getDef() + stats.getDef();
+	}
+
+	@Override
+	public int getDodge() {
+		return base.getDodge() + stats.getDodge();
+	}
+
+	@Override
+	public int getBlock() {
+		return base.getBlock() + stats.getBlock();
+	}
+
+	@Override
+	public boolean isSolid() {
+		return solid;
+	}
+
+	@Override
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+
+	@Override
+	public boolean isFlipped() {
+		return Bit.on(state, 1);
+	}
+
+	@Override
+	public void setFlipped(boolean flipped) {
+		state = (byte) Bit.set(state, 1, flipped);
+	}
+
+	@Override
+	public boolean execute(EffectParameters ep) {
+		String effect = Utils.getOr(stats.getEffect(), base.getEffect());
+		if (effect.isBlank() || !effect.contains(ep.trigger().name())) return false;
+
+		try {
+			GroovyShell gs = new GroovyShell();
+			gs.setVariable("ep", ep);
+			gs.setVariable("self", this);
+			gs.setVariable("pow", 1 + stats.getPower());
+			gs.evaluate(effect);
+
+			return true;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			return false;
+		}
+	}
+
+	@Override
+	public void reset() {
+		stats = new CardExtra();
+	}
+
+	@Override
+	public BufferedImage render(I18N locale, Deck deck) {
+		int hash = renderHashCode(locale);
+		if (cache == null || cache.getFirst() != hash) {
+			if (isFlipped()) return deck.getFrame().getBack(deck);
+
+			String desc = getDescription(locale);
+
+			BufferedImage img = card.drawCardNoBorder(deck.isUsingFoil());
+			BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = out.createGraphics();
+			g2d.setRenderingHints(Constants.HD_HINTS);
+
+			g2d.setClip(deck.getFrame().getBoundary());
+			g2d.drawImage(img, 0, 0, null);
+			g2d.setClip(null);
+
+			g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+
+			g2d.setFont(new Font("Arial", Font.BOLD, 20));
+			g2d.setColor(deck.getFrame().getPrimaryColor());
+			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+
+			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+			g2d.drawString(getTags().stream().map(locale::get).toList().toString(), 7, 275);
+
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
+			Graph.drawMultilineString(g2d,
+					StringUtils.abbreviate(desc, Drawable.MAX_DESC_LENGTH), 7, 285, 211,
+					s -> {
+						String str = Utils.extract(s, "\\{(\\d+)}", 1);
+
+						if (str != null) {
+							double val = Double.parseDouble(str);
+
+							g2d.setColor(Color.ORANGE);
+							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
+						}
+
+						g2d.setColor(deck.getFrame().getSecondaryColor());
+						return s;
+					},
+					(str, x, y) -> {
+						if (str.startsWith("\u200B")) {
+							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
+						} else {
+							g2d.drawString(str, x, y);
+						}
+					}
+			);
+
+			drawCosts(g2d);
+			drawAttributes(g2d, !desc.isEmpty());
+
+			g2d.dispose();
+
+			cache = new Pair<>(hash, out);
+		}
+
+		return cache.getSecond();
+	}
+
+	@Override
+	public int renderHashCode(I18N locale) {
+		return Objects.hash(stats, state, hand, locale);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Evogear evogear = (Evogear) o;
+		return Objects.equals(id, evogear.id) && Objects.equals(card, evogear.card);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, card);
+	}
 }

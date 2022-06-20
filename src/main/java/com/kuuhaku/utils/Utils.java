@@ -111,8 +111,31 @@ public abstract class Utils {
 		else return get == null ? or : (T) get;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T getOr(Callable<?> get, T or) {
+		try {
+			Object obj = get.call();
+			if (obj instanceof String s && s.isBlank()) return or;
+			else return obj == null ? or : (T) get;
+		} catch (Exception e) {
+			return or;
+		}
+	}
+
 	@SafeVarargs
 	public static <T> T getOrMany(Object get, T... or) {
+		T out = null;
+
+		for (T t : or) {
+			out = getOr(get, t);
+			if (out != null && !(out instanceof String s && s.isBlank())) break;
+		}
+
+		return out;
+	}
+
+	@SafeVarargs
+	public static <T> T getOrMany(Callable<?> get, T... or) {
 		T out = null;
 
 		for (T t : or) {

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
 public record Target(Drawable card, int index, Trigger trigger) {

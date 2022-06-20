@@ -36,6 +36,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -224,10 +225,18 @@ public class Card extends DAO {
 				}
 			});
 		} else {
-			f = IO.getResourceAsFile("kawaipon/not_found.png");
-			assert f != null;
+			try {
+				cardBytes = IO.getBytes(ImageIO.read(new URL("https://api.shirojbot.site/card?anime=" + anime.getId() + "&name=" + id)), "png");
+			} catch (IOException e) {
+				cardBytes = new byte[0];
+			}
 
-			cardBytes = FileUtils.readFileToByteArray(f);
+			if (cardBytes.length == 0) {
+				f = IO.getResourceAsFile("kawaipon/not_found.png");
+				assert f != null;
+
+				cardBytes = FileUtils.readFileToByteArray(f);
+			}
 		}
 
 		return cardBytes;

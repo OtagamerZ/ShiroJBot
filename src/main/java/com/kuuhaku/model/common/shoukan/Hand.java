@@ -18,8 +18,9 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -28,11 +29,14 @@ import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.utils.Utils;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hand {
+	private final long timestamp = System.currentTimeMillis();
+
 	private final String uid;
 	private final Deck userDeck;
 
@@ -54,16 +58,20 @@ public class Hand {
 
 	private transient Account account;
 
-	public Hand(String uid, Side side, Origin origin, BaseValues base) {
+	public Hand(String uid, Side side) {
 		this.uid = uid;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
 		this.side = side;
-		this.origin = origin;
-		this.base = base;
+		this.origin = this.userDeck.getOrigins();
+		this.base = new BaseValues();
 	}
 
 	public String getUid() {
 		return uid;
+	}
+
+	public User getUser() {
+		return Main.getApp().getShiro().getUserById(uid);
 	}
 
 	public Deck getUserDeck() {
@@ -156,5 +164,18 @@ public class Hand {
 		}
 
 		return account;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Hand hand = (Hand) o;
+		return timestamp == hand.timestamp && Objects.equals(uid, hand.uid) && side == hand.side && Objects.equals(origin, hand.origin);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(timestamp, uid, side, origin);
 	}
 }

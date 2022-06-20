@@ -19,7 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -27,8 +27,10 @@ import com.kuuhaku.model.persistent.id.LocalizedDescId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.model.records.shoukan.AttrMod;
+import com.kuuhaku.utils.Calc;
 import com.kuuhaku.utils.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Objects;
@@ -45,6 +47,8 @@ public class CardExtra {
 	private Set<AttrMod> dodge = new HashSet<>();
 	private Set<AttrMod> block = new HashSet<>();
 
+	private Set<AttrMod> power = new HashSet<>();
+
 	private EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
 	private EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
 
@@ -58,7 +62,7 @@ public class CardExtra {
 	private String effect = null;
 
 	public int getMana() {
-		return sum(mana);
+		return (int) sum(mana);
 	}
 
 	public void setMana(Drawable source, int mana) {
@@ -74,7 +78,7 @@ public class CardExtra {
 	}
 
 	public int getBlood() {
-		return sum(blood);
+		return (int) sum(blood);
 	}
 
 	public void setBlood(Drawable source, int blood) {
@@ -90,7 +94,7 @@ public class CardExtra {
 	}
 
 	public int getAtk() {
-		return sum(atk);
+		return (int) sum(atk);
 	}
 
 	public void setAtk(Drawable source, int atk) {
@@ -106,7 +110,7 @@ public class CardExtra {
 	}
 
 	public int getDef() {
-		return sum(def);
+		return (int) sum(def);
 	}
 
 	public void setDef(Drawable source, int def) {
@@ -122,7 +126,7 @@ public class CardExtra {
 	}
 
 	public int getDodge() {
-		return sum(dodge);
+		return (int) sum(dodge);
 	}
 
 	public void setDodge(Drawable source, int dodge) {
@@ -138,7 +142,7 @@ public class CardExtra {
 	}
 
 	public int getBlock() {
-		return sum(block);
+		return (int) sum(block);
 	}
 
 	public void setBlock(Drawable source, int block) {
@@ -151,6 +155,22 @@ public class CardExtra {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block, expiration);
 		this.block.remove(mod);
 		this.block.add(mod);
+	}
+
+	public double getPower() {
+		return sum(power);
+	}
+
+	public void setPower(Drawable source, int power) {
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power);
+		this.power.remove(mod);
+		this.power.add(mod);
+	}
+
+	public void setPower(Drawable source, int power, int expiration) {
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power, expiration);
+		this.power.remove(mod);
+		this.power.add(mod);
 	}
 
 	public void setFlag(Flag flag, boolean value) {
@@ -206,6 +226,8 @@ public class CardExtra {
 	}
 
 	public String getDescription(I18N locale) {
+		if (description == null || description.isBlank()) return description;
+
 		return DAO.find(LocalizedDescription.class, new LocalizedDescId(description, locale)).getDescription();
 	}
 
@@ -221,6 +243,7 @@ public class CardExtra {
 		this.effect = effect;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void expireMods() {
 		Predicate<AttrMod> check = mod -> {
 			if (mod.expiration() != null) {
@@ -230,21 +253,24 @@ public class CardExtra {
 			return false;
 		};
 
-		mana.removeIf(check);
-		blood.removeIf(check);
-		atk.removeIf(check);
-		def.removeIf(check);
-		dodge.removeIf(check);
-		block.removeIf(check);
+		Field[] fields = this.getClass().getDeclaredFields();
+		for (Field f : fields) {
+			try {
+				if (f.get(this) instanceof HashSet s) {
+					s.removeIf(check);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
 	}
 
-	private int sum(Set<AttrMod> mods) {
+	private double sum(Set<AttrMod> mods) {
 		double out = 0;
 		for (AttrMod mod : mods) {
 			out += mod.value();
 		}
 
-		return (int) Math.round(out);
+		return Calc.round(out, 1);
 	}
 
 	@Override
