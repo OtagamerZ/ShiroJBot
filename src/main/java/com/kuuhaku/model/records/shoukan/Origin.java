@@ -21,14 +21,23 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.model.enums.shoukan.Race;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public record Origin(Race major, Race minor) {
+	public Origin(List<Race> races) {
+		this(races.get(0), races.get(1));
+	}
+
 	public Race synergy() {
 		return major.fuse(minor);
 	}
 
 	public List<BufferedImage> images() {
-		return List.of(major.getImage(), minor.getImage(), synergy().getImage());
+		return new ArrayList<>() {{
+			add(major.getImage());
+			add(minor.getImage());
+			add(synergy().getImage());
+		}};
 	}
 }

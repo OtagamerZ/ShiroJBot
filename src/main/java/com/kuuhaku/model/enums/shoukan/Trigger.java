@@ -50,5 +50,8 @@ public enum Trigger {
 	// Triggers on player action
 	ON_DRAW,
 	ON_DISCARD,
-	ON_SUMMON
+	ON_SUMMON,
+
+	// Single-use trigger
+	ACTIVATE
 }

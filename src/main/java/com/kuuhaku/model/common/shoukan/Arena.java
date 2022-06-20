@@ -20,17 +20,16 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.Drawable;
+import com.kuuhaku.games.Shoukan;
+import com.kuuhaku.games.engine.Renderer;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.model.records.shoukan.BaseValues;
-import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
@@ -45,7 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class Arena {
+public class Arena implements Renderer {
 	private final Point MARGIN = new Point(25, 25);
 	public final Dimension SIZE = new Dimension(
 			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
@@ -69,15 +68,21 @@ public class Arena {
               └──┘ └──┘ └──┘ └──┘ └──┘
 	*/
 
+	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final List<Drawable> banned = new BondedLinkedList<>(Drawable::reset);
 	private final Field field = DAO.find(Field.class, "DEFAULT");
 
-	public Arena() {
+	public Arena(Shoukan game) {
+		this.game = game;
 		slots = Map.of(
 				Side.TOP, Utils.generate(5, i -> new SlotColumn(Side.TOP, i)),
 				Side.BOTTOM, Utils.generate(5, i -> new SlotColumn(Side.BOTTOM, i))
 		);
+	}
+
+	public Shoukan getGame() {
+		return game;
 	}
 
 	public Map<Side, List<SlotColumn>> getSlots() {
@@ -88,17 +93,13 @@ public class Arena {
 		return slots.get(side);
 	}
 
+	@Override
 	public BufferedImage render(I18N locale) {
-		Map<Side, Hand> temp = Map.of(
-				Side.TOP, new Hand("350836145921327115", Side.TOP, new Origin(Race.HUMAN, Race.MACHINE), new BaseValues()),
-				Side.BOTTOM, new Hand("572413282653306901", Side.BOTTOM, new Origin(Race.MYSTICAL, Race.DEMON), new BaseValues())
-		);
-
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		Graph.applyTransformed(g2d, drawBar(temp.get(Side.TOP)));
+		Graph.applyTransformed(g2d, drawBar(game.getHands().get(Side.TOP)));
 
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
 			g1.drawImage(field.renderBackground(), 0, 0, null);
@@ -110,7 +111,7 @@ public class Arena {
 					case BOTTOM -> CENTER.y + MARGIN.y * 5;
 				};
 
-				Deck deck = temp.get(side).getUserDeck();
+				Deck deck = game.getHands().get(side).getUserDeck();
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
 						int x = (225 + MARGIN.x) * slot.getIndex();
@@ -129,8 +130,7 @@ public class Arena {
 									int middle = 225 / 2 - resized.width / 2;
 
 									for (int i = 0; i < 3; i++) {
-										// TODO Add equipment render
-										g3.drawImage(null,
+										g3.drawImage(top.getEquipments().get(i).render(locale, deck),
 												middle + (resized.width + MARGIN.x / 2) * (i - 1), 0,
 												resized.width, resized.height,
 												null
@@ -151,16 +151,18 @@ public class Arena {
 				g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
 				g2.fillRect(0, CENTER.y - 350 / 2, 225, 350);
 				g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
-			});
+			});*/
 
 			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
-				g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
-				g2.fillRect(0, CENTER.y - 350 / 2, 225, 350);
-				g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
-			});*/
+				//g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
+				g2.drawImage(field.render(locale, Utils.getOr(() -> field.getHand().getUserDeck(), Deck.INSTANCE)),
+						0, CENTER.y - 350 / 2, null
+				);
+				//g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
+			});
 		});
 
-		Graph.applyTransformed(g2d, drawBar(temp.get(Side.BOTTOM)));
+		Graph.applyTransformed(g2d, drawBar(game.getHands().get(Side.BOTTOM)));
 
 		return bi;
 	}
@@ -198,8 +200,6 @@ public class Arena {
 						0.65 - padPrcnt.getX(), 0 + padPrcnt.getY(),
 						0 + padPrcnt.getX(), 0 + padPrcnt.getY()
 				);
-				g1.setColor(new Color(0, 0, 0, 150));
-				g1.fill(boundaries);
 				g1.setClip(boundaries);
 
 				Rectangle bar = new Rectangle(
@@ -275,7 +275,7 @@ public class Arena {
 							Graph.applyTransformed(g2, (int) -(BAR_SIZE.width * 0.65 + padUnit.x + (rad + padUnit.x * 4) * (Lock.values().length - i)), -(rad + padUnit.y / 2), g3 -> {
 								g3.drawImage(lock.getImage(time > 0), 0, 0, rad, rad, null);
 								if (time > 0) {
-									Graph.drawOutlinedString(g3, String.valueOf(time), rad + padUnit.x / 2, rad / 2 * 2, 6, Color.black);
+									Graph.drawOutlinedString(g3, String.valueOf(time), rad + padUnit.x / 2, rad / 2 * 2, 6, Color.BLACK);
 								}
 							});
 						}
@@ -300,7 +300,7 @@ public class Arena {
 				}
 			});
 
-			g2d.setColor(Color.BLACK);
+			g2d.setColor(hand.getUserDeck().getFrame().getThemeColor());
 			g2d.fillPolygon(Graph.makePoly(
 					BAR_SIZE.height / 3, 0,
 					BAR_SIZE.height * 2, 0,

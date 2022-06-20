@@ -19,12 +19,14 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.exceptions.InvalidValueException;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.DoubleStream;
 
 public abstract class Graph {
@@ -46,29 +48,29 @@ public abstract class Graph {
 	}
 
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width) {
+		drawMultilineString(g2d, text, x, y, width, Function.identity());
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, Function<String, String> processor) {
+		drawMultilineString(g2d, text, x, y, width, processor, g2d::drawString);
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		FontMetrics m = g2d.getFontMetrics();
 
 		String[] lines = text.split("\n");
 		for (String line : lines) {
-			if (m.stringWidth(line) <= width) {
-				g2d.drawString(line, x, y);
-				y += m.getHeight();
-			} else {
-				String[] words = text.split("\\s+");
-				StringBuilder sb = new StringBuilder(words[0]);
-				for (int i = 1; i < words.length; i++) {
-					if (m.stringWidth(sb + words[i]) <= width) {
-						sb.append(" ").append(words[i]);
-					} else {
-						g2d.drawString(sb.toString(), x, y);
-						sb.setLength(0);
-						sb.append(words[i]);
-						y += m.getHeight();
-					}
-				}
-
-				if (!sb.isEmpty()) {
-					g2d.drawString(sb.toString(), x, y);
+			String[] words = line.split("\\s+");
+			int offset = 0;
+			for (String s : words) {
+				String word = processor.apply(s);
+				if (offset + m.stringWidth(word) <= width) {
+					renderer.accept(word, x + offset, y);
+					offset += m.stringWidth(word + " ");
+				} else {
+					y += m.getHeight();
+					renderer.accept(word, x, y);
+					offset = m.stringWidth(word + " ");
 				}
 			}
 		}
@@ -90,13 +92,15 @@ public abstract class Graph {
 		applyTransformed(g2d, 0, 0, 0, new Point(), scale, action);
 	}
 
-	public static void applyTransformed(Graphics2D g2d, int x, int y, double ang, Point axis, double scale, Consumer<Graphics2D> action) {
-		AffineTransform trans = g2d.getTransform();
+	public static void applyTransformed(Graphics2D g, int x, int y, double ang, Point axis, double scale, Consumer<Graphics2D> action) {
+		Graphics2D g2d = (Graphics2D) g.create();
+
 		g2d.translate(x, y);
 		g2d.rotate(Math.toRadians(ang), axis.x, axis.y);
 		g2d.scale(scale, scale);
-		action.accept((Graphics2D) g2d.create());
-		g2d.setTransform(trans);
+		action.accept(g2d);
+
+		g2d.dispose();
 	}
 
 	public static Polygon makePoly(int... xy) {
@@ -116,5 +120,28 @@ public abstract class Graph {
 		return makePoly(DoubleStream.of(xy)
 				.mapToInt(d -> (int) ((i.getAndIncrement() % 2 == 0 ? size.width : size.height) * d))
 				.toArray());
+	}
+
+	public static void drawOutlined(Graphics2D g, Shape shape, int width, Color color) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setStroke(new BasicStroke(1));
+		g2d.fill(shape);
+
+		g2d.setColor(color);
+		g2d.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g2d.draw(shape);
+
+		g2d.dispose();
+	}
+
+	public static Color withOpacity(Color in, float opacity) {
+		opacity = Calc.clamp(opacity, 0, 1);
+
+		return new Color(
+				in.getRed(),
+				in.getGreen(),
+				in.getBlue(),
+				(int) (255 * opacity)
+		);
 	}
 }

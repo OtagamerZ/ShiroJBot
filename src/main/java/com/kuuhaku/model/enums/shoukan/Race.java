@@ -23,6 +23,8 @@ import com.kuuhaku.utils.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public enum Race {
 	// Pure races
@@ -65,7 +67,7 @@ public enum Race {
 	SPAWN(UNDEAD.flag | DEMON.flag),
 	IMP(MYSTICAL.flag | DEMON.flag),
 
-	NONE(0x0);
+	NONE(0);
 
 	private final int flag;
 	private final Color color;
@@ -100,12 +102,23 @@ public enum Race {
 	}
 
 	public Race fuse(Race with) {
-		int res = this.flag | with.flag;
-		for (Race r : values()) {
-			if (r.flag == res) return r;
+		return getByFlag(this.flag | with.flag);
+	}
+
+	public Race[] split() {
+		List<Race> races = new ArrayList<>();
+
+		int bits = flag;
+		int i = 1;
+		while (bits > 0) {
+			bits >>= 1;
+			if ((bits & 1) == 1) {
+				races.add(getByFlag(i));
+			}
+			i <<= 1;
 		}
 
-		return NONE;
+		return races.toArray(Race[]::new);
 	}
 
 	public BufferedImage getImage() {
@@ -118,5 +131,13 @@ public enum Race {
 
 	public Color getColor() {
 		return color;
+	}
+
+	public static Race getByFlag(int flag) {
+		for (Race r : values()) {
+			if (r.flag == flag) return r;
+		}
+
+		return NONE;
 	}
 }

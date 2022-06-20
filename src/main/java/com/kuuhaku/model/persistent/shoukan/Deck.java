@@ -18,20 +18,36 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.FrameColor;
-import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.records.shoukan.Origin;
+import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.IO;
+import org.apache.commons.collections4.bag.TreeBag;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.jdesktop.swingx.graphics.BlendComposite;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.RadarChart;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "deck")
 public class Deck extends DAO {
+	@Transient
+	public static final Deck INSTANCE = new Deck();
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
@@ -135,5 +151,78 @@ public class Deck extends DAO {
 
 	public void setUseFoil(boolean useFoil) {
 		this.useFoil = useFoil;
+	}
+
+	public BufferedImage render(I18N locale) {
+		BufferedImage bi = IO.toColorSpace(Objects.requireNonNull(IO.getResourceAsImage("shoukan/deck.png")), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		Graph.applyTransformed(g2d, g -> {
+			g.setColor(frame.getThemeColor());
+			g.setComposite(BlendComposite.Color);
+			g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		});
+
+		RadarChart rc = new RadarChart(600, 500);
+		rc.setRadiiLabels(new String[]{
+				locale.get("str/attack"),
+				locale.get("str/defense"),
+				locale.get("str/mana_sustain"),
+				locale.get("str/hp_sustain"),
+				locale.get("str/control"),
+				locale.get("str/divergence")
+		});
+		rc.addSeries("A", new double[]{0.5, 0.6, 0.3, 0.2, 0.8, 1});
+
+		rc.getStyler()
+				.setLegendVisible(false)
+				.setChartTitleVisible(false)
+				.setPlotBorderVisible(false)
+				.setChartTitleBoxVisible(false)
+				.setChartBackgroundColor(new Color(0, 0, 0, 0))
+				.setPlotBackgroundColor(new Color(0, 0, 0, 0))
+				.setSeriesColors(new Color[]{Graph.withOpacity(frame.getThemeColor(), 0.5f)})
+				.setChartFontColor(Color.white);
+
+		g2d.drawImage(BitmapEncoder.getBufferedImage(rc), 0, 0, null);
+
+		Graph.applyTransformed(g2d, 1212, 14, g -> {
+			int x = 0;
+			int y = 0;
+			for (Senshi s : senshi) {
+				g.drawImage(s.render(locale, this), 120 * (x++ % 9), 182 * (y++ / 9), 113, 175, null);
+			}
+		});
+
+		Graph.applyTransformed(g2d, 1571, 768, g -> {
+			int x = 0;
+			int y = 0;
+			for (Evogear e : evogear) {
+				g.drawImage(e.render(locale, this), 120 * (x++ % 6), 182 * (y++ / 6), 113, 175, null);
+			}
+		});
+
+		g2d.dispose();
+
+		return bi;
+	}
+
+	public Origin getOrigins() {
+		TreeBag<Race> races = new TreeBag<>();
+		for (Senshi s : senshi) {
+			races.addAll(
+					Arrays.stream(s.getRace().split())
+							.filter(r -> r != Race.NONE)
+							.toList()
+			);
+		}
+
+		List<Race> out = races.stream().limit(2).collect(Collectors.toList());
+		while (out.size() < 2) {
+			out.add(Race.NONE);
+		}
+
+		return new Origin(out);
 	}
 }
