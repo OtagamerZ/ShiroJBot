@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.games.Shoukan;
 import com.kuuhaku.games.engine.Renderer;
+import com.kuuhaku.interfaces.annotations.ExecTime;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.I18N;
@@ -95,11 +96,14 @@ public class Arena implements Renderer {
 
 	@Override
 	public BufferedImage render(I18N locale) {
+		Hand top = game.getHands().get(Side.TOP);
+		Hand bottom = game.getHands().get(Side.BOTTOM);
+
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		Graph.applyTransformed(g2d, drawBar(game.getHands().get(Side.TOP)));
+		Graph.applyTransformed(g2d, drawBar(top));
 
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
 			g1.drawImage(field.renderBackground(), 0, 0, null);
@@ -121,16 +125,16 @@ public class Arena implements Renderer {
 						};
 
 						if (slot.hasTop()) {
-							Senshi top = slot.getTop();
+							Senshi s = slot.getTop();
 
-							g2.drawImage(top.render(locale, deck), x, 0, null);
-							if (!top.getEquipments().isEmpty()) {
+							g2.drawImage(s.render(locale, deck), x, 0, null);
+							if (!s.getEquipments().isEmpty()) {
 								Graph.applyTransformed(g2, x, y, g3 -> {
 									Dimension resized = new Dimension(225 / 4, 350 / 4);
 									int middle = 225 / 2 - resized.width / 2;
 
 									for (int i = 0; i < 3; i++) {
-										g3.drawImage(top.getEquipments().get(i).render(locale, deck),
+										g3.drawImage(s.getEquipments().get(i).render(locale, deck),
 												middle + (resized.width + MARGIN.x / 2) * (i - 1), 0,
 												resized.width, resized.height,
 												null
@@ -147,22 +151,47 @@ public class Arena implements Renderer {
 				});
 			}
 
-			/*Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
-				g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
-				g2.fillRect(0, CENTER.y - 350 / 2, 225, 350);
-				g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
-			});*/
+			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
+				if (!top.getDeck().isEmpty()) {
+					Deck d = top.getUserDeck();
+					g2.drawImage(d.getFrame().getBack(d),
+							0, CENTER.y - 350 / 2 - (350 + MARGIN.y), null
+					);
+				}
+				if (!banned.isEmpty()) {
+					Drawable d = banned.get(0);
+					g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
+							0, CENTER.y - 350 / 2, null
+					);
+				}
+				if (!bottom.getGraveyard().isEmpty()) {
+					Drawable d = bottom.getGraveyard().get(0);
+					g2.drawImage(d.render(locale, bottom.getUserDeck()),
+							0, CENTER.y - 350 / 2 + (350 + MARGIN.y), null
+					);
+				}
+			});
 
 			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
-				//g2.fillRect(0, CENTER.y - 350 / 2 - (350 + MARGIN.y), 225, 350);
+				if (!top.getGraveyard().isEmpty()) {
+					Drawable d = top.getGraveyard().get(0);
+					g2.drawImage(d.render(locale, top.getUserDeck()),
+							0, CENTER.y - 350 / 2 - (350 + MARGIN.y), null
+					);
+				}
 				g2.drawImage(field.render(locale, Utils.getOr(() -> field.getHand().getUserDeck(), Deck.INSTANCE)),
 						0, CENTER.y - 350 / 2, null
 				);
-				//g2.fillRect(0, CENTER.y - 350 / 2 + (350 + MARGIN.y), 225, 350);
+				if (!bottom.getDeck().isEmpty()) {
+					Deck d = bottom.getUserDeck();
+					g2.drawImage(d.getFrame().getBack(d),
+							0, CENTER.y - 350 / 2 + (350 + MARGIN.y), null
+					);
+				}
 			});
 		});
 
-		Graph.applyTransformed(g2d, drawBar(game.getHands().get(Side.BOTTOM)));
+		Graph.applyTransformed(g2d, drawBar(bottom));
 
 		return bi;
 	}

@@ -158,12 +158,15 @@ public class Field extends DAO implements Drawable {
 	}
 
 	public BufferedImage renderBackground() {
-		BufferedImage bi = IO.getResourceAsImage("shoukan/backdrop.jpg");
+		BufferedImage bi = IO.getResourceAsImage("shoukan/backdrop.webp");
 		assert bi != null;
 
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
-		g2d.drawImage(IO.getResourceAsImage("shoukan/arenas/" + id + ".png"), 0, 0, null);
+
+		BufferedImage cover = IO.getResourceAsImage("shoukan/arenas/" + id + ".webp");
+		g2d.drawImage(cover, 0, 0, null);
+		g2d.dispose();
 
 		return bi;
 	}

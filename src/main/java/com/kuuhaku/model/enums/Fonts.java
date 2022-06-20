@@ -22,6 +22,7 @@ import com.kuuhaku.utils.IO;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import static java.text.AttributedCharacterIterator.Attribute;
@@ -34,8 +35,8 @@ public enum Fonts {
 	Fonts(String path) {
 		Font temp;
 
-		try {
-			temp = Font.createFont(Font.TRUETYPE_FONT, IO.getResourceAsStream(path));
+		try (InputStream is = IO.getResourceAsStream(path)) {
+			temp = Font.createFont(Font.TRUETYPE_FONT, is);
 		} catch (FontFormatException | IOException e) {
 			temp = new Font("Arial", Font.PLAIN, 11);
 		}
