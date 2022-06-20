@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestMain {
 	public static void main(String[] args) {
-		testCard("GIN");
+		testField();
 	}
 
 	public static void testCard(String card) {

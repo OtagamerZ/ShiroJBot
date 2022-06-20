@@ -21,6 +21,8 @@ package com.kuuhaku.utils;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.luciad.imageio.webp.WebPWriteParam;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -39,12 +41,6 @@ import java.util.Base64;
 import java.util.function.BiConsumer;
 
 public abstract class IO {
-	public static URL getResource(String path) {
-		URL url = IO.class.getClassLoader().getResource(path);
-		if (url == null) throw new NullPointerException();
-		else return url;
-	}
-
 	public static InputStream getResourceAsStream(String path) {
 		InputStream is = IO.class.getClassLoader().getResourceAsStream(path);
 		if (is == null) throw new NullPointerException();
@@ -53,15 +49,11 @@ public abstract class IO {
 
 	public static BufferedImage getResourceAsImage(String path) {
 		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(path, s -> {
-			InputStream is = IO.class.getClassLoader().getResourceAsStream(path);
-
-			if (is == null) return new byte[0];
-			else {
-				try {
-					return getBytes(ImageIO.read(is), path.split("\\.")[1]);
-				} catch (IOException e) {
-					return new byte[0];
-				}
+			try (InputStream is = IO.class.getClassLoader().getResourceAsStream(path)) {
+				if (is == null) return new byte[0];
+				else return IOUtils.toByteArray(is);
+			} catch (IOException e) {
+				return new byte[0];
 			}
 		});
 
@@ -74,7 +66,9 @@ public abstract class IO {
 
 	public static File getResourceAsFile(String path) {
 		try {
-			return new File(getResource(path).toURI());
+			URL url = IO.class.getClassLoader().getResource(path);
+			if (url == null) return null;
+			else return new File(url.toURI());
 		} catch (URISyntaxException e) {
 			return null;
 		}
@@ -97,7 +91,7 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth())) {
 			ImageIO.write(image, "jpg", baos);
 
 			return baos.toByteArray();
@@ -108,7 +102,7 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth())) {
 			ImageIO.write(image, encoding, baos);
 
 			return baos.toByteArray();
@@ -119,7 +113,7 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth())) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
 			writer.setOutput(ios);
