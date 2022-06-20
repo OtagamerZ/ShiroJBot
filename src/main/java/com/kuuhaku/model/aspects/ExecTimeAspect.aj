@@ -17,7 +17,7 @@ public aspect ExecTimeAspect {
 			watch.stop();
 			Constants.LOGGER.log(
 					Level.getLevel("ASPECT"),
-					"Method %s executed in %sms".formatted(
+					"%s executed in %sms".formatted(
 							thisJoinPoint.getSignature().getName(),
 							watch.getTime()
 					)
