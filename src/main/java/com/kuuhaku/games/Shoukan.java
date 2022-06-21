@@ -68,6 +68,8 @@ public class Shoukan extends GameInstance {
 
 	@Override
 	protected void runtime(String value) {
+
+
 		getChannel().sendMessage(locale.get("str/game_turn_change", "<@" + getCurrent().getUid() + ">", getTurn()))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue();
