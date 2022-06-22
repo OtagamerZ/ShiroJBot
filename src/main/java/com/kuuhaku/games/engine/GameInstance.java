@@ -49,6 +49,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private GameChannel channel;
 	private int turn = 1;
 	private T phase;
+	private boolean initialized;
 
 	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
@@ -72,6 +73,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 			begin();
 			GuildListener.addHandler(guild, sml);
+			initialized = true;
 			while (!exec.isDone()) Thread.onSpinWait();
 
 			sml.close();
@@ -117,6 +119,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public void setPhase(T phase) {
 		this.phase = phase;
+	}
+
+	public boolean isInitialized() {
+		return initialized;
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {
