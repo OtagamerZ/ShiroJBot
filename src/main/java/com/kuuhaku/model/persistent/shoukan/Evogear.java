@@ -69,6 +69,7 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 	private CardAttributes base;
 
 	private transient Pair<Integer, BufferedImage> cache = null;
+	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
 	private transient byte state = 0x2;
@@ -90,8 +91,20 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 		return card;
 	}
 
+	public JSONArray getCharms() {
+		return charms;
+	}
+
 	public CardAttributes getBase() {
 		return base;
+	}
+
+	public Senshi getEquipper() {
+		return equipper;
+	}
+
+	public void setEquipper(Senshi equipper) {
+		this.equipper = equipper;
 	}
 
 	public CardExtra getStats() {
@@ -177,6 +190,10 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 
 	@Override
 	public boolean isFlipped() {
+		if (equipper != null) {
+			return equipper.isFlipped() || Bit.on(state, 2);
+		}
+
 		return Bit.on(state, 2);
 	}
 
@@ -303,5 +320,10 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 	@Override
 	public Evogear clone() throws CloneNotSupportedException {
 		return (Evogear) super.clone();
+	}
+
+	@Override
+	public String toString() {
+		return card.getName();
 	}
 }
