@@ -52,15 +52,19 @@ public class SlotColumn {
 	}
 
 	public Senshi getTop() {
+		if (top != null && !equals(top.getSlot())) {
+			top = null;
+		}
+
 		return top;
 	}
 
 	public boolean hasTop() {
-		return top != null;
+		return getTop() != null;
 	}
 
 	public void setTop(Senshi top) {
-		if (this.top != null) {
+		if (getTop() != null) {
 			this.top.setSlot(null);
 		}
 
@@ -71,11 +75,19 @@ public class SlotColumn {
 	}
 
 	public Senshi getBottom() {
+		if (bottom != null && !equals(bottom.getSlot())) {
+			bottom = null;
+		}
+
 		return bottom;
 	}
 
+	public boolean hasBottom() {
+		return getBottom() != null;
+	}
+
 	public void setBottom(Senshi bottom) {
-		if (this.bottom != null) {
+		if (getBottom() != null) {
 			this.bottom.setSlot(null);
 		}
 
@@ -83,10 +95,6 @@ public class SlotColumn {
 		if (this.bottom != null) {
 			this.bottom.setSlot(this);
 		}
-	}
-
-	public boolean hasBottom() {
-		return bottom != null;
 	}
 
 	public boolean isLocked() {

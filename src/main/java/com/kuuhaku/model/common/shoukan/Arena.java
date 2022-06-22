@@ -135,21 +135,28 @@ public class Arena implements Renderer {
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
 						int x = (225 + MARGIN.x) * slot.getIndex();
-						int y = switch (side) {
-							case TOP -> (350 + MARGIN.y) * 2;
-							case BOTTOM -> -350 / 4 - MARGIN.y;
-						};
+						int equips, frontline, backline;
+
+						if (side == Side.TOP) {
+							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4;
+							frontline = 350 + MARGIN.y;
+							backline = 0;
+						} else {
+							equips = -350 / 3 - MARGIN.y / 4;
+							frontline = 0;
+							backline = 350 + MARGIN.y;
+						}
 
 						if (slot.hasTop()) {
 							Senshi s = slot.getTop();
 
-							g2.drawImage(s.render(locale, deck), x, 0, null);
+							g2.drawImage(s.render(locale, deck), x, frontline, null);
 							if (!s.getEquipments().isEmpty()) {
-								Graph.applyTransformed(g2, x, y, g3 -> {
-									Dimension resized = new Dimension(225 / 4, 350 / 4);
+								Graph.applyTransformed(g2, x, equips, g3 -> {
+									Dimension resized = new Dimension(225 / 3, 350 / 3);
 									int middle = 225 / 2 - resized.width / 2;
 
-									for (int i = 0; i < 3; i++) {
+									for (int i = 0; i < s.getEquipments().size(); i++) {
 										g3.drawImage(s.getEquipments().get(i).render(locale, deck),
 												middle + (resized.width + MARGIN.x / 2) * (i - 1), 0,
 												resized.width, resized.height,
@@ -161,7 +168,7 @@ public class Arena implements Renderer {
 						}
 
 						if (slot.hasBottom()) {
-							g2.drawImage(slot.getBottom().render(locale, deck), x, 350 + MARGIN.y, null);
+							g2.drawImage(slot.getBottom().render(locale, deck), x, backline, null);
 						}
 					}
 				});

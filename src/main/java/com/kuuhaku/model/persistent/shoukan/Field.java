@@ -213,4 +213,9 @@ public class Field extends DAO implements Drawable<Field> {
 	public Field clone() throws CloneNotSupportedException {
 		return (Field) super.clone();
 	}
+
+	@Override
+	public String toString() {
+		return card.getName();
+	}
 }

@@ -40,9 +40,8 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -58,6 +57,7 @@ public class Hand {
 	private final List<Drawable<?>> cards = new BondedList<>(d -> d.setHand(this));
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> d.setHand(this));
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(Drawable::reset);
+	private final List<Drawable<?>> discard = new BondedList<>(d -> d.setAvailable(false));
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
 	private final BaseValues base;
@@ -66,9 +66,11 @@ public class Hand {
 
 	private int hp = 5000;
 	private int regen = 0;
-	private int mp = 5;
+	private int mp = 0;
 
 	private transient Account account;
+	private transient String lastMessage;
+	private transient boolean forfeit;
 
 	public Hand(String uid, Side side) {
 		this.uid = uid;
@@ -82,6 +84,7 @@ public class Hand {
 						.parallel()
 						.flatMap(List::stream)
 						.map(d -> d.copy())
+						.peek(d -> d.setSolid(true))
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
 
@@ -114,6 +117,10 @@ public class Hand {
 
 	public int getHandCount() {
 		return (int) cards.stream().filter(Drawable::isSolid).count();
+	}
+
+	public int getRemainingDraws() {
+		return Math.max(0, base.handCapacity() - getHandCount());
 	}
 
 	public LinkedList<Drawable<?>> getDeck() {
@@ -166,6 +173,16 @@ public class Hand {
 
 	public LinkedList<Drawable<?>> getGraveyard() {
 		return graveyard;
+	}
+
+	public List<Drawable<?>> getDiscard() {
+		return discard;
+	}
+
+	public void flushDiscard() {
+		discard.removeIf(d -> !d.isSolid());
+		graveyard.addAll(discard);
+		discard.clear();
 	}
 
 	public Set<Timed<Lock>> getLocks() {
@@ -238,6 +255,22 @@ public class Hand {
 		}
 
 		return account;
+	}
+
+	public String getLastMessage() {
+		return lastMessage;
+	}
+
+	public void setLastMessage(String lastMessage) {
+		this.lastMessage = lastMessage;
+	}
+
+	public boolean isForfeit() {
+		return forfeit;
+	}
+
+	public void setForfeit(boolean forfeit) {
+		this.forfeit = forfeit;
 	}
 
 	public BufferedImage render(I18N locale) {

@@ -22,11 +22,13 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.CardState;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -71,7 +73,10 @@ public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
 	private CardAttributes base;
 
 	private transient Pair<Integer, BufferedImage> cache = null;
-	private transient List<Evogear> equipments = new ArrayList<>();
+	private transient List<Evogear> equipments = new BondedList<>(e -> {
+		e.setEquipper(this);
+		e.setHand(getHand());
+	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
@@ -129,6 +134,10 @@ public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
 	}
 
 	public List<Evogear> getEquipments() {
+		if (equipments.size() > 3) {
+			equipments = equipments.subList(0, 3);
+		}
+
 		return equipments;
 	}
 
@@ -169,22 +178,27 @@ public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
 
 	@Override
 	public int getDmg() {
-		return base.getAtk() + stats.getAtk();
+		return base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum();
 	}
 
 	@Override
 	public int getDef() {
-		return base.getDef() + stats.getDef();
+		return base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum();
+	}
+
+	public int getActiveAttr() {
+		if (isDefending()) return getDef();
+		return getDmg();
 	}
 
 	@Override
 	public int getDodge() {
-		return base.getDodge() + stats.getDodge();
+		return base.getDodge() + stats.getDodge() + equipments.stream().mapToInt(Evogear::getDodge).sum();
 	}
 
 	@Override
 	public int getBlock() {
-		return base.getBlock() + stats.getBlock();
+		return base.getBlock() + stats.getBlock() + equipments.stream().mapToInt(Evogear::getBlock).sum();
 	}
 
 	@Override
@@ -269,6 +283,13 @@ public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
 	public void reduceStasis(int time) {
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
+	}
+
+	public CardState getState() {
+		if (isFlipped()) return CardState.FLIPPED;
+		else if (isDefending()) return CardState.DEFENSE;
+
+		return CardState.ATTACK;
 	}
 
 	public boolean isSupporting() {
@@ -419,5 +440,10 @@ public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
 	@Override
 	public Senshi clone() throws CloneNotSupportedException {
 		return (Senshi) super.clone();
+	}
+
+	@Override
+	public String toString() {
+		return card.getName();
 	}
 }

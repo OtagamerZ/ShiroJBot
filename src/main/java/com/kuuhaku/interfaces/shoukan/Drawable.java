@@ -23,7 +23,6 @@ import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
 
