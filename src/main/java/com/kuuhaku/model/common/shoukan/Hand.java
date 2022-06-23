@@ -214,11 +214,11 @@ public class Hand {
 	}
 
 	public void setHP(int hp) {
-		this.hp = hp;
+		this.hp = Math.max(0, hp);
 	}
 
 	public void modHP(int value) {
-		this.hp += value;
+		this.hp = Math.max(0, this.hp + value);
 	}
 
 	public double getHPPrcnt() {
@@ -241,12 +241,12 @@ public class Hand {
 		return mp;
 	}
 
-	public void modMP(int value) {
-		this.mp += value;
+	public void setMP(int mp) {
+		this.mp = Math.max(0, mp);
 	}
 
-	public void setMP(int mp) {
-		this.mp = mp;
+	public void modMP(int value) {
+		this.mp = Math.max(0, this.mp + value);
 	}
 
 	public Account getAccount() {

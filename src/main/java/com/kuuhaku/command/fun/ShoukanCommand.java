@@ -21,7 +21,7 @@ package com.kuuhaku.command.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.games.Shoukan;
-import com.kuuhaku.games.engine.GameException;
+import com.kuuhaku.games.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -58,7 +58,7 @@ public class ShoukanCommand implements Executable {
 				.handle((v, err) -> {
 					if (err == null) {
 						event.channel().sendMessage("Done").queue();
-					} else if (err instanceof GameException) {
+					} else if (err instanceof GameReport) {
 						event.channel().sendMessage("Error").queue();
 					} else {
 						Constants.LOGGER.error(err, err);
@@ -71,7 +71,7 @@ public class ShoukanCommand implements Executable {
 	}
 
 	private String getRandomTip(I18N locale) {
-		return locale.get("str/loading_tip_" + Calc.rng(5));
+		return locale.get("str/loading_tip_" + Calc.rng(7));
 	}
 
 	private void updateTip(I18N locale, Shoukan skn, Message m) {

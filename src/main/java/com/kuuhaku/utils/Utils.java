@@ -120,7 +120,7 @@ public abstract class Utils {
 		try {
 			Object obj = get.call();
 			if (obj instanceof String s && s.isBlank()) return or;
-			else return obj == null ? or : (T) get;
+			else return obj == null ? or : (T) get.call();
 		} catch (Exception e) {
 			return or;
 		}
@@ -940,5 +940,44 @@ public abstract class Utils {
 					return l;
 				}
 		);
+	}
+
+	@SafeVarargs
+	public static <T> T getNext(T current, T... sequence) {
+		boolean found = false;
+		for (T other : sequence) {
+			if (found) return other;
+			found = Objects.equals(current, other);
+		}
+
+		return null;
+	}
+
+	@SafeVarargs
+	public static <T> T getNext(T current, boolean wrap, T... sequence) {
+		T out = getPrevious(current, sequence);
+		if (wrap) out = sequence[0];
+
+		return out;
+	}
+
+	@SafeVarargs
+	public static <T> T getPrevious(T current, T... sequence) {
+		boolean found = false;
+		for (int i = sequence.length - 1; i >= 0; i--) {
+			T other = sequence[i];
+			if (found) return other;
+			found = Objects.equals(current, other);
+		}
+
+		return null;
+	}
+
+	@SafeVarargs
+	public static <T> T getPrevious(T current, boolean wrap, T... sequence) {
+		T out = getPrevious(current, sequence);
+		if (wrap) out = sequence[sequence.length - 1];
+
+		return out;
 	}
 }

@@ -111,11 +111,11 @@ public enum Race {
 		int bits = flag;
 		int i = 1;
 		while (bits > 0) {
-			bits >>= 1;
 			if ((bits & 1) == 1) {
 				races.add(getByFlag(i));
 			}
 			i <<= 1;
+			bits >>= 1;
 		}
 
 		return races.toArray(Race[]::new);
@@ -123,6 +123,10 @@ public enum Race {
 
 	public BufferedImage getImage() {
 		return IO.getResourceAsImage("shoukan/race/full/" + name() + ".png");
+	}
+
+	public BufferedImage getHalo() {
+		return IO.getResourceAsImage("shoukan/race/halo/" + name() + ".png");
 	}
 
 	public BufferedImage getIcon() {

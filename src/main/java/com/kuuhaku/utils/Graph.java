@@ -56,7 +56,6 @@ public abstract class Graph {
 	}
 
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
-
 		String[] lines = text.split("\n");
 		for (String line : lines) {
 			String[] words = line.split("\\s+");
@@ -74,6 +73,8 @@ public abstract class Graph {
 					offset = m.stringWidth(word + " ");
 				}
 			}
+
+			y += g2d.getFontMetrics().getHeight();
 		}
 	}
 

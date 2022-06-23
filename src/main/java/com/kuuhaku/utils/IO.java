@@ -21,8 +21,8 @@ package com.kuuhaku.utils;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.luciad.imageio.webp.WebPWriteParam;
+import okio.Buffer;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -31,7 +31,9 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -57,8 +59,9 @@ public abstract class IO {
 			}
 		});
 
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			return ImageIO.read(bais);
+		try (Buffer buf = new Buffer()) {
+			buf.write(bytes);
+			return ImageIO.read(buf.inputStream());
 		} catch (IOException e) {
 			return null;
 		}
@@ -83,18 +86,19 @@ public abstract class IO {
 			}
 		});
 
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			return ImageIO.read(bais);
+		try (Buffer buf = new Buffer()) {
+			buf.write(bytes);
+			return ImageIO.read(buf.inputStream());
 		} catch (IOException e) {
 			return null;
 		}
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth())) {
-			ImageIO.write(image, "jpg", baos);
+		try (Buffer buf = new Buffer()) {
+			ImageIO.write(image, "jpg", buf.outputStream());
 
-			return baos.toByteArray();
+			return buf.readByteArray();
 		} catch (IOException e) {
 			Constants.LOGGER.error(e, e);
 			return new byte[0];
@@ -102,10 +106,10 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth())) {
-			ImageIO.write(image, encoding, baos);
+		try (Buffer buf = new Buffer()) {
+			ImageIO.write(image, encoding, buf.outputStream());
 
-			return baos.toByteArray();
+			return buf.readByteArray();
 		} catch (IOException e) {
 			Constants.LOGGER.error(e, e);
 			return new byte[0];
@@ -113,16 +117,16 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(image.getHeight() * image.getWidth())) {
+		try (Buffer buf = new Buffer()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+			ImageOutputStream ios = ImageIO.createImageOutputStream(buf.outputStream());
 			writer.setOutput(ios);
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
 			if (param.canWriteCompressed()) {
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-				if (encoding.equalsIgnoreCase("webp")) {
-					param.setCompressionType(param.getCompressionTypes()[WebPWriteParam.LOSSLESS_COMPRESSION]);
+				if (param instanceof WebPWriteParam webp) {
+					webp.setCompressionType(param.getCompressionTypes()[Math.round(quality)]);
 				}
 
 				param.setCompressionQuality(quality);
@@ -135,7 +139,7 @@ public abstract class IO {
 				ios.flush();
 			}
 
-			return baos.toByteArray();
+			return buf.readByteArray();
 		} catch (IOException e) {
 			Constants.LOGGER.error(e, e);
 			return new byte[0];
@@ -151,8 +155,9 @@ public abstract class IO {
 	}
 
 	public static BufferedImage btoa(String b64) {
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)))) {
-			return ImageIO.read(bais);
+		try (Buffer buf = new Buffer()) {
+			buf.write(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)));
+			return ImageIO.read(buf.inputStream());
 		} catch (IOException | NullPointerException e) {
 			return null;
 		}
