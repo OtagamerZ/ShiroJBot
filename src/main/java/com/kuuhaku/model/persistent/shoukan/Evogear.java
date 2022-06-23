@@ -42,6 +42,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -290,6 +291,11 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 
 			drawCosts(g2d);
 			drawAttributes(g2d, !desc.isEmpty());
+
+			if (!isAvailable()) {
+				RescaleOp op = new RescaleOp(0.5f, 0, null);
+				op.filter(out, out);
+			}
 
 			g2d.dispose();
 

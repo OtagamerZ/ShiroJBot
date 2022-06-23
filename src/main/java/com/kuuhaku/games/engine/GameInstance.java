@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -71,12 +72,17 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 			};
 
-			begin();
-			GuildListener.addHandler(guild, sml);
-			initialized = true;
-			while (!exec.isDone()) Thread.onSpinWait();
-
-			sml.close();
+			try {
+				begin();
+				GuildListener.addHandler(guild, sml);
+				initialized = true;
+				while (!exec.isDone()) Thread.onSpinWait();
+			} catch (Exception e) {
+				initialized = true;
+				close(GameReport.INITIALIZATION_ERROR);
+			} finally {
+				sml.close();
+			}
 		});
 	}
 
@@ -145,11 +151,11 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return null;
 	}
 
-	public final void close(int code) {
-		if (code == 0) {
+	public final void close(@MagicConstant(valuesFromClass = GameReport.class) int code) {
+		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 		} else {
-			exec.completeExceptionally(new GameException(code));
+			exec.completeExceptionally(new GameReport(code));
 		}
 
 		channel = null;
