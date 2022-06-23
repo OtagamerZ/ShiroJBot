@@ -40,6 +40,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -167,6 +168,11 @@ public class Field extends DAO implements Drawable<Field> {
 						23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
 						2, Color.BLACK
 				);
+			}
+
+			if (!isAvailable()) {
+				RescaleOp op = new RescaleOp(0.5f, 0, null);
+				op.filter(out, out);
 			}
 
 			g2d.dispose();

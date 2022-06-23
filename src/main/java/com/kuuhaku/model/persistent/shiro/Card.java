@@ -24,6 +24,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.ImageFilters;
+import okio.Buffer;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -33,7 +34,6 @@ import javax.persistence.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -80,8 +80,9 @@ public class Card extends DAO {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				BufferedImage card = ImageIO.read(bais);
+			try (Buffer buf = new Buffer()) {
+				buf.write(cardBytes);
+				BufferedImage card = ImageIO.read(buf.inputStream());
 
 				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
 				assert frame != null;
@@ -107,8 +108,9 @@ public class Card extends DAO {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				BufferedImage card = ImageIO.read(bais);
+			try (Buffer buf = new Buffer()) {
+				buf.write(cardBytes);
+				BufferedImage card = ImageIO.read(buf.inputStream());
 
 				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/ultimate.png");
 				BufferedImage nBar = IO.getResourceAsImage("kawaipon/frames/new/normal_bar.png");
@@ -164,8 +166,9 @@ public class Card extends DAO {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				return ImageIO.read(bais);
+			try (Buffer buf = new Buffer()) {
+				buf.write(cardBytes);
+				return ImageIO.read(buf.inputStream());
 			}
 		} catch (IOException e) {
 			return null;
@@ -177,8 +180,9 @@ public class Card extends DAO {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				return foil ? foil(ImageIO.read(bais), false) : ImageIO.read(bais);
+			try (Buffer buf = new Buffer()) {
+				buf.write(cardBytes);
+				return foil ? foil(ImageIO.read(buf.inputStream()), false) : ImageIO.read(buf.inputStream());
 			}
 		} catch (IOException e) {
 			return null;

@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
+import com.kuuhaku.games.engine.GameReport;
 import com.kuuhaku.games.engine.GameInstance;
 import com.kuuhaku.games.engine.PhaseConstraint;
 import com.kuuhaku.games.engine.PlayerAction;
@@ -34,6 +35,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Phase;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
@@ -69,13 +71,8 @@ public class Shoukan extends GameInstance<Phase> {
 		);
 
 		setTimeout(turn -> {
-			getChannel().sendMessage(locale.get("str/game_wo", "<@" + getCurrent().getUid() + ">"))
-					.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
-					.queue(m -> {
-
-					});
-
-			close(1);
+			reportResult("str/game_wo", "<@" + getCurrent().getUid() + ">");
+			close(GameReport.GAME_TIMEOUT);
 		}, 5, TimeUnit.MINUTES);
 	}
 
@@ -88,6 +85,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void begin() {
+		setPhase(Phase.PLAN);
+
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn()));
 
@@ -96,7 +95,6 @@ public class Shoukan extends GameInstance<Phase> {
 				.queue(m -> messages.compute(m.getGuild().getId(), replaceMessages(m)));
 
 		sendPlayerHand(curr);
-		setPhase(Phase.PLAN);
 	}
 
 	@Override
@@ -232,6 +230,31 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.isFlipped() ? locale.get("str/an_equipment") : chosen,
 				target.isFlipped() ? locale.get("str/a_card") : target
 		);
+		return true;
+	}
+
+	@PhaseConstraint("PLAN")
+	@PlayerAction("(?<inHand>\\d+)f")
+	private boolean placeField(JSONObject args) {
+		Hand curr = getCurrent();
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
+			return false;
+		}
+
+		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Field chosen) {
+			if (!chosen.isAvailable()) {
+				getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+				return false;
+			}
+		} else {
+			getChannel().sendMessage(locale.get("error/wrong_card_type")).queue();
+			return false;
+		}
+
+		chosen.setAvailable(false);
+		arena.setField(chosen.copy());
+		reportEvent("str/place_field", curr.getName(), chosen);
 		return true;
 	}
 
@@ -413,8 +436,16 @@ public class Shoukan extends GameInstance<Phase> {
 		return hands.get(getTurn() % 2 == 0 ? Side.TOP : Side.BOTTOM);
 	}
 
+	public Side getCurrentSide() {
+		return getTurn() % 2 == 0 ? Side.TOP : Side.BOTTOM;
+	}
+
 	public Hand getOther() {
 		return hands.get(getTurn() % 2 == 1 ? Side.TOP : Side.BOTTOM);
+	}
+
+	public Side getOtherSide() {
+		return getTurn() % 2 == 1 ? Side.TOP : Side.BOTTOM;
 	}
 
 	private void sendPlayerHand(Hand hand) {
@@ -454,9 +485,44 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private void reportEvent(String message, Object... args) {
 		resetTimer();
+
+		Side[] sides = new Side[]{getOtherSide(), getCurrentSide()};
+		for (Side side : sides) {
+			Hand hand = hands.get(side);
+			if (hand.getHP() == 0) {
+				reportResult("str/game_end",
+						"<@" + hand.getUid() + ">",
+						"<@" + hands.get(Utils.getNext(side, true, sides)).getUid() + ">"
+				);
+				close(GameReport.SUCCESS);
+				return;
+			}
+		}
+
 		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue(m -> messages.compute(m.getGuild().getId(), replaceMessages(m)));
+	}
+
+	private void reportResult(String message, Object... args) {
+		getChannel().sendMessage(locale.get("message", args))
+				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
+				.queue(m -> {
+					for (Map.Entry<String, Pair<String, String>> entry : messages.entrySet()) {
+						Pair<String, String> tuple = entry.getValue();
+						if (tuple != null) {
+							Guild guild = Main.getApp().getShiro().getGuildById(entry.getKey());
+							if (guild != null) {
+								TextChannel channel = guild.getTextChannelById(tuple.getFirst());
+								if (channel != null) {
+									channel.retrieveMessageById(tuple.getSecond())
+											.flatMap(Objects::nonNull, Message::delete)
+											.queue();
+								}
+							}
+						}
+					}
+				});
 	}
 
 	private void addButtons(Message msg) {
@@ -492,7 +558,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
-						close(0);
+						close(GameReport.SUCCESS);
 						return;
 					}
 

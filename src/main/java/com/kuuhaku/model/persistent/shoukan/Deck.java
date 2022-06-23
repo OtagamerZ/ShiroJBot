@@ -187,19 +187,52 @@ public class Deck extends DAO {
 
 		g2d.drawImage(BitmapEncoder.getBufferedImage(rc), 0, 0, null);
 
+		Graph.applyTransformed(g2d, 30, 520, g -> {
+			Origin ori = getOrigins();
+			Race syn = ori.synergy();
+			g.drawImage(syn.getImage(), 0, 0, 150, 150, null);
+			g.setFont(new Font("Arial", Font.BOLD, 75));
+			g.setColor(ori.major().getColor());
+
+			String text = locale.get("str/deck_origin", syn.getName(locale), ori.major().getName(locale));
+			Graph.drawOutlinedString(g, text,
+					175, (150 + 75) / 2,
+					2, Color.BLACK
+			);
+
+			int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 10));
+			int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 5));
+			Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
+				g1.drawImage(ori.major().getImage(), majOffset + 5, 10, 75, 75, null);
+				g1.drawImage(ori.minor().getImage(), minOffset + 5, 10, 75, 75, null);
+			});
+
+			g.setFont(new Font("Arial", Font.PLAIN, 25));
+			g.setColor(Color.WHITE);
+			Graph.drawMultilineString(g,
+					ori.major().getMajor(locale) + "\n\n" + ori.minor().getMinor(locale) + "\n\n" + syn.getSynergy(locale),
+					0, 200, 175 + g.getFontMetrics().stringWidth(text) + 25
+			);
+		});
+
 		Graph.applyTransformed(g2d, 1212, 14, g -> {
-			int x = 0;
-			int y = 0;
+			int i = 0;
 			for (Senshi s : senshi) {
-				g.drawImage(s.render(locale, this), 120 * (x++ % 9), 182 * (y++ / 9), 113, 175, null);
+				g.drawImage(s.render(locale, this), 120 * (i++ % 9), 182 * (i / 9), 113, 175, null);
 			}
 		});
 
 		Graph.applyTransformed(g2d, 1571, 768, g -> {
-			int x = 0;
-			int y = 0;
+			int i = 0;
 			for (Evogear e : evogear) {
-				g.drawImage(e.render(locale, this), 120 * (x++ % 6), 182 * (y++ / 6), 113, 175, null);
+				g.drawImage(e.render(locale, this), 120 * (i++ % 6), 182 * (i / 6), 113, 175, null);
+			}
+		});
+
+		Graph.applyTransformed(g2d, 1185, 1314, g -> {
+			int i = 0;
+			for (Field f : field) {
+				g.drawImage(f.render(locale, this), 120 * (i++ % 6), 0, 113, 175, null);
 			}
 		});
 
@@ -218,7 +251,11 @@ public class Deck extends DAO {
 			);
 		}
 
-		List<Race> out = races.stream().limit(2).collect(Collectors.toList());
+		List<Race> out = races.stream()
+				.distinct()
+				.sorted(Comparator.comparingInt(races::getCount).reversed())
+				.limit(2)
+				.collect(Collectors.toList());
 		while (out.size() < 2) {
 			out.add(Race.NONE);
 		}
