@@ -25,25 +25,17 @@ import java.awt.image.BufferedImage;
 
 public abstract class ImageFilters {
 	public static BufferedImage noise(BufferedImage in) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-
-			out.setRGB(x, y, PixelOp.MULTIPLY.get(rgb, 0xFF000000 | Calc.rng(0, 0xFFFFFF)));
-		});
+		Graph.forEachPixel(source, (x, y, rgb) -> out.setRGB(x, y, PixelOp.MULTIPLY.get(rgb, 0xFF000000 | Calc.rng(0, 0xFFFFFF))));
 
 		return out;
 	}
 
 	public static BufferedImage shift(BufferedImage in, int type) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-
+		Graph.forEachPixel(source, (x, y, rgb) -> {
 			try {
 				if ((type == 0 ? y : type == 1 ? x : y + x) % 2 == 0) out.setRGB(x, y, 0);
 				else out.setRGB(x, y, rgb);
@@ -55,12 +47,9 @@ public abstract class ImageFilters {
 	}
 
 	public static BufferedImage mirror(BufferedImage in, int type) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-
+		Graph.forEachPixel(source, (x, y, rgb) -> {
 			int val = type > 1 ? y : x;
 			int half = (type > 1 ? source.getHeight() : source.getWidth()) / 2;
 			int i = half + (half - val - half % 2);
@@ -80,7 +69,7 @@ public abstract class ImageFilters {
 	}
 
 	public static BufferedImage glitch(BufferedImage in, int offset) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		BufferedImage[] layers = {
 				new BufferedImage(out.getWidth(), out.getHeight(), BufferedImage.TYPE_INT_ARGB),
@@ -89,11 +78,8 @@ public abstract class ImageFilters {
 		};
 
 		int diag = (int) Math.hypot(offset, offset);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-
-			int[] colors = IO.unpackRGB(source.getRGB(x, y));
+		Graph.forEachPixel(source, (x, y, rgb) -> {
+			int[] colors = Graph.unpackRGB(source.getRGB(x, y));
 			int[] ext = new int[3];
 
 			ext[0] = (colors[1] / 3) << 24 | colors[1] << 16;
@@ -112,35 +98,30 @@ public abstract class ImageFilters {
 			}
 		});
 
-		IO.forEachPixel(out, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-
+		Graph.forEachPixel(out, (x, y, rgb) -> {
 			int[] color = new int[3];
 			for (int k = 0; k < layers.length; k++) {
 				int c = layers[k].getRGB(x, y);
 				color[k] = (c >> (16 - k * 8)) & 0xFF;
 			}
 
-			out.setRGB(x, y, IO.packRGB(0xFF, color[0], color[1], color[2]));
+			out.setRGB(x, y, Graph.packRGB(0xFF, color[0], color[1], color[2]));
 		});
 
 		return out;
 	}
 
 	public static BufferedImage invert(BufferedImage in, boolean onlyHue) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-			int[] color = IO.unpackRGB(rgb);
+		Graph.forEachPixel(source, (x, y, rgb) -> {
+			int[] color = Graph.unpackRGB(rgb);
 
 			if (onlyHue) {
 				float[] hsv;
 				hsv = Color.RGBtoHSB(color[1], color[2], color[3], null);
 				hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
-				int[] tmp = IO.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+				int[] tmp = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 				color[1] = tmp[1];
 				color[2] = tmp[2];
 				color[3] = tmp[3];
@@ -150,36 +131,32 @@ public abstract class ImageFilters {
 				}
 			}
 
-			out.setRGB(x, y, IO.packRGB(color));
+			out.setRGB(x, y, Graph.packRGB(color));
 		});
 
 		return out;
 	}
 
 	public static BufferedImage grayscale(BufferedImage in) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-			int[] color = IO.unpackRGB(rgb);
+		Graph.forEachPixel(source, (x, y, rgb) -> {
+			int[] color = Graph.unpackRGB(rgb);
 			int luma = Calc.toLuma(color[1], color[2], color[3]);
 
-			out.setRGB(x, y, IO.packRGB(color[0], luma, luma, luma));
+			out.setRGB(x, y, Graph.packRGB(color[0], luma, luma, luma));
 		});
 
 		return out;
 	}
 
 	public static BufferedImage silhouette(BufferedImage in) {
-		BufferedImage source = IO.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		IO.forEachPixel(source, (coords, rgb) -> {
-			int x = coords[0];
-			int y = coords[1];
-			int[] color = IO.unpackRGB(rgb);
+		Graph.forEachPixel(source, (x, y, rgb) -> {
+			int[] color = Graph.unpackRGB(rgb);
 
-			out.setRGB(x, y, IO.packRGB(color[0], 0, 0, 0));
+			out.setRGB(x, y, Graph.packRGB(color[0], 0, 0, 0));
 		});
 
 		return out;

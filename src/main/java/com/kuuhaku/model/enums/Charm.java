@@ -19,6 +19,7 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.utils.Calc;
+import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
 
@@ -94,7 +95,7 @@ public enum Charm {
 		Graphics2D g2d = bi.createGraphics();
 		for (int i = 0; i < icons.size(); i++) {
 			BufferedImage icon = icons.get(i);
-			IO.applyMask(icon, mask, i, true);
+			Graph.applyMask(icon, mask, i, true);
 			g2d.drawImage(icon, 0, 0, null);
 		}
 		g2d.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);

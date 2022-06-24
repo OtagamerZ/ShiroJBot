@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.IO;
+import com.kuuhaku.utils.Graph;
 
 import java.awt.*;
 
@@ -56,14 +56,14 @@ public enum Rarity {
 	public Color getColor(boolean foil) {
 		int color = this.color;
 		if (foil) {
-			int[] rgb = IO.unpackRGB(color);
+			int[] rgb = Graph.unpackRGB(color);
 
 			float[] hsv;
 			hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
 			hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
 
-			rgb = IO.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-			color = IO.packRGB(255, rgb[1], rgb[2], rgb[3]);
+			rgb = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+			color = Graph.packRGB(255, rgb[1], rgb[2], rgb[3]);
 		}
 
 		return new Color(color);
