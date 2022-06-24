@@ -980,4 +980,12 @@ public abstract class Utils {
 
 		return out;
 	}
+
+	public static String lPad(Object o, int pad) {
+		return lPad(o, pad, null);
+	}
+
+	public static String lPad(Object o, int pad, String padChar) {
+		return StringUtils.leftPad(String.valueOf(o), pad, padChar);
+	}
 }

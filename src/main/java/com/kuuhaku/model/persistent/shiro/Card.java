@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.ImageFilters;
 import okio.Buffer;
@@ -192,24 +193,22 @@ public class Card extends DAO {
 	private BufferedImage foil(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-		for (int y = 0; y < bi.getHeight(); y++) {
-			for (int x = 0; x < bi.getWidth(); x++) {
-				int[] rgb = IO.unpackRGB(bi.getRGB(x, y));
-				int alpha = rgb[0];
-				float[] hsv;
-				if (border) {
-					hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
-					hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
-				} else {
-					hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
-					hsv[0] = ((hsv[0] * 360 + 42) % 360) / 360;
-				}
-
-				rgb = IO.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-
-				out.setRGB(x, y, IO.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
+		Graph.forEachPixel(bi, (x, y, rgb) -> {
+			int[] color = Graph.unpackRGB(bi.getRGB(x, y));
+			int alpha = color[0];
+			float[] hsv;
+			if (border) {
+				hsv = Color.RGBtoHSB(color[1], color[2], color[3], null);
+				hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
+			} else {
+				hsv = Color.RGBtoHSB(color[1], color[3], color[2], null);
+				hsv[0] = ((hsv[0] * 360 + 42) % 360) / 360;
 			}
-		}
+
+			color = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+
+			out.setRGB(x, y, Graph.packRGB(alpha, color[1], color[2], color[3]));
+		});
 
 		return out;
 	}

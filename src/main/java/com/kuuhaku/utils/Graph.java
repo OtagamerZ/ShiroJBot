@@ -24,6 +24,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -58,7 +59,7 @@ public abstract class Graph {
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
-			String[] words = line.split("\\s+");
+			String[] words = line.split("(?<=\\S) ");
 			int offset = 0;
 			for (String s : words) {
 				String word = processor.apply(s);
@@ -145,5 +146,71 @@ public abstract class Graph {
 				in.getBlue(),
 				(int) (255 * opacity)
 		);
+	}
+
+	public static BufferedImage toColorSpace(BufferedImage in, int type) {
+		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
+		Graphics2D g2d = out.createGraphics();
+		g2d.drawImage(in, 0, 0, null);
+		g2d.dispose();
+		return out;
+	}
+
+	public static void forEachPixel(BufferedImage bi, TriConsumer<Integer, Integer, Integer> act) {
+		int x;
+		int y;
+		int i = 0;
+		while (true) {
+			x = i % bi.getWidth();
+			y = i / bi.getWidth();
+
+			if (x >= bi.getWidth() || y >= bi.getHeight()) break;
+
+			act.accept(x, y, bi.getRGB(x, y));
+			i++;
+		}
+	}
+
+	public static int[] unpackRGB(int rgb) {
+		return new int[]{
+				(rgb >> 24) & 0xFF,
+				(rgb >> 16) & 0xFF,
+				(rgb >> 8) & 0xFF,
+				rgb & 0xFF
+		};
+	}
+
+	public static int packRGB(int[] argb) {
+		return packRGB(argb[0], argb[1], argb[2], argb[3]);
+	}
+
+	public static int packRGB(int a, int r, int g, int b) {
+		return a << 24 | r << 16 | g << 8 | b;
+	}
+
+	public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
+		applyMask(source, mask, channel, false);
+	}
+
+	public static void applyMask(BufferedImage source, BufferedImage mask, int channel, boolean hasAlpha) {
+		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = newMask.createGraphics();
+		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
+		g2d.dispose();
+
+		forEachPixel(source, (x, y, rgb) -> {
+			int[] color = unpackRGB(source.getRGB(x, y));
+
+			int fac;
+			if (hasAlpha) {
+				fac = Math.min(color[0], unpackRGB(newMask.getRGB(x, y))[channel + 1]);
+			} else
+				fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
+			source.setRGB(
+					x,
+					y,
+					packRGB(fac, color[1], color[2], color[3])
+			);
+		});
 	}
 }

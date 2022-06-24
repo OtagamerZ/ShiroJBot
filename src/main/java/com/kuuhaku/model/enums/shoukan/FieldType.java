@@ -18,6 +18,15 @@
 
 package com.kuuhaku.model.enums.shoukan;
 
+import com.kuuhaku.utils.IO;
+
+import java.awt.image.BufferedImage;
+import java.util.Locale;
+
 public enum FieldType {
-	NONE, DAY, NIGHT, DUNGEON
+	NONE, DAY, NIGHT, DUNGEON;
+
+	public BufferedImage getIcon() {
+		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase(Locale.ROOT) + ".png");
+	}
 }

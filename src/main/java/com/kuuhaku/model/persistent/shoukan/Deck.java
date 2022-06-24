@@ -20,26 +20,31 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.FrameColor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
+import com.kuuhaku.utils.Calc;
 import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
+import com.kuuhaku.utils.Utils;
+import com.kuuhaku.utils.json.JSONArray;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
-import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.RadarChart;
 
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
 import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Entity
@@ -125,6 +130,12 @@ public class Deck extends DAO {
 		return evogear;
 	}
 
+	public int getEvoWeight() {
+		return evogear.stream()
+				.mapToInt(e -> e.getTier() + (-1 + e.getCharms().size()))
+				.sum();
+	}
+
 	public List<Field> getFields() {
 		return field;
 	}
@@ -154,7 +165,7 @@ public class Deck extends DAO {
 	}
 
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = IO.toColorSpace(Objects.requireNonNull(IO.getResourceAsImage("shoukan/deck.png")), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = IO.getResourceAsImage("shoukan/deck.webp");
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
@@ -163,6 +174,45 @@ public class Deck extends DAO {
 			g.setComposite(BlendComposite.Color);
 			g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		});
+
+		List<Drawable<?>> allCards = new ArrayList<>(){{
+			addAll(senshi);
+			addAll(evogear);
+		}};
+		AtomicInteger totalMPCost = new AtomicInteger();
+		AtomicInteger totalHPCost = new AtomicInteger();
+		AtomicInteger totalDmg = new AtomicInteger();
+		AtomicInteger totalDef = new AtomicInteger();
+
+		BaseValues base = getBaseValues();
+		double avgMana = Calc.average((double) base.mpGain().apply(1), base.mpGain().apply(5), base.mpGain().apply(10));
+		int weight = Calc.prcntToInt(getEvoWeight(), 24);
+		String color = "FFFFFF";
+		if (weight > 150) color = "FF0000";
+		else if (weight > 100) color = "FFFF00";
+		int healers = 0;
+		int controllers = 0;
+
+		for (Drawable<?> d : allCards) {
+			if (d instanceof Senshi s) {
+				if (s.getTags().contains("HEALER")) {
+					healers++;
+				} else if (s.getTags().contains("CONTROLLER")) {
+					controllers++;
+				}
+			} else if (d instanceof Evogear e) {
+				if (e.getTags().contains("HEALER")) {
+					healers++;
+				} else if (e.getTags().contains("CONTROLLER")) {
+					controllers++;
+				}
+			}
+
+			totalMPCost.addAndGet(d.getMPCost());
+			totalHPCost.addAndGet(d.getHPCost());
+			totalDmg.addAndGet(d.getDmg());
+			totalDef.addAndGet(d.getDef());
+		}
 
 		RadarChart rc = new RadarChart(600, 500);
 		rc.setRadiiLabels(new String[]{
@@ -173,7 +223,14 @@ public class Deck extends DAO {
 				locale.get("str/control"),
 				locale.get("str/divergence")
 		});
-		rc.addSeries("A", new double[]{0.5, 0.6, 0.3, 0.2, 0.8, 1});
+		rc.addSeries("A", new double[]{
+				Calc.clamp(Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDef.get()) / 1.5), 0, 1),
+				Calc.clamp(Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5), 0, 1),
+				Calc.clamp(avgMana / totalMPCost.get(), 0, 1),
+				Calc.clamp((healers * (1 / 36d) * base.hp()) - totalHPCost.get(), 0, 1),
+				Calc.clamp(controllers / 36d, 0, 1),
+				Calc.clamp(1, 0, 1)
+		});
 
 		rc.getStyler()
 				.setLegendVisible(false)
@@ -185,34 +242,80 @@ public class Deck extends DAO {
 				.setSeriesColors(new Color[]{Graph.withOpacity(frame.getThemeColor(), 0.5f)})
 				.setChartFontColor(Color.white);
 
-		g2d.drawImage(BitmapEncoder.getBufferedImage(rc), 0, 0, null);
+		rc.paint(g2d, rc.getWidth(), rc.getHeight());
+
+		g2d.setFont(new Font("Arial", Font.PLAIN, 30));
+		g2d.setColor(Color.WHITE);
+		Graph.drawMultilineString(g2d, locale.get("str/deck_resume"), 600, 45, 350);
+		Graph.drawMultilineString(g2d,
+				base.hp()
+						+ "\n" + Utils.roundToString(avgMana, 1)
+						+ "\n" + (allCards.size() + field.size()) + "-(" + senshi.size() + "/" + evogear.size() + "/" + field.size() + ")"
+						+ "\n{" + weight + "%;0x" + color + "}"
+						+ "\n" + Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1)
+						+ "\n" + Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1)
+						+ "\n" + Utils.roundToString((float) totalDmg.get() / allCards.size(), 1)
+						+ "\n" + Utils.roundToString((float) totalDef.get() / allCards.size(), 1)
+				, 950, 45, 150,
+				s -> {
+					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
+					if (values.isEmpty()) {
+						g2d.setColor(Color.WHITE);
+						return s;
+					}
+
+					g2d.setColor(Color.decode(values.getString(1)));
+					return values.getString(0);
+				},
+				(s, x, y) -> {
+					FontMetrics m = g2d.getFontMetrics();
+					g2d.drawString(s.replace("-", " "), x + m.stringWidth("MMMMM") - m.stringWidth(s), y);
+				}
+		);
 
 		Graph.applyTransformed(g2d, 30, 520, g -> {
 			Origin ori = getOrigins();
 			Race syn = ori.synergy();
-			g.drawImage(syn.getImage(), 0, 0, 150, 150, null);
-			g.setFont(new Font("Arial", Font.BOLD, 75));
-			g.setColor(ori.major().getColor());
 
-			String text = locale.get("str/deck_origin", syn.getName(locale), ori.major().getName(locale));
-			Graph.drawOutlinedString(g, text,
-					175, (150 + 75) / 2,
-					2, Color.BLACK
-			);
+			if (ori.minor() == Race.NONE) {
+				g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
+				g.setFont(new Font("Arial", Font.BOLD, 75));
+				g.setColor(ori.major().getColor());
 
-			int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 10));
-			int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 5));
-			Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
-				g1.drawImage(ori.major().getImage(), majOffset + 5, 10, 75, 75, null);
-				g1.drawImage(ori.minor().getImage(), minOffset + 5, 10, 75, 75, null);
-			});
+				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
+				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-			g.setFont(new Font("Arial", Font.PLAIN, 25));
-			g.setColor(Color.WHITE);
-			Graph.drawMultilineString(g,
-					ori.major().getMajor(locale) + "\n\n" + ori.minor().getMinor(locale) + "\n\n" + syn.getSynergy(locale),
-					0, 200, 175 + g.getFontMetrics().stringWidth(text) + 25
-			);
+				g.setFont(new Font("Arial", Font.PLAIN, 30));
+				g.setColor(Color.WHITE);
+				Graph.drawMultilineString(g,
+						ori.major().getMajor(locale)
+								+ "\n\n" + locale.get("minor/pureblood"),
+						0, 210, 1100
+				);
+			} else {
+				g.drawImage(syn.getImage(), 0, 0, 150, 150, null);
+				g.setFont(new Font("Arial", Font.BOLD, 75));
+				g.setColor(ori.major().getColor());
+
+				String text = locale.get("str/deck_origin", syn.getName(locale));
+				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
+
+				int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 10));
+				int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 5));
+				Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
+					g1.drawImage(ori.major().getImage(), majOffset + 5, 10, 75, 75, null);
+					g1.drawImage(ori.minor().getImage(), minOffset + 5, 10, 75, 75, null);
+				});
+
+				g.setFont(new Font("Arial", Font.PLAIN, 30));
+				g.setColor(Color.WHITE);
+				Graph.drawMultilineString(g,
+						ori.major().getMajor(locale)
+								+ "\n\n" + ori.minor().getMinor(locale)
+								+ "\n\n" + syn.getSynergy(locale),
+						0, 210, 1100
+				);
+			}
 		});
 
 		Graph.applyTransformed(g2d, 1212, 14, g -> {
@@ -235,6 +338,8 @@ public class Deck extends DAO {
 				g.drawImage(f.render(locale, this), 120 * (i++ % 6), 0, 113, 175, null);
 			}
 		});
+
+		g2d.drawImage(frame.getBack(this), 1252, 849, null);
 
 		g2d.dispose();
 
@@ -261,5 +366,14 @@ public class Deck extends DAO {
 		}
 
 		return new Origin(out);
+	}
+
+	public BaseValues getBaseValues() {
+		int reduction = (int) Math.max(0, (Calc.prcnt(getEvoWeight(), 24) - 1) * 10);
+		return new BaseValues(
+				5000,
+				t -> 5 - reduction,
+				5
+		);
 	}
 }
