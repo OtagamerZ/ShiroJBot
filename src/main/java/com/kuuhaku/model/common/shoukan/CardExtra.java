@@ -48,6 +48,7 @@ public class CardExtra {
 	private final Set<AttrMod> block = new HashSet<>();
 
 	private final Set<AttrMod> power = new HashSet<>();
+	private final Set<AttrMod> tier = new HashSet<>();
 
 	private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
 	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
@@ -161,16 +162,32 @@ public class CardExtra {
 		return sum(power);
 	}
 
-	public void setPower(Drawable<?> source, int power) {
+	public void setPower(Drawable<?> source, double power) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power);
 		this.power.remove(mod);
 		this.power.add(mod);
 	}
 
-	public void setPower(Drawable<?> source, int power, int expiration) {
+	public void setPower(Drawable<?> source, double power, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power, expiration);
 		this.power.remove(mod);
 		this.power.add(mod);
+	}
+
+	public int getTier() {
+		return (int) sum(tier);
+	}
+
+	public void setTier(Drawable<?> source, int tier) {
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), tier);
+		this.tier.remove(mod);
+		this.tier.add(mod);
+	}
+
+	public void setTier(Drawable<?> source, int tier, int expiration) {
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), tier, expiration);
+		this.tier.remove(mod);
+		this.tier.add(mod);
 	}
 
 	public void setFlag(Flag flag, boolean value) {
@@ -278,11 +295,11 @@ public class CardExtra {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CardExtra cardExtra = (CardExtra) o;
-		return Objects.equals(mana, cardExtra.mana) && Objects.equals(blood, cardExtra.blood) && Objects.equals(atk, cardExtra.atk) && Objects.equals(def, cardExtra.def) && Objects.equals(dodge, cardExtra.dodge) && Objects.equals(block, cardExtra.block) && Objects.equals(flags, cardExtra.flags) && Objects.equals(permFlags, cardExtra.permFlags) && Objects.equals(data, cardExtra.data) && race == cardExtra.race && Objects.equals(vanity, cardExtra.vanity) && Objects.equals(write, cardExtra.write) && Objects.equals(description, cardExtra.description) && Objects.equals(effect, cardExtra.effect);
+		return Objects.equals(mana, cardExtra.mana) && Objects.equals(blood, cardExtra.blood) && Objects.equals(atk, cardExtra.atk) && Objects.equals(def, cardExtra.def) && Objects.equals(dodge, cardExtra.dodge) && Objects.equals(block, cardExtra.block) && Objects.equals(power, cardExtra.power) && Objects.equals(tier, cardExtra.tier) && Objects.equals(flags, cardExtra.flags) && Objects.equals(permFlags, cardExtra.permFlags) && Objects.equals(data, cardExtra.data) && race == cardExtra.race && Objects.equals(vanity, cardExtra.vanity) && Objects.equals(write, cardExtra.write) && Objects.equals(description, cardExtra.description) && Objects.equals(effect, cardExtra.effect);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(mana, blood, atk, def, dodge, block, flags, permFlags, data, race, vanity, write, description, effect);
+		return Objects.hash(mana, blood, atk, def, dodge, block, power, tier, flags, permFlags, data, race, vanity, write, description, effect);
 	}
 }

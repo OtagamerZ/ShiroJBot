@@ -41,7 +41,6 @@ import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -144,7 +143,7 @@ public class Field extends DAO implements Drawable<Field> {
 			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
 
 			if (type != FieldType.NONE) {
-				BufferedImage icon = IO.getResourceAsImage("shoukan/icons/" + type.name().toLowerCase(Locale.ROOT) + ".png");
+				BufferedImage icon = type.getIcon();
 				assert icon != null;
 
 				g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);

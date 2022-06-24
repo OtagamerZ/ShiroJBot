@@ -367,7 +367,12 @@ public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-			g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
+			List<String> tags = getTags();
+			if (tags.size() > 4) {
+				tags = tags.subList(0, 3);
+				tags.add("...");
+			}
+			g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
 			Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
 			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);

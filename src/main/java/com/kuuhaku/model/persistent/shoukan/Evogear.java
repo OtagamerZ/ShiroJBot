@@ -26,11 +26,13 @@ import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.utils.Bit;
 import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
 import com.kuuhaku.utils.json.JSONArray;
 import groovy.lang.GroovyShell;
@@ -62,6 +64,9 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 	@MapsId("id")
 	private Card card;
 
+	@Column(name = "tier", nullable = false)
+	private int tier;
+
 	@Convert(converter = JSONArrayConverter.class)
 	@Column(name = "charms", nullable = false)
 	private JSONArray charms = new JSONArray();
@@ -90,6 +95,10 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 	@Override
 	public Card getCard() {
 		return card;
+	}
+
+	public int getTier() {
+		return tier + stats.getTier();
 	}
 
 	public JSONArray getCharms() {
@@ -259,6 +268,34 @@ public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
 			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+
+			if (!getCharms().isEmpty()) {
+				List<BufferedImage> icons = charms.stream()
+						.map(String::valueOf)
+						.map(Charm::valueOf)
+						.map(Charm::getIcon)
+						.filter(Objects::nonNull)
+						.limit(2)
+						.toList();
+
+				if (!icons.isEmpty()) {
+					Graph.applyTransformed(g2d, 200 - 64, 55, g -> {
+						if (icons.size() == 1) {
+							g.drawImage(icons.get(0), 0, 0, null);
+						} else {
+							BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
+							assert mask != null;
+
+							for (int i = 0; i < icons.size(); i++) {
+								BufferedImage icon = icons.get(i);
+								Graph.applyMask(icon, mask, i, true);
+								g.drawImage(icon, 0, 0, null);
+							}
+							g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
+						}
+					});
+				}
+			}
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));

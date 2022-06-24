@@ -84,7 +84,7 @@ public class TestMain {
 			File f = new File("field.webp");
 			if (!f.exists()) f.createNewFile();
 
-			Files.write(f.toPath(), IO.getBytes(bi, "webp", 0.5f));
+			Files.write(f.toPath(), IO.getBytes(bi, "webp", 1));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

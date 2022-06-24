@@ -136,14 +136,14 @@ public abstract class Calc {
 	}
 
 	public static int prcntToInt(float value, float max) {
-		return prcntToInt(value, max, RoundingMode.UNNECESSARY);
+		return prcntToInt(value, max, RoundingMode.HALF_EVEN);
 	}
 
 	public static int prcntToInt(float value, float max, RoundingMode mode) {
 		return (int) switch (mode) {
 			case UP, CEILING, HALF_UP -> Math.ceil((value * 100) / max);
 			case DOWN, FLOOR, HALF_DOWN -> Math.floor((value * 100) / max);
-			case HALF_EVEN, UNNECESSARY -> Math.round((value * 100) / max);
+			default -> Math.round((value * 100) / max);
 		};
 	}
 

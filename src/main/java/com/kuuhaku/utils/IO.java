@@ -29,7 +29,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +39,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.function.BiConsumer;
 
 public abstract class IO {
 	public static InputStream getResourceAsStream(String path) {
@@ -59,12 +57,7 @@ public abstract class IO {
 			}
 		});
 
-		try (Buffer buf = new Buffer()) {
-			buf.write(bytes);
-			return ImageIO.read(buf.inputStream());
-		} catch (IOException e) {
-			return null;
-		}
+		return imageFromBytes(bytes);
 	}
 
 	public static File getResourceAsFile(String path) {
@@ -86,12 +79,7 @@ public abstract class IO {
 			}
 		});
 
-		try (Buffer buf = new Buffer()) {
-			buf.write(bytes);
-			return ImageIO.read(buf.inputStream());
-		} catch (IOException e) {
-			return null;
-		}
+		return imageFromBytes(bytes);
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
@@ -146,6 +134,15 @@ public abstract class IO {
 		}
 	}
 
+	public static BufferedImage imageFromBytes(byte[] bytes) {
+		try (Buffer buf = new Buffer()) {
+			buf.write(bytes);
+			return ImageIO.read(buf.inputStream());
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
 	public static String atob(BufferedImage bi, String encoding) {
 		return atob(getBytes(bi, encoding));
 	}
@@ -165,90 +162,6 @@ public abstract class IO {
 
 	public static byte[] btoc(String b64) {
 		return Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8));
-	}
-
-	public static BufferedImage toColorSpace(BufferedImage in, int type) {
-		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
-		Graphics2D g2d = out.createGraphics();
-		g2d.drawImage(in, 0, 0, null);
-		g2d.dispose();
-		return out;
-	}
-
-	public static void forEachPixel(BufferedImage bi, BiConsumer<int[], Integer> act) {
-		int x;
-		int y;
-		int i = 0;
-		while (true) {
-			x = i % bi.getWidth();
-			y = i / bi.getWidth();
-
-			if (x >= bi.getWidth() || y >= bi.getHeight()) break;
-
-			act.accept(new int[]{x, y}, bi.getRGB(x, y));
-			i++;
-		}
-	}
-
-	public static int[] unpackRGB(int rgb) {
-		return new int[]{
-				(rgb >> 24) & 0xFF,
-				(rgb >> 16) & 0xFF,
-				(rgb >> 8) & 0xFF,
-				rgb & 0xFF
-		};
-	}
-
-	public static int packRGB(int a, int r, int g, int b) {
-		return a << 24 | r << 16 | g << 8 | b;
-	}
-
-	public static int packRGB(int[] argb) {
-		return argb[0] << 24 | argb[1] << 16 | argb[2] << 8 | argb[3];
-	}
-
-	public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
-		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = newMask.createGraphics();
-		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
-		g2d.dispose();
-
-		for (int y = 0; y < source.getHeight(); y++) {
-			for (int x = 0; x < source.getWidth(); x++) {
-				int[] rgb = unpackRGB(source.getRGB(x, y));
-
-				int fac = unpackRGB(newMask.getRGB(x, y))[channel];
-				source.setRGB(
-						x,
-						y,
-						packRGB(fac, rgb[1], rgb[2], rgb[3])
-				);
-			}
-		}
-	}
-
-	public static void applyMask(BufferedImage source, BufferedImage mask, int channel, boolean hasAlpha) {
-		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = newMask.createGraphics();
-		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
-		g2d.dispose();
-
-		for (int y = 0; y < source.getHeight(); y++) {
-			for (int x = 0; x < source.getWidth(); x++) {
-				int[] rgb = unpackRGB(source.getRGB(x, y));
-
-				int fac;
-				if (hasAlpha) {
-					fac = Math.min(rgb[0], unpackRGB(newMask.getRGB(x, y))[channel + 1]);
-				} else
-					fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
-				source.setRGB(
-						x,
-						y,
-						packRGB(fac, rgb[1], rgb[2], rgb[3])
-				);
-			}
-		}
 	}
 
 	public static String readString(Path path) {
