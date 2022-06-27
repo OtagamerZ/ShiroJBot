@@ -365,42 +365,44 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			g2d.setColor(deck.getFrame().getPrimaryColor());
 			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 38, 30, 2, deck.getFrame().getBackgroundColor());
 
-			g2d.setColor(deck.getFrame().getSecondaryColor());
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-			List<String> tags = getTags();
-			if (tags.size() > 4) {
-				tags = tags.subList(0, 3);
-				tags.add("...");
+			if (desc.isEmpty()) {
+				g2d.setColor(deck.getFrame().getSecondaryColor());
+				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+				List<String> tags = getTags();
+				if (tags.size() > 4) {
+					tags = tags.subList(0, 3);
+					tags.add("...");
+				}
+				g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
+
+				Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
+				Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
+				Graph.drawMultilineString(g2d,
+						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211,
+						s -> {
+							String str = Utils.extract(s, "\\{(\\d+)}", 1);
+
+							if (str != null) {
+								double val = Double.parseDouble(str);
+
+								g2d.setFont(dynamic);
+								g2d.setColor(Color.ORANGE);
+								return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
+							}
+
+							g2d.setFont(normal);
+							g2d.setColor(deck.getFrame().getSecondaryColor());
+							return s;
+						},
+						(str, x, y) -> {
+							if (str.startsWith("\u200B")) {
+								Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
+							} else {
+								g2d.drawString(str, x, y);
+							}
+						}
+				);
 			}
-			g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
-
-			Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
-			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
-			Graph.drawMultilineString(g2d,
-					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211,
-					s -> {
-						String str = Utils.extract(s, "\\{(\\d+)}", 1);
-
-						if (str != null) {
-							double val = Double.parseDouble(str);
-
-							g2d.setFont(dynamic);
-							g2d.setColor(Color.ORANGE);
-							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
-						}
-
-						g2d.setFont(normal);
-						g2d.setColor(deck.getFrame().getSecondaryColor());
-						return s;
-					},
-					(str, x, y) -> {
-						if (str.startsWith("\u200B")) {
-							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
-						} else {
-							g2d.drawString(str, x, y);
-						}
-					}
-			);
 
 			drawCosts(g2d);
 			if (!isSupporting()) {
