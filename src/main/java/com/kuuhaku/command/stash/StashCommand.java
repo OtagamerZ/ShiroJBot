@@ -138,13 +138,13 @@ public class StashCommand implements Executable {
 					}
 
 					return new MessageEmbed.Field(
-							sc.toString() + location,
+							sc + location,
 							"%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
-									kc != null ? ("\n" + locale.get("str/quality", kc.getQuality())) : ""
+									kc != null ? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1))) : ""
 							),
 							false
 					);
