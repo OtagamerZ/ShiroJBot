@@ -279,7 +279,7 @@ public class Deck extends DAO<Deck> {
 
 			if (ori.minor() == Race.NONE) {
 				g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
-				g.setFont(new Font("Arial", Font.BOLD, 75));
+				g.setFont(new Font("Arial", Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
 				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
@@ -294,7 +294,7 @@ public class Deck extends DAO<Deck> {
 				);
 			} else {
 				g.drawImage(syn.getImage(), 0, 0, 150, 150, null);
-				g.setFont(new Font("Arial", Font.BOLD, 75));
+				g.setFont(new Font("Arial", Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
 				String text = locale.get("str/deck_origin", syn.getName(locale));
