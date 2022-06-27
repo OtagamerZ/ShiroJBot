@@ -119,7 +119,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getMPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.CYAN);
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 3, y - 3 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 3, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			y += icon.getHeight() + 5;
 		}
 
@@ -131,7 +131,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getHPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.RED);
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 3, y - 3 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 3, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
 	}
 
@@ -150,7 +150,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getDef());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.GREEN);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			y -= icon.getHeight() + 5;
 		}
 
@@ -162,7 +162,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getDmg());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.RED);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			y -= icon.getHeight() + 5;
 		}
 
@@ -174,7 +174,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = getBlock() + "%";
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.GRAY);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			y -= icon.getHeight() + 5;
 		}
 
@@ -186,7 +186,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = getDodge() + "%";
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.ORANGE);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
 	}
 
