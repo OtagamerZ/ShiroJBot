@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.info;
+package com.kuuhaku.command.deck;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
