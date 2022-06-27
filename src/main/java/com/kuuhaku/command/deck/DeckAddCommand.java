@@ -98,13 +98,26 @@ public class DeckAddCommand implements Executable {
 					Deck dk = d.refresh();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
+							if (dk.getSenshi().size() >= 36) {
+								event.channel().sendMessage(locale.get("error/deck_full")).queue();
+								return;
+							}
+
 							dk.getSenshi().add(DAO.find(Senshi.class, card.getId()));
 							sc.setDeck(dk);
 						}
 						case EVOGEAR -> {
+							if (dk.getSenshi().size() >= 24) {
+								event.channel().sendMessage(locale.get("error/deck_full")).queue();
+								return;
+							}
 							//TODO
 						}
 						case FIELD -> {
+							if (dk.getSenshi().size() >= 3) {
+								event.channel().sendMessage(locale.get("error/deck_full")).queue();
+								return;
+							}
 							//TODO
 						}
 					}
