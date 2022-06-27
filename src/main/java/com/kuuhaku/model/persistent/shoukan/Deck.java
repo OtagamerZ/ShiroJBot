@@ -259,7 +259,7 @@ public class Deck extends DAO<Deck> {
 						+ "\n" + Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1)
 						+ "\n" + Utils.roundToString((float) totalDmg.get() / allCards.size(), 1)
 						+ "\n" + Utils.roundToString((float) totalDef.get() / allCards.size(), 1)
-				, 950, 45, 150, 0,
+				, 950, 45, 175, 0,
 				s -> {
 					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
 					if (values.isEmpty()) {
