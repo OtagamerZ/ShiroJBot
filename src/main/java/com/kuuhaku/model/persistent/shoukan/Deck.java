@@ -327,7 +327,7 @@ public class Deck extends DAO<Deck> {
 			int i = 0;
 			for (Senshi s : senshi) {
 				if (i > 36) break;
-				g.drawImage(s.render(locale, this), 120 * (i++ % 9), 182 * (i / 9), 113, 175, null);
+				g.drawImage(s.render(locale, this), 120 * (i++ % 9), 182 * (i / 10), 113, 175, null);
 			}
 		});
 
@@ -335,7 +335,7 @@ public class Deck extends DAO<Deck> {
 			int i = 0;
 			for (Evogear e : evogear) {
 				if (i > 24) break;
-				g.drawImage(e.render(locale, this), 120 * (i++ % 6), 182 * (i / 6), 113, 175, null);
+				g.drawImage(e.render(locale, this), 120 * (i++ % 6), 182 * (i / 7), 113, 175, null);
 			}
 		});
 
