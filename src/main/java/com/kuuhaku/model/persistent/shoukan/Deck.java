@@ -323,6 +323,7 @@ public class Deck extends DAO<Deck> {
 		Graph.applyTransformed(g2d, 1212, 14, g -> {
 			int i = 0;
 			for (Senshi s : senshi) {
+				if (i > 36) break;
 				g.drawImage(s.render(locale, this), 120 * (i++ % 9), 182 * (i / 9), 113, 175, null);
 			}
 		});
@@ -330,6 +331,7 @@ public class Deck extends DAO<Deck> {
 		Graph.applyTransformed(g2d, 1571, 768, g -> {
 			int i = 0;
 			for (Evogear e : evogear) {
+				if (i > 24) break;
 				g.drawImage(e.render(locale, this), 120 * (i++ % 6), 182 * (i / 6), 113, 175, null);
 			}
 		});
@@ -337,6 +339,7 @@ public class Deck extends DAO<Deck> {
 		Graph.applyTransformed(g2d, 1185, 1314, g -> {
 			int i = 0;
 			for (Field f : field) {
+				if (i > 3) break;
 				g.drawImage(f.render(locale, this), 120 * (i++ % 6), 0, 113, 175, null);
 			}
 		});
