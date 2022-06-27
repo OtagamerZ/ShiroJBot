@@ -41,7 +41,8 @@ import java.util.stream.Collectors;
 public abstract class Spawn {
 	private static Pair<Integer, MoonIllumination> illum = null;
 	private static Map<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
-			.expiration(1, TimeUnit.MINUTES)
+			//.expiration(1, TimeUnit.MINUTES)  TODO Return
+			.expiration(20, TimeUnit.SECONDS)
 			.build();
 
 	public synchronized static KawaiponCard getKawaipon(Guild guild) {

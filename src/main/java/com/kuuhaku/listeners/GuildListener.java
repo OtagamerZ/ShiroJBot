@@ -247,7 +247,8 @@ public class GuildListener extends ListenerAdapter {
 
 				Utils.getRandomEntry(channels).sendMessageEmbeds(eb.build())
 						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isFoil()), "png"), "card.png")
-						.delay(1, TimeUnit.MINUTES)
+						//.delay(1, TimeUnit.MINUTES) TODO Return
+						.delay(20, TimeUnit.SECONDS)
 						.flatMap(Message::delete)
 						.queue();
 			}
