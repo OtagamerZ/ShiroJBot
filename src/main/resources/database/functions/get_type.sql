@@ -21,7 +21,7 @@ CREATE OR REPLACE FUNCTION get_type(VARCHAR)
     LANGUAGE sql
 AS
 $$
-SELECT CAST((COUNT(s) << 3) | (COUNT(e) << 2) | (COUNT(f) << 1) AS INT)
+SELECT CAST((COUNT(f) << 3) | (COUNT(e) << 2) | (COUNT(s) << 1) AS INT)
 FROM card c
          LEFT JOIN senshi s ON c.id = s.card_id
          LEFT JOIN evogear e ON c.id = e.card_id
