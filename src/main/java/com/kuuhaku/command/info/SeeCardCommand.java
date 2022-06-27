@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Command(
-		name = "card",
+		name = "see",
 		category = Category.INFO
 )
 @Signature("<card:word:r> <kind:word>[n,c,s]")
