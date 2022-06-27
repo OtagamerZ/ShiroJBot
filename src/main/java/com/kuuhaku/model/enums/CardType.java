@@ -18,34 +18,6 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.user.StashedCard;
-import org.intellij.lang.annotations.Language;
-
 public enum CardType {
-	NONE,
-	KAWAIPON(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.kawaiponCard.uuid = ?1"),
-	EVOGEAR,
-	FIELD;
-
-	private final Class<? extends DAO<?>> klass;
-	private final String query;
-
-	CardType() {
-		this.klass = null;
-		this.query = null;
-	}
-
-	CardType(Class<? extends DAO<?>> klass, @Language("JPAQL") String query) {
-		this.klass = klass;
-		this.query = query;
-	}
-
-	public Class<? extends DAO<?>> getKlass() {
-		return klass;
-	}
-
-	public String getQuery() {
-		return query;
-	}
+	NONE, KAWAIPON, EVOGEAR, FIELD
 }
