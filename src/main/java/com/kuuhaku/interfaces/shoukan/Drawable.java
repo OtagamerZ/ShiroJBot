@@ -20,6 +20,7 @@ package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -107,7 +108,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		BufferedImage icon;
 		int y = 55;
 
-		g2d.setFont(new Font("Arial", Font.BOLD, 18));
+		g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 18));
 		FontMetrics m = g2d.getFontMetrics();
 
 		if (getMPCost() > 0) {
@@ -138,7 +139,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		BufferedImage icon;
 		int y = desc ? 225 : 279;
 
-		g2d.setFont(new Font("Arial", Font.BOLD, 18));
+		g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.BOLD, 18));
 		FontMetrics m = g2d.getFontMetrics();
 
 		if (getDef() > 0) {
