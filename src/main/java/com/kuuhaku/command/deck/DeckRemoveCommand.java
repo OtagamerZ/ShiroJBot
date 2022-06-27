@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.misc;
+package com.kuuhaku.command.deck;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Bit;
@@ -39,13 +40,14 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 @Command(
 		name = "deck",
-		subname = "add",
+		subname = "remove",
 		category = Category.MISC
 )
 @Signature("<card:word:r>")
@@ -53,7 +55,7 @@ import java.util.Set;
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS
 })
-public class DeckAddCommand implements Executable {
+public class DeckRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
@@ -83,13 +85,16 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		{ // TODO Remove
-			d.getSenshi().add(DAO.find(Senshi.class, card.getId()));
-			event.channel().sendMessage("Added").queue();
+		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.id IN ?3",
+				event.user().getId(), d.getId(), card.getId()
+		);
+		if (stash.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/not_in_deck")).queue();
+			return;
 		}
 
-		if (true) return;
-		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
@@ -99,8 +104,16 @@ public class DeckAddCommand implements Executable {
 					Deck dk = d.refresh();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							dk.getSenshi().add(DAO.find(Senshi.class, card.getId()));
-							sc.setDeck(dk);
+							Iterator<Senshi> it = dk.getSenshi().iterator();
+							while (it.hasNext()) {
+								Senshi s = it.next();
+								if (s.getCard().equals(sc.getCard())) {
+									it.remove();
+									break;
+								}
+							}
+
+							sc.setDeck(null);
 						}
 						case EVOGEAR -> {
 							//TODO
@@ -112,7 +125,7 @@ public class DeckAddCommand implements Executable {
 					sc.save();
 					dk.save();
 
-					event.channel().sendMessage(locale.get("success/card_added")).queue();
+					event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), sc)).queue();
 				})
 				.exceptionally(t -> {
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
