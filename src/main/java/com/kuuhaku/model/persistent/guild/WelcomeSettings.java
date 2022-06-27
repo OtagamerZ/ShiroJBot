@@ -28,7 +28,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "welcome_settings")
-public class WelcomeSettings extends DAO {
+public class WelcomeSettings extends DAO<WelcomeSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
 	private String gid;

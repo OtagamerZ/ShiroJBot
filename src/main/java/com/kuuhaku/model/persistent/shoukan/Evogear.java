@@ -51,7 +51,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "evogear")
-public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
+public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHolder {
 	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
 
 	@Id

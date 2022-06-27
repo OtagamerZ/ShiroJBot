@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "deck")
-public class Deck extends DAO {
+public class Deck extends DAO<Deck> {
 	@Transient
 	public static final Deck INSTANCE = new Deck();
 

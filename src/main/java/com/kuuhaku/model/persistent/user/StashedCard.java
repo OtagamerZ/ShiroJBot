@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.utils.Utils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -30,7 +31,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "stashed_card")
-public class StashedCard extends DAO {
+public class StashedCard extends DAO<StashedCard> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
@@ -52,6 +53,10 @@ public class StashedCard extends DAO {
 	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
+
+	@ManyToOne
+	@JoinColumn(name = "deck_id")
+	private Deck deck;
 
 	public StashedCard() {
 
@@ -92,6 +97,14 @@ public class StashedCard extends DAO {
 
 	public void setKawaipon(Kawaipon kawaipon) {
 		this.kawaipon = kawaipon;
+	}
+
+	public Deck getDeck() {
+		return deck;
+	}
+
+	public void setDeck(Deck deck) {
+		this.deck = deck;
 	}
 
 	@Override

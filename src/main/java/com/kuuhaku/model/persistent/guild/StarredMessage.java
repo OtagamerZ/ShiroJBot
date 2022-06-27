@@ -27,7 +27,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "starred_message")
-public class StarredMessage extends DAO {
+public class StarredMessage extends DAO<StarredMessage> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

@@ -46,7 +46,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "field")
-public class Field extends DAO implements Drawable<Field> {
+public class Field extends DAO<Field> implements Drawable<Field> {
 	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
 
 	@Id

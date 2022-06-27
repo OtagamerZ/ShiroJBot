@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
-public class Kawaipon extends DAO {
+public class Kawaipon extends DAO<Kawaipon> {
 	@Id
 	@Column(name = "uid", nullable = false)
 	private String uid;

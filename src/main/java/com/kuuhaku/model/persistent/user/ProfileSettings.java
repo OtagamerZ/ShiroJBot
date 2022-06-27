@@ -28,7 +28,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "profile_settings")
-public class ProfileSettings extends DAO {
+public class ProfileSettings extends DAO<ProfileSettings> {
 	@EmbeddedId
 	private ProfileId id;
 

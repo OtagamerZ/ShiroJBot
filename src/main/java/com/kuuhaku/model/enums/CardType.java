@@ -28,7 +28,7 @@ public enum CardType {
 	EVOGEAR,
 	FIELD;
 
-	private final Class<? extends DAO> klass;
+	private final Class<? extends DAO<?>> klass;
 	private final String query;
 
 	CardType() {
@@ -36,12 +36,12 @@ public enum CardType {
 		this.query = null;
 	}
 
-	CardType(Class<? extends DAO> klass, @Language("JPAQL") String query) {
+	CardType(Class<? extends DAO<?>> klass, @Language("JPAQL") String query) {
 		this.klass = klass;
 		this.query = query;
 	}
 
-	public Class<? extends DAO> getKlass() {
+	public Class<? extends DAO<?>> getKlass() {
 		return klass;
 	}
 

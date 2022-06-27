@@ -35,7 +35,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "guild_settings")
-public class GuildSettings extends DAO {
+public class GuildSettings extends DAO<GuildSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
 	private String gid;

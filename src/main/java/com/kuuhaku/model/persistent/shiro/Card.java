@@ -43,7 +43,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "card")
-public class Card extends DAO {
+public class Card extends DAO<Card> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

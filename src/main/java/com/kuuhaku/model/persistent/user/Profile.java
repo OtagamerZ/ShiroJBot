@@ -41,7 +41,7 @@ import java.util.Objects;
 @DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
-public class Profile extends DAO implements Blacklistable {
+public class Profile extends DAO<Profile> implements Blacklistable {
 	@EmbeddedId
 	private ProfileId id;
 

@@ -53,7 +53,7 @@ public class ShoukanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Shoukan skn = new Shoukan(locale, event.user(), event.message().getMentionedUsers().get(0));
-		Message m = Pages.subGet(event.channel().sendMessage(locale.get("str/loading_game", getRandomTip(locale))));
+		Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 		skn.start(event.guild(), event.channel())
 				.handle((v, err) -> {
 					if (err == null) {
@@ -77,7 +77,7 @@ public class ShoukanCommand implements Executable {
 	private void updateTip(I18N locale, Shoukan skn, Message m) {
 		exec.schedule(() -> {
 			if (!skn.isInitialized()) {
-				m.editMessage(locale.get("str/loading_game", getRandomTip(locale))).queue(null, Utils::doNothing);
+				m.editMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))).queue(null, Utils::doNothing);
 				updateTip(locale, skn, m);
 				return;
 			}
