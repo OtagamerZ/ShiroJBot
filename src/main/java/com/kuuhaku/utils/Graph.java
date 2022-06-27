@@ -49,14 +49,30 @@ public abstract class Graph {
 	}
 
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width) {
-		drawMultilineString(g2d, text, x, y, width, Function.identity());
+		drawMultilineString(g2d, text, x, y, width, 0, Function.identity(), g2d::drawString);
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning) {
+		drawMultilineString(g2d, text, x, y, width, kerning, Function.identity(), g2d::drawString);
 	}
 
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, Function<String, String> processor) {
-		drawMultilineString(g2d, text, x, y, width, processor, g2d::drawString);
+		drawMultilineString(g2d, text, x, y, width, 0, processor, g2d::drawString);
 	}
 
-	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, Function<String, String> processor) {
+		drawMultilineString(g2d, text, x, y, width, kerning, processor, g2d::drawString);
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, TriConsumer<String, Integer, Integer> renderer) {
+		drawMultilineString(g2d, text, x, y, width, 0, Function.identity(), renderer);
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, TriConsumer<String, Integer, Integer> renderer) {
+		drawMultilineString(g2d, text, x, y, width, kerning, Function.identity(), renderer);
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
 			String[] words = line.split("(?<=\\S) ");
@@ -69,13 +85,13 @@ public abstract class Graph {
 					renderer.accept(word, x + offset, y);
 					offset += m.stringWidth(word + " ");
 				} else {
-					y += m.getHeight();
+					y += m.getHeight() - kerning;
 					renderer.accept(word, x, y);
 					offset = m.stringWidth(word + " ");
 				}
 			}
 
-			y += g2d.getFontMetrics().getHeight();
+			y += g2d.getFontMetrics().getHeight() - kerning;
 		}
 	}
 
