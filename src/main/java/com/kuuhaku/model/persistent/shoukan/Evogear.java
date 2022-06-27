@@ -265,7 +265,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 			g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 
-			g2d.setFont(new Font("Arial", Font.BOLD, 20));
+			g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 22));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
 			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
 
