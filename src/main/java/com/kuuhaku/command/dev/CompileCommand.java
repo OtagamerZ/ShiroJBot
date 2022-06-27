@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.dev;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -44,7 +45,7 @@ public class CompileCommand implements Executable {
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		event.channel().sendMessage(locale.get("str/compiling")).queue(m -> {
+		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/compiling"))).queue(m -> {
 			Future<Pair<String, Long>> execute = exec.submit(() -> {
 				AtomicLong time = new AtomicLong();
 

@@ -31,7 +31,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "card_descriptions")
-public class LocalizedDescription extends DAO {
+public class LocalizedDescription extends DAO<LocalizedDescription> {
 	@EmbeddedId
 	private LocalizedDescId id;
 

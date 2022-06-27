@@ -29,7 +29,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "anime")
-public class Anime extends DAO {
+public class Anime extends DAO<Anime> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

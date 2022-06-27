@@ -16,48 +16,57 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.info;
+package com.kuuhaku.command.misc;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.ImageFilters;
+import com.kuuhaku.utils.Bit;
 import com.kuuhaku.utils.Utils;
-import com.kuuhaku.utils.XStringBuilder;
 import com.kuuhaku.utils.json.JSONObject;
 import kotlin.Pair;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @Command(
-		name = "card",
-		category = Category.INFO
+		name = "deck",
+		subname = "add",
+		category = Category.MISC
 )
-@Signature("<card:word:r> <foil:word>[n,c,s]")
+@Signature("<card:word:r>")
 @Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
+		Permission.MESSAGE_ATTACH_FILES,
+		Permission.MESSAGE_EMBED_LINKS
 })
-public class SeeCardCommand implements Executable {
+public class DeckAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		if (kp.getCards().isEmpty()) {
+			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
+			return;
+		}
+
+		Deck d = data.profile().getAccount().getCurrentDeck();
+		if (d == null) {
+			event.channel().sendMessage(locale.get("error/no_deck")).queue();
+			return;
+		}
 
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
 		if (card == null) {
@@ -68,42 +77,46 @@ public class SeeCardCommand implements Executable {
 			return;
 		}
 
-		boolean foil = args.getString("foil", "n").equalsIgnoreCase("c");
-		KawaiponCard kc = kp.getCard(card, foil);
-
-		BufferedImage bi;
-		if (kc == null) {
-			bi = ImageFilters.silhouette(card.drawCard(foil));
-		} else {
-			bi = card.drawCard(foil);
+		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId()));
+		if (types.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
+			return;
 		}
 
-		int stored = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card WHERE kawaipon_uid = ?1 AND card_id = ?2",
-				event.user().getId(),
-				card.getId()
-		);
-		EmbedBuilder eb = new EmbedBuilder()
-				.setAuthor(locale.get("str/in_stash", stored))
-				.setTitle(card.getName() + " (" + card.getAnime() + ")")
-				.setImage("attachment://card.png");
-
-		if (kc != null) {
-			XStringBuilder sb = new XStringBuilder();
-			sb.appendNewLine(locale.get("str/quality", kc.getQuality()));
-			sb.appendNewLine(locale.get("str/suggested_price", kc.getSuggestedPrice()));
-
-			eb.addField(locale.get("str/information"), sb.toString(), true);
+		{ // TODO Remove
+			d.getSenshi().add(DAO.find(Senshi.class, card.getId()));
+			event.channel().sendMessage("Added").queue();
 		}
 
-		Senshi senshi = DAO.query(Senshi.class, card.getId());
-		if (senshi != null) {
-			eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/success") + " " + locale.get("str/yes"), true);
-		} else {
-			eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/error") + " " + locale.get("str/no"), true);
-		}
+		if (true) return;
+		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+				.thenAccept(sc -> {
+					if (sc == null) {
+						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+						return;
+					}
 
-		event.channel().sendMessageEmbeds(eb.build())
-				.addFile(IO.getBytes(bi, "png"), "card.png")
-				.queue();
+					Deck dk = d.refresh();
+					switch (sc.getType()) {
+						case KAWAIPON -> {
+							dk.getSenshi().add(DAO.find(Senshi.class, card.getId()));
+							sc.setDeck(dk);
+						}
+						case EVOGEAR -> {
+							//TODO
+						}
+						case FIELD -> {
+							//TODO
+						}
+					}
+					sc.save();
+					dk.save();
+
+					event.channel().sendMessage(locale.get("success/card_added")).queue();
+				})
+				.exceptionally(t -> {
+					event.channel().sendMessage(locale.get("error/not_owned")).queue();
+					return null;
+				});
 	}
 }

@@ -27,7 +27,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "dynamic_property")
-public class DynamicProperty extends DAO {
+public class DynamicProperty extends DAO<DynamicProperty> {
 	@EmbeddedId
 	private DynamicPropertyId id;
 

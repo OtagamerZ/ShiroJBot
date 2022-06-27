@@ -8,13 +8,14 @@ import org.intellij.lang.annotations.Language;
 import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public abstract class DAO {
-	public static <T extends DAO, ID> T find(@Nonnull Class<T> klass, @Nonnull ID id) {
+public abstract class DAO<T extends DAO<T>> {
+	public static <T extends DAO<T>, ID> T find(@Nonnull Class<T> klass, @Nonnull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -48,14 +49,14 @@ public abstract class DAO {
 		}
 	}
 
-	public static <T extends DAO> T query(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
+	public static <T extends DAO<T>> T query(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			T t;
@@ -83,7 +84,7 @@ public abstract class DAO {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			T t;
@@ -115,7 +116,7 @@ public abstract class DAO {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			try {
@@ -133,7 +134,7 @@ public abstract class DAO {
 		}
 	}
 
-	public static <T extends DAO> List<T> findAll(@Nonnull Class<T> klass) {
+	public static <T extends DAO<T>> List<T> findAll(@Nonnull Class<T> klass) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -151,13 +152,13 @@ public abstract class DAO {
 		}
 	}
 
-	public static <T extends DAO> List<T> queryAll(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
+	public static <T extends DAO<T>> List<T> queryAll(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -178,7 +179,7 @@ public abstract class DAO {
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -207,7 +208,7 @@ public abstract class DAO {
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			return ((Stream<?>) q.getResultStream())
@@ -223,7 +224,7 @@ public abstract class DAO {
 		}
 	}
 
-	public static <T extends DAO, ID> void apply(@Nonnull Class<T> klass, @Nonnull ID id, @Nonnull Consumer<T> consumer) {
+	public static <T extends DAO<?>, ID> void apply(@Nonnull Class<T> klass, @Nonnull ID id, @Nonnull Consumer<T> consumer) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -256,7 +257,7 @@ public abstract class DAO {
 
 			Query q = em.createQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
 
@@ -278,7 +279,7 @@ public abstract class DAO {
 
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				q.setParameter(i+1, params[i]);
+				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
 
@@ -308,6 +309,26 @@ public abstract class DAO {
 				em.getTransaction().rollback();
 			}
 
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public final T refresh() {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Field[] fields = getClass().getDeclaredFields();
+			for (Field field : fields) {
+				if (getClass().isAnnotationPresent(Id.class)) {
+					return (T) find(getClass(), field.get(field));
+				}
+			}
+
+			return (T) this;
+		} catch (IllegalAccessException e) {
+			return (T) this;
+		} finally {
 			em.close();
 		}
 	}

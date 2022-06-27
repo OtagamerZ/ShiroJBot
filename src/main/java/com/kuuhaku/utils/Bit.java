@@ -18,6 +18,9 @@
 
 package com.kuuhaku.utils;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public abstract class Bit {
 	public static int set(int bits, int index, boolean value) {
 		return set(bits, index, Utils.toInt(value), 1);
@@ -47,5 +50,20 @@ public abstract class Bit {
 
 		int mask = (1 << size) - 1;
 		return (bits >> index) & mask;
+	}
+
+	public static <T extends Enum<T>> Set<T> toEnumSet(Class<T> klass, int bits) {
+		Set<T> out = EnumSet.noneOf(klass);
+		T[] fields = klass.getEnumConstants();
+		for (T field : fields) {
+			if (bits == 0) return out;
+			else if ((bits & 1) == 1) {
+				out.add(field);
+			}
+
+			bits >>= 1;
+		}
+
+		return out;
 	}
 }

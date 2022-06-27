@@ -26,7 +26,7 @@ import java.awt.*;
 
 @Entity
 @Table(name = "account_settings")
-public class AccountSettings extends DAO {
+public class AccountSettings extends DAO<AccountSettings> {
 	@Id
 	@Column(name = "uid", nullable = false)
 	private String uid;

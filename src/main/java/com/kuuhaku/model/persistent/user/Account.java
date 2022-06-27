@@ -44,7 +44,7 @@ import java.util.*;
 @DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account", indexes = @Index(columnList = "debit, balance DESC"))
-public class Account extends DAO implements Blacklistable {
+public class Account extends DAO<Account> implements Blacklistable {
 	@Id
 	@Column(name = "uid", nullable = false)
 	private String uid;

@@ -28,7 +28,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "goodbye_settings")
-public class GoodbyeSettings extends DAO {
+public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
 	private String gid;
