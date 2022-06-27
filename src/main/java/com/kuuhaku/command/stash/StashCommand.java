@@ -144,7 +144,9 @@ public class StashCommand implements Executable {
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
-									kc != null ? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1))) : ""
+									kc != null && kc.getQuality() > 0
+											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
+											: ""
 							),
 							false
 					);
