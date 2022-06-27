@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	int MAX_NAME_LENGTH = 16;
-	int MAX_DESC_LENGTH = 215;
+	int MAX_DESC_LENGTH = 335;
 
 	String getId();
 
