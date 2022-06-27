@@ -229,4 +229,16 @@ public abstract class Graph {
 			);
 		});
 	}
+
+	public static void overlay(BufferedImage source, BufferedImage overlay) {
+		if (overlay == null) return;
+
+		Graphics2D g2d = source.createGraphics();
+		g2d.drawImage(overlay,
+				source.getWidth() / 2 - overlay.getWidth() / 2,
+				source.getHeight() / 2 - overlay.getHeight() / 2,
+				null
+		);
+		g2d.dispose();
+	}
 }
