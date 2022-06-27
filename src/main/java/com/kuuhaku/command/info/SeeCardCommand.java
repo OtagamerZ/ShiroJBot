@@ -23,18 +23,20 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.ImageFilters;
-import com.kuuhaku.utils.Utils;
-import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.utils.*;
 import com.kuuhaku.utils.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -44,12 +46,13 @@ import net.dv8tion.jda.api.Permission;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @Command(
 		name = "card",
 		category = Category.INFO
 )
-@Signature("<card:word:r> <foil:word>[n,c,s]")
+@Signature("<card:word:r> <kind:word>[n,c,s]")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
@@ -68,16 +71,6 @@ public class SeeCardCommand implements Executable {
 			return;
 		}
 
-		boolean foil = args.getString("foil", "n").equalsIgnoreCase("c");
-		KawaiponCard kc = kp.getCard(card, foil);
-
-		BufferedImage bi;
-		if (kc == null) {
-			bi = ImageFilters.silhouette(card.drawCard(foil));
-		} else {
-			bi = card.drawCard(foil);
-		}
-
 		int stored = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card WHERE kawaipon_uid = ?1 AND card_id = ?2",
 				event.user().getId(),
 				card.getId()
@@ -87,19 +80,59 @@ public class SeeCardCommand implements Executable {
 				.setTitle(card.getName() + " (" + card.getAnime() + ")")
 				.setImage("attachment://card.png");
 
-		if (kc != null) {
-			XStringBuilder sb = new XStringBuilder();
-			sb.appendNewLine(locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)));
-			sb.appendNewLine(locale.get("str/suggested_price", kc.getSuggestedPrice()));
+		String type = args.getString("kind", "n");
+		BufferedImage bi = null;
+		switch (type) {
+			case "n", "f" -> {
+				KawaiponCard kc = kp.getCard(card, type.equals("f"));
+				if (kc == null) {
+					bi = ImageFilters.silhouette(card.drawCard(type.equals("f")));
+				} else {
+					bi = card.drawCard(type.equals("f"));
+				}
 
-			eb.addField(locale.get("str/information"), sb.toString(), true);
-		}
+				if (kc != null) {
+					XStringBuilder sb = new XStringBuilder();
+					sb.appendNewLine(locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)));
+					sb.appendNewLine(locale.get("str/suggested_price", kc.getSuggestedPrice()));
 
-		Senshi senshi = DAO.find(Senshi.class, card.getId());
-		if (senshi != null) {
-			eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/success") + " " + locale.get("str/yes"), true);
-		} else {
-			eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/error") + " " + locale.get("str/no"), true);
+					eb.addField(locale.get("str/information"), sb.toString(), true);
+				}
+
+				Senshi senshi = DAO.find(Senshi.class, card.getId());
+				if (senshi != null) {
+					eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/success") + " " + locale.get("str/yes"), true);
+				} else {
+					eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/error") + " " + locale.get("str/no"), true);
+				}
+			}
+			case "s" -> {
+				Deck dk = kp.getAccount().getCurrentDeck();
+				if (dk == null) {
+					event.channel().sendMessage(locale.get("error/no_deck")).queue();
+					return;
+				}
+
+				Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId()));
+				if (types.isEmpty()) {
+					event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
+					return;
+				}
+
+				for (CardType ct : types) {
+					Drawable<?> d = switch (ct) {
+						case NONE -> null;
+						case KAWAIPON -> DAO.find(Senshi.class, card.getId());
+						case EVOGEAR -> DAO.find(Evogear.class, card.getId());
+						case FIELD -> DAO.find(Field.class, card.getId());
+					};
+
+					if (d != null) {
+						bi = d.render(locale, dk);
+						break;
+					}
+				}
+			}
 		}
 
 		event.channel().sendMessageEmbeds(eb.build())

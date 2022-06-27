@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Bit;
@@ -83,7 +84,11 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL",
+				event.user().getId(), d.getId(), card.getId()
+		);
+		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
