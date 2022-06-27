@@ -46,7 +46,6 @@ import net.dv8tion.jda.api.Permission;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 @Command(
 		name = "card",
@@ -113,24 +112,21 @@ public class SeeCardCommand implements Executable {
 					return;
 				}
 
-				Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId()));
+				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId())));
 				if (types.isEmpty()) {
 					event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
 					return;
 				}
 
-				for (CardType ct : types) {
-					Drawable<?> d = switch (ct) {
-						case NONE -> null;
-						case KAWAIPON -> DAO.find(Senshi.class, card.getId());
-						case EVOGEAR -> DAO.find(Evogear.class, card.getId());
-						case FIELD -> DAO.find(Field.class, card.getId());
-					};
+				Drawable<?> d = switch (types.get(0)) {
+					case NONE -> null;
+					case KAWAIPON -> DAO.find(Senshi.class, card.getId());
+					case EVOGEAR -> DAO.find(Evogear.class, card.getId());
+					case FIELD -> DAO.find(Field.class, card.getId());
+				};
 
-					if (d != null) {
-						bi = d.render(locale, dk);
-						break;
-					}
+				if (d != null) {
+					bi = d.render(locale, dk);
 				}
 			}
 		}

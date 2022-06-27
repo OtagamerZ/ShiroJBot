@@ -71,7 +71,10 @@ public class TradeRemoveCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), offer + " ₵R")).queue();
 		} else {
 			List<Integer> selfOffer = trade.getSelfOffers(event.user().getId());
-			List<StashedCard> stash = DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.id IN ?2", event.user().getId(), selfOffer);
+			List<StashedCard> stash = DAO.queryAll(StashedCard.class,
+					"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck IS NULL AND s.id IN ?2",
+					event.user().getId(), selfOffer
+			);
 			if (stash.isEmpty()) {
 				event.channel().sendMessage(locale.get("error/empty_offer")).queue();
 				return;
