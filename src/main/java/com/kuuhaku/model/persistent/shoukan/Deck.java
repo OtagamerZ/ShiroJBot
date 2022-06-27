@@ -67,6 +67,7 @@ public class Deck extends DAO<Deck> {
 	private boolean current;
 
 	@ManyToMany
+	@OrderColumn
 	@JoinTable(name = "deck_senshi",
 			joinColumns = @JoinColumn(name = "deck_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "senshi_card_id", referencedColumnName = "card_id"))
@@ -74,6 +75,7 @@ public class Deck extends DAO<Deck> {
 	private List<Senshi> senshi = new ArrayList<>();
 
 	@ManyToMany
+	@OrderColumn
 	@JoinTable(name = "deck_evogear",
 			joinColumns = @JoinColumn(name = "deck_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "evogear_card_id", referencedColumnName = "card_id"))
@@ -81,6 +83,7 @@ public class Deck extends DAO<Deck> {
 	private List<Evogear> evogear = new ArrayList<>();
 
 	@ManyToMany
+	@OrderColumn
 	@JoinTable(name = "deck_field",
 			joinColumns = @JoinColumn(name = "deck_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "field_card_id", referencedColumnName = "card_id"))
