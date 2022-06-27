@@ -28,7 +28,8 @@ import java.util.Map;
 import static java.text.AttributedCharacterIterator.Attribute;
 
 public enum Fonts {
-	HAMMERSMITH_ONE("font/HammersmithOne.ttf");
+	HAMMERSMITH_ONE("font/HammersmithOne.ttf"),
+	DM_SANS("font/DMSans.ttf");
 
 	private final Font font;
 
