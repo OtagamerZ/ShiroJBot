@@ -378,7 +378,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
 				Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
 				Graph.drawMultilineString(g2d,
-						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211, 3,
+						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
 						s -> {
 							String str = Utils.extract(s, "\\{(\\d+)}", 1);
 

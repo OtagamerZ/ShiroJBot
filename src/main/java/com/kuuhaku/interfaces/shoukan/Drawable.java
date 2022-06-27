@@ -108,7 +108,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		BufferedImage icon;
 		int y = 55;
 
-		g2d.setFont(Fonts.DM_SANS.deriveFont(Font.BOLD, 18));
+		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 18));
 		FontMetrics m = g2d.getFontMetrics();
 
 		if (getMPCost() > 0) {
@@ -139,7 +139,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		BufferedImage icon;
 		int y = desc ? 225 : 279;
 
-		g2d.setFont(Fonts.DM_SANS.deriveFont(Font.BOLD, 18));
+		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 18));
 		FontMetrics m = g2d.getFontMetrics();
 
 		if (getDef() > 0) {
