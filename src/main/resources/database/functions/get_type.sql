@@ -16,24 +16,15 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.interfaces;
-
-import com.kuuhaku.Constants;
-import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.EventData;
-import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.utils.json.JSONObject;
-import net.dv8tion.jda.api.JDA;
-import org.apache.logging.log4j.Logger;
-
-public interface Executable {
-	default Logger logger() {
-		return Constants.LOGGER;
-	}
-
-	default Executable getExecutable() {
-		return this;
-	}
-
-	void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args);
-}
+CREATE OR REPLACE FUNCTION get_type(VARCHAR)
+    RETURNS INT
+    LANGUAGE sql
+AS
+$$
+SELECT CAST((COUNT(s) << 3) | (COUNT(e) << 2) | (COUNT(f) << 1) AS INT)
+FROM card c
+         LEFT JOIN senshi s ON c.id = s.card_id
+         LEFT JOIN evogear e ON c.id = e.card_id
+         LEFT JOIN field f ON c.id = f.card_id
+WHERE c.id = $1;
+$$;

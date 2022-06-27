@@ -29,7 +29,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "color_role")
-public class LevelRole extends DAO {
+public class LevelRole extends DAO<LevelRole> {
 	@EmbeddedId
 	private LevelRoleId id;
 

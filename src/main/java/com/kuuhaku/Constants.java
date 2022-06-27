@@ -52,6 +52,8 @@ public abstract class Constants {
 	public static final String VOID = "\u200B";
 	public static final String ACCEPT = "✅";
 
+	public static final Function<Object, String> LOADING = o -> "<a:loading:697879726630502401> | " + o;
+
 	public static final Random DEFAULT_RNG = new Random();
 	public static final Random DEFAULT_SECURE_RNG = new SecureRandom();
 

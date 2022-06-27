@@ -31,7 +31,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "kawaipon_card")
-public class KawaiponCard extends DAO {
+public class KawaiponCard extends DAO<KawaiponCard> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)

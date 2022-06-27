@@ -32,7 +32,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "guild_config")
-public class GuildConfig extends DAO {
+public class GuildConfig extends DAO<GuildConfig> {
 	@Id
 	@Column(name = "gid", nullable = false)
 	private String gid;

@@ -28,7 +28,7 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "transaction")
-public class Transaction extends DAO {
+public class Transaction extends DAO<Transaction> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)

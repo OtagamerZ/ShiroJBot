@@ -52,7 +52,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "senshi")
-public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
+public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolder {
 	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
 
 	@Id
