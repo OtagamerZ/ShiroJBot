@@ -37,7 +37,6 @@ application {
 			"-Xms512M",
 			"-Xmx4G",
 			"-XX:+UseZGC",
-			"-XX:+UseStringDeduplication",
 			"-XX:+HeapDumpOnOutOfMemoryError",
 			"-XX:HeapDumpPath=/shiro/ShiroJBot/logs/memdump.hprof",
 			"-Dfile.encoding=UTF-8",

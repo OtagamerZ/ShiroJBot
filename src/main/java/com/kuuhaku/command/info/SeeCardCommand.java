@@ -95,7 +95,7 @@ public class SeeCardCommand implements Executable {
 			eb.addField(locale.get("str/information"), sb.toString(), true);
 		}
 
-		Senshi senshi = DAO.query(Senshi.class, card.getId());
+		Senshi senshi = DAO.find(Senshi.class, card.getId());
 		if (senshi != null) {
 			eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/success") + " " + locale.get("str/yes"), true);
 		} else {
