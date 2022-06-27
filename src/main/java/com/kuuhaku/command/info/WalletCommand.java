@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "wallet",
+		name = "atm",
 		category = Category.INFO
 )
 public class WalletCommand implements Executable {
