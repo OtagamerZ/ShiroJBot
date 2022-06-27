@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.utils.Utils;
@@ -128,10 +129,16 @@ public class StashCommand implements Executable {
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			switch (sc.getType()) {
 				case KAWAIPON -> {
+					Trade t = Trade.getPending().get(event.user().getId());
 					KawaiponCard kc = sc.getKawaiponCard();
 
+					String location = null;
+					if (sc.getDeck() != null) {
+						location = " (" + locale.get("str/deck", sc.getDeck().getId()) + ")";
+					}
+
 					return new MessageEmbed.Field(
-							sc.toString(),
+							sc.toString() + location,
 							"%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
