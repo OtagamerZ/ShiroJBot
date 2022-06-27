@@ -304,7 +304,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
 				Graph.drawMultilineString(g2d,
-						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211, 5,
+						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211, 3,
 						s -> {
 							String str = Utils.extract(s, "\\{(\\d+)}", 1);
 
