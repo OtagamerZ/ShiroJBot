@@ -132,7 +132,7 @@ public class StashCommand implements Executable {
 					Trade t = Trade.getPending().get(event.user().getId());
 					KawaiponCard kc = sc.getKawaiponCard();
 
-					String location = null;
+					String location = "";
 					if (sc.getDeck() != null) {
 						location = " (" + locale.get("str/deck", sc.getDeck().getId()) + ")";
 					}
