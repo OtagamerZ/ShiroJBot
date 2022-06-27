@@ -150,7 +150,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 				g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);
 			}
 
-			g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 20));
+			g2d.setFont(new Font("Arial", Font.BOLD, 18));
 			FontMetrics m = g2d.getFontMetrics();
 
 			int i = 0;
