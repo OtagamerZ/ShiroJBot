@@ -56,8 +56,11 @@ public abstract class Spawn {
 			illum = new Pair<>(now.getDayOfYear(), mi);
 		}
 
+		// TODO Remove
+		int DEBUG_MULT = 10;
+
 		double fac = 0.5 - Math.abs(illum.getSecond().getPhase()) / 360;
-		double dropRate = 50 * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
+		double dropRate = 5 * DEBUG_MULT * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
 		double rarityBonus = 1 + fac;
 
 		KawaiponCard card = null;
