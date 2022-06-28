@@ -63,7 +63,11 @@ public class DeckSwitchCommand implements Executable {
 			for (List<Deck> decks : chunks) {
 				eb.clearFields();
 				for (Deck deck : decks) {
-					eb.addField("`" + deck.getIndex() + " | " + deck.getName() + "`", deck.toString(locale), true);
+					eb.addField(
+							(deck.isCurrent() ? "✅ " : "") + "`" + deck.getIndex() + " | " + deck.getName() + "`",
+							deck.toString(locale),
+							true
+					);
 				}
 
 				pages.add(new InteractPage(eb.build()));
