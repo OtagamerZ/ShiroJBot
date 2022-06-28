@@ -23,6 +23,7 @@ import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listeners.GuildListener;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.utils.Utils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
@@ -102,7 +103,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		Constants.LOGGER.info("<----------END OF BOOT---------->");
 
 		Main.boot.stop();
-		Constants.LOGGER.info("Finished in " + Utils.toStringDuration(Main.boot.getTime()));
+		Constants.LOGGER.info("Finished in " + Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
 	}
 
 	public ShardManager getShiro() {
