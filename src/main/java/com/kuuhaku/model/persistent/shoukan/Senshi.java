@@ -428,7 +428,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int renderHashCode(I18N locale) {
-		return Objects.hash(stats, state, hand, locale, isSupporting());
+		return Objects.hash(equipments, stats, state, hand, locale, isSupporting());
 	}
 
 	@Override
