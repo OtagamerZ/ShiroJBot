@@ -32,6 +32,7 @@ public abstract class SignatureParser {
 			String[] failOpts = new String[0];
 
 			int i = 0;
+			int matches = 0;
 			for (String arg : args) {
 				i++;
 				JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
@@ -55,6 +56,8 @@ public abstract class SignatureParser {
 						out.put(name, Utils.extract(str, type.getPattern(), "text"));
 						str = str.replaceFirst(type.getRegex(), "").trim();
 					}
+
+					matches++;
 				} else {
 					List<String> opts = Arrays.stream(groups.getString("options", "").split(","))
 							.filter(s -> !s.isBlank())
@@ -73,6 +76,7 @@ public abstract class SignatureParser {
 
 						if (!fail) out.put(name, s);
 						supplied.add(s);
+						matches++;
 					} else if (required) {
 						fail = true;
 						if (opts.isEmpty()) {
@@ -87,14 +91,17 @@ public abstract class SignatureParser {
 
 			if (fail) {
 				out.clear();
-				failed.add(new FailedSignature(String.join(" ", supplied), failOpts));
+				failed.add(new FailedSignature(String.join(" ", supplied), failOpts, matches, args.length));
 				supplied.clear();
 			} else return out;
 		}
 
 		if (annot.allowEmpty()) return new JSONObject();
 		else {
-			FailedSignature first = failed.get(0);
+			FailedSignature first = failed.stream().max(
+					Comparator.comparingInt(FailedSignature::matches)
+							.thenComparing(fs -> fs.numArgs() - input.split(" +").length, Comparator.reverseOrder())
+			).orElseThrow();
 			throw new InvalidSignatureException(first.line(), first.options());
 		}
 	}
