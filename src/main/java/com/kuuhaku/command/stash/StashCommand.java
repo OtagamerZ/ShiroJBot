@@ -134,7 +134,7 @@ public class StashCommand implements Executable {
 
 					String location = "";
 					if (sc.getDeck() != null) {
-						location = " (" + locale.get("str/deck", sc.getDeck().getId()) + ")";
+						location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
 					}
 
 					return new MessageEmbed.Field(
