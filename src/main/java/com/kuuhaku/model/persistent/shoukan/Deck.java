@@ -58,6 +58,9 @@ public class Deck extends DAO<Deck> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
+	@Column(name = "index", nullable = false)
+	private int index;
+
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
@@ -113,6 +116,10 @@ public class Deck extends DAO<Deck> {
 		return id;
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
 	public Account getAccount() {
 		return account;
 	}
@@ -123,6 +130,7 @@ public class Deck extends DAO<Deck> {
 
 	public void setCurrent(boolean current) {
 		this.current = current;
+
 	}
 
 	public List<Senshi> getSenshi() {
