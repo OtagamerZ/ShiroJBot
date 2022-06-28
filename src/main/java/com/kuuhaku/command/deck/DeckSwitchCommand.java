@@ -54,7 +54,7 @@ public class DeckSwitchCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		if (!args.isEmpty()) {
+		if (args.isEmpty()) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/decks"));
 
