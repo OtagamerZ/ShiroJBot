@@ -321,7 +321,7 @@ public abstract class Utils {
 	}
 
 	public static String underline(String text) {
-		return text.replaceAll("([A-OR-Za-or-z])", "$1\u0332");
+		return text.replaceAll("([A-OR-XZa-or-xz])", "$1\u0332");
 	}
 
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
