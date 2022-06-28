@@ -55,6 +55,38 @@ public abstract class Calc {
 		return Math.max(min, Math.min(val, max));
 	}
 
+	public static double[] clamp(double[] vals, double min, double max) {
+		for (int i = 0; i < vals.length; i++) {
+			vals[i] = clamp(vals[i], min, max);
+		}
+
+		return vals;
+	}
+
+	public static float[] clamp(float[] vals, float min, float max) {
+		for (int i = 0; i < vals.length; i++) {
+			vals[i] = clamp(vals[i], min, max);
+		}
+
+		return vals;
+	}
+
+	public static long[] clamp(long[] vals, long min, long max) {
+		for (int i = 0; i < vals.length; i++) {
+			vals[i] = clamp(vals[i], min, max);
+		}
+
+		return vals;
+	}
+
+	public static int[] clamp(int[] vals, int min, int max) {
+		for (int i = 0; i < vals.length; i++) {
+			vals[i] = clamp(vals[i], min, max);
+		}
+
+		return vals;
+	}
+
 	public static boolean between(int val, int from, int to) {
 		return val >= from && val < to;
 	}

@@ -200,6 +200,7 @@ public class Deck extends DAO<Deck> {
 		List<Drawable<?>> allCards = new ArrayList<>(){{
 			addAll(senshi);
 			addAll(evogear);
+			addAll(field);
 		}};
 		AtomicInteger totalMPCost = new AtomicInteger();
 		AtomicInteger totalHPCost = new AtomicInteger();
@@ -212,47 +213,34 @@ public class Deck extends DAO<Deck> {
 		String color = "FFFFFF";
 		if (weight > 150) color = "FF0000";
 		else if (weight > 100) color = "FFFF00";
-		int healers = 0;
-		int controllers = 0;
 
 		for (Drawable<?> d : allCards) {
-			if (d instanceof Senshi s) {
-				if (s.getTags().contains("HEALER")) {
-					healers++;
-				} else if (s.getTags().contains("CONTROLLER")) {
-					controllers++;
-				}
-			} else if (d instanceof Evogear e) {
-				if (e.getTags().contains("HEALER")) {
-					healers++;
-				} else if (e.getTags().contains("CONTROLLER")) {
-					controllers++;
-				}
-			}
-
 			totalMPCost.addAndGet(d.getMPCost());
 			totalHPCost.addAndGet(d.getHPCost());
 			totalDmg.addAndGet(d.getDmg());
 			totalDef.addAndGet(d.getDef());
 		}
 
+		double[] vals = Calc.clamp(new double[]{
+				Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDef.get()) / 1.5),
+				Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5),
+				avgMana / totalMPCost.get(),
+				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
+				1,
+				0
+		}, 0, 1);
+		vals[5] = Calc.average(vals[0], vals[1], vals[2], 0.5 + vals[3] * 0.5, 0.25 + vals[4] * 0.75);
+
 		RadarChart rc = new RadarChart(600, 500);
 		rc.setRadiiLabels(new String[]{
 				locale.get("str/attack"),
 				locale.get("str/defense"),
 				locale.get("str/mana_sustain"),
-				locale.get("str/hp_sustain"),
-				locale.get("str/control"),
-				locale.get("str/divergence")
+				locale.get("str/variety"),
+				locale.get("str/divergence"),
+				locale.get("str/overall_score")
 		});
-		rc.addSeries("A", new double[]{
-				Calc.clamp(Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDef.get()) / 1.5), 0, 1),
-				Calc.clamp(Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5), 0, 1),
-				Calc.clamp(avgMana / totalMPCost.get(), 0, 1),
-				Calc.clamp((healers * (1 / 36d) * base.hp()) - totalHPCost.get(), 0, 1),
-				Calc.clamp(controllers / 36d, 0, 1),
-				Calc.clamp(1, 0, 1)
-		});
+		rc.addSeries("A", vals);
 
 		rc.getStyler()
 				.setLegendVisible(false)
@@ -272,7 +260,7 @@ public class Deck extends DAO<Deck> {
 		Graph.drawMultilineString(g2d,
 				base.hp()
 						+ "\n" + Utils.roundToString(avgMana, 1)
-						+ "\n" + (allCards.size() + field.size()) + "-(" + senshi.size() + "/" + evogear.size() + "/" + field.size() + ")"
+						+ "\n" + allCards.size() + "-(" + senshi.size() + "/" + evogear.size() + "/" + field.size() + ")"
 						+ "\n{" + weight + "%;0x" + color + "}"
 						+ "\n" + Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1)
 						+ "\n" + Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1)
