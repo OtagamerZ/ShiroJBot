@@ -404,14 +404,14 @@ public class Deck extends DAO<Deck> {
 	public String toString(I18N locale) {
 		return locale.get("str/deck_resume",
 				senshi.size(), evogear.size(), field.size(),
-				Stream.of(senshi, evogear)
+				Utils.roundToString(Stream.of(senshi, evogear)
 						.flatMap(List::stream)
 						.mapToInt(d -> d.getMPCost())
-						.average().orElse(0),
-				Stream.of(senshi, evogear)
+						.average().orElse(0), 1),
+				Utils.roundToString(Stream.of(senshi, evogear)
 						.flatMap(List::stream)
 						.mapToInt(d -> d.getHPCost())
-						.average().orElse(0)
+						.average().orElse(0), 1)
 		);
 	}
 }
