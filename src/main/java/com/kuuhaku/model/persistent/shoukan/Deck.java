@@ -406,12 +406,12 @@ public class Deck extends DAO<Deck> {
 				senshi.size(), evogear.size(), field.size(),
 				Utils.roundToString(Stream.of(senshi, evogear)
 						.flatMap(List::stream)
-						.mapToInt(d -> d.getMPCost())
+						.mapToInt(d -> d.getHPCost())
 						.average().orElse(0), 1),
 				Utils.roundToString(Stream.of(senshi, evogear)
-						.flatMap(List::stream)
-						.mapToInt(d -> d.getHPCost())
-						.average().orElse(0), 1)
+								.flatMap(List::stream)
+								.mapToInt(d -> d.getMPCost())
+								.average().orElse(0), 1)
 		);
 	}
 }
