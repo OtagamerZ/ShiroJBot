@@ -45,7 +45,7 @@ import java.util.List;
 		subname = "switch",
 		category = Category.INFO
 )
-@Signature({
+@Signature(allowEmpty = true, value = {
 		"<id:number:r>",
 		"<name:word:r>"
 })
