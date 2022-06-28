@@ -89,6 +89,7 @@ public class DeckReorderCommand implements Executable {
 
 					return 0;
 				}).reversed();
+				default -> throw new IllegalStateException("Unexpected value: " + args.getString("order"));
 			};
 			cards.sort(order);
 			d.save();
