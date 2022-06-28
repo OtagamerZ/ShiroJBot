@@ -85,6 +85,6 @@ public abstract class Spawn {
 	}
 
 	public static SingleUseReference<KawaiponCard> getSpawnedCard(Guild guild) {
-		return spawnedCards.get(guild.getId());
+		return spawnedCards.getOrDefault(guild.getId(), new SingleUseReference<>(null));
 	}
 }
