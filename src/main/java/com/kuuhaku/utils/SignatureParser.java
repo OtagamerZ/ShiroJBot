@@ -98,9 +98,10 @@ public abstract class SignatureParser {
 
 		if (annot.allowEmpty()) return new JSONObject();
 		else {
+			int argLength = input.split(" +").length;
 			FailedSignature first = failed.stream().max(
 					Comparator.comparingInt(FailedSignature::matches)
-							.thenComparing(fs -> fs.numArgs() - input.split(" +").length, Comparator.reverseOrder())
+							.thenComparing(fs -> fs.numArgs() - argLength, Comparator.reverseOrder())
 			).orElseThrow();
 			throw new InvalidSignatureException(first.line(), first.options());
 		}
