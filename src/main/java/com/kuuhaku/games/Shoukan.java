@@ -145,6 +145,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		Senshi copy;
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
@@ -155,7 +156,7 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.modHP(-chosen.getHPCost());
 			curr.modMP(-chosen.getMPCost());
 			chosen.setAvailable(false);
-			slot.setBottom(chosen.withCopy(s -> {
+			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
 					case "b" -> s.setFlipped(true);
@@ -170,7 +171,7 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.modHP(-chosen.getHPCost());
 			curr.modMP(-chosen.getMPCost());
 			chosen.setAvailable(false);
-			slot.setTop(chosen.withCopy(s -> {
+			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
 					case "b" -> s.setFlipped(true);
@@ -180,8 +181,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		reportEvent("str/place_card",
 				curr.getName(),
-				chosen.isFlipped() ? locale.get("str/a_card") : chosen,
-				chosen.getState().toString(locale)
+				copy.isFlipped() ? locale.get("str/a_card") : copy,
+				copy.getState().toString(locale)
 		);
 		return true;
 	}
@@ -220,14 +221,15 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		Evogear copy;
 		Senshi target = slot.getTop();
 		curr.modHP(-chosen.getHPCost());
 		curr.modMP(-chosen.getMPCost());
 		chosen.setAvailable(false);
-		target.getEquipments().add(chosen.withCopy(e -> e.setFlipped(e.getCharms().contains(Charm.TRAP))));
+		target.getEquipments().add(copy = chosen.withCopy(e -> e.setFlipped(e.getCharms().contains(Charm.TRAP))));
 		reportEvent("str/equip_card",
 				curr.getName(),
-				chosen.isFlipped() ? locale.get("str/an_equipment") : chosen,
+				copy.isFlipped() ? locale.get("str/an_equipment") : copy,
 				target.isFlipped() ? locale.get("str/a_card") : target
 		);
 		return true;
