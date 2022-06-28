@@ -79,6 +79,8 @@ public class DeckSwitchCommand implements Executable {
 		for (Deck deck : decks) {
 			if (deck.getIndex() == id || deck.getName().equalsIgnoreCase(name)) {
 				deck.setCurrent(true);
+				deck.save();
+
 				event.channel().sendMessage(locale.get("success/deck_switch", deck.getName())).queue();
 				return;
 			}
