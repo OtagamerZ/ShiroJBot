@@ -80,6 +80,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	private Kawaipon kawaipon;
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Deck> decks = new ArrayList<>();
 
