@@ -76,7 +76,7 @@ import java.util.stream.Stream;
 import java.util.zip.CRC32;
 
 public abstract class Utils {
-	public static String toStringDuration(long millis) {
+	public static String toStringDuration(I18N locale, long millis) {
 		long days = millis / Constants.MILLIS_IN_DAY;
 		millis %= Constants.MILLIS_IN_DAY;
 		long hours = millis / Constants.MILLIS_IN_HOUR;
@@ -87,10 +87,10 @@ public abstract class Utils {
 		seconds %= Constants.MILLIS_IN_SECOND;
 
 		return Stream.of(
-				days > 0 ? days + " dia" + (days != 1 ? "s" : "") : "",
-				hours > 0 ? hours + " hora" + (hours != 1 ? "s" : "") : "",
-				minutes > 0 ? minutes + " minuto" + (minutes != 1 ? "s" : "") : "",
-				seconds > 0 ? seconds + " segundo" + (seconds != 1 ? "s" : "") : ""
+				days > 0 ? days + " " + locale.get("str/day") + (days != 1 ? "s" : "") : "",
+				hours > 0 ? hours + " " + locale.get("str/hour") + (hours != 1 ? "s" : "") : "",
+				minutes > 0 ? minutes + " " + locale.get("str/minute") + (minutes != 1 ? "s" : "") : "",
+				seconds > 0 ? seconds + " " + locale.get("str/second") + (seconds != 1 ? "s" : "") : ""
 		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), humanize(" e ")));
 	}
 
