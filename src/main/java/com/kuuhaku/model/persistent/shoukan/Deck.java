@@ -125,7 +125,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public String getName() {
-		return Utils.getOr(name, "Deck " + index);
+		return Utils.getOr(name, "deck " + index);
 	}
 
 	public void setName(String name) {

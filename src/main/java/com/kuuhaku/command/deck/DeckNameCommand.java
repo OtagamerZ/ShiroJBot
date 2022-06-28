@@ -47,7 +47,7 @@ public class DeckNameCommand implements Executable {
 			return;
 		}
 
-		String name = args.getString("name").replace(" ", "_");
+		String name = args.getString("name").toLowerCase(locale.getLocale());
 		d.setName(name);
 		d.save();
 
