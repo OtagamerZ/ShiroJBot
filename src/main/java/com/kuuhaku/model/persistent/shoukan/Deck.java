@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "deck")
@@ -60,6 +61,9 @@ public class Deck extends DAO<Deck> {
 
 	@Column(name = "index", nullable = false)
 	private int index;
+
+	@Column(name = "name")
+	private String name;
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
@@ -120,6 +124,14 @@ public class Deck extends DAO<Deck> {
 		return index;
 	}
 
+	public String getName() {
+		return Utils.getOr(name, "Deck " + index);
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Account getAccount() {
 		return account;
 	}
@@ -130,7 +142,6 @@ public class Deck extends DAO<Deck> {
 
 	public void setCurrent(boolean current) {
 		this.current = current;
-
 	}
 
 	public List<Senshi> getSenshi() {
@@ -257,7 +268,7 @@ public class Deck extends DAO<Deck> {
 
 		g2d.setFont(new Font("Arial", Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);
-		Graph.drawMultilineString(g2d, locale.get("str/deck_resume"), 600, 45, 350);
+		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 350);
 		Graph.drawMultilineString(g2d,
 				base.hp()
 						+ "\n" + Utils.roundToString(avgMana, 1)
@@ -387,6 +398,20 @@ public class Deck extends DAO<Deck> {
 				5000,
 				t -> 5 - reduction,
 				5
+		);
+	}
+
+	public String toString(I18N locale) {
+		return locale.get("str/deck_resume",
+				senshi.size(), evogear.size(), field.size(),
+				Stream.of(senshi, evogear)
+						.flatMap(List::stream)
+						.mapToInt(Drawable::getMPCost)
+						.average().orElse(0),
+				Stream.of(senshi, evogear)
+						.flatMap(List::stream)
+						.mapToInt(Drawable::getHPCost)
+						.average().orElse(0)
 		);
 	}
 }
