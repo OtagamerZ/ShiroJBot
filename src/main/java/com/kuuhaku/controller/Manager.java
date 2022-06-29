@@ -19,7 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.utils.IO;
+import com.kuuhaku.util.IO;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

@@ -22,8 +22,8 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.MultiMap;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.utils.Utils;
-import com.kuuhaku.utils.XStringBuilder;
+import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.XStringBuilder;
 import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;

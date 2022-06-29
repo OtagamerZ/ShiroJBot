@@ -19,9 +19,9 @@
 package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.utils.Calc;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 
 import java.awt.image.BufferedImage;
 import java.util.Locale;

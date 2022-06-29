@@ -18,8 +18,8 @@
 
 package com.kuuhaku;
 
-import com.kuuhaku.managers.CacheManager;
-import com.kuuhaku.managers.CommandManager;
+import com.kuuhaku.manager.CacheManager;
+import com.kuuhaku.manager.CommandManager;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
 

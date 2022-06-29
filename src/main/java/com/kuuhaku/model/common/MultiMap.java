@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 import kotlin.Pair;
 
 import java.util.HashMap;

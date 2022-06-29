@@ -20,8 +20,8 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.games.Shoukan;
-import com.kuuhaku.games.engine.Renderer;
+import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.I18N;
@@ -30,9 +30,9 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.utils.Graph;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;

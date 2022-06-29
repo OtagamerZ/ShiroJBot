@@ -28,8 +28,8 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.utils.Spawn;
-import com.kuuhaku.utils.json.JSONObject;
+import com.kuuhaku.util.Spawn;
+import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
