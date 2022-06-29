@@ -24,20 +24,19 @@ $$
 BEGIN
     IF (trim(NEW.bearer) = '') THEN
         RAISE EXCEPTION 'a bearer must be supplied';
-
-    ELSEIF (TG_OP = 'UPDATE' AND (NEW.token <> '' OR NEW.salt <> '')) THEN
-        RETURN OLD;
     END IF;
 
-    IF (NEW.salt <> OLD.salt) THEN
-        NEW.salt = gen_salt('sha1');
-    END IF;
+    IF (TG_OP = 'INSERT' OR NEW.token <> OLD.token OR NEW.salt <> OLD.salt) THEN
+        IF (NEW.salt <> OLD.salt) THEN
+            NEW.salt = gen_salt('sha1');
+        END IF;
 
-    NEW.token = encode(cast(NEW.bearer AS bytea), 'base64')
-        ||'.'||
-        encode(cast(cast(extract(MILLISECONDS FROM now()) AS text) AS bytea), 'base64')
-        ||'.'||
-        encode(hmac(NEW.bearer, NEW.salt, 'sha1'), 'base64');
+        NEW.token = encode(cast(NEW.bearer AS bytea), 'base64')
+            ||'.'||
+            encode(cast(cast(extract(MILLISECONDS FROM now()) AS text) AS bytea), 'base64')
+            ||'.'||
+            encode(hmac(NEW.bearer, NEW.salt, 'sha1'), 'base64');
+    END IF;
 
     RETURN NEW;
 END
