@@ -27,8 +27,8 @@ BEGIN
     END IF;
 
     IF (TG_OP = 'INSERT' OR NEW.token <> OLD.token OR NEW.salt <> OLD.salt) THEN
-        IF (NEW.salt <> OLD.salt) THEN
-            NEW.salt = gen_salt('sha1');
+        IF (TG_OP = 'INSERT' OR NEW.salt <> OLD.salt) THEN
+            NEW.salt = gen_salt('md5');
         END IF;
 
         NEW.token = encode(cast(NEW.bearer AS bytea), 'base64')
