@@ -34,7 +34,7 @@ BEGIN
 
     NEW.token = encode(cast(bearer AS bytea), 'base64')
         ||'.'||
-        encode(extract(MILLISECONDS FROM now())::text::bytea, 'base64')
+        encode(cast(cast(extract(MILLISECONDS FROM now()) AS text) AS bytea), 'base64')
         ||'.'||
         encode(hmac(cast(bearer AS bytea), NEW.salt, 'sha1'), 'base64');
 
