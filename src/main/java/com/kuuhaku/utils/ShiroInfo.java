@@ -47,12 +47,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.discordbots.api.client.DiscordBotListAPI;
 
-import javax.websocket.DeploymentException;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
@@ -204,12 +201,12 @@ public class ShiroInfo {
 	}, 30, TimeUnit.MINUTES);
 
 	public ShiroInfo() {
-		try {
+		/*try {
 			encoderClient = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
 		} catch (URISyntaxException | DeploymentException | IOException e) {
 			Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 			encoderClient = null;
-		}
+		}*/
 	}
 
 	//CONSTANTS

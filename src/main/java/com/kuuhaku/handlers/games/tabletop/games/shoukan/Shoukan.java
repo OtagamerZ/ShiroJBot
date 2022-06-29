@@ -3083,7 +3083,7 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		if (!getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
+		if (false && !getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
 			try {
 				getFrames().add(Helper.compress(Helper.atob(getArena().addHands(arena.render(this, hands), hands.values()), "jpg")));
 			} catch (IOException ignore) {
