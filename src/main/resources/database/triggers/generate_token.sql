@@ -23,7 +23,7 @@ AS
 $$
 BEGIN
     IF (trim(NEW.bearer) = '') THEN
-        RAISE 'A bearer must be supplied';
+        RAISE 'a bearer must be supplied';
     ELSEIF (TG_OP = 'INSERT' AND (NEW.token <> '' OR NEW.salt <> '')) THEN
         RETURN OLD;
     END IF;
@@ -36,7 +36,7 @@ BEGIN
         ||'.'||
         encode(cast(cast(extract(MILLISECONDS FROM now()) AS text) AS bytea), 'base64')
         ||'.'||
-        encode(hmac(cast(NEW.bearer AS bytea), NEW.salt, 'sha1'), 'base64');
+        encode(hmac(NEW.bearer, NEW.salt, 'sha1'), 'base64');
 
     RETURN NEW;
 END
