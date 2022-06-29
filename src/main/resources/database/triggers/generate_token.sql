@@ -32,11 +32,11 @@ BEGIN
         NEW.salt = gen_salt('sha1');
     END IF;
 
-    NEW.token = encode(cast(bearer AS bytea), 'base64')
+    NEW.token = encode(cast(NEW.bearer AS bytea), 'base64')
         ||'.'||
         encode(cast(cast(extract(MILLISECONDS FROM now()) AS text) AS bytea), 'base64')
         ||'.'||
-        encode(hmac(cast(bearer AS bytea), NEW.salt, 'sha1'), 'base64');
+        encode(hmac(cast(NEW.bearer AS bytea), NEW.salt, 'sha1'), 'base64');
 
     RETURN NEW;
 END
