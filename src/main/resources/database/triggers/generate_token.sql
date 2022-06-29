@@ -44,12 +44,6 @@ $$;
 
 DROP TRIGGER IF EXISTS generate_token ON access_token;
 CREATE TRIGGER generate_token
-    BEFORE INSERT
-    ON access_token
-EXECUTE PROCEDURE t_generate_token();
-
-DROP TRIGGER IF EXISTS regenerate_token ON access_token;
-CREATE TRIGGER regenerate_token
-    BEFORE UPDATE
+    BEFORE INSERT OR UPDATE
     ON access_token
 EXECUTE PROCEDURE t_generate_token();
