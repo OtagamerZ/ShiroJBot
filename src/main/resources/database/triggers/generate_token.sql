@@ -16,25 +16,40 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-/*CREATE OR REPLACE FUNCTION t_generate_token()
+CREATE OR REPLACE FUNCTION t_generate_token()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    UPDATE deck d
-    SET current = FALSE
-    WHERE d.account_uid = NEW.account_uid
-    AND d.index <> NEW.index;
+    IF (trim(NEW.bearer) = '') THEN
+        RAISE 'A bearer must be supplied';
+    ELSEIF (TG_OP = 'INSERT' AND (NEW.token <> '' OR NEW.salt <> '')) THEN
+        RETURN OLD;
+    END IF;
+
+    IF (NEW.salt <> OLD.salt) THEN
+        NEW.salt = gen_salt('sha1');
+    END IF;
+
+    NEW.token = encode(cast(bearer AS bytea), 'base64')
+        ||'.'||
+        encode(extract(MILLISECONDS FROM now())::text::bytea, 'base64')
+        ||'.'||
+        encode(hmac(cast(bearer AS bytea), NEW.salt, 'sha1'), 'base64');
 
     RETURN NEW;
-END;
+END
 $$;
 
-DROP TRIGGER IF EXISTS generate_token ON deck;
+DROP TRIGGER IF EXISTS generate_token ON access_token;
 CREATE TRIGGER generate_token
-    BEFORE UPDATE OF current
-    ON deck
-    FOR EACH ROW
-    WHEN ( OLD.current <> NEW.current AND NEW.current IS TRUE )
-EXECUTE PROCEDURE t_generate_token();*/
+    BEFORE INSERT
+    ON access_token
+EXECUTE PROCEDURE t_generate_token();
+
+DROP TRIGGER IF EXISTS regenerate_token ON access_token;
+CREATE TRIGGER regenerate_token
+    BEFORE UPDATE
+    ON access_token
+EXECUTE PROCEDURE t_generate_token();
