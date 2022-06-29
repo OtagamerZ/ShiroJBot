@@ -18,7 +18,10 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,11 +36,21 @@ public class AccessToken extends DAO<AccessToken> {
 	@Column(name = "token", nullable = false)
 	private String token;
 
+	@Column(name = "salt", nullable = false)
+	private String salt;
+
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled = true;
 
 	@Column(name = "bearer", nullable = false, unique = true)
 	private String bearer;
+
+	public AccessToken() {
+		byte[] salt = new byte[8];
+		Constants.DEFAULT_SECURE_RNG.nextBytes(salt);
+
+		this.salt = Hex.encodeHexString(DigestUtils.sha1(salt));
+	}
 
 	public String getToken() {
 		return token;
