@@ -27,8 +27,8 @@ import com.kuuhaku.model.persistent.id.LocalizedDescId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.model.records.shoukan.AttrMod;
-import com.kuuhaku.utils.Calc;
-import com.kuuhaku.utils.json.JSONObject;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.EnumSet;

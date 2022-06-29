@@ -29,8 +29,8 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.utils.Utils;
-import com.kuuhaku.utils.json.JSONObject;
+import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 

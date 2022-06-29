@@ -2,7 +2,7 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;

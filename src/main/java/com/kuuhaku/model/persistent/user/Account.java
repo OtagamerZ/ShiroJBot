@@ -24,7 +24,7 @@ import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Cache;

@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.utils.Calc;
+import com.kuuhaku.util.Calc;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

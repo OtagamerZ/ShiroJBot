@@ -24,7 +24,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.utils.IO;
+import com.kuuhaku.util.IO;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;

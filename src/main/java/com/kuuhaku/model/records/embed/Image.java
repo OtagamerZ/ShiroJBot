@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records.embed;
 
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 
 import java.util.List;
 

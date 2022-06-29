@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.utils.Utils;
-import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONArray;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

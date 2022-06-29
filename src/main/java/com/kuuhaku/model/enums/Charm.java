@@ -18,10 +18,10 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Calc;
-import com.kuuhaku.utils.Graph;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

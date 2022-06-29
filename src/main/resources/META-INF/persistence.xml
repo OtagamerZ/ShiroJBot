@@ -48,6 +48,7 @@
         <class>com.kuuhaku.model.persistent.user.VoiceData</class>
         <class>com.kuuhaku.model.persistent.user.Trade</class>
         <class>com.kuuhaku.model.persistent.user.StashedCard</class>
+        <class>com.kuuhaku.model.persistent.user.AccessToken</class>
 
         <!-- SHOUKAN -->
         <class>com.kuuhaku.model.persistent.shoukan.Deck</class>
