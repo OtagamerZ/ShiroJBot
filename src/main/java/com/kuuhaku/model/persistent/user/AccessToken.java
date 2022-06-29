@@ -39,11 +39,14 @@ public class AccessToken extends DAO<AccessToken> {
 	@Column(name = "salt", nullable = false)
 	private String salt;
 
+	@Column(name = "bearer", nullable = false, unique = true)
+	private String bearer;
+
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled = true;
 
-	@Column(name = "bearer", nullable = false, unique = true)
-	private String bearer;
+	@Column(name = "calls", nullable = false)
+	private int calls = 0;
 
 	public AccessToken() {
 		byte[] salt = new byte[8];
@@ -52,8 +55,8 @@ public class AccessToken extends DAO<AccessToken> {
 		this.salt = Hex.encodeHexString(DigestUtils.sha1(salt));
 	}
 
-	public String getToken() {
-		return token;
+	public String getBearer() {
+		return bearer;
 	}
 
 	public boolean isEnabled() {
@@ -64,8 +67,12 @@ public class AccessToken extends DAO<AccessToken> {
 		this.enabled = enabled;
 	}
 
-	public String getBearer() {
-		return bearer;
+	public int getCalls() {
+		return calls;
+	}
+
+	public void setCalls(int calls) {
+		this.calls = calls;
 	}
 
 	@Override
