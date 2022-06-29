@@ -18,8 +18,8 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.image.BufferedImage;

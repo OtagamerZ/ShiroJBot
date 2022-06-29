@@ -19,7 +19,7 @@
 package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.utils.IO;
+import com.kuuhaku.util.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

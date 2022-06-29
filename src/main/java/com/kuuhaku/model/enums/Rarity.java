@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.Graph;
+import com.kuuhaku.util.Graph;
 
 import java.awt.*;
 

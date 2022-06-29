@@ -34,8 +34,8 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
-import com.kuuhaku.utils.Graph;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;

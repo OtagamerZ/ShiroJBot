@@ -27,8 +27,8 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.json.JSONObject;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 

@@ -24,8 +24,8 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.utils.Graph;
-import com.kuuhaku.utils.IO;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

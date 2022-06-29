@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent.converter;
 
-import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.util.json.JSONArray;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

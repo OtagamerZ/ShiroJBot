@@ -20,8 +20,8 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.utils.IO;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

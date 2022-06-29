@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent.converter;
 
-import com.kuuhaku.utils.Bit;
+import com.kuuhaku.util.Bit;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

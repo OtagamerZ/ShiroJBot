@@ -22,7 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

@@ -20,7 +20,7 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.utils.Bit;
+import com.kuuhaku.util.Bit;
 
 import java.util.Objects;
 

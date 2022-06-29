@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.descriptor;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;

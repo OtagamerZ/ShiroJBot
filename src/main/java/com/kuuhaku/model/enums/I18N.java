@@ -19,7 +19,7 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.Utils;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
