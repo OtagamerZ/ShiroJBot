@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.BotStatsDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.TempRoleDAO;
 import com.kuuhaku.controller.postgresql.VoiceTimeDAO;
-import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.model.persistent.TempRole;
 import com.kuuhaku.model.persistent.VoiceTime;
@@ -39,9 +38,6 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import javax.websocket.DeploymentException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -53,13 +49,13 @@ public class MinuteEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		BotStatsDAO.register();
 
-		if (!Main.getInfo().isEncoderConnected()) {
+		/*if (!Main.getInfo().isEncoderConnected()) {
 			try {
 				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 			} catch (URISyntaxException | DeploymentException | IOException e) {
 				Helper.logger(ShiroInfo.class).error(e + " | " + e.getStackTrace()[0]);
 			}
-		}
+		}*/
 
 		Collection<VoiceTime> voiceTimes = ShiroInfo.getShiroEvents().getVoiceTimes().values();
 		for (VoiceTime vt : voiceTimes) {
