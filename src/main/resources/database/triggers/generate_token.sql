@@ -23,7 +23,8 @@ AS
 $$
 BEGIN
     IF (trim(NEW.bearer) = '') THEN
-        RAISE 'a bearer must be supplied';
+        RAISE EXCEPTION 'a bearer must be supplied';
+
     ELSEIF (TG_OP = 'INSERT' AND (NEW.token <> '' OR NEW.salt <> '')) THEN
         RETURN OLD;
     END IF;
