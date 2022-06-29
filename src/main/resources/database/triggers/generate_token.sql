@@ -22,13 +22,17 @@ CREATE OR REPLACE FUNCTION t_generate_token()
 AS
 $$
 BEGIN
-    IF (trim(NEW.bearer) = '') THEN
+    NEW.bearer = trim(NEW.bearer);
+    IF (NEW.bearer = '') THEN
         RAISE EXCEPTION 'a bearer must be supplied';
+    ELSEIF (NEW.bearer <> OLD.bearer) THEN
+        NEW.token = '';
+        NEW.salt = '';
     END IF;
 
     IF (TG_OP = 'INSERT' OR NEW.token <> OLD.token OR NEW.salt <> OLD.salt) THEN
         IF (TG_OP = 'INSERT' OR NEW.salt <> OLD.salt) THEN
-            NEW.salt = gen_salt('md5');
+            NEW.salt = encode(cast(gen_salt('des') AS bytea), 'hex');
         END IF;
 
         NEW.token = encode(cast(NEW.bearer AS bytea), 'base64')
