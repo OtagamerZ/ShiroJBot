@@ -35,8 +35,12 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CommonSocket extends WebSocketClient {
+	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'");
 	private int retry = 0;
 
@@ -89,16 +93,20 @@ public class CommonSocket extends WebSocketClient {
 			return;
 		}
 
-		Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
-		try {
-			Thread.sleep(retry * 5_000L);
-			if (reconnectBlocking()) {
-				retry = 0;
-				Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
+		Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", attempting reconnect in " + (++retry * 5) + " seconds");
+
+		exec.schedule(() -> {
+			try {
+				if (reconnectBlocking()) {
+					retry = 0;
+					Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
+				} else {
+					Constants.LOGGER.info("Failed to connect to " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
+				}
+			} catch (InterruptedException e) {
+				Constants.LOGGER.error(e, e);
 			}
-		} catch (InterruptedException e) {
-			Constants.LOGGER.error(e, e);
-		}
+		}, retry * 5L, TimeUnit.SECONDS);
 	}
 
 	@Override
