@@ -53,7 +53,6 @@ applicationDefaultJvmArgs = [
 		"-Djava.awt.headless=true",
 		"-Dsun.java2d.opengl=true",
 		"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector",
-		"-Djava.net.useSystemProxies=true"
 		//,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 ]
 
