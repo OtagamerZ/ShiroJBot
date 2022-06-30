@@ -34,12 +34,12 @@ import org.apache.http.util.EntityUtils;
 import org.java_websocket.client.WebSocketClient;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public abstract class API {
 	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> socketClients = new HashMap<>();
@@ -79,8 +79,10 @@ public abstract class API {
 
 	public static void connectSocket(Class<? extends WebSocketClient> client, String address) {
 		try {
-			socketClients.put(client, client.getDeclaredConstructor(String.class).newInstance(address));
-		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+			WebSocketClient wc = client.getDeclaredConstructor(String.class).newInstance(address);
+			wc.connectBlocking(1, TimeUnit.MINUTES);
+			socketClients.put(client, wc);
+		} catch (Exception e) {
 			Constants.LOGGER.error(e, e);
 		}
 	}
