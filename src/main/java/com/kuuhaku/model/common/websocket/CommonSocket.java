@@ -33,6 +33,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 public class CommonSocket extends WebSocketClient {
@@ -55,6 +56,10 @@ public class CommonSocket extends WebSocketClient {
 
 		if (payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
 			Constants.LOGGER.info("Connected to socket " + getClass().getSimpleName());
+			send(new JSONObject() {{
+				put("type", "ATTAH");
+				put("channels", List.of("eval"));
+			}}.toString());
 			return;
 		}
 
