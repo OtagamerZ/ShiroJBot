@@ -55,8 +55,8 @@ public abstract class Constants {
 	public static final String ACCEPT = "✅";
 
 	public static final String SERVER_ROOT = System.getenv("SERVER_URL");
-	public static final String API_ROOT = "api." + SERVER_ROOT + "/v2/";
-	public static final String SOCKET_ROOT = "socket." + SERVER_ROOT + "/v2/";
+	public static final String API_ROOT = "https://api." + SERVER_ROOT + "/v2/";
+	public static final String SOCKET_ROOT = "wss://socket." + SERVER_ROOT + "/v2/";
 
 	public static final Function<Object, String> LOADING = o -> "<a:loading:697879726630502401> | " + o;
 
