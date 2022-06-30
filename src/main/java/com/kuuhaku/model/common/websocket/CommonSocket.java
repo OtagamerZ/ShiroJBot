@@ -43,7 +43,7 @@ public class CommonSocket extends WebSocketClient {
 	public void onOpen(ServerHandshake handshake) {
 		send(new JSONObject() {{
 			put("type", "AUTH");
-			put("token", DAO.query(AccessToken.class, "SELECT token FROM AccessToken WHERE bearer = 'Shiro'"));
+			put("token", DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'"));
 		}}.toString());
 	}
 
