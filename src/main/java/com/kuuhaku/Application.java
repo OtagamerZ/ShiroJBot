@@ -23,7 +23,9 @@ import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listener.GuildListener;
+import com.kuuhaku.model.common.websocket.CommonSocket;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
@@ -98,6 +100,8 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			Constants.LOGGER.error("Failed to start pagination library: " + e);
 			System.exit(1);
 		}
+
+		API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
 
 		System.runFinalization();
 		Constants.LOGGER.info("<----------END OF BOOT---------->");

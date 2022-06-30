@@ -18,6 +18,7 @@
 
 package com.kuuhaku.util;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -30,14 +31,18 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.java_websocket.client.WebSocketClient;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class API {
+	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> socketClients = new HashMap<>();
 	private static final CloseableHttpClient HTTP = HttpClients.custom().setDefaultHeaders(List.of(
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 	)).build();
@@ -69,6 +74,14 @@ public abstract class API {
 			}
 		} catch (IOException | URISyntaxException e) {
 			return new JSONObject();
+		}
+	}
+
+	public static void connectSocket(Class<? extends WebSocketClient> client, String address) {
+		try {
+			socketClients.put(client, client.getDeclaredConstructor(String.class).newInstance(address));
+		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+			Constants.LOGGER.error(e, e);
 		}
 	}
 }

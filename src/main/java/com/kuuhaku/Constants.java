@@ -21,6 +21,7 @@ package com.kuuhaku;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.user.Account;
+import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.logging.log4j.LogManager;
@@ -38,6 +39,7 @@ public abstract class Constants {
 	public static final String OWNER = "350836145921327115";
 	public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
 	public static final Logger LOGGER = LogManager.getLogger("shiro");
+	public static final GroovyShell GROOVY = new GroovyShell();
 
 	public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
 
@@ -51,6 +53,10 @@ public abstract class Constants {
 	public static final String TIMESTAMP_R = "<t:%s:R>";
 	public static final String VOID = "\u200B";
 	public static final String ACCEPT = "✅";
+
+	public static final String SERVER_ROOT = System.getenv("SERVER_URL");
+	public static final String API_ROOT = "api." + SERVER_ROOT + "/v2/";
+	public static final String SOCKET_ROOT = "socket." + SERVER_ROOT + "/v2/";
 
 	public static final Function<Object, String> LOADING = o -> "<a:loading:697879726630502401> | " + o;
 
