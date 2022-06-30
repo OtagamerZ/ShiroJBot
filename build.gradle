@@ -52,7 +52,7 @@ applicationDefaultJvmArgs = [
 		"-Duser.timezone=America/Sao_Paulo",
 		"-Djava.awt.headless=true",
 		"-Dsun.java2d.opengl=true",
-		"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
+		"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector",
 		//,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 ]
 
@@ -111,7 +111,7 @@ dependencies {
 	//Wrappers
 	implementation group: "com.graphql-java", name: "graphql-java", version: "2019-05-08T02-56-27-cca4316"
 	implementation group: "com.github.philippheuer.events4j", name: "events4j", version: "0.6.0"
-	implementation group: "org.discordbots", name: "DBL-Java-Library", version: "2.0.1"
+	implementation group: "com.github.top-gg", name: "java-sdk", version: "2.0.1"
 
 	//Apache Commons
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.8.1"
