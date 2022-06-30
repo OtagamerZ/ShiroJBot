@@ -93,15 +93,16 @@ public class CommonSocket extends WebSocketClient {
 			return;
 		}
 
-		Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", attempting reconnect in " + (++retry * 5) + " seconds");
+		if (retry > 0) {
+			Constants.LOGGER.info("Failed to reconnect to " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
+		} else {
+			Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", attempting reconnect in " + (++retry * 5) + " seconds");
+		}
 
 		exec.schedule(() -> {
 			try {
 				if (reconnectBlocking()) {
 					retry = 0;
-					Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
-				} else {
-					Constants.LOGGER.info("Failed to connect to " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
 				}
 			} catch (InterruptedException e) {
 				Constants.LOGGER.error(e, e);
