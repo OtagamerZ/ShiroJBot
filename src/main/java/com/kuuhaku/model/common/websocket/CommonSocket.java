@@ -57,7 +57,7 @@ public class CommonSocket extends WebSocketClient {
 		if (payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
 			Constants.LOGGER.info("Connected to socket " + getClass().getSimpleName());
 			send(new JSONObject() {{
-				put("type", "ATTAH");
+				put("type", "ATTACH");
 				put("channels", List.of("eval"));
 			}}.toString());
 			return;
