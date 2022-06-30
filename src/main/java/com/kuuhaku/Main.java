@@ -87,13 +87,13 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.toList();
 		for (JDA shard : shards) {
 			int id = shard.getShardInfo().getShardId();
-			//try {
-				//shard.awaitReady();
+			try {
+				shard.awaitReady();
 				shard.getPresence().setActivity(Activity.playing("Iniciando shards..."));
 				Helper.logger(Main.class).info("Shard " + id + " pronto!");
-			//} catch (InterruptedException e) {
-			//	Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
-			//}
+			} catch (InterruptedException e) {
+				Helper.logger(Main.class).error("Erro ao inicializar shard " + id + ": " + e);
+			}
 		}
 
 		try {
