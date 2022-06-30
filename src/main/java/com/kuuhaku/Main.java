@@ -88,7 +88,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		for (JDA shard : shards) {
 			int id = shard.getShardInfo().getShardId();
 			try {
-				shard.awaitReady();
+				//shard.awaitReady();
 				shard.getPresence().setActivity(Activity.playing("Iniciando shards..."));
 				Helper.logger(Main.class).info("Shard " + id + " pronto!");
 			} catch (InterruptedException e) {
