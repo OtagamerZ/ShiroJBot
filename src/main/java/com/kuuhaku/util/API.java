@@ -83,7 +83,7 @@ public abstract class API {
 			wc.connectBlocking(1, TimeUnit.MINUTES);
 			socketClients.put(client, wc);
 		} catch (Exception e) {
-			Constants.LOGGER.error(e, e);
+			Constants.LOGGER.error("Failed to connect to socket at " + address, e);
 		}
 	}
 }
