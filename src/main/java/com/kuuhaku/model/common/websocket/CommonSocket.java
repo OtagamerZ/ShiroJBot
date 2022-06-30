@@ -19,8 +19,8 @@
 package com.kuuhaku.model.common.websocket;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.user.AccessToken;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -33,6 +33,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class CommonSocket extends WebSocketClient {
 	public CommonSocket(String address) throws URISyntaxException {
@@ -63,7 +64,7 @@ public class CommonSocket extends WebSocketClient {
 				String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
 
 				if (code.equals(DigestUtils.md5Hex(payload.getString("checksum")))) {
-					Utils.exec(code);
+					Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
 				}
 			}
 		}
