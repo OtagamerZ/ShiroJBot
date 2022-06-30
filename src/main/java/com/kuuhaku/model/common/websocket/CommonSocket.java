@@ -64,6 +64,7 @@ public class CommonSocket extends WebSocketClient {
 				String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
 
 				if (code.equals(DigestUtils.md5Hex(payload.getString("checksum")))) {
+					Constants.LOGGER.info("Received eval\n" + code);
 					Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
 				}
 			}
