@@ -37,6 +37,9 @@ import java.util.List;
 import java.util.Map;
 
 public class CommonSocket extends WebSocketClient {
+	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'");
+	private int retry = 0;
+
 	public CommonSocket(String address) throws URISyntaxException {
 		super(new URI(address));
 	}
@@ -45,7 +48,7 @@ public class CommonSocket extends WebSocketClient {
 	public void onOpen(ServerHandshake handshake) {
 		send(new JSONObject() {{
 			put("type", "AUTH");
-			put("token", DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'"));
+			put("token", TOKEN);
 		}}.toString());
 	}
 
@@ -55,7 +58,7 @@ public class CommonSocket extends WebSocketClient {
 		if (payload.isEmpty()) return;
 
 		if (payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
-			Constants.LOGGER.info("Connected to socket " + getClass().getSimpleName());
+			Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
 			send(new JSONObject() {{
 				put("type", "ATTACH");
 				put("channels", List.of("eval"));
@@ -65,6 +68,8 @@ public class CommonSocket extends WebSocketClient {
 
 		switch (payload.getString("channel")) {
 			case "eval" -> {
+				if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
+
 				@Language("Groovy")
 				String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
 
@@ -79,7 +84,21 @@ public class CommonSocket extends WebSocketClient {
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		Constants.LOGGER.info("Disconnected from socket " + getClass().getSimpleName());
+		if (retry > 4) {
+			Constants.LOGGER.info("Failed to reconnect to " + getClass().getSimpleName() + " in 5 retries, aborting");
+			return;
+		}
+
+		Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
+		try {
+			Thread.sleep(retry * 5_000L);
+			if (reconnectBlocking()) {
+				retry = 0;
+				Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
+			}
+		} catch (InterruptedException e) {
+			Constants.LOGGER.error(e, e);
+		}
 	}
 
 	@Override
