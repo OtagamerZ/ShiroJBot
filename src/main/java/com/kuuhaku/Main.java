@@ -74,6 +74,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		cmdManager = new CommandManager();
 		cacheManager = new CacheManager();
 
+		System.out.println(Helper.get("https://api.ipify.org?format=json", new com.kuuhaku.utils.json.JSONObject()));
+		System.exit(0);
+
 		shiroShards = DefaultShardManagerBuilder.create(ShiroInfo.getBotToken(), EnumSet.allOf(GatewayIntent.class))
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
