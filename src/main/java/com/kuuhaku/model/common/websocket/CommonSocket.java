@@ -63,8 +63,7 @@ public class CommonSocket extends WebSocketClient {
 				@Language("Groovy")
 				String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
 
-				if (code.equals(DigestUtils.md5Hex(payload.getString("checksum")))) {
-					Constants.LOGGER.info("Received eval\n" + code);
+				if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
 					Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
 				}
 			}
