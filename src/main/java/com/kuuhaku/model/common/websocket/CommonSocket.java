@@ -62,7 +62,13 @@ public class CommonSocket extends WebSocketClient {
 		if (payload.isEmpty()) return;
 
 		if (payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
-			Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
+			if (retry > 0) {
+				retry = 0;
+				Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
+			} else {
+				Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
+			}
+
 			send(new JSONObject() {{
 				put("type", "ATTACH");
 				put("channels", List.of("eval"));
@@ -99,15 +105,7 @@ public class CommonSocket extends WebSocketClient {
 			Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", attempting reconnect in " + (++retry * 5) + " seconds");
 		}
 
-		exec.schedule(() -> {
-			try {
-				if (reconnectBlocking()) {
-					retry = 0;
-				}
-			} catch (InterruptedException e) {
-				Constants.LOGGER.error(e, e);
-			}
-		}, retry * 5L, TimeUnit.SECONDS);
+		exec.schedule(this::reconnect, retry * 5L, TimeUnit.SECONDS);
 	}
 
 	@Override
