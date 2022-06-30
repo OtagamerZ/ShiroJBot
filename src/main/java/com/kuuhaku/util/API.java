@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public abstract class API {
-	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> socketClients = new HashMap<>();
+	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> SOCKET_CLIENTS = new HashMap<>();
 	private static final CloseableHttpClient HTTP = HttpClients.custom().setDefaultHeaders(List.of(
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 	)).build();
@@ -81,7 +81,7 @@ public abstract class API {
 		try {
 			WebSocketClient wc = client.getDeclaredConstructor(String.class).newInstance(address);
 			wc.connectBlocking(1, TimeUnit.MINUTES);
-			socketClients.put(client, wc);
+			SOCKET_CLIENTS.put(client, wc);
 		} catch (Exception e) {
 			Constants.LOGGER.error("Failed to connect to socket at " + address, e);
 		}
