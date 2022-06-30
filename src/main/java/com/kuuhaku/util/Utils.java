@@ -39,6 +39,8 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import de.androidpit.colorthief.ColorThief;
+import groovy.lang.Binding;
+import groovy.lang.Script;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -987,5 +989,17 @@ public abstract class Utils {
 
 	public static String lPad(Object o, int pad, String padChar) {
 		return StringUtils.leftPad(String.valueOf(o), pad, padChar);
+	}
+
+	public static Object exec(@Language("Groovy") String code) {
+		return Constants.GROOVY.parse(code).run();
+	}
+
+	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
+		Binding ctx = new Binding(variables);
+		Script script = Constants.GROOVY.parse(code);
+		script.setBinding(ctx);
+
+		return script.run();
 	}
 }
