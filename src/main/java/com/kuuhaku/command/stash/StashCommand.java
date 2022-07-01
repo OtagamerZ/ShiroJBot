@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -171,7 +172,24 @@ public class StashCommand implements Executable {
 					);
 				}
 				case FIELD -> {
-					//TODO
+					Field fd = DAO.find(Field.class, sc.getCard().getId());
+
+					return new MessageEmbed.Field(
+							sc + location,
+							"%s%s%s (%s | %s)".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()),
+									sc.getCard().getAnime(),
+									switch (fd.getType()) {
+										case NONE -> "";
+										case DAY -> ":sunny: ";
+										case NIGHT -> ":crescent_moon: ";
+										case DUNGEON -> ":japanese_castle: ";
+									}
+							),
+							false
+					);
 				}
 			}
 
