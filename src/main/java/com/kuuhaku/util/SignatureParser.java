@@ -52,9 +52,11 @@ public abstract class SignatureParser {
 
 					if (i == args.length) {
 						if (out.has(name)) {
-							Object curr = out.get(name);
-							JSONArray arr = new JSONArray();
-							arr.add(curr);
+							JSONArray arr = out.getJSONArray(name, new JSONArray());
+							if (arr.isEmpty()) {
+								Object curr = out.get(name);
+								arr.add(curr);
+							}
 							arr.add(str.replaceFirst("\"(.*)\"", "$1"));
 
 							out.put(name, arr);
@@ -65,9 +67,11 @@ public abstract class SignatureParser {
 						str = "";
 					} else {
 						if (out.has(name)) {
-							Object curr = out.get(name);
-							JSONArray arr = new JSONArray();
-							arr.add(curr);
+							JSONArray arr = out.getJSONArray(name, new JSONArray());
+							if (arr.isEmpty()) {
+								Object curr = out.get(name);
+								arr.add(curr);
+							}
 							arr.add(Utils.extract(str, type.getPattern(), "text"));
 
 							out.put(name, arr);
@@ -97,9 +101,11 @@ public abstract class SignatureParser {
 
 						if (!fail) {
 							if (out.has(name)) {
-								Object curr = out.get(name);
-								JSONArray arr = new JSONArray();
-								arr.add(curr);
+								JSONArray arr = out.getJSONArray(name, new JSONArray());
+								if (arr.isEmpty()) {
+									Object curr = out.get(name);
+									arr.add(curr);
+								}
 								arr.add(s);
 
 								out.put(name, arr);
