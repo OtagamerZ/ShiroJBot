@@ -241,8 +241,12 @@ public class JSONObject extends HashMap<String, Object> {
 	}
 
 	public JSONArray getJSONArray(String key, JSONArray or) {
-		List<?> ja = (List<?>) get(key);
-		return ja == null ? or : new JSONArray(ja);
+		try {
+			List<?> ar = (List<?>) get(key);
+			return ar == null ? or : new JSONArray(ar);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public JSONObject getJSONObject(String key) {
