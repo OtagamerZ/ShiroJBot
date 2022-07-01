@@ -39,11 +39,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class Spawn {
-	private static Pair<Integer, MoonIllumination> illum = null;
-	private static Map<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
+	private static final Map<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
 			//.expiration(1, TimeUnit.MINUTES)  TODO Return
 			.expiration(20, TimeUnit.SECONDS)
 			.build();
+	private static Pair<Integer, MoonIllumination> illum = null;
 
 	public synchronized static KawaiponCard getKawaipon(Guild guild) {
 		if (spawnedCards.containsKey(guild.getId())) return null;

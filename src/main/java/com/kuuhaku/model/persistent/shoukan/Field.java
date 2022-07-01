@@ -48,8 +48,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
-	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
-
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -67,6 +65,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private FieldType type = FieldType.NONE;
+
+	@Column(name = "effect", nullable = false)
+	private boolean effect = false;
 
 	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient Hand hand = null;
@@ -86,6 +87,26 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Override
 	public Card getCard() {
 		return card;
+	}
+
+	public JSONObject getModifiers() {
+		return modifiers;
+	}
+
+	public void setModifiers(JSONObject modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public FieldType getType() {
+		return type;
+	}
+
+	public void setType(FieldType type) {
+		this.type = type;
+	}
+
+	public boolean isEffect() {
+		return effect;
 	}
 
 	@Override

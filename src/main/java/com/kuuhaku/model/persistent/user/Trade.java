@@ -114,6 +114,7 @@ public class Trade {
 				FROM stashed_card sc
 				WHERE sc.kawaipon_uid = ?1
 				AND sc.id IN ?2
+				AND sc.deck_id IS NULL
 				""";
 
 		if (DAO.queryNative(Integer.class, query, left.getUid(), leftOffers) != leftOffers.size()) {
