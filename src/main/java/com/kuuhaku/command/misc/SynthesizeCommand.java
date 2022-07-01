@@ -73,7 +73,7 @@ public class SynthesizeCommand implements Executable {
 
 				List<StashedCard> stash = DAO.queryAll(StashedCard.class,
 						"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL",
-						event.user().getId(), c.getId()
+						event.user().getId()
 				);
 				Utils.selectOption(locale, event.channel(), stash, c, event.user())
 						.thenAccept(sc -> {
