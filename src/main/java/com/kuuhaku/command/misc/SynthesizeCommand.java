@@ -80,6 +80,9 @@ public class SynthesizeCommand implements Executable {
 							if (sc == null) {
 								event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 								return;
+							} else if (cards.contains(sc)) {
+								event.channel().sendMessage(locale.get("error/twice_added")).queue();
+								return;
 							}
 
 							cards.add(sc);
