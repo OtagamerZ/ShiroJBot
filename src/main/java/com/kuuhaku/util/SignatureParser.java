@@ -52,8 +52,11 @@ public abstract class SignatureParser {
 
 					if (i == args.length) {
 						if (out.has(name)) {
-							JSONArray arr = out.getJSONArray(name, new JSONArray());
-							if (arr.isEmpty()) {
+							JSONArray arr;
+							if (out.get(name) instanceof List<?> ls) {
+								arr = new JSONArray(ls);
+							} else {
+								arr = new JSONArray();
 								Object curr = out.get(name);
 								arr.add(curr);
 							}
@@ -67,8 +70,11 @@ public abstract class SignatureParser {
 						str = "";
 					} else {
 						if (out.has(name)) {
-							JSONArray arr = out.getJSONArray(name, new JSONArray());
-							if (arr.isEmpty()) {
+							JSONArray arr;
+							if (out.get(name) instanceof List<?> ls) {
+								arr = new JSONArray(ls);
+							} else {
+								arr = new JSONArray();
 								Object curr = out.get(name);
 								arr.add(curr);
 							}
@@ -101,8 +107,11 @@ public abstract class SignatureParser {
 
 						if (!fail) {
 							if (out.has(name)) {
-								JSONArray arr = out.getJSONArray(name, new JSONArray());
-								if (arr.isEmpty()) {
+								JSONArray arr;
+								if (out.get(name) instanceof List<?> ls) {
+									arr = new JSONArray(ls);
+								} else {
+									arr = new JSONArray();
 									Object curr = out.get(name);
 									arr.add(curr);
 								}
