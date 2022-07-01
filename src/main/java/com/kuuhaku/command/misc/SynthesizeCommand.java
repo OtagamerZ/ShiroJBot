@@ -151,6 +151,10 @@ public class SynthesizeCommand implements Executable {
 						new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 						event.channel().sendMessage(locale.get("success/synth", e + StringUtils.repeat("★", e.getTier()))).queue();
 					}
+
+					for (StashedCard card : cards) {
+						card.delete();
+					}
 				}, event.user()
 		);
 	}
