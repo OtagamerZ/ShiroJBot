@@ -94,6 +94,7 @@ public class SynthesizeCommand implements Executable {
 			}
 		}
 
+		event.channel().sendMessage("" + cards.size()).queue();
 		if (cards.size() != 3) {
 			event.channel().sendMessage(locale.get("error/invalid_synth_material")).queue();
 			return;
