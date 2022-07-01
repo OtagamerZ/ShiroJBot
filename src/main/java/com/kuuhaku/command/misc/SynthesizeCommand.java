@@ -111,8 +111,6 @@ public class SynthesizeCommand implements Executable {
 		} catch (InterruptedException | ExecutionException ignore) {
 		}
 
-		event.channel().sendMessage(args.getString("card")).queue();
-		event.channel().sendMessage(cards.toString()).queue();
 		if (cards.size() != 3) {
 			event.channel().sendMessage(locale.get("error/invalid_synth_material")).queue();
 			return;
@@ -168,7 +166,7 @@ public class SynthesizeCommand implements Executable {
 
 						Evogear e = pool.get();
 						new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
-						event.channel().sendMessage(locale.get("success/synth", e + StringUtils.repeat("★", e.getTier()))).queue();
+						event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
 					}
 
 					for (StashedCard card : cards) {
