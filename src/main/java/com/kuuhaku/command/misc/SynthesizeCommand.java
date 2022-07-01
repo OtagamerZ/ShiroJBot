@@ -46,6 +46,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Command(
 		name = "synth",
@@ -60,6 +62,7 @@ public class SynthesizeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<StashedCard> cards = new ArrayList<>();
+		CompletableFuture<Void> setup = new CompletableFuture<>();
 		for (Object entry : args.getJSONArray("card")) {
 			if (entry instanceof String card) {
 				Card c = DAO.find(Card.class, card.toUpperCase(Locale.ROOT));
@@ -71,6 +74,7 @@ public class SynthesizeCommand implements Executable {
 					return;
 				}
 
+				CompletableFuture<Void> select = new CompletableFuture<>();
 				List<StashedCard> stash = DAO.queryAll(StashedCard.class,
 						"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL",
 						event.user().getId()
@@ -86,12 +90,25 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							cards.add(sc);
+							select.complete(null);
 						})
 						.exceptionally(t -> {
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
+							select.complete(null);
 							return null;
 						});
+
+				try {
+					select.get();
+					setup.complete(null);
+				} catch (InterruptedException | ExecutionException ignore) {
+				}
 			}
+		}
+
+		try {
+			setup.get();
+		} catch (InterruptedException | ExecutionException ignore) {
 		}
 
 		event.channel().sendMessage(args.getString("card")).queue();
