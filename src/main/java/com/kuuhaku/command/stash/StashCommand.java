@@ -104,6 +104,7 @@ public class StashCommand implements Executable {
 			put("k", "AND c.type = '%s'".formatted(CardType.KAWAIPON));
 			put("e", "AND c.type = '%s'".formatted(CardType.EVOGEAR));
 			put("f", "AND c.type = '%s'".formatted(CardType.FIELD));
+			put("v", "AND c.deck IS NULL");
 		}};
 
 		List<Object> params = new ArrayList<>() {{
