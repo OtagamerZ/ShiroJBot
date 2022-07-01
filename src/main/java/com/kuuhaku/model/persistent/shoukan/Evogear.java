@@ -52,8 +52,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "evogear")
 public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHolder {
-	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
-
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
