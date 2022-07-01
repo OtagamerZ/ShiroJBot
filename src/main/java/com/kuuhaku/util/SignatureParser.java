@@ -5,6 +5,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.FailedSignature;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,10 +51,30 @@ public abstract class SignatureParser {
 					}
 
 					if (i == args.length) {
-						out.put(name, str.replaceFirst("\"(.*)\"", "$1"));
+						if (out.has(name)) {
+							Object curr = out.get(name);
+							JSONArray arr = new JSONArray();
+							arr.add(curr);
+							arr.add(str.replaceFirst("\"(.*)\"", "$1"));
+
+							out.put(name, arr);
+						} else {
+							out.put(name, str.replaceFirst("\"(.*)\"", "$1"));
+						}
+
 						str = "";
 					} else {
-						out.put(name, Utils.extract(str, type.getPattern(), "text"));
+						if (out.has(name)) {
+							Object curr = out.get(name);
+							JSONArray arr = new JSONArray();
+							arr.add(curr);
+							arr.add(Utils.extract(str, type.getPattern(), "text"));
+
+							out.put(name, arr);
+						} else {
+							out.put(name, Utils.extract(str, type.getPattern(), "text"));
+						}
+
 						str = str.replaceFirst(type.getRegex(), "").trim();
 					}
 
@@ -74,7 +95,18 @@ public abstract class SignatureParser {
 							case USER, ROLE -> s = s.replaceAll("[<@!>]", "");
 						}
 
-						if (!fail) out.put(name, s);
+						if (!fail) {
+							if (out.has(name)) {
+								Object curr = out.get(name);
+								JSONArray arr = new JSONArray();
+								arr.add(curr);
+								arr.add(s);
+
+								out.put(name, arr);
+							} else {
+								out.put(name, s);
+							}
+						}
 						supplied.add(s);
 						matches++;
 					} else if (required) {

@@ -85,7 +85,7 @@ public class DeckAddCommand implements Executable {
 		}
 
 		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.card.id = ?2",
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL",
 				event.user().getId(), card.getId()
 		);
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
@@ -98,7 +98,10 @@ public class DeckAddCommand implements Executable {
 					Deck dk = d.refresh();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							if (dk.getSenshi().size() >= 36) {
+							if (sc.getKawaiponCard().isFoil()) {
+								event.channel().sendMessage(locale.get("error/cannot_add_foil")).queue();
+								return;
+							} else if (dk.getSenshi().size() >= 36) {
 								event.channel().sendMessage(locale.get("error/deck_full")).queue();
 								return;
 							}
