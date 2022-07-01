@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -46,6 +47,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -128,15 +130,17 @@ public class StashCommand implements Executable {
 				.setAuthor(locale.get("str/search_result", results.size(), total));
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
+			Trade t = Trade.getPending().get(event.user().getId());
+			String location = "";
+			if (t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
+				location = " (" + locale.get("str/trade") + ")";
+			} else if (sc.getDeck() != null) {
+				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
+			}
+
 			switch (sc.getType()) {
 				case KAWAIPON -> {
-					Trade t = Trade.getPending().get(event.user().getId());
 					KawaiponCard kc = sc.getKawaiponCard();
-
-					String location = "";
-					if (sc.getDeck() != null) {
-						location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
-					}
 
 					return new MessageEmbed.Field(
 							sc + location,
@@ -153,7 +157,18 @@ public class StashCommand implements Executable {
 					);
 				}
 				case EVOGEAR -> {
-					//TODO
+					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+
+					return new MessageEmbed.Field(
+							sc + location,
+							"%s%s (%s | %s)".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
+									sc.getCard().getAnime()
+							),
+							false
+					);
 				}
 				case FIELD -> {
 					//TODO
