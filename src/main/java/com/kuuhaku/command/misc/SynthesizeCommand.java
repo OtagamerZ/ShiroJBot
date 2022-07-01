@@ -88,67 +88,67 @@ public class SynthesizeCommand implements Executable {
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
 							return null;
 						});
-
-				if (cards.size() != 3) {
-					event.channel().sendMessage(locale.get("error/invalid_synth_material")).queue();
-					return;
-				}
-
-				Utils.confirm(locale.get("question/synth"), event.channel(), wrapper -> {
-							Kawaipon kp = data.profile().getAccount().getKawaipon();
-							double field = cards.stream()
-									.mapToDouble(sc -> {
-										if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isFoil()) {
-											return 100 / 3d;
-										}
-
-										return 0;
-									}).sum();
-
-							if (Calc.chance(field)) {
-								Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-								event.channel().sendMessage(locale.get("success/synth", f)).queue();
-								new StashedCard(kp, f.getCard(), CardType.FIELD).save();
-							} else {
-								double inc = 1;
-								double more = 1;
-
-								for (StashedCard sc : cards) {
-									switch (sc.getType()) {
-										case KAWAIPON -> {
-											KawaiponCard kc = sc.getKawaiponCard();
-											int rarity = kc.getCard().getRarity().getIndex();
-
-											if (kc.isFoil()) {
-												more *= 1 + rarity * kc.getQuality() / 200;
-											} else {
-												inc += rarity * kc.getQuality() / 200;
-											}
-										}
-										case EVOGEAR -> {
-											Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
-											inc += ev.getTier() / 4d;
-										}
-										case FIELD -> more *= 1.1;
-									}
-								}
-
-								double mult = 1 * inc * more;
-								RandomList<Evogear> pool = new RandomList<>((v, f) -> 1 - Math.pow(v, f), 1 * mult);
-								List<Evogear> evos = DAO.findAll(Evogear.class);
-								for (Evogear evo : evos) {
-									if (evo.getTier() <= 0) continue;
-
-									pool.add(evo, 5 - evo.getTier());
-								}
-
-								Evogear e = pool.get();
-								new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
-								event.channel().sendMessage(locale.get("success/synth", e + StringUtils.repeat("★", e.getTier()))).queue();
-							}
-						}, event.user()
-				);
 			}
 		}
+
+		if (cards.size() != 3) {
+			event.channel().sendMessage(locale.get("error/invalid_synth_material")).queue();
+			return;
+		}
+
+		Utils.confirm(locale.get("question/synth"), event.channel(), wrapper -> {
+					Kawaipon kp = data.profile().getAccount().getKawaipon();
+					double field = cards.stream()
+							.mapToDouble(sc -> {
+								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isFoil()) {
+									return 100 / 3d;
+								}
+
+								return 0;
+							}).sum();
+
+					if (Calc.chance(field)) {
+						Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
+						event.channel().sendMessage(locale.get("success/synth", f)).queue();
+						new StashedCard(kp, f.getCard(), CardType.FIELD).save();
+					} else {
+						double inc = 1;
+						double more = 1;
+
+						for (StashedCard sc : cards) {
+							switch (sc.getType()) {
+								case KAWAIPON -> {
+									KawaiponCard kc = sc.getKawaiponCard();
+									int rarity = kc.getCard().getRarity().getIndex();
+
+									if (kc.isFoil()) {
+										more *= 1 + rarity * kc.getQuality() / 200;
+									} else {
+										inc += rarity * kc.getQuality() / 200;
+									}
+								}
+								case EVOGEAR -> {
+									Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+									inc += ev.getTier() / 4d;
+								}
+								case FIELD -> more *= 1.1;
+							}
+						}
+
+						double mult = 1 * inc * more;
+						RandomList<Evogear> pool = new RandomList<>((v, f) -> 1 - Math.pow(v, f), 1 * mult);
+						List<Evogear> evos = DAO.findAll(Evogear.class);
+						for (Evogear evo : evos) {
+							if (evo.getTier() <= 0) continue;
+
+							pool.add(evo, 5 - evo.getTier());
+						}
+
+						Evogear e = pool.get();
+						new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
+						event.channel().sendMessage(locale.get("success/synth", e + StringUtils.repeat("★", e.getTier()))).queue();
+					}
+				}, event.user()
+		);
 	}
 }
