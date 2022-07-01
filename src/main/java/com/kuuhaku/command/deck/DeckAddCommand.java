@@ -86,7 +86,7 @@ public class DeckAddCommand implements Executable {
 
 		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
 				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL",
-				event.user().getId(), card.getId()
+				event.user().getId()
 		);
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
