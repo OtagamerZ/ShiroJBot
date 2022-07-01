@@ -59,6 +59,8 @@ public class Anime extends DAO<Anime> {
 
 	@Override
 	public String toString() {
+		if (!visible) return "???";
+
 		return DAO.queryNative(String.class, "SELECT c.name FROM card c WHERE c.anime_id = ?1 AND c.rarity = 'ULTIMATE'", id);
 	}
 
