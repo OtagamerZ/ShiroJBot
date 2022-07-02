@@ -133,7 +133,7 @@ public class StashCommand implements Executable {
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			Trade t = Trade.getPending().get(event.user().getId());
 			String location = "";
-			if (t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
+			if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
 				location = " (" + locale.get("str/trade") + ")";
 			} else if (sc.getDeck() != null) {
 				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
