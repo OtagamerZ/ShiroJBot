@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -173,9 +174,16 @@ public class SynthesizeCommand implements Executable {
 					for (StashedCard sc : cards) {
 						KawaiponCard kc = sc.getKawaiponCard();
 						if (kc != null) {
-							kp = kp.refresh();
-							kp.getCards().remove(kc);
-							kp.save();
+							DAO.apply(Kawaipon.class, kp.getUid(), k -> {
+								Iterator<KawaiponCard> it = k.getCards().iterator();
+								while (it.hasNext()) {
+									KawaiponCard card = it.next();
+									if (card.getStashEntry().equals(sc)) {
+										it.remove();
+										break;
+									}
+								}
+							});
 							continue;
 						}
 
