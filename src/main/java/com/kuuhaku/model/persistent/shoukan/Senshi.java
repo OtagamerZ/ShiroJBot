@@ -184,8 +184,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				mult *= 1 + (hand.getGraveyard().size() * 0.005);
 			}
 
-			Field f = hand.getGame().getArena().getField();
-			mult *= 1 + f.getModifiers().getDouble(race.name());
+			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
 
 		return (int) ((base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum()) * mult);
@@ -199,11 +198,21 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				mult *= 1 + (hand.getGraveyard().size() * 0.01);
 			}
 
-			Field f = hand.getGame().getArena().getField();
-			mult *= 1 + f.getModifiers().getDouble(race.name());
+			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
 
 		return (int) ((base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum()) * mult);
+	}
+
+	public double getFieldMult(Field f) {
+		double mult = 1;
+
+		Race[] races = race.split();
+		for (Race r : races) {
+			mult += f.getModifiers().getDouble(r.name()) / races.length;
+		}
+
+		return mult;
 	}
 
 	public int getActiveAttr() {
