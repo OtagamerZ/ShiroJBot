@@ -388,9 +388,10 @@ public class Deck extends DAO<Deck> {
 						String str = Utils.extract(s, "\\{(.+)}", 1);
 
 						if (str != null) {
-							g2d.setColor(new Color(0xD72929));
+							g.setColor(new Color(0xD72929));
 							return str;
 						}
+
 						return s;
 					}
 			);
