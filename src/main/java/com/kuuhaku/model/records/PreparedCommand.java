@@ -30,7 +30,6 @@ import java.util.EnumSet;
 
 public record PreparedCommand(
 		String name,
-		String[] aliases,
 		String description,
 		Category category,
 		Permission[] permissions,

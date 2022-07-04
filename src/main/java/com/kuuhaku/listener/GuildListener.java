@@ -267,6 +267,11 @@ public class GuildListener extends ListenerAdapter {
 		String[] args = content.toLowerCase(Locale.ROOT).split("\\s+");
 		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
+		JSONObject aliases = event.config().getSettings().getAliases();
+		if (aliases.has("name")) {
+			name = aliases.getString("name");
+		}
+
 		PreparedCommand pc = Main.getCommandManager().getCommand(name);
 		if (pc != null) {
 			Permission[] missing = pc.getMissingPerms(data.channel());
