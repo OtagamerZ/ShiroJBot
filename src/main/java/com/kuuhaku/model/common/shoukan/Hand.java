@@ -68,8 +68,8 @@ public class Hand {
 
 	private String name;
 
-	private int hp = 5000;
-	private int mp = 0;
+	private int hp;
+	private int mp;
 
 	private transient Account account;
 	private transient String lastMessage;
@@ -107,6 +107,7 @@ public class Hand {
 			base = new BaseValues();
 		}
 		this.base = base;
+		this.hp = base.hp();
 
 		deck.addAll(
 				Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields())
