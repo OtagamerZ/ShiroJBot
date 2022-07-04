@@ -280,7 +280,7 @@ public class Deck extends DAO<Deck> {
 				Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5),
 				avgMana / totalMPCost.get(),
 				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
-				1,
+				getMetaDivergence(),
 				0
 		}, 0, 1);
 		vals[5] = Calc.average(vals[0], vals[1], vals[2], 0.5 + vals[3] * 0.5, 0.25 + vals[4] * 0.75);
