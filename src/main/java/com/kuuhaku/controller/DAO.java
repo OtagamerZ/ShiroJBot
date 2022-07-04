@@ -78,7 +78,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T> T queryNative(@Nonnull Class<T> klass, @Nonnull String query, @Nonnull Object... params) {
+	public static <T> T queryNative(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
