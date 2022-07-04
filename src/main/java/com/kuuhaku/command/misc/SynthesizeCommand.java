@@ -79,6 +79,7 @@ public class SynthesizeCommand implements Executable {
 						"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL",
 						event.user().getId()
 				);
+				stash.removeIf(cards::contains);
 				Utils.selectOption(locale, event.channel(), stash, c, event.user())
 						.thenAccept(sc -> {
 							if (sc == null) {
@@ -170,6 +171,7 @@ public class SynthesizeCommand implements Executable {
 					}
 
 					for (StashedCard card : cards) {
+						System.out.println("Delete " + card.getId() + " " + card.getCard());
 						card.delete();
 					}
 				}, event.user()

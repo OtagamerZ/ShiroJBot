@@ -34,8 +34,11 @@ import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import de.androidpit.colorthief.ColorThief;
@@ -787,20 +790,70 @@ public abstract class Utils {
 				.setTitle(locale.get("str/choose_option"));
 
 		AtomicInteger i = new AtomicInteger();
-		List<Page> pages = generatePages(eb, matches, 10, sc -> {
-			KawaiponCard kc = sc.getKawaiponCard();
+		List<Page> pages = Utils.generatePages(eb, matches, 10, sc -> {
+			Trade t = Trade.getPending().get(user.getId());
+			String location = "";
+			if (t != null && t.getSelfOffers(user.getId()).contains(sc.getId())) {
+				location = " (" + locale.get("str/trade") + ")";
+			} else if (sc.getDeck() != null) {
+				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
+			}
 
-			return new MessageEmbed.Field(
-					"`%s` | %s".formatted(i.getAndIncrement(), sc),
-					"%s%s (%s | %s)%s".formatted(
-							sc.getCard().getRarity().getEmote(),
-							locale.get("type/" + sc.getType()),
-							locale.get("rarity/" + sc.getCard().getRarity()),
-							sc.getCard().getAnime(),
-							kc != null ? ("\n" + locale.get("str/quality", kc.getQuality())) : ""
-					),
-					false
-			);
+			switch (sc.getType()) {
+				case KAWAIPON -> {
+					KawaiponCard kc = sc.getKawaiponCard();
+
+					return new MessageEmbed.Field(
+							"`%s` | %s".formatted(i.getAndIncrement(), sc + location),
+							"%s%s (%s | %s)%s".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()),
+									sc.getCard().getAnime(),
+									kc != null && kc.getQuality() > 0
+											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
+											: ""
+							),
+							false
+					);
+				}
+				case EVOGEAR -> {
+					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+
+					return new MessageEmbed.Field(
+							"`%s` | %s".formatted(i.getAndIncrement(), sc + location),
+							"%s%s (%s | %s)".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
+									sc.getCard().getAnime()
+							),
+							false
+					);
+				}
+				case FIELD -> {
+					Field fd = DAO.find(Field.class, sc.getCard().getId());
+
+					return new MessageEmbed.Field(
+							"`%s` | %s".formatted(i.getAndIncrement(), sc + location),
+							"%s%s%s (%s | %s)".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()),
+									sc.getCard().getAnime(),
+									switch (fd.getType()) {
+										case NONE -> "";
+										case DAY -> ":sunny: ";
+										case NIGHT -> ":crescent_moon: ";
+										case DUNGEON -> ":japanese_castle: ";
+									}
+							),
+							false
+					);
+				}
+			}
+
+			return null;
 		});
 
 		Message msg = paginate(pages, channel, user);
@@ -811,13 +864,12 @@ public abstract class Utils {
 					try {
 						int indx = Integer.parseInt(m.getContentRaw());
 						out.complete(matches.get(indx));
-						msg.delete().queue(null, Utils::doNothing);
-
-						return true;
 					} catch (RuntimeException e) {
 						out.complete(null);
-						return true;
 					}
+
+					msg.delete().queue(null, Utils::doNothing);
+					return true;
 				}, 1, TimeUnit.MINUTES
 		);
 
