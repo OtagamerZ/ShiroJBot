@@ -77,7 +77,8 @@ public class Deck extends DAO<Deck> {
 	@OrderColumn(name = "index")
 	@JoinTable(name = "deck_senshi",
 			joinColumns = @JoinColumn(name = "deck_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "senshi_card_id", referencedColumnName = "card_id"))
+			inverseJoinColumns = @JoinColumn(name = "senshi_card_id", referencedColumnName = "card_id")
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Senshi> senshi = new ArrayList<>();
 
@@ -85,7 +86,8 @@ public class Deck extends DAO<Deck> {
 	@OrderColumn(name = "index")
 	@JoinTable(name = "deck_evogear",
 			joinColumns = @JoinColumn(name = "deck_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "evogear_card_id", referencedColumnName = "card_id"))
+			inverseJoinColumns = @JoinColumn(name = "evogear_card_id", referencedColumnName = "card_id")
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Evogear> evogear = new ArrayList<>();
 
@@ -93,7 +95,8 @@ public class Deck extends DAO<Deck> {
 	@OrderColumn(name = "index")
 	@JoinTable(name = "deck_field",
 			joinColumns = @JoinColumn(name = "deck_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "field_card_id", referencedColumnName = "card_id"))
+			inverseJoinColumns = @JoinColumn(name = "field_card_id", referencedColumnName = "card_id")
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Field> field = new ArrayList<>();
 
