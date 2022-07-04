@@ -103,25 +103,14 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void runtime(String value) throws InvocationTargetException, IllegalAccessException {
+		System.out.println(value);
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
 		if (action != null) {
+			System.out.println(action);
 			if ((boolean) action.getFirst().invoke(this, action.getSecond())) {
 				sendPlayerHand(getCurrent());
 			}
 		}
-
-		/*
-		nextTurn();
-		Hand curr = getCurrent();
-		getChannel().sendMessage(locale.get("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn()))
-				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
-				.queue(Once.exec(m ->
-						curr.getUser().openPrivateChannel()
-								.flatMap(chn -> chn.sendFile(IO.getBytes(curr.render(locale), "png"), "hand.png"))
-								.queue()
-				));
-
-		 */
 	}
 
 	@PhaseConstraint("PLAN")
