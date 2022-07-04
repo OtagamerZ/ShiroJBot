@@ -389,7 +389,6 @@ public class Deck extends DAO<Deck> {
 
 						if (str != null) {
 							g.setColor(new Color(0xD72929));
-							return str;
 						}
 
 						return s;
