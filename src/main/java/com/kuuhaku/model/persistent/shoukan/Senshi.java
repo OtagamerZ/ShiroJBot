@@ -178,12 +178,22 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getDmg() {
-		return base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum();
+		double mult = 1;
+		if (hand != null && hand.getOrigin().minor() == Race.SPIRIT) {
+			mult *= 1 + (hand.getGraveyard().size() * 0.005);
+		}
+
+		return (int) ((base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum()) * mult);
 	}
 
 	@Override
 	public int getDef() {
-		return base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum();
+		double mult = 1;
+		if (hand != null && hand.getOrigin().minor() == Race.SPIRIT) {
+			mult *= 1 + (hand.getGraveyard().size() * 0.01);
+		}
+
+		return (int) ((base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum()) * mult);
 	}
 
 	public int getActiveAttr() {

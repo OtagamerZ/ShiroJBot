@@ -40,4 +40,13 @@ public record Origin(Race major, Race minor) {
 			add(synergy().getImage());
 		}};
 	}
+
+	@Override
+	public Race minor() {
+		return demon() ? major : minor;
+	}
+
+	public boolean demon() {
+		return minor == Race.DEMON;
+	}
 }
