@@ -25,7 +25,6 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.records.PreparedCommand;
-import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.Permission;
 import org.reflections8.Reflections;
 
@@ -37,10 +36,9 @@ import java.util.Set;
 public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command");
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
+	private final Set<String> names = new HashSet<>();
 
 	public CommandManager() {
-		Set<String> names = new HashSet<>();
-
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			String full = params.name();
@@ -51,13 +49,6 @@ public class CommandManager {
 			if (!names.add(full)) {
 				Constants.LOGGER.fatal("Detected commands with the same name: " + full);
 				System.exit(1);
-			}
-
-			for (String alias : params.aliases()) {
-				if (!names.add(alias)) {
-					Constants.LOGGER.fatal("Detected commands using the same alias: " + alias);
-					System.exit(1);
-				}
 			}
 		}
 	}
@@ -94,11 +85,10 @@ public class CommandManager {
 				full += "." + params.subname();
 			}
 
-			if (name.equalsIgnoreCase(full) || Utils.equalsAny(name, params.aliases())) {
+			if (name.equalsIgnoreCase(full)) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
 						full,
-						params.aliases(),
 						"cmd/" + cmd.getSimpleName()
 								.replaceFirst("(Command|Reaction)$", "")
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
@@ -122,7 +112,6 @@ public class CommandManager {
 		Requires req = cmd.getDeclaredAnnotation(Requires.class);
 		commands.add(new PreparedCommand(
 				full,
-				params.aliases(),
 				"cmd/" + cmd.getSimpleName()
 						.replaceFirst("(Command|Reaction)$", "")
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
@@ -147,5 +136,9 @@ public class CommandManager {
 		if (sig == null) return new String[0];
 
 		return sig.value();
+	}
+
+	public Set<String> getReservedNames() {
+		return names;
 	}
 }
