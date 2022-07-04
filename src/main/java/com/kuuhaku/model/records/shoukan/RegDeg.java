@@ -18,21 +18,24 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import kotlin.Triple;
+import com.kuuhaku.util.Calc;
+import kotlin.Pair;
 
-import java.util.concurrent.Callable;
-import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public record BaseValues(int hp, Function<Integer, Integer> mpGain, int handCapacity) {
-	public BaseValues() {
-		this(5000, t -> 5, 5);
+public record RegDeg(Pair<Integer, AtomicInteger> value, double dpt, boolean pos) {
+	public RegDeg(int value, double dpt) {
+		this(new Pair<>(value, new AtomicInteger(value)), Calc.clamp(dpt, 0, 1), value > 0);
 	}
 
-	public BaseValues(Callable<Triple<Integer, Function<Integer, Integer>, Integer>> values) throws Exception {
-		this(values.call());
+	public int remaining() {
+		return value.getSecond().get();
 	}
 
-	public BaseValues(Triple<Integer, Function<Integer, Integer>, Integer> values) {
-		this(values.getFirst(), values.getSecond(), values.getThird());
+	public int slice() {
+		int n = (int) (value.getSecond().get() * dpt);
+		value.getSecond().getAndUpdate(i -> pos ? Math.max(0, i - n) : Math.min(i + n, 0));
+
+		return n;
 	}
 }

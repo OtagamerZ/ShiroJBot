@@ -102,7 +102,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return channel;
 	}
 
-	protected int getTurn() {
+	public int getTurn() {
 		return turn;
 	}
 

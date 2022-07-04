@@ -280,11 +280,22 @@ public class Arena implements Renderer {
 					g1.fill(bar);
 				}
 
-				if (hand.getRegen() != 0) {
-					fac = hand.getRegenPrcnt();
-					bar.setSize((int) (boundaries.getBounds().width * Math.min(Math.abs(fac), 1)), bar.height);
+				int regen = hand.getRegen();
+				if (regen != 0) {
+					bar.setSize((int) (boundaries.getBounds().width * ((double) regen / hand.getBase().hp())), bar.height);
 					g1.setPaint(new TexturePaint(
-							IO.getResourceAsImage("shoukan/" + (fac > 0 ? "regen" : "degen") + "_overlay.png"),
+							IO.getResourceAsImage("shoukan/regen_overlay.png"),
+							new Rectangle2D.Double(0, 0, bar.height, bar.height)
+					));
+					g1.fill(bar);
+					g1.setPaint(null);
+				}
+
+				int degen = hand.getDegen();
+				if (degen != 0) {
+					bar.setSize((int) (boundaries.getBounds().width * ((double) degen / hand.getBase().hp())), bar.height);
+					g1.setPaint(new TexturePaint(
+							IO.getResourceAsImage("shoukan/degen_overlay.png"),
 							new Rectangle2D.Double(0, 0, bar.height, bar.height)
 					));
 					g1.fill(bar);
@@ -419,12 +430,13 @@ public class Arena implements Renderer {
 		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 		Graph.drawOutlinedString(g2d, hpText, x, y + spacing, 6, new Color(0, 0, 0, 200));
 
-		if (hand.getRegen() != 0) {
-			boolean degen = hand.getRegen() < 0;
+		int regdeg = hand.getRegen() - hand.getDegen();
+		if (regdeg != 0) {
+			boolean degen = regdeg < 0;
 
 			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
 			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(hand.getRegen()), 4, "0");
+			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(regdeg), 4, "0");
 
 			Graph.drawOutlinedString(g2d, regText,
 					x + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y + spacing,
@@ -444,12 +456,13 @@ public class Arena implements Renderer {
 		int offset = g2d.getFontMetrics().stringWidth(hpText);
 		Graph.drawOutlinedString(g2d, hpText, x - offset, y, 6, new Color(0, 0, 0, 200));
 
-		if (hand.getRegen() != 0) {
-			boolean degen = hand.getRegen() < 0;
+		int regdeg = hand.getRegen() - hand.getDegen();
+		if (regdeg != 0) {
+			boolean degen = regdeg < 0;
 
 			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
 			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(hand.getRegen()), 4, "0");
+			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(regdeg), 4, "0");
 
 			Graph.drawOutlinedString(g2d, regText,
 					x - offset + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y,
