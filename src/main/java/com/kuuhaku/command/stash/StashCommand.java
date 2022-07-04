@@ -114,6 +114,7 @@ public class StashCommand implements Executable {
 		}};
 		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
 		Option[] opts = cli.getFirst().getOptions();
+		System.out.println(Arrays.toString(opts));
 		for (Option opt : opts) {
 			query.appendNewLine(filters.get(opt.getOpt()));
 			System.out.println(opt.getOpt());
