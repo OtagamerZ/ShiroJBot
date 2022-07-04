@@ -37,7 +37,6 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
 import groovy.lang.GroovyShell;
-import kotlin.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -76,7 +75,6 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Embedded
 	private CardAttributes base;
 
-	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
@@ -265,112 +263,101 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	@Override
 	public void reset() {
-		cache = null;
 		stats = new CardExtra();
 		state = 0x2;
 	}
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		int hash = renderHashCode(locale);
-		if (cache == null || cache.getFirst() != hash) {
-			if (isFlipped()) return deck.getFrame().getBack(deck);
+		if (isFlipped()) return deck.getFrame().getBack(deck);
 
-			String desc = getDescription(locale);
+		String desc = getDescription(locale);
 
-			BufferedImage img = card.drawCardNoBorder(deck.isUsingFoil());
-			BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = out.createGraphics();
-			g2d.setRenderingHints(Constants.HD_HINTS);
+		BufferedImage img = card.drawCardNoBorder(deck.isUsingFoil());
+		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = out.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
 
-			g2d.setClip(deck.getFrame().getBoundary());
-			g2d.drawImage(img, 0, 0, null);
-			g2d.setClip(null);
+		g2d.setClip(deck.getFrame().getBoundary());
+		g2d.drawImage(img, 0, 0, null);
+		g2d.setClip(null);
 
-			g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+		g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 
-			g2d.setFont(new Font("Arial", Font.BOLD, 20));
-			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+		g2d.setFont(new Font("Arial", Font.BOLD, 20));
+		g2d.setColor(deck.getFrame().getPrimaryColor());
+		Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
 
-			if (!getCharms().isEmpty()) {
-				List<BufferedImage> icons = charms.stream()
-						.map(String::valueOf)
-						.map(Charm::valueOf)
-						.map(Charm::getIcon)
-						.filter(Objects::nonNull)
-						.limit(2)
-						.toList();
+		if (!getCharms().isEmpty()) {
+			List<BufferedImage> icons = charms.stream()
+					.map(String::valueOf)
+					.map(Charm::valueOf)
+					.map(Charm::getIcon)
+					.filter(Objects::nonNull)
+					.limit(2)
+					.toList();
 
-				if (!icons.isEmpty()) {
-					Graph.applyTransformed(g2d, 200 - 64, 55, g -> {
-						if (icons.size() == 1) {
-							g.drawImage(icons.get(0), 0, 0, null);
-						} else {
-							BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
-							assert mask != null;
+			if (!icons.isEmpty()) {
+				Graph.applyTransformed(g2d, 200 - 64, 55, g -> {
+					if (icons.size() == 1) {
+						g.drawImage(icons.get(0), 0, 0, null);
+					} else {
+						BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
+						assert mask != null;
 
-							for (int i = 0; i < icons.size(); i++) {
-								BufferedImage icon = icons.get(i);
-								Graph.applyMask(icon, mask, i, true);
-								g.drawImage(icon, 0, 0, null);
-							}
-							g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
+						for (int i = 0; i < icons.size(); i++) {
+							BufferedImage icon = icons.get(i);
+							Graph.applyMask(icon, mask, i, true);
+							g.drawImage(icon, 0, 0, null);
 						}
-					});
-				}
+						g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
+					}
+				});
 			}
-
-			if (!desc.isEmpty()) {
-				g2d.setColor(deck.getFrame().getSecondaryColor());
-				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-				g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
-
-				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
-				Graph.drawMultilineString(g2d,
-						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-						s -> {
-							String str = Utils.extract(s, "\\{(\\d+)}", 1);
-
-							if (str != null) {
-								double val = Double.parseDouble(str);
-
-								g2d.setColor(Color.ORANGE);
-								return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
-							}
-
-							g2d.setColor(deck.getFrame().getSecondaryColor());
-							return s;
-						},
-						(str, x, y) -> {
-							if (str.startsWith("\u200B")) {
-								Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
-							} else {
-								g2d.drawString(str, x, y);
-							}
-						}
-				);
-			}
-
-			drawCosts(g2d);
-			drawAttributes(g2d, !desc.isEmpty());
-
-			if (!isAvailable()) {
-				RescaleOp op = new RescaleOp(0.5f, 0, null);
-				op.filter(out, out);
-			}
-
-			g2d.dispose();
-
-			cache = new Pair<>(hash, out);
 		}
 
-		return cache.getSecond();
-	}
+		if (!desc.isEmpty()) {
+			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+			g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
-	@Override
-	public int renderHashCode(I18N locale) {
-		return Objects.hash(stats, state, hand, locale);
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
+			Graph.drawMultilineString(g2d,
+					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
+					s -> {
+						String str = Utils.extract(s, "\\{(\\d+)}", 1);
+
+						if (str != null) {
+							double val = Double.parseDouble(str);
+
+							g2d.setColor(Color.ORANGE);
+							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
+						}
+
+						g2d.setColor(deck.getFrame().getSecondaryColor());
+						return s;
+					},
+					(str, x, y) -> {
+						if (str.startsWith("\u200B")) {
+							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
+						} else {
+							g2d.drawString(str, x, y);
+						}
+					}
+			);
+		}
+
+		drawCosts(g2d);
+		drawAttributes(g2d, !desc.isEmpty());
+
+		if (!isAvailable()) {
+			RescaleOp op = new RescaleOp(0.5f, 0, null);
+			op.filter(out, out);
+		}
+
+		g2d.dispose();
+
+		return out;
 	}
 
 	@Override
