@@ -171,7 +171,11 @@ public class SynthesizeCommand implements Executable {
 					}
 
 					for (StashedCard card : cards) {
-						card.delete();
+						if (card.getKawaiponCard() != null) {
+							card.getKawaiponCard().delete();
+						} else {
+							card.delete();
+						}
 					}
 				}, event.user()
 		);
