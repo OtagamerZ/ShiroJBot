@@ -454,6 +454,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return getTurn() % 2 == 1 ? Side.TOP : Side.BOTTOM;
 	}
 
+	public Arena getArena() {
+		return arena;
+	}
+
 	private void sendPlayerHand(Hand hand) {
 		hand.getUser().openPrivateChannel()
 				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale), "png"), "hand.png"))
