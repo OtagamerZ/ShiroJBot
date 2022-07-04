@@ -78,6 +78,7 @@ public class StashCommand implements Executable {
 		}
 
 		String[] content = args.getString("params").split("\\s+");
+		System.out.println(content);
 		content = ArrayUtils.remove(content, 0);
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, false);
 		if (args.containsKey("action")) {
@@ -117,6 +118,7 @@ public class StashCommand implements Executable {
 			String opt = cli.getFirst().getOptionValue(entry.getKey());
 
 			if (opt != null) {
+				System.out.println("Add " + opt);
 				query.appendNewLine(entry.getValue());
 				params.add(opt.toUpperCase(Locale.ROOT));
 			}
