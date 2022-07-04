@@ -78,7 +78,7 @@ public class StashCommand implements Executable {
 		}
 
 		String[] content = args.getString("params").split("\\s+");
-		System.out.println(content);
+		System.out.println(Arrays.toString(content));
 		content = ArrayUtils.remove(content, 0);
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, false);
 		if (args.containsKey("action")) {
