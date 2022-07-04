@@ -379,7 +379,7 @@ public class Deck extends DAO<Deck> {
 			}
 
 			if (ori.demon()) {
-
+				effects += "\n\n" + Race.DEMON.getMinor(locale);
 			}
 
 			Graph.drawMultilineString(g, effects,
