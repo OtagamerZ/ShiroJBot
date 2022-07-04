@@ -75,6 +75,7 @@ public class StashRemoveCommand implements Executable {
 								return;
 							}
 
+							sc.getKawaiponCard().setStashEntry(null);
 							sc.delete();
 						}
 						case EVOGEAR -> {
