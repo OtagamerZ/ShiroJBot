@@ -379,13 +379,13 @@ public class Deck extends DAO<Deck> {
 			}
 
 			if (ori.demon()) {
-				effects += "\n\n{" + Race.DEMON.getMinor(locale) + "}";
+				effects += "\n\n&" + Race.DEMON.getMinor(locale);
 			}
 
 			Graph.drawMultilineString(g, effects,
-					0, 210, 1200, 10,
+					0, 210, 1100, 10,
 					s -> {
-						String str = Utils.extract(s, "\\{(.+)}", 1);
+						String str = Utils.extract(s, "&(.+)", 1);
 
 						if (str != null) {
 							g.setColor(new Color(0xD72929));
