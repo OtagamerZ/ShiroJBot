@@ -344,7 +344,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		beforeDelete();
 		try {
 			em.getTransaction().begin();
-			em.remove(em.contains(this) ? this : refresh());
+			em.remove(em.contains(this) ? this : em.merge(this));
 			em.getTransaction().commit();
 		} finally {
 			if (em.getTransaction().isActive()) {
