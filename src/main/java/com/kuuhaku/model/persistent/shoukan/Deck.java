@@ -384,7 +384,7 @@ public class Deck extends DAO<Deck> {
 			}
 
 			Graph.drawMultilineString(g, effects,
-					0, 210, 110, 8,
+					0, 210, 1100, 8,
 					s -> {
 						String str = Utils.extract(s, "&(.+)", 1);
 
