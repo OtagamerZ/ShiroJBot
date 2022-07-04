@@ -152,11 +152,11 @@ public class Arena implements Renderer {
 
 							g2.drawImage(s.render(locale, deck), x, frontline, null);
 
-							double mult = getField().getModifiers().getDouble(s.getRace().name());
+							double mult = s.getFieldMult(getField());
 							BufferedImage indicator = null;
-							if (mult > 0) {
+							if (mult > 1) {
 								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
-							} else if (mult < 0) {
+							} else if (mult < 1) {
 								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
 							}
 							g2.drawImage(indicator, x, frontline, null);
