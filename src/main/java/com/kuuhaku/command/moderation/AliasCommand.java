@@ -52,6 +52,9 @@ public class AliasCommand implements Executable {
 		} else if (aliases.containsKey(alias)) {
 			event.channel().sendMessage(locale.get("error/existing_alias")).queue();
 			return;
+		} else if (aliases.containsValue(cmd)) {
+			event.channel().sendMessage(locale.get("error/aliased_command")).queue();
+			return;
 		}
 
 		aliases.put(alias, cmd);
