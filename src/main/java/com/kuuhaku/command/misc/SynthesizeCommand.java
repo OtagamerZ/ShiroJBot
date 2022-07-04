@@ -170,12 +170,8 @@ public class SynthesizeCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
 					}
 
-					for (StashedCard card : cards) {
-						if (card.getKawaiponCard() != null) {
-							card.getKawaiponCard().delete();
-						} else {
-							card.delete();
-						}
+					for (StashedCard sc : cards) {
+						Utils.getOr(sc.getKawaiponCard(), sc).delete();
 					}
 				}, event.user()
 		);
