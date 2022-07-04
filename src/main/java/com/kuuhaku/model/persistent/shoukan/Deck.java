@@ -342,10 +342,11 @@ public class Deck extends DAO<Deck> {
 			if (ori.major() == Race.NONE) return;
 
 			Race syn = ori.synergy();
+			List<BufferedImage> icons = ori.images();
 
 			String effects;
 			if (ori.minor() == Race.NONE) {
-				g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
+				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
 				g.setFont(new Font("Arial", Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
@@ -357,7 +358,7 @@ public class Deck extends DAO<Deck> {
 				effects = ori.major().getMajor(locale)
 						+ "\n\n" + locale.get("minor/pureblood");
 			} else {
-				g.drawImage(syn.getImage(), 0, 0, 150, 150, null);
+				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(new Font("Arial", Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
@@ -367,8 +368,8 @@ public class Deck extends DAO<Deck> {
 				int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 10));
 				int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 5));
 				Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
-					g1.drawImage(ori.major().getImage(), majOffset + 5, 10, 75, 75, null);
-					g1.drawImage(ori.minor().getImage(), minOffset + 5, 10, 75, 75, null);
+					g1.drawImage(icons.get(0), majOffset + 5, 10, 75, 75, null);
+					g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
 				});
 
 				g.setFont(new Font("Arial", Font.PLAIN, 30));
