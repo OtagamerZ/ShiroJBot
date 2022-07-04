@@ -277,11 +277,12 @@ public class Arena implements Renderer {
 				if (fac >= 2 / 3d) {
 					g1.setColor(new Color(69, 173, 28));
 				} else if (fac >= 1 / 3d) {
-					g1.setColor(new Color(173, 161, 28));
+					g1.setColor(new Color(197, 158, 0));
 				} else {
 					g1.setColor(new Color(173, 28, 28));
 				}
 
+				fac = (double) hand.getHP() / hand.getBase().hp();
 				bar.setSize((int) (boundaries.getBounds().width * Math.min(fac, 1)), bar.height);
 				g1.fill(bar);
 				if (fac > 1) {
