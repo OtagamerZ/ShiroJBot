@@ -36,7 +36,7 @@ public @interface Signature {
 
 	enum Type {
 		ANY("\\S+"),
-		WORD("[\\w-]+"),
+		WORD("[\\w-.]+"),
 		NUMBER("-?\\d+"),
 		TEXT("\"(?<text>[\\w\\W])+\""),
 
