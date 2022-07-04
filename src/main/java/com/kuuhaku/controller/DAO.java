@@ -1,6 +1,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.interfaces.Blacklistable;
+import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
 import org.intellij.lang.annotations.Language;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public abstract class DAO<T extends DAO<T>> {
+public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>, ID> T find(@Nonnull Class<T> klass, @Nonnull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -296,6 +297,7 @@ public abstract class DAO<T extends DAO<T>> {
 	public final void save() {
 		EntityManager em = Manager.getEntityManager();
 
+		beforeSave();
 		try {
 			if (this instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
@@ -309,6 +311,7 @@ public abstract class DAO<T extends DAO<T>> {
 				em.getTransaction().rollback();
 			}
 
+			afterSave();
 			em.close();
 		}
 	}
@@ -317,6 +320,7 @@ public abstract class DAO<T extends DAO<T>> {
 	public final T refresh() {
 		EntityManager em = Manager.getEntityManager();
 
+		beforeRefresh();
 		try {
 			Field[] fields = getClass().getDeclaredFields();
 			for (Field field : fields) {
@@ -329,6 +333,7 @@ public abstract class DAO<T extends DAO<T>> {
 		} catch (IllegalAccessException e) {
 			return (T) this;
 		} finally {
+			afterRefresh();
 			em.close();
 		}
 	}
@@ -336,6 +341,7 @@ public abstract class DAO<T extends DAO<T>> {
 	public final void delete() {
 		EntityManager em = Manager.getEntityManager();
 
+		beforeDelete();
 		try {
 			em.getTransaction().begin();
 			em.remove(em.contains(this) ? em : em.merge(this));
@@ -345,6 +351,7 @@ public abstract class DAO<T extends DAO<T>> {
 				em.getTransaction().rollback();
 			}
 
+			afterDelete();
 			em.close();
 		}
 	}
