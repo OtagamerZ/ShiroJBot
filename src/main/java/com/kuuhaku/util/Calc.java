@@ -274,4 +274,60 @@ public abstract class Calc {
 	public static int toLuma(int rgb) {
 		return (int) (0.2126 * ((rgb >> 16) & 0xFF) + 0.7152 * ((rgb >> 8) & 0xFF) + 0.0722 * (rgb & 0xFF));
 	}
+
+	public static int mult(int val, double[] add, double[] mult) {
+		double a = 1;
+		for (double v : add) {
+			a += v;
+		}
+
+		double m = 1;
+		for (double v : mult) {
+			m *= v;
+		}
+
+		return (int) (val * a * m);
+	}
+
+	public static long mult(long val, double[] add, double[] mult) {
+		double a = 1;
+		for (double v : add) {
+			a += v;
+		}
+
+		double m = 1;
+		for (double v : mult) {
+			m *= v;
+		}
+
+		return (long) (val * a * m);
+	}
+
+	public static float mult(float val, double[] add, double[] mult) {
+		double a = 1;
+		for (double v : add) {
+			a += v;
+		}
+
+		double m = 1;
+		for (double v : mult) {
+			m *= v;
+		}
+
+		return (float) (val * a * m);
+	}
+
+	public static double mult(double val, double[] add, double[] mult) {
+		double a = 1;
+		for (double v : add) {
+			a += v;
+		}
+
+		double m = 1;
+		for (double v : mult) {
+			m *= v;
+		}
+
+		return val * a * m;
+	}
 }
