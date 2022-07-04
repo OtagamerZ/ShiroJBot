@@ -260,8 +260,8 @@ public class Hand {
 			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 		}
 
-		if (this.hp + value < 0 && this.hp > 1 / 3d) {
-			if (this.hp > 2 / 3d || Calc.chance(getHPPrcnt() * 100)) {
+		if (this.hp + value < 0 && getHPPrcnt() > 1 / 3d) {
+			if (getHPPrcnt() > 2 / 3d || Calc.chance(getHPPrcnt() * 100)) {
 				this.hp = 1;
 				return;
 			}
