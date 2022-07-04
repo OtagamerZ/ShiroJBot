@@ -49,12 +49,14 @@ public class CommandManager {
 			}
 
 			if (!names.add(full)) {
-				Constants.LOGGER.warn("Detected commands with the same name: " + full);
+				Constants.LOGGER.fatal("Detected commands with the same name: " + full);
+				System.exit(1);
 			}
 
 			for (String alias : params.aliases()) {
 				if (!names.add(alias)) {
-					Constants.LOGGER.warn("Detected commands using the same alias: " + alias);
+					Constants.LOGGER.fatal("Detected commands using the same alias: " + alias);
+					System.exit(1);
 				}
 			}
 		}
