@@ -25,7 +25,6 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -104,9 +103,9 @@ public class StashCommand implements Executable {
 			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%'||?3||'%'");
 			put("a", "AND c.card.anime.id LIKE '%'||?4||'%'");
 			put("c", "AND c.foil = TRUE");
-			put("k", "AND c.type = '%s'".formatted(CardType.KAWAIPON));
-			put("e", "AND c.type = '%s'".formatted(CardType.EVOGEAR));
-			put("f", "AND c.type = '%s'".formatted(CardType.FIELD));
+			put("k", "AND c.type = 'KAWAIPON'");
+			put("e", "AND c.type = 'EVOGEAR'");
+			put("f", "AND c.type = 'FIELD'");
 			put("v", "AND c.deck IS NULL");
 		}};
 
