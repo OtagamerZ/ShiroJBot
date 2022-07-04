@@ -78,7 +78,6 @@ public class StashCommand implements Executable {
 		}
 
 		String[] content = args.getString("params").split("\\s+");
-		System.out.println(Arrays.toString(content));
 		content = ArrayUtils.remove(content, 0);
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, false);
 		if (args.containsKey("action")) {
@@ -114,13 +113,12 @@ public class StashCommand implements Executable {
 			add(event.user().getId());
 		}};
 		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
-		for (Map.Entry<String, String> entry : filters.entrySet()) {
-			String opt = cli.getFirst().getOptionValue(entry.getKey());
+		Option[] opts = cli.getFirst().getOptions();
+		for (Option opt : opts) {
+			query.appendNewLine(filters.get(opt.getOpt()));
 
-			if (opt != null) {
-				System.out.println("Add " + opt);
-				query.appendNewLine(entry.getValue());
-				params.add(opt.toUpperCase(Locale.ROOT));
+			if (opt.hasArg()) {
+				params.add(opt.getValue().toUpperCase(Locale.ROOT));
 			}
 		}
 
