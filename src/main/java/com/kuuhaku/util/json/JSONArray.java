@@ -67,7 +67,7 @@ public class JSONArray extends ArrayList<Object> {
 	}
 
 	public <T> T get(Class<T> klass, int index, T or) {
-		return Utils.getOr(get(index), or);
+		return Utils.getOr(get(klass, index), or);
 	}
 
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) {
@@ -98,7 +98,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public boolean getBoolean(int index, boolean or) {
 		try {
-			return Utils.getOr(get(index), or);
+			return Utils.getOr((boolean) get(index), or);
 		} catch (IndexOutOfBoundsException e) {
 			return or;
 		}
