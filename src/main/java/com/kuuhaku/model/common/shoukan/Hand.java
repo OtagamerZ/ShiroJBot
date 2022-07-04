@@ -260,10 +260,19 @@ public class Hand {
 			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 		}
 
+		RegDeg rd = null;
 		if (value < 0 && getRegen() > 0) {
-
+			rd = regdeg.stream()
+					.filter(r -> r.remaining() > 0)
+					.findFirst().orElse(null);
 		} else if (value > 0 && getDegen() > 0) {
+			rd = regdeg.stream()
+					.filter(d -> d.remaining() < 0)
+					.findFirst().orElse(null);
+		}
 
+		if (rd != null) {
+			value = rd.reduce(value);
 		}
 
 		double prcnt = getHPPrcnt();

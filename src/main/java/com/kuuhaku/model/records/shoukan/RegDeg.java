@@ -35,36 +35,22 @@ public record RegDeg(Pair<Integer, AtomicInteger> value, double dpt, boolean pos
 	public int reduce(int val) {
 		int half = val / 2;
 		val = val - half;
+		half = Math.abs(half);
 
 		int rem = remaining();
-		boolean neg = val < 0;
+		int absVal = Math.abs(val);
+		int absRem = Math.abs(rem);
 
-		int abs;
-		if (neg) {
-			abs = Math.abs(val);
-
-			if (rem > abs) {
-				value.getSecond().set(rem - abs);
-				val = 0;
-			} else {
-				value.getSecond().set(0);
-				val += rem;
-			}
-
-			return half - val;
+		if (absRem > absVal) {
+			absRem -= absVal;
+			absVal = 0;
 		} else {
-			abs = Math.abs(rem);
-
-			if (abs > val) {
-				value.getSecond().set(rem + val);
-				val = 0;
-			} else {
-				value.getSecond().set(0);
-				val += rem;
-			}
-
-			return half + val;
+			absVal -= absRem;
+			absRem = 0;
 		}
+
+		value.getSecond().set(rem < 0 ? -absRem : absRem);
+		return (absVal + half) * (val < 0 ? -1 : 1);
 	}
 
 	public int slice() {
