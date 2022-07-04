@@ -403,7 +403,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (enemy != null) {
 			if (enemy.isSupporting()) {
 				op.getGraveyard().add(enemy);
-				outcome = locale.get("str/combat_direct", dmg);
+				outcome = "str/combat_direct";
 			} else {
 				if (ally.getDmg() > enemy.getActiveAttr()) {
 					if (enemy.isDefending()) {
@@ -412,25 +412,28 @@ public class Shoukan extends GameInstance<Phase> {
 						dmg -= enemy.getActiveAttr();
 					}
 					op.getGraveyard().add(enemy);
-					outcome = locale.get("str/combat_success", dmg);
+					outcome = "str/combat_success";
 				} else if (ally.getDmg() < enemy.getActiveAttr()) {
+					int pHP = you.getHP();
+
 					you.getGraveyard().add(ally);
 					you.modHP(-(enemy.getActiveAttr() - ally.getDmg()));
-					reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat"));
+					reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
 					return true;
 				} else {
 					op.getGraveyard().add(enemy);
 					you.getGraveyard().add(ally);
 					dmg = 0;
-					outcome = locale.get("str/combat_clash", dmg);
+					outcome = "str/combat_clash";
 				}
 			}
 		} else {
-			outcome = locale.get("str/combat_direct", dmg);
+			outcome = "str/combat_direct";
 		}
 
+		int pHP = op.getHP();
 		op.modHP(-dmg);
-		reportEvent("str/combat", ally, Utils.getOr(enemy, op.getName()), outcome);
+		reportEvent("str/combat", ally, Utils.getOr(enemy, op.getName()), locale.get(outcome, pHP - you.getHP()));
 		return false;
 	}
 
