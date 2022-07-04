@@ -388,9 +388,9 @@ public class Arena implements Renderer {
 			int rad = BAR_SIZE.height - padUnit.y * 2;
 			List<BufferedImage> images = hand.getOrigin().images();
 			if (reversed) {
-				for (int i = 1; i >= 0; i--) {
+				for (int i = 0; i < 2; i++) {
 					g2d.drawImage(images.get(i),
-							padUnit.x * 2 + (rad + padUnit.x) * i + rad, padUnit.y + rad,
+							padUnit.x * 2 + (rad + padUnit.x) * (1 - i) + rad, padUnit.y + rad,
 							-rad, -rad, null
 					);
 				}
