@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -65,6 +66,9 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Column(name = "tier", nullable = false)
 	private int tier;
 
+	@Column(name = "spell", nullable = false)
+	private boolean spell;
+
 	@Convert(converter = JSONArrayConverter.class)
 	@Column(name = "charms", nullable = false)
 	private JSONArray charms = new JSONArray();
@@ -97,6 +101,10 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	public int getTier() {
 		return tier + stats.getTier();
+	}
+
+	public boolean isSpell() {
+		return spell;
 	}
 
 	public JSONArray getCharms() {
@@ -148,32 +156,50 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	@Override
 	public int getMPCost() {
-		return base.getMana() + stats.getMana();
+		return (int) ((base.getMana() + stats.getMana()) * getCostMult());
 	}
 
 	@Override
 	public int getHPCost() {
-		return base.getBlood() + stats.getBlood();
+		return (int) ((base.getBlood() + stats.getBlood()) * getCostMult());
 	}
 
 	@Override
 	public int getDmg() {
-		return base.getAtk() + stats.getAtk();
+		return (int) ((base.getAtk() + stats.getAtk()) * getAttrMult());
 	}
 
 	@Override
 	public int getDef() {
-		return base.getDef() + stats.getDef();
+		return (int) ((base.getDef() + stats.getDef()) * getAttrMult());
 	}
 
 	@Override
 	public int getDodge() {
-		return base.getDodge() + stats.getDodge();
+		return (int) ((base.getDodge() + stats.getDodge()) * getAttrMult());
 	}
 
 	@Override
 	public int getBlock() {
-		return base.getBlock() + stats.getBlock();
+		return (int) ((base.getBlock() + stats.getBlock()) * getAttrMult());
+	}
+
+	private double getCostMult() {
+		double mult = 1;
+		if (hand != null && spell && hand.getOrigin().minor() == Race.MYSTICAL) {
+			mult *= 0.9 - (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.01);
+		}
+
+		return mult;
+	}
+
+	private double getAttrMult() {
+		double mult = 1;
+		if (hand != null && !spell && hand.getOrigin().minor() == Race.MACHINE) {
+			mult *= 1.1 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.01);
+		}
+
+		return mult;
 	}
 
 	@Override

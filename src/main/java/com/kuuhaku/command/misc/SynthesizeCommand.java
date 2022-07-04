@@ -134,39 +134,7 @@ public class SynthesizeCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/synth", f)).queue();
 						new StashedCard(kp, f.getCard(), CardType.FIELD).save();
 					} else {
-						double inc = 1;
-						double more = 1;
-
-						for (StashedCard sc : cards) {
-							switch (sc.getType()) {
-								case KAWAIPON -> {
-									KawaiponCard kc = sc.getKawaiponCard();
-									int rarity = kc.getCard().getRarity().getIndex();
-
-									if (kc.isFoil()) {
-										more *= 1 + rarity * kc.getQuality() / 200;
-									} else {
-										inc += rarity * kc.getQuality() / 200;
-									}
-								}
-								case EVOGEAR -> {
-									Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
-									inc += ev.getTier() / 4d;
-								}
-								case FIELD -> more *= 1.1;
-							}
-						}
-
-						double mult = 1 * inc * more;
-						RandomList<Evogear> pool = new RandomList<>((v, f) -> 1 - Math.pow(v, f), 1 * mult);
-						List<Evogear> evos = DAO.findAll(Evogear.class);
-						for (Evogear evo : evos) {
-							if (evo.getTier() <= 0) continue;
-
-							pool.add(evo, 5 - evo.getTier());
-						}
-
-						Evogear e = pool.get();
+						Evogear e = rollSynthesis(cards);
 						new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 						event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
 					}
@@ -192,4 +160,46 @@ public class SynthesizeCommand implements Executable {
 				}, event.user()
 		);
 	}
+
+	public static Evogear rollSynthesis(List<StashedCard> cards) {
+		double inc = 1;
+		double more = 1;
+
+		for (StashedCard sc : cards) {
+			switch (sc.getType()) {
+				case KAWAIPON -> {
+					KawaiponCard kc = sc.getKawaiponCard();
+					int rarity = sc.getCard().getRarity().getIndex();
+
+					if (kc != null) {
+						if (kc.isFoil()) {
+							more *= 1 + rarity * kc.getQuality() / 200;
+						} else {
+							inc += rarity * kc.getQuality() / 200;
+						}
+					} else {
+						inc += rarity / 200d;
+					}
+				}
+				case EVOGEAR -> {
+					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+					inc += ev.getTier() / 4d;
+				}
+				case FIELD -> more *= 1.1;
+			}
+		}
+
+		double mult = 1 * inc * more;
+		RandomList<Evogear> pool = new RandomList<>((v, f) -> 1 - Math.pow(v, f), 1 * mult);
+		List<Evogear> evos = DAO.findAll(Evogear.class);
+		for (Evogear evo : evos) {
+			if (evo.getTier() <= 0) continue;
+
+			pool.add(evo, 5 - evo.getTier());
+		}
+
+		return pool.get();
+	}
+
+
 }

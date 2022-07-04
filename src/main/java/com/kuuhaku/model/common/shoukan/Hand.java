@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
@@ -32,11 +33,10 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.records.shoukan.BaseValues;
-import com.kuuhaku.model.records.shoukan.Origin;
-import com.kuuhaku.model.records.shoukan.Timed;
+import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
+import kotlin.Triple;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
@@ -44,12 +44,14 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Hand {
 	private final long timestamp = System.currentTimeMillis();
 
 	private final String uid;
+	private final Shoukan game;
 	private final Deck userDeck;
 
 	private final Side side;
@@ -62,23 +64,49 @@ public class Hand {
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
 	private final BaseValues base;
+	private final List<RegDeg> regdeg = new ArrayList<>();
 
 	private String name;
 
 	private int hp = 5000;
-	private int regen = 0;
 	private int mp = 0;
 
 	private transient Account account;
 	private transient String lastMessage;
 	private transient boolean forfeit;
+	private transient int cooldown;
 
-	public Hand(String uid, Side side) {
+	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
+		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
 		this.side = side;
 		this.origin = userDeck.getOrigins();
-		this.base = new BaseValues();
+
+		BaseValues base;
+		try {
+			base = new BaseValues(() -> {
+				int bHP = 5000;
+				Function<Integer, Integer> mpGain = t -> 5;
+				int handCap = 5;
+
+				switch (origin.major()) {
+					case DEMON -> {
+						bHP -= 1500;
+						mpGain = mpGain.andThen(t -> (int) (5 - 5 * getHPPrcnt()));
+					}
+					case DIVINITY -> {
+						int baseMP = mpGain.apply(0);
+						mpGain = mpGain.andThen(t -> (int) (baseMP * userDeck.getMetaDivergence()));
+					}
+				}
+
+				return new Triple<>(bHP, mpGain, handCap);
+			});
+		} catch (Exception e) {
+			base = new BaseValues();
+		}
+		this.base = base;
 
 		deck.addAll(
 				Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields())
@@ -88,6 +116,7 @@ public class Hand {
 						.peek(d -> d.setSolid(true))
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
+		// TODO Secondary divinity
 
 		manualDraw(5);
 	}
@@ -98,6 +127,10 @@ public class Hand {
 
 	public User getUser() {
 		return Main.getApp().getShiro().getUserById(uid);
+	}
+
+	public Shoukan getGame() {
+		return game;
 	}
 
 	public Deck getUserDeck() {
@@ -221,13 +254,15 @@ public class Hand {
 	public void modHP(int value) {
 		if (origin.major() == Race.HUMAN && value > 0) {
 			value *= 1.25;
+		} else if (origin.minor() == Race.HUMAN && value < 0) {
+			value *= 1 - Math.max(game.getTurn() * 0.01, 0.75);
 		}
 
 		this.hp = Math.max(0, this.hp + value);
 	}
 
 	public double getHPPrcnt() {
-		if (origin.minor() == Race.DEMON) {
+		if (origin.demon()) {
 			return Math.min(hp / (double) base.hp(), 0.5);
 		}
 
@@ -235,15 +270,60 @@ public class Hand {
 	}
 
 	public int getRegen() {
-		return regen;
+		return regdeg.stream()
+				.mapToInt(RegDeg::remaining)
+				.filter(i -> i > 0)
+				.sum();
 	}
 
-	public void setRegen(int regen) {
-		this.regen = regen;
+	public void addRegen(int regen, double dpt) {
+		regen = Math.min(regen, base.hp() - getRegen());
+
+		this.regdeg.add(new RegDeg(Math.max(0, regen), dpt));
 	}
 
-	public double getRegenPrcnt() {
-		return regen / (double) base.hp();
+	public void applyRegen() {
+		Iterator<RegDeg> it = regdeg.iterator();
+		while (it.hasNext()) {
+			RegDeg rd = it.next();
+			if (rd.remaining() < 0) continue;
+
+			modHP(rd.slice());
+			if (rd.remaining() <= 0) {
+				it.remove();
+			}
+		}
+	}
+
+	public int getDegen() {
+		return regdeg.stream()
+				.mapToInt(RegDeg::remaining)
+				.filter(i -> i < 0)
+				.map(Math::abs)
+				.sum();
+	}
+
+	public void addDegen(int degen, double dpt) {
+		degen = Math.min(degen, base.hp() - getRegen());
+
+		this.regdeg.add(new RegDeg(Math.min(degen, 0), dpt));
+	}
+
+	public void applyDegen() {
+		Iterator<RegDeg> it = regdeg.iterator();
+		while (it.hasNext()) {
+			RegDeg rd = it.next();
+			if (rd.remaining() > 0) continue;
+
+			if (origin.major() == Race.HUMAN) {
+				modHP(rd.slice() / 2);
+			} else {
+				modHP(rd.slice());
+			}
+			if (rd.remaining() >= 0) {
+				it.remove();
+			}
+		}
 	}
 
 	public int getMP() {
@@ -281,6 +361,19 @@ public class Hand {
 	public void setForfeit(boolean forfeit) {
 		this.forfeit = forfeit;
 	}
+
+	public int getCooldown() {
+		return cooldown;
+	}
+
+	public void setCooldown(int cooldown) {
+		this.cooldown = cooldown;
+	}
+
+	public void reduceCooldown() {
+		this.cooldown = Math.max(0, cooldown - 1);
+	}
+
 
 	public BufferedImage render(I18N locale) {
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);

@@ -33,6 +33,7 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
+import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -151,18 +152,63 @@ public class Deck extends DAO<Deck> {
 		return senshi;
 	}
 
+	public boolean validateSenshi() {
+		AtomicInteger allowed = new AtomicInteger(3);
+		if (getOrigins().minor() == Race.BEAST) {
+			allowed.getAndIncrement();
+		}
+
+		HashBag<Senshi> bag = new HashBag<>(senshi);
+		bag.removeIf(s -> bag.getCount(s) <= allowed.get());
+
+		return bag.isEmpty() && Utils.between(senshi.size(), 30, 37);
+	}
+
+	public int countRace(Race race) {
+		return (int) senshi.stream()
+				.filter(s -> s.getRace() == race)
+				.count();
+	}
+
 	public List<Evogear> getEvogear() {
 		return evogear;
 	}
 
+	public boolean validateEvogear() {
+		HashBag<Evogear> bag = new HashBag<>(evogear);
+		bag.removeIf(e -> {
+			if (getOrigins().major() == Race.BEAST) {
+				return bag.getCount(e) <= (5 - e.getTier()) * 2;
+			}
+
+			return bag.getCount(e) <= 5 - e.getTier();
+		});
+
+		return bag.isEmpty() && Utils.between(evogear.size(), 0, 25);
+	}
+
 	public int getEvoWeight() {
 		return evogear.stream()
-				.mapToInt(e -> e.getTier() + (-1 + e.getCharms().size()))
+				.mapToInt(e -> {
+					int i = e.getTier() + (-1 + e.getCharms().size());
+					if (!e.isSpell() && getOrigins().major() == Race.MACHINE) {
+						return i - 1;
+					} else if (e.isSpell() && getOrigins().major() == Race.MYSTICAL) {
+						return i - 1;
+					}
+
+					return i;
+				})
+				.map(i -> Math.max(0, i))
 				.sum();
 	}
 
 	public List<Field> getFields() {
 		return field;
+	}
+
+	public boolean validateFields() {
+		return Utils.between(field.size(), 0, 4);
 	}
 
 	public FrameColor getFrame() {
@@ -187,6 +233,11 @@ public class Deck extends DAO<Deck> {
 
 	public void setUseFoil(boolean useFoil) {
 		this.useFoil = useFoil;
+	}
+
+	public double getMetaDivergence() {
+		// TODO Divegence
+		return 1;
 	}
 
 	public BufferedImage render(I18N locale) {

@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Main;
+import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.PhaseConstraint;
@@ -30,13 +31,16 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Arena;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Charm;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Phase;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -66,8 +70,8 @@ public class Shoukan extends GameInstance<Phase> {
 		this.locale = locale;
 		this.players = new String[]{p1, p2};
 		this.hands = Map.of(
-				Side.TOP, new Hand(p1, Side.TOP),
-				Side.BOTTOM, new Hand(p2, Side.BOTTOM)
+				Side.TOP, new Hand(p1, this, Side.TOP),
+				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
 
 		setTimeout(turn -> {
@@ -492,6 +496,13 @@ public class Shoukan extends GameInstance<Phase> {
 		for (Side side : sides) {
 			Hand hand = hands.get(side);
 			if (hand.getHP() == 0) {
+				if (hand.getOrigin().major() == Race.UNDEAD && hand.getCooldown() == 0) {
+					hand.setHP(1);
+					hand.addRegen((int) (hand.getBase().hp() * 0.3), 1 / 3d);
+					hand.setCooldown(4);
+					continue;
+				}
+
 				reportResult("str/game_end",
 						"<@" + hand.getUid() + ">",
 						"<@" + hands.get(Utils.getNext(side, true, sides)).getUid() + ">"
@@ -507,7 +518,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportResult(String message, Object... args) {
-		getChannel().sendMessage(locale.get("message", args))
+		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue(m -> {
 					for (Map.Entry<String, Pair<String, String>> entry : messages.entrySet()) {
@@ -558,6 +569,33 @@ public class Shoukan extends GameInstance<Phase> {
 						});
 					}
 				}
+				if (curr.getOrigin().major() == Race.SPIRIT && !curr.getGraveyard().isEmpty() && curr.getCooldown() == 0) {
+					put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+						List<StashedCard> cards = new ArrayList<>();
+						Iterator<Drawable<?>> it = curr.getGraveyard().iterator();
+						while (it.hasNext()) {
+							Drawable<?> d = it.next();
+
+							CardType type;
+							if (d instanceof Senshi) {
+								type = CardType.KAWAIPON;
+							} else if (d instanceof Evogear) {
+								type = CardType.EVOGEAR;
+							} else {
+								type = CardType.FIELD;
+							}
+
+							cards.add(new StashedCard(null, d.getCard(), type));
+							arena.getBanned().add(d);
+							it.remove();
+						}
+
+						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
+						curr.setCooldown(3);
+						reportEvent("str/spirit_synth", curr.getName());
+						sendPlayerHand(curr);
+					});
+				}
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						close(GameReport.SUCCESS);
@@ -585,6 +623,9 @@ public class Shoukan extends GameInstance<Phase> {
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn()));
+		curr.applyRegen();
+		curr.applyDegen();
+		curr.reduceCooldown();
 
 		getChannel().sendMessage(locale.get("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn()))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
