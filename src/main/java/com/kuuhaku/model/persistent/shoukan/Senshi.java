@@ -179,8 +179,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Override
 	public int getDmg() {
 		double mult = 1;
-		if (hand != null && hand.getOrigin().minor() == Race.SPIRIT) {
-			mult *= 1 + (hand.getGraveyard().size() * 0.005);
+		if (hand != null) {
+			if (hand.getOrigin().minor() == Race.UNDEAD) {
+				mult *= 1 + (hand.getGraveyard().size() * 0.005);
+			}
+
+			Field f = hand.getGame().getArena().getField();
+			mult *= 1 + f.getModifiers().getDouble(race.name());
 		}
 
 		return (int) ((base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum()) * mult);
@@ -189,8 +194,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Override
 	public int getDef() {
 		double mult = 1;
-		if (hand != null && hand.getOrigin().minor() == Race.SPIRIT) {
-			mult *= 1 + (hand.getGraveyard().size() * 0.01);
+		if (hand != null) {
+			if (hand.getOrigin().minor() == Race.SPIRIT) {
+				mult *= 1 + (hand.getGraveyard().size() * 0.01);
+			}
+
+			Field f = hand.getGame().getArena().getField();
+			mult *= 1 + f.getModifiers().getDouble(race.name());
 		}
 
 		return (int) ((base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum()) * mult);

@@ -208,6 +208,10 @@ public enum FrameColor {
 		);
 	}
 
+	public boolean isLegacy() {
+		return name().startsWith("LEGACY");
+	}
+
 	@Override
 	public String toString() {
 		return switch (this) {

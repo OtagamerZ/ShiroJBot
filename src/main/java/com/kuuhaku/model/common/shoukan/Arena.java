@@ -151,6 +151,16 @@ public class Arena implements Renderer {
 							Senshi s = slot.getTop();
 
 							g2.drawImage(s.render(locale, deck), x, frontline, null);
+
+							double mult = getField().getModifiers().getDouble(s.getRace().name());
+							BufferedImage indicator = null;
+							if (mult > 0) {
+								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
+							} else if (mult < 0) {
+								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
+							}
+							g2.drawImage(indicator, x, frontline, null);
+
 							if (!s.getEquipments().isEmpty()) {
 								Graph.applyTransformed(g2, x, equips, g3 -> {
 									Dimension resized = new Dimension(225 / 3, 350 / 3);
