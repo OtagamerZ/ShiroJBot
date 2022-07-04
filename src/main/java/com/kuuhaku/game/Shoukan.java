@@ -433,7 +433,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int pHP = op.getHP();
 		op.modHP(-dmg);
-		reportEvent("str/combat", ally, Utils.getOr(enemy, op.getName()), locale.get(outcome, pHP - you.getHP()));
+		reportEvent("str/combat", ally, Utils.getOr(enemy, op.getName()), locale.get(outcome, pHP - op.getHP()));
 		return false;
 	}
 
