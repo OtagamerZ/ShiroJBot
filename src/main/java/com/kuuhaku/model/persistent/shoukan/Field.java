@@ -69,7 +69,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Column(name = "effect", nullable = false)
 	private boolean effect = false;
 
-	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient Hand hand = null;
 	private transient byte state = 0x2;
 	/*
@@ -141,67 +140,61 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public void reset() {
-		cache = null;
 		state = 0x2;
 	}
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		int hash = renderHashCode(locale);
-		if (cache == null || cache.getFirst() != hash) {
-			BufferedImage img = getVanity().drawCardNoBorder(false);
-			BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = out.createGraphics();
-			g2d.setRenderingHints(Constants.HD_HINTS);
+		BufferedImage img = getVanity().drawCardNoBorder(false);
+		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = out.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
 
-			g2d.setClip(deck.getFrame().getBoundary());
-			g2d.drawImage(img, 0, 0, null);
-			g2d.setClip(null);
+		g2d.setClip(deck.getFrame().getBoundary());
+		g2d.drawImage(img, 0, 0, null);
+		g2d.setClip(null);
 
-			g2d.drawImage(deck.getFrame().getFront(false), 0, 0, null);
+		g2d.drawImage(deck.getFrame().getFront(false), 0, 0, null);
 
-			g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 22));
-			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 22));
+		g2d.setColor(deck.getFrame().getPrimaryColor());
+		Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
 
-			if (type != FieldType.NONE) {
-				BufferedImage icon = type.getIcon();
-				assert icon != null;
+		if (type != FieldType.NONE) {
+			BufferedImage icon = type.getIcon();
+			assert icon != null;
 
-				g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);
-			}
-
-			g2d.setFont(new Font("Arial", Font.BOLD, 18));
-			FontMetrics m = g2d.getFontMetrics();
-
-			int i = 0;
-			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
-				Race r = Race.valueOf(entry.getKey());
-				double mod = (double) entry.getValue();
-				if (mod == 0) continue;
-
-				int y = 279 - 25 * i++;
-
-				BufferedImage icon = r.getIcon();
-				g2d.drawImage(icon, 23, y, null);
-				g2d.setColor(r.getColor());
-				Graph.drawOutlinedString(g2d, Utils.sign((int) ((1 + mod) * 100)) + "%",
-						23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
-						2, Color.BLACK
-				);
-			}
-
-			if (!isAvailable()) {
-				RescaleOp op = new RescaleOp(0.5f, 0, null);
-				op.filter(out, out);
-			}
-
-			g2d.dispose();
-
-			cache = new Pair<>(hash, out);
+			g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);
 		}
 
-		return cache.getSecond();
+		g2d.setFont(new Font("Arial", Font.BOLD, 18));
+		FontMetrics m = g2d.getFontMetrics();
+
+		int i = 0;
+		for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
+			Race r = Race.valueOf(entry.getKey());
+			double mod = (double) entry.getValue();
+			if (mod == 0) continue;
+
+			int y = 279 - 25 * i++;
+
+			BufferedImage icon = r.getIcon();
+			g2d.drawImage(icon, 23, y, null);
+			g2d.setColor(r.getColor());
+			Graph.drawOutlinedString(g2d, Utils.sign((int) ((1 + mod) * 100)) + "%",
+					23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
+					2, Color.BLACK
+			);
+		}
+
+		if (!isAvailable()) {
+			RescaleOp op = new RescaleOp(0.5f, 0, null);
+			op.filter(out, out);
+		}
+
+		g2d.dispose();
+
+		return out;
 	}
 
 	public BufferedImage renderBackground() {
@@ -216,11 +209,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		g2d.dispose();
 
 		return bi;
-	}
-
-	@Override
-	public int renderHashCode(I18N locale) {
-		return Objects.hash(hand, locale);
 	}
 
 	@Override
