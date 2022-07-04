@@ -251,7 +251,7 @@ public class Deck extends DAO<Deck> {
 			g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		});
 
-		List<Drawable<?>> allCards = new ArrayList<>(){{
+		List<Drawable<?>> allCards = new ArrayList<>() {{
 			addAll(senshi);
 			addAll(evogear);
 			addAll(field);
@@ -343,6 +343,7 @@ public class Deck extends DAO<Deck> {
 
 			Race syn = ori.synergy();
 
+			String effects;
 			if (ori.minor() == Race.NONE) {
 				g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
 				g.setFont(new Font("Arial", Font.BOLD, 60));
@@ -353,11 +354,8 @@ public class Deck extends DAO<Deck> {
 
 				g.setFont(new Font("Arial", Font.PLAIN, 30));
 				g.setColor(Color.WHITE);
-				Graph.drawMultilineString(g,
-						ori.major().getMajor(locale)
-								+ "\n\n" + locale.get("minor/pureblood"),
-						0, 210, 1100
-				);
+				effects = ori.major().getMajor(locale)
+						+ "\n\n" + locale.get("minor/pureblood");
 			} else {
 				g.drawImage(syn.getImage(), 0, 0, 150, 150, null);
 				g.setFont(new Font("Arial", Font.BOLD, 60));
@@ -375,13 +373,27 @@ public class Deck extends DAO<Deck> {
 
 				g.setFont(new Font("Arial", Font.PLAIN, 30));
 				g.setColor(Color.WHITE);
-				Graph.drawMultilineString(g,
-						ori.major().getMajor(locale)
-								+ "\n\n" + ori.minor().getMinor(locale)
-								+ "\n\n" + syn.getSynergy(locale),
-						0, 210, 1100
-				);
+				effects = ori.major().getMajor(locale)
+						+ "\n\n" + ori.minor().getMinor(locale)
+						+ "\n\n" + syn.getSynergy(locale);
 			}
+
+			if (ori.demon()) {
+
+			}
+
+			Graph.drawMultilineString(g, effects,
+					0, 210, 1100, 10,
+					s -> {
+						String str = Utils.extract(s, "\\{(.+)}", 1);
+
+						if (str != null) {
+							g2d.setColor(new Color(0xD72929));
+							return str;
+						}
+						return s;
+					}
+			);
 		});
 
 		Graph.applyTransformed(g2d, 1212, 14, g -> {
@@ -451,9 +463,9 @@ public class Deck extends DAO<Deck> {
 						.mapToInt(d -> d.getHPCost())
 						.average().orElse(0), 1),
 				Utils.roundToString(Stream.of(senshi, evogear)
-								.flatMap(List::stream)
-								.mapToInt(d -> d.getMPCost())
-								.average().orElse(0), 1)
+						.flatMap(List::stream)
+						.mapToInt(d -> d.getMPCost())
+						.average().orElse(0), 1)
 		);
 	}
 }
