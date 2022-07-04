@@ -114,25 +114,23 @@ public abstract class Utils {
 		};
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T getOr(Object get, T or) {
+	public static <T> T getOr(T get, T or) {
 		if (get instanceof String s && s.isBlank()) return or;
-		else return get == null ? or : (T) get;
+		else return get == null ? or : get;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T getOr(Callable<?> get, T or) {
+	public static <T> T getOr(Callable<T> get, T or) {
 		try {
 			Object obj = get.call();
 			if (obj instanceof String s && s.isBlank()) return or;
-			else return obj == null ? or : (T) get.call();
+			else return obj == null ? or : get.call();
 		} catch (Exception e) {
 			return or;
 		}
 	}
 
 	@SafeVarargs
-	public static <T> T getOrMany(Object get, T... or) {
+	public static <T> T getOrMany(T get, T... or) {
 		T out = null;
 
 		for (T t : or) {
@@ -144,7 +142,7 @@ public abstract class Utils {
 	}
 
 	@SafeVarargs
-	public static <T> T getOrMany(Callable<?> get, T... or) {
+	public static <T> T getOrMany(Callable<T> get, T... or) {
 		T out = null;
 
 		for (T t : or) {
