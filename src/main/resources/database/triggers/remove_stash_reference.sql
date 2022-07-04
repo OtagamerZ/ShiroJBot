@@ -25,6 +25,8 @@ BEGIN
     UPDATE kawaipon_card kc
     SET stash_entry = NULL
     WHERE kc.stash_entry = OLD.id;
+
+    RETURN OLD;
 END;
 $$;
 
