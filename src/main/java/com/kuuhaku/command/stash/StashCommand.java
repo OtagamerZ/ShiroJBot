@@ -131,74 +131,69 @@ public class StashCommand implements Executable {
 				.setAuthor(locale.get("str/search_result", results.size(), total));
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
-			try {
-				Trade t = Trade.getPending().get(event.user().getId());
-				String location = "";
-				if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
-					location = " (" + locale.get("str/trade") + ")";
-				} else if (sc.getDeck() != null) {
-					location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
-				}
-
-				switch (sc.getType()) {
-					case KAWAIPON -> {
-						KawaiponCard kc = sc.getKawaiponCard();
-
-						return new MessageEmbed.Field(
-								sc + location,
-								"%s%s (%s | %s)%s".formatted(
-										sc.getCard().getRarity().getEmote(),
-										locale.get("type/" + sc.getType()),
-										locale.get("rarity/" + sc.getCard().getRarity()),
-										sc.getCard().getAnime(),
-										kc != null && kc.getQuality() > 0
-												? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
-												: ""
-								),
-								false
-						);
-					}
-					case EVOGEAR -> {
-						Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
-
-						return new MessageEmbed.Field(
-								sc + location,
-								"%s%s (%s | %s)".formatted(
-										sc.getCard().getRarity().getEmote(),
-										locale.get("type/" + sc.getType()),
-										locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
-										sc.getCard().getAnime()
-								),
-								false
-						);
-					}
-					case FIELD -> {
-						Field fd = DAO.find(Field.class, sc.getCard().getId());
-
-						return new MessageEmbed.Field(
-								sc + location,
-								"%s%s%s (%s | %s)".formatted(
-										sc.getCard().getRarity().getEmote(),
-										locale.get("type/" + sc.getType()),
-										locale.get("rarity/" + sc.getCard().getRarity()),
-										sc.getCard().getAnime(),
-										switch (fd.getType()) {
-											case NONE -> "";
-											case DAY -> ":sunny: ";
-											case NIGHT -> ":crescent_moon: ";
-											case DUNGEON -> ":japanese_castle: ";
-										}
-								),
-								false
-						);
-					}
-				}
-
-				return null;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
+			Trade t = Trade.getPending().get(event.user().getId());
+			String location = "";
+			if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
+				location = " (" + locale.get("str/trade") + ")";
+			} else if (sc.getDeck() != null) {
+				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
 			}
+
+			switch (sc.getType()) {
+				case KAWAIPON -> {
+					KawaiponCard kc = sc.getKawaiponCard();
+
+					return new MessageEmbed.Field(
+							sc + location,
+							"%s%s (%s | %s)%s".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()),
+									sc.getCard().getAnime(),
+									kc != null && kc.getQuality() > 0
+											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
+											: ""
+							),
+							false
+					);
+				}
+				case EVOGEAR -> {
+					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+
+					return new MessageEmbed.Field(
+							sc + location,
+							"%s%s (%s | %s)".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
+									sc.getCard().getAnime()
+							),
+							false
+					);
+				}
+				case FIELD -> {
+					Field fd = DAO.find(Field.class, sc.getCard().getId());
+
+					return new MessageEmbed.Field(
+							sc + location,
+							"%s%s%s (%s | %s)".formatted(
+									sc.getCard().getRarity().getEmote(),
+									locale.get("type/" + sc.getType()),
+									locale.get("rarity/" + sc.getCard().getRarity()),
+									sc.getCard().getAnime(),
+									switch (fd.getType()) {
+										case NONE -> "";
+										case DAY -> ":sunny: ";
+										case NIGHT -> ":crescent_moon: ";
+										case DUNGEON -> ":japanese_castle: ";
+									}
+							),
+							false
+					);
+				}
+			}
+
+			return null;
 		});
 
 		if (pages.isEmpty()) {
