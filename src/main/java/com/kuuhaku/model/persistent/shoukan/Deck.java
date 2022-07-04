@@ -383,12 +383,13 @@ public class Deck extends DAO<Deck> {
 			}
 
 			Graph.drawMultilineString(g, effects,
-					0, 210, 1100, 10,
+					0, 210, 1150, 10,
 					s -> {
 						String str = Utils.extract(s, "&(.+)", 1);
 
 						if (str != null) {
 							g.setColor(new Color(0xD72929));
+							return str.replace("&", "");
 						}
 
 						return s;
