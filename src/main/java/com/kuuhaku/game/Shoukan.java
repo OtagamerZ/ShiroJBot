@@ -83,7 +83,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> ArrayUtils.contains(players, m.getAuthor().getId()))
-				.and(m -> getTurn() % 2 == Arrays.binarySearch(players, m.getAuthor().getId()))
+				.and(m -> getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId()))
 				.test(message);
 	}
 
@@ -103,10 +103,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void runtime(String value) throws InvocationTargetException, IllegalAccessException {
-		System.out.println(value);
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
 		if (action != null) {
-			System.out.println(action);
 			if ((boolean) action.getFirst().invoke(this, action.getSecond())) {
 				sendPlayerHand(getCurrent());
 			}
