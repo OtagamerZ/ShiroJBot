@@ -116,6 +116,7 @@ public class StashCommand implements Executable {
 		Option[] opts = cli.getFirst().getOptions();
 		for (Option opt : opts) {
 			query.appendNewLine(filters.get(opt.getOpt()));
+			System.out.println(opt.getOpt());
 
 			if (opt.hasArg()) {
 				params.add(opt.getValue().toUpperCase(Locale.ROOT));
