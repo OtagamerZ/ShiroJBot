@@ -173,7 +173,7 @@ public class SynthesizeCommand implements Executable {
 					for (StashedCard sc : cards) {
 						KawaiponCard kc = sc.getKawaiponCard();
 						if (kc != null) {
-							kp.refresh();
+							kp = kp.refresh();
 							kp.getCards().remove(kc);
 							kp.save();
 							continue;
