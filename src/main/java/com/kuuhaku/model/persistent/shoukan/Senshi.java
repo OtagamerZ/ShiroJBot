@@ -72,7 +72,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Embedded
 	private CardAttributes base;
 
-	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient List<Evogear> equipments = new BondedList<>(e -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
@@ -363,7 +362,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public void reset() {
-		cache = null;
 		equipments = new ArrayList<>();
 		stats = new CardExtra();
 		slot = null;
@@ -372,92 +370,82 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		int hash = renderHashCode(locale);
-		if (cache == null || cache.getFirst() != hash) {
-			if (isFlipped()) return deck.getFrame().getBack(deck);
+		if (isFlipped()) return deck.getFrame().getBack(deck);
 
-			String desc = getDescription(locale);
+		String desc = getDescription(locale);
 
-			BufferedImage img = getVanity().drawCardNoBorder(deck.isUsingFoil());
-			BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = out.createGraphics();
-			g2d.setRenderingHints(Constants.HD_HINTS);
+		BufferedImage img = getVanity().drawCardNoBorder(deck.isUsingFoil());
+		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = out.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
 
-			g2d.setClip(deck.getFrame().getBoundary());
-			g2d.drawImage(img, 0, 0, null);
-			g2d.setClip(null);
+		g2d.setClip(deck.getFrame().getBoundary());
+		g2d.drawImage(img, 0, 0, null);
+		g2d.setClip(null);
 
-			g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-			g2d.drawImage(getRace().getIcon(), 10, 12, null);
+		g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+		g2d.drawImage(getRace().getIcon(), 10, 12, null);
 
-			g2d.setFont(new Font("Arial", Font.BOLD, 20));
-			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 38, 30, 3, deck.getFrame().getBackgroundColor());
+		g2d.setFont(new Font("Arial", Font.BOLD, 20));
+		g2d.setColor(deck.getFrame().getPrimaryColor());
+		Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 38, 30, 3, deck.getFrame().getBackgroundColor());
 
-			if (!desc.isEmpty()) {
-				g2d.setColor(deck.getFrame().getSecondaryColor());
-				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-				List<String> tags = getTags();
-				if (tags.size() > 4) {
-					tags = tags.subList(0, 3);
-					tags.add("...");
-				}
-				g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
+		if (!desc.isEmpty()) {
+			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+			List<String> tags = getTags();
+			if (tags.size() > 4) {
+				tags = tags.subList(0, 3);
+				tags.add("...");
+			}
+			g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
-				Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
-				Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
-				Graph.drawMultilineString(g2d,
-						StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-						s -> {
-							String str = Utils.extract(s, "\\{(\\d+)}", 1);
+			Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
+			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
+			Graph.drawMultilineString(g2d,
+					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
+					s -> {
+						String str = Utils.extract(s, "\\{(\\d+)}", 1);
 
-							if (str != null) {
-								double val = Double.parseDouble(str);
+						if (str != null) {
+							double val = Double.parseDouble(str);
 
-								g2d.setFont(dynamic);
-								g2d.setColor(Color.ORANGE);
-								return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
-							}
-
-							g2d.setFont(normal);
-							g2d.setColor(deck.getFrame().getSecondaryColor());
-							return s;
-						},
-						(str, x, y) -> {
-							if (str.startsWith("\u200B")) {
-								Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
-							} else {
-								g2d.drawString(str, x, y);
-							}
+							g2d.setFont(dynamic);
+							g2d.setColor(Color.ORANGE);
+							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
 						}
-				);
-			}
 
-			drawCosts(g2d);
-			if (!isSupporting()) {
-				drawAttributes(g2d, !desc.isEmpty());
-			}
-
-			if (!isAvailable()) {
-				RescaleOp op = new RescaleOp(0.5f, 0, null);
-				op.filter(out, out);
-			}
-
-			if (isDefending()) {
-				g2d.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
-			}
-
-			g2d.dispose();
-
-			cache = new Pair<>(hash, out);
+						g2d.setFont(normal);
+						g2d.setColor(deck.getFrame().getSecondaryColor());
+						return s;
+					},
+					(str, x, y) -> {
+						if (str.startsWith("\u200B")) {
+							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
+						} else {
+							g2d.drawString(str, x, y);
+						}
+					}
+			);
 		}
 
-		return cache.getSecond();
-	}
+		drawCosts(g2d);
+		if (!isSupporting()) {
+			drawAttributes(g2d, !desc.isEmpty());
+		}
 
-	@Override
-	public int renderHashCode(I18N locale) {
-		return Objects.hash(equipments, stats, state, hand, locale, isSupporting());
+		if (!isAvailable()) {
+			RescaleOp op = new RescaleOp(0.5f, 0, null);
+			op.filter(out, out);
+		}
+
+		if (isDefending()) {
+			g2d.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
+		}
+
+		g2d.dispose();
+
+		return out;
 	}
 
 	@Override

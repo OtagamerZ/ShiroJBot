@@ -102,8 +102,6 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	BufferedImage render(I18N locale, Deck deck);
 
-	int renderHashCode(I18N locale);
-
 	default void drawCosts(Graphics2D g2d) {
 		BufferedImage icon;
 		int y = 55;
