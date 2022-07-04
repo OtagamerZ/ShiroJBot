@@ -171,7 +171,6 @@ public class SynthesizeCommand implements Executable {
 					}
 
 					for (StashedCard card : cards) {
-						System.out.println("Delete " + card.getId() + " " + card.getCard());
 						card.delete();
 					}
 				}, event.user()
