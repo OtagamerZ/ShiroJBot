@@ -24,6 +24,8 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.EmbedConverter;
 import com.kuuhaku.model.persistent.converter.GuildFeatureConverter;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.Fetch;
@@ -101,6 +103,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = GuildFeatureConverter.class)
 	@Column(name = "feature_flags", nullable = false)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
+
+	@Convert(converter = JSONObjectConverter.class)
+	@Column(name = "aliases", nullable = false)
+	private JSONObject aliases = new JSONObject();
 
 	public GuildSettings() {
 	}
@@ -195,5 +201,9 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public EnumSet<GuildFeature> getFeatures() {
 		return featureFlags;
+	}
+
+	public JSONObject getAliases() {
+		return aliases;
 	}
 }
