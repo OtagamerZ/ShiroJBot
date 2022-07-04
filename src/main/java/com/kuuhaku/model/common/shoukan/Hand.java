@@ -34,6 +34,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.*;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
 import kotlin.Triple;
@@ -257,6 +258,13 @@ public class Hand {
 			value *= 1.25;
 		} else if (origin.minor() == Race.HUMAN && value < 0) {
 			value *= 1 - Math.max(game.getTurn() * 0.01, 0.75);
+		}
+
+		if (this.hp + value < 0 && this.hp > 1 / 3d) {
+			if (this.hp > 2 / 3d || Calc.chance(getHPPrcnt() * 100)) {
+				this.hp = 1;
+				return;
+			}
 		}
 
 		this.hp = Math.max(0, this.hp + value);
