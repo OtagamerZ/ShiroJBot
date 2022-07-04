@@ -260,6 +260,12 @@ public class Hand {
 			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 		}
 
+		if (value < 0 && getRegen() > 0) {
+
+		} else if (value > 0 && getDegen() > 0) {
+
+		}
+
 		double prcnt = getHPPrcnt();
 		if (this.hp + value < 0 && prcnt > 1 / 3d) {
 			if (prcnt > 2 / 3d || Calc.chance(prcnt * 100)) {
