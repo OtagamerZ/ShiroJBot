@@ -29,7 +29,7 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "calc",
+		name = "coinflip",
 		category = Category.MISC
 )
 public class CoinFlipCommand implements Executable {
