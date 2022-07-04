@@ -42,9 +42,6 @@ public class StashedCard extends DAO<StashedCard> {
 	@Fetch(FetchMode.JOIN)
 	private Card card;
 
-	@OneToOne(mappedBy = "stashEntry")
-	private KawaiponCard kawaiponCard;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private CardType type;
@@ -70,7 +67,6 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
 		this.card = card.getCard();
-		this.kawaiponCard = card;
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
 	}
@@ -84,7 +80,7 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public KawaiponCard getKawaiponCard() {
-		return kawaiponCard;
+		return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.stashEntry.id = ?1", id);
 	}
 
 	public CardType getType() {
@@ -109,7 +105,7 @@ public class StashedCard extends DAO<StashedCard> {
 
 	@Override
 	public String toString() {
-		return Utils.getOr(kawaiponCard, (Object) card).toString();
+		return Utils.getOr(getKawaiponCard(), (Object) card).toString();
 	}
 
 	@Override
