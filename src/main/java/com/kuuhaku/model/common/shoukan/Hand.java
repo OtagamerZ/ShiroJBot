@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -218,10 +219,18 @@ public class Hand {
 	}
 
 	public void modHP(int value) {
+		if (origin.major() == Race.HUMAN && value > 0) {
+			value *= 1.25;
+		}
+
 		this.hp = Math.max(0, this.hp + value);
 	}
 
 	public double getHPPrcnt() {
+		if (origin.minor() == Race.DEMON) {
+			return Math.min(hp / (double) base.hp(), 0.5);
+		}
+
 		return hp / (double) base.hp();
 	}
 
