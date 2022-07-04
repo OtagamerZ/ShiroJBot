@@ -268,8 +268,8 @@ public class GuildListener extends ListenerAdapter {
 		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
 		JSONObject aliases = event.config().getSettings().getAliases();
-		if (aliases.has("name")) {
-			name = aliases.getString("name");
+		if (aliases.has(name)) {
+			name = aliases.getString(name);
 		}
 
 		PreparedCommand pc = Main.getCommandManager().getCommand(name);
