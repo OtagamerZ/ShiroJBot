@@ -98,7 +98,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public boolean getBoolean(String key, boolean or) {
 		try {
-			return Utils.getOr(get(key), or);
+			return Utils.getOr((boolean) get(key), or);
 		} catch (NullPointerException e) {
 			return or;
 		}
