@@ -326,7 +326,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
 					parseValues(stats).andThen(s -> {
 						if (s.startsWith("\u200B")) {
-							g2d.setColor(Graph.invert(deck.getFrame().getThemeColor(), 0.5f));
+							g2d.setColor(Graph.adjust(deck.getFrame().getThemeColor(),
+									180,
+									100,
+									50
+							));
 						} else {
 							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}
