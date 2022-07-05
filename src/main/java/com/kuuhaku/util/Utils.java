@@ -207,7 +207,7 @@ public abstract class Utils {
 		return Arrays.asList(compareWith).contains(value);
 	}
 
-	public static String roundToString(double value, int places) {
+	public static String roundToString(Object value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 
 		return new DecimalFormat("#,##0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);

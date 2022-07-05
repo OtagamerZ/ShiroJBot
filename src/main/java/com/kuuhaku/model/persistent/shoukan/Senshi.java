@@ -36,11 +36,11 @@ import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import groovy.lang.GroovyShell;
-import kotlin.Pair;
+import groovy.util.Eval;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -48,6 +48,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -334,7 +335,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		String effect = getEffect();
+		@Language("Groovy") String effect = getEffect();
 		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
@@ -345,11 +346,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				other.setHeroDefense(true);
 			}*/
 
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", this);
-			gs.setVariable("pow", 1 + stats.getPower());
-			gs.evaluate(effect);
+			Utils.exec(effect, Map.of(
+					"ep", ep,
+					"self", this,
+					"pow", 1 + stats.getPower()
+			));
 
 			return true;
 		} catch (Exception e) {
@@ -408,11 +409,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 						String str = Utils.extract(s, "\\{(\\d+)}", 1);
 
 						if (str != null) {
-							double val = Double.parseDouble(str);
+							Object val = Eval.me("pow", stats.getPower(), str);
 
 							g2d.setFont(dynamic);
 							g2d.setColor(Color.ORANGE);
-							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
+							return "\u200B" + Utils.roundToString(val, 2);
 						}
 
 						g2d.setFont(normal);
