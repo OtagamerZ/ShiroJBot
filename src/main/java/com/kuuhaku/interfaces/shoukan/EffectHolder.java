@@ -53,13 +53,13 @@ public interface EffectHolder {
 
 				if (groups.size() > 1) {
 					switch (groups.getString(1)) {
-						case "mp" -> g2d.setColor(new Color(0x00C0D7));
-						case "hp" -> g2d.setColor(new Color(0xA60032));
-						case "atk" -> g2d.setColor(new Color(0xD70B0B));
-						case "def" -> g2d.setColor(new Color(0x08C000));
-						case "ddg" -> g2d.setColor(new Color(0xD98300));
-						case "blk" -> g2d.setColor(new Color(0x797979));
-						case "pow" -> g2d.setColor(new Color(0x9A3BFF));
+						case "mp" -> g2d.setColor(Color.CYAN);
+						case "hp" -> g2d.setColor(new Color(0x199452));
+						case "atk" -> g2d.setColor(Color.RED);
+						case "def" -> g2d.setColor(Color.GREEN);
+						case "ddg" -> g2d.setColor(Color.ORANGE);
+						case "blk" -> g2d.setColor(Color.GRAY);
+						case "pow" -> g2d.setColor(new Color(0x8F25FF));
 					}
 				}
 
