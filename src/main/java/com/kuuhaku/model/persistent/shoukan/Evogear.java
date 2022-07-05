@@ -182,6 +182,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		return (int) ((base.getBlock() + stats.getBlock()) * getAttrMult());
 	}
 
+	@Override
+	public double getPower() {
+		return stats.getPower();
+	}
+
 	private double getCostMult() {
 		double mult = 1;
 		if (hand != null && spell && hand.getOrigin().minor() == Race.MYSTICAL) {
@@ -324,7 +329,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-					parseValues(stats).andThen(s -> {
+					parseValues(this).andThen(s -> {
 						if (s.startsWith("\u200B")) {
 							g2d.setColor(Graph.adjust(deck.getFrame().getThemeColor(),
 									180,
@@ -335,7 +340,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}
 
-						return s;
+						return s.replace("_", " ");
 					})
 			);
 		}

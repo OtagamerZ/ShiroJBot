@@ -18,7 +18,6 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
-import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Utils;
 import org.intellij.lang.annotations.Language;
@@ -29,21 +28,20 @@ import java.util.function.Function;
 public interface EffectHolder {
 	boolean execute(EffectParameters ep);
 
-	default Function<String, String> parseValues(CardExtra stats) {
+	default Function<String, String> parseValues(Drawable<?> d) {
 		return s -> {
 			@Language("Groovy") String str = Utils.extract(s, "\\{(.+)}", 1);
 
 			if (str != null) {
 				String val = String.valueOf(
 						Utils.eval(str, Map.of(
-								"mp", stats.getMana(),
-								"hp", stats.getBlood(),
-								"atk", stats.getAtk(),
-								"def", stats.getDef(),
-								"ddg", stats.getDodge(),
-								"blk", stats.getBlock(),
-								"pow", stats.getPower(),
-								"tier", stats.getTier()
+								"mp", d.getMPCost(),
+								"hp", d.getHPCost(),
+								"atk", d.getDmg(),
+								"def", d.getDef(),
+								"ddg", d.getDodge(),
+								"blk", d.getBlock(),
+								"pow", d.getPower()
 						))
 				);
 
