@@ -18,23 +18,29 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.Constants;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
-import org.intellij.lang.annotations.Language;
+import com.kuuhaku.util.json.JSONArray;
+import org.apache.logging.log4j.util.TriConsumer;
 
+import java.awt.*;
 import java.util.Map;
 import java.util.function.Function;
 
 public interface EffectHolder {
 	boolean execute(EffectParameters ep);
 
-	default Function<String, String> parseValues(Drawable<?> d) {
+	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
 		return s -> {
-			@Language("Groovy") String str = Utils.extract(s, "\\{(.+)}", 1);
+			JSONArray groups = Utils.extractGroups(s, "\\{(.+)}(?:\\{(\\w+)})?");
 
-			if (str != null) {
+			g2d.setColor(deck.getFrame().getSecondaryColor());
+			if (!groups.isEmpty()) {
 				String val = String.valueOf(
-						Utils.eval(str, Map.of(
+						Utils.eval(groups.getString(0), Map.of(
 								"mp", d.getMPCost(),
 								"hp", d.getHPCost(),
 								"atk", d.getDmg(),
@@ -45,10 +51,33 @@ public interface EffectHolder {
 						))
 				);
 
-				return "\u200B" + s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2));
+				if (groups.size() > 1) {
+					switch (groups.getString(1)) {
+						case "mp" -> g2d.setColor(Color.CYAN);
+						case "hp" -> g2d.setColor(Color.RED.darker());
+						case "atk" -> g2d.setColor(Color.RED);
+						case "def" -> g2d.setColor(Color.GREEN);
+						case "ddg" -> g2d.setColor(Color.ORANGE);
+						case "blk" -> g2d.setColor(Color.GRAY);
+						case "pow" -> g2d.setColor(new Color(0x8F25FF));
+					}
+				}
+
+				return Constants.VOID + s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2))
+						.replace("_", " ");
 			}
 
 			return s;
+		};
+	}
+
+	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d) {
+		return (str, x, y) -> {
+			if (str.startsWith(Constants.VOID) && !g2d.getColor().equals(Color.BLACK)) {
+				Graph.drawOutlinedString(g2d, str, x, y, 2, Color.BLACK);
+			} else {
+				g2d.drawString(str, x, y);
+			}
 		};
 	}
 }
