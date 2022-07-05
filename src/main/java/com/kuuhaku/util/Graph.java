@@ -242,12 +242,13 @@ public abstract class Graph {
 		g2d.dispose();
 	}
 
-	public static Color invert(Color in, float brightness) {
+	public static Color adjust(Color in, int hue, int sat, int brightness) {
 		int[] rgb = unpackRGB(in.getRGB());
 
 		float[] hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
-		hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
-		hsv[2] = brightness;
+		hsv[0] = ((hsv[0] * 360 + hue) % 360) / 360;
+		hsv[1] = Calc.clamp(sat / 100f, 0, 1);
+		hsv[2] = Calc.clamp(brightness / 100f, 0, 1);
 
 		return new Color(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 	}
