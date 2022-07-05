@@ -393,7 +393,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		g2d.setColor(deck.getFrame().getPrimaryColor());
-		Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 12, 30, 3, deck.getFrame().getBackgroundColor());
+		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
+		Graph.drawOutlinedString(g2d, name,
+				12 + (100 - g2d.getFontMetrics().stringWidth(name) / 2), 30, 2,
+				deck.getFrame().getBackgroundColor()
+		);
 
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
