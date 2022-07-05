@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.id.LocalizedDescId;
 
@@ -35,7 +34,7 @@ public class LocalizedDescription extends DAO<LocalizedDescription> {
 	@EmbeddedId
 	private LocalizedDescId id;
 
-	@Column(name = "description", nullable = false, length = Drawable.MAX_DESC_LENGTH)
+	@Column(name = "description", nullable = false)
 	private String description;
 
 	public LocalizedDescId getId() {
