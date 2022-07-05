@@ -75,13 +75,14 @@ public abstract class Constants {
 	public static final Function<Member, Boolean> USER_PRIVILEGE = m -> true;
 
 	public static final Map<RenderingHints.Key, Object> HD_HINTS = Map.of(
-			RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON,
+			RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB,
 			RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY,
 			RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY,
 			RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY,
 			RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON,
 			RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR,
-			RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE
+			RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE,
+			RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON
 	);
 	public static final Map<RenderingHints.Key, Object> SD_HINTS = Map.of(
 			RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON,
