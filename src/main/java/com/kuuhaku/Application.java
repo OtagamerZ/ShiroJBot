@@ -58,7 +58,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		}
 
 		int threads = Math.max(1, DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM guild_config") / 100);
-		Constants.LOGGER.info("Running " + threads + " threads");
+		Constants.LOGGER.info("Initializing event thread pool with " + threads + " threads");
 
 		ShardManager sm = null;
 		try {
