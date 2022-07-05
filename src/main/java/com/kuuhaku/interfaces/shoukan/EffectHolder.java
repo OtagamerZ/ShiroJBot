@@ -35,7 +35,7 @@ public interface EffectHolder {
 
 	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
 		return s -> {
-			JSONArray groups = Utils.extractGroups(s, "\\{(.+)}(?:\\{(\\w+)})?");
+			JSONArray groups = Utils.extractGroups(s, "\\{((?:(?!}).)+)}(?:\\{(\\w+)})?");
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
