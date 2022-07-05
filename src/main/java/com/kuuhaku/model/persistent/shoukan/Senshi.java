@@ -400,7 +400,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			}
 			g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
 					parseValues(stats).andThen(s -> {
