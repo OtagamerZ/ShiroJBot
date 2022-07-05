@@ -57,7 +57,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			Constants.LOGGER.error("Database latency: " + latency + "ms");
 		}
 
-		int threads = DAO.queryNative(Integer.class, "SELECT GREATEST(1, COUNT(1) / 50) FROM guild_config");
+		int threads = DAO.queryNative(Integer.class, "SELECT GREATEST(2, COUNT(1) / 50) FROM guild_config");
 		Constants.LOGGER.info("Initializing event thread pool with " + threads + " threads");
 
 		ShardManager sm = null;
