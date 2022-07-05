@@ -54,7 +54,7 @@ public record RegDeg(Pair<Integer, AtomicInteger> value, double dpt, boolean pos
 	}
 
 	public int slice() {
-		int n = (int) (value.getSecond().get() * dpt);
+		int n = (int) Math.min(value.getSecond().get(), value.getFirst() * dpt);
 		value.getSecond().getAndUpdate(i -> pos ? Math.max(0, i - n) : Math.min(i + n, 0));
 
 		return n;
