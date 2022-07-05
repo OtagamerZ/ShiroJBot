@@ -405,7 +405,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
 					parseValues(stats).andThen(s -> {
 						if (s.startsWith("\u200B")) {
-							g2d.setColor(Color.ORANGE);
+							g2d.setColor(Graph.invert(deck.getFrame().getThemeColor()));
 						} else {
 							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}

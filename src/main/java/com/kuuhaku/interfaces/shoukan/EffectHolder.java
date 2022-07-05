@@ -47,7 +47,7 @@ public interface EffectHolder {
 						))
 				);
 
-				return "\u200B" + Utils.roundToString(Double.parseDouble(val), 2);
+				return "\u200B" + s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2));
 			}
 
 			return s;
