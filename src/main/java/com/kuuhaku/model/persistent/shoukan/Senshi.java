@@ -186,7 +186,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
 
-		return (int) ((base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum()) * mult);
+		return (int) ((base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum()) * mult * getAttrMult());
 	}
 
 	@Override
@@ -200,7 +200,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
 
-		return (int) ((base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum()) * mult);
+		return (int) ((base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum()) * mult * getAttrMult());
 	}
 
 	public double getFieldMult(Field f) {
@@ -221,17 +221,30 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getDodge() {
-		return base.getDodge() + stats.getDodge() + equipments.stream().mapToInt(Evogear::getDodge).sum();
+		return (int) (base.getDodge() + stats.getDodge() + equipments.stream().mapToInt(Evogear::getDodge).sum() * getAttrMult());
 	}
 
 	@Override
 	public int getBlock() {
-		return base.getBlock() + stats.getBlock() + equipments.stream().mapToInt(Evogear::getBlock).sum();
+		return (int) (base.getBlock() + stats.getBlock() + equipments.stream().mapToInt(Evogear::getBlock).sum() * getAttrMult());
 	}
 
 	@Override
 	public double getPower() {
 		return stats.getPower();
+	}
+
+	private double getAttrMult() {
+		double mult = 1;
+		if (hand != null && hand.getOrigin().minor() == Race.NONE) {
+			if (race == hand.getOrigin().major()) {
+				mult *= 1.25;
+			} else {
+				mult *= 0.5;
+			}
+		}
+
+		return mult;
 	}
 
 	@Override
