@@ -62,6 +62,8 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Arena arena = new Arena(this);
 	private final Map<String, Pair<String, String>> messages = new HashMap<>();
 
+	private final boolean singleplayer;
+
 	public Shoukan(I18N locale, User p1, User p2) {
 		this(locale, p1.getId(), p2.getId());
 	}
@@ -73,6 +75,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
+		this.singleplayer = p1.equals(p2);
 
 		setTimeout(turn -> {
 			reportResult("str/game_wo", "<@" + getCurrent().getUid() + ">");
@@ -83,7 +86,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> ArrayUtils.contains(players, m.getAuthor().getId()))
-				.and(m -> getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId()))
+				.and(m -> singleplayer || getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId()))
 				.test(message);
 	}
 
