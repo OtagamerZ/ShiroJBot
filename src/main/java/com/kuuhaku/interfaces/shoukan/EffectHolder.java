@@ -34,7 +34,7 @@ public interface EffectHolder {
 
 	default Function<String, String> parseValues(CardExtra stats) {
 		return s -> {
-			@Language("Groovy") String str = Utils.extract(s, "\\{(\\d+)}", 1);
+			@Language("Groovy") String str = Utils.extract(s, "\\{(.+)}", 1);
 
 			if (str != null) {
 				Object val = Utils.eval(str, Map.of(
