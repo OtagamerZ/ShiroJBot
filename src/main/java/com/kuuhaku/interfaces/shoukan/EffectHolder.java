@@ -24,6 +24,7 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
@@ -63,8 +64,10 @@ public interface EffectHolder {
 					}
 				}
 
-				return Constants.VOID + s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2))
-						.replace("_", " ");
+				return Constants.VOID + StringUtils.abbreviate(
+						s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)).replace("_", " "),
+						Drawable.MAX_DESC_LENGTH
+				);
 			}
 
 			return s;
