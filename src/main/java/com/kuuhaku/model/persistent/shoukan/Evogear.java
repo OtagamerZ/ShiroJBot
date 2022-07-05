@@ -321,21 +321,18 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
 			g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
-			Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
-			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
 					parseValues(stats).andThen(s -> {
 						if (s.startsWith("\u200B")) {
-							g2d.setFont(dynamic);
 							g2d.setColor(Color.ORANGE);
 						} else {
-							g2d.setFont(normal);
 							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}
 
 						return s;
-					}), drawValue(g2d)
+					})
 			);
 		}
 
