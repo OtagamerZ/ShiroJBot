@@ -432,7 +432,7 @@ public class Arena implements Renderer {
 
 	private void drawValues(Graphics2D g2d, Hand hand, int x, int y, int spacing) {
 		g2d.setColor(Color.CYAN);
-		g2d.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+		g2d.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.25)));
 		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 		Graph.drawOutlinedString(g2d, mpText, x, y, 6, Color.BLACK);
 
@@ -485,7 +485,7 @@ public class Arena implements Renderer {
 		}
 
 		g2d.setColor(Color.CYAN);
-		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 2));
+		g2d.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.25)));
 		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 
 		offset = g2d.getFontMetrics().stringWidth(mpText);
