@@ -241,4 +241,13 @@ public abstract class Graph {
 		);
 		g2d.dispose();
 	}
+
+	public static Color invert(Color in) {
+		int[] rgb = unpackRGB(in.getRGB());
+
+		float[] hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+		hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
+
+		return new Color(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+	}
 }
