@@ -58,7 +58,7 @@ public interface EffectHolder {
 						case "atk" -> g2d.setColor(Color.RED.darker());
 						case "def" -> g2d.setColor(Color.GREEN.darker());
 						case "ddg" -> g2d.setColor(Color.ORANGE.darker());
-						case "blk" -> g2d.setColor(Color.GRAY);
+						case "blk" -> g2d.setColor(Color.GRAY.darker());
 						case "pow" -> g2d.setColor(new Color(0x8F25FF));
 					}
 				}
