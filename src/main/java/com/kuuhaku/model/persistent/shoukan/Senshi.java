@@ -36,7 +36,6 @@ import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import groovy.util.Eval;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -405,28 +404,17 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-					s -> {
-						String str = Utils.extract(s, "\\{(\\d+)}", 1);
-
-						if (str != null) {
-							Object val = Eval.me("pow", stats.getPower(), str);
-
+					parseValues(stats).andThen(s -> {
+						if (s.startsWith("\u200B")) {
 							g2d.setFont(dynamic);
 							g2d.setColor(Color.ORANGE);
-							return "\u200B" + Utils.roundToString(val, 2);
+						} else {
+							g2d.setFont(normal);
+							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}
 
-						g2d.setFont(normal);
-						g2d.setColor(deck.getFrame().getSecondaryColor());
 						return s;
-					},
-					(str, x, y) -> {
-						if (str.startsWith("\u200B")) {
-							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
-						} else {
-							g2d.drawString(str, x, y);
-						}
-					}
+					}), drawValue(g2d)
 			);
 		}
 
