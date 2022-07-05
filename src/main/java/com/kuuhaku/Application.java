@@ -57,7 +57,8 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			Constants.LOGGER.error("Database latency: " + latency + "ms");
 		}
 
-		int threads = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM guild_config");
+		int threads = Math.max(1, DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM guild_config") / 100);
+		Constants.LOGGER.info("Running " + threads + " threads");
 
 		ShardManager sm = null;
 		try {
@@ -66,7 +67,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 					.setMemberCachePolicy(m -> !m.getUser().isBot())
 					.addEventListeners(new GuildListener())
 					.setBulkDeleteSplittingEnabled(false)
-					.setEventPool(Executors.newWorkStealingPool(Math.max(1, threads / 100)), true)
+					.setEventPool(Executors.newWorkStealingPool(threads), true)
 					.build();
 		} catch (LoginException e) {
 			Constants.LOGGER.fatal("Failed to login: " + e);
