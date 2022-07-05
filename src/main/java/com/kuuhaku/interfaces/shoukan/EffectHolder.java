@@ -22,10 +22,11 @@ import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
-import groovy.util.Eval;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.function.Function;
 
 public interface EffectHolder {
@@ -33,10 +34,19 @@ public interface EffectHolder {
 
 	default Function<String, String> parseValues(CardExtra stats) {
 		return s -> {
-			String str = Utils.extract(s, "\\{(\\d+)}", 1);
+			@Language("Groovy") String str = Utils.extract(s, "\\{(\\d+)}", 1);
 
 			if (str != null) {
-				Object val = Eval.me("pow", stats.getPower(), str);
+				Object val = Utils.eval(str, Map.of(
+						"mp", stats.getMana(),
+						"hp", stats.getBlood(),
+						"atk", stats.getAtk(),
+						"def", stats.getDef(),
+						"ddg", stats.getDodge(),
+						"blk", stats.getBlock(),
+						"pow", stats.getPower(),
+						"tier", stats.getTier()
+				));
 
 				return "\u200B" + Utils.roundToString(val, 2);
 			}
