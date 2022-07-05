@@ -31,7 +31,7 @@ import java.util.function.Function;
 import java.util.stream.DoubleStream;
 
 public abstract class Graph {
-	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, int width, Color color) {
+	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
 
