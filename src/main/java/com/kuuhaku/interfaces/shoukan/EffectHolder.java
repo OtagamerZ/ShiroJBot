@@ -47,6 +47,7 @@ public interface EffectHolder {
 						"pow", stats.getPower(),
 						"tier", stats.getTier()
 				));
+				System.out.println(val.getClass());
 
 				return "\u200B" + Utils.roundToString(val, 2);
 			}
