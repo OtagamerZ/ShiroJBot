@@ -54,7 +54,7 @@ public interface EffectHolder {
 				if (groups.size() > 1) {
 					switch (groups.getString(1)) {
 						case "mp" -> g2d.setColor(Color.CYAN);
-						case "hp" -> g2d.setColor(Color.RED.darker());
+						case "hp" -> g2d.setColor(new Color(0x199452));
 						case "atk" -> g2d.setColor(Color.RED);
 						case "def" -> g2d.setColor(Color.GREEN);
 						case "ddg" -> g2d.setColor(Color.ORANGE);
@@ -74,7 +74,7 @@ public interface EffectHolder {
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d) {
 		return (str, x, y) -> {
 			if (str.startsWith(Constants.VOID) && !g2d.getColor().equals(Color.BLACK)) {
-				Graph.drawOutlinedString(g2d, str, x, y, 2, Color.BLACK);
+				Graph.drawOutlinedString(g2d, str, x, y, 1, Color.BLACK);
 			} else {
 				g2d.drawString(str, x, y);
 			}
