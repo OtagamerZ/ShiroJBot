@@ -408,7 +408,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-					parseValues(g2d, deck, this)
+					parseValues(g2d, deck, this), highlightValues(g2d)
 			);
 		}
 
