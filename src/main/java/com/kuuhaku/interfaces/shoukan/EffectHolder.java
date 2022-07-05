@@ -37,19 +37,20 @@ public interface EffectHolder {
 			@Language("Groovy") String str = Utils.extract(s, "\\{(.+)}", 1);
 
 			if (str != null) {
-				Object val = Utils.eval(str, Map.of(
-						"mp", stats.getMana(),
-						"hp", stats.getBlood(),
-						"atk", stats.getAtk(),
-						"def", stats.getDef(),
-						"ddg", stats.getDodge(),
-						"blk", stats.getBlock(),
-						"pow", stats.getPower(),
-						"tier", stats.getTier()
-				));
-				System.out.println(val.getClass());
+				String val = String.valueOf(
+						Utils.eval(str, Map.of(
+								"mp", stats.getMana(),
+								"hp", stats.getBlood(),
+								"atk", stats.getAtk(),
+								"def", stats.getDef(),
+								"ddg", stats.getDodge(),
+								"blk", stats.getBlock(),
+								"pow", stats.getPower(),
+								"tier", stats.getTier()
+						))
+				);
 
-				return "\u200B" + Utils.roundToString(val, 2);
+				return "\u200B" + Utils.roundToString(Double.parseDouble(val), 2);
 			}
 
 			return s;
