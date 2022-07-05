@@ -20,12 +20,9 @@ package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.intellij.lang.annotations.Language;
 
-import java.awt.*;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -54,16 +51,6 @@ public interface EffectHolder {
 			}
 
 			return s;
-		};
-	}
-
-	default TriConsumer<String, Integer, Integer> drawValue(Graphics2D g2d) {
-		return (str, x, y) -> {
-			if (str.startsWith("\u200B")) {
-				Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
-			} else {
-				g2d.drawString(str, x, y);
-			}
 		};
 	}
 }
