@@ -495,7 +495,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (hand.getHP() == 0) {
 				if (hand.getOrigin().major() == Race.UNDEAD && hand.getCooldown() == 0) {
 					hand.setHP(1);
-					hand.addRegen((int) (hand.getBase().hp() * 0.3), 1 / 3d);
+					hand.addRegen((int) (hand.getBase().hp() * 0.5), 1 / 3d);
 					hand.setCooldown(4);
 					continue;
 				}
