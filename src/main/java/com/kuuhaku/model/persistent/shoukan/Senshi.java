@@ -230,6 +230,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	@Override
+	public double getPower() {
+		return stats.getPower();
+	}
+
+	@Override
 	public boolean isSolid() {
 		return Bit.on(state, 0);
 	}
@@ -403,7 +408,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-					parseValues(stats).andThen(s -> {
+					parseValues(this).andThen(s -> {
 						if (s.startsWith("\u200B")) {
 							g2d.setColor(Graph.adjust(deck.getFrame().getThemeColor(),
 									180,

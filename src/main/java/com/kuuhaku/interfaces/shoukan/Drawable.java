@@ -82,6 +82,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return 0;
 	}
 
+	default double getPower() {
+		return 1;
+	}
+
 	boolean isSolid();
 
 	void setSolid(boolean solid);
