@@ -436,6 +436,7 @@ public class Arena implements Renderer {
 		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 		Graph.drawOutlinedString(g2d, mpText, x, y, 6, Color.BLACK);
 
+
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
 		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
@@ -447,7 +448,7 @@ public class Arena implements Renderer {
 
 			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
 			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(regdeg), 4, "0");
+			String regText = (degen ? " " : " +") + StringUtils.leftPad(String.valueOf(regdeg), 4, "0");
 
 			Graph.drawOutlinedString(g2d, regText,
 					x + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y + spacing,
@@ -464,16 +465,19 @@ public class Arena implements Renderer {
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
 		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 
-		int offset = g2d.getFontMetrics().stringWidth(hpText);
+		int regdeg = hand.getRegen() - hand.getDegen();
+		boolean degen = regdeg < 0;
+		String regText = "";
+		if (regdeg != 0) {
+			regText = (degen ? " " : " +") + StringUtils.leftPad(String.valueOf(regdeg), 4, "0");
+		}
+
+		int offset = g2d.getFontMetrics().stringWidth(hpText) - g2d.getFontMetrics().stringWidth(regText);
 		Graph.drawOutlinedString(g2d, hpText, x - offset, y, 6, new Color(0, 0, 0, 200));
 
-		int regdeg = hand.getRegen() - hand.getDegen();
 		if (regdeg != 0) {
-			boolean degen = regdeg < 0;
-
 			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
 			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-			String regText = (degen ? "" : "+") + StringUtils.leftPad(String.valueOf(regdeg), 4, "0");
 
 			Graph.drawOutlinedString(g2d, regText,
 					x - offset + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y,
