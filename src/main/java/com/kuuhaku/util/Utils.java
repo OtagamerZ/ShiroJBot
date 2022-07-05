@@ -1047,8 +1047,7 @@ public abstract class Utils {
 
 	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
 		Binding ctx = new Binding(variables);
-		Script script = Constants.GROOVY.parse(code);
-		script.setBinding(ctx);
+		Script script = Constants.GROOVY.parse(code, ctx);
 
 		return script.run();
 	}

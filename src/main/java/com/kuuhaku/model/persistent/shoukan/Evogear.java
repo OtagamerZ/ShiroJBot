@@ -321,29 +321,21 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
 			g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
+			Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
+			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
 			Graph.drawMultilineString(g2d,
 					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 287, 211, 3,
-					s -> {
-						String str = Utils.extract(s, "\\{(\\d+)}", 1);
-
-						if (str != null) {
-							double val = Double.parseDouble(str);
-
+					parseValues(stats).andThen(s -> {
+						if (s.startsWith("\u200B")) {
+							g2d.setFont(dynamic);
 							g2d.setColor(Color.ORANGE);
-							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
+						} else {
+							g2d.setFont(normal);
+							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}
 
-						g2d.setColor(deck.getFrame().getSecondaryColor());
 						return s;
-					},
-					(str, x, y) -> {
-						if (str.startsWith("\u200B")) {
-							Graph.drawOutlinedString(g2d, str.substring(1), x, y, 2, Color.BLACK);
-						} else {
-							g2d.drawString(str, x, y);
-						}
-					}
+					}), drawValue(g2d)
 			);
 		}
 
