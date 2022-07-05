@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -74,7 +75,7 @@ public class SeeCardCommand implements Executable {
 				event.user().getId(),
 				card.getId()
 		);
-		EmbedBuilder eb = new EmbedBuilder()
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/in_stash", stored))
 				.setTitle(card.getName() + " (" + card.getAnime() + ")")
 				.setImage("attachment://card.png");

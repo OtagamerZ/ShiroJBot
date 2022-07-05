@@ -419,7 +419,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 							g2d.setColor(deck.getFrame().getSecondaryColor());
 						}
 
-						return s;
+						return s.replace("_", " ");
 					})
 			);
 		}
