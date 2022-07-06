@@ -24,21 +24,164 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestMain {
 	public static void main(String[] args) {
-		testDeck();
+		Point MARGIN = new Point(25, 25);
+		Dimension SIZE = new Dimension(
+				(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
+				(350 + MARGIN.y) * 4 /* slots */ + MARGIN.y * 10 - 1
+		);
+		Dimension BAR_SIZE = new Dimension(SIZE.width / 2, 100);
+
+		JFrame frame = new JFrame("Test");
+		JPanel panel = new JPanel() {
+			int mana = 34;
+			int hp = 5100;
+			int mHp = 5000;
+
+			@Override
+			public void paint(Graphics g) {
+				super.paint(g);
+
+				boolean reverse = false;
+				Graphics2D g2d = (Graphics2D) g;
+				if (reverse) {
+					g2d.scale(-1, -1);
+					g2d.translate(-BAR_SIZE.width, -BAR_SIZE.height);
+				}
+
+				double h = 1 - 2d / BAR_SIZE.height;
+				double w = 1 - 2d / BAR_SIZE.width;
+				Polygon boundaries = Graph.makePoly(BAR_SIZE,
+						1 - w, h / 3d,
+						w / 30d, 1 - h,
+						w / 1.5d, 1 - h,
+						w / 1.4d, h / 3d,
+						w / 1.1d, h / 3d,
+						w, h,
+						1 - w, h
+				);
+				g2d.setColor(Color.gray);
+				g2d.fill(boundaries);
+
+				g2d.setClip(boundaries);
+
+				int mpWidth = (int) (BAR_SIZE.width / 2.25);
+				Color manaOver1 = new Color(0x1181FF);
+				Color manaOver2 = new Color(0x4D15FF);
+				for (int i = 0; i < 33; i++) {
+					g2d.setColor(Color.CYAN);
+					if (mana > 66 + i) {
+						g2d.setColor(manaOver2);
+					} else if (mana > 33 + i) {
+						g2d.setColor(manaOver1);
+					} else if (mana <= i) {
+						g2d.setColor(Color.DARK_GRAY);
+					}
+
+					g2d.fillRect(
+							(int) (BAR_SIZE.width / 1.4 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
+							2, mpWidth / 33 - 5, BAR_SIZE.height / 3 - 2
+					);
+				}
+
+				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
+				Rectangle2D.Double bar = new Rectangle2D.Double(
+						BAR_SIZE.width - barWidth * 1.025, BAR_SIZE.height / 3d + 4,
+						barWidth * 1.025, BAR_SIZE.height / 1.75
+				);
+				g2d.setColor(Color.DARK_GRAY);
+				g2d.fill(bar);
+
+				double fac = (double) hp / mHp;
+				if (fac >= 2 / 3d) {
+					g2d.setColor(new Color(69, 173, 28));
+				} else if (fac >= 1 / 3d) {
+					g2d.setColor(new Color(197, 158, 0));
+				} else {
+					g2d.setColor(new Color(173, 28, 28));
+				}
+				bar.setRect(bar.x, bar.y, bar.width * Math.min(fac, 1), bar.height);
+				g2d.fill(bar);
+
+				if (fac > 1) {
+					g2d.setColor(new Color(0, 255, 149));
+					bar.setRect(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height);
+					g2d.fill(bar);
+				}
+
+				Graph.applyTransformed(g2d, reverse ? -1 : 1, g1 -> {
+					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(mana), 2, "0");
+					g1.setColor(Color.CYAN);
+					g1.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 2));
+
+					if (reverse) {
+						Graph.drawOutlinedString(g1, mpText,
+								(int) -(bar.x + g1.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 4),
+								6, Color.BLACK
+						);
+					} else {
+						Graph.drawOutlinedString(g1, mpText,
+								(int) bar.x, (int) (bar.y - 6),
+								6, Color.BLACK
+						);
+					}
+
+					String hpText = "HP: "
+							+ StringUtils.leftPad(String.valueOf(hp), 4, "0")
+							+ "/"
+							+ StringUtils.leftPad(String.valueOf(mHp), 4, "0");
+					g1.setColor(Color.WHITE);
+					g1.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+
+					if (reverse) {
+						Graph.drawOutlinedString(g1, hpText,
+								(int) -(bar.x + g1.getFontMetrics().stringWidth(hpText) + 6), (int) -(bar.y + 6),
+								6, Color.BLACK
+						);
+					} else {
+						Graph.drawOutlinedString(g1, hpText,
+								(int) bar.x + 6, (int) (bar.y + bar.height - 6),
+								6, Color.BLACK
+						);
+					}
+				});
+
+				g2d.setClip(null);
+				g2d.setColor(Color.ORANGE);
+				g2d.setStroke(new BasicStroke(5));
+				g2d.draw(boundaries);
+				g2d.setStroke(new BasicStroke());
+			}
+		};
+
+		panel.setSize(BAR_SIZE);
+
+		frame.setContentPane(panel);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setUndecorated(true);
+		frame.setSize(panel.getSize());
+		frame.setVisible(true);
+
+		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(frame::repaint, 0, 1, TimeUnit.SECONDS);
 	}
 
 	public static void testDeck() {
