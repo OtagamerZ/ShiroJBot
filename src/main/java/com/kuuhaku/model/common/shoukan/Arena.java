@@ -261,13 +261,6 @@ public class Arena implements Renderer {
 				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				g1.fill(boundaries);
 
-				g1.setPaint(new TexturePaint(
-						IO.getResourceAsImage("shoukan/status_bar.png"),
-						new Rectangle2D.Double(0, 0, BAR_SIZE.height * 4, BAR_SIZE.height * 4)
-				));
-				g1.fill(boundaries);
-				g1.setPaint(null);
-
 				double ratio = ((1 - padPrcnt.getY()) - (0.5 + padPrcnt.getY())) / (1 - 0.5);
 
 				boundaries = Graph.makePoly(BAR_SIZE,
@@ -399,13 +392,6 @@ public class Arena implements Renderer {
 			);
 			g2d.setColor(hand.getUserDeck().getFrame().getThemeColor());
 			g2d.fill(poly);
-
-			g2d.setPaint(new TexturePaint(
-					IO.getResourceAsImage("shoukan/status_bar.png"),
-					new Rectangle2D.Double(0, 0, BAR_SIZE.height * 4, BAR_SIZE.height * 4)
-			));
-			g2d.fill(poly);
-			g2d.setPaint(null);
 
 			int rad = BAR_SIZE.height - padUnit.y * 2;
 			List<BufferedImage> images = hand.getOrigin().images();
