@@ -346,6 +346,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			} catch (Exception e) {
 				data.channel().sendMessage(locale.get("error/error", e)).queue();
+				Constants.LOGGER.error(e, e);
 			}
 		}
 	}
