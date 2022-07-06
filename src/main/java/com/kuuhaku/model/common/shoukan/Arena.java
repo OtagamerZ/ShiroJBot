@@ -273,6 +273,9 @@ public class Arena implements Renderer {
 				);
 				g1.setClip(boundaries);
 
+				g1.setColor(new Color(0, 0, 0, 100));
+				g1.fill(boundaries);
+
 				Rectangle bar = new Rectangle(
 						boundaries.getBounds().x, BAR_SIZE.height / 2 + padUnit.y,
 						boundaries.getBounds().width, BAR_SIZE.height / 2 - padUnit.y * 2
