@@ -126,6 +126,9 @@ public class TestMain {
 					g2d.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height));
 				}
 
+				g2d.setColor(Color.DARK_GRAY);
+				g2d.fillOval(15, 5, BAR_SIZE.height - 10, BAR_SIZE.height - 10);
+
 				Graph.applyTransformed(g2d, reverse ? -1 : 1, g1 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(mana), 2, "0");
 					g1.setColor(Color.CYAN);
