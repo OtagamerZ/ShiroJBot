@@ -485,7 +485,7 @@ public class Arena implements Renderer {
 			g.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 * 2));
 
 			if (reversed) {
-				g.drawImage(bi, 0, BAR_SIZE.height + SIZE.height, null);
+				g.drawImage(bi, SIZE.width - BAR_SIZE.width, BAR_SIZE.height + SIZE.height, null);
 
 				x = MARGIN.x;
 				y = SIZE.height + BAR_SIZE.height + (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
