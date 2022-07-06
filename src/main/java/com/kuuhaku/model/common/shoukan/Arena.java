@@ -264,7 +264,7 @@ public class Arena implements Renderer {
 						w, h,
 						1 - w, h
 				);
-				g1.setColor(Color.ORANGE);
+				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				g1.fill(boundaries);
 
 				g1.setClip(boundaries);
@@ -427,7 +427,7 @@ public class Arena implements Renderer {
 				});
 
 				g1.setClip(null);
-				g1.setColor(Color.ORANGE);
+				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				g1.setStroke(new BasicStroke(5));
 				g1.draw(boundaries);
 				g1.setStroke(new BasicStroke());
