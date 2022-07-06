@@ -143,8 +143,6 @@ public class Hand {
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
 		// TODO Secondary divinity
-
-		manualDraw(5);
 	}
 
 	public String getUid() {

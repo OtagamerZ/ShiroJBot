@@ -94,6 +94,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void begin() {
+		for (Hand h : hands.values()) {
+			h.manualDraw(5);
+		}
+
 		setPhase(Phase.PLAN);
 
 		Hand curr = getCurrent();
