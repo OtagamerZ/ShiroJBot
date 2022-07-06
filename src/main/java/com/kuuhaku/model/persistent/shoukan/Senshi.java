@@ -32,10 +32,7 @@ import com.kuuhaku.model.enums.shoukan.CardState;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -142,7 +139,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public SlotColumn getSlot() {
-		return slot;
+		return Utils.getOr(slot, new SlotColumn(hand.getSide(), -1));
 	}
 
 	@Override
@@ -167,30 +164,40 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getMPCost() {
-		return base.getMana() + stats.getMana();
+		return Math.max(0, base.getMana() + stats.getMana());
 	}
 
 	@Override
 	public int getHPCost() {
-		return base.getBlood() + stats.getBlood();
+		return Math.max(0, base.getBlood() + stats.getBlood());
 	}
 
 	@Override
 	public int getDmg() {
+		int sum = base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum();
+
 		double mult = 1;
 		if (hand != null) {
 			if (hand.getOrigin().minor() == Race.UNDEAD) {
 				mult *= 1 + (hand.getGraveyard().size() * 0.005);
 			}
 
+			if (hand.getHPPrcnt() <= 0.5 && hand.getOrigin().synergy() == Race.ONI) {
+				mult *= 1.02;
+			} else if (hand.getHPPrcnt() > 1 && hand.getOrigin().synergy() == Race.GHOUL) {
+				mult *= 1.05;
+			}
+
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
 
-		return (int) ((base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum()) * mult * getAttrMult());
+		return (int) Math.max(0, sum * mult * getAttrMult());
 	}
 
 	@Override
 	public int getDef() {
+		int sum = base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum();
+
 		double mult = 1;
 		if (hand != null) {
 			if (hand.getOrigin().minor() == Race.SPIRIT) {
@@ -200,7 +207,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
 
-		return (int) ((base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum()) * mult * getAttrMult());
+		return (int) Math.max(0, sum * mult * getAttrMult());
 	}
 
 	public double getFieldMult(Field f) {
@@ -208,7 +215,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 		Race[] races = race.split();
 		for (Race r : races) {
-			mult += f.getModifiers().getDouble(r.name()) / races.length;
+			double mod = f.getModifiers().getDouble(r.name()) / races.length;
+			mult += mod;
+
+			if (mod != 0 && hand.getOrigin().synergy() == Race.ELF) {
+				mult += 0.05;
+			}
 		}
 
 		return mult;
@@ -219,14 +231,35 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		return getDmg();
 	}
 
+	public int getActiveAttr(boolean dbl) {
+		if (isDefending()) {
+			if (dbl) {
+				return getDef() * 2;
+			}
+
+			return getDef();
+		}
+
+		return getDmg();
+	}
+
 	@Override
 	public int getDodge() {
-		return (int) (base.getDodge() + stats.getDodge() + equipments.stream().mapToInt(Evogear::getDodge).sum() * getAttrMult());
+		int sum = base.getDodge() + stats.getDodge() + equipments.stream().mapToInt(Evogear::getDodge).sum();
+
+		return (int) Math.max(0, sum * getAttrMult());
 	}
 
 	@Override
 	public int getBlock() {
-		return (int) (base.getBlock() + stats.getBlock() + equipments.stream().mapToInt(Evogear::getBlock).sum() * getAttrMult());
+		int sum = base.getBlock() + stats.getBlock() + equipments.stream().mapToInt(Evogear::getBlock).sum();
+
+		int min = 0;
+		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
+			min++;
+		}
+
+		return (int) Math.max(0, (min + sum) * getAttrMult());
 	}
 
 	@Override

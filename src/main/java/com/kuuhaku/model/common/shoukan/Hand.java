@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
@@ -31,9 +32,13 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.records.shoukan.*;
+import com.kuuhaku.model.records.shoukan.BaseValues;
+import com.kuuhaku.model.records.shoukan.Origin;
+import com.kuuhaku.model.records.shoukan.RegDeg;
+import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -45,7 +50,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Hand {
@@ -60,7 +64,16 @@ public class Hand {
 
 	private final List<Drawable<?>> cards = new BondedList<>(d -> d.setHand(this));
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> d.setHand(this));
-	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(Drawable::reset);
+	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
+		d.reset();
+
+		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(1)) {
+			cards.add(d.copy());
+			d.setSolid(false);
+		}
+
+		getGraveyard().removeIf(dr -> !dr.isSolid());
+	});
 	private final List<Drawable<?>> discard = new BondedList<>(d -> d.setAvailable(false));
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
@@ -76,6 +89,7 @@ public class Hand {
 	private transient String lastMessage;
 	private transient boolean forfeit;
 	private transient int cooldown;
+	private transient int kills = 0;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -88,18 +102,22 @@ public class Hand {
 		try {
 			base = new BaseValues(() -> {
 				int bHP = 5000;
-				Function<Integer, Integer> mpGain = t -> 5;
+				AccFunction<Integer, Integer> mpGain = t -> 5;
 				int handCap = 5;
 
-				switch (origin.major()) {
+				mpGain = switch (origin.major()) {
 					case DEMON -> {
 						bHP -= 1500;
-						mpGain = mpGain.andThen(t -> (int) (5 - 5 * getHPPrcnt()));
+						yield mpGain.accumulate((t, mp) -> mp + (int) (5 - 5 * getHPPrcnt()));
 					}
-					case DIVINITY -> {
-						int baseMP = mpGain.apply(0);
-						mpGain = mpGain.andThen(t -> (int) (baseMP * userDeck.getMetaDivergence()));
-					}
+					case DIVINITY -> mpGain.accumulate((t, mp) -> mp + (int) (mp * userDeck.getMetaDivergence() / 2));
+					default -> mpGain;
+				};
+
+				if (origin.synergy() == Race.FEY && Calc.chance(1)) {
+					mpGain = mpGain.accumulate((t, mp) -> mp * 2);
+				} else if (origin.synergy() == Race.GHOST) {
+					mpGain = mpGain.accumulate((t, mp) -> mp + (t % 10 == 0 ? 1 : 0));
 				}
 
 				return new Triple<>(bHP, mpGain, handCap);
@@ -115,7 +133,13 @@ public class Hand {
 						.parallel()
 						.flatMap(List::stream)
 						.map(d -> d.copy())
-						.peek(d -> d.setSolid(true))
+						.peek(d -> {
+							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
+								Utils.shufflePairs(f.getModifiers());
+							}
+
+							d.setSolid(true);
+						})
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
 		// TODO Secondary divinity
@@ -169,6 +193,10 @@ public class Hand {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			for (int i = 0; i < deck.size() && value > 0; i++) {
 				if (deck.get(i) instanceof Senshi) {
+					if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+						modHP(-10);
+					}
+
 					cards.add(deck.remove(i));
 					value--;
 					break;
@@ -177,21 +205,38 @@ public class Hand {
 		}
 
 		for (int i = 0; i < value; i++) {
-			cards.add(deck.removeFirst());
+			draw();
 		}
 
 		return true;
 	}
 
+	public void draw() {
+		Drawable<?> d = deck.removeFirst();
+
+		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
+			modHP(50);
+		}
+		if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+			modHP(-10);
+		}
+
+		cards.add(d);
+	}
+
 	public void draw(int value) {
 		for (int i = 0; i < value; i++) {
-			cards.add(deck.removeFirst());
+			draw();
 		}
 	}
 
 	public void drawSenshi(int value) {
 		for (int i = 0; i < deck.size() && value > 0; i++) {
 			if (deck.get(i) instanceof Senshi) {
+				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
 				cards.add(deck.remove(i));
 				value--;
 			}
@@ -200,7 +245,14 @@ public class Hand {
 
 	public void drawEvogear(int value) {
 		for (int i = 0; i < deck.size() && value > 0; i++) {
-			if (deck.get(i) instanceof Evogear) {
+			if (deck.get(i) instanceof Evogear e) {
+				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
+					modHP(50);
+				}
+				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
 				cards.add(deck.remove(i));
 				value--;
 			}
@@ -254,18 +306,24 @@ public class Hand {
 	}
 
 	public void modHP(int value) {
+		int before = hp;
+
 		if (origin.major() == Race.HUMAN && value > 0) {
 			value *= 1.25;
-		} else if (origin.minor() == Race.HUMAN && value < 0) {
+		} else if (origin.major() == Race.HUMAN && value < 0) {
 			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 		}
 
+		if (origin.synergy() == Race.POSSESSED) {
+			value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
+		}
+
 		RegDeg rd = null;
-		if (value < 0 && getRegen() > 0) {
+		if (value < 0) {
 			rd = regdeg.stream()
 					.filter(r -> r.remaining() > 0)
 					.findFirst().orElse(null);
-		} else if (value > 0 && getDegen() > 0) {
+		} else if (value > 0) {
 			rd = regdeg.stream()
 					.filter(d -> d.remaining() < 0)
 					.findFirst().orElse(null);
@@ -284,6 +342,17 @@ public class Hand {
 		}
 
 		this.hp = Math.max(0, this.hp + value);
+
+		int delta = before - this.hp;
+		if (origin.synergy() == Race.VIRUS) {
+			modMP((int) (delta * 0.005));
+		} else if (origin.synergy() == Race.TORMENTED) {
+			game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+		}
+	}
+
+	public void consumeHP(int value) {
+		modHP(-value);
 	}
 
 	public double getHPPrcnt() {
@@ -292,6 +361,10 @@ public class Hand {
 		}
 
 		return hp / (double) base.hp();
+	}
+
+	public List<RegDeg> getRegdeg() {
+		return regdeg;
 	}
 
 	public int getRegen() {
@@ -363,6 +436,12 @@ public class Hand {
 		this.mp = Math.max(0, this.mp + value);
 	}
 
+	public void consumeMP(int value) {
+		if (origin.synergy() == Race.FETCH && Calc.chance(1)) return;
+
+		modMP(-value);
+	}
+
 	public Account getAccount() {
 		if (account == null) {
 			account = DAO.find(Account.class, uid);
@@ -399,6 +478,13 @@ public class Hand {
 		this.cooldown = Math.max(0, cooldown - 1);
 	}
 
+	public int getKills() {
+		return kills;
+	}
+
+	public void addKill() {
+		this.kills++;
+	}
 
 	public BufferedImage render(I18N locale) {
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);

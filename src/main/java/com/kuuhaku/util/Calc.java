@@ -188,6 +188,9 @@ public abstract class Calc {
 	}
 
 	public static boolean chance(double percentage) {
+		if (percentage >= 100) return true;
+		else if (percentage <= 0) return false;
+
 		return rng(100d) < percentage;
 	}
 

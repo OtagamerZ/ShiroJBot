@@ -44,7 +44,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default SlotColumn getSlot() {
-		return null;
+		return new SlotColumn(getHand().getSide(), -1);
 	}
 
 	default void setSlot(SlotColumn slot) {

@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -108,6 +109,12 @@ public class Arena implements Renderer {
 
 	public void setField(Field field) {
 		this.field = field;
+
+		for (Hand h : game.getHands().values()) {
+			if (h.getOrigin().synergy() == Race.WEREBEAST) {
+				h.draw();
+			}
+		}
 	}
 
 	@Override

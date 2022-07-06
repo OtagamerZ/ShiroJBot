@@ -16,20 +16,47 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public record AttrMod(Drawable<?> source, int index, double value, AtomicInteger expiration) {
-	public AttrMod(Drawable<?> source, int index, double value, int expiration) {
-		this(source, index, value, new AtomicInteger(expiration));
-	}
+public class AttrMod {
+	private final Drawable<?> source;
+	private final int index;
+	private final double value;
+	private final AtomicInteger expiration;
 
 	public AttrMod(Drawable<?> source, int index, double value) {
-		this(source, index, value, null);
+		this.source = source;
+		this.index = index;
+		this.value = value;
+		this.expiration = null;
+	}
+
+	public AttrMod(Drawable<?> source, int index, double value, int expiration) {
+		this.source = source;
+		this.index = index;
+		this.value = value;
+		this.expiration = new AtomicInteger(expiration);
+	}
+
+	public Drawable<?> getSource() {
+		return source;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public AtomicInteger getExpiration() {
+		return expiration;
 	}
 
 	public boolean isExpired() {

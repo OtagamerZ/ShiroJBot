@@ -1063,4 +1063,14 @@ public abstract class Utils {
 
 		return script.run();
 	}
+
+	public static <K,V> void shufflePairs(Map<K,V> map) {
+		List<V> valueList = new ArrayList<V>(map.values());
+		Collections.shuffle(valueList);
+		Iterator<V> valueIt = valueList.iterator();
+
+		for(Map.Entry<K,V> e : map.entrySet()) {
+			e.setValue(valueIt.next());
+		}
+	}
 }
