@@ -250,7 +250,6 @@ public class Arena implements Renderer {
 			Point padUnit = new Point((int) (BAR_SIZE.width * padPrcnt.getX()), (int) (BAR_SIZE.height * padPrcnt.getY()));
 
 			Graph.applyTransformed(g2d, BAR_SIZE.height * 2, 0, g1 -> {
-				g1.setBackground(hand.getUserDeck().getFrame().getThemeColor());
 				Polygon boundaries = Graph.makePoly(BAR_SIZE,
 						0, 1,
 						1, 1,
@@ -259,6 +258,9 @@ public class Arena implements Renderer {
 						0.65, 0,
 						0, 0
 				);
+				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				g1.fill(boundaries);
+
 				g1.setPaint(new TexturePaint(
 						IO.getResourceAsImage("shoukan/status_bar.png"),
 						new Rectangle2D.Double(0, 0, BAR_SIZE.height, BAR_SIZE.height)
@@ -388,18 +390,21 @@ public class Arena implements Renderer {
 				}
 			});
 
-			g2d.setPaint(new TexturePaint(
-					IO.getResourceAsImage("shoukan/status_bar.png"),
-					new Rectangle2D.Double(0, 0, BAR_SIZE.height, BAR_SIZE.height)
-			));
-			g2d.setBackground(hand.getUserDeck().getFrame().getThemeColor());
-			g2d.fillPolygon(Graph.makePoly(
+			Polygon poly = Graph.makePoly(
 					BAR_SIZE.height / 3, 0,
 					BAR_SIZE.height * 2, 0,
 					BAR_SIZE.height * 2, BAR_SIZE.height,
 					0, BAR_SIZE.height,
 					0, BAR_SIZE.height / 3
+			);
+			g2d.setColor(hand.getUserDeck().getFrame().getThemeColor());
+			g2d.fill(poly);
+
+			g2d.setPaint(new TexturePaint(
+					IO.getResourceAsImage("shoukan/status_bar.png"),
+					new Rectangle2D.Double(0, 0, BAR_SIZE.height, BAR_SIZE.height)
 			));
+			g2d.fill(poly);
 			g2d.setPaint(null);
 
 			int rad = BAR_SIZE.height - padUnit.y * 2;
