@@ -371,16 +371,16 @@ public class Arena implements Renderer {
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
-					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 10));
+					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 8));
 
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
-								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 6),
+								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 8),
 								6, Color.BLACK
 						);
 					} else {
 						Graph.drawOutlinedString(g2, mpText,
-								(int) bar.x, (int) (bar.y - 6),
+								(int) bar.x, (int) (bar.y - 10),
 								6, Color.BLACK
 						);
 					}
