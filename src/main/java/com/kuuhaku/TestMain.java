@@ -119,13 +119,11 @@ public class TestMain {
 				} else {
 					g2d.setColor(new Color(173, 28, 28));
 				}
-				bar.setRect(bar.x, bar.y, bar.width * Math.min(fac, 1), bar.height);
-				g2d.fill(bar);
+				g2d.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min(fac, 1), bar.height));
 
 				if (fac > 1) {
 					g2d.setColor(new Color(0, 255, 149));
-					bar.setRect(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height);
-					g2d.fill(bar);
+					g2d.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height));
 				}
 
 				Graph.applyTransformed(g2d, reverse ? -1 : 1, g1 -> {
