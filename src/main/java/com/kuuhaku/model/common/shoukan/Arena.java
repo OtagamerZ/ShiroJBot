@@ -340,7 +340,7 @@ public class Arena implements Renderer {
 					g1.fill(poly);
 
 					if (reversed) {
-						g1.drawImage(icons.get(i),
+						g1.drawImage(icons.get(1 - i),
 								10 + slotX + radius, radius,
 								-(radius - 10), -(radius - 10),
 								null
