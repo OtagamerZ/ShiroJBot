@@ -31,13 +31,13 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -246,36 +246,51 @@ public class Arena implements Renderer {
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHints(Constants.HD_HINTS);
 
-			Point2D padPrcnt = new Point2D.Double(0.01, 0.1);
-			Point padUnit = new Point((int) (BAR_SIZE.width * padPrcnt.getX()), (int) (BAR_SIZE.height * padPrcnt.getY()));
-
 			Graph.applyTransformed(g2d, BAR_SIZE.height * 2, 0, g1 -> {
+				if (reversed) {
+					g1.scale(-1, -1);
+					g1.translate(-BAR_SIZE.width, -BAR_SIZE.height);
+				}
+
+				double h = 1 - 2d / BAR_SIZE.height;
+				double w = 1 - 2d / BAR_SIZE.width;
 				Polygon boundaries = Graph.makePoly(BAR_SIZE,
-						0, 1,
-						1, 1,
-						0.95, 0.5,
-						0.7, 0.5,
-						0.65, 0,
-						0, 0
+						1 - w, h / 3d,
+						w / 30d, 1 - h,
+						w / 1.5, 1 - h,
+						w / 1.4, h / 3d,
+						w / 1.1, h / 3d,
+						w, h,
+						1 - w, h
 				);
-				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				g1.setColor(Color.ORANGE);
 				g1.fill(boundaries);
 
-				double ratio = ((1 - padPrcnt.getY()) - (0.5 + padPrcnt.getY())) / (1 - 0.5);
-
-				boundaries = Graph.makePoly(BAR_SIZE,
-						0 + padPrcnt.getX(), 1 - padPrcnt.getY(),
-						0.95 - padPrcnt.getX() + 0.05 * ratio, 1 - padPrcnt.getY(),
-						0.95 - padPrcnt.getX(), 0.5 + padPrcnt.getY(),
-						0.7 - padPrcnt.getX(), 0.5 + padPrcnt.getY(),
-						0.65 - padPrcnt.getX(), 0 + padPrcnt.getY(),
-						0 + padPrcnt.getX(), 0 + padPrcnt.getY()
-				);
 				g1.setClip(boundaries);
 
-				Rectangle bar = new Rectangle(
-						boundaries.getBounds().x, BAR_SIZE.height / 2 + padUnit.y,
-						boundaries.getBounds().width, BAR_SIZE.height / 2 - padUnit.y * 2
+				int mpWidth = (int) (BAR_SIZE.width / 2.25);
+				Color manaOver1 = new Color(0x1181FF);
+				Color manaOver2 = new Color(0x4D15FF);
+				for (int i = 0; i < 33; i++) {
+					g1.setColor(Color.CYAN);
+					if (hand.getMP() > 66 + i) {
+						g1.setColor(manaOver2);
+					} else if (hand.getMP() > 33 + i) {
+						g1.setColor(manaOver1);
+					} else if (hand.getMP() <= i) {
+						g1.setColor(Color.DARK_GRAY);
+					}
+
+					g1.fillRect(
+							(int) (BAR_SIZE.width / 1.4 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
+							2, mpWidth / 33 - 5, BAR_SIZE.height / 3 - 2
+					);
+				}
+
+				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
+				Rectangle2D.Double bar = new Rectangle2D.Double(
+						BAR_SIZE.width - barWidth * 1.025, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
+						barWidth * 1.025, BAR_SIZE.height / 1.75
 				);
 				g1.setColor(Color.DARK_GRAY);
 				g1.fill(bar);
@@ -288,128 +303,170 @@ public class Arena implements Renderer {
 				} else {
 					g1.setColor(new Color(173, 28, 28));
 				}
+				g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min(fac, 1), bar.height));
 
-				fac = (double) hand.getHP() / hand.getBase().hp();
-				bar.setSize((int) (boundaries.getBounds().width * Math.min(fac, 1)), bar.height);
-				g1.fill(bar);
 				if (fac > 1) {
 					g1.setColor(new Color(0, 255, 149));
-					bar.setSize((int) (boundaries.getBounds().width * Math.min(fac - 1, 1)), bar.height);
-					g1.fill(bar);
+					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height));
 				}
 
-				int regen = hand.getRegen();
-				if (regen != 0) {
-					bar.setSize((int) (boundaries.getBounds().width * ((double) regen / hand.getBase().hp())), bar.height);
+				int regdeg = hand.getRegen() - hand.getDegen();
+				if (regdeg != 0) {
+					BufferedImage tex = IO.getResourceAsImage("shoukan/" + (regdeg > 0 ? "r" : "d") + "egen_overlay.png");
 					g1.setPaint(new TexturePaint(
-							IO.getResourceAsImage("shoukan/regen_overlay.png"),
-							new Rectangle2D.Double(0, 0, bar.height, bar.height)
+							tex,
+							new Rectangle2D.Double(bar.x, bar.y + bar.height + (reversed ? 1 : 0), bar.height, bar.height * (reversed ? -1 : 1) + (reversed ? -1 : 1))
 					));
-					g1.fill(bar);
-					g1.setPaint(null);
+					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1), bar.height));
 				}
 
-				int degen = hand.getDegen();
-				if (degen != 0) {
-					bar.setSize((int) (boundaries.getBounds().width * ((double) degen / hand.getBase().hp())), bar.height);
-					g1.setPaint(new TexturePaint(
-							IO.getResourceAsImage("shoukan/degen_overlay.png"),
-							new Rectangle2D.Double(0, 0, bar.height, bar.height)
-					));
-					g1.fill(bar);
-					g1.setPaint(null);
-				}
+				int radius = BAR_SIZE.height - 10;
+				List<BufferedImage> icons = ori.images();
+				for (int i = 0; i < 2; i++) {
+					int slotX = (int) ((BAR_SIZE.width - barWidth * 1.025) / 2 - (radius + 15)) + (radius + 15) * i;
 
-				Color manaOver1 = new Color(46, 95, 255);
-				Color manaOver2 = new Color(77, 21, 255);
-				g1.setStroke(new BasicStroke(14));
-				for (int i = 0; i < 33; i++) {
-					g1.setColor(Color.CYAN);
-					if (hand.getMP() > 66 + i) {
-						g1.setColor(manaOver2);
-					} else if (hand.getMP() > 33 + i) {
-						g1.setColor(manaOver1);
-					} else if (hand.getMP() <= i) {
-						g1.setColor(Color.DARK_GRAY);
+					g1.setColor(new Color(127, 127, 127, 150));
+					Polygon poly = Graph.makePoly(new Dimension(radius, radius),
+							0.5, 0,
+							1, 1 / 4d,
+							1, 1 / 4d * 3,
+							0.5, 1,
+							0, 1 / 4d * 3,
+							0, 1 / 4d
+					);
+					poly.translate(15 + slotX, 5);
+					g1.setClip(poly);
+					g1.fill(poly);
+
+					if (reversed) {
+						g1.drawImage(icons.get(i),
+								10 + slotX + radius, radius,
+								-(radius - 10), -(radius - 10),
+								null
+						);
+					} else {
+						g1.drawImage(icons.get(i),
+								20 + slotX, 10,
+								radius - 10, radius - 10,
+								null
+						);
 					}
 
-					int x = (int) (boundaries.getBounds().x + boundaries.getBounds().width * (0.695 - padPrcnt.getX()) - boundaries.getBounds().width * 0.016 * (32 - i));
-
-					g1.drawLine(
-							x, boundaries.getBounds().y,
-							x, boundaries.getBounds().y + (int) (boundaries.getBounds().height * (0.5 - padPrcnt.getY()))
+					g1.setColor(new Color(255, 0, 0, 200));
+					g1.fillArc(
+							15 + slotX - radius / 2, 5 - radius / 2,
+							radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
+							cd * 360 / mCd
 					);
 				}
-
 				g1.setClip(null);
 
-				Point pos = new Point(padUnit.x + 4, BAR_SIZE.height / 2 - 3);
-				if (reversed) {
-					Graph.applyTransformed(g1, -1, g2 -> {
-						drawValuesInverted(g2, hand, pos.x, (int) (pos.y + padUnit.y * 1.6), BAR_SIZE.height / 3 + 10 + padUnit.y);
+				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
+					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(mana), 2, "0");
+					g2.setColor(Color.CYAN);
+					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 2));
 
-						int rad = bi.getHeight() / 2 - padUnit.y;
-						g2.setColor(Color.RED);
-						g2.setFont(new Font("Arial", Font.BOLD, rad / 3 * 2));
-						for (int i = 0; i < Lock.values().length; i++) {
-							Lock lock = Lock.values()[i];
-							int time = hand.getLockTime(lock);
-
-							Graph.applyTransformed(g2, (int) -(BAR_SIZE.width * 0.65 + padUnit.x + (rad + padUnit.x * 4) * (Lock.values().length - i)), -(rad + padUnit.y / 2), g3 -> {
-								g3.drawImage(lock.getImage(time > 0), 0, 0, rad, rad, null);
-								if (time > 0) {
-									Graph.drawOutlinedString(g3, String.valueOf(time), rad + padUnit.x / 2, rad / 2 * 2, 6, Color.BLACK);
-								}
-							});
-						}
-					});
-				} else {
-					drawValues(g1, hand, pos.x, pos.y, BAR_SIZE.height / 3 - 3 + padUnit.y);
-
-					int rad = bi.getHeight() / 2 - padUnit.y;
-					g1.setColor(Color.RED);
-					g1.setFont(new Font("Arial", Font.BOLD, rad / 3 * 2));
-					for (int i = 0; i < Lock.values().length; i++) {
-						Lock lock = Lock.values()[i];
-						int time = hand.getLockTime(lock);
-
-						Graph.applyTransformed(g1, (int) (SIZE.width * 0.35 + (rad + padUnit.x * 4) * i), padUnit.y / 2, g2 -> {
-							g2.drawImage(lock.getImage(time > 0), 0, 0, rad, rad, null);
-							if (time > 0) {
-								Graph.drawOutlinedString(g2, String.valueOf(time), rad + padUnit.x / 2, rad / 2 * 2, 6, Color.black);
-							}
-						});
+					if (reversed) {
+						Graph.drawOutlinedString(g2, mpText,
+								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 4),
+								6, Color.BLACK
+						);
+					} else {
+						Graph.drawOutlinedString(g2, mpText,
+								(int) bar.x, (int) (bar.y - 6),
+								6, Color.BLACK
+						);
 					}
-				}
+
+					String hpText = "HP: "
+							+ StringUtils.leftPad(String.valueOf(hp), 4, "0")
+							+ "/"
+							+ StringUtils.leftPad(String.valueOf(mHp), 4, "0");
+					g2.setColor(Color.WHITE);
+					g2.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+
+					if (reversed) {
+						String rdText = "";
+						if (regdeg != 0) {
+							rdText = (regdeg > 0 ? " +" : " ") + regdeg;
+							g2.setColor(regdeg < 0 ? new Color(0xAD0000) : new Color(0x009DFF));
+							Graph.drawOutlinedString(g2, rdText,
+									(int) -(bar.x + 6 + g2.getFontMetrics().stringWidth(rdText)), (int) -(bar.y + 6),
+									6, Color.BLACK
+							);
+						}
+
+						g2.setColor(Color.WHITE);
+						Graph.drawOutlinedString(g2, hpText,
+								(int) -(bar.x + 6 + g2.getFontMetrics().stringWidth(hpText + rdText)), (int) -(bar.y + 6),
+								6, Color.BLACK
+						);
+					} else {
+						if (regdeg != 0) {
+							String rdText = (regdeg > 0 ? " +" : " ") + regdeg;
+							g2.setColor(regdeg < 0 ? new Color(0xAD0000) : new Color(0x009DFF));
+							Graph.drawOutlinedString(g2, rdText,
+									(int) (bar.x + 6 + g2.getFontMetrics().stringWidth(hpText)), (int) (bar.y + bar.height - 6),
+									6, Color.BLACK
+							);
+						}
+
+						g2.setColor(Color.WHITE);
+						Graph.drawOutlinedString(g2, hpText,
+								(int) (bar.x + 6), (int) (bar.y + bar.height - 6),
+								6, Color.BLACK
+						);
+					}
+				});
+
+				g1.setClip(null);
+				g1.setColor(Color.ORANGE);
+				g1.setStroke(new BasicStroke(5));
+				g1.draw(boundaries);
+				g1.setStroke(new BasicStroke());
+
+				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
+					Lock[] values = Lock.values();
+					for (int i = 0; i < values.length; i++) {
+						Lock lock = values[i];
+						boolean locked = locks.containsKey(lock);
+
+						int rad = BAR_SIZE.height / 3 - 4;
+						int x = (int) (BAR_SIZE.width / 1.4) + (BAR_SIZE.height / 3 + 35) * i;
+						if (reversed) {
+							g2.drawImage(lock.getImage(locked),
+									-(x + rad - 5) - rad, -rad,
+									rad, rad,
+									null
+							);
+						} else {
+							g2.drawImage(lock.getImage(locked),
+									x, 0,
+									rad, rad,
+									null
+							);
+						}
+
+						if (locked) {
+							g2.setColor(Color.RED);
+							g2.setFont(new Font("Arial", Font.BOLD, rad - 5));
+							String text = String.valueOf(locks.get(lock));
+
+							if (reversed) {
+								Graph.drawOutlinedString(g2, text,
+										-(x + rad - g2.getFontMetrics().stringWidth(text)), (int) -(bar.y - rad),
+										6, Color.BLACK
+								);
+							} else {
+								Graph.drawOutlinedString(g2, text,
+										x + rad + 5, (int) (bar.y - 14),
+										6, Color.BLACK
+								);
+							}
+						}
+					}
+				});
 			});
-
-			Polygon poly = Graph.makePoly(
-					BAR_SIZE.height / 3, 0,
-					BAR_SIZE.height * 2, 0,
-					BAR_SIZE.height * 2, BAR_SIZE.height,
-					0, BAR_SIZE.height,
-					0, BAR_SIZE.height / 3
-			);
-			g2d.setColor(hand.getUserDeck().getFrame().getThemeColor());
-			g2d.fill(poly);
-
-			int rad = BAR_SIZE.height - padUnit.y * 2;
-			List<BufferedImage> images = hand.getOrigin().images();
-			if (reversed) {
-				for (int i = 0; i < 2; i++) {
-					g2d.drawImage(images.get(i),
-							padUnit.x * 2 + (rad + padUnit.x) * (1 - i) + rad, padUnit.y + rad,
-							-rad, -rad, null
-					);
-				}
-			} else {
-				for (int i = 0; i < 2; i++) {
-					g2d.drawImage(images.get(i),
-							padUnit.x * 2 + (rad + padUnit.x) * i, padUnit.y,
-							rad, rad, null
-					);
-				}
-			}
 
 			g2d.dispose();
 
@@ -436,71 +493,6 @@ public class Arena implements Renderer {
 
 			Graph.drawOutlinedString(g, hand.getName(), x, y, 10, Color.black);
 		};
-	}
-
-	private void drawValues(Graphics2D g2d, Hand hand, int x, int y, int spacing) {
-		g2d.setColor(Color.CYAN);
-		g2d.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.25)));
-		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
-		Graph.drawOutlinedString(g2d, mpText, x, y, 6, Color.BLACK);
-
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
-		Graph.drawOutlinedString(g2d, hpText, x, y + spacing, 6, new Color(0, 0, 0, 200));
-
-		int regdeg = hand.getRegen() - hand.getDegen();
-		if (regdeg != 0) {
-			boolean degen = regdeg < 0;
-
-			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
-			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-			String regText = (degen ? " -" : " +") + StringUtils.leftPad(String.valueOf(Math.abs(regdeg)), 4, "0");
-
-			Graph.drawOutlinedString(g2d, regText,
-					x + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y + spacing,
-					6, new Color(0, 0, 0, 200)
-			);
-		}
-	}
-
-	private void drawValuesInverted(Graphics2D g2d, Hand hand, int x, int y, int spacing) {
-		x = -x;
-		y = -y;
-
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
-
-		int offset;
-		int regdeg = hand.getRegen() - hand.getDegen();
-		boolean degen = regdeg < 0;
-		String regText = "";
-		if (regdeg != 0) {
-			regText = (degen ? " -" : " +") + StringUtils.leftPad(String.valueOf(Math.abs(regdeg)), 4, "0");
-			offset = g2d.getFontMetrics().stringWidth(hpText + regText) + 13;
-		} else {
-			offset = g2d.getFontMetrics().stringWidth(hpText);
-		}
-
-		Graph.drawOutlinedString(g2d, hpText, x - offset, y, 6, new Color(0, 0, 0, 200));
-
-		if (regdeg != 0) {
-			g2d.setColor(degen ? Color.RED : new Color(0x009DFF));
-			g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-
-			Graph.drawOutlinedString(g2d, regText,
-					x - offset + g2d.getFontMetrics().stringWidth(hpText) + MARGIN.x / 2, y,
-					6, new Color(0, 0, 0, 200)
-			);
-		}
-
-		g2d.setColor(Color.CYAN);
-		g2d.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.25)));
-		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
-
-		offset = g2d.getFontMetrics().stringWidth(mpText);
-		Graph.drawOutlinedString(g2d, mpText, x - offset, y + spacing, 6, Color.BLACK);
 	}
 
 	@Override
