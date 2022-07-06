@@ -152,14 +152,19 @@ public class Deck extends DAO<Deck> {
 		return senshi;
 	}
 
-	public boolean validateSenshi() {
-		AtomicInteger allowed = new AtomicInteger(3);
+	public int getMaxSenshiCopies() {
+		int allowed = 3;
 		if (getOrigins().minor() == Race.BEAST) {
-			allowed.getAndIncrement();
+			allowed++;
 		}
 
+		return allowed;
+	}
+
+	public boolean validateSenshi() {
+		int allowed = getMaxSenshiCopies();
 		HashBag<Senshi> bag = new HashBag<>(senshi);
-		bag.removeIf(s -> bag.getCount(s) <= allowed.get());
+		bag.removeIf(s -> bag.getCount(s) <= allowed);
 
 		return bag.isEmpty() && Utils.between(senshi.size(), 30, 37);
 	}
@@ -174,15 +179,18 @@ public class Deck extends DAO<Deck> {
 		return evogear;
 	}
 
+	public int getMaxEvogearCopies(int tier) {
+		int allowed = 5 - tier;
+		if (getOrigins().major() == Race.BEAST) {
+			allowed *= 2;
+		}
+
+		return allowed;
+	}
+
 	public boolean validateEvogear() {
 		HashBag<Evogear> bag = new HashBag<>(evogear);
-		bag.removeIf(e -> {
-			if (getOrigins().major() == Race.BEAST) {
-				return bag.getCount(e) <= (5 - e.getTier()) * 2;
-			}
-
-			return bag.getCount(e) <= 5 - e.getTier();
-		});
+		bag.removeIf(e -> bag.getCount(e) <= getMaxEvogearCopies(e.getTier()));
 
 		return bag.isEmpty() && Utils.between(evogear.size(), 0, 25);
 	}
@@ -278,7 +286,7 @@ public class Deck extends DAO<Deck> {
 		double[] vals = Calc.clamp(new double[]{
 				Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDef.get()) / 1.5),
 				Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5),
-				avgMana / totalMPCost.get(),
+				totalMPCost.get() / avgMana,
 				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
 				getMetaDivergence(),
 				0
@@ -289,7 +297,7 @@ public class Deck extends DAO<Deck> {
 		rc.setRadiiLabels(new String[]{
 				locale.get("str/attack"),
 				locale.get("str/defense"),
-				locale.get("str/mana_sustain"),
+				locale.get("str/mp_cost"),
 				locale.get("str/variety"),
 				locale.get("str/divergence"),
 				locale.get("str/overall_score")
@@ -320,6 +328,13 @@ public class Deck extends DAO<Deck> {
 						+ "\n" + Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1)
 						+ "\n" + Utils.roundToString((float) totalDmg.get() / allCards.size(), 1)
 						+ "\n" + Utils.roundToString((float) totalDef.get() / allCards.size(), 1)
+						+ "\n"
+						+ "\n" + getMaxSenshiCopies()
+						+ "\n" + getMaxEvogearCopies(1) + "/"
+						+ getMaxEvogearCopies(2) + "/"
+						+ getMaxEvogearCopies(3) + "/"
+						+ getMaxEvogearCopies(4)
+						+ "\n3"
 				, 950, 45, 175, 0,
 				s -> {
 					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
