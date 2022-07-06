@@ -16,23 +16,26 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.interfaces.AccFunction;
-import kotlin.Triple;
+import com.kuuhaku.Constants;
 
-import java.util.concurrent.Callable;
+import java.util.Objects;
 
-public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, int handCapacity) {
-	public BaseValues() {
-		this(5000, t -> 5, 5);
+public class PermMod extends AttrMod {
+	private final long SEED = Constants.DEFAULT_RNG.nextLong();
+
+	public PermMod(double value) {
+		super(null, -1, value);
 	}
 
-	public BaseValues(Callable<Triple<Integer, AccFunction<Integer, Integer>, Integer>> values) throws Exception {
-		this(values.call());
+	@Override
+	public boolean equals(Object o) {
+		return false;
 	}
 
-	public BaseValues(Triple<Integer, AccFunction<Integer, Integer>, Integer> values) {
-		this(values.getFirst(), values.getSecond(), values.getThird());
+	@Override
+	public int hashCode() {
+		return Objects.hash(SEED);
 	}
 }

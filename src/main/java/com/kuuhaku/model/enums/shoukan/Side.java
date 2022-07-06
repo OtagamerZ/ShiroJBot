@@ -19,5 +19,9 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum Side {
-	TOP, BOTTOM
+	TOP, BOTTOM;
+
+	public Side getOther() {
+		return this == TOP ? BOTTOM : TOP;
+	}
 }
