@@ -392,7 +392,7 @@ public class Arena implements Renderer {
 					IO.getResourceAsImage("shoukan/status_bar.png"),
 					new Rectangle2D.Double(0, 0, BAR_SIZE.height, BAR_SIZE.height)
 			));
-			g2d.setColor(hand.getUserDeck().getFrame().getThemeColor());
+			g2d.setBackground(hand.getUserDeck().getFrame().getThemeColor());
 			g2d.fillPolygon(Graph.makePoly(
 					BAR_SIZE.height / 3, 0,
 					BAR_SIZE.height * 2, 0,
