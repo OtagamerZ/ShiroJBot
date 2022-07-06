@@ -326,7 +326,7 @@ public class Arena implements Renderer {
 				for (int i = 0; i < 2; i++) {
 					int slotX = (int) ((BAR_SIZE.width - barWidth * 1.025) / 2 - (radius + 15)) + (radius + 15) * i;
 
-					g1.setColor(new Color(127, 127, 127, 150));
+					g1.setColor(Color.DARK_GRAY);
 					Polygon poly = Graph.makePoly(new Dimension(radius, radius),
 							0.5, 0,
 							1, 1 / 4d,
@@ -371,11 +371,11 @@ public class Arena implements Renderer {
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
-					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 2));
+					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 4));
 
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
-								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 4),
+								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 6),
 								6, Color.BLACK
 						);
 					} else {
