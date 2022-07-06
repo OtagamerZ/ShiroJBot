@@ -16,23 +16,19 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.interfaces;
 
-import com.kuuhaku.interfaces.AccFunction;
-import kotlin.Triple;
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import java.util.concurrent.Callable;
+@FunctionalInterface
+public interface AccFunction<T, R> extends Function<T, R> {
+	R apply(T t);
 
-public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, int handCapacity) {
-	public BaseValues() {
-		this(5000, t -> 5, 5);
-	}
+	default AccFunction<T, R> accumulate(BiFunction<T, R, R> accumulator) {
+		Objects.requireNonNull(accumulator);
 
-	public BaseValues(Callable<Triple<Integer, AccFunction<Integer, Integer>, Integer>> values) throws Exception {
-		this(values.call());
-	}
-
-	public BaseValues(Triple<Integer, AccFunction<Integer, Integer>, Integer> values) {
-		this(values.getFirst(), values.getSecond(), values.getThird());
+		return (T t) -> accumulator.apply(t, apply(t));
 	}
 }

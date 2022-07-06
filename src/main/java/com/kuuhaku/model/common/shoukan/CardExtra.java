@@ -26,7 +26,6 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.id.LocalizedDescId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
-import com.kuuhaku.model.records.shoukan.AttrMod;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.json.JSONObject;
 
@@ -66,6 +65,12 @@ public class CardExtra {
 		return (int) sum(mana);
 	}
 
+	public void setMana(int mana) {
+		AttrMod mod = new PermMod(mana);
+		this.mana.remove(mod);
+		this.mana.add(mod);
+	}
+
 	public void setMana(Drawable<?> source, int mana) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana);
 		this.mana.remove(mod);
@@ -80,6 +85,12 @@ public class CardExtra {
 
 	public int getBlood() {
 		return (int) sum(blood);
+	}
+
+	public void setBlood(int blood) {
+		AttrMod mod = new PermMod(blood);
+		this.blood.remove(mod);
+		this.blood.add(mod);
 	}
 
 	public void setBlood(Drawable<?> source, int blood) {
@@ -98,6 +109,12 @@ public class CardExtra {
 		return (int) sum(atk);
 	}
 
+	public void setAtk(int atk) {
+		AttrMod mod = new PermMod(atk);
+		this.atk.remove(mod);
+		this.atk.add(mod);
+	}
+
 	public void setAtk(Drawable<?> source, int atk) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk);
 		this.atk.remove(mod);
@@ -112,6 +129,12 @@ public class CardExtra {
 
 	public int getDef() {
 		return (int) sum(def);
+	}
+
+	public void setDef(int def) {
+		AttrMod mod = new PermMod(def);
+		this.def.remove(mod);
+		this.def.add(mod);
 	}
 
 	public void setDef(Drawable<?> source, int def) {
@@ -130,6 +153,12 @@ public class CardExtra {
 		return (int) sum(dodge);
 	}
 
+	public void setDodge(int dodge) {
+		AttrMod mod = new PermMod(dodge);
+		this.dodge.remove(mod);
+		this.dodge.add(mod);
+	}
+
 	public void setDodge(Drawable<?> source, int dodge) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge);
 		this.dodge.remove(mod);
@@ -144,6 +173,12 @@ public class CardExtra {
 
 	public int getBlock() {
 		return (int) sum(block);
+	}
+
+	public void setBlock(int block) {
+		AttrMod mod = new PermMod(block);
+		this.block.remove(mod);
+		this.block.add(mod);
 	}
 
 	public void setBlock(Drawable<?> source, int block) {
@@ -162,6 +197,12 @@ public class CardExtra {
 		return sum(power);
 	}
 
+	public void setPower(double power) {
+		AttrMod mod = new PermMod(power);
+		this.power.remove(mod);
+		this.power.add(mod);
+	}
+
 	public void setPower(Drawable<?> source, double power) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power);
 		this.power.remove(mod);
@@ -176,6 +217,12 @@ public class CardExtra {
 
 	public int getTier() {
 		return (int) sum(tier);
+	}
+
+	public void setTier(int tier) {
+		AttrMod mod = new PermMod(tier);
+		this.tier.remove(mod);
+		this.tier.add(mod);
 	}
 
 	public void setTier(Drawable<?> source, int tier) {
@@ -263,8 +310,8 @@ public class CardExtra {
 	@SuppressWarnings("unchecked")
 	public void expireMods() {
 		Predicate<AttrMod> check = mod -> {
-			if (mod.expiration() != null) {
-				return mod.expiration().decrementAndGet() <= 0;
+			if (mod.getExpiration() != null) {
+				return mod.getExpiration().decrementAndGet() <= 0;
 			}
 
 			return false;
@@ -284,7 +331,7 @@ public class CardExtra {
 	private double sum(Set<AttrMod> mods) {
 		double out = 0;
 		for (AttrMod mod : mods) {
-			out += mod.value();
+			out += mod.getValue();
 		}
 
 		return Calc.round(out, 1);

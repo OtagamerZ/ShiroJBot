@@ -154,32 +154,45 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	@Override
 	public int getMPCost() {
-		return (int) ((base.getMana() + stats.getMana()) * getCostMult());
+		return (int) Math.max(0, (base.getMana() + stats.getMana()) * getCostMult());
 	}
 
 	@Override
 	public int getHPCost() {
-		return (int) ((base.getBlood() + stats.getBlood()) * getCostMult());
+		return (int) Math.max(0, (base.getBlood() + stats.getBlood()) * getCostMult());
 	}
 
 	@Override
 	public int getDmg() {
-		return (int) ((base.getAtk() + stats.getAtk()) * getAttrMult());
+		int sum = base.getAtk() + stats.getAtk();
+
+		return (int) Math.max(0, sum * getAttrMult());
 	}
 
 	@Override
 	public int getDef() {
-		return (int) ((base.getDef() + stats.getDef()) * getAttrMult());
+		int sum = base.getDef() + stats.getDef();
+
+		return (int) Math.max(0, sum * getAttrMult());
 	}
 
 	@Override
 	public int getDodge() {
-		return (int) ((base.getDodge() + stats.getDodge()) * getAttrMult());
+		int sum = base.getDodge() + stats.getDodge();
+
+		return (int) Math.max(0, sum * getAttrMult());
 	}
 
 	@Override
 	public int getBlock() {
-		return (int) ((base.getBlock() + stats.getBlock()) * getAttrMult());
+		int sum = base.getBlock() + stats.getBlock();
+
+		int min = 0;
+		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
+			min++;
+		}
+
+		return (int) Math.max(0, (min + sum) * getAttrMult());
 	}
 
 	@Override
