@@ -263,7 +263,7 @@ public class Arena implements Renderer {
 
 				g1.setPaint(new TexturePaint(
 						IO.getResourceAsImage("shoukan/status_bar.png"),
-						new Rectangle2D.Double(0, 0, BAR_SIZE.height * 3, BAR_SIZE.height * 3)
+						new Rectangle2D.Double(0, 0, BAR_SIZE.height * 4, BAR_SIZE.height * 4)
 				));
 				g1.fill(boundaries);
 				g1.setPaint(null);
@@ -402,7 +402,7 @@ public class Arena implements Renderer {
 
 			g2d.setPaint(new TexturePaint(
 					IO.getResourceAsImage("shoukan/status_bar.png"),
-					new Rectangle2D.Double(0, 0, BAR_SIZE.height * 3, BAR_SIZE.height * 3)
+					new Rectangle2D.Double(0, 0, BAR_SIZE.height * 4, BAR_SIZE.height * 4)
 			));
 			g2d.fill(poly);
 			g2d.setPaint(null);
