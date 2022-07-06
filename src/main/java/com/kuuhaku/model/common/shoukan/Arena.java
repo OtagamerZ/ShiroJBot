@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -246,7 +247,7 @@ public class Arena implements Renderer {
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHints(Constants.HD_HINTS);
 
-			Graph.applyTransformed(g2d, BAR_SIZE.height * 2, 0, g1 -> {
+			Graph.applyTransformed(g2d, reversed ? BAR_SIZE.height * 2 : 0, 0, g1 -> {
 				if (reversed) {
 					g1.scale(-1, -1);
 					g1.translate(-BAR_SIZE.width, -BAR_SIZE.height);
@@ -321,7 +322,7 @@ public class Arena implements Renderer {
 				}
 
 				int radius = BAR_SIZE.height - 10;
-				List<BufferedImage> icons = ori.images();
+				List<BufferedImage> icons = hand.getOrigin().images();
 				for (int i = 0; i < 2; i++) {
 					int slotX = (int) ((BAR_SIZE.width - barWidth * 1.025) / 2 - (radius + 15)) + (radius + 15) * i;
 
@@ -352,17 +353,23 @@ public class Arena implements Renderer {
 						);
 					}
 
+					int mCd = switch (hand.getOrigin().major()) {
+						case SPIRIT -> 3;
+						case UNDEAD -> 4;
+						default -> 1;
+					};
+
 					g1.setColor(new Color(255, 0, 0, 200));
 					g1.fillArc(
 							15 + slotX - radius / 2, 5 - radius / 2,
 							radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
-							cd * 360 / mCd
+							hand.getCooldown() * 360 / mCd
 					);
 				}
 				g1.setClip(null);
 
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
-					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(mana), 2, "0");
+					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
 					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 2));
 
@@ -379,9 +386,9 @@ public class Arena implements Renderer {
 					}
 
 					String hpText = "HP: "
-							+ StringUtils.leftPad(String.valueOf(hp), 4, "0")
+							+ StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0")
 							+ "/"
-							+ StringUtils.leftPad(String.valueOf(mHp), 4, "0");
+							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 					g2.setColor(Color.WHITE);
 					g2.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
@@ -429,28 +436,30 @@ public class Arena implements Renderer {
 					Lock[] values = Lock.values();
 					for (int i = 0; i < values.length; i++) {
 						Lock lock = values[i];
-						boolean locked = locks.containsKey(lock);
+						Timed<Lock> lk = hand.getLocks().stream()
+								.filter(t -> t.obj().equals(lock))
+								.findFirst().orElse(null);
 
 						int rad = BAR_SIZE.height / 3 - 4;
 						int x = (int) (BAR_SIZE.width / 1.4) + (BAR_SIZE.height / 3 + 35) * i;
 						if (reversed) {
-							g2.drawImage(lock.getImage(locked),
+							g2.drawImage(lock.getImage(lk != null),
 									-(x + rad - 5) - rad, -rad,
 									rad, rad,
 									null
 							);
 						} else {
-							g2.drawImage(lock.getImage(locked),
+							g2.drawImage(lock.getImage(lk != null),
 									x, 0,
 									rad, rad,
 									null
 							);
 						}
 
-						if (locked) {
+						if (lk != null) {
 							g2.setColor(Color.RED);
 							g2.setFont(new Font("Arial", Font.BOLD, rad - 5));
-							String text = String.valueOf(locks.get(lock));
+							String text = String.valueOf(lk.time());
 
 							if (reversed) {
 								Graph.drawOutlinedString(g2, text,
