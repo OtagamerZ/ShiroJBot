@@ -503,10 +503,6 @@ public class Hand {
 		cooldown = Bit.set(cooldown, 1, Math.max(0, curr - time), 8);
 	}
 
-	public void reduceCooldown() {
-		this.cooldown = Math.max(0, cooldown - 1);
-	}
-
 	public int getKills() {
 		return kills;
 	}
