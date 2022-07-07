@@ -67,7 +67,7 @@ public class AttrMod {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		if (index < 0) return false;
+
 		AttrMod attrMod = (AttrMod) o;
 		return index == attrMod.index && Objects.equals(source, attrMod.source);
 	}
