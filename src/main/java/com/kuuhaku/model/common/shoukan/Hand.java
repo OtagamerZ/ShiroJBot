@@ -143,6 +143,8 @@ public class Hand {
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
 		// TODO Secondary divinity
+
+		hp += 100;
 	}
 
 	public String getUid() {
