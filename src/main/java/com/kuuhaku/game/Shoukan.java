@@ -395,10 +395,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> d : curr.getCards()) {
-				if (d instanceof Senshi s) {
-					s.getStats().setMana(s, -1);
-				} else if (d instanceof Evogear e) {
-					e.getStats().setMana(e, -1);
+				if (Calc.chance(25)) {
+					if (d instanceof Senshi s) {
+						s.getStats().setMana(-1);
+					} else if (d instanceof Evogear e) {
+						e.getStats().setMana(-1);
+					}
 				}
 			}
 		}
