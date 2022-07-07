@@ -377,7 +377,7 @@ public class Shoukan extends GameInstance<Phase> {
 		List<Drawable<?>> cards = new ArrayList<>();
 		JSONArray batch = args.getJSONArray("inHand");
 		for (Object o : batch) {
-			int idx = Integer.parseInt(String.valueOf(o));
+			int idx = ((Number) o).intValue();
 			if (!Utils.between(idx, 1, curr.getCards().size() + 1)) {
 				getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
 				return false;
