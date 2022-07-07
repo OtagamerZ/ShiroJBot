@@ -189,7 +189,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 		int min = 0;
 		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
-			min++;
+			min += 2;
 		}
 
 		return (int) Math.max(0, (min + sum) * getAttrMult());
