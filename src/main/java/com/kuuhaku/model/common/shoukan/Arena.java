@@ -494,13 +494,13 @@ public class Arena implements Renderer {
 						g1.setColor(Color.WHITE);
 						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
 						String text = "S: %2s\nE: %2s\nF: %2s".formatted(
-								22,//hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
+								hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
 								hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
 								hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
 						);
 
 						if (reversed) {
-							Graph.drawMultilineString(g1, text, g1.getFontMetrics().stringWidth("0"), rad - 5, 375, -10);
+							Graph.drawMultilineString(g1, text, g1.getFontMetrics().stringWidth("0") / 2, rad - 5, 375, -10);
 						} else {
 							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 000"), rad - 5, 375, -10);
 						}
