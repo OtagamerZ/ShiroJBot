@@ -455,9 +455,9 @@ public class Arena implements Renderer {
 
 			int rad = BAR_SIZE.height;
 			Graph.applyTransformed(g,
-					reversed ? 1850 : 0, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
+					reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
 					g1 -> {
-						int space = 625;
+						int space = 615;
 
 						Lock[] values = Lock.values();
 						for (int i = 0; i < values.length; i++) {
@@ -467,7 +467,7 @@ public class Arena implements Renderer {
 									.findFirst().orElse(null);
 
 							g1.drawImage(lock.getImage(lk != null),
-									0, 0,
+									space / 2 - ((rad + 50) * values.length) / 2 + (rad + 50) * i, 0,
 									rad, rad,
 									null
 							);
