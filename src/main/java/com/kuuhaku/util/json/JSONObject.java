@@ -40,7 +40,7 @@ public class JSONObject extends HashMap<String, Object> {
 	}
 
 	public JSONObject(Object bean) {
-		this(String.valueOf(bean));
+		this(JSONUtils.toJSON(bean));
 	}
 
 	public Iterator<Entry<String, Object>> iterator() {
@@ -234,7 +234,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public JSONArray getJSONArray(String key) {
 		try {
-			return new JSONArray(get(key));
+			return new JSONArray(getString(key));
 		} catch (NullPointerException e) {
 			return null;
 		}
@@ -242,7 +242,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public JSONArray getJSONArray(String key, JSONArray or) {
 		try {
-			List<?> ar = (List<?>) get(key);
+			@Language("JSON5") String ar = getString(key);
 			return ar == null ? or : new JSONArray(ar);
 		} catch (NullPointerException e) {
 			return or;
@@ -251,7 +251,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public JSONObject getJSONObject(String key) {
 		try {
-			return new JSONObject(get(key));
+			return new JSONObject(getString(key));
 		} catch (NullPointerException e) {
 			return null;
 		}
@@ -259,7 +259,7 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public JSONObject getJSONObject(String key, JSONObject or) {
 		try {
-			Map<?, ?> jo = (Map<?, ?>) get(key);
+			@Language("JSON5") String jo = getString(key);
 			return jo == null ? or : new JSONObject(jo);
 		} catch (NullPointerException e) {
 			return or;
