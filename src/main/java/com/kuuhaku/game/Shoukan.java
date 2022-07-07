@@ -495,6 +495,8 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 			case FALLEN -> {
 				int degen = (int) (op.getDegen() * 0.05);
+				op.modHP(degen);
+
 				while (degen > 0) {
 					RegDeg rd = op.getRegdeg().stream()
 							.filter(d -> d.remaining() < 0)
