@@ -489,27 +489,20 @@ public class Arena implements Renderer {
 					}
 			);
 
-			Graph.applyTransformed(g, reversed ? 255 : 2230, reversed ? 1176 : 426,
+			Graph.applyTransformed(g, reversed ? 265 : 2240, reversed ? 1176 : 426,
 					g1 -> {
 						g1.setColor(Color.WHITE);
 						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
+						String text = "S: %s\nE: %s\nF: %s".formatted(
+								hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
+								hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
+								hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
+						);
 
 						if (reversed) {
-							String text = "S: %s\nE: %s\nF: %s".formatted(
-									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
-									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
-									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
-							);
-
-							Graph.drawMultilineString(g1, text, 0, rad - 5, 375);
+							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10);
 						} else {
-							String text = "%s :S\n%s :E\n%s :F".formatted(
-									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
-									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
-									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
-							);
-
-							Graph.drawMultilineString(g1, text, 0, rad - 5, 375,
+							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10,
 									(str, px, py) -> g1.drawString(str, px - g1.getFontMetrics().stringWidth(str), py)
 							);
 						}
