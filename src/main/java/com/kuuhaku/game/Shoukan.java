@@ -510,7 +510,7 @@ public class Shoukan extends GameInstance<Phase> {
 					degen = rd.reduce(degen);
 				}
 			}
-			case SPAWN -> op.addDegen((int) (op.getBase().hp() * 0.01), 0.1);
+			case SPAWN -> op.addDegen((int) (op.getBase().hp() * 0.05), 0.1);
 		}
 
 		int dmg = ally.getDmg();
