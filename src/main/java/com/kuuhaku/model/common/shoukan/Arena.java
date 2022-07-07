@@ -363,12 +363,14 @@ public class Arena implements Renderer {
 						default -> 1;
 					};
 
-					g1.setColor(new Color(255, 0, 0, 200));
-					g1.fillArc(
-							15 + slotX - radius / 2, 5 - radius / 2,
-							radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
-							hand.getCooldown() * 360 / mCd
-					);
+					if (mCd > 1) {
+						g1.setColor(new Color(255, 0, 0, 200));
+						g1.fillArc(
+								15 + slotX - radius / 2, 5 - radius / 2,
+								radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
+								hand.getCooldown() * 360 / mCd
+						);
+					}
 				}
 				g1.setClip(null);
 
