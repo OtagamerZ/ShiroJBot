@@ -286,7 +286,7 @@ public class Deck extends DAO<Deck> {
 		double[] vals = Calc.clamp(new double[]{
 				Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDef.get()) / 1.5),
 				Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5),
-				avgMana / totalMPCost.get() / allCards.size(),
+				avgMana / ((double) totalMPCost.get() / allCards.size()),
 				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
 				getMetaDivergence(),
 				0
