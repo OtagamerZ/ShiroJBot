@@ -66,6 +66,10 @@ public class Hand {
 	private final List<Drawable<?>> cards = new BondedList<>(d -> d.setHand(this));
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> d.setHand(this));
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getGraveyard().addAll(s.getEquipments());
+		}
+
 		d.reset();
 
 		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(2)) {
