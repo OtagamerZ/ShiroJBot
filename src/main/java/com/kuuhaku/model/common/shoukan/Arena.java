@@ -326,7 +326,7 @@ public class Arena implements Renderer {
 				for (int i = 0; i < 2; i++) {
 					int slotX = (int) ((BAR_SIZE.width - barWidth * 1.025) / 2 - (radius + 15)) + (radius + 15) * i;
 
-					g1.setColor(new Color(50, 50, 50, 150));
+					g1.setColor(new Color(50, 50, 50, 100));
 					Polygon poly = Graph.makePoly(new Dimension(radius, radius),
 							0.5, 0,
 							1, 1 / 4d,
