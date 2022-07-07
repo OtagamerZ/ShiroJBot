@@ -495,10 +495,11 @@ public class Arena implements Renderer {
 					g1 -> {
 						g1.setColor(Color.WHITE);
 						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
-						String text = "S: %2s\nE: %2s\nF: %2s".formatted(
+						String text = "S: %2s\nE: %2s\nF: %2s\nD: %2s".formatted(
 								hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
 								hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
-								hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
+								hand.getGraveyard().stream().filter(d -> d instanceof Field).count(),
+								hand.getDiscard().size()
 						);
 
 						if (reversed) {
