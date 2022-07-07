@@ -45,6 +45,7 @@ import com.kuuhaku.model.records.shoukan.RegDeg;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.*;
@@ -365,6 +366,45 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		reportEvent("str/discard_card", curr.getName(), chosen);
+		return true;
+	}
+
+	@PhaseConstraint("PLAN")
+	@PlayerAction("(?<inHand>\\[\\d+(,\\d+)*]),d")
+	private boolean discardBatch(JSONObject args) {
+		Hand curr = getCurrent();
+
+		List<String> names = new ArrayList<>();
+		JSONArray batch = args.getJSONArray("inHand");
+		for (Object o : batch) {
+			int idx = Integer.parseInt(String.valueOf(o));
+			if (!Utils.between(idx, 1, curr.getCards().size() + 1)) {
+				getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
+				return false;
+			}
+
+			Drawable<?> chosen = curr.getCards().get(idx - 1);
+			if (!chosen.isAvailable()) {
+				getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+				return false;
+			}
+
+			curr.getDiscard().add(chosen);
+
+			if (curr.getOrigin().synergy() == Race.FAMILIAR) {
+				for (Drawable<?> d : curr.getCards()) {
+					if (d instanceof Senshi s) {
+						s.getStats().setMana(s, -1);
+					} else if (d instanceof Evogear e) {
+						e.getStats().setMana(e, -1);
+					}
+				}
+			}
+
+			names.add(chosen.toString());
+		}
+
+		reportEvent("str/discard_card", curr.getName(), Utils.properlyJoin("str/and").apply(names));
 		return true;
 	}
 
