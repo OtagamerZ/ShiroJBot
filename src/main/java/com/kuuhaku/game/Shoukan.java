@@ -21,6 +21,7 @@ package com.kuuhaku.game;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
+import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.game.engine.GameReport;
@@ -59,6 +60,8 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class Shoukan extends GameInstance<Phase> {
+	private final long seed = Constants.DEFAULT_RNG.nextLong();
+
 	private final I18N locale;
 	private final String[] players;
 	private final Map<Side, Hand> hands;
@@ -827,5 +830,18 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void resetTimer() {
 		super.resetTimer();
 		getCurrent().setForfeit(false);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Shoukan shoukan = (Shoukan) o;
+		return seed == shoukan.seed && singleplayer == shoukan.singleplayer;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(seed, singleplayer);
 	}
 }
