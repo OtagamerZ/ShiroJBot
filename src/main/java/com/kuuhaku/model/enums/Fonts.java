@@ -29,7 +29,8 @@ import static java.text.AttributedCharacterIterator.Attribute;
 
 public enum Fonts {
 	HAMMERSMITH_ONE("font/HammersmithOne.ttf"),
-	STAATLICHES("font/Staatliches.ttf");
+	STAATLICHES("font/Staatliches.ttf"),
+	UBUNTU("font/Ubuntu.ttf");
 
 	private final Font font;
 
