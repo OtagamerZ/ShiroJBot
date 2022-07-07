@@ -495,7 +495,7 @@ public class Arena implements Renderer {
 					g1 -> {
 						g1.setColor(Color.WHITE);
 						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
-						String text = "S: %2s\nE: %2s\nF: %2s\nD: %2s".formatted(
+						String text = "S:\t%2s\nE:\t%2s\nF:\t%2s\nD:\t%2s".formatted(
 								hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
 								hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
 								hand.getGraveyard().stream().filter(d -> d instanceof Field).count(),
@@ -507,7 +507,7 @@ public class Arena implements Renderer {
 									(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
 							);
 						} else {
-							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 00I"), rad - 5, 375, -10,
+							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S:\t00I"), rad - 5, 375, -10,
 									(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
 							);
 						}
