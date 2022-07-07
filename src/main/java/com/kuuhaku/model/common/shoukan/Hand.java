@@ -114,8 +114,8 @@ public class Hand {
 					default -> mpGain;
 				};
 
-				if (origin.synergy() == Race.FEY && Calc.chance(1)) {
-					mpGain = mpGain.accumulate((t, mp) -> mp * 2);
+				if (origin.synergy() == Race.FEY) {
+					mpGain = mpGain.accumulate((t, mp) -> mp * (Calc.chance(1) ? 2 : 1));
 				} else if (origin.synergy() == Race.GHOST) {
 					mpGain = mpGain.accumulate((t, mp) -> mp + (t % 10 == 0 ? 1 : 0));
 				}
