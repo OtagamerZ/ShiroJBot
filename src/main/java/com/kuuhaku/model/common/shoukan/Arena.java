@@ -489,29 +489,29 @@ public class Arena implements Renderer {
 					}
 			);
 
-			Graph.applyTransformed(g, reversed ? 255 : 2230, reversed ? 1526 : 426,
+			Graph.applyTransformed(g, reversed ? 255 : 2230, reversed ? 1176 : 426,
 					g1 -> {
-						g1.setColor(Color.RED);
-						g1.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, rad - 5));
+						g1.setColor(Color.WHITE);
+						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
 
 						if (reversed) {
-							String text = "%s :S\n%s :E\n%s :F".formatted(
-									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
-									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
-									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
-							);
-
-							Graph.drawMultilineString(g1, text, 0, 0, 375,
-									(str, px, py) -> g1.drawString(str, px - g1.getFontMetrics().stringWidth(str), py)
-							);
-						} else {
 							String text = "S: %s\nE: %s\nF: %s".formatted(
 									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
 									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
 									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
 							);
 
-							Graph.drawMultilineString(g1, text, 0, 0, 375);
+							Graph.drawMultilineString(g1, text, 0, rad - 5, 375);
+						} else {
+							String text = "%s :S\n%s :E\n%s :F".formatted(
+									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
+									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
+									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
+							);
+
+							Graph.drawMultilineString(g1, text, 0, rad - 5, 375,
+									(str, px, py) -> g1.drawString(str, px - g1.getFontMetrics().stringWidth(str), py)
+							);
 						}
 					}
 			);
