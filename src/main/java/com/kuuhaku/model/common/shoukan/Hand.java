@@ -413,7 +413,7 @@ public class Hand {
 	}
 
 	public void addDegen(int degen, double dpt) {
-		degen = Math.min(degen, base.hp() - getRegen());
+		degen = Math.min(degen, base.hp() - getDegen());
 
 		this.regdeg.add(new RegDeg(Math.min(degen, 0), dpt));
 	}
