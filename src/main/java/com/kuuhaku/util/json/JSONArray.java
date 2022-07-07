@@ -44,7 +44,7 @@ public class JSONArray extends ArrayList<Object> {
 	}
 
 	public JSONArray(Object array) {
-		this(JSONUtils.toJSON(array));
+		this(String.valueOf(array));
 	}
 
 	public Object get(int index) {

@@ -40,7 +40,7 @@ public class JSONObject extends HashMap<String, Object> {
 	}
 
 	public JSONObject(Object bean) {
-		this(JSONUtils.toJSON(bean));
+		this(String.valueOf(bean));
 	}
 
 	public Iterator<Entry<String, Object>> iterator() {
