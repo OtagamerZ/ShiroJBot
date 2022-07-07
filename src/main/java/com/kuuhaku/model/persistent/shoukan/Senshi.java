@@ -257,7 +257,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 		int min = 0;
 		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
-			min += 2;
+			min++;
 		}
 
 		return (int) Math.max(0, (min + sum) * getAttrMult());
@@ -417,7 +417,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		equipments = new ArrayList<>();
 		stats = new CardExtra();
 		slot = null;
-		state = 0x2;
+
+		if (isSolid()) {
+			state = 0x3;
+		} else {
+			state = 0x2;
+		}
 	}
 
 	@Override
