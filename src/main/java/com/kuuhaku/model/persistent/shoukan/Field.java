@@ -139,7 +139,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public void reset() {
-		state = 0x2;
+		if (isSolid()) {
+			state = 0x3;
+		} else {
+			state = 0x2;
+		}
 	}
 
 	@Override

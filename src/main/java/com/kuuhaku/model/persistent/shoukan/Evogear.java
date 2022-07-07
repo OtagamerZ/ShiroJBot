@@ -189,7 +189,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 		int min = 0;
 		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
-			min += 2;
+			min++;
 		}
 
 		return (int) Math.max(0, (min + sum) * getAttrMult());
@@ -282,7 +282,12 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Override
 	public void reset() {
 		stats = new CardExtra();
-		state = 0x2;
+
+		if (isSolid()) {
+			state = 0x3;
+		} else {
+			state = 0x2;
+		}
 	}
 
 	@Override
