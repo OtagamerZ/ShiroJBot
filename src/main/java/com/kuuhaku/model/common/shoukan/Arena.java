@@ -24,6 +24,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -474,7 +475,7 @@ public class Arena implements Renderer {
 
 							if (lk != null) {
 								g1.setColor(Color.RED);
-								g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
+								g1.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, rad - 5));
 								String text = String.valueOf(lk.time());
 
 								Graph.drawOutlinedString(g1, text,
