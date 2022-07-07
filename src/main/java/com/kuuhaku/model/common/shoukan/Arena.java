@@ -407,7 +407,7 @@ public class Arena implements Renderer {
 						String rdText = "";
 						if (regdeg != 0) {
 							rdText = (regdeg > 0 ? " +" : " ") + regdeg;
-							g2.setColor(regdeg < 0 ? new Color(0xAD0000) : new Color(0x009DFF));
+							g2.setColor(regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF));
 							Graph.drawOutlinedString(g2, rdText,
 									(int) -(bar.x + 6 + g2.getFontMetrics().stringWidth(rdText)), (int) -(bar.y + 6),
 									6, Color.BLACK
@@ -422,7 +422,7 @@ public class Arena implements Renderer {
 					} else {
 						if (regdeg != 0) {
 							String rdText = (regdeg > 0 ? " +" : " ") + regdeg;
-							g2.setColor(regdeg < 0 ? new Color(0xAD0000) : new Color(0x009DFF));
+							g2.setColor(regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF));
 							Graph.drawOutlinedString(g2, rdText,
 									(int) (bar.x + 6 + g2.getFontMetrics().stringWidth(hpText)), (int) (bar.y + bar.height - 6),
 									6, Color.BLACK
