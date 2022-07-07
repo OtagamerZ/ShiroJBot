@@ -503,7 +503,7 @@ public class Arena implements Renderer {
 							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10);
 						} else {
 							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10,
-									(str, px, py) -> g1.drawString(str, px - g1.getFontMetrics().stringWidth(str), py)
+									(str, px, py) -> g1.drawString(str, px - g1.getFontMetrics().stringWidth("P: 00"), py)
 							);
 						}
 					}
