@@ -156,7 +156,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
-			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
+			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(100));
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
@@ -171,7 +171,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
-			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
+			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(100));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
