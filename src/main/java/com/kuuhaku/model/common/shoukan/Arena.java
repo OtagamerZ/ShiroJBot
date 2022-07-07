@@ -502,7 +502,7 @@ public class Arena implements Renderer {
 						if (reversed) {
 							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10);
 						} else {
-							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("P: 00"), rad - 5, 375, -10);
+							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("MMMMM"), rad - 5, 375, -10);
 						}
 					}
 			);
