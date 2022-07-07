@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.Timed;
@@ -485,7 +486,35 @@ public class Arena implements Renderer {
 								);
 							}
 						}
-					});
+					}
+			);
+
+			Graph.applyTransformed(g, reversed ? 255 : 2230, reversed ? 1526 : 426,
+					g1 -> {
+						g1.setColor(Color.RED);
+						g1.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, rad - 5));
+
+						if (reversed) {
+							String text = "%s :S\n%s :E\n%s :F".formatted(
+									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
+									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
+									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
+							);
+
+							Graph.drawMultilineString(g1, text, 0, 0, 375,
+									(str, px, py) -> g1.drawString(str, px - g1.getFontMetrics().stringWidth(str), py)
+							);
+						} else {
+							String text = "S: %s\nE: %s\nF: %s".formatted(
+									hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
+									hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
+									hand.getGraveyard().stream().filter(d -> d instanceof Field).count()
+							);
+
+							Graph.drawMultilineString(g1, text, 0, 0, 375);
+						}
+					}
+			);
 		};
 	}
 
