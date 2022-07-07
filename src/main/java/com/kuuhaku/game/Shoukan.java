@@ -156,7 +156,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
-			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(1));
+			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
@@ -171,7 +171,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
-			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(1));
+			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
@@ -435,10 +435,12 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getDiscard().addAll(cards);
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> d : curr.getCards()) {
-				if (d instanceof Senshi s) {
-					s.getStats().setMana(s, -cards.size());
-				} else if (d instanceof Evogear e) {
-					e.getStats().setMana(e, -cards.size());
+				if (d.isAvailable() && Calc.chance(25)) {
+					if (d instanceof Senshi s) {
+						s.getStats().setMana(s, -cards.size());
+					} else if (d instanceof Evogear e) {
+						e.getStats().setMana(e, -cards.size());
+					}
 				}
 			}
 		}
