@@ -67,7 +67,7 @@ public class Hand {
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
 		d.reset();
 
-		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(1)) {
+		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(2)) {
 			cards.add(d.copy());
 			d.setSolid(false);
 		}
