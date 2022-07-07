@@ -454,7 +454,7 @@ public class Arena implements Renderer {
 			Graph.drawOutlinedString(g, hand.getName(), x, y, 10, Color.black);
 
 			int rad = BAR_SIZE.height / 2;
-			Graph.applyTransformed(g2d,
+			Graph.applyTransformed(g,
 					reversed ? 1850 : 0, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
 					g1 -> {
 						int space = 625;
