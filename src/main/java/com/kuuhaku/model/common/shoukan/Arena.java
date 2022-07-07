@@ -454,34 +454,36 @@ public class Arena implements Renderer {
 			Graph.drawOutlinedString(g, hand.getName(), x, y, 10, Color.black);
 
 			int rad = BAR_SIZE.height / 2;
-			Graph.applyTransformed(g2d, reversed ? 1850 : 0, reversed ? -(rad + 5) : 5, g1 -> {
-				int space = 625;
+			Graph.applyTransformed(g2d,
+					reversed ? 1850 : 0, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
+					g1 -> {
+						int space = 625;
 
-				Lock[] values = Lock.values();
-				for (int i = 0; i < values.length; i++) {
-					Lock lock = values[i];
-					Timed<Lock> lk = hand.getLocks().stream()
-							.filter(t -> t.obj().equals(lock))
-							.findFirst().orElse(null);
+						Lock[] values = Lock.values();
+						for (int i = 0; i < values.length; i++) {
+							Lock lock = values[i];
+							Timed<Lock> lk = hand.getLocks().stream()
+									.filter(t -> t.obj().equals(lock))
+									.findFirst().orElse(null);
 
-					g1.drawImage(lock.getImage(lk != null),
-							0, 0,
-							rad, rad,
-							null
-					);
+							g1.drawImage(lock.getImage(lk != null),
+									0, 0,
+									rad, rad,
+									null
+							);
 
-					if (lk != null) {
-						g1.setColor(Color.RED);
-						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
-						String text = String.valueOf(lk.time());
+							if (lk != null) {
+								g1.setColor(Color.RED);
+								g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
+								String text = String.valueOf(lk.time());
 
-						Graph.drawOutlinedString(g1, text,
-								0, rad - 5,
-								6, Color.BLACK
-						);
-					}
-				}
-			});
+								Graph.drawOutlinedString(g1, text,
+										0, rad - 5,
+										6, Color.BLACK
+								);
+							}
+						}
+					});
 		};
 	}
 
