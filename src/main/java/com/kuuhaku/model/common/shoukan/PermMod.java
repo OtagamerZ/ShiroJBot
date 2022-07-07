@@ -23,7 +23,7 @@ import com.kuuhaku.Constants;
 import java.util.Objects;
 
 public class PermMod extends AttrMod {
-	private final long SEED = Constants.DEFAULT_RNG.nextLong();
+	private final long seed = Constants.DEFAULT_RNG.nextLong();
 
 	public PermMod(double value) {
 		super(null, -1, value);
@@ -36,6 +36,6 @@ public class PermMod extends AttrMod {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(SEED);
+		return Objects.hash(seed);
 	}
 }
