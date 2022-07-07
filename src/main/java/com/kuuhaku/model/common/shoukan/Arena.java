@@ -494,7 +494,7 @@ public class Arena implements Renderer {
 			Graph.applyTransformed(g, reversed ? 265 : 2240, reversed ? 1176 : 426,
 					g1 -> {
 						g1.setColor(Color.WHITE);
-						g1.setFont(Fonts.UBUNTU.deriveFont(Font.BOLD, rad - 5));
+						g1.setFont(Fonts.UBUNTU_MONO.deriveFont(Font.BOLD, rad - 5));
 						String text = "S: %2s\nE: %2s\nF: %2s\nD: %2s".formatted(
 								hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
 								hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
