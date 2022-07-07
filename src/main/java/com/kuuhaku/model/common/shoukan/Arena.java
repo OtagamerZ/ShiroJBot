@@ -430,51 +430,6 @@ public class Arena implements Renderer {
 				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				g1.setStroke(new BasicStroke(5));
 				g1.draw(boundaries);
-				g1.setStroke(new BasicStroke());
-
-				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
-					Lock[] values = Lock.values();
-					for (int i = 0; i < values.length; i++) {
-						Lock lock = values[i];
-						Timed<Lock> lk = hand.getLocks().stream()
-								.filter(t -> t.obj().equals(lock))
-								.findFirst().orElse(null);
-
-						int rad = BAR_SIZE.height / 3 - 4;
-						int x = (int) (BAR_SIZE.width / 1.4) + (BAR_SIZE.height / 3 + 35) * i;
-						if (reversed) {
-							g2.drawImage(lock.getImage(lk != null),
-									-(x + rad - 5) - rad, -rad,
-									rad, rad,
-									null
-							);
-						} else {
-							g2.drawImage(lock.getImage(lk != null),
-									x, 0,
-									rad, rad,
-									null
-							);
-						}
-
-						if (lk != null) {
-							g2.setColor(Color.RED);
-							g2.setFont(new Font("Arial", Font.BOLD, rad - 5));
-							String text = String.valueOf(lk.time());
-
-							if (reversed) {
-								Graph.drawOutlinedString(g2, text,
-										-(x + rad - g2.getFontMetrics().stringWidth(text)), (int) -(bar.y - rad),
-										6, Color.BLACK
-								);
-							} else {
-								Graph.drawOutlinedString(g2, text,
-										x + rad + 5, (int) (bar.y - 14),
-										6, Color.BLACK
-								);
-							}
-						}
-					}
-				});
 			});
 
 			g2d.dispose();
@@ -497,6 +452,36 @@ public class Arena implements Renderer {
 			}
 
 			Graph.drawOutlinedString(g, hand.getName(), x, y, 10, Color.black);
+
+			int rad = BAR_SIZE.height / 2;
+			Graph.applyTransformed(g2d, reversed ? 1850 : 0, reversed ? -(rad + 5) : 5, g1 -> {
+				int space = 625;
+
+				Lock[] values = Lock.values();
+				for (int i = 0; i < values.length; i++) {
+					Lock lock = values[i];
+					Timed<Lock> lk = hand.getLocks().stream()
+							.filter(t -> t.obj().equals(lock))
+							.findFirst().orElse(null);
+
+					g1.drawImage(lock.getImage(lk != null),
+							0, 0,
+							rad, rad,
+							null
+					);
+
+					if (lk != null) {
+						g1.setColor(Color.RED);
+						g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
+						String text = String.valueOf(lk.time());
+
+						Graph.drawOutlinedString(g1, text,
+								0, rad - 5,
+								6, Color.BLACK
+						);
+					}
+				}
+			});
 		};
 	}
 
