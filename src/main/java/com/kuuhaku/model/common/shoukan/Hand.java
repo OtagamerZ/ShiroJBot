@@ -39,6 +39,7 @@ import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.RegDeg;
 import com.kuuhaku.model.records.shoukan.Timed;
+import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -88,8 +89,14 @@ public class Hand {
 	private transient Account account;
 	private transient String lastMessage;
 	private transient boolean forfeit;
-	private transient int cooldown;
 	private transient int kills = 0;
+	private transient int cooldown = 0;
+	/*
+	0x0000 FF FF
+	       └┤ └┤
+	        │  └ (0 - 255) minor effect
+	        └─ (0 - 255) major effect
+	 */
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -464,12 +471,30 @@ public class Hand {
 		this.forfeit = forfeit;
 	}
 
-	public int getCooldown() {
-		return cooldown;
+	public int getMinorCooldown() {
+		return Bit.get(cooldown, 0, 8);
 	}
 
-	public void setCooldown(int cooldown) {
-		this.cooldown = cooldown;
+	public void setMinorCooldown(int time) {
+		cooldown = Bit.set(cooldown, 0, time, 8);
+	}
+
+	public void reduceMinorCooldown(int time) {
+		int curr = Bit.get(cooldown, 0, 8);
+		cooldown = Bit.set(cooldown, 0, Math.max(0, curr - time), 8);
+	}
+
+	public int getMajorCooldown() {
+		return Bit.get(cooldown, 1, 8);
+	}
+
+	public void setMajorCooldown(int time) {
+		cooldown = Bit.set(cooldown, 1, time, 8);
+	}
+
+	public void reduceMajorCooldown(int time) {
+		int curr = Bit.get(cooldown, 1, 8);
+		cooldown = Bit.set(cooldown, 1, Math.max(0, curr - time), 8);
 	}
 
 	public void reduceCooldown() {

@@ -357,20 +357,25 @@ public class Arena implements Renderer {
 						);
 					}
 
+					int cd;
+					if (reversed) {
+						cd = i == 1 ? hand.getMajorCooldown() : hand.getMinorCooldown();
+					} else {
+						cd = i == 0 ? hand.getMajorCooldown() : hand.getMinorCooldown();
+					}
+
 					int mCd = switch (hand.getOrigin().major()) {
 						case SPIRIT -> 3;
 						case UNDEAD -> 4;
 						default -> 1;
 					};
 
-					if (i == 0) {
-						g1.setColor(new Color(255, 0, 0, 200));
-						g1.fillArc(
-								15 + slotX - radius / 2, 5 - radius / 2,
-								radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
-								hand.getCooldown() * 360 / mCd
-						);
-					}
+					g1.setColor(new Color(255, 0, 0, 200));
+					g1.fillArc(
+							15 + slotX - radius / 2, 5 - radius / 2,
+							radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
+							cd * 360 / mCd
+					);
 				}
 				g1.setClip(null);
 
