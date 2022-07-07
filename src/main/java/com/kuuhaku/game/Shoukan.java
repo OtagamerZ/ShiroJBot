@@ -216,9 +216,6 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!slot.hasTop()) {
 			getChannel().sendMessage(locale.get("error/missing_card", slot.getIndex() + 1)).queue();
 			return false;
-		} else if (slot.getTop().getEquipments().size() == 3) {
-			getChannel().sendMessage(locale.get("error/equipment_capacity", slot.getTop())).queue();
-			return false;
 		}
 
 		Evogear copy;
