@@ -363,7 +363,7 @@ public class Arena implements Renderer {
 						default -> 1;
 					};
 
-					if (mCd > 1) {
+					if (i == 0) {
 						g1.setColor(new Color(255, 0, 0, 200));
 						g1.fillArc(
 								15 + slotX - radius / 2, 5 - radius / 2,
