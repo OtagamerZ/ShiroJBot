@@ -167,7 +167,7 @@ public class Arena implements Renderer {
 							} else if (mult < 1) {
 								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
 							}
-							g2.drawImage(indicator, x - 30, frontline - 30, null);
+							g2.drawImage(indicator, x - 15, frontline - 15, null);
 
 							if (!s.getEquipments().isEmpty()) {
 								Graph.applyTransformed(g2, x, equips, g3 -> {
