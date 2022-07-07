@@ -466,7 +466,7 @@ public class Arena implements Renderer {
 							Lock lock = values[i];
 							Timed<Lock> lk = hand.getLocks().stream()
 									.filter(t -> t.obj().equals(lock))
-									.findFirst().orElse(new Timed<>(Lock.DECK, 3));
+									.findFirst().orElse(null);
 
 							g1.drawImage(lock.getImage(lk != null),
 									space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, 0,
