@@ -374,7 +374,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean discardBatch(JSONObject args) {
 		Hand curr = getCurrent();
 
-		List<String> names = new ArrayList<>();
+		List<Drawable<?>> cards = new ArrayList<>();
 		JSONArray batch = args.getJSONArray("inHand");
 		for (Object o : batch) {
 			int idx = Integer.parseInt(String.valueOf(o));
@@ -389,22 +389,21 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			curr.getDiscard().add(chosen);
-
-			if (curr.getOrigin().synergy() == Race.FAMILIAR) {
-				for (Drawable<?> d : curr.getCards()) {
-					if (d instanceof Senshi s) {
-						s.getStats().setMana(s, -1);
-					} else if (d instanceof Evogear e) {
-						e.getStats().setMana(e, -1);
-					}
-				}
-			}
-
-			names.add(chosen.toString());
+			cards.add(chosen);
 		}
 
-		reportEvent("str/discard_card", curr.getName(), Utils.properlyJoin("str/and").apply(names));
+		curr.getDiscard().addAll(cards);
+		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
+			for (Drawable<?> d : curr.getCards()) {
+				if (d instanceof Senshi s) {
+					s.getStats().setMana(s, -cards.size());
+				} else if (d instanceof Evogear e) {
+					e.getStats().setMana(e, -cards.size());
+				}
+			}
+		}
+
+		reportEvent("str/discard_card", curr.getName(), Utils.properlyJoin("str/and").apply(cards.stream().map(Drawable::toString).toList()));
 		return true;
 	}
 
