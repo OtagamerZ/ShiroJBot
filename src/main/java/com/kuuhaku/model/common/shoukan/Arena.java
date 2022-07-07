@@ -464,7 +464,7 @@ public class Arena implements Renderer {
 							Lock lock = values[i];
 							Timed<Lock> lk = hand.getLocks().stream()
 									.filter(t -> t.obj().equals(lock))
-									.findFirst().orElse(null);
+									.findFirst().orElse(new Timed<>(Lock.DECK, 3));
 
 							g1.drawImage(lock.getImage(lk != null),
 									space / 2 - ((rad + 50) * values.length) / 2 + (rad + 50) * i, 0,
@@ -478,7 +478,7 @@ public class Arena implements Renderer {
 								String text = String.valueOf(lk.time());
 
 								Graph.drawOutlinedString(g1, text,
-										0, rad - 5,
+										space / 2 - ((rad + 50) * values.length) / 2 + (rad + 50) * i, rad - 5,
 										6, Color.BLACK
 								);
 							}
