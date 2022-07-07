@@ -20,7 +20,6 @@ package com.kuuhaku;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.shoukan.Arena;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -278,7 +277,7 @@ public class TestMain {
 
 						if (locked) {
 							g1.setColor(Color.RED);
-							g1.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, rad - 5));
+							g1.setFont(new Font("Arial", Font.BOLD, rad - 5));
 							String text = String.valueOf(locks.get(lock));
 
 							if (reverse) {
