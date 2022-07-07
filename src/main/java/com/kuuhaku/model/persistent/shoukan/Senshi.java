@@ -130,8 +130,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public List<Evogear> getEquipments() {
-		if (equipments.size() > 3) {
-			equipments = equipments.subList(0, 3);
+		int size = equipments.size();
+		if (size > 3) {
+			equipments = equipments.subList(size - 3, size);
 		}
 
 		return equipments;
