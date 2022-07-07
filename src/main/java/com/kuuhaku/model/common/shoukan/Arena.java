@@ -459,7 +459,7 @@ public class Arena implements Renderer {
 					reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
 					g1 -> {
 						int space = 615;
-						int spacing = 70;
+						int spacing = 80;
 
 						Lock[] values = Lock.values();
 						for (int i = 0; i < values.length; i++) {
@@ -480,7 +480,7 @@ public class Arena implements Renderer {
 								String text = String.valueOf(lk.time());
 
 								Graph.drawOutlinedString(g1, text,
-										rad + 5 + space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, rad - 5,
+										rad + 10 + space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, rad - 5,
 										6, Color.BLACK
 								);
 							}
