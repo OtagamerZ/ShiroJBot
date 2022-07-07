@@ -72,7 +72,7 @@ public class Hand {
 
 		d.reset();
 
-		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(2)) {
+		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(10)) {
 			cards.add(d.copy());
 			d.setSolid(false);
 		}
