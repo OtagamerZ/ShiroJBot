@@ -817,7 +817,8 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyRegen();
 		curr.applyDegen();
-		curr.reduceCooldown();
+		curr.reduceMinorCooldown(1);
+		curr.reduceMajorCooldown(1);
 
 		getChannel().sendMessage(locale.get("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn()))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
