@@ -403,7 +403,9 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/discard_card", curr.getName(), Utils.properlyJoin("str/and").apply(cards.stream().map(Drawable::toString).toList()));
+		reportEvent("str/discard_card", curr.getName(),
+				Utils.properlyJoin(locale.get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
+		);
 		return true;
 	}
 
