@@ -435,7 +435,7 @@ public class Hand {
 	}
 
 	public void consumeMP(int value) {
-		if (origin.synergy() == Race.FETCH && Calc.chance(1)) return;
+		if (origin.synergy() == Race.FETCH && Calc.chance(2)) return;
 
 		modMP(-value);
 	}
