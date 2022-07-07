@@ -164,7 +164,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getMPCost() {
-		return Math.max(0, base.getMana() + stats.getMana());
+		return Math.max(1, base.getMana() + stats.getMana());
 	}
 
 	@Override
