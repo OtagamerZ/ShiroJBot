@@ -308,7 +308,7 @@ public class Hand {
 
 		if (origin.major() == Race.HUMAN && value > 0) {
 			value *= 1.25;
-		} else if (origin.major() == Race.HUMAN && value < 0) {
+		} else if (origin.minor() == Race.HUMAN && value < 0) {
 			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 		}
 
