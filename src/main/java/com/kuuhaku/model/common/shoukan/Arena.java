@@ -500,9 +500,13 @@ public class Arena implements Renderer {
 						);
 
 						if (reversed) {
-							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10);
+							Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10,
+									(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
+							);
 						} else {
-							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 00I"), rad - 5, 375, -10);
+							Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 00I"), rad - 5, 375, -10,
+									(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
+							);
 						}
 					}
 			);
