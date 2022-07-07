@@ -343,7 +343,7 @@ public class Hand {
 
 		int delta = before - this.hp;
 		if (origin.synergy() == Race.VIRUS) {
-			modMP((int) (delta * 0.005));
+			modMP((int) (delta * 0.0025));
 		} else if (origin.synergy() == Race.TORMENTED) {
 			game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
 		}
