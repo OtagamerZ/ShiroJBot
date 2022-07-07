@@ -353,10 +353,12 @@ public class Hand {
 		this.hp = Math.max(0, this.hp + value);
 
 		int delta = before - this.hp;
-		if (origin.synergy() == Race.VIRUS) {
-			modMP((int) (delta * 0.0025));
-		} else if (origin.synergy() == Race.TORMENTED) {
-			game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+		if (delta > 0) {
+			if (origin.synergy() == Race.VIRUS) {
+				modMP((int) (delta * 0.0025));
+			} else if (origin.synergy() == Race.TORMENTED) {
+				game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+			}
 		}
 	}
 
