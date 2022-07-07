@@ -127,8 +127,6 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		Graph.applyTransformed(g2d, drawBar(top));
-
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height + 1, g1 -> {
 			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
@@ -233,6 +231,8 @@ public class Arena implements Renderer {
 				}
 			});
 		});
+
+		Graph.applyTransformed(g2d, drawBar(top));
 
 		Graph.applyTransformed(g2d, drawBar(bottom));
 
