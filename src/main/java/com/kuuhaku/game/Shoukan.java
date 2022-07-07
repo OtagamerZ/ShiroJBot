@@ -517,7 +517,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				outcome = "str/combat_direct";
 			} else {
-				boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(100);
+				boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
 
 				if (ally.getDmg() < enemy.getActiveAttr(dbl)) {
 					int pHP = you.getHP();
