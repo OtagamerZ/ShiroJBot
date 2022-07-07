@@ -333,7 +333,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("PLAN")
-	@PlayerAction("(?<inField>\\[[1-5](,[1,5])*]),s(?<notCombat>,nc)?")
+	@PlayerAction("(?<inField>\\[[1-5](,[1-5])*]),s(?<notCombat>,nc)?")
 	private boolean sacrificeBatch(JSONObject args) {
 		Hand curr = getCurrent();
 
