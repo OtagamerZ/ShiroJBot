@@ -306,6 +306,8 @@ public class Arena implements Renderer {
 				} else {
 					g1.setColor(new Color(173, 28, 28));
 				}
+
+				fac = (double) hand.getHP() / hand.getBase().hp();
 				g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min(fac, 1), bar.height));
 
 				if (fac > 1) {
