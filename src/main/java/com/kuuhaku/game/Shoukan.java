@@ -339,6 +339,50 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("PLAN")
+	@PlayerAction("(?<inField>\\[[1-5](,[1,5])*]),s(?<notCombat>,nc)?")
+	private boolean sacrificeBatch(JSONObject args) {
+		Hand curr = getCurrent();
+
+		int hp = 0;
+		int mp = 0;
+
+		List<Drawable<?>> cards = new ArrayList<>();
+		JSONArray batch = args.getJSONArray("inField");
+		for (Object o : batch) {
+			int idx = ((Number) o).intValue();
+			SlotColumn slot = arena.getSlots(curr.getSide()).get(idx - 1);
+
+			boolean nc = args.getBoolean("notCombat");
+			if ((nc && !slot.hasBottom()) || (!nc && !slot.hasTop())) {
+				getChannel().sendMessage(locale.get("error/missing_card", slot.getIndex() + 1)).queue();
+				return false;
+			}
+
+			Senshi chosen = nc ? slot.getBottom() : slot.getTop();
+			if (chosen.getHPCost() / 2 >= curr.getHP()) {
+				getChannel().sendMessage(locale.get("error/not_enough_hp_sacrifice")).queue();
+				return false;
+			} else if (chosen.getMPCost() / 2 > curr.getMP()) {
+				getChannel().sendMessage(locale.get("error/not_enough_mp_sacrifice")).queue();
+				return false;
+			}
+
+			hp += chosen.getHPCost() / 2;
+			mp += chosen.getMPCost() / 2;
+			cards.add(chosen);
+		}
+
+		curr.consumeHP(hp);
+		curr.consumeMP(mp);
+		curr.getGraveyard().addAll(cards);
+
+		reportEvent("str/sacrifice_card", curr.getName(),
+				Utils.properlyJoin(locale.get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
+		);
+		return true;
+	}
+
+	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),d")
 	private boolean discardCard(JSONObject args) {
 		Hand curr = getCurrent();
