@@ -189,7 +189,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				mult *= 1 + (hand.getGraveyard().size() * 0.005);
 			}
 
-			if (hand.getHPPrcnt() <= 0.5 && hand.getOrigin().synergy() == Race.ONI) {
+			if (hand.isLowLife() && hand.getOrigin().synergy() == Race.ONI) {
 				mult *= 1.02;
 			} else if (hand.getHPPrcnt() > 1 && hand.getOrigin().synergy() == Race.GHOUL) {
 				mult *= 1.05;

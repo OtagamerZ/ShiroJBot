@@ -333,7 +333,11 @@ public class Hand {
 		value += half;
 
 		double prcnt = getHPPrcnt();
-		if (this.hp + value < 0 && prcnt > 1 / 3d) {
+		if (origin.demon()) {
+			prcnt = Math.min(prcnt, 0.5);
+		}
+
+		if (this.hp + value <= 0 && prcnt > 1 / 3d) {
 			if (prcnt > 2 / 3d || Calc.chance(prcnt * 100)) {
 				this.hp = 1;
 				return;
@@ -357,11 +361,11 @@ public class Hand {
 	}
 
 	public double getHPPrcnt() {
-		if (origin.demon()) {
-			return Math.min(hp / (double) base.hp(), 0.5);
-		}
-
 		return hp / (double) base.hp();
+	}
+
+	public boolean isLowLife() {
+		return origin.demon() || getHPPrcnt() <= 0.5;
 	}
 
 	public RegDeg getRegDeg() {
