@@ -24,7 +24,11 @@ import java.util.List;
 
 public class RegDeg {
 	private final List<ValueOverTime> values = new BondedList<>(v -> {
-		v.setValue(reduce(v.getValue()));
+		if (v instanceof Regen) {
+			v.setValue(reduce(v.getValue()));
+		} else {
+			v.setValue(-reduce(-v.getValue()));
+		}
 	});
 
 	public List<ValueOverTime> getValues() {
