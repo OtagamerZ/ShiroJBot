@@ -42,6 +42,9 @@ public class CardAttributes implements Serializable {
 	@Column(name = "blood", nullable = false)
 	private int blood = 0;
 
+	@Column(name = "sacrifices", nullable = false)
+	private int sacrifices = 0;
+
 	@Column(name = "atk", nullable = false)
 	private int atk = 0;
 
@@ -74,6 +77,10 @@ public class CardAttributes implements Serializable {
 
 	public int getBlood() {
 		return blood;
+	}
+
+	public int getSacrifices() {
+		return sacrifices;
 	}
 
 	public int getAtk() {
