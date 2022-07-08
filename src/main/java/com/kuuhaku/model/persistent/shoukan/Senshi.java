@@ -130,7 +130,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public List<Evogear> getEquipments() {
-		equipments.removeIf(e -> !e.getEquipper().equals(this));
+		equipments.removeIf(e -> !equals(e.getEquipper()));
 
 		while (equipments.size() > 3) {
 			hand.getGraveyard().add(equipments.remove(0));
