@@ -31,11 +31,11 @@ import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
-import com.kuuhaku.model.enums.Charm;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Phase;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -228,13 +228,14 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Evogear copy;
 		Senshi target = slot.getTop();
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
 		curr.consumeSC(chosen.getSCCost());
 		chosen.setAvailable(false);
-		target.getEquipments().add(copy = chosen.withCopy(e -> e.setFlipped(e.getCharms().contains(Charm.TRAP))));
+
+		Evogear copy = chosen.copy();
+		target.getEquipments().add(copy);
 		reportEvent("str/equip_card",
 				curr.getName(),
 				copy.isFlipped() ? locale.get("str/an_equipment") : copy,
@@ -571,7 +572,28 @@ public class Shoukan extends GameInstance<Phase> {
 			case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 		}
 
+		int attacks = 1;
 		int dmg = ally.getDmg();
+		for (Evogear e : ally.getEquipments()) {
+			JSONArray charms = e.getCharms();
+			for (Object o : charms) {
+				Charm c = Charm.valueOf(String.valueOf(o));
+				switch (c) {
+					case PIERCING -> op.modHP(dmg * c.getValue(e.getTier()) / 100);
+					case WOUNDING -> op.getRegDeg().add(new Degen(dmg * c.getValue(e.getTier()) / 100, 0.1));
+					case DRAIN -> {
+						int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
+						if (toDrain > 0) {
+							you.modMP(toDrain);
+							op.modMP(-toDrain);
+						}
+					}
+					case MULTISTRIKE -> attacks = c.getValue(e.getTier());
+				}
+			}
+		}
+
+		dmg *= 2 - Math.pow(0.5, attacks - 1);
 		String outcome;
 		if (enemy != null) {
 			if (enemy.isSupporting()) {

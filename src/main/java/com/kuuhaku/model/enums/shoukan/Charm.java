@@ -32,11 +32,9 @@ public enum Charm {
 	WOUNDING,
 	DRAIN,
 	CLONE,
-	AGILITY,
-	ARMOR,
 	WARDING,
 	TIMEWARP,
-	DOUBLETAP;
+	MULTISTRIKE;
 
 	public String getName(I18N locale) {
 		return locale.get("charm/" + name());
@@ -48,7 +46,7 @@ public enum Charm {
 
 	public String getDescription(I18N locale, int tier) {
 		String val;
-		if (Utils.equalsAny(this, WARDING, TIMEWARP, DOUBLETAP)) {
+		if (Utils.equalsAny(this, WARDING, TIMEWARP, MULTISTRIKE)) {
 			val = locale.get("str/" + getValue(tier) + "_time");
 		} else {
 			val = String.valueOf(getValue(tier));
@@ -63,10 +61,9 @@ public enum Charm {
 
 	public int getValue(int tier) {
 		return switch (this) {
-			case SHIELD, DRAIN, WARDING, TIMEWARP, DOUBLETAP -> (int) Calc.getFibonacci(tier);
-			case PIERCING, WOUNDING, ARMOR -> tier * 4;
+			case SHIELD, DRAIN, WARDING, TIMEWARP, MULTISTRIKE -> (int) Calc.getFibonacci(tier);
+			case PIERCING, WOUNDING -> tier * 4;
 			case CLONE -> tier * 25;
-			case AGILITY -> tier * 7;
 		};
 	}
 }
