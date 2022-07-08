@@ -325,10 +325,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		g2d.setFont(new Font("Arial", Font.BOLD, 18));
 		g2d.setColor(deck.getFrame().getPrimaryColor());
 		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
-		Graph.drawOutlinedString(g2d, name,
-				12 + (100 - g2d.getFontMetrics().stringWidth(name) / 2), 30, 2,
-				deck.getFrame().getBackgroundColor()
-		);
+		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
 
 		if (!getCharms().isEmpty()) {
 			List<BufferedImage> icons = charms.stream()
