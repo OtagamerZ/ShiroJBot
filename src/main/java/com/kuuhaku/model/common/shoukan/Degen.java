@@ -22,4 +22,9 @@ public class Degen extends ValueOverTime {
 	public Degen(int value, double multiplier) {
 		super(value, multiplier);
 	}
+
+	@Override
+	public int getValue() {
+		return -super.getValue();
+	}
 }
