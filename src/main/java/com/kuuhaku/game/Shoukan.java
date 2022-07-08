@@ -564,7 +564,7 @@ public class Shoukan extends GameInstance<Phase> {
 			case FALLEN -> {
 				int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
 				op.modHP(degen);
-				op.getRegDeg().reduce(degen);
+				op.getRegDeg().reduce(Degen.class, degen);
 			}
 			case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 		}
