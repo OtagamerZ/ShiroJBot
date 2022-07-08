@@ -464,7 +464,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@PhaseConstraint("COMBAT")
+	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>[1-5])(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean activate(JSONObject args) {
 		Hand curr = getCurrent();
