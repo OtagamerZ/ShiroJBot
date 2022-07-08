@@ -693,7 +693,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int pHP = op.getHP();
-		op.modHP((int) -(dmg * 2 - Math.pow(0.5, attacks - 1)));
+		for (int i = 0; i < attacks; i++) {
+			int eDmg = (int) (dmg * Math.pow(0.5, i));
+			op.modHP(-eDmg);
+		}
 
 		if (you.getOrigin().synergy() == Race.LICH) {
 			you.modHP((int) ((pHP - op.getHP()) * 0.01));
