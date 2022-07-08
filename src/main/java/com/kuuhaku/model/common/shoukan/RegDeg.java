@@ -24,7 +24,7 @@ import java.util.List;
 
 public class RegDeg {
 	private final List<ValueOverTime> values = new BondedList<>(v -> {
-		v.setValue(Math.abs(reduce(v.peek())));
+		v.setValue(reduce(v.getClass(), v.peek()));
 	});
 
 	public List<ValueOverTime> getValues() {
@@ -35,32 +35,19 @@ public class RegDeg {
 		values.add(vot);
 	}
 
-	public int reduce(int val) {
+	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {
 		if (val == 0) return 0;
 
-		boolean neg = val < 0;
-		val = Math.abs(val);
-
-		if (neg) {
-			for (ValueOverTime vot : values) {
-				if (vot instanceof Regen r) {
-					if ((val = r.reduce(val)) == 0) {
-						break;
-					}
-				}
-			}
-		} else {
-			for (ValueOverTime vot : values) {
-				if (vot instanceof Degen d) {
-					if ((val = d.reduce(val)) == 0) {
-						break;
-					}
+		for (ValueOverTime vot : values) {
+			if (!vot.getClass().equals(klass)) {
+				if ((val = vot.reduce(val)) == 0) {
+					break;
 				}
 			}
 		}
 
 		try {
-			return neg ? -val : val;
+			return val;
 		} finally {
 			values.removeIf(v -> v.getValue() == 0);
 		}
