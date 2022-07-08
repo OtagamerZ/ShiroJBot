@@ -315,6 +315,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		state = Bit.set(state, 2, defending);
 	}
 
+	public boolean canAttack() {
+		return !isDefending() && state <= 0xF;
+	}
+
 	@Override
 	public boolean isFlipped() {
 		return Bit.on(state, 3);
