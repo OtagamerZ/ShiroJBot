@@ -116,7 +116,7 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void runtime(String value) throws InvocationTargetException, IllegalAccessException {
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
 		if (action != null) {
-			if ((boolean) action.getFirst().invoke(this, action.getSecond())) {
+			if ((boolean) action.getFirst().invoke(this, getCurrentSide(), action.getSecond())) {
 				sendPlayerHand(getCurrent());
 			}
 		}
@@ -124,8 +124,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),(?<mode>[adb]),(?<inField>[1-5])(?<notCombat>,nc)?")
-	private boolean placeCard(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean placeCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
 			return false;
@@ -196,8 +196,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),(?<inField>[1-5])")
-	private boolean equipCard(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean equipCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
 			return false;
@@ -245,8 +245,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+)f")
-	private boolean placeField(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean placeField(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
 			return false;
@@ -270,8 +270,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>[1-5]),f(?<notCombat>,nc)?")
-	private boolean flipCard(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean flipCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 
 		boolean nc = args.getBoolean("notCombat");
@@ -293,8 +293,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>[1-5]),p")
-	private boolean promoteCard(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean promoteCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 
 		if (!slot.hasBottom()) {
@@ -315,8 +315,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>[1-5]),s(?<notCombat>,nc)?")
-	private boolean sacrificeCard(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean sacrificeCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 
 		boolean nc = args.getBoolean("notCombat");
@@ -344,8 +344,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>\\[[1-5](,[1-5])*]),s(?<notCombat>,nc)?")
-	private boolean sacrificeBatch(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean sacrificeBatch(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 
 		int hp = 0;
 		int mp = 0;
@@ -388,8 +388,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),d")
-	private boolean discardCard(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean discardCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
 			return false;
@@ -421,8 +421,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\[\\d+(,\\d+)*]),d")
-	private boolean discardBatch(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean discardBatch(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 
 		List<Drawable<?>> cards = new ArrayList<>();
 		JSONArray batch = args.getJSONArray("inHand");
@@ -463,8 +463,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>[1-5])(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
-	private boolean activate(JSONObject args) {
-		Hand curr = getCurrent();
+	private boolean activate(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
 			return false;
@@ -513,8 +513,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint("COMBAT")
 	@PlayerAction("(?<inField>[1-5])(?:,(?<target>[1-5]))?")
-	private boolean attack(JSONObject args) {
-		Hand you = getCurrent();
+	private boolean attack(Side side, JSONObject args) {
+		Hand you = hands.get(side);
 		SlotColumn yourSlot = arena.getSlots(you.getSide()).get(args.getInt("inField") - 1);
 
 		if (!yourSlot.hasTop()) {
@@ -524,7 +524,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi ally = yourSlot.getTop();
 
-		Hand op = getOther();
+		Hand op = hands.get(side.getOther());
 		Senshi enemy = null;
 		if (args.getBoolean("target")) {
 			SlotColumn opSlot = arena.getSlots(op.getSide()).get(args.getInt("target") - 1);

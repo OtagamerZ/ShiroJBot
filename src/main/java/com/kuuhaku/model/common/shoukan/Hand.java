@@ -328,9 +328,11 @@ public class Hand {
 			value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
 		}
 
+		System.out.println(value);
 		int half = value / 2;
 		value = regdeg.reduce(value - half);
 		value += half;
+		System.out.println(value);
 
 		double prcnt = getHPPrcnt();
 		if (origin.demon()) {
