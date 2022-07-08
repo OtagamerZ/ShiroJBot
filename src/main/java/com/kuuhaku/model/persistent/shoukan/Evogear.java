@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -68,6 +69,9 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Column(name = "spell", nullable = false)
 	private boolean spell;
 
+	@Column(name = "target_type", nullable = false)
+	private TargetType targetType = TargetType.NONE;
+
 	@Convert(converter = JSONArrayConverter.class)
 	@Column(name = "charms", nullable = false)
 	private JSONArray charms = new JSONArray();
@@ -103,6 +107,10 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	public boolean isSpell() {
 		return spell;
+	}
+
+	public TargetType getTargetType() {
+		return targetType;
 	}
 
 	public JSONArray getCharms() {
