@@ -79,4 +79,9 @@ public abstract class ValueOverTime {
 			return -val;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ": " + value + " v/t";
+	}
 }
