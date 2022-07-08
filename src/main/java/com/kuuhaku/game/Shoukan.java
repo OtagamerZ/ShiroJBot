@@ -144,6 +144,9 @@ public class Shoukan extends GameInstance<Phase> {
 			} else if (chosen.getMPCost() > curr.getMP()) {
 				getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 				return false;
+			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
+				getChannel().sendMessage(locale.get("error/not_enough_sc")).queue();
+				return false;
 			}
 		} else {
 			getChannel().sendMessage(locale.get("error/wrong_card_type")).queue();
@@ -160,6 +163,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
+			curr.consumeSC(chosen.getSCCost());
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
@@ -175,6 +179,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
+			curr.consumeSC(chosen.getSCCost());
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
@@ -211,6 +216,9 @@ public class Shoukan extends GameInstance<Phase> {
 			} else if (chosen.getMPCost() > curr.getMP()) {
 				getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 				return false;
+			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
+				getChannel().sendMessage(locale.get("error/not_enough_sc")).queue();
+				return false;
 			}
 		} else {
 			getChannel().sendMessage(locale.get("error/wrong_card_type")).queue();
@@ -227,6 +235,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Senshi target = slot.getTop();
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
+		curr.consumeSC(chosen.getSCCost());
 		chosen.setAvailable(false);
 		target.getEquipments().add(copy = chosen.withCopy(e -> e.setFlipped(e.getCharms().contains(Charm.TRAP))));
 		reportEvent("str/equip_card",
@@ -474,6 +483,9 @@ public class Shoukan extends GameInstance<Phase> {
 			} else if (chosen.getMPCost() > curr.getMP()) {
 				getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 				return false;
+			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
+				getChannel().sendMessage(locale.get("error/not_enough_sc")).queue();
+				return false;
 			}
 		} else {
 			getChannel().sendMessage(locale.get("error/wrong_card_type")).queue();
@@ -494,6 +506,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
+		curr.consumeSC(chosen.getSCCost());
 		chosen.execute(tgt.toParameters(chosen.getTargetType()));
 		curr.getGraveyard().add(chosen);
 

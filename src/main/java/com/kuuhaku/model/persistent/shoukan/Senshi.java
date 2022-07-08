@@ -175,6 +175,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	@Override
+	public int getSCCost() {
+		return Math.max(0, base.getSacrifices() + stats.getSacrifices());
+	}
+
+	@Override
 	public int getDmg() {
 		int sum = base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum();
 
