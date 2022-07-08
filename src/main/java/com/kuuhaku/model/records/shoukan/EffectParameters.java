@@ -28,4 +28,8 @@ public record EffectParameters(Trigger trigger, Source source, Target target) {
 	public EffectParameters(Trigger trigger, Source source) {
 		this(trigger, source, null);
 	}
+
+	public EffectParameters(Trigger trigger, Target target) {
+		this(trigger, null, target);
+	}
 }

@@ -37,10 +37,10 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
-import groovy.lang.GroovyShell;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -48,6 +48,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -271,15 +272,14 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		String effect = Utils.getOr(stats.getEffect(), base.getEffect());
+		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
 		if (effect.isBlank() || !effect.contains(ep.trigger().name())) return false;
 
 		try {
-			GroovyShell gs = new GroovyShell();
-			gs.setVariable("ep", ep);
-			gs.setVariable("self", this);
-			gs.setVariable("pow", 1 + stats.getPower());
-			gs.evaluate(effect);
+			Utils.exec(effect, Map.of(
+					"ep", ep,
+					"self", this
+			));
 
 			return true;
 		} catch (Exception e) {
