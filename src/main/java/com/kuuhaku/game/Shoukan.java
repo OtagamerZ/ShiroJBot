@@ -455,6 +455,36 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("COMBAT")
+	@PlayerAction("(?<inHand>[1-5])(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
+	private boolean activate(JSONObject args) {
+		Hand curr = getCurrent();
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+			getChannel().sendMessage(locale.get("error/invalid_hand_index")).queue();
+			return false;
+		}
+
+		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && chosen.isSpell()) {
+			if (!chosen.isAvailable()) {
+				getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+				return false;
+			} else if (chosen.getHPCost() >= curr.getHP()) {
+				getChannel().sendMessage(locale.get("error/not_enough_hp")).queue();
+				return false;
+			} else if (chosen.getMPCost() > curr.getMP()) {
+				getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
+				return false;
+			}
+		} else {
+			getChannel().sendMessage(locale.get("error/wrong_card_type")).queue();
+			return false;
+		}
+
+
+		reportEvent("str/discard_card", curr.getName(), chosen);
+		return true;
+	}
+
+	@PhaseConstraint("COMBAT")
 	@PlayerAction("(?<inField>[1-5])(?:,(?<target>[1-5]))?")
 	private boolean attack(JSONObject args) {
 		Hand you = getCurrent();
