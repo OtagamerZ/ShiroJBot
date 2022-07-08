@@ -173,6 +173,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	}
 
 	@Override
+	public int getSCCost() {
+		return (int) Math.max(0, (base.getSacrifices() + stats.getSacrifices()) * getCostMult());
+	}
+
+	@Override
 	public int getDmg() {
 		int sum = base.getAtk() + stats.getAtk();
 

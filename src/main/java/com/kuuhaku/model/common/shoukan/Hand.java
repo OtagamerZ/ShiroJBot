@@ -453,6 +453,12 @@ public class Hand {
 		modMP(-value);
 	}
 
+	public void consumeSC(int value) {
+		for (int i = 0; i < value && !discard.isEmpty(); i++) {
+			game.getArena().getBanned().add(discard.remove(0));
+		}
+	}
+
 	public Account getAccount() {
 		if (account == null) {
 			account = DAO.find(Account.class, uid);
