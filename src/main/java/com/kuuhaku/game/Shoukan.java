@@ -576,24 +576,29 @@ public class Shoukan extends GameInstance<Phase> {
 		int dmg = ally.getDmg();
 		for (Evogear e : ally.getEquipments()) {
 			JSONArray charms = e.getCharms();
+			if (charms.contains(Charm.MULTISTRIKE.name())) {
+				attacks += Charm.MULTISTRIKE.getValue(e.getTier()) - 1;
+			}
+
 			for (Object o : charms) {
 				Charm c = Charm.valueOf(String.valueOf(o));
-				switch (c) {
-					case PIERCING -> op.modHP(dmg * c.getValue(e.getTier()) / 100);
-					case WOUNDING -> op.getRegDeg().add(new Degen(dmg * c.getValue(e.getTier()) / 100, 0.1));
-					case DRAIN -> {
-						int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
-						if (toDrain > 0) {
-							you.modMP(toDrain);
-							op.modMP(-toDrain);
+				for (int i = 0; i < attacks; i++) {
+					int eDmg = (int) (dmg * Math.pow(0.5, i));
+					switch (c) {
+						case PIERCING -> op.modHP(eDmg * c.getValue(e.getTier()) / 100);
+						case WOUNDING -> op.getRegDeg().add(new Degen(eDmg * c.getValue(e.getTier()) / 100, 0.1));
+						case DRAIN -> {
+							int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
+							if (toDrain > 0) {
+								you.modMP(toDrain);
+								op.modMP(-toDrain);
+							}
 						}
 					}
-					case MULTISTRIKE -> attacks = c.getValue(e.getTier());
 				}
 			}
 		}
 
-		dmg *= 2 - Math.pow(0.5, attacks - 1);
 		String outcome;
 		if (enemy != null) {
 			if (enemy.isSupporting()) {
@@ -688,7 +693,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int pHP = op.getHP();
-		op.modHP(-dmg);
+		op.modHP((int) -(dmg * 2 - Math.pow(0.5, attacks - 1)));
 
 		if (you.getOrigin().synergy() == Race.LICH) {
 			you.modHP((int) ((pHP - op.getHP()) * 0.01));
