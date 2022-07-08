@@ -71,12 +71,10 @@ public abstract class ValueOverTime {
 	}
 
 	public int peek() {
-		int val = (int) Math.min(baseValue * multiplier, value);
-
 		if (this instanceof Regen) {
-			return val;
+			return value;
 		} else {
-			return -val;
+			return -value;
 		}
 	}
 

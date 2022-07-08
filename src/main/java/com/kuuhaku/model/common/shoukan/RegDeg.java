@@ -25,7 +25,6 @@ import java.util.List;
 public class RegDeg {
 	private final List<ValueOverTime> values = new BondedList<>(v -> {
 		v.setValue(reduce(v.getValue()));
-		System.out.println(getValues());
 	});
 
 	public List<ValueOverTime> getValues() {
@@ -33,7 +32,10 @@ public class RegDeg {
 	}
 
 	public void add(ValueOverTime vot) {
+		System.out.println(vot);
 		values.add(vot);
+		System.out.println(vot);
+		System.out.println(values);
 	}
 
 	public int reduce(int val) {
