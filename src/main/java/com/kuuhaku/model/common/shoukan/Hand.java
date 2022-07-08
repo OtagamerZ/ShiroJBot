@@ -329,7 +329,11 @@ public class Hand {
 		}
 
 		int half = value / 2;
-		value = regdeg.reduce(value - half);
+		if (value < 0) {
+			value = regdeg.reduce(Degen.class, value - half);
+		} else {
+			value = regdeg.reduce(Regen.class, value - half);
+		}
 		value += half;
 
 		double prcnt = getHPPrcnt();
