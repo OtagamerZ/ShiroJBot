@@ -32,9 +32,7 @@ public class RegDeg {
 	}
 
 	public void add(ValueOverTime vot) {
-		System.out.println(vot);
 		values.add(vot);
-		System.out.println(vot + " -> " + values);
 	}
 
 	public int reduce(int val) {
