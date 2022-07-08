@@ -58,7 +58,7 @@ public class RegDeg {
 		}
 
 		try {
-			return val;
+			return neg ? -val : val;
 		} finally {
 			values.removeIf(v -> v.getValue() == 0);
 		}
