@@ -523,6 +523,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi ally = yourSlot.getTop();
+		if (!ally.isAvailable()) {
+			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+			return false;
+		}
 
 		Hand op = hands.get(side.getOther());
 		Senshi enemy = null;
@@ -649,6 +653,10 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} else {
 			outcome = "str/combat_direct";
+		}
+
+		if (ally.getSlot() != null) {
+			ally.setAvailable(false);
 		}
 
 		int pHP = op.getHP();
