@@ -526,6 +526,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!ally.isAvailable()) {
 			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
 			return false;
+		} else if (ally.isDefending()) {
+			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+			return false;
 		}
 
 		Hand op = hands.get(side.getOther());
