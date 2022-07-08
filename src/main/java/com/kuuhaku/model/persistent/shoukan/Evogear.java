@@ -69,6 +69,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Column(name = "spell", nullable = false)
 	private boolean spell;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "target_type", nullable = false)
 	private TargetType targetType = TargetType.NONE;
 
