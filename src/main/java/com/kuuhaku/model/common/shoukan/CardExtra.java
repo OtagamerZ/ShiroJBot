@@ -32,13 +32,13 @@ import com.kuuhaku.util.json.JSONObject;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public class CardExtra {
 	private final Set<AttrMod> mana = new HashSet<>();
 	private final Set<AttrMod> blood = new HashSet<>();
+	private final Set<AttrMod> sacrifices = new HashSet<>();
 
 	private final Set<AttrMod> atk = new HashSet<>();
 	private final Set<AttrMod> def = new HashSet<>();
@@ -103,6 +103,28 @@ public class CardExtra {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood, expiration);
 		this.blood.remove(mod);
 		this.blood.add(mod);
+	}
+
+	public int getSacrifices() {
+		return (int) sum(sacrifices);
+	}
+
+	public void setSacrifices(int sacrifices) {
+		AttrMod mod = new PermMod(sacrifices);
+		this.sacrifices.remove(mod);
+		this.sacrifices.add(mod);
+	}
+
+	public void setSacrifices(Drawable<?> source, int sacrifices) {
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), sacrifices);
+		this.sacrifices.remove(mod);
+		this.sacrifices.add(mod);
+	}
+
+	public void setSacrifices(Drawable<?> source, int sacrifices, int expiration) {
+		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), sacrifices, expiration);
+		this.sacrifices.remove(mod);
+		this.sacrifices.add(mod);
 	}
 
 	public int getAtk() {
@@ -335,18 +357,5 @@ public class CardExtra {
 		}
 
 		return Calc.round(out, 1);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		CardExtra cardExtra = (CardExtra) o;
-		return Objects.equals(mana, cardExtra.mana) && Objects.equals(blood, cardExtra.blood) && Objects.equals(atk, cardExtra.atk) && Objects.equals(def, cardExtra.def) && Objects.equals(dodge, cardExtra.dodge) && Objects.equals(block, cardExtra.block) && Objects.equals(power, cardExtra.power) && Objects.equals(tier, cardExtra.tier) && Objects.equals(flags, cardExtra.flags) && Objects.equals(permFlags, cardExtra.permFlags) && Objects.equals(data, cardExtra.data) && race == cardExtra.race && Objects.equals(vanity, cardExtra.vanity) && Objects.equals(write, cardExtra.write) && Objects.equals(description, cardExtra.description) && Objects.equals(effect, cardExtra.effect);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(mana, blood, atk, def, dodge, block, power, tier, flags, permFlags, data, race, vanity, write, description, effect);
 	}
 }
