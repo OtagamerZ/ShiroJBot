@@ -32,7 +32,7 @@ import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
-	int MAX_NAME_LENGTH = 15;
+	int MAX_NAME_LENGTH = 17;
 	int MAX_DESC_LENGTH = 210;
 
 	String getId();
