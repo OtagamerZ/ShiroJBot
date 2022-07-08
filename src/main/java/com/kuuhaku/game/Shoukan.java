@@ -870,6 +870,17 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.modHP(curr.getMP() * 10);
 		}
 
+		List<SlotColumn> slts = getSlots(curr.getSide());
+		for (SlotColumn slt : slts) {
+			if (slt.getTop() != null) {
+				slt.getTop().setAvailable(true);
+
+				slt.getTop().reduceStasis(1);
+				slt.getTop().reduceSleep(1);
+				slt.getTop().reduceStun(1);
+			}
+		}
+
 		super.nextTurn();
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
