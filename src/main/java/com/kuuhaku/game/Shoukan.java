@@ -504,6 +504,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
 		curr.consumeSC(chosen.getSCCost());
+		chosen.setAvailable(false);
 		chosen.execute(tgt.toParameters(chosen.getTargetType()));
 		curr.getGraveyard().add(chosen);
 
