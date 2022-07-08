@@ -24,8 +24,8 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
-import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.GameInstance;
+import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -43,6 +43,7 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.RegDeg;
+import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -479,8 +480,24 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		Targeting tgt = switch (chosen.getTargetType()) {
+			case NONE -> new Targeting(null, null);
+			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
+			case ENEMY -> new Targeting(curr, -1, args.getInt("target1"));
+			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
+		};
 
-		reportEvent("str/discard_card", curr.getName(), chosen);
+		if (!tgt.validate(chosen.getTargetType())) {
+			getChannel().sendMessage(locale.get("error/missing_target")).queue();
+			return false;
+		}
+
+		curr.consumeHP(chosen.getHPCost());
+		curr.consumeMP(chosen.getMPCost());
+		chosen.execute(tgt.toParameters(chosen.getTargetType()));
+		curr.getGraveyard().add(chosen);
+
+		reportEvent("str/activate_card", curr.getName(), chosen);
 		return true;
 	}
 

@@ -400,8 +400,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 			Utils.exec(effect, Map.of(
 					"ep", ep,
-					"self", this,
-					"pow", 1 + stats.getPower()
+					"self", this
 			));
 
 			return true;
