@@ -37,7 +37,6 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
-import com.kuuhaku.model.records.shoukan.RegDeg;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Calc;
@@ -83,7 +82,7 @@ public class Hand {
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
 	private final BaseValues base;
-	private final List<RegDeg> regdeg = new ArrayList<>();
+	private final RegDeg regdeg = new RegDeg();
 
 	private String name;
 
@@ -315,6 +314,8 @@ public class Hand {
 	}
 
 	public void modHP(int value) {
+		if (value == 0) return;
+
 		int before = hp;
 
 		if (origin.major() == Race.HUMAN && value > 0) {
@@ -327,20 +328,9 @@ public class Hand {
 			value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
 		}
 
-		RegDeg rd = null;
-		if (value < 0) {
-			rd = regdeg.stream()
-					.filter(r -> r.remaining() > 0)
-					.findFirst().orElse(null);
-		} else if (value > 0) {
-			rd = regdeg.stream()
-					.filter(d -> d.remaining() < 0)
-					.findFirst().orElse(null);
-		}
-
-		if (rd != null) {
-			value = rd.reduce(value);
-		}
+		int half = value / 2;
+		value = regdeg.reduce(value - half);
+		value += half;
 
 		double prcnt = getHPPrcnt();
 		if (this.hp + value < 0 && prcnt > 1 / 3d) {
@@ -374,65 +364,18 @@ public class Hand {
 		return hp / (double) base.hp();
 	}
 
-	public List<RegDeg> getRegdeg() {
+	public RegDeg getRegDeg() {
 		return regdeg;
 	}
 
-	public int getRegen() {
-		return regdeg.stream()
-				.mapToInt(RegDeg::remaining)
-				.filter(i -> i > 0)
-				.sum();
-	}
+	public void applyVoTs() {
+		int val = regdeg.next();
 
-	public void addRegen(int regen, double dpt) {
-		regen = Math.min(regen, base.hp() - getRegen());
-
-		this.regdeg.add(new RegDeg(Math.max(0, regen), dpt));
-	}
-
-	public void applyRegen() {
-		Iterator<RegDeg> it = regdeg.iterator();
-		while (it.hasNext()) {
-			RegDeg rd = it.next();
-			if (rd.remaining() < 0) continue;
-
-			modHP(rd.slice());
-			if (rd.remaining() <= 0) {
-				it.remove();
-			}
+		if (val < 0 && origin.major() == Race.HUMAN) {
+			val /= 2;
 		}
-	}
 
-	public int getDegen() {
-		return regdeg.stream()
-				.mapToInt(RegDeg::remaining)
-				.filter(i -> i < 0)
-				.map(Math::abs)
-				.sum();
-	}
-
-	public void addDegen(int degen, double dpt) {
-		degen = Math.min(degen, base.hp() - getDegen());
-
-		this.regdeg.add(new RegDeg(Math.min(-degen, 0), dpt));
-	}
-
-	public void applyDegen() {
-		Iterator<RegDeg> it = regdeg.iterator();
-		while (it.hasNext()) {
-			RegDeg rd = it.next();
-			if (rd.remaining() > 0) continue;
-
-			if (origin.major() == Race.HUMAN) {
-				modHP(rd.slice() / 2);
-			} else {
-				modHP(rd.slice());
-			}
-			if (rd.remaining() >= 0) {
-				it.remove();
-			}
-		}
+		modHP(val);
 	}
 
 	public int getMP() {
@@ -444,6 +387,8 @@ public class Hand {
 	}
 
 	public void modMP(int value) {
+		if (value == 0) return;
+
 		this.mp = Math.max(0, this.mp + value);
 	}
 
@@ -454,6 +399,8 @@ public class Hand {
 	}
 
 	public void consumeSC(int value) {
+		if (value == 0) return;
+
 		for (int i = 0; i < value && !discard.isEmpty(); i++) {
 			game.getArena().getBanned().add(discard.remove(0));
 		}

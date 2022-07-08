@@ -315,7 +315,7 @@ public class Arena implements Renderer {
 					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height));
 				}
 
-				int regdeg = hand.getRegen() - hand.getDegen();
+				int regdeg = hand.getRegDeg().peek();
 				if (regdeg != 0) {
 					BufferedImage tex = IO.getResourceAsImage("shoukan/" + (regdeg > 0 ? "r" : "d") + "egen_overlay.png");
 					g1.setPaint(new TexturePaint(
