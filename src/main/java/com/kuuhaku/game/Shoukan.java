@@ -29,9 +29,7 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.common.shoukan.Arena;
-import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.common.shoukan.SlotColumn;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Charm;
 import com.kuuhaku.model.enums.I18N;
@@ -42,7 +40,6 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.records.shoukan.RegDeg;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -557,20 +554,11 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 			case FALLEN -> {
-				int degen = (int) (op.getDegen() * 0.05);
+				int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
 				op.modHP(degen);
-
-				while (degen > 0) {
-					RegDeg rd = op.getRegdeg().stream()
-							.filter(d -> d.remaining() < 0)
-							.findFirst().orElse(null);
-
-					if (rd == null) break;
-
-					degen = rd.reduce(degen);
-				}
+				op.getRegDeg().reduce(degen);
 			}
-			case SPAWN -> op.addDegen((int) (op.getBase().hp() * 0.05), 0.2);
+			case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 		}
 
 		int dmg = ally.getDmg();
@@ -746,7 +734,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (hand.getHP() == 0) {
 				if (hand.getOrigin().major() == Race.UNDEAD && hand.getMajorCooldown() == 0) {
 					hand.setHP(1);
-					hand.addRegen((int) (hand.getBase().hp() * 0.5), 1 / 3d);
+					hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
 					hand.setMajorCooldown(4);
 					continue;
 				}
@@ -875,8 +863,7 @@ public class Shoukan extends GameInstance<Phase> {
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
-		curr.applyRegen();
-		curr.applyDegen();
+		curr.applyVoTs();
 		curr.reduceMinorCooldown(1);
 		curr.reduceMajorCooldown(1);
 
