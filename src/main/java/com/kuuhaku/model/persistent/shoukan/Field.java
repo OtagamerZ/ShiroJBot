@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -159,9 +158,13 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 		g2d.drawImage(deck.getFrame().getFront(false), 0, 0, null);
 
-		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 22));
+		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		g2d.setColor(deck.getFrame().getPrimaryColor());
-		Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
+		Graph.drawOutlinedString(g2d, name,
+				12 + (100 - g2d.getFontMetrics().stringWidth(name) / 2), 30, 2,
+				deck.getFrame().getBackgroundColor()
+		);
 
 		if (type != FieldType.NONE) {
 			BufferedImage icon = type.getIcon();
