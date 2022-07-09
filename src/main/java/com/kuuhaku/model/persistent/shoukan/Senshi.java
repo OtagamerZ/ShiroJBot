@@ -71,7 +71,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	private transient List<Evogear> equipments = new BondedList<>(e -> {
 		e.setEquipper(this);
-		System.out.println(e.getEquipper());
 		e.setHand(getHand());
 	});
 	private transient CardExtra stats = new CardExtra();
@@ -424,7 +423,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public void reset() {
-		equipments = new ArrayList<>();
+		equipments = new BondedList<>(e -> {
+			e.setEquipper(this);
+			e.setHand(getHand());
+		});
 		stats = new CardExtra();
 		slot = null;
 
