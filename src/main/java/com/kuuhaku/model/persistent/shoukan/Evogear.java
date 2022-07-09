@@ -124,7 +124,6 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	}
 
 	public Senshi getEquipper() {
-		System.out.println(equipper);
 		return equipper;
 	}
 
