@@ -28,6 +28,8 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -110,18 +112,22 @@ public class DeckAddCommand implements Executable {
 							sc.setDeck(dk);
 						}
 						case EVOGEAR -> {
-							if (dk.getSenshi().size() >= 24) {
+							if (dk.getEvogear().size() >= 24) {
 								event.channel().sendMessage(locale.get("error/deck_full")).queue();
 								return;
 							}
-							//TODO
+
+							dk.getEvogear().add(DAO.find(Evogear.class, card.getId()));
+							sc.setDeck(dk);
 						}
 						case FIELD -> {
-							if (dk.getSenshi().size() >= 3) {
+							if (dk.getFields().size() >= 3) {
 								event.channel().sendMessage(locale.get("error/deck_full")).queue();
 								return;
 							}
-							//TODO
+
+							dk.getFields().add(DAO.find(Field.class, card.getId()));
+							sc.setDeck(dk);
 						}
 					}
 					sc.save();
