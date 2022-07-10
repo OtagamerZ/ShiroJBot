@@ -337,7 +337,8 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 					.toList();
 
 			if (!icons.isEmpty()) {
-				Graph.applyTransformed(g2d, 200 - 64, 55, g -> {
+				int y = desc.isBlank() ? 215 : 161;
+				Graph.applyTransformed(g2d, 200 - 64, y, g -> {
 					if (icons.size() == 1) {
 						g.drawImage(icons.get(0), 0, 0, null);
 					} else {
