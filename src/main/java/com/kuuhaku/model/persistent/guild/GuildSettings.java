@@ -63,6 +63,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<TextChannel> deniedChannels = new ArrayList<>();
 
+	@Column(name = "notificationsChannel")
+	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
+	private TextChannel notificationsChannel;
+
 	@Convert(converter = EmbedConverter.class)
 	@Column(name = "embed", nullable = false)
 	private AutoEmbedBuilder embed = new AutoEmbedBuilder();
@@ -137,6 +141,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public List<TextChannel> getDeniedChannels() {
 		return deniedChannels;
+	}
+
+	public TextChannel getNotificationsChannel() {
+		return notificationsChannel;
 	}
 
 	public AutoEmbedBuilder getEmbed() {
