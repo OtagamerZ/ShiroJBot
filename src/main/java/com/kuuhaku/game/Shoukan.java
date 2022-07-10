@@ -555,35 +555,22 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		switch (you.getOrigin().synergy()) {
-			case SHIKI -> {
-				List<SlotColumn> slts = arena.getSlots(op.getSide());
-				for (SlotColumn slt : slts) {
-					if (slt.getTop() != null) {
-						slt.getTop().getStats().setDodge(-1);
-					}
-				}
-			}
-			case FALLEN -> {
-				int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
-				op.modHP(degen);
-				op.getRegDeg().reduce(Degen.class, degen);
-			}
-			case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
-		}
-
-		int attacks = 1;
+		int pHP = op.getHP();
 		int dmg = ally.getDmg();
-		for (Evogear e : ally.getEquipments()) {
-			JSONArray charms = e.getCharms();
-			if (charms.contains(Charm.MULTISTRIKE.name())) {
-				attacks += Charm.MULTISTRIKE.getValue(e.getTier()) - 1;
-			}
+		int attacks = 1 + ally.getEquipments().stream()
+				.filter(e -> e.getCharms().contains(Charm.MULTISTRIKE.name()))
+				.mapToInt(e -> Charm.MULTISTRIKE.getValue(e.getTier()))
+				.sum();
 
-			for (Object o : charms) {
-				Charm c = Charm.valueOf(String.valueOf(o));
-				for (int i = 0; i < attacks; i++) {
-					int eDmg = (int) (dmg * Math.pow(0.5, i));
+		String outcome = "";
+		for (int i = 0; i < attacks; i++) {
+			int eDmg = (int) (dmg * Math.pow(0.5, i));
+
+			for (Evogear e : ally.getEquipments()) {
+				JSONArray charms = e.getCharms();
+
+				for (Object o : charms) {
+					Charm c = Charm.valueOf(String.valueOf(o));
 					switch (c) {
 						case PIERCING -> op.modHP(eDmg * c.getValue(e.getTier()) / 100);
 						case WOUNDING -> op.getRegDeg().add(new Degen(eDmg * c.getValue(e.getTier()) / 100, 0.1));
@@ -597,109 +584,122 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 			}
-		}
 
-		String outcome;
-		if (enemy != null) {
-			if (enemy.isSupporting()) {
-				you.addKill();
-				if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-					arena.getBanned().add(enemy);
-				} else {
-					op.getGraveyard().add(enemy);
+			switch (you.getOrigin().synergy()) {
+				case SHIKI -> {
+					List<SlotColumn> slts = arena.getSlots(op.getSide());
+					for (SlotColumn slt : slts) {
+						if (slt.getTop() != null) {
+							slt.getTop().getStats().setDodge(-1);
+						}
+					}
 				}
+				case FALLEN -> {
+					int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
+					op.modHP(degen);
+					op.getRegDeg().reduce(Degen.class, degen);
+				}
+				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
+			}
 
-				outcome = "str/combat_direct";
-			} else {
-				boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
+			if (i == 0) {
+				if (enemy != null) {
+					if (enemy.isSupporting()) {
+						you.addKill();
+						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+							arena.getBanned().add(enemy);
+						} else {
+							op.getGraveyard().add(enemy);
+						}
 
-				if (ally.getDmg() < enemy.getActiveAttr(dbl)) {
-					int pHP = you.getHP();
-
-					op.addKill();
-					if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-						arena.getBanned().add(ally);
+						outcome = "str/combat_direct";
 					} else {
-						you.getGraveyard().add(ally);
-					}
+						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
 
-					you.modHP(-(enemy.getActiveAttr(dbl) - ally.getDmg()));
-					reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
-					return true;
+						if (ally.getDmg() < enemy.getActiveAttr(dbl)) {
+							pHP = you.getHP();
+
+							op.addKill();
+							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+								arena.getBanned().add(ally);
+							} else {
+								you.getGraveyard().add(ally);
+							}
+
+							you.modHP(-(enemy.getActiveAttr(dbl) - ally.getDmg()));
+							reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
+							return true;
+						} else {
+							int block = enemy.getBlock();
+							int dodge = enemy.getDodge();
+
+							if (Calc.chance(block)) {
+								op.addKill();
+								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(ally);
+								} else {
+									you.getGraveyard().add(ally);
+								}
+
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
+								return true;
+							} else if (Calc.chance(dodge)) {
+								if (you.getOrigin().synergy() == Race.FABLED) {
+									op.modHP((int) -(ally.getDmg() * 0.02));
+								}
+
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss", dodge));
+								return true;
+							}
+
+							if (ally.getDmg() > enemy.getActiveAttr(dbl)) {
+								if (enemy.isDefending()) {
+									dmg = 0;
+								} else {
+									dmg -= enemy.getActiveAttr(dbl);
+								}
+
+								you.addKill();
+								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(enemy);
+								} else {
+									op.getGraveyard().add(enemy);
+								}
+
+								outcome = "str/combat_success";
+							} else {
+								you.addKill();
+								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(enemy);
+								} else {
+									op.getGraveyard().add(enemy);
+								}
+
+								op.addKill();
+								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(ally);
+								} else {
+									you.getGraveyard().add(ally);
+								}
+
+								dmg = 0;
+								outcome = "str/combat_clash";
+							}
+						}
+					}
 				} else {
-					int block = enemy.getBlock();
-					int dodge = enemy.getDodge();
-
-					if (Calc.chance(block)) {
-						op.addKill();
-						if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(ally);
-						} else {
-							you.getGraveyard().add(ally);
-						}
-
-						reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
-						return true;
-					} else if (Calc.chance(dodge)) {
-						if (you.getOrigin().synergy() == Race.FABLED) {
-							op.modHP((int) -(ally.getDmg() * 0.02));
-						}
-
-						reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss", dodge));
-						return true;
-					}
-
-					if (ally.getDmg() > enemy.getActiveAttr(dbl)) {
-						if (enemy.isDefending()) {
-							dmg = 0;
-						} else {
-							dmg -= enemy.getActiveAttr(dbl);
-						}
-
-						you.addKill();
-						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(enemy);
-						} else {
-							op.getGraveyard().add(enemy);
-						}
-
-						outcome = "str/combat_success";
-					} else {
-						you.addKill();
-						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(enemy);
-						} else {
-							op.getGraveyard().add(enemy);
-						}
-
-						op.addKill();
-						if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(ally);
-						} else {
-							you.getGraveyard().add(ally);
-						}
-
-						dmg = 0;
-						outcome = "str/combat_clash";
-					}
+					outcome = "str/combat_direct";
 				}
 			}
-		} else {
-			outcome = "str/combat_direct";
-		}
 
-		if (ally.getSlot() != null) {
-			ally.setAvailable(false);
-		}
+			if (ally.getSlot() != null) {
+				ally.setAvailable(false);
+			}
 
-		int pHP = op.getHP();
-		for (int i = 0; i < attacks; i++) {
-			int eDmg = (int) (dmg * Math.pow(0.5, i));
 			op.modHP(-eDmg);
-		}
-
-		if (you.getOrigin().synergy() == Race.LICH) {
-			you.modHP((int) ((pHP - op.getHP()) * 0.01));
+			if (you.getOrigin().synergy() == Race.LICH) {
+				you.modHP((int) ((pHP - op.getHP()) * 0.01));
+			}
 		}
 
 		reportEvent("str/combat", ally, Utils.getOr(enemy, op.getName()), locale.get(outcome, pHP - op.getHP()));
