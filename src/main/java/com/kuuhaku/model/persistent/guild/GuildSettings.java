@@ -147,6 +147,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return notificationsChannel;
 	}
 
+	public void setNotificationsChannel(TextChannel notificationsChannel) {
+		this.notificationsChannel = notificationsChannel;
+	}
+
 	public AutoEmbedBuilder getEmbed() {
 		return embed;
 	}

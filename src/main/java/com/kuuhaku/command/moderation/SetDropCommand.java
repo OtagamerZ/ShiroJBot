@@ -37,7 +37,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 		category = Category.MODERATION
 )
 @Signature(allowEmpty = true, value = {
-		"<action:word:r>[limpar,clear]",
+		"<action:word:r>[clear]",
 		"<channel:channel:r>"
 })
 @Requires({
