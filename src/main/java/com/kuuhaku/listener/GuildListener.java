@@ -186,7 +186,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (!Utils.equalsAny(event.getChannel().getId(), "718666970119143436", "615938347453382656", "971503733202628698")) return;
+		if (!Utils.equalsAny(event.getChannel().getId(), "718666970119143436", "615938347453382656", "971503733202628698"))
+			return;
 		if (event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
@@ -205,6 +206,18 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
+		int lvl = profile.getLevel();
+
+		profile.addXp(15);
+		profile.save();
+
+		if (profile.getLevel() > lvl) {
+			TextChannel notifs = config.getSettings().getNotificationsChannel();
+			if (notifs != null) {
+				notifs.sendMessage(locale.get("str/level_up", data.user().getAsMention(), profile.getLevel())).queue(null, Utils::doNothing);
+			}
+		}
+
 		Account account = profile.getAccount();
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
