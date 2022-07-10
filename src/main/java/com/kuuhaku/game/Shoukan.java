@@ -572,7 +572,7 @@ public class Shoukan extends GameInstance<Phase> {
 				for (Object o : charms) {
 					Charm c = Charm.valueOf(String.valueOf(o));
 					switch (c) {
-						case PIERCING -> op.modHP(eDmg * c.getValue(e.getTier()) / 100);
+						case PIERCING -> op.modHP(-eDmg * c.getValue(e.getTier()) / 100);
 						case WOUNDING -> op.getRegDeg().add(new Degen(eDmg * c.getValue(e.getTier()) / 100, 0.1));
 						case DRAIN -> {
 							int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
