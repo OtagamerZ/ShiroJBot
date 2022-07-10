@@ -692,6 +692,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
+			eDmg = (int) (dmg * Math.pow(0.5, i));
 			if (ally.getSlot() != null) {
 				ally.setAvailable(false);
 			}

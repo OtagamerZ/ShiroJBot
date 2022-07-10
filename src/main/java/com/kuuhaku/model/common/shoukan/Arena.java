@@ -43,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -75,7 +76,7 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final List<Drawable<?>> banned = new BondedLinkedList<>(Drawable::reset);
+	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(Drawable::reset);
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -200,13 +201,13 @@ public class Arena implements Renderer {
 					);
 				}
 				if (!banned.isEmpty()) {
-					Drawable<?> d = banned.get(0);
+					Drawable<?> d = banned.getLast();
 					g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
 							0, CENTER.y - 350 / 2, null
 					);
 				}
 				if (!bottom.getGraveyard().isEmpty()) {
-					Drawable<?> d = bottom.getGraveyard().get(0);
+					Drawable<?> d = bottom.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, bottom.getUserDeck()),
 							0, CENTER.y - 350 / 2 + (350 + MARGIN.y), null
 					);
@@ -215,7 +216,7 @@ public class Arena implements Renderer {
 
 			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
-					Drawable<?> d = top.getGraveyard().get(0);
+					Drawable<?> d = top.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, top.getUserDeck()),
 							0, CENTER.y - 350 / 2 - (350 + MARGIN.y), null
 					);
