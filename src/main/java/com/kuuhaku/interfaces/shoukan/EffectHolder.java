@@ -44,16 +44,25 @@ public interface EffectHolder {
 
 				String val;
 				try {
-					val = String.valueOf(
-							Utils.eval(groups.getString("calc", ""), Map.of(
-									"mp", d.getMPCost(),
-									"hp", d.getHPCost(),
-									"atk", d.getDmg(),
-									"dfs", d.getDef(),
-									"ddg", d.getDodge(),
-									"blk", d.getBlock()
-							))
-					);
+					if (groups.has("calc")) {
+						val = String.valueOf(
+								Utils.eval(groups.getString("calc"), Map.of(
+										"mp", d.getMPCost(),
+										"hp", d.getHPCost(),
+										"atk", d.getDmg(),
+										"dfs", d.getDef(),
+										"ddg", d.getDodge(),
+										"blk", d.getBlock()
+								))
+						);
+
+						val = StringUtils.abbreviate(
+								s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
+								Drawable.MAX_DESC_LENGTH
+						);
+					} else {
+						val = s;
+					}
 
 					switch (groups.getString("color", "")) {
 						case "mp" -> g2d.setColor(new Color(0x00E0E0));
@@ -65,11 +74,7 @@ public interface EffectHolder {
 						case "sp" -> g2d.setColor(new Color(0xC58FFF));
 					}
 
-					return StringUtils.abbreviate(
-							s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2))
-									.replaceAll("\\{.+}", ""),
-							Drawable.MAX_DESC_LENGTH
-					);
+					return val;
 				} catch (Exception e) {
 					return StringUtils.abbreviate(s, Drawable.MAX_DESC_LENGTH);
 				}
