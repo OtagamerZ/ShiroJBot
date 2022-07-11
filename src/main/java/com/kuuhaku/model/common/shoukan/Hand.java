@@ -239,9 +239,11 @@ public class Hand {
 			if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
 				modHP(-10);
 			}
-		}
 
-		return;
+			if (d != null) {
+				cards.add(d);
+			}
+		}
 	}
 
 	public void draw() {
