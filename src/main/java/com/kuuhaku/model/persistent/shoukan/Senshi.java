@@ -468,7 +468,8 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 					"ep", ep,
 					"self", this,
 					"trigger", trigger,
-					"game", hand.getGame()
+					"game", hand.getGame(),
+					"side", hand.getSide()
 			));
 
 			for (Evogear e : equipments) {

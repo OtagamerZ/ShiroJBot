@@ -284,7 +284,8 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			Utils.exec(effect, Map.of(
 					"ep", ep,
 					"self", this,
-					"game", hand.getGame()
+					"game", hand.getGame(),
+					"side", hand.getSide()
 			));
 
 			return true;
