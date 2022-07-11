@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.misc;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -43,6 +44,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -95,6 +97,10 @@ public class SynthesizeCommand implements Executable {
 							select.complete(null);
 						})
 						.exceptionally(t -> {
+							if (!(t instanceof NoResultException)) {
+								Constants.LOGGER.error(t, t);
+							}
+
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
 							select.complete(null);
 							return null;
