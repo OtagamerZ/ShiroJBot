@@ -43,7 +43,7 @@ public interface EffectHolder {
 				String val;
 				try {
 					val = String.valueOf(
-							Utils.eval(groups.getString("calc"), Map.of(
+							Utils.eval(groups.getString("calc", ""), Map.of(
 									"mp", d.getMPCost(),
 									"hp", d.getHPCost(),
 									"atk", d.getDmg(),
