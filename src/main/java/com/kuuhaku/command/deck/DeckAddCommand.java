@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.deck;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -136,6 +137,7 @@ public class DeckAddCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/card_added")).queue();
 				})
 				.exceptionally(t -> {
+					Constants.LOGGER.error(t, t);
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
