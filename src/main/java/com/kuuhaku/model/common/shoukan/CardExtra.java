@@ -313,7 +313,7 @@ public class CardExtra {
 				return mod.getExpiration().decrementAndGet() <= 0;
 			}
 
-			return false;
+			return mod.isExpired();
 		};
 
 		Field[] fields = this.getClass().getDeclaredFields();
