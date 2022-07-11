@@ -240,8 +240,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public static Field getRandom() {
-		Table table = Field.class.getDeclaredAnnotation(Table.class);
-		String id = DAO.queryNative(String.class, "SELECT id FROM ?1 ORDER BY RANDOM()", table.name());
+		String id = DAO.queryNative(String.class, "SELECT card_id FROM field ORDER BY RANDOM()");
 		return DAO.find(Field.class, id);
 	}
 }

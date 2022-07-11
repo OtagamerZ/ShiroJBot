@@ -425,8 +425,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	}
 
 	public static Evogear getRandom() {
-		Table table = Evogear.class.getDeclaredAnnotation(Table.class);
-		String id = DAO.queryNative(String.class, "SELECT id FROM ?1 ORDER BY RANDOM()", table.name());
+		String id = DAO.queryNative(String.class, "SELECT card_id FROM evogear ORDER BY RANDOM()");
 		return DAO.find(Evogear.class, id);
 	}
 }
