@@ -40,26 +40,31 @@ public interface EffectHolder {
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
-				String val = String.valueOf(
-						Utils.eval(groups.getString(0), Map.of(
-								"mp", d.getMPCost(),
-								"hp", d.getHPCost(),
-								"atk", d.getDmg(),
-								"dfs", d.getDef(),
-								"ddg", d.getDodge(),
-								"blk", d.getBlock()
-						))
-				);
+				String val;
+				try {
+					val = String.valueOf(
+							Utils.eval(groups.getString(0), Map.of(
+									"mp", d.getMPCost(),
+									"hp", d.getHPCost(),
+									"atk", d.getDmg(),
+									"dfs", d.getDef(),
+									"ddg", d.getDodge(),
+									"blk", d.getBlock()
+							))
+					);
 
-				if (groups.size() > 1) {
-					switch (groups.getString(1)) {
-						case "mp" -> g2d.setColor(new Color(0x00E0E0));
-						case "hp" -> g2d.setColor(new Color(0x85C720));
-						case "atk" -> g2d.setColor(new Color(0xFF0000));
-						case "dfs" -> g2d.setColor(new Color(0x00C500));
-						case "ddg" -> g2d.setColor(new Color(0xFFC800));
-						case "blk" -> g2d.setColor(new Color(0x777777));
+					if (groups.size() > 1) {
+						switch (groups.getString(1)) {
+							case "mp" -> g2d.setColor(new Color(0x00E0E0));
+							case "hp" -> g2d.setColor(new Color(0x85C720));
+							case "atk" -> g2d.setColor(new Color(0xFF0000));
+							case "dfs" -> g2d.setColor(new Color(0x00C500));
+							case "ddg" -> g2d.setColor(new Color(0xFFC800));
+							case "blk" -> g2d.setColor(new Color(0x777777));
+						}
 					}
+				} catch (Exception e) {
+					val = s;
 				}
 
 				return Constants.VOID + StringUtils.abbreviate(
