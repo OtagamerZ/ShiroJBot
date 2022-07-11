@@ -61,6 +61,7 @@ public interface EffectHolder {
 							case "dfs" -> g2d.setColor(new Color(0x00C500));
 							case "ddg" -> g2d.setColor(new Color(0xFFC800));
 							case "blk" -> g2d.setColor(new Color(0x777777));
+							case "sp" -> g2d.setColor(new Color(0xA551FF));
 						}
 					}
 				} catch (Exception e) {
