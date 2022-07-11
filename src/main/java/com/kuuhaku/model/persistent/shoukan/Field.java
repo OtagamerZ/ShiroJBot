@@ -215,6 +215,13 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
+	public Field getRandom() {
+		Table table = getClass().getDeclaredAnnotation(Table.class);
+		String id = DAO.queryNative(String.class, "SELECT id FROM ?1 ORDER BY RANDOM()", table.name());
+		return DAO.find(Field.class, id);
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
