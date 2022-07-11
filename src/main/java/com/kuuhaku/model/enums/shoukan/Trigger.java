@@ -39,7 +39,6 @@ public enum Trigger {
 	ON_DEFEND,
 
 	// Triggers after combat
-	ON_DIRECT,
 	ON_HIT,
 	ON_BLOCK,
 	ON_DODGE,
