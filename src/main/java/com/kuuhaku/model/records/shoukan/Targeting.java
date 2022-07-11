@@ -20,8 +20,10 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.TargetType;
-import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+
+import static com.kuuhaku.model.enums.shoukan.Trigger.ACTIVATE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
 
 public record Targeting(Senshi ally, Senshi enemy) {
 	public Targeting(Hand hand, int ally, int enemy) {
@@ -48,10 +50,10 @@ public record Targeting(Senshi ally, Senshi enemy) {
 
 	public EffectParameters toParameters(TargetType type) {
 		return switch (type) {
-			case NONE -> new EffectParameters(Trigger.ACTIVATE);
-			case ALLY -> new EffectParameters(Trigger.ACTIVATE, new Source(ally));
-			case ENEMY -> new EffectParameters(Trigger.ACTIVATE, new Target(enemy));
-			case BOTH -> new EffectParameters(Trigger.ACTIVATE, new Source(ally), new Target(enemy));
+			case NONE -> new EffectParameters(ACTIVATE);
+			case ALLY -> new EffectParameters(ACTIVATE, new Source(ally, SPELL_TARGET));
+			case ENEMY -> new EffectParameters(ACTIVATE, new Target(enemy, SPELL_TARGET));
+			case BOTH -> new EffectParameters(ACTIVATE, new Source(ally, SPELL_TARGET), new Target(enemy, SPELL_TARGET));
 		};
 	}
 }

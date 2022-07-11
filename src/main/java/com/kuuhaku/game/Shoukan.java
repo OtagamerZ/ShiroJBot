@@ -32,14 +32,14 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Phase;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Charm;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.model.records.shoukan.Source;
+import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -56,6 +56,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+
+import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
 	private final long seed = Constants.DEFAULT_RNG.nextLong();
@@ -152,6 +154,17 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi copy;
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
+		if (slot.isLocked()) {
+			int time = slot.getLock();
+
+			if (time == -1) {
+				getChannel().sendMessage(locale.get("error/slot_locked_perma")).queue();
+			} else {
+				getChannel().sendMessage(locale.get("error/slot_locked", time)).queue();
+			}
+			return false;
+		}
+
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(locale.get("error/slot_occupied")).queue();
@@ -338,6 +351,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeHP(chosen.getHPCost() / 2);
 		curr.consumeMP(chosen.getMPCost() / 2);
 		curr.getGraveyard().add(chosen);
+		trigger(ON_SACRIFICE, side);
 
 		reportEvent("str/sacrifice_card", curr.getName(), chosen);
 		return true;
@@ -380,6 +394,9 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeHP(hp);
 		curr.consumeMP(mp);
 		curr.getGraveyard().addAll(cards);
+		for (Drawable<?> ignored : cards) {
+			trigger(ON_SACRIFICE, side);
+		}
 
 		reportEvent("str/sacrifice_card", curr.getName(),
 				Utils.properlyJoin(locale.get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
@@ -403,6 +420,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().add(chosen);
+		trigger(ON_DISCARD, side);
 
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> d : curr.getCards()) {
@@ -444,6 +462,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().addAll(cards);
+		for (Drawable<?> ignored : cards) {
+			trigger(ON_DISCARD, side);
+		}
+
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> d : curr.getCards()) {
 				if (d.isAvailable() && Calc.chance(25)) {
@@ -463,7 +485,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("PLAN")
-	@PlayerAction("(?<inHand>[1-5])(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
+	@PlayerAction("(?<inHand>\\d+)(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean activate(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
@@ -483,6 +505,12 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
 				getChannel().sendMessage(locale.get("error/not_enough_sc")).queue();
+				return false;
+			}
+
+			int locktime = curr.getLockTime(Lock.SPELL);
+			if (locktime > 0) {
+				getChannel().sendMessage(locale.get("error/spell_locked", locktime)).queue();
 				return false;
 			}
 		} else {
@@ -512,6 +540,36 @@ public class Shoukan extends GameInstance<Phase> {
 		chosen.setAvailable(false);
 
 		reportEvent("str/activate_card", curr.getName(), chosen);
+		return true;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("(?<inField>[1-5]),a")
+	private boolean special(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
+
+		if (!slot.hasTop()) {
+			getChannel().sendMessage(locale.get("error/missing_card", slot.getIndex() + 1)).queue();
+			return false;
+		}
+
+		int locktime = curr.getLockTime(Lock.EFFECT);
+		if (locktime > 0) {
+			getChannel().sendMessage(locale.get("error/effect_locked", locktime)).queue();
+			return false;
+		}
+
+		Senshi chosen = slot.getTop();
+		if (curr.getMP() < 1) {
+			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
+			return false;
+		}
+
+		curr.consumeMP(1);
+		trigger(ACTIVATE, chosen.asSource(ACTIVATE));
+
+		reportEvent("str/card_special", curr.getName(), chosen);
 		return true;
 	}
 
@@ -589,7 +647,7 @@ public class Shoukan extends GameInstance<Phase> {
 				case SHIKI -> {
 					List<SlotColumn> slts = arena.getSlots(op.getSide());
 					for (SlotColumn slt : slts) {
-						if (slt.getTop() != null) {
+						if (slt.hasTop()) {
 							slt.getTop().getStats().setDodge(-1);
 						}
 					}
@@ -602,9 +660,19 @@ public class Shoukan extends GameInstance<Phase> {
 				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 			}
 
+			Target t;
+			if (enemy != null) {
+				t = enemy.asTarget(ON_DEFEND);
+			} else {
+				t = new Target();
+			}
+			trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
+
 			if (i == 0) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
+						trigger(ON_DIRECT, ally.asSource(ON_HIT), enemy.asTarget(ON_FAIL));
+
 						you.addKill();
 						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
 							arena.getBanned().add(enemy);
@@ -617,6 +685,7 @@ public class Shoukan extends GameInstance<Phase> {
 						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
 
 						if (ally.getDmg() < enemy.getActiveAttr(dbl)) {
+							trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
 							op.addKill();
@@ -634,6 +703,8 @@ public class Shoukan extends GameInstance<Phase> {
 							int dodge = enemy.getDodge();
 
 							if (Calc.chance(block)) {
+								trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_BLOCK));
+
 								op.addKill();
 								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
 									arena.getBanned().add(ally);
@@ -644,6 +715,8 @@ public class Shoukan extends GameInstance<Phase> {
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
 								return true;
 							} else if (Calc.chance(dodge)) {
+								trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_DODGE));
+
 								if (you.getOrigin().synergy() == Race.FABLED) {
 									op.modHP((int) -(ally.getDmg() * 0.02));
 								}
@@ -653,6 +726,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							if (ally.getDmg() > enemy.getActiveAttr(dbl)) {
+								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_FAIL));
 								if (enemy.isDefending()) {
 									dmg = 0;
 								} else {
@@ -668,6 +742,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 								outcome = "str/combat_success";
 							} else {
+								trigger(ON_CLASH, ally.asSource(ON_CLASH), enemy.asTarget(ON_CLASH));
+
 								you.addKill();
 								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
 									arena.getBanned().add(enemy);
@@ -688,6 +764,8 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				} else {
+					trigger(ON_DIRECT, ally.asSource(ON_DIRECT));
+
 					outcome = "str/combat_direct";
 				}
 			}
@@ -735,6 +813,45 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena.getSlots(s);
 	}
 
+	public void trigger(Trigger trigger) {
+		List<Side> sides = new ArrayList<>(){{
+			add(getCurrentSide());
+			add(getOtherSide());
+		}};
+
+		for (Side side : sides) {
+			trigger(trigger, side);
+		}
+	}
+
+	public void trigger(Trigger trigger, Side side) {
+		List<SlotColumn> slts = getSlots(side);
+		for (SlotColumn slt : slts) {
+			Senshi s = slt.getTop();
+			if (s != null) {
+				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				s.unlock();
+			}
+
+			s = slt.getBottom();
+			if (s != null) {
+				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				s.unlock();
+			}
+		}
+	}
+
+	public void trigger(Trigger trigger, Source source) {
+		EffectParameters ep = new EffectParameters(trigger, source);
+		source.execute(ep);
+	}
+
+	public void trigger(Trigger trigger, Source source, Target target) {
+		EffectParameters ep = new EffectParameters(trigger, source, target);
+		source.execute(ep);
+		target.execute(ep);
+	}
+
 	private void sendPlayerHand(Hand hand) {
 		hand.getUser().openPrivateChannel()
 				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale), "png"), "hand.png"))
@@ -772,11 +889,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private void reportEvent(String message, Object... args) {
 		resetTimer();
+		trigger(ON_TICK);
 
 		Side[] sides = new Side[]{getOtherSide(), getCurrentSide()};
 		for (Side side : sides) {
 			Hand hand = hands.get(side);
 			if (hand.getHP() == 0) {
+				trigger(ON_WIN, side.getOther());
+				trigger(ON_DEFEAT, side);
+
 				if (hand.getOrigin().major() == Race.UNDEAD && hand.getMajorCooldown() == 0) {
 					hand.setHP(1);
 					hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
@@ -786,7 +907,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				reportResult("str/game_end",
 						"<@" + hand.getUid() + ">",
-						"<@" + hands.get(Utils.getNext(side, true, sides)).getUid() + ">"
+						"<@" + hands.get(side.getOther()).getUid() + ">"
 				);
 				close(GameReport.SUCCESS);
 				return;
@@ -897,6 +1018,8 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected void nextTurn() {
 		Hand curr = getCurrent();
+		trigger(ON_TURN_END, curr.getSide());
+
 		curr.getCards().removeIf(d -> !d.isAvailable());
 		curr.flushDiscard();
 
@@ -906,18 +1029,21 @@ public class Shoukan extends GameInstance<Phase> {
 
 		List<SlotColumn> slts = getSlots(curr.getSide());
 		for (SlotColumn slt : slts) {
-			if (slt.getTop() != null) {
+			if (slt.hasTop()) {
 				slt.getTop().setAvailable(true);
 
 				slt.getTop().reduceStasis(1);
 				slt.getTop().reduceSleep(1);
 				slt.getTop().reduceStun(1);
+				slt.getTop().reduceCooldown(1);
 			}
 		}
 
 		super.nextTurn();
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
+		trigger(ON_TURN_BEGIN, curr.getSide());
+
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyVoTs();
 		curr.reduceMinorCooldown(1);
@@ -934,6 +1060,17 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void resetTimer() {
 		super.resetTimer();
 		getCurrent().setForfeit(false);
+	}
+
+	@Override
+	public void setPhase(Phase phase) {
+		super.setPhase(phase);
+		Trigger trigger = switch (phase) {
+			case PLAN -> ON_PLAN;
+			case COMBAT -> ON_COMBAT;
+		};
+
+		trigger(trigger, getCurrentSide());
 	}
 
 	@Override

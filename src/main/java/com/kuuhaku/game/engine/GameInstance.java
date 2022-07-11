@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
@@ -137,7 +138,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			PlayerAction pa = meth.getAnnotation(PlayerAction.class);
 			if (pa != null) {
 				PhaseConstraint pc = meth.getAnnotation(PhaseConstraint.class);
-				if (pc != null && (phase == null || !pc.value().equals(phase.name()))) {
+				if (pc != null && (phase == null || !ArrayUtils.contains(pc.value(), phase.name()))) {
 					continue;
 				}
 

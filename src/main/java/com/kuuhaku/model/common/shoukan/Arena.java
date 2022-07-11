@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -76,7 +77,10 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(Drawable::reset);
+	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(d -> {
+		d.reset();
+		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
+	});
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -194,7 +198,7 @@ public class Arena implements Renderer {
 			}
 
 			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
-				if (!top.getDeck().isEmpty()) {
+				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getFrame().getBack(d),
 							0, CENTER.y - 350 / 2 - (350 + MARGIN.y), null
@@ -226,7 +230,7 @@ public class Arena implements Renderer {
 							0, CENTER.y - 350 / 2, null
 					);
 				}
-				if (!bottom.getDeck().isEmpty()) {
+				if (!bottom.getRealDeck().isEmpty()) {
 					Deck d = bottom.getUserDeck();
 					g2.drawImage(d.getFrame().getBack(d),
 							0, CENTER.y - 350 / 2 + (350 + MARGIN.y), null

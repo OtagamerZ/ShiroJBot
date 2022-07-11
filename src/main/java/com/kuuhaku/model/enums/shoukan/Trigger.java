@@ -22,23 +22,31 @@ public enum Trigger {
 	// Triggers on render
 	ON_TICK,
 
+	// Triggers on turn change
+	ON_TURN_BEGIN,
+	ON_TURN_END,
+
 	// Triggers on each phase
 	ON_PLAN,
 	ON_COMBAT,
+
+	// Triggers on win condition
+	ON_WIN,
+	ON_DEFEAT,
 
 	// Triggers before combat
 	ON_ATTACK,
 	ON_DEFEND,
 
 	// Triggers after combat
+	ON_DIRECT,
 	ON_HIT,
 	ON_BLOCK,
 	ON_DODGE,
-
-	// Triggers on attribute clash
 	ON_CLASH,
+	ON_FAIL,
 
-	// Triggers when card attacks someone stronger
+	// Triggers when sacrificing a card
 	ON_SACRIFICE,
 
 	// Triggers when added to each stack
@@ -51,7 +59,20 @@ public enum Trigger {
 	ON_DRAW,
 	ON_DISCARD,
 	ON_SUMMON,
+	ON_EQUIP,
+	ON_SWITCH,
+	ON_FLIP,
+
+	// Triggers on player HP change
+	ON_HEAL,
+	ON_DAMAGE,
 
 	// Single-use trigger
-	ACTIVATE
+	ACTIVATE,
+
+	// Triggered when targeted by a spell
+	SPELL_TARGET,
+
+	// Trigger passed from another card
+	DEFER
 }

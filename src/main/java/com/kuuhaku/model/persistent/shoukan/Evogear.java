@@ -210,11 +210,6 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		return (int) Math.max(0, (min + sum) * getAttrMult());
 	}
 
-	@Override
-	public double getPower() {
-		return stats.getPower();
-	}
-
 	private double getCostMult() {
 		double mult = 1;
 		if (hand != null && spell && hand.getOrigin().minor() == Race.MYSTICAL) {
