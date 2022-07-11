@@ -564,6 +564,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (curr.getMP() < 1) {
 			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 			return false;
+		} else if (!chosen.getEffect().contains(ACTIVATE.name())) {
+			getChannel().sendMessage(locale.get("error/card_not_usable")).queue();
+			return false;
 		}
 
 		curr.consumeMP(1);
