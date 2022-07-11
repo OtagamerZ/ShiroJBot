@@ -64,7 +64,7 @@ public class NotificationsCommand implements Executable {
 
 		TextChannel channel = event.message().getMentionedChannels().get(0);
 
-		if (settings.getNotificationsChannel().equals(channel)) {
+		if (channel.equals(settings.getNotificationsChannel())) {
 			settings.setNotificationsChannel(null);
 			event.channel().sendMessage(locale.get("success/notifications_channel_remove").formatted(channel.getAsMention())).queue();
 		} else {
