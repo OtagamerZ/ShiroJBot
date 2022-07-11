@@ -45,7 +45,7 @@ public interface EffectHolder {
 								"mp", d.getMPCost(),
 								"hp", d.getHPCost(),
 								"atk", d.getDmg(),
-								"def", d.getDef(),
+								"dfs", d.getDef(),
 								"ddg", d.getDodge(),
 								"blk", d.getBlock()
 						))
@@ -56,10 +56,9 @@ public interface EffectHolder {
 						case "mp" -> g2d.setColor(new Color(0x00E0E0));
 						case "hp" -> g2d.setColor(new Color(0x85C720));
 						case "atk" -> g2d.setColor(new Color(0xFF0000));
-						case "def" -> g2d.setColor(new Color(0x00C500));
+						case "dfs" -> g2d.setColor(new Color(0x00C500));
 						case "ddg" -> g2d.setColor(new Color(0xFFC800));
 						case "blk" -> g2d.setColor(new Color(0x777777));
-						case "pow" -> g2d.setColor(new Color(0x8F25FF));
 					}
 				}
 
