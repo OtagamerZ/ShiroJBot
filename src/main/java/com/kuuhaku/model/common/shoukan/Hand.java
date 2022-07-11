@@ -213,8 +213,8 @@ public class Hand {
 		return deck;
 	}
 
-	public boolean manualDraw(int value) {
-		if (deck.isEmpty()) return false;
+	public void manualDraw(int value) {
+		if (deck.isEmpty()) return;
 
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			for (int i = 0; i < deck.size() && value > 0; i++) {
@@ -231,14 +231,22 @@ public class Hand {
 		}
 
 		for (int i = 0; i < value; i++) {
-			draw();
+			Drawable<?> d = deck.pollFirst();
+
+			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
+				modHP(50);
+			}
+			if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				modHP(-10);
+			}
 		}
 
-		return true;
+		return;
 	}
 
 	public void draw() {
-		Drawable<?> d = deck.removeFirst();
+		LinkedList<Drawable<?>> deck = getDeck();
+		Drawable<?> d = deck.pollFirst();
 
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 			modHP(50);
@@ -247,7 +255,9 @@ public class Hand {
 			modHP(-10);
 		}
 
-		cards.add(d);
+		if (d != null) {
+			cards.add(d);
+		}
 	}
 
 	public void draw(int value) {
@@ -257,6 +267,8 @@ public class Hand {
 	}
 
 	public void drawSenshi(int value) {
+		LinkedList<Drawable<?>> deck = getDeck();
+
 		for (int i = 0; i < deck.size() && value > 0; i++) {
 			if (deck.get(i) instanceof Senshi) {
 				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
@@ -270,6 +282,8 @@ public class Hand {
 	}
 
 	public void drawEvogear(int value) {
+		LinkedList<Drawable<?>> deck = getDeck();
+
 		for (int i = 0; i < deck.size() && value > 0; i++) {
 			if (deck.get(i) instanceof Evogear e) {
 				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
