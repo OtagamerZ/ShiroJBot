@@ -80,7 +80,11 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public KawaiponCard getKawaiponCard() {
-		return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.stashEntry.id = ?1", id);
+		try {
+			return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.stashEntry.id = ?1", id);
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	public CardType getType() {
