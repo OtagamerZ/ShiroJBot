@@ -161,68 +161,72 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default void drawAttributes(Graphics2D g2d, boolean desc) {
 		BufferedImage icon;
-		int y = desc ? 225 : 279;
-
 		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 20));
 		FontMetrics m = g2d.getFontMetrics();
 
-		if (getDef() > 0) {
-			icon = IO.getResourceAsImage("shoukan/icons/defense.png");
-			assert icon != null;
-			int x = 25;
+		{ // LEFT
+			int y = desc ? 225 : 279;
+			if (getDef() > 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/defense.png");
+				assert icon != null;
+				int x = 25;
 
-			String val = String.valueOf(getDef());
-			g2d.drawImage(icon, x, y, null);
-			g2d.setColor(Color.GREEN);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-			y -= icon.getHeight() + 5;
+				String val = String.valueOf(getDef());
+				g2d.drawImage(icon, x, y, null);
+				g2d.setColor(Color.GREEN);
+				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+				y -= icon.getHeight() + 5;
+			}
+
+			if (getDmg() > 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/attack.png");
+				assert icon != null;
+				int x = 25;
+
+				String val = String.valueOf(getDmg());
+				g2d.drawImage(icon, x, y, null);
+				g2d.setColor(Color.RED);
+				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+				y -= icon.getHeight() + 5;
+			}
+
+			if (getCooldown() > 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/cooldown.png");
+				assert icon != null;
+				int x = 25;
+
+				String val = getCooldown() + "t";
+				g2d.drawImage(icon, x, y, null);
+				g2d.setColor(new Color(0x00A1DA));
+				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			}
 		}
 
-		if (getDmg() > 0) {
-			icon = IO.getResourceAsImage("shoukan/icons/attack.png");
-			assert icon != null;
-			int x = 25;
 
-			String val = String.valueOf(getDmg());
-			g2d.drawImage(icon, x, y, null);
-			g2d.setColor(Color.RED);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-			y -= icon.getHeight() + 5;
-		}
+		{ // RIGHT
+			int y = desc ? 225 : 279;
+			if (getBlock() > 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/block.png");
+				assert icon != null;
+				int x = 200 - icon.getWidth();
 
-		if (getBlock() > 0) {
-			icon = IO.getResourceAsImage("shoukan/icons/block.png");
-			assert icon != null;
-			int x = 25;
+				String val = getBlock() + "%";
+				g2d.drawImage(icon, x, y, null);
+				g2d.setColor(Color.GRAY);
+				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+				y -= icon.getHeight() + 5;
+			}
 
-			String val = getBlock() + "%";
-			g2d.drawImage(icon, x, y, null);
-			g2d.setColor(Color.GRAY);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-			y -= icon.getHeight() + 5;
-		}
+			if (getDodge() > 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/dodge.png");
+				assert icon != null;
+				int x = 200 - icon.getWidth();
 
-		if (getDodge() > 0) {
-			icon = IO.getResourceAsImage("shoukan/icons/dodge.png");
-			assert icon != null;
-			int x = 25;
-
-			String val = getDodge() + "%";
-			g2d.drawImage(icon, x, y, null);
-			g2d.setColor(Color.ORANGE);
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-			y -= icon.getHeight() + 5;
-		}
-
-		if (getCooldown() > 0) {
-			icon = IO.getResourceAsImage("shoukan/icons/cooldown.png");
-			assert icon != null;
-			int x = 25;
-
-			String val = getCooldown() + "t";
-			g2d.drawImage(icon, x, y, null);
-			g2d.setColor(new Color(0x00A1DA));
-			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+				String val = getDodge() + "%";
+				g2d.drawImage(icon, x, y, null);
+				g2d.setColor(Color.ORANGE);
+				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			}
 		}
 	}
 
