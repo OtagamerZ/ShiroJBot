@@ -53,16 +53,14 @@ public interface EffectHolder {
 							))
 					);
 
-					if (groups.size() > 1) {
-						switch (groups.getString("color")) {
-							case "mp" -> g2d.setColor(new Color(0x00E0E0));
-							case "hp" -> g2d.setColor(new Color(0x85C720));
-							case "atk" -> g2d.setColor(new Color(0xFF0000));
-							case "dfs" -> g2d.setColor(new Color(0x00C500));
-							case "ddg" -> g2d.setColor(new Color(0xFFC800));
-							case "blk" -> g2d.setColor(new Color(0x777777));
-							case "sp" -> g2d.setColor(new Color(0xA551FF));
-						}
+					switch (groups.getString("color", "")) {
+						case "mp" -> g2d.setColor(new Color(0x00E0E0));
+						case "hp" -> g2d.setColor(new Color(0x85C720));
+						case "atk" -> g2d.setColor(new Color(0xFF0000));
+						case "dfs" -> g2d.setColor(new Color(0x00C500));
+						case "ddg" -> g2d.setColor(new Color(0xFFC800));
+						case "blk" -> g2d.setColor(new Color(0x777777));
+						case "sp" -> g2d.setColor(new Color(0xA551FF));
 					}
 				} catch (Exception e) {
 					val = s;
