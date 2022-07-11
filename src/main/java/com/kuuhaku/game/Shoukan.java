@@ -671,8 +671,6 @@ public class Shoukan extends GameInstance<Phase> {
 			if (i == 0) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
-						trigger(ON_DIRECT, ally.asSource(ON_HIT), enemy.asTarget(ON_FAIL));
-
 						you.addKill();
 						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
 							arena.getBanned().add(enemy);
@@ -764,8 +762,6 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				} else {
-					trigger(ON_DIRECT, ally.asSource(ON_DIRECT));
-
 					outcome = "str/combat_direct";
 				}
 			}
