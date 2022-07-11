@@ -81,6 +81,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			} catch (Exception e) {
 				initialized = true;
 				close(GameReport.INITIALIZATION_ERROR);
+				Constants.LOGGER.error(e, e);
 			} finally {
 				sml.close();
 			}
