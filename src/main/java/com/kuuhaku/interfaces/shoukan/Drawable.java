@@ -195,7 +195,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				assert icon != null;
 				int x = 25;
 
-				String val = getCooldown() + "t";
+				String val = getCooldown() + " t";
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(new Color(0x00A1DA));
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
