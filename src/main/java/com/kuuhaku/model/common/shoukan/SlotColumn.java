@@ -18,14 +18,17 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 
+import java.util.List;
 import java.util.Objects;
 
 public class SlotColumn {
+	private final Shoukan game;
 	private final Side side;
 	private final int index;
 
@@ -39,7 +42,8 @@ public class SlotColumn {
       └─ (0 - 15) lock time
 	 */
 
-	public SlotColumn(Side side, int index) {
+	public SlotColumn(Shoukan game, Side side, int index) {
+		this.game = game;
 		this.side = side;
 		this.index = index;
 	}
@@ -127,6 +131,23 @@ public class SlotColumn {
 	public void setLock(int time) {
 		int curr = Bit.get(state, 1, 4);
 		state = (byte) Bit.set(state, 1, Math.max(curr, time), 4);
+	}
+
+	public SlotColumn getLeft() {
+		if (index > 0) {
+			return game.getArena().getSlots(side).get(index - 1);
+		}
+
+		return null;
+	}
+
+	public SlotColumn getRight() {
+		List<SlotColumn> slts = game.getArena().getSlots(side);
+		if (index < slts.size()) {
+			return slts.get(index + 1);
+		}
+
+		return null;
 	}
 
 	@Override

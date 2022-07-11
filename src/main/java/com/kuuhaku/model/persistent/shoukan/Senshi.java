@@ -147,7 +147,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public SlotColumn getSlot() {
-		return Utils.getOr(slot, new SlotColumn(hand.getSide(), -1));
+		return Utils.getOr(slot, new SlotColumn(hand.getGame(), hand.getSide(), -1));
 	}
 
 	@Override
