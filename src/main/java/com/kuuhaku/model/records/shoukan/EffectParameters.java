@@ -20,23 +20,18 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
-public record EffectParameters(Trigger trigger, Source source, Target target) {
+public record EffectParameters(Trigger trigger, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger) {
-		this(trigger, new Source(), new Target());
+		this(trigger, new Source());
 	}
 
-	public EffectParameters(Trigger trigger, Source source) {
-		this(trigger, source, new Target());
-	}
-
-	public EffectParameters(Trigger trigger, Target target) {
-		this(trigger, new Source(), target);
+	public EffectParameters(Trigger trigger, Target... targets) {
+		this(trigger, new Source(), targets);
 	}
 
 	public int size() {
-		int i = 0;
+		int i = targets.length;
 		if (source.card() != null) i++;
-		if (target.card() != null) i++;
 
 		return i;
 	}

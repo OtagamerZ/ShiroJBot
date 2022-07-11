@@ -32,6 +32,8 @@ import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.model.records.shoukan.Target;
+import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -50,6 +52,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.kuuhaku.model.enums.shoukan.Trigger.ACTIVATE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
 
 @Entity
 @Table(name = "evogear")
@@ -278,7 +283,8 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		try {
 			Utils.exec(effect, Map.of(
 					"ep", ep,
-					"self", this
+					"self", this,
+					"game", hand.getGame()
 			));
 
 			return true;
@@ -286,6 +292,22 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 			return false;
 		}
+	}
+
+	public EffectParameters toParameters(Targeting tgt) {
+		return switch (targetType) {
+			case NONE -> new EffectParameters(ACTIVATE);
+			case ALLY -> new EffectParameters(ACTIVATE, asSource(ACTIVATE),
+					new Target(tgt.ally(), SPELL_TARGET)
+			);
+			case ENEMY -> new EffectParameters(ACTIVATE, asSource(ACTIVATE),
+					new Target(tgt.enemy(), SPELL_TARGET)
+			);
+			case BOTH -> new EffectParameters(ACTIVATE, asSource(ACTIVATE),
+					new Target(tgt.ally(), SPELL_TARGET),
+					new Target(tgt.enemy(), SPELL_TARGET)
+			);
+		};
 	}
 
 	@Override
