@@ -18,7 +18,6 @@
 
 package com.kuuhaku.util;
 
-import com.github.ygimenez.exception.InvalidStateException;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.InteractPage;
@@ -61,6 +60,7 @@ import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
+import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -782,7 +782,7 @@ public abstract class Utils {
 								.thenComparing(sc -> sc.getCard().getId())
 				).toList();
 
-		if (matches.isEmpty()) return CompletableFuture.failedStage(new InvalidStateException());
+		if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
 		if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

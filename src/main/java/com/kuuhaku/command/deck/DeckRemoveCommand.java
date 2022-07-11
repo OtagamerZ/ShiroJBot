@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.deck;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -40,6 +41,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import javax.persistence.NoResultException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -128,6 +130,10 @@ public class DeckRemoveCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), sc)).queue();
 				})
 				.exceptionally(t -> {
+					if (!(t instanceof NoResultException)) {
+						Constants.LOGGER.error(t, t);
+					}
+
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
