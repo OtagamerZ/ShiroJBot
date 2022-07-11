@@ -59,7 +59,7 @@ public class ShoukanCommand implements Executable {
 					if (err == null) {
 						event.channel().sendMessage("Done ").queue();
 					} else if (err instanceof GameReport) {
-						event.channel().sendMessage("Error " + err).queue();
+						event.channel().sendMessage("Error " + err.getMessage()).queue();
 					} else {
 						Constants.LOGGER.error(err, err);
 					}
