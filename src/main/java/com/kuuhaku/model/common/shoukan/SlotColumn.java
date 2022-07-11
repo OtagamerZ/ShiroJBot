@@ -134,12 +134,12 @@ public class SlotColumn {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		SlotColumn that = (SlotColumn) o;
-		return index == that.index && state == that.state && side == that.side && Objects.equals(top, that.top) && Objects.equals(bottom, that.bottom);
+		return side == that.side && index == that.index && state == that.state;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(side, index, top, bottom, state);
+		return Objects.hash(side, index, state);
 	}
 
 	public int validationHash() {
