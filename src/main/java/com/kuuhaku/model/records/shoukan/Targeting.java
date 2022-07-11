@@ -22,9 +22,6 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-import static com.kuuhaku.model.enums.shoukan.Trigger.ACTIVATE;
-import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
-
 public record Targeting(Senshi ally, Senshi enemy) {
 	public Targeting(Hand hand, int ally, int enemy) {
 		this(
@@ -45,15 +42,6 @@ public record Targeting(Senshi ally, Senshi enemy) {
 			case ALLY -> ally != null;
 			case ENEMY -> enemy != null;
 			case BOTH -> ally != null && enemy != null;
-		};
-	}
-
-	public EffectParameters toParameters(TargetType type) {
-		return switch (type) {
-			case NONE -> new EffectParameters(ACTIVATE);
-			case ALLY -> new EffectParameters(ACTIVATE, new Source(ally, SPELL_TARGET));
-			case ENEMY -> new EffectParameters(ACTIVATE, new Target(enemy, SPELL_TARGET));
-			case BOTH -> new EffectParameters(ACTIVATE, new Source(ally, SPELL_TARGET), new Target(enemy, SPELL_TARGET));
 		};
 	}
 }

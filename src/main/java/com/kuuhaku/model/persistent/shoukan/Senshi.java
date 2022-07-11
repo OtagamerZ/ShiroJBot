@@ -33,6 +33,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -449,22 +450,29 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			}*/
 
 			Trigger trigger;
+			check:
 			if (ep.source().card().equals(this)) {
 				trigger = ep.source().trigger();
-			} else if (ep.target().card().equals(this)) {
-				trigger = ep.target().trigger();
 			} else {
+				for (Target target : ep.targets()) {
+					if (target.card().equals(this)) {
+						trigger = target.trigger();
+						break check;
+					}
+				}
+
 				trigger = ep.trigger();
 			}
 
 			Utils.exec(effect, Map.of(
 					"ep", ep,
 					"self", this,
-					"trigger", trigger
+					"trigger", trigger,
+					"game", hand.getGame()
 			));
 
 			for (Evogear e : equipments) {
-				e.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.target()));
+				e.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.targets()));
 			}
 
 			Senshi sup = getSupport();
