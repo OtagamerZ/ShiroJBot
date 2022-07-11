@@ -47,8 +47,7 @@ public interface EffectHolder {
 								"atk", d.getDmg(),
 								"def", d.getDef(),
 								"ddg", d.getDodge(),
-								"blk", d.getBlock(),
-								"pow", d.getPower()
+								"blk", d.getBlock()
 						))
 				);
 

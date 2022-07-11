@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -62,9 +63,17 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>(d -> d.setHand(this));
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> d.setHand(this));
+	private final List<Drawable<?>> cards = new BondedList<>(d -> {
+		d.setHand(this);
+		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
+	});
+	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> {
+		d.setHand(this);
+		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
+	});
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
+		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
+
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
 			getGraveyard().addAll(s.getEquipments());
 		}
@@ -100,6 +109,7 @@ public class Hand {
 	        │  └ (0 - 255) minor effect
 	        └─ (0 - 255) major effect
 	 */
+	private transient int hpDelta = 0;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -191,7 +201,15 @@ public class Hand {
 		return Math.max(0, base.handCapacity() - getHandCount());
 	}
 
+	public LinkedList<Drawable<?>> getRealDeck() {
+		return deck;
+	}
+
 	public LinkedList<Drawable<?>> getDeck() {
+		if (getLockTime(Lock.DECK) > 0) {
+			return new LinkedList<>();
+		}
+
 		return deck;
 	}
 
@@ -352,11 +370,15 @@ public class Hand {
 
 		int delta = before - this.hp;
 		if (delta > 0) {
+			game.trigger(Trigger.ON_DAMAGE, side);
+
 			if (origin.synergy() == Race.VIRUS) {
 				modMP((int) (delta * 0.0025));
 			} else if (origin.synergy() == Race.TORMENTED) {
 				game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
 			}
+		} else if (delta < 0) {
+			game.trigger(Trigger.ON_HEAL, side);
 		}
 	}
 
@@ -370,6 +392,10 @@ public class Hand {
 
 	public boolean isLowLife() {
 		return origin.demon() || getHPPrcnt() <= 0.5;
+	}
+
+	public int getHpDelta() {
+		return hpDelta;
 	}
 
 	public RegDeg getRegDeg() {

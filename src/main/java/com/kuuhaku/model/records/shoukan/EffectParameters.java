@@ -22,14 +22,22 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 
 public record EffectParameters(Trigger trigger, Source source, Target target) {
 	public EffectParameters(Trigger trigger) {
-		this(trigger, null, null);
+		this(trigger, new Source(), new Target());
 	}
 
 	public EffectParameters(Trigger trigger, Source source) {
-		this(trigger, source, null);
+		this(trigger, source, new Target());
 	}
 
 	public EffectParameters(Trigger trigger, Target target) {
-		this(trigger, null, target);
+		this(trigger, new Source(), target);
+	}
+
+	public int size() {
+		int i = 0;
+		if (source.card() != null) i++;
+		if (target.card() != null) i++;
+
+		return i;
 	}
 }

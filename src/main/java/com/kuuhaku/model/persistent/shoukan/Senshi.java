@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
@@ -30,9 +30,13 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.CardState;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.util.*;
+import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -42,10 +46,8 @@ import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "senshi")
@@ -69,24 +71,27 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Embedded
 	private CardAttributes base;
 
-	private transient List<Evogear> equipments = new BondedList<>(e -> {
+	@Transient
+	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
+		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
 	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
 	private transient int state = 0x2;
 	/*
-	0x00 00 FFF F
-	        │││ └ 1111
-	        │││   │││└ solid
-	        │││   ││└─ available
-	        │││   │└── defending
-	        │││   └─── flipped
-	        ││└─ (0 - 15) stunned
-	        │└── (0 - 15) sleeping
-	        └─── (0 - 15) stasis
+	0x000 F FFF F
+	      │ │││ └ 1111
+	      │ │││   │││└ solid
+	      │ │││   ││└─ available
+	      │ │││   │└── defending
+	      │ │││   └─── flipped
+	      │ ││└─ (0 - 15) stunned
+	      │ │└── (0 - 15) sleeping
+	      │ └─── (0 - 15) stasis
+	      └ (0 - 15) cooldown
 	 */
 
 	@Override
@@ -133,7 +138,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		equipments.removeIf(e -> !equals(e.getEquipper()));
 
 		while (equipments.size() > 3) {
-			hand.getGraveyard().add(equipments.remove(0));
+			hand.getGraveyard().add(equipments.removeFirst());
 		}
 
 		return equipments;
@@ -269,11 +274,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		return (int) Math.max(0, (min + sum) * getAttrMult());
 	}
 
-	@Override
-	public double getPower() {
-		return stats.getPower();
-	}
-
 	private double getAttrMult() {
 		double mult = 1;
 		if (hand != null && hand.getOrigin().minor() == Race.NONE) {
@@ -313,6 +313,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	public void setDefending(boolean defending) {
 		state = Bit.set(state, 2, defending);
+
+		if (!isFlipped()) {
+			hand.getGame().trigger(Trigger.ON_SWITCH, asSource(Trigger.ON_SWITCH));
+		}
 	}
 
 	public boolean canAttack() {
@@ -328,6 +332,14 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	public void setFlipped(boolean flipped) {
 		if (isFlipped() && !flipped) {
 			setDefending(true);
+
+			if (hand != null) {
+				if (hand.getGame().getCurrentSide() != hand.getSide()) {
+					hand.getGame().trigger(Trigger.ON_FLIP, asSource(Trigger.ON_FLIP));
+				} else {
+					hand.getGame().trigger(Trigger.ON_SUMMON, asSource(Trigger.ON_SUMMON));
+				}
+			}
 		}
 
 		state = Bit.set(state, 3, flipped);
@@ -375,6 +387,22 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
 	}
 
+	@Override
+	public int getCooldown() {
+		return Bit.get(state, 4, 4);
+	}
+
+	@Override
+	public void setCooldown(int time) {
+		int curr = Bit.get(state, 4, 4);
+		state = Bit.set(state, 4, Math.max(curr, time), 4);
+	}
+
+	public void reduceCooldown(int time) {
+		int curr = Bit.get(state, 4, 4);
+		state = Bit.set(state, 4, Math.max(0, curr - time), 4);
+	}
+
 	public CardState getState() {
 		if (isFlipped()) return CardState.FLIPPED;
 		else if (isDefending()) return CardState.DEFENSE;
@@ -384,6 +412,18 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	public boolean isSupporting() {
 		return slot != null && slot.hasBottom() && slot.getBottom().SERIAL == SERIAL;
+	}
+
+	public Senshi getFrontline() {
+		if (!isSupporting()) return null;
+
+		return slot.getTop();
+	}
+
+	public Senshi getSupport() {
+		if (isSupporting()) return null;
+
+		return slot.getBottom();
 	}
 
 	public String getEffect() {
@@ -398,6 +438,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	public boolean execute(EffectParameters ep) {
 		@Language("Groovy") String effect = getEffect();
 		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
+		else if (ep.size() == 0 && ep.trigger() == Trigger.DEFER) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -407,10 +448,29 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				other.setHeroDefense(true);
 			}*/
 
+			Trigger trigger;
+			if (ep.source().card().equals(this)) {
+				trigger = ep.source().trigger();
+			} else if (ep.target().card().equals(this)) {
+				trigger = ep.target().trigger();
+			} else {
+				trigger = ep.trigger();
+			}
+
 			Utils.exec(effect, Map.of(
 					"ep", ep,
-					"self", this
+					"self", this,
+					"trigger", trigger
 			));
+
+			for (Evogear e : equipments) {
+				e.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.target()));
+			}
+
+			Senshi sup = getSupport();
+			if (sup != null) {
+				sup.execute(ep);
+			}
 
 			return true;
 		} catch (Exception e) {
@@ -421,12 +481,16 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		}
 	}
 
+	public void unlock() {
+		base.unlock();
+		for (Evogear e : equipments) {
+			e.getBase().unlock();
+		}
+	}
+
 	@Override
 	public void reset() {
-		equipments = new BondedList<>(e -> {
-			e.setEquipper(this);
-			e.setHand(getHand());
-		});
+		equipments = new BondedLinkedList<>(equipments.getBonding());
 		stats = new CardExtra();
 		slot = null;
 
