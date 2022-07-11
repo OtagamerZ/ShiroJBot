@@ -22,8 +22,11 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.records.shoukan.Source;
+import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 
@@ -86,8 +89,11 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return 0;
 	}
 
-	default double getPower() {
-		return 1;
+	default int getCooldown() {
+		return 0;
+	}
+
+	default void setCooldown(int time) {
 	}
 
 	boolean isSolid();
@@ -205,6 +211,18 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.ORANGE);
 			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			y -= icon.getHeight() + 5;
+		}
+
+		if (getCooldown() > 0) {
+			icon = IO.getResourceAsImage("shoukan/icons/cooldown.png");
+			assert icon != null;
+			int x = 25;
+
+			String val = getCooldown() + "t";
+			g2d.drawImage(icon, x, y, null);
+			g2d.setColor(new Color(0x00A1DA));
+			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
 	}
 
@@ -226,5 +244,13 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		T t = copy();
 		act.accept(t);
 		return t;
+	}
+
+	default Source asSource(Trigger trigger) {
+		return new Source(this, trigger);
+	}
+
+	default Target asTarget(Trigger trigger) {
+		return new Target(this, trigger);
 	}
 }

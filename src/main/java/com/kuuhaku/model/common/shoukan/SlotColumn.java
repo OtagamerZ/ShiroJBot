@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 
@@ -71,6 +72,12 @@ public class SlotColumn {
 		this.top = top;
 		if (this.top != null) {
 			this.top.setSlot(this);
+			this.top.setSolid(true);
+
+			if (!this.top.isFlipped()) {
+				Hand h = this.top.getHand();
+				h.getGame().trigger(Trigger.ON_SUMMON, this.top.asSource(Trigger.ON_SUMMON));
+			}
 		}
 	}
 
@@ -94,7 +101,19 @@ public class SlotColumn {
 		this.bottom = bottom;
 		if (this.bottom != null) {
 			this.bottom.setSlot(this);
+			this.bottom.setSolid(true);
+
+			if (!this.bottom.isFlipped()) {
+				Hand h = this.bottom.getHand();
+				h.getGame().trigger(Trigger.ON_SUMMON, this.bottom.asSource(Trigger.ON_SUMMON));
+			}
 		}
+	}
+
+	public int getLock() {
+		if (Bit.on(state, 0)) return -1;
+
+		return Bit.get(state, 1, 4);
 	}
 
 	public boolean isLocked() {

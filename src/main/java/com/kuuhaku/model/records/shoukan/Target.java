@@ -19,14 +19,21 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
 public record Target(Drawable<?> card, int index, Trigger trigger) {
-	public Target(Drawable<?> card) {
-		this(card, card.getSlot().getIndex(), null);
+	public Target() {
+		this(null, -1, null);
 	}
 
 	public Target(Drawable<?> card, Trigger trigger) {
 		this(card, card.getSlot().getIndex(), trigger);
+	}
+
+	public void execute(EffectParameters ep) {
+		if (card != null && card instanceof EffectHolder eh) {
+			eh.execute(ep);
+		}
 	}
 }

@@ -46,7 +46,6 @@ public class CardExtra {
 	private final Set<AttrMod> dodge = new HashSet<>();
 	private final Set<AttrMod> block = new HashSet<>();
 
-	private final Set<AttrMod> power = new HashSet<>();
 	private final Set<AttrMod> tier = new HashSet<>();
 
 	private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
@@ -213,28 +212,6 @@ public class CardExtra {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block, expiration);
 		this.block.remove(mod);
 		this.block.add(mod);
-	}
-
-	public double getPower() {
-		return sum(power);
-	}
-
-	public void setPower(double power) {
-		AttrMod mod = new PermMod(power);
-		this.power.remove(mod);
-		this.power.add(mod);
-	}
-
-	public void setPower(Drawable<?> source, double power) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power);
-		this.power.remove(mod);
-		this.power.add(mod);
-	}
-
-	public void setPower(Drawable<?> source, double power, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power, expiration);
-		this.power.remove(mod);
-		this.power.add(mod);
 	}
 
 	public int getTier() {
