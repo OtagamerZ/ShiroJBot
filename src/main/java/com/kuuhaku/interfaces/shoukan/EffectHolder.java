@@ -71,7 +71,7 @@ public interface EffectHolder {
 						case "dfs" -> g2d.setColor(new Color(0x00C500));
 						case "ddg" -> g2d.setColor(new Color(0xFFC800));
 						case "blk" -> g2d.setColor(new Color(0xA9A9A9));
-						case "sp" -> g2d.setColor(new Color(0x010101));
+						case "b" -> g2d.setColor(new Color(0x010101));
 					}
 
 					return val.replaceAll("\\{.+}", "");
