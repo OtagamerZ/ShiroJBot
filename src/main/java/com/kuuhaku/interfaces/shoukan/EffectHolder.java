@@ -40,6 +40,8 @@ public interface EffectHolder {
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
+				s = Constants.VOID + s;
+
 				String val;
 				try {
 					val = String.valueOf(
@@ -63,8 +65,8 @@ public interface EffectHolder {
 						case "sp" -> g2d.setColor(new Color(0xA551FF));
 					}
 
-					return Constants.VOID + StringUtils.abbreviate(
-							s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
+					return StringUtils.abbreviate(
+							s.replaceAll("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
 							Drawable.MAX_DESC_LENGTH
 					);
 				} catch (Exception e) {
