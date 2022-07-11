@@ -141,4 +141,8 @@ public class SlotColumn {
 	public int hashCode() {
 		return Objects.hash(side, index, top, bottom, state);
 	}
+
+	public int validationHash() {
+		return Objects.hash(side, index);
+	}
 }
