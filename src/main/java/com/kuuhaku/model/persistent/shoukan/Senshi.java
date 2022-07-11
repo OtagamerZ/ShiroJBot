@@ -575,12 +575,16 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Senshi senshi = (Senshi) o;
-		return Objects.equals(id, senshi.id) && Objects.equals(card, senshi.card) && Objects.equals(slot, senshi.slot) && race == senshi.race;
+		return Objects.equals(id, senshi.id)
+				&& Objects.equals(card, senshi.card)
+				&& Objects.equals(slot, senshi.slot)
+				&& Objects.equals(isSupporting(), senshi.isSupporting())
+				&& race == senshi.race;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, race);
+		return Objects.hash(id, card, slot, race);
 	}
 
 	@Override
