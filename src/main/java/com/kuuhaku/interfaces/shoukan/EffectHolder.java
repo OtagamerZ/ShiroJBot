@@ -62,14 +62,14 @@ public interface EffectHolder {
 						case "blk" -> g2d.setColor(new Color(0x777777));
 						case "sp" -> g2d.setColor(new Color(0xA551FF));
 					}
-				} catch (Exception e) {
-					val = s;
-				}
 
-				return Constants.VOID + StringUtils.abbreviate(
-						s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)).replace("_", " "),
-						Drawable.MAX_DESC_LENGTH
-				);
+					return Constants.VOID + StringUtils.abbreviate(
+							s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
+							Drawable.MAX_DESC_LENGTH
+					);
+				} catch (Exception e) {
+					return StringUtils.abbreviate(s, Drawable.MAX_DESC_LENGTH);
+				}
 			}
 
 			return s;
