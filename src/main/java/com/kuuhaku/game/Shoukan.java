@@ -614,6 +614,8 @@ public class Shoukan extends GameInstance<Phase> {
 			} else {
 				enemy = opSlot.getTop();
 			}
+
+			enemy.setFlipped(false);
 		}
 
 		int pHP = op.getHP();
