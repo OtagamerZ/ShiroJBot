@@ -57,9 +57,9 @@ public class ShoukanCommand implements Executable {
 		skn.start(event.guild(), event.channel())
 				.handle((v, err) -> {
 					if (err == null) {
-						event.channel().sendMessage("Done").queue();
+						event.channel().sendMessage("Done ").queue();
 					} else if (err instanceof GameReport) {
-						event.channel().sendMessage("Error " + err.getMessage()).queue();
+						event.channel().sendMessage("Error " + err).queue();
 					} else {
 						Constants.LOGGER.error(err, err);
 					}
