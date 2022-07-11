@@ -257,4 +257,6 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	default Target asTarget(Trigger trigger) {
 		return new Target(this, trigger);
 	}
+
+	T getRandom();
 }

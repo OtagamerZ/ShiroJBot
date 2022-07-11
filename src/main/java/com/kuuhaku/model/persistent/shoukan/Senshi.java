@@ -53,7 +53,7 @@ import java.util.*;
 @Entity
 @Table(name = "senshi")
 public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolder {
-	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
+	public transient long SERIAL = Constants.DEFAULT_RNG.nextLong();
 
 	@Id
 	@Column(name = "card_id", nullable = false)
@@ -499,6 +499,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public void reset() {
+		SERIAL = Constants.DEFAULT_RNG.nextLong();
 		equipments = new BondedLinkedList<>(equipments.getBonding());
 		stats = new CardExtra();
 		slot = null;
@@ -567,6 +568,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		g2d.dispose();
 
 		return out;
+	}
+
+	@Override
+	public Senshi getRandom() {
+		Table table = getClass().getDeclaredAnnotation(Table.class);
+		String id = DAO.queryNative(String.class, "SELECT id FROM ?1 ORDER BY RANDOM()", table.name());
+		return DAO.find(Senshi.class, id);
 	}
 
 	@Override
