@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.stash;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -34,6 +35,7 @@ import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Locale;
 
@@ -93,6 +95,10 @@ public class StashRemoveCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
 				})
 				.exceptionally(t -> {
+					if (!(t instanceof NoResultException)) {
+						Constants.LOGGER.error(t, t);
+					}
+
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
