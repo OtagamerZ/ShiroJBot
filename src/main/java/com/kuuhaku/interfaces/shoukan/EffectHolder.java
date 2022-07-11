@@ -23,7 +23,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONArray;
+import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 
@@ -36,14 +36,14 @@ public interface EffectHolder {
 
 	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
 		return s -> {
-			JSONArray groups = Utils.extractGroups(s, "\\{((?:(?!}).)+)}(?:\\{(\\w+)})?");
+			JSONObject groups = Utils.extractNamedGroups(s, "\\{(?<calc>(?:(?!}).)+)}(?:\\{(?<color>\\w+)})?");
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
 				String val;
 				try {
 					val = String.valueOf(
-							Utils.eval(groups.getString(0), Map.of(
+							Utils.eval(groups.getString("calc"), Map.of(
 									"mp", d.getMPCost(),
 									"hp", d.getHPCost(),
 									"atk", d.getDmg(),
@@ -54,7 +54,7 @@ public interface EffectHolder {
 					);
 
 					if (groups.size() > 1) {
-						switch (groups.getString(1)) {
+						switch (groups.getString("color")) {
 							case "mp" -> g2d.setColor(new Color(0x00E0E0));
 							case "hp" -> g2d.setColor(new Color(0x85C720));
 							case "atk" -> g2d.setColor(new Color(0xFF0000));
