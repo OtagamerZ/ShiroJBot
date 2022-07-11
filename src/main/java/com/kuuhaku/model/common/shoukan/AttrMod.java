@@ -25,30 +25,34 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AttrMod {
 	private final Drawable<?> source;
-	private final int index;
 	private final double value;
 	private final AtomicInteger expiration;
 
-	public AttrMod(Drawable<?> source, int index, double value) {
-		this.source = source;
-		this.index = index;
+	private final int hash;
+
+	protected AttrMod(double value) {
+		this.source = null;
 		this.value = value;
 		this.expiration = null;
+		this.hash = -1;
 	}
 
-	public AttrMod(Drawable<?> source, int index, double value, int expiration) {
+	public AttrMod(Drawable<?> source, double value) {
 		this.source = source;
-		this.index = index;
+		this.value = value;
+		this.expiration = null;
+		this.hash = source.getSlot().validationHash();
+	}
+
+	public AttrMod(Drawable<?> source, double value, int expiration) {
+		this.source = source;
 		this.value = value;
 		this.expiration = new AtomicInteger(expiration);
+		this.hash = source.getSlot().validationHash();
 	}
 
 	public Drawable<?> getSource() {
 		return source;
-	}
-
-	public int getIndex() {
-		return index;
 	}
 
 	public double getValue() {
@@ -60,6 +64,12 @@ public class AttrMod {
 	}
 
 	public boolean isExpired() {
+		if (hash != -1) {
+			if (source.getSlot() == null || source.getSlot().validationHash() != hash) {
+				return true;
+			}
+		}
+
 		return expiration != null && expiration.get() <= 0;
 	}
 
@@ -69,11 +79,11 @@ public class AttrMod {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		AttrMod attrMod = (AttrMod) o;
-		return index == attrMod.index && Objects.equals(source, attrMod.source);
+		return hash == attrMod.hash && Objects.equals(source, attrMod.source);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source, index);
+		return Objects.hash(source, hash);
 	}
 }

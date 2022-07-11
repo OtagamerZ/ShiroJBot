@@ -26,7 +26,7 @@ public class PermMod extends AttrMod {
 	private final long seed = Constants.DEFAULT_RNG.nextLong();
 
 	public PermMod(double value) {
-		super(null, -1, value);
+		super(value);
 	}
 
 	@Override

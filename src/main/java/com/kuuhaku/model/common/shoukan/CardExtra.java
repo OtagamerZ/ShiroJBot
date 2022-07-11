@@ -77,7 +77,7 @@ public class CardExtra {
 	}
 
 	public void setMana(Drawable<?> source, int mana, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana, expiration);
+		AttrMod mod = new AttrMod(source, mana, expiration);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
@@ -93,13 +93,13 @@ public class CardExtra {
 	}
 
 	public void setBlood(Drawable<?> source, int blood) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood);
+		AttrMod mod = new AttrMod(source, blood);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
 
 	public void setBlood(Drawable<?> source, int blood, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood, expiration);
+		AttrMod mod = new AttrMod(source, blood, expiration);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
@@ -115,13 +115,13 @@ public class CardExtra {
 	}
 
 	public void setSacrifices(Drawable<?> source, int sacrifices) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), sacrifices);
+		AttrMod mod = new AttrMod(source, sacrifices);
 		this.sacrifices.remove(mod);
 		this.sacrifices.add(mod);
 	}
 
 	public void setSacrifices(Drawable<?> source, int sacrifices, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), sacrifices, expiration);
+		AttrMod mod = new AttrMod(source, sacrifices, expiration);
 		this.sacrifices.remove(mod);
 		this.sacrifices.add(mod);
 	}
@@ -137,13 +137,13 @@ public class CardExtra {
 	}
 
 	public void setAtk(Drawable<?> source, int atk) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk);
+		AttrMod mod = new AttrMod(source, atk);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
 
 	public void setAtk(Drawable<?> source, int atk, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk, expiration);
+		AttrMod mod = new AttrMod(source, atk, expiration);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
@@ -159,13 +159,13 @@ public class CardExtra {
 	}
 
 	public void setDef(Drawable<?> source, int def) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), def);
+		AttrMod mod = new AttrMod(source, def);
 		this.def.remove(mod);
 		this.def.add(mod);
 	}
 
 	public void setDef(Drawable<?> source, int def, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), def, expiration);
+		AttrMod mod = new AttrMod(source, def, expiration);
 		this.def.remove(mod);
 		this.def.add(mod);
 	}
@@ -181,13 +181,13 @@ public class CardExtra {
 	}
 
 	public void setDodge(Drawable<?> source, int dodge) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge);
+		AttrMod mod = new AttrMod(source, dodge);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
 
 	public void setDodge(Drawable<?> source, int dodge, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge, expiration);
+		AttrMod mod = new AttrMod(source, dodge, expiration);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
@@ -203,13 +203,13 @@ public class CardExtra {
 	}
 
 	public void setBlock(Drawable<?> source, int block) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block);
+		AttrMod mod = new AttrMod(source, block);
 		this.block.remove(mod);
 		this.block.add(mod);
 	}
 
 	public void setBlock(Drawable<?> source, int block, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block, expiration);
+		AttrMod mod = new AttrMod(source, block, expiration);
 		this.block.remove(mod);
 		this.block.add(mod);
 	}
@@ -225,13 +225,13 @@ public class CardExtra {
 	}
 
 	public void setTier(Drawable<?> source, int tier) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), tier);
+		AttrMod mod = new AttrMod(source, tier);
 		this.tier.remove(mod);
 		this.tier.add(mod);
 	}
 
 	public void setTier(Drawable<?> source, int tier, int expiration) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), tier, expiration);
+		AttrMod mod = new AttrMod(source, tier, expiration);
 		this.tier.remove(mod);
 		this.tier.add(mod);
 	}
