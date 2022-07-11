@@ -404,7 +404,9 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Evogear evogear = (Evogear) o;
-		return Objects.equals(id, evogear.id) && Objects.equals(card, evogear.card);
+		return Objects.equals(id, evogear.id)
+				&& Objects.equals(card, evogear.card)
+				&& Objects.equals(equipper, evogear.equipper);
 	}
 
 	@Override
