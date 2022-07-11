@@ -598,8 +598,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public static Senshi getRandom() {
-		Table table = Senshi.class.getDeclaredAnnotation(Table.class);
-		String id = DAO.queryNative(String.class, "SELECT id FROM ?1 ORDER BY RANDOM()", table.name());
+		String id = DAO.queryNative(String.class, "SELECT card_id FROM senshi ORDER BY RANDOM()");
 		return DAO.find(Senshi.class, id);
 	}
 }
