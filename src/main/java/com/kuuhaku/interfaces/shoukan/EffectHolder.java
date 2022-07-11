@@ -61,12 +61,13 @@ public interface EffectHolder {
 						case "atk" -> g2d.setColor(new Color(0xFF0000));
 						case "dfs" -> g2d.setColor(new Color(0x00C500));
 						case "ddg" -> g2d.setColor(new Color(0xFFC800));
-						case "blk" -> g2d.setColor(new Color(0x777777));
-						case "sp" -> g2d.setColor(new Color(0xA551FF));
+						case "blk" -> g2d.setColor(new Color(0xA9A9A9));
+						case "sp" -> g2d.setColor(new Color(0xC58FFF));
 					}
 
 					return StringUtils.abbreviate(
-							s.replaceAll("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
+							s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2))
+									.replaceAll("\\{.+}", ""),
 							Drawable.MAX_DESC_LENGTH
 					);
 				} catch (Exception e) {
