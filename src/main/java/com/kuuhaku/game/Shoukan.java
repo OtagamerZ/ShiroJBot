@@ -968,16 +968,16 @@ public class Shoukan extends GameInstance<Phase> {
 				put(Utils.parseEmoji("⏩"), w -> nextTurn());
 
 				int rem = curr.getRemainingDraws();
-				if (rem > 0) {
+				if (rem > 0 && !curr.getRealDeck().isEmpty()) {
 					put(Utils.parseEmoji("📤"), w -> {
-						curr.draw(1);
+						curr.manualDraw(1);
 						reportEvent("str/draw_card", curr.getName(), 1, "");
 						sendPlayerHand(curr);
 					});
 
 					if (rem > 1) {
 						put(Utils.parseEmoji("📦"), w -> {
-							curr.draw(curr.getRemainingDraws());
+							curr.manualDraw(curr.getRemainingDraws());
 							reportEvent("str/draw_card", curr.getName(), rem, "s");
 							sendPlayerHand(curr);
 						});
