@@ -814,7 +814,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void trigger(Trigger trigger) {
-		List<Side> sides = new ArrayList<>(){{
+		List<Side> sides = new ArrayList<>() {{
 			add(getCurrentSide());
 			add(getOtherSide());
 		}};
@@ -911,6 +911,22 @@ public class Shoukan extends GameInstance<Phase> {
 				);
 				close(GameReport.SUCCESS);
 				return;
+			}
+
+			List<SlotColumn> slts = getSlots(side);
+			for (SlotColumn slt : slts) {
+				Senshi s = slt.getTop();
+				if (s != null) {
+					s.getStats().expireMods();
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().expireMods();
+					}
+				}
+
+				s = slt.getBottom();
+				if (s != null) {
+					s.getStats().expireMods();
+				}
 			}
 		}
 
