@@ -86,8 +86,8 @@ public class Arena implements Renderer {
 	public Arena(Shoukan game) {
 		this.game = game;
 		slots = Map.of(
-				Side.TOP, Utils.generate(5, i -> new SlotColumn(Side.TOP, i)),
-				Side.BOTTOM, Utils.generate(5, i -> new SlotColumn(Side.BOTTOM, i))
+				Side.TOP, Utils.generate(5, i -> new SlotColumn(game, Side.TOP, i)),
+				Side.BOTTOM, Utils.generate(5, i -> new SlotColumn(game, Side.BOTTOM, i))
 		);
 	}
 
