@@ -30,9 +30,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.json.JSONObject;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class CardExtra {
@@ -52,7 +50,7 @@ public class CardExtra {
 	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
 
 	private final JSONObject data = new JSONObject();
-	private final Set<String> curses = new HashSet<>();
+	private final List<String> curses = new ArrayList<>();
 
 	private Race race = null;
 	private Card vanity = null;
@@ -265,7 +263,7 @@ public class CardExtra {
 		return data;
 	}
 
-	public Set<String> getCurses() {
+	public List<String> getCurses() {
 		return curses;
 	}
 
