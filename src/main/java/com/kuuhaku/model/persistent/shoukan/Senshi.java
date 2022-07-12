@@ -416,13 +416,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public Senshi getFrontline() {
-		if (!isSupporting()) return null;
+		if (!isSupporting() || slot == null) return null;
 
 		return slot.getTop();
 	}
 
 	public Senshi getSupport() {
-		if (isSupporting()) return null;
+		if (isSupporting() || slot == null) return null;
 
 		return slot.getBottom();
 	}
@@ -476,11 +476,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				e.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.targets()));
 			}
 
-			if (slot != null) {
-				Senshi sup = getSupport();
-				if (sup != null) {
-					sup.execute(ep);
-				}
+			Senshi sup = getSupport();
+			if (sup != null) {
+				sup.execute(ep);
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
