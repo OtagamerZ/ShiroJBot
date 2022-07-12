@@ -61,9 +61,6 @@ public class SlotColumn {
 			top = null;
 		}
 
-		if (top != null) {
-			System.out.println(top + " - " + top.getHand());
-		}
 		return top;
 	}
 
@@ -94,9 +91,6 @@ public class SlotColumn {
 			bottom = null;
 		}
 
-		if (bottom != null) {
-			System.out.println(bottom + " - " + bottom.getHand());
-		}
 		return bottom;
 	}
 
