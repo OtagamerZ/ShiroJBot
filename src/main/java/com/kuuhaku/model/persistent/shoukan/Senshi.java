@@ -451,10 +451,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 			trigger = ep.trigger();
 		}
-		System.out.println(trigger);
 
 		@Language("Groovy") String effect = getEffect();
-		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
+		if (effect.isBlank() || !effect.contains(trigger.name()) || base.isLocked()) return false;
 		else if (ep.size() == 0 && ep.trigger() == Trigger.DEFER) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
