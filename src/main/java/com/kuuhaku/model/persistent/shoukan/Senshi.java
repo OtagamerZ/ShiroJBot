@@ -75,6 +75,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Transient
 	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
 		e.setEquipper(this);
+		System.out.println(this + " - " + getHand());
 		e.setHand(getHand());
 		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
 	});
