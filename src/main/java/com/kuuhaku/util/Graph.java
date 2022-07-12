@@ -75,19 +75,22 @@ public abstract class Graph {
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
-			String[] words = line.split("(?<=\\S)[ \u200B]");
+			String[] words = line.split("(?<=\\S) ");
 			int offset = 0;
 			for (String s : words) {
-				String word = processor.apply(s);
-				FontMetrics m = g2d.getFontMetrics();
+				String[] frags = s.split("\u200B");
+				for (String frag : frags) {
+					String word = processor.apply(frag);
+					FontMetrics m = g2d.getFontMetrics();
 
-				if (offset + m.stringWidth(word) <= width) {
-					renderer.accept(word, x + offset, y);
-					offset += m.stringWidth(word + " ");
-				} else {
-					y += m.getHeight() - kerning;
-					renderer.accept(word, x, y);
-					offset = m.stringWidth(word + " ");
+					if (offset + m.stringWidth(word) <= width) {
+						renderer.accept(word, x + offset, y);
+						offset += m.stringWidth(word + " ");
+					} else {
+						y += m.getHeight() - kerning;
+						renderer.accept(word, x, y);
+						offset = m.stringWidth(word + " ");
+					}
 				}
 			}
 
