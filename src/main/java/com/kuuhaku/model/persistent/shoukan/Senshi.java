@@ -74,10 +74,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Transient
 	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
-		System.out.println(getSlot());
 		e.setEquipper(this);
-		e.setHand(getHand());
-		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+		System.out.println("S - " + getHand());
+		//e.setHand(getHand());
+		//getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
 	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
