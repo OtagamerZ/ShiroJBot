@@ -152,7 +152,7 @@ public class SynthesizeCommand implements Executable {
 								Iterator<KawaiponCard> it = k.getCards().iterator();
 								while (it.hasNext()) {
 									KawaiponCard card = it.next();
-									if (card.getStashEntry().equals(sc)) {
+									if (sc.equals(card.getStashEntry())) {
 										it.remove();
 										break;
 									}

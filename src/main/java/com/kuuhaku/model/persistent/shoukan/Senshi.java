@@ -501,7 +501,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Override
 	public void reset() {
 		SERIAL = Constants.DEFAULT_RNG.nextLong();
-		equipments = new BondedLinkedList<>(equipments.getBonding());
+		equipments = new BondedLinkedList<>(e -> {
+			e.setEquipper(this);
+			System.out.println("S - " + getHand());
+			//e.setHand(getHand());
+			//getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+		});
 		stats = new CardExtra();
 		slot = null;
 
