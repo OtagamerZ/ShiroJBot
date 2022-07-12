@@ -65,7 +65,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final I18N locale;
 	private final String[] players;
 	private final Map<Side, Hand> hands;
-	private final Arena arena = new Arena(this);
+	private final Arena arena;
 	private final Map<String, Pair<String, String>> messages = new HashMap<>();
 
 	private final boolean singleplayer;
@@ -81,6 +81,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
+		this.arena = new Arena(this);
 		this.singleplayer = p1.equals(p2);
 
 		setTimeout(turn -> {

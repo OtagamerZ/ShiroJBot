@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 public class Hand {
-	private final long timestamp = System.currentTimeMillis();
+	private final long SERIAL = Constants.DEFAULT_RNG.nextLong();
 
 	private final String uid;
 	private final Shoukan game;
@@ -539,11 +539,11 @@ public class Hand {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Hand hand = (Hand) o;
-		return timestamp == hand.timestamp && Objects.equals(uid, hand.uid) && side == hand.side && Objects.equals(origin, hand.origin);
+		return SERIAL == hand.SERIAL && Objects.equals(uid, hand.uid) && side == hand.side && Objects.equals(origin, hand.origin);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(timestamp, uid, side, origin);
+		return Objects.hash(SERIAL, uid, side, origin);
 	}
 }
