@@ -127,7 +127,7 @@ public class DeckRemoveCommand implements Executable {
 					sc.save();
 					dk.save();
 
-					event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), sc)).queue();
+					event.channel().sendMessage(locale.get("success/deck_remove")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t instanceof NoResultException)) {
