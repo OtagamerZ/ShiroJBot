@@ -1043,7 +1043,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return slts;
 	}
 
-	public String getLocaleStr(String key, Object... params) {
+	public String getString(String key, Object... params) {
 		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key, locale));
 		if (str != null) {
 			return str.getValue().formatted(params);
