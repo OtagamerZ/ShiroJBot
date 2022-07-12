@@ -463,6 +463,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 				trigger = ep.trigger();
 			}
+			System.out.println(trigger);
 
 			Utils.exec(effect, Map.of(
 					"ep", ep,
