@@ -72,6 +72,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Embedded
 	private CardAttributes base;
 
+	@Transient
+	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
+		e.setEquipper(this);
+		e.setHand(getHand());
+		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
@@ -88,12 +94,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	      │ └─── (0 - 15) stasis
 	      └ (0 - 15) cooldown
 	 */
-	@Transient
-	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
-		e.setEquipper(this);
-		e.setHand(hand);
-		hand.getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
-	});
 
 	@Override
 	public String getId() {
