@@ -24,6 +24,7 @@ import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
@@ -33,8 +34,10 @@ import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
+import com.kuuhaku.model.persistent.id.LocalizedDescId;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -1038,6 +1041,15 @@ public class Shoukan extends GameInstance<Phase> {
 		slts.removeIf(sc -> top ? sc.hasTop() : sc.hasBottom());
 
 		return slts;
+	}
+
+	public String getLocaleStr(String key, Object... params) {
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key, locale));
+		if (str != null) {
+			return str.getValue().formatted(params);
+		} else {
+			return "";
+		}
 	}
 
 	@Override
