@@ -476,9 +476,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				e.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.targets()));
 			}
 
-			Senshi sup = getSupport();
-			if (sup != null) {
-				sup.execute(ep);
+			if (slot != null) {
+				Senshi sup = getSupport();
+				if (sup != null) {
+					sup.execute(ep);
+				}
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
