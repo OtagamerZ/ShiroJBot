@@ -32,9 +32,7 @@ public record Target(Drawable<?> card, int index, Trigger trigger) {
 	}
 
 	public void execute(EffectParameters ep) {
-		System.out.println(ep);
 		if (card != null && card instanceof EffectHolder eh) {
-			System.out.println("Enter");
 			eh.execute(ep);
 		}
 	}
