@@ -122,51 +122,40 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 20));
 		FontMetrics m = g2d.getFontMetrics();
 
-		{ // LEFT
-			int y = 55;
-			if (getMPCost() > 0) {
-				String val = String.valueOf(getMPCost());
-				g2d.setColor(Color.ORANGE);
-				Graph.drawOutlinedString(g2d, val, 25, y - 4 + (23 + m.getHeight()) / 2, 2, Color.BLACK);
-			}
+		int y = 55;
+		if (getMPCost() > 0) {
+			icon = IO.getResourceAsImage("shoukan/icons/mana.png");
+			assert icon != null;
+			int x = 200 - icon.getWidth();
+
+			String val = String.valueOf(getMPCost());
+			g2d.drawImage(icon, x, y, null);
+			g2d.setColor(Color.CYAN);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			y += icon.getHeight() + 5;
 		}
 
-		{ // RIGHT
-			int y = 55;
-			if (getMPCost() > 0) {
-				icon = IO.getResourceAsImage("shoukan/icons/mana.png");
-				assert icon != null;
-				int x = 200 - icon.getWidth();
+		if (getHPCost() > 0) {
+			icon = IO.getResourceAsImage("shoukan/icons/blood.png");
+			assert icon != null;
+			int x = 200 - icon.getWidth();
 
-				String val = String.valueOf(getMPCost());
-				g2d.drawImage(icon, x, y, null);
-				g2d.setColor(Color.CYAN);
-				Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-				y += icon.getHeight() + 5;
-			}
+			String val = String.valueOf(getHPCost());
+			g2d.drawImage(icon, x, y, null);
+			g2d.setColor(Color.RED);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			y += icon.getHeight() + 5;
+		}
 
-			if (getHPCost() > 0) {
-				icon = IO.getResourceAsImage("shoukan/icons/blood.png");
-				assert icon != null;
-				int x = 200 - icon.getWidth();
+		if (getSCCost() > 0) {
+			icon = IO.getResourceAsImage("shoukan/icons/sacrifice.png");
+			assert icon != null;
+			int x = 200 - icon.getWidth();
 
-				String val = String.valueOf(getHPCost());
-				g2d.drawImage(icon, x, y, null);
-				g2d.setColor(Color.RED);
-				Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-				y += icon.getHeight() + 5;
-			}
-
-			if (getSCCost() > 0) {
-				icon = IO.getResourceAsImage("shoukan/icons/sacrifice.png");
-				assert icon != null;
-				int x = 200 - icon.getWidth();
-
-				String val = String.valueOf(getSCCost());
-				g2d.drawImage(icon, x, y, null);
-				g2d.setColor(Color.LIGHT_GRAY);
-				Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
-			}
+			String val = String.valueOf(getSCCost());
+			g2d.drawImage(icon, x, y, null);
+			g2d.setColor(Color.LIGHT_GRAY);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
 	}
 
