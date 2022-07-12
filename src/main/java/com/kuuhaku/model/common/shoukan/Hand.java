@@ -109,7 +109,6 @@ public class Hand {
 	        │  └ (0 - 255) minor effect
 	        └─ (0 - 255) major effect
 	 */
-	private transient int hpDelta = 0;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -408,10 +407,6 @@ public class Hand {
 
 	public boolean isLowLife() {
 		return origin.demon() || getHPPrcnt() <= 0.5;
-	}
-
-	public int getHpDelta() {
-		return hpDelta;
 	}
 
 	public RegDeg getRegDeg() {
