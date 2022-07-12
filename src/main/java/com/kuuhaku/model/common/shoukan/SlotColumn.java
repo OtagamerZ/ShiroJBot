@@ -79,7 +79,6 @@ public class SlotColumn {
 		this.top = top;
 		if (this.top != null) {
 			this.top.setSlot(this);
-			this.top.setSolid(true);
 			this.top.setHand(game.getHands().get(side));
 
 			if (!this.top.isFlipped()) {
@@ -112,7 +111,6 @@ public class SlotColumn {
 		this.bottom = bottom;
 		if (this.bottom != null) {
 			this.bottom.setSlot(this);
-			this.bottom.setSolid(true);
 			this.bottom.setHand(game.getHands().get(side));
 
 			if (!this.bottom.isFlipped()) {
