@@ -437,6 +437,21 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public boolean execute(EffectParameters ep) {
+		Trigger trigger;
+		check:
+		if (equals(ep.source().card())) {
+			trigger = ep.source().trigger();
+		} else {
+			for (Target target : ep.targets()) {
+				if (equals(target.card())) {
+					trigger = target.trigger();
+					break check;
+				}
+			}
+
+			trigger = ep.trigger();
+		}
+
 		@Language("Groovy") String effect = getEffect();
 		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
 		else if (ep.size() == 0 && ep.trigger() == Trigger.DEFER) return false;
@@ -448,22 +463,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			/*if (hero != null) {
 				other.setHeroDefense(true);
 			}*/
-
-			Trigger trigger;
-			check:
-			if (equals(ep.source().card())) {
-				trigger = ep.source().trigger();
-			} else {
-				for (Target target : ep.targets()) {
-					if (equals(target.card())) {
-						trigger = target.trigger();
-						break check;
-					}
-				}
-
-				trigger = ep.trigger();
-			}
-			System.out.println(trigger);
 
 			Utils.exec(effect, Map.of(
 					"ep", ep,
