@@ -416,13 +416,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public Senshi getFrontline() {
-		if (!isSupporting() || slot == null) return null;
+		if (slot == null || !isSupporting()) return null;
 
 		return slot.getTop();
 	}
 
 	public Senshi getSupport() {
-		if (isSupporting() || slot == null) return null;
+		if (slot == null || isSupporting()) return null;
 
 		return slot.getBottom();
 	}
