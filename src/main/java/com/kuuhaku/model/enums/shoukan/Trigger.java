@@ -54,6 +54,9 @@ public enum Trigger {
 	ON_HAND,
 	ON_DECK,
 
+	// Triggers when the card is removed from the field
+	ON_REMOVE,
+
 	// Triggers on player action
 	ON_DRAW,
 	ON_DISCARD,

@@ -58,12 +58,10 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (top != null && !equals(top.getSlot())) {
+			game.trigger(Trigger.ON_REMOVE, this.top.asSource(Trigger.ON_REMOVE));
 			top = null;
 		}
 
-		if (top != null) {
-			System.out.println(top + " - " + top.getHand());
-		}
 		return top;
 	}
 
@@ -73,6 +71,7 @@ public class SlotColumn {
 
 	public void setTop(Senshi top) {
 		if (getTop() != null) {
+			game.trigger(Trigger.ON_REMOVE, this.top.asSource(Trigger.ON_REMOVE));
 			this.top.setSlot(null);
 		}
 
@@ -90,12 +89,10 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (bottom != null && !equals(bottom.getSlot())) {
+			game.trigger(Trigger.ON_REMOVE, this.bottom.asSource(Trigger.ON_REMOVE));
 			bottom = null;
 		}
 
-		if (bottom != null) {
-			System.out.println(bottom + " - " + bottom.getHand());
-		}
 		return bottom;
 	}
 
@@ -105,6 +102,7 @@ public class SlotColumn {
 
 	public void setBottom(Senshi bottom) {
 		if (getBottom() != null) {
+			game.trigger(Trigger.ON_REMOVE, this.bottom.asSource(Trigger.ON_REMOVE));
 			this.bottom.setSlot(null);
 		}
 
