@@ -1059,13 +1059,12 @@ public class Shoukan extends GameInstance<Phase> {
 		super.nextTurn();
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
-		trigger(ON_TURN_BEGIN, curr.getSide());
-
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyVoTs();
 		curr.reduceMinorCooldown(1);
 		curr.reduceMajorCooldown(1);
 
+		trigger(ON_TURN_BEGIN, curr.getSide());
 		getChannel().sendMessage(locale.get("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn()))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue(m -> messages.compute(m.getGuild().getId(), replaceMessages(m)));
