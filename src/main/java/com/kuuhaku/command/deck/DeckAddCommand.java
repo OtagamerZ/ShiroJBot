@@ -135,7 +135,7 @@ public class DeckAddCommand implements Executable {
 					sc.save();
 					dk.save();
 
-					event.channel().sendMessage(locale.get("success/card_added")).queue();
+					event.channel().sendMessage(locale.get("success/deck_add")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t instanceof NoResultException)) {

@@ -35,10 +35,6 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		addAll(c);
 	}
 
-	public Consumer<T> getBonding() {
-		return bonding;
-	}
-
 	@Override
 	public void addFirst(T t) {
 		try {
