@@ -74,16 +74,8 @@ public class Hand {
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 
-		if (d instanceof Senshi s) {
-			if (s.isSupporting()) {
-				s.getSlot().setBottom(null);
-			} else {
-				s.getSlot().setTop(null);
-			}
-
-			if (!s.getEquipments().isEmpty()) {
-				getGraveyard().addAll(s.getEquipments());
-			}
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getGraveyard().addAll(s.getEquipments());
 		}
 
 		d.reset();
