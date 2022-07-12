@@ -162,6 +162,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public void setHand(Hand hand) {
+		System.out.println(hand);
 		this.hand = hand;
 	}
 

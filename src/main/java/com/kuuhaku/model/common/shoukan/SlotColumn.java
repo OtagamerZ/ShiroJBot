@@ -79,8 +79,6 @@ public class SlotColumn {
 			this.top.setSolid(true);
 			this.top.setHand(game.getHands().get(side));
 
-			System.out.println(this.top.getHand());
-
 			if (!this.top.isFlipped()) {
 				Hand h = this.top.getHand();
 				h.getGame().trigger(Trigger.ON_SUMMON, this.top.asSource(Trigger.ON_SUMMON));
