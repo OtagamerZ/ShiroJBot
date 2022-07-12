@@ -666,7 +666,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			Target t;
-			if (enemy != null) {
+			if (enemy != null && i == 0) {
 				t = enemy.asTarget(ON_DEFEND);
 			} else {
 				t = new Target();
@@ -1030,6 +1030,13 @@ public class Shoukan extends GameInstance<Phase> {
 		}};
 
 		Pages.buttonize(msg, buttons, true, false, u -> u.getId().equals(curr.getUid()));
+	}
+
+	public List<SlotColumn> getOpenSlots(Side side, boolean top) {
+		List<SlotColumn> slts = new ArrayList<>(getSlots(side));
+		slts.removeIf(sc -> top ? sc.hasTop() : sc.hasBottom());
+
+		return slts;
 	}
 
 	@Override
