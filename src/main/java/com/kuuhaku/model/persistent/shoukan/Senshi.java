@@ -481,6 +481,18 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				sup.execute(ep);
 			}
 
+			for (@Language("Groovy") String curse : stats.getCurses()) {
+				if (curse.isBlank() || !curse.contains(ep.trigger().name())) continue;
+
+				Utils.exec(curse, Map.of(
+						"ep", ep,
+						"self", this,
+						"trigger", trigger,
+						"game", hand.getGame(),
+						"side", hand.getSide()
+				));
+			}
+
 			return true;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
