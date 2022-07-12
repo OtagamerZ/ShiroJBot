@@ -565,7 +565,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = slot.getTop();
-		if (curr.getMP() < 1) {
+		if (!chosen.isAvailable()) {
+			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+			return false;
+		} else if (curr.getMP() < 1) {
 			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 			return false;
 		} else if (!chosen.getEffect().contains(ACTIVATE.name())) {
@@ -575,6 +578,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeMP(1);
 		trigger(ACTIVATE, chosen.asSource(ACTIVATE));
+		if (getPhase() != Phase.PLAN) {
+			chosen.setAvailable(false);
+		}
 
 		reportEvent("str/card_special", curr.getName(), chosen);
 		return true;
@@ -592,11 +598,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi ally = yourSlot.getTop();
-		if (!ally.isAvailable()) {
-			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
-			return false;
-		} else if (ally.isDefending()) {
-			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+		if (!ally.canAttack()) {
+			getChannel().sendMessage(locale.get("error/card_cannot_attack")).queue();
 			return false;
 		}
 
