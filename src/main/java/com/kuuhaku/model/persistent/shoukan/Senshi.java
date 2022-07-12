@@ -451,11 +451,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 			Trigger trigger;
 			check:
-			if (ep.source().card().equals(this)) {
+			if (equals(ep.source().card())) {
 				trigger = ep.source().trigger();
 			} else {
 				for (Target target : ep.targets()) {
-					if (target.card().equals(this)) {
+					if (equals(target.card())) {
 						trigger = target.trigger();
 						break check;
 					}
