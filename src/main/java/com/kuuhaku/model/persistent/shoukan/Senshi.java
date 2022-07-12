@@ -321,7 +321,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public boolean canAttack() {
-		return !isDefending() && state <= 0xF;
+		return !isDefending() && !isStasis() && !isStunned() && !isSleeping() && isAvailable();
 	}
 
 	@Override
