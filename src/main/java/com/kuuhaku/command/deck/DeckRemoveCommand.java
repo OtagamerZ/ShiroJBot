@@ -88,7 +88,7 @@ public class DeckRemoveCommand implements Executable {
 		}
 
 		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.id IN ?3",
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.card.id IN ?3",
 				event.user().getId(), d.getId(), card.getId()
 		);
 		if (stash.isEmpty()) {
