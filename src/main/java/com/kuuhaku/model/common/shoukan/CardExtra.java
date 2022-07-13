@@ -216,7 +216,7 @@ public class CardExtra {
 	}
 
 	public double getAttrMult() {
-		return sum(attrMult);
+		return 1 + sum(attrMult);
 	}
 
 	public void setAttrMult(double attrMult) {

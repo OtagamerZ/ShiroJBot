@@ -294,7 +294,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				mult *= 0.5;
 			}
 		}
-		mult += stats.getAttrMult();
+		mult *= stats.getAttrMult();
 
 		return mult;
 	}
