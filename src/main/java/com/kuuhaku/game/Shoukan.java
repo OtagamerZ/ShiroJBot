@@ -714,7 +714,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						if (ally.getDmg() < eCombatStats) {
-							trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_BLOCK));
+							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
 							op.addKill();
@@ -732,12 +732,12 @@ public class Shoukan extends GameInstance<Phase> {
 							int dodge = enemy.getDodge();
 
 							if (ally.getStats().popFlag(Flag.BLIND) && Calc.chance(50)) {
-								trigger(ON_FAIL, ally.asSource(ON_FAIL));
+								trigger(ON_MISS, ally.asSource(ON_MISS));
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
 								return true;
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
-								trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_BLOCK));
+								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 
 								op.addKill();
 								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
@@ -749,7 +749,7 @@ public class Shoukan extends GameInstance<Phase> {
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
 								return true;
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
-								trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_DODGE));
+								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
 									op.modHP((int) -(ally.getDmg() * 0.02));
@@ -760,7 +760,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							if (ally.getDmg() > eCombatStats) {
-								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_FAIL));
+								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
 								if (enemy.isDefending()) {
 									dmg = 0;
 								} else {

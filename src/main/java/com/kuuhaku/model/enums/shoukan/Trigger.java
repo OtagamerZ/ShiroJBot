@@ -43,7 +43,9 @@ public enum Trigger {
 	ON_BLOCK,
 	ON_DODGE,
 	ON_CLASH,
-	ON_FAIL,
+	ON_LOSE,
+	ON_SUICIDE,
+	ON_MISS,
 
 	// Triggers when sacrificing a card
 	ON_SACRIFICE,
