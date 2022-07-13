@@ -48,8 +48,10 @@ import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "senshi")
@@ -637,7 +639,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			op.filter(out, out);
 		}
 
-		if (isDefending()) {
+		if (isStasis()) {
+			g2d.drawImage(IO.getResourceAsImage("shoukan/states/stasis.png"), 0, 0, null);
+		} else if (isStunned()) {
+			g2d.drawImage(IO.getResourceAsImage("shoukan/states/stun.png"), 0, 0, null);
+		} else if (isSleeping()) {
+			g2d.drawImage(IO.getResourceAsImage("shoukan/states/sleep.png"), 0, 0, null);
+		}else if(isDefending()) {
 			g2d.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
 		}
 
