@@ -118,11 +118,11 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default void drawCosts(Graphics2D g2d) {
 		BufferedImage icon;
-		int y = 55;
 
 		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.BOLD, 20));
 		FontMetrics m = g2d.getFontMetrics();
 
+		int y = 55;
 		if (getMPCost() > 0) {
 			icon = IO.getResourceAsImage("shoukan/icons/mana.png");
 			assert icon != null;
