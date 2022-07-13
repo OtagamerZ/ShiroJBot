@@ -29,19 +29,19 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	private final Predicate<T> check;
 
 	public BondedLinkedList(Consumer<T> bonding) {
-		this(bonding, t -> true);
+		this(t -> true, bonding);
 	}
 
 	public BondedLinkedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
-		this(c, bonding, t -> true);
+		this(c, t -> true, bonding);
 	}
 
-	public BondedLinkedList(Consumer<T> bonding, Predicate<T> check) {
+	public BondedLinkedList(Predicate<T> check, Consumer<T> bonding) {
 		this.bonding = bonding;
 		this.check = check;
 	}
 
-	public BondedLinkedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding, Predicate<T> check) {
+	public BondedLinkedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> bonding) {
 		this.bonding = bonding;
 		this.check = check;
 		addAll(c);

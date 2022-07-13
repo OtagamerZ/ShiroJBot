@@ -60,30 +60,33 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>(d -> {
+	private final List<Drawable<?>> cards = new BondedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 	});
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> {
+	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 	});
-	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
-		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
+	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
+			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)),
+			d -> {
+				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getGraveyard().addAll(s.getEquipments());
-		}
+				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+					getGraveyard().addAll(s.getEquipments());
+				}
 
-		d.reset();
+				d.reset();
 
-		if (d.isSolid() && d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
-			cards.add(d.copy());
-			d.setSolid(false);
-		}
+				if (d.isSolid() && d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
+					cards.add(d.copy());
+					d.setSolid(false);
+				}
 
-		getGraveyard().removeIf(dr -> !dr.isSolid());
-	}, d -> !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)));
+				getGraveyard().removeIf(dr -> !dr.isSolid());
+			}
+	);
 	private final List<Drawable<?>> discard = new BondedList<>(d -> d.setAvailable(false));
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 

@@ -76,7 +76,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	private CardAttributes base;
 
 	@Transient
-	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
+	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
 		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
@@ -573,7 +573,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Override
 	public void reset() {
 		SERIAL = Constants.DEFAULT_RNG.nextLong();
-		equipments = new BondedLinkedList<>(e -> {
+		equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
 			getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
