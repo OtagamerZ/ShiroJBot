@@ -44,6 +44,8 @@ public class CardExtra {
 	private final Set<AttrMod> dodge = new HashSet<>();
 	private final Set<AttrMod> block = new HashSet<>();
 
+	private final Set<AttrMod> attrMult = new HashSet<>();
+
 	private final Set<AttrMod> tier = new HashSet<>();
 
 	private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
@@ -213,6 +215,28 @@ public class CardExtra {
 		this.block.add(mod);
 	}
 
+	public double getAttrMult() {
+		return sum(attrMult);
+	}
+
+	public void setAttrMult(double attrMult) {
+		AttrMod mod = new PermMod(attrMult);
+		this.attrMult.remove(mod);
+		this.attrMult.add(mod);
+	}
+
+	public void setAttrMult(Drawable<?> source, double attrMult) {
+		AttrMod mod = new AttrMod(source, attrMult);
+		this.attrMult.remove(mod);
+		this.attrMult.add(mod);
+	}
+
+	public void setAttrMult(Drawable<?> source, double attrMult, int expiration) {
+		AttrMod mod = new AttrMod(source, attrMult, expiration);
+		this.attrMult.remove(mod);
+		this.attrMult.add(mod);
+	}
+
 	public int getTier() {
 		return (int) sum(tier);
 	}
@@ -313,7 +337,7 @@ public class CardExtra {
 	public void expireMods() {
 		Predicate<AttrMod> check = mod -> {
 			if (mod.getExpiration() != null) {
-				return mod.getExpiration().decrementAndGet() <= 0;
+				mod.getExpiration().getAndDecrement();
 			}
 
 			return mod.isExpired();
