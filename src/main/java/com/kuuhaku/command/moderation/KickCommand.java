@@ -78,7 +78,7 @@ public class KickCommand implements Executable {
 						RestAction.allOf(members.stream().map(m -> m.kick(args.getString("reason"))).toList())
 								.flatMap(s -> event.channel().sendMessage(locale.get("success/kick",
 												s.size(),
-												s.size() == 1 ? "" : "s",
+												members.size() == 1 ? locale.get("str/user") : locale.get("str/users"),
 												args.get("reason")
 										))
 								).queue()
