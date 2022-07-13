@@ -20,7 +20,9 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 public record Target(Drawable<?> card, int index, Trigger trigger) {
 	public Target() {
@@ -29,6 +31,18 @@ public record Target(Drawable<?> card, int index, Trigger trigger) {
 
 	public Target(Drawable<?> card, Trigger trigger) {
 		this(card, card.getSlot().getIndex(), trigger);
+	}
+
+	public Target(Drawable<?> card, int index, Trigger trigger) {
+		if (card instanceof Senshi s && s.getStats().popFlag(Flag.IGNORE_EFFECT)) {
+			this.card = null;
+			this.index = -1;
+			this.trigger = null;
+		} else {
+			this.card = card;
+			this.index = index;
+			this.trigger = trigger;
+		}
 	}
 
 	public void execute(EffectParameters ep) {

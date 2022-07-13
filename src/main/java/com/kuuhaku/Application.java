@@ -19,6 +19,7 @@
 package com.kuuhaku;
 
 import com.github.ygimenez.exception.InvalidHandlerException;
+import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
@@ -29,10 +30,12 @@ import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.AllowedMentions;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
@@ -64,10 +67,13 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		try {
 			sm = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
 					.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-					.setMemberCachePolicy(m -> !m.getUser().isBot())
+					.setMemberCachePolicy(MemberCachePolicy.ONLINE
+							.and(MemberCachePolicy.OWNER)
+							.and(m -> !m.getUser().isBot()))
 					.addEventListeners(new GuildListener())
 					.setBulkDeleteSplittingEnabled(false)
 					.setEventPool(Executors.newWorkStealingPool(threads), true)
+					.setRelativeRateLimit(false)
 					.build();
 		} catch (LoginException e) {
 			Constants.LOGGER.fatal("Failed to login: " + e);
@@ -117,6 +123,10 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return shiro;
 	}
 
+	public User getUserById(String id) {
+		return Utils.getOr(shiro.getUserById(id), Pages.subGet(shiro.retrieveUserById(id)));
+	}
+
 	public JDA getMainShard() {
 		return shiro.getShards().get(0);
 	}
@@ -133,7 +143,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						SELECT c.name||' pela '||(SELECT COUNT(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
 						FROM card c
 						WHERE c.rarity = 'ULTIMATE'
-						ORDER BY random()
+						ORDER BY RANDOM()
 						""")),
 				Activity.playing("com minhas cartas Kawaipon!"),
 				Activity.of(Activity.ActivityType.DEFAULT, "Use s!help para ver os meus comandos!")

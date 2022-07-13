@@ -22,16 +22,28 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class BondedList<T> extends ArrayList<T> {
 	private final Consumer<T> bonding;
+	private final Predicate<T> check;
 
 	public BondedList(Consumer<T> bonding) {
-		this.bonding = bonding;
+		this(bonding, t -> true);
 	}
 
 	public BondedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
+		this(c, bonding, t -> true);
+	}
+
+	public BondedList(Consumer<T> bonding, Predicate<T> check) {
 		this.bonding = bonding;
+		this.check = check;
+	}
+
+	public BondedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding, Predicate<T> check) {
+		this.bonding = bonding;
+		this.check = check;
 		addAll(c);
 	}
 
@@ -41,6 +53,8 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean add(T t) {
+		if (!check.test(t)) return false;
+
 		try {
 			return super.add(t);
 		} finally {
@@ -50,6 +64,8 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public void add(int index, T element) {
+		if (!check.test(element)) return;
+
 		try {
 			super.add(index, element);
 		} finally {
@@ -59,6 +75,10 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
+		for (T t : c) {
+			if (!check.test(t)) return false;
+		}
+
 		try {
 			return super.addAll(c);
 		} finally {
@@ -70,6 +90,10 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
+		for (T t : c) {
+			if (!check.test(t)) return false;
+		}
+
 		try {
 			return super.addAll(index, c);
 		} finally {
