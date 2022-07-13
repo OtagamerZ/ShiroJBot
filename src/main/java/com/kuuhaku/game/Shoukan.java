@@ -681,7 +681,12 @@ public class Shoukan extends GameInstance<Phase> {
 			trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
 			if (i == 0) {
+				combat:
 				if (enemy != null) {
+					if (ally.getStats().popFlag(Flag.NO_COMBAT) || enemy.getStats().popFlag(Flag.IGNORE_COMBAT)) {
+						break combat;
+					}
+
 					if (enemy.isSupporting()) {
 						you.addKill();
 						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
@@ -693,8 +698,14 @@ public class Shoukan extends GameInstance<Phase> {
 						outcome = "str/combat_direct";
 					} else {
 						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
+						int enemyStats = enemy.getActiveAttr(dbl);
+						int eEquipStats = enemy.getActiveEquips(dbl);
+						int eCombatStats = enemyStats;
+						if (ally.getStats().popFlag(Flag.IGNORE_EQUIP)) {
+							eCombatStats -= eEquipStats;
+						}
 
-						if (ally.getDmg() < enemy.getActiveAttr(dbl)) {
+						if (ally.getDmg() < eCombatStats) {
 							trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
@@ -705,14 +716,19 @@ public class Shoukan extends GameInstance<Phase> {
 								you.getGraveyard().add(ally);
 							}
 
-							you.modHP(-(enemy.getActiveAttr(dbl) - ally.getDmg()));
+							you.modHP(-(enemyStats - ally.getDmg()));
 							reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
 							return true;
 						} else {
 							int block = enemy.getBlock();
 							int dodge = enemy.getDodge();
 
-							if (Calc.chance(block)) {
+							if (ally.getStats().popFlag(Flag.BLIND) && Calc.chance(50)) {
+								trigger(ON_FAIL, ally.asSource(ON_FAIL));
+
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
+								return true;
+							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_BLOCK));
 
 								op.addKill();
@@ -724,23 +740,23 @@ public class Shoukan extends GameInstance<Phase> {
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
 								return true;
-							} else if (Calc.chance(dodge)) {
+							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
 								trigger(ON_FAIL, ally.asSource(ON_FAIL), enemy.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
 									op.modHP((int) -(ally.getDmg() * 0.02));
 								}
 
-								reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss", dodge));
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
 								return true;
 							}
 
-							if (ally.getDmg() > enemy.getActiveAttr(dbl)) {
+							if (ally.getDmg() > eCombatStats) {
 								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_FAIL));
 								if (enemy.isDefending()) {
 									dmg = 0;
 								} else {
-									dmg -= enemy.getActiveAttr(dbl);
+									dmg -= enemyStats;
 								}
 
 								you.addKill();

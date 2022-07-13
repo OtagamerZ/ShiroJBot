@@ -27,10 +27,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -86,7 +83,7 @@ public class Hand {
 		}
 
 		getGraveyard().removeIf(dr -> !dr.isSolid());
-	});
+	}, d -> !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)));
 	private final List<Drawable<?>> discard = new BondedList<>(d -> d.setAvailable(false));
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
@@ -169,7 +166,7 @@ public class Hand {
 	}
 
 	public User getUser() {
-		return Main.getApp().getShiro().getUserById(uid);
+		return Main.getApp().getUserById(uid);
 	}
 
 	public Shoukan getGame() {

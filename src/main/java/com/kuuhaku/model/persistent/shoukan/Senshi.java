@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.CardState;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -187,7 +188,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getDmg() {
-		int sum = base.getAtk() + stats.getAtk() + equipments.stream().mapToInt(Evogear::getDmg).sum();
+		int sum = base.getAtk() + stats.getAtk() + getEquipDmg();
 
 		double mult = 1;
 		if (hand != null) {
@@ -209,7 +210,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getDef() {
-		int sum = base.getDef() + stats.getDef() + equipments.stream().mapToInt(Evogear::getDef).sum();
+		int sum = base.getDef() + stats.getDef() + getEquipDef();
 
 		double mult = 1;
 		if (hand != null) {
@@ -224,8 +225,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public double getFieldMult(Field f) {
-		double mult = 1;
+		if (stats.hasFlag(Flag.IGNORE_FIELD)) return 1;
 
+		double mult = 1;
 		Race[] races = race.split();
 		for (Race r : races) {
 			double mod = f.getModifiers().getDouble(r.name()) / races.length;
@@ -258,14 +260,14 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getDodge() {
-		int sum = base.getDodge() + stats.getDodge() + equipments.stream().mapToInt(Evogear::getDodge).sum();
+		int sum = base.getDodge() + stats.getDodge() + getEquipDodge();
 
 		return (int) Math.max(0, sum * getAttrMult());
 	}
 
 	@Override
 	public int getBlock() {
-		int sum = base.getBlock() + stats.getBlock() + equipments.stream().mapToInt(Evogear::getBlock).sum();
+		int sum = base.getBlock() + stats.getBlock() + getEquipBlock();
 
 		int min = 0;
 		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
@@ -286,6 +288,55 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		}
 
 		return mult;
+	}
+
+	public int getEquipDmg() {
+		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+
+		return equipments.stream().mapToInt(Evogear::getDmg).sum();
+	}
+
+	public int getEquipDef() {
+		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+
+		return equipments.stream().mapToInt(Evogear::getDef).sum();
+	}
+
+	public int getEquipDodge() {
+		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+
+		return equipments.stream().mapToInt(Evogear::getDodge).sum();
+	}
+
+	public int getEquipBlock() {
+		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+
+		return equipments.stream().mapToInt(Evogear::getBlock).sum();
+	}
+
+	public int getActiveEquips() {
+		try {
+			if (isDefending()) return getEquipDef();
+			return getEquipDmg();
+		} finally {
+			stats.popFlag(Flag.NO_EQUIP);
+		}
+	}
+
+	public int getActiveEquips(boolean dbl) {
+		try {
+			if (isDefending()) {
+				if (dbl) {
+					return getEquipDef() * 2;
+				}
+
+				return getEquipDef();
+			}
+
+			return getEquipDmg();
+		} finally {
+			stats.popFlag(Flag.NO_EQUIP);
+		}
 	}
 
 	@Override
@@ -437,6 +488,8 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public boolean execute(EffectParameters ep) {
+		if (stats.popFlag(Flag.NO_EFFECT)) return false;
+
 		Trigger trigger;
 		check:
 		if (equals(ep.source().card())) {
@@ -569,7 +622,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		}
 
 		drawCosts(g2d);
-		if (!isSupporting()) {
+		if (!isSupporting() && stats.hasFlag(Flag.HIDE_STATS)) {
 			drawAttributes(g2d, !desc.isEmpty());
 		}
 
