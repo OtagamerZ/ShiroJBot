@@ -467,13 +467,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public Senshi getFrontline() {
-		if (!isSupporting()) return null;
+		if (slot == null || !isSupporting()) return null;
 
 		return slot.getTop();
 	}
 
 	public Senshi getSupport() {
-		if (isSupporting()) return null;
+		if (slot == null || isSupporting()) return null;
 
 		return slot.getBottom();
 	}
@@ -504,11 +504,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 			trigger = ep.trigger();
 		}
-		System.out.println(trigger);
 
 		@Language("Groovy") String effect = getEffect();
-		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
-		else if (ep.size() == 0 && ep.trigger() == Trigger.DEFER) return false;
+		if (effect.isBlank() || !effect.contains(trigger.name()) || base.isLocked()) return false;
+		else if (ep.size() == 0 && trigger == Trigger.DEFER) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -619,6 +618,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 					7, 287, 211, 3,
 					parseValues(g2d, deck, this), highlightValues(g2d)
 			);
+		}
+
+		if (!stats.getWrite().isBlank()) {
+			String val = String.valueOf(stats.getWrite());
+			g2d.setColor(Color.ORANGE);
+			g2d.setFont(new Font("Arial", Font.BOLD, 18));
+			Graph.drawOutlinedString(g2d, val, 25, 51 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 		}
 
 		drawCosts(g2d);
