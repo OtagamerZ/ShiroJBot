@@ -34,7 +34,7 @@ public record Target(Drawable<?> card, int index, Trigger trigger) {
 	}
 
 	public Target(Drawable<?> card, int index, Trigger trigger) {
-		if (card instanceof Senshi s && s.getStats().popFlag(Flag.IGNORE_EFFECT)) {
+		if (card instanceof Senshi s && (s.getStats().popFlag(Flag.IGNORE_EFFECT) || s.isStasis())) {
 			this.card = null;
 			this.index = -1;
 			this.trigger = null;

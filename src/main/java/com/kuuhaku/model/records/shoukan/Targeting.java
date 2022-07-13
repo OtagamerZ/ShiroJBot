@@ -36,6 +36,20 @@ public record Targeting(Senshi ally, Senshi enemy) {
 		);
 	}
 
+	public Targeting(Senshi ally, Senshi enemy) {
+		if (ally != null && ally.isStasis()) {
+			this.ally = null;
+		} else {
+			this.ally = ally;
+		}
+
+		if (enemy != null && enemy.isStasis()) {
+			this.enemy = null;
+		} else {
+			this.enemy = enemy;
+		}
+	}
+
 	public boolean validate(TargetType type) {
 		return switch (type) {
 			case NONE -> true;

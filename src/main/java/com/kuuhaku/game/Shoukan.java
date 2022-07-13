@@ -628,6 +628,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (enemy == null && !arena.isFieldEmpty(op.getSide()) && !ally.getStats().popFlag(Flag.DIRECT)) {
 			getChannel().sendMessage(locale.get("error/field_not_empty")).queue();
 			return false;
+		} else if (enemy != null && enemy.isStasis()) {
+			getChannel().sendMessage(locale.get("error/card_untargetable")).queue();
+			return false;
 		}
 
 		int pHP = op.getHP();
