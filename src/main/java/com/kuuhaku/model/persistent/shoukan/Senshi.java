@@ -92,8 +92,8 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	      │ │││   ││└─ available
 	      │ │││   │└── defending
 	      │ │││   └─── flipped
-	      │ ││└─ (0 - 15) stunned
-	      │ │└── (0 - 15) sleeping
+	      │ ││└─ (0 - 15) sleeping
+	      │ │└── (0 - 15) stunned
 	      │ └─── (0 - 15) stasis
 	      └ (0 - 15) cooldown
 	 */
@@ -206,6 +206,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
+		if (isStunned()) {
+			mult /= 2;
+		}
 
 		return (int) Math.max(0, sum * mult * getAttrMult());
 	}
@@ -221,6 +224,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			}
 
 			mult *= getFieldMult(hand.getGame().getArena().getField());
+		}
+		if (isStunned()) {
+			mult /= 2;
 		}
 
 		return (int) Math.max(0, sum * mult * getAttrMult());
@@ -399,30 +405,30 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		state = Bit.set(state, 3, flipped);
 	}
 
-	public boolean isStunned() {
-		return Bit.on(state, 1, 4);
+	public boolean isSleeping() {
+		return !isStunned() && Bit.on(state, 1, 4);
 	}
 
-	public void setStun(int time) {
+	public void setSleep(int time) {
 		int curr = Bit.get(state, 1, 4);
 		state = Bit.set(state, 1, Math.max(curr, time), 4);
 	}
 
-	public void reduceStun(int time) {
+	public void reduceSleep(int time) {
 		int curr = Bit.get(state, 1, 4);
 		state = Bit.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
-	public boolean isSleeping() {
-		return Bit.on(state, 2, 4);
+	public boolean isStunned() {
+		return !isStasis() && Bit.on(state, 2, 4);
 	}
 
-	public void setSleep(int time) {
+	public void setStun(int time) {
 		int curr = Bit.get(state, 2, 4);
 		state = Bit.set(state, 2, Math.max(curr, time), 4);
 	}
 
-	public void reduceSleep(int time) {
+	public void reduceStun(int time) {
 		int curr = Bit.get(state, 2, 4);
 		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
 	}
@@ -490,7 +496,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (stats.popFlag(Flag.NO_EFFECT)) return false;
+		if (isStunned() || stats.popFlag(Flag.NO_EFFECT)) return false;
 
 		Trigger trigger;
 		check:

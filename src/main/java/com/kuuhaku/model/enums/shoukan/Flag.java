@@ -35,4 +35,5 @@ public enum Flag {
 	TRUE_STRIKE, // Will hit
 	TRUE_DODGE,  // Will dodge
 	TRUE_BLOCK,  // Will block
+	DIRECT,      // Can attack directly regardless of remaining cards
 }

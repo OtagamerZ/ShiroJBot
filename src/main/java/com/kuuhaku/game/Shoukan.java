@@ -299,7 +299,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-		if (chosen.isFlipped()) {
+		if (!chosen.isAvailable()) {
+			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
+			return false;
+		} else if (chosen.isFlipped()) {
 			chosen.setFlipped(false);
 		} else {
 			chosen.setDefending(!chosen.isDefending());
@@ -612,9 +615,6 @@ public class Shoukan extends GameInstance<Phase> {
 				if (!opSlot.hasBottom()) {
 					getChannel().sendMessage(locale.get("error/missing_card", opSlot.getIndex() + 1)).queue();
 					return false;
-				} else if (!arena.isFieldEmpty(op.getSide())) {
-					getChannel().sendMessage(locale.get("error/field_not_empty")).queue();
-					return false;
 				}
 
 				enemy = opSlot.getBottom();
@@ -623,6 +623,11 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			enemy.setFlipped(false);
+		}
+
+		if (enemy == null && !arena.isFieldEmpty(op.getSide()) && !ally.getStats().popFlag(Flag.DIRECT)) {
+			getChannel().sendMessage(locale.get("error/field_not_empty")).queue();
+			return false;
 		}
 
 		int pHP = op.getHP();
