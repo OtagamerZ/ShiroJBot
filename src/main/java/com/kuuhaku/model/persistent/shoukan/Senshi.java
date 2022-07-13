@@ -628,7 +628,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		}
 
 		drawCosts(g2d);
-		if (!isSupporting() && stats.hasFlag(Flag.HIDE_STATS)) {
+		if (!isSupporting() && !stats.hasFlag(Flag.HIDE_STATS)) {
 			drawAttributes(g2d, !desc.isEmpty());
 		}
 
