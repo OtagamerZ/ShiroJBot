@@ -776,7 +776,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								outcome = "str/combat_success";
 							} else {
-								trigger(ON_CLASH, ally.asSource(ON_CLASH), enemy.asTarget(ON_CLASH));
+								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
 
 								you.addKill();
 								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
