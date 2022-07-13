@@ -26,14 +26,13 @@ public enum Flag {
 	NO_EFFECT,  // Cannot activate effect
 
 	IGNORE_EQUIP,  // Ignores target equipment stats
-	IGNORE_FIELD,  // Ignores field modifiers
+	IGNORE_FIELD,  // Ignores field modifiers (NO AUTO)
 	IGNORE_COMBAT, // Cannot be attacked
 	IGNORE_EFFECT, // Cannot be targeted by effects
 
-	HIDE_STATS,  // Stats are hidden
-	SEALED,      // Effect is disabled
-	TRUE_HIT,    // Ignores dodge chance
-	TRUE_STRIKE, // Ignores block chance
+	HIDE_STATS,  // Stats are hidden (NO AUTO)
+	BLIND,		 // Hit chance is halved
+	TRUE_STRIKE, // Will hit
 	TRUE_DODGE,  // Will dodge
 	TRUE_BLOCK,  // Will block
 }

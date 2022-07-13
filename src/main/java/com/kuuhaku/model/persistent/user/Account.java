@@ -113,7 +113,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public User getUser() {
-		return Main.getApp().getMainShard().getUserById(uid);
+		return Main.getApp().getUserById(uid);
 	}
 
 	public String getName() {

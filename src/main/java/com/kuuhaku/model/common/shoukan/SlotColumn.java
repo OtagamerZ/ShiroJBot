@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -70,6 +71,10 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
+		if (top != null && top.getStats().popFlag(Flag.NO_CONVERT)) {
+			return;
+		}
+
 		if (getTop() != null) {
 			game.trigger(Trigger.ON_REMOVE, this.top.asSource(Trigger.ON_REMOVE));
 			this.top.setSlot(null);
@@ -101,6 +106,10 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Senshi bottom) {
+		if (bottom != null && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
+			return;
+		}
+
 		if (getBottom() != null) {
 			game.trigger(Trigger.ON_REMOVE, this.bottom.asSource(Trigger.ON_REMOVE));
 			this.bottom.setSlot(null);
