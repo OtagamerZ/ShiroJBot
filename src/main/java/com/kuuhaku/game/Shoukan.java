@@ -862,13 +862,11 @@ public class Shoukan extends GameInstance<Phase> {
 			Senshi s = slt.getTop();
 			if (s != null) {
 				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
-				s.unlock();
 			}
 
 			s = slt.getBottom();
 			if (s != null) {
 				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
-				s.unlock();
 			}
 		}
 	}

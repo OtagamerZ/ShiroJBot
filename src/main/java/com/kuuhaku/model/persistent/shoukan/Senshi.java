@@ -560,6 +560,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 			return false;
 		} finally {
+			unlock();
 			//other.setHeroDefense(false);
 		}
 	}
