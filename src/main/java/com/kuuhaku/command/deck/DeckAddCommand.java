@@ -102,8 +102,8 @@ public class DeckAddCommand implements Executable {
 					Deck dk = d.refresh();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							if (sc.getKawaiponCard().isFoil()) {
-								event.channel().sendMessage(locale.get("error/cannot_add_foil")).queue();
+							if (sc.getKawaiponCard().isChrome()) {
+								event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
 								return;
 							} else if (dk.getSenshi().size() >= 36) {
 								event.channel().sendMessage(locale.get("error/deck_full")).queue();

@@ -44,7 +44,7 @@ import java.util.Locale;
 		subname = "remove",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature("<card:word:r> <kind:word>[n,c]")
 public class StashRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -72,8 +72,8 @@ public class StashRemoveCommand implements Executable {
 
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							boolean foil = args.getString("kind").equalsIgnoreCase("f");
-							if (kp.hasCard(card, foil)) {
+							boolean chrome = args.getString("kind").equalsIgnoreCase("c");
+							if (kp.hasCard(card, chrome)) {
 								event.channel().sendMessage(locale.get("error/in_collection")).queue();
 								return;
 							}

@@ -53,9 +53,9 @@ public enum Rarity {
 		return index;
 	}
 
-	public Color getColor(boolean foil) {
+	public Color getColor(boolean chrome) {
 		int color = this.color;
-		if (foil) {
+		if (chrome) {
 			int[] rgb = Graph.unpackRGB(color);
 
 			float[] hsv;

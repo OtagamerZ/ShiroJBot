@@ -94,16 +94,16 @@ public class Kawaipon extends DAO<Kawaipon> {
 				.collect(Collectors.toSet());
 	}
 
-	public KawaiponCard getCard(Card card, boolean foil) {
+	public KawaiponCard getCard(Card card, boolean chrome) {
 		return cards.parallelStream()
 				.filter(c -> c.getStashEntry() == null)
-				.filter(c -> c.getCard().equals(card) && c.isFoil() == foil)
+				.filter(c -> c.getCard().equals(card) && c.isChrome() == chrome)
 				.findFirst().orElse(null);
 	}
 
-	public boolean hasCard(Card card, boolean foil) {
+	public boolean hasCard(Card card, boolean chrome) {
 		return cards.parallelStream()
 				.filter(c -> c.getStashEntry() == null)
-				.anyMatch(c -> c.getCard().equals(card) && c.isFoil() == foil);
+				.anyMatch(c -> c.getCard().equals(card) && c.isChrome() == chrome);
 	}
 }

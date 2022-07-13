@@ -254,12 +254,12 @@ public class GuildListener extends ListenerAdapter {
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
 						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
-						.setColor(kc.getCard().getRarity().getColor(kc.isFoil()))
+						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
 						.setImage("attachment://card.png")
 						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
 
 				Utils.getRandomEntry(channels).sendMessageEmbeds(eb.build())
-						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isFoil()), "png"), "card.png")
+						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
 						//.delay(1, TimeUnit.MINUTES) TODO Return
 						.delay(20, TimeUnit.SECONDS)
 						.flatMap(Message::delete)

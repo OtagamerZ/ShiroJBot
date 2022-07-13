@@ -110,8 +110,8 @@ public class Deck extends DAO<Deck> {
 	@Fetch(FetchMode.JOIN)
 	private Card cover;
 
-	@Column(name = "use_foil", nullable = false)
-	private boolean useFoil;
+	@Column(name = "use_chrome", nullable = false)
+	private boolean useChrome;
 
 	public Deck() {
 	}
@@ -235,12 +235,12 @@ public class Deck extends DAO<Deck> {
 		this.cover = cover;
 	}
 
-	public boolean isUsingFoil() {
-		return useFoil;
+	public boolean isUsingChrome() {
+		return useChrome;
 	}
 
-	public void setUseFoil(boolean useFoil) {
-		this.useFoil = useFoil;
+	public void setUseChrome(boolean useChrome) {
+		this.useChrome = useChrome;
 	}
 
 	public double getMetaDivergence() {

@@ -128,7 +128,7 @@ public class SynthesizeCommand implements Executable {
 					Kawaipon kp = data.profile().getAccount().getKawaipon();
 					double field = cards.stream()
 							.mapToDouble(sc -> {
-								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isFoil()) {
+								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
 									return 100 / 3d;
 								}
 
@@ -178,7 +178,7 @@ public class SynthesizeCommand implements Executable {
 					int rarity = sc.getCard().getRarity().getIndex();
 
 					if (kc != null) {
-						if (kc.isFoil()) {
+						if (kc.isChrome()) {
 							more *= 1 + rarity * kc.getQuality() / 200;
 						} else {
 							inc += rarity * kc.getQuality() / 200;

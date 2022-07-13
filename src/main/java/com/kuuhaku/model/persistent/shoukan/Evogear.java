@@ -328,7 +328,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 		String desc = getDescription(locale);
 
-		BufferedImage img = card.drawCardNoBorder(deck.isUsingFoil());
+		BufferedImage img = card.drawCardNoBorder(deck.isUsingChrome());
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);

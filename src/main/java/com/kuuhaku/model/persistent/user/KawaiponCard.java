@@ -40,8 +40,8 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Column(name = "uuid", nullable = false, unique = true, length = 36)
 	private String uuid = UUID.randomUUID().toString();
 
-	@Column(name = "foil", nullable = false)
-	private boolean foil;
+	@Column(name = "chrome", nullable = false)
+	private boolean chrome;
 
 	@Column(name = "quality", nullable = false)
 	private double quality = Calc.round(Math.max(0, Math.pow(Constants.DEFAULT_RNG.nextDouble(), 4) * 30 - 10), 1);
@@ -72,9 +72,9 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	public KawaiponCard() {
 	}
 
-	public KawaiponCard(Card card, boolean foil) {
+	public KawaiponCard(Card card, boolean chrome) {
 		this.card = card;
-		this.foil = foil;
+		this.chrome = chrome;
 	}
 
 	public int getId() {
@@ -85,12 +85,12 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		return uuid;
 	}
 
-	public boolean isFoil() {
-		return foil;
+	public boolean isChrome() {
+		return chrome;
 	}
 
-	public void setFoil(boolean foil) {
-		this.foil = foil;
+	public void setChrome(boolean chrome) {
+		this.chrome = chrome;
 	}
 
 	public double getQuality() {
@@ -102,7 +102,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public String getName() {
-		return (foil ? "« %s »" : "%s").formatted(card.getName());
+		return (chrome ? "« %s »" : "%s").formatted(card.getName());
 	}
 
 	public int getPrice() {
@@ -141,12 +141,12 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
-		return foil == that.foil && Objects.equals(card, that.card) && stashEntry == null;
+		return chrome == that.chrome && Objects.equals(card, that.card) && stashEntry == null;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(foil, card, stashEntry);
+		return Objects.hash(chrome, card, stashEntry);
 	}
 
 	

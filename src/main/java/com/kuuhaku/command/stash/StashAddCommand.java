@@ -42,7 +42,7 @@ import java.util.Locale;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <kind:word>[n,f]")
+@Signature("<card:word:r> <kind:word>[n,c]")
 public class StashAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -63,7 +63,7 @@ public class StashAddCommand implements Executable {
 
 		KawaiponCard kc = kp.getCollection().stream()
 				.filter(c -> c.getCard().equals(card))
-				.filter(c -> c.isFoil() == args.getString("kind", "n").equalsIgnoreCase("f"))
+				.filter(c -> c.isChrome() == args.getString("kind", "n").equalsIgnoreCase("c"))
 				.findFirst().orElse(null);
 
 		if (kc == null) {

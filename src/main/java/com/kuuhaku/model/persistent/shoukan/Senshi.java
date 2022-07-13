@@ -586,7 +586,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 		String desc = getDescription(locale);
 
-		BufferedImage img = getVanity().drawCardNoBorder(deck.isUsingFoil());
+		BufferedImage img = getVanity().drawCardNoBorder(deck.isUsingChrome());
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);

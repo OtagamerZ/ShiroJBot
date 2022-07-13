@@ -918,7 +918,7 @@ public abstract class Utils {
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean store) {
-		String[] longOp = {"name", "rarity", "anime", "foil", "kawaipon", "evogear", "field", "valid", "min", "max", "mine"};
+		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "evogear", "field", "valid", "min", "max", "mine"};
 		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "v", "gt", "lt", "m"};
 
 		Options opt = new Options();

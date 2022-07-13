@@ -76,7 +76,7 @@ public class Card extends DAO<Card> {
 		return rarity;
 	}
 
-	public BufferedImage drawCard(boolean foil) {
+	public BufferedImage drawCard(boolean chrome) {
 		try {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
@@ -91,8 +91,8 @@ public class Card extends DAO<Card> {
 				Graphics2D g2d = canvas.createGraphics();
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-				g2d.drawImage(foil ? foil(card, false) : card, 15, 15, null);
-				g2d.drawImage(foil ? foil(frame, true) : frame, 0, 0, null);
+				g2d.drawImage(chrome ? chrome(card, false) : card, 15, 15, null);
+				g2d.drawImage(chrome ? chrome(frame, true) : frame, 0, 0, null);
 
 				g2d.dispose();
 
@@ -115,7 +115,7 @@ public class Card extends DAO<Card> {
 
 				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/ultimate.png");
 				BufferedImage nBar = IO.getResourceAsImage("kawaipon/frames/new/normal_bar.png");
-				BufferedImage fBar = IO.getResourceAsImage("kawaipon/frames/new/foil_bar.png");
+				BufferedImage fBar = IO.getResourceAsImage("kawaipon/frames/new/chrome_bar.png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
@@ -176,21 +176,21 @@ public class Card extends DAO<Card> {
 		}
 	}
 
-	public BufferedImage drawCardNoBorder(boolean foil) {
+	public BufferedImage drawCardNoBorder(boolean chrome) {
 		try {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
 			try (Buffer buf = new Buffer()) {
 				buf.write(cardBytes);
-				return foil ? foil(ImageIO.read(buf.inputStream()), false) : ImageIO.read(buf.inputStream());
+				return chrome ? chrome(ImageIO.read(buf.inputStream()), false) : ImageIO.read(buf.inputStream());
 			}
 		} catch (IOException e) {
 			return null;
 		}
 	}
 
-	private BufferedImage foil(BufferedImage bi, boolean border) {
+	private BufferedImage chrome(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		Graph.forEachPixel(bi, (x, y, rgb) -> {

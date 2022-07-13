@@ -83,14 +83,14 @@ public class SeeCardCommand implements Executable {
 		String type = args.getString("kind", "n");
 		BufferedImage bi = null;
 		switch (type) {
-			case "n", "f" -> {
-				boolean foil = type.equals("f");
-				KawaiponCard kc = kp.getCard(card, foil);
+			case "n", "c" -> {
+				boolean chrome = type.equals("c");
+				KawaiponCard kc = kp.getCard(card, chrome);
 				if (kc == null) {
-					bi = ImageFilters.silhouette(card.drawCard(foil));
+					bi = ImageFilters.silhouette(card.drawCard(chrome));
 					Graph.overlay(bi, IO.getResourceAsImage("kawaipon/missing.png"));
 				} else {
-					bi = card.drawCard(foil);
+					bi = card.drawCard(chrome);
 				}
 
 				if (kc != null) {
