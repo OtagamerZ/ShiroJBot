@@ -632,7 +632,7 @@ public class Shoukan extends GameInstance<Phase> {
 				.mapToInt(e -> Charm.MULTISTRIKE.getValue(e.getTier()))
 				.sum();
 
-		String outcome = "";
+		String outcome = "str/combat_skip";
 		for (int i = 0; i < attacks; i++) {
 			int eDmg = (int) (dmg * Math.pow(0.5, i));
 
