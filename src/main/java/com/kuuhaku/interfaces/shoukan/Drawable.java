@@ -18,13 +18,16 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.id.LocalizedDescId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
@@ -227,6 +230,15 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				g2d.setColor(Color.ORANGE);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 			}
+		}
+	}
+
+	default String getString(I18N locale, String key, Object... params) {
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key, locale));
+		if (str != null) {
+			return str.getValue().formatted(params);
+		} else {
+			return "";
 		}
 	}
 

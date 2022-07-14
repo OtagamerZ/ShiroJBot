@@ -617,11 +617,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
 			List<String> tags = getTags();
-			if (tags.size() > 4) {
-				tags = tags.subList(0, 3);
-				tags.add("...");
-			}
-			g2d.drawString(tags.stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
+			g2d.drawString(tags.stream()
+							.limit(4)
+							.map(s -> getString(locale, s))
+							.map(String::toUpperCase).toList().toString()
+					, 7, 275
+			);
 
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d, desc,
@@ -653,7 +654,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			g2d.drawImage(IO.getResourceAsImage("shoukan/states/stun.png"), 0, 0, null);
 		} else if (isSleeping()) {
 			g2d.drawImage(IO.getResourceAsImage("shoukan/states/sleep.png"), 0, 0, null);
-		}else if(isDefending()) {
+		} else if (isDefending()) {
 			g2d.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
 		}
 
