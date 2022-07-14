@@ -357,8 +357,14 @@ public class Hand {
 			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 		}
 
-		if (origin.synergy() == Race.POSSESSED) {
+		if (origin.synergy() == Race.POSSESSED && value > 0) {
 			value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
+		} else if (origin.synergy() == Race.PRIMAL && value < 0) {
+			int degen = Math.abs(value / 10);
+			if (degen > 0) {
+				regdeg.add(new Degen(degen, 0.1));
+				value += degen;
+			}
 		}
 
 		int half = value / 2;
@@ -398,7 +404,7 @@ public class Hand {
 	}
 
 	public void consumeHP(int value) {
-		modHP(-value);
+		this.hp = Math.max(0, this.hp - Math.min(value, 0));
 	}
 
 	public double getHPPrcnt() {
@@ -432,20 +438,16 @@ public class Hand {
 	}
 
 	public void modMP(int value) {
-		if (value == 0) return;
-
 		this.mp = Math.max(0, this.mp + value);
 	}
 
 	public void consumeMP(int value) {
 		if (origin.synergy() == Race.FETCH && Calc.chance(2)) return;
 
-		modMP(-value);
+		this.mp = Math.max(0, this.mp - Math.min(value, 0));
 	}
 
 	public void consumeSC(int value) {
-		if (value == 0) return;
-
 		for (int i = 0; i < value && !discard.isEmpty(); i++) {
 			game.getArena().getBanned().add(discard.remove(0));
 		}
