@@ -618,7 +618,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
 			g2d.drawString(getTags().stream()
 							.limit(4)
-							.map(s -> getString(locale, s))
+							.map(s -> {
+								if (s.startsWith("race/")) {
+									return locale.get(s);
+								} else {
+									return getString(locale, s);
+								}
+							})
 							.map(String::toUpperCase).toList().toString()
 					, 7, 275
 			);
