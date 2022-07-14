@@ -451,7 +451,7 @@ public class Hand {
 	}
 
 	public void consumeMP(int value) {
-		if (origin.synergy() == Race.FETCH && Calc.chance(2)) return;
+		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return;
 
 		this.mp = Math.max(0, this.mp - Math.min(value, 0));
 	}

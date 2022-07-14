@@ -41,7 +41,7 @@ public enum Race {
 	WEREBEAST(HUMAN.flag | BEAST.flag),
 	CYBORG(HUMAN.flag | MACHINE.flag),
 	DEMIGOD(HUMAN.flag | DIVINITY.flag),
-	FETCH(HUMAN.flag | SPIRIT.flag),
+	ESPER(HUMAN.flag | SPIRIT.flag),
 	LICH(HUMAN.flag | UNDEAD.flag),
 	ELF(HUMAN.flag | MYSTICAL.flag),
 	ONI(HUMAN.flag | DEMON.flag),
