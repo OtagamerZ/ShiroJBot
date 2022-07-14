@@ -61,6 +61,8 @@ public class CardExtra {
 	private String description = null;
 	private String effect = null;
 
+	private transient Field[] fieldCache = null;
+
 	public int getMana() {
 		return (int) sum(mana);
 	}
@@ -333,7 +335,6 @@ public class CardExtra {
 		this.effect = effect;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void expireMods() {
 		Predicate<AttrMod> check = mod -> {
 			if (mod.getExpiration() != null) {
@@ -343,8 +344,16 @@ public class CardExtra {
 			return mod.isExpired();
 		};
 
-		Field[] fields = this.getClass().getDeclaredFields();
-		for (Field f : fields) {
+		removeExpired(check);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void removeExpired(Predicate<AttrMod> check) {
+		if (fieldCache == null) {
+			fieldCache = this.getClass().getDeclaredFields();
+		}
+
+		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof HashSet s) {
 					s.removeIf(check);

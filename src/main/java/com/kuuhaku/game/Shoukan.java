@@ -846,10 +846,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void trigger(Trigger trigger) {
-		List<Side> sides = new ArrayList<>() {{
-			add(getCurrentSide());
-			add(getOtherSide());
-		}};
+		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 
 		for (Side side : sides) {
 			trigger(trigger, side);
@@ -921,7 +918,7 @@ public class Shoukan extends GameInstance<Phase> {
 		resetTimer();
 		trigger(ON_TICK);
 
-		Side[] sides = new Side[]{getOtherSide(), getCurrentSide()};
+		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 		for (Side side : sides) {
 			Hand hand = hands.get(side);
 			if (hand.getHP() == 0) {
@@ -947,15 +944,15 @@ public class Shoukan extends GameInstance<Phase> {
 			for (SlotColumn slt : slts) {
 				Senshi s = slt.getTop();
 				if (s != null) {
-					s.getStats().expireMods();
+					s.getStats().removeExpired(AttrMod::isExpired);
 					for (Evogear e : s.getEquipments()) {
-						e.getStats().expireMods();
+						e.getStats().removeExpired(AttrMod::isExpired);
 					}
 				}
 
 				s = slt.getBottom();
 				if (s != null) {
-					s.getStats().expireMods();
+					s.getStats().removeExpired(AttrMod::isExpired);
 				}
 			}
 		}
@@ -1091,13 +1088,24 @@ public class Shoukan extends GameInstance<Phase> {
 
 		List<SlotColumn> slts = getSlots(curr.getSide());
 		for (SlotColumn slt : slts) {
-			if (slt.hasTop()) {
-				slt.getTop().setAvailable(true);
+			Senshi s = slt.getTop();
+			if (s != null) {
+				s.setAvailable(true);
 
-				slt.getTop().reduceStasis(1);
-				slt.getTop().reduceSleep(1);
-				slt.getTop().reduceStun(1);
-				slt.getTop().reduceCooldown(1);
+				s.reduceStasis(1);
+				s.reduceSleep(1);
+				s.reduceStun(1);
+				s.reduceCooldown(1);
+
+				s.getStats().expireMods();
+				for (Evogear e : s.getEquipments()) {
+					e.getStats().expireMods();
+				}
+			}
+
+			s = slt.getBottom();
+			if (s != null) {
+				s.getStats().expireMods();
 			}
 		}
 
