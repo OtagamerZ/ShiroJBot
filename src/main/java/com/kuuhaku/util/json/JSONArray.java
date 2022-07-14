@@ -48,10 +48,7 @@ public class JSONArray extends ArrayList<Object> {
 	}
 
 	public Object get(int index) {
-		Object o = super.get(index);
-		if (o == null) throw new NullPointerException();
-
-		return o;
+		return super.get(index);
 	}
 
 	public Object get(int index, Object or) {
