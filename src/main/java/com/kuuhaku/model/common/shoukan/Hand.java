@@ -412,6 +412,7 @@ public class Hand {
 	}
 
 	public void consumeHP(int value) {
+		modHP(-Math.max(0, value), true);
 		this.hp = Math.max(0, this.hp - Math.min(value, 0));
 	}
 
