@@ -58,7 +58,7 @@ public class JSONArray extends ArrayList<Object> {
 	public <T> T get(Class<T> klass, int index) {
 		try {
 			return klass.cast(get(index));
-		} catch (NullPointerException | ClassCastException e) {
+		} catch (ClassCastException e) {
 			return null;
 		}
 	}

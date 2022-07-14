@@ -58,7 +58,7 @@ public class JSONObject extends HashMap<String, Object> {
 	public <T> T get(Class<T> klass, String key) {
 		try {
 			return klass.cast(get(key));
-		} catch (NullPointerException | ClassCastException e) {
+		} catch (ClassCastException e) {
 			return null;
 		}
 	}
@@ -85,30 +85,22 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public boolean getBoolean(String key) {
 		try {
-			return (boolean) get(key);
-		} catch (NullPointerException e) {
-			return false;
+			return (boolean) get(key, false);
 		} catch (ClassCastException e) {
 			return get(key) != null;
 		}
 	}
 
 	public boolean getBoolean(String key, boolean or) {
-		try {
-			return Utils.getOr((boolean) get(key), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
+		return (boolean) get(key, or);
 	}
 
 	public double getDouble(String key) {
 		try {
-			return ((Number) get(key)).doubleValue();
-		} catch (NullPointerException e) {
-			return 0;
+			return ((Number) get(key, 0)).doubleValue();
 		} catch (ClassCastException e) {
 			try {
-				return Double.parseDouble((String) get(key));
+				return Double.parseDouble((String) get(key, "0"));
 			} catch (NumberFormatException ex) {
 				return 0;
 			}
@@ -117,12 +109,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public double getDouble(String key, double or) {
 		try {
-			return Utils.getOr(((Number) get(key)).doubleValue(), or);
-		} catch (NullPointerException e) {
-			return or;
+			return ((Number) get(key, or)).doubleValue();
 		} catch (ClassCastException e) {
 			try {
-				return Double.parseDouble((String) get(key));
+				return Double.parseDouble((String) get(key, String.valueOf(or)));
 			} catch (NumberFormatException ex) {
 				return or;
 			}
@@ -131,12 +121,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key) {
 		try {
-			return ((Number) get(key)).floatValue();
-		} catch (NullPointerException e) {
-			return 0;
+			return ((Number) get(key, 0)).floatValue();
 		} catch (ClassCastException e) {
 			try {
-				return Float.parseFloat((String) get(key));
+				return Float.parseFloat((String) get(key, "0"));
 			} catch (NumberFormatException ex) {
 				return 0;
 			}
@@ -145,12 +133,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public float getFloat(String key, float or) {
 		try {
-			return Utils.getOr(((Number) get(key)).floatValue(), or);
-		} catch (NullPointerException e) {
-			return or;
+			return ((Number) get(key, or)).floatValue();
 		} catch (ClassCastException e) {
 			try {
-				return Float.parseFloat((String) get(key));
+				return Float.parseFloat((String) get(key, String.valueOf(or)));
 			} catch (NumberFormatException ex) {
 				return or;
 			}
@@ -159,12 +145,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key) {
 		try {
-			return ((Number) get(key)).intValue();
-		} catch (NullPointerException e) {
-			return 0;
+			return ((Number) get(key, 0)).intValue();
 		} catch (ClassCastException e) {
 			try {
-				return Integer.parseInt((String) get(key));
+				return Integer.parseInt((String) get(key, "0"));
 			} catch (NumberFormatException ex) {
 				return 0;
 			}
@@ -173,12 +157,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public int getInt(String key, int or) {
 		try {
-			return Utils.getOr(((Number) get(key)).intValue(), or);
-		} catch (NullPointerException e) {
-			return or;
+			return ((Number) get(key, or)).intValue();
 		} catch (ClassCastException e) {
 			try {
-				return Integer.parseInt((String) get(key));
+				return Integer.parseInt((String) get(key, String.valueOf(or)));
 			} catch (NumberFormatException ex) {
 				return or;
 			}
@@ -187,12 +169,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key) {
 		try {
-			return ((Number) get(key)).longValue();
-		} catch (NullPointerException e) {
-			return 0;
+			return ((Number) get(key, 0)).longValue();
 		} catch (ClassCastException e) {
 			try {
-				return Long.parseLong((String) get(key));
+				return Long.parseLong((String) get(key, "0"));
 			} catch (NumberFormatException ex) {
 				return 0;
 			}
@@ -201,12 +181,10 @@ public class JSONObject extends HashMap<String, Object> {
 
 	public long getLong(String key, long or) {
 		try {
-			return Utils.getOr(((Number) get(key)).longValue(), or);
-		} catch (NullPointerException e) {
-			return or;
+			return ((Number) get(key, or)).longValue();
 		} catch (ClassCastException e) {
 			try {
-				return Long.parseLong((String) get(key));
+				return Long.parseLong((String) get(key, String.valueOf(or)));
 			} catch (NumberFormatException ex) {
 				return or;
 			}
@@ -214,53 +192,29 @@ public class JSONObject extends HashMap<String, Object> {
 	}
 
 	public String getString(String key) {
-		try {
-			return String.valueOf(get(key));
-		} catch (NullPointerException e) {
-			return "";
-		}
+		return String.valueOf(get(key, ""));
 	}
 
 	public String getString(String key, String or) {
-		try {
-			return Utils.getOr(String.valueOf(get(key)), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
+		return String.valueOf(get(key, or));
 	}
 
 	public JSONArray getJSONArray(String key) {
-		try {
-			return new JSONArray(getString(key));
-		} catch (NullPointerException e) {
-			return null;
-		}
+		return new JSONArray(getString(key, "[]"));
 	}
 
 	public JSONArray getJSONArray(String key, JSONArray or) {
-		try {
-			@Language("JSON5") String ar = getString(key);
-			return ar == null ? or : new JSONArray(ar);
-		} catch (NullPointerException e) {
-			return or;
-		}
+		JSONArray arr = getJSONArray(key);
+		return arr.isEmpty() ? or : arr;
 	}
 
 	public JSONObject getJSONObject(String key) {
-		try {
-			return new JSONObject(getString(key));
-		} catch (NullPointerException e) {
-			return null;
-		}
+		return new JSONObject(getString(key, "{}"));
 	}
 
 	public JSONObject getJSONObject(String key, JSONObject or) {
-		try {
-			@Language("JSON5") String jo = getString(key);
-			return jo == null ? or : new JSONObject(jo);
-		} catch (NullPointerException e) {
-			return or;
-		}
+		JSONObject obj = getJSONObject(key);
+		return obj.isEmpty() ? or : obj;
 	}
 
 	public boolean has(String key) {
