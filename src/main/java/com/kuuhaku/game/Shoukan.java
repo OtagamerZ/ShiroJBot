@@ -568,6 +568,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!chosen.isAvailable()) {
 			getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
 			return false;
+		} else if (chosen.getCooldown() > 0) {
+			getChannel().sendMessage(locale.get("error/card_cooldown", chosen, chosen.getCooldown())).queue();
+			return false;
 		} else if (curr.getMP() < 1) {
 			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 			return false;
