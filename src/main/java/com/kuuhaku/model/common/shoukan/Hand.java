@@ -347,59 +347,67 @@ public class Hand {
 	}
 
 	public void modHP(int value) {
+		modHP(value, false);
+	}
+
+	public void modHP(int value, boolean pure) {
 		if (value == 0) return;
 
 		int before = hp;
 
-		if (origin.major() == Race.HUMAN && value > 0) {
-			value *= 1.25;
-		} else if (origin.minor() == Race.HUMAN && value < 0) {
-			value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
-		}
-
-		if (origin.synergy() == Race.POSSESSED && value > 0) {
-			value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
-		} else if (origin.synergy() == Race.PRIMAL && value < 0) {
-			int degen = Math.abs(value / 10);
-			if (degen > 0) {
-				regdeg.add(new Degen(degen, 0.1));
-				value += degen;
+		if (!pure) {
+			if (origin.major() == Race.HUMAN && value > 0) {
+				value *= 1.25;
+			} else if (origin.minor() == Race.HUMAN && value < 0) {
+				value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 			}
-		}
 
-		int half = value / 2;
-		if (value < 0) {
-			value = regdeg.reduce(Degen.class, value - half);
-		} else {
-			value = regdeg.reduce(Regen.class, value - half);
-		}
-		value += half;
+			if (origin.synergy() == Race.POSSESSED && value > 0) {
+				value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
+			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
+				int degen = Math.abs(value / 10);
+				if (degen > 0) {
+					regdeg.add(new Degen(degen, 0.1));
+					value += degen;
+				}
+			}
 
-		double prcnt = getHPPrcnt();
-		if (origin.demon()) {
-			prcnt = Math.min(prcnt, 0.5);
-		}
+			int half = value / 2;
+			if (value < 0) {
+				value = regdeg.reduce(Degen.class, value - half);
+			} else {
+				value = regdeg.reduce(Regen.class, value - half);
+			}
+			value += half;
 
-		if (this.hp + value <= 0 && prcnt > 1 / 3d) {
-			if (prcnt > 2 / 3d || Calc.chance(prcnt * 100)) {
-				this.hp = 1;
-				return;
+			double prcnt = getHPPrcnt();
+			if (origin.demon()) {
+				prcnt = Math.min(prcnt, 0.5);
+			}
+
+			if (this.hp + value <= 0 && prcnt > 1 / 3d) {
+				if (prcnt > 2 / 3d || Calc.chance(prcnt * 100)) {
+					this.hp = 1;
+					return;
+				}
 			}
 		}
 
 		this.hp = Math.max(0, this.hp + value);
 
-		int delta = before - this.hp;
-		if (delta > 0) {
-			game.trigger(Trigger.ON_DAMAGE, side);
+		if (!pure) {
+			int delta = before - this.hp;
+			if (delta > 0) {
+				game.trigger(Trigger.ON_DAMAGE, side);
 
-			if (origin.synergy() == Race.VIRUS) {
-				modMP((int) (delta * 0.0025));
-			} else if (origin.synergy() == Race.TORMENTED) {
-				game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+				if (origin.synergy() == Race.VIRUS) {
+					modMP((int) (delta * 0.0025));
+				} else if (origin.synergy() == Race.TORMENTED) {
+					game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+				}
+			} else if (delta < 0) {
+				game.trigger(Trigger.ON_HEAL, side);
 			}
-		} else if (delta < 0) {
-			game.trigger(Trigger.ON_HEAL, side);
 		}
 	}
 
@@ -426,7 +434,7 @@ public class Hand {
 			val /= 2;
 		}
 
-		modHP(val);
+		modHP(val, true);
 	}
 
 	public int getMP() {
