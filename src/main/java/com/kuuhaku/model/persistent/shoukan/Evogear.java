@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
+import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -277,6 +278,8 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	@Override
 	public boolean execute(EffectParameters ep) {
+		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
+
 		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
 		if (effect.isBlank() || !effect.contains(ep.trigger().name())) return false;
 
