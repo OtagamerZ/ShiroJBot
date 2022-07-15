@@ -413,7 +413,7 @@ public class Hand {
 
 	public void consumeHP(int value) {
 		modHP(-Math.max(0, value), true);
-		this.hp = Math.max(0, this.hp - Math.min(value, 0));
+		this.hp = Math.max(0, this.hp - Math.max(0, value));
 	}
 
 	public double getHPPrcnt() {
@@ -453,7 +453,7 @@ public class Hand {
 	public void consumeMP(int value) {
 		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return;
 
-		this.mp = Math.max(0, this.mp - Math.min(value, 0));
+		this.mp = Math.max(0, this.mp - Math.max(0, value));
 	}
 
 	public void consumeSC(int value) {
