@@ -366,11 +366,14 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 					.toList();
 
 			if (!icons.isEmpty()) {
-				int y = (desc.isBlank() ? 225 : 279);
-				int y = desc.isBlank() ? 238 : 184;
+				int y = desc.isBlank() ? 270 : 216;
+				if (getDmg() > 0) y -= 28;
+				if (getDef() > 0) y -= 28;
+				if (getCooldown() > 0) y -= 28;
+
 				Graph.applyTransformed(g2d, 25, y, g -> {
 					if (icons.size() == 1) {
-						g.drawImage(icons.get(0), 0, 0, null);
+						g.drawImage(icons.get(0), 0, 0, 32, 32, null);
 					} else {
 						BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
 						assert mask != null;
@@ -378,9 +381,9 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 						for (int i = 0; i < icons.size(); i++) {
 							BufferedImage icon = icons.get(i);
 							Graph.applyMask(icon, mask, i, true);
-							g.drawImage(icon, 0, 0, null);
+							g.drawImage(icon, 0, 0, 32, 32, null);
 						}
-						g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
+						g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, 32, 32, null);
 					}
 				});
 			}
