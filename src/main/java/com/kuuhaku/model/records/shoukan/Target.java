@@ -18,23 +18,21 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-public record Target(Drawable<?> card, int index, Trigger trigger) {
+public record Target(Senshi card, int index, Trigger trigger) {
 	public Target() {
 		this(null, -1, null);
 	}
 
-	public Target(Drawable<?> card, Trigger trigger) {
+	public Target(Senshi card, Trigger trigger) {
 		this(card, card.getSlot().getIndex(), trigger);
 	}
 
-	public Target(Drawable<?> card, int index, Trigger trigger) {
-		if (card instanceof Senshi s && (s.getStats().popFlag(Flag.IGNORE_EFFECT) || s.isStasis())) {
+	public Target(Senshi card, int index, Trigger trigger) {
+		if (card != null && (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {
 			this.card = null;
 			this.index = -1;
 			this.trigger = null;
@@ -46,8 +44,6 @@ public record Target(Drawable<?> card, int index, Trigger trigger) {
 	}
 
 	public void execute(EffectParameters ep) {
-		if (card != null && card instanceof EffectHolder eh) {
-			eh.execute(ep);
-		}
+		card.execute(ep);
 	}
 }
