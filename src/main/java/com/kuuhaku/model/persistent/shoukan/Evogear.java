@@ -230,7 +230,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			mult *= 1.1 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.01);
 		}
 
-		return mult;
+		return mult * stats.getAttrMult();
 	}
 
 	@Override
