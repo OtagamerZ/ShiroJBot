@@ -44,6 +44,8 @@ public record Target(Senshi card, int index, Trigger trigger) {
 	}
 
 	public void execute(EffectParameters ep) {
-		card.execute(ep);
+		if (card != null) {
+			card.execute(ep);
+		}
 	}
 }
