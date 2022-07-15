@@ -540,12 +540,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			));
 
 			for (Evogear e : equipments) {
-				e.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.targets()));
+				e.execute(new EffectParameters(trigger, ep.source(), ep.targets()));
 			}
 
 			Senshi sup = getSupport();
 			if (sup != null) {
-				sup.execute(ep);
+				sup.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.targets()));
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {

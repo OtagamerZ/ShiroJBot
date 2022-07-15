@@ -820,6 +820,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
+	public I18N getLocale() {
+		return locale;
+	}
+
 	public Map<Side, Hand> getHands() {
 		return hands;
 	}
