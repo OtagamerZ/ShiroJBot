@@ -237,6 +237,8 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	public static Field getRandom() {
 		String id = DAO.queryNative(String.class, "SELECT card_id FROM field ORDER BY RANDOM()");
+		if (id == null) return null;
+
 		return DAO.find(Field.class, id);
 	}
 
@@ -248,6 +250,8 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		query.appendNewLine("ORDER BY RANDOM()");
 
 		String id = DAO.queryNative(String.class, query.toString());
+		if (id == null) return null;
+
 		return DAO.find(Field.class, id);
 	}
 }
