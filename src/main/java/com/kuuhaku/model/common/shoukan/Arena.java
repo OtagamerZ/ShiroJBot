@@ -77,12 +77,15 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(Objects::nonNull, d -> {
-		d.reset();
-		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
+	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(
+			d -> d != null && !d.isSPSummon(),
+			d -> {
+				d.reset();
+				getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
-		getBanned().removeIf(dr -> !dr.isSolid());
-	});
+				getBanned().removeIf(dr -> !dr.isSolid());
+			}
+	);
 	private Field field = null;
 
 	public Arena(Shoukan game) {

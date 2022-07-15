@@ -35,10 +35,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
-import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
@@ -90,13 +87,14 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
-	private transient byte state = 0x2;
+	private transient byte state = 0b10;
 	/*
 	0x0F
-	   └ 0111
-	      ││└ solid
-	      │└─ available
-	      └── flipped
+	   └ 1111
+	     │││└ solid
+	     ││└─ available
+	     │└── flipped
+	     └─── special summon
 	 */
 
 	@Override
@@ -268,6 +266,16 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		state = (byte) Bit.set(state, 2, flipped);
 	}
 
+	@Override
+	public boolean isSPSummon() {
+		return Bit.on(state, 4);
+	}
+
+	@Override
+	public void setSPSummon(boolean special) {
+		state = (byte) Bit.set(state, 4, special);
+	}
+
 	public String getEffect() {
 		return Utils.getOr(stats.getEffect(), base.getEffect());
 	}
@@ -318,11 +326,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	public void reset() {
 		stats = new CardExtra();
 
-		if (isSolid()) {
-			state = 0x3;
-		} else {
-			state = 0x2;
-		}
+		byte base = 0b10;
+		base = (byte) Bit.set(base, 0, isSolid());
+		base = (byte) Bit.set(base, 3, isSPSummon());
+
+		state = base;
 	}
 
 	@Override
@@ -434,6 +442,17 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	public static Evogear getRandom() {
 		String id = DAO.queryNative(String.class, "SELECT card_id FROM evogear ORDER BY RANDOM()");
+		return DAO.find(Evogear.class, id);
+	}
+
+	public static Evogear getRandom(String... filters) {
+		XStringBuilder query = new XStringBuilder("SELECT card_id FROM evogear");
+		for (String f : filters) {
+			query.appendNewLine(f);
+		}
+		query.appendNewLine("ORDER BY RANDOM()");
+
+		String id = DAO.queryNative(String.class, query.toString());
 		return DAO.find(Evogear.class, id);
 	}
 }

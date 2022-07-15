@@ -69,7 +69,7 @@ public class Hand {
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 	});
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
-			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)),
+			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) && !d.isSPSummon(),
 			d -> {
 				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 
@@ -87,7 +87,7 @@ public class Hand {
 				getGraveyard().removeIf(dr -> !dr.isSolid());
 			}
 	);
-	private final List<Drawable<?>> discard = new BondedList<>(d -> d.setAvailable(false));
+	private final List<Drawable<?>> discard = new BondedList<>(Objects::nonNull, d -> d.setAvailable(false));
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
 	private final BaseValues base;

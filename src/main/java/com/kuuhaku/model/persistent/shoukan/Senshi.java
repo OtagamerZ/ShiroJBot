@@ -32,10 +32,7 @@ import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
-import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -81,18 +78,19 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
-	private transient int state = 0x2;
+	private transient int state = 0b10;
 	/*
-	0x000 F FFF F
-	      │ │││ └ 1111
-	      │ │││   │││└ solid
-	      │ │││   ││└─ available
-	      │ │││   │└── defending
-	      │ │││   └─── flipped
-	      │ ││└─ (0 - 15) sleeping
-	      │ │└── (0 - 15) stunned
-	      │ └─── (0 - 15) stasis
-	      └ (0 - 15) cooldown
+	0x00 F FFF FF
+	     │ │││ └┴ 0001 1111
+	     │ │││       │ │││└ solid
+	     │ │││       │ ││└─ available
+	     │ │││       │ │└── defending
+	     │ │││       │ └─── flipped
+	     │ │││       └ special summon
+	     │ ││└─ (0 - 15) sleeping
+	     │ │└── (0 - 15) stunned
+	     │ └─── (0 - 15) stasis
+	     └ (0 - 15) cooldown
 	 */
 
 	@Override
@@ -172,7 +170,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getMPCost() {
-		return Math.max(1, base.getMana() + stats.getMana());
+		return Math.max(0, base.getMana() + stats.getMana());
 	}
 
 	@Override
@@ -403,62 +401,72 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		state = Bit.set(state, 3, flipped);
 	}
 
+	@Override
+	public boolean isSPSummon() {
+		return Bit.on(state, 4);
+	}
+
+	@Override
+	public void setSPSummon(boolean special) {
+		state = Bit.set(state, 4, special);
+	}
+
 	public boolean isSleeping() {
-		return !isStunned() && Bit.on(state, 1, 4);
+		return !isStunned() && Bit.on(state, 2, 4);
 	}
 
 	public void setSleep(int time) {
-		int curr = Bit.get(state, 1, 4);
-		state = Bit.set(state, 1, Math.max(curr, time), 4);
-	}
-
-	public void reduceSleep(int time) {
-		int curr = Bit.get(state, 1, 4);
-		state = Bit.set(state, 1, Math.max(0, curr - time), 4);
-	}
-
-	public boolean isStunned() {
-		return !isStasis() && Bit.on(state, 2, 4);
-	}
-
-	public void setStun(int time) {
 		int curr = Bit.get(state, 2, 4);
 		state = Bit.set(state, 2, Math.max(curr, time), 4);
 	}
 
-	public void reduceStun(int time) {
+	public void reduceSleep(int time) {
 		int curr = Bit.get(state, 2, 4);
 		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
 	}
 
-	public boolean isStasis() {
-		return Bit.on(state, 3, 4);
+	public boolean isStunned() {
+		return !isStasis() && Bit.on(state, 3, 4);
 	}
 
-	public void setStasis(int time) {
+	public void setStun(int time) {
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(curr, time), 4);
 	}
 
-	public void reduceStasis(int time) {
+	public void reduceStun(int time) {
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
 	}
 
-	@Override
-	public int getCooldown() {
-		return Bit.get(state, 4, 4);
+	public boolean isStasis() {
+		return Bit.on(state, 4, 4);
 	}
 
-	@Override
-	public void setCooldown(int time) {
+	public void setStasis(int time) {
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(curr, time), 4);
 	}
 
-	public void reduceCooldown(int time) {
+	public void reduceStasis(int time) {
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(0, curr - time), 4);
+	}
+
+	@Override
+	public int getCooldown() {
+		return Bit.get(state, 5, 4);
+	}
+
+	@Override
+	public void setCooldown(int time) {
+		int curr = Bit.get(state, 5, 4);
+		state = Bit.set(state, 5, Math.max(curr, time), 4);
+	}
+
+	public void reduceCooldown(int time) {
+		int curr = Bit.get(state, 5, 4);
+		state = Bit.set(state, 5, Math.max(0, curr - time), 4);
 	}
 
 	public CardState getState() {
@@ -580,11 +588,11 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		stats = new CardExtra();
 		slot = null;
 
-		if (isSolid()) {
-			state = 0x3;
-		} else {
-			state = 0x2;
-		}
+		byte base = 0b10;
+		base = (byte) Bit.set(base, 0, isSolid());
+		base = (byte) Bit.set(base, 4, isSPSummon());
+
+		state = base;
 	}
 
 	@Override
@@ -694,6 +702,17 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	public static Senshi getRandom() {
 		String id = DAO.queryNative(String.class, "SELECT card_id FROM senshi ORDER BY RANDOM()");
+		return DAO.find(Senshi.class, id);
+	}
+
+	public static Senshi getRandom(String... filters) {
+		XStringBuilder query = new XStringBuilder("SELECT card_id FROM senshi");
+		for (String f : filters) {
+			query.appendNewLine(f);
+		}
+		query.appendNewLine("ORDER BY RANDOM()");
+
+		String id = DAO.queryNative(String.class, query.toString());
 		return DAO.find(Senshi.class, id);
 	}
 }

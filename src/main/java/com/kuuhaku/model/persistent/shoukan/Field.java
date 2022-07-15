@@ -27,10 +27,7 @@ import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
@@ -68,7 +65,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private boolean effect = false;
 
 	private transient Hand hand = null;
-	private transient byte state = 0x2;
+	private transient byte state = 0b10;
 	/*
 	0x0F
 	   └ 0011
@@ -138,11 +135,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public void reset() {
-		if (isSolid()) {
-			state = 0x3;
-		} else {
-			state = 0x2;
-		}
+		byte base = 0b10;
+		base = (byte) Bit.set(base, 0, isSolid());
+
+		state = base;
 	}
 
 	@Override
@@ -241,6 +237,17 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	public static Field getRandom() {
 		String id = DAO.queryNative(String.class, "SELECT card_id FROM field ORDER BY RANDOM()");
+		return DAO.find(Field.class, id);
+	}
+
+	public static Field getRandom(String... filters) {
+		XStringBuilder query = new XStringBuilder("SELECT card_id FROM field");
+		for (String f : filters) {
+			query.appendNewLine(f);
+		}
+		query.appendNewLine("ORDER BY RANDOM()");
+
+		String id = DAO.queryNative(String.class, query.toString());
 		return DAO.find(Field.class, id);
 	}
 }

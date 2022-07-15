@@ -116,6 +116,14 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	}
 
+	default boolean isSPSummon() {
+		return false;
+	}
+
+	default void setSPSummon(boolean special) {
+
+	}
+
 	void reset();
 
 	BufferedImage render(I18N locale, Deck deck);
