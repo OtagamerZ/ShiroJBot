@@ -229,7 +229,7 @@ public class Card extends DAO<Card> {
 			});
 		} else {
 			try {
-				cardBytes = IO.getBytes(ImageIO.read(new URL("https://api.shirojbot.site/card?anime=" + anime.getId() + "&name=" + id)), "png");
+				cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
 			} catch (IOException e) {
 				cardBytes = new byte[0];
 			}

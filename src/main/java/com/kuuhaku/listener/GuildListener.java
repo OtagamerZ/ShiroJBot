@@ -242,7 +242,8 @@ public class GuildListener extends ListenerAdapter {
 		if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
 			data.channel().sendMessage(locale.get("str/mentioned",
 					data.user().getAsMention(),
-					config.getPrefix()
+					config.getPrefix(),
+					Constants.SERVER_ROOT
 			)).queue();
 		}
 
