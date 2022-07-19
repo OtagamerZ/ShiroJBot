@@ -16,8 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION apply_constraints()
-    RETURNS VOID
+CREATE OR REPLACE PROCEDURE apply_constraints()
     LANGUAGE plpgsql
 AS
 $body$
@@ -53,4 +52,4 @@ BEGIN
 END
 $body$;
 
-SELECT apply_constraints();
+CALL apply_constraints();
