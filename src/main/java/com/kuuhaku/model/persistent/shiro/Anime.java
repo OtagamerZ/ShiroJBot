@@ -19,13 +19,13 @@
 package com.kuuhaku.model.persistent.shiro;
 
 import com.kuuhaku.controller.DAO;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
-import java.util.LinkedHashSet;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "anime")
@@ -37,24 +37,12 @@ public class Anime extends DAO<Anime> {
 	@Column(name = "visible", nullable = false)
 	private boolean visible = true;
 
-	@OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<Card> cards = new LinkedHashSet<>();
-
-	public Set<Card> getCards() {
-		return cards;
-	}
-
-	public void setCards(Set<Card> cards) {
-		this.cards = cards;
+	public List<Card> getCards() {
+		return DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.id = ?1", id);
 	}
 
 	public String getId() {
 		return id;
-	}
-
-	public boolean isVisible() {
-		return visible;
 	}
 
 	@Override
