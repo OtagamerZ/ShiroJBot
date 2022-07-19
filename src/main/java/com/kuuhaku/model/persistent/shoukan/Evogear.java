@@ -147,7 +147,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	public java.util.List<String> getTags() {
 		List<String> out = new ArrayList<>();
 		if (hasEffect()) {
-			out.add("tag/effect");
+			if (isSpell()) {
+				out.add("tag/spell");
+			} else {
+				out.add("tag/effect");
+			}
 		}
 		for (Object tag : base.getTags()) {
 			out.add("tag/" + tag);
