@@ -180,17 +180,17 @@ public abstract class IO {
 
 		try (gzip; buf) {
 			gzip.write(bytes);
+			gzip.finish();
 			return buf.readByteArray();
 		}
 	}
 
 	public static String uncompress(byte[] compressed) throws IOException {
 		Buffer buf = new Buffer().write(compressed);
-		GZIPInputStream gis = new GZIPInputStream(buf.inputStream());
+		GZIPInputStream gzip = new GZIPInputStream(buf.inputStream());
 
-		try (gis; buf) {
-			byte[] bytes = IOUtils.toByteArray(gis);
-			return new String(bytes, StandardCharsets.UTF_8);
+		try (gzip; buf) {
+			return new String(IOUtils.toByteArray(gzip), StandardCharsets.UTF_8);
 		}
 	}
 }
