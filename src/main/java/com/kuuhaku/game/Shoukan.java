@@ -224,7 +224,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen) {
+		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && !chosen.isSpell()) {
 			if (!chosen.isAvailable()) {
 				getChannel().sendMessage(locale.get("error/card_unavailable")).queue();
 				return false;

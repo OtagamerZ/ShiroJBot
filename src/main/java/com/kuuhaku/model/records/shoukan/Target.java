@@ -33,14 +33,14 @@ public record Target(Senshi card, Side side, int index, Trigger trigger) {
 	}
 
 	public Target(Senshi card, Side side, int index, Trigger trigger) {
-		if (card != null && (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {
+		if (card == null || (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {
 			this.card = null;
 			this.side = null;
 			this.index = -1;
 			this.trigger = null;
 		} else {
 			this.card = card;
-			this.side = card.getHand().getSide();
+			this.side = side;
 			this.index = index;
 			this.trigger = trigger;
 		}
