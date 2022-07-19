@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
@@ -35,12 +36,14 @@ public record EffectOverTime(
 		BiConsumer<EffectOverTime, EffectParameters> effect,
 		AtomicInteger turns,
 		AtomicInteger limit,
+		AtomicBoolean lock,
 		EnumSet<Trigger> triggers
 ) implements Comparable<EffectOverTime> {
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
 		this(source, debuff, side, effect,
 				turns < 0 ? null : new AtomicInteger(turns),
 				limit < 0 ? null : new AtomicInteger(limit),
+				new AtomicBoolean(),
 				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
 		);
 	}

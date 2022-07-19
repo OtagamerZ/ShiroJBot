@@ -957,6 +957,8 @@ public class Shoukan extends GameInstance<Phase> {
 				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
 			}
 		}
+
+		triggerEOTs(new EffectParameters(trigger));
 	}
 
 	public void trigger(Trigger trigger, Source source) {
@@ -964,6 +966,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		EffectParameters ep = new EffectParameters(trigger, source);
 		source.execute(ep);
+
+		triggerEOTs(new EffectParameters(trigger, source));
 	}
 
 	public void trigger(Trigger trigger, Source source, Target target) {
@@ -972,32 +976,45 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, source, target);
 		source.execute(ep);
 		target.execute(ep);
+
+		triggerEOTs(new EffectParameters(trigger, source, target));
 	}
 
 	public Set<EffectOverTime> getEOTs() {
 		return eots;
 	}
 
-	public void triggerEOT(EffectParameters ep) {
+	public void triggerEOTs(EffectParameters ep) {
 		Iterator<EffectOverTime> it = eots.iterator();
 		while (it.hasNext()) {
-			EffectOverTime eot = it.next();
-			if (eot.expired()) {
+			EffectOverTime effect = it.next();
+			if (effect.lock().get()) continue;
+			else if (effect.expired()) {
 				it.remove();
 				continue;
 			}
 
-			boolean noSide = eot.side() == null;
+			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
+			if (ep.size() == 0) {
+				if (checkSide.test(getCurrentSide()) && effect.triggers().contains(ep.trigger())) {
+					effect.effect().accept(effect, new EffectParameters(ep.trigger()));
+					effect.decrease();
 
-			if ((noSide || eot.side() == ep.source().side()) && eot.triggers().contains(ep.source().trigger())) {
-				eot.effect().accept(eot, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
-				eot.decrease();
-			}
+					if (effect.side() == null) {
+						effect.lock().set(true);
+					}
+				}
+			} else {
+				if (ep.source() != null && checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
+					effect.decrease();
+				}
 
-			for (Target t : ep.targets()) {
-				if ((noSide || eot.side() == t.side()) && eot.triggers().contains(t.trigger())) {
-					eot.effect().accept(eot, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
-					eot.decrease();
+				for (Target t : ep.targets()) {
+					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
+						effect.decrease();
+					}
 				}
 			}
 		}
@@ -1252,6 +1269,10 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void resetTimer() {
 		super.resetTimer();
 		getCurrent().setForfeit(false);
+
+		for (EffectOverTime eot : eots) {
+			eot.lock().set(false);
+		}
 	}
 
 	@Override
