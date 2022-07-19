@@ -138,7 +138,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			PlayerAction pa = meth.getAnnotation(PlayerAction.class);
 			if (pa != null) {
 				PhaseConstraint pc = meth.getAnnotation(PhaseConstraint.class);
-				if (pc != null && (phase == null || !Utils.equalsAny(pc.value(), phase.name()))) {
+				if (pc != null && (phase == null || !Utils.equalsAny(phase.name(), pc.value()))) {
 					continue;
 				}
 
