@@ -65,7 +65,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private boolean effect = false;
 
 	private transient Hand hand = null;
-	private transient byte state = 0b10;
+
+	@Transient
+	private byte state = 0b10;
 	/*
 	0x0F
 	   └ 0011

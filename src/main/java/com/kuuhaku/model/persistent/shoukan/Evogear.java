@@ -87,7 +87,9 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
-	private transient byte state = 0b10;
+
+	@Transient
+	private byte state = 0b10;
 	/*
 	0x0F
 	   └ 1111

@@ -21,33 +21,32 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AttrMod {
 	private final Drawable<?> source;
 	private final double value;
-	private final AtomicInteger expiration;
+	private int expiration;
 
 	private final int hash;
 
 	protected AttrMod(double value) {
 		this.source = null;
 		this.value = value;
-		this.expiration = null;
+		this.expiration = -1;
 		this.hash = -1;
 	}
 
 	public AttrMod(Drawable<?> source, double value) {
 		this.source = source;
 		this.value = value;
-		this.expiration = null;
+		this.expiration = -1;
 		this.hash = source.getSlot().validationHash();
 	}
 
 	public AttrMod(Drawable<?> source, double value, int expiration) {
 		this.source = source;
 		this.value = value;
-		this.expiration = new AtomicInteger(expiration);
+		this.expiration = expiration;
 		this.hash = source.getSlot().validationHash();
 	}
 
@@ -59,8 +58,12 @@ public class AttrMod {
 		return value;
 	}
 
-	public AtomicInteger getExpiration() {
+	public int getExpiration() {
 		return expiration;
+	}
+
+	public void decExpiration() {
+		this.expiration--;
 	}
 
 	public boolean isExpired() {
@@ -70,7 +73,7 @@ public class AttrMod {
 			}
 		}
 
-		return expiration != null && expiration.get() <= 0;
+		return expiration == 0;
 	}
 
 	@Override

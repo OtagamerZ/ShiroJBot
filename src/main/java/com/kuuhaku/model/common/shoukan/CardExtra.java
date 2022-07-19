@@ -337,8 +337,8 @@ public class CardExtra {
 
 	public void expireMods() {
 		Predicate<AttrMod> check = mod -> {
-			if (mod.getExpiration() != null) {
-				mod.getExpiration().getAndDecrement();
+			if (mod.getExpiration() > 0) {
+				mod.decExpiration();
 			}
 
 			return mod.isExpired();

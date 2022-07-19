@@ -70,17 +70,15 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	private CardAttributes base;
 
 	@Transient
-	private BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
+	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
 		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
 	});
-	@Transient
-	private CardExtra stats = new CardExtra();
-	@Transient
-	private SlotColumn slot = null;
-	@Transient
-	private Hand hand = null;
+	private transient CardExtra stats = new CardExtra();
+	private transient SlotColumn slot = null;
+	private transient Hand hand = null;
+
 	@Transient
 	private int state = 0b10;
 	/*
