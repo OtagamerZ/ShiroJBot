@@ -100,7 +100,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return ((Predicate<Message>) m -> Utils.equalsAny(players, m.getAuthor().getId()))
+		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), players))
 				.and(m -> singleplayer || getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId()))
 				.test(message);
 	}
