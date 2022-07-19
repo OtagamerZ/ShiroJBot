@@ -181,6 +181,7 @@ public abstract class IO {
 		try (gzip; buf) {
 			gzip.write(bytes);
 			gzip.finish();
+
 			return buf.readByteArray();
 		}
 	}
