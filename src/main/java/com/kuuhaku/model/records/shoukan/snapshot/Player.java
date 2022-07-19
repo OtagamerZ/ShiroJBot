@@ -30,12 +30,15 @@ public record Player(byte[] cards, byte[] deck, byte[] graveyard) {
 		this(
 				h.getCards().stream()
 						.map(JSONUtils::toJSON)
+						.peek(System.out::println)
 						.collect(Collectors.joining(",", "[", "]")),
 				h.getCards().stream()
 						.map(JSONUtils::toJSON)
+						.peek(System.out::println)
 						.collect(Collectors.joining(",", "[", "]")),
 				h.getCards().stream()
 						.map(JSONUtils::toJSON)
+						.peek(System.out::println)
 						.collect(Collectors.joining(",", "[", "]"))
 		);
 	}
