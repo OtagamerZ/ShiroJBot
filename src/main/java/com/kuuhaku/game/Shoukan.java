@@ -44,6 +44,8 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
+import com.kuuhaku.model.records.shoukan.snapshot.Player;
+import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -76,6 +78,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
+	private boolean restoring = false;
 
 	public Shoukan(I18N locale, User p1, User p2) {
 		this(locale, p1.getId(), p2.getId());
@@ -866,25 +869,72 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	/*public void restoreSnapshot(StateSnap snap) {
+	@SuppressWarnings("unchecked")
+	public void restoreSnapshot(StateSnap snap) {
+		restoring = true;
+
 		try {
 			arena.getBanned().clear();
-
 			JSONArray banned = new JSONArray(IO.uncompress(snap.global().banned()));
 			for (Object o : banned) {
-				arena.getBanned().add(JSONUtils.fromJSON(o, ))
+				JSONObject jo = new JSONObject(o);
+				Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
+
+				arena.getBanned().add(JSONUtils.fromJSON(String.valueOf(o), klass));
 			}
 
-		} catch (IOException e) {
+			arena.setField(JSONUtils.fromJSON(IO.uncompress(snap.global().field()), Field.class));
+
+			for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
+				Hand h = entry.getValue();
+				Player p = snap.players().get(entry.getKey());
+
+				h.getCards().clear();
+				JSONArray cards = new JSONArray(IO.uncompress(p.cards()));
+				for (Object o : cards) {
+					JSONObject jo = new JSONObject(o);
+					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
+
+					h.getCards().add(JSONUtils.fromJSON(String.valueOf(o), klass));
+				}
+
+				h.getRealDeck().clear();
+				JSONArray deck = new JSONArray(IO.uncompress(p.cards()));
+				for (Object o : deck) {
+					JSONObject jo = new JSONObject(o);
+					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
+
+					h.getRealDeck().add(JSONUtils.fromJSON(String.valueOf(o), klass));
+				}
+			}
+
+			for (Map.Entry<Side, List<SlotColumn>> entry : getArena().getSlots().entrySet()) {
+				List<SlotColumn> slts = entry.getValue();
+				List<Slot> slots = snap.slots().get(entry.getKey());
+
+				for (int i = 0; i < slts.size(); i++) {
+					SlotColumn slt = slts.get(i);
+					Slot slot = slots.get(i);
+
+					slt.setState(slot.state());
+					slt.setTop(JSONUtils.fromJSON(IO.uncompress(slot.top()), Senshi.class));
+					slt.setBottom(JSONUtils.fromJSON(IO.uncompress(slot.bottom()), Senshi.class));
+				}
+			}
+		} catch (IOException | ClassNotFoundException e) {
 			Constants.LOGGER.warn("Failed to restore snapshot", e);
+		} finally {
+			restoring = false;
 		}
-	}*/
+	}
 
 	public List<SlotColumn> getSlots(Side s) {
 		return arena.getSlots(s);
 	}
 
 	public void trigger(Trigger trigger) {
+		if (restoring) return;
+
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 
 		for (Side side : sides) {
@@ -893,6 +943,8 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void trigger(Trigger trigger, Side side) {
+		if (restoring) return;
+
 		List<SlotColumn> slts = getSlots(side);
 		for (SlotColumn slt : slts) {
 			Senshi s = slt.getTop();
@@ -908,11 +960,15 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void trigger(Trigger trigger, Source source) {
+		if (restoring) return;
+
 		EffectParameters ep = new EffectParameters(trigger, source);
 		source.execute(ep);
 	}
 
 	public void trigger(Trigger trigger, Source source, Target target) {
+		if (restoring) return;
+
 		EffectParameters ep = new EffectParameters(trigger, source, target);
 		source.execute(ep);
 		target.execute(ep);
@@ -1099,7 +1155,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {
 		List<SlotColumn> slts = new ArrayList<>(getSlots(side));
-		slts.removeIf(sc -> top ? sc.hasTop() : sc.hasBottom());
+		slts.removeIf(sc -> sc.isLocked() || (top ? sc.hasTop() : sc.hasBottom()));
 
 		return slts;
 	}
