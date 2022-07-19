@@ -20,15 +20,16 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
-public record Source(Drawable<?> card, int index, Trigger trigger) {
+public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	public Source() {
-		this(null, -1, null);
+		this(null, null, -1, null);
 	}
 
 	public Source(Drawable<?> card, Trigger trigger) {
-		this(card, card.getSlot().getIndex(), trigger);
+		this(card, card.getHand().getSide(), card.getSlot().getIndex(), trigger);
 	}
 
 	public void execute(EffectParameters ep) {

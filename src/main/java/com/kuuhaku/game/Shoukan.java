@@ -982,14 +982,23 @@ public class Shoukan extends GameInstance<Phase> {
 		Iterator<EffectOverTime> it = eots.iterator();
 		while (it.hasNext()) {
 			EffectOverTime eot = it.next();
-			if (Utils.equalsAny(ep.trigger(), eot.triggers())) {
-				if (eot.expired()) {
-					it.remove();
-					continue;
-				}
+			if (eot.expired()) {
+				it.remove();
+				continue;
+			}
 
-				eot.effect().accept(ep);
+			boolean noSide = eot.side() == null;
+
+			if ((noSide || eot.side() == ep.source().side()) && eot.triggers().contains(ep.source().trigger())) {
+				eot.effect().accept(new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
 				eot.decrease();
+			}
+
+			for (Target t : ep.targets()) {
+				if ((noSide || eot.side() == t.side()) && eot.triggers().contains(t.trigger())) {
+					eot.effect().accept(new EffectParameters(t.trigger(), ep.source(), ep.targets()));
+					eot.decrease();
+				}
 			}
 		}
 	}

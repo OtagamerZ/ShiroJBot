@@ -19,25 +19,28 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-public record Target(Senshi card, int index, Trigger trigger) {
+public record Target(Senshi card, Side side, int index, Trigger trigger) {
 	public Target() {
-		this(null, -1, null);
+		this(null, null, -1, null);
 	}
 
 	public Target(Senshi card, Trigger trigger) {
-		this(card, card.getSlot().getIndex(), trigger);
+		this(card, card.getHand().getSide(), card.getSlot().getIndex(), trigger);
 	}
 
-	public Target(Senshi card, int index, Trigger trigger) {
+	public Target(Senshi card, Side side, int index, Trigger trigger) {
 		if (card != null && (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {
 			this.card = null;
+			this.side = null;
 			this.index = -1;
 			this.trigger = null;
 		} else {
 			this.card = card;
+			this.side = card.getHand().getSide();
 			this.index = index;
 			this.trigger = trigger;
 		}
