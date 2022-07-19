@@ -859,12 +859,14 @@ public class Shoukan extends GameInstance<Phase> {
 		return snapshot;
 	}
 
-	public void takeSnapshot() {
+	public StateSnap takeSnapshot() {
 		try {
 			snapshot = new StateSnap(this);
 		} catch (IOException e) {
 			Constants.LOGGER.warn("Failed to take snapshot", e);
 		}
+
+		return snapshot;
 	}
 
 	@SuppressWarnings("unchecked")
