@@ -26,25 +26,33 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
-public record EffectOverTime(Drawable<?> source, boolean debuff, Side side, Consumer<EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, EnumSet<Trigger> triggers) implements Comparable<EffectOverTime> {
-	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, Consumer<EffectParameters> effect, int turns, int limit, Trigger... triggers) {
+public record EffectOverTime(
+		Drawable<?> source,
+		boolean debuff,
+		Side side,
+		BiConsumer<EffectOverTime, EffectParameters> effect,
+		AtomicInteger turns,
+		AtomicInteger limit,
+		EnumSet<Trigger> triggers
+) implements Comparable<EffectOverTime> {
+	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
 		this(source, debuff, side, effect,
-				turns == -1 ? null : new AtomicInteger(turns),
-				limit == -1 ? null : new AtomicInteger(limit),
+				turns < 0 ? null : new AtomicInteger(turns),
+				limit < 0 ? null : new AtomicInteger(limit),
 				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
 		);
 	}
 
 	public void decrease() {
-		if (turns != null) turns.getAndDecrement();
-		if (limit != null) limit.getAndDecrement();
+		if (turns != null && turns.get() > 0) turns.getAndDecrement();
+		if (limit != null && limit.get() > 0) limit.getAndDecrement();
 	}
 
 	public boolean expired() {
-		if (turns != null) return turns.get() <= 0;
-		if (limit != null) return limit.get() <= 0;
+		if (turns != null) return turns.get() == 0;
+		if (limit != null) return limit.get() == 0;
 
 		return false;
 	}

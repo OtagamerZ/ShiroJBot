@@ -990,13 +990,13 @@ public class Shoukan extends GameInstance<Phase> {
 			boolean noSide = eot.side() == null;
 
 			if ((noSide || eot.side() == ep.source().side()) && eot.triggers().contains(ep.source().trigger())) {
-				eot.effect().accept(new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
+				eot.effect().accept(eot, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
 				eot.decrease();
 			}
 
 			for (Target t : ep.targets()) {
 				if ((noSide || eot.side() == t.side()) && eot.triggers().contains(t.trigger())) {
-					eot.effect().accept(new EffectParameters(t.trigger(), ep.source(), ep.targets()));
+					eot.effect().accept(eot, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
 					eot.decrease();
 				}
 			}
