@@ -23,16 +23,17 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public record EffectOverTime(Drawable<?> source, boolean debuff, Side side, Consumer<EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, Trigger... triggers) implements Comparable<EffectOverTime> {
+public record EffectOverTime(Drawable<?> source, boolean debuff, Side side, Consumer<EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, EnumSet<Trigger> triggers) implements Comparable<EffectOverTime> {
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, Consumer<EffectParameters> effect, int turns, int limit, Trigger... triggers) {
 		this(source, debuff, side, effect,
 				turns == -1 ? null : new AtomicInteger(turns),
 				limit == -1 ? null : new AtomicInteger(limit),
-				triggers
+				EnumSet.of(turns > -1 ? Trigger.ON_TURN_END : Trigger.NONE, triggers)
 		);
 	}
 

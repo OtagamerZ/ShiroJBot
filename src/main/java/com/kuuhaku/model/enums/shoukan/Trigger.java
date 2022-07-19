@@ -79,5 +79,8 @@ public enum Trigger {
 	SPELL_TARGET,
 
 	// Trigger passed from another card
-	DEFER
+	DEFER,
+
+	// Used for nothing
+	NONE
 }
