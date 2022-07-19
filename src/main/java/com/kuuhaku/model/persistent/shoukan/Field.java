@@ -43,6 +43,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
+	@Transient
+	public final String KLASS = getClass().getName();
+
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;

@@ -57,6 +57,9 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
 @Entity
 @Table(name = "evogear")
 public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHolder {
+	@Transient
+	public final String KLASS = getClass().getName();
+
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;

@@ -40,14 +40,14 @@ public class AttrMod {
 		this.source = source;
 		this.value = value;
 		this.expiration = -1;
-		this.hash = source.getSlot().validationHash();
+		this.hash = source.getSlot().hashCode();
 	}
 
 	public AttrMod(Drawable<?> source, double value, int expiration) {
 		this.source = source;
 		this.value = value;
 		this.expiration = expiration;
-		this.hash = source.getSlot().validationHash();
+		this.hash = source.getSlot().hashCode();
 	}
 
 	public Drawable<?> getSource() {
@@ -68,7 +68,7 @@ public class AttrMod {
 
 	public boolean isExpired() {
 		if (hash != -1) {
-			if (source.getSlot() == null || source.getSlot().validationHash() != hash) {
+			if (source.getSlot() == null || source.getSlot().hashCode() != hash) {
 				return true;
 			}
 		}

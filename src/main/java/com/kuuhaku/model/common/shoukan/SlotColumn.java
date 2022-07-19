@@ -59,7 +59,7 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (top != null && !equals(top.getSlot())) {
-			game.trigger(Trigger.ON_REMOVE, this.top.asSource(Trigger.ON_REMOVE));
+			game.trigger(Trigger.ON_REMOVE, top.asSource(Trigger.ON_REMOVE));
 			top = null;
 		}
 
@@ -94,7 +94,7 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (bottom != null && !equals(bottom.getSlot())) {
-			game.trigger(Trigger.ON_REMOVE, this.bottom.asSource(Trigger.ON_REMOVE));
+			game.trigger(Trigger.ON_REMOVE, bottom.asSource(Trigger.ON_REMOVE));
 			bottom = null;
 		}
 
@@ -163,20 +163,24 @@ public class SlotColumn {
 		return null;
 	}
 
+	public byte getState() {
+		return state;
+	}
+
+	public void setState(byte state) {
+		this.state = state;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		SlotColumn that = (SlotColumn) o;
-		return side == that.side && index == that.index && state == that.state;
+		return side == that.side && index == that.index;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(side, index, state);
-	}
-
-	public int validationHash() {
 		return Objects.hash(side, index);
 	}
 }

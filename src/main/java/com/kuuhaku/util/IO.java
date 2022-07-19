@@ -30,15 +30,15 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public abstract class IO {
 	public static InputStream getResourceAsStream(String path) {
@@ -135,8 +135,7 @@ public abstract class IO {
 	}
 
 	public static BufferedImage imageFromBytes(byte[] bytes) {
-		try (Buffer buf = new Buffer()) {
-			buf.write(bytes);
+		try (Buffer buf = new Buffer().write(bytes)) {
 			return ImageIO.read(buf.inputStream());
 		} catch (IOException e) {
 			return null;
@@ -152,8 +151,7 @@ public abstract class IO {
 	}
 
 	public static BufferedImage btoa(String b64) {
-		try (Buffer buf = new Buffer()) {
-			buf.write(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)));
+		try (Buffer buf = new Buffer().write(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)))) {
 			return ImageIO.read(buf.inputStream());
 		} catch (IOException | NullPointerException e) {
 			return null;
@@ -169,6 +167,30 @@ public abstract class IO {
 			return Files.readString(path);
 		} catch (IOException e) {
 			return null;
+		}
+	}
+
+	public static byte[] compress(String data) throws IOException {
+		return compress(data.getBytes(StandardCharsets.UTF_8));
+	}
+
+	public static byte[] compress(byte[] bytes) throws IOException {
+		Buffer buf = new Buffer();
+		GZIPOutputStream gzip = new GZIPOutputStream(buf.outputStream());
+
+		try (gzip; buf) {
+			gzip.write(bytes);
+			return buf.readByteArray();
+		}
+	}
+
+	public static String uncompress(byte[] compressed) throws IOException {
+		Buffer buf = new Buffer().write(compressed);
+		GZIPInputStream gis = new GZIPInputStream(buf.inputStream());
+
+		try (gis; buf) {
+			byte[] bytes = IOUtils.toByteArray(gis);
+			return new String(bytes, StandardCharsets.UTF_8);
 		}
 	}
 }

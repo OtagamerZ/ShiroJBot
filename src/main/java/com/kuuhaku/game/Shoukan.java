@@ -44,15 +44,18 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
+import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -72,6 +75,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<String, Pair<String, String>> messages = new HashMap<>();
 
 	private final boolean singleplayer;
+	private StateSnap snapshot = null;
 
 	public Shoukan(I18N locale, User p1, User p2) {
 		this(locale, p1.getId(), p2.getId());
@@ -113,6 +117,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
 		sendPlayerHand(curr);
+
+		takeSnapshot();
 	}
 
 	@Override
@@ -848,6 +854,32 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena;
 	}
 
+	public StateSnap getSnapshot() {
+		return snapshot;
+	}
+
+	public void takeSnapshot() {
+		try {
+			snapshot = new StateSnap(this);
+		} catch (IOException e) {
+			Constants.LOGGER.warn("Failed to take snapshot", e);
+		}
+	}
+
+	/*public void restoreSnapshot(StateSnap snap) {
+		try {
+			arena.getBanned().clear();
+
+			JSONArray banned = new JSONArray(IO.uncompress(snap.global().banned()));
+			for (Object o : banned) {
+				arena.getBanned().add(JSONUtils.fromJSON(o, ))
+			}
+
+		} catch (IOException e) {
+			Constants.LOGGER.warn("Failed to restore snapshot", e);
+		}
+	}*/
+
 	public List<SlotColumn> getSlots(Side s) {
 		return arena.getSlots(s);
 	}
@@ -1127,6 +1159,8 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
 		sendPlayerHand(curr);
+
+		takeSnapshot();
 	}
 
 	@Override

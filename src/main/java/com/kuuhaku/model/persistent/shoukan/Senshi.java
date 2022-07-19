@@ -50,6 +50,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "senshi")
 public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolder {
+	@Transient
+	public final String KLASS = getClass().getName();
 	public transient long SERIAL = Constants.DEFAULT_RNG.nextLong();
 
 	@Id
