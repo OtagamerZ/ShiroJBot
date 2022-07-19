@@ -121,6 +121,7 @@ public class Arena implements Renderer {
 	}
 
 	public void setField(Field field) {
+		if (Objects.equals(this.field, field)) return;
 		this.field = field;
 
 		for (Hand h : game.getHands().values()) {
@@ -128,6 +129,8 @@ public class Arena implements Renderer {
 				h.draw();
 			}
 		}
+
+		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
 	@Override

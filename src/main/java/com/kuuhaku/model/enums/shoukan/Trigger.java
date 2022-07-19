@@ -55,6 +55,7 @@ public enum Trigger {
 	ON_BAN,
 	ON_HAND,
 	ON_DECK,
+	ON_FIELD_CHANGE,
 
 	// Triggers when the card is removed from the field
 	ON_REMOVE,

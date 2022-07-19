@@ -40,10 +40,7 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.model.records.shoukan.Source;
-import com.kuuhaku.model.records.shoukan.Target;
-import com.kuuhaku.model.records.shoukan.Targeting;
+import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
@@ -75,6 +72,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Arena arena;
 	private final Map<String, Pair<String, String>> messages = new HashMap<>();
+	private final Set<EffectOverTime> eots = new TreeSet<>();
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
@@ -102,7 +100,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return ((Predicate<Message>) m -> ArrayUtils.contains(players, m.getAuthor().getId()))
+		return ((Predicate<Message>) m -> Utils.equalsAny(players, m.getAuthor().getId()))
 				.and(m -> singleplayer || getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId()))
 				.test(message);
 	}
@@ -972,6 +970,22 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, source, target);
 		source.execute(ep);
 		target.execute(ep);
+	}
+
+	public void triggerEOT(EffectParameters ep) {
+		Iterator<EffectOverTime> it = eots.iterator();
+		while (it.hasNext()) {
+			EffectOverTime eot = it.next();
+			if (Utils.equalsAny(ep.trigger(), eot.triggers())) {
+				if (eot.expired()) {
+					it.remove();
+					continue;
+				}
+
+				eot.effect().accept(ep);
+				eot.decrease();
+			}
+		}
 	}
 
 	private void sendPlayerHand(Hand hand) {
