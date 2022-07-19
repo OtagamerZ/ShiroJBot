@@ -33,7 +33,7 @@ public record EffectOverTime(Drawable<?> source, boolean debuff, Side side, Cons
 		this(source, debuff, side, effect,
 				turns == -1 ? null : new AtomicInteger(turns),
 				limit == -1 ? null : new AtomicInteger(limit),
-				EnumSet.of(turns > -1 ? Trigger.ON_TURN_END : Trigger.NONE, triggers)
+				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
 		);
 	}
 
