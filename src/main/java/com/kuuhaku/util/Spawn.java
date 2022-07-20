@@ -54,14 +54,8 @@ public abstract class Spawn {
 		// TODO Remove
 		int DEBUG_MULT = 10;
 
-		double fac = 0.5 - Math.abs(getIllumination().getSecond().getPhase()) / 360;
-		/*
-		NEW MOON = +50% quantity
-		FULL MOON = +50% rarity
-		 */
-
-		double dropRate = 5 * DEBUG_MULT * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
-		double rarityBonus = 1 + fac;
+		double dropRate = 5 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
+		double rarityBonus = 1 + getRarityMult();
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
@@ -95,5 +89,19 @@ public abstract class Spawn {
 		}
 
 		return illum;
+	}
+
+	/*
+	NEW MOON = +50% quantity
+	 */
+	public static double getQuantityMult() {
+		return 0.5 - Math.abs(getIllumination().getSecond().getPhase()) / 360;
+	}
+
+	/*
+	FULL MOON = +50% rarity
+	 */
+	public static double getRarityMult() {
+		return Math.abs(getIllumination().getSecond().getPhase()) / 360;
 	}
 }

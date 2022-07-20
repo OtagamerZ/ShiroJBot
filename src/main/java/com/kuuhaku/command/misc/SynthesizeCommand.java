@@ -170,7 +170,7 @@ public class SynthesizeCommand implements Executable {
 
 	public static Evogear rollSynthesis(List<StashedCard> cards) {
 		double inc = 1;
-		double more = 1 + (0.5 - Math.abs(Spawn.getIllumination().getSecond().getPhase()) / 360);
+		double more = 1 + Spawn.getRarityMult();
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {
