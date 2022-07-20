@@ -37,6 +37,7 @@ import com.kuuhaku.util.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
@@ -249,7 +250,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default String getString(I18N locale, String key, Object... params) {
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key, locale));
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key.toLowerCase(Locale.ROOT), locale));
 		if (str != null) {
 			return str.getValue().formatted(params);
 		} else {
