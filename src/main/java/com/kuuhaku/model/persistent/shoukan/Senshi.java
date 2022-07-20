@@ -129,7 +129,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		out.add("race/" + race.name());
 		if (hasEffect()) {
 			if (base.getTags().contains("MATERIAL")) {
-				out.add("tag/catalyst");
+				out.add("tag/base");
 			} else {
 				out.add("tag/effect");
 			}
