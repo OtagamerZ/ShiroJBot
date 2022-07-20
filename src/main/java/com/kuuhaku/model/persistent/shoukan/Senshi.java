@@ -135,6 +135,8 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			}
 		}
 		for (Object tag : base.getTags()) {
+			if (out.contains("tag/base") && tag.equals("MATERIAL")) continue;
+
 			out.add("tag/" + tag);
 		}
 
