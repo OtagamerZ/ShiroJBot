@@ -23,6 +23,7 @@ import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.apache.commons.math3.util.Precision;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -332,5 +333,11 @@ public abstract class Calc {
 		}
 
 		return val * a * m;
+	}
+
+	public static double luminance(Color color) {
+		int[] rgb = Graph.unpackRGB(color.getRGB());
+
+		return (0.299 * rgb[1] + 0.587 * rgb[2] + 0.114 * rgb[3]) / 255 * (rgb[0] / 255d);
 	}
 }
