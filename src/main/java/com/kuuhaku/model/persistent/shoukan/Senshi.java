@@ -126,7 +126,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	public List<String> getTags() {
 		List<String> out = new ArrayList<>();
-		out.add("race/" + race.name());
+		if (race != Race.NONE) {
+			out.add("race/" + race.name());
+		}
 		if (hasEffect()) {
 			if (base.getTags().contains("MATERIAL")) {
 				out.add("tag/base");
