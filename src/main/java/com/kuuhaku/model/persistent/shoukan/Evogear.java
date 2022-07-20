@@ -303,7 +303,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		try {
 			Utils.exec(effect, Map.of(
 					"ep", ep,
-					"self", this,
+					"self", spell ? this : equipper,
 					"trigger", ep.trigger(),
 					"game", hand.getGame(),
 					"side", hand.getSide()
