@@ -51,16 +51,10 @@ public abstract class Spawn {
 		GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
 		if (config.getSettings().getKawaiponChannels().isEmpty()) return null;
 
-		LocalDate now = LocalDate.now();
-		if (illum == null || illum.getFirst() != now.getDayOfYear()) {
-			MoonIllumination mi = MoonIllumination.compute().midnight().execute();
-			illum = new Pair<>(now.getDayOfYear(), mi);
-		}
-
 		// TODO Remove
 		int DEBUG_MULT = 10;
 
-		double fac = 0.5 - Math.abs(illum.getSecond().getPhase()) / 360;
+		double fac = 0.5 - Math.abs(getIllumination().getSecond().getPhase()) / 360;
 		double dropRate = 5 * DEBUG_MULT * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
 		double rarityBonus = 1 + fac;
 
@@ -86,5 +80,15 @@ public abstract class Spawn {
 
 	public static SingleUseReference<KawaiponCard> getSpawnedCard(Guild guild) {
 		return spawnedCards.getOrDefault(guild.getId(), new SingleUseReference<>(null));
+	}
+
+	public static Pair<Integer, MoonIllumination> getIllumination() {
+		LocalDate now = LocalDate.now();
+		if (illum == null || illum.getFirst() != now.getDayOfYear()) {
+			MoonIllumination mi = MoonIllumination.compute().midnight().execute();
+			illum = new Pair<>(now.getDayOfYear(), mi);
+		}
+
+		return illum;
 	}
 }

@@ -37,6 +37,7 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
@@ -169,7 +170,7 @@ public class SynthesizeCommand implements Executable {
 
 	public static Evogear rollSynthesis(List<StashedCard> cards) {
 		double inc = 1;
-		double more = 1;
+		double more = 1 - Math.abs(Spawn.getIllumination().getSecond().getPhase()) / 360;
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {
