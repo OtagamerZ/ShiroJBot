@@ -635,7 +635,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 								return getString(locale, s);
 							})
-							.map(String::toUpperCase).toList().toString()
+							.map(String::toUpperCase)
+							.toList()
+							.toString()
 					, 7, 275
 			);
 
