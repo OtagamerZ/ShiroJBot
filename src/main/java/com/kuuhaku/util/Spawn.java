@@ -55,6 +55,11 @@ public abstract class Spawn {
 		int DEBUG_MULT = 10;
 
 		double fac = 0.5 - Math.abs(getIllumination().getSecond().getPhase()) / 360;
+		/*
+		NEW MOON = +50% quantity
+		FULL MOON = +50% rarity
+		 */
+
 		double dropRate = 5 * DEBUG_MULT * (1 - fac) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
 		double rarityBonus = 1 + fac;
 
