@@ -501,7 +501,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public boolean hasEffect() {
-		return !getEffect().isEmpty();
+		return getEffect().contains(Trigger.class.getName());
 	}
 
 	@Override
