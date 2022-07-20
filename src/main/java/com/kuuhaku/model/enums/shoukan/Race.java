@@ -58,7 +58,7 @@ public enum Race {
 	POSSESSED(MACHINE.flag | DEMON.flag),
 	HERALD(DIVINITY.flag | SPIRIT.flag),
 	SHINIGAMI(DIVINITY.flag | UNDEAD.flag),
-	PRIMORDIAL(DIVINITY.flag | MYSTICAL.flag),
+	ANGEL(DIVINITY.flag | MYSTICAL.flag),
 	FALLEN(DIVINITY.flag | DEMON.flag),
 	GHOST(SPIRIT.flag | UNDEAD.flag),
 	PIXIE(SPIRIT.flag | MYSTICAL.flag),

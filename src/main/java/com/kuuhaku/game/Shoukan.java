@@ -1223,7 +1223,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getCards().removeIf(d -> !d.isAvailable());
 		curr.flushDiscard();
 
-		if (curr.getOrigin().synergy() == Race.PRIMORDIAL) {
+		if (curr.getOrigin().synergy() == Race.ANGEL) {
 			curr.modHP(curr.getMP() * 10);
 		}
 
