@@ -44,8 +44,8 @@ public abstract class JSONUtils {
 		try {
 			return moshi.adapter(klass).nullSafe().fromJson(json);
 		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-			Constants.LOGGER.error(json);
+			Constants.LOGGER.debug(e, e);
+			Constants.LOGGER.debug(json);
 			return null;
 		}
 	}

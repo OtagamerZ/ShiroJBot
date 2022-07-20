@@ -895,7 +895,9 @@ public class Shoukan extends GameInstance<Phase> {
 					JSONObject jo = new JSONObject(o);
 					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
 
-					h.getCards().add(JSONUtils.fromJSON(String.valueOf(o), klass));
+					String obj = String.valueOf(o);
+					System.out.println(obj);
+					h.getCards().add(JSONUtils.fromJSON(obj, klass));
 				}
 
 				h.getRealDeck().clear();
