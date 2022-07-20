@@ -98,7 +98,7 @@ public class SynthesizeCommand implements Executable {
 							select.complete(null);
 						})
 						.exceptionally(t -> {
-							if (!(t instanceof NoResultException)) {
+							if (!(t.getCause() instanceof NoResultException)) {
 								Constants.LOGGER.error(t, t);
 							}
 

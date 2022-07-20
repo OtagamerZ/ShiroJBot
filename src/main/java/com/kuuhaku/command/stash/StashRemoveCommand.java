@@ -95,7 +95,7 @@ public class StashRemoveCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
 				})
 				.exceptionally(t -> {
-					if (!(t instanceof NoResultException)) {
+					if (!(t.getCause() instanceof NoResultException)) {
 						Constants.LOGGER.error(t, t);
 					}
 

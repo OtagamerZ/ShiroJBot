@@ -130,7 +130,7 @@ public class DeckRemoveCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/deck_remove")).queue();
 				})
 				.exceptionally(t -> {
-					if (!(t instanceof NoResultException)) {
+					if (!(t.getCause() instanceof NoResultException)) {
 						Constants.LOGGER.error(t, t);
 					}
 

@@ -101,7 +101,7 @@ public class TradeAddCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), sc)).queue();
 					})
 					.exceptionally(t -> {
-						if (!(t instanceof NoResultException)) {
+						if (!(t.getCause() instanceof NoResultException)) {
 							Constants.LOGGER.error(t, t);
 						}
 

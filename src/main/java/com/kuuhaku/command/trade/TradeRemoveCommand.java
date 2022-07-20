@@ -102,7 +102,7 @@ public class TradeRemoveCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), sc)).queue();
 					})
 					.exceptionally(t -> {
-						if (!(t instanceof NoResultException)) {
+						if (!(t.getCause() instanceof NoResultException)) {
 							Constants.LOGGER.error(t, t);
 						}
 
