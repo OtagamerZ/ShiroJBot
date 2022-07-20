@@ -28,15 +28,18 @@ import java.util.stream.Collectors;
 public record Player(byte[] cards, byte[] deck, byte[] graveyard) {
 	public Player(Hand h) throws IOException {
 		this(
-				h.getCards().stream()
-						.map(JSONUtils::toJSON)
-						.collect(Collectors.joining(",", "[", "]")),
-				h.getCards().stream()
-						.map(JSONUtils::toJSON)
-						.collect(Collectors.joining(",", "[", "]")),
-				h.getCards().stream()
-						.map(JSONUtils::toJSON)
-						.collect(Collectors.joining(",", "[", "]"))
+				h.getCards().stream().collect(Collectors.collectingAndThen(
+						Collectors.toList(),
+						JSONUtils::toJSON
+				)),
+				h.getCards().stream().collect(Collectors.collectingAndThen(
+						Collectors.toList(),
+						JSONUtils::toJSON
+				)),
+				h.getCards().stream().collect(Collectors.collectingAndThen(
+						Collectors.toList(),
+						JSONUtils::toJSON
+				))
 		);
 	}
 
