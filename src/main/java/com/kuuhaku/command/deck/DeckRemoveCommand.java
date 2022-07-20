@@ -29,6 +29,8 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -114,16 +116,29 @@ public class DeckRemoveCommand implements Executable {
 									break;
 								}
 							}
-
-							sc.setDeck(null);
 						}
 						case EVOGEAR -> {
-							//TODO
+							Iterator<Evogear> it = dk.getEvogear().iterator();
+							while (it.hasNext()) {
+								Evogear e = it.next();
+								if (e.getCard().equals(sc.getCard())) {
+									it.remove();
+									break;
+								}
+							}
 						}
 						case FIELD -> {
-							//TODO
+							Iterator<Field> it = dk.getFields().iterator();
+							while (it.hasNext()) {
+								Field f = it.next();
+								if (f.getCard().equals(sc.getCard())) {
+									it.remove();
+									break;
+								}
+							}
 						}
 					}
+					sc.setDeck(null);
 					sc.save();
 					dk.save();
 

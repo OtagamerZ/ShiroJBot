@@ -111,7 +111,6 @@ public class DeckAddCommand implements Executable {
 							}
 
 							dk.getSenshi().add(DAO.find(Senshi.class, card.getId()));
-							sc.setDeck(dk);
 						}
 						case EVOGEAR -> {
 							if (dk.getEvogear().size() >= 24) {
@@ -120,7 +119,6 @@ public class DeckAddCommand implements Executable {
 							}
 
 							dk.getEvogear().add(DAO.find(Evogear.class, card.getId()));
-							sc.setDeck(dk);
 						}
 						case FIELD -> {
 							if (dk.getFields().size() >= 3) {
@@ -129,9 +127,9 @@ public class DeckAddCommand implements Executable {
 							}
 
 							dk.getFields().add(DAO.find(Field.class, card.getId()));
-							sc.setDeck(dk);
 						}
 					}
+					sc.setDeck(dk);
 					sc.save();
 					dk.save();
 
