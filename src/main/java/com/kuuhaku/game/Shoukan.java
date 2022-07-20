@@ -544,11 +544,11 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
 		curr.consumeSC(chosen.getSCCost());
-		chosen.withCopy(e -> {
-			e.execute(e.toParameters(tgt));
-			curr.getGraveyard().add(e);
-		});
 		chosen.setAvailable(false);
+		chosen.withCopy(e -> {
+			curr.getGraveyard().add(e);
+			e.execute(e.toParameters(tgt));
+		});
 
 		reportEvent("str/activate_card", curr.getName(), chosen);
 		return true;
