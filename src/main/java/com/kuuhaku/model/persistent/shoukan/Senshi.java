@@ -355,7 +355,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public boolean isSolid() {
-		return Bit.on(state, 0);
+		return Bit.on(state, 0) && !base.getTags().contains("FUSION");
 	}
 
 	@Override
