@@ -194,21 +194,21 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	public int getDmg() {
 		int sum = base.getAtk() + stats.getAtk();
 
-		return (int) Math.max(0, sum * getAttrMult());
+		return (int) (sum * getAttrMult());
 	}
 
 	@Override
 	public int getDef() {
 		int sum = base.getDef() + stats.getDef();
 
-		return (int) Math.max(0, sum * getAttrMult());
+		return (int) (sum * getAttrMult());
 	}
 
 	@Override
 	public int getDodge() {
 		int sum = base.getDodge() + stats.getDodge();
 
-		return (int) Math.max(0, sum * getAttrMult());
+		return (int) (sum * getAttrMult());
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 			min += 2;
 		}
 
-		return (int) Math.max(0, (min + sum) * getAttrMult());
+		return (int) ((min + sum) * getAttrMult());
 	}
 
 	private double getCostMult() {
