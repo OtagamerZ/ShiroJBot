@@ -49,6 +49,8 @@ public class RoleJavaType extends AbstractClassJavaType<Role> {
 
 	@Override
 	public String toString(Role value) {
+		if (value == null) return null;
+
 		return value.getId();
 	}
 
