@@ -63,10 +63,22 @@ public class Hand {
 	private final List<Drawable<?>> cards = new BondedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
+
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getCards().addAll(s.getEquipments());
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
 	});
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
+
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getDeck().addAll(s.getEquipments());
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
 	});
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
 			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) && !d.isSPSummon(),
