@@ -185,7 +185,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		{ // LEFT
 			int y = desc ? 225 : 279;
-			if (getDef() > 0) {
+			if (getDef() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/defense.png");
 				assert icon != null;
 				int x = 25;
@@ -197,7 +197,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				y -= icon.getHeight() + 5;
 			}
 
-			if (getDmg() > 0) {
+			if (getDmg() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/attack.png");
 				assert icon != null;
 				int x = 25;
@@ -229,7 +229,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		{ // RIGHT
 			int y = desc ? 225 : 279;
-			if (getBlock() > 0) {
+			if (getBlock() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/block.png");
 				assert icon != null;
 				int x = 200 - icon.getWidth();
@@ -241,7 +241,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				y -= icon.getHeight() + 5;
 			}
 
-			if (getDodge() > 0) {
+			if (getDodge() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/dodge.png");
 				assert icon != null;
 				int x = 200 - icon.getWidth();
