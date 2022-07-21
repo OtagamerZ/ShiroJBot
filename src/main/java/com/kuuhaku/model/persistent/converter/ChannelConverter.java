@@ -28,6 +28,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class ChannelConverter implements AttributeConverter<TextChannel, String> {
 	@Override
 	public String convertToDatabaseColumn(TextChannel channel) {
+		if (channel == null) return null;
+
 		return channel.getId();
 	}
 

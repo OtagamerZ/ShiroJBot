@@ -28,6 +28,8 @@ import net.dv8tion.jda.api.entities.Role;
 public class RoleConverter implements AttributeConverter<Role, String> {
 	@Override
 	public String convertToDatabaseColumn(Role role) {
+		if (role == null) return null;
+
 		return role.getId();
 	}
 
