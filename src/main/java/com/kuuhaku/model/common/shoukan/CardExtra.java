@@ -358,7 +358,7 @@ public class CardExtra {
 		for (Field f : fieldCache) {
 			try {
 				Object o = f.get(this);
-				if (o.getClass() == HashSet.class) {
+				if (o != null && o.getClass() == HashSet.class) {
 					((HashSet<AttrMod>) o).removeIf(check);
 				}
 			} catch (IllegalAccessException ignore) {
