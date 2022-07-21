@@ -19,8 +19,10 @@
 package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.model.enums.GuildFeature;
+import jakarta.persistence.Converter;
 
-public class GuildFeatureConverter extends FlagConverter<GuildFeature> {
+@Converter(autoApply = true)
+public class GuildFeatureConverter extends FlagConverter<GuildFeature>  {
 	public GuildFeatureConverter() {
 		super(GuildFeature.class);
 	}

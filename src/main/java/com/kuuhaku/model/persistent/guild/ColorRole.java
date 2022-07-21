@@ -32,6 +32,7 @@ public class ColorRole extends DAO<ColorRole> {
 	@EmbeddedId
 	private ColorRoleId id;
 
+	@Convert(converter = RoleConverter.class)
 	@Column(name = "role", nullable = false)
 	private Role role;
 

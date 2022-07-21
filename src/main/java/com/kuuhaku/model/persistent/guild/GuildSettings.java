@@ -22,9 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
-import com.kuuhaku.model.persistent.converter.EmbedConverter;
-import com.kuuhaku.model.persistent.converter.GuildFeatureConverter;
-import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.persistent.converter.RoleConverter;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
@@ -65,9 +63,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "embed", nullable = false)
 	private AutoEmbedBuilder embed = new AutoEmbedBuilder();
 
+	@Convert(converter = RoleConverter.class)
 	@Column(name = "join_role")
 	private Role joinRole;
 
+	@Convert(converter = RoleConverter.class)
 	@Column(name = "welcomer")
 	private Role welcomer;
 
@@ -95,11 +95,16 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "starboard_channel")
 	private TextChannel starboardChannel;
 
+	@Enumerated
 	@Column(name = "feature_flags", nullable = false)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
 	@Column(name = "aliases", nullable = false)
 	private JSONObject aliases = new JSONObject();
+
+	public EnumSet<GuildFeature> getFeatureFlags() {
+		return featureFlags;
+	}
 
 	public GuildSettings() {
 	}

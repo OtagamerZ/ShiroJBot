@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.converter.RoleConverter;
 import com.kuuhaku.model.persistent.id.LevelRoleId;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
@@ -34,6 +35,7 @@ public class LevelRole extends DAO<LevelRole> {
 	@Column(name = "level", nullable = false)
 	private int level;
 
+	@Convert(converter = RoleConverter.class)
 	@Column(name = "role", nullable = false)
 	private Role role;
 
