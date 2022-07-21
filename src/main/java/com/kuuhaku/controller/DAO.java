@@ -4,10 +4,10 @@ import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
+import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
-import jakarta.persistence.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -231,7 +231,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			em.getTransaction().begin();
 
-			T obj = em.find(klass, id, LockModeType.PESSIMISTIC_WRITE);
+			T obj = em.find(klass, id);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
