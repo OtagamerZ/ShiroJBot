@@ -35,8 +35,8 @@ public class LevelRole extends DAO<LevelRole> {
 	@Column(name = "level", nullable = false)
 	private int level;
 
-	@Convert(converter = RoleConverter.class)
 	@Column(name = "role", nullable = false)
+	@Convert(converter = RoleConverter.class)
 	private Role role;
 
 	@ManyToOne(optional = false)

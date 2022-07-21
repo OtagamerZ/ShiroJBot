@@ -29,11 +29,11 @@ import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -57,6 +57,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private Card card;
 
 	@Column(name = "modifiers", nullable = false)
+	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject modifiers = new JSONObject();
 
 	@Enumerated(EnumType.STRING)

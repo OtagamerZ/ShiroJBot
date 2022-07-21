@@ -22,10 +22,10 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -58,6 +58,7 @@ public class CardAttributes implements Serializable {
 	private int block = 0;
 
 	@Column(name = "tags", nullable = false)
+	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

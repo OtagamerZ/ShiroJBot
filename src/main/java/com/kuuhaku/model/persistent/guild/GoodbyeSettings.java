@@ -42,6 +42,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	private String message;
 
 	@Column(name = "channel")
+	@Convert(converter = ChannelConverter.class)
 	private TextChannel channel;
 
 	public GoodbyeSettings() {

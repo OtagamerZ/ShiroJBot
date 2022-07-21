@@ -19,10 +19,10 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
-import net.dv8tion.jda.api.entities.TextChannel;
-import org.hibernate.annotations.Type;
-
+import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.TextChannel;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -42,6 +42,7 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	private String message;
 
 	@Column(name = "channel")
+	@Convert(converter = ChannelConverter.class)
 	private TextChannel channel;
 
 	public WelcomeSettings() {

@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
-
 import jakarta.persistence.*;
+
 import java.awt.*;
 
 @Entity
@@ -32,6 +32,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	private String uid;
 
 	@Column(name = "color", nullable = false, length = 6)
+	@Convert(converter = ColorConverter.class)
 	private Color color = new Color(0);
 
 	@Column(name = "background")
