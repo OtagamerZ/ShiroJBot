@@ -39,6 +39,7 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
 import jakarta.persistence.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -630,6 +631,23 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		g2d.setColor(deck.getFrame().getPrimaryColor());
 		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
+
+		if (!stats.getCurses().isEmpty()) {
+			int y = desc.isBlank() ? 270 : 216;
+			if (getDmg() > 0) y -= 28;
+			if (getDef() > 0) y -= 28;
+			if (getCooldown() > 0) y -= 28;
+
+			Graph.applyTransformed(g2d, 25, y, g -> {
+				BufferedImage icon = IO.getResourceAsImage("shoukan/charm/curse.png");
+				assert icon != null;
+
+				String val = String.valueOf(stats.getCurses().size());
+				g2d.drawImage(icon, 0, 0, null);
+				g2d.setColor(Color.BLACK);
+				Graph.drawOutlinedString(g2d, val, icon.getWidth() + 5, -6 + (icon.getHeight() + g.getFontMetrics().getHeight()) / 2, 2, Color.WHITE);
+			});
+		}
 
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
