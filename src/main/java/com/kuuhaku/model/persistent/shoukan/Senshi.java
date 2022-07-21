@@ -156,6 +156,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		return equipments;
 	}
 
+	public boolean isEquipped(String id) {
+		return equipments.stream().anyMatch(e -> e.getCard().getId().equals(id));
+	}
+
 	@Override
 	public SlotColumn getSlot() {
 		return Utils.getOr(slot, new SlotColumn(hand.getGame(), hand.getSide(), -1));
