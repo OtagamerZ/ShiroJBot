@@ -24,8 +24,11 @@ import net.dv8tion.jda.api.entities.Role;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
+import org.hibernate.type.descriptor.jdbc.JdbcType;
+import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
 import java.io.Serial;
+import java.sql.Types;
 
 public class RoleJavaType extends AbstractClassJavaType<Role> {
 	@Serial
@@ -38,14 +41,27 @@ public class RoleJavaType extends AbstractClassJavaType<Role> {
 	}
 
 	@Override
-	public Role fromString(CharSequence string) {
-		return null;
+	public JdbcType getRecommendedJdbcType(JdbcTypeIndicators indicators) {
+		return indicators.getTypeConfiguration()
+				.getJdbcTypeRegistry()
+				.getDescriptor(Types.VARCHAR);
+	}
+
+	@Override
+	public String toString(Role value) {
+		return value.getId();
+	}
+
+	@Override
+	public Role fromString(CharSequence id) {
+		return Main.getApp().getShiro().getRoleById(Utils.getOr(String.valueOf(id), "1"));
 	}
 
 	@Override
 	public <X> X unwrap(Role value, Class<X> type, WrapperOptions options) {
 		if (value == null) return null;
-		else if (String.class.isAssignableFrom(type)) {
+
+		if (String.class.isAssignableFrom(type)) {
 			return type.cast(value.getId());
 		}
 
@@ -55,8 +71,11 @@ public class RoleJavaType extends AbstractClassJavaType<Role> {
 	@Override
 	public <X> Role wrap(X value, WrapperOptions options) {
 		if (value == null) return null;
-		else if (value instanceof String id) {
+
+		if (value instanceof String id) {
 			return Main.getApp().getShiro().getRoleById(Utils.getOr(id, "1"));
+		} else if (value instanceof Role r) {
+			return r;
 		}
 
 		throw unknownWrap(value.getClass());
