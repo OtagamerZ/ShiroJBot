@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter
+@Converter(autoApply = true)
 public class EmbedConverter implements AttributeConverter<AutoEmbedBuilder, String> {
 	@Override
 	public String convertToDatabaseColumn(AutoEmbedBuilder embed) {

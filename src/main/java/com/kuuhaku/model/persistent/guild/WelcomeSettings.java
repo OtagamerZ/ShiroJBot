@@ -42,7 +42,6 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	private String message;
 
 	@Column(name = "channel")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	private TextChannel channel;
 
 	public WelcomeSettings() {

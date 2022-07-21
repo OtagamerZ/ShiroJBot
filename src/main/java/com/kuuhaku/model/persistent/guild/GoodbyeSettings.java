@@ -19,10 +19,10 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
-import net.dv8tion.jda.api.entities.TextChannel;
-import org.hibernate.annotations.Type;
-
+import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.TextChannel;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -42,7 +42,6 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	private String message;
 
 	@Column(name = "channel")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	private TextChannel channel;
 
 	public GoodbyeSettings() {

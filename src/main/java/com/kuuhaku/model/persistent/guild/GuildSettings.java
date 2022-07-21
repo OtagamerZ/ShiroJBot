@@ -26,13 +26,12 @@ import com.kuuhaku.model.persistent.converter.EmbedConverter;
 import com.kuuhaku.model.persistent.converter.GuildFeatureConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
 
-import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
@@ -47,36 +46,29 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@ElementCollection
 	@Column(name = "kawaipon_channels")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<TextChannel> kawaiponChannels = new ArrayList<>();
 
 	@ElementCollection
 	@Column(name = "drop_channels")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<TextChannel> dropChannels = new ArrayList<>();
 
 	@ElementCollection
 	@Column(name = "denied_channels")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<TextChannel> deniedChannels = new ArrayList<>();
 
 	@Column(name = "notificationsChannel")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	private TextChannel notificationsChannel;
 
-	@Convert(converter = EmbedConverter.class)
 	@Column(name = "embed", nullable = false)
 	private AutoEmbedBuilder embed = new AutoEmbedBuilder();
 
 	@Column(name = "join_role")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.RoleStringType")
 	private Role joinRole;
 
 	@Column(name = "welcomer")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.RoleStringType")
 	private Role welcomer;
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -101,14 +93,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 	private int starboardThreshold = 5;
 
 	@Column(name = "starboard_channel")
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.ChannelStringType")
 	private TextChannel starboardChannel;
 
-	@Convert(converter = GuildFeatureConverter.class)
 	@Column(name = "feature_flags", nullable = false)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
-	@Convert(converter = JSONObjectConverter.class)
 	@Column(name = "aliases", nullable = false)
 	private JSONObject aliases = new JSONObject();
 

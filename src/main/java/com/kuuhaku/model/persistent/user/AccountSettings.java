@@ -31,7 +31,6 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "uid", nullable = false)
 	private String uid;
 
-	@Convert(converter = ColorConverter.class)
 	@Column(name = "color", nullable = false, length = 6)
 	private Color color = new Color(0);
 

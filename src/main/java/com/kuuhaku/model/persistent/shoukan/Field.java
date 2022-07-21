@@ -56,7 +56,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@MapsId("id")
 	private Card card;
 
-	@Convert(converter = JSONObjectConverter.class)
 	@Column(name = "modifiers", nullable = false)
 	private JSONObject modifiers = new JSONObject();
 

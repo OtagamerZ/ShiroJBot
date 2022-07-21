@@ -22,7 +22,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.awt.*;
 
-@Converter
+@Converter(autoApply = true)
 public class ColorConverter implements AttributeConverter<Color, String> {
 	@Override
 	public String convertToDatabaseColumn(Color color) {

@@ -80,7 +80,6 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Column(name = "target_type", nullable = false)
 	private TargetType targetType = TargetType.NONE;
 
-	@Convert(converter = JSONArrayConverter.class)
 	@Column(name = "charms", nullable = false)
 	private JSONArray charms = new JSONArray();
 

@@ -16,26 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.descriptor.type;
+package com.kuuhaku.model.persistent.converter;
 
-import com.kuuhaku.model.persistent.descriptor.RoleStringJavaDescriptor;
+import com.kuuhaku.Main;
+import com.kuuhaku.util.Utils;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import net.dv8tion.jda.api.entities.Role;
-import org.hibernate.type.AbstractSingleColumnStandardBasicType;
-import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor;
 
-import java.io.Serial;
-
-public class RoleStringType extends AbstractSingleColumnStandardBasicType<Role> {
-	@Serial
-	private static final long serialVersionUID = -6274205733576989886L;
-	public static final RoleStringType INSTANCE = new RoleStringType();
-
-	public RoleStringType() {
-		super(VarcharTypeDescriptor.INSTANCE, RoleStringJavaDescriptor.INSTANCE);
+@Converter(autoApply = true)
+public class RoleConverter implements AttributeConverter<Role, String> {
+	@Override
+	public String convertToDatabaseColumn(Role attribute) {
+		return attribute.getId();
 	}
 
 	@Override
-	public String getName() {
-		return "RoleString";
+	public Role convertToEntityAttribute(String id) {
+		return Main.getApp().getShiro().getRoleById(Utils.getOr(id, "1"));
 	}
 }

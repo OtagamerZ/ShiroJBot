@@ -24,7 +24,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.EnumSet;
 
-@Converter
+@Converter(autoApply = true)
 public abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<EnumSet<T>, Integer> {
 	private final Class<T> klass;
 

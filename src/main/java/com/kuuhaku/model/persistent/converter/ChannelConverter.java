@@ -16,26 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.descriptor.type;
+package com.kuuhaku.model.persistent.converter;
 
-import com.kuuhaku.model.persistent.descriptor.ChannelStringJavaDescriptor;
+import com.kuuhaku.Main;
+import com.kuuhaku.util.Utils;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.hibernate.type.AbstractSingleColumnStandardBasicType;
-import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor;
 
-import java.io.Serial;
-
-public class ChannelStringType extends AbstractSingleColumnStandardBasicType<TextChannel> {
-	@Serial
-	private static final long serialVersionUID = -8839713682356849422L;
-	public static final ChannelStringType INSTANCE = new ChannelStringType();
-
-	public ChannelStringType() {
-		super(VarcharTypeDescriptor.INSTANCE, ChannelStringJavaDescriptor.INSTANCE);
+@Converter(autoApply = true)
+public class ChannelConverter implements AttributeConverter<TextChannel, String> {
+	@Override
+	public String convertToDatabaseColumn(TextChannel attribute) {
+		return attribute.getId();
 	}
 
 	@Override
-	public String getName() {
-		return "ChannelString";
+	public TextChannel convertToEntityAttribute(String id) {
+		return Main.getApp().getShiro().getTextChannelById(Utils.getOr(id, "1"));
 	}
 }

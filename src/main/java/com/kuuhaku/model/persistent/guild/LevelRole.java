@@ -20,12 +20,10 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.id.LevelRoleId;
+import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "color_role")
@@ -37,7 +35,6 @@ public class LevelRole extends DAO<LevelRole> {
 	private int level;
 
 	@Column(name = "role", nullable = false)
-	@Type(type = "com.kuuhaku.model.persistent.descriptor.type.RoleStringType")
 	private Role role;
 
 	@ManyToOne(optional = false)

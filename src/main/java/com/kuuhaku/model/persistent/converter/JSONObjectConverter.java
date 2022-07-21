@@ -23,7 +23,7 @@ import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter
+@Converter(autoApply = true)
 public class JSONObjectConverter implements AttributeConverter<JSONObject, String> {
 
 	@Override
