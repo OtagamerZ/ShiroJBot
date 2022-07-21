@@ -27,8 +27,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 @Converter(autoApply = true)
 public class ChannelConverter implements AttributeConverter<TextChannel, String> {
 	@Override
-	public String convertToDatabaseColumn(TextChannel attribute) {
-		return attribute.getId();
+	public String convertToDatabaseColumn(TextChannel channel) {
+		return channel.getId();
 	}
 
 	@Override

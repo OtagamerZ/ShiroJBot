@@ -23,12 +23,15 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.*;
+import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
+import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JavaType;
 
 import java.util.*;
 
@@ -59,6 +62,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "notificationsChannel")
 	@Convert(converter = ChannelConverter.class)
+	@JavaType(ChannelJavaType.class)
 	private TextChannel notificationsChannel;
 
 	@Column(name = "embed", nullable = false)
@@ -67,10 +71,12 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "join_role")
 	@Convert(converter = RoleConverter.class)
+	@JavaType(RoleJavaType.class)
 	private Role joinRole;
 
 	@Column(name = "welcomer")
 	@Convert(converter = RoleConverter.class)
+	@JavaType(RoleJavaType.class)
 	private Role welcomer;
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -96,6 +102,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "starboard_channel")
 	@Convert(converter = ChannelConverter.class)
+	@JavaType(ChannelJavaType.class)
 	private TextChannel starboardChannel;
 
 	@Column(name = "feature_flags", nullable = false)

@@ -27,8 +27,8 @@ import net.dv8tion.jda.api.entities.Role;
 @Converter(autoApply = true)
 public class RoleConverter implements AttributeConverter<Role, String> {
 	@Override
-	public String convertToDatabaseColumn(Role attribute) {
-		return attribute.getId();
+	public String convertToDatabaseColumn(Role role) {
+		return role.getId();
 	}
 
 	@Override
