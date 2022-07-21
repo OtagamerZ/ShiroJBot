@@ -532,10 +532,14 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			trigger = ep.trigger();
 		}
 
+		System.out.println(trigger);
+
 		@Language("Groovy") String effect = getEffect();
-		if (effect.isBlank() || !effect.contains(trigger.name()) || base.isLocked()) return false;
+		if (base.isLocked()) return false;
 		else if (ep.size() == 0 && trigger == Trigger.DEFER) return false;
 		else if (trigger == Trigger.ACTIVATE && getCooldown() > 0) return false;
+
+		System.out.println("Pass");
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -545,13 +549,15 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				other.setHeroDefense(true);
 			}*/
 
-			Utils.exec(effect, Map.of(
-					"ep", ep,
-					"self", this,
-					"trigger", trigger,
-					"game", hand.getGame(),
-					"side", hand.getSide()
-			));
+			if (!effect.isBlank()) {
+				Utils.exec(effect, Map.of(
+						"ep", ep,
+						"self", this,
+						"trigger", trigger,
+						"game", hand.getGame(),
+						"side", hand.getSide()
+				));
+			}
 
 			for (Evogear e : equipments) {
 				e.execute(new EffectParameters(trigger, ep.source(), ep.targets()));
