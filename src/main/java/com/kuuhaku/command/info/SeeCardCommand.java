@@ -84,6 +84,11 @@ public class SeeCardCommand implements Executable {
 		BufferedImage bi = null;
 		switch (type) {
 			case "n", "c" -> {
+				if (card.getRarity().getIndex() == -1) {
+					event.channel().sendMessage(locale.get("error/not_kawaipon")).queue();
+					return;
+				}
+
 				boolean chrome = type.equals("c");
 				KawaiponCard kc = kp.getCard(card, chrome);
 				if (kc == null) {

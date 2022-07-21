@@ -29,9 +29,9 @@ public enum Rarity {
 	ULTRA_RARE(4, 0x9966CC, "<:ultra_rare:726171819786240091>"),
 	LEGENDARY(5, 0xDC9018, "<:legendary:726171819945623682>"),
 	ULTIMATE(-1, 0xD400AA, ""),
-	EVOGEAR(),
-	FIELD(),
-	FUSION();
+	EVOGEAR,
+	FIELD,
+	FUSION;
 
 	private final int index;
 	private final int color;
