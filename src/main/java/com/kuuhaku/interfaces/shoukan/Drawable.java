@@ -250,6 +250,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.ORANGE);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+				y -= icon.getHeight() + 5;
 			}
 
 			if (getCurses().size() > 0) {
