@@ -74,7 +74,7 @@ public class TradeAcceptCommand implements Executable {
 
 					trade.accept();
 					event.channel().sendMessage(locale.get("success/trade_accept")).queue();
-				}, trade.getLeft().getUser(), trade.getRight().getUser()
+				}, other
 		);
 	}
 }

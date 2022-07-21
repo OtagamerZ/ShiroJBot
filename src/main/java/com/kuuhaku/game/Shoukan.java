@@ -1184,6 +1184,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
+						reportResult("str/game_forfeit", "<@" + getCurrent().getUid() + ">");
 						close(GameReport.SUCCESS);
 						return;
 					}

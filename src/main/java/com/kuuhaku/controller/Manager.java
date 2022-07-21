@@ -39,6 +39,10 @@ public abstract class Manager {
 
 	private static EntityManagerFactory emf;
 
+	public static EntityManagerFactory getEntityManagerFactory() {
+		return emf;
+	}
+
 	public synchronized static EntityManager getEntityManager() {
 		if (emf == null) {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(

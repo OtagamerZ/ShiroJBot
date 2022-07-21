@@ -343,8 +343,16 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		beforeDelete();
 		try {
+			DAO<?> ent;
+			if (!em.contains(this)) {
+				Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				ent = em.find(getClass(), key);
+			} else {
+				ent = this;
+			}
+
 			em.getTransaction().begin();
-			em.remove(em.contains(this) ? this : em.merge(this));
+			em.remove(ent);
 			em.getTransaction().commit();
 		} finally {
 			if (em.getTransaction().isActive()) {
