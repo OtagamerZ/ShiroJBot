@@ -52,7 +52,7 @@ public class CardExtra {
 	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
 
 	private final JSONObject data = new JSONObject();
-	private final List<String> curses = new ArrayList<>();
+	private final Set<String> curses = new HashSet<>();
 
 	private Race race = null;
 	private Card vanity = null;
@@ -289,7 +289,7 @@ public class CardExtra {
 		return data;
 	}
 
-	public List<String> getCurses() {
+	public Set<String> getCurses() {
 		return curses;
 	}
 
