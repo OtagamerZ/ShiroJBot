@@ -297,7 +297,6 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	public boolean execute(EffectParameters ep) {
 		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 
-		System.out.println(ep.trigger());
 		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
 		if (effect.isBlank() || !effect.contains(ep.trigger().name())) return false;
 

@@ -532,14 +532,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			trigger = ep.trigger();
 		}
 
-		System.out.println(trigger);
-
 		@Language("Groovy") String effect = getEffect();
 		if (base.isLocked()) return false;
 		else if (ep.size() == 0 && trigger == Trigger.DEFER) return false;
 		else if (trigger == Trigger.ACTIVATE && getCooldown() > 0) return false;
-
-		System.out.println("Pass");
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -649,9 +645,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				assert icon != null;
 
 				String val = String.valueOf(stats.getCurses().size());
-				g2d.drawImage(icon, 0, 0, null);
-				g2d.setColor(Color.BLACK);
-				Graph.drawOutlinedString(g2d, val, icon.getWidth() + 5, -6 + (icon.getHeight() + g.getFontMetrics().getHeight()) / 2, 2, Color.WHITE);
+				g.drawImage(icon, 0, 0, null);
+				g.setColor(Color.BLACK);
+				Graph.drawOutlinedString(g, val, icon.getWidth() + 5, -6 + (icon.getHeight() + g.getFontMetrics().getHeight()) / 2, 2, Color.WHITE);
 			});
 		}
 
