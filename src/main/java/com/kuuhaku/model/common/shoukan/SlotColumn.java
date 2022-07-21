@@ -119,6 +119,7 @@ public class SlotColumn {
 		if (this.bottom != null) {
 			this.bottom.setSlot(this);
 			this.bottom.setHand(game.getHands().get(side));
+			this.bottom.getEquipments().clear();
 
 			if (!this.bottom.isFlipped()) {
 				Hand h = this.bottom.getHand();

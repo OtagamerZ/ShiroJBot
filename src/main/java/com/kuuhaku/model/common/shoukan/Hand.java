@@ -75,6 +75,8 @@ public class Hand {
 
 				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
 					getGraveyard().addAll(s.getEquipments());
+				} else if (d instanceof Evogear e && e.getEquipper() != null) {
+					e.getEquipper().getEquipments().remove(e);
 				}
 
 				d.reset();
