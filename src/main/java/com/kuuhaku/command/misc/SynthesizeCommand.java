@@ -159,7 +159,6 @@ public class SynthesizeCommand implements Executable {
 									}
 								}
 							});
-							continue;
 						}
 
 						sc.delete();
@@ -207,6 +206,4 @@ public class SynthesizeCommand implements Executable {
 
 		return pool.get();
 	}
-
-
 }
