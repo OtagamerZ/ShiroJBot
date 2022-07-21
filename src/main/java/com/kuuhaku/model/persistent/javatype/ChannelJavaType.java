@@ -49,6 +49,8 @@ public class ChannelJavaType extends AbstractClassJavaType<TextChannel> {
 
 	@Override
 	public String toString(TextChannel value) {
+		if (value == null) return null;
+
 		return value.getId();
 	}
 
