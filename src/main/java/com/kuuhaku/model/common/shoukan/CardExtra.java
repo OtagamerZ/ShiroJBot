@@ -30,7 +30,11 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.json.JSONObject;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class CardExtra {
@@ -355,8 +359,11 @@ public class CardExtra {
 
 		for (Field f : fieldCache) {
 			try {
-				if (f.get(this) instanceof HashSet s && f.getGenericType() instanceof AttrMod) {
-					s.removeIf(check);
+				if (f.get(this) instanceof HashSet s && f.getGenericType() instanceof ParameterizedType t) {
+					Type[] types = t.getActualTypeArguments();
+					if (types.length == 1 && types[0] instanceof AttrMod) {
+						s.removeIf(check);
+					}
 				}
 			} catch (IllegalAccessException ignore) {
 			}
