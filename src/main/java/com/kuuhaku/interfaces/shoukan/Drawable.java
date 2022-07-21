@@ -37,6 +37,7 @@ import com.kuuhaku.util.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -100,6 +101,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default void setCooldown(int time) {
+	}
+
+	default List<String> getCurses() {
+		return List.of();
 	}
 
 	boolean isSolid();
@@ -245,6 +250,17 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.ORANGE);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
+			}
+
+			if (getCurses().size() > 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/curse.png");
+				assert icon != null;
+				int x = 200 - icon.getWidth();
+
+				String val = String.valueOf(getCurses().size());
+				g2d.drawImage(icon, x, y, null);
+				g2d.setColor(Color.BLACK);
+				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.WHITE);
 			}
 		}
 	}

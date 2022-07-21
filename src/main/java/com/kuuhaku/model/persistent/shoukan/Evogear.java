@@ -37,12 +37,12 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONArray;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
-import jakarta.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -138,6 +138,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	public void setEquipper(Senshi equipper) {
 		this.equipper = equipper;
+	}
+
+	@Override
+	public List<String> getCurses() {
+		return stats.getCurses();
 	}
 
 	public CardExtra getStats() {
@@ -366,6 +371,26 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
 
+		if (!desc.isEmpty()) {
+			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+			g2d.drawString(getTags().stream()
+							.limit(4)
+							.map(s -> getString(locale, s))
+							.map(String::toUpperCase).toList().toString()
+					, 7, 275
+			);
+
+			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
+			Graph.drawMultilineString(g2d, desc,
+					7, 287, 211, 3,
+					parseValues(g2d, deck, this), highlightValues(g2d)
+			);
+		}
+
+		drawCosts(g2d);
+		drawAttributes(g2d, !desc.isEmpty());
+
 		if (!getCharms().isEmpty()) {
 			List<BufferedImage> icons = charms.stream()
 					.map(String::valueOf)
@@ -398,26 +423,6 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 				});
 			}
 		}
-
-		if (!desc.isEmpty()) {
-			g2d.setColor(deck.getFrame().getSecondaryColor());
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-			g2d.drawString(getTags().stream()
-							.limit(4)
-							.map(s -> getString(locale, s))
-							.map(String::toUpperCase).toList().toString()
-					, 7, 275
-			);
-
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
-			Graph.drawMultilineString(g2d, desc,
-					7, 287, 211, 3,
-					parseValues(g2d, deck, this), highlightValues(g2d)
-			);
-		}
-
-		drawCosts(g2d);
-		drawAttributes(g2d, !desc.isEmpty());
 
 		if (!isAvailable()) {
 			RescaleOp op = new RescaleOp(0.5f, 0, null);
