@@ -75,9 +75,9 @@ dependencies {
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: '42.3.6'
-	implementation group: "org.hibernate", name: "hibernate-core", version: '6.1.1.Final'
+	implementation group: "org.hibernate.orm", name: "hibernate-core", version: '6.1.1.Final'
 	implementation group: "com.mchange", name: "c3p0", version: '0.9.5.5'
-	implementation group: "org.hibernate", name: "hibernate-c3p0", version: '6.1.1.Final'
+	implementation group: "org.hibernate.orm", name: "hibernate-c3p0", version: '6.1.1.Final'
 
 	//Compiler
 	implementation group: "org.apache.groovy", name: "groovy", version: '4.0.3'
