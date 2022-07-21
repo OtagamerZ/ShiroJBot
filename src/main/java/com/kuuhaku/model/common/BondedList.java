@@ -32,6 +32,10 @@ public class BondedList<T> extends ArrayList<T> {
 		this(t -> true, bonding);
 	}
 
+	public BondedList(Predicate<T> check) {
+		this(check, t -> {});
+	}
+
 	public BondedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
 		this(c, t -> true, bonding);
 	}

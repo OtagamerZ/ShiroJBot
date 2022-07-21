@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -30,9 +31,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.json.JSONObject;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class CardExtra {
@@ -54,7 +53,7 @@ public class CardExtra {
 	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
 
 	private final JSONObject data = new JSONObject();
-	private final Set<String> curses = new HashSet<>();
+	private final List<String> curses = new BondedList<>(s -> !getCurses().contains(s));
 
 	private Race race = null;
 	private Card vanity = null;
@@ -291,7 +290,7 @@ public class CardExtra {
 		return data;
 	}
 
-	public Set<String> getCurses() {
+	public List<String> getCurses() {
 		return curses;
 	}
 
@@ -357,9 +356,8 @@ public class CardExtra {
 
 		for (Field f : fieldCache) {
 			try {
-				Object o = f.get(this);
-				if (o != null && o.getClass() == HashSet.class) {
-					((HashSet<AttrMod>) o).removeIf(check);
+				if (f.get(this) instanceof HashSet s) {
+					s.removeIf(check);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
