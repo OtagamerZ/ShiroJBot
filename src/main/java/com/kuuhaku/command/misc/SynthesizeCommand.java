@@ -45,7 +45,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.NoResultException;
+import jakarta.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

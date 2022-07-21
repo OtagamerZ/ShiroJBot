@@ -60,7 +60,7 @@
         <class>com.kuuhaku.model.persistent.id.ColorRoleId</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="hibernate.jdbc.batch_size" value="30"/>

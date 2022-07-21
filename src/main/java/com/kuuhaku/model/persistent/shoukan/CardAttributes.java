@@ -25,7 +25,7 @@ import com.kuuhaku.util.json.JSONArray;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashSet;

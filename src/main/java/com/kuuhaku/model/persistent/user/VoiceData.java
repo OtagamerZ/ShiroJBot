@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 

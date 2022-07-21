@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.awt.*;
 
 @Entity

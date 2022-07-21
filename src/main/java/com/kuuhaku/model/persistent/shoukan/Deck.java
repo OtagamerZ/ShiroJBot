@@ -40,7 +40,7 @@ import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
 import org.knowm.xchart.RadarChart;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;

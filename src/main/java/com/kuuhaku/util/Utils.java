@@ -60,7 +60,7 @@ import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
-import javax.persistence.NoResultException;
+import jakarta.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

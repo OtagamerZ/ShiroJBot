@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter
 public class EmbedConverter implements AttributeConverter<AutoEmbedBuilder, String> {

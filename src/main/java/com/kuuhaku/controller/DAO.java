@@ -7,7 +7,7 @@ import com.kuuhaku.util.Utils;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

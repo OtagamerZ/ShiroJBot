@@ -23,7 +23,7 @@ import com.kuuhaku.model.persistent.id.DynamicPropertyId;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "dynamic_property")

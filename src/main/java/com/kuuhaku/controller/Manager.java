@@ -21,9 +21,9 @@ package com.kuuhaku.controller;
 import com.kuuhaku.Constants;
 import com.kuuhaku.util.IO;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,9 +42,9 @@ public abstract class Manager {
 	public synchronized static EntityManager getEntityManager() {
 		if (emf == null) {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(
-					"javax.persistence.jdbc.user", DB_LOGIN,
-					"javax.persistence.jdbc.password", DB_PASS,
-					"javax.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
+					"jakarta.persistence.jdbc.user", DB_LOGIN,
+					"jakarta.persistence.jdbc.password", DB_PASS,
+					"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 							SERVER_IP, DB_NAME
 					)
 			));

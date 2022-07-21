@@ -22,7 +22,7 @@ import com.kuuhaku.controller.DAO;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

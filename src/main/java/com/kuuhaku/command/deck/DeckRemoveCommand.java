@@ -43,7 +43,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import javax.persistence.NoResultException;
+import jakarta.persistence.NoResultException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;

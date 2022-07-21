@@ -24,7 +24,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;

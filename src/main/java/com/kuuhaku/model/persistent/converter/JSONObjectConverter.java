@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.util.json.JSONObject;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter
 public class JSONObjectConverter implements AttributeConverter<JSONObject, String> {
