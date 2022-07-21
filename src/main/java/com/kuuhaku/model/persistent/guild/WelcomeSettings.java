@@ -23,13 +23,14 @@ import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.hibernate.annotations.JavaType;
+import org.hibernate.annotations.JavaTypeRegistration;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "welcome_settings")
+@JavaTypeRegistration(javaType = TextChannel.class, descriptorClass = ChannelJavaType.class)
 public class WelcomeSettings extends DAO<WelcomeSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
@@ -45,7 +46,6 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 
 	@Column(name = "channel")
 	@Convert(converter = ChannelConverter.class)
-	@JavaType(ChannelJavaType.class)
 	private TextChannel channel;
 
 	public WelcomeSettings() {

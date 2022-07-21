@@ -20,23 +20,23 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.RoleConverter;
-import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import com.kuuhaku.model.persistent.id.ColorRoleId;
+import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.JavaType;
+import org.hibernate.annotations.JavaTypeRegistration;
 
 @Entity
 @Table(name = "color_role")
+@JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
 public class ColorRole extends DAO<ColorRole> {
 	@EmbeddedId
 	private ColorRoleId id;
 
 	@Column(name = "role", nullable = false)
 	@Convert(converter = RoleConverter.class)
-	@JavaType(RoleJavaType.class)
 	private Role role;
 
 	@ManyToOne(optional = false)
