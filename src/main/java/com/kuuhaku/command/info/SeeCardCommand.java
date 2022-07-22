@@ -133,6 +133,10 @@ public class SeeCardCommand implements Executable {
 					case FIELD -> DAO.find(Field.class, card.getId());
 				};
 
+				if (d instanceof Senshi s && s.isFusion()) {
+					eb.setAuthor(null);
+				}
+
 				if (d != null) {
 					bi = d.render(locale, dk);
 				}
