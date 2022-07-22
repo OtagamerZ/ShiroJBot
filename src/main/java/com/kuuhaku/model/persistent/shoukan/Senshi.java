@@ -648,7 +648,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-			g2d.drawString(processTags(locale, getTags()), 7, 275);
+			g2d.drawString(processTags(locale), 7, 275);
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			Graph.drawMultilineString(g2d, desc,
