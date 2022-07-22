@@ -278,9 +278,12 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getDodge() {
-		int sum = base.getDodge() + stats.getDodge() + getEquipDodge();
+		int sum = (int) ((base.getDodge() + stats.getDodge() + getEquipDodge()) * getAttrMult());
+		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.DUNGEON) {
+			sum = Math.min(sum, 50);
+		}
 
-		return (int) Math.max(0, sum * getAttrMult());
+		return Math.max(0, sum);
 	}
 
 	@Override
@@ -498,6 +501,14 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	public boolean isFusion() {
 		return base.getTags().contains("FUSION");
+	}
+
+	public boolean isBlinded() {
+		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+			return true;
+		}
+
+		return stats.hasFlag(Flag.BLIND);
 	}
 
 	public boolean isSupporting() {

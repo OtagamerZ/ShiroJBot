@@ -23,7 +23,6 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.id.LocalizedDescId;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -213,7 +212,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.RED);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
-				if (this instanceof Senshi s && s.getStats().hasFlag(Flag.BLIND)) {
+				if (this instanceof Senshi s && s.isBlinded()) {
 					g2d.setColor(Color.lightGray);
 					Graph.drawOutlinedString(g2d, "*", x + icon.getWidth() + 5 + m.stringWidth(val), y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 				}
