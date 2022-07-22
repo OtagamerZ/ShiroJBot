@@ -91,7 +91,7 @@ public interface EffectHolder {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0, 175));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
 			} else {
 				g2d.drawString(str, x, y);
