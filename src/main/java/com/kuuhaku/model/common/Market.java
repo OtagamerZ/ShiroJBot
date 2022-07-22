@@ -26,20 +26,21 @@ import com.kuuhaku.util.XStringBuilder;
 import org.apache.commons.cli.Option;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Market {
 	private final String uid;
 	private final Map<String, String> FILTERS = new LinkedHashMap<>() {{
-		put("n", "AND c.card.id LIKE '%'||?||'%'");
-		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%'||?||'%'");
-		put("a", "AND c.card.anime.id LIKE '%'||?||'%'");
+		put("n", "AND c.card.id LIKE '%%'||%s||'%%'");
+		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||%s||'%%'");
+		put("a", "AND c.card.anime.id LIKE '%%'||%s||'%%'");
 		put("c", "AND c.chrome = TRUE");
 		put("k", "AND c.type = 'KAWAIPON'");
 		put("e", "AND c.type = 'EVOGEAR'");
 		put("f", "AND c.type = 'FIELD'");
-		put("gl", "AND c.price >= ?");
-		put("lt", "AND c.price <= ?");
-		put("m", "AND c.kawaipon.uid = ?");
+		put("gl", "AND c.price >= %s");
+		put("lt", "AND c.price <= %s");
+		put("m", "AND c.kawaipon.uid = %s");
 	}};
 
 	public Market(String uid) {
@@ -50,8 +51,9 @@ public class Market {
 		List<Object> params = new ArrayList<>();
 		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.price > 0");
 
+		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
-			query.appendNewLine(FILTERS.get(opt.getOpt()));
+			query.appendNewLine(FILTERS.get(opt.getOpt()).formatted(i.getAndIncrement()));
 
 			if (opt.hasArg()) {
 				params.add(opt.getValue().toUpperCase(Locale.ROOT));

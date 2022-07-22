@@ -49,6 +49,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "stash",
@@ -89,9 +90,9 @@ public class StashCommand implements Executable {
 		}
 
 		Map<String, String> filters = new LinkedHashMap<>() {{
-			put("n", "AND c.card.id LIKE '%'||?||'%'");
-			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%'||?||'%'");
-			put("a", "AND c.card.anime.id LIKE '%'||?||'%'");
+			put("n", "AND c.card.id LIKE '%%'||%s||'%%'");
+			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||%s||'%%'");
+			put("a", "AND c.card.anime.id LIKE '%%'||%s||'%%'");
 			put("c", "AND c.chrome = TRUE");
 			put("k", "AND c.type = 'KAWAIPON'");
 			put("e", "AND c.type = 'EVOGEAR'");
@@ -99,14 +100,15 @@ public class StashCommand implements Executable {
 			put("v", "AND c.deck IS NULL");
 		}};
 
-		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?");
+		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
 		List<Object> params = new ArrayList<>() {{
 			add(event.user().getId());
 		}};
 
+		AtomicInteger i = new AtomicInteger(2);
 		Option[] opts = cli.getFirst().getOptions();
 		for (Option opt : opts) {
-			query.appendNewLine(filters.get(opt.getOpt()));
+			query.appendNewLine(filters.get(opt.getOpt()).formatted(i.getAndIncrement()));
 
 			if (opt.hasArg()) {
 				params.add(opt.getValue().toUpperCase(Locale.ROOT));
