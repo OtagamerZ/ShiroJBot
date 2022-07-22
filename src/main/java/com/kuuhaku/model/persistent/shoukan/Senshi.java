@@ -42,10 +42,8 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Entity
 @Table(name = "senshi")
@@ -650,20 +648,23 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-			g2d.drawString(getTags().stream()
-							.limit(3)
-							.map(s -> {
-								if (s.startsWith("race/")) {
-									return locale.get(s);
-								}
 
-								return getString(locale, s);
-							})
-							.map(String::toUpperCase)
-							.toList()
-							.toString()
-					, 7, 275
-			);
+			List<String> tags = getTags();
+			if (tags.size() > 3) {
+				tags = tags.subList(0, 3);
+				tags.add("...");
+			}
+
+			for (int i = 0; i < tags.size(); i++) {
+				String tag = tags.get(i);
+				if (tag.startsWith("race/")) {
+					tags.set(i, locale.get(tag).toUpperCase(Locale.ROOT));
+				} else if (tag.startsWith("tag/")) {
+					tags.set(i, getString(locale, tag).toUpperCase(Locale.ROOT));
+				}
+			}
+
+			g2d.drawString(tags.toString(), 7, 275);
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			Graph.drawMultilineString(g2d, desc,
