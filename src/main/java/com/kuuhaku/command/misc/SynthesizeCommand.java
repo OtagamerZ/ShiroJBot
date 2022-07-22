@@ -80,7 +80,7 @@ public class SynthesizeCommand implements Executable {
 
 				CompletableFuture<Void> select = new CompletableFuture<>();
 				List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-						"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price IS NULL",
+						"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0",
 						event.user().getId()
 				);
 				stash.removeIf(cards::contains);

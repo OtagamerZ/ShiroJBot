@@ -27,7 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -44,7 +44,7 @@ import java.util.Locale;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <kind:word>[n,c]")
+@Signature("<card:word:r> <price:number:r> <kind:word>[n,c]")
 public class StoreAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -63,36 +63,27 @@ public class StoreAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0",
+				event.user().getId()
+		);
+		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
 					}
 
-					switch (sc.getType()) {
-						case KAWAIPON -> {
-							boolean chrome = args.getString("kind").equalsIgnoreCase("c");
-							if (kp.hasCard(card, chrome)) {
-								event.channel().sendMessage(locale.get("error/in_collection")).queue();
-								return;
-							}
-
-							KawaiponCard kc = sc.getKawaiponCard();
-							kc.setStashEntry(null);
-							kc.save();
-
-							sc.delete();
-						}
-						case EVOGEAR -> {
-							//TODO
-						}
-						case FIELD -> {
-							//TODO
-						}
+					int price = args.getInt("price");
+					if (price <= 0) {
+						event.channel().sendMessage(locale.get("error/invalid_value_range", 0, Integer.MAX_VALUE)).queue();
+						return;
 					}
 
-					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
+					sc.setPrice(price);
+					sc.save();
+
+					event.channel().sendMessage(locale.get("success/store_add")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {
