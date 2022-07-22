@@ -20,6 +20,7 @@ package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -36,19 +37,19 @@ public interface EffectHolder {
 	boolean execute(EffectParameters ep);
 
 	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
-		return s -> {
-			JSONObject groups = Utils.extractNamedGroups(s, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<color>\\w+)})?");
+		return str -> {
+			JSONObject groups = Utils.extractNamedGroups(str, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<color>\\w+)})?");
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
-				s = Constants.VOID + s;
+				str = Constants.VOID + str;
 
 				String val;
 				try {
 					if (groups.has("calc")) {
 						val = String.valueOf(
 								Utils.eval(groups.getString("calc"), Map.of(
-										"mp", d.getMPCost(),
+										"mp", d instanceof Senshi s ? s.getMP() : d.getMPCost(),
 										"hp", d.getHPCost(),
 										"atk", d.getDmg(),
 										"dfs", d.getDef(),
@@ -58,11 +59,11 @@ public interface EffectHolder {
 						);
 
 						val = StringUtils.abbreviate(
-								s.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
+								str.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
 								Drawable.MAX_DESC_LENGTH
 						);
 					} else {
-						val = s;
+						val = str;
 					}
 
 					switch (groups.getString("color", "")) {
@@ -77,11 +78,11 @@ public interface EffectHolder {
 
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
-					return StringUtils.abbreviate(s, Drawable.MAX_DESC_LENGTH);
+					return StringUtils.abbreviate(str, Drawable.MAX_DESC_LENGTH);
 				}
 			}
 
-			return s;
+			return str;
 		};
 	}
 
