@@ -44,7 +44,7 @@ import java.util.Locale;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <price:number:r> <kind:word>[n,c]")
+@Signature("<card:word:r> <price:number:r>")
 public class StoreAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
