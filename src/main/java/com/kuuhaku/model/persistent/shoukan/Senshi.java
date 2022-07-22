@@ -504,11 +504,15 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public boolean isBlinded() {
+		return isBlinded(false);
+	}
+
+	public boolean isBlinded(boolean pop) {
 		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
 			return true;
 		}
 
-		return stats.hasFlag(Flag.BLIND);
+		return pop ? stats.popFlag(Flag.BLIND) : stats.hasFlag(Flag.BLIND);
 	}
 
 	public boolean isSupporting() {
