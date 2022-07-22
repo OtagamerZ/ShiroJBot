@@ -24,12 +24,17 @@ import com.kuuhaku.util.json.JSONUtils;
 
 import java.io.IOException;
 
-public record Slot(byte[] top, byte[] bottom, byte state) {
+public record Slot(byte[] top, byte[] equips, byte[] bottom, byte state) {
 	public Slot(SlotColumn slt) throws IOException {
-		this(JSONUtils.toJSON(slt.getTop()), JSONUtils.toJSON(slt.getBottom()), slt.getState());
+		this(
+				JSONUtils.toJSON(slt.getTop()),
+				JSONUtils.toJSON(slt.getTop() == null ? null : slt.getTop().getEquipments()),
+				JSONUtils.toJSON(slt.getBottom()),
+				slt.getState()
+		);
 	}
 
-	private Slot(String top, String bottom, byte state) throws IOException {
-		this(IO.compress(top), IO.compress(bottom), state);
+	private Slot(String top, String equips, String bottom, byte state) throws IOException {
+		this(IO.compress(top), IO.compress(equips), IO.compress(bottom), state);
 	}
 }

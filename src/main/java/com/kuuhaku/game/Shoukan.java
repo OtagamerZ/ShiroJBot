@@ -918,6 +918,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 					slt.setState(slot.state());
 					slt.setTop(JSONUtils.fromJSON(IO.uncompress(slot.top()), Senshi.class));
+					if (slt.hasTop()) {
+						JSONArray equips = new JSONArray(IO.uncompress(slot.equips()));
+						for (Object o : equips) {
+							JSONObject jo = new JSONObject(o);
+
+							slt.getTop().getEquipments().add(JSONUtils.fromJSON(jo.toString(), Evogear.class));
+						}
+					}
+
 					slt.setBottom(JSONUtils.fromJSON(IO.uncompress(slot.bottom()), Senshi.class));
 				}
 			}
