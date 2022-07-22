@@ -69,14 +69,15 @@ public class Market {
 		StashedCard sc = DAO.find(StashedCard.class, id);
 		if (sc == null) return false;
 
+		int price = sc.getPrice();
 		DAO.apply(Account.class, sc.getKawaipon().getUid(), a -> {
-			a.addCR(sc.getPrice(), "Sold " + sc);
+			a.addCR(price, "Sold " + sc);
 			a.getUser().openPrivateChannel()
-					.flatMap(c -> c.sendMessage(a.getEstimateLocale().get("success/market_notification", sc, sc.getPrice())))
+					.flatMap(c -> c.sendMessage(a.getEstimateLocale().get("success/market_notification", sc, price)))
 					.queue(null, Utils::doNothing);
 		});
 		DAO.apply(Account.class, uid, a -> {
-			a.consumeCR(sc.getPrice(), "Purchased " + sc);
+			a.consumeCR(price, "Purchased " + sc);
 			sc.setKawaipon(a.getKawaipon());
 			sc.setPrice(0);
 			sc.save();
