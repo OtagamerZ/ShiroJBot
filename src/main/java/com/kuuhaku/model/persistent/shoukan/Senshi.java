@@ -648,7 +648,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
-			g2d.setFont(new Font("Arial", Font.PLAIN, 12));
+			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.drawString(getTags().stream()
 							.limit(4)
 							.map(s -> {
@@ -664,7 +664,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 					, 7, 275
 			);
 
-			g2d.setFont(new Font("Arial", Font.PLAIN, 11));
+			g2d.setFont(new Font("Arial", Font.BOLD, 10));
 			Graph.drawMultilineString(g2d, desc,
 					7, 287, 211, 3,
 					parseValues(g2d, deck, this), highlightValues(g2d)
