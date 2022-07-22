@@ -44,6 +44,7 @@ import java.util.function.Consumer;
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	int MAX_NAME_LENGTH = 17;
 	int MAX_DESC_LENGTH = 210;
+	Font FONT = Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20);
 	int BORDER_WIDTH = 3;
 
 	String getId();
@@ -143,7 +144,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	default void drawCosts(Graphics2D g2d) {
 		BufferedImage icon;
 
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 20));
+		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
 
 		int y = 55;
@@ -185,7 +186,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default void drawAttributes(Graphics2D g2d, boolean desc) {
 		BufferedImage icon;
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 20));
+		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
 
 		{ // LEFT
