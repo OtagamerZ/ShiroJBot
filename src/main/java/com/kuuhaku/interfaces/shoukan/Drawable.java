@@ -143,7 +143,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	default void drawCosts(Graphics2D g2d) {
 		BufferedImage icon;
 
-		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.PLAIN, 20));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 20));
 		FontMetrics m = g2d.getFontMetrics();
 
 		int y = 55;
@@ -185,7 +185,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default void drawAttributes(Graphics2D g2d, boolean desc) {
 		BufferedImage icon;
-		g2d.setFont(Fonts.STAATLICHES.deriveFont(Font.PLAIN, 20));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 20));
 		FontMetrics m = g2d.getFontMetrics();
 
 		{ // LEFT
