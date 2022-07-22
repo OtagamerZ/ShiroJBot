@@ -97,7 +97,7 @@ public class StoreCommand implements Executable {
 					KawaiponCard kc = sc.getKawaiponCard();
 
 					return new MessageEmbed.Field(
-							"ID: `" + sc.getId() + "` | " + sc,
+							"`ID: " + sc.getId() + "` | " + sc,
 							"%s%s (%s | %s)%s%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
@@ -115,7 +115,7 @@ public class StoreCommand implements Executable {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 
 					return new MessageEmbed.Field(
-							"ID: `" + sc.getId() + "` | " + sc,
+							"`ID: " + sc.getId() + "` | " + sc,
 							"%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
@@ -130,7 +130,7 @@ public class StoreCommand implements Executable {
 					Field fd = DAO.find(Field.class, sc.getCard().getId());
 
 					return new MessageEmbed.Field(
-							"ID: `" + sc.getId() + "` | " + sc,
+							"`ID: " + sc.getId() + "` | " + sc,
 							"%s%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
