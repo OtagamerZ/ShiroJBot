@@ -29,6 +29,7 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
@@ -56,11 +57,14 @@ public class MarketBuyCommand implements Executable {
 			return;
 		}
 
-		Market m = new Market(event.user().getId());
-		if (m.buy(args.getInt("id"))) {
-			event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
-		} else {
-			event.channel().sendMessage(locale.get("error/not_announced")).queue();
-		}
+		Utils.confirm(locale.get("question/purchase", sc, sc.getPrice()), event.channel(), wrapper -> {
+					Market m = new Market(event.user().getId());
+					if (m.buy(args.getInt("id"))) {
+						event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
+					} else {
+						event.channel().sendMessage(locale.get("error/not_announced")).queue();
+					}
+				}, event.user()
+		);
 	}
 }
