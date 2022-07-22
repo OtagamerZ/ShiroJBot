@@ -66,7 +66,7 @@ public interface EffectHolder {
 					}
 
 					switch (groups.getString("color", "")) {
-						case "mp" -> g2d.setColor(new Color(0x0080FF));
+						case "mp" -> g2d.setColor(new Color(0x1E8EFF));
 						case "hp" -> g2d.setColor(new Color(0x85C720));
 						case "atk" -> g2d.setColor(new Color(0xFF0000));
 						case "dfs" -> g2d.setColor(new Color(0x00C500));
