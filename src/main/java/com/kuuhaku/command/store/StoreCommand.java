@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
@@ -89,6 +90,8 @@ public class StoreCommand implements Executable {
 				.setAuthor(locale.get("str/search_result", results.size(), total));
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
+			Account seller = sc.getKawaipon().getAccount();
+
 			switch (sc.getType()) {
 				case KAWAIPON -> {
 					KawaiponCard kc = sc.getKawaiponCard();
@@ -103,7 +106,7 @@ public class StoreCommand implements Executable {
 									kc != null && kc.getQuality() > 0
 											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
 											: "",
-									"\n" + locale.get("str/offer", sc.getPrice(), "<@" + sc.getKawaipon().getUid() + ">")
+									"\n" + locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
 							),
 							false
 					);
@@ -118,7 +121,7 @@ public class StoreCommand implements Executable {
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
 									sc.getCard().getAnime(),
-									"\n" + locale.get("str/offer", sc.getPrice(), "<@" + sc.getKawaipon().getUid() + ">")
+									"\n" + locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
 							),
 							false
 					);
@@ -139,7 +142,7 @@ public class StoreCommand implements Executable {
 										case NIGHT -> ":crescent_moon: ";
 										case DUNGEON -> ":japanese_castle: ";
 									},
-									"\n" + locale.get("str/offer", sc.getPrice(), "<@" + sc.getKawaipon().getUid() + ">")
+									"\n" + locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
 							),
 							false
 					);
