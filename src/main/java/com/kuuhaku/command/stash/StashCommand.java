@@ -90,9 +90,9 @@ public class StashCommand implements Executable {
 		}
 
 		Map<String, String> filters = new LinkedHashMap<>() {{
-			put("n", "AND c.card.id LIKE '%%'||%s||'%%'");
-			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||%s||'%%'");
-			put("a", "AND c.card.anime.id LIKE '%%'||%s||'%%'");
+			put("n", "AND c.card.id LIKE '%%'||?%s||'%%'");
+			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'");
+			put("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'");
 			put("c", "AND c.chrome = TRUE");
 			put("k", "AND c.type = 'KAWAIPON'");
 			put("e", "AND c.type = 'EVOGEAR'");

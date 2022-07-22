@@ -31,16 +31,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Market {
 	private final String uid;
 	private final Map<String, String> FILTERS = new LinkedHashMap<>() {{
-		put("n", "AND c.card.id LIKE '%%'||%s||'%%'");
-		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||%s||'%%'");
-		put("a", "AND c.card.anime.id LIKE '%%'||%s||'%%'");
+		put("n", "AND c.card.id LIKE '%%'||?%s||'%%'");
+		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'");
+		put("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'");
 		put("c", "AND c.chrome = TRUE");
 		put("k", "AND c.type = 'KAWAIPON'");
 		put("e", "AND c.type = 'EVOGEAR'");
 		put("f", "AND c.type = 'FIELD'");
-		put("gl", "AND c.price >= %s");
-		put("lt", "AND c.price <= %s");
-		put("m", "AND c.kawaipon.uid = %s");
+		put("gl", "AND c.price >= ?%s");
+		put("lt", "AND c.price <= ?%s");
+		put("m", "AND c.kawaipon.uid = ?%s");
 	}};
 
 	public Market(String uid) {
