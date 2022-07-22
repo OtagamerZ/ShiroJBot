@@ -51,6 +51,9 @@ public class MarketBuyCommand implements Executable {
 		if (sc == null) {
 			event.channel().sendMessage(locale.get("error/not_announced")).queue();
 			return;
+		} else if (sc.getKawaipon().equals(kp)) {
+			event.channel().sendMessage(locale.get("error/cannot_buy_own")).queue();
+			return;
 		}
 
 		Market m = new Market(event.user().getId());

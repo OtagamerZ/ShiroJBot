@@ -21,11 +21,12 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.persistent.shiro.Card;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -105,5 +106,18 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return cards.parallelStream()
 				.filter(c -> c.getStashEntry() == null)
 				.anyMatch(c -> c.getCard().equals(card) && c.isChrome() == chrome);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Kawaipon kawaipon = (Kawaipon) o;
+		return Objects.equals(uid, kawaipon.uid) && Objects.equals(account, kawaipon.account);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uid, account);
 	}
 }
