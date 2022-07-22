@@ -20,7 +20,6 @@ package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -49,7 +48,7 @@ public interface EffectHolder {
 					if (groups.has("calc")) {
 						val = String.valueOf(
 								Utils.eval(groups.getString("calc"), Map.of(
-										"mp", d instanceof Senshi s ? s.getMP() : d.getMPCost(),
+										"mp", d.getMPCost(),
 										"hp", d.getHPCost(),
 										"atk", d.getDmg(),
 										"dfs", d.getDef(),

@@ -191,10 +191,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		return Math.max(0, base.getMana() + stats.getMana()) + (isFusion() ? 5 : 0);
 	}
 
-	public int getMP() {
-		return Math.max(0, base.getMana() + stats.getMana());
-	}
-
 	@Override
 	public int getHPCost() {
 		return Math.max(0, base.getBlood() + stats.getBlood());
