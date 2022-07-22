@@ -151,7 +151,7 @@ public class SeeCardCommand implements Executable {
 											return d.getString(locale, s);
 										})
 										.map(s -> "`" + s + "`")
-										.collect(Collectors.joining(", ")),
+										.collect(Collectors.joining(" ")),
 								false
 						);
 					}
