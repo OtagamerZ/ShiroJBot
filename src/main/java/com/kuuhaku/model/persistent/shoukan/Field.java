@@ -188,7 +188,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			g2d.setColor(r.getColor());
 			Graph.drawOutlinedString(g2d, Utils.sign((int) ((1 + mod) * 100)) + "%",
 					23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
-					2, Color.BLACK
+					Drawable.BORDER_WIDTH, Color.BLACK
 			);
 		}
 
