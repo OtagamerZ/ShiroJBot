@@ -187,7 +187,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public int getMPCost() {
-		return Math.max(0, base.getMana() + stats.getMana());
+		return Math.max(0, base.getMana() + stats.getMana()) + (isFusion() ? 5 : 0);
 	}
 
 	@Override
@@ -496,6 +496,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		else if (isDefending()) return CardState.DEFENSE;
 
 		return CardState.ATTACK;
+	}
+
+	public boolean isFusion() {
+		return getTags().contains("FUSION");
 	}
 
 	public boolean isSupporting() {
