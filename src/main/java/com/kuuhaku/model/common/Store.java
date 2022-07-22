@@ -36,8 +36,8 @@ public class Store {
 		put("e", "AND c.type = 'EVOGEAR'");
 		put("f", "AND c.type = 'FIELD'");
 		put("v", "AND c.deck IS NULL");
-		put("min", "AND c.price >= ?4");
-		put("max", "AND c.price <= ?5");
+		put("gl", "AND c.price >= ?4");
+		put("lt", "AND c.price <= ?5");
 		put("m", "AND c.kawaipon.uid = ?6");
 	}};
 

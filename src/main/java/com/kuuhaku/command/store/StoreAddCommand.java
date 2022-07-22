@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.store;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -31,6 +32,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
@@ -47,8 +49,8 @@ public class StoreAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getCapacity() <= 0) {
-			event.channel().sendMessage(locale.get("error/stash_full")).queue();
+		if (kp.getStash().isEmpty()) {
+			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 			return;
 		}
 
@@ -61,17 +63,44 @@ public class StoreAddCommand implements Executable {
 			return;
 		}
 
-		KawaiponCard kc = kp.getCollection().stream()
-				.filter(c -> c.getCard().equals(card))
-				.filter(c -> c.isChrome() == args.getString("kind", "n").equalsIgnoreCase("c"))
-				.findFirst().orElse(null);
+		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+				.thenAccept(sc -> {
+					if (sc == null) {
+						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+						return;
+					}
 
-		if (kc == null) {
-			event.channel().sendMessage(locale.get("error/not_owned")).queue();
-			return;
-		}
+					switch (sc.getType()) {
+						case KAWAIPON -> {
+							boolean chrome = args.getString("kind").equalsIgnoreCase("c");
+							if (kp.hasCard(card, chrome)) {
+								event.channel().sendMessage(locale.get("error/in_collection")).queue();
+								return;
+							}
 
-		kc.store();
-		event.channel().sendMessage(locale.get("success/card_stored")).queue();
+							KawaiponCard kc = sc.getKawaiponCard();
+							kc.setStashEntry(null);
+							kc.save();
+
+							sc.delete();
+						}
+						case EVOGEAR -> {
+							//TODO
+						}
+						case FIELD -> {
+							//TODO
+						}
+					}
+
+					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
+				})
+				.exceptionally(t -> {
+					if (!(t.getCause() instanceof NoResultException)) {
+						Constants.LOGGER.error(t, t);
+					}
+
+					event.channel().sendMessage(locale.get("error/not_owned")).queue();
+					return null;
+				});
 	}
 }

@@ -23,19 +23,22 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
-import jakarta.persistence.NoResultException;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +52,7 @@ public class StashRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getCards().isEmpty()) {
+		if (kp.getStash().isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 			return;
 		}
@@ -70,26 +73,34 @@ public class StashRemoveCommand implements Executable {
 						return;
 					}
 
-					switch (sc.getType()) {
-						case KAWAIPON -> {
-							boolean chrome = args.getString("kind").equalsIgnoreCase("c");
-							if (kp.hasCard(card, chrome)) {
-								event.channel().sendMessage(locale.get("error/in_collection")).queue();
-								return;
-							}
+					if (sc.getType() == CardType.KAWAIPON) {
+						boolean chrome = args.getString("kind").equalsIgnoreCase("c");
+						if (kp.hasCard(card, chrome)) {
+							event.channel().sendMessage(locale.get("error/in_collection")).queue();
+							return;
+						}
 
-							KawaiponCard kc = sc.getKawaiponCard();
-							kc.setStashEntry(null);
-							kc.save();
+						KawaiponCard kc = sc.getKawaiponCard();
+						kc.setStashEntry(null);
+						kc.save();
 
-							sc.delete();
+						sc.delete();
+					} else {
+						int value;
+						if (sc.getType() == CardType.EVOGEAR) {
+							Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
+							value = e.getTier() * Calc.rng(100, 300, sc.getId());
+						} else {
+							value = Calc.rng(1000, 5000, sc.getId());
 						}
-						case EVOGEAR -> {
-							//TODO
-						}
-						case FIELD -> {
-							//TODO
-						}
+
+						Utils.confirm(locale.get("question/scrap", value), event.channel(), wrapper -> {
+									event.channel().sendMessage(locale.get("success/scrap")).queue();
+									kp.getAccount().addCR(value, sc + " scrapped");
+									sc.delete();
+								}, event.user()
+						);
+						return;
 					}
 
 					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();

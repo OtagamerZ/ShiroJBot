@@ -49,7 +49,7 @@ public class StoreRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getCards().isEmpty()) {
+		if (kp.getStash().isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 			return;
 		}
