@@ -116,6 +116,7 @@ public class StashCommand implements Executable {
 		}
 
 		query.appendNewLine("ORDER BY c.card.rarity, c.card.id");
+		System.out.println(query);
 
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.kawaipon_uid = ?1", event.user().getId());
 		List<StashedCard> results = DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
