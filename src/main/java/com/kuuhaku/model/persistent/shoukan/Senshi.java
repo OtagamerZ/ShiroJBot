@@ -499,7 +499,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public boolean isFusion() {
-		return getTags().contains("FUSION");
+		return base.getTags().contains("FUSION");
 	}
 
 	public boolean isSupporting() {

@@ -351,7 +351,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-		if (chosen.getTags().contains("FIXED")) {
+		if (chosen.getBase().getTags().contains("FIXED")) {
 			getChannel().sendMessage(locale.get("error/card_fixed")).queue();
 			return false;
 		} else if (chosen.getHPCost() / 2 >= curr.getHP()) {
