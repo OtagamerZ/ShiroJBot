@@ -88,7 +88,7 @@ public interface EffectHolder {
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d) {
 		return (str, x, y) -> {
 			if (str.startsWith(Constants.VOID) && !g2d.getColor().equals(Color.BLACK)) {
-				if (Calc.luminance(g2d.getColor()) < 0.5) {
+				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0, 175));
