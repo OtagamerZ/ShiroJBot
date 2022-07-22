@@ -373,21 +373,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-
-			List<String> tags = getTags();
-			if (tags.size() > 3) {
-				tags = tags.subList(0, 3);
-				tags.add("...");
-			}
-
-			for (int i = 0; i < tags.size(); i++) {
-				String tag = tags.get(i);
-				if (tag.startsWith("tag/")) {
-					tags.set(i, getString(locale, tag).toUpperCase(Locale.ROOT));
-				}
-			}
-
-			g2d.drawString(tags.toString(), 7, 275);
+			g2d.drawString(processTags(locale, getTags()), 7, 275);
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			Graph.drawMultilineString(g2d, desc,

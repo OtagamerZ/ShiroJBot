@@ -281,6 +281,26 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		}
 	}
 
+	default String processTags(I18N locale, List<String> tags) {
+		List<String> out = getTags();
+
+		for (String tag : tags) {
+			if (tag.startsWith("race/")) {
+				out.add(locale.get(tag).toUpperCase(Locale.ROOT));
+			} else if (tag.startsWith("tag/")) {
+				out.add(getString(locale, tag).toUpperCase(Locale.ROOT));
+			}
+
+			if (out.toString().length() > 32) {
+				out.remove(out.size() - 1);
+				out.add("...");
+				break;
+			}
+		}
+
+		return out.toString();
+	}
+
 	T clone() throws CloneNotSupportedException;
 
 	@SuppressWarnings("unchecked")
