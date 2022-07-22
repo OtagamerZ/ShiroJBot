@@ -418,7 +418,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 							Graph.applyMask(icon, mask, i, true);
 							g.drawImage(icon, 0, 0, null);
 						}
-						g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, 32, 32, null);
+						g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
 					}
 				});
 			}
