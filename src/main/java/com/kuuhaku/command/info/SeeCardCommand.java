@@ -141,7 +141,7 @@ public class SeeCardCommand implements Executable {
 						eb.setAuthor(null);
 					}
 					if (!d.getTags().isEmpty()) {
-						eb.addField("str/tags",
+						eb.addField(locale.get("str/tags"),
 								d.getTags().stream()
 										.map(s -> {
 											if (s.startsWith("race/")) {
