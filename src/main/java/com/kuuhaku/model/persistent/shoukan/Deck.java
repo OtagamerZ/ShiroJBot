@@ -41,6 +41,7 @@ import org.jdesktop.swingx.graphics.BlendComposite;
 import org.knowm.xchart.RadarChart;
 
 import jakarta.persistence.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -468,7 +469,7 @@ public class Deck extends DAO<Deck> {
 		return new BaseValues(
 				5000,
 				t -> 5 - reduction,
-				5
+				t -> 5
 		);
 	}
 
