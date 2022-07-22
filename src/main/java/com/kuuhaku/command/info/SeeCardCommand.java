@@ -47,6 +47,7 @@ import net.dv8tion.jda.api.Permission;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "see",
@@ -133,12 +134,27 @@ public class SeeCardCommand implements Executable {
 					case FIELD -> DAO.find(Field.class, card.getId());
 				};
 
-				if (d instanceof Senshi s && s.isFusion()) {
-					eb.setAuthor(null);
-				}
-
 				if (d != null) {
 					bi = d.render(locale, dk);
+
+					if (d instanceof Senshi s && s.isFusion()) {
+						eb.setAuthor(null);
+					}
+					if (!d.getTags().isEmpty()) {
+						eb.addField("str/tags",
+								d.getTags().stream()
+										.map(s -> {
+											if (s.startsWith("race/")) {
+												return locale.get(s);
+											}
+
+											return d.getString(locale, s);
+										})
+										.map(s -> "`" + s + "`")
+										.collect(Collectors.joining(", ")),
+								false
+						);
+					}
 				}
 			}
 		}

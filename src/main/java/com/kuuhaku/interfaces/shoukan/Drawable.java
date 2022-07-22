@@ -54,6 +54,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return getCard();
 	}
 
+	default List<String> getTags() {
+		return List.of();
+	}
+
 	default SlotColumn getSlot() {
 		return new SlotColumn(getHand().getGame(), getHand().getSide(), -1);
 	}

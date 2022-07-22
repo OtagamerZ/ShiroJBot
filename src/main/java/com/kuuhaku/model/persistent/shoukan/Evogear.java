@@ -149,7 +149,8 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		return stats;
 	}
 
-	public java.util.List<String> getTags() {
+	@Override
+	public List<String> getTags() {
 		List<String> out = new ArrayList<>();
 		if (hasEffect()) {
 			if (isSpell()) {

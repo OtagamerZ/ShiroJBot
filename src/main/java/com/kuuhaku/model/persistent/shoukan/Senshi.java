@@ -125,6 +125,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		return stats;
 	}
 
+	@Override
 	public List<String> getTags() {
 		List<String> out = new ArrayList<>();
 		if (race != Race.NONE) {
