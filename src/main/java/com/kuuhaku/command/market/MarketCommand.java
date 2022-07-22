@@ -69,7 +69,7 @@ public class MarketCommand implements Executable {
 		if (args.containsKey("action")) {
 			XStringBuilder sb = new XStringBuilder();
 			for (Option opt : cli.getSecond().getOptions()) {
-				sb.appendNewLine("**-%s --%s** - %s".formatted(
+				sb.appendNewLine("`-%s --%s` - %s".formatted(
 						opt.getOpt(),
 						opt.getLongOpt(),
 						opt.getDescription()
