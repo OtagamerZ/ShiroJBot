@@ -19,6 +19,7 @@
 package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
@@ -39,6 +40,7 @@ public interface EffectHolder {
 		return str -> {
 			JSONObject groups = Utils.extractNamedGroups(str, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<color>\\w+)})?");
 
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
 				str = Constants.VOID + str;
@@ -65,6 +67,7 @@ public interface EffectHolder {
 						val = str;
 					}
 
+					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
 					switch (groups.getString("color", "")) {
 						case "mp" -> g2d.setColor(new Color(0x3F9EFF));
 						case "hp" -> g2d.setColor(new Color(0x85C720));
