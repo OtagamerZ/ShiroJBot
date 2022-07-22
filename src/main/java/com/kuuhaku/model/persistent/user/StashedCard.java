@@ -55,8 +55,8 @@ public class StashedCard extends DAO<StashedCard> {
 	@JoinColumn(name = "deck_id")
 	private Deck deck;
 
-	@Column(name = "price")
-	private int price;
+	@Column(name = "price", nullable = false)
+	private int price = 0;
 
 	public StashedCard() {
 
