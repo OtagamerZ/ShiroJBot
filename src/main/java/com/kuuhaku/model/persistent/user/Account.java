@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Utils;
@@ -35,6 +36,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -260,6 +262,21 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public boolean isOldUser() {
 		ZonedDateTime old = ZonedDateTime.of(LocalDateTime.of(2022, 2, 12, 0, 0), ZoneId.of("GMT-3"));
 		return createdAt.isBefore(old);
+	}
+
+	public I18N getEstimateLocale() {
+		return I18N.valueOf(Utils.getOr(
+				DAO.queryNative(String.class,
+						"""
+								SELECT gc.locale
+								FROM guild_config gc
+								INNER JOIN profile p ON gc.gid = p.gid
+								WHERE p.uid = ?1
+								GROUP BY gc.locale
+								ORDER BY COUNT(gc.locale) DESC
+								""", uid
+				), "PT"
+		));
 	}
 
 	@Override

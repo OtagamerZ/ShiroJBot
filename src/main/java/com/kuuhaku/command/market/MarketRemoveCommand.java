@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.store;
+package com.kuuhaku.command.market;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
@@ -27,7 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -40,12 +40,12 @@ import java.util.List;
 import java.util.Locale;
 
 @Command(
-		name = "store",
-		subname = "buy",
+		name = "market",
+		subname = "remove",
 		category = Category.MISC
 )
-@Signature("<id:number:r>")
-public class StoreBuyCommand implements Executable {
+@Signature("<card:word:r>")
+public class MarketRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
@@ -63,36 +63,21 @@ public class StoreBuyCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.price > 0",
+				event.user().getId()
+		);
+		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
 					}
 
-					switch (sc.getType()) {
-						case KAWAIPON -> {
-							boolean chrome = args.getString("kind").equalsIgnoreCase("c");
-							if (kp.hasCard(card, chrome)) {
-								event.channel().sendMessage(locale.get("error/in_collection")).queue();
-								return;
-							}
+					sc.setPrice(0);
+					sc.save();
 
-							KawaiponCard kc = sc.getKawaiponCard();
-							kc.setStashEntry(null);
-							kc.save();
-
-							sc.delete();
-						}
-						case EVOGEAR -> {
-							//TODO
-						}
-						case FIELD -> {
-							//TODO
-						}
-					}
-
-					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
+					event.channel().sendMessage(locale.get("success/market_remove")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

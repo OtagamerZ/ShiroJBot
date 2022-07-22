@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.store;
+package com.kuuhaku.command.market;
 
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
@@ -25,7 +25,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.Store;
+import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -51,7 +51,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 @Command(
-		name = "store",
+		name = "market",
 		category = Category.MISC
 )
 @Signature({
@@ -59,10 +59,10 @@ import java.util.List;
 		"<params:text>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class StoreCommand implements Executable {
+public class MarketCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Store st = new Store(event.user().getId());
+		Market m = new Market(event.user().getId());
 
 		String[] content = args.getString("params").split("\\s+");
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, true);
@@ -85,7 +85,7 @@ public class StoreCommand implements Executable {
 		}
 
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.price > 0");
-		List<StashedCard> results = st.getOffers(cli.getFirst().getOptions());
+		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/search_result", results.size(), total));
 

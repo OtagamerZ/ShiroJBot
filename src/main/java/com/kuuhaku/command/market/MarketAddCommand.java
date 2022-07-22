@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.store;
+package com.kuuhaku.command.market;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
@@ -40,12 +40,12 @@ import java.util.List;
 import java.util.Locale;
 
 @Command(
-		name = "store",
+		name = "market",
 		subname = "add",
 		category = Category.MISC
 )
 @Signature("<card:word:r> <price:number:r>")
-public class StoreAddCommand implements Executable {
+public class MarketAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
@@ -83,7 +83,7 @@ public class StoreAddCommand implements Executable {
 					sc.setPrice(price);
 					sc.save();
 
-					event.channel().sendMessage(locale.get("success/store_add")).queue();
+					event.channel().sendMessage(locale.get("success/market_add")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

@@ -128,7 +128,7 @@ public class StashCommand implements Executable {
 			} else if (sc.getDeck() != null) {
 				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
 			} else if (sc.getPrice() > 0) {
-				location = " (" + locale.get("str/store", sc.getPrice()) + ")";
+				location = " (" + locale.get("str/market", sc.getPrice()) + ")";
 			}
 
 			switch (sc.getType()) {

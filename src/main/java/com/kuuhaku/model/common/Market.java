@@ -19,13 +19,15 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import org.apache.commons.cli.Option;
 
 import java.util.*;
 
-public class Store {
+public class Market {
 	private final String uid;
 	private final Map<String, String> FILTERS = new LinkedHashMap<>() {{
 		put("n", "AND c.card.id LIKE '%'||?1||'%'");
@@ -41,7 +43,7 @@ public class Store {
 		put("m", "AND c.kawaipon.uid = ?6");
 	}};
 
-	public Store(String uid) {
+	public Market(String uid) {
 		this.uid = uid;
 	}
 
@@ -60,5 +62,25 @@ public class Store {
 		query.appendNewLine("ORDER BY c.card.rarity, c.price, c.card.id");
 
 		return DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
+	}
+
+	public boolean buy(int id) {
+		StashedCard sc = DAO.find(StashedCard.class, id);
+		if (sc == null) return false;
+
+		DAO.apply(Account.class, uid, a -> {
+			a.consumeCR(sc.getPrice(), "Purchased " + sc);
+			sc.setKawaipon(a.getKawaipon());
+			sc.setPrice(0);
+			sc.save();
+		});
+		DAO.apply(Account.class, sc.getKawaipon().getUid(), a -> {
+			a.addCR(sc.getPrice(), "Sold " + sc);
+			a.getUser().openPrivateChannel()
+					.flatMap(c -> c.sendMessage(a.getEstimateLocale().get("success/market_notification", sc, sc.getPrice())))
+					.queue(null, Utils::doNothing);
+		});
+
+		return true;
 	}
 }
