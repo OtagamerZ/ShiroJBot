@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public record Slot(byte[] top, byte[] bottom, byte state) {
 	public Slot(SlotColumn slt) throws IOException {
-		this(JSONUtils.toJSON(slt.getTop()), JSONUtils.toJSON(slt.getTop()), slt.getState());
+		this(JSONUtils.toJSON(slt.getTop()), JSONUtils.toJSON(slt.getBottom()), slt.getState());
 	}
 
 	private Slot(String top, String bottom, byte state) throws IOException {
