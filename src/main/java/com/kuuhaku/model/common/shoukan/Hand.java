@@ -136,7 +136,7 @@ public class Hand {
 			base = new BaseValues(() -> {
 				int bHP = 5000;
 				AccFunction<Integer, Integer> mpGain = t -> 5;
-				int handCap = 5;
+				AccFunction<Integer, Integer> handCap = t -> 5;
 
 				mpGain = switch (origin.major()) {
 					case DEMON -> {
@@ -146,6 +146,10 @@ public class Hand {
 					case DIVINITY -> mpGain.accumulate((t, mp) -> mp + (int) (mp * userDeck.getMetaDivergence() / 2));
 					default -> mpGain;
 				};
+
+				if (origin.minor() == Race.BEAST) {
+					handCap = mpGain.accumulate((t, cards) -> cards + t / 25);
+				}
 
 				if (origin.synergy() == Race.FEY) {
 					mpGain = mpGain.accumulate((t, mp) -> mp * (Calc.chance(2) ? 2 : 1));
@@ -211,7 +215,7 @@ public class Hand {
 	}
 
 	public int getRemainingDraws() {
-		return Math.max(0, base.handCapacity() - getHandCount());
+		return Math.max(0, base.handCapacity().apply(game.getTurn()) - getHandCount());
 	}
 
 	public LinkedList<Drawable<?>> getRealDeck() {

@@ -23,16 +23,16 @@ import kotlin.Triple;
 
 import java.util.concurrent.Callable;
 
-public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, int handCapacity) {
+public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, AccFunction<Integer, Integer> handCapacity) {
 	public BaseValues() {
-		this(5000, t -> 5, 5);
+		this(5000, t -> 5, t -> 5);
 	}
 
-	public BaseValues(Callable<Triple<Integer, AccFunction<Integer, Integer>, Integer>> values) throws Exception {
+	public BaseValues(Callable<Triple<Integer, AccFunction<Integer, Integer>, AccFunction<Integer, Integer>>> values) throws Exception {
 		this(values.call());
 	}
 
-	public BaseValues(Triple<Integer, AccFunction<Integer, Integer>, Integer> values) {
+	public BaseValues(Triple<Integer, AccFunction<Integer, Integer>, AccFunction<Integer, Integer>> values) {
 		this(values.getFirst(), values.getSecond(), values.getThird());
 	}
 }
