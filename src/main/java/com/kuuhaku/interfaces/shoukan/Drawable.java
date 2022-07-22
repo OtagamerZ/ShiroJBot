@@ -37,6 +37,7 @@ import com.kuuhaku.util.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -281,8 +282,9 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		}
 	}
 
-	default String processTags(I18N locale, List<String> tags) {
-		List<String> out = getTags();
+	default String processTags(I18N locale) {
+		List<String> tags = getTags();
+		List<String> out = new ArrayList<>();
 
 		for (String tag : tags) {
 			if (tag.startsWith("race/")) {
