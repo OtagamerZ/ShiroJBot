@@ -184,7 +184,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		FontMetrics m = g2d.getFontMetrics();
 
 		{ // LEFT
-			int y = desc ? 225 : 279;
+			int y = desc ? 213 : 279;
 			if (getDef() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/defense.png");
 				assert icon != null;
@@ -228,7 +228,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 
 		{ // RIGHT
-			int y = desc ? 225 : 279;
+			int y = desc ? 213 : 279;
 			if (getBlock() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/block.png");
 				assert icon != null;
