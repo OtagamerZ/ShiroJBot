@@ -115,6 +115,7 @@ public class Trade {
 				WHERE sc.kawaipon_uid = ?1
 				AND sc.id IN ?2
 				AND sc.deck_id IS NULL
+				AND sc.price IS NULL
 				""";
 
 		if (DAO.queryNative(Integer.class, query, left.getUid(), leftOffers) != leftOffers.size()) {

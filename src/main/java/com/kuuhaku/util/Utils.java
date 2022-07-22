@@ -44,6 +44,7 @@ import de.androidpit.colorthief.ColorThief;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -60,7 +61,6 @@ import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
-import jakarta.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -796,6 +796,8 @@ public abstract class Utils {
 				location = " (" + locale.get("str/trade") + ")";
 			} else if (sc.getDeck() != null) {
 				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
+			} else if (sc.getPrice() > 0) {
+				location = " (" + locale.get("str/store", sc.getPrice()) + ")";
 			}
 
 			switch (sc.getType()) {

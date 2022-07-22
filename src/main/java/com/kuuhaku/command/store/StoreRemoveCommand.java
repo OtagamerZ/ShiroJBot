@@ -16,60 +16,41 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.deck;
+package com.kuuhaku.command.store;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
-import jakarta.persistence.NoResultException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 @Command(
-		name = "deck",
-		subname = "add",
+		name = "store",
+		subname = "remove",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
-@Requires({
-		Permission.MESSAGE_ATTACH_FILES,
-		Permission.MESSAGE_EMBED_LINKS
-})
-public class DeckAddCommand implements Executable {
+@Signature("<card:word:r> <kind:word>[n,c]")
+public class StoreRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 		if (kp.getCards().isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
-			return;
-		}
-
-		Deck d = data.profile().getAccount().getCurrentDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck")).queue();
 			return;
 		}
 
@@ -82,58 +63,36 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId()));
-		if (types.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
-			return;
-		}
-
-		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price IS NULL",
-				event.user().getId()
-		);
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
 					}
 
-					Deck dk = d.refresh();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							if (sc.getKawaiponCard().isChrome()) {
-								event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
-								return;
-							} else if (dk.getSenshi().size() >= 36) {
-								event.channel().sendMessage(locale.get("error/deck_full")).queue();
+							boolean chrome = args.getString("kind").equalsIgnoreCase("c");
+							if (kp.hasCard(card, chrome)) {
+								event.channel().sendMessage(locale.get("error/in_collection")).queue();
 								return;
 							}
 
-							dk.getSenshi().add(DAO.find(Senshi.class, card.getId()));
+							KawaiponCard kc = sc.getKawaiponCard();
+							kc.setStashEntry(null);
+							kc.save();
+
+							sc.delete();
 						}
 						case EVOGEAR -> {
-							if (dk.getEvogear().size() >= 24) {
-								event.channel().sendMessage(locale.get("error/deck_full")).queue();
-								return;
-							}
-
-							dk.getEvogear().add(DAO.find(Evogear.class, card.getId()));
+							//TODO
 						}
 						case FIELD -> {
-							if (dk.getFields().size() >= 3) {
-								event.channel().sendMessage(locale.get("error/deck_full")).queue();
-								return;
-							}
-
-							dk.getFields().add(DAO.find(Field.class, card.getId()));
+							//TODO
 						}
 					}
-					sc.setDeck(dk);
-					sc.save();
-					dk.save();
 
-					event.channel().sendMessage(locale.get("success/deck_add")).queue();
+					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

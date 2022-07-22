@@ -55,6 +55,9 @@ public class StashedCard extends DAO<StashedCard> {
 	@JoinColumn(name = "deck_id")
 	private Deck deck;
 
+	@Column(name = "price")
+	private int price;
+
 	public StashedCard() {
 
 	}
@@ -105,6 +108,14 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public void setDeck(Deck deck) {
 		this.deck = deck;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 	@Override

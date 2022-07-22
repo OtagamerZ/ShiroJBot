@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.stash;
+package com.kuuhaku.command.store;
 
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
@@ -25,14 +25,13 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.Store;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.persistent.user.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -48,10 +47,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.List;
 
 @Command(
-		name = "stash",
+		name = "store",
 		category = Category.MISC
 )
 @Signature({
@@ -59,17 +58,13 @@ import java.util.*;
 		"<params:text>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class StashCommand implements Executable {
+public class StoreCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getStash().isEmpty()) {
-			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
-			return;
-		}
+		Store st = new Store(event.user().getId());
 
 		String[] content = args.getString("params").split("\\s+");
-		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, false);
+		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, true);
 		if (args.containsKey("action")) {
 			XStringBuilder sb = new XStringBuilder();
 			for (Option opt : cli.getSecond().getOptions()) {
@@ -88,63 +83,27 @@ public class StashCommand implements Executable {
 			return;
 		}
 
-		Map<String, String> filters = new LinkedHashMap<>() {{
-			put("n", "AND c.card.id LIKE '%'||?2||'%'");
-			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%'||?3||'%'");
-			put("a", "AND c.card.anime.id LIKE '%'||?4||'%'");
-			put("c", "AND c.chrome = TRUE");
-			put("k", "AND c.type = 'KAWAIPON'");
-			put("e", "AND c.type = 'EVOGEAR'");
-			put("f", "AND c.type = 'FIELD'");
-			put("v", "AND c.deck IS NULL");
-		}};
-
-		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
-		List<Object> params = new ArrayList<>() {{
-			add(event.user().getId());
-		}};
-
-		Option[] opts = cli.getFirst().getOptions();
-		for (Option opt : opts) {
-			query.appendNewLine(filters.get(opt.getOpt()));
-
-			if (opt.hasArg()) {
-				params.add(opt.getValue().toUpperCase(Locale.ROOT));
-			}
-		}
-
-		query.appendNewLine("ORDER BY c.card.rarity, c.card.id");
-
-		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.kawaipon_uid = ?1", event.user().getId());
-		List<StashedCard> results = DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
+		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.price > 0");
+		List<StashedCard> results = st.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/search_result", results.size(), total));
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
-			Trade t = Trade.getPending().get(event.user().getId());
-			String location = "";
-			if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
-				location = " (" + locale.get("str/trade") + ")";
-			} else if (sc.getDeck() != null) {
-				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
-			} else if (sc.getPrice() > 0) {
-				location = " (" + locale.get("str/store", sc.getPrice()) + ")";
-			}
-
 			switch (sc.getType()) {
 				case KAWAIPON -> {
 					KawaiponCard kc = sc.getKawaiponCard();
 
 					return new MessageEmbed.Field(
-							sc + location,
-							"%s%s (%s | %s)%s".formatted(
+							"ID: `" + sc.getId() + "` | " + sc,
+							"%s%s (%s | %s)%s%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
 									kc != null && kc.getQuality() > 0
 											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
-											: ""
+											: "",
+									"\n" + locale.get("str/offer", sc.getPrice(), "<@" + sc.getKawaipon().getUid() + ">")
 							),
 							false
 					);
@@ -153,12 +112,13 @@ public class StashCommand implements Executable {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 
 					return new MessageEmbed.Field(
-							sc + location,
-							"%s%s (%s | %s)".formatted(
+							"ID: `" + sc.getId() + "` | " + sc,
+							"%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
-									sc.getCard().getAnime()
+									sc.getCard().getAnime(),
+									"\n" + locale.get("str/offer", sc.getPrice(), "<@" + sc.getKawaipon().getUid() + ">")
 							),
 							false
 					);
@@ -167,8 +127,8 @@ public class StashCommand implements Executable {
 					Field fd = DAO.find(Field.class, sc.getCard().getId());
 
 					return new MessageEmbed.Field(
-							sc + location,
-							"%s%s%s (%s | %s)".formatted(
+							"ID: `" + sc.getId() + "` | " + sc,
+							"%s%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()),
@@ -178,7 +138,8 @@ public class StashCommand implements Executable {
 										case DAY -> ":sunny: ";
 										case NIGHT -> ":crescent_moon: ";
 										case DUNGEON -> ":japanese_castle: ";
-									}
+									},
+									"\n" + locale.get("str/offer", sc.getPrice(), "<@" + sc.getKawaipon().getUid() + ">")
 							),
 							false
 					);
