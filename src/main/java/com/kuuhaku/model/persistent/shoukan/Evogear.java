@@ -24,7 +24,6 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.enums.shoukan.Lock;
@@ -374,7 +373,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+			g2d.setFont(new Font("Arial", Font.PLAIN, 12));
 			g2d.drawString(getTags().stream()
 							.limit(4)
 							.map(s -> getString(locale, s))
@@ -382,7 +381,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 					, 7, 275
 			);
 
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
+			g2d.setFont(new Font("Arial", Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d, desc,
 					7, 287, 211, 3,
 					parseValues(g2d, deck, this), highlightValues(g2d)

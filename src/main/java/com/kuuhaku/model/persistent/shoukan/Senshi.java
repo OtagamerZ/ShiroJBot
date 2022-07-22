@@ -26,19 +26,17 @@ import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
-
-import jakarta.persistence.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -650,7 +648,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
+			g2d.setFont(new Font("Arial", Font.PLAIN, 12));
 			g2d.drawString(getTags().stream()
 							.limit(4)
 							.map(s -> {
@@ -666,7 +664,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 					, 7, 275
 			);
 
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
+			g2d.setFont(new Font("Arial", Font.PLAIN, 11));
 			Graph.drawMultilineString(g2d, desc,
 					7, 287, 211, 3,
 					parseValues(g2d, deck, this), highlightValues(g2d)
