@@ -36,7 +36,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.Map;
@@ -173,7 +172,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);
 		}
 
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 18, Map.of(TextAttribute.WEIGHT, TextAttribute.WEIGHT_ULTRABOLD)));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 18));
 		FontMetrics m = g2d.getFontMetrics();
 
 		int i = 0;

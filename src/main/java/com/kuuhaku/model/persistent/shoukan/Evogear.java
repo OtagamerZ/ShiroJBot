@@ -44,7 +44,6 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
@@ -368,7 +367,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 		g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 		g2d.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + getTier() + ".png"), 190, 12, null);
 
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 18, Map.of(TextAttribute.WEIGHT, TextAttribute.WEIGHT_ULTRABOLD)));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 18));
 		g2d.setColor(deck.getFrame().getPrimaryColor());
 		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
