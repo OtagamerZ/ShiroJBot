@@ -99,7 +99,7 @@ public class StashCommand implements Executable {
 			put("v", "AND c.deck IS NULL");
 		}};
 
-		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
+		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?");
 		List<Object> params = new ArrayList<>() {{
 			add(event.user().getId());
 		}};
