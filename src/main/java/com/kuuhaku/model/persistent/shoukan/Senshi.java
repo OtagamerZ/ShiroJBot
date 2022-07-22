@@ -33,14 +33,14 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
-import jakarta.persistence.*;
-
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
@@ -643,7 +643,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 		g2d.drawImage(getRace().getIcon(), 190, 12, null);
 
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 18));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 18, Map.of(TextAttribute.WEIGHT, TextAttribute.WEIGHT_ULTRABOLD)));
 		g2d.setColor(deck.getFrame().getPrimaryColor());
 		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
