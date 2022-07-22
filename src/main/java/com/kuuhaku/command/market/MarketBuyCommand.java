@@ -58,7 +58,7 @@ public class MarketBuyCommand implements Executable {
 
 		Market m = new Market(event.user().getId());
 		if (m.buy(args.getInt("id"))) {
-			event.channel().sendMessage(locale.get("success/market_purchase")).queue();
+			event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
 		} else {
 			event.channel().sendMessage(locale.get("error/not_announced")).queue();
 		}

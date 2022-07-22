@@ -30,17 +30,16 @@ import java.util.*;
 public class Market {
 	private final String uid;
 	private final Map<String, String> FILTERS = new LinkedHashMap<>() {{
-		put("n", "AND c.card.id LIKE '%'||?1||'%'");
-		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%'||?2||'%'");
-		put("a", "AND c.card.anime.id LIKE '%'||?3||'%'");
+		put("n", "AND c.card.id LIKE '%'||?||'%'");
+		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%'||?||'%'");
+		put("a", "AND c.card.anime.id LIKE '%'||?||'%'");
 		put("c", "AND c.chrome = TRUE");
 		put("k", "AND c.type = 'KAWAIPON'");
 		put("e", "AND c.type = 'EVOGEAR'");
 		put("f", "AND c.type = 'FIELD'");
-		put("v", "AND c.deck IS NULL");
-		put("gl", "AND c.price >= ?4");
-		put("lt", "AND c.price <= ?5");
-		put("m", "AND c.kawaipon.uid = ?6");
+		put("gl", "AND c.price >= ?");
+		put("lt", "AND c.price <= ?");
+		put("m", "AND c.kawaipon.uid = ?");
 	}};
 
 	public Market(String uid) {
@@ -68,17 +67,17 @@ public class Market {
 		StashedCard sc = DAO.find(StashedCard.class, id);
 		if (sc == null) return false;
 
-		DAO.apply(Account.class, uid, a -> {
-			a.consumeCR(sc.getPrice(), "Purchased " + sc);
-			sc.setKawaipon(a.getKawaipon());
-			sc.setPrice(0);
-			sc.save();
-		});
 		DAO.apply(Account.class, sc.getKawaipon().getUid(), a -> {
 			a.addCR(sc.getPrice(), "Sold " + sc);
 			a.getUser().openPrivateChannel()
 					.flatMap(c -> c.sendMessage(a.getEstimateLocale().get("success/market_notification", sc, sc.getPrice())))
 					.queue(null, Utils::doNothing);
+		});
+		DAO.apply(Account.class, uid, a -> {
+			a.consumeCR(sc.getPrice(), "Purchased " + sc);
+			sc.setKawaipon(a.getKawaipon());
+			sc.setPrice(0);
+			sc.save();
 		});
 
 		return true;
