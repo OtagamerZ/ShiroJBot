@@ -19,6 +19,7 @@
 package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 
 import java.awt.*;
@@ -28,14 +29,14 @@ import java.util.List;
 
 public enum Race {
 	// Pure races
-	HUMAN(0x1, 0x6413FE),
-	BEAST(0x2, 0x502600),
-	MACHINE(0x4, 0xFF6B00),
-	DIVINITY(0x8, 0xFFD500),
-	SPIRIT(0x10, 0xFFFFFF),
-	UNDEAD(0x20, 0xFF00D1),
-	MYSTICAL(0x40, 0x00B3FF),
-	DEMON(0x80, 0xFF0000),
+	HUMAN(0x1),
+	BEAST(0x2),
+	MACHINE(0x4),
+	DIVINITY(0x8),
+	SPIRIT(0x10),
+	UNDEAD(0x20),
+	MYSTICAL(0x40),
+	DEMON(0x80),
 
 	// Semi-races
 	WEREBEAST(HUMAN.flag | BEAST.flag),
@@ -134,7 +135,7 @@ public enum Race {
 	}
 
 	public Color getColor() {
-		return color;
+		return Graph.colorThief(getImage());
 	}
 
 	public static Race getByFlag(int flag) {
