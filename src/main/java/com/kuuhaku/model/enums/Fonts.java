@@ -31,7 +31,8 @@ public enum Fonts {
 	HAMMERSMITH_ONE("font/HammersmithOne.ttf"),
 	UBUNTU_MONO("font/UbuntuMono.ttf"),
 	OPEN_SANS("font/OpenSans.ttf"),
-	OPEN_SANS_BOLD("font/OpenSansBold.ttf");
+	OPEN_SANS_BOLD("font/OpenSans-Bold.ttf"),
+	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf");
 
 	private final Font font;
 
