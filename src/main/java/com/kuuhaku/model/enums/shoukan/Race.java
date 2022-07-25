@@ -71,15 +71,9 @@ public enum Race {
 	NONE(0);
 
 	private final int flag;
-	private final Color color;
 
 	Race(int flag) {
-		this(flag, 0);
-	}
-
-	Race(int flag, int color) {
 		this.flag = flag;
-		this.color = new Color(color);
 	}
 
 	public String getName(I18N locale) {
@@ -124,10 +118,6 @@ public enum Race {
 
 	public BufferedImage getImage() {
 		return IO.getResourceAsImage("shoukan/race/full/" + name() + ".png");
-	}
-
-	public BufferedImage getHalo() {
-		return IO.getResourceAsImage("shoukan/race/halo/" + name() + ".png");
 	}
 
 	public BufferedImage getIcon() {
