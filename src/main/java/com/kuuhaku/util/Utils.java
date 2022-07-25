@@ -40,7 +40,6 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
-import de.androidpit.colorthief.ColorThiefColorThief;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
