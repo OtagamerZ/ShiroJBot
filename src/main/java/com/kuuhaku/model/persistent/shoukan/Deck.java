@@ -323,7 +323,7 @@ public class Deck extends DAO<Deck> {
 		Graph.drawMultilineString(g2d, """
 						%s
 						%s
-						%s (%s/%s/%s)
+						%s-(%s/%s/%s)
 						{%s%%;0x%s}
 						%s
 						%s
@@ -331,7 +331,7 @@ public class Deck extends DAO<Deck> {
 						%s
 												
 						%s
-						%s (T4: %s)
+						%s-(T4:-%s)
 						%s
 						""".formatted(
 						base.hp(),
@@ -357,7 +357,7 @@ public class Deck extends DAO<Deck> {
 				},
 				(s, x, y) -> {
 					FontMetrics m = g2d.getFontMetrics();
-					g2d.drawString(s.replace("-", " "), x + 50 - m.stringWidth(s), y);
+					g2d.drawString(s.replace("-", " "), x - m.stringWidth(s), y);
 				}
 		);
 
