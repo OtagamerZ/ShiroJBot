@@ -372,7 +372,8 @@ public class Deck extends DAO<Deck> {
 			if (ori.minor() == Race.NONE) {
 				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
 				g.setFont(new Font("Arial", Font.BOLD, 60));
-				g.setColor(ori.major().getColor());
+				//g.setColor(ori.major().getColor());
+				g.setColor(Color.WHITE);
 
 				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
 				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
@@ -384,7 +385,8 @@ public class Deck extends DAO<Deck> {
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(new Font("Arial", Font.BOLD, 60));
-				g.setColor(ori.major().getColor());
+				//g.setColor(ori.major().getColor());
+				g.setColor(Color.WHITE);
 
 				String text = locale.get("str/deck_origin", syn.getName(locale));
 				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
