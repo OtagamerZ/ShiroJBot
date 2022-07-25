@@ -40,7 +40,7 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
-import de.androidpit.colorthief.ColorThief;
+import de.androidpit.colorthief.ColorThiefColorThief;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
@@ -672,25 +672,6 @@ public abstract class Utils {
 
 			return sb.toString();
 		};
-	}
-
-	public static Color colorThief(String url) {
-		try {
-			return colorThief(ImageIO.read(getImage(url)));
-		} catch (IOException e) {
-			return getRandomColor();
-		}
-	}
-
-	public static Color colorThief(BufferedImage image) {
-		try {
-			if (image != null) {
-				int[] colors = ColorThief.getColor(image, 5, false);
-				return new Color(colors[0], colors[1], colors[2]);
-			} else return getRandomColor();
-		} catch (NullPointerException e) {
-			return getRandomColor();
-		}
 	}
 
 	public static InputStream getImage(String link) throws IOException {
