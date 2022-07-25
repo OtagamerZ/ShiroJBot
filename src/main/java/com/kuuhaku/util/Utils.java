@@ -37,7 +37,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.persistent.user.Trade;
+import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import de.androidpit.colorthief.ColorThief;

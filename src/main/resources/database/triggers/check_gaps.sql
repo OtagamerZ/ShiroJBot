@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION t_check_gaps()
 AS
 $$
 BEGIN
-    CALL fix_deck_gaps(OLD.deck_id);
+    CALL fix_deck_gaps();
 
     RETURN OLD;
 END;
@@ -30,21 +30,21 @@ $$;
 
 DROP TRIGGER IF EXISTS check_gaps ON deck_senshi;
 CREATE TRIGGER check_gaps
-    BEFORE DELETE
+    AFTER DELETE
     ON deck_senshi
     FOR EACH STATEMENT
 EXECUTE PROCEDURE t_check_gaps();
 
 DROP TRIGGER IF EXISTS check_gaps ON deck_evogear;
 CREATE TRIGGER check_gaps
-    BEFORE DELETE
+    AFTER DELETE
     ON deck_evogear
     FOR EACH STATEMENT
 EXECUTE PROCEDURE t_check_gaps();
 
 DROP TRIGGER IF EXISTS check_gaps ON deck_field;
 CREATE TRIGGER check_gaps
-    BEFORE DELETE
+    AFTER DELETE
     ON deck_field
     FOR EACH STATEMENT
 EXECUTE PROCEDURE t_check_gaps();

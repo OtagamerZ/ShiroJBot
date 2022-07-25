@@ -33,17 +33,16 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import jakarta.persistence.NoResultException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -88,11 +87,7 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0",
-				event.user().getId()
-		);
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

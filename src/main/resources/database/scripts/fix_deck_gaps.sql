@@ -16,51 +16,51 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE PROCEDURE fix_deck_gaps(INT, INT)
+CREATE OR REPLACE PROCEDURE fix_deck_gaps()
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    UPDATE deck_senshi
+    UPDATE deck_senshi s
     SET index = x.expected
     FROM (
-         SELECT ds.deck_id
+         SELECT ds.CTID
+              , ds.deck_id
               , ds.senshi_card_id
-              , ds.index AS current
-              , row_number() OVER (PARTITION BY ds.deck_id) - 1 AS expected
+              , ds.index                                                          AS current
+              , row_number() OVER (PARTITION BY ds.deck_id ORDER BY ds.index) - 1 AS expected
          FROM deck_senshi ds
                   INNER JOIN deck d ON d.id = ds.deck_id
-         WHERE d.id = $1
          ORDER BY ds.deck_id, ds.index
-    ) x
-    WHERE x.current <> x.expected;
+         ) x
+    WHERE s.CTID = x.CTID;
 
-    UPDATE deck_evogear
+    UPDATE deck_evogear e
     SET index = x.expected
     FROM (
-         SELECT de.deck_id
+         SELECT de.CTID
+              , de.deck_id
               , de.evogear_card_id
-              , de.index AS current
-              , row_number() OVER (PARTITION BY de.deck_id) - 1 AS expected
+              , de.index                                                          AS current
+              , row_number() OVER (PARTITION BY de.deck_id ORDER BY de.index) - 1 AS expected
          FROM deck_evogear de
                   INNER JOIN deck d ON d.id = de.deck_id
-         WHERE d.id = $1
          ORDER BY de.deck_id, de.index
-    ) x
-    WHERE x.current <> x.expected;
+         ) x
+    WHERE e.CTID = x.CTID;
 
-    UPDATE deck_field
+    UPDATE deck_field f
     SET index = x.expected
     FROM (
-         SELECT df.deck_id
+         SELECT df.CTID
+              , df.deck_id
               , df.field_card_id
-              , df.index AS current
-              , row_number() OVER (PARTITION BY df.deck_id) - 1 AS expected
+              , df.index                                                          AS current
+              , row_number() OVER (PARTITION BY df.deck_id ORDER BY df.index) - 1 AS expected
          FROM deck_field df
                   INNER JOIN deck d ON d.id = df.deck_id
-         WHERE d.id = $1
          ORDER BY df.deck_id, df.index
-    ) x
-    WHERE x.current <> x.expected;
+         ) x
+    WHERE f.CTID = x.CTID;
 END
 $$;

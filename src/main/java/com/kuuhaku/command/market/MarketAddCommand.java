@@ -27,7 +27,6 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -63,11 +62,7 @@ public class MarketAddCommand implements Executable {
 			return;
 		}
 
-		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0",
-				event.user().getId()
-		);
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

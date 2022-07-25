@@ -32,7 +32,7 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.persistent.user.Trade;
+import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;

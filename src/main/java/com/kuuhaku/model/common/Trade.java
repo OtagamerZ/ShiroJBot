@@ -16,12 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.user;
+package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.MultiMap;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import org.intellij.lang.annotations.Language;

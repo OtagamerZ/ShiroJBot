@@ -26,6 +26,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -106,6 +107,10 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return cards.parallelStream()
 				.filter(c -> c.getStashEntry() == null)
 				.anyMatch(c -> c.getCard().equals(card) && c.isChrome() == chrome);
+	}
+
+	public List<StashedCard> getNotInUse() {
+		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0", uid);
 	}
 
 	@Override

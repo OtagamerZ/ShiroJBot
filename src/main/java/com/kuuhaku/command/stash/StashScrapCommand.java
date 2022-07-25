@@ -66,7 +66,7 @@ public class StashScrapCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
