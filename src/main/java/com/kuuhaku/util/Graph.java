@@ -273,4 +273,16 @@ public abstract class Graph {
 			return getRandomColor();
 		}
 	}
+
+	public static Color mix(Color a, Color b) {
+		int[] rgbA = unpackRGB(a.getRGB());
+		int[] rgbB = unpackRGB(b.getRGB());
+
+		return new Color(
+				(rgbA[0] + rgbB[0]) / 2,
+				(rgbA[1] + rgbB[1]) / 2,
+				(rgbA[2] + rgbB[2]) / 2,
+				(rgbA[3] + rgbB[3]) / 2
+		);
+	}
 }
