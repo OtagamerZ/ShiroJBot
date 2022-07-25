@@ -26,6 +26,33 @@ BEGIN
     SET stash_entry = NULL
     WHERE kc.stash_entry = OLD.id;
 
+    SELECT de.deck_id
+         , de.senshi_card_id
+         , de.index
+    FROM deck_senshi de
+             INNER JOIN deck d ON de.deck_id = d.id
+             LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.senshi_card_id = sc.card_id
+    WHERE d.account_uid = OLD.kawaipon_uid
+      AND sc.id IS NULL;
+
+    SELECT de.deck_id
+         , de.evogear_card_id
+         , de.index
+    FROM deck_evogear de
+             INNER JOIN deck d ON de.deck_id = d.id
+             LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.evogear_card_id = sc.card_id
+    WHERE d.account_uid = OLD.kawaipon_uid
+      AND sc.id IS NULL;
+
+    SELECT de.deck_id
+         , de.field_card_id
+         , de.index
+    FROM deck_field de
+             INNER JOIN deck d ON de.deck_id = d.id
+             LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.field_card_id = sc.card_id
+    WHERE d.account_uid = OLD.kawaipon_uid
+      AND sc.id IS NULL;
+
     RETURN OLD;
 END;
 $$;
