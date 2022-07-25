@@ -344,7 +344,7 @@ public class Deck extends DAO<Deck> {
 						Utils.roundToString((float) totalDef.get() / allCards.size(), 1),
 						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 						3
-				), 1000, 45, 175, 0,
+				), 1200, 45, 175, 0,
 				s -> {
 					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
 					if (values.isEmpty()) {
