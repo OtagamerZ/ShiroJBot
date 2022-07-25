@@ -22,9 +22,7 @@ CREATE OR REPLACE FUNCTION t_check_gaps()
 AS
 $$
 BEGIN
-    IF ((SELECT x.sum - (SELECT sum(generate_series) FROM generate_series(0, x.max)) FROM (SELECT sum(index) , max(index) FROM deck_senshi WHERE deck_id = 5) x) <> 0) THEN
-        CALL fix_deck_gaps((SELECT account_uid FROM deck WHERE id = OLD.deck_id));
-    END IF;
+    CALL fix_deck_gaps((SELECT account_uid FROM deck WHERE id = OLD.deck_id));
 
     RETURN NEW;
 END;
