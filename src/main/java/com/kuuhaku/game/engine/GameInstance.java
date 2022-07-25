@@ -35,14 +35,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 public abstract class GameInstance<T extends Enum<T>> {
+	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
 	private CompletableFuture<Void> exec;

@@ -834,6 +834,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return locale;
 	}
 
+	public String[] getPlayers() {
+		return players;
+	}
+
 	public Map<Side, Hand> getHands() {
 		return hands;
 	}

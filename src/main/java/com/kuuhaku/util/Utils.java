@@ -154,16 +154,9 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static boolean containsAll(String string, String... compareWith) {
-		return Arrays.stream(compareWith).map(String::toLowerCase).allMatch(string.toLowerCase(Locale.ROOT)::contains);
-	}
-
-	public static boolean containsAny(String string, String... compareWith) {
-		return Arrays.stream(compareWith).map(String::toLowerCase).anyMatch(string.toLowerCase(Locale.ROOT)::contains);
-	}
-
-	public static boolean containsAll(String[] string, String... compareWith) {
-		return Arrays.stream(string).map(String::toLowerCase).allMatch(s -> ArrayUtils.contains(compareWith, s));
+	@SafeVarargs
+	public static <T> boolean containsAll(Collection<T> value, T... compareWith) {
+		return containsAll(value.toArray(), compareWith);
 	}
 
 	@SafeVarargs
@@ -172,12 +165,8 @@ public abstract class Utils {
 	}
 
 	@SafeVarargs
-	public static <T> boolean containsAll(Collection<T> value, T... compareWith) {
-		return value.stream().allMatch(t -> ArrayUtils.contains(compareWith, t));
-	}
-
-	public static boolean containsAny(String[] string, String... compareWith) {
-		return Arrays.stream(string).map(String::toLowerCase).anyMatch(s -> ArrayUtils.contains(compareWith, s));
+	public static <T> boolean containsAny(Collection<T> value, T... compareWith) {
+		return containsAny(value.toArray(), compareWith);
 	}
 
 	@SafeVarargs
@@ -185,26 +174,29 @@ public abstract class Utils {
 		return Arrays.stream(value).anyMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
 
-	@SafeVarargs
-	public static <T> boolean containsAny(Collection<T> value, T... compareWith) {
-		return value.stream().anyMatch(s -> ArrayUtils.contains(compareWith, s));
-	}
-
-	public static boolean equalsAll(String string, String... compareWith) {
-		return Arrays.stream(compareWith).allMatch(string::equalsIgnoreCase);
+	public static <T> boolean equalsAll(T value, Collection<T> compareWith) {
+		return equalsAll(value, compareWith.toArray());
 	}
 
 	@SafeVarargs
-	public static <T> boolean equalsAll(Object value, T... compareWith) {
+	public static <T> boolean equalsAll(T value, T... compareWith) {
+		if (value instanceof String s) {
+			return Arrays.stream(compareWith).allMatch(v -> s.equalsIgnoreCase((String) v));
+		}
+
 		return Arrays.stream(compareWith).allMatch(value::equals);
 	}
 
-	public static boolean equalsAny(String string, String... compareWith) {
-		return Arrays.stream(compareWith).anyMatch(string::equalsIgnoreCase);
+	public static <T> boolean equalsAny(T value, Collection<T> compareWith) {
+		return equalsAny(value, compareWith.toArray());
 	}
 
 	@SafeVarargs
 	public static <T> boolean equalsAny(T value, T... compareWith) {
+		if (value instanceof String s) {
+			return Arrays.stream(compareWith).anyMatch(v -> s.equalsIgnoreCase((String) v));
+		}
+
 		return Arrays.asList(compareWith).contains(value);
 	}
 

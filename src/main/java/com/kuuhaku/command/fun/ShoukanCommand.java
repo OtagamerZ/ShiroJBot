@@ -21,6 +21,7 @@ package com.kuuhaku.command.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -35,6 +36,7 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.concurrent.Executors;
@@ -52,19 +54,29 @@ public class ShoukanCommand implements Executable {
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Shoukan skn = new Shoukan(locale, event.user(), event.message().getMentionedUsers().get(0));
+		if (GameInstance.PLAYERS.contains(event.user().getId())) {
+			event.channel().sendMessage(locale.get("error/in_game_self")).queue();
+			return;
+		}
+
+		Member other = event.message().getMentionedMembers().get(0);
+		if (GameInstance.PLAYERS.contains(other.getId())) {
+			event.channel().sendMessage(locale.get("error/in_game_target", other.getEffectiveName())).queue();
+			return;
+		}
+
+		Shoukan skn = new Shoukan(locale, event.user(), other.getUser());
 		Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 		skn.start(event.guild(), event.channel())
-				.handle((v, err) -> {
-					if (err == null) {
-						event.channel().sendMessage("Done ").queue();
-					} else if (err instanceof GameReport) {
-						event.channel().sendMessage("Error " + err.getMessage()).queue();
-					} else {
-						Constants.LOGGER.error(err, err);
+				.whenComplete((v, e) -> {
+					if (e instanceof GameReport rep && rep.getCode() == 1) {
+						event.channel().sendMessage(locale.get("error/error", e)).queue();
+						Constants.LOGGER.error(e, e);
 					}
 
-					return null;
+					for (String s : skn.getPlayers()) {
+						GameInstance.PLAYERS.remove(s);
+					}
 				});
 
 		updateTip(locale, skn, m);
