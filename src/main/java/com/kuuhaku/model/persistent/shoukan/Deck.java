@@ -319,7 +319,7 @@ public class Deck extends DAO<Deck> {
 
 		g2d.setFont(new Font("Arial", Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);
-		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 375);
+		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 400);
 		Graph.drawMultilineString(g2d, """
 						%s
 						%s
@@ -344,7 +344,7 @@ public class Deck extends DAO<Deck> {
 						Utils.roundToString((float) totalDef.get() / allCards.size(), 1),
 						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 						3
-				), 975, 45, 175, 0,
+				), 950, 45, 250, 0,
 				s -> {
 					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
 					if (values.isEmpty()) {
