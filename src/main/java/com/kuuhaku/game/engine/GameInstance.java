@@ -75,6 +75,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 				begin();
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
+				timeout.start();
+
 				while (!exec.isDone()) Thread.onSpinWait();
 			} catch (Exception e) {
 				initialized = true;
@@ -152,6 +154,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public final void close(@MagicConstant(valuesFromClass = GameReport.class) int code) {
+		timeout.stop();
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 		} else {

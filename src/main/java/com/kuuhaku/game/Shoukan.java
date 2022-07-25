@@ -107,6 +107,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void begin() {
+		PLAYERS.addAll(Arrays.asList(players));
+
 		for (Hand h : hands.values()) {
 			h.manualDraw(5);
 		}

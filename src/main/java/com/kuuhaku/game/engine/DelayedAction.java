@@ -51,12 +51,16 @@ public class DelayedAction {
 	}
 
 	public void run(Runnable task) {
-		if (action != null) {
-			action.cancel(true);
-			action = null;
-		}
-
+		stop();
 		action = exec.schedule(cachedTask = task, time, unit);
+	}
+
+	public void start() {
+		if (cachedTask != null) {
+			if (action != null) return;
+
+			action = exec.schedule(cachedTask, time, unit);
+		}
 	}
 
 	public void stop() {
@@ -68,11 +72,7 @@ public class DelayedAction {
 
 	public void restart() {
 		if (cachedTask != null) {
-			if (action != null) {
-				action.cancel(true);
-				action = null;
-			}
-
+			stop();
 			action = exec.schedule(cachedTask, time, unit);
 		}
 	}
