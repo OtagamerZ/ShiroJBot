@@ -43,6 +43,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
 import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
@@ -72,7 +73,12 @@ public class Application implements Thread.UncaughtExceptionHandler {
 							.and(m -> !m.getUser().isBot()))
 					.addEventListeners(new GuildListener())
 					.setBulkDeleteSplittingEnabled(false)
-					.setEventPool(Executors.newWorkStealingPool(threads), true)
+					.setEventPool(new ForkJoinPool(
+							Runtime.getRuntime().availableProcessors(),
+							ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+							this,
+							true
+					), true)
 					.setRelativeRateLimit(false)
 					.build();
 		} catch (LoginException e) {

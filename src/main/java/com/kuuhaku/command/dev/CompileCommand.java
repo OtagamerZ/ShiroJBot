@@ -26,12 +26,15 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
 import groovy.lang.GroovyShell;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+import org.intellij.lang.annotations.Language;
 
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -41,7 +44,7 @@ import java.util.concurrent.atomic.AtomicLong;
 )
 @Signature("<code:text:r>")
 public class CompileCommand implements Executable {
-	private static final ExecutorService exec = Executors.newFixedThreadPool(2);
+	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -50,14 +53,14 @@ public class CompileCommand implements Executable {
 				AtomicLong time = new AtomicLong();
 
 				try {
-					String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
+					@Language("Groovy") String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
 					Future<?> fut = exec.submit(() -> {
 						GroovyShell gs = new GroovyShell();
 						gs.setVariable("msg", event.message());
 
 						time.set(System.currentTimeMillis());
-						Object out = gs.evaluate(code);
+						Object out = Utils.exec(code, Map.of("msg", event.message()));
 						time.getAndUpdate(t -> System.currentTimeMillis() - t);
 
 						return out;

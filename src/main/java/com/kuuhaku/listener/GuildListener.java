@@ -23,6 +23,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.PatternCache;
@@ -338,7 +339,7 @@ public class GuildListener extends ListenerAdapter {
 			try {
 				JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
-				pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
+				Executable.POOL.submit(() -> pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params));
 
 				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
 					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
