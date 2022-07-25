@@ -27,10 +27,12 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.NoResultException;
@@ -42,11 +44,11 @@ import java.util.Locale;
 
 @Command(
 		name = "stash",
-		subname = "remove",
+		subname = "scrap",
 		category = Category.MISC
 )
 @Signature("<card:word:r>")
-public class StashRemoveCommand implements Executable {
+public class StashScrapCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
@@ -71,23 +73,26 @@ public class StashRemoveCommand implements Executable {
 						return;
 					}
 
+					int value;
+					double mult = Calc.rng(1, 1.75, sc.getId());
 					if (sc.getType() == CardType.KAWAIPON) {
 						KawaiponCard kc = sc.getKawaiponCard();
-						if (kp.hasCard(card, kc.isChrome())) {
-							event.channel().sendMessage(locale.get("error/in_collection")).queue();
-							return;
-						}
-
-						kc.setStashEntry(null);
-						kc.save();
-
-						sc.delete();
+						value = (int) (kc.getSuggestedPrice() / 3 * mult);
 					} else {
-						event.channel().sendMessage(locale.get("error/not_kawaipon")).queue();
-						return;
+						if (sc.getType() == CardType.EVOGEAR) {
+							Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
+							value = (int) (e.getTier() * 225 * mult);
+						} else {
+							value = (int) (2500 * mult);
+						}
 					}
 
-					event.channel().sendMessage(locale.get("success/card_retrieved")).queue();
+					Utils.confirm(locale.get("question/scrap", value), event.channel(), wrapper -> {
+								event.channel().sendMessage(locale.get("success/scrap")).queue();
+								kp.getAccount().addCR(value, sc + " scrapped");
+								sc.delete();
+							}, event.user()
+					);
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

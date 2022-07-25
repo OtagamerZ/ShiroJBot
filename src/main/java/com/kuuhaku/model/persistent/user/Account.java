@@ -264,6 +264,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return createdAt.isBefore(old);
 	}
 
+	public int getHighestLevel() {
+		return DAO.queryNative(Integer.class, "SELECT CAST(SQRT(MAX(xp) / 100) AS INT) FROM profile WHERE uid = ?1", uid);
+	}
+
 	public I18N getEstimateLocale() {
 		return I18N.valueOf(Utils.getOr(
 				DAO.queryNative(String.class,

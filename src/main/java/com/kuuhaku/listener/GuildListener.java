@@ -211,17 +211,28 @@ public class GuildListener extends ListenerAdapter {
 		profile.addXp(15);
 		profile.save();
 
-		if (profile.getLevel() > lvl) {
-			TextChannel notifs = config.getSettings().getNotificationsChannel();
-			if (notifs != null) {
-				notifs.sendMessage(locale.get("str/level_up", data.user().getAsMention(), profile.getLevel())).queue(null, Utils::doNothing);
-			}
-		}
-
 		Account account = profile.getAccount();
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
 			account.save();
+		}
+
+		if (profile.getLevel() > lvl) {
+			int high = account.getHighestLevel();
+			int prize = 0;
+			if (profile.getLevel() > high) {
+				prize = profile.getLevel() * 150;
+				account.addCR(prize, "Level up prize");
+			}
+
+			TextChannel notifs = config.getSettings().getNotificationsChannel();
+			if (notifs != null) {
+				if (prize > 0) {
+					notifs.sendMessage(locale.get("str/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
+				} else {
+					notifs.sendMessage(locale.get("str/level_up", data.user().getAsMention(), profile.getLevel())).queue(null, Utils::doNothing);
+				}
+			}
 		}
 
 		if (toHandle.containsKey(data.guild().getId())) {

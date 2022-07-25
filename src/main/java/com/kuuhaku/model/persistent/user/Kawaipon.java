@@ -82,7 +82,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 	}
 
 	public int getMaxCapacity() {
-		return stashCapacity;
+		return stashCapacity + account.getHighestLevel() * 3;
 	}
 
 	public int getCapacity() {
