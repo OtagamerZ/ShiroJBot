@@ -333,9 +333,7 @@ public class Deck extends DAO<Deck> {
 						+ "\n" + getMaxSenshiCopies()
 						+ "\n" + getMaxEvogearCopies(1) + "/"
 						+ "\n"
-						+ getMaxEvogearCopies(2) + "/"
-						+ getMaxEvogearCopies(3) + "/"
-						+ getMaxEvogearCopies(4)
+						+ getMaxEvogearCopies(1) + "/" + getMaxEvogearCopies(2) + "/" + getMaxEvogearCopies(3) + "/" + getMaxEvogearCopies(4)
 						+ "\n3"
 				, 950, 45, 175, 0,
 				s -> {
