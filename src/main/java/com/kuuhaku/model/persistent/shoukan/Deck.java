@@ -330,9 +330,9 @@ public class Deck extends DAO<Deck> {
 						%s
 						%s
 												
-						s %s
-						e %s (T4: %s)
-						c %s
+						%s
+						%s (T4: %s)
+						%s
 						""".formatted(
 						base.hp(),
 						Utils.roundToString(avgMana, 1),
@@ -344,7 +344,7 @@ public class Deck extends DAO<Deck> {
 						Utils.roundToString((float) totalDef.get() / allCards.size(), 1),
 						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 						3
-				), 950, 45, 250, 0,
+				), 1000, 45, 175, 0,
 				s -> {
 					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
 					if (values.isEmpty()) {
@@ -357,7 +357,7 @@ public class Deck extends DAO<Deck> {
 				},
 				(s, x, y) -> {
 					FontMetrics m = g2d.getFontMetrics();
-					g2d.drawString(s.replace("-", " "), x + m.stringWidth("MMMMM") - m.stringWidth(s), y);
+					g2d.drawString(s.replace("-", " "), x + 50 - m.stringWidth(s), y);
 				}
 		);
 
