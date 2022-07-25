@@ -319,21 +319,32 @@ public class Deck extends DAO<Deck> {
 
 		g2d.setFont(new Font("Arial", Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);
-		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 350);
-		Graph.drawMultilineString(g2d,
-				base.hp()
-						+ "\n" + Utils.roundToString(avgMana, 1)
-						+ "\n" + allCards.size() + "-(" + senshi.size() + "/" + evogear.size() + "/" + field.size() + ")"
-						+ "\n{" + weight + "%;0x" + color + "}"
-						+ "\n" + Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1)
-						+ "\n" + Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1)
-						+ "\n" + Utils.roundToString((float) totalDmg.get() / allCards.size(), 1)
-						+ "\n" + Utils.roundToString((float) totalDef.get() / allCards.size(), 1)
-						+ "\n"
-						+ "\n" + getMaxSenshiCopies()
-						+ "\n" + getMaxEvogearCopies(1) + " (T4: " + getMaxEvogearCopies(4) + ")"
-						+ "\n3"
-				, 950, 45, 175, 0,
+		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 375);
+		Graph.drawMultilineString(g2d, """
+						%s
+						%s
+						%s (%s/%s/%s)
+						{%s%%;0x%s}
+						%s
+						%s
+						%s
+						%s
+												
+						s %s
+						e %s (T4: %s)
+						c %s
+						""".formatted(
+						base.hp(),
+						Utils.roundToString(avgMana, 1),
+						allCards.size(), senshi.size(), evogear.size(), field.size(),
+						weight, color,
+						Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1),
+						Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1),
+						Utils.roundToString((float) totalDmg.get() / allCards.size(), 1),
+						Utils.roundToString((float) totalDef.get() / allCards.size(), 1),
+						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
+						3
+				), 975, 45, 175, 0,
 				s -> {
 					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
 					if (values.isEmpty()) {
