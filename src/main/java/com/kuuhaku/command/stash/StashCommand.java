@@ -120,7 +120,7 @@ public class StashCommand implements Executable {
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.kawaipon_uid = ?1", event.user().getId());
 		List<StashedCard> results = DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/search_result", results.size(), total));
+				.setAuthor(locale.get("str/search_result_with_cap", results.size(), total, kp.getMaxCapacity()));
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			Trade t = Trade.getPending().get(event.user().getId());

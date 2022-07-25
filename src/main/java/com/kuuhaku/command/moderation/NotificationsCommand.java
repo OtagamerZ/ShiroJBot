@@ -42,7 +42,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class NotificationsCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-        GuildSettings settings = data.config().getSettings();
+		GuildSettings settings = data.config().getSettings();
 		if (args.containsKey("action")) {
 			settings.getKawaiponChannels().clear();
 			settings.save();
@@ -63,15 +63,9 @@ public class NotificationsCommand implements Executable {
 		}
 
 		TextChannel channel = event.message().getMentionedChannels().get(0);
-
-		if (channel.equals(settings.getNotificationsChannel())) {
-			settings.setNotificationsChannel(null);
-			event.channel().sendMessage(locale.get("success/notifications_channel_remove").formatted(channel.getAsMention())).queue();
-		} else {
-			settings.setNotificationsChannel(channel);
-			event.channel().sendMessage(locale.get("success/notifications_channel_add").formatted(channel.getAsMention())).queue();
-		}
-
+		settings.setNotificationsChannel(channel);
 		settings.save();
+
+		event.channel().sendMessage(locale.get("success/notifications_channel_set").formatted(channel.getAsMention())).queue();
 	}
 }
