@@ -21,8 +21,10 @@ CREATE OR REPLACE FUNCTION t_check_gaps()
     LANGUAGE plpgsql
 AS
 $$
+    DECLARE uid VARCHAR;
 BEGIN
-    CALL fix_deck_gaps((SELECT account_uid FROM deck WHERE id = OLD.deck_id));
+    uid = (SELECT account_uid FROM deck WHERE id = OLD.deck_id);
+    CALL fix_deck_gaps(uid);
 
     RETURN NEW;
 END;
@@ -32,16 +34,19 @@ DROP TRIGGER IF EXISTS check_gaps ON deck_senshi;
 CREATE TRIGGER check_gaps
     AFTER DELETE
     ON deck_senshi
+    FOR EACH STATEMENT
 EXECUTE PROCEDURE t_check_gaps();
 
 DROP TRIGGER IF EXISTS check_gaps ON deck_evogear;
 CREATE TRIGGER check_gaps
     AFTER DELETE
     ON deck_evogear
+    FOR EACH STATEMENT
 EXECUTE PROCEDURE t_check_gaps();
 
 DROP TRIGGER IF EXISTS check_gaps ON deck_field;
 CREATE TRIGGER check_gaps
     AFTER DELETE
     ON deck_field
+    FOR EACH STATEMENT
 EXECUTE PROCEDURE t_check_gaps();
