@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE PROCEDURE fix_deck_gaps(VARCHAR)
+CREATE OR REPLACE PROCEDURE fix_deck_gaps(INT, INT)
     LANGUAGE plpgsql
 AS
 $$
@@ -30,10 +30,10 @@ BEGIN
               , row_number() OVER (PARTITION BY ds.deck_id) - 1 AS expected
          FROM deck_senshi ds
                   INNER JOIN deck d ON d.id = ds.deck_id
-         WHERE d.account_uid = $1
+         WHERE d.id = $1
          ORDER BY ds.deck_id, ds.index
     ) x
-    WHERE x.current != x.expected;
+    WHERE x.current <> x.expected;
 
     UPDATE deck_evogear
     SET index = x.expected
@@ -44,10 +44,10 @@ BEGIN
               , row_number() OVER (PARTITION BY de.deck_id) - 1 AS expected
          FROM deck_evogear de
                   INNER JOIN deck d ON d.id = de.deck_id
-         WHERE d.account_uid = $1
+         WHERE d.id = $1
          ORDER BY de.deck_id, de.index
-         ) x
-    WHERE x.current != x.expected;
+    ) x
+    WHERE x.current <> x.expected;
 
     UPDATE deck_field
     SET index = x.expected
@@ -58,9 +58,9 @@ BEGIN
               , row_number() OVER (PARTITION BY df.deck_id) - 1 AS expected
          FROM deck_field df
                   INNER JOIN deck d ON d.id = df.deck_id
-         WHERE d.account_uid = $1
+         WHERE d.id = $1
          ORDER BY df.deck_id, df.index
-         ) x
-    WHERE x.current != x.expected;
+    ) x
+    WHERE x.current <> x.expected;
 END
 $$;
