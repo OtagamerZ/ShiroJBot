@@ -331,9 +331,7 @@ public class Deck extends DAO<Deck> {
 						+ "\n" + Utils.roundToString((float) totalDef.get() / allCards.size(), 1)
 						+ "\n"
 						+ "\n" + getMaxSenshiCopies()
-						+ "\n" + getMaxEvogearCopies(1) + "/"
-						+ "\n"
-						+ getMaxEvogearCopies(1) + "/" + getMaxEvogearCopies(2) + "/" + getMaxEvogearCopies(3) + "/" + getMaxEvogearCopies(4)
+						+ "\n" + getMaxEvogearCopies(1) + " (T4: " + getMaxEvogearCopies(4) + ")"
 						+ "\n3"
 				, 950, 45, 175, 0,
 				s -> {
