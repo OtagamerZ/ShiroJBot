@@ -19,14 +19,13 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.exceptions.InvalidValueException;
-import de.androidpit.colorthief.ColorThief;
+import com.trickl.palette.Palette;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -259,7 +258,7 @@ public abstract class Graph {
 		return new Color(Calc.rng(0, 0xFFFFFF));
 	}
 
-	public static Color colorThief(String url) throws IOException {
+	public static Color colorThief(String url) {
 		BufferedImage icon = IO.getImage(url);
 
 		return colorThief(icon);
@@ -268,8 +267,7 @@ public abstract class Graph {
 	public static Color colorThief(BufferedImage image) {
 		try {
 			if (image != null) {
-				int[] colors = ColorThief.getColor(image, 5, false);
-				return new Color(colors[0], colors[1], colors[2]);
+				return Palette.from(image).generate().getVibrantColor(getRandomColor());
 			} else return getRandomColor();
 		} catch (NullPointerException e) {
 			return getRandomColor();
