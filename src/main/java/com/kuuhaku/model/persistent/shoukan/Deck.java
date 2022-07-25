@@ -181,7 +181,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public int getMaxEvogearCopies(int tier) {
-		int allowed = 5 - tier;
+		int allowed = tier == 4 ? 1 : 3;
 		if (getOrigins().major() == Race.BEAST) {
 			allowed *= 2;
 		}
