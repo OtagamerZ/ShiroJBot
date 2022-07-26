@@ -170,7 +170,7 @@ public class GuildListener extends ListenerAdapter {
 			eb.setFooter("ID: " + mb.getId());
 		}
 		if (temp.getColor() == null) {
-			eb.setColor(Graph.colorThief(mb.getEffectiveAvatarUrl()));
+			eb.setColor(Graph.getColor(mb.getEffectiveAvatarUrl()));
 		}
 
 		channel.sendMessageEmbeds(eb.build()).queue();

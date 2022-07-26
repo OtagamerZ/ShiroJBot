@@ -18,17 +18,34 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.CardType;
+import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
+import com.kuuhaku.util.json.JSONArray;
+import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.cli.Option;
 
+import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.util.List;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Market {
+	private static final Dimension BANNER_SIZE = new Dimension(450, 100);
 	private final String uid;
 	private final Map<String, String> FILTERS = new LinkedHashMap<>() {{
 		put("n", "AND c.card.id LIKE '%%'||?%s||'%%'");
@@ -101,5 +118,120 @@ public class Market {
 		});
 
 		return true;
+	}
+
+	public int getDailyOffer() {
+		int seed = LocalDate.now().get(ChronoField.EPOCH_DAY);
+
+		GlobalProperty today = DAO.find(GlobalProperty.class, "daily_offer");
+		JSONObject jo;
+		if (today == null) {
+			jo = new JSONObject(){{
+				put("updated", seed);
+				put("id", DAO.queryNative(Integer.class, "SELECT c.id FROM stashed_card c WHERE c.price > 0 ORDER BY RANDOM()"));
+			}};
+
+			new GlobalProperty("daily_offer", jo).save();
+		} else {
+			jo = new JSONObject(today.getValue());
+
+			if (jo.getInt("updated") != seed) {
+				jo.put("updated", seed);
+				jo.put("id", DAO.queryNative(Integer.class, "SELECT c.id FROM stashed_card c WHERE c.price > 0 ORDER BY RANDOM()"));
+
+				today.save();
+			}
+		}
+
+		return jo.getInt("id");
+	}
+
+	public BufferedImage generateBanner(I18N locale) {
+		StashedCard offer = DAO.query(StashedCard.class, "SELECT c FROM StashedCard c WHERE c.id = ?1 AND c.price > 0", getDailyOffer());
+		if (offer == null) return null;
+
+		BufferedImage img;
+		if (offer.getType() == CardType.KAWAIPON) {
+			img = offer.getCard().drawCardNoBorder(offer.getKawaiponCard().isChrome());
+		} else {
+			img = offer.getCard().drawCardNoBorder();
+		}
+
+		BufferedImage banner = new BufferedImage(BANNER_SIZE.width, BANNER_SIZE.height, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g2d = banner.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
+		g2d.setClip(new RoundRectangle2D.Double(0, 0,
+				BANNER_SIZE.width, BANNER_SIZE.height,
+				BANNER_SIZE.width * 0.1, BANNER_SIZE.width * 0.1
+		));
+
+		double imgFac = 1.25;
+		int offset = (int) (img.getWidth() / imgFac);
+		g2d.drawImage(img, 0, -50, offset, (int) (img.getHeight() / imgFac), null);
+
+		Polygon poly = Graph.makePoly(
+				offset, 0,
+				BANNER_SIZE.width, 0,
+				BANNER_SIZE.width, BANNER_SIZE.height,
+				offset - 20, BANNER_SIZE.height
+		);
+
+		Graph.applyTransformed(g2d, g1 -> {
+			g1.setColor(Graph.getColor(img));
+			g1.fill(poly);
+
+			AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
+			g1.setComposite(ac);
+
+			double ratio = ((BANNER_SIZE.getWidth() - offset) / img.getWidth());
+			g1.clip(poly);
+			g1.drawImage(img, offset, BANNER_SIZE.height / 2 - (int) (img.getHeight() * ratio) / 2,
+					BANNER_SIZE.width - offset, (int) (img.getHeight() * ratio), null
+			);
+		});
+
+		Graph.applyTransformed(g2d, offset, 0, g1 -> {
+			g1.setColor(Color.WHITE);
+			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
+
+			String str = locale.get("str/daily_offer");
+			Graph.drawOutlinedString(g1, str,
+					(BANNER_SIZE.width - offset) / 2 - g1.getFontMetrics().stringWidth(str) / 2, 25,
+					3, Color.BLACK
+			);
+
+			AtomicBoolean nextBig = new AtomicBoolean(false);
+			Graph.drawMultilineString(g1,
+					"""
+							ID: %s | %s
+							~~%s~~ %s#₵R
+							""".formatted(offer.getId(), offer, offer.getPrice(), (int) (offer.getPrice() * 0.8)),
+					0, 50, BANNER_SIZE.width, 2,
+					s -> {
+						JSONArray groups = Utils.extractGroups(s, "~~(.+)~~");
+
+						g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 15));
+						if (!groups.isEmpty()) {
+							s = groups.getString(0);
+
+							g1.setFont(Fonts.DEFAULT.deriveFont(Font.PLAIN, 15,
+									Map.of(TextAttribute.STRIKETHROUGH, true)
+							));
+
+							nextBig.set(true);
+						} else if (nextBig.get()) {
+							g1.setColor(Color.ORANGE);
+							g1.setFont(Fonts.DEFAULT.deriveFont(Font.BOLD, 40));
+							g1.translate(5, 20);
+						}
+
+						return s.replace("#", " ");
+					},
+					(s, x, y) -> Graph.drawOutlinedString(g1, s, x, y, 3, Color.BLACK)
+			);
+		});
+
+		return banner;
 	}
 }

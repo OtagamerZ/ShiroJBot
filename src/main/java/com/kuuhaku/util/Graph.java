@@ -258,13 +258,13 @@ public abstract class Graph {
 		return new Color(Calc.rng(0, 0xFFFFFF));
 	}
 
-	public static Color colorThief(String url) {
+	public static Color getColor(String url) {
 		BufferedImage icon = IO.getImage(url);
 
-		return colorThief(icon);
+		return getColor(icon);
 	}
 
-	public static Color colorThief(BufferedImage image) {
+	public static Color getColor(BufferedImage image) {
 		try {
 			if (image != null) {
 				return Palette.from(image).generate().getVibrantColor(getRandomColor());

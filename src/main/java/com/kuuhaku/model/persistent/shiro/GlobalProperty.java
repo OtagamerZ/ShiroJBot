@@ -16,41 +16,38 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.user;
+package com.kuuhaku.model.persistent.shiro;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.id.DynamicPropertyId;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "dynamic_property")
-public class DynamicProperty extends DAO<DynamicProperty> {
-	@EmbeddedId
-	private DynamicPropertyId id;
+@Table(name = "global_property")
+public class GlobalProperty extends DAO<GlobalProperty> {
+	@Id
+	@Column(name = "id", nullable = false)
+	private String id;
 
 	@Column(name = "value", nullable = false)
 	private String value;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "uid", nullable = false)
-	@Fetch(FetchMode.JOIN)
-	@MapsId("uid")
-	private Account account;
-
-	public DynamicProperty() {
+	public GlobalProperty() {
 	}
 
-	public DynamicProperty(Account account, String id, Object value) {
-		this.id = new DynamicPropertyId(account.getUid(), id);
+	public GlobalProperty(String id, Object value) {
+		this.id = id;
 		this.value = String.valueOf(value);
-		this.account = account;
 	}
 
-	public DynamicPropertyId getId() {
+	public String getId() {
 		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getValue() {
@@ -59,9 +56,5 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public Account getAccount() {
-		return account;
 	}
 }

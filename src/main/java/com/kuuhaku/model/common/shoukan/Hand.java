@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -541,7 +542,7 @@ public class Hand {
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
-		g2d.setFont(new Font("Arial", Font.BOLD, 90));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 
 		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {

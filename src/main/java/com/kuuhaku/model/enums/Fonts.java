@@ -32,17 +32,22 @@ public enum Fonts {
 	UBUNTU_MONO("font/UbuntuMono.ttf"),
 	OPEN_SANS("font/OpenSans.ttf"),
 	OPEN_SANS_BOLD("font/OpenSans-Bold.ttf"),
-	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf");
+	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf"),
+	DEFAULT("");
 
 	private final Font font;
 
 	Fonts(String path) {
 		Font temp;
 
-		try (InputStream is = IO.getResourceAsStream(path)) {
-			temp = Font.createFont(Font.TRUETYPE_FONT, is);
-		} catch (FontFormatException | IOException e) {
-			temp = new Font("Arial", Font.PLAIN, 11);
+		if (path.isBlank()) {
+			temp = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
+		} else {
+			try (InputStream is = IO.getResourceAsStream(path)) {
+				temp = Font.createFont(Font.TRUETYPE_FONT, is);
+			} catch (FontFormatException | IOException e) {
+				temp = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
+			}
 		}
 
 		this.font = temp;

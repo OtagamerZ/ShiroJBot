@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.FrameColor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -317,7 +318,7 @@ public class Deck extends DAO<Deck> {
 
 		rc.paint(g2d, rc.getWidth(), rc.getHeight());
 
-		g2d.setFont(new Font("Arial", Font.PLAIN, 30));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);
 		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 400);
 		Graph.drawMultilineString(g2d, """
@@ -371,19 +372,19 @@ public class Deck extends DAO<Deck> {
 			String effects;
 			if (ori.minor() == Race.NONE) {
 				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
-				g.setFont(new Font("Arial", Font.BOLD, 60));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
 				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
 				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-				g.setFont(new Font("Arial", Font.PLAIN, 30));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 30));
 				g.setColor(Color.WHITE);
 				effects = ori.major().getMajor(locale)
 						+ "\n\n" + locale.get("minor/pureblood");
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
-				g.setFont(new Font("Arial", Font.BOLD, 60));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.synergy().getColor());
 
 				String text = locale.get("str/deck_origin", syn.getName(locale));
@@ -396,7 +397,7 @@ public class Deck extends DAO<Deck> {
 					g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
 				});
 
-				g.setFont(new Font("Arial", Font.PLAIN, 30));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 30));
 				g.setColor(Color.WHITE);
 				effects = ori.major().getMajor(locale)
 						+ "\n\n" + ori.minor().getMinor(locale)

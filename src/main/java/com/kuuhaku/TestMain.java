@@ -18,35 +18,20 @@
 
 package com.kuuhaku;
 
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class TestMain {
 	public static void main(String[] args) {
-		Dimension SIZE = new Dimension(400, 100);
+		Dimension SIZE = new Dimension(450, 100);
 
-		BufferedImage cd = IO.getImage("https://api.shirojbot.site/v2/card/AKAME_GA_KILL/CHELSEA.png");
 		JFrame frame = new JFrame("Test");
 		JPanel panel = new JPanel() {
 			@Override
 			public void paint(Graphics g) {
 				super.paint(g);
 
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setRenderingHints(Constants.HD_HINTS);
 
-				g2d.setColor(Color.black);
-				g2d.drawImage(cd, 0, 0, cd.getWidth() / 2, cd.getHeight() / 2, null);
-				g2d.fill(Graph.makePoly(SIZE,
-						0.35, 0,
-						1, 0,
-						1, 1,
-						0.3, 1
-				));
 			}
 		};
 

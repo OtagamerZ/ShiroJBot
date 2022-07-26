@@ -127,9 +127,9 @@ public enum Race {
 	public Color getColor() {
 		Race[] pures = split();
 		if (pures.length == 1) {
-			return Graph.colorThief(getImage());
+			return Graph.getColor(getImage());
 		} else {
-			return Graph.mix(Graph.colorThief(pures[0].getImage()), Graph.colorThief(pures[1].getImage()));
+			return Graph.mix(Graph.getColor(pures[0].getImage()), Graph.getColor(pures[1].getImage()));
 		}
 	}
 

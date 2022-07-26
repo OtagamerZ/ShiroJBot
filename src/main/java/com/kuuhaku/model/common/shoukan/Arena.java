@@ -402,7 +402,7 @@ public class Arena implements Renderer {
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
-					g2.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 - 8));
+					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height / 3f - 8));
 
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
@@ -421,7 +421,7 @@ public class Arena implements Renderer {
 							+ "/"
 							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 					g2.setColor(Color.WHITE);
-					g2.setFont(new Font("Arial", Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
 					if (reversed) {
 						String rdText = "";
@@ -468,7 +468,7 @@ public class Arena implements Renderer {
 			int x;
 			int y;
 			g.setColor(Color.WHITE);
-			g.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 3 * 2));
+			g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 
 			if (reversed) {
 				g.drawImage(bi, SIZE.width - bi.getWidth(), BAR_SIZE.height + SIZE.height, null);
