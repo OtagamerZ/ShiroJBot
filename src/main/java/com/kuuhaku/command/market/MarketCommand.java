@@ -96,7 +96,7 @@ public class MarketCommand implements Executable {
 		}
 
 		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
-		int sale = gp == null ? -1 : Integer.parseInt(gp.getValue());
+		int sale = gp == null ? -1 : new JSONObject(gp.getValue()).getInt("id");
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			Account seller = sc.getKawaipon().getAccount();
