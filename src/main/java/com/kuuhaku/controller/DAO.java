@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
@@ -290,6 +291,78 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				em.getTransaction().rollback();
 			}
 
+			em.close();
+		}
+	}
+
+	public static <T extends DAO<T>> List<T> queryBuilder(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @Nonnull Object... params) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			TypedQuery<T> q = em.createQuery(query, klass);
+			for (int i = 0; i < params.length; i++) {
+				q.setParameter(i + 1, params[i]);
+			}
+
+			if (klass.isInstance(Blacklistable.class)) {
+				return processor.apply(q).stream()
+						.filter(o -> !((Blacklistable) o).isBlacklisted())
+						.toList();
+			} else {
+				return processor.apply(q);
+			}
+		} finally {
+			em.close();
+		}
+	}
+
+	public static <T> List<T> nativeQueryBuilder(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @Nonnull Object... params) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Query q = em.createNativeQuery(query);
+			for (int i = 0; i < params.length; i++) {
+				q.setParameter(i + 1, params[i]);
+			}
+
+			if (klass.isInstance(Blacklistable.class)) {
+				return processor.apply(q).stream()
+						.map(klass::cast)
+						.filter(o -> !((Blacklistable) o).isBlacklisted())
+						.toList();
+			} else if (Number.class.isAssignableFrom(klass)) {
+				return processor.apply(q).stream()
+						.map(o -> Utils.fromNumber(klass, (Number) o))
+						.map(klass::cast)
+						.toList();
+			} else {
+				return processor.apply(q).stream()
+						.map(klass::cast)
+						.toList();
+			}
+		} finally {
+			em.close();
+		}
+	}
+
+	public static List<Object[]> unmappedQueryBuilder(@Nonnull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @Nonnull Object... params) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Query q = em.createNativeQuery(query);
+			for (int i = 0; i < params.length; i++) {
+				q.setParameter(i + 1, params[i]);
+			}
+
+			return processor.apply(q).stream()
+					.map(o -> {
+						if (o.getClass().isArray()) {
+							return (Object[]) o;
+						} else {
+							return new Object[]{o};
+						}
+					}).toList();
+		} finally {
 			em.close();
 		}
 	}

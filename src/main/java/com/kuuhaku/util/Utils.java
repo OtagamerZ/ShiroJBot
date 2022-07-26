@@ -19,10 +19,7 @@
 package com.kuuhaku.util;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ButtonWrapper;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingConsumer;
+import com.github.ygimenez.model.*;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -376,6 +373,16 @@ public abstract class Utils {
 		return chunks;
 	}
 
+	public static <T> Page generatePage(EmbedBuilder eb, List<T> list, Function<T, MessageEmbed.Field> mapper) {
+		eb.clearFields();
+
+		for (T t : list) {
+			eb.addField(mapper.apply(t));
+		}
+
+		return new InteractPage(eb.build());
+	}
+
 	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
@@ -404,6 +411,16 @@ public abstract class Utils {
 		Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()));
 
 		Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
+				Arrays.asList(allowed).contains(u)
+		);
+
+		return msg;
+	}
+
+	public static Message paginate(ThrowingFunction<Integer, Page> loader, TextChannel channel, User... allowed) {
+		Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) loader.apply(0).getContent()));
+
+		Pages.lazyPaginate(msg, loader, true, 1, TimeUnit.MINUTES, u ->
 				Arrays.asList(allowed).contains(u)
 		);
 
@@ -1036,12 +1053,12 @@ public abstract class Utils {
 		return script.run();
 	}
 
-	public static <K,V> void shufflePairs(Map<K,V> map) {
+	public static <K, V> void shufflePairs(Map<K, V> map) {
 		List<V> valueList = new ArrayList<V>(map.values());
 		Collections.shuffle(valueList);
 		Iterator<V> valueIt = valueList.iterator();
 
-		for(Map.Entry<K,V> e : map.entrySet()) {
+		for (Map.Entry<K, V> e : map.entrySet()) {
 			e.setValue(valueIt.next());
 		}
 	}

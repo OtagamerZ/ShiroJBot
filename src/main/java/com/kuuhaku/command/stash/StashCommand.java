@@ -19,12 +19,14 @@
 package com.kuuhaku.command.stash;
 
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -32,7 +34,6 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -122,84 +123,91 @@ public class StashCommand implements Executable {
 
 		query.appendNewLine("ORDER BY c.card.anime, COALESCE(e.tier, c.card.rarity) DESC, c.card.id");
 
-		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.kawaipon_uid = ?1", event.user().getId());
-		List<StashedCard> results = DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/search_result_stash", results.size(), total, kp.getMaxCapacity()));
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
-			Trade t = Trade.getPending().get(event.user().getId());
-			String location = "";
-			if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
-				location = " (" + locale.get("str/trade") + ")";
-			} else if (sc.getDeck() != null) {
-				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
-			} else if (sc.getPrice() > 0) {
-				location = " (" + locale.get("str/market", sc.getPrice()) + ")";
-			}
+		ThrowingFunction<Integer, Page> loader = p -> {
+			List<StashedCard> results = DAO.queryBuilder(
+					StashedCard.class,
+					query.toString(),
+					q -> q.setFirstResult(p * 10).setMaxResults(10).getResultList(),
+					params.toArray()
+			);
 
-			switch (sc.getType()) {
-				case KAWAIPON -> {
-					KawaiponCard kc = sc.getKawaiponCard();
-
-					return new MessageEmbed.Field(
-							sc + location,
-							"%s%s (%s | %s)%s".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
-									locale.get("rarity/" + sc.getCard().getRarity()),
-									sc.getCard().getAnime(),
-									kc != null && kc.getQuality() > 0
-											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
-											: ""
-							),
-							false
-					);
+			eb.setAuthor(locale.get("str/search_result_stash", results.size(), kp.getCapacity(), kp.getMaxCapacity()));
+			return Utils.generatePage(eb, results, sc -> {
+				Trade t = Trade.getPending().get(event.user().getId());
+				String location = "";
+				if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
+					location = " (" + locale.get("str/trade") + ")";
+				} else if (sc.getDeck() != null) {
+					location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
+				} else if (sc.getPrice() > 0) {
+					location = " (" + locale.get("str/market", sc.getPrice()) + ")";
 				}
-				case EVOGEAR -> {
-					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 
-					return new MessageEmbed.Field(
-							sc + location,
-							"%s%s (%s | %s)".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
-									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
-									sc.getCard().getAnime()
-							),
-							false
-					);
+				switch (sc.getType()) {
+					case KAWAIPON -> {
+						KawaiponCard kc = sc.getKawaiponCard();
+
+						return new MessageEmbed.Field(
+								sc + location,
+								"%s%s (%s | %s)%s".formatted(
+										sc.getCard().getRarity().getEmote(),
+										locale.get("type/" + sc.getType()),
+										locale.get("rarity/" + sc.getCard().getRarity()),
+										sc.getCard().getAnime(),
+										kc != null && kc.getQuality() > 0
+												? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
+												: ""
+								),
+								false
+						);
+					}
+					case EVOGEAR -> {
+						Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+
+						return new MessageEmbed.Field(
+								sc + location,
+								"%s%s (%s | %s)".formatted(
+										sc.getCard().getRarity().getEmote(),
+										locale.get("type/" + sc.getType()),
+										locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
+										sc.getCard().getAnime()
+								),
+								false
+						);
+					}
+					case FIELD -> {
+						Field fd = DAO.find(Field.class, sc.getCard().getId());
+
+						return new MessageEmbed.Field(
+								sc + location,
+								"%s%s%s (%s | %s)".formatted(
+										sc.getCard().getRarity().getEmote(),
+										locale.get("type/" + sc.getType()),
+										locale.get("rarity/" + sc.getCard().getRarity()),
+										sc.getCard().getAnime(),
+										switch (fd.getType()) {
+											case NONE -> "";
+											case DAY -> ":sunny: ";
+											case NIGHT -> ":crescent_moon: ";
+											case DUNGEON -> ":japanese_castle: ";
+										}
+								),
+								false
+						);
+					}
 				}
-				case FIELD -> {
-					Field fd = DAO.find(Field.class, sc.getCard().getId());
 
-					return new MessageEmbed.Field(
-							sc + location,
-							"%s%s%s (%s | %s)".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
-									locale.get("rarity/" + sc.getCard().getRarity()),
-									sc.getCard().getAnime(),
-									switch (fd.getType()) {
-										case NONE -> "";
-										case DAY -> ":sunny: ";
-										case NIGHT -> ":crescent_moon: ";
-										case DUNGEON -> ":japanese_castle: ";
-									}
-							),
-							false
-					);
-				}
-			}
+				return null;
+			});
+		};
 
-			return null;
-		});
-
-		if (pages.isEmpty()) {
+		if (loader.apply(0) == null) {
 			event.channel().sendMessage(locale.get("error/no_result")).queue();
 			return;
 		}
 
-		Utils.paginate(pages, 5, false, event.channel(), event.user());
+		Utils.paginate(loader, event.channel(), event.user());
 	}
 }
