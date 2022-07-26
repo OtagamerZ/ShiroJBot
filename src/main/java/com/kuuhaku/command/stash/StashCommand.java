@@ -136,7 +136,6 @@ public class StashCommand implements Executable {
 				       	) DESC
 					   	, c.card.id
 				""");
-		query.appendNewLine("ORDER BY c.card.anime, COALESCE(, c.card.rarity) DESC, c.card.id");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
