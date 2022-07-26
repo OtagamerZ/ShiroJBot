@@ -66,9 +66,9 @@ public class Market {
 		}
 
 		query.appendNewLine("""
-				ORDER BY COALESCE(
-						c.price / e.tier,
-					   	c.price / CASE c.card.rarity
+				ORDER BY c.price / COALESCE(
+						e.tier,
+					   	CASE c.card.rarity
 					   		WHEN 'COMMON' THEN 1
 				      		WHEN 'UNCOMMON' THEN 1.5
 				      		WHEN 'RARE' THEN 2
