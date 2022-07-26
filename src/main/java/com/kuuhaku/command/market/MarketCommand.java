@@ -86,7 +86,7 @@ public class MarketCommand implements Executable {
 			return;
 		}
 
-		int total = DAO.queryNative(Integer.class, "SELECT EST_SIZE('stashed_card') FROM stashed_card c WHERE c.price > 0");
+		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.price > 0");
 		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/search_result", results.size(), total));
