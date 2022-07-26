@@ -19,6 +19,7 @@
 package com.kuuhaku.command.market;
 
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -48,7 +49,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 @Command(
@@ -88,12 +88,8 @@ public class MarketCommand implements Executable {
 		int total = DAO.queryNative(Integer.class, "SELECT EST_SIZE('stashed_card') FROM stashed_card c WHERE c.price > 0");
 		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/search_result", results.size(), total));
-
-		BufferedImage banner = m.generateBanner(locale);
-		if (banner != null) {
-			eb.setImage("attachment://offer.png");
-		}
+				.setAuthor(locale.get("str/search_result", results.size(), total))
+				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			Account seller = sc.getKawaipon().getAccount();
