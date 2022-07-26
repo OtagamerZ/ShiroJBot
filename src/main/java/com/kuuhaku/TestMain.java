@@ -23,13 +23,16 @@ import java.awt.*;
 
 public class TestMain {
 	public static void main(String[] args) {
-		Dimension SIZE = new Dimension();
+		Dimension SIZE = new Dimension(950, 600);
 
 		JFrame frame = new JFrame("Test");
 		JPanel panel = new JPanel() {
 			@Override
 			public void paint(Graphics g) {
 				super.paint(g);
+
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setRenderingHints(Constants.SD_HINTS);
 
 
 			}

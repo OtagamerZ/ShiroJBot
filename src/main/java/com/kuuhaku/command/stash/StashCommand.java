@@ -100,7 +100,12 @@ public class StashCommand implements Executable {
 			put("v", "AND c.deck IS NULL");
 		}};
 
-		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.kawaipon.uid = ?1");
+		XStringBuilder query = new XStringBuilder("""
+				SELECT c FROM StashedCard c
+				LEFT JOIN KawaiponCard kc ON kc.stashEntry = c
+				LEFT JOIN Evogear e ON e.card = c.card
+				WHERE c.kawaipon.uid = ?1
+				""");
 		List<Object> params = new ArrayList<>() {{
 			add(event.user().getId());
 		}};
@@ -115,7 +120,7 @@ public class StashCommand implements Executable {
 			}
 		}
 
-		query.appendNewLine("ORDER BY c.card.rarity, c.card.id");
+		query.appendNewLine("ORDER BY c.card.anime, c.card.rarity, c.card.id");
 
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.kawaipon_uid = ?1", event.user().getId());
 		List<StashedCard> results = DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
