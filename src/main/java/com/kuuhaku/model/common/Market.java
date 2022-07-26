@@ -91,6 +91,9 @@ public class Market {
 		StashedCard sc = DAO.find(StashedCard.class, id);
 		if (sc == null) return false;
 
+		GlobalProperty gp = Utils.getOr(DAO.find(GlobalProperty.class, "daily_offer"), new GlobalProperty("daily_offer", "{}"));
+		JSONObject dailyOffer = new JSONObject(gp.getValue());
+
 		int price = sc.getPrice();
 		DAO.apply(Account.class, sc.getKawaipon().getUid(), a -> {
 			a.addCR(price, "Sold " + sc);
@@ -99,16 +102,10 @@ public class Market {
 					.queue(null, Utils::doNothing);
 		});
 		DAO.apply(Account.class, uid, a -> {
-			GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
-
 			try {
-				if (gp != null) {
-					int sale = new JSONObject(gp.getValue()).getInt("id");
-					if (sale == sc.getId()) {
-						a.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
-					}
-				} else {
-					a.consumeCR(price, "Purchased " + sc);
+				int sale = dailyOffer.getInt("id");
+				if (sale == sc.getId()) {
+					a.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
 				}
 			} catch (Exception e) {
 				a.consumeCR(price, "Purchased " + sc);
@@ -118,6 +115,10 @@ public class Market {
 			sc.setPrice(0);
 			sc.save();
 		});
+
+		dailyOffer.put("id", "-1");
+		gp.setValue(dailyOffer);
+		gp.save();
 
 		return true;
 	}
