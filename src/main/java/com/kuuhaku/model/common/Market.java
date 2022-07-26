@@ -49,7 +49,12 @@ public class Market {
 
 	public List<StashedCard> getOffers(Option[] opts) {
 		List<Object> params = new ArrayList<>();
-		XStringBuilder query = new XStringBuilder("SELECT c FROM StashedCard c WHERE c.price > 0");
+		XStringBuilder query = new XStringBuilder("""
+				SELECT c FROM StashedCard c
+				LEFT JOIN KawaiponCard kc ON kc.stashEntry = c
+				LEFT JOIN Evogear e ON e.card = c.card
+				WHERE c.price > 0
+				""");
 
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
@@ -60,7 +65,7 @@ public class Market {
 			}
 		}
 
-		query.appendNewLine("ORDER BY c.card.rarity, c.price, c.card.id");
+		query.appendNewLine("ORDER BY e.tier, e.card.id, c.card.anime, c.card.rarity, c.price, c.card.id");
 
 		return DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
 	}
