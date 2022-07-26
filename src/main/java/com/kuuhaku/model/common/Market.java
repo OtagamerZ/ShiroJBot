@@ -65,7 +65,18 @@ public class Market {
 			}
 		}
 
-		query.appendNewLine("ORDER BY e.tier DESC, c.card.anime, c.card.rarity DESC, c.price, c.card.id");
+		query.appendNewLine("""
+				ORDER BY c.price / COALESCE(e.tier, 1)
+					   , c.price / CASE c.card.rarity
+					   		WHEN 'COMMON' THEN 1
+				      		WHEN 'UNCOMMON' THEN 2
+				      		WHEN 'RARE' THEN 3
+				      		WHEN 'ULTRA_RARE' THEN 4
+				      		WHEN 'LEGENDARY' THEN 5
+				      		ELSE 1
+				       END
+					   , c.card.id
+				""");
 
 		return DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
 	}
