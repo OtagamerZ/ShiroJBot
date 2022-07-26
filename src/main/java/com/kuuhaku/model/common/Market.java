@@ -65,7 +65,7 @@ public class Market {
 			}
 		}
 
-		query.appendNewLine("ORDER BY e.tier, e.card.id, c.card.anime, c.card.rarity, c.price, c.card.id");
+		query.appendNewLine("ORDER BY e.tier, c.card.anime, c.card.rarity, c.price, c.card.id");
 
 		return DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
 	}
