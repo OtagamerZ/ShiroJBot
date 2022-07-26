@@ -66,16 +66,17 @@ public class Market {
 		}
 
 		query.appendNewLine("""
-				ORDER BY c.price / COALESCE(e.tier, 1)
-					   , c.price / CASE c.card.rarity
+				ORDER BY COALESCE(
+						c.price / e.tier,
+					   	c.price / CASE c.card.rarity
 					   		WHEN 'COMMON' THEN 1
-				      		WHEN 'UNCOMMON' THEN 2
-				      		WHEN 'RARE' THEN 3
-				      		WHEN 'ULTRA_RARE' THEN 4
-				      		WHEN 'LEGENDARY' THEN 5
+				      		WHEN 'UNCOMMON' THEN 1.5
+				      		WHEN 'RARE' THEN 2
+				      		WHEN 'ULTRA_RARE' THEN 2.5
+				      		WHEN 'LEGENDARY' THEN 3
 				      		ELSE 1
-				       END
-					   , c.card.id
+				       	END)
+					   	, c.card.id
 				""");
 
 		return DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
