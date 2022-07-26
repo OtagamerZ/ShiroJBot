@@ -21,8 +21,6 @@ CREATE OR REPLACE FUNCTION est_size(VARCHAR)
     LANGUAGE sql
 AS
 $$
-VACUUM;
-
 SELECT cast(reltuples AS BIGINT) AS size
 FROM pg_class
 WHERE oid = to_regclass($1);
