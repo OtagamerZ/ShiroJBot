@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
@@ -57,9 +58,17 @@ public class MarketBuyCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/purchase", sc, sc.getPrice()), event.channel(), wrapper -> {
+		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
+
+		int id = args.getInt("id");
+		boolean sale = false;
+		if (gp != null) {
+			sale = new JSONObject(gp.getValue()).getInt("id") == id;
+		}
+
+		Utils.confirm(locale.get("question/purchase", sc, sale ? (int) (sc.getPrice() * 0.8) : sc.getPrice()), event.channel(), wrapper -> {
 					Market m = new Market(event.user().getId());
-					if (m.buy(args.getInt("id"))) {
+					if (m.buy(id)) {
 						event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
 					} else {
 						event.channel().sendMessage(locale.get("error/not_announced")).queue();
