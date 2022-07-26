@@ -28,8 +28,6 @@ import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.cli.Option;
 
 import java.awt.*;
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -101,7 +99,21 @@ public class Market {
 					.queue(null, Utils::doNothing);
 		});
 		DAO.apply(Account.class, uid, a -> {
-			a.consumeCR(price, "Purchased " + sc);
+			GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
+
+			try {
+				if (gp != null) {
+					int sale = new JSONObject(gp.getValue()).getInt("id");
+					if (sale == sc.getId()) {
+						a.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
+					}
+				} else {
+					a.consumeCR(price, "Purchased " + sc);
+				}
+			} catch (Exception e) {
+				a.consumeCR(price, "Purchased " + sc);
+			}
+
 			sc.setKawaipon(a.getKawaipon());
 			sc.setPrice(0);
 			sc.save();
@@ -110,29 +122,13 @@ public class Market {
 		return true;
 	}
 
-	public int getDailyOffer() {
-		int seed = LocalDate.now().get(ChronoField.EPOCH_DAY);
-
-		GlobalProperty today = DAO.find(GlobalProperty.class, "daily_offer");
-		JSONObject jo;
-		if (today == null) {
-			jo = new JSONObject(){{
-				put("updated", seed);
-				put("id", DAO.queryNative(Integer.class, "SELECT c.id FROM stashed_card c WHERE c.price > 0 ORDER BY RANDOM()"));
-			}};
-
-			new GlobalProperty("daily_offer", jo).save();
-		} else {
-			jo = new JSONObject(today.getValue());
-
-			if (jo.getInt("updated") != seed) {
-				jo.put("updated", seed);
-				jo.put("id", DAO.queryNative(Integer.class, "SELECT c.id FROM stashed_card c WHERE c.price > 0 ORDER BY RANDOM()"));
-
-				today.save();
-			}
+	public StashedCard getDailyOffer() {
+		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
+		if (gp != null) {
+			int id = new JSONObject(gp.getValue()).getInt("id");
+			return DAO.query(StashedCard.class, "SELECT c FROM StashedCard c WHERE c.id = ?1 AND c.price > 0", id);
 		}
 
-		return jo.getInt("id");
+		return null;
 	}
 }

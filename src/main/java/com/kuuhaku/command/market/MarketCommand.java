@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Account;
@@ -88,11 +89,24 @@ public class MarketCommand implements Executable {
 		int total = DAO.queryNative(Integer.class, "SELECT EST_SIZE('stashed_card') FROM stashed_card c WHERE c.price > 0");
 		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/search_result", results.size(), total))
-				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
+				.setAuthor(locale.get("str/search_result", results.size(), total));
+
+		if (m.getDailyOffer() != null) {
+			eb.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
+		}
+
+		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
+		int sale = gp == null ? -1 : Integer.parseInt(gp.getValue());
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			Account seller = sc.getKawaipon().getAccount();
+
+			String emote = sc.getCard().getRarity().getEmote();
+			String type = locale.get("type/" + sc.getType());
+			String price = "\n" + (sale == sc.getId()
+					? locale.get("str/offer_sale", sc.getPrice(), (int) (sc.getPrice() * 0.8), seller.getName() + " (<@" + seller.getUid() + ">)")
+					: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
+			);
 
 			switch (sc.getType()) {
 				case KAWAIPON -> {
@@ -100,15 +114,13 @@ public class MarketCommand implements Executable {
 
 					return new MessageEmbed.Field(
 							"`ID: " + sc.getId() + "` | " + sc,
-							"%s%s (%s | %s)%s%s".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
+							"%s%s (%s | %s)%s%s".formatted(emote, type,
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
 									kc != null && kc.getQuality() > 0
 											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
 											: "",
-									"\n" + locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
+									price
 							),
 							false
 					);
@@ -118,12 +130,10 @@ public class MarketCommand implements Executable {
 
 					return new MessageEmbed.Field(
 							"`ID: " + sc.getId() + "` | " + sc,
-							"%s%s (%s | %s)%s".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
+							"%s%s (%s | %s)%s".formatted(emote, type,
 									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
 									sc.getCard().getAnime(),
-									"\n" + locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
+									price
 							),
 							false
 					);
@@ -133,9 +143,7 @@ public class MarketCommand implements Executable {
 
 					return new MessageEmbed.Field(
 							"`ID: " + sc.getId() + "` | " + sc,
-							"%s%s%s (%s | %s)%s".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
+							"%s%s%s (%s | %s)%s".formatted(emote, type,
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
 									switch (fd.getType()) {
@@ -144,7 +152,7 @@ public class MarketCommand implements Executable {
 										case NIGHT -> ":crescent_moon: ";
 										case DUNGEON -> ":japanese_castle: ";
 									},
-									"\n" + locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
+									price
 							),
 							false
 					);
