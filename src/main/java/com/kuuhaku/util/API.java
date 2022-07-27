@@ -25,6 +25,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -47,20 +48,26 @@ public abstract class API {
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 	)).build();
 
-	public static <T extends HttpEntityEnclosingRequestBase> JSONObject call(T req, JSONObject parameters, JSONObject headers, String body) {
+	public static <T extends HttpRequestBase> JSONObject call(T req, JSONObject parameters, JSONObject headers, String body) {
 		try {
-			req.setEntity(new StringEntity(body));
+			if (body != null && req instanceof HttpEntityEnclosingRequestBase r) {
+				r.setEntity(new StringEntity(body));
+			}
 
 			URIBuilder ub = new URIBuilder(req.getURI());
-			for (Map.Entry<String, Object> params : parameters.entrySet()) {
-				ub.setParameter(params.getKey(), String.valueOf(params.getValue()));
+			if (parameters != null) {
+				for (Map.Entry<String, Object> params : parameters.entrySet()) {
+					ub.setParameter(params.getKey(), String.valueOf(params.getValue()));
+				}
 			}
 			URI uri = ub.build();
 
-			req.setHeaders(headers.entrySet().parallelStream()
-					.map(e -> new BasicHeader(e.getKey(), String.valueOf(e.getValue())))
-					.toArray(Header[]::new)
-			);
+			if (headers != null) {
+				req.setHeaders(headers.entrySet().parallelStream()
+						.map(e -> new BasicHeader(e.getKey(), String.valueOf(e.getValue())))
+						.toArray(Header[]::new)
+				);
+			}
 			req.setURI(uri);
 
 			try (CloseableHttpResponse res = HTTP.execute(req)) {
