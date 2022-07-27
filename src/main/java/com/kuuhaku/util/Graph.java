@@ -25,6 +25,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -32,6 +33,10 @@ import java.util.function.Function;
 import java.util.stream.DoubleStream;
 
 public abstract class Graph {
+	public static Rectangle2D getStringBounds(Graphics2D g2d, String text) {
+		return new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext()).getBounds();
+	}
+
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
@@ -286,5 +291,54 @@ public abstract class Graph {
 				(rgbA[2] + rgbB[2]) / 2,
 				(rgbA[3] + rgbB[3]) / 2
 		);
+	}
+
+	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+		double thumbRatio = (double) w / (double) h;
+		int imageWidth = image.getWidth();
+		int imageHeight = image.getHeight();
+		double aspectRatio = (double) imageWidth / (double) imageHeight;
+
+		if (thumbRatio > aspectRatio) {
+			h = (int) (w / aspectRatio);
+		} else {
+			w = (int) (h * aspectRatio);
+		}
+
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
+		Graphics2D g2d = newImage.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2d.drawImage(image, 0, 0, w, h, null);
+		g2d.dispose();
+
+		return newImage;
+	}
+
+	public static BufferedImage scaleImage(BufferedImage image, int prcnt) {
+		int w = image.getWidth() / prcnt;
+		int h = image.getHeight() / prcnt;
+
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
+		Graphics2D g2d = newImage.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2d.drawImage(image, 0, 0, w, h, null);
+		g2d.dispose();
+
+		return newImage;
+	}
+
+	public static BufferedImage scaleAndCenterImage(BufferedImage image, int w, int h) {
+		image = scaleImage(image, w, h);
+
+		int offX = Math.min((image.getWidth() - w) / -2, 0);
+		int offY = Math.min((image.getHeight() - h) / -2, 0);
+
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
+		Graphics2D g2d = newImage.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2d.drawImage(image, offX, offY, null);
+		g2d.dispose();
+
+		return newImage;
 	}
 }
