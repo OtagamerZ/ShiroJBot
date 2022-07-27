@@ -58,11 +58,17 @@ public class DeckSwitchCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/decks"));
 
+			int idx = 0;
 			List<Page> pages = new ArrayList<>();
 			List<List<Deck>> chunks = Utils.chunkify(acc.getDecks(), 10);
 			for (List<Deck> decks : chunks) {
 				eb.clearFields();
 				for (Deck deck : decks) {
+					if (idx++ != deck.getIndex()) {
+						event.channel().sendMessage(locale.get("success/index_regen", deck.getName())).queue();
+						return;
+					}
+
 					eb.addField(
 							(deck.isCurrent() ? "✅ " : "") + "`" + deck.getIndex() + " | " + deck.getName() + "`",
 							deck.toString(locale),
