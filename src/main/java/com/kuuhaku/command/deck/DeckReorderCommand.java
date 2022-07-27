@@ -52,7 +52,7 @@ public class DeckReorderCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getCurrentDeck();
 		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck")).queue();
+			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
 		}
 

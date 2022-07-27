@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
@@ -129,6 +130,10 @@ public class Hand {
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
+		if (userDeck == null) {
+			throw new GameReport(GameReport.NO_DECK, uid);
+		}
+
 		this.side = side;
 		this.origin = userDeck.getOrigins();
 
