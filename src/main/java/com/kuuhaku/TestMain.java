@@ -84,7 +84,7 @@ public class TestMain {
 					RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 110, 200, 50, 20, 20);
 
 					g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 15));
-					String[] info = {"WWWWWWWWWWWWWWWWWWWW", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla"};
+					String[] info = {"WWWWWWWWWWWWWWWWWWWWWWWWWW", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla", "Bla"};
 					for (String s : info) {
 						Rectangle2D bounds = Graph.getStringBounds(g1, s);
 						int y = (int) wids.getY();

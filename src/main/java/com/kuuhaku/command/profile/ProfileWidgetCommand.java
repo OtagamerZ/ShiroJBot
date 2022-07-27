@@ -22,13 +22,18 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 @Command(
@@ -36,23 +41,48 @@ import java.util.Locale;
 		subname = "widget",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<action:text:r>[add,remove,set] <text:text:r>")
+@Signature({
+		"<action:text:r>[add,remove] <text:text:r> <id:number>",
+		"<action:text:r>[add,remove] <id:number:r>"
+})
 public class ProfileWidgetCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 		switch (args.getString("action").toLowerCase(Locale.ROOT)) {
 			case "add" -> {
-				//settings.getWidgets().add();
+				Graphics2D g2d = new BufferedImage(0, 0, BufferedImage.TYPE_INT_RGB).createGraphics();
+				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 15));
+
+				String text = args.getString("text");
+				if (Graph.getStringBounds(g2d, text).getWidth() > 375) {
+					g2d.dispose();
+					event.channel().sendMessage(locale.get("error/too_long")).queue();
+					return;
+				}
+				g2d.dispose();
+
+				int id = args.getInt("id", -1);
+				if (id > -1) {
+					settings.getWidgets().set(id, text);
+					event.channel().sendMessage(locale.get("success/widget_set")).queue();
+				} else {
+					settings.getWidgets().add(text);
+					event.channel().sendMessage(locale.get("success/widget_add")).queue();
+				}
+
+				settings.save();
 			}
 			case "remove" -> {
+				int id = args.getInt("id", -1);
+				if (!Utils.between(id, 0, settings.getWidgets().size())) {
+					event.channel().sendMessage(locale.get("error/invalid_value_range", 0, settings.getWidgets().size())).queue();
+					return;
+				}
 
-			}
-			case "set" -> {
-
-			}
-			default -> {
-
+				event.channel().sendMessage(locale.get("success/widget_remove")).queue();
+				settings.getWidgets().remove(id);
+				settings.save();
 			}
 		}
 	}
