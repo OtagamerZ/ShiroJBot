@@ -209,12 +209,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public List<Deck> getDecks() {
+		boolean update = false;
 		while (decks.size() < settings.getDeckCapacity()) {
 			Deck d = new Deck(this);
 			decks.add(d);
-			d.save();
+			update = true;
 		}
 
+		if (update) save();
 		return decks;
 	}
 
