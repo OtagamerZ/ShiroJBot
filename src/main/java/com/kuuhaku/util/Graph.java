@@ -221,13 +221,11 @@ public abstract class Graph {
 			int fac;
 			if (hasAlpha) {
 				fac = Math.min(color[0], unpackRGB(newMask.getRGB(x, y))[channel + 1]);
-			} else
+			} else {
 				fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
-			source.setRGB(
-					x,
-					y,
-					packRGB(fac, color[1], color[2], color[3])
-			);
+			}
+
+			source.setRGB(x, y, packRGB(fac, color[1], color[2], color[3]));
 		});
 	}
 
