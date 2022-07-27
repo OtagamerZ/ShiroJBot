@@ -43,7 +43,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "bio")
 	private String bio;
 
-	@Column(name = "tags", nullable = false)
+	@Column(name = "widgets", nullable = false)
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray widgets = new JSONArray();
 
