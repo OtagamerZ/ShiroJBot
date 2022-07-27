@@ -20,6 +20,8 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.util.json.JSONArray;
 import jakarta.persistence.*;
 
 import java.awt.*;
@@ -40,6 +42,10 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	@Column(name = "bio")
 	private String bio;
+
+	@Column(name = "tags", nullable = false)
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray widgets = new JSONArray();
 
 	@Column(name = "deck_capacity", nullable = false)
 	private int deckCapacity = 2;
@@ -77,6 +83,10 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setBio(String bio) {
 		this.bio = bio;
+	}
+
+	public JSONArray getWidgets() {
+		return widgets;
 	}
 
 	public int getDeckCapacity() {
