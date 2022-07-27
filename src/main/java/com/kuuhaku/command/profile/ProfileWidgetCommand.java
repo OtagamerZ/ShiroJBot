@@ -42,7 +42,7 @@ import java.util.Locale;
 		category = Category.MISC
 )
 @Signature({
-		"<action:text:r>[add,remove] <text:text:r> <id:number>",
+		"<action:text:r>[add,remove] <id:number> <text:text:r>",
 		"<action:text:r>[add,remove] <id:number:r>"
 })
 public class ProfileWidgetCommand implements Executable {
