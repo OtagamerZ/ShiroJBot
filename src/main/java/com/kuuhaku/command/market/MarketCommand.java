@@ -89,7 +89,7 @@ public class MarketCommand implements Executable {
 		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/search_result", results.size(), total))
-				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
+				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?hide=true&v=" + System.currentTimeMillis());
 
 		int sale;
 		StashedCard offer = m.getDailyOffer();
@@ -97,7 +97,6 @@ public class MarketCommand implements Executable {
 			sale = offer.getId();
 		} else {
 			sale = -1;
-			eb.setImage(null);
 		}
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
