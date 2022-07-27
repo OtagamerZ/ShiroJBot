@@ -18,14 +18,17 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.cli.Option;
+import org.apache.http.client.methods.HttpHead;
 
 import java.awt.*;
 import java.util.List;
@@ -124,6 +127,8 @@ public class Market {
 	}
 
 	public StashedCard getDailyOffer() {
+		API.call(new HttpHead(Constants.API_ROOT + "market/refresh"), null, null, null);
+
 		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
 		if (gp != null) {
 			int id = new JSONObject(gp.getValue()).getInt("id");

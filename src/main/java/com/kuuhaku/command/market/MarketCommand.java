@@ -36,7 +36,6 @@ import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
@@ -49,7 +48,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpHead;
 
 import java.util.List;
 
@@ -94,7 +92,6 @@ public class MarketCommand implements Executable {
 				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?hide=true&v=" + System.currentTimeMillis());
 
 		int sale;
-		API.call(new HttpHead(Constants.API_ROOT + "market/refresh"), null, null, null);
 		StashedCard offer = m.getDailyOffer();
 		if (offer != null) {
 			sale = offer.getId();
