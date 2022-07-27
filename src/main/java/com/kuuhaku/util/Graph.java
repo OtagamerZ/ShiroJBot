@@ -267,8 +267,12 @@ public abstract class Graph {
 	public static Color getColor(BufferedImage image) {
 		try {
 			if (image != null) {
-				return Palette.from(image).generate().getVibrantColor(getRandomColor());
-			} else return getRandomColor();
+				Palette p = Palette.from(image).generate();
+
+				return p.getDominantColor(p.getSwatches().get(0).getColor());
+			}
+
+			return getRandomColor();
 		} catch (NullPointerException e) {
 			return getRandomColor();
 		}

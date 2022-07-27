@@ -29,7 +29,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Account;
@@ -91,12 +90,14 @@ public class MarketCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/search_result", results.size(), total));
 
-		if (m.getDailyOffer() != null) {
+		int sale;
+		StashedCard offer = m.getDailyOffer();
+		if (offer != null) {
 			eb.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
+			sale = offer.getId();
+		} else {
+			sale = -1;
 		}
-
-		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
-		int sale = gp == null ? -1 : new JSONObject(gp.getValue()).getInt("id");
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
 			Account seller = sc.getKawaipon().getAccount();
