@@ -23,28 +23,6 @@ import java.awt.*;
 
 public class TestMain {
 	public static void main(String[] args) {
-		Dimension SIZE = new Dimension(450, 100);
-
-		JFrame frame = new JFrame("Test");
-		JPanel panel = new JPanel() {
-			@Override
-			public void paint(Graphics g) {
-				super.paint(g);
-
-
-			}
-		};
-
-		panel.setSize(SIZE);
-		frame.setContentPane(panel);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setUndecorated(true);
-		frame.setSize(panel.getSize());
-		frame.setVisible(true);
-	}
-
-	/*
-	public static void main(String[] args) {
 		Dimension SIZE = new Dimension(950, 600);
 
 		JFrame frame = new JFrame("Test");
@@ -67,5 +45,4 @@ public class TestMain {
 		frame.setSize(panel.getSize());
 		frame.setVisible(true);
 	}
-	 */
 }

@@ -88,15 +88,16 @@ public class MarketCommand implements Executable {
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.price > 0");
 		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/search_result", results.size(), total));
+				.setAuthor(locale.get("str/search_result", results.size(), total))
+				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
 
 		int sale;
 		StashedCard offer = m.getDailyOffer();
 		if (offer != null) {
-			eb.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?v=" + System.currentTimeMillis());
 			sale = offer.getId();
 		} else {
 			sale = -1;
+			eb.setImage(null);
 		}
 
 		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
