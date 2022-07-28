@@ -254,7 +254,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
 			if (!bio.isBlank()) {
-				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
 				int h = em * 5 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
 				int w = (int) (SIZE.width / 2d);
@@ -265,7 +264,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					g2.setColor(Color.WHITE);
-					Graph.drawMultilineString(g2, bio, 10, (int) (em * 3.5  + 10), w - 20, 3,
+					Graph.drawMultilineString(g2, bio, 10, (int) (em * 3.5  + 5), w - 20, 3,
 							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
 					);
 				});
