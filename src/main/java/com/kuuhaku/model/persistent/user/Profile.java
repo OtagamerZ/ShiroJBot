@@ -256,7 +256,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			if (!bio.isBlank()) {
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
 				int lines = Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
-				int h = em * 2 * lines - 3 * lines
+				int h = em * 2 * lines - 3 * lines;
 				int w = (int) (SIZE.width / 2d);
 
 				Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
