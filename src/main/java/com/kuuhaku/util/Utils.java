@@ -1062,4 +1062,17 @@ public abstract class Utils {
 			e.setValue(valueIt.next());
 		}
 	}
+
+	public static String shorten(double number) {
+		NavigableMap<Double, String> suffixes = new TreeMap<>(){{
+			put(1_000D, "k");
+			put(1_000_000D, "m");
+			put(1_000_000_000D, "b");
+			put(1_000_000_000_000D, "t");
+			put(1_000_000_000_000_000D, "q");
+		}};
+
+		Map.Entry<Double, String> entry = suffixes.floorEntry(number);
+		return roundToString(number / entry.getKey(), 1) + entry.getValue();
+	}
 }
