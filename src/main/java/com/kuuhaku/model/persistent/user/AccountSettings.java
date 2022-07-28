@@ -24,6 +24,9 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.BasicType;
+import org.hibernate.usertype.UserType;
 
 import java.awt.*;
 
