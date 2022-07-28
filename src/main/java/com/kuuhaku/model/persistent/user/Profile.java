@@ -256,8 +256,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.setColor(new Color(colors[Math.max(0, (lvl % 215 - 1) / 30)]));
 		g2d.fillRect(88 + pad / 2, 59 + pad / 2, (int) ((384 - pad) * prcnt), 10 - pad);
 
-		g2d.setFont(Fonts.UBUNTU_MONO.deriveFont(Font.BOLD, 55));
-		Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 56, 2, Color.BLACK);
+		g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 55));
+		Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 50, 2, Color.BLACK);
 
 		g2d.dispose();
 
