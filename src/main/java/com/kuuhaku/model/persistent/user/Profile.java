@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -118,11 +119,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	public int getLevel() {
-		return (int) Math.ceil(Math.sqrt(xp / 100d));
+		return (int) Math.max(1, Math.floor(Math.sqrt(xp / 100d)) + 1);
 	}
 
 	public long getXpToLevel(int level) {
-		return (int) (Math.pow(level, 2) * 100);
+		return (int) (Math.pow(level - 1, 2) * 100);
 	}
 
 	public List<VoiceData> getVoiceData() {
@@ -249,8 +250,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.fillRect(91, 49, 384, 20);
 
 		int[] colors = {0x5b2d11, 0xb5b5b5, 0xd49800, 0x00d4d4, 0x9716ff, 0x0ed700, 0xe40000};
-		g2d.setColor(new Color(colors[Math.max(0, (getLevel() - 1 % 145) / 30)]));
-		g2d.fillRect(91, 49, 384, 20);
+		g2d.setColor(new Color(colors[Math.max(0, (getLevel() % 215 - 1) / 30)]));
+		int pad = 2;
+		double prcnt = Calc.prcnt(xp, getXpToLevel(getLevel() + 1));
+		g2d.fillRect(91 + pad, 49 + pad, (int) ((384 - pad) * prcnt), 20 - pad);
 
 		g2d.dispose();
 
