@@ -339,7 +339,14 @@ public class GuildListener extends ListenerAdapter {
 			try {
 				JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
-				Executable.POOL.submit(() -> pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params));
+				Executable.POOL.submit(() -> {
+					try {
+						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params),
+					} catch (Exception e) {
+						data.channel().sendMessage(locale.get("error/error", e)).queue();
+						Constants.LOGGER.error(e, e);
+					}
+				});
 
 				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
 					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
@@ -370,9 +377,6 @@ public class GuildListener extends ListenerAdapter {
 
 					data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
 				}
-			} catch (Exception e) {
-				data.channel().sendMessage(locale.get("error/error", e)).queue();
-				Constants.LOGGER.error(e, e);
 			}
 		}
 	}
