@@ -42,9 +42,9 @@ import java.util.Locale;
 		category = Category.MISC
 )
 @Signature({
-		"<action:word:r>[add,remove] <text:text:r>",
+		"<action:word:r>[add,remove] <id:number:r>",
 		"<action:word:r>[add,remove] <id:number:r> <text:text:r>",
-		"<action:word:r>[add,remove] <id:number:r>"
+		"<action:word:r>[add,remove] <text:text:r>",
 })
 public class ProfileWidgetCommand implements Executable {
 	@Override
