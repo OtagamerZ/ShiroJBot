@@ -31,11 +31,11 @@ import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.time.StopWatch;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Command(
 		name = "eval",
@@ -48,21 +48,21 @@ public class CompileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/compiling"))).queue(m -> {
-			Future<Pair<String, Long>> execute = exec.submit(() -> {
-				AtomicLong time = new AtomicLong();
+			Callable<Pair<String, Long>> execute = () -> {
+				StopWatch time = new StopWatch();
 
 				try {
 					@Language("Groovy") String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
 					Future<?> fut = exec.submit(() -> {
-						time.set(System.currentTimeMillis());
-						Object out = Utils.eval(code, Map.of("msg", event.message()));
-						time.getAndUpdate(t -> System.currentTimeMillis() - t);
+						time.start();
+						Object out = Utils.exec(code, Map.of("msg", event.message()));
+						time.stop();
 
 						return out;
 					});
 
-					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.get());
+					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.getTime());
 				} catch (TimeoutException e) {
 					return new Pair<>(locale.get("error/timeout"), -1L);
 				} catch (Exception e) {
@@ -80,10 +80,10 @@ public class CompileCommand implements Executable {
 
 					return new Pair<>(sb.toString(), -1L);
 				}
-			});
+			};
 
 			try {
-				Pair<String, Long> out = execute.get();
+				Pair<String, Long> out = execute.call();
 				if (out.getSecond() > -1) {
 					m.editMessage("""
 							```
@@ -99,7 +99,7 @@ public class CompileCommand implements Executable {
 							""".formatted(out.getFirst().replace("`", "'"))
 					).queue();
 				}
-			} catch (ExecutionException | InterruptedException e) {
+			} catch (Exception e) {
 				logger().error(e, e);
 			}
 		});
