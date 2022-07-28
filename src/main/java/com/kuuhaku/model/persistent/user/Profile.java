@@ -155,7 +155,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			settings.setBackground(null);
 			bg = IO.getImage(settings.getBackground());
 		}
-		bg = Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB);
+		bg = Graph.scaleAndCenterImage(Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB), SIZE.width, SIZE.height);
 
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 
