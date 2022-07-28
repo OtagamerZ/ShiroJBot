@@ -121,6 +121,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return (int) Math.ceil(Math.sqrt(xp / 100d));
 	}
 
+	public long getXpToLevel(int level) {
+		return (int) (Math.pow(level, 2) * 100);
+	}
+
 	public List<VoiceData> getVoiceData() {
 		return voiceData;
 	}
@@ -240,6 +244,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
 		g2d.drawImage(emote, 6, -3, 81, 81, null);
+
+
 
 		g2d.dispose();
 
