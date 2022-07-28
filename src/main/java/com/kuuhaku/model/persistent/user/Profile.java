@@ -256,7 +256,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			if (!bio.isBlank()) {
 				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
-				int h = (int) (bounds.getHeight() * 2 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20)));
+				int em = (int) Graph.getStringBounds(g1, "M").getHeight();
+				int h = em * 2 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
 				int w = (int) (SIZE.width / 2d);
 
 				Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
@@ -265,7 +266,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					g2.setColor(Color.WHITE);
-					Graph.drawMultilineString(g2, bio, 10, (int) (bounds.getHeight() + 10), w - 20, 3,
+					Graph.drawMultilineString(g2, bio, 10, em + 10, w - 20, 3,
 							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
 					);
 				});
