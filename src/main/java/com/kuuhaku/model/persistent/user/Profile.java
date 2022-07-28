@@ -236,13 +236,12 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			if (!bio.isBlank()) {
 				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
-				int y = (int) (SIZE.height - SIZE.height / 3d - 20);
 				int h = (int) (bounds.getHeight() * 2 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20), 0));
 				int w = (int) (SIZE.width / 2d);
 
 				Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
 					g2.setColor(bgCol);
-					Shape desc = new RoundRectangle2D.Double(0, 0, 0, h, 20, 20);
+					Shape desc = new RoundRectangle2D.Double(0, 0, w, h, 20, 20);
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					Graph.drawMultilineString(g2, bio, 10, 10, w - 20, 0,
