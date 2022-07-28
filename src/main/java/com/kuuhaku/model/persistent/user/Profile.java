@@ -306,7 +306,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
-		Graph.drawOutlinedString(g2d, "#", 88 + offset - 15, 45, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, "#", 88 + offset - 20, 45, 2, Color.BLACK);
 
 		g2d.dispose();
 
