@@ -107,7 +107,7 @@ public abstract class Graph {
 		}
 	}
 
-	public static int getLineCount(Graphics2D g2d, String text, int width, int kerning) {
+	public static int getLineCount(Graphics2D g2d, String text, int width) {
 		int l = 0;
 
 		String[] lines = text.split("\n");
