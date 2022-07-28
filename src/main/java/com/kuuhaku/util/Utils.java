@@ -1064,7 +1064,7 @@ public abstract class Utils {
 	}
 
 	public static String shorten(double number) {
-		if (number < 1000) return String.valueOf(number);
+		if (number < 1000) return roundToString(number, 1);
 
 		NavigableMap<Double, String> suffixes = new TreeMap<>(){{
 			put(1_000D, "k");
