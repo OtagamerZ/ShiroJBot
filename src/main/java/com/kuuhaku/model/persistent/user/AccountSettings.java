@@ -81,7 +81,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	}
 
 	public String getBio() {
-		return bio;
+		return Utils.getOr(bio, "");
 	}
 
 	public void setBio(String bio) {

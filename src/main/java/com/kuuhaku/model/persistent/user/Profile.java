@@ -232,13 +232,15 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				Graph.drawOutlinedString(g1, s, 15, (int) (y + bounds.getHeight() * 2), 2, Color.BLACK);
 			}
 
-			g1.setColor(bgCol);
-			Shape desc = new RoundRectangle2D.Double(
-					SIZE.width - SIZE.width / 2d - 40, SIZE.height - SIZE.height / 3d - 20,
-					SIZE.width / 2d, SIZE.height / 3d,
-					20, 20
-			);
-			Graph.drawOutlined(g1, desc, 1, Color.BLACK);
+			if (!settings.getBio().isBlank()) {
+				g1.setColor(bgCol);
+				Shape desc = new RoundRectangle2D.Double(
+						SIZE.width - SIZE.width / 2d - 40, SIZE.height - SIZE.height / 3d - 20,
+						SIZE.width / 2d, SIZE.height / 3d,
+						20, 20
+				);
+				Graph.drawOutlined(g1, desc, 1, Color.BLACK);
+			}
 		});
 
 		Graph.applyMask(overlay, mask, 1);
@@ -275,7 +277,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
-		Graph.drawOutlinedString(g2d, "#", 88 + offset - 10, 39, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, "#", 88 + offset - 20, 45, 2, Color.BLACK);
 
 		g2d.dispose();
 
