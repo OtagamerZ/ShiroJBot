@@ -236,7 +236,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 110, 200, 50, 20, 20);
 
-			int widgetH = (int) Graph.getStringBounds(g1, "M").getHeight();
+			int em = (int) Graph.getStringBounds(g1, "M").getHeight();
 			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
 				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
@@ -244,20 +244,19 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				int y = (int) wids.getY();
 
 				g1.setColor(bgCol);
-				wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), widgetH * 5);
+				wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), em * 5);
 				Graph.drawOutlined(g1, wids, 1, Color.BLACK);
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawOutlinedString(g1, s, 15, (int) (y + widgetH * 3.5), 2, Color.BLACK);
+				Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 3.5), 2, Color.BLACK);
 			}
 
 			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
 			if (!bio.isBlank()) {
 				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
-				int em = (int) Graph.getStringBounds(g1, "M").getHeight();
-				int h = em * 2 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
+				int h = em * 5 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
 				int w = (int) (SIZE.width / 2d);
 
 				Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
@@ -266,7 +265,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					g2.setColor(Color.WHITE);
-					Graph.drawMultilineString(g2, bio, 10, em + 10, w - 20, 3,
+					Graph.drawMultilineString(g2, bio, 10, (int) (em * 3.5  + 10), w - 20, 3,
 							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
 					);
 				});
