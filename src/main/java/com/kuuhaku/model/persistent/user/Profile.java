@@ -251,9 +251,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.drawOutlined(g2d, new Rectangle(88, 59, 384, 10), 3, Color.BLACK);
 
 		int lvl = getLevel();
+		long lvlXp = getXpToLevel(lvl);
 		long toNext = getXpToLevel(lvl + 1);
 		int pad = 4;
-		double prcnt = Math.max(0, Calc.prcnt(xp - getXpToLevel(lvl), toNext - getXpToLevel(lvl)));
+		double prcnt = Math.max(0, Calc.prcnt(xp - lvlXp, toNext - lvlXp));
 		int[] colors = {0x5b2d11, 0xb5b5b5, 0xd49800, 0x00d4d4, 0x9716ff, 0x0ed700, 0xe40000};
 		g2d.setColor(new Color(colors[Math.max(0, (lvl % 215 - 1) / 30)]));
 		g2d.fillRect(88 + pad / 2, 59 + pad / 2, (int) ((384 - pad) * prcnt), 10 - pad);
@@ -268,7 +269,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 		Graph.drawOutlinedString(g2d, "XP: %s/%s I Rank: %s".formatted(
-			Utils.shorten(xp), Utils.shorten(toNext), 1
+			Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp), 1
 		), 88 + offset, 51, 3, Color.BLACK);
 
 		g2d.dispose();
