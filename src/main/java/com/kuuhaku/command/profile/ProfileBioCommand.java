@@ -42,9 +42,16 @@ public class ProfileBioCommand implements Executable {
 
 		String text = args.getString("text");
 		if (text.isBlank()) {
-
+			settings.setBio(null);
+			event.channel().sendMessage(locale.get("success/bio_clear")).queue();
 		} else {
+			if (text.length() > 255) {
+				event.channel().sendMessage(locale.get("error/too_long")).queue();
+				return;
+			}
 
+			settings.setBio(text);
+			event.channel().sendMessage(locale.get("success/bio_set")).queue();
 		}
 
 		settings.save();
