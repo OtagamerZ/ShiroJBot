@@ -249,7 +249,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawOutlinedString(g1, s, 15, y + widgetH * 3, 2, Color.BLACK);
+				Graph.drawOutlinedString(g1, s, 15, (int) (y + widgetH * 3.5), 2, Color.BLACK);
 			}
 
 			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
