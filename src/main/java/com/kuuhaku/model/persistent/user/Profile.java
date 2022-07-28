@@ -244,7 +244,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				int y = (int) wids.getY();
 
 				g1.setColor(bgCol);
-				wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), widgetH * 6);
+				wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), widgetH * 4);
 				Graph.drawOutlined(g1, wids, 1, Color.BLACK);
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
