@@ -74,7 +74,7 @@ public class KickCommand implements Executable {
 		Utils.confirm(locale.get("question/kick",
 						members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
 						members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
-				), event.channel(), wrapper ->
+				), event.channel(), w ->
 						RestAction.allOf(members.stream().map(m -> m.kick(args.getString("reason"))).toList())
 								.flatMap(s -> event.channel().sendMessage(locale.get("success/kick",
 												s.size(),

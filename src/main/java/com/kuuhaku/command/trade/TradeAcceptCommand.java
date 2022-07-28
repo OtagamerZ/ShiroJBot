@@ -65,7 +65,7 @@ public class TradeAcceptCommand implements Executable {
 		Utils.confirm(
 				locale.get("question/trade_close", other.getAsMention(), event.user().getAsMention()),
 				eb.build(), event.channel(),
-				wrapper -> {
+				w -> {
 					if (!trade.validate()) {
 						event.channel().sendMessage(locale.get("success/trade_invalid")).queue();
 						Trade.getPending().remove(event.user().getId());

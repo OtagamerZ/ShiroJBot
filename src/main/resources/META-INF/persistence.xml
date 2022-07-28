@@ -50,6 +50,7 @@
         <class>com.kuuhaku.model.common.Trade</class>
         <class>com.kuuhaku.model.persistent.user.StashedCard</class>
         <class>com.kuuhaku.model.persistent.user.AccessToken</class>
+        <class>com.kuuhaku.model.persistent.user.Couple</class>
 
         <!-- SHOUKAN -->
         <class>com.kuuhaku.model.persistent.shoukan.Deck</class>

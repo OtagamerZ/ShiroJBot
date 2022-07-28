@@ -65,7 +65,7 @@ public class TradeCommand implements Executable {
 		Trade trade = new Trade(event.user().getId(), other.getId());
 		Utils.confirm(
 				locale.get("question/trade_open", other.getAsMention(), event.user().getAsMention()), event.channel(),
-				wrapper -> {
+				w -> {
 					if (!wrapper.getUser().equals(other)) return;
 
 					Trade.getPending().put(trade, event.user().getId(), other.getId());

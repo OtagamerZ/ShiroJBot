@@ -1077,4 +1077,12 @@ public abstract class Utils {
 		Map.Entry<Double, String> entry = suffixes.floorEntry(number);
 		return roundToString(number / entry.getKey(), 1) + entry.getValue();
 	}
+
+	public static String replaceTags(String text, char delimiter, Map<String, Object> tags) {
+		for (Map.Entry<String, Object> tag : tags.entrySet()) {
+			text = text.replace(delimiter + tag.getKey() + delimiter, String.valueOf(tag.getValue()));
+		}
+
+		return text;
+	}
 }

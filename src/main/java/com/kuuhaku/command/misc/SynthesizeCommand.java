@@ -122,7 +122,7 @@ public class SynthesizeCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/synth"), event.channel(), wrapper -> {
+		Utils.confirm(locale.get("question/synth"), event.channel(), w -> {
 					Kawaipon kp = data.profile().getAccount().getKawaipon();
 					double field = cards.stream()
 							.mapToDouble(sc -> {

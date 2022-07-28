@@ -16,62 +16,47 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.market;
+package com.kuuhaku.command.misc;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.Couple;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 
 @Command(
-		name = "market",
-		subname = "buy",
+		name = "marry",
 		category = Category.MISC
 )
-@Signature("<id:number:r>")
-public class MarketBuyCommand implements Executable {
+@Signature("<user:user:r>")
+public class MarryCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getCapacity() <= 0) {
-			event.channel().sendMessage(locale.get("error/stash_full")).queue();
+		Couple c = data.profile().getAccount().getCouple();
+		if (c != null) {
+			event.channel().sendMessage(locale.get("error/already_married", c.getOther(event.user().getId()).getName())).queue();
 			return;
 		}
 
-		StashedCard sc = DAO.query(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.price > 0 AND s.id = ?1", args.getInt("id"));
-		if (sc == null) {
-			event.channel().sendMessage(locale.get("error/not_announced")).queue();
-			return;
-		} else if (sc.getKawaipon().equals(kp)) {
-			event.channel().sendMessage(locale.get("error/cannot_buy_own")).queue();
+		Member other = event.message().getMentionedMembers().get(0);
+		if (DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second", other.getId()) != null) {
+			event.channel().sendMessage(locale.get("error/already_married_target", other.getEffectiveName())).queue();
 			return;
 		}
 
-		int id = args.getInt("id");
-		int price = sc.getPrice();
-
-		Market m = new Market(event.user().getId());
-		if (sc.equals(m.getDailyOffer())) {
-			price *= 0.8;
-		}
-
-		Utils.confirm(locale.get("question/purchase", sc, price), event.channel(), w -> {
-					if (m.buy(id)) {
-						event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
-					} else {
-						event.channel().sendMessage(locale.get("error/not_announced")).queue();
-					}
-				}, event.user()
+		Utils.confirm(locale.get("question/marry", other.getAsMention(), event.user().getAsMention()), event.channel(),
+				w -> {
+					new Couple(event.user().getId(), other.getId()).save();
+					event.channel().sendMessage(locale.get("success/marry")).queue();
+				}, other.getUser()
 		);
 	}
 }

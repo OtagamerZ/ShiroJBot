@@ -45,9 +45,8 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @DynamicUpdate
@@ -176,7 +175,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	public BufferedImage render(I18N locale) {
 		BufferedImage mask = IO.getResourceAsImage("assets/profile_mask.webp");
 		BufferedImage overlay = Graph.toColorSpace(IO.getResourceAsImage("assets/profile_overlay.webp"), BufferedImage.TYPE_INT_ARGB);
-		;
 		BufferedImage hex = IO.getResourceAsImage("assets/hex_grid.webp");
 
 		AccountSettings settings = account.getSettings();
@@ -224,6 +222,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(hex, 0, 0, null);
 
 		Graph.applyTransformed(g2d, g1 -> {
+			Map<String, Object> replaces = new HashMap<>(){{
+				put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
+				put("g_rank", Utils.separate(account.getRanking()));
+				put("l_rank", Utils.separate(getRanking()));
+				put("xp", Utils.shorten(xp));
+				put("level", getLevel());
+			}};
 			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0x00FFFFFF), true);
 
 			g1.setClip(inner);
@@ -233,7 +238,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
-				String s = String.valueOf(o);
+				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
 				Rectangle2D bounds = Graph.getStringBounds(g1, s);
 				int y = (int) wids.getY();
 

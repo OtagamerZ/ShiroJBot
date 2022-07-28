@@ -87,7 +87,7 @@ public class StashScrapCommand implements Executable {
 						}
 					}
 
-					Utils.confirm(locale.get("question/scrap", value), event.channel(), wrapper -> {
+					Utils.confirm(locale.get("question/scrap", value), event.channel(), w -> {
 								event.channel().sendMessage(locale.get("success/scrap")).queue();
 								kp.getAccount().addCR(value, sc + " scrapped");
 								sc.delete();

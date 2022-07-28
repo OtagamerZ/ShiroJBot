@@ -65,7 +65,7 @@ public class ShoukanCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), wrapper -> {
+		Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), w -> {
 					try {
 						Shoukan skn = new Shoukan(locale, event.user(), other.getUser());
 						Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));

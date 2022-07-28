@@ -74,7 +74,7 @@ public class BanCommand implements Executable {
 		Utils.confirm(locale.get("question/ban",
 						members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
 						members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
-				), event.channel(), wrapper ->
+				), event.channel(), w ->
 						RestAction.allOf(members.stream().map(m -> m.ban(7, args.getString("reason"))).toList())
 								.flatMap(s -> event.channel().sendMessage(locale.get("success/ban",
 												s.size(),
