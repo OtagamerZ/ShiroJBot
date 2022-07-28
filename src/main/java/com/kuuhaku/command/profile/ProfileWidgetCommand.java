@@ -50,8 +50,10 @@ public class ProfileWidgetCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
-		switch (args.getString("action").toLowerCase(Locale.ROOT)) {
-			case "add" -> {
+
+		String op = args.getString("action").toLowerCase(Locale.ROOT);
+		switch (op) {
+			case "add", "set" -> {
 				Graphics2D g2d = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB).createGraphics();
 				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 15));
 
@@ -63,8 +65,8 @@ public class ProfileWidgetCommand implements Executable {
 				}
 				g2d.dispose();
 
-				int id = args.getInt("id", -1);
-				if (id > -1) {
+				if (op.equals("set")) {
+					int id = args.getInt("id", -1);
 					if (!Utils.between(id, 0, settings.getWidgets().size())) {
 						event.channel().sendMessage(locale.get("error/invalid_value_range", 0, settings.getWidgets().size() - 1)).queue();
 						return;
