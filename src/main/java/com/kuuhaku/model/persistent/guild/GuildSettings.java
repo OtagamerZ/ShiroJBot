@@ -107,7 +107,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = GuildFeatureConverter.class)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
-	@Lob
 	@Column(name = "aliases", nullable = false)
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
