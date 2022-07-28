@@ -264,7 +264,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					g2.setColor(Color.WHITE);
-					Graph.drawMultilineString(g2, bio, 10, (int) (em * 3.5  + 5), w - 20, 3,
+					Graph.drawMultilineString(g2, bio, 10, (int) (em * 3.5), w - 20, 3,
 							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
 					);
 				});
