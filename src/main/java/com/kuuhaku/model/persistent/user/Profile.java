@@ -244,7 +244,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Shape desc = new RoundRectangle2D.Double(0, 0, w, h, 20, 20);
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
-					Graph.drawMultilineString(g2, bio, 10, 10, w - 20, 0,
+					g1.setColor(Color.WHITE);
+					Graph.drawMultilineString(g2, bio, 10, (int) (bounds.getHeight() + 10), w - 20, 0,
 							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
 					);
 				});
