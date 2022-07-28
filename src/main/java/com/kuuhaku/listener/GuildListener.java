@@ -341,7 +341,7 @@ public class GuildListener extends ListenerAdapter {
 
 				Executable.POOL.submit(() -> {
 					try {
-						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params),
+						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 					} catch (Exception e) {
 						data.channel().sendMessage(locale.get("error/error", e)).queue();
 						Constants.LOGGER.error(e, e);
