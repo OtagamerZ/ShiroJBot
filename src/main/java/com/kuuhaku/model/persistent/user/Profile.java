@@ -232,14 +232,21 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				Graph.drawOutlinedString(g1, s, 15, (int) (y + bounds.getHeight() * 2), 2, Color.BLACK);
 			}
 
-			if (!settings.getBio().isBlank()) {
+			String bio = settings.getBio();
+			if (!bio.isBlank()) {
+				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
+				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
+				int y = (int) (SIZE.height - SIZE.height / 3d - 20);
+				int h = (int) (bounds.getHeight() * 2 * Graph.getLineCount(g2d, bio, (int) (SIZE.width / 2d - 20), 0));
+				int w = (int) (SIZE.width / 2d);
+
 				g1.setColor(bgCol);
-				Shape desc = new RoundRectangle2D.Double(
-						SIZE.width - SIZE.width / 2d - 40, SIZE.height - SIZE.height / 3d - 20,
-						SIZE.width / 2d, SIZE.height / 3d,
-						20, 20
-				);
+				Shape desc = new RoundRectangle2D.Double(x, y, w, h, 20, 20);
 				Graph.drawOutlined(g1, desc, 1, Color.BLACK);
+
+				Graph.drawMultilineString(g2d, bio, x + 10, y + 10, w - 20, 0,
+						(s, px, py) -> Graph.drawOutlinedString(g2d, s, px, py, 2, Color.BLACK)
+				);
 			}
 		});
 
@@ -269,7 +276,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
 		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 2, Color.BLACK);
 
-		String details = "XP: %s/%s I Rank:  %s".formatted(
+		String details = "XP: %s/%s I Rank:   %s".formatted(
 				Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp), 1
 		);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
@@ -277,7 +284,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
-		Graph.drawOutlinedString(g2d, "#", 88 + offset - 20, 45, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, "#", 88 + offset - 15, 45, 2, Color.BLACK);
 
 		g2d.dispose();
 

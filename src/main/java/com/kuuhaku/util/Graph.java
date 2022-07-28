@@ -107,6 +107,30 @@ public abstract class Graph {
 		}
 	}
 
+	public static int getLineCount(Graphics2D g2d, String text, int width, int kerning) {
+		int l = 0;
+
+		String[] lines = text.split("\n");
+		for (String line : lines) {
+			String[] words = line.split("(?<=\\S[ \u200B])");
+			int offset = 0;
+			for (String word : words) {
+				FontMetrics m = g2d.getFontMetrics();
+
+				if (offset + m.stringWidth(word) <= width) {
+					offset += m.stringWidth(word);
+				} else {
+					l++;
+					offset = m.stringWidth(word);
+				}
+			}
+
+			l++;
+		}
+
+		return l;
+	}
+
 	public static void applyTransformed(Graphics2D g2d, Consumer<Graphics2D> action) {
 		applyTransformed(g2d, 0, 0, 0, new Point(), 1, action);
 	}
