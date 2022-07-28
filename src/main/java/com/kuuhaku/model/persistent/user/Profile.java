@@ -170,7 +170,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.HD_HINTS);
+		g2d.setRenderingHints(Constants.SD_HINTS);
 
 		Graph.applyMask(bg, mask, 0);
 		g2d.drawImage(bg, 0, 0, null);
