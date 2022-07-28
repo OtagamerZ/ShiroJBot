@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
 import jakarta.persistence.*;
 
@@ -29,13 +30,15 @@ import java.awt.*;
 @Entity
 @Table(name = "account_settings")
 public class AccountSettings extends DAO<AccountSettings> {
+	public static final long MAX_BG_SIZE = 4 * 1024 * 1024;
+
 	@Id
 	@Column(name = "uid", nullable = false)
 	private String uid;
 
 	@Column(name = "color", nullable = false, length = 6)
 	@Convert(converter = ColorConverter.class)
-	private Color color = new Color(0);
+	private Color color = Color.BLACK;
 
 	@Column(name = "background")
 	private String background;
@@ -43,6 +46,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "bio")
 	private String bio;
 
+	@Lob
 	@Column(name = "widgets", nullable = false)
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray widgets = new JSONArray();
@@ -70,7 +74,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	}
 
 	public String getBackground() {
-		return background;
+		return Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
 	}
 
 	public void setBackground(String background) {

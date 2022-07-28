@@ -26,32 +26,40 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.validator.routines.UrlValidator;
 
 @Command(
 		name = "profile",
-		subname = "bio",
+		subname = "background",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<text:text:r>")
-public class ProfileBioCommand implements Executable {
+public class ProfileBackgroundCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 
 		String text = args.getString("text");
 		if (text.isBlank()) {
-			settings.setBio(null);
-			event.channel().sendMessage(locale.get("success/profile_bio_clear")).queue();
+			settings.setBackground(null);
+			event.channel().sendMessage(locale.get("success/profile_background_clear")).queue();
 		} else {
-			if (text.length() > 255) {
-				event.channel().sendMessage(locale.get("error/too_long")).queue();
+			if (!UrlValidator.getInstance().isValid(text)) {
+				event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 				return;
 			}
 
-			settings.setBio(text);
-			event.channel().sendMessage(locale.get("success/profile_bio_set")).queue();
+			long size = Graph.getImageSize(text);
+			if (size > AccountSettings.MAX_BG_SIZE) {
+				event.channel().sendMessage(locale.get("error/image_too_big", "5 MB")).queue();
+				return;
+			}
+
+			settings.setBackground(text);
+			event.channel().sendMessage(locale.get("success/profile_background_set")).queue();
 		}
 
 		settings.save();

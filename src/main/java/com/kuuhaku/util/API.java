@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class API {
 	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> SOCKET_CLIENTS = new HashMap<>();
-	private static final CloseableHttpClient HTTP = HttpClients.custom().setDefaultHeaders(List.of(
+	public static final CloseableHttpClient HTTP = HttpClients.custom().setDefaultHeaders(List.of(
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 	)).build();
 

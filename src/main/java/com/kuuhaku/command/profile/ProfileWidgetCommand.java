@@ -73,10 +73,10 @@ public class ProfileWidgetCommand implements Executable {
 					}
 
 					settings.getWidgets().set(id, text);
-					event.channel().sendMessage(locale.get("success/widget_set")).queue();
+					event.channel().sendMessage(locale.get("success/profile_widget_set")).queue();
 				} else {
 					settings.getWidgets().add(text);
-					event.channel().sendMessage(locale.get("success/widget_add")).queue();
+					event.channel().sendMessage(locale.get("success/profile_widget_add")).queue();
 				}
 
 				settings.save();
@@ -88,7 +88,7 @@ public class ProfileWidgetCommand implements Executable {
 					return;
 				}
 
-				event.channel().sendMessage(locale.get("success/widget_remove")).queue();
+				event.channel().sendMessage(locale.get("success/profile_widget_remove")).queue();
 				settings.getWidgets().remove(id);
 				settings.save();
 			}

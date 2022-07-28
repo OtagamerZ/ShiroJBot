@@ -20,6 +20,11 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.exceptions.InvalidValueException;
 import com.trickl.palette.Palette;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
@@ -27,6 +32,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -340,5 +346,23 @@ public abstract class Graph {
 		g2d.dispose();
 
 		return newImage;
+	}
+
+	public static long getImageSize(String url) {
+		try {
+			HttpHead req = new HttpHead(url);
+
+			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
+				Header h = res.getLastHeader(HttpHeaders.CONTENT_LENGTH);
+
+				if (h != null) {
+					return NumberUtils.toLong(h.getValue(), 0);
+				} else {
+					return 0;
+				}
+			}
+		} catch (IOException e) {
+			return 0;
+		}
 	}
 }

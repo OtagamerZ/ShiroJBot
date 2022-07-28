@@ -26,32 +26,35 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
+import java.awt.*;
+
 @Command(
 		name = "profile",
-		subname = "bio",
+		subname = "color",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<text:text:r>")
-public class ProfileBioCommand implements Executable {
+public class ProfileColorCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 
 		String text = args.getString("text");
 		if (text.isBlank()) {
-			settings.setBio(null);
-			event.channel().sendMessage(locale.get("success/profile_bio_clear")).queue();
+			settings.setColor(Color.BLACK);
+			event.channel().sendMessage(locale.get("success/profile_color_clear")).queue();
 		} else {
-			if (text.length() > 255) {
-				event.channel().sendMessage(locale.get("error/too_long")).queue();
+			if (!Utils.regex(text, "#[\\da-fA-F]]{6}").matches()) {
+				event.channel().sendMessage(locale.get("error/invalid_color")).queue();
 				return;
 			}
 
-			settings.setBio(text);
-			event.channel().sendMessage(locale.get("success/profile_bio_set")).queue();
+			settings.setColor(Color.decode(text));
+			event.channel().sendMessage(locale.get("success/profile_color_set")).queue();
 		}
 
 		settings.save();
