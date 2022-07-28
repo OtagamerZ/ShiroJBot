@@ -50,10 +50,9 @@ public class ProfileWidgetCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
-		System.out.println(args.getString("action"));
 		switch (args.getString("action").toLowerCase(Locale.ROOT)) {
 			case "add" -> {
-				Graphics2D g2d = new BufferedImage(0, 0, BufferedImage.TYPE_INT_RGB).createGraphics();
+				Graphics2D g2d = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB).createGraphics();
 				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 15));
 
 				String text = args.getString("text");
