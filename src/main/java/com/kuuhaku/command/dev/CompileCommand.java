@@ -29,7 +29,6 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
-import groovy.lang.GroovyShell;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import org.intellij.lang.annotations.Language;
@@ -56,11 +55,8 @@ public class CompileCommand implements Executable {
 					@Language("Groovy") String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
 					Future<?> fut = exec.submit(() -> {
-						GroovyShell gs = new GroovyShell();
-						gs.setVariable("msg", event.message());
-
 						time.set(System.currentTimeMillis());
-						Object out = Utils.exec(code, Map.of("msg", event.message()));
+						Object out = Utils.eval(code, Map.of("msg", event.message()));
 						time.getAndUpdate(t -> System.currentTimeMillis() - t);
 
 						return out;
