@@ -153,6 +153,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		AccountSettings settings = account.getSettings();
 		BufferedImage bg = IO.getImage(settings.getBackground());
+		if (bg == null) {
+			settings.setBackground(null);
+			bg = IO.getImage(settings.getBackground());
+		}
 
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 
