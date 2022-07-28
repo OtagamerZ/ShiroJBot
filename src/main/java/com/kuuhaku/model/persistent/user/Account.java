@@ -266,6 +266,19 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return createdAt.isBefore(old);
 	}
 
+	public int getRanking() {
+		return DAO.queryNative(Integer.class, """
+				SELECT x.rank
+				FROM (
+				     SELECT p.uid
+				          , row_number()
+				     FROM profile p
+				     ORDER BY p.xp DESC
+				     ) x
+				WHERE x.uid = ?1
+				""", uid);
+	}
+
 	public int getHighestLevel() {
 		return DAO.queryNative(Integer.class, "SELECT CAST(SQRT(MAX(xp) / 100) AS INT) FROM profile WHERE uid = ?1", uid);
 	}

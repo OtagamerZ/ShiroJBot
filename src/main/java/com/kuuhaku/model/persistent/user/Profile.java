@@ -151,6 +151,20 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return account.isBlacklisted();
 	}
 
+	public int getRanking() {
+		return DAO.queryNative(Integer.class, """
+				SELECT x.rank
+				FROM (
+				     SELECT p.uid
+				          , row_number()
+				     FROM profile p
+				     WHERE p.gid = ?2
+				     ORDER BY p.xp DESC
+				     ) x
+				WHERE x.uid = ?1
+				""", id.getUid(), id.getGid());
+	}
+
 	public Emote getLevelEmote() {
 		return Main.getApp().getShiro()
 				.getEmotesByName("lvl_" + (getLevel() - getLevel() % 5), false)
