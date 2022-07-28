@@ -75,6 +75,8 @@ public class ProfileWidgetCommand implements Executable {
 					settings.getWidgets().set(id, text);
 					event.channel().sendMessage(locale.get("success/profile_widget_set")).queue();
 				} else {
+
+
 					settings.getWidgets().add(text);
 					event.channel().sendMessage(locale.get("success/profile_widget_add")).queue();
 				}
