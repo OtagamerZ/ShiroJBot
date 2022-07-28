@@ -170,7 +170,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
+		g2d.setRenderingHints(Constants.HD_HINTS);
 
 		Graph.applyMask(bg, mask, 0);
 		g2d.drawImage(bg, 0, 0, null);
@@ -211,7 +211,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 110, 200, 50, 20, 20);
 
-			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 18));
+			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
 				String s = String.valueOf(o);
 				Rectangle2D bounds = Graph.getStringBounds(g1, s);
