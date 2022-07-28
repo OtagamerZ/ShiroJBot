@@ -246,8 +246,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
 		g2d.drawImage(emote, 6, -3, 81, 81, null);
 
-		g2d.setColor(Color.DARK_GRAY);
-		g2d.fillRect(91, 49, 384, 20);
+		g2d.setColor(Color.GRAY);
+		Graph.drawOutlined(g2d, new Rectangle(91, 49, 384, 20), 3, Color.BLACK);
 
 		int pad = 5;
 		double prcnt = Calc.prcnt(xp, getXpToLevel(getLevel() + 1));
