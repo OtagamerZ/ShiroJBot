@@ -148,7 +148,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 	public BufferedImage render(I18N locale) {
 		BufferedImage mask = IO.getResourceAsImage("assets/profile_mask.webp");
-		BufferedImage overlay = IO.getResourceAsImage("assets/profile_overlay.webp");
+		BufferedImage overlay = Graph.toColorSpace(IO.getResourceAsImage("assets/profile_overlay.webp"), BufferedImage.TYPE_INT_ARGB);;
 		BufferedImage hex = IO.getResourceAsImage("assets/hex_grid.webp");
 
 		AccountSettings settings = account.getSettings();
