@@ -1064,8 +1064,9 @@ public abstract class Utils {
 	}
 
 	public static String shorten(double number) {
+		if (number < 1000) return String.valueOf(number);
+
 		NavigableMap<Double, String> suffixes = new TreeMap<>(){{
-			put(0D, "");
 			put(1_000D, "k");
 			put(1_000_000D, "m");
 			put(1_000_000_000D, "b");
