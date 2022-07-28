@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.profile;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -26,6 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -38,9 +40,12 @@ import net.dv8tion.jda.api.Permission;
 public class ProfileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		event.channel()
-				.sendMessage(event.user().getAsMention())
-				.addFile(IO.getBytes(data.profile().render(locale), "webp"), "profile.webp").
-				queue();
+		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
+			event.channel()
+					.sendMessage(event.user().getAsMention())
+					.addFile(IO.getBytes(data.profile().render(locale), "webp"), "profile.webp")
+					.flatMap(s -> m.delete())
+					.queue(null, Utils::doNothing);
+		});
 	}
 }
