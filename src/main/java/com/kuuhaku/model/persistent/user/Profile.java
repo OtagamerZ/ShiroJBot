@@ -239,7 +239,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(overlay, 0, 0, null);
 
 		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
-		g2d.drawImage(emote, 6, 6, 75, 75, null);
+		g2d.drawImage(emote, 6, -3, 81, 81, null);
 
 		g2d.dispose();
 
