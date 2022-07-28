@@ -247,13 +247,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(emote, 6, -3, 81, 81, null);
 
 		g2d.setColor(Color.GRAY);
-		Graph.drawOutlined(g2d, new Rectangle(91, 49, 384, 20), 3, Color.BLACK);
+		Graph.drawOutlined(g2d, new Rectangle(91, 49, 384, 20), 2, Color.BLACK);
 
-		int pad = 5;
+		int pad = 4;
 		double prcnt = Calc.prcnt(xp, getXpToLevel(getLevel() + 1));
 		int[] colors = {0x5b2d11, 0xb5b5b5, 0xd49800, 0x00d4d4, 0x9716ff, 0x0ed700, 0xe40000};
 		g2d.setColor(new Color(colors[Math.max(0, (getLevel() % 215 - 1) / 30)]));
-		g2d.fillRect(91 + pad, 49 + pad, (int) ((384 - pad) * prcnt), 20 - pad);
+		g2d.fillRect(91 + pad / 2, 49 + pad / 2, (int) ((384 - pad / 2) * prcnt), 20 - pad / 2);
 
 		g2d.dispose();
 
