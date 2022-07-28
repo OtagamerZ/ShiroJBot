@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
@@ -33,6 +34,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -144,6 +146,14 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return account.isBlacklisted();
 	}
 
+	public Emote getLevelEmote() {
+		return Main.getApp().getShiro()
+				.getEmotesByName("lvl_" + (getLevel() - getLevel() % 5), false)
+				.stream()
+				.findFirst()
+				.orElseThrow();
+	}
+
 	public BufferedImage render(I18N locale) {
 		BufferedImage mask = IO.getResourceAsImage("assets/profile_mask.webp");
 		BufferedImage overlay = Graph.toColorSpace(IO.getResourceAsImage("assets/profile_overlay.webp"), BufferedImage.TYPE_INT_ARGB);;
@@ -227,6 +237,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		Graph.applyMask(overlay, mask, 1);
 		g2d.drawImage(overlay, 0, 0, null);
+
+		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
+		g2d.drawImage(emote, 6, 6, null);
 
 		g2d.dispose();
 
