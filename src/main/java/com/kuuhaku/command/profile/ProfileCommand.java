@@ -20,40 +20,27 @@ package com.kuuhaku.command.profile;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 
 @Command(
 		name = "profile",
-		subname = "bio",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<text:text:r>")
+@Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ProfileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		AccountSettings settings = data.profile().getAccount().getSettings();
-
-		String text = args.getString("text");
-		if (text.isBlank()) {
-			settings.setBio(null);
-			event.channel().sendMessage(locale.get("success/profile_bio_clear")).queue();
-		} else {
-			if (text.length() > 255) {
-				event.channel().sendMessage(locale.get("error/too_long")).queue();
-				return;
-			}
-
-			settings.setBio(text);
-			event.channel().sendMessage(locale.get("success/profile_bio_set")).queue();
-		}
-
-		settings.save();
+		event.channel()
+				.sendMessage(event.user().getAsMention())
+				.addFile(IO.getBytes(data.profile().render(locale), "webp"), "profile.webp").
+				queue();
 	}
 }
