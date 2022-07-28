@@ -220,14 +220,14 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.applyMask(hex, mask, 0, true);
 		g2d.drawImage(hex, 0, 0, null);
 
+		Map<String, Object> replaces = new HashMap<>(){{
+			put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
+			put("g_rank", Utils.separate(account.getRanking()));
+			put("l_rank", Utils.separate(getRanking()));
+			put("xp", Utils.shorten(xp));
+			put("level", getLevel());
+		}};
 		Graph.applyTransformed(g2d, g1 -> {
-			Map<String, Object> replaces = new HashMap<>(){{
-				put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
-				put("g_rank", Utils.separate(account.getRanking()));
-				put("l_rank", Utils.separate(getRanking()));
-				put("xp", Utils.shorten(xp));
-				put("level", getLevel());
-			}};
 			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0x00FFFFFF), true);
 
 			g1.setClip(inner);
@@ -250,7 +250,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				Graph.drawOutlinedString(g1, s, 15, (int) (y + bounds.getHeight() * 2), 2, Color.BLACK);
 			}
 
-			String bio = settings.getBio();
+			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
 			if (!bio.isBlank()) {
 				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
