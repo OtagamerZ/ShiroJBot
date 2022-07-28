@@ -29,15 +29,13 @@ import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.entities.Member;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
-
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.Member;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
 import java.awt.*;
@@ -168,7 +166,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(bg, 0, 0, null);
 
 		Graphics2D og2d = overlay.createGraphics();
-		og2d.setColor(settings.getColor());
+		if (settings.getColor().equals(Color.BLACK)) {
+			og2d.setColor(Graph.rotate(Graph.getColor(bg), 180));
+		} else {
+			og2d.setColor(settings.getColor());
+		}
 		og2d.setComposite(BlendComposite.Multiply);
 		og2d.fillRect(0, 0, overlay.getWidth(), overlay.getHeight());
 		og2d.dispose();

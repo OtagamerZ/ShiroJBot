@@ -365,4 +365,19 @@ public abstract class Graph {
 			return 0;
 		}
 	}
+
+	public static Color rotate(Color color, int deg) {
+		return new Color(rotate(color.getRGB(), deg));
+	}
+
+	public static int rotate(int color, int deg) {
+		int[] rgb = Graph.unpackRGB(color);
+
+		float[] hsv;
+		hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+		hsv[0] = ((hsv[0] * 360 + deg) % 360) / 360;
+
+		rgb = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+		return Graph.packRGB(255, rgb[1], rgb[2], rgb[3]);
+	}
 }

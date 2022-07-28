@@ -54,19 +54,12 @@ public enum Rarity {
 	}
 
 	public Color getColor(boolean chrome) {
-		int color = this.color;
+		Color color = new Color(this.color);
 		if (chrome) {
-			int[] rgb = Graph.unpackRGB(color);
-
-			float[] hsv;
-			hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
-			hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
-
-			rgb = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-			color = Graph.packRGB(255, rgb[1], rgb[2], rgb[3]);
+			color = Graph.rotate(color, 180);
 		}
 
-		return new Color(color);
+		return color;
 	}
 
 	public String getEmote() {

@@ -20,7 +20,6 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.model.enums.PixelOp;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class ImageFilters {
@@ -115,17 +114,12 @@ public abstract class ImageFilters {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graph.forEachPixel(source, (x, y, rgb) -> {
-			int[] color = Graph.unpackRGB(rgb);
+			int[] color;
 
 			if (onlyHue) {
-				float[] hsv;
-				hsv = Color.RGBtoHSB(color[1], color[2], color[3], null);
-				hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
-				int[] tmp = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-				color[1] = tmp[1];
-				color[2] = tmp[2];
-				color[3] = tmp[3];
+				color = Graph.unpackRGB(Graph.rotate(rgb, 180));
 			} else {
+				color = Graph.unpackRGB(rgb);
 				for (int i = 1; i < color.length; i++) {
 					color[i] = ~color[i] & 0xFF;
 				}
