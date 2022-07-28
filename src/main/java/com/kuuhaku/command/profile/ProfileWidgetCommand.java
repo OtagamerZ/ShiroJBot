@@ -65,6 +65,11 @@ public class ProfileWidgetCommand implements Executable {
 
 				int id = args.getInt("id", -1);
 				if (id > -1) {
+					if (!Utils.between(id, 0, settings.getWidgets().size())) {
+						event.channel().sendMessage(locale.get("error/invalid_value_range", 0, settings.getWidgets().size() - 1)).queue();
+						return;
+					}
+
 					settings.getWidgets().set(id, text);
 					event.channel().sendMessage(locale.get("success/widget_set")).queue();
 				} else {
@@ -76,8 +81,9 @@ public class ProfileWidgetCommand implements Executable {
 			}
 			case "remove" -> {
 				int id = args.getInt("id", -1);
+				System.out.println(id);
 				if (!Utils.between(id, 0, settings.getWidgets().size())) {
-					event.channel().sendMessage(locale.get("error/invalid_value_range", 0, settings.getWidgets().size())).queue();
+					event.channel().sendMessage(locale.get("error/invalid_value_range", 0, settings.getWidgets().size() - 1)).queue();
 					return;
 				}
 
