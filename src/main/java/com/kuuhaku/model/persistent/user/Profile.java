@@ -265,9 +265,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
 		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 2, Color.BLACK);
+
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 22));
 		Graph.drawOutlinedString(g2d, "XP: %s/%s | Rank: %s".formatted(
 			xp, toNext, 1
-		), 88 + offset, 51, 2, Color.BLACK);
+		), 88 + offset, 53, 2, Color.BLACK);
 
 		g2d.dispose();
 
