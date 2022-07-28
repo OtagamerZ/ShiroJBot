@@ -222,6 +222,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		Map<String, Object> replaces = new HashMap<>(){{
 			put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
+			put("guild", getGuild().getName());
 			put("g_rank", Utils.separate(account.getRanking()));
 			put("l_rank", Utils.separate(getRanking()));
 			put("xp", Utils.shorten(xp));
