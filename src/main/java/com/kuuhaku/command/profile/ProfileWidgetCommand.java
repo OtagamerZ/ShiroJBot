@@ -44,7 +44,8 @@ import java.util.Locale;
 @Signature({
 		"<action:word:r>[add] <text:text:r>",
 		"<action:word:r>[set] <id:number:r> <text:text:r>",
-		"<action:word:r>[remove] <id:number:r>"
+		"<action:word:r>[remove] <id:number:r>",
+		"<action:word:r>[clear]"
 })
 public class ProfileWidgetCommand implements Executable {
 	@Override
@@ -95,6 +96,11 @@ public class ProfileWidgetCommand implements Executable {
 
 				event.channel().sendMessage(locale.get("success/profile_widget_remove")).queue();
 				settings.getWidgets().remove(id);
+				settings.save();
+			}
+			case "clear" -> {
+				event.channel().sendMessage(locale.get("success/profile_widget_clear")).queue();
+				settings.getWidgets().clear();
 				settings.save();
 			}
 		}
