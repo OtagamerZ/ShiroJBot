@@ -28,6 +28,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.StringUtils;
 
 @Command(
 		name = "profile",
@@ -45,7 +46,7 @@ public class ProfileBioCommand implements Executable {
 			settings.setBio(null);
 			event.channel().sendMessage(locale.get("success/profile_bio_clear")).queue();
 		} else {
-			if (text.length() > 255) {
+			if (text.length() > 255 || StringUtils.countMatches(text, "\n") > 10) {
 				event.channel().sendMessage(locale.get("error/too_long")).queue();
 				return;
 			}

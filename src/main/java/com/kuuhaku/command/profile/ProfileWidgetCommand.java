@@ -57,7 +57,7 @@ public class ProfileWidgetCommand implements Executable {
 				Graphics2D g2d = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB).createGraphics();
 				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 15));
 
-				String text = args.getString("text");
+				String text = args.getString("text").replace("\n", " ");
 				if (Graph.getStringBounds(g2d, text).getWidth() > 375) {
 					g2d.dispose();
 					event.channel().sendMessage(locale.get("error/too_long")).queue();
