@@ -237,16 +237,18 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				Rectangle2D bounds = Graph.getStringBounds(g1, bio);
 				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
 				int y = (int) (SIZE.height - SIZE.height / 3d - 20);
-				int h = (int) (bounds.getHeight() * 2 * Graph.getLineCount(g2d, bio, (int) (SIZE.width / 2d - 20), 0));
+				int h = (int) (bounds.getHeight() * 2 * Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20), 0));
 				int w = (int) (SIZE.width / 2d);
 
-				g1.setColor(bgCol);
-				Shape desc = new RoundRectangle2D.Double(x, y, w, h, 20, 20);
-				Graph.drawOutlined(g1, desc, 1, Color.BLACK);
+				Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
+					g2.setColor(bgCol);
+					Shape desc = new RoundRectangle2D.Double(0, 0, 0, h, 20, 20);
+					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
-				Graph.drawMultilineString(g2d, bio, x + 10, y + 10, w - 20, 0,
-						(s, px, py) -> Graph.drawOutlinedString(g2d, s, px, py, 2, Color.BLACK)
-				);
+					Graph.drawMultilineString(g2, bio, 10, 10, w - 20, 0,
+							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
+					);
+				});
 			}
 		});
 
@@ -284,7 +286,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
-		Graph.drawOutlinedString(g2d, "#", 88 + offset - 15, 45, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, "#", 88 + offset - 17, 45, 2, Color.BLACK);
 
 		g2d.dispose();
 
