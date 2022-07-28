@@ -229,7 +229,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawOutlinedString(g1, s, 15, (int) (y + bounds.getHeight() * 2), 3, Color.BLACK);
+				Graph.drawOutlinedString(g1, s, 15, (int) (y + bounds.getHeight() * 2), 2, Color.BLACK);
 			}
 
 			g1.setColor(bgCol);
@@ -248,7 +248,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(emote, 6, -3, 81, 81, null);
 
 		g2d.setColor(Color.GRAY);
-		Graph.drawOutlined(g2d, new Rectangle(88, 59, 384, 10), 3, Color.BLACK);
+		Graph.drawOutlined(g2d, new Rectangle(88, 59, 384, 10), 2, Color.BLACK);
 
 		int lvl = getLevel();
 		long lvlXp = getXpToLevel(lvl);
@@ -265,12 +265,12 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
-		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
+		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 2, Color.BLACK);
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
-		Graph.drawOutlinedString(g2d, "XP: %s/%s I Rank: ﹟%s".formatted(
+		Graph.drawOutlinedString(g2d, "XP: %s/%s I Rank: ⁿ%s".formatted(
 			Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp), 1
-		), 88 + offset, 51, 3, Color.BLACK);
+		), 88 + offset, 51, 2, Color.BLACK);
 
 		g2d.dispose();
 
