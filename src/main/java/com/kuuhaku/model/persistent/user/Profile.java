@@ -165,13 +165,16 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.applyMask(bg, mask, 0);
 		g2d.drawImage(bg, 0, 0, null);
 
-		Graphics2D og2d = overlay.createGraphics();
+		Color color;
 		if (settings.getColor().equals(Color.BLACK)) {
-			og2d.setColor(Graph.rotate(Graph.getColor(bg), 180));
+			color = Graph.rotate(Graph.getColor(bg), 180);
 		} else {
-			og2d.setColor(settings.getColor());
+			color = settings.getColor();
 		}
+
+		Graphics2D og2d = overlay.createGraphics();
 		og2d.setComposite(BlendComposite.Multiply);
+		og2d.setColor(color);
 		og2d.fillRect(0, 0, overlay.getWidth(), overlay.getHeight());
 		og2d.dispose();
 
@@ -191,7 +194,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(hex, 0, 0, null);
 
 		Graph.applyTransformed(g2d, g1 -> {
-			Color bgCol = new Color((200 << 24) | (settings.getColor().getRGB() & 0x00FFFFFF), true);
+			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0x00FFFFFF), true);
 
 			g1.setClip(inner);
 			g1.setColor(bgCol);
