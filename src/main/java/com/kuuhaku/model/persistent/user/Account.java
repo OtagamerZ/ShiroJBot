@@ -271,7 +271,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 				SELECT x.rank
 				FROM (
 				     SELECT p.uid
-				          , row_number()
+				          , row_number() OVER ()
 				     FROM profile p
 				     ORDER BY p.xp DESC
 				     ) x

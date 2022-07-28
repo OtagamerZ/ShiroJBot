@@ -155,7 +155,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				SELECT x.rank
 				FROM (
 				     SELECT p.uid
-				          , row_number()
+				          , row_number() OVER ()
 				     FROM profile p
 				     WHERE p.gid = ?2
 				     ORDER BY p.xp DESC
