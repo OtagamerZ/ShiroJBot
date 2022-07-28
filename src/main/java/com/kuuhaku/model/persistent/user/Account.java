@@ -298,7 +298,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public Couple getCouple() {
-		return DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second");
+		return DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second", uid);
 	}
 
 	@Override
