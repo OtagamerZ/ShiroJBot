@@ -161,7 +161,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 	public BufferedImage render(I18N locale) {
 		BufferedImage mask = IO.getResourceAsImage("assets/profile_mask.webp");
-		BufferedImage overlay = Graph.toColorSpace(IO.getResourceAsImage("assets/profile_overlay.webp"), BufferedImage.TYPE_INT_ARGB);;
+		BufferedImage overlay = Graph.toColorSpace(IO.getResourceAsImage("assets/profile_overlay.webp"), BufferedImage.TYPE_INT_ARGB);
+		;
 		BufferedImage hex = IO.getResourceAsImage("assets/hex_grid.webp");
 
 		AccountSettings settings = account.getSettings();
@@ -223,9 +224,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				int y = (int) wids.getY();
 
 				g1.setColor(bgCol);
-				wids.setFrame(wids.getX(),  y, 43 + bounds.getWidth(), bounds.getHeight() * 3);
+				wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), bounds.getHeight() * 3);
 				Graph.drawOutlined(g1, wids, 1, Color.BLACK);
-				wids.setFrame(wids.getX(),  y + wids.getHeight() + 10, 0, 0);
+				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
 				Graph.drawOutlinedString(g1, s, 15, (int) (y + bounds.getHeight() * 2), 3, Color.BLACK);
@@ -260,7 +261,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 51, 2, Color.BLACK);
 
 		g2d.setColor(Color.WHITE);
-
+		Graph.drawOutlinedString(g2d, account.getName(), 195, 25, 2, Color.BLACK);
 
 		g2d.dispose();
 
