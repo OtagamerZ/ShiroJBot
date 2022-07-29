@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -39,6 +40,10 @@ public class Title {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedTitle> infos = new HashSet<>();
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "rarity", nullable = false)
+	private Rarity rarity;
+
 	public String getId() {
 		return id;
 	}
@@ -48,6 +53,10 @@ public class Title {
 				.filter(ld -> ld.getLocale() == locale)
 				.findFirst()
 				.orElseThrow();
+	}
+
+	public Rarity getRarity() {
+		return rarity;
 	}
 
 	@Override
