@@ -45,6 +45,8 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -1084,5 +1086,20 @@ public abstract class Utils {
 		}
 
 		return text;
+	}
+
+	public static Webhook getWebhook(TextChannel channel) {
+		List<Webhook> hooks = Pages.subGet(channel.retrieveWebhooks());
+		for (Webhook hook : hooks) {
+			if (Objects.equals(hook.getOwnerAsUser(), channel.getGuild().getSelfMember().getUser())) {
+				return hook;
+			}
+		}
+
+		try {
+			return Pages.subGet(channel.createWebhook("Shiro"));
+		} catch (PermissionException | ErrorResponseException e) {
+			return null;
+		}
 	}
 }

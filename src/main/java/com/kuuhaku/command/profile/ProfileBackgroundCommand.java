@@ -53,8 +53,11 @@ public class ProfileBackgroundCommand implements Executable {
 			}
 
 			long size = Graph.getImageSize(text);
-			if (size > AccountSettings.MAX_BG_SIZE) {
-				event.channel().sendMessage(locale.get("error/image_too_big", "5 MB")).queue();
+			if (size == 0) {
+				event.channel().sendMessage(locale.get("error/invalid_url")).queue();
+				return;
+			} else if (size > AccountSettings.MAX_BG_SIZE) {
+				event.channel().sendMessage(locale.get("error/image_too_big", "4 MB")).queue();
 				return;
 			}
 
