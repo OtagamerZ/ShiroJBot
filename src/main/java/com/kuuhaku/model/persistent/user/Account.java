@@ -246,12 +246,18 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findFirst().orElse(new DynamicProperty(this, id, ""));
 	}
 
+	public AccountTitle getTitle() {
+		return titles.stream()
+				.filter(AccountTitle::isCurrent)
+				.findFirst().orElse(null);
+	}
+
 	public Set<AccountTitle> getTitles() {
 		return titles;
 	}
 
-	public void addTitles(String title) {
-		titles.add(new AccountTitle(this, DAO.find(Title.class, title)));
+	public boolean addTitle(String title) {
+		return titles.add(new AccountTitle(this, DAO.find(Title.class, title)));
 	}
 
 	@Override
