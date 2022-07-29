@@ -314,7 +314,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 40));
 
 			Graph.drawMultilineString(g2d, title.getTitle().getInfo(locale).getName(), 524, 75, 374, 15, (str, x, y) ->
-					Graph.drawOutlinedString(g2d, str, (int) (x + (374 - Graph.getStringBounds(g2d, str).getWidth()) / 2), y, 20, Color.BLACK)
+					Graph.drawOutlinedString(g2d, str, x, y, 20, Color.BLACK)
 			);
 		}
 
