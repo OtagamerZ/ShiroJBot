@@ -250,6 +250,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return titles;
 	}
 
+	public void addTitles(String title) {
+		titles.add(new AccountTitle(this, DAO.find(Title.class, title)));
+	}
+
 	@Override
 	public boolean isBlacklisted() {
 		return blacklisted;

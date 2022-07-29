@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.controller.DAO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -26,7 +27,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "account_title")
-public class AccountTitle {
+public class AccountTitle extends DAO<AccountTitle> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import jakarta.persistence.*;
@@ -30,7 +31,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "title")
-public class Title {
+public class Title extends DAO<Title> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
