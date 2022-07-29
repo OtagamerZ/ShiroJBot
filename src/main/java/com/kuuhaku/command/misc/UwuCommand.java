@@ -24,11 +24,13 @@ import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PseudoUser;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.Uwuifier;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
@@ -37,12 +39,13 @@ import net.dv8tion.jda.api.JDA;
 		name = "uwu",
 		category = Category.MISC
 )
+@Signature("<text:text:r>")
 public class UwuCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		PseudoUser pu = new PseudoUser(event.member(), event.channel());
 
-		String text = Uwuifier.INSTANCE.uwu(locale, event.message().getContentRaw());
+		String text = Uwuifier.INSTANCE.uwu(locale, args.getString("text"));
 		try (WebhookClient hook = pu.webhook()) {
 			if (hook != null) {
 				WebhookMessage msg = new WebhookMessageBuilder()
@@ -53,6 +56,7 @@ public class UwuCommand implements Executable {
 						.build();
 
 				hook.send(msg);
+				event.message().delete().queue(null, Utils::doNothing);
 			} else {
 				event.channel().sendMessage(text).reference(event.message()).queue();
 			}
