@@ -16,10 +16,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.util;
+package com.kuuhaku.util.text;
 
 import com.kuuhaku.model.enums.I18N;
-import org.apache.commons.lang3.StringUtils;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -28,35 +29,17 @@ import java.util.List;
 public class Uwuifier {
     public static final Uwuifier INSTANCE = new Uwuifier();
 
-    private final double faceFac;
-    private final double actionFac;
-    private final double stutterFac;
-
     private static final String[] punctuation = {"!?", "?!!", "?!?1", "!!11", "?!?!"};
     private static final String[] faces = {
-            "(・`ω´・)",
-            ";;w;;",
-            "OwO",
-            "UwU",
-            ">w<",
-            "^w^",
-            "ÚwÚ",
-            "^-^",
-            ":3",
-            "x3",
-            "q(≧▽≦q)",
-            "(✿◡‿◡)"
+            "(・`ω´・)", ";;w;;", "OwO",
+            "UwU", ">w<", "^w^",
+            "ÚwÚ", "^-^", ":3",
+            "x3", "q(≧▽≦q)", "(✿◡‿◡)"
     };
     private static final String[] actions = {
-            "str/uwu_blush",
-            "str/uwu_whisper",
-            "str/uwu_sob",
-            "str/uwu_scream",
-            "str/uwu_shy",
-            "str/uwu_run",
-            "str/uwu_screech",
-            "str/uwu_stare",
-            "str/uwu_hug",
+            "str/uwu_blush", "str/uwu_whisper", "str/uwu_sob",
+            "str/uwu_scream", "str/uwu_shy", "str/uwu_run",
+            "str/uwu_screech", "str/uwu_stare", "str/uwu_hug",
             "str/uwu_smile"
     };
     private static final List<Pair<String, String>> exp = List.of(
@@ -66,6 +49,10 @@ public class Uwuifier {
             Pair.of("N([AEIOUaeiou])", "Ny$1"),
             Pair.of("ove", "uv")
     );
+
+    private final double faceFac;
+    private final double actionFac;
+    private final double stutterFac;
 
     public Uwuifier() {
         this.faceFac = 0.05;
@@ -85,8 +72,7 @@ public class Uwuifier {
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            String[] words = StringUtils.normalizeSpace(line).split(" ");
-
+            String[] words = line.split("(?<=\\S )");
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
                 if (UrlValidator.getInstance().isValid(word) || word.matches(":.+:|<.+>")) continue;

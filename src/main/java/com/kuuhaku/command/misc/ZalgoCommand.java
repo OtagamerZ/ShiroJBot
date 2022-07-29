@@ -31,21 +31,21 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.text.Uwuifier;
 import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.util.text.Zalgo;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "uwu",
+		name = "zalgo",
 		category = Category.MISC
 )
 @Signature("<text:text:r>")
-public class UwuCommand implements Executable {
+public class ZalgoCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		PseudoUser pu = new PseudoUser(event.member(), event.channel());
 
-		String text = Uwuifier.INSTANCE.uwu(locale, args.getString("text"));
+		String text = Zalgo.INSTANCE.curse(args.getString("text"));
 		try (WebhookClient hook = pu.webhook()) {
 			if (hook != null) {
 				event.message().delete().queue(null, Utils::doNothing);
