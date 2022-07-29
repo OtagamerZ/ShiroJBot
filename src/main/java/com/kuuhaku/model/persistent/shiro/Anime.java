@@ -70,6 +70,10 @@ public class Anime extends DAO<Anime> {
 		return id;
 	}
 
+	public boolean isVisible() {
+		return visible;
+	}
+
 	@Override
 	public String toString() {
 		if (!visible) return "???";
