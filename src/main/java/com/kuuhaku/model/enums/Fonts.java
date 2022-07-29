@@ -33,6 +33,7 @@ public enum Fonts {
 	OPEN_SANS("font/OpenSans.ttf"),
 	OPEN_SANS_BOLD("font/OpenSans-Bold.ttf"),
 	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf"),
+	DOREKING("font/Doreking.ttf"),
 	DEFAULT("");
 
 	private final Font font;
