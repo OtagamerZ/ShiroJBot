@@ -37,7 +37,7 @@ import java.util.Objects;
 @Table(name = "giftcode")
 public class Giftcode extends DAO<Giftcode> {
 	@Id
-	@Column(name = "id", nullable = false, length = 32)
+	@Column(name = "code", nullable = false, length = 32)
 	private String code;
 
 	@Column(name = "redeemer")
