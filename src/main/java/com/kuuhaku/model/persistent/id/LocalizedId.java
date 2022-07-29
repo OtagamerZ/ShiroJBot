@@ -16,49 +16,64 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.model.persistent.id;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.id.LocalizedId;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "card_descriptions")
-public class LocalizedDescription extends DAO<LocalizedDescription> {
-	@EmbeddedId
-	private LocalizedId id;
+@Embeddable
+public class LocalizedId implements Serializable {
+	@Serial
+	private static final long serialVersionUID = -6914298265904559282L;
 
-	@Column(name = "description", nullable = false)
-	private String description;
+	@Column(name = "id", nullable = false)
+	private String id;
 
-	public LocalizedId getId() {
+	@Enumerated(EnumType.STRING)
+	@Column(name = "locale", nullable = false)
+	private I18N locale;
+
+	public LocalizedId() {
+	}
+
+	public LocalizedId(String id, I18N locale) {
+		this.id = id;
+		this.locale = locale;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public I18N getLocale() {
-		return id.getLocale();
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getDescription() {
-		return description;
+	public I18N getLocale() {
+		return locale;
+	}
+
+	public void setLocale(I18N locale) {
+		this.locale = locale;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedDescription that = (LocalizedDescription) o;
-		return Objects.equals(id, that.id);
+		LocalizedId that = (LocalizedId) o;
+		return Objects.equals(id, that.id) && locale == that.locale;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, locale);
 	}
 }

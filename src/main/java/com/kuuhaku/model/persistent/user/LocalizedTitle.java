@@ -16,23 +16,26 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.id.LocalizedId;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
 import java.util.Objects;
 
 @Entity
-@Table(name = "card_descriptions")
-public class LocalizedDescription extends DAO<LocalizedDescription> {
+@Table(name = "title_info")
+public class LocalizedTitle extends DAO<LocalizedTitle> {
 	@EmbeddedId
 	private LocalizedId id;
+
+	@Column(name = "name", nullable = false)
+	private String name;
 
 	@Column(name = "description", nullable = false)
 	private String description;
@@ -45,6 +48,10 @@ public class LocalizedDescription extends DAO<LocalizedDescription> {
 		return id.getLocale();
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -53,7 +60,7 @@ public class LocalizedDescription extends DAO<LocalizedDescription> {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedDescription that = (LocalizedDescription) o;
+		LocalizedTitle that = (LocalizedTitle) o;
 		return Objects.equals(id, that.id);
 	}
 

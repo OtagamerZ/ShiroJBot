@@ -16,64 +16,50 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.id;
+package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.model.enums.I18N;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import java.io.Serial;
-import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-@Embeddable
-public class LocalizedDescId implements Serializable {
-	@Serial
-	private static final long serialVersionUID = -6914298265904559282L;
-
+@Entity
+@Table(name = "title")
+public class Title {
+	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "locale", nullable = false)
-	private I18N locale;
-
-	public LocalizedDescId() {
-	}
-
-	public LocalizedDescId(String id, I18N locale) {
-		this.id = id;
-		this.locale = locale;
-	}
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedTitle> infos = new HashSet<>();
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public I18N getLocale() {
-		return locale;
-	}
-
-	public void setLocale(I18N locale) {
-		this.locale = locale;
+	public LocalizedTitle getInfo(I18N locale) {
+		return infos.stream()
+				.filter(ld -> ld.getLocale() == locale)
+				.findFirst()
+				.orElseThrow();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedDescId that = (LocalizedDescId) o;
-		return Objects.equals(id, that.id) && locale == that.locale;
+		Title title = (Title) o;
+		return Objects.equals(id, title.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, locale);
+		return Objects.hash(id);
 	}
 }

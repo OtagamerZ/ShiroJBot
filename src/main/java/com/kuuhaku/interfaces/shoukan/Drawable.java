@@ -24,7 +24,7 @@ import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.id.LocalizedDescId;
+import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
@@ -273,7 +273,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default String getString(I18N locale, String key, Object... params) {
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key.toLowerCase(Locale.ROOT), locale));
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(Locale.ROOT), locale));
 		if (str != null) {
 			return str.getValue().formatted(params);
 		} else {

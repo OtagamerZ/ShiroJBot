@@ -34,7 +34,7 @@ import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.id.LocalizedDescId;
+import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
@@ -1226,7 +1226,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... params) {
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedDescId(key, locale));
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key, locale));
 		if (str != null) {
 			return str.getValue().formatted(params);
 		} else {

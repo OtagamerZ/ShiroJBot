@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.id.LocalizedDescId;
+import com.kuuhaku.model.persistent.id.LocalizedId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -32,12 +32,12 @@ import java.util.Objects;
 @Table(name = "locale_string")
 public class LocalizedString extends DAO<LocalizedString> {
 	@EmbeddedId
-	private LocalizedDescId id;
+	private LocalizedId id;
 
 	@Column(name = "value", nullable = false)
 	private String value;
 
-	public LocalizedDescId getId() {
+	public LocalizedId getId() {
 		return id;
 	}
 

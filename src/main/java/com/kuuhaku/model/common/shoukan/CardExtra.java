@@ -24,7 +24,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.id.LocalizedDescId;
+import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.util.Calc;
@@ -321,7 +321,7 @@ public class CardExtra {
 	public String getDescription(I18N locale) {
 		if (description == null || description.isBlank()) return description;
 
-		return DAO.find(LocalizedDescription.class, new LocalizedDescId(description, locale)).getDescription();
+		return DAO.find(LocalizedDescription.class, new LocalizedId(description, locale)).getDescription();
 	}
 
 	public void setDescription(String description) {

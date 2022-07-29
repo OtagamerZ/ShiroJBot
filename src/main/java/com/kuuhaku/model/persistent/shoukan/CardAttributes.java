@@ -28,7 +28,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Embeddable
@@ -64,7 +64,7 @@ public class CardAttributes implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedDescription> descriptions = new LinkedHashSet<>();
+	private Set<LocalizedDescription> descriptions = new HashSet<>();
 
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;

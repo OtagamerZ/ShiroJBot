@@ -26,16 +26,14 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Utils;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -93,6 +91,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
+
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<AccountTitle> titles = new HashSet<>();
 
 	@Column(name = "blacklisted", nullable = false)
 	private boolean blacklisted;
@@ -244,8 +246,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findFirst().orElse(new DynamicProperty(this, id, ""));
 	}
 
-	public void addDynamicProperties(String id, Object value) {
-		dynamicProperties.add(new DynamicProperty(this, id, String.valueOf(value)));
+	public Set<AccountTitle> getTitles() {
+		return titles;
 	}
 
 	@Override
