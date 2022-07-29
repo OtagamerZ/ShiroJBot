@@ -260,6 +260,7 @@ public class Deck extends DAO<Deck> {
 			g.setComposite(BlendComposite.Color);
 			g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		});
+		Graph.applyMask(bi, IO.getResourceAsImage("shoukan/deck_mask.webp"), 0, true);
 
 		List<Drawable<?>> allCards = new ArrayList<>() {{
 			addAll(senshi);

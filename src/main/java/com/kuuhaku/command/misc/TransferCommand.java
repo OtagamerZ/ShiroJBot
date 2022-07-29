@@ -72,7 +72,6 @@ public class TransferCommand implements Executable {
 				return;
 			}
 
-
 			try {
 				Utils.confirm(locale.get("question/transfer", Utils.separate(value) + " ₵R", target.getName()), event.channel(), w -> {
 							acc.consumeCR(value, "Transferred to " + target.getName());
