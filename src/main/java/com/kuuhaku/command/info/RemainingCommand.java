@@ -64,9 +64,9 @@ public class RemainingCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/anime_cards", anime))
 				.setFooter(locale.get("str/owned_cards",
-						Calc.prcnt(count.getFirst() + count.getSecond(), total * 2),
-						Calc.prcnt(count.getFirst(), total),
-						Calc.prcnt(count.getSecond(), total)
+						Calc.prcntToInt(count.getFirst() + count.getSecond(), total * 2),
+						Calc.prcntToInt(count.getFirst(), total),
+						Calc.prcntToInt(count.getSecond(), total)
 				));
 
 		List<Page> pages = Utils.generateStringPages(eb, anime.getCards(), 30, c -> {
@@ -83,7 +83,7 @@ public class RemainingCommand implements Executable {
 			if (!suffix.isBlank()) {
 				return "||" + c.getRarity().getEmote() + name + " **(" + suffix + ")**" + "||";
 			} else {
-				return c.getRarity() + name;
+				return c.getRarity().getEmote() + name;
 			}
 		});
 
