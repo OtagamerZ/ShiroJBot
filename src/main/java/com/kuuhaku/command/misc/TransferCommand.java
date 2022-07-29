@@ -74,7 +74,7 @@ public class TransferCommand implements Executable {
 
 
 			try {
-				Utils.confirm(locale.get("question/transfer", Utils.separate(value) + "₵R", target.getAsMention()), event.channel(), w -> {
+				Utils.confirm(locale.get("question/transfer", Utils.separate(value) + " ₵R", target.getAsMention()), event.channel(), w -> {
 							acc.consumeCR(value, "Transferred to " + target.getName());
 							DAO.find(Account.class, target.getId()).addCR(value, "Received from " + event.user().getName());
 

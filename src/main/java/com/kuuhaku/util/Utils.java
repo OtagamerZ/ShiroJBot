@@ -483,6 +483,7 @@ public abstract class Utils {
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
+							unlock(allowed);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> unlock(allowed)
@@ -500,6 +501,7 @@ public abstract class Utils {
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
+							unlock(allowed);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
@@ -517,6 +519,7 @@ public abstract class Utils {
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
+							unlock(allowed);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> unlock(allowed)
@@ -534,6 +537,7 @@ public abstract class Utils {
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
+							unlock(allowed);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
@@ -551,6 +555,7 @@ public abstract class Utils {
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
+							unlock(allowed);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> unlock(allowed)
@@ -568,6 +573,7 @@ public abstract class Utils {
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
+							unlock(allowed);
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
