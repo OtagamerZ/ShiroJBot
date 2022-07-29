@@ -47,7 +47,10 @@ public class GiftcodeCommand implements Executable {
 			return;
 		}
 
-		code.redeem(data.profile().getAccount());
-		event.channel().sendMessage(locale.get("success/giftcode", code.getDescription())).queue();
+		if (code.redeem(data.profile().getAccount())) {
+			event.channel().sendMessage(locale.get("success/giftcode", code.getDescription())).queue();
+		} else {
+			event.channel().sendMessage(locale.get("error/giftcode")).queue();
+		}
 	}
 }
