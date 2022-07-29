@@ -24,6 +24,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -37,8 +38,21 @@ public class Anime extends DAO<Anime> {
 	@Column(name = "visible", nullable = false)
 	private boolean visible = true;
 
+	@SuppressWarnings("JpaQlInspection")
 	public List<Card> getCards() {
-		return DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.id = ?1", id);
+		return DAO.queryAll(Card.class, """
+				SELECT c
+				FROM Card c
+				WHERE c.anime.id = ?1
+				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'ULTRA_RARE', 'LEGENDARY')
+				ORDER BY CASE c.rarity
+					WHEN 'COMMON' THEN 1
+					WHEN 'UNCOMMON' THEN 2
+					WHEN 'RARE' THEN 3
+					WHEN 'ULTRA_RARE' THEN 4
+					WHEN 'LEGENDARY' THEN 5
+				END DESC
+				""", id);
 	}
 
 	public String getId() {

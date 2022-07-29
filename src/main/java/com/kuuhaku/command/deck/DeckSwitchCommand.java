@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.deck;
 
-import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -36,9 +35,11 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "deck",
@@ -58,25 +59,23 @@ public class DeckSwitchCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/decks"));
 
-			int idx = 0;
-			List<Page> pages = new ArrayList<>();
-			List<List<Deck>> chunks = Utils.chunkify(acc.getDecks(), 10);
-			for (List<Deck> decks : chunks) {
-				eb.clearFields();
-				for (Deck deck : decks) {
-					if (idx++ != deck.getIndex()) {
-						event.channel().sendMessage(locale.get("success/index_regen", deck.getName())).queue();
-						return;
-					}
-
-					eb.addField(
-							(deck.isCurrent() ? "✅ " : "") + "`" + deck.getIndex() + " | " + deck.getName() + "`",
-							deck.toString(locale),
-							true
-					);
+			AtomicInteger idx = new AtomicInteger();
+			AtomicBoolean regen = new AtomicBoolean();
+			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 10, deck -> {
+				if (idx.getAndIncrement() != deck.getIndex()) {
+					regen.set(true);
 				}
 
-				pages.add(new InteractPage(eb.build()));
+				return new MessageEmbed.Field(
+						(deck.isCurrent() ? "✅ " : "") + "`" + deck.getIndex() + " | " + deck.getName() + "`",
+						deck.toString(locale),
+						true
+				);
+			});
+
+			if (regen.get()) {
+				execute(bot, locale, data, event, args);
+				return;
 			}
 
 			Utils.paginate(pages, event.channel(), event.user());

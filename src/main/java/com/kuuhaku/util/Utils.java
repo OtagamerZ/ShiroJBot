@@ -385,6 +385,17 @@ public abstract class Utils {
 		return new InteractPage(eb.build());
 	}
 
+	public static <T> Page generateStringPage(EmbedBuilder eb, List<T> list, Function<T, String> mapper) {
+		StringBuilder sb = eb.getDescriptionBuilder();
+		sb.setLength(0);
+
+		for (T t : list) {
+			sb.append(mapper.apply(t)).append("\n");
+		}
+
+		return new InteractPage(eb.build());
+	}
+
 	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
@@ -393,6 +404,24 @@ public abstract class Utils {
 
 			for (T t : chunk) {
 				eb.addField(mapper.apply(t));
+			}
+
+			pages.add(new InteractPage(eb.build()));
+		}
+
+		return pages;
+	}
+
+	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper) {
+		StringBuilder sb = eb.getDescriptionBuilder();
+
+		List<Page> pages = new ArrayList<>();
+		List<List<T>> chunks = chunkify(list, itemsPerPage);
+		for (List<T> chunk : chunks) {
+			sb.setLength(0);
+
+			for (T t : chunk) {
+				sb.append(mapper.apply(t)).append("\n");
 			}
 
 			pages.add(new InteractPage(eb.build()));
