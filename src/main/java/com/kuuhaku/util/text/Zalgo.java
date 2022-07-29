@@ -87,7 +87,7 @@ public class Zalgo {
 		if (iterations <= 0) {
 			return sb.toString();
 		} else {
-			return curse(sb.toString(), --iterations);
+			return curse(sb.toString(), iterations - 1);
 		}
 	}
 }
