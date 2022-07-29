@@ -220,7 +220,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.applyMask(hex, mask, 0, true);
 		g2d.drawImage(hex, 0, 0, null);
 
-		Map<String, Object> replaces = new HashMap<>(){{
+		Map<String, Object> replaces = new HashMap<>() {{
 			put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
 			put("guild", getGuild().getName());
 			put("g_rank", Utils.separate(account.getRanking()));
@@ -313,8 +313,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			g2d.setColor(title.getTitle().getRarity().getColor(false));
 			g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 40));
 
-			String str = title.getTitle().getInfo(locale).getName();
-			Graph.drawOutlinedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 75, 3, Color.BLACK);
+			Graph.drawMultilineString(g2d, title.getTitle().getInfo(locale).getName(), 524, 115, 374, 3, (str, x, y) ->
+					Graph.drawOutlinedString(g2d, str, x + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, y, 3, Color.BLACK)
+			);
 		}
 
 		g2d.dispose();
