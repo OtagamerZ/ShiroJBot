@@ -55,7 +55,7 @@ public class Zalgo {
 		for (char c : chars) {
 			sb.append(c);
 
-			int zu = Calc.rng(3;
+			int zu = Calc.rng(3);
 			for (int i = 0; i < zu; i++) {
 				sb.append(Utils.getRandomEntry(diacUp));
 			}
