@@ -19,6 +19,7 @@
 package com.kuuhaku.command.market;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -65,13 +66,17 @@ public class MarketBuyCommand implements Executable {
 			price *= 0.8;
 		}
 
-		Utils.confirm(locale.get("question/purchase", sc, price), event.channel(), w -> {
-					if (m.buy(id)) {
-						event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
-					} else {
-						event.channel().sendMessage(locale.get("error/not_announced")).queue();
-					}
-				}, event.user()
-		);
+		try {
+			Utils.confirm(locale.get("question/purchase", sc, price), event.channel(), w -> {
+						if (m.buy(id)) {
+							event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
+						} else {
+							event.channel().sendMessage(locale.get("error/not_announced")).queue();
+						}
+					}, event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

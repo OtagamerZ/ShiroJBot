@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.trade;
 
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -62,19 +63,23 @@ public class TradeAcceptCommand implements Executable {
 				.addField(trade.getRight().getName(), trade.toString(locale, false), true);
 
 		trade.setFinalizing(true);
-		Utils.confirm(
-				locale.get("question/trade_close", other.getAsMention(), event.user().getAsMention()),
-				eb.build(), event.channel(),
-				w -> {
-					if (!trade.validate()) {
-						event.channel().sendMessage(locale.get("success/trade_invalid")).queue();
-						Trade.getPending().remove(event.user().getId());
-						return;
-					}
+		try {
+			Utils.confirm(
+					locale.get("question/trade_close", other.getAsMention(), event.user().getAsMention()),
+					eb.build(), event.channel(),
+					w -> {
+						if (!trade.validate()) {
+							event.channel().sendMessage(locale.get("success/trade_invalid")).queue();
+							Trade.getPending().remove(event.user().getId());
+							return;
+						}
 
-					trade.accept();
-					event.channel().sendMessage(locale.get("success/trade_accept")).queue();
-				}, other
-		);
+						trade.accept();
+						event.channel().sendMessage(locale.get("success/trade_accept")).queue();
+					}, other
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

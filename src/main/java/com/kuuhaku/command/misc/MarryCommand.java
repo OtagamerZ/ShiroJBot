@@ -19,6 +19,7 @@
 package com.kuuhaku.command.misc;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -52,11 +53,15 @@ public class MarryCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/marry", other.getAsMention(), event.user().getAsMention()), event.channel(),
-				w -> {
-					new Couple(event.user().getId(), other.getId()).save();
-					event.channel().sendMessage(locale.get("success/marry")).queue();
-				}, other.getUser()
-		);
+		try {
+			Utils.confirm(locale.get("question/marry", other.getAsMention(), event.user().getAsMention()), event.channel(),
+					w -> {
+						new Couple(event.user().getId(), other.getId()).save();
+						event.channel().sendMessage(locale.get("success/marry")).queue();
+					}, other.getUser()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

@@ -98,26 +98,26 @@ public class Market {
 		JSONObject dailyOffer = new JSONObject(gp.getValue());
 
 		int price = sc.getPrice();
-		DAO.apply(Account.class, sc.getKawaipon().getUid(), a -> {
-			a.addCR(price, "Sold " + sc);
-			a.getUser().openPrivateChannel()
-					.flatMap(c -> c.sendMessage(a.getEstimateLocale().get("success/market_notification", sc, price)))
-					.queue(null, Utils::doNothing);
-		});
-		DAO.apply(Account.class, uid, a -> {
-			try {
-				int sale = dailyOffer.getInt("id");
-				if (sale == sc.getId()) {
-					a.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
-				}
-			} catch (Exception e) {
-				a.consumeCR(price, "Purchased " + sc);
-			}
 
-			sc.setKawaipon(a.getKawaipon());
-			sc.setPrice(0);
-			sc.save();
-		});
+		Account seller = sc.getKawaipon().getAccount();
+		seller.addCR(price, "Sold " + sc);
+		seller.getUser().openPrivateChannel()
+				.flatMap(c -> c.sendMessage(seller.getEstimateLocale().get("success/market_notification", sc, price)))
+				.queue(null, Utils::doNothing);
+
+		Account buyer = DAO.find(Account.class, uid);
+		try {
+			int sale = dailyOffer.getInt("id");
+			if (sale == sc.getId()) {
+				buyer.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
+			}
+		} catch (Exception e) {
+			buyer.consumeCR(price, "Purchased " + sc);
+		}
+
+		sc.setKawaipon(buyer.getKawaipon());
+		sc.setPrice(0);
+		sc.save();
 
 		dailyOffer.put("id", "-1");
 		gp.setValue(dailyOffer);

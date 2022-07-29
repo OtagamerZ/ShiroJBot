@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 		"<id:number:r>",
 		"<name:word:r>"
 })
-@Requires(Permission.MESSAGE_ATTACH_FILES)
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckSwitchCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

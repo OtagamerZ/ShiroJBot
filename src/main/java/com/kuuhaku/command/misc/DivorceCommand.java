@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.misc;
 
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.enums.Category;
@@ -42,11 +43,15 @@ public class DivorceCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/divorce"), event.channel(),
-				w -> {
-					c.delete();
-					event.channel().sendMessage(locale.get("success/divorce")).queue();
-				}, event.user()
-		);
+		try {
+			Utils.confirm(locale.get("question/divorce"), event.channel(),
+					w -> {
+						c.delete();
+						event.channel().sendMessage(locale.get("success/divorce")).queue();
+					}, event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

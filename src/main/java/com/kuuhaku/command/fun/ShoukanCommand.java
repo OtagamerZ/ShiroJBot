@@ -20,6 +20,7 @@ package com.kuuhaku.command.fun;
 
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
@@ -65,32 +66,36 @@ public class ShoukanCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), w -> {
-					try {
-						Shoukan skn = new Shoukan(locale, event.user(), other.getUser());
-						Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
-						skn.start(event.guild(), event.channel())
-								.whenComplete((v, e) -> {
-									if (e instanceof GameReport rep && rep.getCode() == 1) {
-										event.channel().sendMessage(locale.get("error/error", e)).queue();
-										Constants.LOGGER.error(e, e);
-									}
+		try {
+			Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), w -> {
+						try {
+							Shoukan skn = new Shoukan(locale, event.user(), other.getUser());
+							Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
+							skn.start(event.guild(), event.channel())
+									.whenComplete((v, e) -> {
+										if (e instanceof GameReport rep && rep.getCode() == 1) {
+											event.channel().sendMessage(locale.get("error/error", e)).queue();
+											Constants.LOGGER.error(e, e);
+										}
 
-									for (String s : skn.getPlayers()) {
-										GameInstance.PLAYERS.remove(s);
-									}
-								});
+										for (String s : skn.getPlayers()) {
+											GameInstance.PLAYERS.remove(s);
+										}
+									});
 
-						updateTip(locale, skn, m);
-					} catch (GameReport e) {
-						if (e.getContent().equals(event.user().getId())) {
-							event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-						} else {
-							event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+							updateTip(locale, skn, m);
+						} catch (GameReport e) {
+							if (e.getContent().equals(event.user().getId())) {
+								event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+							} else {
+								event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+							}
 						}
-					}
-				}, other.getUser()
-		);
+					}, other.getUser()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 
 	private String getRandomTip(I18N locale) {

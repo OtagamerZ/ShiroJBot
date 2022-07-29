@@ -23,6 +23,7 @@ import com.github.ygimenez.model.*;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.PatternCache;
@@ -78,6 +79,8 @@ import java.util.stream.Stream;
 import java.util.zip.CRC32;
 
 public abstract class Utils {
+	public static final Set<String> CONFIMATIONS = ConcurrentHashMap.newKeySet();
+
 	public static String toStringDuration(I18N locale, long millis) {
 		long days = millis / Constants.MILLIS_IN_DAY;
 		millis %= Constants.MILLIS_IN_DAY;
@@ -458,68 +461,116 @@ public abstract class Utils {
 		return msg;
 	}
 
-	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
+	public static void lock(User... users) {
+		for (User user : users) {
+			CONFIMATIONS.add(user.getId());
+		}
+	}
+
+	public static void unlock(User... users) {
+		for (User user : users) {
+			CONFIMATIONS.remove(user.getId());
+		}
+	}
+
+	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) throws PendingConfirmationException {
+		for (User user : allowed) {
+			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
+		}
+
+		lock(allowed);
 		channel.sendMessage(text).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u)
+						u -> Arrays.asList(allowed).contains(u),
+						c -> unlock(allowed)
 				)
 		);
 	}
 
-	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) {
+	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+		for (User user : allowed) {
+			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
+		}
+
+		lock(allowed);
 		channel.sendMessage(text).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u), onCancel
+						u -> Arrays.asList(allowed).contains(u),
+						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
 				)
 		);
 	}
 
-	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
+	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) throws PendingConfirmationException {
+		for (User user : allowed) {
+			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
+		}
+
+		lock(allowed);
 		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u)
+						u -> Arrays.asList(allowed).contains(u),
+						c -> unlock(allowed)
 				)
 		);
 	}
 
-	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) {
+	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+		for (User user : allowed) {
+			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
+		}
+
+		lock(allowed);
 		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u), onCancel
+						u -> Arrays.asList(allowed).contains(u),
+						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
 				)
 		);
 	}
 
-	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) {
+	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) throws PendingConfirmationException {
+		for (User user : allowed) {
+			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
+		}
+
+		lock(allowed);
 		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u)
+						u -> Arrays.asList(allowed).contains(u),
+						c -> unlock(allowed)
 				)
 		);
 	}
 
-	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) {
+	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+		for (User user : allowed) {
+			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
+		}
+
+		lock(allowed);
 		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 							action.accept(w);
 						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u), onCancel
+						u -> Arrays.asList(allowed).contains(u),
+						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
 				)
 		);
 	}
@@ -1097,7 +1148,7 @@ public abstract class Utils {
 	public static String shorten(double number) {
 		if (number < 1000) return roundToString(number, 1);
 
-		NavigableMap<Double, String> suffixes = new TreeMap<>(){{
+		NavigableMap<Double, String> suffixes = new TreeMap<>() {{
 			put(1_000D, "k");
 			put(1_000_000D, "m");
 			put(1_000_000_000D, "b");

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.moderation;
 
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -71,18 +72,22 @@ public class BanCommand implements Executable {
 			}
 		}
 
-		Utils.confirm(locale.get("question/ban",
-						members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
-						members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
-				), event.channel(), w ->
-						RestAction.allOf(members.stream().map(m -> m.ban(7, args.getString("reason"))).toList())
-								.flatMap(s -> event.channel().sendMessage(locale.get("success/ban",
-												s.size(),
-												members.size() == 1 ? locale.get("str/user") : locale.get("str/users"),
-												args.get("reason")
-										))
-								).queue(),
-				event.user()
-		);
+		try {
+			Utils.confirm(locale.get("question/ban",
+							members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
+							members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
+					), event.channel(), w ->
+							RestAction.allOf(members.stream().map(m -> m.ban(7, args.getString("reason"))).toList())
+									.flatMap(s -> event.channel().sendMessage(locale.get("success/ban",
+													s.size(),
+													members.size() == 1 ? locale.get("str/user") : locale.get("str/users"),
+													args.get("reason")
+											))
+									).queue(),
+					event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

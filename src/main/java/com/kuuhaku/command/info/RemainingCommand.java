@@ -22,6 +22,7 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
@@ -36,6 +37,7 @@ import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.Locale;
@@ -45,6 +47,7 @@ import java.util.Locale;
 		category = Category.INFO
 )
 @Signature("<anime:text:r>")
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RemainingCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -87,6 +90,6 @@ public class RemainingCommand implements Executable {
 			}
 		});
 
-		Utils.paginate(pages, 5, true, event.channel(), event.user());
+		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}
 }

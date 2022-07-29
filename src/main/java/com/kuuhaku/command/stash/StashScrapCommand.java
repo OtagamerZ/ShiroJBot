@@ -20,6 +20,7 @@ package com.kuuhaku.command.stash;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -87,12 +88,16 @@ public class StashScrapCommand implements Executable {
 						}
 					}
 
-					Utils.confirm(locale.get("question/scrap", value), event.channel(), w -> {
-								event.channel().sendMessage(locale.get("success/scrap")).queue();
-								kp.getAccount().addCR(value, sc + " scrapped");
-								sc.delete();
-							}, event.user()
-					);
+					try {
+						Utils.confirm(locale.get("question/scrap", value), event.channel(), w -> {
+									event.channel().sendMessage(locale.get("success/scrap")).queue();
+									kp.getAccount().addCR(value, sc + " scrapped");
+									sc.delete();
+								}, event.user()
+						);
+					} catch (PendingConfirmationException e) {
+						event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+					}
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

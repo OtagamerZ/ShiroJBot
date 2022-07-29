@@ -20,6 +20,7 @@ package com.kuuhaku.command.misc;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -122,46 +123,50 @@ public class SynthesizeCommand implements Executable {
 			return;
 		}
 
-		Utils.confirm(locale.get("question/synth"), event.channel(), w -> {
-					Kawaipon kp = data.profile().getAccount().getKawaipon();
-					double field = cards.stream()
-							.mapToDouble(sc -> {
-								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
-									return 100 / 3d;
-								}
-
-								return 0;
-							}).sum();
-
-					if (Calc.chance(field)) {
-						Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-						event.channel().sendMessage(locale.get("success/synth", f)).queue();
-						new StashedCard(kp, f.getCard(), CardType.FIELD).save();
-					} else {
-						Evogear e = rollSynthesis(cards);
-						new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
-						event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
-					}
-
-					for (StashedCard sc : cards) {
-						KawaiponCard kc = sc.getKawaiponCard();
-						if (kc != null) {
-							DAO.apply(Kawaipon.class, kp.getUid(), k -> {
-								Iterator<KawaiponCard> it = k.getCards().iterator();
-								while (it.hasNext()) {
-									KawaiponCard card = it.next();
-									if (sc.equals(card.getStashEntry())) {
-										it.remove();
-										break;
+		try {
+			Utils.confirm(locale.get("question/synth"), event.channel(), w -> {
+						Kawaipon kp = data.profile().getAccount().getKawaipon();
+						double field = cards.stream()
+								.mapToDouble(sc -> {
+									if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
+										return 100 / 3d;
 									}
-								}
-							});
+
+									return 0;
+								}).sum();
+
+						if (Calc.chance(field)) {
+							Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
+							event.channel().sendMessage(locale.get("success/synth", f)).queue();
+							new StashedCard(kp, f.getCard(), CardType.FIELD).save();
+						} else {
+							Evogear e = rollSynthesis(cards);
+							new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
+							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
 						}
 
-						sc.delete();
-					}
-				}, event.user()
-		);
+						for (StashedCard sc : cards) {
+							KawaiponCard kc = sc.getKawaiponCard();
+							if (kc != null) {
+								DAO.apply(Kawaipon.class, kp.getUid(), k -> {
+									Iterator<KawaiponCard> it = k.getCards().iterator();
+									while (it.hasNext()) {
+										KawaiponCard card = it.next();
+										if (sc.equals(card.getStashEntry())) {
+											it.remove();
+											break;
+										}
+									}
+								});
+							}
+
+							sc.delete();
+						}
+					}, event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 
 	public static Evogear rollSynthesis(List<StashedCard> cards) {
