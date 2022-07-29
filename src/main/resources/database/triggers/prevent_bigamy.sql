@@ -30,7 +30,7 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS prevent_bigamy ON stashed_card;
+DROP TRIGGER IF EXISTS prevent_bigamy ON couple;
 CREATE TRIGGER prevent_bigamy
     BEFORE INSERT
     ON couple
