@@ -22,8 +22,8 @@ CREATE OR REPLACE FUNCTION t_generate_giftcode()
 AS
 $$
 BEGIN
-    NEW.code = md5(current_date::TEXT || random());
-    NEW.gift = '//' || lpad((SELECT COUNT(1) + 1 FROM giftcode)::TEXT, 4, '0') || E'\n';
+    NEW.code = md5(cast(current_date AS TEXT) || random());
+    NEW.gift = '//' || lpad(CAST((SELECT COUNT(1) + 1 FROM giftcode) AS TEXT), 4, '0') || E'\n';
 
     RETURN NEW;
 END;
