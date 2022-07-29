@@ -45,7 +45,7 @@ public class ZalgoCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		PseudoUser pu = new PseudoUser(event.member(), event.channel());
 
-		String text = Zalgo.INSTANCE.curse(args.getString("text"), 2);
+		String text = Zalgo.INSTANCE.curse(args.getString("text"));
 		try (WebhookClient hook = pu.webhook()) {
 			if (hook != null) {
 				event.message().delete().queue(null, Utils::doNothing);

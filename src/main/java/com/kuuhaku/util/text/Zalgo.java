@@ -48,7 +48,7 @@ public class Zalgo {
 			'\u034e', '\u0353', '\u0354', '\u0355', '\u0356', '\u0359', '\u035a', '\u0323'
 	};
 
-	public String curse(String text, int iterations) {
+	public String curse(String text) {
 		char[] chars = text.toCharArray();
 
 		StringBuilder sb = new StringBuilder();
@@ -71,10 +71,6 @@ public class Zalgo {
 			}
 		}
 
-		if (iterations <= 0) {
-			return sb.toString();
-		} else {
-			return curse(sb.toString(), iterations - 1);
-		}
+		return sb.toString();
 	}
 }
