@@ -24,11 +24,11 @@ import net.dv8tion.jda.api.entities.*;
 
 public record PseudoUser(String name, String avatar, TextChannel channel) {
 	public PseudoUser(User user, TextChannel channel) {
-		this(user.getName(), user.getAvatarUrl(), channel);
+		this(user.getName(), user.getEffectiveAvatarUrl(), channel);
 	}
 
 	public PseudoUser(Member member, TextChannel channel) {
-		this(member.getEffectiveName(), member.getAvatarUrl(), channel);
+		this(member.getEffectiveName(), member.getEffectiveAvatarUrl(), channel);
 	}
 
 	public WebhookClient webhook() {

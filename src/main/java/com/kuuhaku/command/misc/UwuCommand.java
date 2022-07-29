@@ -48,6 +48,7 @@ public class UwuCommand implements Executable {
 		String text = Uwuifier.INSTANCE.uwu(locale, args.getString("text"));
 		try (WebhookClient hook = pu.webhook()) {
 			if (hook != null) {
+				event.message().delete().queue(null, Utils::doNothing);
 				WebhookMessage msg = new WebhookMessageBuilder()
 						.setUsername(pu.name())
 						.setAvatarUrl(pu.avatar())
@@ -56,7 +57,6 @@ public class UwuCommand implements Executable {
 						.build();
 
 				hook.send(msg);
-				event.message().delete().queue(null, Utils::doNothing);
 			} else {
 				event.channel().sendMessage(text).reference(event.message()).queue();
 			}
