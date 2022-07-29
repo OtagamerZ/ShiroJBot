@@ -61,29 +61,33 @@ public class Zalgo {
 		this.variation = Calc.clamp(variation, 0, 1);
 	}
 
-	public String curse(String text) {
+	public String curse(String text, int iterations) {
 		char[] chars = text.toCharArray();
 
 		StringBuilder sb = new StringBuilder();
 		for (char c : chars) {
 			sb.append(c);
 
-			int zu = ((int) Calc.rng(power * variation, (double) power));
+			int zu = Calc.rng((int) (power * variation), power);
 			for (int i = 0; i < zu; i++) {
 				sb.append(Utils.getRandomEntry(diacUp));
 			}
 
-			int zm = ((int) Calc.rng(power * variation, (double) power));
+			int zm = Calc.rng((int) (power * variation), power);
 			for (int i = 0; i < zm; i++) {
 				sb.append(Utils.getRandomEntry(diacMiddle));
 			}
 
-			int zd = ((int) Calc.rng(power * variation, (double) power));
+			int zd = Calc.rng((int) (power * variation), power);
 			for (int i = 0; i < zd; i++) {
 				sb.append(Utils.getRandomEntry(diacDown));
 			}
 		}
 
-		return sb.toString();
+		if (iterations <= 0) {
+			return sb.toString();
+		} else {
+			return curse(sb.toString(), --iterations);
+		}
 	}
 }
