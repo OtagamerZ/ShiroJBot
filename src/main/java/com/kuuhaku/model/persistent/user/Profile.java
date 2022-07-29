@@ -249,7 +249,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 1.5), 2, Color.BLACK);
+				Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 1.5), 3, Color.BLACK);
 			}
 
 			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
@@ -266,7 +266,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 					g2.setColor(Color.WHITE);
 					Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3,
-							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 2, Color.BLACK)
+							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 3, Color.BLACK)
 					);
 				});
 			}
@@ -296,17 +296,17 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
-		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
 
 		String details = "XP: %s/%s I Rank:   %s".formatted(
 				Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp), account.getRanking()
 		);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
-		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
-		Graph.drawOutlinedString(g2d, "#", 88 + offset - 20, 45, 2, Color.BLACK);
+		Graph.drawOutlinedString(g2d, "#", 88 + offset - 20, 45, 3, Color.BLACK);
 
 		AccountTitle title = account.getTitle();
 		if (title != null) {
