@@ -42,9 +42,8 @@ public class AccountTitle extends DAO<AccountTitle> {
 	private boolean current;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "uid", nullable = false)
+	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
-	@MapsId("uid")
 	private Account account;
 
 	public AccountTitle() {

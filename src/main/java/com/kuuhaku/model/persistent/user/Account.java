@@ -92,6 +92,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
+
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<AccountTitle> titles = new HashSet<>();
