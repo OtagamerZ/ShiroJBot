@@ -52,7 +52,7 @@ public class Zalgo {
 	private final double variation;
 
 	public Zalgo() {
-		power = 5;
+		power = 3;
 		variation = 0.5;
 	}
 
