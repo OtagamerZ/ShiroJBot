@@ -48,19 +48,6 @@ public class Zalgo {
 			'\u034e', '\u0353', '\u0354', '\u0355', '\u0356', '\u0359', '\u035a', '\u0323'
 	};
 
-	private final int power;
-	private final double variation;
-
-	public Zalgo() {
-		power = 3;
-		variation = 0.5;
-	}
-
-	public Zalgo(int power, double variation) {
-		this.power = power;
-		this.variation = Calc.clamp(variation, 0, 1);
-	}
-
 	public String curse(String text, int iterations) {
 		char[] chars = text.toCharArray();
 
@@ -68,17 +55,17 @@ public class Zalgo {
 		for (char c : chars) {
 			sb.append(c);
 
-			int zu = Calc.rng((int) (power * variation), power);
+			int zu = Calc.rng(16) / 2 + 1;
 			for (int i = 0; i < zu; i++) {
 				sb.append(Utils.getRandomEntry(diacUp));
 			}
 
-			int zm = Calc.rng((int) (power * variation), power);
+			int zm = Calc.rng(6) / 2;
 			for (int i = 0; i < zm; i++) {
 				sb.append(Utils.getRandomEntry(diacMiddle));
 			}
 
-			int zd = Calc.rng((int) (power * variation), power);
+			int zd = Calc.rng(16) / 2 + 1;
 			for (int i = 0; i < zd; i++) {
 				sb.append(Utils.getRandomEntry(diacDown));
 			}
