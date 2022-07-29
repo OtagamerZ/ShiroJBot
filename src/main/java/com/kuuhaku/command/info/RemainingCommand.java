@@ -81,7 +81,7 @@ public class RemainingCommand implements Executable {
 			}
 
 			if (!suffix.isBlank()) {
-				return "||" + c.getRarity().getEmote() + name + " (" + suffix + ")" + "||";
+				return "||" + c.getRarity().getEmote() + name + " **(" + suffix + ")**" + "||";
 			} else {
 				return c.getRarity() + name;
 			}
