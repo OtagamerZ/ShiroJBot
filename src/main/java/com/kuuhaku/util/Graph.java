@@ -60,14 +60,14 @@ public abstract class Graph {
 		g2d.fill(outline);
 	}
 
-	public static void drawShadowedString(Graphics2D g2d, String text, int x, int y, int width, Color color) {
+	public static void drawShadowedString(Graphics2D g2d, String text, int x, int y, int width, int power, Color color) {
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
 
 		TextLayout layout = new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext());
 		Shape outline = layout.getOutline(AffineTransform.getTranslateInstance(x, y));
 
-		int alpha = color.getAlpha() / width * 2;
+		int alpha = color.getAlpha() / width * power;
 		g2d.setColor(new Color((alpha << 24) | (color.getRGB() & 0x00FFFFFF), true));
 		for (int i = 1; i <= width; i++) {
 			g2d.setStroke(new BasicStroke(i, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, null, 0));
