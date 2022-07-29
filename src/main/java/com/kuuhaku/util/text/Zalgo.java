@@ -55,17 +55,17 @@ public class Zalgo {
 		for (char c : chars) {
 			sb.append(c);
 
-			int zu = Calc.rng(16) / 2 + 1;
+			int zu = Calc.rng(3;
 			for (int i = 0; i < zu; i++) {
 				sb.append(Utils.getRandomEntry(diacUp));
 			}
 
-			int zm = Calc.rng(6) / 2;
+			int zm = Calc.rng(1);
 			for (int i = 0; i < zm; i++) {
 				sb.append(Utils.getRandomEntry(diacMiddle));
 			}
 
-			int zd = Calc.rng(16) / 2 + 1;
+			int zd = Calc.rng(3);
 			for (int i = 0; i < zd; i++) {
 				sb.append(Utils.getRandomEntry(diacDown));
 			}
