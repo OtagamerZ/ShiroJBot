@@ -290,7 +290,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.setColor(new Color(colors[Math.max(0, (lvl % 215 - 1) / 30)]));
 		g2d.fillRect(88 + pad / 2, 59 + pad / 2, (int) ((384 - pad) * prcnt), 10 - pad);
 
-		g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 55));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 55));
 		Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 51, 3, Color.BLACK);
 
 		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
@@ -311,10 +311,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		AccountTitle title = account.getTitle();
 		if (title != null) {
 			g2d.setColor(title.getTitle().getRarity().getColor(false));
-			g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 40));
+			g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 35));
 
 			String str = title.getTitle().getInfo(locale).getName();
-			Graph.drawShadowedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 75, 15, 2, Color.BLACK);
+			Graph.drawShadowedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 70, 15, 2, Color.BLACK);
 		}
 
 		g2d.dispose();
