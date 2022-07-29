@@ -59,7 +59,7 @@ public class Zalgo {
 
 			int zc = ((int) Calc.rng(power * variation, power));
 			for (int i = 0; i < zc; i++) {
-				sb.append(Utils.getRandomEntry(diacratic));
+				sb.append((char) Utils.getRandomEntry(diacratic).intValue());
 			}
 		}
 
