@@ -68,17 +68,17 @@ public class Zalgo {
 		for (char c : chars) {
 			sb.append(c);
 
-			int zu = ((int) Calc.rng(power * variation, power));
+			int zu = ((int) Calc.rng(power * variation, (double) power));
 			for (int i = 0; i < zu; i++) {
 				sb.append(Utils.getRandomEntry(diacUp));
 			}
 
-			int zm = ((int) Calc.rng(power * variation, power));
+			int zm = ((int) Calc.rng(power * variation, (double) power));
 			for (int i = 0; i < zm; i++) {
 				sb.append(Utils.getRandomEntry(diacMiddle));
 			}
 
-			int zd = ((int) Calc.rng(power * variation, power));
+			int zd = ((int) Calc.rng(power * variation, (double) power));
 			for (int i = 0; i < zd; i++) {
 				sb.append(Utils.getRandomEntry(diacDown));
 			}
