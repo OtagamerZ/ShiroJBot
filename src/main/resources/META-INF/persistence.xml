@@ -27,6 +27,7 @@
         <class>com.kuuhaku.model.persistent.shiro.Anime</class>
         <class>com.kuuhaku.model.persistent.shiro.Card</class>
         <class>com.kuuhaku.model.persistent.shiro.GlobalProperty</class>
+        <class>com.kuuhaku.model.persistent.shiro.Giftcode</class>
 
         <!-- GUILD -->
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
