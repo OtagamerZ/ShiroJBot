@@ -38,6 +38,16 @@ public class Anime extends DAO<Anime> {
 	@Column(name = "visible", nullable = false)
 	private boolean visible = true;
 
+	public int getCount() {
+		return DAO.queryNative(Integer.class, """
+				SELECT COUNT(1)
+				FROM Card c
+				WHERE c.anime_id = ?1
+				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'ULTRA_RARE', 'LEGENDARY')
+				""", id
+		);
+	}
+
 	@SuppressWarnings("JpaQlInspection")
 	public List<Card> getCards() {
 		return DAO.queryAll(Card.class, """
@@ -52,7 +62,8 @@ public class Anime extends DAO<Anime> {
 					WHEN 'ULTRA_RARE' THEN 4
 					WHEN 'LEGENDARY' THEN 5
 				END DESC
-				""", id);
+				""", id
+		);
 	}
 
 	public String getId() {

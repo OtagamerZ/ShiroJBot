@@ -20,8 +20,10 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -29,6 +31,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Entity
@@ -107,6 +110,24 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return cards.parallelStream()
 				.filter(c -> c.getStashEntry() == null)
 				.anyMatch(c -> c.getCard().equals(card) && c.isChrome() == chrome);
+	}
+
+	public Pair<Integer, Integer> countCards(Anime anime) {
+		AtomicInteger normal = new AtomicInteger();
+		AtomicInteger chrome = new AtomicInteger();
+
+		cards.parallelStream()
+				.filter(c -> c.getStashEntry() == null)
+				.filter(c -> c.getCard().getAnime().equals(anime))
+				.forEach(c -> {
+					if (c.isChrome()) {
+						chrome.getAndIncrement();
+					} else {
+						normal.getAndIncrement();
+					}
+				});
+
+		return new Pair<>(normal.get(), chrome.get());
 	}
 
 	public List<StashedCard> getNotInUse() {

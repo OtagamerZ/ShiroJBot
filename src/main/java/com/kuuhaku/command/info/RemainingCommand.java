@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
@@ -38,7 +39,6 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "remaining",
@@ -59,22 +59,25 @@ public class RemainingCommand implements Executable {
 			return;
 		}
 
+		int total = anime.getCount();
+		Pair<Integer, Integer> count = kp.countCards(anime);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/anime_cards", anime));
+				.setTitle(locale.get("str/anime_cards", anime))
+				.setFooter(locale.get("str/owned_cards",
+						Calc.prcnt(count.getFirst() + count.getSecond(), total * 2),
+						Calc.prcnt(count.getFirst(), total),
+						Calc.prcnt(count.getSecond(), total)
+				));
 
-		AtomicInteger normal = new AtomicInteger();
-		AtomicInteger chrome = new AtomicInteger();
 		List<Page> pages = Utils.generateStringPages(eb, anime.getCards(), 30, c -> {
 			String name = c.getName();
 
 			String suffix = "";
 			if (kp.hasCard(c, false)) {
 				suffix += "N";
-				normal.getAndIncrement();
 			}
 			if (kp.hasCard(c, true)) {
 				suffix += "C";
-				chrome.getAndIncrement();
 			}
 
 			if (!suffix.isBlank()) {
