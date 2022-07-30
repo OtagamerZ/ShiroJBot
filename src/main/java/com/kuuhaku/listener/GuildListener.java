@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
@@ -58,6 +59,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
@@ -217,6 +219,14 @@ public class GuildListener extends ListenerAdapter {
 			account.save();
 		}
 
+		AtomicReference<TextChannel> notifs = new AtomicReference<>();
+		if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+			notifs.set(config.getSettings().getNotificationsChannel());
+			if (notifs.get() == null) {
+				notifs.set(event.getChannel());
+			}
+		}
+
 		if (profile.getLevel() > lvl) {
 			int high = account.getHighestLevel();
 			int prize = 0;
@@ -225,15 +235,26 @@ public class GuildListener extends ListenerAdapter {
 				account.addCR(prize, "Level up prize");
 			}
 
-			TextChannel notifs = config.getSettings().getNotificationsChannel();
-			if (notifs != null) {
+			if (notifs.get() != null) {
 				if (prize > 0) {
-					notifs.sendMessage(locale.get("str/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
+					notifs.get().sendMessage(locale.get("str/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
 				} else {
-					notifs.sendMessage(locale.get("str/level_up", data.user().getAsMention(), profile.getLevel())).queue(null, Utils::doNothing);
+					notifs.get().sendMessage(locale.get("str/level_up", data.user().getAsMention(), profile.getLevel())).queue(null, Utils::doNothing);
 				}
 			}
 		}
+
+		DynamicProperty dp = account.getDynamicProperty("message_count");
+		int count = NumberUtils.toInt(dp.getValue()) + 1;
+		dp.setValue(count);
+		dp.save();
+
+		DAO.apply(Account.class, account.getUid(), acc -> {
+			Title t = acc.checkTitles();
+			if (t != null && notifs.get() != null) {
+				notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
+			}
+		});
 
 		if (toHandle.containsKey(data.guild().getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
@@ -278,18 +299,6 @@ public class GuildListener extends ListenerAdapter {
 						.queue();
 			}
 		}
-
-		DynamicProperty dp = account.getDynamicProperty("message_count");
-		int count = NumberUtils.toInt(dp.getValue()) + 1;
-		dp.setValue(count);
-		dp.save();
-
-		DAO.apply(Account.class, account.getUid(), acc -> {
-			Title t = acc.checkTitles();
-			if (t != null) {
-				event.getChannel().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
-			}
-		});
 
 		messages.computeIfAbsent(data.guild().getId(), k ->
 				ExpiringMap.builder()
