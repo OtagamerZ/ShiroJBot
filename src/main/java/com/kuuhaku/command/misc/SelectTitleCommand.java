@@ -75,17 +75,20 @@ public class SelectTitleCommand implements Executable {
 				StringBuilder sb = new StringBuilder();
 				LocalizedTitle info = current.getInfo(locale);
 
+				boolean has = acc.hasTitle(current.getId());
 				sb.append("`ID: ");
-				if (acc.hasTitle(current.getId())) {
+				if (has) {
 					sb.append(current.getId());
 				} else {
 					sb.append(current.getId().replaceAll("[A-Z\\d-]", "?"));
 				}
 				sb.append("`\n").append(info.getDescription());
 
-				Title next = Utils.getNext(current, ts);
-				if (next != null) {
-					sb.append("\n").append(locale.get("str/next_tier", next.getInfo(locale).getDescription()));
+				if (has) {
+					Title next = Utils.getNext(current, ts);
+					if (next != null) {
+						sb.append("\n").append(locale.get("str/next_tier", next.getInfo(locale).getDescription()));
+					}
 				}
 
 				return new MessageEmbed.Field(current.getRarity().getEmote() + info.getName(), sb.toString(), true);
