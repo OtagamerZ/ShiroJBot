@@ -236,11 +236,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			if (notifs.get() != null) {
-				if (prize > 0) {
-					notifs.get().sendMessage(locale.get("str/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
-				} else {
-					notifs.get().sendMessage(locale.get("str/level_up", data.user().getAsMention(), profile.getLevel())).queue(null, Utils::doNothing);
-				}
+				notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
 			}
 		}
 
