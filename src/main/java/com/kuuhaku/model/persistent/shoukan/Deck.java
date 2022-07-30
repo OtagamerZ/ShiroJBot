@@ -381,7 +381,7 @@ public class Deck extends DAO<Deck> {
 
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 40));
 				g.setColor(Color.WHITE);
-				effects = ori.major().getMajor(locale)
+				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + locale.get("minor/pureblood")
 						+ "\n\n\"" + ori.major().getDescription(locale) + "\"";
 			} else {
@@ -401,7 +401,7 @@ public class Deck extends DAO<Deck> {
 
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 40));
 				g.setColor(Color.WHITE);
-				effects = ori.major().getMajor(locale)
+				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + ori.minor().getMinor(locale)
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ "\n\n\"" + syn.getDescription(locale) + "\"";
