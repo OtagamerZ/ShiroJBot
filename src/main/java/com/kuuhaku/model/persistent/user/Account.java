@@ -259,6 +259,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 				FROM Title t
 				LEFT JOIN AccountTitle at ON at.title.id = t.id AND at.account.uid = ?1
 				WHERE at IS NULL
+				AND COALESCE(t.condition, '') <> ''
 				""", uid
 		);
 
