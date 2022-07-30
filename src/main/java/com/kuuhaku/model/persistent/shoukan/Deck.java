@@ -379,7 +379,7 @@ public class Deck extends DAO<Deck> {
 				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
 				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 40));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + locale.get("minor/pureblood")
@@ -399,7 +399,7 @@ public class Deck extends DAO<Deck> {
 					g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
 				});
 
-				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 40));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + ori.minor().getMinor(locale)
