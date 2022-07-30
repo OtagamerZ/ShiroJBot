@@ -1074,6 +1074,15 @@ public abstract class Utils {
 
 	@SafeVarargs
 	public static <T> T getNext(T current, T... sequence) {
+		return getNext(current, List.of(sequence));
+	}
+
+	@SafeVarargs
+	public static <T> T getNext(T current, boolean wrap, T... sequence) {
+		return getNext(current, wrap, List.of(sequence));
+	}
+
+	public static <T> T getNext(T current, List<T> sequence) {
 		boolean found = false;
 		for (T other : sequence) {
 			if (found) return other;
@@ -1083,19 +1092,27 @@ public abstract class Utils {
 		return null;
 	}
 
-	@SafeVarargs
-	public static <T> T getNext(T current, boolean wrap, T... sequence) {
-		T out = getPrevious(current, sequence);
-		if (wrap) out = sequence[0];
+	public static <T> T getNext(T current, boolean wrap, List<T> sequence) {
+		T out = getNext(current, sequence);
+		if (wrap) out = sequence.get(0);
 
 		return out;
 	}
 
 	@SafeVarargs
 	public static <T> T getPrevious(T current, T... sequence) {
+		return getPrevious(current, List.of(sequence));
+	}
+
+	@SafeVarargs
+	public static <T> T getPrevious(T current, boolean wrap, T... sequence) {
+		return getPrevious(current, wrap, List.of(sequence));
+	}
+
+	public static <T> T getPrevious(T current, List<T> sequence) {
 		boolean found = false;
-		for (int i = sequence.length - 1; i >= 0; i--) {
-			T other = sequence[i];
+		for (int i = sequence.size() - 1; i >= 0; i--) {
+			T other = sequence.get(i);
 			if (found) return other;
 			found = Objects.equals(current, other);
 		}
@@ -1103,10 +1120,9 @@ public abstract class Utils {
 		return null;
 	}
 
-	@SafeVarargs
-	public static <T> T getPrevious(T current, boolean wrap, T... sequence) {
+	public static <T> T getPrevious(T current, boolean wrap, List<T> sequence) {
 		T out = getPrevious(current, sequence);
-		if (wrap) out = sequence[sequence.length - 1];
+		if (wrap) out = sequence.get(sequence.size() - 1);
 
 		return out;
 	}

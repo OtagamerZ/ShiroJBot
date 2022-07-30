@@ -67,24 +67,28 @@ public class SelectTitleCommand implements Executable {
 			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, ts -> {
 				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
 
-				Title high = ts.stream()
+				Title current = ts.stream()
 						.filter(t -> acc.hasTitle(t.getId()))
 						.findFirst()
 						.orElse(ts.get(0));
 
 				StringBuilder sb = new StringBuilder();
-				LocalizedTitle info = high.getInfo(locale);
+				LocalizedTitle info = current.getInfo(locale);
 
 				sb.append("`ID: ");
-				if (acc.hasTitle(high.getId())) {
-					sb.append(high.getId());
+				if (acc.hasTitle(current.getId())) {
+					sb.append(current.getId());
 				} else {
-					sb.append(high.getId().replaceAll("[A-Z\\d-]", "?"));
+					sb.append(current.getId().replaceAll("[A-Z\\d-]", "?"));
 				}
 				sb.append("`\n").append(info.getDescription());
 
+				Title next = Utils.getNext(current, ts);
+				if (next != null) {
+					sb.append("\n").append(locale.get("str/next_tier", next.getInfo(locale).getDescription()));
+				}
 
-				return new MessageEmbed.Field(high.getRarity().getEmote() + info.getName(), sb.toString(), true);
+				return new MessageEmbed.Field(current.getRarity().getEmote() + info.getName(), sb.toString(), true);
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());
