@@ -71,13 +71,13 @@ public class SelectTitleCommand implements Executable {
 				for (Title t : ts) {
 					LocalizedTitle info = t.getInfo(locale);
 
-					sb.append("`ID: `");
+					sb.append("`ID: ");
 					if (acc.hasTitle(t.getId())) {
 						sb.append(t.getId());
 					} else {
 						sb.append(t.getId().replaceAll("[A-Z\\d-]", "?"));
 					}
-					sb.append("` - ").append(info.getDescription()).append("\n");
+					sb.append("`\n").append(info.getDescription()).append("\n");
 				}
 
 				Title high = ts.stream()
