@@ -92,6 +92,10 @@ public enum Race {
 		return locale.get("synergy/" + name());
 	}
 
+	public String getDescription(I18N locale) {
+		return locale.get("race/" + name() + "_desc");
+	}
+
 	public boolean isRace(Race race) {
 		return (this.flag & race.flag) == race.flag;
 	}
