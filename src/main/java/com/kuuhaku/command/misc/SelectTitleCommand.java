@@ -65,27 +65,25 @@ public class SelectTitleCommand implements Executable {
 					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))"), "")));
 
 			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, ts -> {
-				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
-
-				StringBuilder sb = new StringBuilder();
-				for (Title t : ts) {
-					LocalizedTitle info = t.getInfo(locale);
-
-					sb.append("`ID: ");
-					if (acc.hasTitle(t.getId())) {
-						sb.append(t.getId());
-					} else {
-						sb.append(t.getId().replaceAll("[A-Z\\d-]", "?"));
-					}
-					sb.append("`\n").append(info.getDescription()).append("\n");
-				}
-
 				Title high = ts.stream()
+						.sorted(Comparator.comparingInt(t -> t.getRarity().getIndex()))
 						.filter(t -> acc.hasTitle(t.getId()))
 						.findFirst()
 						.orElse(ts.get(0));
 
-				return new MessageEmbed.Field(high.getRarity().getEmote() + high.getInfo(locale).getName(), sb.toString(), true);
+				StringBuilder sb = new StringBuilder();
+				LocalizedTitle info = high.getInfo(locale);
+
+				sb.append("`ID: ");
+				if (acc.hasTitle(high.getId())) {
+					sb.append(high.getId());
+				} else {
+					sb.append(high.getId().replaceAll("[A-Z\\d-]", "?"));
+				}
+				sb.append("`\n").append(info.getDescription());
+
+
+				return new MessageEmbed.Field(high.getRarity().getEmote() + info.getName(), sb.toString(), true);
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());
