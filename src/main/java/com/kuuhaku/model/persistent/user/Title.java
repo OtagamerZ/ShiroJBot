@@ -45,8 +45,8 @@ public class Title extends DAO<Title> {
 	@Column(name = "rarity", nullable = false)
 	private Rarity rarity;
 
-	@Column(name = "check", columnDefinition = "TEXT")
-	private String check;
+	@Column(name = "condition", columnDefinition = "TEXT")
+	private String condition;
 
 	public String getId() {
 		return id;
