@@ -228,6 +228,16 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			put("xp", Utils.shorten(xp));
 			put("level", getLevel());
 		}};
+
+		for (AccountTitle title : account.getTitles()) {
+			Title t = title.getTitle();
+
+			replaces.put(
+					t.getId().toLowerCase(Locale.ROOT),
+					t.getInfo(locale).getName()
+			);
+		}
+
 		Graph.applyTransformed(g2d, g1 -> {
 			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0x00FFFFFF), true);
 

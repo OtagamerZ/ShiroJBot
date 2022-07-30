@@ -26,6 +26,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -58,6 +59,23 @@ public class Title extends DAO<Title> {
 
 	public Rarity getRarity() {
 		return rarity;
+	}
+
+	@SuppressWarnings("JpaQlInspection")
+	public static List<Title> getAllTitles() {
+		return DAO.queryAll(Title.class, """
+				SELECT t
+				FROM Title t
+				ORDER BY CASE t.rarity
+					WHEN 'COMMON' THEN 1
+					WHEN 'UNCOMMON' THEN 2
+					WHEN 'RARE' THEN 3
+					WHEN 'ULTRA_RARE' THEN 4
+					WHEN 'LEGENDARY' THEN 5
+					WHEN 'ULTIMATE' THEN 6
+				END DESC
+				"""
+		);
 	}
 
 	@Override
