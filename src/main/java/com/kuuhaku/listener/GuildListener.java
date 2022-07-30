@@ -31,9 +31,7 @@ import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
-import com.kuuhaku.model.persistent.user.Profile;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
@@ -50,6 +48,7 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -279,6 +278,18 @@ public class GuildListener extends ListenerAdapter {
 						.queue();
 			}
 		}
+
+		DynamicProperty dp = account.getDynamicProperty("message_count");
+		int count = NumberUtils.toInt(dp.getValue()) + 1;
+		dp.setValue(count);
+		dp.save();
+
+		DAO.apply(Account.class, account.getUid(), acc -> {
+			Title t = acc.checkTitles();
+			if (t != null) {
+				event.getChannel().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
+			}
+		});
 
 		messages.computeIfAbsent(data.guild().getId(), k ->
 				ExpiringMap.builder()

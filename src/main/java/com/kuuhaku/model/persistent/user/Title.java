@@ -18,17 +18,16 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "title")
@@ -46,6 +45,9 @@ public class Title extends DAO<Title> {
 	@Column(name = "rarity", nullable = false)
 	private Rarity rarity;
 
+	@Column(name = "check", columnDefinition = "TEXT")
+	private String check;
+
 	public String getId() {
 		return id;
 	}
@@ -59,6 +61,17 @@ public class Title extends DAO<Title> {
 
 	public Rarity getRarity() {
 		return rarity;
+	}
+
+	public boolean check(Account acc) {
+		try {
+			Object out = Utils.exec(Utils.getOr(check, ""), Map.of("acc", acc));
+
+			return (out instanceof Boolean b) && b;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to check title " + id, e);
+			return false;
+		}
 	}
 
 	@SuppressWarnings("JpaQlInspection")

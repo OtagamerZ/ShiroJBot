@@ -253,6 +253,25 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findFirst().orElse(null);
 	}
 
+	public Title checkTitles() {
+		List<Title> titles = DAO.queryAll(Title.class, """
+				SELECT t
+				FROM Title t
+				LEFT JOIN AccountTitle at ON at.title.id = t.id AND at.account.uid = ?1
+				WHERE at IS NULL
+				""", uid
+		);
+
+		for (Title title : titles) {
+			if (title.check(this)) {
+				this.titles.add(new AccountTitle(this, title));
+				return title;
+			}
+		}
+
+		return null;
+	}
+
 	public Set<AccountTitle> getTitles() {
 		return titles;
 	}
