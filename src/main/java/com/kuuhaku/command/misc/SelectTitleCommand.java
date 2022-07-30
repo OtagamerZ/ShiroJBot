@@ -41,8 +41,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "title",
@@ -58,17 +61,31 @@ public class SelectTitleCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/all_titles"));
 
-			List<Page> pages = Utils.generatePages(eb, Title.getAllTitles(), 10, t -> {
-				LocalizedTitle info = t.getInfo(locale);
+			Map<String, List<Title>> titles = Title.getAllTitles().stream()
+					.collect(Collectors.groupingBy(t -> Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))")));
 
-				String str;
-				if (acc.hasTitle(t.getId())) {
-					str = "`ID: " + t.getId() + "`\n\n" + info.getDescription();
-				} else {
-					str = "`ID: " + t.getId().replaceAll("[A-Z\\d-]", "?") + "`\n\n" + info.getDescription();
+			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, ts -> {
+				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
+
+				StringBuilder sb = new StringBuilder();
+				for (Title t : ts) {
+					LocalizedTitle info = t.getInfo(locale);
+
+					sb.append("`ID: `");
+					if (acc.hasTitle(t.getId())) {
+						sb.append(t.getId());
+					} else {
+						sb.append(t.getId().replaceAll("[A-Z\\d-]", "?"));
+					}
+					sb.append("` - ").append(info.getDescription()).append("\n");
 				}
 
-				return new MessageEmbed.Field(t.getRarity().getEmote() + info.getName(), str, true);
+				Title high = ts.stream()
+						.filter(t -> acc.hasTitle(t.getId()))
+						.findFirst()
+						.orElse(ts.get(0));
+
+				return new MessageEmbed.Field(high.getRarity().getEmote() + high.getInfo(locale).getName(), sb.toString(), true);
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());
