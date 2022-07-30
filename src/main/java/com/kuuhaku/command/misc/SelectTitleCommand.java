@@ -65,8 +65,9 @@ public class SelectTitleCommand implements Executable {
 					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))"), "")));
 
 			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, ts -> {
+				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
+
 				Title high = ts.stream()
-						.sorted(Comparator.comparingInt(t -> t.getRarity().getIndex()))
 						.filter(t -> acc.hasTitle(t.getId()))
 						.findFirst()
 						.orElse(ts.get(0));
