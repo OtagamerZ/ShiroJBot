@@ -65,7 +65,7 @@ public class Title extends DAO<Title> {
 
 	public boolean check(Account acc) {
 		try {
-			Object out = Utils.exec(Utils.getOr(check, ""), Map.of("acc", acc));
+			Object out = Utils.exec(Utils.getOr(condition, ""), Map.of("acc", acc));
 
 			return (out instanceof Boolean b) && b;
 		} catch (Exception e) {
