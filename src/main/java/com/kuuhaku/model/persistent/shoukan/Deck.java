@@ -373,7 +373,7 @@ public class Deck extends DAO<Deck> {
 			String effects;
 			if (ori.minor() == Race.NONE) {
 				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
-				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 80));
 				g.setColor(ori.major().getColor());
 
 				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
@@ -382,11 +382,11 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 30));
 				g.setColor(Color.WHITE);
 				effects = ori.major().getMajor(locale)
-						+ "\n\n" + locale.get("minor/pureblood")
+						+ "\n\n- " + locale.get("minor/pureblood")
 						+ "\n\n\"" + ori.major().getDescription(locale) + "\"";
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
-				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 80));
 				g.setColor(ori.synergy().getColor());
 
 				String text = locale.get("str/deck_origin", syn.getName(locale));
@@ -402,8 +402,8 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 30));
 				g.setColor(Color.WHITE);
 				effects = ori.major().getMajor(locale)
-						+ "\n\n" + ori.minor().getMinor(locale)
-						+ "\n\n" + syn.getSynergy(locale)
+						+ "\n\n- " + ori.minor().getMinor(locale)
+						+ "\n\n- " + syn.getSynergy(locale)
 						+ "\n\n\"" + syn.getDescription(locale) + "\"";
 			}
 
