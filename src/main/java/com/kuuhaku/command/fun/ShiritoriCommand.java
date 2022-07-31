@@ -60,8 +60,9 @@ public class ShiritoriCommand implements Executable {
 			return;
 		}
 
-		List<Member> others = event.message().getMentionedMembers();
-		others.remove(event.member());
+		List<Member> others = event.message().getMentionedMembers().stream()
+				.filter(m -> !m.equals(event.member()))
+				.toList();
 
 		for (Member other : others) {
 			if (GameInstance.PLAYERS.contains(other.getId())) {
