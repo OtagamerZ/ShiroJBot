@@ -60,9 +60,11 @@ public class ShiritoriCommand implements Executable {
 			return;
 		}
 
-		List<Member> others = event.message().getMentionedMembers().stream()
-				.filter(m -> !m.equals(event.member()))
-				.toList();
+		List<Member> others = event.message().getMentionedMembers();
+		if (others.contains(event.member())) {
+			event.channel().sendMessage(locale.get("error/cannot_play_with_self")).queue();
+			return;
+		}
 
 		for (Member other : others) {
 			if (GameInstance.PLAYERS.contains(other.getId())) {
