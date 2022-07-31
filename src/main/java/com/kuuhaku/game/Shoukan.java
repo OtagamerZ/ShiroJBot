@@ -53,6 +53,7 @@ import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.intellij.lang.annotations.MagicConstant;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -71,7 +72,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final String[] players;
 	private final Map<Side, Hand> hands;
 	private final Arena arena;
-	private final Map<String, Pair<String, String>> messages = new HashMap<>();
+	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new TreeSet<>();
 
 	private final boolean singleplayer;
@@ -92,10 +93,7 @@ public class Shoukan extends GameInstance<Phase> {
 		this.arena = new Arena(this);
 		this.singleplayer = p1.equals(p2);
 
-		setTimeout(turn -> {
-			reportResult("str/game_wo", "<@" + getCurrent().getUid() + ">");
-			close(GameReport.GAME_TIMEOUT);
-		}, 5, TimeUnit.MINUTES);
+		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getCurrent().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -1052,24 +1050,21 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 	}
 
-	private BiFunction<String, Pair<String, String>, Pair<String, String>> replaceMessages(Message msg) {
+	private BiFunction<String, String, String> replaceMessages(Message message) {
 		resetTimer();
-		addButtons(msg);
+		addButtons(message);
 
-		return (gid, tuple) -> {
-			if (tuple != null) {
-				Guild guild = Main.getApp().getShiro().getGuildById(gid);
-				if (guild != null) {
-					TextChannel channel = guild.getTextChannelById(tuple.getFirst());
-					if (channel != null) {
-						channel.retrieveMessageById(tuple.getSecond())
-								.flatMap(Objects::nonNull, Message::delete)
-								.queue();
-					}
+		return (chn, msg) -> {
+			if (msg != null) {
+				TextChannel channel = Main.getApp().getShiro().getTextChannelById(chn);
+				if (channel != null) {
+					channel.retrieveMessageById(msg)
+							.flatMap(Objects::nonNull, Message::delete)
+							.queue();
 				}
 			}
 
-			return new Pair<>(msg.getChannel().getId(), msg.getId());
+			return message.getId();
 		};
 	}
 
@@ -1091,11 +1086,7 @@ public class Shoukan extends GameInstance<Phase> {
 					continue;
 				}
 
-				reportResult("str/game_end",
-						"<@" + hand.getUid() + ">",
-						"<@" + hands.get(side.getOther()).getUid() + ">"
-				);
-				close(GameReport.SUCCESS);
+				reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
 				return;
 			}
 
@@ -1118,24 +1109,21 @@ public class Shoukan extends GameInstance<Phase> {
 
 		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
-				.queue(m -> messages.compute(m.getGuild().getId(), replaceMessages(m)));
+				.queue(m -> messages.compute(m.getTextChannel().getId(), replaceMessages(m)));
 	}
 
-	private void reportResult(String message, Object... args) {
+	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
+		close(code);
 		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue(m -> {
-					for (Map.Entry<String, Pair<String, String>> entry : messages.entrySet()) {
-						Pair<String, String> tuple = entry.getValue();
+					for (Map.Entry<String, String> tuple : messages.entrySet()) {
 						if (tuple != null) {
-							Guild guild = Main.getApp().getShiro().getGuildById(entry.getKey());
-							if (guild != null) {
-								TextChannel channel = guild.getTextChannelById(tuple.getFirst());
-								if (channel != null) {
-									channel.retrieveMessageById(tuple.getSecond())
-											.flatMap(Objects::nonNull, Message::delete)
-											.queue();
-								}
+							TextChannel channel = Main.getApp().getShiro().getTextChannelById(tuple.getKey());
+							if (channel != null) {
+								channel.retrieveMessageById(tuple.getValue())
+										.flatMap(Objects::nonNull, Message::delete)
+										.queue();
 							}
 						}
 					}
@@ -1202,8 +1190,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
-						reportResult("str/game_forfeit", "<@" + getCurrent().getUid() + ">");
-						close(GameReport.SUCCESS);
+						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
 						return;
 					}
 

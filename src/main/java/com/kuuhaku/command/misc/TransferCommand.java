@@ -78,6 +78,7 @@ public class TransferCommand implements Executable {
 							DAO.find(Account.class, target.getId()).addCR(value, "Received from " + event.user().getName());
 
 							event.channel().sendMessage(locale.get("success/transfer")).queue();
+							return true;
 						}, event.user()
 				);
 			} catch (PendingConfirmationException e) {
@@ -132,10 +133,11 @@ public class TransferCommand implements Executable {
 							selected.save();
 
 							event.channel().sendMessage(locale.get("success/transfer")).queue();
+					return true;
 						}, event.user()
 				);
 			} catch (InterruptedException | ExecutionException ignore) {
-			}  catch (PendingConfirmationException e) {
+			} catch (PendingConfirmationException e) {
 				event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 			}
 		}

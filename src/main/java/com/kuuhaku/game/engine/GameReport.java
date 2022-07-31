@@ -19,25 +19,26 @@
 package com.kuuhaku.game.engine;
 
 public class GameReport extends RuntimeException {
-	public static final int SUCCESS = 0;
-	public static final int INITIALIZATION_ERROR = 1;
-	public static final int GAME_TIMEOUT = 2;
-	public static final int NO_DECK = 3;
+	public static final byte SUCCESS = 0;
+	public static final byte INITIALIZATION_ERROR = 1;
+	public static final byte GAME_TIMEOUT = 2;
+	public static final byte NO_DECK = 3;
+	public static final byte DICT_NOT_FOUND = 4;
 
-	private final int code;
+	private final byte code;
 	private final String content;
 
-	public GameReport(int code) {
+	public GameReport(byte code) {
 		this(code, "");
 	}
 
-	public GameReport(int code, String content) {
+	public GameReport(byte code, String content) {
 		super("Report code " + code + ": " + getCodeName(code));
 		this.code = code;
 		this.content = content;
 	}
 
-	public int getCode() {
+	public byte getCode() {
 		return code;
 	}
 
@@ -51,6 +52,7 @@ public class GameReport extends RuntimeException {
 			case INITIALIZATION_ERROR -> "INITIALIZATION_ERROR";
 			case GAME_TIMEOUT -> "GAME_TIMEOUT";
 			case NO_DECK -> "NO_DECK";
+			case DICT_NOT_FOUND -> "DICT_NOT_FOUND";
 			default -> "UNKNOWN_CODE";
 		};
 	}

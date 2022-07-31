@@ -54,10 +54,10 @@ public class MarryCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/marry", other.getAsMention(), event.user().getAsMention()), event.channel(),
-					w -> {
+			Utils.confirm(locale.get("question/marry", other.getAsMention(), event.user().getAsMention()), event.channel(), w -> {
 						new Couple(event.user().getId(), other.getId()).save();
 						event.channel().sendMessage(locale.get("success/marry")).queue();
+						return true;
 					}, other.getUser()
 			);
 		} catch (PendingConfirmationException e) {

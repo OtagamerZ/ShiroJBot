@@ -92,13 +92,17 @@ public abstract class GameInstance<T extends Enum<T>> {
 		});
 	}
 
+	protected abstract boolean validate(Message message);
+
 	protected abstract void begin();
 
 	protected abstract void runtime(String value) throws InvocationTargetException, IllegalAccessException;
 
-	protected abstract boolean validate(Message message);
-
 	public void setTimeout(Consumer<Integer> action, int time, TimeUnit unit) {
+		if (timeout != null) {
+			timeout.stop();
+		}
+
 		this.timeout = DelayedAction.of(service)
 				.setTimeUnit(time, unit)
 				.setTask(() -> action.accept(turn));
@@ -157,7 +161,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return null;
 	}
 
-	public final void close(@MagicConstant(valuesFromClass = GameReport.class) int code) {
+	public final void close(@MagicConstant(valuesFromClass = GameReport.class) byte code) {
 		timeout.stop();
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);

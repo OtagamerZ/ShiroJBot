@@ -44,10 +44,10 @@ public class DivorceCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/divorce"), event.channel(),
-					w -> {
+			Utils.confirm(locale.get("question/divorce"), event.channel(), w -> {
 						c.delete();
 						event.channel().sendMessage(locale.get("success/divorce")).queue();
+						return true;
 					}, event.user()
 			);
 		} catch (PendingConfirmationException e) {

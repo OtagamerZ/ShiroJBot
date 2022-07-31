@@ -73,6 +73,8 @@ public class MarketBuyCommand implements Executable {
 						} else {
 							event.channel().sendMessage(locale.get("error/not_announced")).queue();
 						}
+
+						return true;
 					}, event.user()
 			);
 		} catch (PendingConfirmationException e) {

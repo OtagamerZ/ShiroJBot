@@ -93,6 +93,7 @@ public class StashScrapCommand implements Executable {
 									event.channel().sendMessage(locale.get("success/scrap")).queue();
 									kp.getAccount().addCR(value, sc + " scrapped");
 									sc.delete();
+									return true;
 								}, event.user()
 						);
 					} catch (PendingConfirmationException e) {

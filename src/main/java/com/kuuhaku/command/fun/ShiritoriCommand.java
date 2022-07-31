@@ -18,10 +18,9 @@
 
 package com.kuuhaku.command.fun;
 
-import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.PendingConfirmationException;
-import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.game.Shiritori;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
@@ -32,25 +31,26 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "shoukan",
+		name = "shiritori",
 		category = Category.FUN
 )
-@Signature("<user:user:r>")
+@Signature("<users:user:r>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
-public class ShoukanCommand implements Executable {
+public class ShiritoriCommand implements Executable {
 	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
 
 	@Override
@@ -60,30 +60,41 @@ public class ShoukanCommand implements Executable {
 			return;
 		}
 
-		Member other = event.message().getMentionedMembers().get(0);
-		if (GameInstance.PLAYERS.contains(other.getId())) {
-			event.channel().sendMessage(locale.get("error/in_game_target", other.getEffectiveName())).queue();
-			return;
+		List<Member> others = event.message().getMentionedMembers();
+		others.remove(event.member());
+
+		for (Member other : others) {
+			if (GameInstance.PLAYERS.contains(other.getId())) {
+				event.channel().sendMessage(locale.get("error/in_game_target", other.getEffectiveName())).queue();
+				return;
+			}
 		}
 
+		Set<Member> pending = new HashSet<>(others);
 		try {
-			Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), w -> {
+			Utils.confirm(locale.get("question/shiritori",
+							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(Member::getAsMention).toList()),
+							event.user().getAsMention()
+					), event.channel(), w -> {
+						if (!pending.isEmpty()) {
+							event.channel().sendMessage(locale.get("str/match_accept", w.getMember().getEffectiveName())).queue();
+							pending.remove(w.getMember());
+							return false;
+						}
+
 						try {
-							Shoukan skn = new Shoukan(locale, event.user(), other.getUser());
-							Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
-							skn.start(event.guild(), event.channel())
+							Shiritori shi = new Shiritori(locale, others.stream().map(Member::getId).toArray(String[]::new));
+							shi.start(event.guild(), event.channel())
 									.whenComplete((v, e) -> {
 										if (e instanceof GameReport rep && rep.getCode() == 1) {
 											event.channel().sendMessage(locale.get("error/error", e)).queue();
 											Constants.LOGGER.error(e, e);
 										}
 
-										for (String s : skn.getPlayers()) {
+										for (String s : shi.getPlayers()) {
 											GameInstance.PLAYERS.remove(s);
 										}
 									});
-
-							updateTip(locale, skn, m);
 						} catch (GameReport e) {
 							if (e.getContent().equals(event.user().getId())) {
 								event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
@@ -93,27 +104,10 @@ public class ShoukanCommand implements Executable {
 						}
 
 						return true;
-					}, other.getUser()
+					}, others.stream().map(Member::getUser).toArray(User[]::new)
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
-	}
-
-	private String getRandomTip(I18N locale) {
-		return locale.get("str/loading_tip_" + Calc.rng(7));
-	}
-
-	private void updateTip(I18N locale, Shoukan skn, Message m) {
-		exec.schedule(() -> {
-			if (!skn.isInitialized()) {
-				m.editMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))).queue(null, Utils::doNothing);
-				updateTip(locale, skn, m);
-				return;
-			}
-
-			m.delete().queue(null, Utils::doNothing);
-			throw new RuntimeException("Done");
-		}, Calc.rng(2000, 4000), TimeUnit.MILLISECONDS);
 	}
 }

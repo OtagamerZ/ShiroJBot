@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -473,107 +474,48 @@ public abstract class Utils {
 		}
 	}
 
-	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) throws PendingConfirmationException {
-		for (User user : allowed) {
-			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
-		}
-
-		lock(allowed);
-		channel.sendMessage(text).queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-							action.accept(w);
-							unlock(allowed);
-						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u),
-						c -> unlock(allowed)
-				)
-		);
+	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+		confirm(text, null, channel, action, m -> {}, allowed);
 	}
 
-	public static void confirm(String text, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
-		for (User user : allowed) {
-			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
-		}
-
-		lock(allowed);
-		channel.sendMessage(text).queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-							action.accept(w);
-							unlock(allowed);
-						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u),
-						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
-				)
-		);
+	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+		confirm(text, null, channel, action, onCancel, allowed);
 	}
 
-	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) throws PendingConfirmationException {
-		for (User user : allowed) {
-			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
-		}
-
-		lock(allowed);
-		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-							action.accept(w);
-							unlock(allowed);
-						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u),
-						c -> unlock(allowed)
-				)
-		);
+	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+		confirm(null, embed, channel, action, m -> {}, allowed);
 	}
 
-	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
-		for (User user : allowed) {
-			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
-		}
-
-		lock(allowed);
-		channel.sendMessageEmbeds(embed).queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-							action.accept(w);
-							unlock(allowed);
-						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u),
-						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
-				)
-		);
+	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+		confirm(null, embed, channel, action, onCancel, allowed);
 	}
 
-	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, User... allowed) throws PendingConfirmationException {
-		for (User user : allowed) {
-			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
-		}
-
-		lock(allowed);
-		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-							action.accept(w);
-							unlock(allowed);
-						}), true, true, 1, TimeUnit.MINUTES,
-						u -> Arrays.asList(allowed).contains(u),
-						c -> unlock(allowed)
-				)
-		);
+	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+		confirm(text, embed, channel, action, m -> {}, allowed);
 	}
 
-	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingConsumer<ButtonWrapper> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
 		for (User user : allowed) {
 			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
 		}
 
 		lock(allowed);
-		channel.sendMessage(text).setEmbeds(embed).queue(s -> Pages.buttonize(s,
+		MessageAction ma;
+		if (text == null) {
+			ma = channel.sendMessageEmbeds(embed);
+		} else {
+			ma = channel.sendMessage(text);
+			if (embed != null) {
+				ma = ma.setEmbeds(embed);
+			}
+		}
+
+		ma.queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-							action.accept(w);
-							unlock(allowed);
+							if (action.apply(w)) {
+								w.getMessage().delete().queue(null, Utils::doNothing);
+								unlock(allowed);
+							}
 						}), true, true, 1, TimeUnit.MINUTES,
 						u -> Arrays.asList(allowed).contains(u),
 						c -> onCancel.andThen(m -> unlock(allowed)).accept(c)

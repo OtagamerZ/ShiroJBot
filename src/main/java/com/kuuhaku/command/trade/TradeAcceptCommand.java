@@ -71,11 +71,12 @@ public class TradeAcceptCommand implements Executable {
 						if (!trade.validate()) {
 							event.channel().sendMessage(locale.get("success/trade_invalid")).queue();
 							Trade.getPending().remove(event.user().getId());
-							return;
+							return true;
 						}
 
 						trade.accept();
 						event.channel().sendMessage(locale.get("success/trade_accept")).queue();
+						return true;
 					}, other
 			);
 		} catch (PendingConfirmationException e) {
