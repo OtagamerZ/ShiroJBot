@@ -46,8 +46,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 public class Shiritori extends GameInstance<NullPhase> {
-	private final long seed = Constants.DEFAULT_RNG.nextLong();
+	private static final String[] blacklisted = {};
 
+	private final long seed = Constants.DEFAULT_RNG.nextLong();
 	private final I18N locale;
 	private final String[] players;
 	private final InfiniteList<String> inGame;
@@ -119,9 +120,15 @@ public class Shiritori extends GameInstance<NullPhase> {
 					return;
 				}
 
-				if (current != null && !current.substring(current.length() - 2).equals(word.substring(0, 2))) {
-					getChannel().sendMessage(locale.get("error/invalid_word")).queue();
-					return;
+				if (current != null) {
+					String end = current.substring(current.length() - 2);
+					if (Utils.equalsAny(end, blacklisted)) {
+						getChannel().sendMessage(locale.get("error/blacklisted_ending")).queue();
+						return;
+					} else if (!end.equals(word.substring(0, 2))) {
+						getChannel().sendMessage(locale.get("error/invalid_word")).queue();
+						return;
+					}
 				}
 
 				used.add(current);
