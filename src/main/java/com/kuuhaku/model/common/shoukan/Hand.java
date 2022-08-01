@@ -109,7 +109,7 @@ public class Hand {
 		d.setAvailable(false);
 	});
 	private final Set<Timed<Lock>> locks = new HashSet<>();
-	private final Set<EffectHolder> leeches = new HashSet<>();
+	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
 	private final BaseValues base;
 	private final RegDeg regdeg = new RegDeg();
@@ -374,7 +374,7 @@ public class Hand {
 				.findFirst().orElse(0);
 	}
 
-	public Set<EffectHolder> getLeeches() {
+	public Set<EffectHolder<?>> getLeeches() {
 		leeches.removeIf(e -> !Objects.equals(e.getLeech(), this));
 
 		return leeches;
