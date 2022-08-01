@@ -324,7 +324,7 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			Drawable<?> d = deck.get(i);
-			if (d instanceof Senshi s && s.getRace() == race) {
+			if (d instanceof Senshi s && s.getRace().isRace(race)) {
 				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
