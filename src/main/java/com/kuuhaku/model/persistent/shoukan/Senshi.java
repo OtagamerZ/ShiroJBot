@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
@@ -42,12 +41,14 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "senshi")
-public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolder {
+public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
 	public final String KLASS = getClass().getName();
 	public transient long SERIAL = Constants.DEFAULT_RNG.nextLong();

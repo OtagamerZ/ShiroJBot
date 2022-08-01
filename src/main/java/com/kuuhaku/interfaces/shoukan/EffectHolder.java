@@ -34,7 +34,7 @@ import java.awt.*;
 import java.util.Map;
 import java.util.function.Function;
 
-public interface EffectHolder {
+public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	boolean execute(EffectParameters ep);
 
 	default Hand getLeech() {

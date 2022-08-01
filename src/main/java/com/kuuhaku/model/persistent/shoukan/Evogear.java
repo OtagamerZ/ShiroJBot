@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
@@ -46,15 +45,17 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import static com.kuuhaku.model.enums.shoukan.Trigger.*;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ACTIVATE;
 import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
 
 @Entity
 @Table(name = "evogear")
-public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHolder {
+public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Transient
 	public final String KLASS = getClass().getName();
 

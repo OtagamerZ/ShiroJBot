@@ -30,6 +30,7 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
@@ -969,6 +970,10 @@ public class Shoukan extends GameInstance<Phase> {
 			if (s != null) {
 				trig |= s.execute(new EffectParameters(trigger, s.asSource(trigger)));
 			}
+		}
+
+		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
+			leech.execute(new EffectParameters(trigger, leech.asSource(trigger)));
 		}
 
 		if (trig) {
