@@ -319,6 +319,23 @@ public class Hand {
 		}
 	}
 
+	public void draw(Race race) {
+		LinkedList<Drawable<?>> deck = getDeck();
+
+		for (int i = 0; i < deck.size(); i++) {
+			Drawable<?> d = deck.get(i);
+			if (d instanceof Senshi s && s.getRace() == race) {
+				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
+				cards.add(deck.remove(i));
+				getGame().trigger(Trigger.ON_DRAW);
+				return;
+			}
+		}
+	}
+
 	public void drawSenshi(int value) {
 		LinkedList<Drawable<?>> deck = getDeck();
 
