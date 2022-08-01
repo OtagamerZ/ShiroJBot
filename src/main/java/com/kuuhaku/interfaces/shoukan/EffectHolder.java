@@ -19,6 +19,7 @@
 package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -35,6 +36,13 @@ import java.util.function.Function;
 
 public interface EffectHolder {
 	boolean execute(EffectParameters ep);
+
+	default Hand getLeech() {
+		return null;
+	}
+
+	default void setLeech(Hand leech) {
+	}
 
 	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
 		return str -> {

@@ -88,6 +88,7 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
+	private transient Hand leech = null;
 
 	@Transient
 	private byte state = 0b10;
@@ -172,6 +173,21 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Override
 	public void setHand(Hand hand) {
 		this.hand = hand;
+	}
+
+	public Hand getLeech() {
+		return leech;
+	}
+
+	public void setLeech(Hand leech) {
+		if (this.leech != null) {
+			this.leech.getLeeches().remove(this);
+		}
+
+		this.leech = leech;
+		if (this.leech != null) {
+			this.leech.getLeeches().add(this);
+		}
 	}
 
 	@Override
@@ -339,6 +355,9 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 	@Override
 	public void reset() {
 		stats = new CardExtra();
+		if (leech != null) {
+			leech.getLeeches().remove(this);
+		}
 
 		byte base = 0b10;
 		base = (byte) Bit.set(base, 0, isSolid());

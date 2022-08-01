@@ -25,6 +25,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
@@ -103,8 +104,12 @@ public class Hand {
 				getGraveyard().removeIf(dr -> !dr.isSolid());
 			}
 	);
-	private final List<Drawable<?>> discard = new BondedList<>(Objects::nonNull, d -> d.setAvailable(false));
+	private final List<Drawable<?>> discard = new BondedList<>(Objects::nonNull, d -> {
+		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
+		d.setAvailable(false);
+	});
 	private final Set<Timed<Lock>> locks = new HashSet<>();
+	private final Set<EffectHolder> leeches = new HashSet<>();
 
 	private final BaseValues base;
 	private final RegDeg regdeg = new RegDeg();
@@ -291,6 +296,25 @@ public class Hand {
 		}
 	}
 
+	public void draw(String card) {
+		LinkedList<Drawable<?>> deck = getDeck();
+
+		for (int i = 0; i < deck.size(); i++) {
+			Drawable<?> d = deck.get(i);
+			if (d.getCard().getId().equalsIgnoreCase(card)) {
+				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
+					modHP(50);
+				}
+				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
+				cards.add(deck.remove(i));
+				return;
+			}
+		}
+	}
+
 	public void drawSenshi(int value) {
 		LinkedList<Drawable<?>> deck = getDeck();
 
@@ -348,6 +372,12 @@ public class Hand {
 				.map(Timed::time)
 				.mapToInt(AtomicInteger::get)
 				.findFirst().orElse(0);
+	}
+
+	public Set<EffectHolder> getLeeches() {
+		leeches.removeIf(e -> !Objects.equals(e.getLeech(), this));
+
+		return leeches;
 	}
 
 	public BaseValues getBase() {

@@ -78,6 +78,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
+	private transient Hand leech = null;
 
 	@Transient
 	private int state = 0b10;
@@ -177,6 +178,21 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	@Override
 	public void setHand(Hand hand) {
 		this.hand = hand;
+	}
+
+	public Hand getLeech() {
+		return leech;
+	}
+
+	public void setLeech(Hand leech) {
+		if (this.leech != null) {
+			this.leech.getLeeches().remove(this);
+		}
+
+		this.leech = leech;
+		if (this.leech != null) {
+			this.leech.getLeeches().add(this);
+		}
 	}
 
 	@Override
@@ -630,7 +646,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 
 	@Override
 	public void reset() {
-		SERIAL = Constants.DEFAULT_RNG.nextLong();
 		equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
@@ -638,6 +653,9 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		});
 		stats = new CardExtra();
 		slot = null;
+		if (leech != null) {
+			leech.getLeeches().remove(this);
+		}
 
 		byte base = 0b10;
 		base = (byte) Bit.set(base, 0, isSolid());

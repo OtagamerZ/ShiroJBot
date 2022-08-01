@@ -434,7 +434,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().add(chosen);
-		trigger(ON_DISCARD, side);
 
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> d : curr.getCards()) {
@@ -476,9 +475,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().addAll(cards);
-		for (Drawable<?> ignored : cards) {
-			trigger(ON_DISCARD, side);
-		}
 
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> d : curr.getCards()) {
