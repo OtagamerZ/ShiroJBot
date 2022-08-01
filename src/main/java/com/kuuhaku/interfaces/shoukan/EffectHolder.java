@@ -29,6 +29,7 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.util.Map;
@@ -55,9 +56,16 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String val;
 				try {
-					if (groups.has("calc")) {
+					@Language("Groovy") String calc = groups.getString("calc");
+					if (!calc.isBlank()) {
+						if (calc.startsWith(">")) {
+							calc = "Math.max(0," + calc.substring(1) + ")";
+						} else if (calc.startsWith("<")) {
+							calc = "Math.min(" + calc.substring(1) + ",0)";
+						}
+
 						val = String.valueOf(
-								Utils.eval(groups.getString("calc"), Map.of(
+								Utils.eval(calc, Map.of(
 										"mp", d.getMPCost(),
 										"hp", d.getHPCost(),
 										"atk", d.getDmg(),
