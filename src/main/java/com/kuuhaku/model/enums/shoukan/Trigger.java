@@ -81,6 +81,7 @@ public enum Trigger {
 
 	// Trigger passed from another card
 	DEFER,
+	LEECH,
 
 	// Used for nothing
 	NONE
