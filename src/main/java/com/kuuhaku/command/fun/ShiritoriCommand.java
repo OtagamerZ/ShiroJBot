@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Stream;
 
 @Command(
 		name = "shiritori",
@@ -88,7 +89,11 @@ public class ShiritoriCommand implements Executable {
 						}
 
 						try {
-							Shiritori shi = new Shiritori(locale, others.stream().map(Member::getId).toArray(String[]::new));
+							Shiritori shi = new Shiritori(locale,
+									Stream.concat(others.stream(), Stream.of(event.member()))
+											.map(Member::getId)
+											.toArray(String[]::new)
+							);
 							shi.start(event.guild(), event.channel())
 									.whenComplete((v, e) -> {
 										if (e instanceof GameReport rep && rep.getCode() == 1) {

@@ -107,7 +107,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 		try {
 			if (scanWord(word)) {
-				if (!used.contains(word)) {
+				if (used.contains(word)) {
 					getChannel().sendMessage(locale.get("str/game_out_shiritori", "<@" + inGame.get() + ">")).queue();
 					inGame.remove(inGame.get());
 
