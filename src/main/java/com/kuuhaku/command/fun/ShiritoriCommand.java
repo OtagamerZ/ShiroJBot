@@ -79,9 +79,11 @@ public class ShiritoriCommand implements Executable {
 							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(Member::getAsMention).toList()),
 							event.user().getAsMention()
 					), event.channel(), w -> {
-						if (!pending.isEmpty()) {
+						if (pending.remove(w.getMember())) {
 							event.channel().sendMessage(locale.get("str/match_accept", w.getMember().getEffectiveName())).queue();
-							pending.remove(w.getMember());
+
+							if (!pending.isEmpty()) return false;
+						} else {
 							return false;
 						}
 

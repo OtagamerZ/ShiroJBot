@@ -131,7 +131,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 					}
 				}
 
-				used.add(current);
+				used.add(current = word);
 				nextTurn();
 			}
 		} catch (FileNotFoundException e) {
