@@ -136,7 +136,10 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			} else {
 				out.add("tag/effect");
 			}
+		} else if (isSealed()) {
+			out.add("tag/sealed");
 		}
+
 		for (Object tag : base.getTags()) {
 			if (out.contains("tag/base") && tag.equals("MATERIAL")) continue;
 
@@ -565,7 +568,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	}
 
 	public boolean hasEffect() {
-		return getEffect().contains(Trigger.class.getName());
+		return !isSealed() && getEffect().contains(Trigger.class.getName());
 	}
 
 	@Override
@@ -587,7 +590,6 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 			trigger = ep.trigger();
 		}
 
-		@Language("Groovy") String effect = getEffect();
 		if (base.isLocked()) return false;
 		else if (ep.size() == 0 && trigger == Trigger.DEFER) return false;
 		else if (trigger == Trigger.ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
@@ -600,8 +602,8 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 				other.setHeroDefense(true);
 			}*/
 
-			if (!effect.isBlank()) {
-				Utils.exec(effect, Map.of(
+			if (!hasEffect()) {
+				Utils.exec(getEffect(), Map.of(
 						"ep", ep,
 						"self", this,
 						"trigger", trigger,
