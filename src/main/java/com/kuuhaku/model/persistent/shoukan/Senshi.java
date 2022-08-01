@@ -83,12 +83,13 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 	private int state = 0b10;
 	/*
 	0x00 F FFF FF
-	     │ │││ └┴ 0001 1111
-	     │ │││       │ │││└ solid
-	     │ │││       │ ││└─ available
-	     │ │││       │ │└── defending
-	     │ │││       │ └─── flipped
-	     │ │││       └ special summon
+	     │ │││ └┴ 0011 1111
+	     │ │││      ││ │││└ solid
+	     │ │││      ││ ││└─ available
+	     │ │││      ││ │└── defending
+	     │ │││      ││ └─── flipped
+	     │ │││      │└ special summon
+	     │ │││      └─ sealed
 	     │ ││└─ (0 - 15) sleeping
 	     │ │└── (0 - 15) stunned
 	     │ └─── (0 - 15) stasis
@@ -429,6 +430,14 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		state = Bit.set(state, 4, special);
 	}
 
+	public boolean isSealed() {
+		return Bit.on(state, 5);
+	}
+
+	public void setSealed(boolean sealed) {
+		state = Bit.set(state, 5, sealed);
+	}
+
 	public boolean isSleeping() {
 		return !isStunned() && Bit.on(state, 2, 4);
 	}
@@ -633,6 +642,7 @@ public class Senshi extends DAO<Senshi> implements Drawable<Senshi>, EffectHolde
 		byte base = 0b10;
 		base = (byte) Bit.set(base, 0, isSolid());
 		base = (byte) Bit.set(base, 4, isSPSummon());
+		base = (byte) Bit.set(base, 5, isSealed());
 
 		state = base;
 	}
