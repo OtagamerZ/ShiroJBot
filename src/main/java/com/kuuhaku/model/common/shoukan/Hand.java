@@ -252,6 +252,7 @@ public class Hand {
 					}
 
 					cards.add(deck.remove(i));
+					getGame().trigger(Trigger.ON_DRAW);
 					value--;
 					break;
 				}
@@ -270,6 +271,7 @@ public class Hand {
 
 			if (d != null) {
 				cards.add(d);
+				getGame().trigger(Trigger.ON_DRAW);
 			}
 		}
 	}
@@ -287,6 +289,7 @@ public class Hand {
 
 		if (d != null) {
 			cards.add(d);
+			getGame().trigger(Trigger.ON_DRAW);
 		}
 	}
 
@@ -310,6 +313,7 @@ public class Hand {
 				}
 
 				cards.add(deck.remove(i));
+				getGame().trigger(Trigger.ON_DRAW);
 				return;
 			}
 		}
@@ -325,6 +329,7 @@ public class Hand {
 				}
 
 				cards.add(deck.remove(i));
+				getGame().trigger(Trigger.ON_DRAW);
 				value--;
 			}
 		}
@@ -343,6 +348,7 @@ public class Hand {
 				}
 
 				cards.add(deck.remove(i));
+				getGame().trigger(Trigger.ON_DRAW);
 				value--;
 			}
 		}
