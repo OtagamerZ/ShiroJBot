@@ -58,12 +58,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				try {
 					@Language("Groovy") String calc = groups.getString("calc");
 					if (!calc.isBlank()) {
-						if (calc.startsWith(">")) {
-							calc = "Math.max(0," + calc.substring(1) + ")";
-						} else if (calc.startsWith("<")) {
-							calc = "Math.min(" + calc.substring(1) + ",0)";
-						}
-
+						calc = "import static java.lang.Math.*\n\n" + calc;
 						val = String.valueOf(
 								Utils.eval(calc, Map.of(
 										"mp", d.getMPCost(),
