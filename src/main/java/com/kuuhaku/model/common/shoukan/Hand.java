@@ -276,7 +276,7 @@ public class Hand {
 		}
 	}
 
-	public void draw() {
+	public Drawable<?> draw() {
 		LinkedList<Drawable<?>> deck = getDeck();
 		Drawable<?> d = deck.pollFirst();
 
@@ -291,15 +291,22 @@ public class Hand {
 			cards.add(d);
 			getGame().trigger(Trigger.ON_DRAW);
 		}
+
+		return d;
 	}
 
-	public void draw(int value) {
+	public List<Drawable<?>> draw(int value) {
+		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
-			draw();
+			Drawable<?> d = draw();
+			if (d != null) {
+				out.add(d);
+			}
 		}
+		return out;
 	}
 
-	public void draw(String card) {
+	public Drawable<?> draw(String card) {
 		LinkedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -312,50 +319,58 @@ public class Hand {
 					modHP(-10);
 				}
 
-				cards.add(deck.remove(i));
+				Drawable<?> out = deck.remove(i);
+				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
-				return;
+				return out;
 			}
 		}
+
+		return null;
 	}
 
-	public void draw(Race race) {
+	public Drawable<?> draw(Race race) {
 		LinkedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
-			Drawable<?> d = deck.get(i);
-			if (d instanceof Senshi s && s.getRace().isRace(race)) {
+			if (deck.get(i) instanceof Senshi s && s.getRace().isRace(race)) {
 				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
-				cards.add(deck.remove(i));
+				Drawable<?> out = deck.remove(i);
+				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
-				return;
+				return out;
 			}
 		}
+
+		return null;
 	}
 
-	public void drawSenshi(int value) {
+	public Drawable<?> drawSenshi() {
 		LinkedList<Drawable<?>> deck = getDeck();
 
-		for (int i = 0; i < deck.size() && value > 0; i++) {
-			if (deck.get(i) instanceof Senshi) {
+		for (int i = 0; i < deck.size(); i++) {
+			if (deck.get(i) instanceof Senshi s) {
 				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
-				cards.add(deck.remove(i));
+				Drawable<?> out = deck.remove(i);
+				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
-				value--;
+				return out;
 			}
 		}
+
+		return null;
 	}
 
-	public void drawEvogear(int value) {
+	public Drawable<?> drawEvogear() {
 		LinkedList<Drawable<?>> deck = getDeck();
 
-		for (int i = 0; i < deck.size() && value > 0; i++) {
+		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e) {
 				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
 					modHP(50);
@@ -364,11 +379,14 @@ public class Hand {
 					modHP(-10);
 				}
 
-				cards.add(deck.remove(i));
+				Drawable<?> out = deck.remove(i);
+				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
-				value--;
+				return out;
 			}
 		}
+
+		return null;
 	}
 
 	public LinkedList<Drawable<?>> getGraveyard() {
