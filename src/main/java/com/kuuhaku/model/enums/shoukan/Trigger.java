@@ -75,8 +75,9 @@ public enum Trigger {
 	// Single-use trigger
 	ACTIVATE,
 
-	// Triggered when targeted by a spell
+	// Triggered when targeted by effects
 	SPELL_TARGET,
+	EFFECT_TARGET,
 
 	// Trigger passed from another card
 	DEFER,

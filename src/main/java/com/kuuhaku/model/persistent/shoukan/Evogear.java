@@ -49,7 +49,7 @@ import java.awt.image.RescaleOp;
 import java.util.*;
 import java.util.List;
 
-import static com.kuuhaku.model.enums.shoukan.Trigger.ACTIVATE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
 
 @Entity

@@ -33,6 +33,10 @@ public record Target(Senshi card, Side side, int index, Trigger trigger) {
 	}
 
 	public Target(Senshi card, Side side, int index, Trigger trigger) {
+		if (card != null) {
+			card.getHand().getGame().trigger(Trigger.EFFECT_TARGET, new Source(card, Trigger.EFFECT_TARGET));
+		}
+
 		if (card == null || (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {
 			this.card = null;
 			this.side = null;
@@ -46,9 +50,11 @@ public record Target(Senshi card, Side side, int index, Trigger trigger) {
 		}
 	}
 
-	public void execute(EffectParameters ep) {
+	public boolean execute(EffectParameters ep) {
 		if (card != null) {
-			card.execute(ep);
+			return card.execute(ep);
 		}
+
+		return false;
 	}
 }

@@ -961,39 +961,41 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
+		boolean trig = false;
 		List<SlotColumn> slts = getSlots(side);
 		for (SlotColumn slt : slts) {
 			Senshi s = slt.getTop();
 			if (s != null) {
-				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				trig |= s.execute(new EffectParameters(trigger, s.asSource(trigger)));
 			}
 
 			s = slt.getBottom();
 			if (s != null) {
-				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				trig |= s.execute(new EffectParameters(trigger, s.asSource(trigger)));
 			}
 		}
 
-		triggerEOTs(new EffectParameters(trigger));
+		if (trig) {
+			triggerEOTs(new EffectParameters(trigger));
+		}
 	}
 
 	public void trigger(Trigger trigger, Source source) {
 		if (restoring) return;
 
 		EffectParameters ep = new EffectParameters(trigger, source);
-		source.execute(ep);
-
-		triggerEOTs(new EffectParameters(trigger, source));
+		if (source.execute(ep)) {
+			triggerEOTs(new EffectParameters(trigger, source));
+		}
 	}
 
 	public void trigger(Trigger trigger, Source source, Target target) {
 		if (restoring) return;
 
 		EffectParameters ep = new EffectParameters(trigger, source, target);
-		source.execute(ep);
-		target.execute(ep);
-
-		triggerEOTs(new EffectParameters(trigger, source, target));
+		if (source.execute(ep) | target.execute(ep)) {
+			triggerEOTs(new EffectParameters(trigger, source, target));
+		}
 	}
 
 	public Set<EffectOverTime> getEOTs() {

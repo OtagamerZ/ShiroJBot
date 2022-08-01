@@ -32,9 +32,11 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 		this(card, card.getHand().getSide(), card.getSlot().getIndex(), trigger);
 	}
 
-	public void execute(EffectParameters ep) {
+	public boolean execute(EffectParameters ep) {
 		if (card != null && card instanceof EffectHolder eh) {
-			eh.execute(ep);
+			return eh.execute(ep);
 		}
+
+		return false;
 	}
 }
