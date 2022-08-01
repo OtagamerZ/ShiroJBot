@@ -83,7 +83,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	@Override
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), players))
-				.and(m -> getTurn() % inGame.size() == inGame.indexOf(m.getAuthor().getId()))
+				.and(m -> m.getAuthor().getId().equals(inGame.get()))
 				.test(message);
 	}
 
@@ -197,7 +197,6 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
-		close(code);
 		getChannel().sendMessage(locale.get(msg, args))
 				.queue(m -> {
 					if (message != null) {
@@ -209,6 +208,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 						}
 					}
 				});
+		close(code);
 	}
 
 	@Override
