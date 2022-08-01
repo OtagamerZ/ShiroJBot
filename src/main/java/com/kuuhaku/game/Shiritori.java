@@ -69,7 +69,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 		setTimeout(turn -> {
 			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
-			inGame.remove(inGame.get());
+			inGame.remove();
 
 			if (inGame.size() == 1) {
 				reportResult(GameReport.SUCCESS, "str/game_end_alt", inGame.get());
@@ -103,13 +103,13 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@PlayerAction("(?<word>[a-zA-Z]{3,})")
 	private void nextWord(JSONObject args) {
-		String word = args.getString("word");
+		String word = args.getString("word").toLowerCase(Locale.ROOT);
 
 		try {
 			if (scanWord(word)) {
 				if (used.contains(word)) {
 					getChannel().sendMessage(locale.get("str/game_out_shiritori", "<@" + inGame.get() + ">")).queue();
-					inGame.remove(inGame.get());
+					inGame.remove();
 
 					if (inGame.size() == 1) {
 						reportResult(GameReport.SUCCESS, "str/game_end_alt", inGame.get());
@@ -220,7 +220,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 				getChannel().sendMessage(locale.get("alert/shiritori_sudden_death")).queue();
 				setTimeout(turn -> {
 					getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
-					inGame.remove(inGame.get());
+					inGame.remove();
 
 					if (inGame.size() == 1) {
 						reportResult(GameReport.SUCCESS, "str/game_end_alt", inGame.get());

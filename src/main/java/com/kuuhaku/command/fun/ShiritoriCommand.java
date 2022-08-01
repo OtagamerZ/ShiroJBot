@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -90,8 +91,9 @@ public class ShiritoriCommand implements Executable {
 
 						try {
 							Shiritori shi = new Shiritori(locale,
-									Stream.concat(others.stream(), Stream.of(event.member()))
+									Stream.concat(Stream.of(event.member()), others.stream())
 											.map(Member::getId)
+											.sorted(Collections.reverseOrder())
 											.toArray(String[]::new)
 							);
 							shi.start(event.guild(), event.channel())
