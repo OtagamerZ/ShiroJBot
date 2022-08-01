@@ -181,7 +181,11 @@ public class Evogear extends DAO<Evogear> implements Drawable<Evogear>, EffectHo
 
 	public void setLeech(Hand leech) {
 		if (this.leech != null) {
-			this.leech.getLeeches().remove(this);
+			if (leech == null) {
+				this.leech.getLeeches().remove(this);
+			} else {
+				return;
+			}
 		}
 
 		this.leech = leech;
