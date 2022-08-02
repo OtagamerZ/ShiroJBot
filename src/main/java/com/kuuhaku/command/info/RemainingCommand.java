@@ -91,7 +91,7 @@ public class RemainingCommand implements Executable {
 			} else {
 				return c.getRarity().getEmote() + name;
 			}
-		}, p -> eb.setFooter(footer + "\n" + locale.get("str/page", p, (int) Math.ceil(cards.size() / 15d))));
+		}, (p, t) -> eb.setFooter(footer + "\n" + locale.get("str/page", p + 1, t)));
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}

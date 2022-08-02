@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -401,10 +402,10 @@ public abstract class Utils {
 	}
 
 	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper) {
-		return generatePages(eb, list, itemsPerPage, mapper, p -> {});
+		return generatePages(eb, list, itemsPerPage, mapper, (p, t) -> {});
 	}
 
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper, Consumer<Integer> finisher) {
+	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper, BiConsumer<Integer, Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
 		for (int i = 0; i < chunks.size(); i++) {
@@ -415,7 +416,7 @@ public abstract class Utils {
 				eb.addField(mapper.apply(t));
 			}
 
-			finisher.accept(i);
+			finisher.accept(i, chunks.size());
 
 			pages.add(new InteractPage(eb.build()));
 		}
@@ -424,10 +425,10 @@ public abstract class Utils {
 	}
 
 	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper) {
-		return generateStringPages(eb, list, itemsPerPage, mapper, p -> {});
+		return generateStringPages(eb, list, itemsPerPage, mapper, (p, t) -> {});
 	}
 
-	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper, Consumer<Integer> finisher) {
+	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
 		StringBuilder sb = eb.getDescriptionBuilder();
 
 		List<Page> pages = new ArrayList<>();
@@ -440,7 +441,7 @@ public abstract class Utils {
 				sb.append(mapper.apply(t)).append("\n");
 			}
 
-			finisher.accept(i);
+			finisher.accept(i, chunks.size());
 
 			pages.add(new InteractPage(eb.build()));
 		}
