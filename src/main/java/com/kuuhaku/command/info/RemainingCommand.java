@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Anime;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -65,14 +66,16 @@ public class RemainingCommand implements Executable {
 		int total = anime.getCount();
 		Pair<Integer, Integer> count = kp.countCards(anime);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/anime_cards", anime))
-				.setFooter(locale.get("str/owned_cards",
-						Calc.prcntToInt(count.getFirst() + count.getSecond(), total * 2),
-						Calc.prcntToInt(count.getFirst(), total),
-						Calc.prcntToInt(count.getSecond(), total)
-				));
+				.setTitle(locale.get("str/anime_cards", anime));
 
-		List<Page> pages = Utils.generateStringPages(eb, anime.getCards(), 15, c -> {
+		String footer = locale.get("str/owned_cards",
+				Calc.prcntToInt(count.getFirst() + count.getSecond(), total * 2),
+				Calc.prcntToInt(count.getFirst(), total),
+				Calc.prcntToInt(count.getSecond(), total)
+		);
+
+		List<Card> cards = anime.getCards();
+		List<Page> pages = Utils.generateStringPages(eb, cards, 15, c -> {
 			String name = c.getName();
 
 			String suffix = "";
@@ -88,7 +91,7 @@ public class RemainingCommand implements Executable {
 			} else {
 				return c.getRarity().getEmote() + name;
 			}
-		});
+		}, p -> eb.setFooter(footer + "\n" + locale.get("str/page", p, (int) Math.ceil(cards.size() / 15d))));
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}

@@ -392,8 +392,8 @@ public class Deck extends DAO<Deck> {
 				String text = locale.get("str/deck_origin", syn.getName(locale));
 				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-				int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 13));
-				int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 7));
+				int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 12));
+				int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 6));
 				Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
 					g1.drawImage(icons.get(0), majOffset + 5, 10, 75, 75, null);
 					g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);

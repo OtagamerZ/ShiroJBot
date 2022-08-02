@@ -401,14 +401,21 @@ public abstract class Utils {
 	}
 
 	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper) {
+		return generatePages(eb, list, itemsPerPage, mapper, p -> {});
+	}
+
+	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper, Consumer<Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
-		for (List<T> chunk : chunks) {
+		for (int i = 0; i < chunks.size(); i++) {
+			List<T> chunk = chunks.get(i);
 			eb.clearFields();
 
 			for (T t : chunk) {
 				eb.addField(mapper.apply(t));
 			}
+
+			finisher.accept(i);
 
 			pages.add(new InteractPage(eb.build()));
 		}
@@ -417,16 +424,23 @@ public abstract class Utils {
 	}
 
 	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper) {
+		return generateStringPages(eb, list, itemsPerPage, mapper, p -> {});
+	}
+
+	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper, Consumer<Integer> finisher) {
 		StringBuilder sb = eb.getDescriptionBuilder();
 
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
-		for (List<T> chunk : chunks) {
+		for (int i = 0; i < chunks.size(); i++) {
+			List<T> chunk = chunks.get(i);
 			sb.setLength(0);
 
 			for (T t : chunk) {
 				sb.append(mapper.apply(t)).append("\n");
 			}
+
+			finisher.accept(i);
 
 			pages.add(new InteractPage(eb.build()));
 		}
