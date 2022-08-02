@@ -384,11 +384,16 @@ public abstract class Utils {
 	public static <T> Page generatePage(EmbedBuilder eb, List<T> list, int itemsPerColumn, Function<T, String> mapper) {
 		eb.clearFields();
 
+		XStringBuilder sb = new XStringBuilder();
 		List<List<T>> cols = chunkify(list, (int) Math.ceil(list.size() / (float) itemsPerColumn));
 		for (List<T> col : cols) {
+			sb.clear();
+
 			for (T t : col) {
-				eb.addField(new MessageEmbed.Field(Constants.VOID, mapper.apply(t), true));
+				sb.appendNewLine(mapper.apply(t));
 			}
+
+			eb.addField(new MessageEmbed.Field(Constants.VOID, sb.toString(), true));
 		}
 
 		return new InteractPage(eb.build());
