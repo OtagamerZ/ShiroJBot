@@ -692,7 +692,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		g2d.setFont(FONT);
 		g2d.setColor(deck.getFrame().getPrimaryColor());
-		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
+		String name = StringUtils.abbreviate(getVanity().getName(), MAX_NAME_LENGTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
 
 		if (!desc.isEmpty()) {
