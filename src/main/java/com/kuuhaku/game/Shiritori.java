@@ -72,7 +72,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 			inGame.remove();
 
 			if (inGame.size() == 1) {
-				reportResult(GameReport.SUCCESS, "str/game_end_alt", inGame.get());
+				reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.get() + ">");
 				return;
 			}
 
@@ -112,7 +112,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 					inGame.remove();
 
 					if (inGame.size() == 1) {
-						reportResult(GameReport.SUCCESS, "str/game_end_alt", inGame.get());
+						reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.get() + ">");
 						return;
 					}
 
@@ -223,7 +223,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 					inGame.remove();
 
 					if (inGame.size() == 1) {
-						reportResult(GameReport.SUCCESS, "str/game_end_alt", inGame.get());
+						reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.get() + ">");
 						return;
 					}
 
