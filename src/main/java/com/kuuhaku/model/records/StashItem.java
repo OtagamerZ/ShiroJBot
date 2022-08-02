@@ -45,7 +45,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 			location = " (" + locale.get("str/market", sc.getPrice()) + ")";
 		}
 
-		String rarity = locale.get("rarity/" + sc.getCard().getRarity());
+		String rarity = locale.get("type/" + sc.getType());
 		if (sc.getType() == CardType.EVOGEAR) {
 			Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 			rarity += " " + StringUtils.repeat("★", ev.getTier());
@@ -57,6 +57,8 @@ public record StashItem(I18N locale, StashedCard sc) {
 				case NIGHT -> ":crescent_moon:";
 				case DUNGEON -> ":japanese_castle:";
 			};
+		} else {
+			rarity += locale.get("rarity/" + sc.getCard().getRarity());
 		}
 
 		String quality = "";
@@ -66,7 +68,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 		}
 
 		return "**" + sc + location + "**" +
-				"\n" + sc.getCard().getRarity().getEmote() + locale.get("type/" + sc.getType()) + " (" + rarity + ")" +
+				"\n" + sc.getCard().getRarity().getEmote() + " (" + rarity + ")" +
 				"\n" + sc.getCard().getAnime().toString() +
 				"\n" + quality + "\n";
 	}
