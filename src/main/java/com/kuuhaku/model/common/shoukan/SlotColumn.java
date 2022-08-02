@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -82,12 +83,17 @@ public class SlotColumn {
 
 		this.top = top;
 		if (this.top != null) {
+			Hand h = game.getHands().get(side);
+
 			this.top.setSlot(this);
-			this.top.setHand(game.getHands().get(side));
+			this.top.setHand(h);
 
 			if (!this.top.isFlipped()) {
-				Hand h = this.top.getHand();
 				h.getGame().trigger(Trigger.ON_SUMMON, this.top.asSource(Trigger.ON_SUMMON));
+			}
+
+			if (h.getOrigin().synergy() == Race.DEMIGOD && this.top.isFusion()) {
+				h.modMP(1);
 			}
 		}
 	}
@@ -117,13 +123,18 @@ public class SlotColumn {
 
 		this.bottom = bottom;
 		if (this.bottom != null) {
+			Hand h = game.getHands().get(side);
+
 			this.bottom.setSlot(this);
-			this.bottom.setHand(game.getHands().get(side));
+			this.bottom.setHand(h);
 			this.bottom.getEquipments().clear();
 
 			if (!this.bottom.isFlipped()) {
-				Hand h = this.bottom.getHand();
 				h.getGame().trigger(Trigger.ON_SUMMON, this.bottom.asSource(Trigger.ON_SUMMON));
+			}
+
+			if (h.getOrigin().synergy() == Race.DEMIGOD && this.bottom.isFusion()) {
+				h.modMP(1);
 			}
 		}
 	}
