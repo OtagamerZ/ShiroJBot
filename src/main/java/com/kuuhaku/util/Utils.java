@@ -385,7 +385,7 @@ public abstract class Utils {
 		eb.clearFields();
 
 		XStringBuilder sb = new XStringBuilder();
-		List<List<T>> cols = chunkify(list, (int) Math.ceil(list.size() / (float) itemsPerColumn));
+		List<List<T>> cols = chunkify(list, itemsPerColumn);
 		for (List<T> col : cols) {
 			sb.clear();
 
@@ -399,17 +399,17 @@ public abstract class Utils {
 		return new InteractPage(eb.build());
 	}
 
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int columns, Function<T, String> mapper) {
-		return generatePages(eb, list, itemsPerPage, columns, mapper, (p, t) -> {
+	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper) {
+		return generatePages(eb, list, itemsPerPage, itemsPerColumn, mapper, (p, t) -> {
 		});
 	}
 
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int columns, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
+	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
 		for (int i = 0; i < chunks.size(); i++) {
 			finisher.accept(i, chunks.size());
-			pages.add(generatePage(eb, chunks.get(i), columns, mapper));
+			pages.add(generatePage(eb, chunks.get(i), itemsPerColumn, mapper));
 		}
 
 		return pages;
