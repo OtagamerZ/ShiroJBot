@@ -488,7 +488,12 @@ public class Arena implements Renderer {
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
-			Graph.drawOutlinedString(g, hand.getName(), x, y, 10, Color.black);
+			String name = hand.getName();
+			if (game.getCurrentSide() == hand.getSide()) {
+				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				name = "--> " + hand.getName() + " <--";
+			}
+			Graph.drawOutlinedString(g, name, x, y, 10, Color.black);
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
 			Graph.applyTransformed(g,

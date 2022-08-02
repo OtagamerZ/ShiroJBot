@@ -172,7 +172,7 @@ public class SlotColumn {
 
 	public SlotColumn getRight() {
 		List<SlotColumn> slts = game.getArena().getSlots(side);
-		if (index < slts.size()) {
+		if (index < slts.size() - 1) {
 			return slts.get(index + 1);
 		}
 

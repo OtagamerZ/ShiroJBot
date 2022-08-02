@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
@@ -709,7 +710,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (!stats.getWrite().isBlank()) {
 			String val = String.valueOf(stats.getWrite());
 			g2d.setColor(Color.ORANGE);
-			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 18));
+			g2d.setFont(Drawable.FONT);
 			Graph.drawOutlinedString(g2d, val, 25, 51 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 		}
 
