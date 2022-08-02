@@ -128,6 +128,10 @@ public class SlotColumn {
 		}
 	}
 
+	public List<Senshi> getCards() {
+		return List.of(getTop(), getBottom());
+	}
+
 	public int getLock() {
 		if (Bit.on(state, 0)) return -1;
 
