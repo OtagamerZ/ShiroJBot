@@ -75,7 +75,7 @@ public class RemainingCommand implements Executable {
 		);
 
 		List<Card> cards = anime.getCards();
-		List<Page> pages = Utils.generateStringPages(eb, cards, 15, c -> {
+		List<Page> pages = Utils.generatePages(eb, cards, 20, 10, c -> {
 			String name = c.getName();
 
 			String suffix = "";
