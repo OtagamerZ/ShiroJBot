@@ -73,7 +73,7 @@ public class AttrMod {
 			}
 		}
 
-		return expiration == 0;
+		return value == 0 || expiration == 0;
 	}
 
 	@Override
