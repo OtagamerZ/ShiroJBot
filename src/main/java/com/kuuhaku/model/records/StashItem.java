@@ -58,7 +58,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 				case DUNGEON -> ":japanese_castle:";
 			};
 		} else {
-			rarity += locale.get("rarity/" + sc.getCard().getRarity());
+			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity());
 		}
 
 		String quality = "";
@@ -70,6 +70,6 @@ public record StashItem(I18N locale, StashedCard sc) {
 		return "**" + sc + location + "**" +
 				"\n" + sc.getCard().getRarity().getEmote() + rarity +
 				"\n" + sc.getCard().getAnime().toString() +
-				"\n" + quality + "\n";
+				(!quality.isBlank() ? "\n" + quality + "\n" : "\n");
 	}
 }
