@@ -386,7 +386,7 @@ public class Deck extends DAO<Deck> {
 						+ "\n\n\n\n  \"" + ori.major().getDescription(locale) + "\"";
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
-				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
+				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.synergy().getColor());
 
 				String text = locale.get("str/deck_origin", syn.getName(locale));
