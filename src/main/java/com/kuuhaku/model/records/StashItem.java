@@ -68,7 +68,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 		}
 
 		return "**" + sc + location + "**" +
-				"\n" + sc.getCard().getRarity().getEmote() + " (" + rarity + ")" +
+				"\n" + sc.getCard().getRarity().getEmote() + rarity +
 				"\n" + sc.getCard().getAnime().toString() +
 				"\n" + quality + "\n";
 	}
