@@ -71,14 +71,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						);
 
 						val = StringUtils.abbreviate(
-								str.replaceFirst("\\{.+}", Utils.roundToString(Double.parseDouble(val), 2)),
+								str.replaceFirst("\\{.+}", String.valueOf((int) Double.parseDouble(val))),
 								Drawable.MAX_DESC_LENGTH
 						);
 					} else {
 						val = str;
 					}
 
-					g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 10));
+					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
 					switch (groups.getString("color", "")) {
 						case "mp" -> g2d.setColor(new Color(0x3F9EFF));
 						case "hp" -> g2d.setColor(new Color(0x85C720));

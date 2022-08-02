@@ -175,38 +175,44 @@ public class Arena implements Renderer {
 							backline = 350 + MARGIN.y;
 						}
 
-						if (slot.hasTop()) {
-							Senshi s = slot.getTop();
+						if (slot.isLocked()) {
+							BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
+							g2.drawImage(hole, x, frontline, null);
+							g2.drawImage(hole, x, backline, null);
+						} else {
+							if (slot.hasTop()) {
+								Senshi s = slot.getTop();
 
-							g2.drawImage(s.render(locale, deck), x, frontline, null);
+								g2.drawImage(s.render(locale, deck), x, frontline, null);
 
-							double mult = s.getFieldMult(getField());
-							BufferedImage indicator = null;
-							if (mult > 1) {
-								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
-							} else if (mult < 1) {
-								indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
+								double mult = s.getFieldMult(getField());
+								BufferedImage indicator = null;
+								if (mult > 1) {
+									indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
+								} else if (mult < 1) {
+									indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
+								}
+								g2.drawImage(indicator, x - 15, frontline - 15, null);
+
+								if (!s.getEquipments().isEmpty()) {
+									Graph.applyTransformed(g2, x, equips, g3 -> {
+										Dimension resized = new Dimension(225 / 3, 350 / 3);
+										int middle = 225 / 2 - resized.width / 2;
+
+										for (int i = 0; i < s.getEquipments().size(); i++) {
+											g3.drawImage(s.getEquipments().get(i).render(locale, deck),
+													middle + (resized.width + MARGIN.x / 2) * (i - 1), 0,
+													resized.width, resized.height,
+													null
+											);
+										}
+									});
+								}
 							}
-							g2.drawImage(indicator, x - 15, frontline - 15, null);
 
-							if (!s.getEquipments().isEmpty()) {
-								Graph.applyTransformed(g2, x, equips, g3 -> {
-									Dimension resized = new Dimension(225 / 3, 350 / 3);
-									int middle = 225 / 2 - resized.width / 2;
-
-									for (int i = 0; i < s.getEquipments().size(); i++) {
-										g3.drawImage(s.getEquipments().get(i).render(locale, deck),
-												middle + (resized.width + MARGIN.x / 2) * (i - 1), 0,
-												resized.width, resized.height,
-												null
-										);
-									}
-								});
+							if (slot.hasBottom()) {
+								g2.drawImage(slot.getBottom().render(locale, deck), x, backline, null);
 							}
-						}
-
-						if (slot.hasBottom()) {
-							g2.drawImage(slot.getBottom().render(locale, deck), x, backline, null);
 						}
 					}
 				});
