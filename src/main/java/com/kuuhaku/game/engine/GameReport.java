@@ -23,7 +23,8 @@ public class GameReport extends RuntimeException {
 	public static final byte INITIALIZATION_ERROR = 1;
 	public static final byte GAME_TIMEOUT = 2;
 	public static final byte NO_DECK = 3;
-	public static final byte DICT_NOT_FOUND = 4;
+	public static final byte INVALID_DECK = 4;
+	public static final byte DICT_NOT_FOUND = 5;
 
 	private final byte code;
 	private final String content;
@@ -51,6 +52,7 @@ public class GameReport extends RuntimeException {
 			case SUCCESS -> "SUCCESS";
 			case INITIALIZATION_ERROR -> "INITIALIZATION_ERROR";
 			case GAME_TIMEOUT -> "GAME_TIMEOUT";
+			case INVALID_DECK -> "INVALID_DECK";
 			case NO_DECK -> "NO_DECK";
 			case DICT_NOT_FOUND -> "DICT_NOT_FOUND";
 			default -> "UNKNOWN_CODE";

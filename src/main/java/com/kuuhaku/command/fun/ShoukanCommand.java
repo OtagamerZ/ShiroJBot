@@ -87,10 +87,21 @@ public class ShoukanCommand implements Executable {
 
 					updateTip(locale, skn, m);
 				} catch (GameReport e) {
-					if (e.getContent().equals(event.user().getId())) {
-						event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-					} else {
-						event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+					switch (e.getCode()) {
+						case GameReport.NO_DECK -> {
+							if (e.getContent().equals(event.user().getId())) {
+								event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+							} else {
+								event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+							}
+						}
+						case GameReport.INVALID_DECK -> {
+							if (e.getContent().equals(event.user().getId())) {
+								event.channel().sendMessage(locale.get("error/invalid_deck", data.config().getPrefix())).queue();
+							} else {
+								event.channel().sendMessage(locale.get("error/invalid_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+							}
+						}
 					}
 				}
 
