@@ -21,8 +21,10 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONObject;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -115,6 +117,17 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public void setPrice(int price) {
+		if (price == 0) {
+			GlobalProperty gp = Utils.getOr(DAO.find(GlobalProperty.class, "daily_offer"), new GlobalProperty("daily_offer", "{}"));
+			JSONObject dailyOffer = new JSONObject(gp.getValue());
+
+			if (dailyOffer.getInt("id") == id) {
+				dailyOffer.put("id", "-1");
+				gp.setValue(dailyOffer);
+				gp.save();
+			}
+		}
+
 		this.price = price;
 	}
 

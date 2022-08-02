@@ -101,8 +101,6 @@ public class Market {
 		if (sc == null) return false;
 
 		GlobalProperty gp = Utils.getOr(DAO.find(GlobalProperty.class, "daily_offer"), new GlobalProperty("daily_offer", "{}"));
-		JSONObject dailyOffer = new JSONObject(gp.getValue());
-
 		int price = sc.getPrice();
 
 		Account seller = sc.getKawaipon().getAccount();
@@ -113,7 +111,7 @@ public class Market {
 
 		Account buyer = DAO.find(Account.class, uid);
 		try {
-			int sale = dailyOffer.getInt("id");
+			int sale = new JSONObject(gp.getValue()).getInt("id");
 			if (sale == sc.getId()) {
 				buyer.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
 			}
@@ -124,10 +122,6 @@ public class Market {
 		sc.setKawaipon(buyer.getKawaipon());
 		sc.setPrice(0);
 		sc.save();
-
-		dailyOffer.put("id", "-1");
-		gp.setValue(dailyOffer);
-		gp.save();
 
 		return true;
 	}
