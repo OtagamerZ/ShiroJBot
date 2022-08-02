@@ -762,7 +762,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String toString() {
-		return card.getName();
+		return getVanity().getName();
 	}
 
 	public static Senshi getRandom() {
