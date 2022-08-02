@@ -20,7 +20,6 @@ package com.kuuhaku.model.records;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.Market;
-import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -35,18 +34,6 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 
 	@Override
 	public String toString() {
-		String uid = sc.getKawaipon().getUid();
-
-		Trade t = Trade.getPending().get(uid);
-		String location = "";
-		if (t != null && t.getSelfOffers(uid).contains(sc.getId())) {
-			location = " (" + locale.get("str/trade") + ")";
-		} else if (sc.getDeck() != null) {
-			location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
-		} else if (sc.getPrice() > 0) {
-			location = " (" + locale.get("str/market", sc.getPrice()) + ")";
-		}
-
 		String rarity = locale.get("rarity/" + sc.getCard().getRarity());
 		if (sc.getType() == CardType.EVOGEAR) {
 			Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
@@ -80,7 +67,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 				: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
 		);
 
-		return "**" + sc + location + price + "**" +
+		return "**" + sc + " " + price + "**" +
 				"\n" + sc.getCard().getRarity().getEmote() + locale.get("type/" + sc.getType()) +
 				"\n" + rarity +
 				"\n" + sc.getCard().getAnime().toString() +
