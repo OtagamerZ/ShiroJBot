@@ -326,14 +326,11 @@ public abstract class Graph {
 	}
 
 	public static Color mix(Color a, Color b) {
-		int[] rgbA = unpackRGB(a.getRGB());
-		int[] rgbB = unpackRGB(b.getRGB());
-
 		return new Color(
-				(rgbA[0] + rgbB[0]) / 2,
-				(rgbA[1] + rgbB[1]) / 2,
-				(rgbA[2] + rgbB[2]) / 2,
-				(rgbA[3] + rgbB[3]) / 2
+				(a.getRed() + b.getRed()) / 2,
+				(a.getGreen() + b.getGreen()) / 2,
+				(a.getBlue() + b.getBlue()) / 2,
+				(a.getAlpha() + b.getAlpha()) / 2
 		);
 	}
 
@@ -391,13 +388,13 @@ public abstract class Graph {
 	}
 
 	public static int rotate(int color, int deg) {
-		int[] rgb = Graph.unpackRGB(color);
+		int[] rgb = unpackRGB(color);
 
 		float[] hsv;
 		hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
 		hsv[0] = ((hsv[0] * 360 + deg) % 360) / 360;
 
-		rgb = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-		return Graph.packRGB(255, rgb[1], rgb[2], rgb[3]);
+		rgb = unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+		return packRGB(255, rgb[1], rgb[2], rgb[3]);
 	}
 }
