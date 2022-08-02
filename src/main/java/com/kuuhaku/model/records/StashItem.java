@@ -64,12 +64,12 @@ public record StashItem(I18N locale, StashedCard sc) {
 		String quality = "";
 		KawaiponCard kc = sc.getKawaiponCard();
 		if (kc != null && kc.getQuality() > 0) {
-			quality = locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1));
+			quality = " (" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)) + ")";
 		}
 
 		return "**" + sc + location + "**" +
-				"\n" + sc.getCard().getRarity().getEmote() + rarity +
+				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +
 				"\n" + sc.getCard().getAnime().toString() +
-				(!quality.isBlank() ? "\n" + quality + "\n" : "\n");
+				"\n";
 	}
 }

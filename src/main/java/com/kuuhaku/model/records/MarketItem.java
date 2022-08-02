@@ -53,7 +53,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 		String quality = "";
 		KawaiponCard kc = sc.getKawaiponCard();
 		if (kc != null && kc.getQuality() > 0) {
-			quality = locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1));
+			quality = " (" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)) + ")";
 		}
 
 		int sale;
@@ -70,8 +70,8 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 		);
 
 		return "**" + sc + " " + price + "**" +
-				"\n" + sc.getCard().getRarity().getEmote() + rarity +
+				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +
 				"\n" + sc.getCard().getAnime().toString() +
-				(!quality.isBlank() ? "\n" + quality + "\n" : "\n");
+				"\n";
 	}
 }
