@@ -23,6 +23,11 @@ import com.kuuhaku.Main;
 import com.luciad.imageio.webp.WebPWriteParam;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpHead;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -73,8 +78,8 @@ public abstract class IO {
 	public static BufferedImage getImage(String url) {
 		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(url, s -> {
 			try {
-				return getBytes(ImageIO.read(new URL(url)), Utils.extract(url, "(?<=\\.)\\w+$"));
-			} catch (IOException e) {
+				return getBytes(ImageIO.read(new URL(url)), Utils.extract(url, getImageType(url)));
+			} catch (IllegalArgumentException | IOException e) {
 				return new byte[0];
 			}
 		});
@@ -135,6 +140,8 @@ public abstract class IO {
 	}
 
 	public static BufferedImage imageFromBytes(byte[] bytes) {
+		if (bytes.length == 0) return null;
+
 		try (Buffer buf = new Buffer().write(bytes)) {
 			return ImageIO.read(buf.inputStream());
 		} catch (IOException e) {
@@ -192,6 +199,43 @@ public abstract class IO {
 
 		try (gzip; buf) {
 			return new String(IOUtils.toByteArray(gzip), StandardCharsets.UTF_8);
+		}
+	}
+
+	public static String getImageType(String url) {
+		try {
+			HttpHead req = new HttpHead(url);
+
+			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
+				Header h = res.getLastHeader(HttpHeaders.CONTENT_TYPE);
+
+
+				if (h != null) {
+					return h.getValue().substring(h.getValue().indexOf("/") + 1);
+				} else {
+					return null;
+				}
+			}
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	public static long getImageSize(String url) {
+		try {
+			HttpHead req = new HttpHead(url);
+
+			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
+				Header h = res.getLastHeader(HttpHeaders.CONTENT_LENGTH);
+
+				if (h != null) {
+					return NumberUtils.toLong(h.getValue(), 0);
+				} else {
+					return 0;
+				}
+			}
+		} catch (IOException e) {
+			return 0;
 		}
 	}
 }

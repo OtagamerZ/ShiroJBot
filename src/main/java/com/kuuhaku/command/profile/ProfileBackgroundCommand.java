@@ -26,7 +26,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -52,7 +52,7 @@ public class ProfileBackgroundCommand implements Executable {
 				return;
 			}
 
-			long size = Graph.getImageSize(text);
+			long size = IO.getImageSize(text);
 			if (size == 0) {
 				event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 				return;
