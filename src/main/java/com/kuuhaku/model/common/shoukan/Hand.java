@@ -23,7 +23,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
-import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
@@ -44,7 +43,6 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
-import kotlin.Triple;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
@@ -149,39 +147,7 @@ public class Hand {
 
 		this.side = side;
 		this.origin = userDeck.getOrigins();
-
-		BaseValues base;
-		try {
-			base = new BaseValues(() -> {
-				int bHP = 5000;
-				AccFunction<Integer, Integer> mpGain = t -> 5;
-				AccFunction<Integer, Integer> handCap = t -> 5;
-
-				mpGain = switch (origin.major()) {
-					case DEMON -> {
-						bHP -= 1500;
-						yield mpGain.accumulate((t, mp) -> mp + (int) (5 - 5 * getHPPrcnt()));
-					}
-					case DIVINITY -> mpGain.accumulate((t, mp) -> mp + (int) (mp * userDeck.getMetaDivergence() / 2));
-					default -> mpGain;
-				};
-
-				if (origin.minor() == Race.BEAST) {
-					handCap = mpGain.accumulate((t, cards) -> cards + t / 25);
-				}
-
-				if (origin.synergy() == Race.FEY) {
-					mpGain = mpGain.accumulate((t, mp) -> mp * (Calc.chance(2) ? 2 : 1));
-				} else if (origin.synergy() == Race.GHOST) {
-					mpGain = mpGain.accumulate((t, mp) -> mp + (t % 5 == 0 ? 1 : 0));
-				}
-
-				return new Triple<>(bHP, mpGain, handCap);
-			});
-		} catch (Exception e) {
-			base = new BaseValues();
-		}
-		this.base = base;
+		this.base = userDeck.getBaseValues(this);
 		this.hp = base.hp();
 
 		deck.addAll(

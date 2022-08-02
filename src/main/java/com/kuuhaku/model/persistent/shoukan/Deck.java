@@ -20,7 +20,9 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.FrameColor;
 import com.kuuhaku.model.enums.I18N;
@@ -34,14 +36,14 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
+import jakarta.persistence.*;
+import kotlin.Triple;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
 import org.knowm.xchart.RadarChart;
-
-import jakarta.persistence.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -272,7 +274,7 @@ public class Deck extends DAO<Deck> {
 		AtomicInteger totalDmg = new AtomicInteger();
 		AtomicInteger totalDef = new AtomicInteger();
 
-		BaseValues base = getBaseValues();
+		BaseValues base = getBaseValues(null);
 		double avgMana = Calc.average((double) base.mpGain().apply(1), base.mpGain().apply(5), base.mpGain().apply(10));
 		int weight = Calc.prcntToInt(getEvoWeight(), 24);
 		String color = "FFFFFF";
@@ -476,13 +478,46 @@ public class Deck extends DAO<Deck> {
 		return new Origin(out);
 	}
 
-	public BaseValues getBaseValues() {
-		int reduction = (int) Math.max(0, (Calc.prcnt(getEvoWeight(), 24) - 1) * 10);
-		return new BaseValues(
-				5000,
-				t -> 5 - reduction,
-				t -> 5
-		);
+	public BaseValues getBaseValues(Hand h) {
+		try {
+			return new BaseValues(() -> {
+				Origin origin = getOrigins();
+				int bHP = 5000;
+				double reduction = Math.max(0, Calc.prcnt(getEvoWeight(), 24) - 1);
+				AccFunction<Integer, Integer> mpGain = t -> 5;
+				AccFunction<Integer, Integer> handCap = t -> 5;
+
+				mpGain = switch (origin.major()) {
+					case DEMON -> {
+						bHP -= 1500;
+						if (h != null) {
+							yield mpGain.accumulate((t, mp) -> mp + (int) (5 - 5 * h.getHPPrcnt()));
+						} else {
+							yield mpGain.accumulate((t, mp) -> mp);
+						}
+					}
+					case DIVINITY -> mpGain.accumulate((t, mp) -> mp + (int) (mp * getMetaDivergence() / 2));
+					default -> mpGain;
+				};
+
+				if (origin.minor() == Race.BEAST) {
+					handCap = mpGain.accumulate((t, cards) -> cards + t / 25);
+				}
+
+				if (origin.synergy() == Race.FEY) {
+					mpGain = mpGain.accumulate((t, mp) -> mp * (Calc.chance(2) ? 2 : 1));
+				} else if (origin.synergy() == Race.GHOST) {
+					mpGain = mpGain.accumulate((t, mp) -> mp + (t % 5 == 0 ? 1 : 0));
+				}
+
+				return new Triple<>(
+						bHP,
+						mpGain.accumulate((t, mp) -> mp - (int) (mp * reduction)),
+						handCap);
+			});
+		} catch (Exception e) {
+			return new BaseValues();
+		}
 	}
 
 	public String toString(I18N locale) {
