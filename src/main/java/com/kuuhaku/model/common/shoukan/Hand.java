@@ -73,6 +73,8 @@ public class Hand {
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
+
+		d.reset();
 	});
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
@@ -83,6 +85,8 @@ public class Hand {
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
+
+		d.reset();
 	});
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
 			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) && !d.isSPSummon(),

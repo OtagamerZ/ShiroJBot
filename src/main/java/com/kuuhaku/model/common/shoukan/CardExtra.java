@@ -53,6 +53,7 @@ public class CardExtra {
 	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
 
 	private final JSONObject data = new JSONObject();
+	private final JSONObject perm = new JSONObject();
 	private final List<String> curses = new BondedList<>(s -> !getCurses().contains(s));
 
 	private Race race = null;
@@ -288,6 +289,10 @@ public class CardExtra {
 
 	public JSONObject getData() {
 		return data;
+	}
+
+	public JSONObject getPerm() {
+		return perm;
 	}
 
 	public List<String> getCurses() {

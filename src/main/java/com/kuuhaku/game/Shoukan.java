@@ -550,7 +550,10 @@ public class Shoukan extends GameInstance<Phase> {
 			e.execute(e.toParameters(tgt));
 		});
 
-		reportEvent("str/activate_card", curr.getName(), chosen);
+		reportEvent("str/activate_card",
+				curr.getName(),
+				chosen.getBase().getTags().contains("SECRET") ? locale.get("str/a_spell") : chosen
+		);
 		return true;
 	}
 
