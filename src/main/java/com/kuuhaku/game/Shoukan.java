@@ -75,6 +75,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Arena arena;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new TreeSet<>();
+	private final JSONObject data = new JSONObject();
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
@@ -1047,6 +1048,10 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		}
+	}
+
+	public JSONObject getData() {
+		return data;
 	}
 
 	private void sendPlayerHand(Hand hand) {
