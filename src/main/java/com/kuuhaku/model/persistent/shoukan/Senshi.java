@@ -701,7 +701,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			g2d.drawString(processTags(locale), 7, 275);
 
 			Graph.drawMultilineString(g2d, desc,
-					7, 287, 211, 2,
+					7, 287, 211, 3,
 					parseValues(g2d, deck, this), highlightValues(g2d)
 			);
 		}
