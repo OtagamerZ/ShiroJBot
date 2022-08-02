@@ -474,7 +474,7 @@ public class Arena implements Renderer {
 			int x;
 			int y;
 			g.setColor(Color.WHITE);
-			g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
+			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 
 			if (reversed) {
 				g.drawImage(bi, SIZE.width - bi.getWidth(), BAR_SIZE.height + SIZE.height, null);
