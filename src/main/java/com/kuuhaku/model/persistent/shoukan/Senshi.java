@@ -603,7 +603,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
-			if (!hasEffect()) {
+			if (hasEffect()) {
 				Utils.exec(getEffect(), Map.of(
 						"ep", ep,
 						"self", this,

@@ -53,7 +53,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 		String quality = "";
 		KawaiponCard kc = sc.getKawaiponCard();
 		if (kc != null && kc.getQuality() > 0) {
-			quality = " (Q: " + Utils.roundToString(kc.getQuality(), 1) + ")";
+			quality = " (Q: " + Utils.roundToString(kc.getQuality(), 1) + "%)";
 		}
 
 		int sale;
