@@ -766,17 +766,26 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public static Senshi getRandom() {
-		String id = DAO.queryNative(String.class, "SELECT card_id FROM senshi ORDER BY RANDOM()");
+		String id = DAO.queryNative(String.class, "SELECT card_id FROM senshi WHERE tags NOT LIKE '%FUSION%' ORDER BY RANDOM()");
 		if (id == null) return null;
 
 		return DAO.find(Senshi.class, id);
 	}
 
-	public static Senshi getRandom(String... filters) {
+	public static Senshi getRandom(boolean allowFusion, String... filters) {
 		XStringBuilder query = new XStringBuilder("SELECT card_id FROM senshi");
 		for (String f : filters) {
 			query.appendNewLine(f);
 		}
+
+		if (allowFusion) {
+			if (filters.length == 0) {
+				query.appendNewLine("WHERE tags NOT LIKE '%FUSION%'");
+			} else {
+				query.appendNewLine("AND tags NOT LIKE '%FUSION%'");
+			}
+		}
+
 		query.appendNewLine("ORDER BY RANDOM()");
 
 		String id = DAO.queryNative(String.class, query.toString());

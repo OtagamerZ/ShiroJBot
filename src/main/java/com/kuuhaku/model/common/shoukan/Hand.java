@@ -43,6 +43,7 @@ import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONObject;
 import kotlin.Triple;
 import net.dv8tion.jda.api.entities.User;
 
@@ -113,6 +114,7 @@ public class Hand {
 
 	private final BaseValues base;
 	private final RegDeg regdeg = new RegDeg();
+	private final JSONObject data = new JSONObject();
 
 	private String name;
 
@@ -532,6 +534,10 @@ public class Hand {
 		}
 
 		modHP(val, true);
+	}
+
+	public JSONObject getData() {
+		return data;
 	}
 
 	public int getMP() {
