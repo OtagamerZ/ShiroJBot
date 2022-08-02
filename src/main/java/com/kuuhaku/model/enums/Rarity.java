@@ -31,7 +31,8 @@ public enum Rarity {
 	ULTIMATE(-1, 0xD400AA, "<:ultimate:1002748864643743774>"),
 	EVOGEAR,
 	FIELD,
-	FUSION;
+	FUSION,
+	NONE;
 
 	private final int index;
 	private final int color;
