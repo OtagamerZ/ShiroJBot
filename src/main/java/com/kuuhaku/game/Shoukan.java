@@ -913,7 +913,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				h.getRealDeck().clear();
-				JSONArray deck = new JSONArray(IO.uncompress(p.cards()));
+				JSONArray deck = new JSONArray(IO.uncompress(p.deck()));
 				for (Object o : deck) {
 					JSONObject jo = new JSONObject(o);
 					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
