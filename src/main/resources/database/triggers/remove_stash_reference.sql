@@ -26,34 +26,43 @@ BEGIN
     SET stash_entry = NULL
     WHERE kc.stash_entry = OLD.id;
 
-    SELECT de.deck_id
-         , de.senshi_card_id
-         , de.index
-    FROM deck_senshi de
-             INNER JOIN deck d ON de.deck_id = d.id
-             LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.senshi_card_id = sc.card_id
-    WHERE d.account_uid = OLD.kawaipon_uid
-      AND sc.id IS NULL;
+    DELETE
+    FROM deck_senshi s
+    WHERE s.deck_id = OLD.deck_id
+    AND index IN (
+                   SELECT ds.index
+                   FROM deck_senshi ds
+                            INNER JOIN deck d ON ds.deck_id = d.id
+                            LEFT JOIN stashed_card sc ON ds.deck_id = sc.deck_id AND ds.senshi_card_id = sc.card_id
+                   WHERE d.account_uid = OLD.kawaipon_uid
+                     AND sc.id IS NULL
+                   );
 
-    SELECT de.deck_id
-         , de.evogear_card_id
-         , de.index
-    FROM deck_evogear de
-             INNER JOIN deck d ON de.deck_id = d.id
-             LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.evogear_card_id = sc.card_id
-    WHERE d.account_uid = OLD.kawaipon_uid
-      AND sc.id IS NULL;
+    DELETE
+    FROM deck_evogear e
+    WHERE e.deck_id = OLD.deck_id
+    AND index IN (
+                   SELECT de.index
+                   FROM deck_evogear de
+                            INNER JOIN deck d ON de.deck_id = d.id
+                            LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.evogear_card_id = sc.card_id
+                   WHERE d.account_uid = OLD.kawaipon_uid
+                     AND sc.id IS NULL
+                   );
 
-    SELECT de.deck_id
-         , de.field_card_id
-         , de.index
-    FROM deck_field de
-             INNER JOIN deck d ON de.deck_id = d.id
-             LEFT JOIN stashed_card sc ON de.deck_id = sc.deck_id AND de.field_card_id = sc.card_id
-    WHERE d.account_uid = OLD.kawaipon_uid
-      AND sc.id IS NULL;
+    DELETE
+    FROM deck_field f
+    WHERE f.deck_id = OLD.deck_id
+    AND index IN (
+                   SELECT df.index
+                   FROM deck_field df
+                            INNER JOIN deck d ON df.deck_id = d.id
+                            LEFT JOIN stashed_card sc ON df.deck_id = sc.deck_id AND df.field_card_id = sc.card_id
+                   WHERE d.account_uid = OLD.kawaipon_uid
+                     AND sc.id IS NULL
+                   );
 
-    RETURN OLD;
+    RETURN NEW;
 END;
 $$;
 
