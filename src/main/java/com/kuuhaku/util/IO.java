@@ -78,7 +78,7 @@ public abstract class IO {
 	public static BufferedImage getImage(String url) {
 		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(url, s -> {
 			try {
-				return getBytes(ImageIO.read(new URL(url)), Utils.extract(url, getImageType(url)));
+				return getBytes(ImageIO.read(new URL(url)), getImageType(url));
 			} catch (IllegalArgumentException | IOException e) {
 				return new byte[0];
 			}
