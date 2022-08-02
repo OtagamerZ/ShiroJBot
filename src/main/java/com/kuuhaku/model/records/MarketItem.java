@@ -69,7 +69,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 				: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
 		);
 
-		return "**" + sc + " " + price + "**" +
+		return "** `ID: " + sc.getId() + "` " + sc + "**" +
 				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +
 				"\n" + sc.getCard().getAnime().toString() +
 				"\n";

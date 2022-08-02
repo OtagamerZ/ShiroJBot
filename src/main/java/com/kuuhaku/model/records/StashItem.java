@@ -67,9 +67,13 @@ public record StashItem(I18N locale, StashedCard sc) {
 			quality = " (Q: " + Utils.roundToString(kc.getQuality(), 1) + ")";
 		}
 
-		return "** `ID: " + sc.getId() + "` " + sc + location + "**" +
+		return "**" + sc + location + "**" +
 				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +
 				"\n" + sc.getCard().getAnime().toString() +
 				"\n";
+	}
+
+	public String toString(int id) {
+		return "`" + id + "` " + this;
 	}
 }

@@ -19,7 +19,10 @@
 package com.kuuhaku.util;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.*;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -28,15 +31,11 @@ import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
-import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.records.FieldMimic;
+import com.kuuhaku.model.records.StashItem;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import groovy.lang.Binding;
@@ -791,70 +790,7 @@ public abstract class Utils {
 				.setTitle(locale.get("str/choose_option"));
 
 		AtomicInteger i = new AtomicInteger();
-		List<Page> pages = generatePages(eb, matches, 10, 5, sc -> {
-			Trade t = Trade.getPending().get(user.getId());
-			String location = "";
-			if (t != null && t.getSelfOffers(user.getId()).contains(sc.getId())) {
-				location = " (" + locale.get("str/trade") + ")";
-			} else if (sc.getDeck() != null) {
-				location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
-			} else if (sc.getPrice() > 0) {
-				location = " (" + locale.get("str/market", sc.getPrice()) + ")";
-			}
-
-			switch (sc.getType()) {
-				case KAWAIPON -> {
-					KawaiponCard kc = sc.getKawaiponCard();
-
-					return new FieldMimic(
-							"**`%s` | %s".formatted(i.getAndIncrement(), sc + location) + "**\n",
-							"%s%s (%s | %s)%s".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
-									locale.get("rarity/" + sc.getCard().getRarity()),
-									sc.getCard().getAnime(),
-									kc != null && kc.getQuality() > 0
-											? ("\n" + locale.get("str/quality", roundToString(kc.getQuality(), 1)))
-											: ""
-							)
-					).toString();
-				}
-				case EVOGEAR -> {
-					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
-
-					return new FieldMimic(
-							"**`%s` | %s".formatted(i.getAndIncrement(), sc + location) + "**\n",
-							"%s%s (%s | %s)".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
-									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
-									sc.getCard().getAnime()
-							)
-					).toString();
-				}
-				case FIELD -> {
-					Field fd = DAO.find(Field.class, sc.getCard().getId());
-
-					return new FieldMimic(
-							"**`%s` | %s".formatted(i.getAndIncrement(), sc + location) + "**\n",
-							"%s%s%s (%s | %s)".formatted(
-									sc.getCard().getRarity().getEmote(),
-									locale.get("type/" + sc.getType()),
-									locale.get("rarity/" + sc.getCard().getRarity()),
-									sc.getCard().getAnime(),
-									switch (fd.getType()) {
-										case NONE -> "";
-										case DAY -> ":sunny: ";
-										case NIGHT -> ":crescent_moon: ";
-										case DUNGEON -> ":japanese_castle: ";
-									}
-							)
-					).toString();
-				}
-			}
-
-			return null;
-		});
+		List<Page> pages = generatePages(eb, matches, 10, 5, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()));
 
 		Message msg = paginate(pages, channel, user);
 

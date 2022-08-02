@@ -30,24 +30,24 @@ import java.util.Locale;
 import java.util.function.Function;
 
 public enum FrameColor {
-	PINK("Batalhe com perspicácia com a cor característica da Shiro!"),
-	PURPLE("Lute para dominar o campo, dê checkmate com a peça rei!"),
-	BLUE("Seja sábio, preveja a estratégia de seus oponentes!"),
-	CYAN("Divirta-se enquanto destroi seus oponentes!"),
-	GREEN("Canalize a força da natureza e lute com a graça de um pássaro!"),
-	YELLOW("Alveje o ponto fraco de seus oponentes, mostre a inovação de seu deck!"),
-	ORANGE("Laranja como o pôr do sol, mantenha o foco mesmo nos duelos mais arriscados!"),
-	RED("No massacre você floresce, leve o campo de batalha aos seus inimigos!"),
-	GRAY("Lute com frieza, calcule seus movimentos e desintegre seus oponentes!"),
+	PINK,
+	PURPLE,
+	BLUE,
+	CYAN,
+	GREEN,
+	YELLOW,
+	ORANGE,
+	RED,
+	GRAY,
 
-	LEGACY_PINK("Empoeirado e gasto, trazendo a perspicácia de um tempo distante.", Account::isOldUser),
-	LEGACY_PURPLE("Empoeirado e gasto, mostrando a dominação de um tempo distante.", Account::isOldUser),
-	LEGACY_BLUE("Empoeirado e gasto, meditando sobre a sabedoria de um tempo distante.", Account::isOldUser),
-	LEGACY_CYAN("Empoeirado e gasto, relembrando suas vitórias passadas.", Account::isOldUser),
-	LEGACY_GREEN("Empoeirado e gasto, mas verde como um grande pinheiro de outrora.", Account::isOldUser),
-	LEGACY_YELLOW("Empoeirado e gasto, com uma tecnologia a muito tempo perdida.", Account::isOldUser),
-	LEGACY_RED("Empoeirado e gasto, ainda sujo com o sangue de seus inimigos.", Account::isOldUser),
-	LEGACY_GRAY("Empoeirado e gasto, praticamente desbotado mas afiado.", Account::isOldUser),
+	LEGACY_PINK(Account::isOldUser),
+	LEGACY_PURPLE(Account::isOldUser),
+	LEGACY_BLUE(Account::isOldUser),
+	LEGACY_CYAN(Account::isOldUser),
+	LEGACY_GREEN(Account::isOldUser),
+	LEGACY_YELLOW(Account::isOldUser),
+	LEGACY_RED(Account::isOldUser),
+	LEGACY_GRAY(Account::isOldUser),
 
 	/*RAINBOW("**(Complete 10 coleções cromadas)** Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
 			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
@@ -75,17 +75,14 @@ public enum FrameColor {
 	),*/
 	;
 
-	private final String description;
 	private final Function<Account, Boolean> req;
 
-	FrameColor(String description, Function<Account, Boolean> req) {
-		this.description = description;
-		this.req = req;
+	FrameColor() {
+		this.req = null;
 	}
 
-	FrameColor(String description) {
-		this.description = description;
-		this.req = null;
+	FrameColor(Function<Account, Boolean> req) {
+		this.req = req;
 	}
 
 	public Color getThemeColor() {
@@ -184,8 +181,12 @@ public enum FrameColor {
 		return canvas;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getName(I18N locale) {
+		return locale.get("frame/" + name());
+	}
+
+	public String getDescription(I18N locale) {
+		return locale.get("frame/" + name() + "_desc");
 	}
 
 	public boolean canUse(Account acc) {
@@ -212,36 +213,19 @@ public enum FrameColor {
 		return name().startsWith("LEGACY");
 	}
 
+	/*
 	@Override
 	public String toString() {
 		return switch (this) {
-			case PINK -> "Rosa";
-			case PURPLE -> "Roxo";
-			case BLUE -> "Azul";
-			case CYAN -> "Ciano";
-			case GREEN -> "Verde";
-			case YELLOW -> "Amarelo";
-			case ORANGE -> "Laranja";
-			case RED -> "Vermelho";
-			case GRAY -> "Cinza";
-
-			case LEGACY_PINK -> "Legado Rosa";
-			case LEGACY_PURPLE -> "Legado Roxo";
-			case LEGACY_BLUE -> "Legado Azul";
-			case LEGACY_CYAN -> "Legado Ciano";
-			case LEGACY_GREEN -> "Legado Verde";
-			case LEGACY_YELLOW -> "Legado Amarelo";
-			case LEGACY_RED -> "Legado Vermelho";
-			case LEGACY_GRAY -> "Legado Cinza";
-
-			/*case RAINBOW -> "Arco-iris";
+			case RAINBOW -> "Arco-iris";
 			case BLACK -> "Negro";
 			case HALLOWEEN -> "Halloween";
 			case GLITCH -> "Glitch";
 
 			case PADORU -> "Padoru";
 			case METALLIC -> "Metálico";
-			case RICH -> "Rico";*/
+			case RICH -> "Rico";
 		} + " (`" + name().toLowerCase(Locale.ROOT) + "`)";
 	}
+	*/
 }
