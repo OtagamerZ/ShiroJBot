@@ -76,7 +76,7 @@ public class CardExtra {
 	}
 
 	public void setMana(Drawable<?> source, int mana) {
-		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana);
+		AttrMod mod = new AttrMod(source, mana);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
