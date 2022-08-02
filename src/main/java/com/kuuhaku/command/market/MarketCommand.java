@@ -19,6 +19,7 @@
 package com.kuuhaku.command.market;
 
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -29,13 +30,9 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
-import com.kuuhaku.model.records.FieldMimic;
+import com.kuuhaku.model.records.MarketItem;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
@@ -47,7 +44,6 @@ import net.dv8tion.jda.api.Permission;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -86,85 +82,21 @@ public class MarketCommand implements Executable {
 		}
 
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.price > 0");
-		List<StashedCard> results = m.getOffers(cli.getFirst().getOptions());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/search_result", results.size(), total))
 				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?hide=true&v=" + System.currentTimeMillis());
 
-		int sale;
-		StashedCard offer = m.getDailyOffer();
-		if (offer != null) {
-			sale = offer.getId();
-		} else {
-			sale = -1;
-		}
+		ThrowingFunction<Integer, Page> loader = p -> {
+			List<StashedCard> results = m.getOffers(cli.getFirst().getOptions(), p);
 
-		List<Page> pages = Utils.generatePages(eb, results, 10, 5, sc -> {
-			Account seller = sc.getKawaipon().getAccount();
+			eb.setAuthor(locale.get("str/search_result", results.size(), total));
+			return Utils.generatePage(eb, results, 5, sc -> new MarketItem(locale, m, sc).toString());
+		};
 
-			String emote = sc.getCard().getRarity().getEmote();
-			String type = locale.get("type/" + sc.getType());
-			String price = "\n" + (sale == sc.getId()
-					? locale.get("str/offer_sale", sc.getPrice(), (int) (sc.getPrice() * 0.8), seller.getName() + " (<@" + seller.getUid() + ">)")
-					: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
-			);
-
-			switch (sc.getType()) {
-				case KAWAIPON -> {
-					KawaiponCard kc = sc.getKawaiponCard();
-
-					return new FieldMimic(
-							"`ID: " + sc.getId() + "` | " + sc,
-							"%s%s (%s | %s)%s%s".formatted(emote, type,
-									locale.get("rarity/" + sc.getCard().getRarity()),
-									sc.getCard().getAnime(),
-									kc != null && kc.getQuality() > 0
-											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
-											: "",
-									price
-							)
-					).toString();
-				}
-				case EVOGEAR -> {
-					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
-
-					return new FieldMimic(
-							"`ID: " + sc.getId() + "` | " + sc,
-							"%s%s (%s | %s)%s".formatted(emote, type,
-									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
-									sc.getCard().getAnime(),
-									price
-							)
-					).toString();
-				}
-				case FIELD -> {
-					Field fd = DAO.find(Field.class, sc.getCard().getId());
-
-					return new FieldMimic(
-							"`ID: " + sc.getId() + "` | " + sc,
-							"%s%s%s (%s | %s)%s".formatted(emote, type,
-									locale.get("rarity/" + sc.getCard().getRarity()),
-									sc.getCard().getAnime(),
-									switch (fd.getType()) {
-										case NONE -> "";
-										case DAY -> ":sunny: ";
-										case NIGHT -> ":crescent_moon: ";
-										case DUNGEON -> ":japanese_castle: ";
-									},
-									price
-							)
-					).toString();
-				}
-			}
-
-			return null;
-		});
-
-		if (pages.isEmpty()) {
+		if (loader.apply(0) == null) {
 			event.channel().sendMessage(locale.get("error/no_result")).queue();
 			return;
 		}
 
-		Utils.paginate(pages, 5, false, event.channel(), event.user());
+		Utils.paginate(loader, event.channel(), event.user());
 	}
 }

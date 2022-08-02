@@ -55,7 +55,7 @@ public class Market {
 		this.uid = uid;
 	}
 
-	public List<StashedCard> getOffers(Option[] opts) {
+	public List<StashedCard> getOffers(Option[] opts, int page) {
 		List<Object> params = new ArrayList<>();
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
@@ -88,7 +88,12 @@ public class Market {
 					   	, c.card.id
 				""");
 
-		return DAO.queryAll(StashedCard.class, query.toString(), params.toArray());
+		return DAO.queryBuilder(
+				StashedCard.class,
+				query.toString(),
+				q -> q.setFirstResult(page * 10).setMaxResults(10).getResultList(),
+				params.toArray()
+		);
 	}
 
 	public boolean buy(int id) {
