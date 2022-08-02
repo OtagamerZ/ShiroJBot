@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -34,7 +35,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
@@ -75,12 +75,12 @@ public class SnipeCommand implements Executable {
 				.setTitle(":detective: | " + locale.get("str/snipe_result"));
 
 		Utils.paginate(
-				Utils.generatePages(eb, messages, 10, m -> new MessageEmbed.Field(
+				Utils.generatePages(eb, messages, 10, 5, m -> new FieldMimic(
 						locale.get("str/sent",
 								m.getTimeCreated().toEpochSecond(),
 								m.getAuthor().getName()
-						), StringUtils.abbreviate(m.getContentRaw(), 100), false
-				)),
+						), StringUtils.abbreviate(m.getContentRaw(), 100)
+				).toString()),
 				event.channel(),
 				event.user()
 		);

@@ -29,13 +29,13 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,16 +61,15 @@ public class DeckSwitchCommand implements Executable {
 
 			AtomicInteger idx = new AtomicInteger();
 			AtomicBoolean regen = new AtomicBoolean();
-			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 10, deck -> {
+			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 10, 2, deck -> {
 				if (idx.getAndIncrement() != deck.getIndex()) {
 					regen.set(true);
 				}
 
-				return new MessageEmbed.Field(
+				return new FieldMimic(
 						(deck.isCurrent() ? "✅ " : "") + "`" + deck.getIndex() + " | " + deck.getName() + "`",
-						deck.toString(locale),
-						true
-				);
+						deck.toString(locale)
+				).toString();
 			});
 
 			if (regen.get()) {

@@ -35,6 +35,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
@@ -43,7 +44,6 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -99,7 +99,7 @@ public class MarketCommand implements Executable {
 			sale = -1;
 		}
 
-		List<Page> pages = Utils.generatePages(eb, results, 10, sc -> {
+		List<Page> pages = Utils.generatePages(eb, results, 10, 5, sc -> {
 			Account seller = sc.getKawaipon().getAccount();
 
 			String emote = sc.getCard().getRarity().getEmote();
@@ -113,7 +113,7 @@ public class MarketCommand implements Executable {
 				case KAWAIPON -> {
 					KawaiponCard kc = sc.getKawaiponCard();
 
-					return new MessageEmbed.Field(
+					return new FieldMimic(
 							"`ID: " + sc.getId() + "` | " + sc,
 							"%s%s (%s | %s)%s%s".formatted(emote, type,
 									locale.get("rarity/" + sc.getCard().getRarity()),
@@ -122,27 +122,25 @@ public class MarketCommand implements Executable {
 											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
 											: "",
 									price
-							),
-							false
-					);
+							)
+					).toString();
 				}
 				case EVOGEAR -> {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 
-					return new MessageEmbed.Field(
+					return new FieldMimic(
 							"`ID: " + sc.getId() + "` | " + sc,
 							"%s%s (%s | %s)%s".formatted(emote, type,
 									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
 									sc.getCard().getAnime(),
 									price
-							),
-							false
-					);
+							)
+					).toString();
 				}
 				case FIELD -> {
 					Field fd = DAO.find(Field.class, sc.getCard().getId());
 
-					return new MessageEmbed.Field(
+					return new FieldMimic(
 							"`ID: " + sc.getId() + "` | " + sc,
 							"%s%s%s (%s | %s)%s".formatted(emote, type,
 									locale.get("rarity/" + sc.getCard().getRarity()),
@@ -154,9 +152,8 @@ public class MarketCommand implements Executable {
 										case DUNGEON -> ":japanese_castle: ";
 									},
 									price
-							),
-							false
-					);
+							)
+					).toString();
 				}
 			}
 

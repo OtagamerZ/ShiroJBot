@@ -84,6 +84,7 @@ public class Market {
 				      		WHEN 'LEGENDARY' THEN 3
 				      		ELSE 1
 				       	END)
+				       	, c.type
 					   	, c.card.id
 				""");
 

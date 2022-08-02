@@ -35,6 +35,7 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
@@ -43,7 +44,6 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -134,6 +134,7 @@ public class StashCommand implements Executable {
 				    	  		ELSE 1
 				       		END
 				       	) DESC
+				       	, c.type
 					   	, c.card.id
 				""");
 
@@ -148,7 +149,7 @@ public class StashCommand implements Executable {
 			);
 
 			eb.setAuthor(locale.get("str/search_result_stash", results.size(), kp.getCapacity(), kp.getMaxCapacity()));
-			return Utils.generatePage(eb, results, sc -> {
+			return Utils.generatePage(eb, results, 5, sc -> {
 				Trade t = Trade.getPending().get(event.user().getId());
 				String location = "";
 				if (t != null && t.getSelfOffers(event.user().getId()).contains(sc.getId())) {
@@ -163,7 +164,7 @@ public class StashCommand implements Executable {
 					case KAWAIPON -> {
 						KawaiponCard kc = sc.getKawaiponCard();
 
-						return new MessageEmbed.Field(
+						return new FieldMimic(
 								sc + location,
 								"%s%s (%s | %s)%s".formatted(
 										sc.getCard().getRarity().getEmote(),
@@ -173,28 +174,26 @@ public class StashCommand implements Executable {
 										kc != null && kc.getQuality() > 0
 												? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
 												: ""
-								),
-								false
-						);
+								)
+						).toString();
 					}
 					case EVOGEAR -> {
 						Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 
-						return new MessageEmbed.Field(
+						return new FieldMimic(
 								sc + location,
 								"%s%s (%s | %s)".formatted(
 										sc.getCard().getRarity().getEmote(),
 										locale.get("type/" + sc.getType()),
 										locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
 										sc.getCard().getAnime()
-								),
-								false
-						);
+								)
+						).toString();
 					}
 					case FIELD -> {
 						Field fd = DAO.find(Field.class, sc.getCard().getId());
 
-						return new MessageEmbed.Field(
+						return new FieldMimic(
 								sc + location,
 								"%s%s%s (%s | %s)".formatted(
 										sc.getCard().getRarity().getEmote(),
@@ -207,9 +206,8 @@ public class StashCommand implements Executable {
 											case NIGHT -> ":crescent_moon: ";
 											case DUNGEON -> ":japanese_castle: ";
 										}
-								),
-								false
-						);
+								)
+						).toString();
 					}
 				}
 

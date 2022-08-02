@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.user.AccountTitle;
 import com.kuuhaku.model.persistent.user.LocalizedTitle;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -39,7 +40,6 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.Comparator;
 import java.util.List;
@@ -64,7 +64,7 @@ public class SelectTitleCommand implements Executable {
 			Map<String, List<Title>> titles = Title.getAllTitles().stream()
 					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))"), "")));
 
-			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, ts -> {
+			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, 2, ts -> {
 				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
 
 				Title current = ts.stream()
@@ -91,7 +91,7 @@ public class SelectTitleCommand implements Executable {
 					}
 				}
 
-				return new MessageEmbed.Field(current.getRarity().getEmote() + info.getName(), sb.toString(), true);
+				return new FieldMimic(current.getRarity().getEmote() + info.getName(), sb.toString()).toString();
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());

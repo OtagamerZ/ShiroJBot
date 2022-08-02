@@ -36,6 +36,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import groovy.lang.Binding;
@@ -380,70 +381,30 @@ public abstract class Utils {
 		return chunks;
 	}
 
-	public static <T> Page generatePage(EmbedBuilder eb, List<T> list, Function<T, MessageEmbed.Field> mapper) {
+	public static <T> Page generatePage(EmbedBuilder eb, List<T> list, int itemsPerColumn, Function<T, String> mapper) {
 		eb.clearFields();
 
-		for (T t : list) {
-			eb.addField(mapper.apply(t));
+		List<List<T>> cols = chunkify(list, (int) Math.ceil(list.size() / (float) itemsPerColumn));
+		for (List<T> col : cols) {
+			for (T t : col) {
+				eb.addField(new MessageEmbed.Field(Constants.VOID, mapper.apply(t), true));
+			}
 		}
 
 		return new InteractPage(eb.build());
 	}
 
-	public static <T> Page generateStringPage(EmbedBuilder eb, List<T> list, Function<T, String> mapper) {
-		StringBuilder sb = eb.getDescriptionBuilder();
-		sb.setLength(0);
-
-		for (T t : list) {
-			sb.append(mapper.apply(t)).append("\n");
-		}
-
-		return new InteractPage(eb.build());
+	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int columns, Function<T, String> mapper) {
+		return generatePages(eb, list, itemsPerPage, columns, mapper, (p, t) -> {
+		});
 	}
 
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper) {
-		return generatePages(eb, list, itemsPerPage, mapper, (p, t) -> {});
-	}
-
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, MessageEmbed.Field> mapper, BiConsumer<Integer, Integer> finisher) {
+	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int columns, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
 		for (int i = 0; i < chunks.size(); i++) {
-			List<T> chunk = chunks.get(i);
-			eb.clearFields();
-
-			for (T t : chunk) {
-				eb.addField(mapper.apply(t));
-			}
-
 			finisher.accept(i, chunks.size());
-
-			pages.add(new InteractPage(eb.build()));
-		}
-
-		return pages;
-	}
-
-	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper) {
-		return generateStringPages(eb, list, itemsPerPage, mapper, (p, t) -> {});
-	}
-
-	public static <T> List<Page> generateStringPages(EmbedBuilder eb, List<T> list, int itemsPerPage, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
-		StringBuilder sb = eb.getDescriptionBuilder();
-
-		List<Page> pages = new ArrayList<>();
-		List<List<T>> chunks = chunkify(list, itemsPerPage);
-		for (int i = 0; i < chunks.size(); i++) {
-			List<T> chunk = chunks.get(i);
-			sb.setLength(0);
-
-			for (T t : chunk) {
-				sb.append(mapper.apply(t)).append("\n");
-			}
-
-			finisher.accept(i, chunks.size());
-
-			pages.add(new InteractPage(eb.build()));
+			pages.add(generatePage(eb, chunks.get(i), columns, mapper));
 		}
 
 		return pages;
@@ -490,7 +451,8 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, null, channel, action, m -> {}, allowed);
+		confirm(text, null, channel, action, m -> {
+		}, allowed);
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -498,7 +460,8 @@ public abstract class Utils {
 	}
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(null, embed, channel, action, m -> {}, allowed);
+		confirm(null, embed, channel, action, m -> {
+		}, allowed);
 	}
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -506,7 +469,8 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, embed, channel, action, m -> {}, allowed);
+		confirm(text, embed, channel, action, m -> {
+		}, allowed);
 	}
 
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -821,7 +785,7 @@ public abstract class Utils {
 				.setTitle(locale.get("str/choose_option"));
 
 		AtomicInteger i = new AtomicInteger();
-		List<Page> pages = Utils.generatePages(eb, matches, 10, sc -> {
+		List<Page> pages = generatePages(eb, matches, 10, 5, sc -> {
 			Trade t = Trade.getPending().get(user.getId());
 			String location = "";
 			if (t != null && t.getSelfOffers(user.getId()).contains(sc.getId())) {
@@ -836,39 +800,37 @@ public abstract class Utils {
 				case KAWAIPON -> {
 					KawaiponCard kc = sc.getKawaiponCard();
 
-					return new MessageEmbed.Field(
-							"`%s` | %s".formatted(i.getAndIncrement(), sc + location),
+					return new FieldMimic(
+							"**`%s` | %s".formatted(i.getAndIncrement(), sc + location) + "**\n",
 							"%s%s (%s | %s)%s".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()),
 									sc.getCard().getAnime(),
 									kc != null && kc.getQuality() > 0
-											? ("\n" + locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)))
+											? ("\n" + locale.get("str/quality", roundToString(kc.getQuality(), 1)))
 											: ""
-							),
-							false
-					);
+							)
+					).toString();
 				}
 				case EVOGEAR -> {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 
-					return new MessageEmbed.Field(
-							"`%s` | %s".formatted(i.getAndIncrement(), sc + location),
+					return new FieldMimic(
+							"**`%s` | %s".formatted(i.getAndIncrement(), sc + location) + "**\n",
 							"%s%s (%s | %s)".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
 									locale.get("rarity/" + sc.getCard().getRarity()) + " " + StringUtils.repeat("★", ev.getTier()),
 									sc.getCard().getAnime()
-							),
-							false
-					);
+							)
+					).toString();
 				}
 				case FIELD -> {
 					Field fd = DAO.find(Field.class, sc.getCard().getId());
 
-					return new MessageEmbed.Field(
-							"`%s` | %s".formatted(i.getAndIncrement(), sc + location),
+					return new FieldMimic(
+							"**`%s` | %s".formatted(i.getAndIncrement(), sc + location) + "**\n",
 							"%s%s%s (%s | %s)".formatted(
 									sc.getCard().getRarity().getEmote(),
 									locale.get("type/" + sc.getType()),
@@ -880,9 +842,8 @@ public abstract class Utils {
 										case NIGHT -> ":crescent_moon: ";
 										case DUNGEON -> ":japanese_castle: ";
 									}
-							),
-							false
-					);
+							)
+					).toString();
 				}
 			}
 
