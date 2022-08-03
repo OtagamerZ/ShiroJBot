@@ -134,6 +134,10 @@ public class SynthesizeCommand implements Executable {
 									return 0;
 								}).sum();
 
+						for (StashedCard sc : cards) {
+							Utils.getOr(sc.getKawaiponCard(), sc).delete();
+						}
+
 						if (Calc.chance(field)) {
 							Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
 							event.channel().sendMessage(locale.get("success/synth", f)).queue();
@@ -142,10 +146,6 @@ public class SynthesizeCommand implements Executable {
 							Evogear e = rollSynthesis(cards);
 							new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
-						}
-
-						for (StashedCard sc : cards) {
-							Utils.getOr(sc.getKawaiponCard(), sc).delete();
 						}
 
 						return true;

@@ -26,7 +26,7 @@ BEGIN
         DELETE FROM stashed_card WHERE id = OLD.stash_entry;
     END IF;
 
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$;
 

@@ -40,7 +40,7 @@ BEGIN
     WHERE df.deck_id = x.id
       AND df.index = x.index;
 
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$;
 

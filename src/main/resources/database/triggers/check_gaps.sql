@@ -24,7 +24,7 @@ $$
 BEGIN
     CALL fix_deck_gaps();
 
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$;
 
