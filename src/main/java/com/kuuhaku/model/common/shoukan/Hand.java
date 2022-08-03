@@ -168,6 +168,7 @@ public class Hand {
 		// TODO Secondary divinity
 
 		for (String card : game.getParams().cards()) {
+			card = card.toUpperCase(Locale.ROOT);
 			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
 					.findFirst()
 					.orElse(CardType.NONE);
