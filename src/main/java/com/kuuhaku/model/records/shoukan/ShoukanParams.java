@@ -22,9 +22,19 @@ import com.kuuhaku.util.Utils;
 
 import java.util.List;
 
-public record ShoukanParams(int hp, int mp, List<String> cards) {
+public record ShoukanParams(Integer hp, Integer mp, List<String> cards) {
 	public ShoukanParams() {
 		this(5000, 5, List.of());
+	}
+
+	@Override
+	public Integer hp() {
+		return Utils.getOr(hp, 5000);
+	}
+
+	@Override
+	public Integer mp() {
+		return Utils.getOr(mp, 5);
 	}
 
 	@Override
