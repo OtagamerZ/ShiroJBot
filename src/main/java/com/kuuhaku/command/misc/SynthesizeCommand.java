@@ -159,8 +159,6 @@ public class SynthesizeCommand implements Executable {
 									}
 								});
 							}
-
-							sc.delete();
 						}
 
 				return true;
