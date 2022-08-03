@@ -145,15 +145,10 @@ public class SynthesizeCommand implements Executable {
 						}
 
 						for (StashedCard sc : cards) {
-							KawaiponCard kc = sc.getKawaiponCard();
-							if (kc != null) {
-								kc.delete();
-							} else {
-								sc.delete();
-							}
+							Utils.getOr(sc.getKawaiponCard(), sc).delete();
 						}
 
-				return true;
+						return true;
 					}, event.user()
 			);
 		} catch (PendingConfirmationException e) {
