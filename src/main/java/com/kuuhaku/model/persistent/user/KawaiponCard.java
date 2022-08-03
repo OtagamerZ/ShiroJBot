@@ -148,6 +148,4 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	public int hashCode() {
 		return Objects.hash(chrome, card, stashEntry);
 	}
-
-	
 }
