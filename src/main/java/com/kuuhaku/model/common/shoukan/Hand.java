@@ -27,6 +27,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -165,6 +166,22 @@ public class Hand {
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
 		// TODO Secondary divinity
+
+		for (String card : game.getParams().cards()) {
+			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
+					.findFirst()
+					.orElse(CardType.NONE);
+
+			Drawable<?> d = switch (type) {
+				case NONE -> null;
+				case KAWAIPON -> DAO.find(Senshi.class, card);
+				case EVOGEAR -> DAO.find(Evogear.class, card);
+				case FIELD -> DAO.find(Field.class, card);
+			};
+			if (d == null) continue;
+
+			cards.add(d);
+		}
 	}
 
 	public String getUid() {

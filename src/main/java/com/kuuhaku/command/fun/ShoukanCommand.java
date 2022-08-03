@@ -34,9 +34,11 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.shoukan.ShoukanParams;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.util.json.JSONUtils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -50,10 +52,10 @@ import java.util.concurrent.TimeUnit;
 		name = "shoukan",
 		category = Category.FUN
 )
-@Signature("<user:user:r>")
+@Signature("<user:user:r> <json:text>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShoukanCommand implements Executable {
-	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
+	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -69,9 +71,10 @@ public class ShoukanCommand implements Executable {
 		}
 
 		try {
+			ShoukanParams params = JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class);
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
 				try {
-					Shoukan skn = new Shoukan(locale, event.user(), other.getUser());
+					Shoukan skn = new Shoukan(locale, params, event.user(), other.getUser());
 					Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 					skn.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
@@ -132,6 +135,6 @@ public class ShoukanCommand implements Executable {
 
 			m.delete().queue(null, Utils::doNothing);
 			throw new RuntimeException("Done");
-		}, Calc.rng(2000, 4000), TimeUnit.MILLISECONDS);
+		}, Calc.rng(1000, 3000), TimeUnit.MILLISECONDS);
 	}
 }
