@@ -135,6 +135,7 @@ public class SynthesizeCommand implements Executable {
 								}).sum();
 
 						for (StashedCard sc : cards) {
+							System.out.println(sc.getId());
 							Utils.getOr(sc.getKawaiponCard(), sc).delete();
 						}
 
