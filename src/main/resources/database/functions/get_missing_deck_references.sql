@@ -30,8 +30,8 @@ BEGIN
     SELECT d.id
         , dx.card_id
         , dx.index
-        , dx.deck_copy::INT
-        , sx.stash_copy::INT
+        ,  CAST(dx.deck_copy AS INT) AS deck_copy
+        ,  CAST(sx.stash_copy AS INT) AS stash_copy
     FROM deck d
         INNER JOIN (
         SELECT ds.deck_id
