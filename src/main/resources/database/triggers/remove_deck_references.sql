@@ -46,7 +46,7 @@ $$;
 
 DROP TRIGGER IF EXISTS remove_deck_references ON stashed_card;
 CREATE TRIGGER remove_deck_references
-    BEFORE DELETE
+    AFTER DELETE
     ON stashed_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_remove_deck_references();
