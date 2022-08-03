@@ -32,7 +32,7 @@ $$;
 
 DROP TRIGGER IF EXISTS remove_stash_entry ON kawaipon_card;
 CREATE TRIGGER remove_stash_entry
-    BEFORE DELETE
+    AFTER DELETE
     ON kawaipon_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_remove_stash_entry();
