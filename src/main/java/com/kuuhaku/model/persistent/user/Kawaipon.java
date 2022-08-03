@@ -89,8 +89,12 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return stashCapacity + account.getHighestLevel() * 3;
 	}
 
+	public int getStashUsage() {
+		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card WHERE kawaipon_uid = ?1", uid);
+	}
+
 	public int getCapacity() {
-		return getMaxCapacity() - stash.size();
+		return getMaxCapacity() - getStashUsage();
 	}
 
 	public Set<KawaiponCard> getCollection() {
