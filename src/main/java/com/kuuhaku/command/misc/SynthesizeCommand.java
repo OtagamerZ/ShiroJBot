@@ -148,16 +148,7 @@ public class SynthesizeCommand implements Executable {
 						for (StashedCard sc : cards) {
 							KawaiponCard kc = sc.getKawaiponCard();
 							if (kc != null) {
-								DAO.apply(Kawaipon.class, kp.getUid(), k -> {
-									Iterator<KawaiponCard> it = k.getCards().iterator();
-									while (it.hasNext()) {
-										KawaiponCard card = it.next();
-										if (sc.equals(card.getStashEntry())) {
-											it.remove();
-											break;
-										}
-									}
-								});
+								kc.delete();
 							}
 						}
 
