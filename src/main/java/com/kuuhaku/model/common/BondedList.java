@@ -75,12 +75,8 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		for (T t : c) {
-			if (!check.test(t)) return false;
-		}
-
 		try {
-			return super.addAll(c);
+			return super.addAll(c.stream().filter(check).toList());
 		} finally {
 			for (T t : c) {
 				bonding.accept(t);
@@ -90,12 +86,8 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		for (T t : c) {
-			if (!check.test(t)) return false;
-		}
-
 		try {
-			return super.addAll(index, c);
+			return super.addAll(index, c.stream().filter(check).toList());
 		} finally {
 			for (T t : c) {
 				bonding.accept(t);
