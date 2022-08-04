@@ -39,19 +39,19 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class CardExtra implements Cloneable {
-	private final Set<AttrMod> mana;
-	private final Set<AttrMod> blood;
-	private final Set<AttrMod> sacrifices;
+	private final HashSet<AttrMod> mana;
+	private final HashSet<AttrMod> blood;
+	private final HashSet<AttrMod> sacrifices;
 
-	private final Set<AttrMod> atk;
-	private final Set<AttrMod> def;
+	private final HashSet<AttrMod> atk;
+	private final HashSet<AttrMod> def;
 
-	private final Set<AttrMod> dodge;
-	private final Set<AttrMod> block;
+	private final HashSet<AttrMod> dodge;
+	private final HashSet<AttrMod> block;
 
-	private final Set<AttrMod> attrMult;
+	private final HashSet<AttrMod> attrMult;
 
-	private final Set<AttrMod> tier;
+	private final HashSet<AttrMod> tier;
 
 	private final EnumSet<Flag> flags;
 	private final EnumSet<Flag> permFlags;
@@ -72,9 +72,9 @@ public class CardExtra implements Cloneable {
 	private transient Field[] fieldCache = null;
 
 	public CardExtra(
-			Set<AttrMod> mana, Set<AttrMod> blood, Set<AttrMod> sacrifices,
-			Set<AttrMod> atk, Set<AttrMod> def, Set<AttrMod> dodge,
-			Set<AttrMod> block, Set<AttrMod> attrMult, Set<AttrMod> tier,
+			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
+			HashSet<AttrMod> atk, HashSet<AttrMod> def, HashSet<AttrMod> dodge,
+			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
 			EnumSet<Flag> flags, EnumSet<Flag> permFlags, JSONObject data,
 			JSONObject perm, ListOrderedSet<String> curses
 	) {
@@ -437,7 +437,7 @@ public class CardExtra implements Cloneable {
 	@Override
 	public CardExtra clone() {
 		@SuppressWarnings("rawtypes")
-		Copier<Set, AttrMod> copier = new Copier<>(Set.class, AttrMod.class);
+		Copier<HashSet, AttrMod> copier = new Copier<>(HashSet.class, AttrMod.class);
 
 		CardExtra clone = new CardExtra(
 				copier.makeCopy(mana),
