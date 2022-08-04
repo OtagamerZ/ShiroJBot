@@ -18,7 +18,8 @@
 
 package com.kuuhaku.util;
 
-import java.lang.reflect.InvocationTargetException;
+import com.kuuhaku.Constants;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -43,7 +44,8 @@ public class Copier<C extends Collection, T extends Cloneable> {
 			}
 
 			return out;
-		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+		} catch (Exception e) {
+			Constants.LOGGER.error(e, e);
 			return null;
 		}
 	}
