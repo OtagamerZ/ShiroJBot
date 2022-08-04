@@ -38,7 +38,7 @@ public @interface Signature {
 		ANY("\\S+"),
 		WORD("[\\w-.]+"),
 		NUMBER("-?\\d+"),
-		TEXT("\"(?<text>[\\w\\W])+\""),
+		TEXT("^\"(?<text>[\\w\\W])+\"$"),
 
 		USER(Message.MentionType.USER.getPattern().pattern()),
 		ROLE(Message.MentionType.ROLE.getPattern().pattern()),
