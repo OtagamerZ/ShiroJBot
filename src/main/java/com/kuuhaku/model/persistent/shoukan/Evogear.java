@@ -360,7 +360,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void reset() {
-		stats = new CardExtra();
+		stats = stats.clone();
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
