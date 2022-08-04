@@ -19,6 +19,7 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.util.Utils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -42,8 +43,13 @@ public record Origin(Race major, Race minor) {
 	}
 
 	@Override
+	public Race major() {
+		return Utils.getOr(major, Race.NONE);
+	}
+
+	@Override
 	public Race minor() {
-		return demon() ? major : minor;
+		return demon() ? major : Utils.getOr(minor, Race.NONE);
 	}
 
 	public boolean demon() {

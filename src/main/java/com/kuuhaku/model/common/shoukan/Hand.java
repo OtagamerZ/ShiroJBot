@@ -147,7 +147,7 @@ public class Hand {
 		}
 
 		this.side = side;
-		this.origin = userDeck.getOrigins();
+		this.origin = Utils.getOr(game.getParams().origin(), userDeck.getOrigins());
 		this.base = userDeck.getBaseValues(this);
 		this.hp = base.hp();
 

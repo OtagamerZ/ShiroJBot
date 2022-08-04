@@ -22,9 +22,9 @@ import com.kuuhaku.util.Utils;
 
 import java.util.List;
 
-public record ShoukanParams(Integer hp, Integer mp, List<String> cards) {
+public record ShoukanParams(Integer hp, Integer mp, List<String> cards, Origin origin) {
 	public ShoukanParams() {
-		this(5000, 5, List.of());
+		this(5000, 5, List.of(), null);
 	}
 
 	@Override
