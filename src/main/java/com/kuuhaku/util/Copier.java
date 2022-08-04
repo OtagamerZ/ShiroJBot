@@ -36,7 +36,7 @@ public class Copier<C extends Collection, T extends Cloneable> {
 	@SuppressWarnings("unchecked")
 	public <O extends Collection<T>> O makeCopy(C col) {
 		try {
-			Method clone = Object.class.getMethod("clone");
+			Method clone = Cloneable.class.getMethod("clone");
 
 			O out = (O) klass.getDeclaredConstructor().newInstance();
 			for (Object t : col) {
