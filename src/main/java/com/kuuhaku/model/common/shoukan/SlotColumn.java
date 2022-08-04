@@ -60,7 +60,7 @@ public class SlotColumn {
 	}
 
 	public Senshi getTop() {
-		if (isLocked() || (top != null && !equals(top.getSlot()))) {
+		if (isLocked() || (top != null && (!equals(top.getSlot()) || top.getHand().getSide() != side))) {
 			game.trigger(Trigger.ON_REMOVE, top.asSource(Trigger.ON_REMOVE));
 			top = null;
 		}
@@ -100,7 +100,7 @@ public class SlotColumn {
 	}
 
 	public Senshi getBottom() {
-		if (isLocked() || (bottom != null && !equals(bottom.getSlot()))) {
+		if (isLocked() || (bottom != null && (!equals(bottom.getSlot()) || top.getHand().getSide() != side))) {
 			game.trigger(Trigger.ON_REMOVE, bottom.asSource(Trigger.ON_REMOVE));
 			bottom = null;
 		}
