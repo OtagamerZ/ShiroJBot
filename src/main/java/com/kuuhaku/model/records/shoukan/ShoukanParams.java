@@ -16,35 +16,29 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION t_check_gaps()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-    CALL fix_deck_gaps();
+package com.kuuhaku.model.records.shoukan;
 
-    RETURN OLD;
-END;
-$$;
+import com.kuuhaku.util.Utils;
 
-DROP TRIGGER IF EXISTS check_gaps ON deck_senshi;
-CREATE TRIGGER check_gaps
-    AFTER DELETE
-    ON deck_senshi
-    FOR EACH STATEMENT
-EXECUTE PROCEDURE t_check_gaps();
+import java.util.List;
 
-DROP TRIGGER IF EXISTS check_gaps ON deck_evogear;
-CREATE TRIGGER check_gaps
-    AFTER DELETE
-    ON deck_evogear
-    FOR EACH STATEMENT
-EXECUTE PROCEDURE t_check_gaps();
+public record ShoukanParams(Integer hp, Integer mp, List<String> cards, Origin origin) {
+	public ShoukanParams() {
+		this(5000, 5, List.of(), null);
+	}
 
-DROP TRIGGER IF EXISTS check_gaps ON deck_field;
-CREATE TRIGGER check_gaps
-    AFTER DELETE
-    ON deck_field
-    FOR EACH STATEMENT
-EXECUTE PROCEDURE t_check_gaps();
+	@Override
+	public Integer hp() {
+		return Utils.getOr(hp, 5000);
+	}
+
+	@Override
+	public Integer mp() {
+		return Utils.getOr(mp, 5);
+	}
+
+	@Override
+	public List<String> cards() {
+		return Utils.getOr(cards, List.of());
+	}
+}

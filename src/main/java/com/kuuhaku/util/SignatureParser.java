@@ -60,11 +60,11 @@ public abstract class SignatureParser {
 								Object curr = out.get(name);
 								arr.add(curr);
 							}
-							arr.add(str.replaceFirst("\"(.*)\"", "$1"));
+							arr.add(str);
 
 							out.put(name, arr);
 						} else {
-							out.put(name, str.replaceFirst("\"(.*)\"", "$1"));
+							out.put(name, str);
 						}
 
 						str = "";

@@ -24,7 +24,7 @@ import org.intellij.lang.annotations.Language;
 import java.io.Serial;
 import java.util.*;
 
-public class JSONArray extends ArrayList<Object> {
+public class JSONArray extends ArrayList<Object> implements Cloneable {
 	@Serial
 	private static final long serialVersionUID = -2826952916406184142L;
 
@@ -249,5 +249,10 @@ public class JSONArray extends ArrayList<Object> {
 	@Override
 	public String toString() {
 		return JSONUtils.toJSON(this);
+	}
+
+	@Override
+	public JSONArray clone() {
+		return (JSONArray) super.clone();
 	}
 }

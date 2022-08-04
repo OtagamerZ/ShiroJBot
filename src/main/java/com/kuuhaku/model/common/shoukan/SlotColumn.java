@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -140,7 +141,7 @@ public class SlotColumn {
 	}
 
 	public List<Senshi> getCards() {
-		return List.of(getTop(), getBottom());
+		return Arrays.asList(getTop(), getBottom());
 	}
 
 	public int getLock() {

@@ -41,14 +41,13 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
 
-import jakarta.persistence.NoResultException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -135,6 +134,10 @@ public class SynthesizeCommand implements Executable {
 									return 0;
 								}).sum();
 
+						for (StashedCard sc : cards) {
+							Utils.getOr(sc.getKawaiponCard(), sc).delete();
+						}
+
 						if (Calc.chance(field)) {
 							Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
 							event.channel().sendMessage(locale.get("success/synth", f)).queue();
@@ -145,25 +148,7 @@ public class SynthesizeCommand implements Executable {
 							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
 						}
 
-						for (StashedCard sc : cards) {
-							KawaiponCard kc = sc.getKawaiponCard();
-							if (kc != null) {
-								DAO.apply(Kawaipon.class, kp.getUid(), k -> {
-									Iterator<KawaiponCard> it = k.getCards().iterator();
-									while (it.hasNext()) {
-										KawaiponCard card = it.next();
-										if (sc.equals(card.getStashEntry())) {
-											it.remove();
-											break;
-										}
-									}
-								});
-							}
-
-							sc.delete();
-						}
-
-				return true;
+						return true;
 					}, event.user()
 			);
 		} catch (PendingConfirmationException e) {

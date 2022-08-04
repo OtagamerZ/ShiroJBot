@@ -143,7 +143,7 @@ public class StashCommand implements Executable {
 					params.toArray()
 			);
 
-			eb.setAuthor(locale.get("str/search_result_stash", results.size(), kp.getCapacity(), kp.getMaxCapacity()));
+			eb.setAuthor(locale.get("str/search_result_stash", results.size(), kp.getStashUsage(), kp.getMaxCapacity()));
 			return Utils.generatePage(eb, results, 5, sc -> new StashItem(locale, sc).toString());
 		};
 

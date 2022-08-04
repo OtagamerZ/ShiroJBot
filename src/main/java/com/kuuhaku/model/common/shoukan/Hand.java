@@ -27,6 +27,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -89,6 +90,7 @@ public class Hand {
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
 			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) && !d.isSPSummon(),
 			d -> {
+				d.setHand(this);
 				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 
 				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
@@ -146,7 +148,7 @@ public class Hand {
 		}
 
 		this.side = side;
-		this.origin = userDeck.getOrigins();
+		this.origin = Utils.getOr(game.getParams().origin(), userDeck.getOrigins());
 		this.base = userDeck.getBaseValues(this);
 		this.hp = base.hp();
 
@@ -158,6 +160,12 @@ public class Hand {
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 								Utils.shufflePairs(f.getModifiers());
+							} else if (d instanceof Senshi s && origin.minor() == Race.DIVINITY) {
+								s.getStats().setSource(
+										Senshi.getRandom(false,
+												"WHERE mana = " + s.getBase().getMana()
+										)
+								);
 							}
 
 							d.setSolid(true);
@@ -165,6 +173,23 @@ public class Hand {
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
 		// TODO Secondary divinity
+
+		for (String card : game.getParams().cards()) {
+			card = card.toUpperCase(Locale.ROOT);
+			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
+					.findFirst()
+					.orElse(CardType.NONE);
+
+			Drawable<?> d = switch (type) {
+				case NONE -> null;
+				case KAWAIPON -> DAO.find(Senshi.class, card);
+				case EVOGEAR -> DAO.find(Evogear.class, card);
+				case FIELD -> DAO.find(Field.class, card);
+			};
+			if (d == null) continue;
+
+			cards.add(d);
+		}
 	}
 
 	public String getUid() {

@@ -24,7 +24,7 @@ import org.intellij.lang.annotations.Language;
 import java.io.Serial;
 import java.util.*;
 
-public class JSONObject extends HashMap<String, Object> {
+public class JSONObject extends HashMap<String, Object> implements Cloneable {
 	@Serial
 	private static final long serialVersionUID = 6263175813447647494L;
 
@@ -266,5 +266,10 @@ public class JSONObject extends HashMap<String, Object> {
 	@Override
 	public String toString() {
 		return JSONUtils.toJSON(this);
+	}
+
+	@Override
+	public JSONObject clone() {
+		return (JSONObject) super.clone();
 	}
 }

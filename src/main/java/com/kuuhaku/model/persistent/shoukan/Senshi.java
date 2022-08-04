@@ -34,6 +34,7 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import jakarta.persistence.*;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -206,7 +207,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		return Utils.getOr(stats.getDescription(locale), base.getDescription(locale));
+		Senshi source = (Senshi) Utils.getOr(stats.getSource(), this);
+
+		return Utils.getOr(stats.getDescription(locale), source.base.getDescription(locale));
 	}
 
 	@Override
@@ -522,7 +525,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public List<String> getCurses() {
+	public ListOrderedSet<String> getCurses() {
 		return stats.getCurses();
 	}
 
@@ -566,7 +569,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public String getEffect() {
-		return Utils.getOr(stats.getEffect(), base.getEffect());
+		Senshi source = (Senshi) Utils.getOr(stats.getSource(), this);
+
+		return Utils.getOr(stats.getEffect(), source.base.getEffect());
 	}
 
 	public boolean hasEffect() {
@@ -659,7 +664,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			e.setHand(getHand());
 			getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
 		});
-		stats = new CardExtra();
+		stats = stats.clone();
 		slot = null;
 		if (leech != null) {
 			leech.getLeeches().remove(this);

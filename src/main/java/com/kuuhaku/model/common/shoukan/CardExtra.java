@@ -28,42 +28,90 @@ import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Copier;
 import com.kuuhaku.util.json.JSONObject;
+import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
-public class CardExtra {
-	private final Set<AttrMod> mana = new HashSet<>();
-	private final Set<AttrMod> blood = new HashSet<>();
-	private final Set<AttrMod> sacrifices = new HashSet<>();
+public class CardExtra implements Cloneable {
+	private final HashSet<AttrMod> mana;
+	private final HashSet<AttrMod> blood;
+	private final HashSet<AttrMod> sacrifices;
 
-	private final Set<AttrMod> atk = new HashSet<>();
-	private final Set<AttrMod> def = new HashSet<>();
+	private final HashSet<AttrMod> atk;
+	private final HashSet<AttrMod> def;
 
-	private final Set<AttrMod> dodge = new HashSet<>();
-	private final Set<AttrMod> block = new HashSet<>();
+	private final HashSet<AttrMod> dodge;
+	private final HashSet<AttrMod> block;
 
-	private final Set<AttrMod> attrMult = new HashSet<>();
+	private final HashSet<AttrMod> attrMult;
 
-	private final Set<AttrMod> tier = new HashSet<>();
+	private final HashSet<AttrMod> tier;
 
-	private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
-	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
+	private final EnumSet<Flag> flags;
+	private final EnumSet<Flag> permFlags;
 
-	private final JSONObject data = new JSONObject();
-	private final JSONObject perm = new JSONObject();
-	private final List<String> curses = new BondedList<>(s -> !getCurses().contains(s));
+	private final JSONObject data;
+	private final JSONObject perm;
+	private final ListOrderedSet<String> curses;
 
 	private Race race = null;
 	private Card vanity = null;
 
 	private String write = "";
+
+	private Drawable<?> source = null;
 	private String description = null;
 	private String effect = null;
 
 	private transient Field[] fieldCache = null;
+
+	public CardExtra(
+			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
+			HashSet<AttrMod> atk, HashSet<AttrMod> def, HashSet<AttrMod> dodge,
+			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
+			EnumSet<Flag> flags, EnumSet<Flag> permFlags, JSONObject data,
+			JSONObject perm, ListOrderedSet<String> curses
+	) {
+		this.mana = mana;
+		this.blood = blood;
+		this.sacrifices = sacrifices;
+		this.atk = atk;
+		this.def = def;
+		this.dodge = dodge;
+		this.block = block;
+		this.attrMult = attrMult;
+		this.tier = tier;
+		this.flags = flags;
+		this.permFlags = permFlags;
+		this.data = data;
+		this.perm = perm;
+		this.curses = curses;
+	}
+
+	public CardExtra() {
+		this(
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				new HashSet<>(),
+				EnumSet.noneOf(Flag.class),
+				EnumSet.noneOf(Flag.class),
+				new JSONObject(),
+				new JSONObject(),
+				ListOrderedSet.listOrderedSet(BondedList.withCheck(s -> s != null && s.isBlank()))
+		);
+	}
 
 	public int getMana() {
 		return (int) sum(mana);
@@ -295,7 +343,7 @@ public class CardExtra {
 		return perm;
 	}
 
-	public List<String> getCurses() {
+	public ListOrderedSet<String> getCurses() {
 		return curses;
 	}
 
@@ -321,6 +369,14 @@ public class CardExtra {
 
 	public void setWrite(String write) {
 		this.write = write;
+	}
+
+	public Drawable<?> getSource() {
+		return source;
+	}
+
+	public void setSource(Drawable<?> source) {
+		this.source = source;
 	}
 
 	public String getDescription(I18N locale) {
@@ -376,5 +432,36 @@ public class CardExtra {
 		}
 
 		return Calc.round(out, 1);
+	}
+
+	@Override
+	public CardExtra clone() {
+		@SuppressWarnings("rawtypes")
+		Copier<HashSet, AttrMod> copier = new Copier<>(HashSet.class, AttrMod.class);
+
+		CardExtra clone = new CardExtra(
+				copier.makeCopy(mana),
+				copier.makeCopy(blood),
+				copier.makeCopy(sacrifices),
+				copier.makeCopy(atk),
+				copier.makeCopy(def),
+				copier.makeCopy(dodge),
+				copier.makeCopy(block),
+				copier.makeCopy(attrMult),
+				copier.makeCopy(tier),
+				EnumSet.copyOf(flags),
+				EnumSet.copyOf(permFlags),
+				data.clone(),
+				perm.clone(),
+				ListOrderedSet.listOrderedSet(BondedList.withCheck(s -> s != null && s.isBlank()))
+		);
+
+		clone.race = race;
+		clone.vanity = vanity;
+		clone.write = write;
+		clone.description = description;
+		clone.effect = effect;
+
+		return clone;
 	}
 }

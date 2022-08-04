@@ -37,6 +37,7 @@ import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONArray;
 import jakarta.persistence.*;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -141,7 +142,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public List<String> getCurses() {
+	public ListOrderedSet<String> getCurses() {
 		return stats.getCurses();
 	}
 
@@ -359,7 +360,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void reset() {
-		stats = new CardExtra();
+		stats = stats.clone();
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}

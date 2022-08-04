@@ -482,14 +482,26 @@ public class Deck extends DAO<Deck> {
 		try {
 			return new BaseValues(() -> {
 				Origin origin = getOrigins();
-				int bHP = 5000;
+				int bHP;
+				if (h != null) {
+					bHP = h.getGame().getParams().hp();
+				} else {
+					bHP = 5000;
+				}
+
 				double reduction = Math.max(0, Calc.prcnt(getEvoWeight(), 24) - 1);
-				AccFunction<Integer, Integer> mpGain = t -> 5;
+				AccFunction<Integer, Integer> mpGain = t -> {
+					if (h != null) {
+						return h.getGame().getParams().mp();
+					} else {
+						return 5;
+					}
+				};
 				AccFunction<Integer, Integer> handCap = t -> 5;
 
 				mpGain = switch (origin.major()) {
 					case DEMON -> {
-						bHP -= 1500;
+						bHP -= bHP * 1500 / 5000;
 						if (h != null) {
 							yield mpGain.accumulate((t, mp) -> mp + (int) (5 - 5 * h.getHPPrcnt()));
 						} else {

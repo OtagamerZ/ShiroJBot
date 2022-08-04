@@ -16,35 +16,37 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION t_check_gaps()
+CREATE OR REPLACE FUNCTION t_remove_deck_references()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    CALL fix_deck_gaps();
+    DELETE
+    FROM deck_senshi ds
+    USING get_missing_deck_references('senshi') x
+    WHERE ds.deck_id = x.id
+    AND ds.index = x.index;
+
+    DELETE
+    FROM deck_evogear de
+        USING get_missing_deck_references('evogear') x
+    WHERE de.deck_id = x.id
+      AND de.index = x.index;
+
+    DELETE
+    FROM deck_field df
+        USING get_missing_deck_references('field') x
+    WHERE df.deck_id = x.id
+      AND df.index = x.index;
 
     RETURN OLD;
 END;
 $$;
 
-DROP TRIGGER IF EXISTS check_gaps ON deck_senshi;
-CREATE TRIGGER check_gaps
+DROP TRIGGER IF EXISTS remove_deck_references ON stashed_card;
+CREATE TRIGGER remove_deck_references
     AFTER DELETE
-    ON deck_senshi
-    FOR EACH STATEMENT
-EXECUTE PROCEDURE t_check_gaps();
-
-DROP TRIGGER IF EXISTS check_gaps ON deck_evogear;
-CREATE TRIGGER check_gaps
-    AFTER DELETE
-    ON deck_evogear
-    FOR EACH STATEMENT
-EXECUTE PROCEDURE t_check_gaps();
-
-DROP TRIGGER IF EXISTS check_gaps ON deck_field;
-CREATE TRIGGER check_gaps
-    AFTER DELETE
-    ON deck_field
-    FOR EACH STATEMENT
-EXECUTE PROCEDURE t_check_gaps();
+    ON stashed_card
+    FOR EACH ROW
+EXECUTE PROCEDURE t_remove_deck_references();

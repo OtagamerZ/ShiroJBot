@@ -28,16 +28,12 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	private final Consumer<T> bonding;
 	private final Predicate<T> check;
 
-	public BondedLinkedList(Consumer<T> bonding) {
-		this(t -> true, bonding);
+	public static <T> BondedLinkedList<T> withBind(Consumer<T> bonding) {
+		return new BondedLinkedList<T>(t -> true, bonding);
 	}
 
-	public BondedLinkedList(Predicate<T> check) {
-		this(check, t -> {});
-	}
-
-	public BondedLinkedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
-		this(c, t -> true, bonding);
+	public static <T> BondedLinkedList<T> withCheck(Predicate<T> check) {
+		return new BondedLinkedList<T>(check, t -> {});
 	}
 
 	public BondedLinkedList(Predicate<T> check, Consumer<T> bonding) {
@@ -97,12 +93,8 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		for (T t : c) {
-			if (!check.test(t)) return false;
-		}
-
 		try {
-			return super.addAll(c);
+			return super.addAll(c.stream().filter(check).toList());
 		} finally {
 			for (T t : c) {
 				bonding.accept(t);
@@ -112,12 +104,8 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		for (T t : c) {
-			if (!check.test(t)) return false;
-		}
-
 		try {
-			return super.addAll(index, c);
+			return super.addAll(index, c.stream().filter(check).toList());
 		} finally {
 			for (T t : c) {
 				bonding.accept(t);

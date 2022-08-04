@@ -70,6 +70,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final long seed = Constants.DEFAULT_RNG.nextLong();
 
 	private final I18N locale;
+	private final ShoukanParams params;
 	private final String[] players;
 	private final Map<Side, Hand> hands;
 	private final Arena arena;
@@ -81,12 +82,13 @@ public class Shoukan extends GameInstance<Phase> {
 	private StateSnap snapshot = null;
 	private boolean restoring = false;
 
-	public Shoukan(I18N locale, User p1, User p2) {
-		this(locale, p1.getId(), p2.getId());
+	public Shoukan(I18N locale, ShoukanParams params, User p1, User p2) {
+		this(locale, params, p1.getId(), p2.getId());
 	}
 
-	public Shoukan(I18N locale, String p1, String p2) {
+	public Shoukan(I18N locale, ShoukanParams params, String p1, String p2) {
 		this.locale = locale;
+		this.params = Utils.getOr(params, new ShoukanParams());
 		this.players = new String[]{p1, p2};
 		this.hands = Map.of(
 				Side.TOP, new Hand(p1, this, Side.TOP),
@@ -840,6 +842,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public I18N getLocale() {
 		return locale;
+	}
+
+	public ShoukanParams getParams() {
+		return params;
 	}
 
 	public String[] getPlayers() {
