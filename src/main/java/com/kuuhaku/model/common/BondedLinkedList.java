@@ -21,6 +21,7 @@ package com.kuuhaku.model.common;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -93,10 +94,12 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
+		List<? extends T> filtered = c.stream().filter(check).toList();
+
 		try {
-			return super.addAll(c.stream().filter(check).toList());
+			return super.addAll(filtered);
 		} finally {
-			for (T t : c) {
+			for (T t : filtered) {
 				bonding.accept(t);
 			}
 		}
@@ -104,10 +107,12 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
+		List<? extends T> filtered = c.stream().filter(check).toList();
+
 		try {
-			return super.addAll(index, c.stream().filter(check).toList());
+			return super.addAll(index, filtered);
 		} finally {
-			for (T t : c) {
+			for (T t : filtered) {
 				bonding.accept(t);
 			}
 		}
