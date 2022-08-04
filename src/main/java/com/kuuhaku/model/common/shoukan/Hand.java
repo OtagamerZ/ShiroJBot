@@ -192,7 +192,7 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> getCards() {
-		cards.removeIf(d -> !d.getHand().equals(this));
+		cards.removeIf(d -> !equals(d.getHand()));
 
 		return cards;
 	}
@@ -206,7 +206,7 @@ public class Hand {
 	}
 
 	public LinkedList<Drawable<?>> getRealDeck() {
-		deck.removeIf(d -> !d.getHand().equals(this));
+		deck.removeIf(d -> !equals(d.getHand()));
 
 		return deck;
 	}
@@ -368,7 +368,7 @@ public class Hand {
 	}
 
 	public LinkedList<Drawable<?>> getGraveyard() {
-		graveyard.removeIf(d -> !d.getHand().equals(this));
+		graveyard.removeIf(d -> !equals(d.getHand()));
 
 		return graveyard;
 	}
