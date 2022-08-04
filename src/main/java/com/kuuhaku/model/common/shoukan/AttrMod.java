@@ -22,7 +22,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 
 import java.util.Objects;
 
-public class AttrMod {
+public class AttrMod implements Cloneable {
 	private final Drawable<?> source;
 	private final double value;
 	private int expiration;
@@ -88,5 +88,14 @@ public class AttrMod {
 	@Override
 	public int hashCode() {
 		return Objects.hash(source, hash);
+	}
+
+	@Override
+	public AttrMod clone() {
+		try {
+			return (AttrMod) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError();
+		}
 	}
 }

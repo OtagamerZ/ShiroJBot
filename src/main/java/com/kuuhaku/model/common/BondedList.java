@@ -28,16 +28,12 @@ public class BondedList<T> extends ArrayList<T> {
 	private final Consumer<T> bonding;
 	private final Predicate<T> check;
 
-	public BondedList(Consumer<T> bonding) {
-		this(t -> true, bonding);
+	public static <T> BondedList<T> withBind(Consumer<T> bonding) {
+		return new BondedList<T>(t -> true, bonding);
 	}
 
-	public BondedList(Predicate<T> check) {
-		this(check, t -> {});
-	}
-
-	public BondedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
-		this(c, t -> true, bonding);
+	public static <T> BondedList<T> withCheck(Predicate<T> check) {
+		return new BondedList<T>(check, t -> {});
 	}
 
 	public BondedList(Predicate<T> check, Consumer<T> bonding) {

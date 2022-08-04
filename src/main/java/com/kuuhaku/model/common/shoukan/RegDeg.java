@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.BondedList;
 import java.util.List;
 
 public class RegDeg {
-	private final List<ValueOverTime> values = new BondedList<>(v -> v.setValue(reduce(v.getClass(), v.getValue())));
+	private final List<ValueOverTime> values = BondedList.withBind(v -> v.setValue(reduce(v.getClass(), v.getValue())));
 
 	public List<ValueOverTime> getValues() {
 		return values;
@@ -31,6 +31,10 @@ public class RegDeg {
 
 	public void add(ValueOverTime vot) {
 		values.add(vot);
+	}
+
+	public void leftShift(ValueOverTime vot) {
+		add(vot);
 	}
 
 	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {

@@ -159,6 +159,12 @@ public class Hand {
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 								Utils.shufflePairs(f.getModifiers());
+							} else if (d instanceof Senshi s && origin.minor() == Race.DIVINITY) {
+								s.getStats().setSource(
+										Senshi.getRandom(false,
+												"WHERE mana = " + s.getBase().getMana()
+										)
+								);
 							}
 
 							d.setSolid(true);

@@ -28,16 +28,12 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	private final Consumer<T> bonding;
 	private final Predicate<T> check;
 
-	public BondedLinkedList(Consumer<T> bonding) {
-		this(t -> true, bonding);
+	public static <T> BondedLinkedList<T> withBind(Consumer<T> bonding) {
+		return new BondedLinkedList<T>(t -> true, bonding);
 	}
 
-	public BondedLinkedList(Predicate<T> check) {
-		this(check, t -> {});
-	}
-
-	public BondedLinkedList(@Nonnull Collection<? extends T> c, Consumer<T> bonding) {
-		this(c, t -> true, bonding);
+	public static <T> BondedLinkedList<T> withCheck(Predicate<T> check) {
+		return new BondedLinkedList<T>(check, t -> {});
 	}
 
 	public BondedLinkedList(Predicate<T> check, Consumer<T> bonding) {

@@ -33,6 +33,7 @@ import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
+import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -109,8 +110,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	default void setCooldown(int time) {
 	}
 
-	default List<String> getCurses() {
-		return List.of();
+	default ListOrderedSet<String> getCurses() {
+		return new ListOrderedSet<>();
 	}
 
 	boolean isSolid();
