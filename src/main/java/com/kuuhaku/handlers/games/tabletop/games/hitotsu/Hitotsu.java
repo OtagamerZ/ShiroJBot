@@ -30,6 +30,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.AddedAnime;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -413,7 +414,14 @@ public class Hitotsu extends Game {
 					.queue(s -> Pages.paginate(s, pages, ShiroInfo.USE_BUTTONS, 1, TimeUnit.MINUTES));
 		});
 		buttons.put(Helper.parseEmoji("\uD83D\uDCE4"), wrapper -> {
-			seats.get(getCurrent().getId()).draw(getDeque());
+			Card last = played.getLast().getCard();
+			Hand h = seats.get(getCurrent().getId());
+			if (h.getCards().stream().anyMatch(c -> c.getCard().getAnime().equals(last.getAnime()) || c.getCard().getRarity().equals(last.getRarity()))) {
+				channel.sendMessage("❌ | Você não pode passar a vez se tiver uma carta válida.").queue(null, Helper::doNothing);
+				return;
+			}
+
+			h.draw(getDeque());
 
 			User u = getCurrent();
 			resetTimer();
