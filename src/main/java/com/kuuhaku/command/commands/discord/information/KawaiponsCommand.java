@@ -105,16 +105,7 @@ public class KawaiponsCommand implements Executable {
                 if (rr == null) {
                     if (c == null) {
                         if (r == null) {
-                            if (args[0].equalsIgnoreCase("total")) {
-                                boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
-                                Set<KawaiponCard> collection = kp.getCards();
-
-                                KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(author.getId(), (AddedAnime) null, foil);
-
-                                send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.getTotalCards());
-                                return;
-                            } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
+                           if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
                                 List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
