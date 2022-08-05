@@ -1,3 +1,3 @@
 files:
   - source: /src/main/resources/locale
-    translation: /lang_%two_letters_code%.properties
+    translation: /src/main/resources/crowdin/lang_%two_letters_code%.properties
