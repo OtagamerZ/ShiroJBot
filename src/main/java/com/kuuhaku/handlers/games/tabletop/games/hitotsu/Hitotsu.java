@@ -417,7 +417,7 @@ public class Hitotsu extends Game {
 			Card last = played.getLast().getCard();
 			Hand h = seats.get(getCurrent().getId());
 			if (h.getCards().stream().anyMatch(c -> c.getCard().getAnime().equals(last.getAnime()) || c.getCard().getRarity().equals(last.getRarity()))) {
-				channel.sendMessage("❌ | Você não pode passar a vez se tiver uma carta válida.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não pode passar a vez se tiver uma carta válida para jogar.").queue(null, Helper::doNothing);
 				return;
 			}
 
