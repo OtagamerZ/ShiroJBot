@@ -166,6 +166,7 @@ public class Hand {
 												"WHERE mana = " + s.getBase().getMana()
 										)
 								);
+								System.out.println(s.getCard() + " - " + s.getStats().getSource().getCard());
 							}
 
 							d.setSolid(true);
