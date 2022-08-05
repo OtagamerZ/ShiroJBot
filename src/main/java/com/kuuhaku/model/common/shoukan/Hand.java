@@ -163,7 +163,8 @@ public class Hand {
 							} else if (d instanceof Senshi s && origin.minor() == Race.DIVINITY && !s.hasEffect()) {
 								s.getStats().setSource(
 										Senshi.getRandom(false,
-												"WHERE mana = " + s.getBase().getMana()
+												"WHERE effect IS NOT NULL",
+												"AND mana = " + s.getBase().getMana()
 										)
 								);
 								System.out.println(s.getCard() + " - " + s.getStats().getSource().getCard());
