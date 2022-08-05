@@ -167,7 +167,6 @@ public class Hand {
 												"AND mana = " + s.getBase().getMana()
 										)
 								);
-								System.out.println(s.getCard() + " - " + s.getStats().getSource().getCard());
 							}
 
 							d.setSolid(true);
