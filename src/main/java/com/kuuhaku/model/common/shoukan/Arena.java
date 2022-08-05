@@ -473,6 +473,11 @@ public class Arena implements Renderer {
 
 			int x;
 			int y;
+			String name = hand.getName();
+			if (game.getCurrentSide() == hand.getSide()) {
+				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				name = "--> " + name + " <--";
+			}
 			g.setColor(Color.WHITE);
 			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 
@@ -484,15 +489,10 @@ public class Arena implements Renderer {
 			} else {
 				g.drawImage(bi, 0, 0, null);
 
-				x = SIZE.width - MARGIN.x - g.getFontMetrics().stringWidth(hand.getName());
+				x = SIZE.width - MARGIN.x - g.getFontMetrics().stringWidth(name);
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
-			String name = hand.getName();
-			if (game.getCurrentSide() == hand.getSide()) {
-				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
-				name = "--> " + hand.getName() + " <--";
-			}
 			Graph.drawOutlinedString(g, name, x, y, 10, Color.black);
 
 			int rad = (int) (BAR_SIZE.height / 1.5);

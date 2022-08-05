@@ -160,10 +160,11 @@ public class Hand {
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 								Utils.shufflePairs(f.getModifiers());
-							} else if (d instanceof Senshi s && origin.minor() == Race.DIVINITY) {
+							} else if (d instanceof Senshi s && origin.minor() == Race.DIVINITY && !s.hasEffect()) {
 								s.getStats().setSource(
 										Senshi.getRandom(false,
-												"WHERE mana = " + s.getBase().getMana()
+												"WHERE effect IS NOT NULL",
+												"AND mana = " + s.getBase().getMana()
 										)
 								);
 							}
@@ -172,7 +173,6 @@ public class Hand {
 						})
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
-		// TODO Secondary divinity
 
 		for (String card : game.getParams().cards()) {
 			card = card.toUpperCase(Locale.ROOT);
