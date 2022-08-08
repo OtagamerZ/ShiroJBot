@@ -239,7 +239,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		}
 
 		Graph.applyTransformed(g2d, g1 -> {
-			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0x00FFFFFF), true);
+			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0xFFFFFF), true);
 
 			g1.setClip(inner);
 			g1.setColor(bgCol);

@@ -62,7 +62,7 @@ public abstract class Graph {
 		Shape outline = layout.getOutline(AffineTransform.getTranslateInstance(x, y));
 
 		int alpha = color.getAlpha() / width * power;
-		g2d.setColor(new Color((alpha << 24) | (color.getRGB() & 0x00FFFFFF), true));
+		g2d.setColor(new Color((alpha << 24) | (color.getRGB() & 0xFFFFFF), true));
 		for (int i = 1; i <= width; i++) {
 			g2d.setStroke(new BasicStroke(i, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, null, 0));
 			g2d.draw(outline);
