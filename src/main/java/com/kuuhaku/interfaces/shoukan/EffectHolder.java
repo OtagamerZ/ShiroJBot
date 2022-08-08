@@ -105,7 +105,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 
 					if (!Utils.equalsAny(color, "", "b")) {
-						val = val + "   ";
+						val = val + "    ";
 					}
 
 					return val.replaceAll("\\{.+}", "");
@@ -130,7 +130,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				g2d.drawString(str, x, y);
 			}
 
-			BufferedImage icon = switch (g2d.getColor().getRGB()) {
+			BufferedImage icon = switch (g2d.getColor().getRGB() & 0xFFFFFF) {
 				case 0x85C720 -> IO.getResourceAsImage("shoukan/icons/hp.png");
 				case 0x3F9EFF -> IO.getResourceAsImage("shoukan/icons/mp.png");
 				case 0x9A1313 -> IO.getResourceAsImage("shoukan/icons/regen.png");
