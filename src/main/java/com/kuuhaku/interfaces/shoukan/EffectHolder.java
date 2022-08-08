@@ -25,13 +25,16 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -58,9 +61,15 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				try {
 					@Language("Groovy") String calc = groups.getString("calc");
 					if (!calc.isBlank()) {
+						Hand h = d.getHand();
+
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						val = String.valueOf(
 								Utils.eval(calc, Map.of(
+										"pmp", h == null ? 5 : h.getMP(),
+										"php", h == null ? 5000 : h.getHP(),
+										"pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek()),
+										"prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek()),
 										"mp", d.getMPCost(),
 										"hp", d.getHPCost(),
 										"atk", d.getDmg(),
@@ -71,7 +80,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						);
 
 						val = StringUtils.abbreviate(
-								str.replaceFirst("\\{.+}", String.valueOf((int) Double.parseDouble(val))),
+								str.replaceFirst("\\{.+}", String.valueOf(NumberUtils.toInt(val))),
 								Drawable.MAX_DESC_LENGTH
 						);
 					} else {
@@ -79,14 +88,24 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 
 					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
-					switch (groups.getString("color", "")) {
-						case "mp" -> g2d.setColor(new Color(0x3F9EFF));
-						case "hp" -> g2d.setColor(new Color(0x85C720));
-						case "atk" -> g2d.setColor(new Color(0xFF0000));
+					String color = groups.getString("color", "");
+					switch (color) {
+						case "php" -> g2d.setColor(new Color(0x85C720));
+						case "pmp" -> g2d.setColor(new Color(0x3F9EFF));
+						case "pdg" -> g2d.setColor(new Color(0x9A1313));
+						case "prg" -> g2d.setColor(new Color(0x7ABCFF));
+
+						case "hp" -> g2d.setColor(new Color(0xFF0000));
+						case "mp" -> g2d.setColor(new Color(0x3F9EFE));
+						case "atk" -> g2d.setColor(new Color(0xFE0000));
 						case "dfs" -> g2d.setColor(new Color(0x00C500));
 						case "ddg" -> g2d.setColor(new Color(0xFFC800));
 						case "blk" -> g2d.setColor(new Color(0xA9A9A9));
 						case "b" -> g2d.setColor(new Color(0x010101));
+					}
+
+					if (!Utils.equalsAny(color, "", "b")) {
+						val = val + "   ";
 					}
 
 					return val.replaceAll("\\{.+}", "");
@@ -109,6 +128,25 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 			} else {
 				g2d.drawString(str, x, y);
+			}
+
+			BufferedImage icon = switch (g2d.getColor().getRGB()) {
+				case 0x85C720 -> IO.getResourceAsImage("shoukan/icons/hp.png");
+				case 0x3F9EFF -> IO.getResourceAsImage("shoukan/icons/mp.png");
+				case 0x9A1313 -> IO.getResourceAsImage("shoukan/icons/regen.png");
+				case 0x7ABCFF -> IO.getResourceAsImage("shoukan/icons/degen.png");
+				case 0xFF0000 -> IO.getResourceAsImage("shoukan/icons/blood.png");
+				case 0x3F9EFE -> IO.getResourceAsImage("shoukan/icons/mana.png");
+				case 0xFE0000 -> IO.getResourceAsImage("shoukan/icons/attack.png");
+				case 0x00C500 -> IO.getResourceAsImage("shoukan/icons/defense.png");
+				case 0xFFC800 -> IO.getResourceAsImage("shoukan/icons/dodge.png");
+				case 0xA9A9A9 -> IO.getResourceAsImage("shoukan/icons/block.png");
+				default -> null;
+			};
+
+			if (icon != null) {
+				int size = g2d.getFont().getSize();
+				g2d.drawImage(icon, x, y - size, size, size, null);
 			}
 		};
 	}
