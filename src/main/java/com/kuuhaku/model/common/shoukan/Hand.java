@@ -559,10 +559,17 @@ public class Hand {
 		this.mp = Math.max(0, this.mp - Math.max(0, value));
 	}
 
-	public void consumeSC(int value) {
+	public List<Drawable<?>> consumeSC(int value) {
+		List<Drawable<?>> consumed = new ArrayList<>();
+
 		for (int i = 0; i < value && !discard.isEmpty(); i++) {
-			game.getArena().getBanned().add(discard.remove(0));
+			Drawable<?> card = discard.remove(0);
+
+			consumed.add(card);
+			game.getArena().getBanned().add(card);
 		}
+
+		return consumed;
 	}
 
 	public Account getAccount() {

@@ -185,12 +185,17 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
-			curr.consumeSC(chosen.getSCCost());
+			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
 					case "b" -> s.setFlipped(true);
+				}
+
+				if (!consumed.isEmpty()) {
+					s.getStats().getData().put("consumed", consumed);
 				}
 			}));
 		} else {
@@ -201,12 +206,18 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
-			curr.consumeSC(chosen.getSCCost());
+			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+
+
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
 					case "b" -> s.setFlipped(true);
+				}
+
+				if (!consumed.isEmpty()) {
+					s.getStats().getData().put("consumed", consumed);
 				}
 			}));
 		}
@@ -256,10 +267,14 @@ public class Shoukan extends GameInstance<Phase> {
 		Senshi target = slot.getTop();
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
-		curr.consumeSC(chosen.getSCCost());
-		chosen.setAvailable(false);
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
+		chosen.setAvailable(false);
 		Evogear copy = chosen.copy();
+		if (!consumed.isEmpty()) {
+			copy.getStats().getData().put("consumed", consumed);
+		}
+
 		target.getEquipments().add(copy);
 		reportEvent("str/equip_card",
 				curr.getName(),
@@ -546,10 +561,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeHP(chosen.getHPCost());
 		curr.consumeMP(chosen.getMPCost());
-		curr.consumeSC(chosen.getSCCost());
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+
 		chosen.setAvailable(false);
 		chosen.withCopy(e -> {
 			curr.getGraveyard().add(e);
+			if (!consumed.isEmpty()) {
+				e.getStats().getData().put("consumed", consumed);
+			}
+
 			e.execute(e.toParameters(tgt));
 		});
 
