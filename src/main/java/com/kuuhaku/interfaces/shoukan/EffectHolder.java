@@ -35,6 +35,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -65,18 +66,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						val = String.valueOf(
-								Utils.eval(calc, Map.of(
-										"pmp", h == null ? 5 : h.getMP(),
-										"php", h == null ? 5000 : h.getHP(),
-										"pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek()),
-										"prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek()),
-										"mp", d.getMPCost(),
-										"hp", d.getHPCost(),
-										"atk", d.getDmg(),
-										"dfs", d.getDef(),
-										"ddg", d.getDodge(),
-										"blk", d.getBlock()
-								))
+								Utils.eval(calc, new HashMap<>() {{
+									put("bhp", h == null ? 5000 : h.getBase().hp());
+									put("pmp", h == null ? 5 : h.getMP());
+									put("php", h == null ? 5000 : h.getHP());
+									put("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek()));
+									put("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek()));
+									put("mp", d.getMPCost());
+									put("hp", d.getHPCost());
+									put("atk", d.getDmg());
+									put("dfs", d.getDef());
+									put("ddg", d.getDodge());
+									put("blk", d.getBlock());
+								}})
 						);
 
 						val = StringUtils.abbreviate(
