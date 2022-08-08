@@ -80,7 +80,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						);
 
 						val = StringUtils.abbreviate(
-								str.replaceFirst("\\{.+}", String.valueOf(NumberUtils.toInt(val))),
+								str.replaceFirst("\\{.+}", String.valueOf((int) NumberUtils.toDouble(val))),
 								Drawable.MAX_DESC_LENGTH
 						);
 					} else {
@@ -146,7 +146,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			if (icon != null) {
 				int size = g2d.getFont().getSize();
-				g2d.drawImage(icon, x + g2d.getFontMetrics().stringWidth(str.substring(0, str.length() - 4)) + 1, y - size + 1, size, size, null);
+				g2d.drawImage(icon, x + g2d.getFontMetrics().stringWidth(str.substring(0, str.length() - 4)), y - size + 1, size, size, null);
 			}
 		};
 	}
