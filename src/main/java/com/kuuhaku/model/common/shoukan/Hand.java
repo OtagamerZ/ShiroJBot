@@ -399,6 +399,8 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> getDiscard() {
+		discard.removeIf(d -> !cards.contains(d));
+
 		return discard;
 	}
 
