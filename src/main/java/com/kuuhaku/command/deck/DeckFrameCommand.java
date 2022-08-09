@@ -101,7 +101,7 @@ public class DeckFrameCommand implements Executable {
 								});
 								put(Utils.parseEmoji("✅"), w -> {
 									FrameColor frame = frames[i.get()];
-									if (frame.canUse(acc)) {
+									if (!frame.canUse(acc)) {
 										event.channel().sendMessage(locale.get("error/frame_locked")).queue();
 										return;
 									}
