@@ -18,8 +18,10 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 
@@ -39,14 +41,14 @@ public enum FrameColor {
 	RED,
 	GRAY,
 
-	LEGACY_PINK(""),
-	LEGACY_PURPLE(""),
-	LEGACY_BLUE(""),
-	LEGACY_CYAN(""),
-	LEGACY_GREEN(""),
-	LEGACY_YELLOW(""),
-	LEGACY_RED(""),
-	LEGACY_GRAY(""),
+	LEGACY_PINK("VETERAN"),
+	LEGACY_PURPLE("VETERAN"),
+	LEGACY_BLUE("VETERAN"),
+	LEGACY_CYAN("VETERAN"),
+	LEGACY_GREEN("VETERAN"),
+	LEGACY_YELLOW("VETERAN"),
+	LEGACY_RED("VETERAN"),
+	LEGACY_GRAY("VETERAN"),
 
 	/*RAINBOW("**(Complete 10 coleções cromadas)** Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
 			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
@@ -186,6 +188,12 @@ public enum FrameColor {
 
 	public String getDescription(I18N locale) {
 		return locale.get("frame/" + name() + "_desc");
+	}
+
+	public Title getTitle() {
+		if (title == null) return null;
+
+		return DAO.find(Title.class, title);
 	}
 
 	public boolean canUse(Account acc) {
