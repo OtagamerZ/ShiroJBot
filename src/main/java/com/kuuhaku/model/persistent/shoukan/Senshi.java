@@ -87,13 +87,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private int state = 0b10;
 	/*
 	0x00 F FFF FF
-	     │ │││ └┴ 0011 1111
-	     │ │││      ││ │││└ solid
-	     │ │││      ││ ││└─ available
-	     │ │││      ││ │└── defending
-	     │ │││      ││ └─── flipped
-	     │ │││      │└ special summon
-	     │ │││      └─ sealed
+	     │ │││ └┴ 0001 1111
+	     │ │││       │ │││└ solid
+	     │ │││       │ ││└─ available
+	     │ │││       │ │└── defending
+	     │ │││       │ └─── flipped
+	     │ │││       └ sealed
 	     │ ││└─ (0 - 15) sleeping
 	     │ │└── (0 - 15) stunned
 	     │ └─── (0 - 15) stasis
@@ -448,22 +447,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 3, flipped);
 	}
 
-	@Override
-	public boolean isSPSummon() {
+	public boolean isSealed() {
 		return Bit.on(state, 4);
 	}
 
-	@Override
-	public void setSPSummon(boolean special) {
-		state = Bit.set(state, 4, special);
-	}
-
-	public boolean isSealed() {
-		return Bit.on(state, 5);
-	}
-
 	public void setSealed(boolean sealed) {
-		state = Bit.set(state, 5, sealed);
+		state = Bit.set(state, 4, sealed);
 	}
 
 	public boolean isSleeping() {
@@ -670,9 +659,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			leech.getLeeches().remove(this);
 		}
 
-		byte base = 0b10;
-		base = (byte) Bit.set(base, 0, isSolid());
-		base = (byte) Bit.set(base, 4, isSPSummon());
+		byte base = 0b11;
 		base = (byte) Bit.set(base, 5, isSealed());
 
 		state = base;

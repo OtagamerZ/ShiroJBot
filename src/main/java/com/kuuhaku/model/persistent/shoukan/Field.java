@@ -140,10 +140,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public void reset() {
-		byte base = 0b10;
-		base = (byte) Bit.set(base, 0, isSolid());
-
-		state = base;
+		state = 0b11;
 	}
 
 	@Override

@@ -96,11 +96,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private byte state = 0b10;
 	/*
 	0x0F
-	   └ 1111
-	     │││└ solid
-	     ││└─ available
-	     │└── flipped
-	     └─── special summon
+	   └ 0111
+	      ││└ solid
+	      │└─ available
+	      └── flipped
 	 */
 
 	@Override
@@ -301,16 +300,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		state = (byte) Bit.set(state, 2, flipped);
 	}
 
-	@Override
-	public boolean isSPSummon() {
-		return Bit.on(state, 4);
-	}
-
-	@Override
-	public void setSPSummon(boolean special) {
-		state = (byte) Bit.set(state, 4, special);
-	}
-
 	public String getEffect() {
 		return Utils.getOr(stats.getEffect(), base.getEffect());
 	}
@@ -365,11 +354,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			leech.getLeeches().remove(this);
 		}
 
-		byte base = 0b10;
-		base = (byte) Bit.set(base, 0, isSolid());
-		base = (byte) Bit.set(base, 3, isSPSummon());
-
-		state = base;
+		state = 0b11;
 	}
 
 	@Override
