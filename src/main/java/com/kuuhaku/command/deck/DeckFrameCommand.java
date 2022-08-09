@@ -73,7 +73,8 @@ public class DeckFrameCommand implements Executable {
 					Title title = fc.getTitle();
 					assert title != null;
 
-					eb.setThumbnail("https://indyme.com/wp-content/uploads/2020/11/lock-icon.png")
+					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+							.setImage(null)
 							.setTitle(locale.get("str/frame_locked"))
 							.setDescription(locale.get("str/frame_locked_desc", title.getInfo(locale).getName()));
 				} else {
@@ -107,6 +108,7 @@ public class DeckFrameCommand implements Executable {
 
 									d.setFrame(frame);
 									d.save();
+									event.channel().sendMessage(locale.get("success/frame_selected", d.getName())).queue();
 								});
 							}},
 							true, true, 1, TimeUnit.MINUTES, event.user()::equals
