@@ -176,10 +176,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		this.hand = hand;
 	}
 
+	@Override
 	public Hand getLeech() {
 		return leech;
 	}
 
+	@Override
 	public void setLeech(Hand leech) {
 		if (this.leech != null) {
 			if (leech == null) {
