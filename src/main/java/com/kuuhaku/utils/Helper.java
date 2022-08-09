@@ -93,7 +93,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.NotNull;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
@@ -1645,11 +1644,16 @@ public abstract class Helper {
 		if (chance((2.5 - clamp(channel.getGuild().getMemberCount() * 0.75f / 5000, 0, 0.75)) * dropBuff)) {
 			Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true, 1, TimeUnit.MINUTES);
 
+			DynamicParameter dp = DynamicParameterDAO.getParam("golden_tickets");
+			int rem = NumberUtils.toInt(dp.getValue());
+
 			Prize<?> drop;
 			int type = rng(1000);
 
 			if (type >= 995)
 				drop = new FieldDrop();
+			else if (type >= 985 && rem < 5)
+				drop = new TicketDrop();
 			else if (type >= 975)
 				drop = new EvogearDrop();
 			else if (type >= 900)
