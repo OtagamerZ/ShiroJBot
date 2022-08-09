@@ -39,5 +39,6 @@ public class MoneyCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		data.profile().getAccount().addCR(100_000, "Testing feature");
+		event.channel().sendMessage("Add").queue();
 	}
 }
