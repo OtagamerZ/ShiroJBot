@@ -102,7 +102,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						case "dfs" -> g2d.setColor(new Color(0x00C500));
 						case "ddg" -> g2d.setColor(new Color(0xFFC800));
 						case "blk" -> g2d.setColor(new Color(0xA9A9A9));
+
 						case "b" -> g2d.setColor(new Color(0x010101));
+						case "cd" -> g2d.setColor(new Color(0x48BAFF));
 					}
 
 					if (!Utils.equalsAny(color, "", "b")) {
@@ -142,6 +144,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				case 0x00C500 -> IO.getResourceAsImage("shoukan/icons/defense.png");
 				case 0xFFC800 -> IO.getResourceAsImage("shoukan/icons/dodge.png");
 				case 0xA9A9A9 -> IO.getResourceAsImage("shoukan/icons/block.png");
+				case 0x48BAFF -> IO.getResourceAsImage("shoukan/icons/cooldown.png");
 				default -> null;
 			};
 
