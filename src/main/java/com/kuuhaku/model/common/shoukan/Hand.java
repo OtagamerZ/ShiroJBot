@@ -104,7 +104,7 @@ public class Hand {
 
 				if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
 					cards.add(d.copy());
-					d.setSolid(false);
+					getGraveyard().remove(d);
 				}
 			}
 	);
