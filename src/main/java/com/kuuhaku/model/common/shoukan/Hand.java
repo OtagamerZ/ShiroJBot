@@ -170,8 +170,6 @@ public class Hand {
 										)
 								);
 							}
-
-							d.setSolid(true);
 						})
 						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
 		);
@@ -256,7 +254,10 @@ public class Hand {
 						modHP(-10);
 					}
 
-					cards.add(deck.remove(i));
+					Drawable<?> d = deck.remove(i);
+					d.setSolid(true);
+
+					cards.add(d);
 					getGame().trigger(Trigger.ON_DRAW);
 					value--;
 					break;
@@ -275,6 +276,7 @@ public class Hand {
 			}
 
 			if (d != null) {
+				d.setSolid(true);
 				cards.add(d);
 				getGame().trigger(Trigger.ON_DRAW);
 			}
@@ -293,6 +295,7 @@ public class Hand {
 		}
 
 		if (d != null) {
+			d.setSolid(true);
 			cards.add(d);
 			getGame().trigger(Trigger.ON_DRAW);
 		}
@@ -325,6 +328,8 @@ public class Hand {
 				}
 
 				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
 				return out;
@@ -344,6 +349,8 @@ public class Hand {
 				}
 
 				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
 				return out;
@@ -363,6 +370,8 @@ public class Hand {
 				}
 
 				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
 				return out;
@@ -385,6 +394,8 @@ public class Hand {
 				}
 
 				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW);
 				return out;
