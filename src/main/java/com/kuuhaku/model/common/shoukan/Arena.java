@@ -78,7 +78,7 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(
-			d -> d != null && !d.isSPSummon(),
+			d -> d != null && !(d instanceof Senshi s && s.isFusion()),
 			d -> {
 				getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
@@ -89,8 +89,6 @@ public class Arena implements Renderer {
 				}
 
 				d.reset();
-
-				getBanned().removeIf(dr -> !dr.isSolid());
 			}
 	);
 	private Field field = null;

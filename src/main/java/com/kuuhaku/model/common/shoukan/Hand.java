@@ -72,23 +72,24 @@ public class Hand {
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
-
-		d.reset();
 	});
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(Objects::nonNull, d -> {
-		d.setHand(this);
-		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
+	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(
+			d -> d != null && !(d instanceof Senshi s && s.isFusion()),
+			d -> {
+				d.setHand(this);
+				getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getDeck().addAll(s.getEquipments());
-		} else if (d instanceof Evogear e && e.getEquipper() != null) {
-			e.getEquipper().getEquipments().remove(e);
-		}
+				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+					getDeck().addAll(s.getEquipments());
+				} else if (d instanceof Evogear e && e.getEquipper() != null) {
+					e.getEquipper().getEquipments().remove(e);
+				}
 
-		d.reset();
-	});
+				d.reset();
+			}
+	);
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
-			d -> d != null && !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) && !d.isSPSummon(),
+			d -> d != null && !(d instanceof Senshi s && (s.getStats().popFlag(Flag.NO_DEATH) || s.isFusion())),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
@@ -101,18 +102,19 @@ public class Hand {
 
 				d.reset();
 
-				if (d.isSolid() && d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
+				if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
 					cards.add(d.copy());
 					d.setSolid(false);
 				}
-
-				getGraveyard().removeIf(dr -> !dr.isSolid());
 			}
 	);
-	private final List<Drawable<?>> discard = new BondedList<>(Objects::nonNull, d -> {
-		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
-		d.setAvailable(false);
-	});
+	private final List<Drawable<?>> discard = new BondedList<>(
+			d -> d != null && !(d instanceof Senshi s && s.isFusion()),
+			d -> {
+				getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
+				d.setAvailable(false);
+			}
+	);
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
@@ -405,7 +407,6 @@ public class Hand {
 	}
 
 	public void flushDiscard() {
-		discard.removeIf(d -> !d.isSolid());
 		graveyard.addAll(discard);
 		discard.clear();
 	}
