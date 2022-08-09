@@ -36,7 +36,6 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
@@ -112,7 +111,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
-					return StringUtils.abbreviate(str, Drawable.MAX_DESC_LENGTH);
+					return str;
 				}
 			}
 
