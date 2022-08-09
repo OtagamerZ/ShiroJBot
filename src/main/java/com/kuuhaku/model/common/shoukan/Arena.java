@@ -472,12 +472,12 @@ public class Arena implements Renderer {
 			int x;
 			int y;
 			String name = hand.getName();
+			g.setColor(Color.WHITE);
+			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
 				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				name = "--> " + name + " <--";
 			}
-			g.setColor(Color.WHITE);
-			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 
 			if (reversed) {
 				g.drawImage(bi, SIZE.width - bi.getWidth(), BAR_SIZE.height + SIZE.height, null);
