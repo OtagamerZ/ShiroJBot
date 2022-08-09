@@ -1010,7 +1010,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
-			leech.execute(new EffectParameters(trigger, leech.asSource(trigger)));
+			leech.execute(new EffectParameters(trigger, leech.asSource(LEECH)));
 		}
 
 		if (trig) {
