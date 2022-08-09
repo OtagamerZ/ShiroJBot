@@ -27,7 +27,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.function.Function;
 
 public enum FrameColor {
 	PINK,
@@ -40,14 +39,14 @@ public enum FrameColor {
 	RED,
 	GRAY,
 
-	LEGACY_PINK(Account::isOldUser),
-	LEGACY_PURPLE(Account::isOldUser),
-	LEGACY_BLUE(Account::isOldUser),
-	LEGACY_CYAN(Account::isOldUser),
-	LEGACY_GREEN(Account::isOldUser),
-	LEGACY_YELLOW(Account::isOldUser),
-	LEGACY_RED(Account::isOldUser),
-	LEGACY_GRAY(Account::isOldUser),
+	LEGACY_PINK(""),
+	LEGACY_PURPLE(""),
+	LEGACY_BLUE(""),
+	LEGACY_CYAN(""),
+	LEGACY_GREEN(""),
+	LEGACY_YELLOW(""),
+	LEGACY_RED(""),
+	LEGACY_GRAY(""),
 
 	/*RAINBOW("**(Complete 10 coleções cromadas)** Seja fabuloso, mostre a elegância de uma estratégia estonteante!",
 			acc -> acc.getCompState().values().stream().filter(CompletionState::foil).count() >= 10),
@@ -75,14 +74,14 @@ public enum FrameColor {
 	),*/
 	;
 
-	private final Function<Account, Boolean> req;
+	private final String title;
 
 	FrameColor() {
-		this.req = null;
+		this.title = null;
 	}
 
-	FrameColor(Function<Account, Boolean> req) {
-		this.req = req;
+	FrameColor(String title) {
+		this.title = title;
 	}
 
 	public Color getThemeColor() {
@@ -190,7 +189,7 @@ public enum FrameColor {
 	}
 
 	public boolean canUse(Account acc) {
-		return req == null || req.apply(acc);
+		return title == null || acc.hasTitle(title);
 	}
 
 	public static FrameColor getByName(String name) {

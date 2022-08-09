@@ -1073,6 +1073,11 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 			}
+
+			if (effect.expired()) {
+				getChannel().sendMessage(locale.get("str/effect_expiration", effect.source())).queue();
+				it.remove();
+			}
 		}
 	}
 
