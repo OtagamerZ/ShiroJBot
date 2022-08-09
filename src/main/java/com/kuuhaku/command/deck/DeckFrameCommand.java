@@ -108,7 +108,9 @@ public class DeckFrameCommand implements Executable {
 
 									d.setFrame(frame);
 									d.save();
-									event.channel().sendMessage(locale.get("success/frame_selected", d.getName())).queue();
+									event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
+											.flatMap(m -> s.delete())
+											.queue();
 								});
 							}},
 							true, true, 1, TimeUnit.MINUTES, event.user()::equals
