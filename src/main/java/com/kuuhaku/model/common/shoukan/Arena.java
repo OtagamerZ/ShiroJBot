@@ -503,6 +503,7 @@ public class Arena implements Renderer {
 					}
 				});
 			} else {
+				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				Graph.drawOutlinedString(g, name, x, y, 10, Color.BLACK);
 			}
 

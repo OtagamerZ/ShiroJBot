@@ -1013,9 +1013,7 @@ public class Shoukan extends GameInstance<Phase> {
 			leech.execute(new EffectParameters(trigger, leech.asSource(ON_LEECH)));
 		}
 
-		if (trig) {
-			triggerEOTs(new EffectParameters(trigger));
-		}
+		triggerEOTs(new EffectParameters(trigger));
 	}
 
 	public void trigger(Trigger trigger, Source source) {
