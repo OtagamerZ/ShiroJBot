@@ -21,6 +21,7 @@ package com.kuuhaku.interfaces.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
@@ -40,6 +41,10 @@ import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	boolean execute(EffectParameters ep);
+
+	default boolean executeAssert(Trigger trigger) {
+		return true;
+	}
 
 	default Hand getLeech() {
 		return null;

@@ -34,7 +34,7 @@ public record Target(Senshi card, Side side, int index, Trigger trigger) {
 
 	public Target(Senshi card, Side side, int index, Trigger trigger) {
 		if (card != null) {
-			card.getHand().getGame().trigger(Trigger.EFFECT_TARGET, new Source(card, Trigger.EFFECT_TARGET));
+			card.getHand().getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(card, Trigger.ON_EFFECT_TARGET));
 		}
 
 		if (card == null || (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {

@@ -589,8 +589,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (base.isLocked()) return false;
-		else if (ep.size() == 0 && trigger == Trigger.DEFER) return false;
-		else if (trigger == Trigger.ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
+		else if (ep.size() == 0 && trigger == Trigger.ON_DEFER) return false;
+		else if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -616,7 +616,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			Senshi sup = getSupport();
 			if (sup != null) {
-				sup.execute(new EffectParameters(Trigger.DEFER, ep.source(), ep.targets()));
+				sup.execute(new EffectParameters(Trigger.ON_DEFER, ep.source(), ep.targets()));
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
@@ -638,6 +638,32 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} finally {
 			unlock();
 			//other.setHeroDefense(false);
+		}
+	}
+
+	@Override
+	public boolean executeAssert(Trigger trigger) {
+		if (base.isLocked()) return false;
+		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return false;
+		else if (!hasEffect() || !getEffect().contains(trigger.name())) return false;
+
+		try {
+			base.lock();
+
+			Utils.exec(getEffect(), Map.of(
+					"ep", new EffectParameters(trigger),
+					"self", this,
+					"trigger", trigger,
+					"game", hand.getGame(),
+					"side", hand.getSide()
+			));
+
+			return true;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			return false;
+		} finally {
+			unlock();
 		}
 	}
 

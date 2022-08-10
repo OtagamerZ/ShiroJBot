@@ -610,13 +610,13 @@ public class Shoukan extends GameInstance<Phase> {
 		} else if (curr.getMP() < 1) {
 			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 			return false;
-		} else if (!chosen.getEffect().contains(ACTIVATE.name())) {
+		} else if (!chosen.getEffect().contains(ON_ACTIVATE.name())) {
 			getChannel().sendMessage(locale.get("error/card_no_special")).queue();
 			return false;
 		}
 
 		curr.consumeMP(1);
-		trigger(ACTIVATE, chosen.asSource(ACTIVATE));
+		trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE));
 		if (getPhase() != Phase.PLAN) {
 			chosen.setAvailable(false);
 		}
@@ -1010,7 +1010,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
-			leech.execute(new EffectParameters(trigger, leech.asSource(LEECH)));
+			leech.execute(new EffectParameters(trigger, leech.asSource(ON_LEECH)));
 		}
 
 		if (trig) {
