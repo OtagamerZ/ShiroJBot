@@ -61,7 +61,7 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (isLocked() || (top != null && !equals(top.getSlot()))) {
-			game.trigger(Trigger.ON_REMOVE, top.asSource(Trigger.ON_REMOVE));
+			top.executeAssert(Trigger.ON_REMOVE);
 			top = null;
 		}
 
@@ -78,7 +78,7 @@ public class SlotColumn {
 		}
 
 		if (getTop() != null) {
-			game.trigger(Trigger.ON_REMOVE, this.top.asSource(Trigger.ON_REMOVE));
+			this.top.executeAssert(Trigger.ON_REMOVE);
 			this.top.setSlot(null);
 		}
 
@@ -88,6 +88,7 @@ public class SlotColumn {
 
 			this.top.setSlot(this);
 			this.top.setHand(h);
+			this.top.executeAssert(Trigger.ON_INITIALIZE);
 
 			if (!this.top.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, this.top.asSource(Trigger.ON_SUMMON));
@@ -101,7 +102,7 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (isLocked() || (bottom != null && !equals(bottom.getSlot()))) {
-			game.trigger(Trigger.ON_REMOVE, bottom.asSource(Trigger.ON_REMOVE));
+			bottom.executeAssert(Trigger.ON_REMOVE);
 			bottom = null;
 		}
 
@@ -118,7 +119,7 @@ public class SlotColumn {
 		}
 
 		if (getBottom() != null) {
-			game.trigger(Trigger.ON_REMOVE, this.bottom.asSource(Trigger.ON_REMOVE));
+			this.bottom.executeAssert(Trigger.ON_REMOVE);
 			this.bottom.setSlot(null);
 		}
 
@@ -129,6 +130,7 @@ public class SlotColumn {
 			this.bottom.setSlot(this);
 			this.bottom.setHand(h);
 			this.bottom.getEquipments().clear();
+			this.bottom.executeAssert(Trigger.ON_INITIALIZE);
 
 			if (!this.bottom.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, this.bottom.asSource(Trigger.ON_SUMMON));

@@ -57,6 +57,9 @@ public enum Trigger {
 	ON_DECK,
 	ON_FIELD_CHANGE,
 
+	// Triggers when the card is placed on the field
+	ON_INITIALIZE,
+
 	// Triggers when the card is removed from the field
 	ON_REMOVE,
 
@@ -73,15 +76,15 @@ public enum Trigger {
 	ON_DAMAGE,
 
 	// Single-use trigger
-	ACTIVATE,
+	ON_ACTIVATE,
 
 	// Triggered when targeted by effects
-	SPELL_TARGET,
-	EFFECT_TARGET,
+	ON_SPELL_TARGET,
+	ON_EFFECT_TARGET,
 
 	// Trigger passed from another card
-	DEFER,
-	LEECH,
+	ON_DEFER,
+	ON_LEECH,
 
 	// Used for nothing
 	NONE

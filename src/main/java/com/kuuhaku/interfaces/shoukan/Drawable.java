@@ -43,7 +43,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
-	int MAX_NAME_LENGTH = 17;
+	int MAX_NAME_LENGTH = 14;
 	int MAX_DESC_LENGTH = 210;
 	Font FONT = Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 20);
 	int BORDER_WIDTH = 3;
@@ -149,7 +149,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getMPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(new Color(0x3F9EFF));
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 			y += icon.getHeight() + 5;
 		}
 
@@ -161,7 +161,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getHPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.RED);
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 			y += icon.getHeight() + 5;
 		}
 
@@ -173,7 +173,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			String val = String.valueOf(getSCCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.LIGHT_GRAY);
-			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 4 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 		}
 	}
 
@@ -206,7 +206,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				g2d.setColor(Color.RED);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 				if (this instanceof Senshi s && s.isBlinded()) {
-					g2d.setColor(Color.lightGray);
+					g2d.setColor(Color.LIGHT_GRAY);
 					Graph.drawOutlinedString(g2d, "*", x + icon.getWidth() + 5 + m.stringWidth(val), y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 				}
 

@@ -25,10 +25,7 @@ import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Charm;
-import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.TargetType;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -51,8 +48,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.kuuhaku.model.enums.shoukan.Trigger.ACTIVATE;
-import static com.kuuhaku.model.enums.shoukan.Trigger.SPELL_TARGET;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_ACTIVATE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_SPELL_TARGET;
 
 @Entity
 @Table(name = "evogear")
@@ -176,10 +173,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		this.hand = hand;
 	}
 
+	@Override
 	public Hand getLeech() {
 		return leech;
 	}
 
+	@Override
 	public void setLeech(Hand leech) {
 		if (this.leech != null) {
 			if (leech == null) {
@@ -331,18 +330,40 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		}
 	}
 
+	@Override
+	public boolean executeAssert(Trigger trigger) {
+		if (base.isLocked() || isSpell()) return false;
+		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return false;
+		else if (!hasEffect() || !getEffect().contains(trigger.name())) return false;
+
+		try {
+			Utils.exec(getEffect(), Map.of(
+					"ep", new EffectParameters(trigger),
+					"self", this,
+					"trigger", trigger,
+					"game", hand.getGame(),
+					"side", hand.getSide()
+			));
+
+			return true;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			return false;
+		}
+	}
+
 	public EffectParameters toParameters(Targeting tgt) {
 		return switch (targetType) {
-			case NONE -> new EffectParameters(ACTIVATE);
-			case ALLY -> new EffectParameters(ACTIVATE, asSource(ACTIVATE),
-					new Target(tgt.ally(), SPELL_TARGET)
+			case NONE -> new EffectParameters(ON_ACTIVATE);
+			case ALLY -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
+					new Target(tgt.ally(), ON_SPELL_TARGET)
 			);
-			case ENEMY -> new EffectParameters(ACTIVATE, asSource(ACTIVATE),
-					new Target(tgt.enemy(), SPELL_TARGET)
+			case ENEMY -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
+					new Target(tgt.enemy(), ON_SPELL_TARGET)
 			);
-			case BOTH -> new EffectParameters(ACTIVATE, asSource(ACTIVATE),
-					new Target(tgt.ally(), SPELL_TARGET),
-					new Target(tgt.enemy(), SPELL_TARGET)
+			case BOTH -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
+					new Target(tgt.ally(), ON_SPELL_TARGET),
+					new Target(tgt.enemy(), ON_SPELL_TARGET)
 			);
 		};
 	}

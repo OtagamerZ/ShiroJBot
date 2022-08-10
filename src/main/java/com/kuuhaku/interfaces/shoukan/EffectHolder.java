@@ -21,6 +21,7 @@ package com.kuuhaku.interfaces.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
@@ -36,11 +37,14 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	boolean execute(EffectParameters ep);
+
+	default boolean executeAssert(Trigger trigger) {
+		return true;
+	}
 
 	default Hand getLeech() {
 		return null;
@@ -103,7 +107,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						case "dfs" -> g2d.setColor(new Color(0x00C500));
 						case "ddg" -> g2d.setColor(new Color(0xFFC800));
 						case "blk" -> g2d.setColor(new Color(0xA9A9A9));
+
 						case "b" -> g2d.setColor(new Color(0x010101));
+						case "cd" -> g2d.setColor(new Color(0x48BAFF));
 					}
 
 					if (!Utils.equalsAny(color, "", "b")) {
@@ -112,7 +118,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
-					return StringUtils.abbreviate(str, Drawable.MAX_DESC_LENGTH);
+					return str;
 				}
 			}
 
@@ -143,6 +149,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				case 0x00C500 -> IO.getResourceAsImage("shoukan/icons/defense.png");
 				case 0xFFC800 -> IO.getResourceAsImage("shoukan/icons/dodge.png");
 				case 0xA9A9A9 -> IO.getResourceAsImage("shoukan/icons/block.png");
+				case 0x48BAFF -> IO.getResourceAsImage("shoukan/icons/cooldown.png");
 				default -> null;
 			};
 

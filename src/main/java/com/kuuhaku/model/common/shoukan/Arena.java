@@ -25,6 +25,7 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.FrameColor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -472,12 +473,11 @@ public class Arena implements Renderer {
 			int x;
 			int y;
 			String name = hand.getName();
-			if (game.getCurrentSide() == hand.getSide()) {
-				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
-				name = "--> " + name + " <--";
-			}
 			g.setColor(Color.WHITE);
 			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
+			if (game.getCurrentSide() == hand.getSide()) {
+				name = "==> " + name + " <==";
+			}
 
 			if (reversed) {
 				g.drawImage(bi, SIZE.width - bi.getWidth(), BAR_SIZE.height + SIZE.height, null);
@@ -491,7 +491,22 @@ public class Arena implements Renderer {
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
-			Graph.drawOutlinedString(g, name, x, y, 10, Color.black);
+			g.setColor(Color.WHITE);
+			if (hand.getUserDeck().getFrame() == FrameColor.BLUE) {
+				Graph.drawProcessedString(g, name, x, y, (str, px, py) -> {
+					Color color = Graph.getRandomColor();
+					g.setColor(color);
+
+					if (Calc.luminance(color) < 0.2) {
+						Graph.drawOutlinedString(g, str, px, py, 10, Color.WHITE);
+					} else {
+						Graph.drawOutlinedString(g, str, px, py, 10, Color.BLACK);
+					}
+				});
+			} else {
+				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				Graph.drawOutlinedString(g, name, x, y, 10, Color.BLACK);
+			}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
 			Graph.applyTransformed(g,

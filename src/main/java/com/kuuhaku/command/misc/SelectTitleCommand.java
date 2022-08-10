@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 		name = "title",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<name:word:r>")
+@Signature(allowEmpty = true, value = "<id:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class SelectTitleCommand implements Executable {
 	@Override

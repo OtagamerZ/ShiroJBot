@@ -196,7 +196,9 @@ public class Deck extends DAO<Deck> {
 		HashBag<Evogear> bag = new HashBag<>(evogear);
 		bag.removeIf(e -> bag.getCount(e) <= getMaxEvogearCopies(e.getTier()));
 
-		return bag.isEmpty() && Utils.between(evogear.size(), 0, 25);
+		return bag.isEmpty()
+				&& Utils.between(evogear.size(), 0, 25)
+				&& evogear.stream().filter(e -> e.getTier() == 4).count() <= getMaxEvogearCopies(4);
 	}
 
 	public int getEvoWeight() {
@@ -317,7 +319,7 @@ public class Deck extends DAO<Deck> {
 				.setChartBackgroundColor(new Color(0, 0, 0, 0))
 				.setPlotBackgroundColor(new Color(0, 0, 0, 0))
 				.setSeriesColors(new Color[]{Graph.withOpacity(frame.getThemeColor(), 0.5f)})
-				.setChartFontColor(Color.white);
+				.setChartFontColor(Color.WHITE);
 
 		rc.paint(g2d, rc.getWidth(), rc.getHeight());
 
