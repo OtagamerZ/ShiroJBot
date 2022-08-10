@@ -319,7 +319,7 @@ public class Deck extends DAO<Deck> {
 				.setChartBackgroundColor(new Color(0, 0, 0, 0))
 				.setPlotBackgroundColor(new Color(0, 0, 0, 0))
 				.setSeriesColors(new Color[]{Graph.withOpacity(frame.getThemeColor(), 0.5f)})
-				.setChartFontColor(Color.white);
+				.setChartFontColor(Color.WHITE);
 
 		rc.paint(g2d, rc.getWidth(), rc.getHeight());
 

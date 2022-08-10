@@ -121,6 +121,24 @@ public abstract class Graph {
 		}
 	}
 
+	public static void drawProcessedString(Graphics2D g2d, String text, int x, int y, Function<String, String> processor) {
+		drawProcessedString(g2d, text, x, y, processor, g2d::drawString);
+	}
+
+	public static void drawProcessedString(Graphics2D g2d, String text, int x, int y, TriConsumer<String, Integer, Integer> renderer) {
+		drawProcessedString(g2d, text, x, y, Function.identity(), renderer);
+	}
+
+	public static void drawProcessedString(Graphics2D g2d, String text, int x, int y, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
+		String[] chars = text.split("");
+		for (String c : chars) {
+			String s = processor.apply(c);
+			FontMetrics m = g2d.getFontMetrics();
+
+			renderer.accept(s, x + m.stringWidth(s), y);
+		}
+	}
+
 	public static int getLineCount(Graphics2D g2d, String text, int width) {
 		int l = 0;
 
