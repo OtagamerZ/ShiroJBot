@@ -43,7 +43,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
-	int MAX_NAME_LENGTH = 17;
+	int MAX_NAME_LENGTH = 14;
 	int MAX_DESC_LENGTH = 210;
 	Font FONT = Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 20);
 	int BORDER_WIDTH = 3;
