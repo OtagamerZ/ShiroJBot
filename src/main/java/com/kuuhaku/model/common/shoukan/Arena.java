@@ -491,6 +491,7 @@ public class Arena implements Renderer {
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
+			g.setColor(Color.WHITE);
 			if (hand.getUserDeck().getFrame() == FrameColor.BLUE) {
 				Graph.drawProcessedString(g, name, x, y, (str, px, py) -> {
 					Color color = Graph.getRandomColor();
