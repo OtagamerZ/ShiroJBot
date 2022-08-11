@@ -263,14 +263,14 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 				g1.setColor(Color.WHITE);
 				Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), 200, (str, px, py) -> {
-					if (s.startsWith("#")) {
-						String[] frags = s.split(",");
+					if (str.startsWith("#")) {
+						String[] frags = str.split(",");
 
 						g1.setColor(Color.decode(frags[0]));
-						Graph.drawOutlinedString(g1, frags[1].replace("_", " "), 15, (int) (y + em * 1.5), 3, Color.BLACK);
+						Graph.drawOutlinedString(g1, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
 					} else {
 						g1.setColor(Color.WHITE);
-						Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 1.5), 3, Color.BLACK);
+						Graph.drawOutlinedString(g1, str, px, py, 3, Color.BLACK);
 					}
 				});
 			}
@@ -288,9 +288,17 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					g2.setColor(Color.WHITE);
-					Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3,
-							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 3, Color.BLACK)
-					);
+					Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3, (str, px, py) -> {
+						if (str.startsWith("#")) {
+							String[] frags = str.split(",");
+
+							g2.setColor(Color.decode(frags[0]));
+							Graph.drawOutlinedString(g2, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
+						} else {
+							g2.setColor(Color.WHITE);
+							Graph.drawOutlinedString(g2, str, px, py, 3, Color.BLACK);
+						}
+					});
 				});
 			}
 		});
