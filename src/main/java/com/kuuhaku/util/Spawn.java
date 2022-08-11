@@ -27,7 +27,6 @@ import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import kotlin.Pair;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
@@ -71,7 +70,7 @@ public abstract class Spawn {
 				rPool.add(r, 6 - r.getIndex());
 			}
 
-			card = new KawaiponCard(Utils.getRandomEntry(cPool.get(rPool.get())), Calc.chance(0.005 * rarityBonus));
+			card = new KawaiponCard(Utils.getRandomEntry(cPool.get(rPool.get())), Calc.chance(0.1 * rarityBonus));
 			spawnedCards.put(channel.getId(), new SingleUseReference<>(card));
 		}
 
