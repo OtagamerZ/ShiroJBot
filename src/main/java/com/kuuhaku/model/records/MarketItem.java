@@ -72,6 +72,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 		return "** `ID: " + sc.getId() + "` " + sc + "**" +
 				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +
 				"\n" + sc.getCard().getAnime().toString() +
+				"\n" + price +
 				"\n";
 	}
 }
