@@ -25,9 +25,11 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.*;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -36,6 +38,7 @@ import org.hibernate.annotations.FetchMode;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,6 +68,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Column(name = "effect", nullable = false)
 	private boolean effect = false;
+
+	@Column(name = "tags", nullable = false)
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray tags = new JSONArray();
 
 	private transient Hand hand = null;
 
@@ -105,6 +112,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	public boolean isEffect() {
 		return effect;
+	}
+
+	@Override
+	public List<String> getTags() {
+		return tags.stream().map(t -> "tag/" + t).toList();
 	}
 
 	@Override
