@@ -49,7 +49,7 @@ public class Title extends DAO<Title> {
 	@Column(name = "condition", columnDefinition = "TEXT")
 	private String condition;
 
-	@Column(name = "tracker", columnDefinition = "TEXT")
+	@Column(name = "tracker")
 	private String tracker;
 
 	public String getId() {
@@ -82,15 +82,9 @@ public class Title extends DAO<Title> {
 	}
 
 	public int track(Account acc) {
-		@Language("Groovy") String track = Utils.getOr(tracker, "");
-		if (track.isBlank()) return -1;
+		if (tracker == null) return -1;
 
-		try {
-			return ((Number) Utils.exec(track, Map.of("acc", acc))).intValue();
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to track title " + id, e);
-			return -1;
-		}
+		return Integer.parseInt(acc.getDynamicProperty(tracker).getValue());
 	}
 
 	@SuppressWarnings("JpaQlInspection")

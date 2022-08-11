@@ -62,7 +62,7 @@ public class SelectTitleCommand implements Executable {
 					.setTitle(locale.get("str/all_titles"));
 
 			Map<String, List<Title>> titles = Title.getAllTitles().stream()
-					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))"), "")));
+					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")));
 
 			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, 2, ts -> {
 				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
