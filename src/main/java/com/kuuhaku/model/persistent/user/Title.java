@@ -26,6 +26,7 @@ import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 
@@ -48,6 +49,9 @@ public class Title extends DAO<Title> {
 	@Column(name = "condition", columnDefinition = "TEXT")
 	private String condition;
 
+	@Column(name = "tracker")
+	private String tracker;
+
 	public String getId() {
 		return id;
 	}
@@ -64,7 +68,7 @@ public class Title extends DAO<Title> {
 	}
 
 	public boolean check(Account acc) {
-		String check = Utils.getOr(condition, "");
+		@Language("Groovy") String check = Utils.getOr(condition, "");
 		if (check.isBlank()) return false;
 
 		try {
@@ -75,6 +79,12 @@ public class Title extends DAO<Title> {
 			Constants.LOGGER.warn("Failed to check title " + id, e);
 			return false;
 		}
+	}
+
+	public int track(Account acc) {
+		if (tracker == null) return -1;
+
+		return Integer.parseInt(Utils.getOr(acc.getDynamicProperty(tracker).getValue(), "0"));
 	}
 
 	@SuppressWarnings("JpaQlInspection")

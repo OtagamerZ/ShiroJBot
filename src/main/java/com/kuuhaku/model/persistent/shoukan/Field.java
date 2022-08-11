@@ -158,7 +158,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 		g2d.setFont(FONT);
 		g2d.setColor(deck.getFrame().getPrimaryColor());
-		String name = StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH);
+		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
 
 		if (type != FieldType.NONE) {

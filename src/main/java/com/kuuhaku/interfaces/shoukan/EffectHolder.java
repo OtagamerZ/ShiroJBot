@@ -86,7 +86,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						);
 
 						val = StringUtils.abbreviate(
-								str.replaceFirst("\\{.+}", String.valueOf((int) NumberUtils.toDouble(val))),
+								str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toDouble(val)))),
 								Drawable.MAX_DESC_LENGTH
 						);
 					} else {

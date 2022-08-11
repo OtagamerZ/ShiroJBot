@@ -41,10 +41,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Command(
@@ -61,15 +58,18 @@ public class SelectTitleCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/all_titles"));
 
-			Map<String, List<Title>> titles = Title.getAllTitles().stream()
-					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))"), "")));
+			List<List<Title>> titles = Title.getAllTitles().stream()
+					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")))
+					.values().stream()
+					.sorted(Comparator.comparing(ts -> ts.get(0).getId()))
+					.toList();
 
-			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, 2, ts -> {
+			List<Page> pages = Utils.generatePages(eb, titles, 10, 5, ts -> {
 				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
 
 				Title current = ts.stream()
 						.filter(t -> acc.hasTitle(t.getId()))
-						.findFirst()
+						.reduce((f, s) -> s)
 						.orElse(ts.get(0));
 
 				StringBuilder sb = new StringBuilder();
@@ -88,6 +88,11 @@ public class SelectTitleCommand implements Executable {
 					Title next = Utils.getNext(current, ts);
 					if (next != null) {
 						sb.append("\n").append(locale.get("str/next_tier", next.getInfo(locale).getDescription()));
+
+						int track = next.track(acc);
+						if (track >= 0) {
+							sb.append("\n").append(locale.get("str/current_tracker", track));
+						}
 					}
 				}
 
@@ -99,7 +104,7 @@ public class SelectTitleCommand implements Executable {
 		}
 
 		AccountTitle title = DAO.query(AccountTitle.class, "SELECT t FROM AccountTitle t WHERE t.account.uid = ?1 AND t.title.id = UPPER(?2)",
-				acc.getUid(), args.getString("name")
+				acc.getUid(), args.getString("id")
 		);
 		if (title == null) {
 			List<String> names = DAO.queryAllNative(String.class, "SELECT t.title_id FROM account_title t WHERE t.account_uid = ?1", acc.getUid());

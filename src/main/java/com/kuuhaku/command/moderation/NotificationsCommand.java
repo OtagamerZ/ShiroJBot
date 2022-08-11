@@ -52,10 +52,10 @@ public class NotificationsCommand implements Executable {
 		} else if (!args.containsKey("channel")) {
 			if (settings.isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
 				settings.getFeatures().remove(GuildFeature.NOTIFICATIONS);
-				event.channel().sendMessage(locale.get("success/notifications_enable")).queue();
+				event.channel().sendMessage(locale.get("success/notifications_disable")).queue();
 			} else {
 				settings.getFeatures().add(GuildFeature.NOTIFICATIONS);
-				event.channel().sendMessage(locale.get("success/notifications_disable")).queue();
+				event.channel().sendMessage(locale.get("success/notifications_enable")).queue();
 			}
 
 			settings.save();

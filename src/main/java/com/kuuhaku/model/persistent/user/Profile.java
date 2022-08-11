@@ -234,7 +234,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 			replaces.put(
 					t.getId().toLowerCase(Locale.ROOT),
-					t.getInfo(locale).getName()
+					"#%06X,%s".formatted(
+							t.getRarity().getColor(false).getRGB() & 0xFFFFFF,
+							t.getInfo(locale).getName().replace(" ", "_")
+					)
 			);
 		}
 
@@ -250,7 +253,12 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
 				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
-				Rectangle2D bounds = Graph.getStringBounds(g1, s);
+				Rectangle2D bounds;
+				if (s.startsWith("#")) {
+					bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " "));
+				} else {
+					bounds = Graph.getStringBounds(g1, s);
+				}
 				int y = (int) wids.getY();
 
 				g1.setColor(bgCol);
@@ -259,7 +267,17 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 1.5), 3, Color.BLACK);
+				Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), SIZE.width, (str, px, py) -> {
+					if (str.startsWith("#")) {
+						String[] frags = str.split(",");
+
+						g1.setColor(Color.decode(frags[0]));
+						Graph.drawOutlinedString(g1, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
+					} else {
+						g1.setColor(Color.WHITE);
+						Graph.drawOutlinedString(g1, str, px, py, 3, Color.BLACK);
+					}
+				});
 			}
 
 			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
@@ -275,9 +293,17 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
 					g2.setColor(Color.WHITE);
-					Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3,
-							(s, px, py) -> Graph.drawOutlinedString(g2, s, px, py, 3, Color.BLACK)
-					);
+					Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3, (str, px, py) -> {
+						if (str.startsWith("#")) {
+							String[] frags = str.split(",");
+
+							g2.setColor(Color.decode(frags[0]));
+							Graph.drawOutlinedString(g2, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
+						} else {
+							g2.setColor(Color.WHITE);
+							Graph.drawOutlinedString(g2, str, px, py, 3, Color.BLACK);
+						}
+					});
 				});
 			}
 		});

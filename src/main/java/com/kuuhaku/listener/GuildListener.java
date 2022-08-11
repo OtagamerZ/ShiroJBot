@@ -275,7 +275,7 @@ public class GuildListener extends ListenerAdapter {
 			)).queue();
 		}
 
-		KawaiponCard kc = Spawn.getKawaipon(event.getGuild());
+		KawaiponCard kc = Spawn.getKawaipon(event.getChannel());
 		if (kc != null) {
 			List<TextChannel> channels = config.getSettings().getKawaiponChannels();
 

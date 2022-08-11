@@ -70,12 +70,12 @@ public class TradeAcceptCommand implements Executable {
 					w -> {
 						if (!trade.validate()) {
 							event.channel().sendMessage(locale.get("success/trade_invalid")).queue();
-							Trade.getPending().remove(event.user().getId());
-							return true;
+						} else {
+							trade.accept();
+							event.channel().sendMessage(locale.get("success/trade_accept")).queue();
 						}
 
-						trade.accept();
-						event.channel().sendMessage(locale.get("success/trade_accept")).queue();
+						Trade.getPending().remove(event.user().getId());
 						return true;
 					}, other
 			);

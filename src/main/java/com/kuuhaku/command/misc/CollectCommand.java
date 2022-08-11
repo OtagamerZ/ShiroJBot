@@ -42,15 +42,20 @@ public class CollectCommand implements Executable {
 		Account acc = data.profile().getAccount();
 		Kawaipon kp = acc.getKawaipon();
 
-		SingleUseReference<KawaiponCard> card = Spawn.getSpawnedCard(event.guild());
-		if (!card.isValid()) {
+		SingleUseReference<KawaiponCard> card = Spawn.getSpawnedCard(event.channel());
+		try {
+			if (!card.isValid()) {
+				event.channel().sendMessage(locale.get("error/no_card")).queue();
+				return;
+			} else if (card.peekProperty(kc -> kp.getCollection().contains(kc))) {
+				event.channel().sendMessage(locale.get("error/owned")).queue();
+				return;
+			} else if (card.peekProperty(kc -> acc.getBalance() < kc.getPrice())) {
+				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
+				return;
+			}
+		} catch (NullPointerException e) {
 			event.channel().sendMessage(locale.get("error/no_card")).queue();
-			return;
-		} else if (card.peekProperty(kc -> kp.getCollection().contains(kc))) {
-			event.channel().sendMessage(locale.get("error/owned")).queue();
-			return;
-		} else if (card.peekProperty(kc -> acc.getBalance() < kc.getPrice())) {
-			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 			return;
 		}
 

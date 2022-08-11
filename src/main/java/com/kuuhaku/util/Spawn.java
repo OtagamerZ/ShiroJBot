@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
@@ -45,16 +46,16 @@ public abstract class Spawn {
 			.build();
 	private static Pair<Integer, MoonIllumination> illum = null;
 
-	public synchronized static KawaiponCard getKawaipon(Guild guild) {
-		if (spawnedCards.containsKey(guild.getId())) return null;
+	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
+		if (spawnedCards.containsKey(channel.getId())) return null;
 
-		GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
+		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (config.getSettings().getKawaiponChannels().isEmpty()) return null;
 
 		// TODO Remove
 		int DEBUG_MULT = 10;
 
-		double dropRate = 5 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * guild.getMemberCount()));
+		double dropRate = 5 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		KawaiponCard card = null;
@@ -71,14 +72,14 @@ public abstract class Spawn {
 			}
 
 			card = new KawaiponCard(Utils.getRandomEntry(cPool.get(rPool.get())), Calc.chance(0.005 * rarityBonus));
-			spawnedCards.put(guild.getId(), new SingleUseReference<>(card));
+			spawnedCards.put(channel.getId(), new SingleUseReference<>(card));
 		}
 
 		return card;
 	}
 
-	public static SingleUseReference<KawaiponCard> getSpawnedCard(Guild guild) {
-		return spawnedCards.getOrDefault(guild.getId(), new SingleUseReference<>(null));
+	public static SingleUseReference<KawaiponCard> getSpawnedCard(TextChannel channel) {
+		return spawnedCards.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 
 	public static Pair<Integer, MoonIllumination> getIllumination() {
