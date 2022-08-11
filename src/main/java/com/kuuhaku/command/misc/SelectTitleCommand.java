@@ -64,7 +64,7 @@ public class SelectTitleCommand implements Executable {
 			Map<String, List<Title>> titles = Title.getAllTitles().stream()
 					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")));
 
-			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, 2, ts -> {
+			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, 5, ts -> {
 				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
 
 				Title current = ts.stream()
