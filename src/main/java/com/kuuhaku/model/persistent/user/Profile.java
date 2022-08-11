@@ -262,7 +262,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), 200, (str, px, py) -> {
+				Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), SIZE.width, (str, px, py) -> {
 					if (str.startsWith("#")) {
 						String[] frags = str.split(",");
 
