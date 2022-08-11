@@ -42,7 +42,7 @@ public class CollectCommand implements Executable {
 		Account acc = data.profile().getAccount();
 		Kawaipon kp = acc.getKawaipon();
 
-		SingleUseReference<KawaiponCard> card = Spawn.getSpawnedCard(event.guild());
+		SingleUseReference<KawaiponCard> card = Spawn.getSpawnedCard(event.channel());
 		try {
 			if (!card.isValid()) {
 				event.channel().sendMessage(locale.get("error/no_card")).queue();
