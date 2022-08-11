@@ -110,6 +110,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						case "b" -> g2d.setColor(new Color(0x010101));
 						case "cd" -> g2d.setColor(new Color(0x48BAFF));
+
+						case "all" -> g2d.setColor(new Color(0x000100));
+						case "ene" -> g2d.setColor(new Color(0x000001));
 					}
 
 					if (!Utils.equalsAny(color, "", "b")) {
@@ -128,7 +131,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d) {
 		return (str, x, y) -> {
-			if (str.startsWith(Constants.VOID) && !g2d.getColor().equals(Color.BLACK)) {
+			if (str.startsWith(Constants.VOID)) {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
@@ -150,6 +153,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				case 0xFFC800 -> IO.getResourceAsImage("shoukan/icons/dodge.png");
 				case 0xA9A9A9 -> IO.getResourceAsImage("shoukan/icons/block.png");
 				case 0x48BAFF -> IO.getResourceAsImage("shoukan/icons/cooldown.png");
+				case 0x000100 -> IO.getResourceAsImage("shoukan/icons/ally_target.png");
+				case 0x000001 -> IO.getResourceAsImage("shoukan/icons/enemy_target.png");
 				default -> null;
 			};
 
