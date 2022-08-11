@@ -84,7 +84,7 @@ public class Title extends DAO<Title> {
 	public int track(Account acc) {
 		if (tracker == null) return -1;
 
-		return Integer.parseInt(acc.getDynamicProperty(tracker).getValue());
+		return Integer.parseInt(Utils.getOr(acc.getDynamicProperty(tracker).getValue(), "0"));
 	}
 
 	@SuppressWarnings("JpaQlInspection")
