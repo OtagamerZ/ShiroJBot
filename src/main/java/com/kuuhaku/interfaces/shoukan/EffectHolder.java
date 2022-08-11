@@ -111,8 +111,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						case "b" -> g2d.setColor(new Color(0x010101));
 						case "cd" -> g2d.setColor(new Color(0x48BAFF));
 
-						case "all" -> g2d.setColor(new Color(0x000100));
-						case "ene" -> g2d.setColor(new Color(0x000001));
+						case "ally" -> g2d.setColor(new Color(0x000100));
+						case "enemy" -> g2d.setColor(new Color(0x000001));
 					}
 
 					if (!Utils.equalsAny(color, "", "b")) {
