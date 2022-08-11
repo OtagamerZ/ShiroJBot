@@ -182,7 +182,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			BufferedImage icon = r.getIcon();
 			g2d.drawImage(icon, 23, y, null);
 			g2d.setColor(r.getColor());
-			Graph.drawOutlinedString(g2d, Utils.sign((int) ((1 + mod) * 100)) + "%",
+			Graph.drawOutlinedString(g2d, Utils.sign((int) (mod * 100)) + "%",
 					23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
 					BORDER_WIDTH, Color.BLACK
 			);
