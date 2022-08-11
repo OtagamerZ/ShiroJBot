@@ -104,7 +104,7 @@ public class SelectTitleCommand implements Executable {
 		}
 
 		AccountTitle title = DAO.query(AccountTitle.class, "SELECT t FROM AccountTitle t WHERE t.account.uid = ?1 AND t.title.id = UPPER(?2)",
-				acc.getUid(), args.getString("name")
+				acc.getUid(), args.getString("id")
 		);
 		if (title == null) {
 			List<String> names = DAO.queryAllNative(String.class, "SELECT t.title_id FROM account_title t WHERE t.account_uid = ?1", acc.getUid());
