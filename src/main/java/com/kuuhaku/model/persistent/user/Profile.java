@@ -257,7 +257,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				if (s.startsWith("#")) {
 					bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " "));
 				} else {
-					Graph.getStringBounds(g1, s);
+					bounds = Graph.getStringBounds(g1, s);
 				}
 				int y = (int) wids.getY();
 
