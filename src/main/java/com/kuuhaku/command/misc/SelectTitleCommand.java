@@ -41,10 +41,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Command(
@@ -61,10 +58,13 @@ public class SelectTitleCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/all_titles"));
 
-			Map<String, List<Title>> titles = Title.getAllTitles().stream()
-					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")));
+			List<List<Title>> titles = Title.getAllTitles().stream()
+					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")))
+					.values().stream()
+					.sorted(Comparator.comparing(ts -> ts.get(0).getId()))
+					.toList();
 
-			List<Page> pages = Utils.generatePages(eb, List.copyOf(titles.values()), 10, 5, ts -> {
+			List<Page> pages = Utils.generatePages(eb, titles, 10, 5, ts -> {
 				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
 
 				Title current = ts.stream()
