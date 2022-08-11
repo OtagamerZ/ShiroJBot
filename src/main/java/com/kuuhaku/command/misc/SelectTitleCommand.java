@@ -69,7 +69,7 @@ public class SelectTitleCommand implements Executable {
 
 				Title current = ts.stream()
 						.filter(t -> acc.hasTitle(t.getId()))
-						.findFirst()
+						.reduce((f, s) -> s)
 						.orElse(ts.get(0));
 
 				StringBuilder sb = new StringBuilder();
