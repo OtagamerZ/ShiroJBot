@@ -491,8 +491,7 @@ public class Arena implements Renderer {
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
-			g.setColor(Color.WHITE);
-			if (hand.getUserDeck().getFrame() == FrameColor.BLUE) {
+			if (hand.getUserDeck().getFrame() == FrameColor.BLUE) { //TODO Glitch
 				Graph.drawProcessedString(g, name, x, y, (str, px, py) -> {
 					Color color = Graph.getRandomColor();
 					g.setColor(color);
@@ -504,7 +503,12 @@ public class Arena implements Renderer {
 					}
 				});
 			} else {
-				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				if (game.getCurrentSide() == hand.getSide()) {
+					g.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				} else {
+					g.setColor(Color.WHITE);
+				}
+
 				Graph.drawOutlinedString(g, name, x, y, 10, Color.BLACK);
 			}
 

@@ -100,7 +100,7 @@ public class Shoukan extends GameInstance<Phase> {
 		this.arena = new Arena(this);
 		this.singleplayer = p1.equals(p2);
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getCurrent().getUid() + ">"), 5, TimeUnit.MINUTES);
+		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -622,7 +622,15 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE))) {
+		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting");
+		Targeting tgt = switch (type) {
+			default -> new Targeting(null, null);
+			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
+			case ENEMY -> new Targeting(curr, -1, args.getInt("target1"));
+			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
+		};
+
+		if (!tgt.validate(type) || !trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE))) {
 			getChannel().sendMessage(locale.get("error/activation")).queue();
 			return false;
 		}
@@ -1038,11 +1046,11 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	public boolean trigger(Trigger trigger, Source source, Target target) {
+	public boolean trigger(Trigger trigger, Source source, Target... target) {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source, target);
-		if (source.execute(ep) | target.execute(ep)) {
+		if (source.execute(ep) | Arrays.stream(target).map(t -> t.execute(ep)).reduce(Boolean::logicalOr).orElse(false)) {
 			triggerEOTs(new EffectParameters(trigger, source, target));
 			return true;
 		}

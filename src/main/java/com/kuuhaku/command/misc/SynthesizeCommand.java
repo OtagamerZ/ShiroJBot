@@ -168,19 +168,17 @@ public class SynthesizeCommand implements Executable {
 
 					if (kc != null) {
 						if (kc.isChrome()) {
-							more *= 1 + rarity * kc.getQuality() / 200;
+							more *= 1 + rarity * kc.getQuality() / 150;
 						} else {
-							inc += rarity * kc.getQuality() / 200;
+							inc += rarity * kc.getQuality() / 150;
 						}
-					} else {
-						inc += rarity / 200d;
 					}
 				}
 				case EVOGEAR -> {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 					inc += ev.getTier() / 4d;
 				}
-				case FIELD -> more *= 1.1;
+				case FIELD -> more *= 1.25;
 			}
 		}
 
