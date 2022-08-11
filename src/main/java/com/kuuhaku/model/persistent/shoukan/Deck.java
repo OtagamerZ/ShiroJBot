@@ -421,7 +421,7 @@ public class Deck extends DAO<Deck> {
 						if (str != null) {
 							g.setColor(new Color(0xD72929));
 							return str;
-						} else if (s.startsWith("\"")) {
+						} else if (s.startsWith("  \"")) {
 							g.setColor(Color.WHITE);
 						}
 

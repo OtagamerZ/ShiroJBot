@@ -68,7 +68,8 @@ public class DeckFrameCommand implements Executable {
 
 			FrameColor[] frames = FrameColor.values();
 			List<Page> pages = new ArrayList<>();
-			for (FrameColor fc : frames) {
+			for (int i = 0; i < frames.length; i++) {
+				FrameColor fc = frames[i];
 				if (!fc.canUse(acc)) {
 					Title title = fc.getTitle();
 					assert title != null;
@@ -82,6 +83,7 @@ public class DeckFrameCommand implements Executable {
 							.setTitle(fc.getName(locale))
 							.setDescription(fc.getDescription(locale));
 				}
+				eb.setFooter(locale.get("str/page", i + 1, frames.length));
 
 				pages.add(new InteractPage(eb.build()));
 			}
