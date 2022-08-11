@@ -114,6 +114,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		return effect;
 	}
 
+	public JSONArray getRawTags() {
+		return tags;
+	}
+
 	@Override
 	public List<String> getTags() {
 		return tags.stream().map(t -> "tag/" + t).toList();
