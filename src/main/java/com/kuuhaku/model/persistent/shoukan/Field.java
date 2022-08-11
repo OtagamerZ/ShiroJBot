@@ -30,7 +30,6 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
