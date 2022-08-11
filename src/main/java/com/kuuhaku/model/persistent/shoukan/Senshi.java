@@ -35,7 +35,6 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -713,7 +712,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		g2d.setFont(FONT);
 		g2d.setColor(deck.getFrame().getPrimaryColor());
-		String name = StringUtils.abbreviate(getVanity().getName(), MAX_NAME_LENGTH);
+		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
 
 		if (!desc.isEmpty()) {

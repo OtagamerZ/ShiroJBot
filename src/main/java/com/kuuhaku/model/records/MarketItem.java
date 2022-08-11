@@ -64,10 +64,9 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 			sale = -1;
 		}
 		Account seller = sc.getKawaipon().getAccount();
-		String price = "\n" + (sale == sc.getId()
+		String price = sale == sc.getId()
 				? locale.get("str/offer_sale", sc.getPrice(), (int) (sc.getPrice() * 0.8), seller.getName() + " (<@" + seller.getUid() + ">)")
-				: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)")
-		);
+				: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)");
 
 		return "** `ID: " + sc.getId() + "` " + sc + "**" +
 				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +

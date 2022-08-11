@@ -20,6 +20,7 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.exceptions.InvalidValueException;
 import com.trickl.palette.Palette;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
@@ -414,5 +415,14 @@ public abstract class Graph {
 
 		rgb = unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 		return packRGB(255, rgb[1], rgb[2], rgb[3]);
+	}
+
+	public static String abbreviate(Graphics2D g2d, String text, int width) {
+		FontMetrics m = g2d.getFontMetrics();
+		while (text.length() > 4 && m.stringWidth(text) > width) {
+			text = StringUtils.abbreviate(text, text.length() - 1);
+		}
+
+		return text;
 	}
 }
