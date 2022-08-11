@@ -234,7 +234,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 			replaces.put(
 					t.getId().toLowerCase(Locale.ROOT),
-					t.getInfo(locale).getName()
+					"#%06X,%s".formatted(
+							t.getRarity().getColor(false).getRGB() & 0xFFFFFF,
+							t.getInfo(locale).getName().replace(" ", "_")
+					)
 			);
 		}
 
@@ -259,7 +262,17 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
 
 				g1.setColor(Color.WHITE);
-				Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 1.5), 3, Color.BLACK);
+				Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), 200, (str, px, py) -> {
+					if (s.startsWith("#")) {
+						String[] frags = s.split(",");
+
+						g1.setColor(Color.decode(frags[0]));
+						Graph.drawOutlinedString(g1, frags[1].replace("_", " "), 15, (int) (y + em * 1.5), 3, Color.BLACK);
+					} else {
+						g1.setColor(Color.WHITE);
+						Graph.drawOutlinedString(g1, s, 15, (int) (y + em * 1.5), 3, Color.BLACK);
+					}
+				});
 			}
 
 			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
