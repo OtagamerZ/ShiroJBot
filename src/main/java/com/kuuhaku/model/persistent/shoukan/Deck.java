@@ -388,7 +388,7 @@ public class Deck extends DAO<Deck> {
 				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + locale.get("minor/pureblood")
 						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "")
-						+ "\n\n\n\n  \"" + ori.major().getDescription(locale) + "\"";
+						+ "\n\n\n  \"" + ori.major().getDescription(locale) + "\"";
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -410,7 +410,7 @@ public class Deck extends DAO<Deck> {
 						+ "\n\n- " + ori.minor().getMinor(locale)
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "")
-						+ "\n\n\n\n  \"" + syn.getDescription(locale) + "\"";
+						+ "\n\n\n  \"" + syn.getDescription(locale) + "\"";
 			}
 
 			Graph.drawMultilineString(g, effects,
@@ -421,10 +421,10 @@ public class Deck extends DAO<Deck> {
 						if (str != null) {
 							g.setColor(new Color(0xD72929));
 							return str;
-						} else {
-							g.setColor(Color.WHITE);
-							return s;
 						}
+
+						g.setColor(Color.WHITE);
+						return s;
 					}
 			);
 		});
