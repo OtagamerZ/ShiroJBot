@@ -418,8 +418,7 @@ public abstract class Graph {
 	}
 
 	public static String abbreviate(Graphics2D g2d, String text, int width) {
-		FontMetrics m = g2d.getFontMetrics();
-		while (text.length() > 4 && m.stringWidth(text) > width) {
+		while (text.length() > 4 && getStringBounds(g2d, text).getWidth() > width) {
 			text = StringUtils.abbreviate(text, text.length() - 1);
 		}
 
