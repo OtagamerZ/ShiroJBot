@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Command(
 		name = "synth",
@@ -78,6 +79,7 @@ public class SynthesizeCommand implements Executable {
 					return;
 				}
 
+				AtomicBoolean failed = new AtomicBoolean();
 				CompletableFuture<Void> select = new CompletableFuture<>();
 				List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 				stash.removeIf(cards::contains);
@@ -85,9 +87,11 @@ public class SynthesizeCommand implements Executable {
 						.thenAccept(sc -> {
 							if (sc == null) {
 								event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+								failed.set(true);
 								return;
 							} else if (cards.contains(sc)) {
 								event.channel().sendMessage(locale.get("error/twice_added")).queue();
+								failed.set(true);
 								return;
 							}
 
@@ -100,12 +104,17 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
+							failed.set(true);
 							select.complete(null);
 							return null;
 						});
 
 				try {
 					select.get();
+					if (failed.get()) {
+						return;
+					}
+
 					setup.complete(null);
 				} catch (InterruptedException | ExecutionException ignore) {
 				}
