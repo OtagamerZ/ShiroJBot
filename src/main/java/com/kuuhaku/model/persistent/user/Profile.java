@@ -253,7 +253,12 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
 				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
-				Rectangle2D bounds = Graph.getStringBounds(g1, s);
+				Rectangle2D bounds;
+				if (s.startsWith("#")) {
+					bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " "));
+				} else {
+					Graph.getStringBounds(g1, s);
+				}
 				int y = (int) wids.getY();
 
 				g1.setColor(bgCol);
