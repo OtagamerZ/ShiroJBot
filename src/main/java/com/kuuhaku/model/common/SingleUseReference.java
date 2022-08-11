@@ -28,7 +28,7 @@ public class SingleUseReference<T> {
 		ref = new AtomicReference<>(obj);
 	}
 
-	public <R> R peekProperty(Function<T, R> retriever) {
+	public synchronized <R> R peekProperty(Function<T, R> retriever) {
 		if (ref.get() == null) return null;
 
 		return retriever.apply(ref.get());
