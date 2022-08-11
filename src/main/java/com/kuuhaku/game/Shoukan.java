@@ -52,7 +52,10 @@ import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Emoji;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -563,15 +566,19 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeMP(chosen.getMPCost());
 		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
-		chosen.setAvailable(false);
-		chosen.withCopy(e -> {
-			curr.getGraveyard().add(e);
-			if (!consumed.isEmpty()) {
-				e.getStats().getData().put("consumed", consumed);
-			}
+		Evogear copy = chosen.copy();
+		curr.getGraveyard().add(copy);
+		if (!consumed.isEmpty()) {
+			copy.getStats().getData().put("consumed", consumed);
+		}
 
-			e.execute(e.toParameters(tgt));
-		});
+		chosen.setAvailable(false);
+		if (!copy.execute(copy.toParameters(tgt))) {
+			curr.getGraveyard().remove(copy);
+			chosen.setAvailable(true);
+			getChannel().sendMessage(locale.get("error/activation")).queue();
+			return false;
+		}
 
 		reportEvent("str/activate_card",
 				curr.getName(),
@@ -581,7 +588,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("(?<inField>[1-5]),a")
+	@PlayerAction("(?<inField>[1-5]),a(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean special(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
@@ -615,8 +622,12 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE))) {
+			getChannel().sendMessage(locale.get("error/activation")).queue();
+			return false;
+		}
+
 		curr.consumeMP(1);
-		trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE));
 		if (getPhase() != Phase.PLAN) {
 			chosen.setAvailable(false);
 		}
@@ -995,17 +1006,16 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		boolean trig = false;
 		List<SlotColumn> slts = getSlots(side);
 		for (SlotColumn slt : slts) {
 			Senshi s = slt.getTop();
 			if (s != null) {
-				trig |= s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
 			}
 
 			s = slt.getBottom();
 			if (s != null) {
-				trig |= s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
 			}
 		}
 
@@ -1016,22 +1026,28 @@ public class Shoukan extends GameInstance<Phase> {
 		triggerEOTs(new EffectParameters(trigger));
 	}
 
-	public void trigger(Trigger trigger, Source source) {
-		if (restoring) return;
+	public boolean trigger(Trigger trigger, Source source) {
+		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source);
 		if (source.execute(ep)) {
 			triggerEOTs(new EffectParameters(trigger, source));
+			return true;
 		}
+
+		return false;
 	}
 
-	public void trigger(Trigger trigger, Source source, Target target) {
-		if (restoring) return;
+	public boolean trigger(Trigger trigger, Source source, Target target) {
+		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source, target);
 		if (source.execute(ep) | target.execute(ep)) {
 			triggerEOTs(new EffectParameters(trigger, source, target));
+			return true;
 		}
+
+		return false;
 	}
 
 	public Set<EffectOverTime> getEOTs() {

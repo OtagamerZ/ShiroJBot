@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
@@ -35,7 +36,6 @@ import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -346,6 +346,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			));
 
 			return true;
+		} catch (ActivationException e) {
+			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 			return false;

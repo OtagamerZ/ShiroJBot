@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
@@ -631,6 +632,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			return true;
+		} catch (ActivationException e) {
+			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 			return false;
