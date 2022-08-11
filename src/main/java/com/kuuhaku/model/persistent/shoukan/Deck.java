@@ -387,6 +387,7 @@ public class Deck extends DAO<Deck> {
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + locale.get("minor/pureblood")
+						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "")
 						+ "\n\n\n\n  \"" + ori.major().getDescription(locale) + "\"";
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
@@ -408,11 +409,8 @@ public class Deck extends DAO<Deck> {
 				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + ori.minor().getMinor(locale)
 						+ "\n\n- " + syn.getSynergy(locale)
+						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "")
 						+ "\n\n\n\n  \"" + syn.getDescription(locale) + "\"";
-			}
-
-			if (ori.demon()) {
-				effects += "\n\n&" + Race.DEMON.getMinor(locale);
 			}
 
 			Graph.drawMultilineString(g, effects,
