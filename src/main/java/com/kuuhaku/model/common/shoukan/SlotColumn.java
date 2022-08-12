@@ -19,10 +19,8 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 
@@ -73,11 +71,49 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
-		if (top != null && top.getStats().popFlag(Flag.NO_CONVERT)) {
-			return;
+		if (top != null) {
+			Evogear shield = null;
+			if (!top.getHand().equals(top.getHand().getGame().getCurrent())) {
+				for (Evogear e : top.getEquipments()) {
+					if (e.hasCharm(Charm.SHIELD)) {
+						shield = e;
+					}
+				}
+			}
+
+			if (top.getStats().popFlag(Flag.NO_CONVERT)) {
+				return;
+			} else if (shield != null) {
+				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
+				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
+					top.getHand().getGraveyard().add(shield);
+				} else {
+					shield.getStats().getData().put("shield", charges);
+				}
+
+				return;
+			}
 		}
 
 		if (getTop() != null) {
+			Evogear ward = null;
+			for (Evogear e : getTop().getEquipments()) {
+				if (e.hasCharm(Charm.WARDING)) {
+					ward = e;
+				}
+			}
+
+			if (ward != null) {
+				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
+				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
+					getTop().getHand().getGraveyard().add(ward);
+				} else {
+					ward.getStats().getData().put("ward", charges);
+				}
+
+				return;
+			}
+
 			this.top.executeAssert(Trigger.ON_REMOVE);
 			this.top.setSlot(null);
 		}

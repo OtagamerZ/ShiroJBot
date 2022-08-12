@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
@@ -76,7 +77,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
-		getHand().getGame().trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+
+		Shoukan game = getHand().getGame();
+		game.trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+
+		if (e.hasCharm(Charm.TIMEWARP)) {
+			int times = Charm.TIMEWARP.getValue(e.getTier());
+			for (int i = 0; i < times; i++) {
+				game.trigger(Trigger.ON_TURN_BEGIN, asSource(Trigger.ON_TURN_BEGIN));
+				game.trigger(Trigger.ON_TURN_END, asSource(Trigger.ON_TURN_END));
+			}
+		} else if (e.hasCharm(Charm.CLONE)) {
+			List<SlotColumn> slts = game.getOpenSlots(getHand().getSide(), true);
+			if (!slts.isEmpty()) {
+				slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
+			}
+		}
 	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;

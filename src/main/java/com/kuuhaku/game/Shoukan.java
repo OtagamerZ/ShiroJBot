@@ -691,7 +691,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int pHP = op.getHP();
 		int dmg = ally.getDmg();
 		int attacks = 1 + ally.getEquipments().stream()
-				.filter(e -> e.getCharms().contains(Charm.MULTISTRIKE.name()))
+				.filter(e -> e.hasCharm(Charm.MULTISTRIKE))
 				.mapToInt(e -> Charm.MULTISTRIKE.getValue(e.getTier()))
 				.sum();
 

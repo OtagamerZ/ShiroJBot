@@ -125,6 +125,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return charms;
 	}
 
+	public boolean hasCharm(Charm charm) {
+		return charms.contains(charm.name());
+	}
+
 	public CardAttributes getBase() {
 		return base;
 	}
