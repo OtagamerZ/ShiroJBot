@@ -77,7 +77,7 @@ public class TradeAcceptCommand implements Executable {
 
 						Trade.getPending().remove(event.user().getId());
 						return true;
-					}, other
+					}, m -> trade.setFinalizing(false), other
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
