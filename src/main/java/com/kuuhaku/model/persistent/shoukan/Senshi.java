@@ -87,7 +87,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				game.trigger(Trigger.ON_TURN_BEGIN, asSource(Trigger.ON_TURN_BEGIN));
 				game.trigger(Trigger.ON_TURN_END, asSource(Trigger.ON_TURN_END));
 			}
-		} else if (e.hasCharm(Charm.CLONE)) {
+		}
+
+		System.out.println(e.hasCharm(Charm.CLONE));
+		if (e.hasCharm(Charm.CLONE)) {
 			List<SlotColumn> slts = game.getOpenSlots(getHand().getSide(), true);
 			System.out.println(slts);
 			if (!slts.isEmpty()) {
