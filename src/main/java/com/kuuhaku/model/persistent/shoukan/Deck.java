@@ -515,7 +515,7 @@ public class Deck extends DAO<Deck> {
 				};
 
 				if (origin.minor() == Race.BEAST) {
-					handCap = mpGain.accumulate((t, cards) -> cards + t / 25);
+					handCap = mpGain.accumulate((t, cards) -> cards + t / 20);
 				}
 
 				if (origin.synergy() == Race.FEY) {
