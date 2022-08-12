@@ -622,7 +622,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting");
+		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting", TargetType.NONE);
 		Targeting tgt = switch (type) {
 			default -> new Targeting(null, null);
 			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
@@ -630,7 +630,7 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(type) || !trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE))) {
+		if (!tgt.validate(type) || !trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets())) {
 			getChannel().sendMessage(locale.get("error/activation")).queue();
 			return false;
 		}

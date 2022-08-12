@@ -20,7 +20,11 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.TargetType;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public record Targeting(Senshi ally, Senshi enemy) {
 	public Targeting(Hand hand, int ally, int enemy) {
@@ -57,5 +61,12 @@ public record Targeting(Senshi ally, Senshi enemy) {
 			case ENEMY -> enemy != null;
 			case BOTH -> ally != null && enemy != null;
 		};
+	}
+
+	public Target[] targets() {
+		return Stream.of(ally, enemy)
+				.filter(Objects::nonNull)
+				.map(s -> new Target(s, Trigger.ON_EFFECT_TARGET))
+				.toArray(Target[]::new);
 	}
 }
