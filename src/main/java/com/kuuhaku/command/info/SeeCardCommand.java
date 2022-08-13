@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -139,7 +140,16 @@ public class SeeCardCommand implements Executable {
 
 					if (d instanceof Senshi s && s.isFusion()) {
 						eb.setAuthor(null);
+					} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
+						eb.addField(locale.get("str/charms"),
+								e.getCharms().stream()
+										.map(c -> Charm.valueOf(String.valueOf(c)).getName(locale))
+										.map(s -> "`" + s + "`")
+										.collect(Collectors.joining(" ")),
+								true
+						);
 					}
+
 					if (!d.getTags().isEmpty()) {
 						eb.addField(locale.get("str/tags"),
 								d.getTags().stream()
@@ -152,7 +162,7 @@ public class SeeCardCommand implements Executable {
 										})
 										.map(s -> "`" + s + "`")
 										.collect(Collectors.joining(" ")),
-								false
+								true
 						);
 					}
 				}
