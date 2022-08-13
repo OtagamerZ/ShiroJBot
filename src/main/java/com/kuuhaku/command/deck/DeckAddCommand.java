@@ -97,7 +97,10 @@ public class DeckAddCommand implements Executable {
 					Deck dk = d.refresh();
 					switch (sc.getType()) {
 						case KAWAIPON -> {
-							if (sc.getKawaiponCard().isChrome()) {
+							if (sc.getKawaiponCard().getCard().getRarity().getIndex() == -1) {
+								event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
+								return;
+							} else if (sc.getKawaiponCard().isChrome()) {
 								event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
 								return;
 							} else if (dk.getSenshi().size() >= 36) {

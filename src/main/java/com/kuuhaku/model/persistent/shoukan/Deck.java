@@ -485,7 +485,7 @@ public class Deck extends DAO<Deck> {
 			return new BaseValues(() -> {
 				Origin origin = getOrigins();
 
-				double reduction = 100 / (100 + Math.max(0, Calc.prcnt(getEvoWeight(), 24) - 1));
+				double reduction = 10d / (10 + Math.max(0, getEvoWeight() - 24));
 				int bHP;
 				if (h != null) {
 					bHP = (int) (h.getGame().getParams().hp() * reduction);
