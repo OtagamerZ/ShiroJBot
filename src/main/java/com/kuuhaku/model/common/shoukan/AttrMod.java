@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class AttrMod implements Cloneable {
 	private final Drawable<?> source;
-	private final double value;
+	private double value;
 	private int expiration;
 
 	private final int hash;
@@ -56,6 +56,10 @@ public class AttrMod implements Cloneable {
 
 	public double getValue() {
 		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
 	}
 
 	public int getExpiration() {

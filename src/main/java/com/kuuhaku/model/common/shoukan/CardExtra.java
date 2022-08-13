@@ -118,6 +118,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setMana(int mana) {
+		for (AttrMod mod : this.mana) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + mana);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(mana);
 		this.mana.remove(mod);
 		this.mana.add(mod);
@@ -140,6 +147,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setBlood(int blood) {
+		for (AttrMod mod : this.blood) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + blood);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(blood);
 		this.blood.remove(mod);
 		this.blood.add(mod);
@@ -162,6 +176,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setSacrifices(int sacrifices) {
+		for (AttrMod mod : this.sacrifices) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + sacrifices);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(sacrifices);
 		this.sacrifices.remove(mod);
 		this.sacrifices.add(mod);
@@ -184,6 +205,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setAtk(int atk) {
+		for (AttrMod mod : this.atk) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + atk);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(atk);
 		this.atk.remove(mod);
 		this.atk.add(mod);
@@ -206,6 +234,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setDef(int def) {
+		for (AttrMod mod : this.def) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + def);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(def);
 		this.def.remove(mod);
 		this.def.add(mod);
@@ -228,6 +263,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setDodge(int dodge) {
+		for (AttrMod mod : this.dodge) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + dodge);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(dodge);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
@@ -250,6 +292,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setBlock(int block) {
+		for (AttrMod mod : this.block) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + block);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(block);
 		this.block.remove(mod);
 		this.block.add(mod);
@@ -272,6 +321,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setAttrMult(double attrMult) {
+		for (AttrMod mod : this.attrMult) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + attrMult);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(attrMult);
 		this.attrMult.remove(mod);
 		this.attrMult.add(mod);
@@ -294,6 +350,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setTier(int tier) {
+		for (AttrMod mod : this.tier) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + tier);
+				return;
+			}
+		}
+
 		AttrMod mod = new PermMod(tier);
 		this.tier.remove(mod);
 		this.tier.add(mod);
