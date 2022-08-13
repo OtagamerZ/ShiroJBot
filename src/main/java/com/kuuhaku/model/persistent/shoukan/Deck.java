@@ -204,7 +204,7 @@ public class Deck extends DAO<Deck> {
 	public int getEvoWeight() {
 		return evogear.stream()
 				.mapToInt(e -> {
-					int i = e.getTier() + (-1 + e.getCharms().size());
+					int i = e.getTier() + e.getCharms().size();
 					if (!e.isSpell() && getOrigins().major() == Race.MACHINE) {
 						return i - 1;
 					} else if (e.isSpell() && getOrigins().major() == Race.MYSTICAL) {
@@ -280,7 +280,7 @@ public class Deck extends DAO<Deck> {
 		double avgMana = Calc.average((double) base.mpGain().apply(1), base.mpGain().apply(5), base.mpGain().apply(10));
 		int weight = Calc.prcntToInt(getEvoWeight(), 24);
 		String color = "FFFFFF";
-		if (weight > 150) color = "FF0000";
+		if (weight > 175) color = "FF0000";
 		else if (weight > 100) color = "FFFF00";
 
 		for (Drawable<?> d : allCards) {
