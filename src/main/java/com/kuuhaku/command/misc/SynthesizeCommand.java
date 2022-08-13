@@ -167,7 +167,7 @@ public class SynthesizeCommand implements Executable {
 
 	public static Evogear rollSynthesis(List<StashedCard> cards) {
 		double inc = 1;
-		double more = 1 + Spawn.getRarityMult();
+		double more = 1 + Spawn.getRarityMult() / 2;
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {
@@ -177,22 +177,22 @@ public class SynthesizeCommand implements Executable {
 
 					if (kc != null) {
 						if (kc.isChrome()) {
-							more *= 1 + rarity * kc.getQuality() / 100;
+							more *= 1 + rarity * kc.getQuality() / 150;
 						} else {
-							inc += rarity * kc.getQuality() / 100;
+							inc += rarity * kc.getQuality() / 150;
 						}
 					}
 				}
 				case EVOGEAR -> {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
-					inc += ev.getTier() / 4d;
+					inc += ev.getTier() / 6d;
 				}
 				case FIELD -> more *= 1.5;
 			}
 		}
 
 		double mult = 1 * inc * more;
-		RandomList<Evogear> pool = new RandomList<>((v, f) -> 1 - Math.pow(v, f), 1 * mult);
+		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 1 * mult);
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;

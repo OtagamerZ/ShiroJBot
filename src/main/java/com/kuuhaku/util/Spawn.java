@@ -18,6 +18,7 @@
 
 package com.kuuhaku.util;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
@@ -63,7 +64,7 @@ public abstract class Spawn {
 			Map<Rarity, Set<Card>> cPool = Utils.getRandomEntry(animes).getCards().stream()
 					.collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
 
-			RandomList<Rarity> rPool = new RandomList<>(3 - rarityBonus);
+			RandomList<Rarity> rPool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, 3 - rarityBonus);
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
 
