@@ -109,7 +109,12 @@ public class StashCommand implements Executable {
 		AtomicInteger i = new AtomicInteger(2);
 		Option[] opts = cli.getFirst().getOptions();
 		for (Option opt : opts) {
-			query.appendNewLine(filters.get(opt.getOpt()).formatted(i.getAndIncrement()));
+			String filter = filters.get(opt.getOpt());
+			if (filter.contains("%s")) {
+				filter = filter.formatted(i.getAndIncrement());
+			}
+
+			query.appendNewLine(filter);
 
 			if (opt.hasArg()) {
 				params.add(opt.getValue().toUpperCase(Locale.ROOT));

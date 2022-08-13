@@ -66,7 +66,12 @@ public class Market {
 
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
-			query.appendNewLine(FILTERS.get(opt.getOpt()).formatted(i.getAndIncrement()));
+			String filter = FILTERS.get(opt.getOpt());
+			if (filter.contains("%s")) {
+				filter = filter.formatted(i.getAndIncrement());
+			}
+
+			query.appendNewLine(filter);
 
 			if (opt.hasArg()) {
 				params.add(opt.getValue().toUpperCase(Locale.ROOT));
