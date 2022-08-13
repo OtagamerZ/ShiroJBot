@@ -517,7 +517,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("PLAN")
-	@PlayerAction("(?<inHand>\\d+)(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
+	@PlayerAction("(?<inHand>\\d+)s(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean activate(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
@@ -588,7 +588,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("(?<inField>[1-5]),a(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
+	@PlayerAction("(?<inField>[1-5])a(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean special(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
@@ -765,7 +765,8 @@ public class Shoukan extends GameInstance<Phase> {
 							op.getGraveyard().add(enemy);
 						}
 
-						outcome = "str/combat_direct";
+						dmg = 0;
+						outcome = "str/combat_success";
 					} else {
 						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
 						int enemyStats = enemy.getActiveAttr(dbl);
