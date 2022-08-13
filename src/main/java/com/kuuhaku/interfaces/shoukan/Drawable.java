@@ -321,7 +321,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default Target asTarget(Trigger trigger) {
 		if (this instanceof Senshi s) {
-			return new Target(s, trigger);
+			return new Target(s, getHand().getSide(), getSlot().getIndex(), trigger);
 		} else {
 			return new Target();
 		}

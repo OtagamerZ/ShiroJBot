@@ -30,10 +30,6 @@ public record Target(Senshi card, Side side, int index, Trigger trigger) {
 		this(null, null, -1, null);
 	}
 
-	public Target(Senshi card, Trigger trigger) {
-		this(card, card.getHand().getSide(), card.getSlot().getIndex(), trigger);
-	}
-
 	public Target(Senshi card, Side side, int index, Trigger trigger) {
 		Evogear shield = null;
 		if (card != null) {

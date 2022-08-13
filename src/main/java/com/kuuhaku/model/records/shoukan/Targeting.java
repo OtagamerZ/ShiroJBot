@@ -23,6 +23,8 @@ import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -50,10 +52,19 @@ public record Targeting(Hand hand, int allyPos, int enemyPos) {
 		};
 	}
 
-	public Target[] targets() {
-		return Stream.of(ally(), enemy())
-				.filter(Objects::nonNull)
-				.map(s -> new Target(s, Trigger.ON_EFFECT_TARGET))
-				.toArray(Target[]::new);
+	public Target[] targets(Trigger trigger) {
+		List<Target> targets = new ArrayList<>();
+
+		Senshi ally = ally();
+		if (ally != null) {
+			targets.add(ally.asTarget(trigger));
+		}
+
+		Senshi enemy = enemy();
+		if (enemy != null) {
+			targets.add(enemy.asTarget(trigger));
+		}
+
+		return targets.toArray(Target[]::new);
 	}
 }

@@ -361,15 +361,18 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public EffectParameters toParameters(Targeting tgt) {
 		return switch (targetType) {
 			case NONE -> new EffectParameters(ON_ACTIVATE);
-			case ALLY -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
-					new Target(tgt.ally(), ON_SPELL_TARGET)
+			case ALLY -> new EffectParameters(ON_ACTIVATE,
+					asSource(ON_ACTIVATE),
+					new Target(tgt.ally(), hand.getSide(), tgt.allyPos(), ON_SPELL_TARGET)
 			);
-			case ENEMY -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
-					new Target(tgt.enemy(), ON_SPELL_TARGET)
+			case ENEMY -> new EffectParameters(ON_ACTIVATE,
+					asSource(ON_ACTIVATE),
+					new Target(tgt.enemy(), hand.getSide().getOther(), tgt.enemyPos(), ON_SPELL_TARGET)
 			);
-			case BOTH -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
-					new Target(tgt.ally(), ON_SPELL_TARGET),
-					new Target(tgt.enemy(), ON_SPELL_TARGET)
+			case BOTH -> new EffectParameters(ON_ACTIVATE,
+					asSource(ON_ACTIVATE),
+					new Target(tgt.ally(), hand.getSide(), tgt.allyPos(), ON_SPELL_TARGET),
+					new Target(tgt.enemy(), hand.getSide().getOther(), tgt.enemyPos(), ON_SPELL_TARGET)
 			);
 		};
 	}

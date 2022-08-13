@@ -630,7 +630,7 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(type) || !trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets())) {
+		if (!tgt.validate(type) || !trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
 			getChannel().sendMessage(locale.get("error/activation")).queue();
 			return false;
 		}
