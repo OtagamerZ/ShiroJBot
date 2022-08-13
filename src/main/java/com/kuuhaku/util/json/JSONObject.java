@@ -259,6 +259,10 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 		return this;
 	}
 
+	public Object rightShift(String obj) {
+		return remove(obj);
+	}
+
 	public JSONArray toJSONArray() {
 		return new JSONArray(values());
 	}

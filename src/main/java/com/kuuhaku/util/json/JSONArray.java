@@ -237,6 +237,14 @@ public class JSONArray extends ArrayList<Object> implements Cloneable {
 		return this;
 	}
 
+	public Object rightShift(int index) {
+		return remove(index);
+	}
+
+	public boolean rightShift(Object obj) {
+		return remove(obj);
+	}
+
 	public JSONObject toJSONObject(JSONArray names) {
 		JSONObject out = new JSONObject();
 		for (int i = 0; i < names.size(); i++) {
