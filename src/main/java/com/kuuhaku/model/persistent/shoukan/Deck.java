@@ -280,7 +280,7 @@ public class Deck extends DAO<Deck> {
 		double avgMana = Calc.average((double) base.mpGain().apply(1), base.mpGain().apply(5), base.mpGain().apply(10));
 		int weight = Calc.prcntToInt(getEvoWeight(), 24);
 		String color = "FFFFFF";
-		if (weight > 175) color = "FF0000";
+		if (weight > 200) color = "FF0000";
 		else if (weight > 100) color = "FFFF00";
 
 		for (Drawable<?> d : allCards) {
