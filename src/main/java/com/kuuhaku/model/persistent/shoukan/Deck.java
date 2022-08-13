@@ -485,13 +485,14 @@ public class Deck extends DAO<Deck> {
 			return new BaseValues(() -> {
 				Origin origin = getOrigins();
 
-				double reduction = 24d / (24 + Math.max(0, getEvoWeight() - 24));
-				int bHP;
+				double reduction = Math.pow(0.999, -24 * getEvoWeight());
+				int base;
 				if (h != null) {
-					bHP = (int) (h.getGame().getParams().hp() * reduction);
+					base = h.getGame().getParams().hp();
 				} else {
-					bHP = (int) (5000 * reduction);
+					base = 5000;
 				}
+				int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 1, base);
 
 				AccFunction<Integer, Integer> mpGain = t -> {
 					if (h != null) {
