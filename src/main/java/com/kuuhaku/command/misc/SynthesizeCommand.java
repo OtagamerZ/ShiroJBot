@@ -192,8 +192,7 @@ public class SynthesizeCommand implements Executable {
 		}
 
 		double mult = 1 * inc * more;
-		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 2.5 / mult);
-		System.out.println(1 / mult);
+		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 1.5 / mult);
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;
