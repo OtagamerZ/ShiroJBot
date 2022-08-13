@@ -76,7 +76,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 							this,
 							true
 					), true)
-					.setRelativeRateLimit(false)
 					.build();
 		} catch (LoginException e) {
 			Constants.LOGGER.fatal("Failed to login: " + e);
