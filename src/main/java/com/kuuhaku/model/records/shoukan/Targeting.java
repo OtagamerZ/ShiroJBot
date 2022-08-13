@@ -26,45 +26,32 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public record Targeting(Senshi ally, Senshi enemy) {
-	public Targeting(Hand hand, int ally, int enemy) {
-		this(
-				ally == -1 ? null : hand.getGame()
-						.getSlots(hand.getSide())
-						.get(ally)
-						.getTop(),
-				enemy == -1 ? null : hand.getGame()
-						.getSlots(hand.getSide().getOther())
-						.get(enemy)
-						.getTop()
-		);
+public record Targeting(Hand hand, int allyPos, int enemyPos) {
+	public Senshi ally() {
+		return allyPos == -1 ? null : hand.getGame()
+				.getSlots(hand.getSide())
+				.get(allyPos)
+				.getTop();
 	}
 
-	public Targeting(Senshi ally, Senshi enemy) {
-		if (ally != null && ally.isStasis()) {
-			this.ally = null;
-		} else {
-			this.ally = ally;
-		}
-
-		if (enemy != null && enemy.isStasis()) {
-			this.enemy = null;
-		} else {
-			this.enemy = enemy;
-		}
+	public Senshi enemy() {
+		return enemyPos == -1 ? null : hand.getGame()
+				.getSlots(hand.getSide().getOther())
+				.get(enemyPos)
+				.getTop();
 	}
 
 	public boolean validate(TargetType type) {
 		return switch (type) {
 			case NONE -> true;
-			case ALLY -> ally != null;
-			case ENEMY -> enemy != null;
-			case BOTH -> ally != null && enemy != null;
+			case ALLY -> allyPos != -1;
+			case ENEMY -> enemyPos != -1;
+			case BOTH -> allyPos != -1 && enemyPos != -1;
 		};
 	}
 
 	public Target[] targets() {
-		return Stream.of(ally, enemy)
+		return Stream.of(ally(), enemy())
 				.filter(Objects::nonNull)
 				.map(s -> new Target(s, Trigger.ON_EFFECT_TARGET))
 				.toArray(Target[]::new);

@@ -551,7 +551,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Targeting tgt = switch (chosen.getTargetType()) {
-			case NONE -> new Targeting(null, null);
+			case NONE -> new Targeting(curr, -1, -1);
 			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
 			case ENEMY -> new Targeting(curr, -1, args.getInt("target1"));
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
@@ -624,7 +624,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting", TargetType.NONE);
 		Targeting tgt = switch (type) {
-			default -> new Targeting(null, null);
+			case NONE -> new Targeting(curr, -1, -1);
 			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
 			case ENEMY -> new Targeting(curr, -1, args.getInt("target1"));
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
