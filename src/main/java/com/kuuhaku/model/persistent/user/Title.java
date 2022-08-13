@@ -100,6 +100,7 @@ public class Title extends DAO<Title> {
 					WHEN 'LEGENDARY' THEN 5
 					WHEN 'ULTIMATE' THEN 6
 				END DESC
+				, t.id
 				"""
 		);
 	}

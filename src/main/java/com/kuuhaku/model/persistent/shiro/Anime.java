@@ -62,6 +62,7 @@ public class Anime extends DAO<Anime> {
 					WHEN 'ULTRA_RARE' THEN 4
 					WHEN 'LEGENDARY' THEN 5
 				END DESC
+				, c.id
 				""", id
 		);
 	}

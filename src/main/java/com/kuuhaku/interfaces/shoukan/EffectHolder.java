@@ -60,8 +60,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
-				str = Constants.VOID + str;
-
 				String val;
 				try {
 					@Language("Groovy") String calc = groups.getString("calc");
@@ -117,6 +115,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					if (!Utils.equalsAny(color, "", "b")) {
 						val = val + "    ";
+					}
+
+					if (!Utils.equalsAny(color, "ally", "enemy")) {
+						val = Constants.VOID + val;
 					}
 
 					return val.replaceAll("\\{.+}", "");
