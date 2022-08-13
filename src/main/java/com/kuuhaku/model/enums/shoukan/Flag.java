@@ -31,7 +31,7 @@ public enum Flag {
 	IGNORE_EFFECT, // Cannot be targeted by effects
 
 	HIDE_STATS,  // Stats are hidden (NO AUTO)
-	BLIND,		 // Hit chance is halved
+	BLIND,		 // Hit chance is reduced by 25%
 	TRUE_STRIKE, // Will hit
 	TRUE_DODGE,  // Will dodge
 	TRUE_BLOCK,  // Will block
