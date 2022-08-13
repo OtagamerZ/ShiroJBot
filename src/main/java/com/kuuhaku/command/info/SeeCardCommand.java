@@ -143,9 +143,9 @@ public class SeeCardCommand implements Executable {
 					} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
 						eb.addField(locale.get("str/charms"),
 								e.getCharms().stream()
-										.map(c -> Charm.valueOf(String.valueOf(c)).getName(locale))
-										.map(s -> "`" + s + "`")
-										.collect(Collectors.joining(" ")),
+										.map(c -> Charm.valueOf(String.valueOf(c)))
+										.map(c -> "**" + c.getName(locale) + ":** " + c.getDescription(locale, e.getTier()))
+										.collect(Collectors.joining("\n")),
 								true
 						);
 					}
