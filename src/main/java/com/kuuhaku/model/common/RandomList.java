@@ -9,6 +9,9 @@ public class RandomList<T> {
 	private final Random rng;
 	private final BiFunction<Double, Double, Double> randGen;
 	private final double fac;
+	/*
+	Curve bias, low values tend toward 1, while high values tend toward 0
+	 */
 	private double total = 0;
 
 	public RandomList() {

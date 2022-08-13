@@ -177,9 +177,9 @@ public class SynthesizeCommand implements Executable {
 
 					if (kc != null) {
 						if (kc.isChrome()) {
-							more *= 1 + rarity * kc.getQuality() / 150;
+							more *= 1 + rarity * kc.getQuality() / 200;
 						} else {
-							inc += rarity * kc.getQuality() / 150;
+							inc += rarity * kc.getQuality() / 200;
 						}
 					}
 				}
@@ -187,12 +187,13 @@ public class SynthesizeCommand implements Executable {
 					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
 					inc += ev.getTier() / 6d;
 				}
-				case FIELD -> more *= 1.5;
+				case FIELD -> more *= 1.25;
 			}
 		}
 
 		double mult = 1 * inc * more;
-		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 1 * mult);
+		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 1 / mult);
+		System.out.println(1 / mult);
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;
