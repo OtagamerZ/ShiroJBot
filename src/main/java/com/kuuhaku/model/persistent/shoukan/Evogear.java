@@ -413,10 +413,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (!desc.isEmpty()) {
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-			g2d.drawString(processTags(locale), 7, 275);
+
+			int y = 276;
+			String tags = processTags(locale);
+			if (tags != null) {
+				g2d.drawString(tags, 7, 275);
+				y += 11;
+			}
 
 			Graph.drawMultilineString(g2d, desc,
-					7, 287, 211, 3,
+					7, y, 211, 3,
 					parseValues(g2d, deck, this), highlightValues(g2d)
 			);
 		}

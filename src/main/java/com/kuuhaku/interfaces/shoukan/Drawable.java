@@ -276,6 +276,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default String processTags(I18N locale) {
 		List<String> tags = getTags();
+		if (tags.isEmpty()) return null;
+
 		List<String> out = new ArrayList<>();
 
 		for (String tag : tags) {
