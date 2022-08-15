@@ -99,7 +99,7 @@ public class TradeRemoveCommand implements Executable {
 							return;
 						}
 
-						selfOffer.remove(sc.getId());
+						selfOffer.remove((Object) sc.getId());
 						event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), sc)).queue();
 					})
 					.exceptionally(t -> {
