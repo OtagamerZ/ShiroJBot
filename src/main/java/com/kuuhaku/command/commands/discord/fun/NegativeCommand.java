@@ -85,7 +85,7 @@ public class NegativeCommand implements Executable {
 						}
 
 						assert url != null;
-						if (url.contains(".gif")) {
+						if (false && url.contains(".gif")) {
 							int finalMode = mode;
 							f = File.createTempFile("inverted", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);

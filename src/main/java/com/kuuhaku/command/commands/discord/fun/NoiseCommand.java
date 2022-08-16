@@ -74,7 +74,7 @@ public class NoiseCommand implements Executable {
 						File f;
 
 						assert url != null;
-						if (url.contains(".gif")) {
+						if (false && url.contains(".gif")) {
 							f = File.createTempFile("noised", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(

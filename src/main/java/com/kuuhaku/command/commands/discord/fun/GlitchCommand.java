@@ -85,7 +85,7 @@ public class GlitchCommand implements Executable {
 						}
 
 						assert url != null;
-						if (url.contains(".gif")) {
+						if (false && url.contains(".gif")) {
 							int finalPow = pow;
 							f = File.createTempFile("glitched", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
