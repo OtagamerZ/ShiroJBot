@@ -202,19 +202,17 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public int getEvoWeight() {
-		return evogear.stream()
-				.mapToInt(e -> {
-					int i = e.getTier() + e.getCharms().size();
-					if (!e.isSpell() && getOrigins().major() == Race.MACHINE) {
-						return i - 1;
-					} else if (e.isSpell() && getOrigins().major() == Race.MYSTICAL) {
-						return i - 1;
-					}
+		int weight = 0;
+		double penalty = 0;
+		for (Evogear e : evogear) {
+			if ((!e.isSpell() && getOrigins().major() == Race.MACHINE) || (e.isSpell() && getOrigins().major() == Race.MYSTICAL)) {
+				weight -= 1;
+			}
 
-					return i;
-				})
-				.map(i -> Math.max(0, i))
-				.sum();
+			penalty += e.getCharms().size() * 0.75;
+		}
+
+		return (int) (weight + penalty);
 	}
 
 	public List<Field> getFields() {
