@@ -29,6 +29,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Copier;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
@@ -63,7 +64,7 @@ public class CardExtra implements Cloneable {
 	private Race race = null;
 	private Card vanity = null;
 
-	private String write = "";
+	private String write = null;
 
 	private Drawable<?> source = null;
 	private String description = null;
@@ -427,7 +428,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public String getWrite() {
-		return write;
+		return Utils.getOr(write, "");
 	}
 
 	public void setWrite(String write) {
