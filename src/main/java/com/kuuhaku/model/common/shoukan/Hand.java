@@ -111,6 +111,7 @@ public class Hand {
 	private final List<Drawable<?>> discard = new BondedList<>(
 			d -> d != null && !(d instanceof Senshi s && s.isFusion()),
 			d -> {
+				d.setHand(this);
 				getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
 				d.setAvailable(false);
 			}
