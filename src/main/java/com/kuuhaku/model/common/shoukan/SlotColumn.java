@@ -71,9 +71,9 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
-		if (top != null) {
+		if (top != null && top.getHand() != null) {
 			Evogear shield = null;
-			if (!top.getHand().equals(top.getHand().getGame().getCurrent())) {
+			if (!top.getHand().equals(game.getCurrent())) {
 				for (Evogear e : top.getEquipments()) {
 					if (e.hasCharm(Charm.SHIELD)) {
 						shield = e;
@@ -96,22 +96,26 @@ public class SlotColumn {
 		}
 
 		if (getTop() != null) {
-			Evogear ward = null;
-			for (Evogear e : getTop().getEquipments()) {
-				if (e.hasCharm(Charm.WARDING)) {
-					ward = e;
-				}
-			}
-
-			if (ward != null) {
-				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
-				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-					getTop().getHand().getGraveyard().add(ward);
-				} else {
-					ward.getStats().getData().put("ward", charges);
+			if (top == null) {
+				Evogear ward = null;
+				for (Evogear e : this.top.getEquipments()) {
+					if (e.hasCharm(Charm.WARDING)) {
+						ward = e;
+					}
 				}
 
-				return;
+				if (this.top.getStats().popFlag(Flag.NO_DEATH)) {
+					return;
+				} else if (ward != null) {
+					int charges = ward.getStats().getData().getInt("ward", 0) + 1;
+					if (charges >= Charm.WARDING.getValue(ward.getTier())) {
+						this.top.getHand().getGraveyard().add(ward);
+					} else {
+						ward.getStats().getData().put("ward", charges);
+					}
+
+					return;
+				}
 			}
 
 			this.top.executeAssert(Trigger.ON_REMOVE);
@@ -150,11 +154,15 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Senshi bottom) {
-		if (bottom != null && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
+		if (bottom != null && bottom.getHand() != null && top.getStats().popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
 		if (getBottom() != null) {
+			if (bottom == null && this.bottom.getStats().popFlag(Flag.NO_DEATH)) {
+				return;
+			}
+
 			this.bottom.executeAssert(Trigger.ON_REMOVE);
 			this.bottom.setSlot(null);
 		}
