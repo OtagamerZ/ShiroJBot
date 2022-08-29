@@ -18,7 +18,11 @@
 
 package com.kuuhaku.model.records.shoukan;
 
+import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.util.Utils;
+
+import java.util.Arrays;
 
 public record EffectParameters(Trigger trigger, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger) {
@@ -26,7 +30,11 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 	}
 
 	public EffectParameters(Trigger trigger, Target... targets) {
-		this(trigger, new Source(), targets);
+		this(trigger, new Source(),
+				Arrays.stream(targets)
+						.filter(t -> Utils.equalsAny(t.type(), TargetType.ALLY, TargetType.ENEMY))
+						.toArray(Target[]::new)
+		);
 	}
 
 	public int size() {
@@ -34,5 +42,17 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		if (source.card() != null) i++;
 
 		return i;
+	}
+
+	public Target[] allies() {
+		return Arrays.stream(targets)
+				.filter(t -> t.type() == TargetType.ALLY)
+				.toArray(Target[]::new);
+	}
+
+	public Target[] enemies() {
+		return Arrays.stream(targets)
+				.filter(t -> t.type() == TargetType.ENEMY)
+				.toArray(Target[]::new);
 	}
 }

@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -323,7 +324,13 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default Target asTarget(Trigger trigger) {
 		if (this instanceof Senshi s) {
-			return new Target(s, getHand().getSide(), getSlot().getIndex(), trigger);
+			return new Target(
+					s,
+					getHand().getSide(),
+					getSlot().getIndex(),
+					trigger,
+					getHand().getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY
+			);
 		} else {
 			return new Target();
 		}

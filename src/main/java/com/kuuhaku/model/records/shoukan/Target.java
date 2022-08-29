@@ -18,19 +18,16 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.model.enums.shoukan.Charm;
-import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-public record Target(Senshi card, Side side, int index, Trigger trigger) {
+public record Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
 	public Target() {
-		this(null, null, -1, null);
+		this(null, null, -1, null, TargetType.NONE);
 	}
 
-	public Target(Senshi card, Side side, int index, Trigger trigger) {
+	public Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
 		Evogear shield = null;
 		if (card != null) {
 			card.getHand().getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(card, Trigger.ON_EFFECT_TARGET));
@@ -57,11 +54,13 @@ public record Target(Senshi card, Side side, int index, Trigger trigger) {
 			this.side = null;
 			this.index = -1;
 			this.trigger = null;
+			this.type = TargetType.NONE;
 		} else {
 			this.card = card;
 			this.side = side;
 			this.index = index;
 			this.trigger = trigger;
+			this.type = type;
 		}
 	}
 
