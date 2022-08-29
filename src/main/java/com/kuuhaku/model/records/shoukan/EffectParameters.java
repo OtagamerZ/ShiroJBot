@@ -46,12 +46,14 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 
 	public Target[] allies() {
 		return Arrays.stream(targets)
+				.filter(t -> t.index() > -1)
 				.filter(t -> t.type() == TargetType.ALLY)
 				.toArray(Target[]::new);
 	}
 
 	public Target[] enemies() {
 		return Arrays.stream(targets)
+				.filter(t -> t.index() > -1)
 				.filter(t -> t.type() == TargetType.ENEMY)
 				.toArray(Target[]::new);
 	}
