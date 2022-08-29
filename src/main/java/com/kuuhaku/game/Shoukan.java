@@ -1187,18 +1187,19 @@ public class Shoukan extends GameInstance<Phase> {
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
-				.queue(m -> {
-					for (Map.Entry<String, String> tuple : messages.entrySet()) {
-						if (tuple != null) {
-							TextChannel channel = Main.getApp().getShiro().getTextChannelById(tuple.getKey());
-							if (channel != null) {
-								channel.retrieveMessageById(tuple.getValue())
-										.flatMap(Objects::nonNull, Message::delete)
-										.queue();
-							}
-						}
-					}
-				});
+				.queue();
+
+		for (Map.Entry<String, String> tuple : messages.entrySet()) {
+			if (tuple != null) {
+				TextChannel channel = Main.getApp().getShiro().getTextChannelById(tuple.getKey());
+				if (channel != null) {
+					channel.retrieveMessageById(tuple.getValue())
+							.flatMap(Objects::nonNull, Message::delete)
+							.queue();
+				}
+			}
+		}
+
 		close(code);
 	}
 
