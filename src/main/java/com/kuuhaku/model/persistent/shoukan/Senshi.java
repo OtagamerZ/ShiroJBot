@@ -187,6 +187,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return equipments.stream().anyMatch(e -> e.getCard().getId().equals(id));
 	}
 
+	public Evogear getEquipped(String id) {
+		return equipments.stream()
+				.filter(e -> e.getCard().getId().equals(id))
+				.findFirst()
+				.orElse(null);
+	}
+
 	@Override
 	public SlotColumn getSlot() {
 		return Utils.getOr(slot, new SlotColumn(hand.getGame(), hand.getSide(), -1));
