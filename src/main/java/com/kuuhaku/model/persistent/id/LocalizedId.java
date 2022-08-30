@@ -37,7 +37,7 @@ public class LocalizedId implements Serializable {
 	private String id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "locale", nullable = false)
+	@Column(name = "locale", nullable = false, length = 2)
 	private I18N locale;
 
 	public LocalizedId() {
