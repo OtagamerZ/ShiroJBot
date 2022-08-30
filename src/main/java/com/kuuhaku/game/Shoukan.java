@@ -1055,7 +1055,6 @@ public class Shoukan extends GameInstance<Phase> {
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
 		if (restoring) return false;
 
-		System.out.println(Arrays.toString(targets));
 		EffectParameters ep = new EffectParameters(trigger, source, targets);
 		if (source.execute(ep) | Arrays.stream(targets).map(t -> t.execute(ep)).reduce(Boolean::logicalOr).orElse(false)) {
 			triggerEOTs(new EffectParameters(trigger, source, targets));

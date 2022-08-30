@@ -25,21 +25,19 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 public record Targeting(Hand hand, int allyPos, int enemyPos) {
 	public Senshi ally() {
 		return allyPos == -1 ? null : hand.getGame()
 				.getSlots(hand.getSide())
-				.get(allyPos)
+				.get(allyPos - 1)
 				.getTop();
 	}
 
 	public Senshi enemy() {
 		return enemyPos == -1 ? null : hand.getGame()
 				.getSlots(hand.getSide().getOther())
-				.get(enemyPos)
+				.get(enemyPos - 1)
 				.getTop();
 	}
 
