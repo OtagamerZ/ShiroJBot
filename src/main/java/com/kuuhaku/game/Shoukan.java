@@ -123,8 +123,8 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 
-		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
 		sendPlayerHand(curr);
+		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
 
 		takeSnapshot();
 	}
@@ -1228,15 +1228,15 @@ public class Shoukan extends GameInstance<Phase> {
 				if (rem > 0 && !curr.getRealDeck().isEmpty()) {
 					put(Utils.parseEmoji("📤"), w -> {
 						curr.manualDraw(1);
-						reportEvent("str/draw_card", curr.getName(), 1, "");
 						sendPlayerHand(curr);
+						reportEvent("str/draw_card", curr.getName(), 1, "");
 					});
 
 					if (rem > 1) {
 						put(Utils.parseEmoji("📦"), w -> {
 							curr.manualDraw(curr.getRemainingDraws());
-							reportEvent("str/draw_card", curr.getName(), rem, "s");
 							sendPlayerHand(curr);
+							reportEvent("str/draw_card", curr.getName(), rem, "s");
 						});
 					}
 				}
@@ -1263,8 +1263,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
 						curr.setMajorCooldown(3);
-						reportEvent("str/spirit_synth", curr.getName());
 						sendPlayerHand(curr);
+						reportEvent("str/spirit_synth", curr.getName());
 					});
 				}
 				put(Utils.parseEmoji("🏳"), w -> {
@@ -1344,8 +1344,8 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceMajorCooldown(1);
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
 		sendPlayerHand(curr);
+		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
 
 		takeSnapshot();
 	}
