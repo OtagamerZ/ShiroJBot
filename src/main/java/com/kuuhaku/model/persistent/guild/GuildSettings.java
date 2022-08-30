@@ -111,10 +111,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
-	public EnumSet<GuildFeature> getFeatureFlags() {
-		return featureFlags;
-	}
-
 	public GuildSettings() {
 	}
 
