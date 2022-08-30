@@ -62,7 +62,7 @@ public class CardAttributes implements Serializable {
 	private JSONArray tags = new JSONArray();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@JoinColumn(name = "card_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new HashSet<>();
 
@@ -104,10 +104,13 @@ public class CardAttributes implements Serializable {
 	}
 
 	public String getDescription(I18N locale) {
-		return descriptions.stream()
-				.filter(ld -> ld.getLocale() == locale)
-				.map(LocalizedDescription::getDescription)
-				.findFirst().orElse("");
+		for (LocalizedDescription ld : descriptions) {
+			if (ld.getLocale() == locale) {
+				return ld.getDescription();
+			}
+		}
+
+		return "";
 	}
 
 	public String getEffect() {
