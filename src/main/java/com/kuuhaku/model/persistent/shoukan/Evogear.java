@@ -376,6 +376,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void reset() {
+		equipper = null;
 		stats = stats.clone();
 		if (leech != null) {
 			leech.getLeeches().remove(this);

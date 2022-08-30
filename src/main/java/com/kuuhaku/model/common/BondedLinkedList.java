@@ -26,25 +26,40 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class BondedLinkedList<T> extends LinkedList<T> {
-	private final Consumer<T> bonding;
 	private final Predicate<T> check;
+	private final Consumer<T> onAdd;
+	private final Consumer<T> onRemove;
 
-	public static <T> BondedLinkedList<T> withBind(Consumer<T> bonding) {
-		return new BondedLinkedList<T>(t -> true, bonding);
+	public static <T> BondedLinkedList<T> withBind(Consumer<T> onAdd) {
+		return withBind(onAdd, t -> {});
+	}
+
+	public static <T> BondedLinkedList<T> withBind(Consumer<T> onAdd, Consumer<T> onRemove) {
+		return new BondedLinkedList<T>(t -> true, onAdd, onRemove);
 	}
 
 	public static <T> BondedLinkedList<T> withCheck(Predicate<T> check) {
-		return new BondedLinkedList<T>(check, t -> {});
+		return new BondedLinkedList<T>(check, t -> {}, t -> {});
 	}
 
-	public BondedLinkedList(Predicate<T> check, Consumer<T> bonding) {
-		this.bonding = bonding;
-		this.check = check;
+	public BondedLinkedList(Predicate<T> check, Consumer<T> onAdd) {
+		this(check, onAdd, t -> {});
 	}
 
-	public BondedLinkedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> bonding) {
-		this.bonding = bonding;
+	public BondedLinkedList(Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
 		this.check = check;
+		this.onAdd = onAdd;
+		this.onRemove = onRemove;
+	}
+
+	public BondedLinkedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> onAdd) {
+		this(c, check, onAdd, t -> {});
+	}
+
+	public BondedLinkedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
+		this.check = check;
+		this.onAdd = onAdd;
+		this.onRemove = onRemove;
 		addAll(c);
 	}
 
@@ -55,7 +70,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		try {
 			super.addFirst(t);
 		} finally {
-			bonding.accept(t);
+			onAdd.accept(t);
 		}
 	}
 
@@ -66,7 +81,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		try {
 			super.addLast(t);
 		} finally {
-			bonding.accept(t);
+			onAdd.accept(t);
 		}
 	}
 
@@ -77,7 +92,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		try {
 			return super.add(t);
 		} finally {
-			bonding.accept(t);
+			onAdd.accept(t);
 		}
 	}
 
@@ -88,7 +103,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		try {
 			super.add(index, element);
 		} finally {
-			bonding.accept(element);
+			onAdd.accept(element);
 		}
 	}
 
@@ -100,7 +115,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 			return super.addAll(filtered);
 		} finally {
 			for (T t : filtered) {
-				bonding.accept(t);
+				onAdd.accept(t);
 			}
 		}
 	}
@@ -113,8 +128,45 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 			return super.addAll(index, filtered);
 		} finally {
 			for (T t : filtered) {
-				bonding.accept(t);
+				onAdd.accept(t);
 			}
 		}
+	}
+
+	@Override
+	public T removeFirst() {
+		onRemove.accept(getFirst());
+		return super.removeFirst();
+	}
+
+	@Override
+	public T removeLast() {
+		onRemove.accept(getLast());
+		return super.removeLast();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean remove(Object o) {
+		if (super.contains(o)) {
+			onRemove.accept((T) o);
+		}
+
+		return super.remove(o);
+	}
+
+	@Override
+	public T remove(int index) {
+		onRemove.accept(get(index));
+		return super.remove(index);
+	}
+
+	@Override
+	public void clear() {
+		for (T t : this) {
+			onRemove.accept(t);
+		}
+
+		super.clear();
 	}
 }

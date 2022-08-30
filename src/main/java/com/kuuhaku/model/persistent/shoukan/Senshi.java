@@ -77,6 +77,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
+		e.executeAssert(Trigger.ON_INITIALIZE);
 
 		Shoukan game = getHand().getGame();
 		game.trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
@@ -95,6 +96,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
 			}
 		}
+	}, e -> {
+		e.setEquipper(null);
+		e.executeAssert(Trigger.ON_REMOVE);
 	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
