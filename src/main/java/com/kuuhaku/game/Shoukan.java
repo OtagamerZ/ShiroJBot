@@ -630,7 +630,12 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(type) || !trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+		if (!tgt.validate(type)) {
+			getChannel().sendMessage(locale.get("error/missing_target")).queue();
+			return false;
+		}
+
+		if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
 			getChannel().sendMessage(locale.get("error/activation")).queue();
 			return false;
 		}
@@ -1047,12 +1052,13 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	public boolean trigger(Trigger trigger, Source source, Target... target) {
+	public boolean trigger(Trigger trigger, Source source, Target... targets) {
 		if (restoring) return false;
 
-		EffectParameters ep = new EffectParameters(trigger, source, target);
-		if (source.execute(ep) | Arrays.stream(target).map(t -> t.execute(ep)).reduce(Boolean::logicalOr).orElse(false)) {
-			triggerEOTs(new EffectParameters(trigger, source, target));
+		System.out.println(Arrays.toString(targets));
+		EffectParameters ep = new EffectParameters(trigger, source, targets);
+		if (source.execute(ep) | Arrays.stream(targets).map(t -> t.execute(ep)).reduce(Boolean::logicalOr).orElse(false)) {
+			triggerEOTs(new EffectParameters(trigger, source, targets));
 			return true;
 		}
 
