@@ -623,6 +623,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting", TargetType.NONE);
+		System.out.println(type);
 		Targeting tgt = switch (type) {
 			case NONE -> new Targeting(curr, -1, -1);
 			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
@@ -1054,6 +1055,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
 		if (restoring) return false;
+		System.out.println(Arrays.toString(targets));
 
 		EffectParameters ep = new EffectParameters(trigger, source, targets);
 		if (source.execute(ep) | Arrays.stream(targets).map(t -> t.execute(ep)).reduce(Boolean::logicalOr).orElse(false)) {
