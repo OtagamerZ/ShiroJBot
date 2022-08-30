@@ -27,17 +27,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Targeting(Hand hand, int allyPos, int enemyPos) {
+	public Targeting(Hand hand, int allyPos, int enemyPos) {
+		this.hand = hand;
+		this.allyPos = allyPos == -1 ? -1 : allyPos - 1;
+		this.enemyPos = enemyPos == -1 ? -1 : enemyPos - 1;
+	}
+
 	public Senshi ally() {
 		return allyPos == -1 ? null : hand.getGame()
 				.getSlots(hand.getSide())
-				.get(allyPos - 1)
+				.get(allyPos)
 				.getTop();
 	}
 
 	public Senshi enemy() {
 		return enemyPos == -1 ? null : hand.getGame()
 				.getSlots(hand.getSide().getOther())
-				.get(enemyPos - 1)
+				.get(enemyPos)
 				.getTop();
 	}
 
