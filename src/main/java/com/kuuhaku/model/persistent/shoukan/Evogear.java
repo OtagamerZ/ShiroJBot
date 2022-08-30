@@ -375,6 +375,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
+	public boolean keepOnDestroy() {
+		return tier > 0;
+	}
+
+	@Override
 	public void reset() {
 		equipper = null;
 		stats = stats.clone();

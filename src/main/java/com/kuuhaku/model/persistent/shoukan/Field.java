@@ -154,6 +154,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
+	public boolean keepOnDestroy() {
+		return !isEffect();
+	}
+
+	@Override
 	public void reset() {
 		state = 0b11;
 	}

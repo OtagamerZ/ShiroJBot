@@ -74,7 +74,7 @@ public class Hand {
 		}
 	});
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(
-			d -> d != null && !(d instanceof Senshi s && s.isFusion()),
+			d -> d != null && d.keepOnDestroy(),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
@@ -89,7 +89,7 @@ public class Hand {
 			}
 	);
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
-			d -> d != null && !(d instanceof Senshi s && (s.getStats().popFlag(Flag.NO_DEATH) || s.isFusion())),
+			d -> d != null && d.keepOnDestroy() && !(d instanceof Senshi s && (s.getStats().popFlag(Flag.NO_DEATH))),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
@@ -109,7 +109,7 @@ public class Hand {
 			}
 	);
 	private final List<Drawable<?>> discard = new BondedList<>(
-			d -> d != null && !(d instanceof Senshi s && s.isFusion()),
+			d -> d != null && d.keepOnDestroy(),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));

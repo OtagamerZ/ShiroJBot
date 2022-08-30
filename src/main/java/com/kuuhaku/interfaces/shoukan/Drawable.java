@@ -131,6 +131,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	}
 
+	default boolean keepOnDestroy() {
+		return true;
+	}
+
 	void reset();
 
 	BufferedImage render(I18N locale, Deck deck);
