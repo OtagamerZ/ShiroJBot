@@ -61,10 +61,12 @@ public class SlotColumn {
 		if (isLocked() || (top != null && !equals(top.getSlot()))) {
 			Senshi current = top;
 
+			System.out.println(top);
 			current.executeAssert(Trigger.ON_REMOVE);
 			if (Objects.equals(current, top)) {
 				top = null;
 			}
+			System.out.println(top);
 		}
 
 		return top;
