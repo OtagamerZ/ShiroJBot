@@ -86,7 +86,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						double pow = 1;
 						if (d instanceof Senshi s) {
-							pow = s.getStats().getPower();
+							pow = s.getPower();
 						}
 
 						val = StringUtils.abbreviate(

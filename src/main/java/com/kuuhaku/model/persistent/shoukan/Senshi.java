@@ -371,6 +371,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return mult;
 	}
 
+	public double getPower() {
+		if (isSupporting()) {
+			return stats.getPower() * 0.75;
+		} else {
+			return stats.getPower();
+		}
+	}
+
 	public int getEquipDmg() {
 		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
 
