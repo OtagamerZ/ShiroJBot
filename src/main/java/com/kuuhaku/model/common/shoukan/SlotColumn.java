@@ -58,7 +58,7 @@ public class SlotColumn {
 	}
 
 	public Senshi getTop() {
-		if (isLocked() || (top != null && !equals(top.getSlot()))) {
+		if (top != null && (isLocked() || !equals(top.getSlot()))) {
 			Senshi current = top;
 
 			current.setSlot(this);
@@ -150,7 +150,7 @@ public class SlotColumn {
 	}
 
 	public Senshi getBottom() {
-		if (isLocked() || (bottom != null && !equals(bottom.getSlot()))) {
+		if (bottom != null && (isLocked() || !equals(bottom.getSlot()))) {
 			Senshi current = bottom;
 
 			current.setSlot(this);
