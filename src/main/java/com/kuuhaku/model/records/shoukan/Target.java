@@ -40,7 +40,7 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 			}
 		}
 
-		if (card == null || shield != null || (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis())) {
+		if (shield != null || (card != null && (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis()))) {
 			if (shield != null) {
 				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
 				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
