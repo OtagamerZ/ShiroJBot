@@ -48,7 +48,7 @@ public class CardAttributes implements Serializable {
 	@Column(name = "atk", nullable = false)
 	private int atk = 0;
 
-	@Column(name = "def", nullable = false)
+	@Column(name = "dfs", nullable = false)
 	private int dfs = 0;
 
 	@Column(name = "dodge", nullable = false)
