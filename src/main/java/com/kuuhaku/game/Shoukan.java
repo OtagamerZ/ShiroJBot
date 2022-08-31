@@ -633,9 +633,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!tgt.validate(type)) {
 			getChannel().sendMessage(locale.get("error/missing_target_" + type)).queue();
 			return false;
-		}
-
-		if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
 			getChannel().sendMessage(locale.get("error/activation")).queue();
 			return false;
 		}
@@ -1056,7 +1054,11 @@ public class Shoukan extends GameInstance<Phase> {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source, targets);
-		if (source.execute(ep) | Arrays.stream(targets).map(t -> t.execute(ep)).reduce(Boolean::logicalOr).orElse(false)) {
+		if (source.execute(ep) | Arrays.stream(targets).map(t -> {
+			boolean out = t.execute(ep);
+			System.out.println(out);
+			return out;
+		}).reduce(Boolean::logicalOr).orElse(false)) {
 			triggerEOTs(new EffectParameters(trigger, source, targets));
 			return true;
 		}
