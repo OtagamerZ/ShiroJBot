@@ -71,6 +71,8 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
+		Senshi current = getTop();
+
 		if (top != null && top.getHand() != null) {
 			Evogear shield = null;
 			if (!top.getHand().equals(game.getCurrent())) {
@@ -95,7 +97,7 @@ public class SlotColumn {
 			}
 		}
 
-		if (getTop() != null) {
+		if (current != null) {
 			if (top == null) {
 				Evogear ward = null;
 				for (Evogear e : this.top.getEquipments()) {
@@ -104,7 +106,7 @@ public class SlotColumn {
 					}
 				}
 
-				if (this.top.getStats().popFlag(Flag.NO_DEATH)) {
+				if (current.getStats().popFlag(Flag.NO_DEATH)) {
 					return;
 				} else if (ward != null) {
 					int charges = ward.getStats().getData().getInt("ward", 0) + 1;
@@ -118,23 +120,23 @@ public class SlotColumn {
 				}
 			}
 
-			this.top.executeAssert(Trigger.ON_REMOVE);
-			this.top.setSlot(null);
+			current.executeAssert(Trigger.ON_REMOVE);
+			current.setSlot(null);
 		}
 
 		this.top = top;
-		if (this.top != null) {
+		if (top != null) {
 			Hand h = game.getHands().get(side);
 
-			this.top.setSlot(this);
-			this.top.setHand(h);
-			this.top.executeAssert(Trigger.ON_INITIALIZE);
+			top.setSlot(this);
+			top.setHand(h);
+			top.executeAssert(Trigger.ON_INITIALIZE);
 
-			if (!this.top.isFlipped()) {
-				h.getGame().trigger(Trigger.ON_SUMMON, this.top.asSource(Trigger.ON_SUMMON));
+			if (!top.isFlipped()) {
+				h.getGame().trigger(Trigger.ON_SUMMON, top.asSource(Trigger.ON_SUMMON));
 			}
 
-			if (h.getOrigin().synergy() == Race.DEMIGOD && this.top.isFusion()) {
+			if (h.getOrigin().synergy() == Race.DEMIGOD && top.isFusion()) {
 				h.modMP(1);
 			}
 		}
@@ -154,33 +156,35 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Senshi bottom) {
-		if (bottom != null && bottom.getHand() != null && top.getStats().popFlag(Flag.NO_CONVERT)) {
+		Senshi current = getBottom();
+
+		if (bottom != null && bottom.getHand() != null && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
-		if (getBottom() != null) {
-			if (bottom == null && this.bottom.getStats().popFlag(Flag.NO_DEATH)) {
+		if (current != null) {
+			if (bottom == null && current.getStats().popFlag(Flag.NO_DEATH)) {
 				return;
 			}
 
-			this.bottom.executeAssert(Trigger.ON_REMOVE);
-			this.bottom.setSlot(null);
+			current.executeAssert(Trigger.ON_REMOVE);
+			current.setSlot(null);
 		}
 
 		this.bottom = bottom;
-		if (this.bottom != null) {
+		if (bottom != null) {
 			Hand h = game.getHands().get(side);
 
-			this.bottom.setSlot(this);
-			this.bottom.setHand(h);
-			this.bottom.getEquipments().clear();
-			this.bottom.executeAssert(Trigger.ON_INITIALIZE);
+			bottom.setSlot(this);
+			bottom.setHand(h);
+			bottom.getEquipments().clear();
+			bottom.executeAssert(Trigger.ON_INITIALIZE);
 
-			if (!this.bottom.isFlipped()) {
-				h.getGame().trigger(Trigger.ON_SUMMON, this.bottom.asSource(Trigger.ON_SUMMON));
+			if (!bottom.isFlipped()) {
+				h.getGame().trigger(Trigger.ON_SUMMON, bottom.asSource(Trigger.ON_SUMMON));
 			}
 
-			if (h.getOrigin().synergy() == Race.DEMIGOD && this.bottom.isFusion()) {
+			if (h.getOrigin().synergy() == Race.DEMIGOD && bottom.isFusion()) {
 				h.modMP(1);
 			}
 		}
