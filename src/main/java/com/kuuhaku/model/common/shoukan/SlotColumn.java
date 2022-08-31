@@ -62,7 +62,6 @@ public class SlotColumn {
 			Senshi current = top;
 
 			current.executeAssert(Trigger.ON_REMOVE);
-			System.out.println(top);
 			if (Objects.equals(current, top)) {
 				top = null;
 			}
