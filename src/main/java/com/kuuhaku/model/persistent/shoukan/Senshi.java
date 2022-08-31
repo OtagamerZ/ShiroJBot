@@ -670,6 +670,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return true;
 		} catch (ActivationException e) {
+			e.printStackTrace();
 			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
