@@ -147,7 +147,7 @@ public class SynthesizeCommand implements Executable {
 			);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult * 100, 1), field));
+					.setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult, 2), field));
 
 			Utils.confirm(locale.get("question/synth"), eb.build(), event.channel(), w -> {
 						Kawaipon kp = data.profile().getAccount().getKawaipon();
