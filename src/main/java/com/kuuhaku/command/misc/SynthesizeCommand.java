@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
@@ -43,6 +44,7 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
@@ -132,16 +134,24 @@ public class SynthesizeCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/synth"), event.channel(), w -> {
-						Kawaipon kp = data.profile().getAccount().getKawaipon();
-						double field = cards.stream()
-								.mapToDouble(sc -> {
-									if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
-										return 100 / 3d;
-									}
+			double mult = getMult(cards);
+			int field = (int) Math.round(
+					cards.stream()
+							.mapToDouble(sc -> {
+								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
+									return 100 / 3d;
+								}
 
-									return 0;
-								}).sum();
+								return 0;
+							}).sum()
+			);
+
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.addField(Constants.VOID, locale.get("str/rarity_mult", Utils.roundToString(mult * 100, 1)), true)
+					.addField(Constants.VOID, locale.get("str/field_chance", String.valueOf(field)), true);
+
+			Utils.confirm(locale.get("question/synth"), eb.build(), event.channel(), w -> {
+						Kawaipon kp = data.profile().getAccount().getKawaipon();
 
 						for (StashedCard sc : cards) {
 							Utils.getOr(sc.getKawaiponCard(), sc).delete();
@@ -152,7 +162,7 @@ public class SynthesizeCommand implements Executable {
 							event.channel().sendMessage(locale.get("success/synth", f)).queue();
 							new StashedCard(kp, f.getCard(), CardType.FIELD).save();
 						} else {
-							Evogear e = rollSynthesis(cards);
+							Evogear e = rollSynthesis(mult);
 							new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
 						}
@@ -166,6 +176,22 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(List<StashedCard> cards) {
+		return rollSynthesis(getMult(cards));
+	}
+
+	public static Evogear rollSynthesis(double mult) {
+		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 1.5 / mult);
+		List<Evogear> evos = DAO.findAll(Evogear.class);
+		for (Evogear evo : evos) {
+			if (evo.getTier() <= 0) continue;
+
+			pool.add(evo, 5 - evo.getTier());
+		}
+
+		return pool.get();
+	}
+
+	private static double getMult(List<StashedCard> cards) {
 		double inc = 1;
 		double more = 1 + Spawn.getRarityMult() / 2;
 
@@ -191,15 +217,6 @@ public class SynthesizeCommand implements Executable {
 			}
 		}
 
-		double mult = 1 * inc * more;
-		RandomList<Evogear> pool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, (v, f) -> 1 - Math.pow(v, f), 1.5 / mult);
-		List<Evogear> evos = DAO.findAll(Evogear.class);
-		for (Evogear evo : evos) {
-			if (evo.getTier() <= 0) continue;
-
-			pool.add(evo, 5 - evo.getTier());
-		}
-
-		return pool.get();
+		return 1 * inc * more;
 	}
 }
