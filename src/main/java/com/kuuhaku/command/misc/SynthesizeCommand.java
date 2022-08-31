@@ -147,8 +147,7 @@ public class SynthesizeCommand implements Executable {
 			);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.addField(Constants.VOID, locale.get("str/rarity_mult", Utils.roundToString(mult * 100, 1)), true)
-					.addField(Constants.VOID, locale.get("str/field_chance", String.valueOf(field)), true);
+					.setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult * 100, 1), field));
 
 			Utils.confirm(locale.get("question/synth"), eb.build(), event.channel(), w -> {
 						Kawaipon kp = data.profile().getAccount().getKawaipon();
