@@ -120,6 +120,7 @@ public class SlotColumn {
 				}
 			}
 
+			System.out.println(current);
 			current.executeAssert(Trigger.ON_REMOVE);
 			current.setSlot(null);
 		}
