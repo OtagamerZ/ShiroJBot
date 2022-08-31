@@ -51,6 +51,7 @@ public class CardExtra implements Cloneable {
 	private final HashSet<AttrMod> block;
 
 	private final HashSet<AttrMod> attrMult;
+	private final HashSet<AttrMod> power;
 
 	private final HashSet<AttrMod> tier;
 
@@ -76,8 +77,8 @@ public class CardExtra implements Cloneable {
 			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
 			HashSet<AttrMod> atk, HashSet<AttrMod> dfs, HashSet<AttrMod> dodge,
 			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
-			EnumSet<Flag> flags, EnumSet<Flag> permFlags, JSONObject data,
-			JSONObject perm, ListOrderedSet<String> curses
+			HashSet<AttrMod> power, EnumSet<Flag> flags, EnumSet<Flag> permFlags,
+			JSONObject data, JSONObject perm, ListOrderedSet<String> curses
 	) {
 		this.mana = mana;
 		this.blood = blood;
@@ -87,6 +88,7 @@ public class CardExtra implements Cloneable {
 		this.dodge = dodge;
 		this.block = block;
 		this.attrMult = attrMult;
+		this.power = power;
 		this.tier = tier;
 		this.flags = flags;
 		this.permFlags = permFlags;
@@ -97,6 +99,7 @@ public class CardExtra implements Cloneable {
 
 	public CardExtra() {
 		this(
+				new HashSet<>(),
 				new HashSet<>(),
 				new HashSet<>(),
 				new HashSet<>(),
@@ -346,6 +349,35 @@ public class CardExtra implements Cloneable {
 		this.attrMult.add(mod);
 	}
 
+	public double getPower() {
+		return 1 + sum(power);
+	}
+
+	public void setPower(double power) {
+		for (AttrMod mod : this.power) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + power);
+				return;
+			}
+		}
+
+		AttrMod mod = new PermMod(power);
+		this.power.remove(mod);
+		this.power.add(mod);
+	}
+
+	public void setPower(Drawable<?> source, double power) {
+		AttrMod mod = new AttrMod(source, power);
+		this.power.remove(mod);
+		this.power.add(mod);
+	}
+
+	public void setPower(Drawable<?> source, double power, int expiration) {
+		AttrMod mod = new AttrMod(source, power, expiration);
+		this.power.remove(mod);
+		this.power.add(mod);
+	}
+
 	public int getTier() {
 		return (int) sum(tier);
 	}
@@ -512,6 +544,7 @@ public class CardExtra implements Cloneable {
 				copier.makeCopy(dodge),
 				copier.makeCopy(block),
 				copier.makeCopy(attrMult),
+				copier.makeCopy(power),
 				copier.makeCopy(tier),
 				EnumSet.copyOf(flags),
 				EnumSet.copyOf(permFlags),

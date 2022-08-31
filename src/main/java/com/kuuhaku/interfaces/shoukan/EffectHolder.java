@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -83,8 +84,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								}})
 						);
 
+						double pow = 1;
+						if (d instanceof Senshi s) {
+							pow = s.getStats().getPower();
+						}
+
 						val = StringUtils.abbreviate(
-								str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toDouble(val)))),
+								str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toDouble(val) * pow))),
 								Drawable.MAX_DESC_LENGTH
 						);
 					} else {
