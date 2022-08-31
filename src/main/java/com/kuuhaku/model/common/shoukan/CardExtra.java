@@ -45,7 +45,7 @@ public class CardExtra implements Cloneable {
 	private final HashSet<AttrMod> sacrifices;
 
 	private final HashSet<AttrMod> atk;
-	private final HashSet<AttrMod> def;
+	private final HashSet<AttrMod> dfs;
 
 	private final HashSet<AttrMod> dodge;
 	private final HashSet<AttrMod> block;
@@ -74,7 +74,7 @@ public class CardExtra implements Cloneable {
 
 	public CardExtra(
 			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
-			HashSet<AttrMod> atk, HashSet<AttrMod> def, HashSet<AttrMod> dodge,
+			HashSet<AttrMod> atk, HashSet<AttrMod> dfs, HashSet<AttrMod> dodge,
 			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
 			EnumSet<Flag> flags, EnumSet<Flag> permFlags, JSONObject data,
 			JSONObject perm, ListOrderedSet<String> curses
@@ -83,7 +83,7 @@ public class CardExtra implements Cloneable {
 		this.blood = blood;
 		this.sacrifices = sacrifices;
 		this.atk = atk;
-		this.def = def;
+		this.dfs = dfs;
 		this.dodge = dodge;
 		this.block = block;
 		this.attrMult = attrMult;
@@ -230,12 +230,12 @@ public class CardExtra implements Cloneable {
 		this.atk.add(mod);
 	}
 
-	public int getDef() {
-		return (int) sum(def);
+	public int getDfs() {
+		return (int) sum(dfs);
 	}
 
-	public void setDef(int def) {
-		for (AttrMod mod : this.def) {
+	public void setDfs(int def) {
+		for (AttrMod mod : this.dfs) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + def);
 				return;
@@ -243,20 +243,20 @@ public class CardExtra implements Cloneable {
 		}
 
 		AttrMod mod = new PermMod(def);
-		this.def.remove(mod);
-		this.def.add(mod);
+		this.dfs.remove(mod);
+		this.dfs.add(mod);
 	}
 
-	public void setDef(Drawable<?> source, int def) {
+	public void setDfs(Drawable<?> source, int def) {
 		AttrMod mod = new AttrMod(source, def);
-		this.def.remove(mod);
-		this.def.add(mod);
+		this.dfs.remove(mod);
+		this.dfs.add(mod);
 	}
 
-	public void setDef(Drawable<?> source, int def, int expiration) {
+	public void setDfs(Drawable<?> source, int def, int expiration) {
 		AttrMod mod = new AttrMod(source, def, expiration);
-		this.def.remove(mod);
-		this.def.add(mod);
+		this.dfs.remove(mod);
+		this.dfs.add(mod);
 	}
 
 	public int getDodge() {
@@ -508,7 +508,7 @@ public class CardExtra implements Cloneable {
 				copier.makeCopy(blood),
 				copier.makeCopy(sacrifices),
 				copier.makeCopy(atk),
-				copier.makeCopy(def),
+				copier.makeCopy(dfs),
 				copier.makeCopy(dodge),
 				copier.makeCopy(block),
 				copier.makeCopy(attrMult),

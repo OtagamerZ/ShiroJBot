@@ -49,7 +49,7 @@ public class CardAttributes implements Serializable {
 	private int atk = 0;
 
 	@Column(name = "def", nullable = false)
-	private int def = 0;
+	private int dfs = 0;
 
 	@Column(name = "dodge", nullable = false)
 	private int dodge = 0;
@@ -87,8 +87,8 @@ public class CardAttributes implements Serializable {
 		return atk;
 	}
 
-	public int getDef() {
-		return def;
+	public int getDfs() {
+		return dfs;
 	}
 
 	public int getDodge() {

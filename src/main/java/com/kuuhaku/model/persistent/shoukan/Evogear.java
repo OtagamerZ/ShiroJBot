@@ -226,8 +226,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public int getDef() {
-		int sum = base.getDef() + stats.getDef();
+	public int getDfs() {
+		int sum = base.getDfs() + stats.getDfs();
 
 		return (int) (sum * getAttrMult());
 	}
@@ -445,7 +445,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (!icons.isEmpty()) {
 				int y = !desc.isBlank() ? 253 : 319;
 				if (getDmg() != 0) y -= 28;
-				if (getDef() != 0) y -= 28;
+				if (getDfs() != 0) y -= 28;
 				if (getCooldown() != 0) y -= 28;
 
 				Graph.applyTransformed(g2d, 25, y - 64, g -> {

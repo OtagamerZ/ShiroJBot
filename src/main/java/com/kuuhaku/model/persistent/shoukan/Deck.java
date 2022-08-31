@@ -272,7 +272,7 @@ public class Deck extends DAO<Deck> {
 		AtomicInteger totalMPCost = new AtomicInteger();
 		AtomicInteger totalHPCost = new AtomicInteger();
 		AtomicInteger totalDmg = new AtomicInteger();
-		AtomicInteger totalDef = new AtomicInteger();
+		AtomicInteger totalDfs = new AtomicInteger();
 
 		BaseValues base = getBaseValues(null);
 		double avgMana = Calc.average((double) base.mpGain().apply(1), base.mpGain().apply(5), base.mpGain().apply(10));
@@ -285,12 +285,12 @@ public class Deck extends DAO<Deck> {
 			totalMPCost.addAndGet(d.getMPCost());
 			totalHPCost.addAndGet(d.getHPCost());
 			totalDmg.addAndGet(d.getDmg());
-			totalDef.addAndGet(d.getDef());
+			totalDfs.addAndGet(d.getDfs());
 		}
 
 		double[] vals = Calc.clamp(new double[]{
-				Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDef.get()) / 1.5),
-				Calc.prcnt(totalDef.get(), (totalDmg.get() + totalDef.get()) / 1.5),
+				Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
+				Calc.prcnt(totalDfs.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
 				((double) totalMPCost.get() / allCards.size()) / avgMana,
 				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
 				getMetaDivergence(),
@@ -345,7 +345,7 @@ public class Deck extends DAO<Deck> {
 						Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1),
 						Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1),
 						Utils.roundToString((float) totalDmg.get() / allCards.size(), 1),
-						Utils.roundToString((float) totalDef.get() / allCards.size(), 1),
+						Utils.roundToString((float) totalDfs.get() / allCards.size(), 1),
 						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 						3
 				), 1175, 45, 175, 0,

@@ -283,8 +283,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public int getDef() {
-		int sum = base.getDef() + stats.getDef() + getEquipDef();
+	public int getDfs() {
+		int sum = base.getDfs() + stats.getDfs() + getEquipDfs();
 
 		double mult = 1;
 		if (hand != null) {
@@ -319,17 +319,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getActiveAttr() {
-		if (isDefending()) return getDef();
+		if (isDefending()) return getDfs();
 		return getDmg();
 	}
 
 	public int getActiveAttr(boolean dbl) {
 		if (isDefending()) {
 			if (dbl) {
-				return getDef() * 2;
+				return getDfs() * 2;
 			}
 
-			return getDef();
+			return getDfs();
 		}
 
 		return getDmg();
@@ -377,10 +377,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return equipments.stream().mapToInt(Evogear::getDmg).sum();
 	}
 
-	public int getEquipDef() {
+	public int getEquipDfs() {
 		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDef).sum();
+		return equipments.stream().mapToInt(Evogear::getDfs).sum();
 	}
 
 	public int getEquipDodge() {
@@ -397,7 +397,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getActiveEquips() {
 		try {
-			if (isDefending()) return getEquipDef();
+			if (isDefending()) return getEquipDfs();
 			return getEquipDmg();
 		} finally {
 			stats.popFlag(Flag.NO_EQUIP);
@@ -408,10 +408,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		try {
 			if (isDefending()) {
 				if (dbl) {
-					return getEquipDef() * 2;
+					return getEquipDfs() * 2;
 				}
 
-				return getEquipDef();
+				return getEquipDfs();
 			}
 
 			return getEquipDmg();

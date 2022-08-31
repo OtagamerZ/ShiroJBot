@@ -77,7 +77,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									put("mp", d.getMPCost());
 									put("hp", d.getHPCost());
 									put("atk", d.getDmg());
-									put("dfs", d.getDef());
+									put("dfs", d.getDfs());
 									put("ddg", d.getDodge());
 									put("blk", d.getBlock());
 								}})

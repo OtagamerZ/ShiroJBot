@@ -78,8 +78,8 @@ public class DeckReorderCommand implements Executable {
 			Comparator<? super Drawable<?>> order = switch (args.getString("order")) {
 				case "name" -> Comparator.comparing(c -> c.getCard().getId());
 				case "atk" -> Comparator.<Drawable<?>>comparingInt(Drawable::getDmg).reversed();
-				case "def" -> Comparator.<Drawable<?>>comparingInt(Drawable::getDef).reversed();
-				case "attr" -> Comparator.<Drawable<?>>comparingInt(c -> c.getDmg() + c.getDef()).reversed();
+				case "def" -> Comparator.<Drawable<?>>comparingInt(Drawable::getDfs).reversed();
+				case "attr" -> Comparator.<Drawable<?>>comparingInt(c -> c.getDmg() + c.getDfs()).reversed();
 				case "hp" -> Comparator.<Drawable<?>>comparingInt(Drawable::getHPCost).reversed();
 				case "mp" -> Comparator.<Drawable<?>>comparingInt(Drawable::getMPCost).reversed();
 				case "tier" -> Comparator.<Drawable<?>>comparingInt(c -> {

@@ -92,7 +92,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return 0;
 	}
 
-	default int getDef() {
+	default int getDfs() {
 		return 0;
 	}
 
@@ -189,12 +189,12 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
-			if (getDef() != 0) {
+			if (getDfs() != 0) {
 				icon = IO.getResourceAsImage("shoukan/icons/defense.png");
 				assert icon != null;
 				int x = 25;
 
-				String val = String.valueOf(getDef());
+				String val = String.valueOf(getDfs());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.GREEN);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
