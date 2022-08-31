@@ -558,7 +558,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		if (!tgt.validate(chosen.getTargetType())) {
-			getChannel().sendMessage(locale.get("error/missing_target")).queue();
+			getChannel().sendMessage(locale.get("error/missing_target_" + chosen.getTargetType())).queue();
 			return false;
 		}
 
@@ -631,7 +631,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		if (!tgt.validate(type)) {
-			getChannel().sendMessage(locale.get("error/missing_target")).queue();
+			getChannel().sendMessage(locale.get("error/missing_target_" + type)).queue();
 			return false;
 		}
 
