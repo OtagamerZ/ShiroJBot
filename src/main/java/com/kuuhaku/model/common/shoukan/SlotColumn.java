@@ -61,7 +61,10 @@ public class SlotColumn {
 		if (isLocked() || (top != null && !equals(top.getSlot()))) {
 			Senshi current = top;
 
+			current.setSlot(this);
 			current.executeAssert(Trigger.ON_REMOVE);
+			current.setSlot(null);
+
 			if (Objects.equals(current, top)) {
 				top = null;
 			}
@@ -150,7 +153,10 @@ public class SlotColumn {
 		if (isLocked() || (bottom != null && !equals(bottom.getSlot()))) {
 			Senshi current = bottom;
 
+			current.setSlot(this);
 			current.executeAssert(Trigger.ON_REMOVE);
+			current.setSlot(null);
+
 			if (Objects.equals(current, bottom)) {
 				bottom = null;
 			}
