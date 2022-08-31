@@ -65,9 +65,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addFirst(T t) {
-		if (!check.test(t)) return;
-
 		try {
+			if (!check.test(t)) return;
+
 			super.addFirst(t);
 		} finally {
 			onAdd.accept(t);
@@ -76,9 +76,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addLast(T t) {
-		if (!check.test(t)) return;
-
 		try {
+			if (!check.test(t)) return;
+
 			super.addLast(t);
 		} finally {
 			onAdd.accept(t);
@@ -87,9 +87,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean add(T t) {
-		if (!check.test(t)) return false;
-
 		try {
+			if (!check.test(t)) return false;
+
 			return super.add(t);
 		} finally {
 			onAdd.accept(t);
@@ -98,9 +98,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void add(int index, T element) {
-		if (!check.test(element)) return;
-
 		try {
+			if (!check.test(element)) return;
+
 			super.add(index, element);
 		} finally {
 			onAdd.accept(element);
@@ -109,12 +109,12 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(check).toList();
-
 		try {
+			List<? extends T> filtered = c.stream().filter(check).toList();
+
 			return super.addAll(filtered);
 		} finally {
-			for (T t : filtered) {
+			for (T t : c) {
 				onAdd.accept(t);
 			}
 		}
@@ -122,12 +122,12 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(check).toList();
-
 		try {
+			List<? extends T> filtered = c.stream().filter(check).toList();
+
 			return super.addAll(index, filtered);
 		} finally {
-			for (T t : filtered) {
+			for (T t : c) {
 				onAdd.accept(t);
 			}
 		}
