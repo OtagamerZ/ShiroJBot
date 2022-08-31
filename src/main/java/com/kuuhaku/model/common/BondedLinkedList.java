@@ -70,7 +70,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 			super.addFirst(t);
 		} finally {
-			onAdd.accept(t);
+			if (t != null) {
+				onAdd.accept(t);
+			}
 		}
 	}
 
@@ -81,7 +83,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 			super.addLast(t);
 		} finally {
-			onAdd.accept(t);
+			if (t != null) {
+				onAdd.accept(t);
+			}
 		}
 	}
 
@@ -92,18 +96,22 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 			return super.add(t);
 		} finally {
-			onAdd.accept(t);
+			if (t != null) {
+				onAdd.accept(t);
+			}
 		}
 	}
 
 	@Override
-	public void add(int index, T element) {
+	public void add(int index, T t) {
 		try {
-			if (!check.test(element)) return;
+			if (!check.test(t)) return;
 
-			super.add(index, element);
+			super.add(index, t);
 		} finally {
-			onAdd.accept(element);
+			if (t != null) {
+				onAdd.accept(t);
+			}
 		}
 	}
 
@@ -115,7 +123,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 			return super.addAll(filtered);
 		} finally {
 			for (T t : c) {
-				onAdd.accept(t);
+				if (t != null) {
+					onAdd.accept(t);
+				}
 			}
 		}
 	}
@@ -128,7 +138,9 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 			return super.addAll(index, filtered);
 		} finally {
 			for (T t : c) {
-				onAdd.accept(t);
+				if (t != null) {
+					onAdd.accept(t);
+				}
 			}
 		}
 	}
