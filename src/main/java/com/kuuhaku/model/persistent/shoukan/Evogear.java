@@ -321,7 +321,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		try {
 			Utils.exec(effect, Map.of(
 					"ep", ep,
-					"self", spell ? this : equipper,
+					"self", equipper,
 					"evo", this,
 					"trigger", ep.trigger(),
 					"game", hand.getGame(),
@@ -344,7 +344,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		try {
 			Utils.exec(getEffect(), Map.of(
 					"ep", new EffectParameters(trigger),
-					"self", this,
+					"self", equipper,
+					"evo", this,
 					"trigger", trigger,
 					"game", hand.getGame(),
 					"side", hand.getSide()
