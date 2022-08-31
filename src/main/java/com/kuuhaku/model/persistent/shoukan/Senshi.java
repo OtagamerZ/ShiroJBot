@@ -790,7 +790,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			String val = String.valueOf(stats.getWrite());
 			g2d.setColor(Color.ORANGE);
 			g2d.setFont(Drawable.FONT);
-			Graph.drawOutlinedString(g2d, val, 25, 51 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
+			Graph.drawOutlinedString(g2d, val, 25, 49 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 		}
 
 		drawCosts(g2d);
