@@ -277,13 +277,16 @@ public class Arena implements Renderer {
 		Graph.applyTransformed(g2d, source.getWidth(), BAR_SIZE.height, g1 -> {
 			int w = source.getWidth() / 4;
 
-			g1.setColor(new Color(0x77000000, true));
-			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+			g1.setColor(new Color(0x50000000, true));
 			g1.fillRect(0, 0, w, SIZE.height);
+
+			g1.setColor(Color.WHITE);
+			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 			Graph.drawMultilineString(g1,
 					String.join("\n\n", history),
 					MARGIN.x, SIZE.height,
-					w - MARGIN.x, g1.getFontMetrics().getHeight() * 2
+					w - MARGIN.x, g1.getFontMetrics().getHeight() * 2,
+					(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
 			);
 		});
 

@@ -64,6 +64,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -1192,23 +1193,31 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		String msg = locale.get(message, args);
-		getHistory().add(msg);
-
-		getChannel().sendMessage(msg)
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
-				.queue(m -> messages.compute(m.getTextChannel().getId(), replaceMessages(m)));
+				.queue(m -> {
+					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+
+					if (!registered.get()) {
+						getHistory().add(m.getContentDisplay());
+						registered.set(true);
+					}
+				});
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
 
-		String msg = locale.get(message, args);
-		getHistory().add(msg);
-
-		getChannel().sendMessage(msg)
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
-				.queue();
+				.queue(m -> {
+					if (!registered.get()) {
+						getHistory().add(m.getContentDisplay());
+						registered.set(true);
+					}
+				});
 
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
 			if (tuple != null) {
@@ -1283,13 +1292,13 @@ public class Shoukan extends GameInstance<Phase> {
 					});
 				}
 				put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
-					if (history) {
-						reportEvent("str/game_history_disable", curr.getName());
-					} else {
-						reportEvent("str/game_history_enable", curr.getName());
-					}
-
 					history = !history;
+
+					if (history) {
+						reportEvent("str/game_history_enable", curr.getName());
+					} else {
+						reportEvent("str/game_history_disable", curr.getName());
+					}
 				});
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
