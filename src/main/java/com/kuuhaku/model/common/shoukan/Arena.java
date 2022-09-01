@@ -269,29 +269,28 @@ public class Arena implements Renderer {
 	public BufferedImage render(I18N locale, Deque<HistoryLog> history) {
 		BufferedImage source = render(locale);
 
-		BufferedImage bi = new BufferedImage((int) (source.getWidth() * 1.25), source.getHeight(), source.getType());
+		BufferedImage bi = new BufferedImage((int) (source.getWidth() * 1.33), source.getHeight(), source.getType());
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
 		g2d.drawImage(source, 0, 0, null);
 
 		Graph.applyTransformed(g2d, source.getWidth(), BAR_SIZE.height, g1 -> {
-			int w = source.getWidth() / 4;
+			int w = source.getWidth() / 3;
 
 			g1.setColor(new Color(0x50000000, true));
 			g1.fillRect(0, 0, w, SIZE.height);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
 			int y = SIZE.height;
+			int h = g1.getFontMetrics().getHeight();
+
 			for (HistoryLog log : history) {
 				g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
-				int h = (int) Graph.getStringBounds(g1, log.message() + "\n").getHeight();
-
 				Graph.drawOutlinedString(g1, log.message(), MARGIN.x, y, 6, Color.BLACK);
+
 				y -= h * 1.25;
 			}
-
-
 		});
 
 		g2d.dispose();
