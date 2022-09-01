@@ -283,9 +283,9 @@ public class Arena implements Renderer {
 			g1.setColor(Color.WHITE);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 			Graph.drawMultilineString(g1,
-					String.join("\n\n", history),
+					String.join("\n", history),
 					MARGIN.x, SIZE.height,
-					w - MARGIN.x, g1.getFontMetrics().getHeight() * 2,
+					w - MARGIN.x, (int) (g1.getFontMetrics().getHeight() * 2.25),
 					(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
 			);
 		});
