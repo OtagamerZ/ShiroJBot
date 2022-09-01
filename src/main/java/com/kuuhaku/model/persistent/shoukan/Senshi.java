@@ -201,7 +201,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void setSlot(SlotColumn slot) {
-		if (slot == null)
 		this.slot = slot;
 	}
 
