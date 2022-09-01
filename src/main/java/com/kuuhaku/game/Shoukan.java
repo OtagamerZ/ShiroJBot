@@ -84,6 +84,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
 	private boolean restoring = false;
+	private boolean history = false;
 
 	public Shoukan(I18N locale, ShoukanParams params, User p1, User p2) {
 		this(locale, params, p1.getId(), p2.getId());
@@ -132,7 +133,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected void runtime(String value) throws InvocationTargetException, IllegalAccessException {
 		if (value.equalsIgnoreCase("reload")) {
-			reportEvent("str/game_reload", "<@" + getCurrent().getUid() + ">");
+			reportEvent("str/game_reload", getCurrent().getName());
 			return;
 		}
 
@@ -1195,7 +1196,7 @@ public class Shoukan extends GameInstance<Phase> {
 		getHistory().add(msg);
 
 		getChannel().sendMessage(msg)
-				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
+				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
 				.queue(m -> messages.compute(m.getTextChannel().getId(), replaceMessages(m)));
 	}
 
@@ -1206,7 +1207,7 @@ public class Shoukan extends GameInstance<Phase> {
 		getHistory().add(msg);
 
 		getChannel().sendMessage(msg)
-				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
+				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
 				.queue();
 
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
@@ -1281,6 +1282,13 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/spirit_synth", curr.getName());
 					});
 				}
+				put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+					if (history) {
+						reportEvent("str/game_history_disable", curr.getName());
+					} else {
+						reportEvent("str/game_history_enable", curr.getName());
+					}
+				});
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");

@@ -45,10 +45,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Arena implements Renderer {
@@ -262,6 +260,33 @@ public class Arena implements Renderer {
 		Graph.applyTransformed(g2d, drawBar(top));
 
 		Graph.applyTransformed(g2d, drawBar(bottom));
+
+		return bi;
+	}
+
+	@Override
+	public BufferedImage render(I18N locale, Deque<String> history) {
+		BufferedImage source = render(locale);
+
+		BufferedImage bi = new BufferedImage((int) (source.getWidth() * 1.25), source.getHeight(), source.getType());
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.SD_HINTS);
+
+		g2d.drawImage(source, 0, 0, null);
+
+		Graph.applyTransformed(g2d, source.getWidth(), BAR_SIZE.height, g1 -> {
+			int w = source.getWidth() / 4;
+
+			g1.setColor(new Color(0x77000000, true));
+			g1.fillRect(0, 0, w, SIZE.height);
+			Graph.drawMultilineString(g1,
+					String.join("\n\n", history),
+					MARGIN.x, SIZE.height,
+					w - MARGIN.x, g1.getFontMetrics().getHeight() * 2
+			);
+		});
+
+		g2d.dispose();
 
 		return bi;
 	}

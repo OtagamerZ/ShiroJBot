@@ -21,7 +21,14 @@ package com.kuuhaku.game.engine;
 import com.kuuhaku.model.enums.I18N;
 
 import java.awt.image.BufferedImage;
+import java.util.Deque;
 
 public interface Renderer {
-	BufferedImage render(I18N locale);
+	default BufferedImage render(I18N locale) {
+		throw new IllegalStateException("Not implemented");
+	}
+
+	default BufferedImage render(I18N locale, Deque<String> history) {
+		throw new IllegalStateException("Not implemented");
+	}
 }
