@@ -282,22 +282,24 @@ public class Arena implements Renderer {
 			g1.fillRect(0, 0, w, SIZE.height);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
-			int y = Integer.MAX_VALUE;
+			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
+				int y = -MARGIN.y;
 
-			for (HistoryLog log : history) {
-				int h = g1.getFontMetrics().getHeight() * (int) Math.ceil(g1.getFontMetrics().stringWidth(log.message()) / (double) w);
-				if (y == Integer.MAX_VALUE) {
-					y = (int) (SIZE.height - (h * 2.25 * history.size())) + MARGIN.y;
+				for (HistoryLog log : history) {
+					int h = g2.getFontMetrics().getHeight() * (int) Math.ceil(g1.getFontMetrics().stringWidth(log.message()) / (double) w);
+					if (y == Integer.MAX_VALUE) {
+						y = (int) (SIZE.height - (h * 2.25 * history.size())) + MARGIN.y;
+					}
+
+					g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
+					Graph.drawMultilineString(g1, log.message(),
+							MARGIN.x, y - MARGIN.y, w - MARGIN.x,
+							(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
+					);
+
+					y -= h * 2.25;
 				}
-
-				g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
-				Graph.drawMultilineString(g1, log.message(),
-						MARGIN.x, y - MARGIN.y, w - MARGIN.x,
-						(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
-				);
-
-				y += h * 2.25;
-			}
+			});
 		});
 
 		g2d.dispose();
