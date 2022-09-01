@@ -1200,7 +1200,7 @@ public class Shoukan extends GameInstance<Phase> {
 					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
 
 					if (!registered.get()) {
-						getHistory().add(m.getContentDisplay());
+						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
 						registered.set(true);
 					}
 				});
@@ -1214,7 +1214,7 @@ public class Shoukan extends GameInstance<Phase> {
 				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
 				.queue(m -> {
 					if (!registered.get()) {
-						getHistory().add(m.getContentDisplay());
+						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
 						registered.set(true);
 					}
 				});

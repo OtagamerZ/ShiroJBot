@@ -16,20 +16,9 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.game.engine;
+package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.shoukan.HistoryLog;
+import com.kuuhaku.model.enums.shoukan.Side;
 
-import java.awt.image.BufferedImage;
-import java.util.Deque;
-
-public interface Renderer {
-	default BufferedImage render(I18N locale) {
-		throw new IllegalStateException("Not implemented");
-	}
-
-	default BufferedImage render(I18N locale, Deque<HistoryLog> history) {
-		throw new IllegalStateException("Not implemented");
-	}
+public record HistoryLog(String message, Side side) {
 }

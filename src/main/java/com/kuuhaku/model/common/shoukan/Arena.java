@@ -35,6 +35,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -45,8 +46,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class Arena implements Renderer {
@@ -265,7 +266,7 @@ public class Arena implements Renderer {
 	}
 
 	@Override
-	public BufferedImage render(I18N locale, Deque<String> history) {
+	public BufferedImage render(I18N locale, Deque<HistoryLog> history) {
 		BufferedImage source = render(locale);
 
 		BufferedImage bi = new BufferedImage((int) (source.getWidth() * 1.25), source.getHeight(), source.getType());
@@ -279,15 +280,18 @@ public class Arena implements Renderer {
 
 			g1.setColor(new Color(0x50000000, true));
 			g1.fillRect(0, 0, w, SIZE.height);
-
-			g1.setColor(Color.WHITE);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
-			Graph.drawMultilineString(g1,
-					String.join("\n", history),
-					MARGIN.x, SIZE.height,
-					w - MARGIN.x, (int) (g1.getFontMetrics().getHeight() * 2.25),
-					(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
-			);
+
+			int y = SIZE.height;
+			for (HistoryLog log : history) {
+				g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
+				int h = (int) Graph.getStringBounds(g1, log.message() + "\n").getHeight();
+
+				Graph.drawOutlinedString(g1, log.message(), MARGIN.x, y, 6, Color.BLACK);
+				y -= h * 1.25;
+			}
+
+
 		});
 
 		g2d.dispose();

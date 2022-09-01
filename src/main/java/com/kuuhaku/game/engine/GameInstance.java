@@ -23,6 +23,7 @@ import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
@@ -53,7 +54,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private T phase;
 	private boolean initialized;
 
-	private final Deque<String> history = new ArrayDeque<>();
+	private final Deque<HistoryLog> history = new ArrayDeque<>();
 
 	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
@@ -145,7 +146,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return initialized;
 	}
 
-	public Deque<String> getHistory() {
+	public Deque<HistoryLog> getHistory() {
 		return history;
 	}
 
