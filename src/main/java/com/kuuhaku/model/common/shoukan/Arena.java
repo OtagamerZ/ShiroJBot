@@ -282,8 +282,8 @@ public class Arena implements Renderer {
 			g1.fillRect(0, 0, w, SIZE.height);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
-			int y = SIZE.height;
 			int h = g1.getFontMetrics().getHeight();
+			int y = (int) (SIZE.height - (h * 2.25 * history.size()));
 
 			for (HistoryLog log : history) {
 				g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
@@ -292,7 +292,7 @@ public class Arena implements Renderer {
 						(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
 				);
 
-				y -= h * 2.25;
+				y += h * 2.25;
 			}
 		});
 
