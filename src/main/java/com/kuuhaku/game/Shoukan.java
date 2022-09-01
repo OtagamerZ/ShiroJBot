@@ -1288,6 +1288,8 @@ public class Shoukan extends GameInstance<Phase> {
 					} else {
 						reportEvent("str/game_history_enable", curr.getName());
 					}
+
+					history = !history;
 				});
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
