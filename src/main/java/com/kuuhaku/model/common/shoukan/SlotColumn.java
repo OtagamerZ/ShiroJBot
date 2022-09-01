@@ -105,28 +105,6 @@ public class SlotColumn {
 		}
 
 		if (current != null) {
-			if (top == null) {
-				Evogear ward = null;
-				for (Evogear e : this.top.getEquipments()) {
-					if (e.hasCharm(Charm.WARDING)) {
-						ward = e;
-					}
-				}
-
-				if (current.getStats().popFlag(Flag.NO_DEATH)) {
-					return;
-				} else if (ward != null) {
-					int charges = ward.getStats().getData().getInt("ward", 0) + 1;
-					if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-						this.top.getHand().getGraveyard().add(ward);
-					} else {
-						ward.getStats().getData().put("ward", charges);
-					}
-
-					return;
-				}
-			}
-
 			current.executeAssert(Trigger.ON_REMOVE);
 			current.setSlot(null);
 		}

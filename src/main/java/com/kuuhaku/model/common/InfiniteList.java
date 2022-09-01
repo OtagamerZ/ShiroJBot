@@ -20,10 +20,11 @@ package com.kuuhaku.model.common;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class InfiniteList<T> extends LinkedList<T> {
+public class InfiniteList<T> extends ArrayDeque<T> {
 	public InfiniteList() {
 	}
 
@@ -32,11 +33,15 @@ public class InfiniteList<T> extends LinkedList<T> {
 	}
 
 	public T getNext() {
+		if (isEmpty()) throw new IllegalStateException("This collection is empty");
+
 		addLast(pollFirst());
 		return getFirst();
 	}
 
 	public T getPrevious() {
+		if (isEmpty()) throw new IllegalStateException("This collection is empty");
+
 		addFirst(pollLast());
 		return getLast();
 	}

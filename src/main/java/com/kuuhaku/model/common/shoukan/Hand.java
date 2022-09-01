@@ -89,8 +89,37 @@ public class Hand {
 			}
 	);
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
-			d -> d != null && d.keepOnDestroy() && !(d instanceof Senshi s && (s.getStats().popFlag(Flag.NO_DEATH))),
 			d -> {
+				if (d == null || !d.keepOnDestroy()) return false;
+
+				if (d instanceof Senshi s) {
+					Evogear ward = null;
+					for (Evogear e : s.getEquipments()) {
+						if (e.hasCharm(Charm.WARDING)) {
+							ward = e;
+						}
+					}
+
+					if (s.getStats().hasFlag(Flag.NO_DEATH)) {
+						return false;
+					} else if (ward != null) {
+						int charges = ward.getStats().getData().getInt("ward", 0) + 1;
+						if (charges >= Charm.WARDING.getValue(ward.getTier())) {
+							getGraveyard().add(ward);
+						} else {
+							ward.getStats().getData().put("ward", charges);
+						}
+
+						s.getStats().setFlag(Flag.NO_DEATH, true);
+						return false;
+					}
+				}
+
+				return true;
+			},
+			d -> {
+				if (d instanceof Senshi s && (s.getStats().popFlag(Flag.NO_DEATH))) return;
+
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 

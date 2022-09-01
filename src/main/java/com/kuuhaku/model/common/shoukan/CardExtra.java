@@ -408,6 +408,8 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setFlag(Flag flag, boolean value) {
+		if (hasFlag(flag) == value) return;
+
 		if (value) {
 			flags.add(flag);
 		} else {
@@ -416,6 +418,8 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setFlag(Flag flag, boolean value, boolean permanent) {
+		if (hasFlag(flag) == value) return;
+
 		if (value) {
 			(permanent ? permFlags : flags).add(flag);
 		} else {

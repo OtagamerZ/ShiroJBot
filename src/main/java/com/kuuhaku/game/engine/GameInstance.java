@@ -51,6 +51,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private T phase;
 	private boolean initialized;
 
+	//private final Deque
+
 	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
 			SimpleMessageListener sml = new SimpleMessageListener(channels) {
