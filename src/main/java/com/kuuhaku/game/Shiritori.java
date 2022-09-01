@@ -90,7 +90,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	@Override
 	protected void begin() {
 		PLAYERS.addAll(Arrays.asList(players));
-		reportEvent("str/game_start", "<@" + inGame.get() + ">");
+		reportEvent("str/game_start_shiritori", "<@" + inGame.get() + ">");
 	}
 
 	@Override

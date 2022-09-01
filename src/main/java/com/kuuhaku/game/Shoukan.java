@@ -131,6 +131,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void runtime(String value) throws InvocationTargetException, IllegalAccessException {
+		if (value.equalsIgnoreCase("reload")) {
+			reportEvent("str/game_reload", "<@" + getCurrent().getUid() + ">");
+			return;
+		}
+
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
 		if (action != null) {
 			if ((boolean) action.getFirst().invoke(this, getCurrentSide(), action.getSecond())) {
