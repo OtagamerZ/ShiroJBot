@@ -52,6 +52,7 @@ import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -1193,31 +1194,29 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(locale.get(message, args))
-				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
-				.queue(m -> {
-					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+		Message ph = new MessageBuilder()
+				.setContent(locale.get(message, args))
+				.build();
 
-					if (!registered.get()) {
-						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-						registered.set(true);
-					}
-				});
+		getHistory().add(new HistoryLog(ph.getContentDisplay(), getCurrentSide()));
+
+		getChannel().sendMessage(ph.getContentRaw())
+				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
+				.queue(m -> messages.compute(m.getTextChannel().getId(), replaceMessages(m)));
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
 
-		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(locale.get(message, args))
+		Message ph = new MessageBuilder()
+				.setContent(locale.get(message, args))
+				.build();
+
+		getHistory().add(new HistoryLog(ph.getContentDisplay(), getCurrentSide()));
+
+		getChannel().sendMessage(ph.getContentRaw())
 				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
-				.queue(m -> {
-					if (!registered.get()) {
-						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-						registered.set(true);
-					}
-				});
+				.queue();
 
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
 			if (tuple != null) {
