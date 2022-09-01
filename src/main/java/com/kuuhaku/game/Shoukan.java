@@ -52,7 +52,6 @@ import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -65,6 +64,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -1193,29 +1193,31 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		Message ph = new MessageBuilder()
-				.setContent(locale.get(message, args))
-				.build();
-
-		getHistory().add(new HistoryLog(ph.getContentDisplay(), getCurrentSide()));
-
-		getChannel().sendMessage(ph.getContentRaw())
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
-				.queue(m -> messages.compute(m.getTextChannel().getId(), replaceMessages(m)));
+				.queue(m -> {
+					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+
+					if (!registered.get()) {
+						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+						registered.set(true);
+					}
+				});
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
 
-		Message ph = new MessageBuilder()
-				.setContent(locale.get(message, args))
-				.build();
-
-		getHistory().add(new HistoryLog(ph.getContentDisplay(), getCurrentSide()));
-
-		getChannel().sendMessage(ph.getContentRaw())
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(history ? arena.render(locale, getHistory()) : arena.render(locale), "webp"), "game.webp")
-				.queue();
+				.queue(m -> {
+					if (!registered.get()) {
+						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+						registered.set(true);
+					}
+				});
 
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
 			if (tuple != null) {
