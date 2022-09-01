@@ -697,6 +697,14 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		Target t;
+		if (enemy != null) {
+			t = enemy.asTarget(ON_DEFEND);
+		} else {
+			t = new Target();
+		}
+		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
+
 		int pHP = op.getHP();
 		int dmg = ally.getDmg();
 		int attacks = 1 + ally.getEquipments().stream()
@@ -750,14 +758,6 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 			}
-
-			Target t;
-			if (enemy != null && i == 0) {
-				t = enemy.asTarget(ON_DEFEND);
-			} else {
-				t = new Target();
-			}
-			trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
 			if (i == 0) {
 				combat:
