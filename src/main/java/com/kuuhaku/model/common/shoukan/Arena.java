@@ -282,10 +282,14 @@ public class Arena implements Renderer {
 			g1.fillRect(0, 0, w, SIZE.height);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
-			int h = g1.getFontMetrics().getHeight();
-			int y = (int) (SIZE.height - (h * 2.25 * history.size()));
+			int y = Integer.MAX_VALUE;
 
 			for (HistoryLog log : history) {
+				int h = g1.getFontMetrics().getHeight() * (int) Math.ceil(g1.getFontMetrics().stringWidth(log.message()) / (double) w);
+				if (y == Integer.MAX_VALUE) {
+					y = (int) (SIZE.height - (h * 2.25 * history.size())) + MARGIN.y;
+				}
+
 				g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
 				Graph.drawMultilineString(g1, log.message(),
 						MARGIN.x, y - MARGIN.y, w - MARGIN.x,
