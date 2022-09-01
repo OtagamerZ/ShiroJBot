@@ -287,9 +287,12 @@ public class Arena implements Renderer {
 
 			for (HistoryLog log : history) {
 				g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
-				Graph.drawOutlinedString(g1, log.message(), MARGIN.x, y, 6, Color.BLACK);
+				Graph.drawMultilineString(g1, log.message(),
+						MARGIN.x, y - MARGIN.y, w - MARGIN.x,
+						(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
+				);
 
-				y -= h * 1.25;
+				y -= h * 2.25;
 			}
 		});
 
