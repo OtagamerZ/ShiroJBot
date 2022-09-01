@@ -161,6 +161,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return null;
 	}
 
+	public final boolean isClosed() {
+		return exec.isDone();
+	}
+
 	public final void close(@MagicConstant(valuesFromClass = GameReport.class) byte code) {
 		timeout.stop();
 		if (code == GameReport.SUCCESS) {

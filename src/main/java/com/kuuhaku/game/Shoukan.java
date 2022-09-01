@@ -1192,6 +1192,8 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
+		if (isClosed()) return;
+
 		getChannel().sendMessage(locale.get(message, args))
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue();
