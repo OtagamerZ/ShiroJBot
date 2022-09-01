@@ -25,7 +25,7 @@
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout
-                    pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level %C{36}.%M():%L}{FATAL=blinking bright red, ERROR=red, WARN=bold yellow, INFO=green, ASPECT=cyan, DEBUG=bold green, TRACE=black} - %style{%msg}{white}%n%n"
+                    pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level %C{36}.%M():%L}{FATAL=blink bright red, ERROR=red, WARN=bold yellow, INFO=green, ASPECT=cyan, DEBUG=bold green, TRACE=black} - %style{%msg}{white}%n%n"
                     disableAnsi="false"/>
         </Console>
 
