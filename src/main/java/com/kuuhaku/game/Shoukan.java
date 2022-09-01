@@ -1186,7 +1186,10 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		getChannel().sendMessage(locale.get(message, args))
+		String msg = locale.get(message, args);
+		getHistory().add(msg);
+
+		getChannel().sendMessage(msg)
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue(m -> messages.compute(m.getTextChannel().getId(), replaceMessages(m)));
 	}
@@ -1194,7 +1197,10 @@ public class Shoukan extends GameInstance<Phase> {
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
 
-		getChannel().sendMessage(locale.get(message, args))
+		String msg = locale.get(message, args);
+		getHistory().add(msg);
+
+		getChannel().sendMessage(msg)
 				.addFile(IO.getBytes(arena.render(locale), "webp"), "game.webp")
 				.queue();
 

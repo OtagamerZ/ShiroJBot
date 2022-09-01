@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
@@ -51,7 +53,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private T phase;
 	private boolean initialized;
 
-	//private final Deque
+	private final Deque<String> history = new ArrayDeque<>();
 
 	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
@@ -141,6 +143,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public boolean isInitialized() {
 		return initialized;
+	}
+
+	public Deque<String> getHistory() {
+		return history;
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {

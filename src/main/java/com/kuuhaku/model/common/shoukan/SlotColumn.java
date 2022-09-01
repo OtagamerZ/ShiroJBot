@@ -109,6 +109,7 @@ public class SlotColumn {
 			current.setSlot(null);
 		}
 
+		System.out.println(current);
 		this.top = top;
 		if (top != null) {
 			Hand h = game.getHands().get(side);
@@ -116,6 +117,8 @@ public class SlotColumn {
 			top.setSlot(this);
 			top.setHand(h);
 			top.executeAssert(Trigger.ON_INITIALIZE);
+
+			System.out.println(top);
 
 			if (!top.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, top.asSource(Trigger.ON_SUMMON));
@@ -155,10 +158,6 @@ public class SlotColumn {
 		}
 
 		if (current != null) {
-			if (bottom == null && current.getStats().popFlag(Flag.NO_DEATH)) {
-				return;
-			}
-
 			current.executeAssert(Trigger.ON_REMOVE);
 			current.setSlot(null);
 		}
