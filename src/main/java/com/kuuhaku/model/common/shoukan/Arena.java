@@ -286,13 +286,13 @@ public class Arena implements Renderer {
 				int y = -MARGIN.y;
 
 				for (HistoryLog log : history) {
-					int h = g2.getFontMetrics().getHeight() * (int) Math.ceil(g1.getFontMetrics().stringWidth(log.message()) / (double) w);
+					int h = g2.getFontMetrics().getHeight() * (int) Math.ceil(g2.getFontMetrics().stringWidth(log.message()) / (double) w);
 					y -= h * 1.25;
 
-					g1.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
-					Graph.drawMultilineString(g1, log.message(),
+					g2.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
+					Graph.drawMultilineString(g2, log.message(),
 							MARGIN.x, y, w - MARGIN.x,
-							(str, px, py) -> Graph.drawOutlinedString(g1, str, px, py, 6, Color.BLACK)
+							(str, px, py) -> Graph.drawOutlinedString(g2, str, px, py, 6, Color.BLACK)
 					);
 				}
 			});
