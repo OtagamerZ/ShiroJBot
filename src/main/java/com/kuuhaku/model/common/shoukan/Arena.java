@@ -285,7 +285,6 @@ public class Arena implements Renderer {
 			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
 				int y = -MARGIN.y;
 
-				int prev = 0;
 				for (HistoryLog log : history) {
 					int h = g2.getFontMetrics().getHeight() * (int) Math.ceil(g1.getFontMetrics().stringWidth(log.message()) / (double) w);
 					y -= h * 1.25;
