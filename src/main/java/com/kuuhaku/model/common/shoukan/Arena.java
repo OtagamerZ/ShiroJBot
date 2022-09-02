@@ -283,9 +283,12 @@ public class Arena implements Renderer {
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
 			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
-				int y = -MARGIN.y;
+				int y = 0;
 
-				for (HistoryLog log : history) {
+				Iterator<HistoryLog> iterator = history.descendingIterator();
+				while (iterator.hasNext()) {
+					HistoryLog log = iterator.next();
+
 					int h = g2.getFontMetrics().getHeight() * (int) Math.ceil(g2.getFontMetrics().stringWidth(log.message()) / (double) w);
 					y -= h * 1.25;
 
