@@ -289,7 +289,7 @@ public class Arena implements Renderer {
 				while (iterator.hasNext()) {
 					HistoryLog log = iterator.next();
 
-					int h = g2.getFont().getSize() * (int) Math.ceil(g2.getFontMetrics().stringWidth(log.message()) / (double) w);
+					int h = (int) Graph.getMultilineStringBounds(g2, log.message(), w).getHeight();
 					y -= h * 1.25;
 
 					g2.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());

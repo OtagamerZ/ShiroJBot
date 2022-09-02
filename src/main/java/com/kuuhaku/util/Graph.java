@@ -38,6 +38,29 @@ public abstract class Graph {
 		return new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext()).getBounds();
 	}
 
+	public static Rectangle2D getMultilineStringBounds(Graphics2D g2d, String text, int width) {
+		int y = 0;
+		String[] lines = text.split("\n");
+		for (String line : lines) {
+			String[] words = line.split("(?<=\\S[ \u200B])");
+			int offset = 0;
+			for (String word : words) {
+				FontMetrics m = g2d.getFontMetrics();
+
+				if (offset + m.stringWidth(word) <= width) {
+					offset += m.stringWidth(word);
+				} else {
+					y += m.getHeight();
+					offset = m.stringWidth(word);
+				}
+			}
+
+			y += g2d.getFontMetrics().getHeight();
+		}
+
+		return new Rectangle2D.Double(0, 0, width, y);
+	}
+
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
