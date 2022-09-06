@@ -135,10 +135,9 @@ public abstract class ImageFilters {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graph.forEachPixel(source, (x, y, rgb) -> {
-			int[] color = Graph.unpackRGB(rgb);
-			int luma = Calc.toLuma(color[1], color[2], color[3]);
+			int luma = (int) (Calc.luminance(rgb) * 255);
 
-			out.setRGB(x, y, Graph.packRGB(color[0], luma, luma, luma));
+			out.setRGB(x, y, Graph.packRGB((rgb >> 24) & 0xFF, luma, luma, luma));
 		});
 
 		return out;

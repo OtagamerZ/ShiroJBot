@@ -267,16 +267,24 @@ public abstract class Calc {
 		return w / h;
 	}
 
-	public static int toLuma(int r, int g, int b) {
-		return (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
+	public static double luminance(Color color) {
+		return luminance(color.getRGB());
 	}
 
-	public static int toLuma(int[] rgb) {
-		return (int) (0.2126 * rgb[1] + 0.7152 * rgb[2] + 0.0722 * rgb[3]);
+	public static double luminance(int[] rgb) {
+		return luminance(rgb[0], rgb[1], rgb[2], rgb[3]);
 	}
 
-	public static int toLuma(int rgb) {
-		return (int) (0.2126 * ((rgb >> 16) & 0xFF) + 0.7152 * ((rgb >> 8) & 0xFF) + 0.0722 * (rgb & 0xFF));
+	public static double luminance(int r, int g, int b) {
+		return luminance(255, r, g, b);
+	}
+
+	public static double luminance(int a, int r, int g, int b) {
+		return luminance((a << 24) | (r << 16) | (g << 8) | b);
+	}
+
+	public static double luminance(int rgb) {
+		return (0.299 * ((rgb >> 16) & 0xFF) + 0.587 * ((rgb >> 8) & 0xFF) + 0.114 * (rgb & 0xFF)) / 255 * (((rgb >> 24) & 0xFF) / 255d);
 	}
 
 	public static int mult(int val, double[] add, double[] mult) {
@@ -333,11 +341,5 @@ public abstract class Calc {
 		}
 
 		return val * a * m;
-	}
-
-	public static double luminance(Color color) {
-		int[] rgb = Graph.unpackRGB(color.getRGB());
-
-		return (0.299 * rgb[1] + 0.587 * rgb[2] + 0.114 * rgb[3]) / 255 * (rgb[0] / 255d);
 	}
 }
