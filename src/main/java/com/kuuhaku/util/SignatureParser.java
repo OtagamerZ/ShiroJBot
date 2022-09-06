@@ -48,44 +48,44 @@ public abstract class SignatureParser {
 						fail = true;
 						supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
 						continue;
-					} else if (!str.isBlank()) {
-						if (i == args.length) {
-							if (out.has(name)) {
-								JSONArray arr;
-								if (out.get(name) instanceof List<?> ls) {
-									arr = new JSONArray(ls);
-								} else {
-									arr = new JSONArray();
-									Object curr = out.get(name);
-									arr.add(curr);
-								}
-								arr.add(str);
+					}
 
-								out.put(name, arr);
+					if (i == args.length) {
+						if (out.has(name)) {
+							JSONArray arr;
+							if (out.get(name) instanceof List<?> ls) {
+								arr = new JSONArray(ls);
 							} else {
-								out.put(name, str);
+								arr = new JSONArray();
+								Object curr = out.get(name);
+								arr.add(curr);
 							}
+							arr.add(str);
 
-							str = "";
+							out.put(name, arr);
 						} else {
-							if (out.has(name)) {
-								JSONArray arr;
-								if (out.get(name) instanceof List<?> ls) {
-									arr = new JSONArray(ls);
-								} else {
-									arr = new JSONArray();
-									Object curr = out.get(name);
-									arr.add(curr);
-								}
-								arr.add(Utils.extract(str, type.getPattern(), "text"));
-
-								out.put(name, arr);
-							} else {
-								out.put(name, Utils.extract(str, type.getPattern(), "text"));
-							}
-
-							str = str.replaceFirst(type.getRegex(), "").trim();
+							out.put(name, str);
 						}
+
+						str = "";
+					} else {
+						if (out.has(name)) {
+							JSONArray arr;
+							if (out.get(name) instanceof List<?> ls) {
+								arr = new JSONArray(ls);
+							} else {
+								arr = new JSONArray();
+								Object curr = out.get(name);
+								arr.add(curr);
+							}
+							arr.add(Utils.extract(str, type.getPattern(), "text"));
+
+							out.put(name, arr);
+						} else {
+							out.put(name, Utils.extract(str, type.getPattern(), "text"));
+						}
+
+						str = str.replaceFirst(type.getRegex(), "").trim();
 					}
 
 					matches++;
