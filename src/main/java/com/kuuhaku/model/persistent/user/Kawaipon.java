@@ -116,6 +116,23 @@ public class Kawaipon extends DAO<Kawaipon> {
 				.anyMatch(c -> c.getCard().equals(card) && c.isChrome() == chrome);
 	}
 
+	public Pair<Integer, Integer> countCards() {
+		AtomicInteger normal = new AtomicInteger();
+		AtomicInteger chrome = new AtomicInteger();
+
+		cards.parallelStream()
+				.filter(c -> c.getStashEntry() == null)
+				.forEach(c -> {
+					if (c.isChrome()) {
+						chrome.getAndIncrement();
+					} else {
+						normal.getAndIncrement();
+					}
+				});
+
+		return new Pair<>(normal.get(), chrome.get());
+	}
+
 	public Pair<Integer, Integer> countCards(Anime anime) {
 		AtomicInteger normal = new AtomicInteger();
 		AtomicInteger chrome = new AtomicInteger();

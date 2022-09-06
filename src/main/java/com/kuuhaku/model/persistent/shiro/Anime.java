@@ -39,13 +39,7 @@ public class Anime extends DAO<Anime> {
 	private boolean visible = true;
 
 	public int getCount() {
-		return DAO.queryNative(Integer.class, """
-				SELECT COUNT(1)
-				FROM Card c
-				WHERE c.anime_id = ?1
-				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'ULTRA_RARE', 'LEGENDARY')
-				""", id
-		);
+		return DAO.queryNative(Integer.class, "SELECT count FROM aux.card_counter WHERE anime_id = ?1", id);
 	}
 
 	@SuppressWarnings("JpaQlInspection")
