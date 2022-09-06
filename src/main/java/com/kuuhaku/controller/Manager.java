@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -58,6 +59,7 @@ public abstract class Manager {
 			if (initDir != null && initDir.isDirectory()) {
 				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
 					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
+							.sorted(Comparator.comparing(Path::getNameCount))
 							.peek(p -> Constants.LOGGER.info("Applying script " + p.getFileName()))
 							.map(IO::readString)
 							.forEach(DAO::applyNative);
