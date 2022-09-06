@@ -18,6 +18,13 @@
 
 CREATE TABLE IF NOT EXISTS aux.card_counter
 (
-    id    VARCHAR(255) NOT NULL PRIMARY KEY,
-    count INT          NOT NULL
+    id    VARCHAR NOT NULL PRIMARY KEY,
+    count INT     NOT NULL
 );
+
+INSERT INTO aux.card_counter (id, count)
+SELECT anime_id
+     , COUNT(1)
+FROM card
+WHERE get_rarity_index(rarity) < 6
+GROUP BY anime_id
