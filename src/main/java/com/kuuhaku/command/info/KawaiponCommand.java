@@ -49,7 +49,7 @@ import java.util.Locale;
 		name = "kawaipon",
 		category = Category.INFO
 )
-@Signature("<anime:text> <kind:word>[n,c]")
+@Signature("<anime:word> <kind:word>[n,c]")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES

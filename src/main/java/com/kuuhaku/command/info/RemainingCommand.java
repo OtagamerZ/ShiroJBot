@@ -47,7 +47,7 @@ import java.util.Locale;
 		name = "remaining",
 		category = Category.INFO
 )
-@Signature("<anime:text:r>")
+@Signature("<anime:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RemainingCommand implements Executable {
 	@Override
