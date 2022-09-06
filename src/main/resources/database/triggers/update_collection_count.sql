@@ -40,6 +40,10 @@ BEGIN
         WHERE kawaipon_uid = NEW.kawaipon_uid
           AND anime_id = (SELECT anime_id FROM card WHERE id = NEW.card_id);
     ELSIF TG_OP = 'UPDATE' THEN
+        IF (OLD.card_id <> NEW.card_id) THEN
+            RAISE EXCEPTION 'Cannot change card ID';
+        END IF;
+
         IF (OLD.kawaipon_uid <> NEW.kawaipon_uid) THEN
             UPDATE aux.v_collection_counter
             SET normal = normal - iif(NEW.chrome, 0, 1)
