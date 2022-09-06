@@ -21,9 +21,9 @@ CREATE OR REPLACE PROCEDURE apply_constraints()
 AS
 $body$
 DECLARE
-    MATCH RECORD;
+    _match RECORD;
 BEGIN
-    FOR MATCH IN
+    FOR _match IN
         SELECT x.name
              , x.table
              , x.def
@@ -47,7 +47,7 @@ BEGIN
                 ADD CONSTRAINT %2$I
                     FOREIGN KEY (%3$I) REFERENCES %4$I
                         ON UPDATE CASCADE;
-            $$, MATCH.table, MATCH.name, MATCH.col, MATCH.ref);
+            $$, _match.table, _match.name, _match.col, _match.ref);
         END LOOP;
 END
 $body$;

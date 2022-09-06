@@ -22,23 +22,31 @@ CREATE OR REPLACE FUNCTION t_update_card_count()
 AS
 $$
 DECLARE
-    ref card;
+    _anime VARCHAR;
 BEGIN
-    ref = COALESCE(OLD, NEW);
+    IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+        _anime = NEW.anime_id;
+    ELSE
+        _anime = OLD.anime_id;
+    END IF;
 
-    IF NOT EXISTS(SELECT FROM aux.card_counter WHERE id = ref.anime_id) THEN
-        INSERT
-        INTO aux.card_counter (id, count)
-        VALUES (ref.anime_id, (SELECT COUNT(1) FROM card WHERE anime_id = ref.anime_id AND get_rarity_index(rarity) < 6));
+    IF NOT EXISTS(SELECT FROM aux.card_counter WHERE anime_id = _anime) THEN
+        INSERT INTO aux.card_counter (anime_id, count)
+        SELECT _anime
+             , COUNT(1)
+        FROM card
+        WHERE anime_id = _anime
+          AND get_rarity_index(rarity) < 6
+        GROUP BY _anime;
     END IF;
 
     IF TG_OP = 'INSERT' THEN
-        UPDATE aux.card_counter SET count = count + 1 WHERE id = NEW.anime_id;
+        UPDATE aux.card_counter SET count = count + 1 WHERE anime_id = NEW.anime_id;
     ELSIF TG_OP = 'UPDATE' AND OLD.anime_id <> NEW.anime_id THEN
-        UPDATE aux.card_counter SET count = count - 1 WHERE id = OLD.anime_id;
-        UPDATE aux.card_counter SET count = count + 1 WHERE id = NEW.anime_id;
+        UPDATE aux.card_counter SET count = count - 1 WHERE anime_id = OLD.anime_id;
+        UPDATE aux.card_counter SET count = count + 1 WHERE anime_id = NEW.anime_id;
     ELSIF TG_OP = 'DELETE' THEN
-        UPDATE aux.card_counter SET count = count - 1 WHERE id = OLD.anime_id;
+        UPDATE aux.card_counter SET count = count - 1 WHERE anime_id = OLD.anime_id;
     END IF;
 
     RETURN NEW;

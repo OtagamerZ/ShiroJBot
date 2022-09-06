@@ -18,11 +18,11 @@
 
 CREATE TABLE IF NOT EXISTS aux.card_counter
 (
-    id    VARCHAR NOT NULL PRIMARY KEY,
-    count INT     NOT NULL
+    anime_id VARCHAR NOT NULL PRIMARY KEY,
+    count    INT     NOT NULL
 );
 
-INSERT INTO aux.card_counter (id, count)
+INSERT INTO aux.card_counter (anime_id, count)
 SELECT anime_id
      , COUNT(1)
 FROM card
