@@ -109,7 +109,7 @@ public class KawaiponCommand implements Executable {
 				locale, kp.getUid(), anime.getId(), i, System.currentTimeMillis(), args.getString("kind", "n")
 			));
 			eb.setTitle("Test", (Constants.API_ROOT + "kawaipon/%s/%s?anime=%s&type=%s&v=%s&page=%s").formatted(
-					locale, kp.getUid(), anime.getId(), i, System.currentTimeMillis(), args.getString("kind", "n")
+					locale, kp.getUid(), anime.getId(), args.getString("kind", "n"), System.currentTimeMillis(), i
 			));
 			pages.add(new InteractPage(eb.build()));
 		}
