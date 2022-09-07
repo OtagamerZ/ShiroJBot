@@ -49,19 +49,36 @@ import java.util.Locale;
 
 @Command(
 		name = "kawaipon",
+		subname = "rarity",
 		category = Category.INFO
 )
+@Signature("<rarity:word:r> <kind:word>[n,c]")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
 })
-public class KawaiponCommand implements Executable {
+public class KawaiponRarityCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		int total = DAO.queryNative(Integer.class, "SELECT SUM(count) FROM aux.card_counter");
-		Pair<Integer, Integer> count = kp.countCards();
+		Rarity rarity = null;
+		String str = args.getString("rarity").toUpperCase(Locale.ROOT);
+		for (Rarity r : Rarity.values()) {
+			if (r.name().startsWith(str)) {
+				rarity = r;
+			}
+		}
+
+		if (rarity == null) {
+			Pair<String, Double> sug = Utils.didYouMean(str, Arrays.stream(Rarity.values()).map(Rarity::name).toList());
+			event.channel().sendMessage(locale.get("error/unknown_rarity", sug.getFirst())).queue();
+			return;
+		}
+
+		int total = rarity.getCount();
+		Pair<Integer, Integer> count = kp.countCards(rarity);
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/kawaipon_collection", event.user().getName()))
 				.setFooter(locale.get("str/owned_cards",
@@ -73,8 +90,8 @@ public class KawaiponCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			eb.setImage((Constants.API_ROOT + "kawaipon/%s/%s?v=%s&page=%s").formatted(
-					locale, kp.getUid(), System.currentTimeMillis(), i
+			eb.setImage((Constants.API_ROOT + "kawaipon/%s/%s?q=%s&type=%s&v=%s&page=%s").formatted(
+					locale, kp.getUid(), rarity, args.getString("kind", "n"), System.currentTimeMillis(), i
 			));
 			pages.add(new InteractPage(eb.build()));
 		}

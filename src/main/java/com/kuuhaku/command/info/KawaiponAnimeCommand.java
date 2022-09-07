@@ -49,19 +49,31 @@ import java.util.Locale;
 
 @Command(
 		name = "kawaipon",
+		subname = "anime",
 		category = Category.INFO
 )
+@Signature("<anime:word:r> <kind:word>[n,c]")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
 })
-public class KawaiponCommand implements Executable {
+public class KawaiponAnimeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		int total = DAO.queryNative(Integer.class, "SELECT SUM(count) FROM aux.card_counter");
-		Pair<Integer, Integer> count = kp.countCards();
+		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase(Locale.ROOT));
+		if (anime == null || !anime.isVisible()) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM anime WHERE visible");
+
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(Locale.ROOT), names);
+			event.channel().sendMessage(locale.get("error/unknown_anime", sug.getFirst())).queue();
+			return;
+		}
+
+		int total = anime.getCount();
+		Pair<Integer, Integer> count = kp.countCards(anime);
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/kawaipon_collection", event.user().getName()))
 				.setFooter(locale.get("str/owned_cards",
@@ -73,8 +85,8 @@ public class KawaiponCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			eb.setImage((Constants.API_ROOT + "kawaipon/%s/%s?v=%s&page=%s").formatted(
-					locale, kp.getUid(), System.currentTimeMillis(), i
+			eb.setImage((Constants.API_ROOT + "kawaipon/%s/%s?q=%s&type=%s&v=%s&page=%s").formatted(
+					locale, kp.getUid(), anime.getId(), args.getString("kind", "n"), System.currentTimeMillis(), i
 			));
 			pages.add(new InteractPage(eb.build()));
 		}
