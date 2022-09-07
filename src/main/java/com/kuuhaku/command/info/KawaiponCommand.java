@@ -52,8 +52,8 @@ import java.util.Locale;
 		category = Category.INFO
 )
 @Signature({
-		"<anime:word> <kind:word>[n,c]",
-		"<rarity:word> <kind:word>[n,c]"
+		"<rarity:word>[common,uncommon,rare,ultra_rare,legendary] <kind:word>[n,c]",
+		"<anime:word> <kind:word>[n,c]"
 })
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
@@ -88,8 +88,8 @@ public class KawaiponCommand implements Executable {
 			return;
 		}
 
-		int total;
-		Pair<Integer, Integer> count;
+		int total = -1;
+		Pair<Integer, Integer> count = null;
 
 		if (args.has("anime")) {
 			Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase(Locale.ROOT));
@@ -104,17 +104,15 @@ public class KawaiponCommand implements Executable {
 			total = anime.getCount();
 			count = kp.countCards(anime);
 		} else {
-			check:
-			{
-				String rarity = args.getString("rarity").toUpperCase(Locale.ROOT);
-				for (Rarity r : Rarity.values()) {
-					if (r.name().startsWith(rarity)) {
-						total = r.getCount();
-						count = kp.countCards(r);
-						break check;
-					}
+			String rarity = args.getString("rarity").toUpperCase(Locale.ROOT);
+			for (Rarity r : Rarity.values()) {
+				if (r.name().startsWith(rarity)) {
+					total = r.getCount();
+					count = kp.countCards(r);
 				}
+			}
 
+			if (total == -1) {
 				Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(Locale.ROOT), Arrays.stream(Rarity.values()).map(Rarity::name).toList());
 				event.channel().sendMessage(locale.get("error/unknown_rarity", sug.getFirst())).queue();
 				return;
