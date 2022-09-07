@@ -29,6 +29,7 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
@@ -42,6 +43,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +51,10 @@ import java.util.Locale;
 		name = "kawaipon",
 		category = Category.INFO
 )
-@Signature("<anime:word> <kind:word>[n,c]")
+@Signature({
+		"<anime:word> <kind:word>[n,c]",
+		"<rarity:word> <kind:word>[n,c]"
+})
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
@@ -59,7 +64,7 @@ public class KawaiponCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		if (!args.has("anime")) {
+		if (!args.has("anime") && !args.has("rarity")) {
 			int total = DAO.queryNative(Integer.class, "SELECT SUM(count) FROM aux.card_counter");
 			Pair<Integer, Integer> count = kp.countCards();
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -83,17 +88,39 @@ public class KawaiponCommand implements Executable {
 			return;
 		}
 
-		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase(Locale.ROOT));
-		if (anime == null || !anime.isVisible()) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM anime WHERE visible");
+		int total;
+		Pair<Integer, Integer> count;
 
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(Locale.ROOT), names);
-			event.channel().sendMessage(locale.get("error/unknown_anime", sug.getFirst())).queue();
-			return;
+		if (args.has("anime")) {
+			Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase(Locale.ROOT));
+			if (anime == null || !anime.isVisible()) {
+				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM anime WHERE visible");
+
+				Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(Locale.ROOT), names);
+				event.channel().sendMessage(locale.get("error/unknown_anime", sug.getFirst())).queue();
+				return;
+			}
+
+			total = anime.getCount();
+			count = kp.countCards(anime);
+		} else {
+			check:
+			{
+				String rarity = args.getString("rarity").toUpperCase(Locale.ROOT);
+				for (Rarity r : Rarity.values()) {
+					if (r.name().startsWith(rarity)) {
+						total = r.getCount();
+						count = kp.countCards(r);
+						break check;
+					}
+				}
+
+				Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(Locale.ROOT), Arrays.stream(Rarity.values()).map(Rarity::name).toList());
+				event.channel().sendMessage(locale.get("error/unknown_rarity", sug.getFirst())).queue();
+				return;
+			}
 		}
 
-		int total = anime.getCount();
-		Pair<Integer, Integer> count = kp.countCards(anime);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/kawaipon_collection", event.user().getName()))
 				.setFooter(locale.get("str/owned_cards",
@@ -105,8 +132,8 @@ public class KawaiponCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			eb.setImage((Constants.API_ROOT + "kawaipon/%s/%s?anime=%s&type=%s&v=%s&page=%s").formatted(
-				locale, kp.getUid(), anime.getId(), args.getString("kind", "n"), System.currentTimeMillis(), i
+			eb.setImage((Constants.API_ROOT + "kawaipon/%s/%s?q=%s&type=%s&v=%s&page=%s").formatted(
+					locale, kp.getUid(), args.getString("anime", args.getString("rarity")), args.getString("kind", "n"), System.currentTimeMillis(), i
 			));
 			pages.add(new InteractPage(eb.build()));
 		}

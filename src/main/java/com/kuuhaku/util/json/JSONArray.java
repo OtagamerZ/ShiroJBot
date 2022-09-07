@@ -70,7 +70,7 @@ public class JSONArray extends ArrayList<Object> implements Cloneable {
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) {
 		if (!clazz.isEnum()) return null;
 		return Arrays.stream(clazz.getEnumConstants())
-				.filter(e -> e.name().equals(getString(index)))
+				.filter(e -> e.name().equalsIgnoreCase(getString(index)))
 				.findFirst()
 				.orElse(null);
 	}
@@ -78,7 +78,7 @@ public class JSONArray extends ArrayList<Object> implements Cloneable {
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, int index, E or) {
 		if (!clazz.isEnum()) return null;
 		return Arrays.stream(clazz.getEnumConstants())
-				.filter(e -> e.name().equals(getString(index)))
+				.filter(e -> e.name().equalsIgnoreCase(getString(index)))
 				.findFirst()
 				.orElse(or);
 	}

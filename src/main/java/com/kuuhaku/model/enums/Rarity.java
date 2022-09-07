@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.util.Graph;
 
 import java.awt.*;
@@ -65,5 +66,9 @@ public enum Rarity {
 
 	public String getEmote() {
 		return emote;
+	}
+
+	public int getCount() {
+		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM card WHERE rarity = ?1", this);
 	}
 }

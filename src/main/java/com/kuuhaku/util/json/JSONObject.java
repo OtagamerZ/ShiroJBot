@@ -70,7 +70,7 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) {
 		if (!clazz.isEnum()) return null;
 		return Arrays.stream(clazz.getEnumConstants())
-				.filter(e -> e.name().equals(getString(key)))
+				.filter(e -> e.name().equalsIgnoreCase(getString(key)))
 				.findFirst()
 				.orElse(null);
 	}
@@ -78,7 +78,7 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, String key, E or) {
 		if (!clazz.isEnum()) return null;
 		return Arrays.stream(clazz.getEnumConstants())
-				.filter(e -> e.name().equals(getString(key)))
+				.filter(e -> e.name().equalsIgnoreCase(getString(key)))
 				.findFirst()
 				.orElse(or);
 	}

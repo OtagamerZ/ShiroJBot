@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import jakarta.persistence.*;
@@ -140,6 +141,24 @@ public class Kawaipon extends DAO<Kawaipon> {
 		cards.parallelStream()
 				.filter(c -> c.getStashEntry() == null)
 				.filter(c -> c.getCard().getAnime().equals(anime))
+				.forEach(c -> {
+					if (c.isChrome()) {
+						chrome.getAndIncrement();
+					} else {
+						normal.getAndIncrement();
+					}
+				});
+
+		return new Pair<>(normal.get(), chrome.get());
+	}
+
+	public Pair<Integer, Integer> countCards(Rarity rarity) {
+		AtomicInteger normal = new AtomicInteger();
+		AtomicInteger chrome = new AtomicInteger();
+
+		cards.parallelStream()
+				.filter(c -> c.getStashEntry() == null)
+				.filter(c -> c.getCard().getRarity() == rarity)
 				.forEach(c -> {
 					if (c.isChrome()) {
 						chrome.getAndIncrement();
