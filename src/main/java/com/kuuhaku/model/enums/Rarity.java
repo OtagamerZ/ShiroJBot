@@ -69,6 +69,6 @@ public enum Rarity {
 	}
 
 	public int getCount() {
-		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM card WHERE rarity = ?1", this);
+		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM card WHERE rarity = ?1", name());
 	}
 }
