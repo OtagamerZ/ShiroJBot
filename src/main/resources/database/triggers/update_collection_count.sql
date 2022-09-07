@@ -34,10 +34,10 @@ BEGIN
     ON CONFLICT DO NOTHING;
 
     IF TG_OP = 'INSERT' THEN
-        UPDATE aux.v_collection_counter
+        UPDATE aux.collection_counter
         SET normal = normal + CAST(NOT NEW.chrome AS INT)
           , chrome = chrome + CAST(NEW.chrome AS INT)
-        WHERE kawaipon_uid = NEW.kawaipon_uid
+        WHERE uid = NEW.kawaipon_uid
           AND anime_id = (SELECT anime_id FROM card WHERE id = NEW.card_id);
     ELSIF TG_OP = 'UPDATE' THEN
         IF (OLD.card_id <> NEW.card_id) THEN
@@ -45,43 +45,43 @@ BEGIN
         END IF;
 
         IF (OLD.kawaipon_uid <> NEW.kawaipon_uid) THEN
-            UPDATE aux.v_collection_counter
+            UPDATE aux.collection_counter
             SET normal = normal - iif(NEW.chrome, 0, 1)
               , chrome = chrome - iif(NEW.chrome, 1, 0)
-            WHERE kawaipon_uid = OLD.kawaipon_uid
+            WHERE uid = OLD.kawaipon_uid
               AND anime_id = (SELECT anime_id FROM card WHERE id = OLD.card_id);
 
-            UPDATE aux.v_collection_counter
+            UPDATE aux.collection_counter
             SET normal = normal + iif(NEW.chrome, 0, 1)
               , chrome = chrome + iif(NEW.chrome, 1, 0)
-            WHERE kawaipon_uid = NEW.kawaipon_uid
+            WHERE uid = NEW.kawaipon_uid
               AND anime_id = (SELECT anime_id FROM card WHERE id = NEW.card_id);
         END IF;
 
         IF (OLD.chrome <> NEW.chrome) THEN
             _mod = iif(NEW.chrome, 1, -1);
 
-            UPDATE aux.v_collection_counter
+            UPDATE aux.collection_counter
             SET normal = normal - 1 * _mod
               , chrome = chrome + 1 * _mod
-            WHERE kawaipon_uid = NEW.kawaipon_uid
+            WHERE uid = NEW.kawaipon_uid
               AND anime_id = (SELECT anime_id FROM card WHERE id = NEW.card_id);
         END IF;
 
         IF (OLD.stash_entry <> NEW.stash_entry) THEN
             _mod = iif(NEW.stash_entry IS NULL, 1, -1);
 
-            UPDATE aux.v_collection_counter
+            UPDATE aux.collection_counter
             SET normal = normal + iif(NEW.chrome, 0, 1) * _mod
               , chrome = chrome + iif(NEW.chrome, 1, 0) * _mod
-            WHERE kawaipon_uid = NEW.kawaipon_uid
+            WHERE uid = NEW.kawaipon_uid
               AND anime_id = (SELECT anime_id FROM card WHERE id = NEW.card_id);
         END IF;
     ELSIF TG_OP = 'DELETE' THEN
-        UPDATE aux.v_collection_counter
+        UPDATE aux.collection_counter
         SET normal = normal - CAST(NOT OLD.chrome AS INT)
           , chrome = chrome - CAST(OLD.chrome AS INT)
-        WHERE kawaipon_uid = OLD.kawaipon_uid
+        WHERE uid = OLD.kawaipon_uid
           AND anime_id = (SELECT anime_id FROM card WHERE id = OLD.card_id);
     END IF;
 
