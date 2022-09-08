@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Emote;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -82,16 +81,15 @@ public class HelpCommand implements Executable {
 
 		Set<PreparedCommand> subCmds = pc.getSubCommands();
 		if (!subCmds.isEmpty()) {
-			String str = "`" + data.config().getPrefix() + pc.name() + ".`";
-			XStringBuilder sb = new XStringBuilder();
+			XStringBuilder sb = new XStringBuilder("`" + data.config().getPrefix() + pc.name() + ".`");
 
 			int i = 0;
 			for (PreparedCommand sub : subCmds) {
 				String name = sub.name().split("\\.")[1];
 				if (++i == subCmds.size()) {
-					sb.appendNewLine(StringUtils.repeat("⠀", str.length()) + "└ `" + name + "`");
+					sb.appendNewLine("⠀⠀└ `." + name + "`");
 				} else {
-					sb.appendNewLine(StringUtils.repeat("⠀", str.length()) + "├ `" + name + "`");
+					sb.appendNewLine("⠀⠀├ `." + name + "`");
 				}
 			}
 
