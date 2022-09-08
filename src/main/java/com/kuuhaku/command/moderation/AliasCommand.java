@@ -57,6 +57,7 @@ public class AliasCommand implements Executable {
 			);
 
 			Utils.paginate(pages, 1, true, event.channel(), event.user());
+			return;
 		}
 
 		String cmd = args.getString("command").toLowerCase(Locale.ROOT);
