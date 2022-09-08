@@ -56,5 +56,13 @@
             <AppenderRef ref="ErrorLog" level="error"/>
             <AppenderRef ref="CrashLog" level="fatal"/>
         </Root>
+
+        <Logger name="org.reflections8.Reflections" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+
+            <AppenderRef ref="InfoLog"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="CrashLog" level="fatal"/>
+        </Logger>
     </Loggers>
 </Configuration>
