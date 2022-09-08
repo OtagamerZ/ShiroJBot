@@ -86,13 +86,11 @@ public class HelpCommand implements Executable {
 			int i = 0;
 			for (PreparedCommand sub : subCmds) {
 				String name = sub.name().split("\\.")[1];
-				if (i == subCmds.size()) {
+				if (++i == subCmds.size()) {
 					sb.appendNewLine("  └ `" + name + "`");
 				} else {
 					sb.appendNewLine("  ├ `" + name + "`");
 				}
-
-				i++;
 			}
 
 			eb.addField(locale.get("str/subcommands"), sb.toString(), false);
