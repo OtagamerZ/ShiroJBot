@@ -83,7 +83,6 @@ public class HelpCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		for (Category cat : categories) {
-			int total = cat.getCommands().size();
 			Emote emt = cat.getEmote();
 			if (emt == null) continue;
 
@@ -91,22 +90,25 @@ public class HelpCommand implements Executable {
 					.setTitle(cat.getName(locale))
 					.setThumbnail(emt.getImageUrl())
 					.appendDescription(cat.getDescription(locale) + "\n\n")
-					.appendDescription(locale.get("str/command_counter", total));
+					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()));
 
 			AtomicInteger i = new AtomicInteger();
-			pages.put(Utils.parseEmoji(emt), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
+			pages.put(Utils.parseEmoji(emt), Utils.generatePage(eb, cat.getCommands(), 20, cmd -> {
 				String[] parts = cmd.name().split("\\.");
 
 				try {
 					if (parts.length > 1) {
-						if (i.get() + 1 == total) {
+						i.getAndDecrement();
+
+						if (i.get() == 0) {
 							return "└ `" + parts[1] + "`";
 						} else {
 							return "├ `" + parts[1] + "`";
 						}
+					} else {
+						i.set(cmd.getSubCommands().size());
+						return "`" + cmd.name() + "`";
 					}
-
-					return "`" + cmd.name() + "`";
 				} finally {
 					i.getAndIncrement();
 				}

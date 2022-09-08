@@ -101,8 +101,8 @@ public class CommandManager {
 		return null;
 	}
 
-	public List<PreparedCommand> getSubCommands(String parent) {
-		List<PreparedCommand> out = new ArrayList<>();
+	public Set<PreparedCommand> getSubCommands(String parent) {
+		Set<PreparedCommand> out = new TreeSet<>();
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);

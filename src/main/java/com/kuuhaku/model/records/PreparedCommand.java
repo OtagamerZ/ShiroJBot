@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.Set;
 
 public record PreparedCommand(
 		String name,
@@ -56,6 +58,10 @@ public record PreparedCommand(
 		}
 
 		return missing.stream().sorted(Comparator.comparingInt(Permission::getOffset)).toArray(Permission[]::new);
+	}
+
+	public Set<PreparedCommand> getSubCommands() {
+		return Main.getCommandManager().getSubCommands(name);
 	}
 
 	@Override
