@@ -40,7 +40,6 @@ import net.dv8tion.jda.api.entities.Emote;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "help",
@@ -92,21 +91,9 @@ public class HelpCommand implements Executable {
 					.appendDescription(cat.getDescription(locale) + "\n\n")
 					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()));
 
-			AtomicInteger i = new AtomicInteger();
-			pages.put(Utils.parseEmoji(emt), Utils.generatePage(eb, cat.getCommands(), 20, cmd -> {
-				String[] parts = cmd.name().split("\\.");
+			pages.put(Utils.parseEmoji(emt), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
+				if (cmd.name().contains(".")) return null;
 
-				if (parts.length > 1) {
-					i.getAndDecrement();
-
-					if (i.get() == 0) {
-						return "└ `" + cmd.name() /*parts[1]*/ + "`";
-					} else {
-						return "├ `" + cmd.name() /*parts[1]*/ + "`";
-					}
-				}
-
-				i.set(cmd.getSubCommands().size());
 				return "`" + cmd.name() + "`";
 			}));
 		}

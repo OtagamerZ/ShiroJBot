@@ -390,7 +390,10 @@ public abstract class Utils {
 			sb.clear();
 
 			for (T t : col) {
-				sb.appendNewLine(mapper.apply(t));
+				String val = mapper.apply(t);
+				if (val != null) {
+					sb.appendNewLine(val);
+				}
 			}
 
 			eb.addField(new MessageEmbed.Field(Constants.VOID, sb.toString(), true));
