@@ -34,11 +34,21 @@ import java.util.Locale;
 		name = "unalias",
 		category = Category.MODERATION
 )
-@Signature("<alias:word:r>")
+@Signature({
+		"<action:word:r>[clear]",
+		"<alias:word:r>"
+})
 public class UnaliasCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		JSONObject aliases = data.config().getSettings().getAliases();
+		if (args.containsKey("action")) {
+			aliases.clear();
+			data.config().save();
+
+			event.channel().sendMessage(locale.get("success/alias_clear")).queue();
+			return;
+		}
 
 		String alias = args.getString("alias").toLowerCase(Locale.ROOT);
 		if (!aliases.containsKey(alias)) {

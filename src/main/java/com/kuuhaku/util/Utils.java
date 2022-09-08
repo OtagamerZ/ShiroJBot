@@ -399,12 +399,12 @@ public abstract class Utils {
 		return new InteractPage(eb.build());
 	}
 
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper) {
+	public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper) {
 		return generatePages(eb, list, itemsPerPage, itemsPerColumn, mapper, (p, t) -> {
 		});
 	}
 
-	public static <T> List<Page> generatePages(EmbedBuilder eb, List<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
+	public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
 		List<List<T>> chunks = chunkify(list, itemsPerPage);
 		for (int i = 0; i < chunks.size(); i++) {
