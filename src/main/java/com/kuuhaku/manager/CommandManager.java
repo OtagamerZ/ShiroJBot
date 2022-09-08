@@ -29,9 +29,7 @@ import net.dv8tion.jda.api.Permission;
 import org.reflections8.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command");
@@ -54,7 +52,7 @@ public class CommandManager {
 	}
 
 	public Set<PreparedCommand> getCommands() {
-		Set<PreparedCommand> commands = new HashSet<>();
+		Set<PreparedCommand> commands = new TreeSet<>();
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
@@ -65,7 +63,7 @@ public class CommandManager {
 	}
 
 	public Set<PreparedCommand> getCommands(Category category) {
-		Set<PreparedCommand> commands = new HashSet<>();
+		Set<PreparedCommand> commands = new TreeSet<>();
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
@@ -103,6 +101,29 @@ public class CommandManager {
 		return null;
 	}
 
+	public List<PreparedCommand> getSubCommands(String parent) {
+		List<PreparedCommand> out = new ArrayList<>();
+
+		for (Class<?> cmd : cmds) {
+			Command params = cmd.getDeclaredAnnotation(Command.class);
+			if (!params.name().equalsIgnoreCase(parent)) continue;
+
+			Requires req = cmd.getDeclaredAnnotation(Requires.class);
+			out.add(new PreparedCommand(
+					params.name() + "." + params.subname(),
+					"cmd/" + cmd.getSimpleName()
+							.replaceFirst("(Command|Reaction)$", "")
+							.replaceAll("[a-z](?=[A-Z])", "$0-")
+							.toLowerCase(Locale.ROOT),
+					params.category(),
+					req == null ? new Permission[0] : req.value(),
+					buildCommand(cmd)
+			));
+		}
+
+		return out;
+	}
+
 	private void extractCommand(Set<PreparedCommand> commands, Class<?> cmd, Command params) {
 		String full = params.name();
 		if (!params.subname().isBlank()) {
@@ -125,7 +146,8 @@ public class CommandManager {
 	private Executable buildCommand(Class<?> klass) {
 		try {
 			return (Executable) klass.getConstructor().newInstance();
-		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
+				 IllegalAccessException e) {
 			Constants.LOGGER.error(e, e);
 			return null;
 		}

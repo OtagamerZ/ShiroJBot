@@ -42,6 +42,8 @@ public enum Category {
 	private final String emote;
 	private final Function<Member, Boolean> allowed;
 
+	private Set<PreparedCommand> cmdCache = null;
+
 	Category(String emote, Function<Member, Boolean> allowed) {
 		this.name = "category/name/" + name().toLowerCase(Locale.ROOT);
 		this.description = "category/desc/" + name().toLowerCase(Locale.ROOT);
@@ -58,7 +60,11 @@ public enum Category {
 	}
 
 	public Set<PreparedCommand> getCommands() {
-		return Main.getCommandManager().getCommands(this);
+		if (cmdCache == null) {
+			cmdCache = Main.getCommandManager().getCommands(this);
+		}
+
+		return cmdCache;
 	}
 
 	public Emote getEmote() {

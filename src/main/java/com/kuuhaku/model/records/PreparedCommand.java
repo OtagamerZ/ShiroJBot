@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.I18N;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -34,7 +35,7 @@ public record PreparedCommand(
 		Category category,
 		Permission[] permissions,
 		Executable command
-) {
+) implements Comparable<PreparedCommand> {
 
 	public String description(I18N code) {
 		return code.get(description);
@@ -55,5 +56,10 @@ public record PreparedCommand(
 		}
 
 		return missing.stream().sorted(Comparator.comparingInt(Permission::getOffset)).toArray(Permission[]::new);
+	}
+
+	@Override
+	public int compareTo(@NotNull PreparedCommand o) {
+		return name.compareTo(o.name);
 	}
 }

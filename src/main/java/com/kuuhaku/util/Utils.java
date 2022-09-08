@@ -380,7 +380,7 @@ public abstract class Utils {
 		return chunks;
 	}
 
-	public static <T> Page generatePage(EmbedBuilder eb, List<T> list, int itemsPerColumn, Function<T, String> mapper) {
+	public static <T> Page generatePage(EmbedBuilder eb, Collection<T> list, int itemsPerColumn, Function<T, String> mapper) {
 		if (list.isEmpty()) return null;
 		eb.clearFields();
 
@@ -638,6 +638,10 @@ public abstract class Utils {
 		}
 
 		return out;
+	}
+
+	public static Emoji parseEmoji(Emote in) {
+		return Emoji.fromEmote(in);
 	}
 
 	public static Emoji parseEmoji(String in) {
