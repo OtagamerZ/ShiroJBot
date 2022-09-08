@@ -309,10 +309,16 @@ public class GuildListener extends ListenerAdapter {
 		String[] args = content.toLowerCase(Locale.ROOT).split("\\s+");
 		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
+		String[] parts = name.split("\\.");
 		JSONObject aliases = event.config().getSettings().getAliases();
-		if (aliases.has(name)) {
-			name = aliases.getString(name);
+		for (int i = 0; i < parts.length; i++) {
+			String part = parts[i];
+
+			if (aliases.has(part)) {
+				parts[i] = aliases.getString(part);
+			}
 		}
+		name = String.join(".", parts);
 
 		PreparedCommand pc = Main.getCommandManager().getCommand(name);
 		if (pc != null) {
