@@ -106,7 +106,7 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (!params.name().equalsIgnoreCase(parent)) continue;
+			if (params.subname().isBlank() || !params.name().equalsIgnoreCase(parent)) continue;
 
 			Requires req = cmd.getDeclaredAnnotation(Requires.class);
 			out.add(new PreparedCommand(
