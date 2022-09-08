@@ -21,6 +21,7 @@ package com.kuuhaku.command.info;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -30,7 +31,10 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.PreparedCommand;
+import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -45,22 +49,65 @@ import java.util.concurrent.TimeUnit;
 		name = "help",
 		category = Category.INFO
 )
-@Signature({
-		"<category:word>",
-		"<command:word>"
-})
+@Signature("<command:word>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class HelpCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		String cmd = args.getString("command");
+		if (cmd.isBlank()) {
+			showHomePage(bot, locale, event);
+			return;
+		}
+
+		cmd = data.config().getSettings().getAliases().getString(cmd, cmd);
+		PreparedCommand pc = Main.getCommandManager().getCommand(cmd);
+		if (pc == null) {
+			event.channel().sendMessage(locale.get("error/command_not_found")).queue();
+			return;
+		}
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(pc.name());
+
+		List<String> sigs = SignatureParser.extract(locale, pc.command());
+		if (!sigs.isEmpty()) {
+			eb.addField(
+					locale.get("str/command_signatures"),
+					"```css\n" + String.join("\n", sigs).formatted(data.config().getPrefix(), pc.name()) + "\n```",
+					false
+			);
+		}
+
+		Set<PreparedCommand> subCmds = pc.getSubCommands();
+		if (!subCmds.isEmpty()) {
+			XStringBuilder sb = new XStringBuilder(pc.name());
+
+			int i = 0;
+			for (PreparedCommand sub : subCmds) {
+				String name = sub.name().split("\\.")[1];
+				if (i == subCmds.size()) {
+					sb.appendNewLine("  └ `" + name + "`");
+				} else {
+					sb.appendNewLine("  ├ `" + name + "`");
+				}
+
+				i++;
+			}
+
+			eb.addField(locale.get("str/subcommands"), sb.toString(), false);
+		}
+
+		event.channel().sendMessageEmbeds(eb.build()).queue();
+	}
+
+	private void showHomePage(JDA bot, I18N locale, MessageData.Guild event) {
 		List<Category> categories = new ArrayList<>();
 		for (Category cat : Category.values()) {
 			if (cat.check(event.member())) {
 				categories.add(cat);
 			}
 		}
-
-		Emote home = bot.getEmoteById("674261700366827539");
 
 		EmbedBuilder index = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/all_commands"))
@@ -75,6 +122,7 @@ public class HelpCommand implements Executable {
 			index.addField(emt.getAsMention() + " " + cat.getName(locale), cat.getDescription(locale), true);
 		}
 
+		Emote home = bot.getEmoteById("674261700366827539");
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
 			pages.put(Utils.parseEmoji(home), new InteractPage(index.build()));
