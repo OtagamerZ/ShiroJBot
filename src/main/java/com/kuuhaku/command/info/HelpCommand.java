@@ -68,7 +68,7 @@ public class HelpCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(pc.name());
+				.setTitle(locale.get("str/command", pc.name()));
 
 		List<String> sigs = SignatureParser.extract(locale, pc.command());
 		if (!sigs.isEmpty()) {
@@ -81,15 +81,15 @@ public class HelpCommand implements Executable {
 
 		Set<PreparedCommand> subCmds = pc.getSubCommands();
 		if (!subCmds.isEmpty()) {
-			XStringBuilder sb = new XStringBuilder(pc.name());
+			XStringBuilder sb = new XStringBuilder("`" + data.config().getPrefix() + pc.name() + "`");
 
 			int i = 0;
 			for (PreparedCommand sub : subCmds) {
 				String name = sub.name().split("\\.")[1];
 				if (++i == subCmds.size()) {
-					sb.appendNewLine("  └ `" + name + "`");
+					sb.appendNewLine("⠀⠀└ `" + name + "`");
 				} else {
-					sb.appendNewLine("  ├ `" + name + "`");
+					sb.appendNewLine("⠀⠀├ `" + name + "`");
 				}
 			}
 
