@@ -100,9 +100,9 @@ public class HelpCommand implements Executable {
 					i.getAndDecrement();
 
 					if (i.get() == 0) {
-						return "└ `" + parts[1] + "`";
+						return "└ `" + cmd.name() /*parts[1]*/ + "`";
 					} else {
-						return "├ `" + parts[1] + "`";
+						return "├ `" + cmd.name() /*parts[1]*/ + "`";
 					}
 				}
 
