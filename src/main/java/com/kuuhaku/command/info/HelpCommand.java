@@ -82,8 +82,10 @@ public class HelpCommand implements Executable {
 		for (Category cat : categories) {
 			int total = cat.getCommands().size();
 			Emote emt = cat.getEmote();
+			if (emt == null) continue;
 
-			eb.setTitle(cat.getName(locale))
+			eb.clear()
+					.setTitle(cat.getName(locale))
 					.setThumbnail(emt.getImageUrl())
 					.appendDescription(cat.getDescription(locale) + "\n\n")
 					.appendDescription(locale.get("str/command_counter", total));
