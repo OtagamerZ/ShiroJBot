@@ -96,22 +96,18 @@ public class HelpCommand implements Executable {
 			pages.put(Utils.parseEmoji(emt), Utils.generatePage(eb, cat.getCommands(), 20, cmd -> {
 				String[] parts = cmd.name().split("\\.");
 
-				try {
-					if (parts.length > 1) {
-						i.getAndDecrement();
+				if (parts.length > 1) {
+					i.getAndDecrement();
 
-						if (i.get() == 0) {
-							return "└ `" + parts[1] + "`";
-						} else {
-							return "├ `" + parts[1] + "`";
-						}
+					if (i.get() == 0) {
+						return "└ `" + parts[1] + "`";
 					} else {
-						i.set(cmd.getSubCommands().size());
-						return "`" + cmd.name() + "`";
+						return "├ `" + parts[1] + "`";
 					}
-				} finally {
-					i.getAndIncrement();
 				}
+
+				i.set(cmd.getSubCommands().size());
+				return "`" + cmd.name() + "`";
 			}));
 		}
 
