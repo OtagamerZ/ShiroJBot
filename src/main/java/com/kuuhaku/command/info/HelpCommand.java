@@ -70,7 +70,10 @@ public class HelpCommand implements Executable {
 
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
-			index.addField(cat.getName(locale), cat.getDescription(locale), true);
+			Emote emt = cat.getEmote();
+			if (emt == null) continue;
+
+			index.addField(emt.getAsMention() + " " + cat.getName(locale), cat.getDescription(locale), true);
 		}
 
 		if (home != null) {
