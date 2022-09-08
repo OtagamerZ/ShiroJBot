@@ -159,6 +159,10 @@ public abstract class SignatureParser {
 		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
 		if (annot == null) return out;
 
+		if (annot.allowEmpty()) {
+			out.add("%1$s%2$s");
+		}
+
 		String[] signatures = annot.value();
 
 		List<String> supplied = new ArrayList<>();
