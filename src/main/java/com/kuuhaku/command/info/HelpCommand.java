@@ -60,7 +60,17 @@ public class HelpCommand implements Executable {
 			return;
 		}
 
-		cmd = data.config().getSettings().getAliases().getString(cmd, cmd);
+		String[] parts = cmd.split("\\.");
+		JSONObject aliases = data.config().getSettings().getAliases();
+		for (int i = 0; i < parts.length; i++) {
+			String part = parts[i];
+
+			if (aliases.has(part)) {
+				parts[i] = aliases.getString(part);
+			}
+		}
+		cmd = String.join(".", parts);
+
 		PreparedCommand pc = Main.getCommandManager().getCommand(cmd);
 		if (pc == null) {
 			event.channel().sendMessage(locale.get("error/command_not_found")).queue();
