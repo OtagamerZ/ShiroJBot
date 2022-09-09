@@ -95,7 +95,6 @@ public class CustomAnswerAddCommand implements Executable {
 
 			event.channel().sendMessage(locale.get("success/custom_answer_add")).queue();
 		} catch (Exception e) {
-			Constants.LOGGER.error(e, e);
 			event.channel().sendMessage(locale.get("error/custom_answer")).queue();
 		}
 	}
