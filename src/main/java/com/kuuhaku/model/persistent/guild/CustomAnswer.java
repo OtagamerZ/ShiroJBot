@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.id.CustomAnswerId;
 import com.kuuhaku.util.json.JSONArray;
+import com.squareup.moshi.Json;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -58,6 +59,7 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 	@JoinColumn(name = "gid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
+	@Json(ignore = true)
 	private GuildSettings settings;
 
 	public CustomAnswerId getId() {
