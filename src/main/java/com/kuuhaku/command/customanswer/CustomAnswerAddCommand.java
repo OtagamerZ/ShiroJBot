@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.customanswer;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -84,6 +85,7 @@ public class CustomAnswerAddCommand implements Executable {
 
 			event.channel().sendMessage(locale.get("success/custom_answer_add")).queue();
 		} catch (Exception e) {
+			Constants.LOGGER.error(e, e);
 			event.channel().sendMessage(locale.get("error/custom_answer")).queue();
 		}
 	}
