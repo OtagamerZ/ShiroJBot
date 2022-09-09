@@ -19,6 +19,7 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.apache.commons.math3.util.Precision;
@@ -26,6 +27,9 @@ import org.apache.commons.math3.util.Precision;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -341,5 +345,23 @@ public abstract class Calc {
 		}
 
 		return val * a * m;
+	}
+
+	public static String hash(byte[] bytes, String encoding) {
+		try {
+			return Hex.encodeHexString(MessageDigest.getInstance(encoding).digest(bytes));
+		} catch (NoSuchAlgorithmException e) {
+			Constants.LOGGER.error(e, e);
+			return "";
+		}
+	}
+
+	public static String hash(String value, String encoding) {
+		try {
+			return Hex.encodeHexString(MessageDigest.getInstance(encoding).digest(value.getBytes(StandardCharsets.UTF_8)));
+		} catch (NoSuchAlgorithmException e) {
+			Constants.LOGGER.error(e, e);
+			return "";
+		}
 	}
 }

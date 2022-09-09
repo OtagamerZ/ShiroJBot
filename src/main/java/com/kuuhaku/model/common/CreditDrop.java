@@ -16,13 +16,21 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records;
+package com.kuuhaku.model.common;
 
-import com.kuuhaku.model.persistent.user.Account;
-import org.apache.commons.lang3.function.TriFunction;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.records.DropContent;
+import com.kuuhaku.util.Calc;
 
-import java.util.Random;
-import java.util.function.Function;
+public class CreditDrop extends Drop<Integer> {
+	public CreditDrop(I18N locale) {
+		this(locale, Calc.rng(300, 800));
+	}
 
-public record DropCondition<T>(String key, Function<Random, T[]> extractor, TriFunction<Random, Object[], Account, Boolean> condition) {
+	public CreditDrop(I18N locale, int value) {
+		super(locale,
+				r -> new DropContent<>("str/credit", (int) (value * r * 0.75)),
+				(r, acc) -> acc.addCR((int) (value * r * 0.75), "Credit drop")
+		);
+	}
 }

@@ -25,56 +25,67 @@ import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.DropCondition;
+import com.kuuhaku.model.records.DropContent;
 import com.kuuhaku.util.Utils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class Drop<T> {
-	private static final RandomList<DropCondition> pool = new RandomList<>() {{
-		add(new DropCondition("low_cash",
+	private static final RandomList<DropCondition<?>> pool = new RandomList<>() {{
+		add(new DropCondition<>("low_cash",
+				(rng) -> new Integer[]{
+						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
+				},
 				(rng, vals, acc) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account");
-
-					return acc.getBalance() <= 1000 + avg * rng.nextDouble();
+					int avg = (int) vals[0];
+					return acc.getBalance() <= 1000 * avg * rng.nextDouble();
 				}
 		));
-		add(new DropCondition("high_cash",
+		add(new DropCondition<>("high_cash",
+				(rng) -> new Integer[]{
+						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
+				},
 				(rng, vals, acc) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account");
-
+					int avg = (int) vals[0];
 					return acc.getBalance() >= 2500 + avg * 1.5 * rng.nextDouble();
 				}
 		));
-		add(new DropCondition("level",
+		add(new DropCondition<>("level",
+				(rng) -> new Integer[]{
+						DAO.queryNative(Integer.class, "SELECT AVG(SQRT(xp / 100)) FROM profile")
+				},
 				(rng, vals, acc) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT AVG(SQRT(xp / 100)) FROM profile");
-
+					int avg = (int) vals[0];
 					return acc.getHighestLevel() >= avg * rng.nextDouble();
-				})
-		);
-		add(new DropCondition("cards",
+				}
+		));
+		add(new DropCondition<>("cards",
+				(rng) -> new Integer[]{
+						DAO.queryNative(Integer.class, """
+								SELECT AVG(x.count)
+								FROM (
+								     SELECT COUNT(1) AS count
+								     FROM kawaipon_card
+								     WHERE stash_entry IS NULL
+								     GROUP BY kawaipon_uid
+								     ) AS x
+								""")
+				},
 				(rng, vals, acc) -> {
-					int avg = DAO.queryNative(Integer.class, """
-							SELECT AVG(x.count)
-							FROM (
-							     SELECT COUNT(1) AS count
-							     FROM kawaipon_card
-							     WHERE stash_entry IS NULL
-							     GROUP BY kawaipon_uid
-							     ) AS x
-							""");
-
+					int avg = (int) vals[0];
 					return acc.getHighestLevel() >= avg / 10d + avg * rng.nextDouble();
-				})
-		);
-		add(new DropCondition("cards_anime",
+				}
+		));
+		add(new DropCondition<>("cards_anime",
 				(rng) -> {
 					List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE visible = TRUE");
-					return new Object[]{Utils.getRandomEntry(rng, animes)};
+					return new Anime[]{Utils.getRandomEntry(rng, animes)};
 				},
 				(rng, vals, acc) -> {
 					int avg = DAO.queryNative(Integer.class, """
@@ -90,18 +101,25 @@ public abstract class Drop<T> {
 							""", ((Anime) Utils.getRandomEntry(rng, vals[0])).getId());
 
 					return acc.getHighestLevel() >= avg / 10d + avg * rng.nextDouble();
-				})
-		);
+				}
+		));
 	}};
 
 	private final long seed = Constants.DEFAULT_RNG.nextLong();
 	private final Rarity rarity = Utils.getRandomEntry(Rarity.getActualRarities());
-	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
-	private final I18N locale;
+	private final List<DropCondition<?>> conditions = Arrays.asList(new DropCondition<>[getConditionCount()]);
+	private final Random rng = new Random(seed);
+	private final String captcha = Utils.generateRandomHash(5);
 
-	public Drop(I18N locale) {
+	private final I18N locale;
+	private final DropContent<T> content;
+	private final BiConsumer<Integer, Account> applier;
+
+	public Drop(I18N locale, Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
 		conditions.replaceAll(c -> pool.get());
 		this.locale = locale;
+		this.content = content.apply(rarity.getIndex());
+		this.applier = applier;
 	}
 
 	public final Rarity getRarity() {
@@ -112,7 +130,7 @@ public abstract class Drop<T> {
 		return (int) Math.ceil(rarity.getIndex() / 2f);
 	}
 
-	public final List<DropCondition> getConditions() {
+	public final List<DropCondition<?>> getConditions() {
 		return conditions;
 	}
 
@@ -120,22 +138,46 @@ public abstract class Drop<T> {
 		return seed;
 	}
 
-	public final boolean check(Account acc) {
-		AtomicLong seed = new AtomicLong(this.seed);
-		return conditions.stream().allMatch(dc -> {
-			Random rng = new Random(seed.incrementAndGet());
+	public final String getCaptcha(boolean krangle) {
+		if (krangle) {
+			return String.join(Constants.VOID, captcha.split("\\."));
+		}
 
-			Object[] vals = dc.extractor().apply(rng);
-			rng.setSeed(seed.get());
+		return captcha;
+	}
 
-			return dc.condition().apply(rng, vals, acc);
-		});
+	public final boolean award(Account acc) {
+		AtomicInteger seed = new AtomicInteger();
+		boolean valid = conditions.stream().allMatch(dc -> dc.condition().apply(
+				getRng(seed.getAndIncrement()),
+				dc.extractor().apply(getRng()),
+				acc
+		));
+
+		if (valid) {
+			applier.accept(rarity.getIndex(), acc);
+		}
+
+		return valid;
+	}
+
+	private Random getRng() {
+		rng.setSeed(seed);
+		return rng;
+	}
+
+	private Random getRng(int salt) {
+		rng.setSeed(seed + salt);
+		return rng;
 	}
 
 	@Override
 	public final String toString() {
-		return locale.get("str/drop_reward") + "\n\n" + conditions.stream()
-				.map(dc -> locale.get(dc.key(), dc.extractor().apply(new Random(seed + 1))))
-				.collect(Collectors.joining("\n"));
+		AtomicInteger seed = new AtomicInteger();
+		return locale.get("str/drop_content", locale.get(content.key(), content.value())) + "\n\n" +
+				locale.get("str/drop_requirements") + "\n" +
+				conditions.stream()
+						.map(dc -> locale.get(dc.key(), (Object[]) dc.extractor().apply(getRng(seed.getAndIncrement()))))
+						.collect(Collectors.joining("\n"));
 	}
 }

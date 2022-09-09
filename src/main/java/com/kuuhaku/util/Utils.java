@@ -1079,4 +1079,23 @@ public abstract class Utils {
 
 		return true;
 	}
+
+	public static String generateRandomHash(int length) {
+		String method;
+
+		if (length <= 0) return "";
+		else if (length <= 32) method = "MD5";
+		else if (length <= 40) method = "SHA-1";
+		else if (length <= 64) method = "SHA-256";
+		else if (length <= 128) method = "SHA-512";
+		else return "";
+
+		byte[] bytes = new byte[8];
+		Constants.DEFAULT_RNG.nextBytes(bytes);
+
+		String hash = Calc.hash(bytes, method);
+		if (hash.isBlank()) return "";
+
+		return hash.substring(0, length);
+	}
 }
