@@ -20,7 +20,6 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Account;
@@ -119,14 +118,12 @@ public abstract class Drop<T> {
 	private final Random rng = new Random(seed);
 	private final String captcha = Utils.generateRandomHash(5);
 
-	private final I18N locale;
 	private final DropContent<T> content;
 	private final BiConsumer<Integer, Account> applier;
 
-	public Drop(I18N locale, Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
+	public Drop(Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
 		conditions.replaceAll(c -> pool.remove());
 
-		this.locale = locale;
 		this.content = content.apply(rarity.getIndex());
 		this.applier = applier;
 	}
