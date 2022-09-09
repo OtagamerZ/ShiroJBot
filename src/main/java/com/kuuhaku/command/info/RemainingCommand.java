@@ -28,7 +28,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Anime;
-import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -74,24 +73,26 @@ public class RemainingCommand implements Executable {
 				Calc.prcntToInt(count.getSecond(), total)
 		);
 
-		List<Card> cards = anime.getCards();
-		List<Page> pages = Utils.generatePages(eb, cards, 20, 10, c -> {
-			String name = c.getName();
+		List<Page> pages = Utils.generatePages(eb, anime.getCards(), 20, 10,
+				c -> {
+					String name = c.getName();
 
-			String suffix = "";
-			if (kp.hasCard(c, false)) {
-				suffix += "N";
-			}
-			if (kp.hasCard(c, true)) {
-				suffix += "C";
-			}
+					String suffix = "";
+					if (kp.hasCard(c, false)) {
+						suffix += "N";
+					}
+					if (kp.hasCard(c, true)) {
+						suffix += "C";
+					}
 
-			if (!suffix.isBlank()) {
-				return "||" + c.getRarity().getEmote() + name + " **(" + suffix + ")**" + "||";
-			} else {
-				return c.getRarity().getEmote() + name;
-			}
-		}, (p, t) -> eb.setFooter(footer + "\n" + locale.get("str/page", p + 1, t)));
+					if (!suffix.isBlank()) {
+						return "||" + c.getRarity().getEmote() + name + " **(" + suffix + ")**" + "||";
+					} else {
+						return c.getRarity().getEmote() + name;
+					}
+				},
+				(p, t) -> eb.setFooter(footer + "\n" + locale.get("str/page", p + 1, t))
+		);
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}

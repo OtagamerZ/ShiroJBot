@@ -274,6 +274,26 @@ public class GuildListener extends ListenerAdapter {
 			)).queue();
 		}
 
+		if (Utils.between(content.length(), 3, 256)) {
+			List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+					data.guild().getId(), content
+			);
+
+			for (CustomAnswer ca : cas) {
+				if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
+					if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
+						if (Calc.chance(ca.getChance())) {
+							event.getChannel().sendTyping()
+									.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+									.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+									.queue();
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		KawaiponCard kc = Spawn.getKawaipon(event.getChannel());
 		if (kc != null) {
 			EmbedBuilder eb = new EmbedBuilder()

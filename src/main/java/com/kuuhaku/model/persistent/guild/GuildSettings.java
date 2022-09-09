@@ -86,6 +86,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<LevelRole> levelRoles = new ArrayList<>();
 
+	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private List<CustomAnswer> customAnswers = new ArrayList<>();
+
 	@ElementCollection
 	@Column(name = "disabled_categories")
 	@CollectionTable(name = "guild_settings_disabledcategories", joinColumns = @JoinColumn(name = "gid"))
@@ -180,6 +184,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public List<LevelRole> getLevelRoles() {
 		return levelRoles;
+	}
+
+	public List<CustomAnswer> getCustomAnswers() {
+		return customAnswers;
 	}
 
 	public Set<Category> getDisabledCategories() {

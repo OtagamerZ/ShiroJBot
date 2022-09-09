@@ -40,9 +40,7 @@ import java.util.Locale;
 		name = "alias",
 		category = Category.MODERATION
 )
-@Signature(allowEmpty = true, value = {
-		"<command:word:r> <alias:word:r>"
-})
+@Signature(allowEmpty = true, value = "<command:word:r> <alias:word:r>")
 public class AliasCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

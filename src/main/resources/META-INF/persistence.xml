@@ -37,6 +37,7 @@
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
         <class>com.kuuhaku.model.persistent.guild.WelcomeSettings</class>
         <class>com.kuuhaku.model.persistent.guild.StarredMessage</class>
+        <class>com.kuuhaku.model.persistent.guild.CustomAnswer</class>
 
         <!-- USER -->
         <class>com.kuuhaku.model.persistent.user.Account</class>
