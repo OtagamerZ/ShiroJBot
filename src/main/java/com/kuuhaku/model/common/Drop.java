@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public abstract class Drop<T> {
 	private static final RandomList<DropCondition> pool = new RandomList<>() {{
 		add(new DropCondition("low_cash",
-				(rng) -> new Integer[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
 				},
 				(rng, vals, acc) -> {
@@ -49,7 +49,7 @@ public abstract class Drop<T> {
 				}
 		), 2);
 		add(new DropCondition("high_cash",
-				(rng) -> new Integer[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
 				},
 				(rng, vals, acc) -> {
@@ -58,7 +58,7 @@ public abstract class Drop<T> {
 				}
 		), 2);
 		add(new DropCondition("level",
-				(rng) -> new Integer[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT AVG(SQRT(xp / 100)) FROM profile")
 				},
 				(rng, vals, acc) -> {
@@ -67,7 +67,7 @@ public abstract class Drop<T> {
 				}
 		), 3);
 		add(new DropCondition("cards",
-				(rng) -> new Integer[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, """
 								SELECT AVG(x.count)
 								FROM (
@@ -189,7 +189,7 @@ public abstract class Drop<T> {
 		return content + "\n\n" +
 				locale.get("str/drop_requirements") + "\n" +
 				conditions.stream()
-						.map(dc -> locale.get(dc.key(), (Object[]) dc.extractor().apply(getRng(seed.getAndIncrement()))))
+						.map(dc -> locale.get(dc.key(), dc.extractor().apply(getRng(seed.getAndIncrement()))))
 						.collect(Collectors.joining("\n"));
 	}
 }
