@@ -85,7 +85,7 @@ BEGIN
           AND anime_id = (SELECT anime_id FROM card WHERE id = OLD.card_id);
     END IF;
 
-    RETURN NEW;
+    RETURN coalesce(NEW, OLD);
 END;
 $$;
 

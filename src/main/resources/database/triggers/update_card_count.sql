@@ -47,7 +47,7 @@ BEGIN
         WHERE anime_id = OLD.anime_id;
     END IF;
 
-    RETURN NEW;
+    RETURN coalesce(NEW, OLD);
 END;
 $$;
 
