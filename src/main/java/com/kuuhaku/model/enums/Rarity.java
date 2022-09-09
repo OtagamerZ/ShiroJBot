@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.util.Graph;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public enum Rarity {
 	COMMON(1, 0xFFFFFF, "<:common:726171819664736268>"),
@@ -70,5 +71,11 @@ public enum Rarity {
 
 	public int getCount() {
 		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM card WHERE rarity = ?1", name());
+	}
+
+	public static Rarity[] getActualRarities() {
+		return Arrays.stream(values())
+				.filter(r -> r.getIndex() > 0)
+				.toArray(Rarity[]::new);
 	}
 }
