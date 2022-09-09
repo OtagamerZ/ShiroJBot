@@ -22,11 +22,7 @@ CREATE OR REPLACE FUNCTION t_prevent_selling_deck()
 AS
 $$
 BEGIN
-    IF (NEW.deck_id IS NOT NULL AND NEW.price > 0) THEN
-        RAISE EXCEPTION 'Cannot have a card in deck and market at the same time';
-    END IF;
-
-    RETURN NEW;
+    RAISE EXCEPTION 'Cannot have a card in deck and market at the same time';
 END;
 $$;
 
@@ -35,4 +31,5 @@ CREATE TRIGGER prevent_selling_deck
     BEFORE UPDATE
     ON stashed_card
     FOR EACH ROW
+    WHEN ( NEW.deck_id IS NOT NULL AND NEW.price > 0 )
 EXECUTE PROCEDURE t_prevent_selling_deck();

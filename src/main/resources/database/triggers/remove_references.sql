@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION t_remove_deck_references()
+CREATE OR REPLACE FUNCTION t_remove_references()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
@@ -24,9 +24,9 @@ $$
 BEGIN
     DELETE
     FROM deck_senshi ds
-    USING get_missing_deck_references('senshi') x
+        USING get_missing_deck_references('senshi') x
     WHERE ds.deck_id = x.id
-    AND ds.index = x.index;
+      AND ds.index = x.index;
 
     DELETE
     FROM deck_evogear de
@@ -40,13 +40,17 @@ BEGIN
     WHERE df.deck_id = x.id
       AND df.index = x.index;
 
+    UPDATE kawaipon_card
+    SET stash_entry = NULL
+    WHERE stash_entry = OLD.id;
+
     RETURN OLD;
 END;
 $$;
 
-DROP TRIGGER IF EXISTS remove_deck_references ON stashed_card;
-CREATE TRIGGER remove_deck_references
+DROP TRIGGER IF EXISTS remove_references ON stashed_card;
+CREATE TRIGGER remove_references
     AFTER DELETE
     ON stashed_card
     FOR EACH ROW
-EXECUTE PROCEDURE t_remove_deck_references();
+EXECUTE PROCEDURE t_remove_references();
