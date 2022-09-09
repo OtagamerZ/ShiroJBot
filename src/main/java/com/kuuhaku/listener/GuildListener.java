@@ -310,8 +310,7 @@ public class GuildListener extends ListenerAdapter {
 					.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
 
 			event.getChannel().sendMessageEmbeds(eb.build())
-					//.delay(1, TimeUnit.MINUTES) TODO Return
-					.delay(20, TimeUnit.SECONDS)
+					.delay(1, TimeUnit.MINUTES)
 					.flatMap(Message::delete)
 					.queue();
 		}

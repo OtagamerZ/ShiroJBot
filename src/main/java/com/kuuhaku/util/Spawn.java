@@ -47,8 +47,7 @@ public abstract class Spawn {
 			.expiration(20, TimeUnit.SECONDS)
 			.build();
 	private static final Map<String, SingleUseReference<Drop<?>>> spawnedDrops = ExpiringMap.builder()
-			//.expiration(1, TimeUnit.MINUTES)  TODO Return
-			.expiration(20, TimeUnit.SECONDS)
+			.expiration(1, TimeUnit.MINUTES)
 			.build();
 
 	private static Pair<Integer, MoonIllumination> illum = null;
@@ -91,10 +90,7 @@ public abstract class Spawn {
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (config.getSettings().getDropChannels().isEmpty()) return null;
 
-		// TODO Remove
-		int DEBUG_MULT = 10;
-
-		double dropRate = 5 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double dropRate = 7 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		Drop<?> drop = null;
