@@ -25,11 +25,11 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.CustomAnswer;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
-import com.kuuhaku.util.json.JSONUtils;
 import net.dv8tion.jda.api.JDA;
 import org.apache.commons.lang3.StringUtils;
 
@@ -79,9 +79,19 @@ public class CustomAnswerAddCommand implements Executable {
 		}
 
 		try {
-			CustomAnswer ca = JSONUtils.fromJSON(struct.toString(), CustomAnswer.class);
-			data.config().getSettings().getCustomAnswers().add(ca);
-			data.config().getSettings().save();
+			GuildSettings settings = data.config().getSettings();
+
+			CustomAnswer ca = new CustomAnswer(
+					settings, event.user().getId(),
+					struct.getString("trigger"),
+					struct.getString("answer"),
+					struct.getInt("chance", 100),
+					struct.getJSONArray("channels"),
+					struct.getJSONArray("users")
+			);
+
+			settings.getCustomAnswers().add(ca);
+			settings.save();
 
 			event.channel().sendMessage(locale.get("success/custom_answer_add")).queue();
 		} catch (Exception e) {
