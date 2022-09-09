@@ -16,8 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION geo_mean_accum(DOUBLE PRECISION[], DOUBLE PRECISION,
-                                          DOUBLE PRECISION DEFAULT '-1.0'::NUMERIC)
+CREATE OR REPLACE FUNCTION geo_mean_accum(DOUBLE PRECISION[], DOUBLE PRECISION, DOUBLE PRECISION DEFAULT -1)
     RETURNS DOUBLE PRECISION[]
     LANGUAGE sql
 AS
