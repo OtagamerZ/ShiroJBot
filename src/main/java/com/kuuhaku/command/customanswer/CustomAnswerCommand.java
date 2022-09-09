@@ -66,7 +66,7 @@ public class CustomAnswerCommand implements Executable {
 			}
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(locale.get("str/custom_answer"));
+					.setTitle(locale.get("str/custom_answer", id));
 
 			XStringBuilder sb = new XStringBuilder();
 			sb.appendNewLine(locale.get("str/ca_trigger", StringUtils.abbreviate(ca.getTrigger().replace("`", "'"), 20)));
@@ -119,7 +119,7 @@ public class CustomAnswerCommand implements Executable {
 				.setTitle(locale.get("str/custom_answers"));
 
 		List<Page> pages = Utils.generatePages(eb, settings.getCustomAnswers(), 20, 10,
-				ca -> "ID: `" + ca.getId().getId() + "`\n" +
+				ca -> "`ID: " + ca.getId().getId() + "`\n" +
 						locale.get("str/ca_trigger", StringUtils.abbreviate(ca.getTrigger().replace("`", "'"), 20)) +
 						"\n" +
 						locale.get("str/ca_answer", StringUtils.abbreviate(ca.getAnswer().replace("`", "'"), 20)) +
