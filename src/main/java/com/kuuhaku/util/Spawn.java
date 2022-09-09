@@ -20,6 +20,8 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.CreditDrop;
+import com.kuuhaku.model.common.Drop;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.enums.Rarity;
@@ -44,6 +46,11 @@ public abstract class Spawn {
 			//.expiration(1, TimeUnit.MINUTES)  TODO Return
 			.expiration(20, TimeUnit.SECONDS)
 			.build();
+	private static final Map<String, SingleUseReference<Drop<?>>> spawnedDrops = ExpiringMap.builder()
+			//.expiration(1, TimeUnit.MINUTES)  TODO Return
+			.expiration(20, TimeUnit.SECONDS)
+			.build();
+
 	private static Pair<Integer, MoonIllumination> illum = null;
 
 	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
@@ -78,8 +85,37 @@ public abstract class Spawn {
 		return card;
 	}
 
+	public synchronized static Drop<?> getDrop(TextChannel channel) {
+		if (spawnedDrops.containsKey(channel.getId())) return null;
+
+		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
+		if (config.getSettings().getDropChannels().isEmpty()) return null;
+
+		// TODO Remove
+		int DEBUG_MULT = 10;
+
+		double dropRate = 5 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double rarityBonus = 1 + getRarityMult();
+
+		Drop<?> drop = null;
+		if (Calc.chance(dropRate)) {
+			RandomList<Drop<?>> rPool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, 3 - rarityBonus) {{
+				add(new CreditDrop(config.getLocale()));
+			}};
+
+			drop = rPool.get();
+			spawnedDrops.put(channel.getId(), new SingleUseReference<>(drop));
+		}
+
+		return drop;
+	}
+
 	public static SingleUseReference<KawaiponCard> getSpawnedCard(TextChannel channel) {
 		return spawnedCards.getOrDefault(channel.getId(), new SingleUseReference<>(null));
+	}
+
+	public static SingleUseReference<Drop<?>> getSpawnedDrop(TextChannel channel) {
+		return spawnedDrops.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 
 	public static Pair<Integer, MoonIllumination> getIllumination() {

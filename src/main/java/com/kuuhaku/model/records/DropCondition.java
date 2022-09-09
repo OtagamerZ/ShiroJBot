@@ -24,5 +24,5 @@ import org.apache.commons.lang3.function.TriFunction;
 import java.util.Random;
 import java.util.function.Function;
 
-public record DropCondition<T>(String key, Function<Random, T[]> extractor, TriFunction<Random, Object[], Account, Boolean> condition) {
+public record DropCondition(String key, Function<Random, Object[]> extractor, TriFunction<Random, Object[], Account, Boolean> condition) {
 }

@@ -24,10 +24,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.interfaces.Executable;
-import com.kuuhaku.model.common.AutoEmbedBuilder;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.PatternCache;
-import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
@@ -277,23 +274,35 @@ public class GuildListener extends ListenerAdapter {
 
 		KawaiponCard kc = Spawn.getKawaipon(event.getChannel());
 		if (kc != null) {
-			List<TextChannel> channels = config.getSettings().getKawaiponChannels();
+			EmbedBuilder eb = new EmbedBuilder()
+					.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
+					.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
+					.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
+					.setImage("attachment://card.png")
+					.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
 
-			if (!channels.isEmpty()) {
-				EmbedBuilder eb = new EmbedBuilder()
-						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
-						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
-						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
-						.setImage("attachment://card.png")
-						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
+			event.getChannel().sendMessageEmbeds(eb.build())
+					.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
+					//.delay(1, TimeUnit.MINUTES) TODO Return
+					.delay(20, TimeUnit.SECONDS)
+					.flatMap(Message::delete)
+					.queue();
+		}
 
-				Utils.getRandomEntry(channels).sendMessageEmbeds(eb.build())
-						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
-						//.delay(1, TimeUnit.MINUTES) TODO Return
-						.delay(20, TimeUnit.SECONDS)
-						.flatMap(Message::delete)
-						.queue();
-			}
+		Drop<?> drop = Spawn.getDrop(event.getChannel());
+		if (drop != null) {
+			EmbedBuilder eb = new EmbedBuilder()
+					.setAuthor(locale.get("str/drop_spawn", locale.get("rarity/" + drop.getRarity().name())))
+					.setColor(drop.getRarity().getColor(false))
+					.setDescription(drop.toString())
+					.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
+					.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
+
+			event.getChannel().sendMessageEmbeds(eb.build())
+					//.delay(1, TimeUnit.MINUTES) TODO Return
+					.delay(20, TimeUnit.SECONDS)
+					.flatMap(Message::delete)
+					.queue();
 		}
 
 		messages.computeIfAbsent(data.guild().getId(), k ->

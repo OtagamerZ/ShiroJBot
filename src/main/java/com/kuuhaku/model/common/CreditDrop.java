@@ -27,7 +27,7 @@ public class CreditDrop extends Drop<Integer> {
 		this(locale, Calc.rng(300, 800));
 	}
 
-	public CreditDrop(I18N locale, int value) {
+	private CreditDrop(I18N locale, int value) {
 		super(locale,
 				r -> new DropContent<>("str/credit", (int) (value * r * 0.75)),
 				(r, acc) -> acc.addCR((int) (value * r * 0.75), "Credit drop")

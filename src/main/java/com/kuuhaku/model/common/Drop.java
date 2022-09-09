@@ -27,6 +27,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.DropCondition;
 import com.kuuhaku.model.records.DropContent;
 import com.kuuhaku.util.Utils;
+import kotlin.Pair;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +38,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class Drop<T> {
-	private static final RandomList<DropCondition<?>> pool = new RandomList<>() {{
-		add(new DropCondition<>("low_cash",
+	private static final RandomList<DropCondition> pool = new RandomList<>() {{
+		add(new DropCondition("low_cash",
 				(rng) -> new Integer[]{
 						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
 				},
@@ -46,8 +47,8 @@ public abstract class Drop<T> {
 					int avg = (int) vals[0];
 					return acc.getBalance() <= 1000 * avg * rng.nextDouble();
 				}
-		));
-		add(new DropCondition<>("high_cash",
+		), 2);
+		add(new DropCondition("high_cash",
 				(rng) -> new Integer[]{
 						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
 				},
@@ -55,8 +56,8 @@ public abstract class Drop<T> {
 					int avg = (int) vals[0];
 					return acc.getBalance() >= 2500 + avg * 1.5 * rng.nextDouble();
 				}
-		));
-		add(new DropCondition<>("level",
+		), 2);
+		add(new DropCondition("level",
 				(rng) -> new Integer[]{
 						DAO.queryNative(Integer.class, "SELECT AVG(SQRT(xp / 100)) FROM profile")
 				},
@@ -64,8 +65,8 @@ public abstract class Drop<T> {
 					int avg = (int) vals[0];
 					return acc.getHighestLevel() >= avg * rng.nextDouble();
 				}
-		));
-		add(new DropCondition<>("cards",
+		), 3);
+		add(new DropCondition("cards",
 				(rng) -> new Integer[]{
 						DAO.queryNative(Integer.class, """
 								SELECT AVG(x.count)
@@ -79,16 +80,18 @@ public abstract class Drop<T> {
 				},
 				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
-					return acc.getHighestLevel() >= avg / 10d + avg * rng.nextDouble();
+					Pair<Integer, Integer> total = acc.getKawaipon().countCards();
+
+					return total.getFirst() + total.getSecond() >= avg / 10d + avg * rng.nextDouble();
 				}
-		));
-		add(new DropCondition<>("cards_anime",
+		), 3);
+		add(new DropCondition("cards_anime",
 				(rng) -> {
 					List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE visible = TRUE");
-					return new Anime[]{Utils.getRandomEntry(rng, animes)};
-				},
-				(rng, vals, acc) -> {
-					int avg = DAO.queryNative(Integer.class, """
+					Anime anime = Utils.getRandomEntry(rng, animes);
+
+					return new Object[]{
+							DAO.queryNative(Integer.class, """
 							SELECT AVG(x.count)
 							FROM (
 							     SELECT COUNT(1) AS count
@@ -98,16 +101,21 @@ public abstract class Drop<T> {
 							       AND c.anime_id = ?1
 							     GROUP BY kc.kawaipon_uid
 							     ) AS x
-							""", ((Anime) Utils.getRandomEntry(rng, vals[0])).getId());
+							""", anime.getId()),
+					};
+				},
+				(rng, vals, acc) -> {
+					int avg = (int) vals[0];
+					Pair<Integer, Integer> total = acc.getKawaipon().countCards((Anime) vals[1]);
 
-					return acc.getHighestLevel() >= avg / 10d + avg * rng.nextDouble();
+					return total.getFirst() + total.getSecond() >= avg / 10d + avg * rng.nextDouble();
 				}
-		));
+		), 1);
 	}};
 
 	private final long seed = Constants.DEFAULT_RNG.nextLong();
 	private final Rarity rarity = Utils.getRandomEntry(Rarity.getActualRarities());
-	private final List<DropCondition<?>> conditions = Arrays.asList(new DropCondition<>[getConditionCount()]);
+	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 	private final Random rng = new Random(seed);
 	private final String captcha = Utils.generateRandomHash(5);
 
@@ -130,7 +138,11 @@ public abstract class Drop<T> {
 		return (int) Math.ceil(rarity.getIndex() / 2f);
 	}
 
-	public final List<DropCondition<?>> getConditions() {
+	public DropContent<T> getContent() {
+		return content;
+	}
+
+	public final List<DropCondition> getConditions() {
 		return conditions;
 	}
 
@@ -146,19 +158,19 @@ public abstract class Drop<T> {
 		return captcha;
 	}
 
-	public final boolean award(Account acc) {
+	public final boolean check(Account acc) {
 		AtomicInteger seed = new AtomicInteger();
-		boolean valid = conditions.stream().allMatch(dc -> dc.condition().apply(
+		return conditions.stream().allMatch(dc -> dc.condition().apply(
 				getRng(seed.getAndIncrement()),
 				dc.extractor().apply(getRng()),
 				acc
 		));
+	}
 
-		if (valid) {
+	public final void award(Account acc) {
+		if (check(acc)) {
 			applier.accept(rarity.getIndex(), acc);
 		}
-
-		return valid;
 	}
 
 	private Random getRng() {
@@ -174,7 +186,7 @@ public abstract class Drop<T> {
 	@Override
 	public final String toString() {
 		AtomicInteger seed = new AtomicInteger();
-		return locale.get("str/drop_content", locale.get(content.key(), content.value())) + "\n\n" +
+		return content + "\n\n" +
 				locale.get("str/drop_requirements") + "\n" +
 				conditions.stream()
 						.map(dc -> locale.get(dc.key(), (Object[]) dc.extractor().apply(getRng(seed.getAndIncrement()))))

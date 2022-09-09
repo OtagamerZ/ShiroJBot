@@ -18,5 +18,10 @@
 
 package com.kuuhaku.model.records;
 
+import com.kuuhaku.model.enums.I18N;
+
 public record DropContent<T>(String key, T value) {
+	public String toString(I18N locale) {
+		return locale.get("str/drop_content", locale.get(key, value));
+	}
 }
