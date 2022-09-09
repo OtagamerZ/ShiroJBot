@@ -55,7 +55,7 @@ public class OpenCommand implements Executable {
 			} else if (args.getString("captcha").contains(Constants.VOID)) {
 				event.channel().sendMessage(locale.get("error/no_copy")).queue();
 				return;
-			} else if (drop.peekProperty(dp -> args.getString("captcha").equalsIgnoreCase(dp.getCaptcha(false)))) {
+			} else if (!drop.peekProperty(dp -> args.getString("captcha").equalsIgnoreCase(dp.getCaptcha(false)))) {
 				event.channel().sendMessage(locale.get("error/wrong_captcha")).queue();
 				return;
 			}

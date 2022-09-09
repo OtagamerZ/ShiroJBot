@@ -101,6 +101,7 @@ public abstract class Drop<T> {
 							     GROUP BY kc.kawaipon_uid
 							     ) AS x
 							""", anime.getId()),
+							anime
 					};
 				},
 				(rng, vals, acc) -> {

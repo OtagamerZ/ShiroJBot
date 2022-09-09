@@ -16,21 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+CREATE OR REPLACE FUNCTION t_remove_stash_references()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    DELETE
+    FROM stashed_card sc
+    WHERE sc.id = OLD.stash_entry;
 
-import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.DropContent;
-import com.kuuhaku.util.Calc;
+    RETURN OLD;
+END;
+$$;
 
-public class CreditDrop extends Drop<Integer> {
-	public CreditDrop(I18N locale) {
-		this(locale, Calc.rng(300, 800));
-	}
-
-	private CreditDrop(I18N locale, int value) {
-		super(locale,
-				r -> new DropContent<>("reward/credit", value * r),
-				(r, acc) -> acc.addCR((int) (value * r * 0.75), "Credit drop")
-		);
-	}
-}
+DROP TRIGGER IF EXISTS remove_stash_references ON kawaipon_card;
+CREATE TRIGGER remove_stash_references
+    AFTER DELETE
+    ON kawaipon_card
+    FOR EACH ROW
+EXECUTE PROCEDURE t_remove_stash_references();
