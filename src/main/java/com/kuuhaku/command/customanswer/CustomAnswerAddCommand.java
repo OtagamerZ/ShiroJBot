@@ -53,9 +53,6 @@ public class CustomAnswerAddCommand implements Executable {
 		} else if (!Utils.between(struct.getString("answer").length(), 1, 256)) {
 			event.channel().sendMessage(locale.get("error/answer_length")).queue();
 			return;
-		} else if (!Utils.between(struct.getInt("chance"), 1, 101)) {
-			event.channel().sendMessage(locale.get("error/invalid_value_range", 1, 100)).queue();
-			return;
 		}
 
 		for (Object chn : struct.getJSONArray("channels")) {
@@ -74,6 +71,10 @@ public class CustomAnswerAddCommand implements Executable {
 				event.channel().sendMessage(locale.get("error/invalid_user", id)).queue();
 				return;
 			}
+		}
+
+		if (struct.has("chance")) {
+			struct.put("chance", Utils.clamp(struct.getInt("chance"), 1, 100));
 		}
 
 		try {

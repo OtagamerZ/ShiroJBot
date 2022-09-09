@@ -39,7 +39,7 @@ public abstract class Drop<T> {
 	private static final RandomList<DropCondition> pool = new RandomList<>() {{
 		add(new DropCondition("low_cash",
 				(rng) -> new Object[]{
-						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
+						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
 				},
 				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
@@ -48,7 +48,7 @@ public abstract class Drop<T> {
 		), 2);
 		add(new DropCondition("high_cash",
 				(rng) -> new Object[]{
-						DAO.queryNative(Integer.class, "SELECT AVG(balance) FROM account")
+						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
 				},
 				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
@@ -57,7 +57,7 @@ public abstract class Drop<T> {
 		), 2);
 		add(new DropCondition("level",
 				(rng) -> new Object[]{
-						DAO.queryNative(Integer.class, "SELECT AVG(SQRT(xp / 100)) FROM profile")
+						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 0")
 				},
 				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
@@ -67,7 +67,7 @@ public abstract class Drop<T> {
 		add(new DropCondition("cards",
 				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, """
-								SELECT AVG(x.count)
+								SELECT GEO_MEAN(x.count)
 								FROM (
 								     SELECT COUNT(1) AS count
 								     FROM kawaipon_card
@@ -90,7 +90,7 @@ public abstract class Drop<T> {
 
 					return new Object[]{
 							DAO.queryNative(Integer.class, """
-							SELECT AVG(x.count)
+							SELECT GEO_MEAN(x.count)
 							FROM (
 							     SELECT COUNT(1) AS count
 							     FROM kawaipon_card kc
