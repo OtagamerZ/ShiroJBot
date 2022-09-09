@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.customanswer;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;

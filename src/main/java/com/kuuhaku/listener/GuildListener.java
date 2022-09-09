@@ -274,7 +274,7 @@ public class GuildListener extends ListenerAdapter {
 			)).queue();
 		}
 
-		if (Utils.between(content.length(), 3, 256)) {
+		if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 256)) {
 			List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
 					data.guild().getId(), content
 			);
@@ -282,7 +282,7 @@ public class GuildListener extends ListenerAdapter {
 			for (CustomAnswer ca : cas) {
 				if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
 					if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
-						if (Calc.chance(ca.getChance())) {
+						if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
 							event.getChannel().sendTyping()
 									.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
 									.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
