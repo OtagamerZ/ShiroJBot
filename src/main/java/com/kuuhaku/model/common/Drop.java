@@ -35,7 +35,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public abstract class Drop<T> {
 	private static final RandomList<DropCondition> pool = new RandomList<>() {{
@@ -124,7 +123,8 @@ public abstract class Drop<T> {
 	private final BiConsumer<Integer, Account> applier;
 
 	public Drop(I18N locale, Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
-		conditions.replaceAll(c -> pool.get());
+		conditions.replaceAll(c -> pool.remove());
+
 		this.locale = locale;
 		this.content = content.apply(rarity.getIndex());
 		this.applier = applier;
@@ -159,10 +159,10 @@ public abstract class Drop<T> {
 	}
 
 	public final boolean check(Account acc) {
-		AtomicInteger seed = new AtomicInteger();
+		AtomicInteger i = new AtomicInteger();
 		return conditions.stream().allMatch(dc -> dc.condition().apply(
-				getRng(seed.getAndIncrement()),
-				dc.extractor().apply(getRng()),
+				getRng(i.incrementAndGet()),
+				dc.extractor().apply(getRng(i.get())),
 				acc
 		));
 	}
@@ -173,23 +173,13 @@ public abstract class Drop<T> {
 		}
 	}
 
-	private Random getRng() {
+	public Random getRng() {
 		rng.setSeed(seed);
 		return rng;
 	}
 
-	private Random getRng(int salt) {
-		rng.setSeed(seed + salt);
+	public Random getRng(int index) {
+		rng.setSeed(seed + index);
 		return rng;
-	}
-
-	@Override
-	public final String toString() {
-		AtomicInteger seed = new AtomicInteger();
-		return content.toString(locale) + "\n\n" +
-				locale.get("str/drop_requirements") + "\n" +
-				conditions.stream()
-						.map(dc -> dc.toString(locale, getRng(seed.incrementAndGet())))
-						.collect(Collectors.joining("\n"));
 	}
 }

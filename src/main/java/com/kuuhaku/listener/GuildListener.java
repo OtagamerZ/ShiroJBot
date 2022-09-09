@@ -56,7 +56,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
@@ -291,11 +293,20 @@ public class GuildListener extends ListenerAdapter {
 
 		Drop<?> drop = Spawn.getDrop(event.getChannel());
 		if (drop != null) {
+			AtomicInteger i = new AtomicInteger();
+
 			EmbedBuilder eb = new EmbedBuilder()
 					.setAuthor(locale.get("str/drop_spawn", locale.get("rarity/" + drop.getRarity().name())))
 					.setColor(drop.getRarity().getColor(false))
-					.setDescription(drop.toString())
+					.setDescription(drop.getContent().toString(locale))
 					.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
+					.addField(
+							locale.get("str/drop_requirements"),
+							drop.getConditions().stream()
+									.map(dc -> dc.toString(locale, drop.getRng(i.incrementAndGet())))
+									.collect(Collectors.joining("\n")),
+							true
+					)
 					.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
 
 			event.getChannel().sendMessageEmbeds(eb.build())

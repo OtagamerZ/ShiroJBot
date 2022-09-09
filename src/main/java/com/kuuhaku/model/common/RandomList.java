@@ -57,6 +57,15 @@ public class RandomList<T> {
 		return map.higherEntry(randGen.apply(rng.nextDouble(), fac) * total).getValue();
 	}
 
+	public T remove() {
+		T t = get();
+		if (t == null) return null;
+
+		remove(t);
+
+		return t;
+	}
+
 	public void remove(@Nonnull T item) {
 		Iterator<Map.Entry<Double, T>> it = map.entrySet().iterator();
 		while (it.hasNext()) {

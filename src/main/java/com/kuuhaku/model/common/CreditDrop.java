@@ -29,7 +29,7 @@ public class CreditDrop extends Drop<Integer> {
 
 	private CreditDrop(I18N locale, int value) {
 		super(locale,
-				r -> new DropContent<>("str/credit", (int) (value * r * 0.75)),
+				r -> new DropContent<>("reward/credit", (int) (value * r * 0.75)),
 				(r, acc) -> acc.addCR((int) (value * r * 0.75), "Credit drop")
 		);
 	}
