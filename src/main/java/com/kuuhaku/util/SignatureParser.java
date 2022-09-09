@@ -157,13 +157,19 @@ public abstract class SignatureParser {
 	public static List<String> extract(I18N locale, Executable exec) {
 		List<String> out = new ArrayList<>();
 		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
-		if (annot == null) return out;
-
-		if (annot.allowEmpty()) {
-			out.add("%1$s%2$s");
-		}
+		if (annot == null) return List.of("%1$s%2$s");
 
 		String[] signatures = annot.value();
+		if (annot.allowEmpty()) {
+			out.add("%1$s%2$s");
+		} else {
+			for (String sig : signatures) {
+				if (!Utils.regex(sig, ":r>").find()) {
+					out.add("%1$s%2$s");
+					break;
+				}
+			}
+		}
 
 		List<String> supplied = new ArrayList<>();
 		for (String sig : signatures) {
