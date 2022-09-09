@@ -186,10 +186,10 @@ public abstract class Drop<T> {
 	@Override
 	public final String toString() {
 		AtomicInteger seed = new AtomicInteger();
-		return content + "\n\n" +
+		return content.toString(locale) + "\n\n" +
 				locale.get("str/drop_requirements") + "\n" +
 				conditions.stream()
-						.map(dc -> locale.get(dc.key(), dc.extractor().apply(getRng(seed.getAndIncrement()))))
+						.map(dc -> dc.toString(locale, getRng(seed.incrementAndGet())))
 						.collect(Collectors.joining("\n"));
 	}
 }
