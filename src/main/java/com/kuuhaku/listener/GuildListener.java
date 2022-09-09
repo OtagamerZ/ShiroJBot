@@ -296,7 +296,7 @@ public class GuildListener extends ListenerAdapter {
 			AtomicInteger i = new AtomicInteger();
 
 			EmbedBuilder eb = new EmbedBuilder()
-					.setAuthor(locale.get("str/drop_spawn", locale.get("rarity/" + drop.getRarity().name())))
+					.setAuthor(locale.get("str/drop_spawn", 6 - drop.getRarity().getIndex()))
 					.setColor(drop.getRarity().getColor(false))
 					.setDescription(drop.getContent().toString(locale))
 					.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
