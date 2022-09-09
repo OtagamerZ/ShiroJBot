@@ -61,7 +61,7 @@ public abstract class Spawn {
 		// TODO Remove
 		int DEBUG_MULT = 10;
 
-		double dropRate = 5 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double dropRate = 8 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		KawaiponCard card = null;
@@ -90,7 +90,7 @@ public abstract class Spawn {
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (config.getSettings().getDropChannels().isEmpty()) return null;
 
-		double dropRate = 7 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		Drop<?> drop = null;
