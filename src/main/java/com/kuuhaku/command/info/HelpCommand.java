@@ -68,7 +68,8 @@ public class HelpCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/command", pc.name()));
+				.setTitle(locale.get("str/command", pc.name()))
+				.setDescription(locale.get("str/category", pc.category().getName(locale)));
 
 		List<String> sigs = SignatureParser.extract(locale, pc.command());
 		if (!sigs.isEmpty()) {
