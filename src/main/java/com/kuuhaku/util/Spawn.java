@@ -51,15 +51,13 @@ public abstract class Spawn {
 			.build();
 
 	private static Pair<Integer, MoonIllumination> illum = null;
+	private static final int DEBUG_MULT = 10; // TODO Remove
 
 	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (config.getSettings().getKawaiponChannels().isEmpty()) return null;
-
-		// TODO Remove
-		int DEBUG_MULT = 10;
 
 		double dropRate = 8 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
@@ -90,7 +88,7 @@ public abstract class Spawn {
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (config.getSettings().getDropChannels().isEmpty()) return null;
 
-		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double dropRate = 10 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		Drop<?> drop = null;
