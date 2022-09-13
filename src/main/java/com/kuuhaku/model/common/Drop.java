@@ -141,8 +141,6 @@ public abstract class Drop<T> {
 	}
 
 	public final List<DropCondition> getConditions() {
-		System.out.println(conditions);
-
 		return conditions;
 	}
 
