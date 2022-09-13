@@ -30,7 +30,7 @@ public enum SlotSkin {
 	DEFAULT, AHEGAO;
 
 	public BufferedImage getImage(Side side, boolean legacy) {
-		String s = side.name().toUpperCase(Locale.ROOT);
+		String s = side.name().toLowerCase(Locale.ROOT);
 
 		BufferedImage bi = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase(Locale.ROOT) + "_" + s + ".webp");
 		Graphics2D g2d = bi.createGraphics();
