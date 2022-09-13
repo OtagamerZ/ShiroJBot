@@ -62,7 +62,6 @@ public class RandomList<T> {
 		if (t == null) return null;
 
 		remove(t);
-
 		return t;
 	}
 

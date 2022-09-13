@@ -36,7 +36,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public abstract class Drop<T> {
-	private static final RandomList<DropCondition> pool = new RandomList<>() {{
+	private final RandomList<DropCondition> pool = new RandomList<>() {{
 		add(new DropCondition("low_cash",
 				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
@@ -61,7 +61,7 @@ public abstract class Drop<T> {
 				},
 				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
-					return acc.getHighestLevel() >= avg * rng.nextDouble();
+					return acc.getHighestLevel() >= (int) (avg * rng.nextDouble());
 				}
 		), 3);
 		add(new DropCondition("cards",
