@@ -36,7 +36,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public abstract class Drop<T> {
-	private static final RandomList<DropCondition> pool = new RandomList<>() {{
+	private final RandomList<DropCondition> pool = new RandomList<>() {{
 		add(new DropCondition("low_cash",
 				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
