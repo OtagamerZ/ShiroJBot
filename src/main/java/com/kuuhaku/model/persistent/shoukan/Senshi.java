@@ -608,7 +608,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (isStunned() || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
+		if ((isStunned() && Calc.chance(25)) || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
 		Trigger trigger;
 		check:
