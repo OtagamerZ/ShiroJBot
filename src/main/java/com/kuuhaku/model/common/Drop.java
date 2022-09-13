@@ -61,7 +61,7 @@ public abstract class Drop<T> {
 				},
 				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
-					return acc.getHighestLevel() >= avg * rng.nextDouble();
+					return acc.getHighestLevel() >= (int) (avg * rng.nextDouble());
 				}
 		), 3);
 		add(new DropCondition("cards",

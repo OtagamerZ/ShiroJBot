@@ -49,7 +49,7 @@ public class OpenCommand implements Executable {
 			if (!drop.isValid()) {
 				event.channel().sendMessage(locale.get("error/no_drop")).queue();
 				return;
-			} else if (drop.peekProperty(dp -> dp.check(acc))) {
+			} else if (!drop.peekProperty(dp -> dp.check(acc))) {
 				event.channel().sendMessage(locale.get("error/not_fulfilled")).queue();
 				return;
 			} else if (args.getString("captcha").contains(Constants.VOID)) {
