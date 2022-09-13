@@ -25,16 +25,13 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.model.enums.FrameColor;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
@@ -91,6 +88,7 @@ public class Arena implements Renderer {
 				d.reset();
 			}
 	);
+
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -158,6 +156,10 @@ public class Arena implements Renderer {
 				};
 
 				Deck deck = game.getHands().get(side).getUserDeck();
+				DeckStyling style = deck.getStyling();
+
+				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 20, yOffset, null);
+
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
 						int x = (225 + MARGIN.x) * slot.getIndex();
@@ -186,9 +188,9 @@ public class Arena implements Renderer {
 								double mult = s.getFieldMult(getField());
 								BufferedImage indicator = null;
 								if (mult > 1) {
-									indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
+									indicator = IO.getResourceAsImage("kawaipon/frames/" + (style.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
 								} else if (mult < 1) {
-									indicator = IO.getResourceAsImage("kawaipon/frames/" + (deck.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
+									indicator = IO.getResourceAsImage("kawaipon/frames/" + (style.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
 								}
 								g2.drawImage(indicator, x - 15, frontline - 15, null);
 
@@ -219,7 +221,7 @@ public class Arena implements Renderer {
 			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
-					g2.drawImage(d.getFrame().getBack(d),
+					g2.drawImage(d.getStyling().getFrame().getBack(d),
 							0, CENTER.y - 350 / 2 - (350 + MARGIN.y), null
 					);
 				}
@@ -251,7 +253,7 @@ public class Arena implements Renderer {
 				}
 				if (!bottom.getRealDeck().isEmpty()) {
 					Deck d = bottom.getUserDeck();
-					g2.drawImage(d.getFrame().getBack(d),
+					g2.drawImage(d.getStyling().getFrame().getBack(d),
 							0, CENTER.y - 350 / 2 + (350 + MARGIN.y), null
 					);
 				}
@@ -292,7 +294,7 @@ public class Arena implements Renderer {
 					int h = (int) Graph.getMultilineStringBounds(g2, log.message(), w).getHeight();
 					y -= h * 1.25;
 
-					g2.setColor(game.getHands().get(log.side()).getUserDeck().getFrame().getThemeColor());
+					g2.setColor(game.getHands().get(log.side()).getUserDeck().getStyling().getFrame().getThemeColor());
 					Graph.drawMultilineString(g2, log.message(),
 							MARGIN.x, y, w - MARGIN.x,
 							(str, px, py) -> Graph.drawOutlinedString(g2, str, px, py, 6, Color.BLACK)
@@ -331,7 +333,7 @@ public class Arena implements Renderer {
 						w, h,
 						1 - w, h
 				);
-				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
 				g1.fill(boundaries);
 
 				g1.setClip(boundaries);
@@ -503,7 +505,7 @@ public class Arena implements Renderer {
 				});
 
 				g1.setClip(null);
-				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
+				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
 				g1.setStroke(new BasicStroke(5));
 				g1.draw(boundaries);
 			});
@@ -531,7 +533,7 @@ public class Arena implements Renderer {
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
-			if (hand.getUserDeck().getFrame() == FrameColor.BLUE) { //TODO Glitch
+			if (hand.getUserDeck().getStyling().getFrame() == FrameSkin.BLUE) { //TODO Glitch
 				Graph.drawProcessedString(g, name, x, y, (str, px, py) -> {
 					Color color = Graph.getRandomColor();
 					g.setColor(color);
@@ -544,7 +546,7 @@ public class Arena implements Renderer {
 				});
 			} else {
 				if (game.getCurrentSide() == hand.getSide()) {
-					g.setColor(hand.getUserDeck().getFrame().getThemeColor());
+					g.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
 				} else {
 					g.setColor(Color.WHITE);
 				}

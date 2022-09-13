@@ -336,10 +336,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public boolean executeAssert(Trigger trigger) {
-		if (base.isLocked() || isSpell()) return false;
-		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return false;
-		else if (!hasEffect() || !getEffect().contains(trigger.name())) return false;
+	public void executeAssert(Trigger trigger) {
+		if (base.isLocked() || isSpell()) return;
+		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
+		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
 			Utils.exec(getEffect(), Map.of(
@@ -351,12 +351,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"side", hand.getSide()
 			));
 
-			return true;
 		} catch (ActivationException e) {
-			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
-			return false;
 		}
 	}
 
@@ -394,29 +391,30 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		if (isFlipped()) return deck.getFrame().getBack(deck);
+		DeckStyling style = deck.getStyling();
+		if (isFlipped()) return style.getFrame().getBack(deck);
 
 		String desc = getDescription(locale);
 
-		BufferedImage img = card.drawCardNoBorder(deck.isUsingChrome());
+		BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		g2d.setClip(deck.getFrame().getBoundary());
+		g2d.setClip(style.getFrame().getBoundary());
 		g2d.drawImage(img, 0, 0, null);
 		g2d.setClip(null);
 
-		g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+		g2d.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 		g2d.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + getTier() + ".png"), 190, 12, null);
 
 		g2d.setFont(FONT);
-		g2d.setColor(deck.getFrame().getPrimaryColor());
+		g2d.setColor(style.getFrame().getPrimaryColor());
 		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
-		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
+		Graph.drawOutlinedString(g2d, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
 		if (!desc.isEmpty()) {
-			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setColor(style.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
 			int y = 276;

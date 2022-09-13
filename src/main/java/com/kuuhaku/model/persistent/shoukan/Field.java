@@ -165,21 +165,22 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
+		DeckStyling style = deck.getStyling();
 		BufferedImage img = getVanity().drawCardNoBorder(false);
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		g2d.setClip(deck.getFrame().getBoundary());
+		g2d.setClip(style.getFrame().getBoundary());
 		g2d.drawImage(img, 0, 0, null);
 		g2d.setClip(null);
 
-		g2d.drawImage(deck.getFrame().getFront(false), 0, 0, null);
+		g2d.drawImage(style.getFrame().getFront(false), 0, 0, null);
 
 		g2d.setFont(FONT);
-		g2d.setColor(deck.getFrame().getPrimaryColor());
+		g2d.setColor(style.getFrame().getPrimaryColor());
 		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
-		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
+		Graph.drawOutlinedString(g2d, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
 		if (type != FieldType.NONE) {
 			BufferedImage icon = type.getIcon();
@@ -219,14 +220,14 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public BufferedImage renderBackground() {
-		BufferedImage bi = IO.getResourceAsImage("shoukan/backdrop.webp");
-		assert bi != null;
-
+		BufferedImage bi =  IO.getResourceAsImage("shoukan/arenas/" + id + ".webp");
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		BufferedImage cover = IO.getResourceAsImage("shoukan/arenas/" + id + ".webp");
-		g2d.drawImage(cover, 0, 0, null);
+		BufferedImage slots = IO.getResourceAsImage("shoukan/side/middle.webp");
+		g2d.drawImage(slots, 25, bi.getHeight() / 2 - slots.getHeight() / 2, null);
+		g2d.drawImage(IO.getResourceAsImage("shoukan/overlay/middle.webp"), 20, bi.getHeight() / 2 - slots.getHeight() / 2, null);
+
 		g2d.dispose();
 
 		return bi;

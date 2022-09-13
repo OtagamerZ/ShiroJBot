@@ -681,10 +681,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public boolean executeAssert(Trigger trigger) {
-		if (base.isLocked()) return false;
-		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return false;
-		else if (!hasEffect() || !getEffect().contains(trigger.name())) return false;
+	public void executeAssert(Trigger trigger) {
+		if (base.isLocked()) return;
+		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
+		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
 			base.lock();
@@ -697,10 +697,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"side", hand.getSide()
 			));
 
-			return true;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
-			return false;
 		} finally {
 			unlock();
 		}
@@ -756,29 +754,30 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		if (isFlipped()) return deck.getFrame().getBack(deck);
+		DeckStyling style = deck.getStyling();
+		if (isFlipped()) return style.getFrame().getBack(deck);
 
 		String desc = getDescription(locale);
 
-		BufferedImage img = getVanity().drawCardNoBorder(deck.isUsingChrome());
+		BufferedImage img = getVanity().drawCardNoBorder(style.isUsingChrome());
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		g2d.setClip(deck.getFrame().getBoundary());
+		g2d.setClip(style.getFrame().getBoundary());
 		g2d.drawImage(img, 0, 0, null);
 		g2d.setClip(null);
 
-		g2d.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+		g2d.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 		g2d.drawImage(getRace().getIcon(), 190, 12, null);
 
 		g2d.setFont(FONT);
-		g2d.setColor(deck.getFrame().getPrimaryColor());
+		g2d.setColor(style.getFrame().getPrimaryColor());
 		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
-		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
+		Graph.drawOutlinedString(g2d, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
 		if (!desc.isEmpty()) {
-			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setColor(style.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
 			int y = 276;

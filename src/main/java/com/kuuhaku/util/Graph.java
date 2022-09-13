@@ -301,6 +301,8 @@ public abstract class Graph {
 	}
 
 	public static void applyMask(BufferedImage source, BufferedImage mask, int channel, boolean hasAlpha) {
+		if (source == null) return;
+
 		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = newMask.createGraphics();
 		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);

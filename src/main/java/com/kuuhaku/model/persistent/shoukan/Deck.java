@@ -24,10 +24,8 @@ import com.kuuhaku.interfaces.AccFunction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.model.enums.FrameColor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -105,17 +103,8 @@ public class Deck extends DAO<Deck> {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Field> field = new ArrayList<>();
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "frame", nullable = false)
-	private FrameColor frame = FrameColor.PINK;
-
-	@ManyToOne
-	@JoinColumn(name = "cover_id")
-	@Fetch(FetchMode.JOIN)
-	private Card cover;
-
-	@Column(name = "use_chrome", nullable = false)
-	private boolean useChrome;
+	@Embedded
+	private DeckStyling styling;
 
 	public Deck() {
 	}
@@ -223,28 +212,8 @@ public class Deck extends DAO<Deck> {
 		return Utils.between(field.size(), 0, 4);
 	}
 
-	public FrameColor getFrame() {
-		return frame;
-	}
-
-	public void setFrame(FrameColor frame) {
-		this.frame = frame;
-	}
-
-	public Card getCover() {
-		return cover;
-	}
-
-	public void setCover(Card cover) {
-		this.cover = cover;
-	}
-
-	public boolean isUsingChrome() {
-		return useChrome;
-	}
-
-	public void setUseChrome(boolean useChrome) {
-		this.useChrome = useChrome;
+	public DeckStyling getStyling() {
+		return styling;
 	}
 
 	public double getMetaDivergence() {
@@ -258,11 +227,11 @@ public class Deck extends DAO<Deck> {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
 		Graph.applyTransformed(g2d, g -> {
-			g.setColor(frame.getThemeColor());
+			g.setColor(styling.getFrame().getThemeColor());
 			g.setComposite(BlendComposite.Color);
 			g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		});
-		Graph.applyMask(bi, IO.getResourceAsImage("shoukan/deck_mask.webp"), 0, true);
+		Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/deck_mask.webp"), 0, true);
 
 		List<Drawable<?>> allCards = new ArrayList<>() {{
 			addAll(senshi);
@@ -316,7 +285,7 @@ public class Deck extends DAO<Deck> {
 				.setChartTitleBoxVisible(false)
 				.setChartBackgroundColor(new Color(0, 0, 0, 0))
 				.setPlotBackgroundColor(new Color(0, 0, 0, 0))
-				.setSeriesColors(new Color[]{Graph.withOpacity(frame.getThemeColor(), 0.5f)})
+				.setSeriesColors(new Color[]{Graph.withOpacity(styling.getFrame().getThemeColor(), 0.5f)})
 				.setChartFontColor(Color.WHITE);
 
 		rc.paint(g2d, rc.getWidth(), rc.getHeight());
@@ -449,7 +418,7 @@ public class Deck extends DAO<Deck> {
 			}
 		});
 
-		g2d.drawImage(frame.getBack(this), 1252, 849, null);
+		g2d.drawImage(styling.getFrame().getBack(this), 1252, 849, null);
 
 		g2d.dispose();
 

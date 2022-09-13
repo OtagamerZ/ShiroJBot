@@ -43,8 +43,7 @@ import java.util.function.Function;
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	boolean execute(EffectParameters ep);
 
-	default boolean executeAssert(Trigger trigger) {
-		return true;
+	default void executeAssert(Trigger trigger) {
 	}
 
 	default Hand getLeech() {
@@ -59,7 +58,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			JSONObject groups = Utils.extractNamedGroups(str, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<color>\\w+)})?");
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-			g2d.setColor(deck.getFrame().getSecondaryColor());
+			g2d.setColor(deck.getStyling().getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
 				String val;
 				try {

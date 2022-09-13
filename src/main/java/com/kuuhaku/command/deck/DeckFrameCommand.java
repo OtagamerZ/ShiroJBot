@@ -26,7 +26,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.FrameColor;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
@@ -66,10 +66,10 @@ public class DeckFrameCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/all_frames"));
 
-			FrameColor[] frames = FrameColor.values();
+			FrameSkin[] frames = FrameSkin.values();
 			List<Page> pages = new ArrayList<>();
 			for (int i = 0; i < frames.length; i++) {
-				FrameColor fc = frames[i];
+				FrameSkin fc = frames[i];
 				if (!fc.canUse(acc)) {
 					Title title = fc.getTitle();
 					assert title != null;
@@ -102,13 +102,13 @@ public class DeckFrameCommand implements Executable {
 									}
 								});
 								put(Utils.parseEmoji("✅"), w -> {
-									FrameColor frame = frames[i.get()];
+									FrameSkin frame = frames[i.get()];
 									if (!frame.canUse(acc)) {
 										event.channel().sendMessage(locale.get("error/frame_locked")).queue();
 										return;
 									}
 
-									d.setFrame(frame);
+									d.getStyling().setFrame(frame);
 									d.save();
 									event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
 											.flatMap(m -> s.delete())
