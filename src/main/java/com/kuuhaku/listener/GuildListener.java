@@ -56,7 +56,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -313,7 +313,7 @@ public class GuildListener extends ListenerAdapter {
 
 		Drop<?> drop = Spawn.getDrop(event.getChannel());
 		if (drop != null) {
-			AtomicInteger i = new AtomicInteger();
+			AtomicLong i = new AtomicLong(drop.getSeed());
 
 			EmbedBuilder eb = new EmbedBuilder()
 					.setAuthor(locale.get("str/drop_spawn", 6 - drop.getRarity().getIndex()))
@@ -323,7 +323,7 @@ public class GuildListener extends ListenerAdapter {
 					.addField(
 							locale.get("str/drop_requirements"),
 							drop.getConditions().stream()
-									.map(dc -> dc.toString(locale, drop.getRng(i.incrementAndGet())))
+									.map(dc -> dc.toString(locale, i.getAndIncrement()))
 									.collect(Collectors.joining("\n")),
 							true
 					)
