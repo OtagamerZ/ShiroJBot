@@ -158,7 +158,7 @@ public class Arena implements Renderer {
 				Deck deck = game.getHands().get(side).getUserDeck();
 				DeckStyling style = deck.getStyling();
 
-				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 20, yOffset, null);
+				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 20, yOffset - 5, null);
 
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
