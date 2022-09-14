@@ -327,6 +327,7 @@ public class GuildListener extends ListenerAdapter {
 					.addField(
 							locale.get("str/drop_requirements"),
 							drop.getConditions().stream()
+									.peek(dc -> System.out.println(i.get()))
 									.map(dc -> dc.toString(locale, i.getAndIncrement()))
 									.collect(Collectors.joining("\n")),
 							true
