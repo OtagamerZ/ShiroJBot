@@ -125,17 +125,16 @@ public class GuildListener extends ListenerAdapter {
 
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
+		Member mb = event.getMember();
+		Role join = config.getSettings().getJoinRole();
+		if (join != null && event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+			event.getGuild().addRoleToMember(mb, join).queue();
+		}
+
 		WelcomeSettings ws = config.getWelcomeSettings();
 		TextChannel channel = ws.getChannel();
 		if (channel != null) {
-			Member mb = event.getMember();
-
-			Role join = config.getSettings().getJoinRole();
-			if (join != null && event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-				event.getGuild().addRoleToMember(mb, join).queue();
-			}
-
-			buildAndSendJLEmbed(config, channel, mb, ws.getMessage(), ws.getHeaders());
+			buildAndSendJLEmbed(config, channel, mb, ws.getMessage(), ws.getHeaders(), true);
 		}
 	}
 
@@ -150,12 +149,12 @@ public class GuildListener extends ListenerAdapter {
 		if (channel != null) {
 			Member mb = event.getMember();
 			if (mb != null) {
-				buildAndSendJLEmbed(config, channel, mb, gs.getMessage(), gs.getHeaders());
+				buildAndSendJLEmbed(config, channel, mb, gs.getMessage(), gs.getHeaders(), false);
 			}
 		}
 	}
 
-	private void buildAndSendJLEmbed(GuildConfig config, TextChannel channel, Member mb, String message, Set<String> headers) {
+	private void buildAndSendJLEmbed(GuildConfig config, TextChannel channel, Member mb, String message, Set<String> headers, boolean join) {
 		GuildSettings settings = config.getSettings();
 
 		EmbedBuilder eb = new AutoEmbedBuilder(Utils.replaceTags(mb, mb.getGuild(), settings.getEmbed().toString()))
@@ -173,7 +172,12 @@ public class GuildListener extends ListenerAdapter {
 			eb.setColor(Graph.getColor(mb.getEffectiveAvatarUrl()));
 		}
 
-		channel.sendMessageEmbeds(eb.build()).queue();
+		Role welcomer = config.getSettings().getWelcomer();
+		if (join && welcomer != null) {
+			channel.sendMessage(welcomer.getAsMention()).setEmbeds(eb.build()).queue();
+		} else {
+			channel.sendMessageEmbeds(eb.build()).queue();
+		}
 	}
 
 	@Override
