@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.ProfileEffect;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
@@ -42,6 +43,10 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	@Column(name = "background")
 	private String background;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "overlay", nullable = false)
+	private ProfileEffect effect = ProfileEffect.NONE;
 
 	@Column(name = "bio")
 	private String bio;
@@ -78,6 +83,14 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setBackground(String background) {
 		this.background = background;
+	}
+
+	public ProfileEffect getEffect() {
+		return effect;
+	}
+
+	public void setEffect(ProfileEffect effect) {
+		this.effect = effect;
 	}
 
 	public String getBio() {

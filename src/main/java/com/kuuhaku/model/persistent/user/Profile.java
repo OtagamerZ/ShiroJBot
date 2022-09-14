@@ -174,7 +174,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	public BufferedImage render(I18N locale) {
 		BufferedImage mask = IO.getResourceAsImage("assets/profile_mask.webp");
 		BufferedImage overlay = Graph.toColorSpace(IO.getResourceAsImage("assets/profile_overlay.webp"), BufferedImage.TYPE_INT_ARGB);
-		BufferedImage hex = IO.getResourceAsImage("assets/hex_grid.webp");
 
 		AccountSettings settings = account.getSettings();
 		BufferedImage bg = IO.getImage(settings.getBackground());
@@ -217,8 +216,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				6, 547
 		);
 
-		Graph.applyMask(hex, mask, 0, true);
-		g2d.drawImage(hex, 0, 0, null);
+		BufferedImage effect = settings.getEffect().getImage();
+		Graph.applyMask(effect, mask, 0, true);
+		g2d.drawImage(effect, 0, 0, null);
 
 		Map<String, Object> replaces = new HashMap<>() {{
 			put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
