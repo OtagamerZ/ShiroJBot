@@ -22,10 +22,11 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.Random;
 import java.util.function.Function;
 
-public record DropCondition(String key, Function<Long, Object[]> extractor, TriFunction<Long, Object[], Account, Boolean> condition) {
-	public String toString(I18N locale, long seed) {
-		return locale.get("condition/" + key, extractor().apply(seed));
+public record DropCondition(String key, Function<Random, Object[]> extractor, TriFunction<Random, Object[], Account, Boolean> condition) {
+	public String toString(I18N locale, Random rng) {
+		return locale.get("condition/" + key, extractor().apply(rng));
 	}
 }

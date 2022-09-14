@@ -38,30 +38,30 @@ import java.util.function.Function;
 public abstract class Drop<T> {
 	private final RandomList<DropCondition> pool = new RandomList<>() {{
 		add(new DropCondition("low_cash",
-				(seed) -> new Object[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
 				},
-				(seed, vals, acc) -> {
+				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
-					return acc.getBalance() <= Calc.rng(avg, avg * 1.9, seed);
+					return acc.getBalance() <= Calc.rng(avg, avg * 1.9, rng);
 				}
 		), 2);
 		add(new DropCondition("high_cash",
-				(seed) -> new Object[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
 				},
-				(seed, vals, acc) -> {
+				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
-					return acc.getBalance() >= Calc.rng(avg * 0.1, avg, seed);
+					return acc.getBalance() >= Calc.rng(avg * 0.1, avg, rng);
 				}
 		), 2);
 		add(new DropCondition("level",
-				(seed) -> new Object[]{
+				(rng) -> new Object[]{
 						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 0")
 				},
-				(seed, vals, acc) -> {
+				(rng, vals, acc) -> {
 					int avg = (int) vals[0];
-					return acc.getHighestLevel() >= Calc.rng(avg / 2, (int) (avg * 1.5), seed);
+					return acc.getHighestLevel() >= Calc.rng(avg / 2, (int) (avg * 1.5), rng);
 				}
 		), 3);
 		add(new DropCondition("cards",
@@ -86,7 +86,7 @@ public abstract class Drop<T> {
 		add(new DropCondition("cards_anime",
 				(rng) -> {
 					List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE visible = TRUE");
-					Anime anime = Utils.getRandomEntry(new Random(rng), animes);
+					Anime anime = Utils.getRandomEntry(rng, animes);
 
 					return new Object[]{
 							DAO.queryNative(Integer.class, """
@@ -157,15 +157,20 @@ public abstract class Drop<T> {
 	}
 
 	public final boolean check(Account acc) {
-		for (int i = 0; i < conditions.size(); i++) {
-			DropCondition dc = conditions.get(i);
+		Random rngA = getRng();
+		Random rngB = getRng();
 
-			if (!dc.condition().apply(seed + i, dc.extractor().apply(seed + i * 1000L), acc)) {
+		for (DropCondition dc : conditions) {
+			if (!dc.condition().apply(rngA, dc.extractor().apply(rngB), acc)) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	public final Random getRng() {
+		return new Random(seed);
 	}
 
 	public final void award(Account acc) {
