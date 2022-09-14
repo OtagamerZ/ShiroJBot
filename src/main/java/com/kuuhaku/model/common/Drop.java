@@ -160,7 +160,7 @@ public abstract class Drop<T> {
 		for (int i = 0; i < conditions.size(); i++) {
 			DropCondition dc = conditions.get(i);
 
-			if (!dc.condition().apply(seed + i, dc.extractor().apply(seed + i), acc)) {
+			if (!dc.condition().apply(seed + i, dc.extractor().apply(seed + i * 1000L), acc)) {
 				return false;
 			}
 		}

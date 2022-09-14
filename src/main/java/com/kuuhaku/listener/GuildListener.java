@@ -312,7 +312,7 @@ public class GuildListener extends ListenerAdapter {
 					//.delay(1, TimeUnit.MINUTES) TODO Return
 					.delay(20, TimeUnit.SECONDS)
 					.flatMap(Message::delete)
-					.queue();
+					.queue(null, Utils::doNothing);
 		}
 
 		Drop<?> drop = Spawn.getDrop(event.getChannel());
@@ -327,8 +327,7 @@ public class GuildListener extends ListenerAdapter {
 					.addField(
 							locale.get("str/drop_requirements"),
 							drop.getConditions().stream()
-									.peek(dc -> System.out.println(i.get()))
-									.map(dc -> dc.toString(locale, i.getAndIncrement()))
+									.map(dc -> dc.toString(locale, i.getAndAdd(1000)))
 									.collect(Collectors.joining("\n")),
 							true
 					)
@@ -337,7 +336,7 @@ public class GuildListener extends ListenerAdapter {
 			event.getChannel().sendMessageEmbeds(eb.build())
 					.delay(1, TimeUnit.MINUTES)
 					.flatMap(Message::delete)
-					.queue();
+					.queue(null, Utils::doNothing);
 		}
 
 		messages.computeIfAbsent(data.guild().getId(), k ->
