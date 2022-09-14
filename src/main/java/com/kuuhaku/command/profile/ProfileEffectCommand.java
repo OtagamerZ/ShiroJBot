@@ -45,6 +45,6 @@ public class ProfileEffectCommand implements Executable {
 		settings.setEffect(effect);
 		settings.save();
 
-		event.channel().sendMessage(locale.get("success/profile_color_set")).queue();
+		event.channel().sendMessage(locale.get("success/profile_effect_set")).queue();
 	}
 }
