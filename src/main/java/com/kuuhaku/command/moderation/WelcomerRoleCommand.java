@@ -20,64 +20,47 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.GoodbyeSettings;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.Role;
+
+import java.util.Set;
 
 @Command(
-		name = "goodbye",
+		name = "welcomer",
 		category = Category.MODERATION
 )
 @Signature(allowEmpty = true, value = {
 		"<action:word:r>[clear]",
-		"<channel:channel:r>",
-		"<message:text:r>"
+		"<role:role:r>"
 })
-@Requires(Permission.MESSAGE_EMBED_LINKS)
-public class GoodbyeCommand implements Executable {
+public class WelcomerRoleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GoodbyeSettings settings = data.config().getGoodbyeSettings();
+		GuildSettings settings = data.config().getSettings();
 		if (args.containsKey("action")) {
-			settings.setMessage(locale.get("default/goodbye_message"));
-			settings.setChannel(null);
+			settings.setWelcomer(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/goodbye_clear")).queue();
+			event.channel().sendMessage(locale.get("success/welcomer_role_clear")).queue();
 			return;
-		} else if (args.containsKey("channel")) {
-			settings.setChannel(event.message().getMentionedChannels().get(0));
+		} else if (args.containsKey("role")) {
+			settings.setWelcomer(event.message().getMentionedRoles().get(0));
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/goodbye_channel_save")).queue();
+			event.channel().sendMessage(locale.get("success/welcomer_role_save")).queue();
 			return;
 		}
 
-		String msg = args.getString("message");
-		if (msg == null) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setDescription(settings.getMessage());
-
-			TextChannel chn = settings.getChannel();
-			event.channel().sendMessage(locale.get("str/current_goodbye_message",
-					chn == null ? "`" + locale.get("str/none") + "`" : chn.getAsMention()
-			)).setEmbeds(eb.build()).queue();
-			return;
-		}
-
-		settings.setMessage(msg);
-		settings.save();
-
-		event.channel().sendMessage(locale.get("success/goodbye_message_save")).queue();
+		Role role = settings.getWelcomer();
+		event.channel().sendMessage(locale.get("str/current_welcomer_role",
+				role == null ? "`" + locale.get("str/none") + "`" : role.getAsMention()
+		)).allowedMentions(Set.of()).queue();
 	}
 }

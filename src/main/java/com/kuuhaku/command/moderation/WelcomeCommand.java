@@ -43,10 +43,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 		"<channel:channel:r>",
 		"<message:text:r>"
 })
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class WelcomeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
