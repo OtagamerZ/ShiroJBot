@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.JDA;
 		subname = "effect",
 		category = Category.MISC
 )
-@Signature("<type:word:r>[none,hex,scanlines,vignette]")
+@Signature("<type:word:r>[none,hex,scanline,vignette]")
 public class ProfileEffectCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
