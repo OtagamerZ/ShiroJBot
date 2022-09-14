@@ -45,7 +45,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	private String background;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "overlay", nullable = false)
+	@Column(name = "effect", nullable = false)
 	private ProfileEffect effect = ProfileEffect.NONE;
 
 	@Column(name = "bio")
