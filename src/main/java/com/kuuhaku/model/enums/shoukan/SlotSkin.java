@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 public enum SlotSkin {
-	DEFAULT, AHEGAO;
+	DEFAULT, AHEGAO, HEX;
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase(Locale.ROOT);

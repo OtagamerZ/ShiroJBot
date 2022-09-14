@@ -41,7 +41,7 @@ public abstract class Drop<T> {
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
 
-					return new Object[]{Calc.rng(avg, avg * 1.9, rng)};
+					return new Object[]{(int) Calc.rng(avg, avg * 1.9, rng)};
 				},
 				(vals, acc) -> acc.getBalance() <= (int) vals[0]
 		), 2);
@@ -49,7 +49,7 @@ public abstract class Drop<T> {
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
 
-					return new Object[]{Calc.rng(avg * 0.1, avg, rng)};
+					return new Object[]{(int) Calc.rng(avg * 0.1, avg, rng)};
 				},
 				(vals, acc) -> acc.getBalance() >= (int) vals[0]
 		), 2);
@@ -57,7 +57,7 @@ public abstract class Drop<T> {
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 0");
 
-					return new Object[]{Calc.rng(avg / 2, (int) (avg * 1.5), rng)};
+					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
 				},
 				(vals, acc) -> acc.getHighestLevel() >= (int) vals[0]
 		), 3);
@@ -73,7 +73,7 @@ public abstract class Drop<T> {
 							     ) AS x
 							""");
 
-					return new Object[]{Calc.rng(avg / 2, (int) (avg * 1.5), rng)};
+					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
 				},
 				(vals, acc) -> {
 					Pair<Integer, Integer> total = acc.getKawaipon().countCards();
@@ -98,7 +98,7 @@ public abstract class Drop<T> {
 									     ) AS x
 									""", anime.getId());
 
-					return new Object[]{Calc.rng(avg / 2, (int) Math.min(avg * 1.5, anime.getCount()), seed), anime};
+					return new Object[]{(int) Calc.rng(avg / 2d, Math.min(avg * 1.5, anime.getCount()), seed), anime};
 				},
 				(vals, acc) -> {
 					Pair<Integer, Integer> total = acc.getKawaipon().countCards((Anime) vals[1]);
