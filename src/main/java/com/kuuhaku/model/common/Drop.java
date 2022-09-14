@@ -38,49 +38,47 @@ import java.util.function.Function;
 public abstract class Drop<T> {
 	private final RandomList<DropCondition> pool = new RandomList<>() {{
 		add(new DropCondition("low_cash",
-				(rng) -> new Object[]{
-						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
+				(rng) -> {
+					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
+
+					return new Object[]{Calc.rng(avg, avg * 1.9, rng)};
 				},
-				(rng, vals, acc) -> {
-					int avg = (int) vals[0];
-					return acc.getBalance() <= Calc.rng(avg, avg * 1.9, rng);
-				}
+				(vals, acc) -> acc.getBalance() <= (int) vals[0]
 		), 2);
 		add(new DropCondition("high_cash",
-				(rng) -> new Object[]{
-						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0")
+				(rng) -> {
+					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
+
+					return new Object[]{Calc.rng(avg * 0.1, avg, rng)};
 				},
-				(rng, vals, acc) -> {
-					int avg = (int) vals[0];
-					return acc.getBalance() >= Calc.rng(avg * 0.1, avg, rng);
-				}
+				(vals, acc) -> acc.getBalance() >= (int) vals[0]
 		), 2);
 		add(new DropCondition("level",
-				(rng) -> new Object[]{
-						DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 0")
+				(rng) -> {
+					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 0");
+
+					return new Object[]{Calc.rng(avg / 2, (int) (avg * 1.5), rng)};
 				},
-				(rng, vals, acc) -> {
-					int avg = (int) vals[0];
-					return acc.getHighestLevel() >= Calc.rng(avg / 2, (int) (avg * 1.5), rng);
-				}
+				(vals, acc) -> acc.getHighestLevel() >= (int) vals[0]
 		), 3);
 		add(new DropCondition("cards",
-				(seed) -> new Object[]{
-						DAO.queryNative(Integer.class, """
-								SELECT GEO_MEAN(x.count)
-								FROM (
-								     SELECT COUNT(1) AS count
-								     FROM kawaipon_card
-								     WHERE stash_entry IS NULL
-								     GROUP BY kawaipon_uid
-								     ) AS x
-								""")
+				(rng) -> {
+					int avg = DAO.queryNative(Integer.class, """
+							SELECT GEO_MEAN(x.count)
+							FROM (
+							     SELECT COUNT(1) AS count
+							     FROM kawaipon_card
+							     WHERE stash_entry IS NULL
+							     GROUP BY kawaipon_uid
+							     ) AS x
+							""");
+
+					return new Object[]{Calc.rng(avg / 2, (int) (avg * 1.5), rng)};
 				},
-				(seed, vals, acc) -> {
-					int avg = (int) vals[0];
+				(vals, acc) -> {
 					Pair<Integer, Integer> total = acc.getKawaipon().countCards();
 
-					return total.getFirst() + total.getSecond() >= Calc.rng(avg / 2, (int) (avg * 1.5), seed);
+					return total.getFirst() + total.getSecond() >= (int) vals[0];
 				}
 		), 3);
 		add(new DropCondition("cards_anime",
@@ -88,27 +86,24 @@ public abstract class Drop<T> {
 					List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE visible = TRUE");
 					Anime anime = Utils.getRandomEntry(rng, animes);
 
-					return new Object[]{
-							DAO.queryNative(Integer.class, """
-							SELECT GEO_MEAN(x.count)
-							FROM (
-							     SELECT COUNT(1) AS count
-							     FROM kawaipon_card kc
-							              INNER JOIN card c ON kc.card_id = c.id
-							     WHERE kc.stash_entry IS NULL
-							       AND c.anime_id = ?1
-							     GROUP BY kc.kawaipon_uid
-							     ) AS x
-							""", anime.getId()),
-							anime
-					};
+					int avg = DAO.queryNative(Integer.class, """
+									SELECT GEO_MEAN(x.count)
+									FROM (
+									     SELECT COUNT(1) AS count
+									     FROM kawaipon_card kc
+									              INNER JOIN card c ON kc.card_id = c.id
+									     WHERE kc.stash_entry IS NULL
+									       AND c.anime_id = ?1
+									     GROUP BY kc.kawaipon_uid
+									     ) AS x
+									""", anime.getId());
+
+					return new Object[]{Calc.rng(avg / 2, (int) Math.min(avg * 1.5, anime.getCount()), seed), anime};
 				},
-				(rng, vals, acc) -> {
-					int avg = (int) vals[0];
-					Anime a = (Anime) vals[1];
+				(vals, acc) -> {
 					Pair<Integer, Integer> total = acc.getKawaipon().countCards((Anime) vals[1]);
 
-					return total.getFirst() + total.getSecond() >= Calc.rng(avg / 2, (int) Math.min(avg * 1.5, a.getCount()), seed);
+					return total.getFirst() + total.getSecond() >= (int) vals[0];
 				}
 		), 1);
 	}};
@@ -157,11 +152,10 @@ public abstract class Drop<T> {
 	}
 
 	public final boolean check(Account acc) {
-		Random rngA = getRng();
-		Random rngB = getRng();
+		Random rng = getRng();
 
 		for (DropCondition dc : conditions) {
-			if (!dc.condition().apply(rngA, dc.extractor().apply(rngB), acc)) {
+			if (!dc.condition().apply(dc.extractor().apply(rng), acc)) {
 				return false;
 			}
 		}
