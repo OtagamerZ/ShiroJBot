@@ -77,9 +77,21 @@ public class HelpCommand implements Executable {
 			return;
 		}
 
+		String alias = null;
+		for (Map.Entry<String, Object> e : aliases.entrySet()) {
+			if (e.getValue().equals(cmd)) {
+				alias = e.getKey();
+				break;
+			}
+		}
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/command", pc.name()))
 				.setDescription(locale.get("str/category", pc.category().getName(locale)));
+
+		if (alias != null) {
+			eb.addField("Alias", "`" + alias + "`", true);
+		}
 
 		List<String> sigs = SignatureParser.extract(locale, pc.command());
 		if (!sigs.isEmpty()) {

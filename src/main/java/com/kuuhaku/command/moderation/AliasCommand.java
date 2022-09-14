@@ -66,8 +66,8 @@ public class AliasCommand implements Executable {
 		} else if (Main.getCommandManager().getReservedNames().contains(alias)) {
 			event.channel().sendMessage(locale.get("error/reserved_name")).queue();
 			return;
-		} else if (aliases.containsKey(alias)) {
-			event.channel().sendMessage(locale.get("error/existing_alias")).queue();
+		} else if (aliases.containsValue(cmd)) {
+			event.channel().sendMessage(locale.get("error/aliased_command")).queue();
 			return;
 		}
 
