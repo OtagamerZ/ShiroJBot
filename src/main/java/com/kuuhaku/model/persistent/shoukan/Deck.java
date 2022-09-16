@@ -416,7 +416,7 @@ public class Deck extends DAO<Deck> {
 			}
 
 			Graph.drawMultilineString(g, str,
-					0, bi.getHeight() - 530 - (int) Graph.getMultilineStringBounds(g, str, 1100).getHeight(),
+					0, bi.getHeight() - 520 - (int) Graph.getMultilineStringBounds(g, str, 1100).getHeight(),
 					1100
 			);
 		});
