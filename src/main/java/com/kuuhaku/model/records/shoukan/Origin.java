@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Origin(Race major, Race... minors) {
+public record Origin(Race major, Race... minor) {
 	public Origin(List<Race> races) {
 		this(races.get(0), races.get(1));
 	}
@@ -34,7 +34,7 @@ public record Origin(Race major, Race... minors) {
 	public Race synergy() {
 		if (major == Race.NONE) return Race.NONE;
 
-		return major.fuse(minors[0]);
+		return major.fuse(minor[0]);
 	}
 
 	public List<BufferedImage> images() {
@@ -42,8 +42,8 @@ public record Origin(Race major, Race... minors) {
 			if (major != Race.NONE) {
 				add(major.getImage());
 			}
-			for (Race race : minors) {
-				add(race.getImage());
+			for (Race r : minor) {
+				add(r.getImage());
 			}
 			if (synergy() != Race.NONE) {
 				add(synergy().getImage());
@@ -56,19 +56,19 @@ public record Origin(Race major, Race... minors) {
 		return Utils.getOr(major, Race.NONE);
 	}
 
-	public Race[] minors() {
-		if (major == Race.NONE) return minors;
-		else if (demon()) return ArrayUtils.add(minors, major);
+	public Race[] minor() {
+		if (major == Race.NONE) return minor;
+		else if (demon()) return ArrayUtils.add(minor, major);
 
-		return minors;
+		return minor;
 	}
 
 	public boolean isPure() {
-		return minors().length == 0;
+		return minor().length == 0;
 	}
 
 	public boolean hasMinor(Race race) {
-		for (Race r : minors()) {
+		for (Race r : minor()) {
 			if (r.isRace(race)) return true;
 		}
 
@@ -76,6 +76,6 @@ public record Origin(Race major, Race... minors) {
 	}
 
 	public boolean demon() {
-		return Utils.equalsAny(Race.DEMON, minors);
+		return Utils.equalsAny(Race.DEMON, minor);
 	}
 }

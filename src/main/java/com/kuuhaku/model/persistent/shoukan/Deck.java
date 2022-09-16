@@ -368,7 +368,7 @@ public class Deck extends DAO<Deck> {
 
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
 				g.setColor(Color.WHITE);
-				effects = Arrays.stream(ori.minors()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
+				effects = Arrays.stream(ori.minor()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "\n")
 						+ "\n\n\n  \"" + syn.getDescription(locale) + "\"";
@@ -390,7 +390,7 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						+ "\n\n" + Arrays.stream(ori.minors()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
+						+ "\n\n" + Arrays.stream(ori.minor()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "\n")
 						+ "\n\n\n  \"" + syn.getDescription(locale) + "\"";
@@ -460,7 +460,7 @@ public class Deck extends DAO<Deck> {
 
 			List<Race> ori = races.stream()
 					.distinct()
-					.filter(r -> races.getCount(r) == high)
+					.filter(r -> races.getCount(r) >= high)
 					.collect(Collectors.toList());
 			while (ori.size() < 2) {
 				ori.add(Race.NONE);

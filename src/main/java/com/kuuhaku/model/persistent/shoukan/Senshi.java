@@ -368,7 +368,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minors().length - 1));
+			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
 		mult *= stats.getAttrMult();
 

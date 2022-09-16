@@ -264,7 +264,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		double mult = 1;
 		if (hand != null && !spell && hand.getOrigin().hasMinor(Race.MACHINE)) {
 			mult *= 1.1 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.01);
-			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minors().length - 1));
+			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
 
 		return mult * stats.getAttrMult();

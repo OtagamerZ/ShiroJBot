@@ -73,9 +73,9 @@ public class ShoukanCommand implements Executable {
 		try {
 			ShoukanParams params = JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class);
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
-				try {
-					Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
+				Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 
+				try {
 					Shoukan skn = new Shoukan(locale, params, event.user(), other.getUser());
 					skn.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
@@ -107,6 +107,8 @@ public class ShoukanCommand implements Executable {
 							}
 						}
 					}
+
+					m.delete().queue(null, Utils::doNothing);
 				}
 
 				return true;

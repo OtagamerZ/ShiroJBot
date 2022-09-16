@@ -165,7 +165,7 @@ public class Hand {
 	/*
 	0x0000 FF FF
 	       └┤ └┤
-	        │  └ (0 - 255) minors effect
+	        │  └ (0 - 255) minor effect
 	        └─ (0 - 255) major effect
 	 */
 

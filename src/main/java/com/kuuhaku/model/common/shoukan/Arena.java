@@ -337,7 +337,8 @@ public class Arena implements Renderer {
 				g1.fill(boundaries);
 
 				g1.setClip(boundaries);
-
+//int radius = BAR_SIZE.height - 10;
+//				List<BufferedImage> icons = hand.getOrigin().images();
 				int mpWidth = (int) (BAR_SIZE.width / 2);
 				Color manaOver1 = new Color(0x1181FF);
 				Color manaOver2 = new Color(0x4D15FF);
