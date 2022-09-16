@@ -106,6 +106,8 @@ public class Deck extends DAO<Deck> {
 	@Embedded
 	private DeckStyling styling;
 
+	private transient Origin origin = null;
+
 	public Deck() {
 	}
 
@@ -147,7 +149,7 @@ public class Deck extends DAO<Deck> {
 
 	public int getMaxSenshiCopies() {
 		int allowed = 3;
-		if (getOrigins().minor() == Race.BEAST) {
+		if (getOrigins().hasMinor(Race.BEAST)) {
 			allowed++;
 		}
 
@@ -342,7 +344,7 @@ public class Deck extends DAO<Deck> {
 			List<BufferedImage> icons = ori.images();
 
 			String effects;
-			if (ori.minor() == Race.NONE) {
+			if (ori.isPure()) {
 				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
@@ -356,6 +358,20 @@ public class Deck extends DAO<Deck> {
 						+ "\n\n- " + locale.get("minor/pureblood")
 						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "\n")
 						+ "\n\n\n  \"" + ori.major().getDescription(locale) + "\"";
+			} else if (ori.major() == Race.NONE) {
+				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
+				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
+				g.setColor(Color.GRAY);
+
+				String text = locale.get("str/deck_origin_mixed");
+				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.WHITE);
+
+				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
+				g.setColor(Color.WHITE);
+				effects = Arrays.stream(ori.minors()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
+						+ "\n\n- " + syn.getSynergy(locale)
+						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "\n")
+						+ "\n\n\n  \"" + syn.getDescription(locale) + "\"";
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -374,7 +390,7 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						+ "\n\n- " + ori.minor().getMinor(locale)
+						+ "\n\n" + Arrays.stream(ori.minors()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&" + Race.DEMON.getMinor(locale) : "\n")
 						+ "\n\n\n  \"" + syn.getDescription(locale) + "\"";
@@ -426,25 +442,38 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public Origin getOrigins() {
-		TreeBag<Race> races = new TreeBag<>();
-		for (Senshi s : senshi) {
-			races.addAll(
-					Arrays.stream(s.getRace().split())
-							.filter(r -> r != Race.NONE)
-							.toList()
-			);
+		if (origin == null) {
+			TreeBag<Race> races = new TreeBag<>();
+			for (Senshi s : senshi) {
+				races.addAll(
+						Arrays.stream(s.getRace().split())
+								.filter(r -> r != Race.NONE)
+								.toList()
+				);
+			}
+
+			int high = races.stream()
+					.distinct()
+					.mapToInt(races::getCount)
+					.max()
+					.orElse(0);
+
+			List<Race> ori = races.stream()
+					.distinct()
+					.filter(r -> races.getCount(r) == high)
+					.collect(Collectors.toList());
+			while (ori.size() < 2) {
+				ori.add(Race.NONE);
+			}
+
+			if (ori.size() > 2) {
+				origin = new Origin(Race.NONE, ori.toArray(Race[]::new));
+			} else {
+				origin = new Origin(ori);
+			}
 		}
 
-		List<Race> out = races.stream()
-				.distinct()
-				.sorted(Comparator.comparingInt(races::getCount).reversed())
-				.limit(2)
-				.collect(Collectors.toList());
-		while (out.size() < 2) {
-			out.add(Race.NONE);
-		}
-
-		return new Origin(out);
+		return origin;
 	}
 
 	public BaseValues getBaseValues(Hand h) {
@@ -483,7 +512,7 @@ public class Deck extends DAO<Deck> {
 					default -> mpGain;
 				};
 
-				if (origin.minor() == Race.BEAST) {
+				if (origin.hasMinor(Race.BEAST)) {
 					handCap = mpGain.accumulate((t, cards) -> cards + t / 20);
 				}
 

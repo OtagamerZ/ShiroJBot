@@ -338,7 +338,7 @@ public class Arena implements Renderer {
 
 				g1.setClip(boundaries);
 
-				int mpWidth = (int) (BAR_SIZE.width / 2.25);
+				int mpWidth = (int) (BAR_SIZE.width / 2);
 				Color manaOver1 = new Color(0x1181FF);
 				Color manaOver2 = new Color(0x4D15FF);
 				for (int i = 0; i < 33; i++) {
@@ -391,60 +391,6 @@ public class Arena implements Renderer {
 					));
 					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1), bar.height));
 				}
-
-				int radius = BAR_SIZE.height - 10;
-				List<BufferedImage> icons = hand.getOrigin().images();
-				for (int i = 0; i < 2; i++) {
-					int slotX = (int) ((BAR_SIZE.width - barWidth * 1.025) / 2 - (radius + 15)) + (radius + 15) * i;
-
-					g1.setColor(new Color(50, 50, 50, 100));
-					Polygon poly = Graph.makePoly(new Dimension(radius, radius),
-							0.5, 0,
-							1, 1 / 4d,
-							1, 1 / 4d * 3,
-							0.5, 1,
-							0, 1 / 4d * 3,
-							0, 1 / 4d
-					);
-					poly.translate(15 + slotX, 5);
-					g1.setClip(poly);
-					g1.fill(poly);
-
-					if (reversed) {
-						g1.drawImage(icons.get(1 - i),
-								10 + slotX + radius, radius,
-								-(radius - 10), -(radius - 10),
-								null
-						);
-					} else {
-						g1.drawImage(icons.get(i),
-								20 + slotX, 10,
-								radius - 10, radius - 10,
-								null
-						);
-					}
-
-					int cd;
-					if (reversed) {
-						cd = i == 1 ? hand.getMajorCooldown() : hand.getMinorCooldown();
-					} else {
-						cd = i == 0 ? hand.getMajorCooldown() : hand.getMinorCooldown();
-					}
-
-					int mCd = switch (hand.getOrigin().major()) {
-						case SPIRIT -> 3;
-						case UNDEAD -> 4;
-						default -> 1;
-					};
-
-					g1.setColor(new Color(255, 0, 0, 200));
-					g1.fillArc(
-							15 + slotX - radius / 2, 5 - radius / 2,
-							radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
-							cd * 360 / mCd
-					);
-				}
-				g1.setClip(null);
 
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");

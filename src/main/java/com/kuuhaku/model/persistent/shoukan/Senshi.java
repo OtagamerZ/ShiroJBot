@@ -263,7 +263,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		double mult = 1;
 		if (hand != null) {
-			if (hand.getOrigin().minor() == Race.UNDEAD) {
+			if (hand.getOrigin().hasMinor(Race.UNDEAD)) {
 				mult *= 1 + (hand.getGraveyard().size() * 0.005);
 			}
 
@@ -288,7 +288,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		double mult = 1;
 		if (hand != null) {
-			if (hand.getOrigin().minor() == Race.SPIRIT) {
+			if (hand.getOrigin().hasMinor(Race.SPIRIT)) {
 				mult *= 1 + (hand.getGraveyard().size() * 0.01);
 			}
 
@@ -359,12 +359,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	private double getAttrMult() {
 		double mult = 1;
-		if (hand != null && hand.getOrigin().minor() == Race.NONE) {
-			if (race == hand.getOrigin().major()) {
-				mult *= 1.25;
-			} else {
-				mult *= 0.5;
+		if (hand != null) {
+			if (hand.getOrigin().isPure()) {
+				if (race == hand.getOrigin().major()) {
+					mult *= 1.25;
+				} else {
+					mult *= 0.5;
+				}
 			}
+
+			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minors().length - 1));
 		}
 		mult *= stats.getAttrMult();
 
@@ -608,7 +612,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if ((isStunned() && Calc.chance(25)) || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
+		if ((isStunned() && Calc.chance(25)) || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0)
+			return false;
 
 		Trigger trigger;
 		check:

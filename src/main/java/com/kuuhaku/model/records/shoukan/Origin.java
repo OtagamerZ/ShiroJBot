@@ -20,25 +20,34 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Origin(Race major, Race minor) {
+public record Origin(Race major, Race... minors) {
 	public Origin(List<Race> races) {
 		this(races.get(0), races.get(1));
 	}
 
 	public Race synergy() {
-		return major.fuse(minor);
+		if (major == Race.NONE) return Race.NONE;
+
+		return major.fuse(minors[0]);
 	}
 
 	public List<BufferedImage> images() {
 		return new ArrayList<>() {{
-			add(major.getImage());
-			add(minor.getImage());
-			add(synergy().getImage());
+			if (major != Race.NONE) {
+				add(major.getImage());
+			}
+			for (Race race : minors) {
+				add(race.getImage());
+			}
+			if (synergy() != Race.NONE) {
+				add(synergy().getImage());
+			}
 		}};
 	}
 
@@ -47,12 +56,26 @@ public record Origin(Race major, Race minor) {
 		return Utils.getOr(major, Race.NONE);
 	}
 
-	@Override
-	public Race minor() {
-		return demon() ? major : Utils.getOr(minor, Race.NONE);
+	public Race[] minors() {
+		if (major == Race.NONE) return minors;
+		else if (demon()) return ArrayUtils.add(minors, major);
+
+		return minors;
+	}
+
+	public boolean isPure() {
+		return minors().length == 0;
+	}
+
+	public boolean hasMinor(Race race) {
+		for (Race r : minors()) {
+			if (r.isRace(race)) return true;
+		}
+
+		return false;
 	}
 
 	public boolean demon() {
-		return minor == Race.DEMON;
+		return Utils.equalsAny(Race.DEMON, minors);
 	}
 }

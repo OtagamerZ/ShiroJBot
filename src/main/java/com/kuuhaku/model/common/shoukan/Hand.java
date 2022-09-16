@@ -165,7 +165,7 @@ public class Hand {
 	/*
 	0x0000 FF FF
 	       └┤ └┤
-	        │  └ (0 - 255) minor effect
+	        │  └ (0 - 255) minors effect
 	        └─ (0 - 255) major effect
 	 */
 
@@ -192,7 +192,7 @@ public class Hand {
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 								Utils.shufflePairs(f.getModifiers());
-							} else if (d instanceof Senshi s && origin.minor() == Race.DIVINITY && !s.hasEffect()) {
+							} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 								s.getStats().setSource(
 										Senshi.getRandom(false,
 												"WHERE effect IS NOT NULL",
@@ -502,7 +502,7 @@ public class Hand {
 		if (!pure) {
 			if (origin.major() == Race.HUMAN && value > 0) {
 				value *= 1.25;
-			} else if (origin.minor() == Race.HUMAN && value < 0) {
+			} else if (origin.hasMinor(Race.HUMAN) && value < 0) {
 				value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 			}
 

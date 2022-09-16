@@ -85,7 +85,7 @@ public enum Race {
 	}
 
 	public String getMinor(I18N locale) {
-		return locale.get("minor/" + name());
+		return locale.get("minors/" + name());
 	}
 
 	public String getSynergy(I18N locale) {
