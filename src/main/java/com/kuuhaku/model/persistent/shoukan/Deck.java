@@ -408,11 +408,11 @@ public class Deck extends DAO<Deck> {
 
 			String str;
 			if (ori.isPure()) {
-				str = "⠀⠀\"" + ori.major().getDescription(locale) + "\"";
+				str = "  \"" + ori.major().getDescription(locale) + "\"";
 			} else if (ori.major() == Race.NONE) {
 				str = "";
 			} else {
-				str = "⠀⠀\"" + syn.getDescription(locale) + "\"";
+				str = "  \"" + syn.getDescription(locale) + "\"";
 			}
 
 			Graph.drawMultilineString(g, str,
