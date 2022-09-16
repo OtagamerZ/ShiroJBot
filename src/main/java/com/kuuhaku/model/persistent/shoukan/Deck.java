@@ -338,7 +338,6 @@ public class Deck extends DAO<Deck> {
 
 		Graph.applyTransformed(g2d, 30, 520, g -> {
 			Origin ori = getOrigins();
-			if (ori.major() == Race.NONE) return;
 
 			Race syn = ori.synergy();
 			List<BufferedImage> icons = ori.images();
@@ -452,16 +451,23 @@ public class Deck extends DAO<Deck> {
 				);
 			}
 
-			int high = races.stream()
+			List<Race> ori = new ArrayList<>();
+			Iterator<Race> it = races.stream()
 					.distinct()
-					.mapToInt(races::getCount)
-					.max()
-					.orElse(0);
+					.sorted(Comparator.comparingInt(races::getCount).reversed())
+					.iterator();
 
-			List<Race> ori = races.stream()
-					.distinct()
-					.filter(r -> races.getCount(r) >= high)
-					.collect(Collectors.toList());
+			int high = 0;
+			while (it.hasNext()) {
+				Race r = it.next();
+				int count = races.getCount(r);
+
+				if (high == 0) high = count;
+				else if (count < high && ori.size() >= 2) break;
+
+				ori.add(r);
+			}
+
 			while (ori.size() < 2) {
 				ori.add(Race.NONE);
 			}
