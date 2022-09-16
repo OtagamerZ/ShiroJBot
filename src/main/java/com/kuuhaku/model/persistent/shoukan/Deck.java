@@ -415,7 +415,10 @@ public class Deck extends DAO<Deck> {
 				str = syn.getDescription(locale);
 			}
 
-			Graph.drawMultilineString(g, str, 0, (int) (bi.getHeight() - 20 - Graph.getMultilineStringBounds(g, str, 1100).getHeight()), 1100);
+			Graph.drawMultilineString(g, str,
+					0, 0,//(int) (bi.getHeight() - 20 - Graph.getMultilineStringBounds(g, str, 1100).getHeight()),
+					1100
+			);
 		});
 
 		Graph.applyTransformed(g2d, 1212, 14, g -> {
