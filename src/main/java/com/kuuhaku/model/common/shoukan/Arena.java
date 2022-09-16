@@ -399,6 +399,7 @@ public class Arena implements Renderer {
 					g2.setColor(Color.CYAN);
 					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
+					//TODO Finish
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
 								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y + 10),
