@@ -337,9 +337,8 @@ public class Arena implements Renderer {
 				g1.fill(boundaries);
 
 				g1.setClip(boundaries);
-//int radius = BAR_SIZE.height - 10;
-//				List<BufferedImage> icons = hand.getOrigin().images();
-				int mpWidth = (int) (BAR_SIZE.width / 2);
+
+				int mpWidth = BAR_SIZE.width / 2;
 				Color manaOver1 = new Color(0x1181FF);
 				Color manaOver2 = new Color(0x4D15FF);
 				for (int i = 0; i < 33; i++) {
@@ -393,19 +392,21 @@ public class Arena implements Renderer {
 					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1), bar.height));
 				}
 
+				//int radius = BAR_SIZE.height - 10;
+//				List<BufferedImage> icons = hand.getOrigin().images();
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
-					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height / 3f - 8));
+					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
-								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y - BAR_SIZE.height / 3 + 8),
+								(int) -(bar.x + g2.getFontMetrics().stringWidth(mpText)), (int) -(bar.y + 10),
 								6, Color.BLACK
 						);
 					} else {
 						Graph.drawOutlinedString(g2, mpText,
-								(int) bar.x, (int) (bar.y - 10),
+								MARGIN.x, BAR_SIZE.height - 10,
 								6, Color.BLACK
 						);
 					}
