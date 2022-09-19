@@ -423,7 +423,7 @@ public class Deck extends DAO<Deck> {
 
 			g.setColor(Color.WHITE);
 			Graph.drawMultilineString(g, str,
-					0, bi.getHeight() - 520 - (int) Graph.getMultilineStringBounds(g, str, 1100, 10).getHeight(),
+					0, g.getFontMetrics().getHeight() + bi.getHeight() - 520 - (int) Graph.getMultilineStringBounds(g, str, 1100, 10).getHeight(),
 					1100, 10
 			);
 		});
