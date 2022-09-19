@@ -354,8 +354,8 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						+ "\n- " + locale.get("minor/pureblood")
-						+ (ori.demon() ? "\n&- " + Race.DEMON.getMinor(locale) : "");
+						+ "\n\n- " + locale.get("minor/pureblood")
+						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else if (ori.major() == Race.NONE) {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -366,9 +366,12 @@ public class Deck extends DAO<Deck> {
 
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				g.setColor(Color.WHITE);
-				effects = Arrays.stream(ori.minor()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
-						+ "\n- " + syn.getSynergy(locale)
-						+ (ori.demon() ? "\n&- " + Race.DEMON.getMinor(locale) : "");
+				effects = Arrays.stream(ori.minor())
+						.filter(r -> r != Race.DEMON)
+						.map(o -> "- " + o.getMinor(locale))
+						.collect(Collectors.joining("\n\n"))
+						+ "\n\n- " + syn.getSynergy(locale)
+						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -387,16 +390,16 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						+ "\n" + Arrays.stream(ori.minor())
+						+ "\n\n" + Arrays.stream(ori.minor())
 						.filter(r -> r != Race.DEMON)
 						.map(o -> "- " + o.getMinor(locale))
-						.collect(Collectors.joining("\n"))
-						+ "\n- " + syn.getSynergy(locale)
-						+ (ori.demon() ? "\n&- " + Race.DEMON.getMinor(locale) : "");
+						.collect(Collectors.joining("\n\n"))
+						+ "\n\n- " + syn.getSynergy(locale)
+						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			}
 
 			Graph.drawMultilineString(g, effects,
-					0, 210, 1100, -10,
+					0, 210, 1100, 10,
 					s -> {
 						String str = Utils.extract(s, "&(.+)", 1);
 
