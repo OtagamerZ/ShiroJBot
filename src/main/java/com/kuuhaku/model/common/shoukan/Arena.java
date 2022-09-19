@@ -308,14 +308,14 @@ public class Arena implements Renderer {
 		return g -> {
 			boolean reversed = hand.getSide() != Side.TOP;
 
-			BufferedImage bi = new BufferedImage(BAR_SIZE.width + BAR_SIZE.height * 2, BAR_SIZE.height, BufferedImage.TYPE_INT_ARGB);
+			int leftOffset = 250;
+			double lOffPercent = (double) leftOffset / BAR_SIZE.width;
+
+			BufferedImage bi = new BufferedImage(BAR_SIZE.width + leftOffset, BAR_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHints(Constants.HD_HINTS);
 
 			Graph.applyTransformed(g2d, reversed ? BAR_SIZE.height * 2 : 0, 0, g1 -> {
-				int leftOffset = 250;
-				double lOffPercent = (double) leftOffset / BAR_SIZE.width;
-
 				if (reversed) {
 					g1.scale(-1, -1);
 					g1.translate(-BAR_SIZE.width, -BAR_SIZE.height);
