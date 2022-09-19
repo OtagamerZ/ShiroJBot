@@ -387,13 +387,16 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 38));
 				g.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						+ "\n\n" + Arrays.stream(ori.minor()).map(o -> "- " + o.getMinor(locale)).collect(Collectors.joining("\n\n"))
+						+ "\n\n" + Arrays.stream(ori.minor())
+						.filter(r -> r != Race.DEMON)
+						.map(o -> "- " + o.getMinor(locale))
+						.collect(Collectors.joining("\n\n"))
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			}
 
 			Graph.drawMultilineString(g, effects,
-					0, 210, 1100, 6,
+					0, 210, 1100, 2,
 					s -> {
 						String str = Utils.extract(s, "&(.+)", 1);
 
