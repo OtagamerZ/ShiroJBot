@@ -418,7 +418,7 @@ public class Arena implements Renderer {
 							+ "/"
 							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 					g2.setColor(Color.WHITE);
-					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
 					if (reversed) {
 						String rdText = "";
