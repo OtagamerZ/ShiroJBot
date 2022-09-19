@@ -25,12 +25,8 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Timed;
@@ -38,7 +34,6 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -55,7 +50,7 @@ public class Arena implements Renderer {
 			(350 + MARGIN.y) * 4 /* slots */ + MARGIN.y * 10 - 1
 	);
 	private final Point CENTER = new Point(SIZE.width / 2, SIZE.height / 2);
-	private final Dimension BAR_SIZE = new Dimension((int) (SIZE.width / 1.8), 100);
+	private final Dimension BAR_SIZE = new Dimension(SIZE.width / 2, 100);
 	/*
               ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
               │  │ │  │ │  │ │  │ │  │
@@ -317,6 +312,9 @@ public class Arena implements Renderer {
 			g2d.setRenderingHints(Constants.HD_HINTS);
 
 			Graph.applyTransformed(g2d, reversed ? BAR_SIZE.height * 2 : 0, 0, g1 -> {
+				int leftOffset = 200;
+				double lOffPercent = (double) leftOffset / BAR_SIZE.width;
+
 				if (reversed) {
 					g1.scale(-1, -1);
 					g1.translate(-BAR_SIZE.width, -BAR_SIZE.height);
@@ -327,10 +325,10 @@ public class Arena implements Renderer {
 				Polygon boundaries = Graph.makePoly(BAR_SIZE,
 						1 - w, h / 3d,
 						w / 30d, 1 - h,
-						w / 1.5, 1 - h,
-						w / 1.4, h / 3d,
-						w / 1.1, h / 3d,
-						w, h,
+						lOffPercent + w / 1.5, 1 - h,
+						lOffPercent + w / 1.4, h / 3d,
+						lOffPercent + w / 1.1, h / 3d,
+						lOffPercent + w, h,
 						1 - w, h
 				);
 				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
@@ -359,8 +357,8 @@ public class Arena implements Renderer {
 
 				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
 				Rectangle2D.Double bar = new Rectangle2D.Double(
-						BAR_SIZE.width - barWidth * 1.01, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
-						barWidth * 1.025, BAR_SIZE.height / 1.75
+						2, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
+						BAR_SIZE.width, BAR_SIZE.height / 1.75
 				);
 				g1.setColor(Color.DARK_GRAY);
 				g1.fill(bar);
@@ -392,8 +390,8 @@ public class Arena implements Renderer {
 					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1), bar.height));
 				}
 
-				//int radius = BAR_SIZE.height - 10;
-//				List<BufferedImage> icons = hand.getOrigin().images();
+				/* int radius = BAR_SIZE.height - 10;
+				List<BufferedImage> icons = hand.getOrigin().images();
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
@@ -452,6 +450,7 @@ public class Arena implements Renderer {
 						);
 					}
 				});
+				 */
 
 				g1.setClip(null);
 				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
