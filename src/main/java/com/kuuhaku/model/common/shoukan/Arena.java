@@ -315,7 +315,7 @@ public class Arena implements Renderer {
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHints(Constants.HD_HINTS);
 
-			Graph.applyTransformed(g2d, reversed ? leftOffset : 0, 0, g1 -> {
+			Graph.applyTransformed(g2d, g1 -> {
 				if (reversed) {
 					g1.scale(-1, -1);
 					g1.translate(-bi.getWidth(), -bi.getHeight());
