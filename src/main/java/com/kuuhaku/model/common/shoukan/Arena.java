@@ -339,7 +339,6 @@ public class Arena implements Renderer {
 				g1.setClip(boundaries);
 
 				int mpWidth = BAR_SIZE.width / 2;
-				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
 				Color manaOver1 = new Color(0x1181FF);
 				Color manaOver2 = new Color(0x4D15FF);
 				for (int i = 0; i < 33; i++) {
@@ -353,11 +352,12 @@ public class Arena implements Renderer {
 					}
 
 					g1.fillRect(
-							(int) ((BAR_SIZE.width - barWidth * 1.01)  - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
+							(int) (BAR_SIZE.width / 1.3 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
 							2, mpWidth / 33 - 5, BAR_SIZE.height / 3 - 2
 					);
 				}
 
+				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
 				Rectangle2D.Double bar = new Rectangle2D.Double(
 						BAR_SIZE.width - barWidth * 1.01, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
 						barWidth * 1.025, BAR_SIZE.height / 1.75
