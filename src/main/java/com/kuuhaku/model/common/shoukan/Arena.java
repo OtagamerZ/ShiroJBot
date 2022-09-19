@@ -143,7 +143,7 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		Graph.applyTransformed(g2d, 0, BAR_SIZE.height + 1, g1 -> {
+		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
 			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
 			for (Side side : Side.values()) {
@@ -394,15 +394,11 @@ public class Arena implements Renderer {
 					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1), bar.height));
 				}
 
-				/* int radius = BAR_SIZE.height - 10;
-				List<BufferedImage> icons = hand.getOrigin().images();
-				 */
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
 					g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
-					//TODO Finish
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
 								-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
@@ -540,11 +536,10 @@ public class Arena implements Renderer {
 					}
 			);
 
-			Graph.applyTransformed(g, reversed ? 2240 : 265, reversed ? 1176 : 426,
+			Graph.applyTransformed(g, reversed ? 1526 : 26, reversed ? 2449 : 168,
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
-						/*
 						g1.setColor(new Color(50, 50, 50, 100));
 						Polygon poly = Graph.makePoly(new Dimension(rad * 2, rad * 2),
 								0.5, 0,
@@ -554,7 +549,7 @@ public class Arena implements Renderer {
 								0, 1 / 4d * 3,
 								0, 1 / 4d
 						);
-						poly.translate(15 + slotX, 5);*/
+						poly.translate(0, 256 / 2 - poly.getBounds().height / 2);
 
 						/*
 
