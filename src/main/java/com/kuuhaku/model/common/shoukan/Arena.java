@@ -549,9 +549,20 @@ public class Arena implements Renderer {
 								0, 1 / 4d * 3,
 								0, 1 / 4d
 						);
-						poly.translate(0, 256 / 2 - poly.getBounds().height / 2);
-						g1.fill(poly);
-						g1.setClip(poly);
+
+						if (ori.major() != Race.NONE) {
+							Rectangle rect = poly.getBounds();
+							poly.translate(reversed ? -rect.width : 0, 256 / 2 - rect.height / 2);
+							g1.fill(poly);
+							g1.setClip(poly);
+
+							if (reversed) {
+								g1.drawImage(ori.major().getImage(), rect.x, rect.y, -rect.width, -rect.height, null);
+							} else {
+								g1.drawImage(ori.major().getImage(), rect.x, rect.y, rect.width, rect.height, null);
+							}
+						}
+						g1.setClip(null);
 
 						/*
 
@@ -594,30 +605,6 @@ public class Arena implements Renderer {
 								cd * 360 / mCd
 						);
 						 */
-
-
-						if (reversed) {
-							/*Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10,
-									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
-							);*/
-						} else {
-							int yOffset = 0;
-							if (ori.major() != Race.NONE) {
-								g1.drawImage(ori.major().getImage(), 0, yOffset, rad * 2, rad * 2, null);
-								yOffset = 10 + (rad * 2);
-							}
-
-							Race[] minor = ori.minor();
-							for (int i = 0; i < minor.length; i++) {
-								g1.drawImage(minor[i].getImage(),
-										(rad + 5) * (i % 2), 5 + yOffset + (5 + rad) * (i / 2),
-										rad, rad, null
-								);
-							}
-							/*Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 000"), rad - 5, 375, -10,
-									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
-							);*/
-						}
 					}
 			);
 
