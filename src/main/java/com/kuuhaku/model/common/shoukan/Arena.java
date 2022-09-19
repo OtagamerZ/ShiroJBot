@@ -34,6 +34,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -312,7 +313,7 @@ public class Arena implements Renderer {
 			g2d.setRenderingHints(Constants.HD_HINTS);
 
 			Graph.applyTransformed(g2d, reversed ? BAR_SIZE.height * 2 : 0, 0, g1 -> {
-				int leftOffset = 200;
+				int leftOffset = 250;
 				double lOffPercent = (double) leftOffset / BAR_SIZE.width;
 
 				if (reversed) {
@@ -393,6 +394,7 @@ public class Arena implements Renderer {
 
 				/* int radius = BAR_SIZE.height - 10;
 				List<BufferedImage> icons = hand.getOrigin().images();
+				 */
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
@@ -451,7 +453,6 @@ public class Arena implements Renderer {
 						);
 					}
 				});
-				 */
 
 				g1.setClip(null);
 				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
