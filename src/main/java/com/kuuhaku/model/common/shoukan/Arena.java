@@ -29,11 +29,13 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
+import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -538,14 +540,34 @@ public class Arena implements Renderer {
 					}
 			);
 
+			Graph.applyTransformed(g, reversed ? 2240 : 265, reversed ? 426 : 1176,
+					g1 -> {
+						Origin ori = hand.getOrigin();
+
+						if (reversed) {
+							/*Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10,
+									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
+							);*/
+						} else {
+							g1.drawImage(ori.major().getImage(), 0, 5, rad, rad, null);
+							/*Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 000"), rad - 5, 375, -10,
+									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
+							);*/
+						}
+					}
+			);
+
 			Graph.applyTransformed(g, reversed ? 265 : 2240, reversed ? 1176 : 426,
 					g1 -> {
+						HashBag<Class<?>> count = new HashBag<>();
+						count.addAll(hand.getGraveyard().stream().map(Drawable::getClass).toList());
+
 						g1.setColor(Color.WHITE);
 						g1.setFont(Fonts.UBUNTU_MONO.deriveFont(Font.BOLD, rad - 5));
 						String text = "S: %2s\nE: %2s\nF: %2s\nD: %2s".formatted(
-								hand.getGraveyard().stream().filter(d -> d instanceof Senshi).count(),
-								hand.getGraveyard().stream().filter(d -> d instanceof Evogear).count(),
-								hand.getGraveyard().stream().filter(d -> d instanceof Field).count(),
+								count.getCount(Senshi.class),
+								count.getCount(Evogear.class),
+								count.getCount(Field.class),
 								hand.getDiscard().size()
 						);
 
