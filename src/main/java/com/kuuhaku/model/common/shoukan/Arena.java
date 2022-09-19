@@ -349,10 +349,12 @@ public class Arena implements Renderer {
 						g1.setColor(Color.DARK_GRAY);
 					}
 
-					g1.fillRect(
-							leftOffset + 2 + (mpWidth / 33) * i,
-							2, mpWidth / 33 - 8, BAR_SIZE.height / 3 - 2
-					);
+					int width = mpWidth / 33 - 8;
+					if (i == 32) {
+						width *= 2;
+					}
+
+					g1.fillRect(leftOffset + 2 + (mpWidth / 33) * i, 2, width, BAR_SIZE.height / 3 - 2);
 				}
 
 				Rectangle2D.Double bar = new Rectangle2D.Double(
