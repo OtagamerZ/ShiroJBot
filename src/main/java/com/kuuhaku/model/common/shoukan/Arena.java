@@ -216,7 +216,7 @@ public class Arena implements Renderer {
 				});
 			}
 
-			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
+			Graph.applyTransformed(g1, MARGIN.x - 2, -3, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
@@ -237,7 +237,7 @@ public class Arena implements Renderer {
 				}
 			});
 
-			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
+			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x - 2, -3, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
 					Drawable<?> d = top.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, top.getUserDeck()),
@@ -544,6 +544,61 @@ public class Arena implements Renderer {
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
+						/*
+						g1.setColor(new Color(50, 50, 50, 100));
+						Polygon poly = Graph.makePoly(new Dimension(rad * 2, rad * 2),
+								0.5, 0,
+								1, 1 / 4d,
+								1, 1 / 4d * 3,
+								0.5, 1,
+								0, 1 / 4d * 3,
+								0, 1 / 4d
+						);
+						poly.translate(15 + slotX, 5);*/
+
+						/*
+
+
+						poly.translate(15 + slotX, 5);
+						g1.setClip(poly);
+						g1.fill(poly);
+
+						if (reversed) {
+							g1.drawImage(icons.get(1 - i),
+									10 + slotX + radius, radius,
+									-(radius - 10), -(radius - 10),
+									null
+							);
+						} else {
+							g1.drawImage(icons.get(i),
+									20 + slotX, 10,
+									radius - 10, radius - 10,
+									null
+							);
+						}
+
+						int cd;
+						if (reversed) {
+							cd = i == 1 ? hand.getMajorCooldown() : hand.getMinorCooldown();
+						} else {
+							cd = i == 0 ? hand.getMajorCooldown() : hand.getMinorCooldown();
+						}
+
+						int mCd = switch (hand.getOrigin().major()) {
+							case SPIRIT -> 3;
+							case UNDEAD -> 4;
+							default -> 1;
+						};
+
+						g1.setColor(new Color(255, 0, 0, 200));
+						g1.fillArc(
+								15 + slotX - radius / 2, 5 - radius / 2,
+								radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
+								cd * 360 / mCd
+						);
+						 */
+
+
 						if (reversed) {
 							/*Graph.drawMultilineString(g1, text, 0, rad - 5, 375, -10,
 									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
@@ -551,13 +606,13 @@ public class Arena implements Renderer {
 						} else {
 							int yOffset = 0;
 							if (ori.major() != Race.NONE) {
-								g1.drawImage(ori.major().getImageHighlighted(), 0, yOffset, rad * 2, rad * 2, null);
+								g1.drawImage(ori.major().getImage(), 0, yOffset, rad * 2, rad * 2, null);
 								yOffset = 10 + (rad * 2);
 							}
 
 							Race[] minor = ori.minor();
 							for (int i = 0; i < minor.length; i++) {
-								g1.drawImage(minor[i].getImageHighlighted(),
+								g1.drawImage(minor[i].getImage(),
 										(rad + 5) * (i % 2), 5 + yOffset + (5 + rad) * (i / 2),
 										rad, rad, null
 								);

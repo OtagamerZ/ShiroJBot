@@ -78,10 +78,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Transient
 	private byte state = 0b10;
 	/*
-	0x0F
-	   └ 0011
-	       │└ solid
-	       └─ available
+	0xF
+	  └ 000 0011
+	          │└ solid
+	          └─ available
 	 */
 
 	@Override

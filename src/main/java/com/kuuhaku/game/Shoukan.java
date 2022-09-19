@@ -1165,10 +1165,10 @@ public class Shoukan extends GameInstance<Phase> {
 				trigger(ON_WIN, side.getOther());
 				trigger(ON_DEFEAT, side);
 
-				if (hand.getOrigin().major() == Race.UNDEAD && hand.getMajorCooldown() == 0) {
+				if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
 					hand.setHP(1);
 					hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
-					hand.setMajorCooldown(4);
+					hand.setOriginCooldown(4);
 					continue;
 				}
 
@@ -1264,7 +1264,7 @@ public class Shoukan extends GameInstance<Phase> {
 						});
 					}
 				}
-				if (curr.getOrigin().major() == Race.SPIRIT && !curr.getGraveyard().isEmpty() && curr.getMajorCooldown() == 0) {
+				if (curr.getOrigin().major() == Race.SPIRIT && !curr.getGraveyard().isEmpty() && curr.getOriginCooldown() == 0) {
 					put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 						List<StashedCard> cards = new ArrayList<>();
 						Iterator<Drawable<?>> it = curr.getGraveyard().iterator();
@@ -1286,7 +1286,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
-						curr.setMajorCooldown(3);
+						curr.setOriginCooldown(3);
 						sendPlayerHand(curr);
 						reportEvent("str/spirit_synth", curr.getName());
 					});
@@ -1373,8 +1373,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyVoTs();
-		curr.reduceMinorCooldown(1);
-		curr.reduceMajorCooldown(1);
+		curr.reduceOriginCooldown(1);
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		sendPlayerHand(curr);

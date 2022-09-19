@@ -92,11 +92,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Transient
 	private byte state = 0b10;
 	/*
-	0x0F
-	   └ 0111
-	      ││└ solid
-	      │└─ available
-	      └── flipped
+	0xF
+	  └ 000 0111
+	         ││└ solid
+	         │└─ available
+	         └── flipped
 	 */
 
 	@Override
