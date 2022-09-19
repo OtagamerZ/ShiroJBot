@@ -118,6 +118,10 @@ public abstract class Graph {
 		drawMultilineString(g2d, text, x, y, width, kerning, processor, g2d::drawString);
 	}
 
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, int blankOffset, Function<String, String> processor) {
+		drawMultilineString(g2d, text, x, y, width, kerning, blankOffset, processor, g2d::drawString);
+	}
+
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, TriConsumer<String, Integer, Integer> renderer) {
 		drawMultilineString(g2d, text, x, y, width, 0, Function.identity(), renderer);
 	}
