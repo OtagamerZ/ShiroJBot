@@ -397,7 +397,7 @@ public class Arena implements Renderer {
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
-					g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
+					g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
 					//TODO Finish
 					if (reversed) {
@@ -407,7 +407,7 @@ public class Arena implements Renderer {
 						);
 					} else {
 						Graph.drawOutlinedString(g2, mpText,
-								MARGIN.x, BAR_SIZE.height - 10,
+								MARGIN.x, BAR_SIZE.height - 20,
 								6, Color.BLACK
 						);
 					}
