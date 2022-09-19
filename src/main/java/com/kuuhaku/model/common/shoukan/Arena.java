@@ -540,7 +540,7 @@ public class Arena implements Renderer {
 					}
 			);
 
-			Graph.applyTransformed(g, reversed ? 2240 : 265, reversed ? 426 : 1176,
+			Graph.applyTransformed(g, reversed ? 2240 : 265, reversed ? 1176 : 426,
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
@@ -549,7 +549,7 @@ public class Arena implements Renderer {
 									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
 							);*/
 						} else {
-							g1.drawImage(ori.major().getImage(), 0, 5, rad, rad, null);
+							g1.drawImage(ori.major().getImage(), 0, 5, (int) (rad * 1.5), (int) (rad * 1.5), null);
 							/*Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 000"), rad - 5, 375, -10,
 									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
 							);*/
