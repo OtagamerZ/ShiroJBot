@@ -352,7 +352,7 @@ public class Arena implements Renderer {
 					}
 
 					g1.fillRect(
-							(int) (BAR_SIZE.width / 1.3 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
+							(int) (BAR_SIZE.width / 1.5 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
 							2, mpWidth / 33 - 5, BAR_SIZE.height / 3 - 2
 					);
 				}
