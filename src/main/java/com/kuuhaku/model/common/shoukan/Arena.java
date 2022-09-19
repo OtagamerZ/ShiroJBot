@@ -349,15 +349,15 @@ public class Arena implements Renderer {
 						g1.setColor(Color.DARK_GRAY);
 					}
 
+					// (int) (BAR_SIZE.width / 1.5 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2
 					g1.fillRect(
-							(int) (BAR_SIZE.width / 1.5 - (mpWidth / 33 - 0.75) * 33) + (mpWidth / 33 - 1) * i + 2,
+							leftOffset + 2 + (mpWidth / 33) * i,
 							2, mpWidth / 33 - 5, BAR_SIZE.height / 3 - 2
 					);
 				}
 
-				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
 				Rectangle2D.Double bar = new Rectangle2D.Double(
-						2, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
+						leftOffset + 2, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
 						BAR_SIZE.width, BAR_SIZE.height / 1.75
 				);
 				g1.setColor(Color.DARK_GRAY);
