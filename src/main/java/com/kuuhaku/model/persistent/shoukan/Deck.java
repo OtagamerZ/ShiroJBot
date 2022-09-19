@@ -395,9 +395,8 @@ public class Deck extends DAO<Deck> {
 						+ (ori.demon() ? "\n&- " + Race.DEMON.getMinor(locale) : "");
 			}
 
-			g.setColor(Color.WHITE);
 			Graph.drawMultilineString(g, effects,
-					0, 210, 1100, 5,
+					0, 210, 1100, 10,
 					s -> {
 						String str = Utils.extract(s, "&(.+)", 1);
 
@@ -419,6 +418,7 @@ public class Deck extends DAO<Deck> {
 				str = "  \"" + syn.getDescription(locale) + "\"";
 			}
 
+			g.setColor(Color.WHITE);
 			Graph.drawMultilineString(g, str,
 					0, bi.getHeight() - 520 - (int) Graph.getMultilineStringBounds(g, str, 1100).getHeight(),
 					1100
