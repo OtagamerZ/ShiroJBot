@@ -403,7 +403,7 @@ public class Arena implements Renderer {
 					//TODO Finish
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
-								-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), 20,
+								-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
 								6, Color.BLACK
 						);
 					} else {
