@@ -550,6 +550,8 @@ public class Arena implements Renderer {
 								0, 1 / 4d
 						);
 						poly.translate(0, 256 / 2 - poly.getBounds().height / 2);
+						g1.fill(poly);
+						g1.setClip(poly);
 
 						/*
 
