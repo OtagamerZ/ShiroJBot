@@ -336,7 +336,7 @@ public class Arena implements Renderer {
 
 				g1.setClip(boundaries);
 
-				int mpWidth = (int) (BAR_SIZE.width / 1.4);
+				int mpWidth = (int) (BAR_SIZE.width / 1.3);
 				Color manaOver1 = new Color(0x1181FF);
 				Color manaOver2 = new Color(0x4D15FF);
 				for (int i = 0; i < 33; i++) {
@@ -351,7 +351,7 @@ public class Arena implements Renderer {
 
 					g1.fillRect(
 							leftOffset + 2 + (mpWidth / 33) * i,
-							2, mpWidth / 33 - 5, BAR_SIZE.height / 3 - 2
+							2, mpWidth / 33 - 8, BAR_SIZE.height / 3 - 2
 					);
 				}
 
