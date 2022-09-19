@@ -156,7 +156,7 @@ public class Arena implements Renderer {
 				Deck deck = game.getHands().get(side).getUserDeck();
 				DeckStyling style = deck.getStyling();
 
-				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 20, yOffset - 5, null);
+				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
 
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
@@ -216,7 +216,7 @@ public class Arena implements Renderer {
 				});
 			}
 
-			Graph.applyTransformed(g1, MARGIN.x - 2, -3, g2 -> {
+			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
@@ -237,7 +237,7 @@ public class Arena implements Renderer {
 				}
 			});
 
-			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x - 2, -3, g2 -> {
+			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
 					Drawable<?> d = top.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, top.getUserDeck()),
