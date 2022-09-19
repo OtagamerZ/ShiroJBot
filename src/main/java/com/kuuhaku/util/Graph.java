@@ -39,6 +39,10 @@ public abstract class Graph {
 	}
 
 	public static Rectangle2D getMultilineStringBounds(Graphics2D g2d, String text, int width) {
+		return getMultilineStringBounds(g2d, text, width, 0);
+	}
+
+	public static Rectangle2D getMultilineStringBounds(Graphics2D g2d, String text, int width, int kerning) {
 		int y = 0;
 		String[] lines = text.split("\n");
 		for (String line : lines) {
@@ -55,7 +59,7 @@ public abstract class Graph {
 				}
 			}
 
-			y += g2d.getFontMetrics().getHeight();
+			y += g2d.getFontMetrics().getHeight() - kerning;
 		}
 
 		return new Rectangle2D.Double(0, 0, width, y);
@@ -123,6 +127,10 @@ public abstract class Graph {
 	}
 
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
+		drawMultilineString(g2d, text, x, y, width, kerning, 0, processor, renderer);
+	}
+
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, int blankOffset, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
 			String[] words = line.split("(?<=\\S[ \u200B])");
@@ -141,7 +149,11 @@ public abstract class Graph {
 				}
 			}
 
-			y += g2d.getFontMetrics().getHeight() - kerning;
+			if (line.isBlank()) {
+				y += g2d.getFontMetrics().getHeight() - kerning + blankOffset;
+			} else {
+				y += g2d.getFontMetrics().getHeight() - kerning;
+			}
 		}
 	}
 

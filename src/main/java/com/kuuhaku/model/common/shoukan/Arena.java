@@ -549,10 +549,10 @@ public class Arena implements Renderer {
 									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
 							);*/
 						} else {
-							int yOffset = 5;
+							int yOffset = 0;
 							if (ori.major() != Race.NONE) {
 								g1.drawImage(ori.major().getImage(), 0, yOffset, rad * 2, rad * 2, null);
-								yOffset = 5 + (rad * 2);
+								yOffset = 10 + (rad * 2);
 							}
 
 							Race[] minor = ori.minor();
