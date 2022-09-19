@@ -33,6 +33,9 @@ public enum Fonts {
 	OPEN_SANS("font/OpenSans.ttf"),
 	OPEN_SANS_BOLD("font/OpenSans-Bold.ttf"),
 	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf"),
+	OPEN_SANS_COMPACT("font/OpenSans_Compact.ttf"),
+	OPEN_SANS_COMPACT_BOLD("font/OpenSans_Compact-Bold.ttf"),
+	OPEN_SANS_COMPACT_EXTRABOLD("font/OpenSans_Compact-ExtraBold.ttf"),
 	DOREKING("font/Doreking.ttf"),
 	DEFAULT("");
 

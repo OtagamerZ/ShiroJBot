@@ -55,7 +55,7 @@ public class Arena implements Renderer {
 			(350 + MARGIN.y) * 4 /* slots */ + MARGIN.y * 10 - 1
 	);
 	private final Point CENTER = new Point(SIZE.width / 2, SIZE.height / 2);
-	private final Dimension BAR_SIZE = new Dimension(SIZE.width / 2, 100);
+	private final Dimension BAR_SIZE = new Dimension((int) (SIZE.width / 1.8), 100);
 	/*
               ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
               │  │ │  │ │  │ │  │ │  │
@@ -359,7 +359,7 @@ public class Arena implements Renderer {
 
 				double barWidth = BAR_SIZE.width - (BAR_SIZE.width / 1.5 - (mpWidth / 33d - 0.75) * 33);
 				Rectangle2D.Double bar = new Rectangle2D.Double(
-						BAR_SIZE.width - barWidth * 1.025, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
+						BAR_SIZE.width - barWidth * 1.035, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
 						barWidth * 1.025, BAR_SIZE.height / 1.75
 				);
 				g1.setColor(Color.DARK_GRAY);
@@ -397,7 +397,7 @@ public class Arena implements Renderer {
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 					g2.setColor(Color.CYAN);
-					g2.setFont(new Font(Font.MONOSPACED, Font.BOLD, BAR_SIZE.height - 20));
+					g2.setFont(Fonts.OPEN_SANS_COMPACT_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
 					//TODO Finish
 					if (reversed) {
