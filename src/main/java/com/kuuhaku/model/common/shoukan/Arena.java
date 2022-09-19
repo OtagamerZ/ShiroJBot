@@ -550,6 +550,14 @@ public class Arena implements Renderer {
 							);*/
 						} else {
 							g1.drawImage(ori.major().getImage(), 0, 5, (int) (rad * 1.5), (int) (rad * 1.5), null);
+
+							Race[] minor = ori.minor();
+							for (int i = 0; i < minor.length; i++) {
+								g1.drawImage(minor[i].getImage(),
+										(rad + 5) * (i / 4), (int) (10 + (rad * 1.5)) + (5 + rad) * (i % 4),
+										rad, rad, null
+								);
+							}
 							/*Graph.drawMultilineString(g1, text, -g1.getFontMetrics().stringWidth("S: 000"), rad - 5, 375, -10,
 									(str, px, py) -> Graph.drawOutlinedString(g1, str.replace("_", " "), px, py, 6, Color.BLACK)
 							);*/
