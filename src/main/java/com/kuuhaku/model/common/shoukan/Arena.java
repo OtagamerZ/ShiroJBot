@@ -551,14 +551,14 @@ public class Arena implements Renderer {
 						} else {
 							int yOffset = 0;
 							if (ori.major() != Race.NONE) {
-								g1.drawImage(ori.major().getImage(), 0, yOffset, rad * 2, rad * 2, null);
+								g1.drawImage(ori.major().getImageHighlighted(), 0, yOffset, rad * 2, rad * 2, null);
 								yOffset = 10 + (rad * 2);
 							}
 
 							Race[] minor = ori.minor();
 							for (int i = 0; i < minor.length; i++) {
-								g1.drawImage(minor[i].getImage(),
-										(rad + 5) * (i / 4), 5 + yOffset + (5 + rad) * (i % 4),
+								g1.drawImage(minor[i].getImageHighlighted(),
+										(rad + 5) * (i % 2), 5 + yOffset + (5 + rad) * (i / 2),
 										rad, rad, null
 								);
 							}

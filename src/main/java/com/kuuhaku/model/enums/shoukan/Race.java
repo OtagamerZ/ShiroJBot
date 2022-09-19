@@ -124,6 +124,10 @@ public enum Race {
 		return IO.getResourceAsImage("shoukan/race/full/" + name() + ".png");
 	}
 
+	public BufferedImage getImageHighlighted() {
+		return IO.getResourceAsImage("shoukan/race/full_highlight/" + name() + ".png");
+	}
+
 	public BufferedImage getIcon() {
 		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
 	}
