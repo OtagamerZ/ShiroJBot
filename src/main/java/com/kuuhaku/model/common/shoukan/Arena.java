@@ -318,7 +318,7 @@ public class Arena implements Renderer {
 			Graph.applyTransformed(g2d, reversed ? BAR_SIZE.height * 2 : 0, 0, g1 -> {
 				if (reversed) {
 					g1.scale(-1, -1);
-					g1.translate(-BAR_SIZE.width, -BAR_SIZE.height);
+					g1.translate(-bi.getWidth(), -bi.getHeight());
 				}
 
 				double h = 1 - 2d / BAR_SIZE.height;
@@ -403,7 +403,7 @@ public class Arena implements Renderer {
 					//TODO Finish
 					if (reversed) {
 						Graph.drawOutlinedString(g2, mpText,
-								-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText) - 50), (int) -(bar.y + 10),
+								-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), 20,
 								6, Color.BLACK
 						);
 					} else {
