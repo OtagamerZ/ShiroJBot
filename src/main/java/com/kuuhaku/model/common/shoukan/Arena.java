@@ -591,6 +591,7 @@ public class Arena implements Renderer {
 
 							if (reversed) {
 								poly.translate(-rect.x * 2 - rect.width, 0);
+								rect = poly.getBounds();
 							}
 
 							g1.setColor(new Color(50, 50, 50, 100));
