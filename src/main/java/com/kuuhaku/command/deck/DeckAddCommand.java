@@ -33,6 +33,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Bit;
@@ -52,7 +53,7 @@ import java.util.Set;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature("<card:word:r> <first:word>")
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS
@@ -87,7 +88,12 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
+		List<StashedCard> stash = kp.getNotInUse();
+		if (args.has("first")) {
+			stash = stash.subList(0, Math.min(stash.size(), 1));
+		}
+
+		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

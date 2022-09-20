@@ -114,7 +114,7 @@ public class DeckRemoveCommand implements Executable {
 		}
 
 		if (args.has("first")) {
-			stash.remo
+			stash = stash.subList(0, Math.min(stash.size(), 1));
 		}
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
