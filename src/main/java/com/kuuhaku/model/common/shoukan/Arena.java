@@ -535,7 +535,7 @@ public class Arena implements Renderer {
 					}
 			);
 
-			Graph.applyTransformed(g, reversed ? 1526 : 26, /*reversed ? 2449 :*/ 168,
+			Graph.applyTransformed(g, reversed ? 2449 : 26, reversed ? 1526 : 168,
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
