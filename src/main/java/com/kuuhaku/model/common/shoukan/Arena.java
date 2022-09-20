@@ -553,7 +553,6 @@ public class Arena implements Renderer {
 
 						int xOffset = 0;
 						int centerY = 256 / 2;
-						int dir = reversed ? -1 : 1;
 						if (ori.major() != Race.NONE) {
 							poly.translate(reversed ? -poly.getBounds().width : 0, centerY - poly.getBounds().height / 2);
 							Rectangle rect = poly.getBounds();
@@ -570,16 +569,16 @@ public class Arena implements Renderer {
 								default -> 1;
 							};
 
-							g1.drawImage(ori.major().getImage(), rect.x, rect.y, rect.width * dir, rect.height * dir, null);
+							g1.drawImage(ori.major().getImage(), rect.x, rect.y, rect.width, rect.height, null);
 
 							g1.setColor(new Color(255, 0, 0, 200));
 							g1.fillArc(
 									rect.x, rect.y,
-									rect.width * dir, rect.height * dir, 90,
+									rect.width, rect.height, 90,
 									hand.getOriginCooldown() * 360 / maxCd
 							);
 
-							xOffset = (poly.getBounds().width + MARGIN.x) * dir;
+							xOffset = (poly.getBounds().width + MARGIN.x);
 						}
 
 						Race[] minor = ori.minor();
@@ -597,11 +596,9 @@ public class Arena implements Renderer {
 							g1.fill(poly);
 
 							g1.setClip(poly);
-							g1.drawImage(r.getImage(), rect.x, rect.y, rect.width * dir, rect.height * dir, null);
+							g1.drawImage(r.getImage(), rect.x, rect.y, rect.width, rect.height, null);
 						}
-
-						g1.setClip(null);
-					}
+				}
 			);
 
 			Graph.applyTransformed(g, reversed ? 265 : 2240, reversed ? 1176 : 426,
