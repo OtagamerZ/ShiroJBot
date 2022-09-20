@@ -489,11 +489,11 @@ public class Deck extends DAO<Deck> {
 			if (ori.size() > 2) {
 				origin = new Origin(Race.NONE, ori.toArray(Race[]::new));
 			} else {
-				if (ori.size() > 1) {
-					origin = new Origin(ori.get(0), ori.get(1));
-				} else {
-					origin = new Origin(ori.get(0));
-				}
+				origin = switch (ori.size()) {
+					case 2 -> new Origin(ori.get(0), ori.get(1));
+					case 1 -> new Origin(ori.get(0));
+					default -> new Origin(Race.NONE);
+				};
 			}
 		}
 
