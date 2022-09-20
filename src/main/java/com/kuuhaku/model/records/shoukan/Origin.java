@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public record Origin(Race major, Race... minor) {
@@ -64,11 +65,12 @@ public record Origin(Race major, Race... minor) {
 	}
 
 	public boolean isPure() {
-		return minor().length == 0;
+		System.out.println(Arrays.toString(minor));
+		return minor.length == 0;
 	}
 
 	public boolean hasMinor(Race race) {
-		for (Race r : minor()) {
+		for (Race r : minor) {
 			if (r.isRace(race)) return true;
 		}
 
