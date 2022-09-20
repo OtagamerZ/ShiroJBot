@@ -559,6 +559,7 @@ public class Arena implements Renderer {
 							Rectangle rect = poly.getBounds();
 
 							g1.setColor(new Color(50, 50, 50, 100));
+							Graph.drawOutlined(g1, poly, 5, ori.major().getColor());
 							g1.fill(poly);
 
 							g1.setClip(poly);
@@ -592,7 +593,7 @@ public class Arena implements Renderer {
 							Rectangle rect = poly.getBounds();
 
 							g1.setColor(new Color(50, 50, 50, 100));
-							Graph.drawOutlined(g1, poly, 2, r.getColor());
+							Graph.drawOutlined(g1, poly, 5, r.getColor());
 							g1.fill(poly);
 
 							g1.setClip(poly);
