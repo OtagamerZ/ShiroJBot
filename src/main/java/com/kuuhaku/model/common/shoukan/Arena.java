@@ -551,8 +551,8 @@ public class Arena implements Renderer {
 						);
 
 						if (ori.major() != Race.NONE) {
+							poly.translate(reversed ? -poly.getBounds().width : 0, 256 / 2 - poly.getBounds().height / 2);
 							Rectangle rect = poly.getBounds();
-							poly.translate(reversed ? -rect.width : 0, 256 / 2 - rect.height / 2);
 							g1.fill(poly);
 							g1.setClip(poly);
 
