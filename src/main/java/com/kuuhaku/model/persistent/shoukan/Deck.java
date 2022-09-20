@@ -367,7 +367,7 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				g.setColor(Color.WHITE);
 				effects = "- " + locale.get("minor/mixed")
-						+ "\n\n- " + Arrays.stream(ori.minor())
+						+ "\n\n" + Arrays.stream(ori.minor())
 						.filter(r -> r != Race.DEMON)
 						.map(o -> "- " + o.getMinor(locale))
 						.collect(Collectors.joining("\n\n"))
