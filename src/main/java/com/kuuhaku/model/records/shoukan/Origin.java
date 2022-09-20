@@ -24,14 +24,9 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public record Origin(Race major, Race... minor) {
-	public Origin(List<Race> races) {
-		this(races.get(0), races.get(1));
-	}
-
 	public Race synergy() {
 		if (major == Race.NONE) return Race.NONE;
 
@@ -65,7 +60,6 @@ public record Origin(Race major, Race... minor) {
 	}
 
 	public boolean isPure() {
-		System.out.println(Arrays.toString(minor));
 		return minor.length == 0;
 	}
 

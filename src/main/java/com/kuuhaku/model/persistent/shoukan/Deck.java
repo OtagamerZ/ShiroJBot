@@ -486,14 +486,14 @@ public class Deck extends DAO<Deck> {
 				ori.add(r);
 			}
 
-			while (ori.size() < 2) {
-				ori.add(Race.NONE);
-			}
-
 			if (ori.size() > 2) {
 				origin = new Origin(Race.NONE, ori.toArray(Race[]::new));
 			} else {
-				origin = new Origin(ori);
+				if (ori.size() > 1) {
+					origin = new Origin(ori.get(0), ori.get(1));
+				} else {
+					origin = new Origin(ori.get(0));
+				}
 			}
 		}
 
