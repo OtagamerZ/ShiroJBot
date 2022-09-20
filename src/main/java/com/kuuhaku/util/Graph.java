@@ -385,13 +385,18 @@ public abstract class Graph {
 		}
 	}
 
-	public static Color mix(Color a, Color b) {
-		return new Color(
-				(a.getRed() + b.getRed()) / 2,
-				(a.getGreen() + b.getGreen()) / 2,
-				(a.getBlue() + b.getBlue()) / 2,
-				(a.getAlpha() + b.getAlpha()) / 2
-		);
+	public static Color mix(Color... colors) {
+		int r = 0;
+		int g = 0;
+		int b = 0;
+
+		for (Color c : colors) {
+			r += c.getRed();
+			g += c.getGreen();
+			b += c.getBlue();
+		}
+
+		return new Color(r / colors.length, g / colors.length, b / colors.length);
 	}
 
 	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {

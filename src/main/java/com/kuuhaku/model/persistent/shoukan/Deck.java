@@ -359,10 +359,10 @@ public class Deck extends DAO<Deck> {
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else if (ori.minor().length > 1) {
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
-				g.setColor(Color.GRAY);
+				g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
 
 				String text = locale.get("str/deck_origin_mixed");
-				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.WHITE);
+				Graph.drawOutlinedString(g, text, 0, (150 + 75) / 2, 2, Color.BLACK);
 
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				g.setColor(Color.WHITE);
