@@ -552,9 +552,10 @@ public class Arena implements Renderer {
 						Polygon poly = Graph.makePoly(new Dimension(rad * 2, rad * 2), coords);
 
 						int xOffset = 0;
+						int centerY = 256 / 2;
 						int dir = reversed ? -1 : 1;
 						if (ori.major() != Race.NONE) {
-							poly.translate(reversed ? -poly.getBounds().width : 0, 256 / 2 - poly.getBounds().height / 2);
+							poly.translate(reversed ? -poly.getBounds().width : 0, centerY - poly.getBounds().height / 2);
 							Rectangle rect = poly.getBounds();
 
 							g1.setColor(new Color(50, 50, 50, 100));
@@ -585,7 +586,7 @@ public class Arena implements Renderer {
 							g1.setClip(null);
 
 							poly = Graph.makePoly(new Dimension(rad, rad), coords);
-							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), /*-(MARGIN.y / 4) +*/ (rad + MARGIN.y) * (i % 2));
+							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y + (rad + MARGIN.y * 2) * (i % 2));
 							Rectangle rect = poly.getBounds();
 
 							g1.setColor(new Color(50, 50, 50, 100));
