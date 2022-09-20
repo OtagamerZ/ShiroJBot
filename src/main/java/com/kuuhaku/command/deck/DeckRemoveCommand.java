@@ -114,8 +114,8 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
-		if (args.has("first")) {
-			int i = args.getInt("amount");
+		if (args.has("index")) {
+			int i = args.getInt("index");
 			if (i < 1) {
 				event.channel().sendMessage(locale.get("error/invalid_value_range", 0, stash.size())).queue();
 				return;
