@@ -356,7 +356,7 @@ public class Deck extends DAO<Deck> {
 				effects = "- " + ori.major().getMajor(locale)
 						+ "\n\n- " + locale.get("minor/pureblood")
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
-			} else if (ori.major() == Race.NONE) {
+			} else if (ori.minor().length > 1) {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
 				g.setColor(Color.GRAY);

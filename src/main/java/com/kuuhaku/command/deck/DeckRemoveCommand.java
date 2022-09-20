@@ -56,7 +56,7 @@ import java.util.Set;
 )
 @Signature({
 		"<action:word:r>[all]",
-		"<card:word:r>"
+		"<card:word:r> <first:word>"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
@@ -111,6 +111,10 @@ public class DeckRemoveCommand implements Executable {
 		if (stash.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/not_in_deck")).queue();
 			return;
+		}
+
+		if (args.has("first")) {
+			stash.remo
 		}
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
