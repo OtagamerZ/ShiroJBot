@@ -475,6 +475,7 @@ public class Deck extends DAO<Deck> {
 					.iterator();
 
 			int high = 0;
+			boolean allSame = true;
 			while (it.hasNext()) {
 				Race r = it.next();
 				int count = races.getCount(r);
@@ -482,10 +483,14 @@ public class Deck extends DAO<Deck> {
 				if (high == 0) high = count;
 				else if (count < high && ori.size() >= 2) break;
 
+				if (count != high) {
+					allSame = false;
+				}
+
 				ori.add(r);
 			}
 
-			if (ori.size() > 2) {
+			if (allSame && ori.size() > 1) {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 			} else {
 				origin = switch (ori.size()) {
