@@ -343,7 +343,7 @@ public class Deck extends DAO<Deck> {
 			List<BufferedImage> icons = ori.images();
 
 			String effects = null;
-			if (ori.isPure()) {
+			if (ori.major() != Race.NONE && ori.isPure()) {
 				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
