@@ -349,7 +349,7 @@ public class Deck extends DAO<Deck> {
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
-				String text = locale.get("str/deck_origin_pure", syn.getName(locale));
+				String text = locale.get("str/deck_origin_pure", ori.major().getName(locale));
 				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
