@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import jakarta.persistence.NoResultException;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +57,7 @@ import java.util.Set;
 )
 @Signature({
 		"<action:word:r>[all]",
-		"<card:word:r> <first:word>[1]"
+		"<card:word:r> <index:number>"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
@@ -114,7 +115,13 @@ public class DeckRemoveCommand implements Executable {
 		}
 
 		if (args.has("first")) {
-			stash = stash.subList(0, Math.min(stash.size(), 1));
+			int i = args.getInt("amount");
+			if (i < 1) {
+				event.channel().sendMessage(locale.get("error/invalid_value_range", 0, stash.size())).queue();
+				return;
+			}
+
+			stash = List.of(stash.get(i));
 		}
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())

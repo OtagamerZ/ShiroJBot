@@ -53,7 +53,7 @@ import java.util.Set;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <first:word>[1]")
+@Signature("<card:word:r> <amount:number>")
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS
@@ -89,52 +89,28 @@ public class DeckAddCommand implements Executable {
 		}
 
 		List<StashedCard> stash = kp.getNotInUse();
-		if (args.has("first")) {
-			stash = stash.subList(0, Math.min(stash.size(), 1));
+		if (args.has("amount")) {
+			int qtd = args.getInt("amount");
+			if (qtd < 1) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+				return;
+			}
+
+			Deck dk = d.refresh();
+			for (int i = 0; i < Math.min(qtd, stash.size()); i++) {
+				StashedCard sc = stash.get(i);
+				addToDeck(event, locale, dk, sc, card);
+			}
+			dk.save();
+
+			event.channel().sendMessage(locale.get("success/deck_add")).queue();
+			return;
 		}
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
-					if (sc == null) {
-						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-						return;
-					}
-
 					Deck dk = d.refresh();
-					switch (sc.getType()) {
-						case KAWAIPON -> {
-							if (sc.getKawaiponCard().getCard().getRarity().getIndex() == -1) {
-								event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
-								return;
-							} else if (sc.getKawaiponCard().isChrome()) {
-								event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
-								return;
-							} else if (dk.getSenshi().size() >= 36) {
-								event.channel().sendMessage(locale.get("error/deck_full")).queue();
-								return;
-							}
-
-							dk.getSenshi().add(DAO.find(Senshi.class, card.getId()));
-						}
-						case EVOGEAR -> {
-							if (dk.getEvogear().size() >= 24) {
-								event.channel().sendMessage(locale.get("error/deck_full")).queue();
-								return;
-							}
-
-							dk.getEvogear().add(DAO.find(Evogear.class, card.getId()));
-						}
-						case FIELD -> {
-							if (dk.getFields().size() >= 3) {
-								event.channel().sendMessage(locale.get("error/deck_full")).queue();
-								return;
-							}
-
-							dk.getFields().add(DAO.find(Field.class, card.getId()));
-						}
-					}
-					sc.setDeck(dk);
-					sc.save();
+					addToDeck(event, locale, dk, sc, card);
 					dk.save();
 
 					event.channel().sendMessage(locale.get("success/deck_add")).queue();
@@ -147,5 +123,47 @@ public class DeckAddCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
+	}
+
+	private void addToDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc, Card card) {
+		if (sc == null) {
+			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+			return;
+		}
+
+		switch (sc.getType()) {
+			case KAWAIPON -> {
+				if (sc.getKawaiponCard().getCard().getRarity().getIndex() == -1) {
+					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
+					return;
+				} else if (sc.getKawaiponCard().isChrome()) {
+					event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
+					return;
+				} else if (d.getSenshi().size() >= 36) {
+					event.channel().sendMessage(locale.get("error/deck_full")).queue();
+					return;
+				}
+
+				d.getSenshi().add(DAO.find(Senshi.class, card.getId()));
+			}
+			case EVOGEAR -> {
+				if (d.getEvogear().size() >= 24) {
+					event.channel().sendMessage(locale.get("error/deck_full")).queue();
+					return;
+				}
+
+				d.getEvogear().add(DAO.find(Evogear.class, card.getId()));
+			}
+			case FIELD -> {
+				if (d.getFields().size() >= 3) {
+					event.channel().sendMessage(locale.get("error/deck_full")).queue();
+					return;
+				}
+
+				d.getFields().add(DAO.find(Field.class, card.getId()));
+			}
+		}
+		sc.setDeck(d);
+		sc.save();
 	}
 }
