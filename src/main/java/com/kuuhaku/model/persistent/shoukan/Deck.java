@@ -338,12 +338,11 @@ public class Deck extends DAO<Deck> {
 
 		Graph.applyTransformed(g2d, 30, 520, g -> {
 			Origin ori = getOrigins();
-			if (ori.major() == Race.NONE && ori.minor().length == 0) return;
 
 			Race syn = ori.synergy();
 			List<BufferedImage> icons = ori.images();
 
-			String effects;
+			String effects = null;
 			if (ori.isPure()) {
 				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
@@ -373,7 +372,7 @@ public class Deck extends DAO<Deck> {
 						.collect(Collectors.joining("\n\n"))
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
-			} else {
+			} else if (ori.synergy() != Race.NONE) {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.synergy().getColor());
@@ -398,6 +397,7 @@ public class Deck extends DAO<Deck> {
 						+ "\n\n- " + syn.getSynergy(locale)
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			}
+			if (effects == null) return;
 
 			Graph.drawMultilineString(g, effects,
 					0, 210, 1100, 10, -20,
