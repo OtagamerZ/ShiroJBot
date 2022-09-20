@@ -503,8 +503,7 @@ public class Arena implements Renderer {
 			}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
-			Graph.applyTransformed(g,
-					reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
+			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
 					g1 -> {
 						int space = 615;
 						int spacing = 80;
@@ -536,7 +535,7 @@ public class Arena implements Renderer {
 					}
 			);
 
-			Graph.applyTransformed(g, reversed ? 1526 : 26, reversed ? 1869 /*2449*/ : 168,
+			Graph.applyTransformed(g, /*reversed ? 1526 :*/ 26, /*reversed ? 2449 :*/ 168,
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
@@ -559,7 +558,6 @@ public class Arena implements Renderer {
 
 							g1.setColor(new Color(50, 50, 50, 100));
 							Graph.drawOutlined(g1, poly, 5, ori.major().getColor());
-							g1.fill(poly);
 
 							g1.setClip(poly);
 
@@ -593,7 +591,6 @@ public class Arena implements Renderer {
 
 							g1.setColor(new Color(50, 50, 50, 100));
 							Graph.drawOutlined(g1, poly, 5, r.getColor());
-							g1.fill(poly);
 
 							g1.setClip(poly);
 							g1.drawImage(r.getImage(), rect.x, rect.y, rect.width, rect.height, null);
