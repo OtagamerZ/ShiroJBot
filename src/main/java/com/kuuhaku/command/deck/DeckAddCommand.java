@@ -53,7 +53,7 @@ import java.util.Set;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <first:word>")
+@Signature("<card:word:r> <first:word>[1]")
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS

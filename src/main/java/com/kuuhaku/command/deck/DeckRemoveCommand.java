@@ -56,7 +56,7 @@ import java.util.Set;
 )
 @Signature({
 		"<action:word:r>[all]",
-		"<card:word:r> <first:word>"
+		"<card:word:r> <first:word>[1]"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,

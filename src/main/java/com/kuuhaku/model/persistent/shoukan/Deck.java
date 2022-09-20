@@ -338,6 +338,7 @@ public class Deck extends DAO<Deck> {
 
 		Graph.applyTransformed(g2d, 30, 520, g -> {
 			Origin ori = getOrigins();
+			if (ori.major() == Race.NONE && ori.minor().length == 0) return;
 
 			Race syn = ori.synergy();
 			List<BufferedImage> icons = ori.images();
