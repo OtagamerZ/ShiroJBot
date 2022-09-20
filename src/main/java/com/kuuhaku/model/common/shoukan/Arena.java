@@ -558,7 +558,7 @@ public class Arena implements Renderer {
 							poly.translate(reversed ? -poly.getBounds().width : 0, centerY - poly.getBounds().height / 2);
 							Rectangle rect = poly.getBounds();
 
-							g1.setColor(new Color(50, 50, 50, 100));
+							g1.setColor(new Color(70, 70, 70, 100));
 							Graph.drawOutlined(g1, poly, 5, ori.major().getColor());
 							g1.fill(poly);
 
@@ -592,7 +592,7 @@ public class Arena implements Renderer {
 							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y + (rad + MARGIN.y * 2) * (i % 2));
 							Rectangle rect = poly.getBounds();
 
-							g1.setColor(new Color(50, 50, 50, 100));
+							g1.setColor(new Color(70, 70, 70, 100));
 							Graph.drawOutlined(g1, poly, 5, r.getColor());
 							g1.fill(poly);
 
