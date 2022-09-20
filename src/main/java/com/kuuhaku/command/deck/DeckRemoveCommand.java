@@ -54,7 +54,10 @@ import java.util.Set;
 		subname = "remove",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature({
+		"<action:word:r>[all]",
+		"<card:word:r>"
+})
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS
@@ -74,6 +77,15 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
+		if (args.has("action")) {
+			DAO.applyNative("UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
+					event.user().getId(), d.getId()
+			);
+
+			event.channel().sendMessage(locale.get("success/deck_clear")).queue();
+			return;
+		}
+
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
 		if (card == null) {
 			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
@@ -90,7 +102,7 @@ public class DeckRemoveCommand implements Executable {
 		}
 
 		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.card.id IN ?3",
+				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.card.id = ?3",
 				event.user().getId(), d.getId(), card.getId()
 		);
 		if (stash.isEmpty()) {
