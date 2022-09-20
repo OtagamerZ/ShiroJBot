@@ -583,6 +583,8 @@ public class Arena implements Renderer {
 
 						Race[] minor = ori.minor();
 						for (int i = 0; i < minor.length; i++) {
+							Race r = minor[i];
+
 							g1.setClip(null);
 
 							poly = Graph.makePoly(new Dimension(rad, rad), coords);
@@ -590,10 +592,11 @@ public class Arena implements Renderer {
 							Rectangle rect = poly.getBounds();
 
 							g1.setColor(new Color(50, 50, 50, 100));
+							Graph.drawOutlined(g1, poly, 2, r.getColor());
 							g1.fill(poly);
 
 							g1.setClip(poly);
-							g1.drawImage(minor[i].getImage(), rect.x, rect.y, rect.width * dir, rect.height * dir, null);
+							g1.drawImage(r.getImage(), rect.x, rect.y, rect.width * dir, rect.height * dir, null);
 						}
 
 						g1.setClip(null);
