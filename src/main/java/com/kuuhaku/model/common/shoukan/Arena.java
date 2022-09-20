@@ -540,71 +540,63 @@ public class Arena implements Renderer {
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
-						g1.setColor(new Color(50, 50, 50, 100));
-						Polygon poly = Graph.makePoly(new Dimension(rad * 2, rad * 2),
+						double[] coords = {
 								0.5, 0,
 								1, 1 / 4d,
 								1, 1 / 4d * 3,
 								0.5, 1,
 								0, 1 / 4d * 3,
 								0, 1 / 4d
-						);
+						};
 
+						Polygon poly = Graph.makePoly(new Dimension(rad * 2, rad * 2), coords);
+
+						int xOffset = 0;
 						if (ori.major() != Race.NONE) {
 							poly.translate(reversed ? -poly.getBounds().width : 0, 256 / 2 - poly.getBounds().height / 2);
 							Rectangle rect = poly.getBounds();
+
+							g1.setColor(new Color(50, 50, 50, 100));
 							g1.fill(poly);
+
 							g1.setClip(poly);
 
-							if (reversed) {
-								g1.drawImage(ori.major().getImage(), rect.x, rect.y, -rect.width, -rect.height, null);
-							} else {
-								g1.drawImage(ori.major().getImage(), rect.x, rect.y, rect.width, rect.height, null);
-							}
+							int maxCd = switch (hand.getOrigin().major()) {
+								case SPIRIT -> 3;
+								case UNDEAD -> 4;
+								default -> 1;
+							};
+
+							int dir = reversed ? -1 : 1;
+
+							g1.drawImage(ori.major().getImage(), rect.x, rect.y, rect.width * dir, rect.height * dir, null);
+
+							g1.setColor(new Color(255, 0, 0, 200));
+							g1.fillArc(
+									rect.x, rect.y,
+									rect.width * dir, rect.height * dir, 90,
+									hand.getOriginCooldown() * 360 / maxCd
+							);
+
+							xOffset = (poly.getBounds().width + MARGIN.x) * dir;
 						}
+
+						Race[] minor = ori.minor();
+						for (int i = 0; i < minor.length; i++) {
+							g1.setClip(null);
+
+							poly = Graph.makePoly(new Dimension(rad, rad), coords);
+							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), -(MARGIN.y / 4) + (rad + MARGIN.y) * (i % 2));
+							Rectangle rect = poly.getBounds();
+
+							g1.setColor(new Color(50, 50, 50, 100));
+							g1.fill(poly);
+
+							g1.setClip(poly);
+							g1.drawImage(minor[i].getImage(), rect.x, rect.y, rect.width, rect.height, null);
+						}
+
 						g1.setClip(null);
-
-						/*
-
-
-						poly.translate(15 + slotX, 5);
-						g1.setClip(poly);
-						g1.fill(poly);
-
-						if (reversed) {
-							g1.drawImage(icons.get(1 - i),
-									10 + slotX + radius, radius,
-									-(radius - 10), -(radius - 10),
-									null
-							);
-						} else {
-							g1.drawImage(icons.get(i),
-									20 + slotX, 10,
-									radius - 10, radius - 10,
-									null
-							);
-						}
-
-						int cd;
-						if (reversed) {
-							cd = i == 1 ? hand.getMajorCooldown() : hand.getMinorCooldown();
-						} else {
-							cd = i == 0 ? hand.getMajorCooldown() : hand.getMinorCooldown();
-						}
-
-						int mCd = switch (hand.getOrigin().major()) {
-							case SPIRIT -> 3;
-							case UNDEAD -> 4;
-							default -> 1;
-						};
-
-						g1.setColor(new Color(255, 0, 0, 200));
-						g1.fillArc(
-								15 + slotX - radius / 2, 5 - radius / 2,
-								radius * 2, radius * 2, 90 * (reversed ? -1 : 1),
-								cd * 360 / mCd
-						);
-						 */
 					}
 			);
 
