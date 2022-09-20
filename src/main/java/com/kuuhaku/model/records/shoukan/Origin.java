@@ -28,7 +28,7 @@ import java.util.List;
 
 public record Origin(Race major, Race... minor) {
 	public Race synergy() {
-		if (major == Race.NONE) return Race.NONE;
+		if (major == Race.NONE || minor.length == 0) return Race.NONE;
 
 		return major.fuse(minor[0]);
 	}
