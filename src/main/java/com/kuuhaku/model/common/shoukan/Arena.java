@@ -586,11 +586,12 @@ public class Arena implements Renderer {
 							g1.setClip(null);
 
 							poly = Graph.makePoly(new Dimension(rad, rad), coords);
-							poly.translate(
-									(xOffset + (rad + MARGIN.x) * (i / 2)) * (reversed ? -1 : 1),
-									centerY - rad - MARGIN.y + (rad + MARGIN.y * 2) * (i % 2)
-							);
+							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y + (rad + MARGIN.y * 2) * (i % 2));
 							Rectangle rect = poly.getBounds();
+
+							if (reversed) {
+								poly.translate(-rect.x * 2 - rect.width, 0);
+							}
 
 							g1.setColor(new Color(50, 50, 50, 100));
 							Graph.drawOutlined(g1, poly, 5, r.getColor());
