@@ -81,9 +81,9 @@ public class DeckRemoveCommand implements Executable {
 			DAO.applyNative("UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
 					event.user().getId(), d.getId()
 			);
-			DAO.applyNative("DELETE FROM deck_senshi WHERE deck_id = ?1");
-			DAO.applyNative("DELETE FROM deck_evogear WHERE deck_id = ?1");
-			DAO.applyNative("DELETE FROM deck_field WHERE deck_id = ?1");
+			DAO.applyNative("DELETE FROM deck_senshi WHERE deck_id = ?1", d.getId());
+			DAO.applyNative("DELETE FROM deck_evogear WHERE deck_id = ?1", d.getId());
+			DAO.applyNative("DELETE FROM deck_field WHERE deck_id = ?1", d.getId());
 
 			event.channel().sendMessage(locale.get("success/deck_clear")).queue();
 			return;
