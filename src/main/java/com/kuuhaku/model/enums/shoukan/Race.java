@@ -68,6 +68,7 @@ public enum Race {
 	SPAWN(UNDEAD.flag | DEMON.flag),
 	IMP(MYSTICAL.flag | DEMON.flag),
 
+	MIXED(0),
 	NONE(0);
 
 	private final int flag;

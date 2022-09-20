@@ -97,9 +97,12 @@ public class DeckAddCommand implements Executable {
 			}
 
 			Deck dk = d.refresh();
-			for (int i = 0; i < Math.min(qtd, stash.size()); i++) {
+			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
-				addToDeck(event, locale, dk, sc, card);
+				if (sc.getCard().equals(card)) {
+					addToDeck(event, locale, dk, sc, card);
+					j++;
+				}
 			}
 			dk.save();
 

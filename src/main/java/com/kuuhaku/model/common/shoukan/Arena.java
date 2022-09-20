@@ -552,7 +552,7 @@ public class Arena implements Renderer {
 
 						int xOffset = 0;
 						int centerY = 256 / 2;
-						if (ori.major() != Race.NONE) {
+						if (ori.major() != Race.MIXED) {
 							poly.translate(reversed ? -poly.getBounds().width : 0, centerY - poly.getBounds().height / 2);
 							Rectangle rect = poly.getBounds();
 

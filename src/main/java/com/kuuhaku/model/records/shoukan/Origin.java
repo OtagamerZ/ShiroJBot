@@ -53,7 +53,7 @@ public record Origin(Race major, Race... minor) {
 	}
 
 	public Race[] minor() {
-		if (major == Race.NONE) return minor;
+		if (major == Race.MIXED) return minor;
 		else if (demon()) return ArrayUtils.add(minor, major);
 
 		return minor;
