@@ -64,7 +64,7 @@ public class CommonSocket extends WebSocketClient {
 		JSONObject payload = new JSONObject(message);
 		if (payload.isEmpty()) return;
 
-		if (payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
+		if (payload.getString("type").equals("AUTH") && payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
 			if (retry > 0) {
 				retry = 0;
 				Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
