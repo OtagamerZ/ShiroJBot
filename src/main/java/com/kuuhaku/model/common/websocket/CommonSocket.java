@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpStatus;
@@ -75,7 +76,7 @@ public class CommonSocket extends WebSocketClient {
 
 			send(new JSONObject() {{
 				put("type", "ATTACH");
-				put("channels", List.of("eval", "shoukan"));
+				put("channels", new JSONArray(List.of("eval", "shoukan")));
 			}}.toString());
 			return;
 		}
