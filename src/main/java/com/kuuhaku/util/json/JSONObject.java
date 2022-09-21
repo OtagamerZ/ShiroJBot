@@ -212,7 +212,7 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 	}
 
 	public JSONObject getJSONObject(String key) {
-		return new JSONObject(getString(key, "{}"));
+		return new JSONObject(get(key, "{}"));
 	}
 
 	public JSONObject getJSONObject(String key, JSONObject or) {
