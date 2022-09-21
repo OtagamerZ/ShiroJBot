@@ -93,6 +93,7 @@ public class CommonSocket extends WebSocketClient {
 			case "shoukan" -> {
 				if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
 
+				System.out.println("Request: " + payload);
 				Account acc = DAO.find(Account.class, payload.getString("uid"));
 
 				Senshi s = DAO.find(Senshi.class, payload.getString("card"));
