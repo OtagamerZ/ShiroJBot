@@ -21,6 +21,9 @@ package com.kuuhaku.model.common.websocket;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -71,7 +74,7 @@ public class CommonSocket extends WebSocketClient {
 
 			send(new JSONObject() {{
 				put("type", "ATTACH");
-				put("channels", List.of("eval"));
+				put("channels", List.of("eval", "shoukan"));
 			}}.toString());
 			return;
 		}
@@ -86,6 +89,17 @@ public class CommonSocket extends WebSocketClient {
 				if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
 					Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
 				}
+			}
+			case "shoukan" -> {
+				if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
+
+				Account acc = DAO.find(Account.class, payload.getString("uid"));
+
+				Senshi s = DAO.find(Senshi.class, payload.getString("card"));
+				send(new JSONObject() {{
+					put("type", "DELIVERY");
+					put("content", IO.atob(s.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png"));
+				}}.toString());
 			}
 		}
 	}
