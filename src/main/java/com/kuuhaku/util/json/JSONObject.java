@@ -22,7 +22,10 @@ import com.kuuhaku.util.Utils;
 import org.intellij.lang.annotations.Language;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class JSONObject extends HashMap<String, Object> implements Cloneable {
 	@Serial
@@ -200,7 +203,7 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 	}
 
 	public JSONArray getJSONArray(String key) {
-		return new JSONArray(getString(key, "[]"));
+		return new JSONArray(get(key, "[]"));
 	}
 
 	public JSONArray getJSONArray(String key, JSONArray or) {
