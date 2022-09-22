@@ -68,11 +68,11 @@ tasks.withType(JavaCompile) {
 	options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
-task preBuild << {
+task setOrigin {
 	System.property("GIT_ORIGIN", "git config --get remote.origin.url".execute().text)
 	System.property("GIT_BRANCH", "git rev-parse --abbrev-ref HEAD".execute().text)
 }
-run.dependsOn preBuild
+run.dependsOn setOrigin
 
 dependencies {
 	//Core
