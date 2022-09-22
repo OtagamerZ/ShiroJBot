@@ -96,7 +96,7 @@ public class CommonSocket extends WebSocketClient {
 
 				String b64;
 				Senshi s = DAO.find(Senshi.class, payload.getString("card"));
-				if (payload.has("uid")) {
+				if (Main.getApp().getShiro().getUserById(payload.getString("uid")) != null) {
 					Account acc = DAO.find(Account.class, payload.getString("uid"));
 					b64 = IO.atob(s.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
 				} else {
