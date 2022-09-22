@@ -27,12 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Origin(Race major, Race... minor) {
-	public Race synergy() {
-		if (major == Race.NONE || minor.length == 0) return Race.NONE;
-
-		return major.fuse(minor[0]);
-	}
-
 	public List<BufferedImage> images() {
 		return new ArrayList<>() {{
 			if (major != Race.NONE) {
@@ -57,6 +51,12 @@ public record Origin(Race major, Race... minor) {
 		else if (demon()) return ArrayUtils.add(minor, major);
 
 		return minor;
+	}
+
+	public Race synergy() {
+		if (major == Race.NONE || minor.length == 0) return Race.NONE;
+
+		return major.fuse(minor[0]);
 	}
 
 	public boolean isPure() {
