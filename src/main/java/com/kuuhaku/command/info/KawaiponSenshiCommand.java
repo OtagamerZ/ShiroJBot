@@ -74,6 +74,8 @@ public class KawaiponSenshiCommand implements Executable {
 				.setTitle(race.getName(locale))
 				.setDescription(race.getDescription(locale));
 
+		System.out.println(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png");
+
 		if (Integer.bitCount(race.getFlag()) == 1) {
 			eb.addField(locale.get("str/major_effect"), race.getMajor(locale), false)
 					.addField(locale.get("str/minor_effect"), race.getMinor(locale), false);
