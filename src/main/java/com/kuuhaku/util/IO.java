@@ -53,7 +53,9 @@ public abstract class IO {
 	}
 
 	public static BufferedImage getResourceAsImage(String path) {
-		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(path, s -> {
+		byte[] bytes = Main.getCacheManager().getResourceCache().compute(path, (k, v) -> {
+			if (v != null && v.length > 0) return v;
+
 			try (InputStream is = IO.class.getClassLoader().getResourceAsStream(path)) {
 				if (is == null) return new byte[0];
 				else return IOUtils.toByteArray(is);
@@ -76,7 +78,9 @@ public abstract class IO {
 	}
 
 	public static BufferedImage getImage(String url) {
-		byte[] bytes = Main.getCacheManager().getResourceCache().computeIfAbsent(url, s -> {
+		byte[] bytes = Main.getCacheManager().getResourceCache().compute(url, (k, v) -> {
+			if (v != null && v.length > 0) return v;
+
 			try {
 				return getBytes(ImageIO.read(new URL(url)), getImageType(url));
 			} catch (IllegalArgumentException | IOException e) {

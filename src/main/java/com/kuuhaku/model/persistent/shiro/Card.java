@@ -25,13 +25,13 @@ import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.ImageFilters;
+import jakarta.persistence.*;
 import okio.Buffer;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.imageio.ImageIO;
-import jakarta.persistence.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -219,7 +219,9 @@ public class Card extends DAO<Card> {
 		byte[] cardBytes;
 		if (f.exists()) {
 			File finalF = f;
-			cardBytes = Main.getCacheManager().getCardCache().computeIfAbsent(id, k -> {
+			cardBytes = Main.getCacheManager().getCardCache().compute(id, (k, v) -> {
+				if (v != null && v.length > 0) return v;
+
 				try {
 					return FileUtils.readFileToByteArray(finalF);
 				} catch (IOException e) {
