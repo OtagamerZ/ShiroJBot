@@ -57,7 +57,7 @@ public abstract class Spawn {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
-		if (config.getSettings().getKawaiponChannels().isEmpty()) return null;
+		if (!config.getSettings().getKawaiponChannels().contains(channel)) return null;
 
 		double dropRate = 8 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
@@ -86,7 +86,7 @@ public abstract class Spawn {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
-		if (config.getSettings().getDropChannels().isEmpty()) return null;
+		if (!config.getSettings().getDropChannels().contains(channel)) return null;
 
 		double dropRate = 10 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
