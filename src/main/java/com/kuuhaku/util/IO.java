@@ -92,25 +92,11 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		try (Buffer buf = new Buffer()) {
-			ImageIO.write(image, "jpg", buf.outputStream());
-
-			return buf.readByteArray();
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-			return new byte[0];
-		}
+		return getBytes(image, "jpg", 0.8f);
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
-		try (Buffer buf = new Buffer()) {
-			ImageIO.write(image, encoding, buf.outputStream());
-
-			return buf.readByteArray();
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-			return new byte[0];
-		}
+		return getBytes(image, encoding, 0.8f);
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
@@ -123,7 +109,7 @@ public abstract class IO {
 			if (param.canWriteCompressed()) {
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 				if (param instanceof WebPWriteParam webp) {
-					webp.setCompressionType(param.getCompressionTypes()[Math.round(quality)]);
+					webp.setCompressionType(param.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]);
 				}
 
 				param.setCompressionQuality(quality);

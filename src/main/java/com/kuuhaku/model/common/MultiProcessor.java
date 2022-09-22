@@ -18,28 +18,30 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class MultiProcessor<In, Out> {
-	private final Supplier<In> supplier;
+	private final Supplier<Collection<In>> supplier;
 	private final ExecutorService exec;
 	private final int threads;
 
-	private MultiProcessor(Supplier<In> supplier, ExecutorService exec, int threads) {
+	private MultiProcessor(Supplier<Collection<In>> supplier, ExecutorService exec, int threads) {
 		this.supplier = supplier;
 		this.exec = exec;
 		this.threads = threads;
 	}
 
-	public static <In, Out> MultiProcessor<In, Out> with(int threads, Supplier<In> supplier) {
+	public static <In> MultiProcessor<In, ?> with(int threads, Supplier<Collection<In>> supplier) {
 		return new MultiProcessor<>(supplier, Executors.newWorkStealingPool(threads), threads);
 	}
 
@@ -47,17 +49,19 @@ public class MultiProcessor<In, Out> {
 		return new MultiProcessor<>(supplier, exec, threads);
 	}
 
-	public List<CompletableFuture<Out>> process(BiFunction<Integer, In, Out> task) {
+	public List<CompletableFuture<Out>> process(Function<In, Out> task) {
+		List<In> all = List.copyOf(supplier.get());
+
 		List<CompletableFuture<Out>> tasks = new ArrayList<>();
-		for (int i = 0; i < threads; i++) {
+		for (int i = 0; i < all.size(); i++) {
 			int index = i;
-			tasks.add(CompletableFuture.supplyAsync(() -> task.apply(index, supplier.get()), exec));
+			tasks.add(CompletableFuture.supplyAsync(() -> task.apply(all.get(index)), exec));
 		}
 
 		return tasks;
 	}
 
-	public Out process(BiFunction<Integer, In, Out> task, Function<List<Out>, Out> merger) {
+	public Out process(Function<In, Out> task, Function<List<Out>, Out> merger) {
 		try {
 			List<Out> finished = new ArrayList<>();
 			List<CompletableFuture<Out>> tasks = process(task);
@@ -67,6 +71,7 @@ public class MultiProcessor<In, Out> {
 
 			return merger.apply(finished);
 		} catch (ExecutionException | InterruptedException e) {
+			Constants.LOGGER.error(e, e);
 			return null;
 		}
 	}
