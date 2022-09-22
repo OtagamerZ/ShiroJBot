@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpStatus;
 import org.intellij.lang.annotations.Language;
@@ -37,6 +38,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -80,10 +82,11 @@ public class CommonSocket extends WebSocketClient {
 			return;
 		}
 
+		String token = DigestUtils.sha256Hex(TOKEN);
+		if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
+
 		switch (payload.getString("channel")) {
 			case "eval" -> {
-				if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
-
 				@Language("Groovy")
 				String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
 
@@ -92,7 +95,14 @@ public class CommonSocket extends WebSocketClient {
 				}
 			}
 			case "shoukan" -> {
-				if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
+				send(new JSONObject(){{
+					put("type", "ACKNOWLEDGE");
+					put("token", token);
+				}}.toString());
+
+				MessageDigest md = DigestUtils.getDigest("md5");
+				md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
+				md.update(token.getBytes(StandardCharsets.UTF_8));
 
 				String b64;
 				Senshi s = DAO.find(Senshi.class, payload.getString("card"));
@@ -105,6 +115,7 @@ public class CommonSocket extends WebSocketClient {
 
 				send(new JSONObject() {{
 					put("type", "DELIVERY");
+					put("key", Hex.encodeHexString(md.digest()));
 					put("content", b64);
 				}}.toString());
 			}
