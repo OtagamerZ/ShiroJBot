@@ -76,7 +76,7 @@ public class KawaiponSenshiCommand implements Executable {
 				.setDescription(race.getDescription(locale));
 
 		if (Integer.bitCount(race.getFlag()) == 1) {
-			eb.addField(locale.get("str/sub_races"), Utils.properlyJoin(locale.get("str/and")).apply(Arrays.stream(race.split()).map(r -> r.getName(locale)).toList()), false)
+			eb.addField(locale.get("str/sub_races"), Utils.properlyJoin(locale.get("str/and")).apply(Arrays.stream(race.derivates()).map(r -> r.getName(locale)).toList()), false)
 					.addField(locale.get("str/major_effect"), race.getMajor(locale), false)
 					.addField(locale.get("str/minor_effect"), race.getMinor(locale), false);
 		} else {
