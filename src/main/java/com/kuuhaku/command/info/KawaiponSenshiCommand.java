@@ -62,6 +62,12 @@ public class KawaiponSenshiCommand implements Executable {
 			return;
 		}
 
+		int total = race.getCount();
+		if (total == 0) {
+			event.channel().sendMessage(locale.get("error/empty_race")).queue();
+			return;
+		}
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", "Senshi"))
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
@@ -76,7 +82,7 @@ public class KawaiponSenshiCommand implements Executable {
 		}
 
 		List<Page> pages = new ArrayList<>();
-		int max = (int) Math.ceil(race.getCount() / 50d);
+		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
 			eb.setImage((Constants.API_ROOT + "shoukan/cards/%s/%s?uid=%s&v=%s&page=%s").formatted(
 					locale, race.getFlag(), event.user().getId(), System.currentTimeMillis(), i
