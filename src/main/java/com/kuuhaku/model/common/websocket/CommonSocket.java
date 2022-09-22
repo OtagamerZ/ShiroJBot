@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.IO;
@@ -93,13 +94,18 @@ public class CommonSocket extends WebSocketClient {
 			case "shoukan" -> {
 				if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
 
-				System.out.println("Request: " + payload);
-				Account acc = DAO.find(Account.class, payload.getString("uid"));
-
+				String b64;
 				Senshi s = DAO.find(Senshi.class, payload.getString("card"));
+				if (payload.has("uid")) {
+					Account acc = DAO.find(Account.class, payload.getString("uid"));
+					b64 = IO.atob(s.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
+				} else {
+					b64 = IO.atob(s.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
+				}
+
 				send(new JSONObject() {{
 					put("type", "DELIVERY");
-					put("content", IO.atob(s.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png"));
+					put("content", b64);
 				}}.toString());
 			}
 		}
