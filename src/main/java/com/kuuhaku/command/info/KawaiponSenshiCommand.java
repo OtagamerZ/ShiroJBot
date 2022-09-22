@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "kawaipon",
@@ -74,13 +75,12 @@ public class KawaiponSenshiCommand implements Executable {
 				.setTitle(race.getName(locale))
 				.setDescription(race.getDescription(locale));
 
-		System.out.println(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png");
-
 		if (Integer.bitCount(race.getFlag()) == 1) {
 			eb.addField(locale.get("str/major_effect"), race.getMajor(locale), false)
 					.addField(locale.get("str/minor_effect"), race.getMinor(locale), false);
 		} else {
-			eb.addField(locale.get("str/synergy_effect"), race.getSynergy(locale), false);
+			eb.addField(locale.get("str/origins"), Arrays.stream(race.split()).map(r -> r.getName(locale)).collect(Collectors.joining(" + ")), false)
+					.addField(locale.get("str/synergy_effect"), race.getSynergy(locale), false);
 		}
 
 		List<Page> pages = new ArrayList<>();
