@@ -72,7 +72,7 @@ public class KawaiponSenshiCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", "Senshi"))
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
-				.setTitle(race.getName(locale))
+				.setTitle(race.getName(locale) + " (`" + race.name() + "`)")
 				.setDescription(race.getDescription(locale));
 
 		if (Integer.bitCount(race.getFlag()) == 1) {
