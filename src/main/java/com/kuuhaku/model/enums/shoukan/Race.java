@@ -121,6 +121,18 @@ public enum Race {
 		return races.toArray(Race[]::new);
 	}
 
+	public Race[] derivates() {
+		List<Race> races = new ArrayList<>();
+
+		for (Race r : values()) {
+			if (r != this && r.isRace(this)) {
+				races.add(r);
+			}
+		}
+
+		return races.toArray(Race[]::new);
+	}
+
 	public BufferedImage getImage() {
 		return IO.getResourceAsImage("shoukan/race/full/" + name() + ".png");
 	}
