@@ -338,7 +338,7 @@ public class Deck extends DAO<Deck> {
 
 		Graph.applyTransformed(g2d, 30, 520, g -> {
 			Origin ori = getOrigins();
-			System.out.println(ori.major().name());
+			System.out.println(ori.major());
 			if (ori.major() == Race.NONE) return;
 
 			Race syn = ori.synergy();
