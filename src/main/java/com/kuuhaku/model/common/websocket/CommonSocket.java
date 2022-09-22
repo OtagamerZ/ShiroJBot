@@ -64,7 +64,6 @@ public class CommonSocket extends WebSocketClient {
 		JSONObject payload = new JSONObject(message);
 		if (payload.isEmpty()) return;
 
-		System.out.println(payload);
 		if (payload.getString("type").equals("AUTH") && payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
 			if (retry > 0) {
 				retry = 0;
