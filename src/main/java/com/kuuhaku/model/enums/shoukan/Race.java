@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.enums.shoukan;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -25,11 +26,12 @@ import com.kuuhaku.util.IO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum Race {
 	// Pure races
-	HUMAN(0x1),
+	HUMAN(0b1),
 	BEAST(0x2),
 	MACHINE(0x4),
 	DIVINITY(0x8),
@@ -148,6 +150,16 @@ public enum Race {
 		} else {
 			return Graph.mix(Graph.getColor(pures[0].getImage()), Graph.getColor(pures[1].getImage()));
 		}
+	}
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public int getCount() {
+		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM senshi WHERE race = ?1 OR race IN ?2",
+				name(), Arrays.stream(derivates()).map(Race::name).toList()
+		);
 	}
 
 	public static Race getByFlag(int flag) {
