@@ -82,7 +82,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private JSONArray charms = new JSONArray();
 
 	@Embedded
-	private CardAttributes base;
+	private CardAttributes base = new CardAttributes();
 
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();

@@ -71,7 +71,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private Race race;
 
 	@Embedded
-	private CardAttributes base;
+	private CardAttributes base = new CardAttributes();
 
 	@Transient
 	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(Objects::nonNull, e -> {

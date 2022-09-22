@@ -104,7 +104,7 @@ public class Deck extends DAO<Deck> {
 	private List<Field> field = new ArrayList<>();
 
 	@Embedded
-	private DeckStyling styling;
+	private DeckStyling styling = new DeckStyling();
 
 	private transient Origin origin = null;
 
