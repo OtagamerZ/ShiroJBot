@@ -97,6 +97,7 @@ public class CommonSocket extends WebSocketClient {
 			case "shoukan" -> {
 				send(new JSONObject(){{
 					put("type", "ACKNOWLEDGE");
+					put("key", payload.getString("key"));
 					put("token", token);
 				}}.toString());
 
