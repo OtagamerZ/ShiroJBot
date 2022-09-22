@@ -481,8 +481,7 @@ public class Deck extends DAO<Deck> {
 
 				if (high == 0) high = count;
 				else if (count < high && ori.size() >= 2) break;
-
-				if (count != high) {
+				else if (count != high) {
 					allSame = false;
 				}
 
