@@ -480,10 +480,11 @@ public class Deck extends DAO<Deck> {
 				int count = races.getCount(r);
 
 				if (high == 0) high = count;
-				else if (count < high && ori.size() >= 2) break;
 				else if (count != high) {
 					allSame = false;
 				}
+
+				if (count < high && ori.size() >= 2) break;
 
 				ori.add(r);
 			}
