@@ -62,8 +62,6 @@ repositories {
 
 run {
 	standardInput = System.in
-	System.setProperty("GIT_ORIGIN", "git config --get remote.origin.url".execute().text)
-	System.setProperty("GIT_BRANCH", "git rev-parse --abbrev-ref HEAD".execute().text)
 }
 
 tasks.withType(JavaCompile) {
