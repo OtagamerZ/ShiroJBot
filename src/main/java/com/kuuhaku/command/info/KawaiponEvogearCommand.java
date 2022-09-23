@@ -63,9 +63,11 @@ public class KawaiponEvogearCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				eb.setImage((Constants.API_ROOT + "shoukan/%s/evogear?uid=%s&v=%s&page=%s").formatted(
+				String url = (Constants.API_ROOT + "shoukan/%s/evogar?uid=%s&v=%s&page=%s").formatted(
 						locale, event.user().getId(), System.currentTimeMillis(), i
-				));
+				);
+
+				eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
 				pages.add(new InteractPage(eb.build()));
 			}
 
@@ -91,7 +93,7 @@ public class KawaiponEvogearCommand implements Executable {
 					locale, tier, event.user().getId(), System.currentTimeMillis(), i
 			);
 
-			eb.setImage(url).setFooter(locale.get("str/fallback_url", url));
+			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
 			pages.add(new InteractPage(eb.build()));
 		}
 

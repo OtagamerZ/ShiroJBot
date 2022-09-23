@@ -67,9 +67,11 @@ public class KawaiponSenshiCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				eb.setImage((Constants.API_ROOT + "shoukan/%s/senshi?uid=%s&v=%s&page=%s").formatted(
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?uid=%s&v=%s&page=%s").formatted(
 						locale, event.user().getId(), System.currentTimeMillis(), i
-				));
+				);
+
+				eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
 				pages.add(new InteractPage(eb.build()));
 			}
 
@@ -93,8 +95,7 @@ public class KawaiponSenshiCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
-				.setTitle(race.getName(locale) + " (`" + race.name() + "`)")
-				.setDescription(race.getDescription(locale));
+				.setTitle(race.getName(locale) + " (`" + race.name() + "`)");
 
 		if (Integer.bitCount(race.getFlag()) == 1) {
 			eb.addField(locale.get("str/sub_races"), Utils.properlyJoin(locale.get("str/and")).apply(Arrays.stream(race.derivates()).map(r -> r.getName(locale)).toList()), false)
@@ -112,7 +113,7 @@ public class KawaiponSenshiCommand implements Executable {
 					locale, race.getFlag(), event.user().getId(), System.currentTimeMillis(), i
 			);
 
-			eb.setImage(url).setFooter(locale.get("str/fallback_url", url));
+			eb.setImage(url).setDescription(race.getDescription(locale) + "\n\n" + locale.get("str/fallback_url", url));
 			pages.add(new InteractPage(eb.build()));
 		}
 

@@ -92,7 +92,7 @@ public class KawaiponRarityCommand implements Executable {
 					locale, kp.getUid(), rarity, args.getString("kind", "n"), System.currentTimeMillis(), i
 			);
 
-			eb.setImage(url).setFooter(locale.get("str/fallback_url", url));
+			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
 			pages.add(new InteractPage(eb.build()));
 		}
 
