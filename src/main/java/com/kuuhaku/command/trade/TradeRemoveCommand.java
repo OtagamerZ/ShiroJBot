@@ -62,8 +62,8 @@ public class TradeRemoveCommand implements Executable {
 
 		if (args.containsKey("value")) {
 			int offer = args.getInt("value");
-			if (offer < 0) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
+			if (offer < 1) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
 				return;
 			} else if (offer > trade.getSelfValue(event.user().getId())) {
 				event.channel().sendMessage(locale.get("error/offer_cr")).queue();
