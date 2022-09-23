@@ -35,6 +35,7 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import kotlin.Triple;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.bag.TreeBag;
@@ -49,6 +50,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Entity
@@ -372,7 +374,7 @@ public class Deck extends DAO<Deck> {
 						.filter(r -> r != Race.DEMON)
 						.map(o -> "- " + o.getMinor(locale))
 						.collect(Collectors.joining("\n\n"))
-						+(ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else {
 				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -485,19 +487,37 @@ public class Deck extends DAO<Deck> {
 					allSame = false;
 				}
 
-				if (count < high && ori.size() >= 2) break;
+				if (count < high && ori.size() >= 2) {
+					Race curr = ori.get(1);
+					if (races.getCount(curr) == races.getCount(r)) {
+						Race keep = IntStream.range(0, senshi.size())
+								.mapToObj(i -> new Pair<>(i, senshi.get(i).getRace()))
+								.filter(p -> Utils.equalsAny(p.getSecond(), curr, r))
+								.map(Pair::getSecond)
+								.findFirst()
+								.orElse(Race.NONE);
+
+						if (keep != Race.NONE) {
+							ori.set(1, keep);
+						}
+					}
+
+					break;
+				}
 
 				ori.add(r);
 			}
 
 			if (allSame && ori.size() > 1) {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
+				System.out.println(origin);
 			} else {
 				origin = switch (ori.size()) {
 					case 2 -> new Origin(ori.get(0), ori.get(1));
 					case 1 -> new Origin(ori.get(0));
 					default -> new Origin(Race.NONE);
 				};
+				System.out.println(origin);
 			}
 		}
 
