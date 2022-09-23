@@ -54,7 +54,7 @@ public class KawaiponEvogearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		if (!args.has("tier")) {
-			int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM evogear");
+			int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM evogear WHERE tier > 0");
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/available_cards", locale.get("type/evogear")))
@@ -74,7 +74,7 @@ public class KawaiponEvogearCommand implements Executable {
 		}
 
 		int tier = args.getInt("tier");
-		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM evogear WHERE tier = ?1", tier);
+		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM evogear WHERE tier = ?1 AND tier > 0", tier);
 		if (total == 0) {
 			event.channel().sendMessage(locale.get("error/empty_tier")).queue();
 			return;
