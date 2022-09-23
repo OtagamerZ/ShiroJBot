@@ -21,10 +21,15 @@ package com.kuuhaku.model.common.websocket;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -105,13 +110,20 @@ public class CommonSocket extends WebSocketClient {
 				md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
 				md.update(token.getBytes(StandardCharsets.UTF_8));
 
+				String id = payload.getString("card");
+				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+				Drawable<?> d = switch (types.get(0)) {
+					case EVOGEAR -> DAO.find(Evogear.class, id);
+					case FIELD -> DAO.find(Field.class, id);
+					default -> DAO.find(Senshi.class, id);
+				};
+
 				String b64;
-				Senshi s = DAO.find(Senshi.class, payload.getString("card"));
 				if (DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM account WHERE uid = ?1", payload.getString("uid")) > 0) {
 					Account acc = DAO.find(Account.class, payload.getString("uid"));
-					b64 = IO.atob(s.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
+					b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
 				} else {
-					b64 = IO.atob(s.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
+					b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
 				}
 
 				send(new JSONObject() {{
