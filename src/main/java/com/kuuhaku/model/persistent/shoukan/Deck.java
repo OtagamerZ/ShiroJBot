@@ -510,6 +510,7 @@ public class Deck extends DAO<Deck> {
 
 			if (allSame && ori.size() > 1) {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
+				System.out.println("All same");
 				System.out.println(origin);
 			} else {
 				origin = switch (ori.size()) {
