@@ -108,9 +108,11 @@ public class KawaiponSenshiCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			eb.setImage((Constants.API_ROOT + "shoukan/%s/senshi?race=%s&uid=%s&v=%s&page=%s").formatted(
+			String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&uid=%s&v=%s&page=%s").formatted(
 					locale, race.getFlag(), event.user().getId(), System.currentTimeMillis(), i
-			));
+			);
+
+			eb.setImage(url).setFooter(locale.get("str/fallback_url", url));
 			pages.add(new InteractPage(eb.build()));
 		}
 
