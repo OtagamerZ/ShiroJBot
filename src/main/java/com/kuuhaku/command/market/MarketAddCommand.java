@@ -70,8 +70,8 @@ public class MarketAddCommand implements Executable {
 					}
 
 					int price = args.getInt("price");
-					if (price <= 0) {
-						event.channel().sendMessage(locale.get("error/invalid_value_range", 0, Integer.MAX_VALUE)).queue();
+					if (!Utils.between(price, 1, 10_000_000)) {
+						event.channel().sendMessage(locale.get("error/invalid_value_range", 1, 10_000_000)).queue();
 						return;
 					}
 
