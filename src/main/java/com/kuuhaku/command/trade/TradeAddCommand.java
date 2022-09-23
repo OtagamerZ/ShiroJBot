@@ -62,8 +62,11 @@ public class TradeAddCommand implements Executable {
 
 		if (args.containsKey("value")) {
 			int offer = args.getInt("value");
-			if (offer < 0) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
+			if (offer < 1) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+				return;
+			} else if (!Utils.between(offer + trade.getSelfValue(event.user().getId()), 0, 10_000_000)) {
+				event.channel().sendMessage(locale.get("error/invalid_value_range", 0, 10_000_000)).queue();
 				return;
 			}
 
