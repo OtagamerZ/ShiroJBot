@@ -484,25 +484,27 @@ public class Deck extends DAO<Deck> {
 
 				if (high == 0) high = count;
 				else if (count != high) {
-					allSame = false;
-				}
+					if (ori.size() == 2) {
+						allSame = false;
 
-				if (count < high && ori.size() >= 2) {
-					Race curr = ori.get(1);
-					if (races.getCount(curr) == races.getCount(r)) {
-						Race keep = IntStream.range(0, senshi.size())
-								.mapToObj(i -> new Pair<>(i, senshi.get(i).getRace()))
-								.filter(p -> Utils.equalsAny(p.getSecond(), curr, r))
-								.map(Pair::getSecond)
-								.findFirst()
-								.orElse(Race.NONE);
+						Race curr = ori.get(1);
+						if (races.getCount(curr) == races.getCount(r)) {
+							Race keep = IntStream.range(0, senshi.size())
+									.mapToObj(i -> new Pair<>(i, senshi.get(i).getRace()))
+									.filter(p -> Utils.equalsAny(p.getSecond(), curr, r))
+									.map(Pair::getSecond)
+									.findFirst()
+									.orElse(Race.NONE);
 
-						if (keep != Race.NONE) {
-							ori.set(1, keep);
+							if (keep != Race.NONE) {
+								ori.set(1, keep);
+							}
 						}
-					}
 
-					break;
+						break;
+					} else {
+						break;
+					}
 				}
 
 				ori.add(r);
@@ -510,15 +512,12 @@ public class Deck extends DAO<Deck> {
 
 			if (allSame && ori.size() > 1) {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
-				System.out.println("All same");
-				System.out.println(origin);
 			} else {
 				origin = switch (ori.size()) {
 					case 2 -> new Origin(ori.get(0), ori.get(1));
 					case 1 -> new Origin(ori.get(0));
 					default -> new Origin(Race.NONE);
 				};
-				System.out.println(origin);
 			}
 		}
 
