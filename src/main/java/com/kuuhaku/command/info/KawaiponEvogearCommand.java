@@ -63,7 +63,7 @@ public class KawaiponEvogearCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				String url = (Constants.API_ROOT + "shoukan/%s/evogar?uid=%s&v=%s&page=%s").formatted(
+				String url = (Constants.API_ROOT + "shoukan/%s/evogear?uid=%s&v=%s&page=%s").formatted(
 						locale, event.user().getId(), System.currentTimeMillis(), i
 				);
 
@@ -89,7 +89,7 @@ public class KawaiponEvogearCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			String url = (Constants.API_ROOT + "shoukan/%s/evogar?tier=%s&uid=%s&v=%s&page=%s").formatted(
+			String url = (Constants.API_ROOT + "shoukan/%s/evogear?tier=%s&uid=%s&v=%s&page=%s").formatted(
 					locale, tier, event.user().getId(), System.currentTimeMillis(), i
 			);
 
