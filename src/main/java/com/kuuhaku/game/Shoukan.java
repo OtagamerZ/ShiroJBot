@@ -80,7 +80,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Arena arena;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new TreeSet<>();
-	private final JSONObject data = new JSONObject();
+	private final Map<Drawable<?>, JSONObject> data = new HashMap<>();
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
@@ -1118,8 +1118,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public JSONObject getData() {
-		return data;
+	public JSONObject getData(Drawable<?> holder) {
+		return data.computeIfAbsent(holder, k -> new JSONObject());
 	}
 
 	private void sendPlayerHand(Hand hand) {
@@ -1157,6 +1157,8 @@ public class Shoukan extends GameInstance<Phase> {
 	private void reportEvent(String message, Object... args) {
 		resetTimer();
 		trigger(ON_TICK);
+
+		data.entrySet().removeIf(e -> e.getValue() == null || e.getValue().isEmpty());
 
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 		for (Side side : sides) {

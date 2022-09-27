@@ -701,7 +701,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"game", hand.getGame(),
 					"side", hand.getSide()
 			));
-
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 		} finally {

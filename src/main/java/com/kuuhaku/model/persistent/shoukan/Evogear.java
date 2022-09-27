@@ -351,8 +351,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"game", hand.getGame(),
 					"side", hand.getSide()
 			));
-
-		} catch (ActivationException e) {
+		} catch (ActivationException ignored) {
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 		}
