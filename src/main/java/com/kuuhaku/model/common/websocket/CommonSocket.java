@@ -38,6 +38,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpStatus;
 import org.intellij.lang.annotations.Language;
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
@@ -69,69 +70,72 @@ public class CommonSocket extends WebSocketClient {
 
 	@Override
 	public void onMessage(@Language("JSON5") String message) {
-		JSONObject payload = new JSONObject(message);
-		if (payload.isEmpty()) return;
+		try {
+			JSONObject payload = new JSONObject(message);
+			if (payload.isEmpty()) return;
 
-		if (payload.getString("type").equals("AUTH") && payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
-			if (retry > 0) {
-				retry = 0;
-				Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
-			} else {
-				Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
-			}
-
-			send(new JSONObject() {{
-				put("type", "ATTACH");
-				put("channels", List.of("eval", "shoukan"));
-			}}.toString());
-			return;
-		}
-
-		String token = DigestUtils.sha256Hex(TOKEN);
-		if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
-
-		switch (payload.getString("channel")) {
-			case "eval" -> {
-				@Language("Groovy")
-				String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
-
-				if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
-					Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
-				}
-			}
-			case "shoukan" -> {
-				send(new JSONObject(){{
-					put("type", "ACKNOWLEDGE");
-					put("key", payload.getString("key"));
-					put("token", token);
-				}}.toString());
-
-				MessageDigest md = DigestUtils.getDigest("md5");
-				md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
-				md.update(token.getBytes(StandardCharsets.UTF_8));
-
-				String id = payload.getString("card");
-				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-				Drawable<?> d = switch (types.get(0)) {
-					case EVOGEAR -> DAO.find(Evogear.class, id);
-					case FIELD -> DAO.find(Field.class, id);
-					default -> DAO.find(Senshi.class, id);
-				};
-
-				String b64;
-				if (DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM account WHERE uid = ?1", payload.getString("uid")) > 0) {
-					Account acc = DAO.find(Account.class, payload.getString("uid"));
-					b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
+			if (payload.getString("type").equals("AUTH") && payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
+				if (retry > 0) {
+					retry = 0;
+					Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
 				} else {
-					b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
+					Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
 				}
 
 				send(new JSONObject() {{
-					put("type", "DELIVERY");
-					put("key", Hex.encodeHexString(md.digest()));
-					put("content", b64);
+					put("type", "ATTACH");
+					put("channels", List.of("eval", "shoukan"));
 				}}.toString());
+				return;
 			}
+
+			String token = DigestUtils.sha256Hex(TOKEN);
+			if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
+
+			switch (payload.getString("channel")) {
+				case "eval" -> {
+					@Language("Groovy")
+					String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
+
+					if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
+						Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
+					}
+				}
+				case "shoukan" -> {
+					send(new JSONObject() {{
+						put("type", "ACKNOWLEDGE");
+						put("key", payload.getString("key"));
+						put("token", token);
+					}}.toString());
+
+					MessageDigest md = DigestUtils.getDigest("md5");
+					md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
+					md.update(token.getBytes(StandardCharsets.UTF_8));
+
+					String id = payload.getString("card");
+					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+					Drawable<?> d = switch (types.get(0)) {
+						case EVOGEAR -> DAO.find(Evogear.class, id);
+						case FIELD -> DAO.find(Field.class, id);
+						default -> DAO.find(Senshi.class, id);
+					};
+
+					String b64;
+					if (DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM account WHERE uid = ?1", payload.getString("uid")) > 0) {
+						Account acc = DAO.find(Account.class, payload.getString("uid"));
+						b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
+					} else {
+						b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
+					}
+
+					send(new JSONObject() {{
+						put("type", "DELIVERY");
+						put("key", Hex.encodeHexString(md.digest()));
+						put("content", b64);
+					}}.toString());
+				}
+			}
+		} catch (WebsocketNotConnectedException ignore) {
 		}
 	}
 
