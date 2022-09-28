@@ -30,6 +30,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +69,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 					if (checkChannel(event.getChannel()) && validate(event.getMessage())) {
 						try {
-							runtime(event.getMessage().getContentRaw());
+							runtime(event.getAuthor(), event.getMessage().getContentRaw());
 						} catch (InvocationTargetException | IllegalAccessException e) {
 							Constants.LOGGER.error(e, e);
 						}
@@ -101,7 +102,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	protected abstract void begin();
 
-	protected abstract void runtime(String value) throws InvocationTargetException, IllegalAccessException;
+	protected abstract void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException;
 
 	public void setTimeout(Consumer<Integer> action, int time, TimeUnit unit) {
 		if (timeout != null) {

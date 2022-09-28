@@ -109,7 +109,10 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), players))
-				.and(m -> singleplayer || getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId()))
+				.and(m -> singleplayer
+						|| getTurn() % 2 == ArrayUtils.indexOf(players, m.getAuthor().getId())
+						|| hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
+				)
 				.test(message);
 	}
 
@@ -133,7 +136,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@Override
-	protected void runtime(String value) throws InvocationTargetException, IllegalAccessException {
+	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
 		if (value.equalsIgnoreCase("reload")) {
 			reportEvent("str/game_reload", getCurrent().getName());
 			return;
@@ -141,16 +144,22 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
 		if (action != null) {
-			Hand h = getCurrent();
-
 			Method m = action.getFirst();
-			if (h.selectionPending() && !m.getName().equals("select")) {
-				reportEvent("error/pending_choice");
-				return;
+
+			for (Hand h : hands.values()) {
+				if (h.getUid().equals(user.getId()) && h.selectionPending()) {
+					if (!m.getName().equals("select")) {
+						reportEvent("error/pending_choice");
+						return;
+					}
+
+					m.invoke(this, h.getSide(), action.getSecond());
+					return;
+				}
 			}
 
 			if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-				h.showHand(locale);
+				getCurrent().showHand(locale);
 			}
 		}
 	}
