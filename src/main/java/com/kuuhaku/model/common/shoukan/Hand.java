@@ -714,12 +714,12 @@ public class Hand {
 				6, Color.BLACK
 		);
 
-		System.out.println("start");
 		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
+			System.out.println("card " + d);
 			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 350, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
