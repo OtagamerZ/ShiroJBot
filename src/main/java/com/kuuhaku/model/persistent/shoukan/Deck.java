@@ -475,6 +475,8 @@ public class Deck extends DAO<Deck> {
 					.sorted(Comparator.comparingInt(races::getCount).reversed())
 					.iterator();
 
+			System.out.println(races.size());
+
 			int high = 0;
 			boolean allSame = true;
 			while (it.hasNext()) {
