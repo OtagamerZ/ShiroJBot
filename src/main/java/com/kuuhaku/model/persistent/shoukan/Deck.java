@@ -221,7 +221,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public double getMetaDivergence() {
-		// TODO Divegence
+		// TODO Divergence
 		return 1;
 	}
 
@@ -486,7 +486,7 @@ public class Deck extends DAO<Deck> {
 				int count = races.getCount(r);
 
 				if (high == 0) high = count;
-				else if (count != high) {
+				else if (count != high && ori.size() >= 2) {
 					if (ori.size() == 2) {
 						allSame = false;
 
@@ -503,15 +503,15 @@ public class Deck extends DAO<Deck> {
 								ori.set(1, keep);
 							}
 						}
-
-						break;
 					}
+
+					break;
 				}
 
 				ori.add(r);
 			}
 
-			if (allSame && ori.size() > 1) {
+			if (allSame && ori.size() >= 2) {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 			} else {
 				if (!ori.isEmpty()) {
