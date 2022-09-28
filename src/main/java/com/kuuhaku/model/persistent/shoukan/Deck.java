@@ -469,13 +469,15 @@ public class Deck extends DAO<Deck> {
 				);
 			}
 
+			if (races.stream().distinct().count() == 1) {
+				return origin = new Origin(races.first());
+			}
+
 			List<Race> ori = new ArrayList<>();
 			Iterator<Race> it = races.stream()
 					.distinct()
 					.sorted(Comparator.comparingInt(races::getCount).reversed())
 					.iterator();
-
-			System.out.println(races.size());
 
 			int high = 0;
 			boolean allSame = true;
@@ -503,8 +505,6 @@ public class Deck extends DAO<Deck> {
 						}
 
 						break;
-					} else {
-						break;
 					}
 				}
 
@@ -514,11 +514,11 @@ public class Deck extends DAO<Deck> {
 			if (allSame && ori.size() > 1) {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 			} else {
-				origin = switch (ori.size()) {
-					case 2 -> new Origin(ori.get(0), ori.get(1));
-					case 1 -> new Origin(ori.get(0));
-					default -> new Origin(Race.NONE);
-				};
+				if (!ori.isEmpty()) {
+					origin = new Origin(ori.get(0), ori.get(1));
+				} else {
+					origin = new Origin(Race.NONE);
+				}
 			}
 		}
 
