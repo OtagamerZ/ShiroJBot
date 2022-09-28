@@ -730,11 +730,14 @@ public class Hand {
 
 		g2d.dispose();
 
+		System.out.println("draw");
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(bi, "png"), "choices.png")));
+		System.out.println("send");
 
 		selection = new Pair<>(
 				cards, new CompletableFuture<Drawable<?>>()
 				.thenApply(d -> {
+					System.out.println("done");
 					msg.delete().queue();
 					selection = null;
 
