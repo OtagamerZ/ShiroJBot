@@ -710,7 +710,7 @@ public class Hand {
 
 		String str = locale.get("str/select_a_card");
 		Graph.drawOutlinedString(g2d, str,
-				bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, 0,
+				bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10,
 				6, Color.BLACK
 		);
 
