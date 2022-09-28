@@ -489,10 +489,7 @@ public class Deck extends DAO<Deck> {
 
 				if (high == 0) high = count;
 				else if (count != high) {
-					System.out.println(count);
-
 					if (ori.size() == 2) {
-						System.out.println("diff");
 						allSame = false;
 
 						Race curr = ori.get(1);
