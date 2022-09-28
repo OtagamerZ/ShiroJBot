@@ -39,6 +39,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -120,7 +121,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public List<String> getTags() {
-		return tags.stream().map(t -> "tag/" + t).toList();
+		return tags.stream().map(t -> "tag/" + ((String) t).toLowerCase(Locale.ROOT)).toList();
 	}
 
 	@Override

@@ -63,6 +63,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -125,7 +126,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 
-		sendPlayerHand(curr);
+		curr.showHand(locale);
 		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
 
 		takeSnapshot();
@@ -140,8 +141,16 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
 		if (action != null) {
-			if ((boolean) action.getFirst().invoke(this, getCurrentSide(), action.getSecond())) {
-				sendPlayerHand(getCurrent());
+			Hand h = getCurrent();
+
+			Method m = action.getFirst();
+			if (h.selectionPending() && !m.getName().equals("select")) {
+				reportEvent("error/pending_choice");
+				return;
+			}
+
+			if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
+				h.showHand(locale);
 			}
 		}
 	}
@@ -380,7 +389,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-		if (chosen.getBase().getTags().contains("FIXED")) {
+		if (chosen.getTags().contains("tag/fixed")) {
 			getChannel().sendMessage(locale.get("error/card_fixed")).queue();
 			return false;
 		} else if (chosen.getHPCost() / 2 >= curr.getHP()) {
@@ -589,8 +598,27 @@ public class Shoukan extends GameInstance<Phase> {
 
 		reportEvent("str/activate_card",
 				curr.getName(),
-				chosen.getBase().getTags().contains("SECRET") ? locale.get("str/a_spell") : chosen
+				chosen.getTags().contains("tag/secret") ? locale.get("str/a_spell") : chosen
 		);
+		return true;
+	}
+
+	@PhaseConstraint("PLAN")
+	@PlayerAction("(?<choice>\\d+)")
+	private boolean select(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (!curr.selectionPending()) return false;
+
+		Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
+		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size() + 1)) {
+			getChannel().sendMessage(locale.get("error/invalid_selection_index")).queue();
+			return false;
+		}
+
+		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
+		selection.getSecond().complete(chosen);
+
+		reportEvent("str/activate_card", curr.getName(), args.getInt("choice"));
 		return true;
 	}
 
@@ -1122,20 +1150,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return data.computeIfAbsent(holder, k -> new JSONObject());
 	}
 
-	private void sendPlayerHand(Hand hand) {
-		hand.getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale), "png"), "hand.png"))
-				.queue(m -> {
-					if (hand.getLastMessage() != null) {
-						m.getChannel().retrieveMessageById(hand.getLastMessage())
-								.flatMap(Objects::nonNull, Message::delete)
-								.queue();
-					}
-
-					hand.setLastMessage(m.getId());
-				});
-	}
-
 	private BiFunction<String, String, String> replaceMessages(Message message) {
 		resetTimer();
 		addButtons(message);
@@ -1254,14 +1268,14 @@ public class Shoukan extends GameInstance<Phase> {
 				if (rem > 0 && !curr.getRealDeck().isEmpty()) {
 					put(Utils.parseEmoji("📤"), w -> {
 						curr.manualDraw(1);
-						sendPlayerHand(curr);
+						curr.showHand(locale);
 						reportEvent("str/draw_card", curr.getName(), 1, "");
 					});
 
 					if (rem > 1) {
 						put(Utils.parseEmoji("📦"), w -> {
 							curr.manualDraw(curr.getRemainingDraws());
-							sendPlayerHand(curr);
+							curr.showHand(locale);
 							reportEvent("str/draw_card", curr.getName(), rem, "s");
 						});
 					}
@@ -1289,7 +1303,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
 						curr.setOriginCooldown(3);
-						sendPlayerHand(curr);
+						curr.showHand(locale);
 						reportEvent("str/spirit_synth", curr.getName());
 					});
 				}
@@ -1378,7 +1392,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		sendPlayerHand(curr);
+		curr.showHand(locale);
 		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
 
 		takeSnapshot();

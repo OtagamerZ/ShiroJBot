@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -39,17 +40,17 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
-import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
+import kotlin.Pair;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -166,6 +167,8 @@ public class Hand {
 	0xF
 	  └ (0 - 127) origin effect
 	 */
+
+	private transient Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -682,6 +685,72 @@ public class Hand {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	public void showHand(I18N locale) {
+		getUser().openPrivateChannel()
+				.flatMap(chn -> chn.sendFile(IO.getBytes(render(locale), "png"), "hand.png"))
+				.queue(m -> {
+					if (lastMessage != null) {
+						m.getChannel().retrieveMessageById(lastMessage)
+								.flatMap(Objects::nonNull, Message::delete)
+								.queue();
+					}
+
+					lastMessage = m.getId();
+				});
+	}
+
+	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
+		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
+		g2d.translate(0, 100);
+
+		String str = locale.get("str/select_a_card");
+		Graph.drawOutlinedString(g2d, str,
+				bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, 0,
+				6, Color.BLACK
+		);
+
+		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
+		for (int i = 0; i < cards.size(); i++) {
+			int x = offset + 10 + (225 + 10) * i;
+
+			Drawable<?> d = cards.get(i);
+			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 350, null);
+			if (d.isAvailable()) {
+				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
+						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
+						6, Color.BLACK
+				);
+			}
+		}
+
+		g2d.dispose();
+
+		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(bi, "png"), "choices.png")));
+
+		selection = new Pair<>(
+				cards, new CompletableFuture<Drawable<?>>()
+				.thenApply(d -> {
+					msg.delete().queue();
+					selection = null;
+
+					return d;
+				})
+		);
+
+		return selection.getSecond();
+	}
+
+	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
+		return selection;
+	}
+
+	public boolean selectionPending() {
+		return selection != null;
 	}
 
 	@Override

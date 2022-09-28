@@ -43,10 +43,8 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_ACTIVATE;
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_SPELL_TARGET;
@@ -161,7 +159,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 		for (Object tag : base.getTags()) {
-			out.add("tag/" + tag);
+			out.add("tag/" + ((String) tag).toLowerCase(Locale.ROOT));
 		}
 
 		return out;
