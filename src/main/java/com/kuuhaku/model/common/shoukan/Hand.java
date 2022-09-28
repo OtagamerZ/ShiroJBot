@@ -702,6 +702,7 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
+		System.out.println("start");
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
