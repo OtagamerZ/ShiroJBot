@@ -567,8 +567,6 @@ public class Arena implements Renderer {
 						for (int i = 0; i < minor.length; i++) {
 							Race r = minor[i];
 
-							g1.setClip(null);
-
 							rect = new Rectangle(rad, rad);
 							rect.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y / 2 + (rad + MARGIN.y) * (i % 2));
 
@@ -576,11 +574,7 @@ public class Arena implements Renderer {
 								rect.translate(-rect.x * 2 - rect.width, 0);
 							}
 
-							g1.setColor(new Color(50, 50, 50, 100));
-							Graph.drawOutlined(g1, rect, 5, r.getColor());
-
-							g1.setClip(rect);
-							g1.drawImage(r.getImage(), rect.x, rect.y, rect.width, rect.height, null);
+							g1.drawImage(r.getBadged(), rect.x, rect.y, rect.width, rect.height, null);
 						}
 				}
 			);
