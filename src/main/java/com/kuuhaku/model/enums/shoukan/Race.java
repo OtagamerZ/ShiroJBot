@@ -184,7 +184,7 @@ public enum Race {
 		g2d.setStroke(new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.draw(poly);
 
-		//g2d.drawImage(bi, thickness / 2, thickness / 2, null);
+		g2d.drawImage(bi, out.getWidth() / 2 - bi.getWidth() / 2, out.getHeight() / 2 - bi.getHeight() / 2, null);
 
 		g2d.dispose();
 
