@@ -57,12 +57,14 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -617,7 +619,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		var selection = curr.getSelection();
+		MutablePair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
 		if (!Utils.between(args.getInt("choice"), 1, selection.getKey().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_selection_index")).queue();
 			return false;

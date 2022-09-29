@@ -44,7 +44,7 @@ import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -168,7 +168,7 @@ public class Hand {
 	  └ (0 - 127) origin effect
 	 */
 
-	private transient Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
+	private transient MutablePair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -702,7 +702,7 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
-		selection = Pair.of(cards, new CompletableFuture<>());
+		selection = MutablePair.of(cards, new CompletableFuture<>());
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -745,7 +745,7 @@ public class Hand {
 		return selection.getValue();
 	}
 
-	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
+	public MutablePair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
 		return selection;
 	}
 
