@@ -735,7 +735,6 @@ public class Hand {
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(bi, "png"), "choices.png")));
 
 		selection.getSecond().thenAccept(d -> {
-			System.out.println("done");
 			msg.delete().queue(null, Utils::doNothing);
 			selection = null;
 		});
