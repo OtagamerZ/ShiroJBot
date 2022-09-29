@@ -42,9 +42,9 @@ import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
-import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -702,6 +702,8 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
+		selection = Pair.of(cards, new CompletableFuture<>());
+
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
@@ -719,7 +721,6 @@ public class Hand {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			System.out.println("card " + d);
 			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 350, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
@@ -731,22 +732,17 @@ public class Hand {
 
 		g2d.dispose();
 
-		System.out.println("draw");
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(bi, "png"), "choices.png")));
-		System.out.println("send");
 
-		selection = new Pair<>(
-				cards, new CompletableFuture<Drawable<?>>()
-				.thenApply(d -> {
-					System.out.println("done");
-					msg.delete().queue();
-					selection = null;
+		selection.setValue(selection.getValue().thenApply(d -> {
+			System.out.println("done");
+			msg.delete().queue();
+			selection = null;
 
-					return d;
-				})
-		);
+			return d;
+		}));
 
-		return selection.getSecond();
+		return selection.getValue();
 	}
 
 	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {

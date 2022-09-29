@@ -63,7 +63,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -618,16 +617,16 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
-		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size() + 1)) {
+		var selection = curr.getSelection();
+		if (!Utils.between(args.getInt("choice"), 1, selection.getKey().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_selection_index")).queue();
 			return false;
 		}
 
-		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
-		selection.getSecond().complete(chosen);
+		Drawable<?> chosen = selection.getKey().get(args.getInt("choice") - 1);
+		selection.getValue().complete(chosen);
 
-		reportEvent("str/activate_card", curr.getName(), args.getInt("choice"));
+		reportEvent("str/select_card", curr.getName(), args.getInt("choice"));
 		return true;
 	}
 
@@ -688,7 +687,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		reportEvent("str/card_special", curr.getName(), chosen);
-		return true;
+		return !curr.selectionPending();
 	}
 
 	@PhaseConstraint("COMBAT")
@@ -1262,7 +1261,10 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>() {{
 			put(Utils.parseEmoji("▶"), w -> {
-				if (getPhase() == Phase.COMBAT || getTurn() == 1) {
+				if (curr.selectionPending()) {
+					reportEvent("error/pending_choice");
+					return;
+				} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
 					nextTurn();
 					return;
 				}
@@ -1271,11 +1273,23 @@ public class Shoukan extends GameInstance<Phase> {
 				reportEvent("str/game_combat_phase");
 			});
 			if (getPhase() == Phase.PLAN) {
-				put(Utils.parseEmoji("⏩"), w -> nextTurn());
+				put(Utils.parseEmoji("⏩"), w -> {
+					if (curr.selectionPending()) {
+						reportEvent("error/pending_choice");
+						return;
+					}
+
+					nextTurn();
+				});
 
 				int rem = curr.getRemainingDraws();
 				if (rem > 0 && !curr.getRealDeck().isEmpty()) {
 					put(Utils.parseEmoji("📤"), w -> {
+						if (curr.selectionPending()) {
+							reportEvent("error/pending_choice");
+							return;
+						}
+
 						curr.manualDraw(1);
 						curr.showHand(locale);
 						reportEvent("str/draw_card", curr.getName(), 1, "");
@@ -1283,6 +1297,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 					if (rem > 1) {
 						put(Utils.parseEmoji("📦"), w -> {
+							if (curr.selectionPending()) {
+								reportEvent("error/pending_choice");
+								return;
+							}
+
 							curr.manualDraw(curr.getRemainingDraws());
 							curr.showHand(locale);
 							reportEvent("str/draw_card", curr.getName(), rem, "s");
@@ -1291,6 +1310,11 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 				if (curr.getOrigin().major() == Race.SPIRIT && !curr.getGraveyard().isEmpty() && curr.getOriginCooldown() == 0) {
 					put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+						if (curr.selectionPending()) {
+							reportEvent("error/pending_choice");
+							return;
+						}
+
 						List<StashedCard> cards = new ArrayList<>();
 						Iterator<Drawable<?>> it = curr.getGraveyard().iterator();
 						while (it.hasNext()) {
