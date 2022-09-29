@@ -148,7 +148,9 @@ public enum Race {
 		if (Integer.bitCount(flag) == 0) return null;
 
 		BufferedImage bi = icon ? getIcon() : getImage();
-		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		int thickness = bi.getWidth() / 15;
+
+		BufferedImage out = new BufferedImage(bi.getWidth() + thickness / 2, bi.getHeight() + thickness / 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
@@ -160,6 +162,7 @@ public enum Race {
 				0, 1 / 4d * 3,
 				0, 1 / 4d
 		);
+		poly.translate(thickness / 2, thickness / 2);
 
 		g2d.setColor(new Color(0x323232));
 		g2d.fill(poly);
@@ -175,15 +178,10 @@ public enum Race {
 			));
 		}
 
-		int thickness = bi.getWidth() / 15;
 		g2d.setStroke(new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.draw(poly);
 
-		g2d.drawImage(bi,
-				thickness / 2, thickness / 2,
-				bi.getWidth() - thickness / 2, bi.getHeight() - thickness / 2,
-				null
-		);
+		g2d.drawImage(bi, thickness / 2, thickness / 2, null);
 
 		g2d.dispose();
 
