@@ -42,11 +42,10 @@ import org.hibernate.annotations.*;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @Entity
 @DynamicUpdate
@@ -253,11 +252,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
 				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
-				Rectangle2D bounds;
+				Rectangle bounds;
 				if (s.startsWith("#")) {
-					bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " "));
+					bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " ")).getBounds();
 				} else {
-					bounds = Graph.getStringBounds(g1, s);
+					bounds = Graph.getStringBounds(g1, s).getBounds();
 				}
 				int y = (int) wids.getY();
 

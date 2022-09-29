@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.enums.shoukan;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.Graph;
@@ -141,6 +142,48 @@ public enum Race {
 
 	public BufferedImage getIcon() {
 		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
+	}
+
+	public BufferedImage getBadged() {
+		if (Integer.bitCount(flag) == 0) return null;
+
+		BufferedImage bi = getImage();
+		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = out.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		Polygon poly = Graph.makePoly(new Dimension(bi.getWidth(), bi.getHeight()),
+				0.5, 0,
+				1, 1 / 4d,
+				1, 1 / 4d * 3,
+				0.5, 1,
+				0, 1 / 4d * 3,
+				0, 1 / 4d
+		);
+
+		g2d.setColor(new Color(0x323232));
+		g2d.fill(poly);
+
+		g2d.setClip(poly);
+		g2d.drawImage(bi, 0, 0, null);
+		g2d.setClip(null);
+
+		if (Integer.bitCount(flag) == 1) {
+			g2d.setColor(Graph.getColor(bi));
+		} else {
+			Race[] subs = split();
+
+			g2d.setPaint(new GradientPaint(
+					0, 0, subs[0].getColor(),
+					bi.getWidth(), bi.getHeight(), subs[1].getColor()
+			));
+		}
+
+		g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g2d.draw(poly);
+		g2d.dispose();
+
+		return out;
 	}
 
 	public Color getColor() {

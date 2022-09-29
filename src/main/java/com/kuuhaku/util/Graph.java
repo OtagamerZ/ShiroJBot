@@ -26,7 +26,6 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -34,15 +33,15 @@ import java.util.function.Function;
 import java.util.stream.DoubleStream;
 
 public abstract class Graph {
-	public static Rectangle2D getStringBounds(Graphics2D g2d, String text) {
-		return new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext()).getBounds();
+	public static Rectangle getStringBounds(Graphics2D g2d, String text) {
+		return new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext()).getBounds().getBounds();
 	}
 
-	public static Rectangle2D getMultilineStringBounds(Graphics2D g2d, String text, int width) {
+	public static Rectangle getMultilineStringBounds(Graphics2D g2d, String text, int width) {
 		return getMultilineStringBounds(g2d, text, width, 0);
 	}
 
-	public static Rectangle2D getMultilineStringBounds(Graphics2D g2d, String text, int width, int kerning) {
+	public static Rectangle getMultilineStringBounds(Graphics2D g2d, String text, int width, int kerning) {
 		int y = 0;
 		String[] lines = text.split("\n");
 		for (String line : lines) {
@@ -62,7 +61,7 @@ public abstract class Graph {
 			y += g2d.getFontMetrics().getHeight() - kerning;
 		}
 
-		return new Rectangle2D.Double(0, 0, width, y);
+		return new Rectangle(0, 0, width, y);
 	}
 
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {

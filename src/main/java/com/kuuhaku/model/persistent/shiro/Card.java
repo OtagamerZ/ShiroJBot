@@ -33,12 +33,10 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -126,7 +124,7 @@ public class Card extends DAO<Card> {
 				double fProg = 1; //Card.queryNative(Number.class, "SELECT cs FROM \"GetFoilCompletionState\"(:id, :anime) cs", uid, id).doubleValue();
 
 				double prcnt = Math.max(nProg, fProg);
-				g2d.setClip(new Rectangle2D.Double(15, 15 + 350 * (1 - prcnt), 225, 350 * prcnt));
+				g2d.setClip(new Rectangle(15, (int) (15 + 350 * (1 - prcnt)), 225, (int) (350 * prcnt)));
 				g2d.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), 15, 15, null);
 				g2d.setClip(null);
 
@@ -136,7 +134,7 @@ public class Card extends DAO<Card> {
 					if (nProg >= 1) {
 						g2d.drawImage(nBar, 0, 0, null);
 					} else {
-						g2d.setClip(new Rectangle2D.Double(0, 82 + 295 * (1 - nProg), frame.getWidth(), 85 + 213 * nProg));
+						g2d.setClip(new Rectangle(0, (int) (82 + 295 * (1 - nProg)), frame.getWidth(), (int) (85 + 213 * nProg)));
 						g2d.drawImage(nBar, 0, 0, null);
 						g2d.setClip(null);
 					}
@@ -146,7 +144,7 @@ public class Card extends DAO<Card> {
 					if (fProg >= 1) {
 						g2d.drawImage(fBar, 0, 0, null);
 					} else {
-						g2d.setClip(new Rectangle2D.Double(0, 82 + 295 * (1 - fProg), frame.getWidth(), 85 + 213 * fProg));
+						g2d.setClip(new Rectangle(0, (int) (82 + 295 * (1 - fProg)), frame.getWidth(), (int) (85 + 213 * fProg)));
 						g2d.drawImage(fBar, 0, 0, null);
 						g2d.setClip(null);
 					}

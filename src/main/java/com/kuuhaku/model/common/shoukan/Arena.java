@@ -39,7 +39,6 @@ import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
@@ -360,9 +359,9 @@ public class Arena implements Renderer {
 					g1.fillRect(leftOffset + 2 + (mpWidth / 33) * i, 2, width, BAR_SIZE.height / 3 - 2);
 				}
 
-				Rectangle2D.Double bar = new Rectangle2D.Double(
-						leftOffset + 2, BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0),
-						BAR_SIZE.width, BAR_SIZE.height / 1.75
+				Rectangle bar = new Rectangle(
+						leftOffset + 2, (int) (BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0)),
+						BAR_SIZE.width, (int) (BAR_SIZE.height / 1.75)
 				);
 				g1.setColor(Color.DARK_GRAY);
 				g1.fill(bar);
@@ -377,11 +376,11 @@ public class Arena implements Renderer {
 				}
 
 				fac = (double) hand.getHP() / hand.getBase().hp();
-				g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min(fac, 1), bar.height));
+				g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Math.min(fac, 1)), bar.height));
 
 				if (fac > 1) {
 					g1.setColor(new Color(0, 255, 149));
-					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Calc.clamp(fac - 1, 0, 1), bar.height));
+					g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Calc.clamp(fac - 1, 0, 1)), bar.height));
 				}
 
 				int regdeg = hand.getRegDeg().peek();
@@ -389,9 +388,9 @@ public class Arena implements Renderer {
 					BufferedImage tex = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen.webp");
 					g1.setPaint(new TexturePaint(
 							tex,
-							new Rectangle2D.Double(bar.x, bar.y + bar.height + (reversed ? 1 : 0), bar.height, bar.height * (reversed ? -1 : 1) + (reversed ? -1 : 1))
+							new Rectangle(bar.x, bar.y + bar.height + (reversed ? 1 : 0), bar.height, bar.height * (reversed ? -1 : 1) + (reversed ? -1 : 1))
 					));
-					g1.fill(new Rectangle2D.Double(bar.x, bar.y, bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1), bar.height));
+					g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1)), bar.height));
 				}
 
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
@@ -539,27 +538,12 @@ public class Arena implements Renderer {
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
-						double[] coords = {
-								0.5, 0,
-								1, 1 / 4d,
-								1, 1 / 4d * 3,
-								0.5, 1,
-								0, 1 / 4d * 3,
-								0, 1 / 4d
-						};
-
-						Polygon poly = Graph.makePoly(new Dimension(rad * 2, rad * 2), coords);
+						Rectangle rect = new Rectangle(rad * 2, rad * 2);
 
 						int xOffset = 0;
 						int centerY = 256 / 2;
 						if (ori.major() != Race.MIXED) {
-							poly.translate(reversed ? -poly.getBounds().width : 0, centerY - poly.getBounds().height / 2);
-							Rectangle rect = poly.getBounds();
-
-							g1.setColor(new Color(50, 50, 50, 100));
-							Graph.drawOutlined(g1, poly, 5, ori.major().getColor());
-
-							g1.setClip(poly);
+							rect.translate(reversed ? -rect.width : 0, centerY - rect.height / 2);
 
 							int maxCd = switch (hand.getOrigin().major()) {
 								case SPIRIT -> 3;
@@ -567,7 +551,7 @@ public class Arena implements Renderer {
 								default -> 1;
 							};
 
-							g1.drawImage(ori.major().getImage(), rect.x, rect.y, rect.width, rect.height, null);
+							g1.drawImage(ori.major().getBadged(), rect.x, rect.y, rect.width, rect.height, null);
 
 							g1.setColor(new Color(255, 0, 0, 200));
 							g1.fillArc(
@@ -576,7 +560,7 @@ public class Arena implements Renderer {
 									hand.getOriginCooldown() * 360 / maxCd
 							);
 
-							xOffset = (poly.getBounds().width + MARGIN.x);
+							xOffset = rect.width + MARGIN.x;
 						}
 
 						Race[] minor = ori.minor();
@@ -585,19 +569,17 @@ public class Arena implements Renderer {
 
 							g1.setClip(null);
 
-							poly = Graph.makePoly(new Dimension(rad, rad), coords);
-							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y / 2 + (rad + MARGIN.y) * (i % 2));
-							Rectangle rect = poly.getBounds();
+							rect = new Rectangle(rad, rad);
+							rect.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y / 2 + (rad + MARGIN.y) * (i % 2));
 
 							if (reversed) {
-								poly.translate(-rect.x * 2 - rect.width, 0);
-								rect = poly.getBounds();
+								rect.translate(-rect.x * 2 - rect.width, 0);
 							}
 
 							g1.setColor(new Color(50, 50, 50, 100));
-							Graph.drawOutlined(g1, poly, 5, r.getColor());
+							Graph.drawOutlined(g1, rect, 5, r.getColor());
 
-							g1.setClip(poly);
+							g1.setClip(rect);
 							g1.drawImage(r.getImage(), rect.x, rect.y, rect.width, rect.height, null);
 						}
 				}
