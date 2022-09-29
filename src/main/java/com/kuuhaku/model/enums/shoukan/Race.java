@@ -164,6 +164,9 @@ public enum Race {
 		);
 		poly.translate(thickness, thickness);
 
+		g2d.setColor(Color.red);
+		g2d.fillRect(0, 0, out.getWidth(), out.getHeight());
+
 		g2d.setColor(new Color(50, 50, 50, 127));
 		g2d.fill(poly);
 
@@ -181,7 +184,7 @@ public enum Race {
 		g2d.setStroke(new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.draw(poly);
 
-		g2d.drawImage(bi, thickness / 2, thickness / 2, null);
+		//g2d.drawImage(bi, thickness / 2, thickness / 2, null);
 
 		g2d.dispose();
 
