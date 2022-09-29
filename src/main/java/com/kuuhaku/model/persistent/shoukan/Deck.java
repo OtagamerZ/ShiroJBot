@@ -347,7 +347,7 @@ public class Deck extends DAO<Deck> {
 
 			String effects;
 			if (ori.isPure()) {
-				g.drawImage(icons.get(0), 0, 0, 150, 150, null);
+				g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.major().getColor());
 
@@ -375,7 +375,7 @@ public class Deck extends DAO<Deck> {
 						.collect(Collectors.joining("\n\n"))
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else {
-				g.drawImage(icons.get(2), 0, 0, 150, 150, null);
+				g.drawImage(ori.synergy().getBadged(), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.synergy().getColor());
 
