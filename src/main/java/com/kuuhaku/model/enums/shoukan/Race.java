@@ -221,7 +221,7 @@ public enum Race {
 			));
 		}
 
-		g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.draw(poly);
 		g2d.dispose();
 
