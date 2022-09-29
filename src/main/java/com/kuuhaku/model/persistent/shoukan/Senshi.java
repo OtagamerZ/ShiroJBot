@@ -771,7 +771,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		g2d.setClip(null);
 
 		g2d.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-		g2d.drawImage(getRace().getIcon(), 190, 12, null);
+		g2d.drawImage(getRace().getBadgedIcon(), 190, 12, null);
 
 		g2d.setFont(FONT);
 		g2d.setColor(style.getFrame().getPrimaryColor());
