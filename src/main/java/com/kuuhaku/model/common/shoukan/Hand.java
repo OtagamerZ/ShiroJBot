@@ -272,7 +272,7 @@ public class Hand {
 			return new LinkedList<>();
 		}
 
-		return getRealDeck();
+		return deck;
 	}
 
 	public void manualDraw(int value) {

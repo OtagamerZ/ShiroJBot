@@ -18,6 +18,10 @@
 
 package com.kuuhaku.game;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.send.AllowedMentions;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
@@ -41,6 +45,7 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
@@ -57,7 +62,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.io.IOException;
@@ -74,6 +78,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
 	private final long seed = Constants.DEFAULT_RNG.nextLong();
+	private final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
 
 	private final I18N locale;
 	private final ShoukanParams params;
@@ -1187,6 +1192,10 @@ public class Shoukan extends GameInstance<Phase> {
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 		for (Side side : sides) {
 			Hand hand = hands.get(side);
+			hand.getCards();
+			hand.getRealDeck();
+			hand.getGraveyard();
+
 			if (hand.getHP() == 0) {
 				trigger(ON_WIN, side.getOther());
 				trigger(ON_DEFEAT, side);
@@ -1381,6 +1390,34 @@ public class Shoukan extends GameInstance<Phase> {
 			return str.getValue().formatted(params);
 		} else {
 			return "";
+		}
+	}
+
+	public void send(Drawable<?> source, String text) {
+		send(source, text, null);
+	}
+
+	public void send(Drawable<?> source, String text, String gif) {
+		for (TextChannel chn : getChannel().getChannels()) {
+			PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getId(), chn);
+
+			try (WebhookClient hook = pu.webhook()) {
+				if (hook == null) continue;
+
+				WebhookMessageBuilder msg = new WebhookMessageBuilder()
+						.setUsername(pu.name())
+						.setAvatarUrl(pu.avatar())
+						.setAllowedMentions(AllowedMentions.none())
+						.setContent(text);
+
+				if (gif != null) {
+					msg.addEmbeds(new WebhookEmbedBuilder()
+							.setImageUrl(GIF_PATH + gif + ".gif")
+							.build());
+				}
+
+				hook.send(msg.build());
+			}
 		}
 	}
 

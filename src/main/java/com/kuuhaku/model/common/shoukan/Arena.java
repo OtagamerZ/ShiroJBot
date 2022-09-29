@@ -586,7 +586,7 @@ public class Arena implements Renderer {
 							g1.setClip(null);
 
 							poly = Graph.makePoly(new Dimension(rad, rad), coords);
-							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y + (rad + MARGIN.y * 2) * (i % 2));
+							poly.translate(xOffset + (rad + MARGIN.x) * (i / 2), centerY - rad - MARGIN.y / 2 + (rad + MARGIN.y) * (i % 2));
 							Rectangle rect = poly.getBounds();
 
 							if (reversed) {
