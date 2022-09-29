@@ -148,7 +148,7 @@ public enum Race {
 		if (Integer.bitCount(flag) == 0) return null;
 
 		BufferedImage bi = icon ? getIcon() : getImage();
-		int thickness = bi.getWidth() / 15;
+		int thickness = bi.getWidth() / 10;
 
 		BufferedImage out = new BufferedImage(bi.getWidth() + thickness / 2, bi.getHeight() + thickness / 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
@@ -164,7 +164,7 @@ public enum Race {
 		);
 		poly.translate(thickness / 2, thickness / 2);
 
-		g2d.setColor(new Color(0x323232));
+		g2d.setColor(new Color(50, 50, 50, 100));
 		g2d.fill(poly);
 
 		if (Integer.bitCount(flag) == 1) {
