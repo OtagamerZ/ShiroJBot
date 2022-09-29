@@ -551,7 +551,7 @@ public class Arena implements Renderer {
 								default -> 1;
 							};
 
-							g1.drawImage(ori.major().getBadged(), rect.x, rect.y, rect.width, rect.height, null);
+							g1.drawImage(ori.major().getBadged(false), rect.x, rect.y, rect.width, rect.height, null);
 
 							g1.setColor(new Color(255, 0, 0, 200));
 							g1.fillArc(
@@ -574,7 +574,7 @@ public class Arena implements Renderer {
 								rect.translate(-rect.x * 2 - rect.width, 0);
 							}
 
-							g1.drawImage(r.getBadged(), rect.x, rect.y, rect.width, rect.height, null);
+							g1.drawImage(r.getBadged(false), rect.x, rect.y, rect.width, rect.height, null);
 						}
 				}
 			);
