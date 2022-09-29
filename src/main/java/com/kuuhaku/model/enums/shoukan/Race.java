@@ -164,9 +164,6 @@ public enum Race {
 		);
 		poly.translate(thickness / 2, thickness / 2);
 
-		g2d.setColor(Color.red);
-		g2d.fillRect(0, 0, out.getWidth(), out.getHeight());
-
 		g2d.setColor(new Color(50, 50, 50, 127));
 		g2d.fill(poly);
 
