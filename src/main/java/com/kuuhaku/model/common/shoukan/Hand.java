@@ -42,9 +42,9 @@ import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -168,7 +168,7 @@ public class Hand {
 	  └ (0 - 127) origin effect
 	 */
 
-	private transient MutablePair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
+	private transient Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -702,7 +702,7 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
-		selection = MutablePair.of(cards, new CompletableFuture<>());
+		selection = new Pair(cards, new CompletableFuture<>());
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -734,18 +734,16 @@ public class Hand {
 
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(bi, "png"), "choices.png")));
 
-		selection.setValue(selection.getValue().thenApply(d -> {
+		selection.getSecond().thenAccept(d -> {
 			System.out.println("done");
-			msg.delete().queue();
+			msg.delete().queue(null, Utils::doNothing);
 			selection = null;
+		});
 
-			return d;
-		}));
-
-		return selection.getValue();
+		return selection.getSecond();
 	}
 
-	public MutablePair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
+	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
 		return selection;
 	}
 

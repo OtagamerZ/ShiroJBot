@@ -619,14 +619,14 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		MutablePair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
-		if (!Utils.between(args.getInt("choice"), 1, selection.getKey().size() + 1)) {
+		Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
+		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size() + 1)) {
 			getChannel().sendMessage(locale.get("error/invalid_selection_index")).queue();
 			return false;
 		}
 
-		Drawable<?> chosen = selection.getKey().get(args.getInt("choice") - 1);
-		selection.getValue().complete(chosen);
+		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
+		selection.getSecond().complete(chosen);
 
 		reportEvent("str/select_card", curr.getName(), args.getInt("choice"));
 		return true;
