@@ -66,9 +66,6 @@ public class Hand {
 
 	private final List<Drawable<?>> cards = new BondedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
-		System.out.println(d);
-		System.out.println(d.getHand().getSide());
-
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
@@ -253,7 +250,14 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> getCards() {
-		cards.removeIf(d -> !equals(d.getHand()));
+		cards.removeIf(d -> {
+			if (!equals(d.getHand())) {
+				System.out.println("Removed " + d);
+				return true;
+			}
+
+			return false;
+		});
 
 		return cards;
 	}
