@@ -144,10 +144,10 @@ public enum Race {
 		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
 	}
 
-	public BufferedImage getBadged(boolean icon) {
+	public BufferedImage getBadged() {
 		if (Integer.bitCount(flag) == 0) return null;
 
-		BufferedImage bi = icon ? getIcon() : getImage();
+		BufferedImage bi = getImage();
 		int thickness = bi.getWidth() / 10;
 
 		BufferedImage out = new BufferedImage(bi.getWidth() + thickness * 2, bi.getHeight() + thickness * 2, BufferedImage.TYPE_INT_ARGB);
