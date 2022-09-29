@@ -154,7 +154,7 @@ public enum Race {
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		Polygon poly = Graph.makePoly(new Dimension(bi.getWidth() + thickness + (bi.getWidth() % 2), bi.getHeight() + thickness + (bi.getHeight() % 2)),
+		Polygon poly = Graph.makePoly(new Dimension(bi.getWidth() + thickness - (bi.getWidth() % 2), bi.getHeight() - thickness + (bi.getHeight() % 2)),
 				0.5, 0,
 				1, 1 / 4d,
 				1, 1 / 4d * 3,
