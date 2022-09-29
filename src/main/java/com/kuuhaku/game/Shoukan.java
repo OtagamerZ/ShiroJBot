@@ -1425,8 +1425,6 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void nextTurn() {
 		Hand curr = getCurrent();
 		trigger(ON_TURN_END, curr.getSide());
-
-		curr.getCards().removeIf(d -> !d.isAvailable());
 		curr.flushDiscard();
 
 		if (curr.getOrigin().synergy() == Race.ANGEL) {

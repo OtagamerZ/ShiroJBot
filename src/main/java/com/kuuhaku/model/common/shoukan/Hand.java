@@ -66,6 +66,7 @@ public class Hand {
 
 	private final List<Drawable<?>> cards = new BondedList<>(Objects::nonNull, d -> {
 		d.setHand(this);
+
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
@@ -73,6 +74,8 @@ public class Hand {
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
+
+		d.setSlot(null);
 	});
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(
 			d -> d != null && d.keepOnDestroy(),
@@ -449,6 +452,7 @@ public class Hand {
 	}
 
 	public void flushDiscard() {
+		cards.removeIf(d -> !d.isAvailable());
 		graveyard.addAll(discard);
 		discard.clear();
 	}
