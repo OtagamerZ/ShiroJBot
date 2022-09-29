@@ -162,7 +162,7 @@ public enum Race {
 				0, 1 / 4d * 3,
 				0, 1 / 4d
 		);
-		poly.translate(thickness, thickness);
+		poly.translate(thickness / 2, thickness / 2);
 
 		g2d.setColor(Color.red);
 		g2d.fillRect(0, 0, out.getWidth(), out.getHeight());
