@@ -90,7 +90,7 @@ public class CommandManager {
 						"cmd/" + cmd.getSimpleName()
 								.replaceFirst("(Command|Reaction)$", "")
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
-								.toLowerCase(Locale.ROOT),
+								.toLowerCase(),
 						params.category(),
 						req == null ? new Permission[0] : req.value(),
 						buildCommand(cmd)
@@ -114,7 +114,7 @@ public class CommandManager {
 					"cmd/" + cmd.getSimpleName()
 							.replaceFirst("(Command|Reaction)$", "")
 							.replaceAll("[a-z](?=[A-Z])", "$0-")
-							.toLowerCase(Locale.ROOT),
+							.toLowerCase(),
 					params.category(),
 					req == null ? new Permission[0] : req.value(),
 					buildCommand(cmd)
@@ -136,7 +136,7 @@ public class CommandManager {
 				"cmd/" + cmd.getSimpleName()
 						.replaceFirst("(Command|Reaction)$", "")
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
-						.toLowerCase(Locale.ROOT),
+						.toLowerCase(),
 				params.category(),
 				req == null ? new Permission[0] : req.value(),
 				buildCommand(cmd)

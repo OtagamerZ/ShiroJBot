@@ -74,7 +74,7 @@ public class Market {
 			query.appendNewLine(filter);
 
 			if (opt.hasArg()) {
-				params.add(opt.getValue().toUpperCase(Locale.ROOT));
+				params.add(opt.getValue().toUpperCase());
 			}
 		}
 

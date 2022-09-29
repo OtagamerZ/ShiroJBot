@@ -109,7 +109,7 @@ public class SelectTitleCommand implements Executable {
 		if (title == null) {
 			List<String> names = DAO.queryAllNative(String.class, "SELECT t.title_id FROM account_title t WHERE t.account_uid = ?1", acc.getUid());
 
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("name").toUpperCase(Locale.ROOT), names);
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("name").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_title", sug.getFirst())).queue();
 			return;
 		}

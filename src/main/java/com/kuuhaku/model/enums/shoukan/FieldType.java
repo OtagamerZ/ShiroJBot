@@ -27,6 +27,6 @@ public enum FieldType {
 	NONE, DAY, NIGHT, DUNGEON;
 
 	public BufferedImage getIcon() {
-		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase(Locale.ROOT) + ".png");
+		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase() + ".png");
 	}
 }

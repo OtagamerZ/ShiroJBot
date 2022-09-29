@@ -828,7 +828,7 @@ public abstract class Utils {
 			if (word.equalsIgnoreCase(w)) {
 				return word;
 			} else {
-				int diff = checker.apply(word.toLowerCase(Locale.ROOT), w.toLowerCase(Locale.ROOT));
+				int diff = checker.apply(word.toLowerCase(), w.toLowerCase());
 				if (diff < threshold) {
 					match = w;
 					threshold = diff;
@@ -848,7 +848,7 @@ public abstract class Utils {
 			if (word.equalsIgnoreCase(w)) {
 				return new Pair<>(w, 100d);
 			} else {
-				int diff = checker.apply(word.toLowerCase(Locale.ROOT), w.toLowerCase(Locale.ROOT));
+				int diff = checker.apply(word.toLowerCase(), w.toLowerCase());
 				if (diff < threshold) {
 					match = w;
 					threshold = diff;

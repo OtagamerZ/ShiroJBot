@@ -129,7 +129,7 @@ public enum Race {
     }
 
     public BufferedImage getIcon() {
-        return IO.getResourceAsImage("shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png");
+        return IO.getResourceAsImage("shoukan/race/" + name().toLowerCase() + ".png");
     }
 
     public static Race getByName(String name) {

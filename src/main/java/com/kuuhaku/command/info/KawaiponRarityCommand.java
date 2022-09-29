@@ -61,7 +61,7 @@ public class KawaiponRarityCommand implements Executable {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
 		Rarity rarity = null;
-		String str = args.getString("rarity").toUpperCase(Locale.ROOT);
+		String str = args.getString("rarity").toUpperCase();
 		for (Rarity r : Rarity.values()) {
 			if (r.name().startsWith(str)) {
 				rarity = r;

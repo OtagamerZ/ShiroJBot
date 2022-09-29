@@ -159,7 +159,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 		for (Object tag : base.getTags()) {
-			out.add("tag/" + ((String) tag).toLowerCase(Locale.ROOT));
+			out.add("tag/" + ((String) tag).toLowerCase());
 		}
 
 		return out;

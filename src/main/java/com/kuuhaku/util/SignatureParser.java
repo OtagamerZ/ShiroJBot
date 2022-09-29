@@ -41,7 +41,7 @@ public abstract class SignatureParser {
 				boolean required = groups.containsKey("required");
 				String wrap = required ? "[%s]" : "%s";
 
-				Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase(Locale.ROOT));
+				Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase());
 
 				if (type == Signature.Type.TEXT) {
 					if (str.isBlank() && required) {
@@ -99,7 +99,7 @@ public abstract class SignatureParser {
 					str = str.replaceFirst(Pattern.quote(s), "").trim();
 					s = StringUtils.stripAccents(s);
 
-					if (type.validate(s) && (opts.isEmpty() || opts.contains(s.toLowerCase(Locale.ROOT)))) {
+					if (type.validate(s) && (opts.isEmpty() || opts.contains(s.toLowerCase()))) {
 						switch (type) {
 							case CHANNEL -> s = s.replaceAll("[<#>]", "");
 							case USER, ROLE -> s = s.replaceAll("[<@!>]", "");

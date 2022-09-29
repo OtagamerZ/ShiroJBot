@@ -38,7 +38,7 @@ import java.util.Locale;
 public class LocaleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		locale = I18N.valueOf(args.getString("locale").toUpperCase(Locale.ROOT));
+		locale = I18N.valueOf(args.getString("locale").toUpperCase());
 
 		data.config().setLocale(locale);
 		data.config().save();

@@ -271,7 +271,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default String getString(I18N locale, String key, Object... params) {
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(Locale.ROOT), locale));
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
 		if (str != null) {
 			return str.getValue().formatted(params);
 		} else {
@@ -287,9 +287,9 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		for (String tag : tags) {
 			if (tag.startsWith("race/")) {
-				out.add(locale.get(tag).toUpperCase(Locale.ROOT));
+				out.add(locale.get(tag).toUpperCase());
 			} else if (tag.startsWith("tag/")) {
-				out.add(getString(locale, tag).toUpperCase(Locale.ROOT));
+				out.add(getString(locale, tag).toUpperCase());
 			}
 
 			if (out.toString().length() > 32) {

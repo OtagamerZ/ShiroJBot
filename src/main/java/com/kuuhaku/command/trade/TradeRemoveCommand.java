@@ -83,11 +83,11 @@ public class TradeRemoveCommand implements Executable {
 				return;
 			}
 
-			Card card = DAO.find(Card.class, args.getString("card").toUpperCase(Locale.ROOT));
+			Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 			if (card == null) {
 				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
 
-				Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(Locale.ROOT), names);
+				Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
 				event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
 				return;
 			}

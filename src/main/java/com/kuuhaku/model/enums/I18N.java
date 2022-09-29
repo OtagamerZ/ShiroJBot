@@ -31,7 +31,7 @@ public enum I18N {
 	PT(ZoneId.of("GMT-3")),
 	EN(ZoneId.of("GMT-4"));
 
-	private final Locale locale = new Locale(name().toLowerCase(Locale.ROOT));
+	private final Locale locale = new Locale(name().toLowerCase());
 	private final ZoneId zone;
 
 	I18N(ZoneId zone) {
@@ -50,7 +50,7 @@ public enum I18N {
 		if (key == null) return "";
 		else if (key.contains(" ") && !key.contains("/")) return key;
 
-		String lower = key.toLowerCase(Locale.ROOT);
+		String lower = key.toLowerCase();
 		if (!key.equals(lower)) return get(lower);
 
 		return Main.getCacheManager().getLocaleCache().computeIfAbsent(name() + "-" + key, k -> {
@@ -74,7 +74,7 @@ public enum I18N {
 		if (key == null) return "";
 		else if (key.contains(" ") && !key.contains("/")) return key;
 
-		String lower = key.toLowerCase(Locale.ROOT);
+		String lower = key.toLowerCase();
 		if (!key.equals(lower)) return get(lower, args);
 
 		for (int i = 0; i < args.length; i++) {

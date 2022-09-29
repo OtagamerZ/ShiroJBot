@@ -50,7 +50,7 @@ public class UnaliasCommand implements Executable {
 			return;
 		}
 
-		String alias = args.getString("alias").toLowerCase(Locale.ROOT);
+		String alias = args.getString("alias").toLowerCase();
 		if (!aliases.containsKey(alias)) {
 			event.channel().sendMessage(locale.get("error/alias_not_found")).queue();
 			return;

@@ -233,7 +233,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			Title t = title.getTitle();
 
 			replaces.put(
-					t.getId().toLowerCase(Locale.ROOT),
+					t.getId().toLowerCase(),
 					"#%06X,%s".formatted(
 							t.getRarity().getColor(false).getRGB() & 0xFFFFFF,
 							t.getInfo(locale).getName().replace(" ", "_")

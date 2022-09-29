@@ -165,7 +165,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		for (Object tag : base.getTags()) {
 			if (out.contains("tag/base") && tag.equals("MATERIAL")) continue;
 
-			out.add("tag/" + ((String) tag).toLowerCase(Locale.ROOT));
+			out.add("tag/" + ((String) tag).toLowerCase());
 		}
 
 		return out;

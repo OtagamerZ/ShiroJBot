@@ -165,13 +165,13 @@ public enum FrameSkin {
 	}
 
 	public BufferedImage getFront(boolean desc) {
-		return IO.getResourceAsImage("shoukan/frames/front/" + name().toLowerCase(Locale.ROOT) + (desc ? "" : "_nodesc") + ".png");
+		return IO.getResourceAsImage("shoukan/frames/front/" + name().toLowerCase() + (desc ? "" : "_nodesc") + ".png");
 	}
 
 	public BufferedImage getBack(Deck deck) {
 		DeckStyling style = deck.getStyling();
 
-		BufferedImage cover = IO.getResourceAsImage("shoukan/frames/back/" + name().toLowerCase(Locale.ROOT) + (style.getCover() != null ? "_t" : "") + ".png");
+		BufferedImage cover = IO.getResourceAsImage("shoukan/frames/back/" + name().toLowerCase() + (style.getCover() != null ? "_t" : "") + ".png");
 		assert cover != null;
 
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -236,7 +236,7 @@ public enum FrameSkin {
 			case PADORU -> "Padoru";
 			case METALLIC -> "Metálico";
 			case RICH -> "Rico";
-		} + " (`" + name().toLowerCase(Locale.ROOT) + "`)";
+		} + " (`" + name().toLowerCase() + "`)";
 	}
 	*/
 }

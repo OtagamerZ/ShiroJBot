@@ -52,7 +52,7 @@ public class ProfileWidgetCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 
-		String op = args.getString("action").toLowerCase(Locale.ROOT);
+		String op = args.getString("action").toLowerCase();
 		switch (op) {
 			case "add", "set" -> {
 				Graphics2D g2d = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB).createGraphics();

@@ -27,6 +27,6 @@ public enum Lock {
 	EFFECT, SPELL, FUSION, DECK;
 
 	public BufferedImage getImage(boolean locked) {
-		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase(Locale.ROOT) + (locked ? "_lock" : "_unlock") + ".png");
+		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase() + (locked ? "_lock" : "_unlock") + ".png");
 	}
 }

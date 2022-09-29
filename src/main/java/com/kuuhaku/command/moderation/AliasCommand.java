@@ -58,8 +58,8 @@ public class AliasCommand implements Executable {
 			return;
 		}
 
-		String cmd = args.getString("command").toLowerCase(Locale.ROOT);
-		String alias = args.getString("alias").toLowerCase(Locale.ROOT);
+		String cmd = args.getString("command").toLowerCase();
+		String alias = args.getString("alias").toLowerCase();
 		if (!Main.getCommandManager().getReservedNames().contains(cmd)) {
 			event.channel().sendMessage(locale.get("error/command_not_found")).queue();
 			return;

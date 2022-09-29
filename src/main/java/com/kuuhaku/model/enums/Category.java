@@ -45,8 +45,8 @@ public enum Category {
 	private Set<PreparedCommand> cmdCache = null;
 
 	Category(String emote, Function<Member, Boolean> allowed) {
-		this.name = "category/name/" + name().toLowerCase(Locale.ROOT);
-		this.description = "category/desc/" + name().toLowerCase(Locale.ROOT);
+		this.name = "category/name/" + name().toLowerCase();
+		this.description = "category/desc/" + name().toLowerCase();
 		this.emote = emote;
 		this.allowed = allowed;
 	}

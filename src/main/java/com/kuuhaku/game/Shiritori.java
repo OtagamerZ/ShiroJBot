@@ -65,7 +65,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		this.locale = locale;
 		this.players = players;
 		this.inGame = new InfiniteList<>(Set.of(players));
-		this.dict = IO.getResourceAsFile("shiritori/" + locale.name().toLowerCase(Locale.ROOT) + ".dict");
+		this.dict = IO.getResourceAsFile("shiritori/" + locale.name().toLowerCase() + ".dict");
 
 		setTimeout(turn -> {
 			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
@@ -95,7 +95,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
-		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase(Locale.ROOT));
+		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase());
 		if (action != null) {
 			action.getFirst().invoke(this, action.getSecond());
 		}
@@ -103,7 +103,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@PlayerAction("(?<word>[a-zA-Z]{3,})")
 	private void nextWord(JSONObject args) {
-		String word = args.getString("word").toLowerCase(Locale.ROOT);
+		String word = args.getString("word").toLowerCase();
 
 		try {
 			if (scanWord(word)) {

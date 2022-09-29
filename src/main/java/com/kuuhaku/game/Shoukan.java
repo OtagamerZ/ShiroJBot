@@ -148,7 +148,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return;
 		}
 
-		Pair<Method, JSONObject> action = toAction(value.toLowerCase(Locale.ROOT).replace(" ", ""));
+		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""));
 		if (action != null) {
 			Method m = action.getFirst();
 
@@ -1385,7 +1385,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... params) {
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(Locale.ROOT), locale));
+		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
 		if (str != null) {
 			return str.getValue().formatted(params);
 		} else {

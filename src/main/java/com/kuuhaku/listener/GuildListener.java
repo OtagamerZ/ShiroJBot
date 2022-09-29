@@ -265,7 +265,7 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		EventData ed = new EventData(config, profile);
-		if (content.toLowerCase(Locale.ROOT).startsWith(config.getPrefix())) {
+		if (content.toLowerCase().startsWith(config.getPrefix())) {
 			processCommand(data, ed, content);
 		}
 
@@ -348,7 +348,7 @@ public class GuildListener extends ListenerAdapter {
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
 		I18N locale = event.config().getLocale();
-		String[] args = content.toLowerCase(Locale.ROOT).split("\\s+");
+		String[] args = content.toLowerCase().split("\\s+");
 		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
 		String[] parts = name.split("\\.");

@@ -62,11 +62,11 @@ public class KawaiponAnimeCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase(Locale.ROOT));
+		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase());
 		if (anime == null || !anime.isVisible()) {
 			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM anime WHERE visible");
 
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(Locale.ROOT), names);
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_anime", sug.getFirst())).queue();
 			return;
 		}

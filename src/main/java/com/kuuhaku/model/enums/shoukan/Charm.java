@@ -56,7 +56,7 @@ public enum Charm {
 	}
 
 	public BufferedImage getIcon() {
-		return IO.getResourceAsImage("shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
+		return IO.getResourceAsImage("shoukan/charm/" + name().toLowerCase() + ".png");
 	}
 
 	public int getValue(int tier) {

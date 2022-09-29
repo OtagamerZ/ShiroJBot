@@ -121,7 +121,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public List<String> getTags() {
-		return tags.stream().map(t -> "tag/" + ((String) t).toLowerCase(Locale.ROOT)).toList();
+		return tags.stream().map(t -> "tag/" + ((String) t).toLowerCase()).toList();
 	}
 
 	@Override

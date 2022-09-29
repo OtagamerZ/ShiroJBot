@@ -79,7 +79,7 @@ public class DeckFrameCommand implements Executable {
 							.setTitle(locale.get("str/frame_locked"))
 							.setDescription(locale.get("str/frame_locked_desc", title.getInfo(locale).getName()));
 				} else {
-					eb.setImage(URL.formatted(fc.name().toLowerCase(Locale.ROOT)))
+					eb.setImage(URL.formatted(fc.name().toLowerCase()))
 							.setTitle(fc.getName(locale))
 							.setDescription(fc.getDescription(locale));
 				}

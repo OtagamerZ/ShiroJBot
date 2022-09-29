@@ -85,7 +85,7 @@ public class Card extends DAO<Card> {
 				buf.write(cardBytes);
 				BufferedImage card = ImageIO.read(buf.inputStream());
 
-				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png");
+				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/" + rarity.name().toLowerCase() + ".png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();

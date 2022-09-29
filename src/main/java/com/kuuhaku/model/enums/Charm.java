@@ -75,7 +75,7 @@ public enum Charm {
 
     public BufferedImage getIcon() {
         if (Utils.equalsAny(this, SPELL, ENCHANTMENT, TRAP)) return null;
-        return IO.getResourceAsImage("shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png");
+        return IO.getResourceAsImage("shoukan/charm/" + name().toLowerCase() + ".png");
     }
 
     public static BufferedImage getIcon(List<Charm> charms) {

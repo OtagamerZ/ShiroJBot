@@ -206,7 +206,7 @@ public class Hand {
 		);
 
 		for (String card : game.getParams().cards()) {
-			card = card.toUpperCase(Locale.ROOT);
+			card = card.toUpperCase();
 			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
 					.findFirst()
 					.orElse(CardType.NONE);
