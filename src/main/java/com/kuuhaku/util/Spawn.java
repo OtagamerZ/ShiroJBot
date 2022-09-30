@@ -20,8 +20,8 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.CreditDrop;
-import com.kuuhaku.model.common.Drop;
+import com.kuuhaku.model.common.drop.CreditDrop;
+import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.enums.Rarity;
@@ -68,7 +68,7 @@ public abstract class Spawn {
 			Map<Rarity, Set<Card>> cPool = Utils.getRandomEntry(animes).getCards().stream()
 					.collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
 
-			RandomList<Rarity> rPool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, 3 - rarityBonus);
+			RandomList<Rarity> rPool = new RandomList<>(Constants.DEFAULT_RNG, 3 - rarityBonus);
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
 
@@ -93,7 +93,7 @@ public abstract class Spawn {
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Drop<?>> rPool = new RandomList<>(Constants.DEFAULT_SECURE_RNG, 3 - rarityBonus) {{
+			RandomList<Drop<?>> rPool = new RandomList<>(Constants.DEFAULT_RNG, 3 - rarityBonus) {{
 				add(new CreditDrop(config.getLocale()));
 			}};
 

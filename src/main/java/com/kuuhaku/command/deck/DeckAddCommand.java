@@ -45,7 +45,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 @Command(
@@ -136,7 +135,9 @@ public class DeckAddCommand implements Executable {
 
 		switch (sc.getType()) {
 			case KAWAIPON -> {
-				if (sc.getKawaiponCard().getCard().getRarity().getIndex() == -1) {
+				Senshi s = DAO.find(Senshi.class, card.getId());
+
+				if (s.isFusion()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
 					return;
 				} else if (sc.getKawaiponCard().isChrome()) {
@@ -147,7 +148,7 @@ public class DeckAddCommand implements Executable {
 					return;
 				}
 
-				d.getSenshi().add(DAO.find(Senshi.class, card.getId()));
+				d.getSenshi().add(s);
 			}
 			case EVOGEAR -> {
 				if (d.getEvogear().size() >= 24) {

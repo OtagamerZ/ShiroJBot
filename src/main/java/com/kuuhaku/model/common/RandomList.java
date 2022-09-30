@@ -1,5 +1,7 @@
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -23,7 +25,7 @@ public class RandomList<T> {
 	}
 
 	public RandomList(double fac) {
-		this(new Random(), fac);
+		this(Constants.DEFAULT_RNG, fac);
 	}
 
 	public RandomList(Random rng, double fac) {
@@ -31,7 +33,7 @@ public class RandomList<T> {
 	}
 
 	public RandomList(BiFunction<Double, Double, Double> randGen, double fac) {
-		this(new Random(), randGen, fac);
+		this(Constants.DEFAULT_RNG, randGen, fac);
 	}
 
 	public RandomList(Random rng, BiFunction<Double, Double, Double> randGen, double fac) {
@@ -75,5 +77,9 @@ public class RandomList<T> {
 				break;
 			}
 		}
+	}
+
+	public Collection<T> getValues() {
+		return map.values();
 	}
 }

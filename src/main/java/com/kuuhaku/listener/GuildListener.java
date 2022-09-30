@@ -25,6 +25,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;

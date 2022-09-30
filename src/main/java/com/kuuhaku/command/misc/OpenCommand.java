@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.common.Drop;
+import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;

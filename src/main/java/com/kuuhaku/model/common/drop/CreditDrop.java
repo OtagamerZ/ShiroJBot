@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.DropContent;
