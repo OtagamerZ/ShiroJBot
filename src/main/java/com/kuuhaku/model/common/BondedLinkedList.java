@@ -43,7 +43,8 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	}
 
 	public BondedLinkedList(Predicate<T> check, Consumer<T> onAdd) {
-		this(check, onAdd, t -> {});
+		this(check, onAdd, t -> {
+		});
 	}
 
 	public BondedLinkedList(Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
@@ -65,84 +66,72 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addFirst(T t) {
-		try {
-			if (!check.test(t)) return;
+		if (!check.test(t)) return;
 
-			super.addFirst(t);
-		} finally {
-			if (t != null) {
-				onAdd.accept(t);
-			}
+		if (t != null) {
+			onAdd.accept(t);
 		}
+
+		super.addFirst(t);
 	}
 
 	@Override
 	public void addLast(T t) {
-		try {
-			if (!check.test(t)) return;
+		if (!check.test(t)) return;
 
-			super.addLast(t);
-		} finally {
-			if (t != null) {
-				onAdd.accept(t);
-			}
+		if (t != null) {
+			onAdd.accept(t);
 		}
+
+		super.addLast(t);
 	}
 
 	@Override
 	public boolean add(T t) {
-		try {
-			if (!check.test(t)) return false;
+		if (!check.test(t)) return false;
 
-			return super.add(t);
-		} finally {
-			if (t != null) {
-				onAdd.accept(t);
-			}
+		if (t != null) {
+			onAdd.accept(t);
 		}
+
+		return super.add(t);
 	}
 
 	@Override
 	public void add(int index, T t) {
-		try {
-			if (!check.test(t)) return;
+		if (!check.test(t)) return;
 
-			super.add(index, t);
-		} finally {
-			if (t != null) {
-				onAdd.accept(t);
-			}
+		if (t != null) {
+			onAdd.accept(t);
 		}
+
+		super.add(index, t);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		try {
-			List<? extends T> filtered = c.stream().filter(check).toList();
+		List<? extends T> filtered = c.stream().filter(check).toList();
 
-			return super.addAll(filtered);
-		} finally {
-			for (T t : c) {
-				if (t != null) {
-					onAdd.accept(t);
-				}
+		for (T t : c) {
+			if (t != null) {
+				onAdd.accept(t);
 			}
 		}
+
+		return super.addAll(filtered);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		try {
-			List<? extends T> filtered = c.stream().filter(check).toList();
+		List<? extends T> filtered = c.stream().filter(check).toList();
 
-			return super.addAll(index, filtered);
-		} finally {
-			for (T t : c) {
-				if (t != null) {
-					onAdd.accept(t);
-				}
+		for (T t : c) {
+			if (t != null) {
+				onAdd.accept(t);
 			}
 		}
+
+		return super.addAll(index, filtered);
 	}
 
 	@Override

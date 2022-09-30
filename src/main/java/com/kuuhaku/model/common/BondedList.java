@@ -26,77 +26,103 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class BondedList<T> extends ArrayList<T> {
-	private final Consumer<T> bonding;
 	private final Predicate<T> check;
+	private final Consumer<T> onAdd;
+	private final Consumer<T> onRemove;
 
-	public static <T> BondedList<T> withBind(Consumer<T> bonding) {
-		return new BondedList<T>(t -> true, bonding);
+	public static <T> BondedList<T> withBind(Consumer<T> onAdd) {
+		return withBind(onAdd, t -> {});
+	}
+
+	public static <T> BondedList<T> withBind(Consumer<T> onAdd, Consumer<T> onRemove) {
+		return new BondedList<T>(t -> true, onAdd, onRemove);
 	}
 
 	public static <T> BondedList<T> withCheck(Predicate<T> check) {
-		return new BondedList<T>(check, t -> {});
+		return new BondedList<T>(check, t -> {}, t -> {});
 	}
 
-	public BondedList(Predicate<T> check, Consumer<T> bonding) {
-		this.bonding = bonding;
-		this.check = check;
+	public BondedList(Predicate<T> check, Consumer<T> onAdd) {
+		this(check, onAdd, t -> {});
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> bonding) {
-		this.bonding = bonding;
+	public BondedList(Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
 		this.check = check;
+		this.onAdd = onAdd;
+		this.onRemove = onRemove;
+	}
+
+	public BondedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> onAdd) {
+		this(c, check, onAdd, t -> {});
+	}
+
+	public BondedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
+		this.check = check;
+		this.onAdd = onAdd;
+		this.onRemove = onRemove;
 		addAll(c);
-	}
-
-	public Consumer<T> getBonding() {
-		return bonding;
 	}
 
 	@Override
 	public boolean add(T t) {
 		if (!check.test(t)) return false;
 
-		try {
-			return super.add(t);
-		} finally {
-			bonding.accept(t);
-		}
+		onAdd.accept(t);
+		return super.add(t);
 	}
 
 	@Override
 	public void add(int index, T element) {
 		if (!check.test(element)) return;
 
-		try {
-			super.add(index, element);
-		} finally {
-			bonding.accept(element);
-		}
+		onAdd.accept(element);
+		super.add(index, element);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream().filter(check).toList();
 
-		try {
-			return super.addAll(filtered);
-		} finally {
-			for (T t : filtered) {
-				bonding.accept(t);
-			}
+		for (T t : filtered) {
+			onAdd.accept(t);
 		}
+
+		return super.addAll(filtered);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream().filter(check).toList();
 
-		try {
-			return super.addAll(index, filtered);
-		} finally {
-			for (T t : filtered) {
-				bonding.accept(t);
-			}
+		for (T t : filtered) {
+			onAdd.accept(t);
 		}
+
+		return super.addAll(index, filtered);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean remove(Object o) {
+		if (super.contains(o)) {
+			onRemove.accept((T) o);
+		}
+
+		return super.remove(o);
+	}
+
+	@Override
+	public T remove(int index) {
+		onRemove.accept(get(index));
+		return super.remove(index);
+	}
+
+	@Override
+	public void clear() {
+		for (T t : this) {
+			onRemove.accept(t);
+		}
+
+		super.clear();
 	}
 }
