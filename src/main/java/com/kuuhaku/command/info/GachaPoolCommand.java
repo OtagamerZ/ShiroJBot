@@ -63,14 +63,19 @@ public class GachaPoolCommand implements Executable {
 				.setTitle(locale.get("str/gacha_pool", locale.get("gacha/" + type)));
 
 		List<Card> pool = new ArrayList<>(DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE id IN ?1", gacha.getPool()));
-		pool.sort(Comparator.<Card>comparingDouble(c -> gacha.rarityOf(c.getId())).thenComparing(Card::getId));
+		pool.sort(
+				Comparator.<Card>comparingDouble(c -> gacha.rarityOf(c.getId()))
+						.thenComparing(Card::getRarity, Comparator.reverseOrder())
+						.thenComparing(Card::getId)
+		);
 
 		List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
 				c -> {
 					String name = c.getName();
 
 					return c.getRarity().getEmote() + name;
-				}
+				},
+				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());
