@@ -102,7 +102,7 @@ public class GachaCommand implements Executable {
 					w -> {
 						List<String> result = gacha.draw();
 
-						BufferedImage bi = new BufferedImage(255 + 265 * (result.size() - 1), 410, BufferedImage.TYPE_INT_ARGB);
+						BufferedImage bi = new BufferedImage(255 + 265 * (result.size() - 1), 400, BufferedImage.TYPE_INT_ARGB);
 						Graphics2D g2d = bi.createGraphics();
 						g2d.setRenderingHints(Constants.HD_HINTS);
 
@@ -126,7 +126,7 @@ public class GachaCommand implements Executable {
 						g2d.dispose();
 
 						event.channel()
-								.sendMessage(event.user().getAsMention())
+								.sendMessage(locale.get("str/gacha_result", event.user().getAsMention()))
 								.addFile(IO.getBytes(bi, "webp"), "result.webp")
 								.queue();
 
@@ -162,9 +162,9 @@ public class GachaCommand implements Executable {
 				case KAWAIPON -> {
 					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * (1 - Spawn.getRarityMult())));
 
-					g2d.drawImage(c.drawCard(kc.isChrome()), 15, 35, null);
+					g2d.drawImage(c.drawCard(kc.isChrome()), 15, 25, null);
 					if (kc.isChrome()) {
-						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/destiny.png"), 0, 20, null);
+						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/destiny.png"), 0, 10, null);
 					}
 
 					kc.setKawaipon(kp);
@@ -173,9 +173,9 @@ public class GachaCommand implements Executable {
 				case EVOGEAR -> {
 					Evogear e = DAO.find(Evogear.class, card);
 
-					g2d.drawImage(e.render(locale, deck), 15, 35, null);
+					g2d.drawImage(e.render(locale, deck), 15, 25, null);
 					if (e.getTier() == 4) {
-						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 0, 20, null);
+						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 0, 10, null);
 					}
 
 					return new StashedCard(kp, c, tp);
@@ -183,7 +183,7 @@ public class GachaCommand implements Executable {
 				case FIELD -> {
 					Field f = DAO.find(Field.class, card);
 
-					g2d.drawImage(f.render(locale, deck), 15, 35, null);
+					g2d.drawImage(f.render(locale, deck), 15, 25, null);
 					return new StashedCard(kp, c, tp);
 				}
 			}
