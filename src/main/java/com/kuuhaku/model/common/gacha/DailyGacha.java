@@ -34,7 +34,7 @@ public class DailyGacha extends Gacha<String> {
 				FROM (
 				     SELECT c.id
 				          , CASE
-				                WHEN f.card_id IS NOT NULL THEN 0.1
+				                WHEN f.card_id IS NOT NULL THEN 0.05
 				                WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2
 				                ELSE 6.0 - get_rarity_index(c.rarity)
 				         END AS value
@@ -42,7 +42,7 @@ public class DailyGacha extends Gacha<String> {
 				              LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
 				              LEFT JOIN field f ON c.id = f.card_id AND NOT f.effect
 				     WHERE (e.card_id IS NOT NULL OR f.card_id IS NOT NULL OR get_rarity_index(c.rarity) BETWEEN 1 AND 5)
-				     ORDER BY hashtextextended(c.id, :seed)
+				     ORDER BY hashtextextended(c.id, ?1)
 				     LIMIT 50
 				     ) x
 				ORDER BY x.value
