@@ -162,7 +162,7 @@ public class GachaCommand implements Executable {
 				case KAWAIPON -> {
 					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * (1 - Spawn.getRarityMult())));
 
-					g2d.drawImage(c.drawCard(kc.isChrome()), 5, 0, null);
+					g2d.drawImage(c.drawCard(kc.isChrome()), 5, 20, null);
 
 					kc.setKawaipon(kp);
 					return new StashedCard(kp, kc);
