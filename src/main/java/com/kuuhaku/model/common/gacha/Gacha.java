@@ -21,8 +21,7 @@ package com.kuuhaku.model.common.gacha;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,10 +62,11 @@ public abstract class Gacha<T> {
 		return prizeCount;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<T> draw() {
-		List<T> out = Arrays.asList((T[]) Array.newInstance(pool.getClass().getComponentType(), prizeCount));
-		out.replaceAll(t -> pool.get());
+		List<T> out = new ArrayList<>();
+		for (int i = 0; i < prizeCount; i++) {
+			out.add(pool.get());
+		}
 
 		return out;
 	}
