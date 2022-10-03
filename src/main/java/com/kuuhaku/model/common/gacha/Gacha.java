@@ -68,6 +68,6 @@ public abstract class Gacha<T> {
 			out.add(pool.get());
 		}
 
-		return out;
+		return List.copyOf(out);
 	}
 }
