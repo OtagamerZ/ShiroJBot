@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.Currency;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -43,6 +44,10 @@ public class Transaction extends DAO<Transaction> {
 	@Column(name = "reason", nullable = false)
 	private String reason;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "currency", nullable = false)
+	private Currency currency;
+
 	@Column(name = "date", nullable = false)
 	private ZonedDateTime date;
 
@@ -54,10 +59,11 @@ public class Transaction extends DAO<Transaction> {
 	public Transaction() {
 	}
 
-	protected Transaction(Account account, long value, boolean input, String reason) {
+	protected Transaction(Account account, long value, boolean input, String reason, Currency currency) {
 		this.value = value;
 		this.input = input;
 		this.reason = reason;
+		this.currency = currency;
 		this.date = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		this.account = account;
 	}
@@ -76,6 +82,10 @@ public class Transaction extends DAO<Transaction> {
 
 	public String getReason() {
 		return reason;
+	}
+
+	public Currency getCurrency() {
+		return currency;
 	}
 
 	public ZonedDateTime getDate() {

@@ -22,6 +22,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
@@ -50,7 +51,7 @@ public class CollectCommand implements Executable {
 			} else if (card.peekProperty(kc -> kp.getCollection().contains(kc))) {
 				event.channel().sendMessage(locale.get("error/owned")).queue();
 				return;
-			} else if (card.peekProperty(kc -> acc.getBalance() < kc.getPrice())) {
+			} else if (card.peekProperty(kc -> !acc.hasEnough(kc.getPrice(), Currency.CR))) {
 				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 				return;
 			}

@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -44,10 +45,12 @@ public class SummonersGacha extends Gacha<String> {
 	}
 
 	private SummonersGacha(List<Object[]> pool) {
-		super(new RandomList<>(2.5 - Spawn.getRarityMult()) {{
-			for (Object[] card : pool) {
-				add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
-			}
-		}}, 3);
+		super(5000, Currency.CR, 3,
+				new RandomList<>(2.5 - Spawn.getRarityMult()) {{
+					for (Object[] card : pool) {
+						add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
+					}
+				}}
+		);
 	}
 }

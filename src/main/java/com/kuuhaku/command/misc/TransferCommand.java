@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
@@ -42,7 +43,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -67,7 +67,7 @@ public class TransferCommand implements Executable {
 			Account acc = data.profile().getAccount();
 
 			int value = args.getInt("value");
-			if (value > acc.getBalance()) {
+			if (!acc.hasEnough(value, Currency.CR)) {
 				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 				return;
 			}

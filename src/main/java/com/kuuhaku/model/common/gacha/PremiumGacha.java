@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -43,11 +44,13 @@ public class PremiumGacha extends Gacha<String> {
 	}
 
 	private PremiumGacha(List<Object[]> pool) {
-		super(new RandomList<>(1.75 - Spawn.getRarityMult()) {{
-			for (Object[] card : pool) {
-				add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
-			}
-		}}, 5);
+		super(1, Currency.GEM, 5,
+				new RandomList<>(1.75 - Spawn.getRarityMult()) {{
+					for (Object[] card : pool) {
+						add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
+					}
+				}}
+		);
 	}
 
 	@Override

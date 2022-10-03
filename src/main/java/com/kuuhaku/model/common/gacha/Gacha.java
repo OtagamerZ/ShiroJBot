@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.enums.Currency;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -26,12 +27,24 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Gacha<T> {
+	private final int price;
+	private final Currency currency;
 	private final RandomList<T> pool;
 	private final int prizeCount;
 
-	public Gacha(RandomList<T> pool, int prizeCount) {
-		this.pool = pool;
+	public Gacha(int price, Currency currency, int prizeCount, RandomList<T> pool) {
+		this.price = price;
+		this.currency = currency;
 		this.prizeCount = prizeCount;
+		this.pool = pool;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public Currency getCurrency() {
+		return currency;
 	}
 
 	public final List<T> getPool() {

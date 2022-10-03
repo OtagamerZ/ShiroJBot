@@ -16,21 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.drop;
+package com.kuuhaku.model.enums;
 
-import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.DropContent;
-import com.kuuhaku.util.Calc;
-
-public class CreditDrop extends Drop<Integer> {
-	public CreditDrop(I18N locale) {
-		this(locale, Calc.rng(300, 800));
-	}
-
-	private CreditDrop(I18N locale, int value) {
-		super(
-				r -> new DropContent<>("currency/cr", value * r),
-				(r, acc) -> acc.addCR((int) (value * r * 0.75), "Credit drop")
-		);
-	}
+public enum Currency {
+	CR, GEM
 }

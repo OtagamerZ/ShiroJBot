@@ -20,26 +20,30 @@ package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.enums.Rarity;
-import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
+import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class BasicGacha extends Gacha<Card> {
+public class BasicGacha extends Gacha<String> {
 	public BasicGacha() {
-		this(new ArrayList<>(DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.rarity IN :allowed", List.of(Rarity.getActualRarities()))));
+		this(DAO.queryAllUnmapped("""
+				SELECT c.id
+				     , 6. - get_rarity_index(c.rarity)
+				FROM card c
+				WHERE get_rarity_index(c.rarity) BETWEEN 1 AND 5
+				ORDER BY 2
+				"""));
 	}
 
-	private BasicGacha(List<Card> pool) {
-		super(new RandomList<>(2.5 - Spawn.getRarityMult()) {{
-			pool.sort(Comparator.comparingInt(c -> -c.getRarity().getIndex()));
-
-			for (Card card : pool) {
-				add(card, 6 - card.getRarity().getIndex());
-			}
-		}}, 3);
+	private BasicGacha(List<Object[]> pool) {
+		super(2800, Currency.CR, 5,
+				new RandomList<>(2.5 - Spawn.getRarityMult()) {{
+					for (Object[] card : pool) {
+						add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
+					}
+				}}
+		);
 	}
 }

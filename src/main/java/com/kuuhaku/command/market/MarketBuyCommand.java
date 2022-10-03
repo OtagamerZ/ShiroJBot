@@ -45,7 +45,7 @@ public class MarketBuyCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 		if (kp.getCapacity() <= 0) {
-			event.channel().sendMessage(locale.get("error/stash_full")).queue();
+			event.channel().sendMessage(locale.get("error/insufficient_space")).queue();
 			return;
 		}
 

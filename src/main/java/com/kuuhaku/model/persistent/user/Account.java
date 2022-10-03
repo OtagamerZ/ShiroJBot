@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -158,7 +159,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 				a.setDebit(0);
 			}
 
-			a.addTransaction(value, true, reason);
+			a.addTransaction(value, true, reason, Currency.CR);
 		});
 	}
 
@@ -172,7 +173,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 				a.setBalance(0);
 			}
 
-			a.addTransaction(value, false, reason);
+			a.addTransaction(value, false, reason, Currency.CR);
 		});
 	}
 
@@ -180,12 +181,33 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return gems;
 	}
 
-	public void addGem() {
-		gems++;
+	protected void setGems(int gems) {
+		this.gems = gems;
 	}
 
-	public void addGems(int value) {
-		gems += value;
+	public void addGems(int value, String reason) {
+		if (value <= 0) return;
+
+		apply(this.getClass(), uid, a -> {
+			a.setGems(a.getGems() + value);
+			a.addTransaction(value, true, reason, Currency.GEM);
+		});
+	}
+
+	public void consumeGems(int value, String reason) {
+		if (value <= 0) return;
+
+		apply(this.getClass(), uid, a -> {
+			a.setGems(a.getGems() - value);
+			a.addTransaction(value, false, reason, Currency.GEM);
+		});
+	}
+
+	public boolean hasEnough(int value, Currency currency) {
+		return switch (currency) {
+			case CR -> getBalance() - getDebit() >= value;
+			case GEM -> getGems() >= value;
+		};
 	}
 
 	public List<Profile> getProfiles() {
@@ -232,8 +254,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return transactions;
 	}
 
-	public void addTransaction(long value, boolean input, String reason) {
-		transactions.add(new Transaction(this, value, input, reason));
+	public void addTransaction(long value, boolean input, String reason, Currency currency) {
+		transactions.add(new Transaction(this, value, input, reason, currency));
 	}
 
 	public Set<DynamicProperty> getDynamicProperties() {
