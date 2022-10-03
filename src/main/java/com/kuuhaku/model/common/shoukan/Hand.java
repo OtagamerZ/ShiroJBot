@@ -250,14 +250,7 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> getCards() {
-		cards.removeIf(d -> {
-			if (!equals(d.getHand())) {
-				System.out.println("Removed " + d);
-				return true;
-			}
-
-			return false;
-		});
+		cards.removeIf(d -> !equals(d.getHand()));
 
 		return cards;
 	}
