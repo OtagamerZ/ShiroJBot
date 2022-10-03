@@ -20,10 +20,10 @@ package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
+import kotlin.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Gacha<T> {
 	private final int price;
@@ -52,9 +52,8 @@ public abstract class Gacha<T> {
 
 	public final double rarityOf(T value) {
 		return pool.entries().stream()
-				.filter(e -> e.getValue().equals(value))
-				.peek(System.out::println)
-				.mapToDouble(Map.Entry::getKey)
+				.filter(e -> e.getSecond().equals(value))
+				.mapToDouble(Pair::getFirst)
 				.findFirst()
 				.orElse(0);
 	}

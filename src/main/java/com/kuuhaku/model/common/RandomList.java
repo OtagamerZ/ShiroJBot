@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
+import kotlin.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -8,6 +9,7 @@ import java.util.function.BiFunction;
 
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
+	private final TreeSet<Pair<Double, T>> pool = new TreeSet<>(Comparator.comparingDouble(Pair::getFirst));
 	private final Random rng;
 	private final BiFunction<Double, Double, Double> randGen;
 	private final double fac;
@@ -51,6 +53,7 @@ public class RandomList<T> {
 
 		total += weight;
 		map.put(total, item);
+		pool.add(new Pair<>(weight, item));
 	}
 
 	public T get() {
@@ -83,7 +86,7 @@ public class RandomList<T> {
 		return map.values();
 	}
 
-	public Set<Map.Entry<Double, T>> entries() {
-		return map.entrySet();
+	public Set<Pair<Double, T>> entries() {
+		return pool;
 	}
 }
