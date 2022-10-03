@@ -102,7 +102,7 @@ public class GachaCommand implements Executable {
 					w -> {
 						List<String> result = gacha.draw();
 
-						BufferedImage bi = new BufferedImage(265 * result.size(), 410, BufferedImage.TYPE_INT_ARGB);
+						BufferedImage bi = new BufferedImage(255 + 265 * (result.size() - 1), 410, BufferedImage.TYPE_INT_ARGB);
 						Graphics2D g2d = bi.createGraphics();
 						g2d.setRenderingHints(Constants.HD_HINTS);
 
@@ -154,7 +154,7 @@ public class GachaCommand implements Executable {
 		Card c = DAO.find(Card.class, card);
 		try {
 			Graph.drawOutlinedString(g2d, c.getName(),
-					265 / 2 - g2d.getFontMetrics().stringWidth(c.getName()) / 2, 20,
+					15 + 225 / 2 - g2d.getFontMetrics().stringWidth(c.getName()) / 2, 20,
 					6, Color.BLACK
 			);
 
