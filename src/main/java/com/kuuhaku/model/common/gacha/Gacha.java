@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.RandomList;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Gacha<T> {
 	private final RandomList<T> pool;
@@ -34,7 +35,15 @@ public abstract class Gacha<T> {
 	}
 
 	public final List<T> getPool() {
-		return List.copyOf(pool.getValues());
+		return List.copyOf(pool.values());
+	}
+
+	public final double rarityOf(T value) {
+		return pool.entries().stream()
+				.filter(e -> e.getValue().equals(value))
+				.mapToDouble(Map.Entry::getKey)
+				.findFirst()
+				.orElse(0);
 	}
 
 	public final int getPrizeCount() {
@@ -42,7 +51,7 @@ public abstract class Gacha<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public final List<T> draw() {
+	public List<T> draw() {
 		List<T> out = Arrays.asList((T[]) Array.newInstance(pool.getClass().getComponentType(), prizeCount));
 		out.replaceAll(t -> pool.get());
 

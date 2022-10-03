@@ -79,7 +79,11 @@ public class RandomList<T> {
 		}
 	}
 
-	public Collection<T> getValues() {
+	public Collection<T> values() {
 		return map.values();
+	}
+
+	public Set<Map.Entry<Double, T>> entries() {
+		return map.entrySet();
 	}
 }

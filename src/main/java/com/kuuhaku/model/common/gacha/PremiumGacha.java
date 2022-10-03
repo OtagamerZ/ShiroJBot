@@ -30,15 +30,14 @@ public class PremiumGacha extends Gacha<String> {
 		this(DAO.queryAllUnmapped("""
 				SELECT c.id
 				     , CASE
-				           WHEN s.card_id IS NOT NULL THEN 6. - get_rarity_index(c.rarity)
+				           WHEN f.card_id IS NOT NULL THEN 0.15
 				           WHEN e.card_id IS NOT NULL THEN (5. - e.tier) / 1.25
-				           ELSE 0.15
+				           ELSE 6. - get_rarity_index(c.rarity)
 				    END
 				FROM card c
-				         LEFT JOIN senshi s ON c.id = s.card_id AND get_type(c.id) & 2 = 2 AND get_rarity_index(c.rarity) BETWEEN 3 AND 5 AND NOT CAST(s.tags AS jsonb) ? 'FUSION'
 				         LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 1
 				         LEFT JOIN field f ON c.id = f.card_id AND NOT f.effect
-				WHERE (s.card_id IS NOT NULL OR e.card_id IS NOT NULL OR f.card_id IS NOT NULL OR get_rarity_index(c.rarity) BETWEEN 3 AND 5)
+				WHERE (e.card_id IS NOT NULL OR f.card_id IS NOT NULL OR get_rarity_index(c.rarity) BETWEEN 3 AND 5)
 				ORDER BY 2
 				"""));
 	}
@@ -49,5 +48,22 @@ public class PremiumGacha extends Gacha<String> {
 				add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
 			}
 		}}, 5);
+	}
+
+	@Override
+	public List<String> draw() {
+		List<String> out = super.draw();
+		List<String> aux = super.draw();
+
+		for (int i = 0; i < out.size(); i++) {
+			String first = out.get(i);
+			String second = aux.get(i);
+
+			if (rarityOf(second) > rarityOf(first)) {
+				out.set(i, second);
+			}
+		}
+
+		return out;
 	}
 }
