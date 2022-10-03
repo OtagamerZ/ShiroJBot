@@ -71,7 +71,7 @@ public class GachaCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			for (String type : new String[]{"basic", "premium", "summoner", "daily"}) {
-				eb.setTitle(locale.get("gacha/" + type) + " (`" + type.toUpperCase() + "`)")
+				eb.setTitle(locale.get("gacha/" + type) + " (`" + type.toUpperCase() + "` - " + locale.get("currency/" + (type.equals("premium") ? "gem" : "cr")) + ")")
 						.setDescription(locale.get("gacha/" + type + "_desc"));
 
 				pages.add(new InteractPage(eb.build()));
@@ -96,7 +96,7 @@ public class GachaCommand implements Executable {
 		if (!acc.hasEnough(gacha.getPrice(), gacha.getCurrency())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + gacha.getCurrency())).queue();
 			return;
-		} else if (acc.getKawaipon().getStashUsage() < gacha.getPrizeCount()) {
+		} else if (acc.getKawaipon().getCapacity() < gacha.getPrizeCount()) {
 			event.channel().sendMessage(locale.get("error/insufficient_space")).queue();
 			return;
 		}
