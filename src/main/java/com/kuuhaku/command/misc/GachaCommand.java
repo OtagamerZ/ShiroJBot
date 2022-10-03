@@ -29,10 +29,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.gacha.*;
-import com.kuuhaku.model.enums.CardType;
-import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.Currency;
-import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -101,13 +98,15 @@ public class GachaCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type).toLowerCase()), event.channel(),
+			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type).toLowerCase(), locale.get("currency/" + gacha.getCurrency(), gacha.getPrice())), event.channel(),
 					w -> {
 						List<String> result = gacha.draw();
 
-						BufferedImage bi = new BufferedImage(255 + 265 * (result.size() - 1), 380, BufferedImage.TYPE_INT_ARGB);
+						BufferedImage bi = new BufferedImage(265 * result.size(), 450, BufferedImage.TYPE_INT_ARGB);
 						Graphics2D g2d = bi.createGraphics();
 						g2d.setRenderingHints(Constants.HD_HINTS);
+
+						g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 
 						List<StashedCard> acts = new ArrayList<>();
 						for (String s : result) {
@@ -154,13 +153,18 @@ public class GachaCommand implements Executable {
 
 		Card c = DAO.find(Card.class, card);
 		try {
+			Graph.drawOutlinedString(g2d, c.getName(),
+					265 / 2 - g2d.getFontMetrics().stringWidth(c.getName()) / 2, 90,
+					6, Color.BLACK
+			);
+
 			switch (tp) {
 				case KAWAIPON -> {
 					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * (1 - Spawn.getRarityMult())));
 
-					g2d.drawImage(c.drawCard(kc.isChrome()), 15, 15, null);
+					g2d.drawImage(c.drawCard(kc.isChrome()), 15, 105, null);
 					if (kc.isChrome()) {
-						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/destiny.png"), 0, 0, null);
+						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/destiny.png"), 0, 90, null);
 					}
 
 					kc.setKawaipon(kp);
@@ -169,9 +173,9 @@ public class GachaCommand implements Executable {
 				case EVOGEAR -> {
 					Evogear e = DAO.find(Evogear.class, card);
 
-					g2d.drawImage(e.render(locale, deck), 15, 15, null);
+					g2d.drawImage(e.render(locale, deck), 15, 105, null);
 					if (e.getTier() == 4) {
-						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 0, 0, null);
+						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 0, 90, null);
 					}
 
 					return new StashedCard(kp, c, tp);
@@ -179,7 +183,7 @@ public class GachaCommand implements Executable {
 				case FIELD -> {
 					Field f = DAO.find(Field.class, card);
 
-					g2d.drawImage(f.render(locale, deck), 15, 15, null);
+					g2d.drawImage(f.render(locale, deck), 15, 105, null);
 					return new StashedCard(kp, c, tp);
 				}
 			}

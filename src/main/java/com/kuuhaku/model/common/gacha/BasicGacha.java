@@ -38,7 +38,7 @@ public class BasicGacha extends Gacha<String> {
 	}
 
 	private BasicGacha(List<Object[]> pool) {
-		super(2800, Currency.CR, 5,
+		super(2800, Currency.CR, 3,
 				new RandomList<>(2.5 - Spawn.getRarityMult()) {{
 					for (Object[] card : pool) {
 						add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
