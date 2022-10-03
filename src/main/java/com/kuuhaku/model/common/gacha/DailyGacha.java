@@ -35,8 +35,8 @@ public class DailyGacha extends Gacha<String> {
 				     SELECT c.id
 				          , CASE
 				                WHEN f.card_id IS NOT NULL THEN 0.1
-				                WHEN e.card_id IS NOT NULL THEN (5. - e.tier) / 2
-				                ELSE 6. - get_rarity_index(c.rarity)
+				                WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2
+				                ELSE 6.0 - get_rarity_index(c.rarity)
 				         END AS value
 				     FROM card c
 				              LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0

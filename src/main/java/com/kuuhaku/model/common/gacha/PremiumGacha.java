@@ -32,8 +32,8 @@ public class PremiumGacha extends Gacha<String> {
 				SELECT c.id
 				     , CASE
 				           WHEN f.card_id IS NOT NULL THEN 0.15
-				           WHEN e.card_id IS NOT NULL THEN (5. - e.tier) / 1.25
-				           ELSE 6. - get_rarity_index(c.rarity)
+				           WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 1.25
+				           ELSE 6.0 - get_rarity_index(c.rarity)
 				    END
 				FROM card c
 				         LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 1

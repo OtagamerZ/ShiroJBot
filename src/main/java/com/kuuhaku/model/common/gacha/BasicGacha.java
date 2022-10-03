@@ -30,7 +30,7 @@ public class BasicGacha extends Gacha<String> {
 	public BasicGacha() {
 		this(DAO.queryAllUnmapped("""
 				SELECT c.id
-				     , 6. - get_rarity_index(c.rarity)
+				     , 6.0 - get_rarity_index(c.rarity)
 				FROM card c
 				WHERE get_rarity_index(c.rarity) BETWEEN 1 AND 5
 				ORDER BY 2
