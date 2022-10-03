@@ -153,6 +153,8 @@ public class GachaCommand implements Executable {
 
 		Card c = DAO.find(Card.class, card);
 		try {
+			g2d.drawRect(0, 0, 265, 20);
+			g2d.drawRect(265 / 2 - g2d.getFontMetrics().stringWidth(c.getName()) / 2, 0, g2d.getFontMetrics().stringWidth(c.getName()), 20);
 			Graph.drawOutlinedString(g2d, c.getName(),
 					265 / 2 - g2d.getFontMetrics().stringWidth(c.getName()) / 2, 20,
 					6, Color.BLACK
