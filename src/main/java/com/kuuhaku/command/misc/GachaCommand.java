@@ -71,7 +71,7 @@ public class GachaCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			for (String type : new String[]{"basic", "premium", "summoner", "daily"}) {
-				eb.setTitle(locale.get("gacha/" + type))
+				eb.setTitle(locale.get("gacha/" + type) + " (`" + type.toUpperCase() + "`)")
 						.setDescription(locale.get("gacha/" + type + "_desc"));
 
 				pages.add(new InteractPage(eb.build()));
