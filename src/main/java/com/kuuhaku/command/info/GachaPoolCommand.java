@@ -65,8 +65,8 @@ public class GachaPoolCommand implements Executable {
 		List<Card> pool = new ArrayList<>(DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE id IN ?1", gacha.getPool()));
 		pool.sort(
 				Comparator.<Card>comparingDouble(c -> gacha.rarityOf(c.getId()))
-						.thenComparing(c -> c.getRarity().ordinal(), Comparator.reverseOrder())
-						.thenComparing(Card::getId)
+						.thenComparing(Card::getRarity, Comparator.reverseOrder())
+						//.thenComparing(Card::getId)
 		);
 
 		List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
