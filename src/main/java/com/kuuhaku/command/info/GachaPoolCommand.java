@@ -60,14 +60,16 @@ public class GachaPoolCommand implements Executable {
 		};
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/gacha_pool", locale.get("gacha/" + type)));
+				.setTitle(locale.get("str/gacha_pool", locale.get("gacha/" + type).toLowerCase()));
 
 		List<Card> pool = new ArrayList<>(DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE id IN ?1", gacha.getPool()));
+		System.out.println(pool);
 		pool.sort(
 				Comparator.<Card>comparingDouble(c -> gacha.rarityOf(c.getId()))
 						.thenComparing(Card::getRarity, Comparator.reverseOrder())
-						//.thenComparing(Card::getId)
+						.thenComparing(Card::getId)
 		);
+		System.out.println(pool);
 
 		List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
 				c -> {

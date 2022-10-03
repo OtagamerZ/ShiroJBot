@@ -31,8 +31,8 @@ public enum Rarity {
 	ULTRA_RARE(4, 0x9966CC, "<:ultra_rare:726171819786240091>"),
 	LEGENDARY(5, 0xDC9018, "<:legendary:726171819945623682>"),
 	ULTIMATE(-1, 0xD400AA, "<:ultimate:1002748864643743774>"),
-	EVOGEAR,
-	FIELD,
+	EVOGEAR("\\\uD83E\uDDE7 "),
+	FIELD("\\\uD83C\uDFD4️ "),
 	FUSION,
 	NONE;
 
@@ -43,6 +43,12 @@ public enum Rarity {
 	Rarity(int index, int color, String emote) {
 		this.index = index;
 		this.color = color;
+		this.emote = emote;
+	}
+
+	Rarity(String emote) {
+		this.index = -1;
+		this.color = 0;
 		this.emote = emote;
 	}
 
