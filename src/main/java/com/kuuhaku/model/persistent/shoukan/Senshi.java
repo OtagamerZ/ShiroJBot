@@ -854,6 +854,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				&& SERIAL == senshi.SERIAL;
 	}
 
+	public int posHash() {
+		return Objects.hash(id, slot, isSupporting());
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, card, slot, race);
