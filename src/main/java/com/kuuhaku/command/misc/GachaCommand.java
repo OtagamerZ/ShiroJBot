@@ -96,10 +96,6 @@ public class GachaCommand implements Executable {
 			default -> new BasicGacha();
 		};
 
-		if (args.has("list")) {
-
-		}
-
 		if (!acc.hasEnough(gacha.getPrice(), gacha.getCurrency())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + gacha.getCurrency())).queue();
 			return;
