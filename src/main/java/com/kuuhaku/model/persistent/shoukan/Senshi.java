@@ -192,6 +192,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.orElse(null);
 	}
 
+	public Evogear unequip(String id) {
+		Iterator<Evogear> it = equipments.iterator();
+		while (it.hasNext()) {
+			Evogear e = it.next();
+
+			if (e.getCard().getId().equals(id)) {
+				hand.getGraveyard().add(e);
+				it.remove();
+				return e;
+			}
+		}
+
+		return null;
+	}
+
 	@Override
 	public SlotColumn getSlot() {
 		return Utils.getOr(slot, new SlotColumn(hand.getGame(), hand.getSide(), -1));
