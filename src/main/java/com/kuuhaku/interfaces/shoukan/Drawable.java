@@ -40,7 +40,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
@@ -299,7 +298,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			}
 		}
 
-		return out.toString();
+		return out.stream().filter(s -> !s.isBlank()).toList().toString();
 	}
 
 	T clone() throws CloneNotSupportedException;

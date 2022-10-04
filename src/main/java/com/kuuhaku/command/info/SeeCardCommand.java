@@ -47,7 +47,6 @@ import net.dv8tion.jda.api.Permission;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Command(
@@ -160,6 +159,7 @@ public class SeeCardCommand implements Executable {
 
 											return d.getString(locale, s);
 										})
+										.filter(s -> !s.isBlank())
 										.map(s -> "`" + s + "`")
 										.collect(Collectors.joining(" ")),
 								true
