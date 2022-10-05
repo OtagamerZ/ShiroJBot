@@ -49,6 +49,6 @@ public class DeckCoverCommand implements Executable {
 			return;
 		}
 
-		d.getStyling().set
+
 	}
 }
