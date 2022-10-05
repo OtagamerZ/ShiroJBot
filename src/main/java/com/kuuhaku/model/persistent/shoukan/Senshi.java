@@ -217,6 +217,28 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		this.slot = slot;
 	}
 
+	public Senshi getLeft() {
+		SlotColumn slt = getSlot().getLeft();
+		if (slt == null) return null;
+
+		if (isSupporting()) {
+			return slt.getBottom();
+		} else {
+			return slt.getTop();
+		}
+	}
+
+	public Senshi getRight() {
+		SlotColumn slt = getSlot().getRight();
+		if (slt == null) return null;
+
+		if (isSupporting()) {
+			return slt.getBottom();
+		} else {
+			return slt.getTop();
+		}
+	}
+
 	@Override
 	public Hand getHand() {
 		return hand;
