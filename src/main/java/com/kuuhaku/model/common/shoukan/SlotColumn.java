@@ -182,6 +182,12 @@ public class SlotColumn {
 		return Arrays.asList(getTop(), getBottom());
 	}
 
+	public void swap() {
+		Senshi aux = bottom;
+		bottom = top;
+		top = aux;
+	}
+
 	public int getLock() {
 		if (Bit.on(state, 0)) return -1;
 
