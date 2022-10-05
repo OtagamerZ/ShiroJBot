@@ -528,7 +528,12 @@ public class Deck extends DAO<Deck> {
 	public BaseValues getBaseValues(Hand h) {
 		try {
 			return new BaseValues(() -> {
-				Origin origin = getOrigins();
+				Origin origin;
+				if (h != null) {
+					origin = h.getOrigin();
+				} else {
+					origin = getOrigins();
+				}
 
 				double reduction = Math.pow(0.999, -24 * getEvoWeight());
 				int base;
