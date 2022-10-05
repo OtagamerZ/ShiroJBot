@@ -19,6 +19,7 @@
 package com.kuuhaku.util.json;
 
 import com.kuuhaku.Constants;
+import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
@@ -47,7 +48,7 @@ public abstract class JSONUtils {
 	public static <T> T fromJSON(String json, Class<T> klass) {
 		try {
 			return moshi.adapter(klass).nullSafe().fromJson(json);
-		} catch (IOException e) {
+		} catch (IOException | JsonDataException e) {
 			Constants.LOGGER.debug(e, e);
 			Constants.LOGGER.debug(json);
 			return null;
@@ -58,7 +59,7 @@ public abstract class JSONUtils {
 	public static Map<String, Object> toMap(@Language("JSON5") String json) {
 		try {
 			return (Map<String, Object>) moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class)).fromJson(json);
-		} catch (IOException e) {
+		} catch (IOException | JsonDataException e) {
 			Constants.LOGGER.debug(e, e);
 			Constants.LOGGER.debug(json);
 			return new HashMap<>();
@@ -69,7 +70,7 @@ public abstract class JSONUtils {
 	public static List<Object> toList(@Language("JSON5") String json) {
 		try {
 			return (List<Object>) moshi.adapter(Types.newParameterizedType(List.class, Object.class)).fromJson(json);
-		} catch (IOException e) {
+		} catch (IOException | JsonDataException e) {
 			Constants.LOGGER.debug(e, e);
 			Constants.LOGGER.debug(json);
 			return new ArrayList<>();
