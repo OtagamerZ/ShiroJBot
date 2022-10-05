@@ -470,7 +470,7 @@ public class Deck extends DAO<Deck> {
 			}
 
 			if (races.stream().distinct().count() == 1) {
-				return origin = new Origin(races.first());
+				return origin = Origin.of(races.first());
 			}
 
 			List<Race> ori = new ArrayList<>();
@@ -515,9 +515,9 @@ public class Deck extends DAO<Deck> {
 				origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 			} else {
 				if (!ori.isEmpty()) {
-					origin = new Origin(ori.get(0), ori.get(1));
+					origin = Origin.of(ori.get(0), ori.get(1));
 				} else {
-					origin = new Origin(Race.NONE);
+					origin = Origin.of(Race.NONE);
 				}
 			}
 		}

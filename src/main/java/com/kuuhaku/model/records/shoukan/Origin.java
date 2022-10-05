@@ -26,9 +26,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Origin(Race major, Race... minor) {
-	public Origin(Race major, Race minor) {
-		this(major, new Race[]{minor});
+public record Origin(Race major, Race[] minor) {
+	public static Origin of(Race major, Race... minor) {
+		return new Origin(major, minor);
 	}
 
 	public List<BufferedImage> images() {
