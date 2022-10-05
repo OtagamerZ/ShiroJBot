@@ -20,6 +20,7 @@ package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
 import com.kuuhaku.model.persistent.user.Account;
@@ -30,7 +31,6 @@ import com.kuuhaku.util.Utils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.Locale;
 
 public enum FrameSkin {
 	PINK,
@@ -170,18 +170,19 @@ public enum FrameSkin {
 
 	public BufferedImage getBack(Deck deck) {
 		DeckStyling style = deck.getStyling();
+		Card cover = deck.isCoverAllowed() ? style.getCover() : null;
 
-		BufferedImage cover = IO.getResourceAsImage("shoukan/frames/back/" + name().toLowerCase() + (style.getCover() != null ? "_t" : "") + ".png");
-		assert cover != null;
+		BufferedImage back = IO.getResourceAsImage("shoukan/frames/back/" + name().toLowerCase() + (cover != null ? "_t" : "") + ".png");
+		assert back != null;
 
-		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage canvas = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = canvas.createGraphics();
 
-		if (style.getCover() != null) {
+		if (cover != null) {
 			g2d.drawImage(style.getCover().drawCardNoBorder(), 15, 16, 195, 318, null);
 		}
 
-		g2d.drawImage(cover, 0, 0, null);
+		g2d.drawImage(back, 0, 0, null);
 
 		return canvas;
 	}
