@@ -364,7 +364,7 @@ public class Arena implements Renderer {
 
 				Rectangle bar;
 				if (demon) {
-					bar = new Rectangle(0, 0, BAR_SIZE.width, BAR_SIZE.height);
+					bar = new Rectangle(leftOffset + 2, 0, BAR_SIZE.width + leftOffset + 2, BAR_SIZE.height);
 				} else {
 					bar = new Rectangle(
 							leftOffset + 2, (int) (BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0)),
@@ -428,35 +428,39 @@ public class Arena implements Renderer {
 					g2.setColor(Color.WHITE);
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
+					int offset = 6;
+					if (demon) offset += 10;
+
+					Color rdColor = regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF);
 					if (reversed) {
 						String rdText = "";
 						if (regdeg != 0) {
 							rdText = (regdeg > 0 ? " +" : " ") + regdeg;
-							g2.setColor(regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF));
+							g2.setColor(rdColor);
 							Graph.drawOutlinedString(g2, rdText,
-									-(bar.x + 6 + g2.getFontMetrics().stringWidth(rdText)), -(bar.y + 6),
+									-(bar.x + offset + g2.getFontMetrics().stringWidth(rdText)), -(bar.y + 6),
 									6, Color.BLACK
 							);
 						}
 
 						g2.setColor(Color.WHITE);
 						Graph.drawOutlinedString(g2, hpText,
-								-(bar.x + 6 + g2.getFontMetrics().stringWidth(hpText + rdText)), -(bar.y + 6),
+								-(bar.x + offset + g2.getFontMetrics().stringWidth(hpText + rdText)), -(bar.y + 6),
 								6, Color.BLACK
 						);
 					} else {
 						if (regdeg != 0) {
 							String rdText = (regdeg > 0 ? " +" : " ") + regdeg;
-							g2.setColor(regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF));
+							g2.setColor(rdColor);
 							Graph.drawOutlinedString(g2, rdText,
-									bar.x + 6 + g2.getFontMetrics().stringWidth(hpText), bar.y + bar.height - 6,
+									bar.x + offset + g2.getFontMetrics().stringWidth(hpText), bar.y + bar.height - 6,
 									6, Color.BLACK
 							);
 						}
 
 						g2.setColor(Color.WHITE);
 						Graph.drawOutlinedString(g2, hpText,
-								bar.x + 6, bar.y + bar.height - 6,
+								bar.x + offset, bar.y + bar.height - 6,
 								6, Color.BLACK
 						);
 					}
