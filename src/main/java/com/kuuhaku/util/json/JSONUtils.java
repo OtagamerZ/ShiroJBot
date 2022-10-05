@@ -36,11 +36,8 @@ public abstract class JSONUtils {
 			.add(OffsetDateTime.class, new Rfc3339DateJsonAdapter())
 			.build();
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static String toJSON(Object o) {
-		Class klass = o.getClass();
-
-		return moshi.adapter(klass).toJson(o);
+		return moshi.adapter(Object.class).toJson(o);
 	}
 
 	public static <T> T fromJSON(String json, Class<T> klass) {
