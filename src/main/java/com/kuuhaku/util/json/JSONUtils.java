@@ -25,7 +25,6 @@ import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 import org.intellij.lang.annotations.Language;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,9 +37,11 @@ public abstract class JSONUtils {
 			.build();
 
 	public static String toJSON(Object o) {
-		Type type = Types.newParameterizedType(Class.class, o.getClass());
+		if (o instanceof String s) {
+			return moshi.adapter(String.class).toJson(s);
+		}
 
-		return moshi.adapter(type).toJson(o);
+		return moshi.adapter(Object.class).toJson(o);
 	}
 
 	public static <T> T fromJSON(String json, Class<T> klass) {
