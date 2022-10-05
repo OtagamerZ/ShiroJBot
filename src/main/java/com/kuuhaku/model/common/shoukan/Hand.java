@@ -611,19 +611,37 @@ public class Hand {
 	}
 
 	public int getMP() {
+		if (origin.major() == Race.DEMON) {
+			return Math.max(0, hp / (base.hp() / 10) - 1);
+		}
+
 		return mp;
 	}
 
 	public void setMP(int mp) {
+		if (origin.major() == Race.DEMON) {
+			setHP((mp + 1) * (base.hp() / 10));
+			return;
+		}
+
 		this.mp = Math.max(0, mp);
 	}
 
 	public void modMP(int value) {
+		if (origin.major() == Race.DEMON) {
+			modHP(value * (base.hp() / 10));
+			return;
+		}
+
 		this.mp = Math.max(0, this.mp + value);
 	}
 
 	public void consumeMP(int value) {
 		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return;
+		else if (origin.major() == Race.DEMON) {
+			consumeHP(value * (base.hp() / 10));
+			return;
+		}
 
 		this.mp = Math.max(0, this.mp - Math.max(0, value));
 	}

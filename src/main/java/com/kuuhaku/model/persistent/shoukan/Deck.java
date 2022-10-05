@@ -549,14 +549,7 @@ public class Deck extends DAO<Deck> {
 				AccFunction<Integer, Integer> handCap = t -> 5;
 
 				mpGain = switch (origin.major()) {
-					case DEMON -> {
-						bHP -= bHP * 1500 / 5000;
-						if (h != null) {
-							yield mpGain.accumulate((t, mp) -> mp + (int) (5 - 5 * h.getHPPrcnt()));
-						} else {
-							yield mpGain.accumulate((t, mp) -> mp);
-						}
-					}
+					case DEMON -> mpGain.accumulate((t, mp) -> mp / 2);
 					case DIVINITY -> mpGain.accumulate((t, mp) -> mp + (int) (mp * getMetaDivergence() / 2));
 					default -> mpGain;
 				};

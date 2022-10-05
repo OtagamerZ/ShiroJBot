@@ -308,6 +308,7 @@ public class Arena implements Renderer {
 	private Consumer<Graphics2D> drawBar(Hand hand) {
 		return g -> {
 			boolean reversed = hand.getSide() != Side.TOP;
+			boolean demon = hand.getOrigin().major() == Race.DEMON;
 
 			int leftOffset = 250;
 			double lOffPercent = (double) leftOffset / BAR_SIZE.width;
@@ -338,31 +339,39 @@ public class Arena implements Renderer {
 
 				g1.setClip(boundaries);
 
-				int mpWidth = (int) (BAR_SIZE.width / 1.4);
-				Color manaOver1 = new Color(0x1181FF);
-				Color manaOver2 = new Color(0x4D15FF);
-				for (int i = 0; i < 33; i++) {
-					g1.setColor(Color.CYAN);
-					if (hand.getMP() > 66 + i) {
-						g1.setColor(manaOver2);
-					} else if (hand.getMP() > 33 + i) {
-						g1.setColor(manaOver1);
-					} else if (hand.getMP() <= i) {
-						g1.setColor(Color.DARK_GRAY);
-					}
+				if (!demon) {
+					int mpWidth = (int) (BAR_SIZE.width / 1.4);
+					Color manaOver1 = new Color(0x1181FF);
+					Color manaOver2 = new Color(0x4D15FF);
+					for (int i = 0; i < 33; i++) {
+						g1.setColor(Color.CYAN);
+						if (hand.getMP() > 66 + i) {
+							g1.setColor(manaOver2);
+						} else if (hand.getMP() > 33 + i) {
+							g1.setColor(manaOver1);
+						} else if (hand.getMP() <= i) {
+							g1.setColor(Color.DARK_GRAY);
+						}
 
-					int width = mpWidth / 33 - 8;
-					if (i == 32) {
-						width *= 2;
-					}
+						int width = mpWidth / 33 - 8;
+						if (i == 32) {
+							width *= 2;
+						}
 
-					g1.fillRect(leftOffset + 2 + (mpWidth / 33) * i, 2, width, BAR_SIZE.height / 3 - 2);
+						g1.fillRect(leftOffset + 2 + (mpWidth / 33) * i, 2, width, BAR_SIZE.height / 3 - 2);
+					}
 				}
 
-				Rectangle bar = new Rectangle(
-						leftOffset + 2, (int) (BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0)),
-						BAR_SIZE.width, (int) (BAR_SIZE.height / 1.75)
-				);
+				Rectangle bar;
+				if (demon) {
+					bar = new Rectangle(0, 0, BAR_SIZE.width, BAR_SIZE.height);
+				} else {
+					bar = new Rectangle(
+							leftOffset + 2, (int) (BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0)),
+							BAR_SIZE.width, (int) (BAR_SIZE.height / 1.75)
+					);
+				}
+
 				g1.setColor(Color.DARK_GRAY);
 				g1.fill(bar);
 
@@ -394,20 +403,22 @@ public class Arena implements Renderer {
 				}
 
 				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
-					String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
-					g2.setColor(Color.CYAN);
-					g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
+					if (!demon) {
+						String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
+						g2.setColor(Color.CYAN);
+						g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
-					if (reversed) {
-						Graph.drawOutlinedString(g2, mpText,
-								-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
-								6, Color.BLACK
-						);
-					} else {
-						Graph.drawOutlinedString(g2, mpText,
-								MARGIN.x, BAR_SIZE.height - 20,
-								6, Color.BLACK
-						);
+						if (reversed) {
+							Graph.drawOutlinedString(g2, mpText,
+									-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
+									6, Color.BLACK
+							);
+						} else {
+							Graph.drawOutlinedString(g2, mpText,
+									MARGIN.x, BAR_SIZE.height - 20,
+									6, Color.BLACK
+							);
+						}
 					}
 
 					String hpText = "HP: "
@@ -415,7 +426,7 @@ public class Arena implements Renderer {
 							+ "/"
 							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 					g2.setColor(Color.WHITE);
-					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
 					if (reversed) {
 						String rdText = "";
@@ -423,14 +434,14 @@ public class Arena implements Renderer {
 							rdText = (regdeg > 0 ? " +" : " ") + regdeg;
 							g2.setColor(regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF));
 							Graph.drawOutlinedString(g2, rdText,
-									(int) -(bar.x + 6 + g2.getFontMetrics().stringWidth(rdText)), (int) -(bar.y + 6),
+									-(bar.x + 6 + g2.getFontMetrics().stringWidth(rdText)), -(bar.y + 6),
 									6, Color.BLACK
 							);
 						}
 
 						g2.setColor(Color.WHITE);
 						Graph.drawOutlinedString(g2, hpText,
-								(int) -(bar.x + 6 + g2.getFontMetrics().stringWidth(hpText + rdText)), (int) -(bar.y + 6),
+								-(bar.x + 6 + g2.getFontMetrics().stringWidth(hpText + rdText)), -(bar.y + 6),
 								6, Color.BLACK
 						);
 					} else {
@@ -438,14 +449,14 @@ public class Arena implements Renderer {
 							String rdText = (regdeg > 0 ? " +" : " ") + regdeg;
 							g2.setColor(regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF));
 							Graph.drawOutlinedString(g2, rdText,
-									(int) (bar.x + 6 + g2.getFontMetrics().stringWidth(hpText)), (int) (bar.y + bar.height - 6),
+									bar.x + 6 + g2.getFontMetrics().stringWidth(hpText), bar.y + bar.height - 6,
 									6, Color.BLACK
 							);
 						}
 
 						g2.setColor(Color.WHITE);
 						Graph.drawOutlinedString(g2, hpText,
-								(int) (bar.x + 6), (int) (bar.y + bar.height - 6),
+								bar.x + 6, bar.y + bar.height - 6,
 								6, Color.BLACK
 						);
 					}
