@@ -138,10 +138,17 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
+		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
 
+
 		return (str, x, y) -> {
-			if (!legacy && line.incrementAndGet() == 6) {
+			if (lastVal.get() != y) {
+				line.getAndIncrement();
+				lastVal.set(y);
+			}
+
+			if (!legacy && line.get() == 6) {
 				x += 12;
 			}
 
