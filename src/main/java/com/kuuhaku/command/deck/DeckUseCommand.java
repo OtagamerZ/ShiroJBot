@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "deck",
-		subname = "switch",
+		subname = "use",
 		category = Category.INFO
 )
 @Signature(allowEmpty = true, value = {
@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 		"<name:word:r>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class DeckSwitchCommand implements Executable {
+public class DeckUseCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
