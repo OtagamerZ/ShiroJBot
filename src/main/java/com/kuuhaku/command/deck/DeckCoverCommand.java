@@ -27,7 +27,6 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -48,7 +47,6 @@ import java.util.List;
 public class DeckCoverCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Account acc = data.profile().getAccount();
 		Deck d = data.profile().getAccount().getCurrentDeck();
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
@@ -65,6 +63,8 @@ public class DeckCoverCommand implements Executable {
 		}
 
 		d.getStyling().setCover(anime.getCover());
+		d.save();
+
 		event.channel().sendMessage(locale.get("success/deck_cover", anime)).queue();
 	}
 }
