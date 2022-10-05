@@ -27,6 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Origin(Race major, Race... minor) {
+	public Origin(Race major, Race minor) {
+		this(major, new Race[]{minor});
+	}
+
 	public List<BufferedImage> images() {
 		return new ArrayList<>() {{
 			if (major != Race.NONE) {
