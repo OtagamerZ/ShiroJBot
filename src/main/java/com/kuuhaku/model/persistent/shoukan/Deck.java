@@ -459,8 +459,6 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public Origin getOrigins() {
-		origin = new Origin(Race.DEMON, Race.HUMAN);
-
 		if (origin == null) {
 			TreeBag<Race> races = new TreeBag<>();
 			for (Senshi s : senshi) {
