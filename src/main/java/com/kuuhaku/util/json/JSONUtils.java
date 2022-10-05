@@ -36,8 +36,11 @@ public abstract class JSONUtils {
 			.add(OffsetDateTime.class, new Rfc3339DateJsonAdapter())
 			.build();
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static String toJSON(Object o) {
-		return moshi.adapter(Object.class).toJson(o);
+		Class klass = o.getClass();
+
+		return moshi.adapter(klass).toJson(o);
 	}
 
 	public static <T> T fromJSON(String json, Class<T> klass) {
@@ -73,18 +76,10 @@ public abstract class JSONUtils {
 	}
 
 	public static Map<String, Object> toMap(Object o) {
-		if (o instanceof @Language("JSON5") String s) {
-			return toMap(s);
-		}
-
 		return toMap(toJSON(o));
 	}
 
 	public static List<Object> toList(Object o) {
-		if (o instanceof @Language("JSON5") String s) {
-			return toList(s);
-		}
-
 		return toList(toJSON(o));
 	}
 }
