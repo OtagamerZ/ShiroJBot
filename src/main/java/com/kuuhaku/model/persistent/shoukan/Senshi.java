@@ -796,9 +796,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		DeckStyling style = deck.getStyling();
 		if (isFlipped()) return style.getFrame().getBack(deck);
 
-		String desc = getDescription(locale);
+		Senshi card = Utils.getOr(stats.getDisguise(), this);
+		String desc = card.getDescription(locale);
 
-		BufferedImage img = getVanity().drawCardNoBorder(style.isUsingChrome());
+		BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
@@ -808,11 +809,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		g2d.setClip(null);
 
 		g2d.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-		g2d.drawImage(getRace().getIcon(), 190, 12, null);
+		g2d.drawImage(card.getRace().getIcon(), 190, 12, null);
 
 		g2d.setFont(FONT);
 		g2d.setColor(style.getFrame().getPrimaryColor());
-		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
+		String name = Graph.abbreviate(g2d, card.getVanity().getName(), MAX_NAME_WIDTH);
 		Graph.drawOutlinedString(g2d, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
 		if (!desc.isEmpty()) {
@@ -820,7 +821,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
 			int y = 276;
-			String tags = processTags(locale);
+			String tags = card.processTags(locale);
 			if (tags != null) {
 				g2d.drawString(tags, 7, 275);
 				y += 11;
@@ -828,7 +829,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			Graph.drawMultilineString(g2d, desc,
 					7, y, 211, 3,
-					parseValues(g2d, deck, this), highlightValues(g2d, style.getFrame().isLegacy())
+					card.parseValues(g2d, deck, this), card.highlightValues(g2d, style.getFrame().isLegacy())
 			);
 		}
 
@@ -839,9 +840,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Graph.drawOutlinedString(g2d, val, 25, 49 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 		}
 
-		drawCosts(g2d);
+		card.drawCosts(g2d);
 		if (!isSupporting() && !stats.hasFlag(Flag.HIDE_STATS)) {
-			drawAttributes(g2d, !desc.isEmpty());
+			card.drawAttributes(g2d, !desc.isEmpty());
 		}
 
 		if (!isAvailable()) {

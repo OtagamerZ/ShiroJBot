@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Copier;
 import com.kuuhaku.util.Utils;
@@ -64,6 +65,7 @@ public class CardExtra implements Cloneable {
 
 	private Race race = null;
 	private Card vanity = null;
+	private Senshi disguise = null;
 
 	private String write = null;
 
@@ -461,6 +463,14 @@ public class CardExtra implements Cloneable {
 
 	public void setVanity(Card vanity) {
 		this.vanity = vanity;
+	}
+
+	public Senshi getDisguise() {
+		return disguise;
+	}
+
+	public void setDisguise(Senshi disguise) {
+		this.disguise = disguise;
 	}
 
 	public String getWrite() {

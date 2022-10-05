@@ -231,7 +231,7 @@ public class Deck extends DAO<Deck> {
 		Anime anime = cover.getAnime();
 		Pair<Integer, Integer> count = account.getKawaipon().countCards(anime);
 
-		return Math.max(count.getFirst(), count.getSecond()) > anime.getCount();
+		return Math.max(count.getFirst(), count.getSecond()) >= anime.getCount();
 	}
 
 	public double getMetaDivergence() {
