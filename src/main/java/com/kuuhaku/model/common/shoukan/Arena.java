@@ -364,7 +364,7 @@ public class Arena implements Renderer {
 
 				Rectangle bar;
 				if (demon) {
-					bar = new Rectangle(leftOffset + 2, 0, BAR_SIZE.width + leftOffset + 2, BAR_SIZE.height);
+					bar = new Rectangle(0, 0, BAR_SIZE.width + leftOffset, BAR_SIZE.height);
 				} else {
 					bar = new Rectangle(
 							leftOffset + 2, (int) (BAR_SIZE.height / 3d + 4 - (reversed ? 2 : 0)),
