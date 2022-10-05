@@ -38,6 +38,10 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 public abstract class Calc {
+	public static int round(double value) {
+		return (int) round(value, 0);
+	}
+
 	public static double round(double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 

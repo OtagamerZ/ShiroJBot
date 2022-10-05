@@ -120,7 +120,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getMana() {
-		return (int) Math.round(sum(mana));
+		return Calc.round(sum(mana));
 	}
 
 	public void setMana(int mana) {
@@ -149,7 +149,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getBlood() {
-		return (int) Math.round(sum(blood));
+		return Calc.round(sum(blood));
 	}
 
 	public void setBlood(int blood) {
@@ -178,7 +178,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getSacrifices() {
-		return (int) Math.round(sum(sacrifices));
+		return Calc.round(sum(sacrifices));
 	}
 
 	public void setSacrifices(int sacrifices) {
@@ -207,7 +207,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getAtk() {
-		return (int) Math.round(sum(atk));
+		return Calc.round(sum(atk));
 	}
 
 	public void setAtk(int atk) {
@@ -236,7 +236,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getDfs() {
-		return (int) Math.round(sum(dfs));
+		return Calc.round(sum(dfs));
 	}
 
 	public void setDfs(int def) {
@@ -265,7 +265,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getDodge() {
-		return (int) Math.round(sum(dodge));
+		return Calc.round(sum(dodge));
 	}
 
 	public void setDodge(int dodge) {
@@ -294,7 +294,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getBlock() {
-		return (int) Math.round(sum(block));
+		return Calc.round(sum(block));
 	}
 
 	public void setBlock(int block) {
@@ -381,7 +381,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public int getTier() {
-		return (int) Math.round(sum(tier));
+		return Calc.round(sum(tier));
 	}
 
 	public void setTier(int tier) {
