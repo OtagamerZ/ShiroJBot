@@ -26,6 +26,8 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.shiro.Anime;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -220,6 +222,18 @@ public class Deck extends DAO<Deck> {
 		return styling;
 	}
 
+	public boolean isCoverAllowed() {
+		Card cover = styling.getCover();
+		if (cover == null) {
+			return true;
+		}
+
+		Anime anime = cover.getAnime();
+		Pair<Integer, Integer> count = account.getKawaipon().countCards(anime);
+
+		return Math.max(count.getFirst(), count.getSecond()) > anime.getCount();
+	}
+
 	public double getMetaDivergence() {
 		// TODO Divergence
 		return 1;
@@ -375,7 +389,7 @@ public class Deck extends DAO<Deck> {
 						.collect(Collectors.joining("\n\n"))
 						+ (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else {
-				g.drawImage(ori.synergy().getBadged(), 0, 0, 150, 150, null);
+				g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
 				g.setColor(ori.synergy().getColor());
 

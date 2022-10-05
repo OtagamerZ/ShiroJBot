@@ -18,19 +18,25 @@
 
 package com.kuuhaku.command.deck;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+
+import java.util.List;
 
 @Command(
 		name = "deck",
@@ -49,8 +55,16 @@ public class DeckCoverCommand implements Executable {
 			return;
 		}
 
+		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase());
+		if (anime == null || !anime.isVisible()) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM anime WHERE visible");
 
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(), names);
+			event.channel().sendMessage(locale.get("error/unknown_anime", sug.getFirst())).queue();
+			return;
+		}
 
-		//d.getStyling().setCover();
+		d.getStyling().setCover(anime.getCover());
+		event.channel().sendMessage(locale.get("success/deck_cover", anime)).queue();
 	}
 }

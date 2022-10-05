@@ -42,6 +42,10 @@ public class Anime extends DAO<Anime> {
 		return DAO.queryNative(Integer.class, "SELECT count FROM aux.card_counter WHERE anime_id = ?1", id);
 	}
 
+	public Card getCover() {
+		return DAO.find(Card.class, id);
+	}
+
 	@SuppressWarnings("JpaQlInspection")
 	public List<Card> getCards() {
 		return DAO.queryAll(Card.class, """

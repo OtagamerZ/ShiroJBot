@@ -144,7 +144,7 @@ public enum Race {
 		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
 	}
 
-	public BufferedImage getBadged() {
+	public BufferedImage getBadge() {
 		if (Integer.bitCount(flag) == 0) return null;
 
 		BufferedImage bi = getImage();
