@@ -540,20 +540,25 @@ public class Deck extends DAO<Deck> {
 				int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 1, base);
 
 				AccFunction<Integer, Integer> mpGain = t -> {
+					int v;
 					if (h != null) {
-						return h.getGame().getParams().mp();
+						v = h.getGame().getParams().mp();
 					} else {
-						return 5;
+						v = 5;
 					}
+
+					if (origin.major() == Race.DEMON) {
+						v /= 2;
+					}
+
+					return v;
 				};
+
+				if (origin.major() == Race.DIVINITY) {
+					mpGain = mpGain.accumulate((t, mp) -> mp + (int) (mp * getMetaDivergence() / 2));
+				}
+
 				AccFunction<Integer, Integer> handCap = t -> 5;
-
-				mpGain = switch (origin.major()) {
-					case DEMON -> mpGain.accumulate((t, mp) -> mp / 2);
-					case DIVINITY -> mpGain.accumulate((t, mp) -> mp + (int) (mp * getMetaDivergence() / 2));
-					default -> mpGain;
-				};
-
 				if (origin.hasMinor(Race.BEAST)) {
 					handCap = mpGain.accumulate((t, cards) -> cards + t / 20);
 				}

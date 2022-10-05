@@ -50,5 +50,7 @@ public class DeckCoverCommand implements Executable {
 		}
 
 
+
+		//d.getStyling().setCover();
 	}
 }
