@@ -460,6 +460,27 @@ public class Hand {
 		return locks;
 	}
 
+	public void modLockTime(Lock lock, int time) {
+		if (time == 0) return;
+
+		Iterator<Timed<Lock>> it = locks.iterator();
+		while (it.hasNext()) {
+			Timed<Lock> lk = it.next();
+
+			if (lk.obj() == lock) {
+				if (lk.time().addAndGet(time) <= 0) {
+					it.remove();
+				}
+
+				return;
+			}
+		}
+
+		if (time > 0) {
+			locks.add(new Timed<>(lock, time));
+		}
+	}
+
 	public int getLockTime(Lock lock) {
 		return locks.stream()
 				.filter(t -> t.obj().equals(lock))
