@@ -77,10 +77,18 @@ public abstract class JSONUtils {
 	}
 
 	public static Map<String, Object> toMap(Object o) {
+		if (o instanceof @Language("JSON5") String s) {
+			return toMap(s);
+		}
+
 		return toMap(toJSON(o));
 	}
 
 	public static List<Object> toList(Object o) {
+		if (o instanceof @Language("JSON5") String s) {
+			return toList(s);
+		}
+
 		return toList(toJSON(o));
 	}
 }

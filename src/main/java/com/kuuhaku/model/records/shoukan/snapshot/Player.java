@@ -32,11 +32,11 @@ public record Player(byte[] cards, byte[] deck, byte[] graveyard) {
 						Collectors.toList(),
 						JSONUtils::toJSON
 				)),
-				h.getCards().stream().collect(Collectors.collectingAndThen(
+				h.getDeck().stream().collect(Collectors.collectingAndThen(
 						Collectors.toList(),
 						JSONUtils::toJSON
 				)),
-				h.getCards().stream().collect(Collectors.collectingAndThen(
+				h.getGraveyard().stream().collect(Collectors.collectingAndThen(
 						Collectors.toList(),
 						JSONUtils::toJSON
 				))
