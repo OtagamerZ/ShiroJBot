@@ -37,8 +37,9 @@ public abstract class JSONUtils {
 			.build();
 
 	public static String toJSON(Object o) {
-		System.out.println(o.getClass());
-		System.out.println(o);
+		if (o instanceof String s) {
+			return s;
+		}
 
 		return moshi.adapter(Object.class).toJson(o);
 	}
