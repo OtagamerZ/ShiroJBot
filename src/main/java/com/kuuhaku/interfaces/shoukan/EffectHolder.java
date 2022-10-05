@@ -149,7 +149,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			if (!legacy && line.get() == 6) {
-				x += 12;
+				x += 10;
 			}
 
 			if (str.startsWith(Constants.VOID)) {
