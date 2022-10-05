@@ -424,7 +424,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			Graph.drawMultilineString(g2d, desc,
 					7, y, 211, 3,
-					parseValues(g2d, deck, this), highlightValues(g2d)
+					parseValues(g2d, deck, this), highlightValues(g2d, style.getFrame().isLegacy())
 			);
 		}
 

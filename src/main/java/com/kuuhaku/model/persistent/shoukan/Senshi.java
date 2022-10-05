@@ -828,7 +828,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			Graph.drawMultilineString(g2d, desc,
 					7, y, 211, 3,
-					parseValues(g2d, deck, this), highlightValues(g2d)
+					parseValues(g2d, deck, this), highlightValues(g2d, style.getFrame().isLegacy())
 			);
 		}
 

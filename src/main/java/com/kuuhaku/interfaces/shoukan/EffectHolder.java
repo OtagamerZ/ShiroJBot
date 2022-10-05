@@ -38,6 +38,7 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
@@ -136,8 +137,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d) {
+	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
+		AtomicInteger lastVal = new AtomicInteger();
+		AtomicInteger line = new AtomicInteger();
+
+
 		return (str, x, y) -> {
+			if (lastVal.get() != y) line.getAndIncrement();
+
+			if (!legacy && line.get() == 6) {
+				str = "  " + str;
+			}
+
 			if (str.startsWith(Constants.VOID)) {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));

@@ -145,7 +145,7 @@ public class SeeCardCommand implements Executable {
 										.map(c -> Charm.valueOf(String.valueOf(c)))
 										.map(c -> "**" + c.getName(locale) + ":** " + c.getDescription(locale, e.getTier()))
 										.collect(Collectors.joining("\n")),
-								true
+								false
 						);
 					}
 
@@ -162,7 +162,7 @@ public class SeeCardCommand implements Executable {
 										.filter(s -> !s.isBlank())
 										.map(s -> "`" + s + "`")
 										.collect(Collectors.joining(" ")),
-								true
+								false
 						);
 					}
 				}
