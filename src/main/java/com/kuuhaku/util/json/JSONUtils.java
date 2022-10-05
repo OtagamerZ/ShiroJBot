@@ -19,6 +19,7 @@
 package com.kuuhaku.util.json;
 
 import com.kuuhaku.Constants;
+import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
@@ -69,6 +70,9 @@ public abstract class JSONUtils {
 			Constants.LOGGER.debug(e, e);
 			Constants.LOGGER.debug(json);
 			return new ArrayList<>();
+		} catch (JsonDataException e) {
+			System.out.println(json);
+			throw e;
 		}
 	}
 
