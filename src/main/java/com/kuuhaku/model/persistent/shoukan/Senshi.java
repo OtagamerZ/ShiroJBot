@@ -310,6 +310,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
+
 		if (isStunned()) {
 			mult /= 2;
 		}
@@ -329,6 +330,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			mult *= getFieldMult(hand.getGame().getArena().getField());
 		}
+
 		if (isStunned()) {
 			mult /= 2;
 		}
