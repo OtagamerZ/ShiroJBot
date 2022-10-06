@@ -368,4 +368,20 @@ public abstract class Calc {
 			return "";
 		}
 	}
+
+	public static int interp(int min, int max, float fac) {
+		return Math.round(min + (max - min) * fac);
+	}
+
+	public static long interp(long min, long max, double fac) {
+		return Math.round(min + (max - min) * fac);
+	}
+
+	public static float interp(float min, float max, float fac) {
+		return min + (max - min) * fac;
+	}
+
+	public static double interp(double min, double max, double fac) {
+		return min + (max - min) * fac;
+	}
 }
