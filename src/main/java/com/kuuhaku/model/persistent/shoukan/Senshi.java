@@ -274,7 +274,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public String getDescription(I18N locale) {
 		Senshi source = (Senshi) Utils.getOr(stats.getSource(), this);
 
-		return Utils.getOr(stats.getDescription(locale), source.base.getDescription(locale));
+		return Utils.getOr(source.stats.getDescription(locale), source.base.getDescription(locale));
 	}
 
 	@Override
@@ -685,7 +685,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"self", this,
 						"trigger", trigger,
 						"game", hand.getGame(),
-						"side", hand.getSide()
+						"side", hand.getSide(),
+						"props", extractValues(hand.getGame().getLocale(), this)
 				));
 			}
 
@@ -706,7 +707,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"self", this,
 						"trigger", trigger,
 						"game", hand.getGame(),
-						"side", hand.getSide()
+						"side", hand.getSide(),
+						"props", extractValues(hand.getGame().getLocale(), this)
 				));
 			}
 
@@ -736,7 +738,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"self", this,
 					"trigger", trigger,
 					"game", hand.getGame(),
-					"side", hand.getSide()
+					"side", hand.getSide(),
+					"props", extractValues(hand.getGame().getLocale(), this)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);

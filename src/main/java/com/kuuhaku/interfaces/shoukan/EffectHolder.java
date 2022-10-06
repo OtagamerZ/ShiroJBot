@@ -21,6 +21,7 @@ package com.kuuhaku.interfaces.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -184,5 +185,50 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				g2d.drawImage(icon, x + g2d.getFontMetrics().stringWidth(str.replace(" ", "")) + 1, y - size + 1, size, size, null);
 			}
 		};
+	}
+
+	default JSONObject extractValues(I18N locale, Drawable<?> d) {
+		JSONObject out = new JSONObject();
+
+		String desc = d.getDescription(locale);
+		for (String str : desc.split("\\s")) {
+			JSONObject groups = Utils.extractNamedGroups(str, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<key>\\w+)})?");
+
+			if (!groups.isEmpty()) {
+				try {
+					@Language("Groovy") String calc = groups.getString("calc");
+					if (!calc.isBlank()) {
+						Hand h = d.getHand();
+
+						calc = "import static java.lang.Math.*\n\n" + calc;
+						String val = String.valueOf(
+								Utils.eval(calc, new HashMap<>() {{
+									put("bhp", h == null ? 5000 : h.getBase().hp());
+									put("pmp", h == null ? 5 : h.getMP());
+									put("php", h == null ? 5000 : h.getHP());
+									put("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek()));
+									put("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek()));
+									put("mp", d.getMPCost());
+									put("hp", d.getHPCost());
+									put("atk", d.getDmg());
+									put("dfs", d.getDfs());
+									put("ddg", d.getDodge());
+									put("blk", d.getBlock());
+								}})
+						);
+
+						double pow = 1;
+						if (d instanceof Senshi s) {
+							pow = s.getPower();
+						}
+
+						out.put(groups.getString("key"), Calc.round(NumberUtils.toDouble(val) * pow));
+					}
+				} catch (Exception ignore) {
+				}
+			}
+		}
+
+		return out;
 	}
 }

@@ -324,7 +324,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"evo", this,
 					"trigger", ep.trigger(),
 					"game", hand.getGame(),
-					"side", hand.getSide()
+					"side", hand.getSide(),
+					"props", extractValues(hand.getGame().getLocale(), this)
 			));
 
 			return true;
@@ -347,7 +348,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"evo", this,
 					"trigger", trigger,
 					"game", hand.getGame(),
-					"side", hand.getSide()
+					"side", hand.getSide(),
+					"props", extractValues(hand.getGame().getLocale(), this)
 			));
 		} catch (ActivationException ignored) {
 		} catch (Exception e) {
