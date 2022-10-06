@@ -261,6 +261,6 @@ public class JSONArray extends ArrayList<Object> implements Cloneable {
 
 	@Override
 	public JSONArray clone() {
-		return (JSONArray) super.clone();
+		return new JSONArray(this);
 	}
 }

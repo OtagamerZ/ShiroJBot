@@ -277,6 +277,6 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 
 	@Override
 	public JSONObject clone() {
-		return (JSONObject) super.clone();
+		return new JSONObject(this);
 	}
 }
