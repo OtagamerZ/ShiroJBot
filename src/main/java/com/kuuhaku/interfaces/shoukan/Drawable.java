@@ -130,7 +130,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	}
 
-	default boolean keepOnDestroy() {
+	default boolean keepOnDestroy(boolean reset) {
 		return true;
 	}
 

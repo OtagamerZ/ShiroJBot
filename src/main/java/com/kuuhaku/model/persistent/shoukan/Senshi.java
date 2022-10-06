@@ -756,7 +756,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public boolean keepOnDestroy() {
+	public boolean keepOnDestroy(boolean reset) {
+		if (!isFusion() && reset) {
+			reset();
+			return false;
+		}
+
 		return !isFusion();
 	}
 

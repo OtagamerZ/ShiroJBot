@@ -72,7 +72,7 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(
-			d -> d != null && d.keepOnDestroy(),
+			d -> d != null && d.keepOnDestroy(true),
 			d -> {
 				getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 

@@ -39,7 +39,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -155,7 +154,12 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	public boolean keepOnDestroy() {
+	public boolean keepOnDestroy(boolean reset) {
+		if (!isEffect() && reset) {
+			reset();
+			return false;
+		}
+
 		return !isEffect();
 	}
 

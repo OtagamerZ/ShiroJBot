@@ -112,7 +112,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	public boolean addAll(Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream().filter(check).toList();
 
-		for (T t : c) {
+		for (T t : filtered) {
 			if (t != null) {
 				onAdd.accept(t);
 			}
@@ -125,7 +125,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	public boolean addAll(int index, Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream().filter(check).toList();
 
-		for (T t : c) {
+		for (T t : filtered) {
 			if (t != null) {
 				onAdd.accept(t);
 			}

@@ -77,7 +77,7 @@ public class Hand {
 		d.setSlot(null);
 	});
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(
-			d -> d != null && d.keepOnDestroy(),
+			d -> d != null && d.keepOnDestroy(true),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
@@ -93,7 +93,7 @@ public class Hand {
 	);
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
 			d -> {
-				if (d == null || !d.keepOnDestroy()) return false;
+				if (d == null || !d.keepOnDestroy(true)) return false;
 
 				if (d instanceof Senshi s) {
 					Evogear ward = null;
@@ -141,7 +141,7 @@ public class Hand {
 			}
 	);
 	private final List<Drawable<?>> discard = new BondedList<>(
-			d -> d != null && d.keepOnDestroy(),
+			d -> d != null && d.keepOnDestroy(true),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
