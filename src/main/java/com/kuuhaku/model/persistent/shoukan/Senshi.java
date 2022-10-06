@@ -760,6 +760,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
+			e.executeAssert(Trigger.ON_INITIALIZE);
 
 			Shoukan game = getHand().getGame();
 			game.trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));

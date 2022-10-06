@@ -519,7 +519,7 @@ public class CardExtra implements Cloneable {
 		removeExpired(check);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void removeExpired(Predicate<AttrMod> check) {
 		if (fieldCache == null) {
 			fieldCache = this.getClass().getDeclaredFields();
@@ -529,6 +529,22 @@ public class CardExtra implements Cloneable {
 			try {
 				if (f.get(this) instanceof HashSet s) {
 					s.removeIf(check);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void removeTemporary() {
+		if (fieldCache == null) {
+			fieldCache = this.getClass().getDeclaredFields();
+		}
+
+		for (Field f : fieldCache) {
+			try {
+				if (f.get(this) instanceof HashSet s) {
+					s.removeIf(o -> !(o instanceof PermMod));
 				}
 			} catch (IllegalAccessException ignore) {
 			}
@@ -567,8 +583,11 @@ public class CardExtra implements Cloneable {
 				ListOrderedSet.listOrderedSet(BondedList.withCheck(s -> s != null && s.isBlank()))
 		);
 
+		clone.removeTemporary();
+
 		clone.race = race;
 		clone.vanity = vanity;
+		clone.disguise = disguise;
 		clone.write = write;
 		clone.source = source;
 		clone.description = description;
