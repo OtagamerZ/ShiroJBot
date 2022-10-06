@@ -30,6 +30,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -39,6 +40,7 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -85,11 +87,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								}})
 						);
 
-						double pow = 1;
-						if (d instanceof Senshi s) {
-							pow = s.getPower();
-						}
-
+						double pow = d instanceof Senshi s ? s.getPower() : 1;
 						val = StringUtils.abbreviate(
 								str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toDouble(val) * pow))),
 								Drawable.MAX_DESC_LENGTH
@@ -217,12 +215,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								}})
 						);
 
-						double pow = 1;
-						if (d instanceof Senshi s) {
-							pow = s.getPower();
-						}
+						double pow = d instanceof Senshi s ? s.getPower() : 1;
+						out.compute(groups.getString("key"), (k, v) -> {
+							int value = Calc.round(NumberUtils.toDouble(val) * pow);
 
-						out.put(groups.getString("key"), Calc.round(NumberUtils.toDouble(val) * pow));
+							if (v == null) {
+								return value;
+							} else if (v instanceof JSONArray a) {
+								a.add(value);
+								return a;
+							}
+
+							return new JSONArray(List.of(v, value));
+						});
 					}
 				} catch (Exception ignore) {
 				}
