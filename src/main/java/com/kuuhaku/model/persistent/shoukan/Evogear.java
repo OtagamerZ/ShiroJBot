@@ -374,12 +374,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public boolean keepOnDestroy(boolean reset) {
-		if (tier <= 0 && reset) {
-			reset();
-			return false;
-		}
-
+	public boolean keepOnDestroy() {
 		return tier > 0;
 	}
 

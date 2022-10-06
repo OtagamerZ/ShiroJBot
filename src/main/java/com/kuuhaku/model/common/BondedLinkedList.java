@@ -43,8 +43,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	}
 
 	public BondedLinkedList(Predicate<T> check, Consumer<T> onAdd) {
-		this(check, onAdd, t -> {
-		});
+		this(check, onAdd, t -> {});
 	}
 
 	public BondedLinkedList(Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
@@ -66,46 +65,44 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addFirst(T t) {
-		if (!check.test(t)) return;
-
 		if (t != null) {
 			onAdd.accept(t);
 		}
 
-		super.addFirst(t);
+		if (check.test(t)) {
+			super.addFirst(t);
+		}
 	}
 
 	@Override
 	public void addLast(T t) {
-		if (!check.test(t)) return;
-
 		if (t != null) {
 			onAdd.accept(t);
 		}
 
-		super.addLast(t);
+		if (check.test(t)) {
+			super.addLast(t);
+		}
 	}
 
 	@Override
 	public boolean add(T t) {
-		if (!check.test(t)) return false;
-
 		if (t != null) {
 			onAdd.accept(t);
 		}
 
-		return super.add(t);
+		return check.test(t) && super.add(t);
 	}
 
 	@Override
 	public void add(int index, T t) {
-		if (!check.test(t)) return;
-
 		if (t != null) {
 			onAdd.accept(t);
 		}
 
-		super.add(index, t);
+		if (check.test(t)) {
+			super.add(index, t);
+		}
 	}
 
 	@Override
@@ -113,9 +110,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		List<? extends T> filtered = c.stream().filter(check).toList();
 
 		for (T t : filtered) {
-			if (t != null) {
-				onAdd.accept(t);
-			}
+			onAdd.accept(t);
 		}
 
 		return super.addAll(filtered);
@@ -126,9 +121,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		List<? extends T> filtered = c.stream().filter(check).toList();
 
 		for (T t : filtered) {
-			if (t != null) {
-				onAdd.accept(t);
-			}
+			onAdd.accept(t);
 		}
 
 		return super.addAll(index, filtered);

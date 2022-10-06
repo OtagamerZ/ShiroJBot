@@ -65,18 +65,22 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean add(T t) {
-		if (!check.test(t)) return false;
+		if (t != null) {
+			onAdd.accept(t);
+		}
 
-		onAdd.accept(t);
-		return super.add(t);
+		return check.test(t) && super.add(t);
 	}
 
 	@Override
-	public void add(int index, T element) {
-		if (!check.test(element)) return;
+	public void add(int index, T t) {
+		if (t != null) {
+			onAdd.accept(t);
+		}
 
-		onAdd.accept(element);
-		super.add(index, element);
+		if (check.test(t)) {
+			super.add(index, t);
+		}
 	}
 
 	@Override
