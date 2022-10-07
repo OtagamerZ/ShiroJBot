@@ -36,6 +36,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
+import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -208,6 +209,20 @@ public class GuildListener extends ListenerAdapter {
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
 			config.setName(data.guild().getName());
 			config.save();
+		}
+
+		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
+			Member mb = event.getMember();
+			if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+				String name = Unidecode.decode(mb.getEffectiveName()).trim();
+				if (!name.equals(mb.getEffectiveName())) {
+					if (name.length() < 3) {
+						name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+					}
+
+					mb.modifyNickname(name).queue();
+				}
+			}
 		}
 
 		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));

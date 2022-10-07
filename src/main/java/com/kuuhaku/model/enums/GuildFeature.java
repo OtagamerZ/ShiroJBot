@@ -21,10 +21,9 @@ package com.kuuhaku.model.enums;
 public enum GuildFeature {
 	ANTI_RAID,     //0x1
 	ANTI_LINK,     //0x2
-	ANTI_SPAM,     //0x3
-	ANTI_HOIST,    //0x4
-	ANTI_ZALGO,    //0x5
+	ANTI_SPAM,     //0x4
+	ANTI_ZALGO,    //0x8
 
-	NQN_MODE,      //0x6
-	NOTIFICATIONS, //0x7
+	NQN_MODE,      //0x10
+	NOTIFICATIONS, //0x20
 }
