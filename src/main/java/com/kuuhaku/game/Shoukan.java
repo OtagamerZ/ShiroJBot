@@ -1225,11 +1225,15 @@ public class Shoukan extends GameInstance<Phase> {
 				continue;
 			}
 
+			if (Utils.equalsAny(ep.trigger(), ON_TURN_BEGIN, ON_TURN_END) && effect.triggers().contains(ep.trigger())) {
+				effect.decreaseTurn();
+			}
+
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (ep.size() == 0) {
 				if (checkSide.test(getCurrentSide()) && effect.triggers().contains(ep.trigger())) {
 					effect.effect().accept(effect, new EffectParameters(ep.trigger()));
-					effect.decrease();
+					effect.decreaseLimit();
 
 					if (effect.side() == null) {
 						effect.lock().set(true);
@@ -1238,13 +1242,13 @@ public class Shoukan extends GameInstance<Phase> {
 			} else {
 				if (ep.source() != null && checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
 					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
-					effect.decrease();
+					effect.decreaseLimit();
 				}
 
 				for (Target t : ep.targets()) {
 					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
 						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
-						effect.decrease();
+						effect.decreaseLimit();
 					}
 				}
 			}
@@ -1567,6 +1571,10 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
+
+		for (Lock lock : Lock.values()) {
+			curr.modLockTime(lock, -1);
+		}
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand(locale);

@@ -48,8 +48,11 @@ public record EffectOverTime(
 		);
 	}
 
-	public void decrease() {
+	public void decreaseTurn() {
 		if (turns != null && turns.get() > 0) turns.getAndDecrement();
+	}
+
+	public void decreaseLimit() {
 		if (limit != null && limit.get() > 0) limit.getAndDecrement();
 	}
 

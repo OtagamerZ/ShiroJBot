@@ -486,7 +486,7 @@ public class Hand {
 				.filter(t -> t.obj().equals(lock))
 				.map(Timed::time)
 				.mapToInt(AtomicInteger::get)
-				.findFirst().orElse(0);
+				.sum();
 	}
 
 	public Set<EffectHolder<?>> getLeeches() {
