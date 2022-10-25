@@ -1232,8 +1232,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (ep.size() == 0) {
 				if (checkSide.test(getCurrentSide()) && effect.triggers().contains(ep.trigger())) {
-					effect.effect().accept(effect, new EffectParameters(ep.trigger()));
 					effect.decreaseLimit();
+					effect.effect().accept(effect, new EffectParameters(ep.trigger()));
 
 					if (effect.side() == null) {
 						effect.lock().set(true);
@@ -1241,14 +1241,14 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			} else {
 				if (ep.source() != null && checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
-					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
 					effect.decreaseLimit();
+					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
 				}
 
 				for (Target t : ep.targets()) {
 					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
-						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
 						effect.decreaseLimit();
+						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
 					}
 				}
 			}
