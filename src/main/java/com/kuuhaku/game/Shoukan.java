@@ -1374,7 +1374,7 @@ public class Shoukan extends GameInstance<Phase> {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						reportEvent("error/taunt_lock", curr.getLockTime(Lock.TAUNT));
+						reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
 						return;
 					}
 				} else if (curr.selectionPending()) {
@@ -1393,7 +1393,7 @@ public class Shoukan extends GameInstance<Phase> {
 					if (curr.getLockTime(Lock.TAUNT) > 0) {
 						List<SlotColumn> yours = getSlots(curr.getSide());
 						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-							reportEvent("error/taunt_lock", curr.getLockTime(Lock.TAUNT));
+							reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
 							return;
 						}
 					} else if (curr.selectionPending()) {
