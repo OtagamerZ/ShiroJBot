@@ -32,7 +32,7 @@ import java.util.List;
 
 public enum Race {
 	// Pure races
-	HUMAN(0b1),
+	HUMAN(0x1),
 	BEAST(0x2),
 	MACHINE(0x4),
 	DIVINITY(0x8),

@@ -1225,11 +1225,11 @@ public class Shoukan extends GameInstance<Phase> {
 				continue;
 			}
 
-			if (Utils.equalsAny(ep.trigger(), ON_TURN_BEGIN, ON_TURN_END) && effect.triggers().contains(ep.trigger())) {
+			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
+			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
 			}
 
-			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (ep.size() == 0) {
 				if (checkSide.test(getCurrentSide()) && effect.triggers().contains(ep.trigger())) {
 					effect.effect().accept(effect, new EffectParameters(ep.trigger()));
