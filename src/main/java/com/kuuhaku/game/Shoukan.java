@@ -1567,16 +1567,16 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
+		for (Lock lock : Lock.values()) {
+			curr.modLockTime(lock, -1);
+		}
+
 		super.nextTurn();
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
-
-		for (Lock lock : Lock.values()) {
-			curr.modLockTime(lock, -1);
-		}
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand(locale);

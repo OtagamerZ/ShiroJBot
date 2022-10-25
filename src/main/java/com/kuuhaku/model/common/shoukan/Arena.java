@@ -537,11 +537,11 @@ public class Arena implements Renderer {
 
 							if (lk != null) {
 								g1.setColor(Color.RED);
-								g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, rad - 5));
+								g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, rad - 5));
 								String text = String.valueOf(lk.time());
 
 								Graph.drawOutlinedString(g1, text,
-										rad + 10 + space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, rad - 5,
+										rad + 10 + space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, (rad + rad - 5) / 2,
 										6, Color.BLACK
 								);
 							}
