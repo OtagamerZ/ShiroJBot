@@ -56,7 +56,7 @@ public abstract class Drop<T> {
 		), 2);
 		add(new DropCondition("level",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 0");
+					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 100");
 
 					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
 				},
