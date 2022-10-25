@@ -24,7 +24,7 @@ import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 public enum Lock {
-	EFFECT, SPELL, FUSION, DECK;
+	EFFECT, SPELL, TAUNT, DECK;
 
 	public BufferedImage getImage(boolean locked) {
 		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase() + (locked ? "_lock" : "_unlock") + ".png");

@@ -699,6 +699,90 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("COMBAT")
+	@PlayerAction("(?<inField>[1-5]),self")
+	private boolean selfDamage(Side side, JSONObject args) {
+		Hand you = hands.get(side);
+		if (you.getLockTime(Lock.TAUNT) == 0) {
+			getChannel().sendMessage(locale.get("error/not_taunted")).queue();
+			return false;
+		}
+
+		SlotColumn yourSlot = arena.getSlots(you.getSide()).get(args.getInt("inField") - 1);
+
+		if (!yourSlot.hasTop()) {
+			getChannel().sendMessage(locale.get("error/missing_card", yourSlot.getIndex() + 1)).queue();
+			return false;
+		}
+
+		Senshi ally = yourSlot.getTop();
+		if (!ally.canAttack()) {
+			getChannel().sendMessage(locale.get("error/card_cannot_attack")).queue();
+			return false;
+		}
+
+		int pHP = you.getHP();
+		int dmg = ally.getDmg();
+
+		int attacks = 1 + ally.getEquipments().stream()
+				.filter(e -> e.hasCharm(Charm.MULTISTRIKE))
+				.mapToInt(e -> Charm.MULTISTRIKE.getValue(e.getTier()))
+				.sum();
+
+		for (int i = 0; i < attacks; i++) {
+			int eDmg = (int) (dmg * Math.pow(0.5, i));
+
+			for (Evogear e : ally.getEquipments()) {
+				JSONArray charms = e.getCharms();
+
+				for (Object o : charms) {
+					Charm c = Charm.valueOf(String.valueOf(o));
+					switch (c) {
+						case PIERCING -> you.modHP((int) -(eDmg * 0.5 * c.getValue(e.getTier()) / 100));
+						case WOUNDING -> {
+							int val = eDmg * c.getValue(e.getTier()) / 100;
+							you.getRegDeg().add(new Degen(val, 0.1));
+
+							if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
+								you.getRegDeg().add(new Degen(val, 0.1));
+							}
+						}
+					}
+				}
+			}
+
+			switch (you.getOrigin().synergy()) {
+				case SHIKI -> {
+					List<SlotColumn> slts = arena.getSlots(you.getSide());
+					for (SlotColumn slt : slts) {
+						if (slt.hasTop()) {
+							slt.getTop().getStats().setDodge(-1);
+						}
+					}
+				}
+				case FALLEN -> {
+					int degen = (int) Math.min(you.getRegDeg().peek() * 0.05, 0);
+					you.modHP(degen);
+					you.getRegDeg().reduce(Degen.class, degen);
+				}
+				case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
+			}
+
+			eDmg = (int) (dmg * Math.pow(0.5, i));
+			if (ally.getSlot() != null) {
+				ally.setAvailable(false);
+			}
+
+			you.modHP((int) -(eDmg * 0.5));
+			if (you.getOrigin().synergy() == Race.LICH) {
+				you.modHP((int) ((pHP - you.getHP()) * 0.01));
+			}
+		}
+
+		reportEvent("str/combat_self", ally, pHP - you.getHP());
+		return false;
+	}
+
+	@PhaseConstraint("COMBAT")
 	@PlayerAction("(?<inField>[1-5])(?:,(?<target>[1-5]))?")
 	private boolean attack(Side side, JSONObject args) {
 		Hand you = hands.get(side);
@@ -755,6 +839,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int pHP = op.getHP();
 		int dmg = ally.getDmg();
+		float mitigation = 1;
+		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
+			mitigation /= 2;
+		}
 
 		String outcome = "str/combat_skip";
 		if (enemy == null || posHash == enemy.posHash()) {
@@ -772,7 +860,7 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> op.modHP(-eDmg * c.getValue(e.getTier()) / 100);
+							case PIERCING -> op.modHP((int) -(eDmg * mitigation * c.getValue(e.getTier()) / 100));
 							case WOUNDING -> {
 								int val = eDmg * c.getValue(e.getTier()) / 100;
 								op.getRegDeg().add(new Degen(val, 0.1));
@@ -846,7 +934,7 @@ public class Shoukan extends GameInstance<Phase> {
 									you.getGraveyard().add(ally);
 								}
 
-								you.modHP(-(enemyStats - ally.getDmg()));
+								you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
 								return true;
 							} else {
@@ -874,7 +962,7 @@ public class Shoukan extends GameInstance<Phase> {
 									trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
 									if (you.getOrigin().synergy() == Race.FABLED) {
-										op.modHP((int) -(ally.getDmg() * 0.02));
+										op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
 									}
 
 									reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
@@ -929,7 +1017,7 @@ public class Shoukan extends GameInstance<Phase> {
 					ally.setAvailable(false);
 				}
 
-				op.modHP(-eDmg);
+				op.modHP((int) -(eDmg * mitigation));
 				if (you.getOrigin().synergy() == Race.LICH) {
 					you.modHP((int) ((pHP - op.getHP()) * 0.01));
 				}
@@ -1279,7 +1367,13 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>() {{
 			put(Utils.parseEmoji("▶"), w -> {
-				if (curr.selectionPending()) {
+				if (curr.getLockTime(Lock.TAUNT) > 0) {
+					List<SlotColumn> yours = getSlots(curr.getSide());
+					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+						reportEvent("error/taunt_lock", curr.getLockTime(Lock.TAUNT));
+						return;
+					}
+				} else if (curr.selectionPending()) {
 					reportEvent("error/pending_choice");
 					return;
 				} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
@@ -1292,7 +1386,13 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 			if (getPhase() == Phase.PLAN) {
 				put(Utils.parseEmoji("⏩"), w -> {
-					if (curr.selectionPending()) {
+					if (curr.getLockTime(Lock.TAUNT) > 0) {
+						List<SlotColumn> yours = getSlots(curr.getSide());
+						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+							reportEvent("error/taunt_lock", curr.getLockTime(Lock.TAUNT));
+							return;
+						}
+					} else if (curr.selectionPending()) {
 						reportEvent("error/pending_choice");
 						return;
 					}
