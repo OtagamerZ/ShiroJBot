@@ -1371,16 +1371,18 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>() {{
 			put(Utils.parseEmoji("▶"), w -> {
-				if (curr.getLockTime(Lock.TAUNT) > 0) {
-					List<SlotColumn> yours = getSlots(curr.getSide());
-					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
-						return;
-					}
-				} else if (curr.selectionPending()) {
+				if (curr.selectionPending()) {
 					reportEvent("error/pending_choice");
 					return;
 				} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
+					if (curr.getLockTime(Lock.TAUNT) > 0) {
+						List<SlotColumn> yours = getSlots(curr.getSide());
+						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+							reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
+							return;
+						}
+					}
+
 					nextTurn();
 					return;
 				}
