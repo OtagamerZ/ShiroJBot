@@ -608,7 +608,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!copy.execute(copy.toParameters(tgt))) {
 			curr.getGraveyard().remove(copy);
 			chosen.setAvailable(true);
-			getChannel().sendMessage(locale.get("error/activation")).queue();
+			getChannel().sendMessage(locale.get("error/spell")).queue();
 			return false;
 		}
 

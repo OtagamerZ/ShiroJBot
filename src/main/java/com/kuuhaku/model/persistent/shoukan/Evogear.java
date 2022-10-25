@@ -320,7 +320,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		try {
 			Utils.exec(effect, Map.of(
 					"ep", ep,
-					"self", equipper,
+					"self", Utils.getOr(equipper, this),
 					"evo", this,
 					"trigger", ep.trigger(),
 					"game", hand.getGame(),
