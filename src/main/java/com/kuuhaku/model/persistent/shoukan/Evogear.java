@@ -318,15 +318,26 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (!hasEffect() || !effect.contains(ep.trigger().name())) return false;
 
 		try {
-			Utils.exec(effect, Map.of(
-					"ep", ep,
-					"self", Utils.getOr(equipper, this),
-					"evo", this,
-					"trigger", ep.trigger(),
-					"game", hand.getGame(),
-					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale(), this)
-			));
+			if (isSpell()) {
+				Utils.exec(effect, Map.of(
+						"ep", ep,
+						"evo", this,
+						"trigger", ep.trigger(),
+						"game", hand.getGame(),
+						"side", hand.getSide(),
+						"props", extractValues(hand.getGame().getLocale(), this)
+				));
+			} else {
+				Utils.exec(effect, Map.of(
+						"ep", ep,
+						"self", equipper,
+						"evo", this,
+						"trigger", ep.trigger(),
+						"game", hand.getGame(),
+						"side", hand.getSide(),
+						"props", extractValues(hand.getGame().getLocale(), this)
+				));
+			}
 
 			return true;
 		} catch (Exception e) {
