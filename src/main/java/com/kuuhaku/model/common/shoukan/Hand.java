@@ -719,6 +719,10 @@ public class Hand {
 	}
 
 	public BufferedImage render(I18N locale) {
+		return render(locale, true);
+	}
+
+	public BufferedImage render(I18N locale, boolean ally) {
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
@@ -730,11 +734,17 @@ public class Hand {
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 350, null);
-			if (d.isAvailable()) {
+			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
 						6, Color.BLACK
 				);
+			}
+
+			if (!ally) {
+				g2d.setClip(userDeck.getStyling().getFrame().getBoundary());
+				g2d.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), x, bi.getHeight() - 350, null);
+				g2d.setClip(null);
 			}
 		}
 
@@ -744,8 +754,12 @@ public class Hand {
 	}
 
 	public void showHand(I18N locale) {
+		showHand(locale, this);
+	}
+
+	public void showHand(I18N locale, Hand hand) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(render(locale), "png"), "hand.png"))
+				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale, equals(hand)), "png"), "hand.png"))
 				.queue(m -> {
 					if (lastMessage != null) {
 						m.getChannel().retrieveMessageById(lastMessage)
