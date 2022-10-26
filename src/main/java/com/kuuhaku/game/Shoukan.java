@@ -1312,6 +1312,18 @@ public class Shoukan extends GameInstance<Phase> {
 					continue;
 				}
 
+				restoring = true;
+				for (List<SlotColumn> slts : arena.getSlots().values()) {
+					for (SlotColumn slt : slts) {
+						for (Senshi card : slt.getCards()) {
+							if (card != null) {
+								card.setFlipped(false);
+							}
+						}
+					}
+				}
+				restoring = false;
+
 				if (def != null) {
 					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
 				} else {
