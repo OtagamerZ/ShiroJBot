@@ -310,6 +310,7 @@ public class Arena implements Renderer {
 
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
+		g2d.setStroke(new BasicStroke(2));
 
 		int y = 0;
 		for (List<SlotColumn> side : slots.values()) {
@@ -322,6 +323,10 @@ public class Arena implements Renderer {
 							g2d.drawImage(e.render(locale, s.getHand().getUserDeck()), 235 * (x + i), 400 * y, null);
 						}
 					}
+				}
+
+				if (x < side.size() - 1) {
+					g2d.drawLine(705 * x, 0, 705 * x, bi.getHeight());
 				}
 			}
 
