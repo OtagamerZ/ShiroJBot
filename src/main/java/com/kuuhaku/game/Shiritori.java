@@ -18,7 +18,6 @@
 
 package com.kuuhaku.game;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
@@ -42,13 +41,14 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 public class Shiritori extends GameInstance<NullPhase> {
 	private static final String[] blacklisted = {};
 
-	private final long seed = Constants.DEFAULT_RNG.nextLong();
+	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final I18N locale;
 	private final String[] players;
 	private final InfiniteList<String> inGame;

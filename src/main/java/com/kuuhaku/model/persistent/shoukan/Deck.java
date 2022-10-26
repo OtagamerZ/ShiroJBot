@@ -579,7 +579,7 @@ public class Deck extends DAO<Deck> {
 
 				AccFunction<Integer, Integer> handCap = t -> 5;
 				if (origin.hasMinor(Race.BEAST)) {
-					handCap = mpGain.accumulate((t, cards) -> cards + t / 20);
+					handCap = handCap.accumulate((t, cards) -> cards + t / 20);
 				}
 
 				if (origin.synergy() == Race.FEY) {

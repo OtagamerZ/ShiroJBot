@@ -47,13 +47,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name = "senshi")
 public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
 	public final String KLASS = getClass().getName();
-	public transient long SERIAL = Constants.DEFAULT_RNG.nextLong();
+	public transient long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	@Id
 	@Column(name = "card_id", nullable = false)

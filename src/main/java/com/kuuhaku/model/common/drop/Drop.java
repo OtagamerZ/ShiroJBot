@@ -33,6 +33,7 @@ import kotlin.Pair;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -109,7 +110,7 @@ public abstract class Drop<T> {
 		), 1);
 	}};
 
-	private final long seed = Constants.DEFAULT_RNG.nextLong();
+	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final Rarity rarity = Utils.getRandomEntry(Rarity.getActualRarities());
 	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 	private final String captcha = Utils.generateRandomHash(5);

@@ -21,12 +21,12 @@ package com.kuuhaku.model.records;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 
-import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 
-public record DropCondition(String key, Function<Random, Object[]> extractor, BiFunction<Object[], Account, Boolean> condition) {
-	public String toString(I18N locale, Random rng) {
+public record DropCondition(String key, Function<RandomGenerator, Object[]> extractor, BiFunction<Object[], Account, Boolean> condition) {
+	public String toString(I18N locale, RandomGenerator rng) {
 		return locale.get("condition/" + key, extractor().apply(rng));
 	}
 }

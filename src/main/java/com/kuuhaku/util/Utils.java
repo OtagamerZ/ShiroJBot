@@ -73,6 +73,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
@@ -567,7 +568,7 @@ public abstract class Utils {
 		return list.get(Calc.rng(list.size() - 1));
 	}
 
-	public static <T> T getRandomEntry(Random random, Collection<T> col) {
+	public static <T> T getRandomEntry(RandomGenerator random, Collection<T> col) {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
 
 		List<T> list = List.copyOf(col);
@@ -577,7 +578,7 @@ public abstract class Utils {
 	}
 
 	@SafeVarargs
-	public static <T> T getRandomEntry(Random random, T... array) {
+	public static <T> T getRandomEntry(RandomGenerator random, T... array) {
 		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
 		else if (array.length == 1) return array[0];
 
@@ -586,25 +587,25 @@ public abstract class Utils {
 		return list.get(Calc.rng(list.size() - 1, random));
 	}
 
-	public static <T> List<T> getRandomN(List<T> array, int elements) {
-		List<T> aux = new ArrayList<>(array);
+	public static <T> List<T> getRandomN(List<T> list, int elements) {
+		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
-		Random random = new Random(System.currentTimeMillis());
+		RandomGenerator random = Constants.DEFAULT_RNG.get();
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = Calc.rng(aux.size() - 1, random);
 
 			out.add(aux.get(index));
-			Collections.shuffle(aux, random);
+			Collections.shuffle(aux);
 		}
 
 		return out;
 	}
 
-	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances) {
-		List<T> aux = new ArrayList<>(array);
+	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances) {
+		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
-		Random random = new Random(System.currentTimeMillis());
+		RandomGenerator random = Constants.DEFAULT_RNG.get();
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = Calc.rng(aux.size() - 1, random);
@@ -614,7 +615,7 @@ public abstract class Utils {
 				out.add(inst);
 			else {
 				aux.remove(index);
-				Collections.shuffle(aux, random);
+				Collections.shuffle(aux);
 				i--;
 			}
 		}
@@ -622,8 +623,8 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances, long seed) {
-		List<T> aux = new ArrayList<>(array);
+	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, long seed) {
+		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
 		Random random = new Random(seed);
 
@@ -919,21 +920,11 @@ public abstract class Utils {
 		return String.valueOf(n);
 	}
 
-	public static Collector<?, ?, ?> toShuffledList() {
+	public static <T> Collector<T, ?, List<T>> toShuffledList() {
 		return Collectors.collectingAndThen(
 				Collectors.toList(),
 				l -> {
 					Collections.shuffle(l);
-					return l;
-				}
-		);
-	}
-
-	public static <T> Collector<T, ?, List<T>> toShuffledList(Random rng) {
-		return Collectors.collectingAndThen(
-				Collectors.toList(),
-				l -> {
-					Collections.shuffle(l, rng);
 					return l;
 				}
 		);
@@ -1091,7 +1082,7 @@ public abstract class Utils {
 		else return "";
 
 		byte[] bytes = new byte[8];
-		Constants.DEFAULT_RNG.nextBytes(bytes);
+		ThreadLocalRandom.current().nextBytes(bytes);
 
 		String hash = Calc.hash(bytes, method);
 		if (hash.isBlank()) return "";

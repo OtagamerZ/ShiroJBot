@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -113,50 +114,50 @@ public abstract class Calc {
 	}
 
 	public static int rng(int max) {
-		return rng(0, max, Constants.DEFAULT_RNG);
+		return rng(0, max, Constants.DEFAULT_RNG.get());
 	}
 
 	public static int rng(int max, long seed) {
 		return rng(0, max, new Random(seed));
 	}
 
-	public static int rng(int max, Random random) {
+	public static int rng(int max, RandomGenerator random) {
 		return rng(0, max, random);
 	}
 
 	public static int rng(int min, int max) {
-		return rng(min, max, Constants.DEFAULT_RNG);
+		return rng(min, max, Constants.DEFAULT_RNG.get());
 	}
 
 	public static int rng(int min, int max, long seed) {
 		return rng(min, max, new Random(seed));
 	}
 
-	public static int rng(int min, int max, Random random) {
+	public static int rng(int min, int max, RandomGenerator random) {
 		return (int) Math.round(min + random.nextDouble() * (max - min));
 	}
 
 	public static double rng(double max) {
-		return rng(0, max, Constants.DEFAULT_RNG);
+		return rng(0, max, Constants.DEFAULT_RNG.get());
 	}
 
 	public static double rng(double max, long seed) {
 		return rng(0, max, new Random(seed));
 	}
 
-	public static double rng(double max, Random random) {
+	public static double rng(double max, RandomGenerator random) {
 		return rng(0, max, random);
 	}
 
 	public static double rng(double min, double max) {
-		return rng(min, max, Constants.DEFAULT_RNG);
+		return rng(min, max, Constants.DEFAULT_RNG.get());
 	}
 
 	public static double rng(double min, double max, long seed) {
 		return rng(min, max, new Random(seed));
 	}
 
-	public static double rng(double min, double max, Random random) {
+	public static double rng(double min, double max, RandomGenerator random) {
 		return min + random.nextDouble() * (max - min);
 	}
 

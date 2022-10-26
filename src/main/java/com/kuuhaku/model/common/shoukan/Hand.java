@@ -51,11 +51,12 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 public class Hand {
-	private final long SERIAL = Constants.DEFAULT_RNG.nextLong();
+	private final long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	private final String uid;
 	private final Shoukan game;
@@ -205,7 +206,7 @@ public class Hand {
 								);
 							}
 						})
-						.collect(Utils.toShuffledList(Constants.DEFAULT_RNG))
+						.collect(Utils.toShuffledList())
 		);
 
 		for (String card : game.getParams().cards()) {

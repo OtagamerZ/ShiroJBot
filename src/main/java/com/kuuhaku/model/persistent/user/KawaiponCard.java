@@ -18,16 +18,16 @@
 
 package com.kuuhaku.model.persistent.user;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Calc;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name = "kawaipon_card")
@@ -44,7 +44,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	private boolean chrome;
 
 	@Column(name = "quality", nullable = false)
-	private double quality = Calc.round(Math.max(0, Math.pow(Constants.DEFAULT_RNG.nextDouble(), 5) * 30 - 10), 1);
+	private double quality = Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 30 - 10), 1);
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")

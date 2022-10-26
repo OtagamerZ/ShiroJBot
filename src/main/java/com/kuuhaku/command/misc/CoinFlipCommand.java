@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.misc;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.enums.Category;
@@ -28,6 +27,8 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Command(
 		name = "coinflip",
 		category = Category.MISC
@@ -35,7 +36,7 @@ import net.dv8tion.jda.api.JDA;
 public class CoinFlipCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		boolean tails = Constants.DEFAULT_RNG.nextBoolean();
+		boolean tails = ThreadLocalRandom.current().nextBoolean();
 		event.channel().sendMessage(locale.get("str/coinflip", tails ? locale.get("str/tails") : locale.get("str/heads"))).queue();
 	}
 }
