@@ -1310,7 +1310,7 @@ public class Shoukan extends GameInstance<Phase> {
 					continue;
 				}
 
-				reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
+				reportResult(GameReport.SUCCESS, hand.isDefeat() ? "str/game_end_doom" : "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
 				return;
 			}
 
