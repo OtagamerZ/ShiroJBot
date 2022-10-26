@@ -281,7 +281,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				System.out.println("Pass " + i);
 				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
