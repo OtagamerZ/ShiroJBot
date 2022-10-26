@@ -330,13 +330,13 @@ public class Arena implements Renderer {
 					}
 				}
 
-				if (x > 0) {
-					FontMetrics fm = g2d.getFontMetrics();
-					Graph.drawOutlinedString(g2d, String.valueOf(x + 1),
-							slotWidth + (slotWidth / 2 - fm.stringWidth(String.valueOf(x + 1)) / 2), slotHeight + fm.getHeight() * y,
-							6, Color.BLACK
-					);
+				FontMetrics fm = g2d.getFontMetrics();
+				Graph.drawOutlinedString(g2d, String.valueOf(x + 1),
+						slotWidth + (slotWidth / 2 - fm.stringWidth(String.valueOf(x + 1)) / 2), slotHeight + fm.getHeight() * y,
+						6, Color.BLACK
+				);
 
+				if (x > 0) {
 					g2d.drawLine(slotWidth * x, 0, slotWidth * x, bi.getHeight());
 				}
 			}
