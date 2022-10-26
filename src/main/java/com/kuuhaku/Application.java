@@ -114,6 +114,8 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 		API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
 
+		//TODO Scheduler
+
 		System.runFinalization();
 		Constants.LOGGER.info("<----------END OF BOOT---------->");
 

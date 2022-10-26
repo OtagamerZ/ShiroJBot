@@ -110,7 +110,7 @@ dependencies {
 	implementation group: "com.lmax", name: "disruptor", version: "3.4.4"
 
 	//Util
-	implementation group: "org.quartz-scheduler", name: "quartz", version: "2.3.2"
+	implementation group: "it.sauronsoftware.cron4j", name: "cron4j", version: "2.2.5"
 	implementation group: "org.swinglabs.swingx", name: "swingx-graphics", version: "1.6.5-1"
 	implementation group: "net.oneandone.reflections8", name: "reflections8", version: "0.11.7"
 	implementation group: "com.squareup.moshi", name: "moshi", version: "1.13.0"
