@@ -422,9 +422,9 @@ public class Arena implements Renderer {
 				g1.fill(bar);
 
 				double fac = hand.getHPPrcnt();
-				if (fac > 0.5 && !hand.getOrigin().demon()) {
+				if (fac >= 0.5 && !hand.getOrigin().demon()) {
 					g1.setColor(new Color(69, 173, 28));
-				} else if (fac > 0.25) {
+				} else if (fac >= 0.25) {
 					g1.setColor(new Color(197, 158, 0));
 				} else {
 					g1.setColor(new Color(173, 28, 28));

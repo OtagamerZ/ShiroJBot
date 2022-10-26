@@ -590,7 +590,7 @@ public class Hand {
 	}
 
 	public boolean isLowLife() {
-		return origin.demon() || getHPPrcnt() <= 0.5;
+		return origin.demon() || getHPPrcnt() < 0.5;
 	}
 
 	public RegDeg getRegDeg() {
