@@ -330,11 +330,13 @@ public class Arena implements Renderer {
 					}
 				}
 
-				Rectangle rect = Graph.getStringBounds(g2d, String.valueOf(x + 1));
-				Graph.drawOutlinedString(g2d, String.valueOf(x + 1),
-						slotWidth * x + (slotWidth / 2 - rect.width / 2), slotHeight - 5 + (rect.height + 10) * y,
-						6, Color.BLACK
-				);
+				if (y == 0) {
+					Rectangle rect = Graph.getStringBounds(g2d, String.valueOf(x + 1));
+					Graph.drawOutlinedString(g2d, String.valueOf(x + 1),
+							slotWidth * x + (slotWidth / 2 - rect.width / 2), (slotHeight + rect.height) / 2,
+							6, Color.BLACK
+					);
+				}
 
 				if (x > 0) {
 					g2d.drawLine(slotWidth * x, 0, slotWidth * x, bi.getHeight());
