@@ -30,9 +30,11 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.security.SecureRandom;
 import java.util.Map;
-import java.util.Random;
+import java.util.SplittableRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.random.RandomGenerator;
 
 public abstract class Constants {
 	protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
@@ -64,8 +66,9 @@ public abstract class Constants {
 
 	public static final Function<Object, String> LOADING = o -> "<a:loading:697879726630502401> | " + o;
 
-	public static final Random DEFAULT_RNG = new Random();
-	public static final Random DEFAULT_SECURE_RNG = new SecureRandom();
+	private static final SplittableRandom SOURCE_RNG = new SplittableRandom();
+	public static final Supplier<RandomGenerator> DEFAULT_RNG = SOURCE_RNG::split;
+	public static final SecureRandom DEFAULT_SECURE_RNG = new SecureRandom();
 
 	//public static final File COLLECTIONS_FOLDER = new File(System.getenv("COLLECTIONS_PATH"));
 	//public static final File TEMPORARY_FOLDER = new File(System.getenv("TEMPORARY_PATH"));

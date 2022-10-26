@@ -6,11 +6,12 @@ import kotlin.Pair;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.random.RandomGenerator;
 
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
 	private final TreeSet<Pair<Double, T>> pool = new TreeSet<>(Comparator.comparingDouble(Pair::getFirst));
-	private final Random rng;
+	private final RandomGenerator rng;
 	private final BiFunction<Double, Double, Double> randGen;
 	private final double fac;
 	/*
@@ -19,26 +20,26 @@ public class RandomList<T> {
 	private double total = 0;
 
 	public RandomList() {
-		this(new Random(), 1);
+		this(Constants.DEFAULT_RNG.get(), 1);
 	}
 
-	public RandomList(Random rng) {
+	public RandomList(RandomGenerator rng) {
 		this(rng, 1);
 	}
 
 	public RandomList(double fac) {
-		this(Constants.DEFAULT_RNG, fac);
+		this(Constants.DEFAULT_RNG.get(), fac);
 	}
 
-	public RandomList(Random rng, double fac) {
+	public RandomList(RandomGenerator rng, double fac) {
 		this(rng, Math::pow, fac);
 	}
 
 	public RandomList(BiFunction<Double, Double, Double> randGen, double fac) {
-		this(Constants.DEFAULT_RNG, randGen, fac);
+		this(Constants.DEFAULT_RNG.get(), randGen, fac);
 	}
 
-	public RandomList(Random rng, BiFunction<Double, Double, Double> randGen, double fac) {
+	public RandomList(RandomGenerator rng, BiFunction<Double, Double, Double> randGen, double fac) {
 		this.rng = rng;
 		this.randGen = randGen;
 		this.fac = fac;
