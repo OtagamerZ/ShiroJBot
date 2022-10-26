@@ -22,6 +22,7 @@ import com.kuuhaku.util.json.JSONObject;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.intellij.lang.annotations.Language;
 
 @Converter(autoApply = true)
 public class JSONObjectConverter implements AttributeConverter<JSONObject, String> {
@@ -32,7 +33,7 @@ public class JSONObjectConverter implements AttributeConverter<JSONObject, Strin
 	}
 
 	@Override
-	public JSONObject convertToEntityAttribute(String json) {
+	public JSONObject convertToEntityAttribute(@Language("JSON5") String json) {
 		return new JSONObject(json);
 	}
 }

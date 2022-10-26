@@ -75,7 +75,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Column(name = "target_type", nullable = false)
 	private TargetType targetType = TargetType.NONE;
 
-	@Column(name = "charms", nullable = false)
+	@Column(name = "charms", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray charms = new JSONArray();
 

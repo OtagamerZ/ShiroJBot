@@ -57,7 +57,7 @@ public class CardAttributes implements Serializable {
 	@Column(name = "block", nullable = false)
 	private int block = 0;
 
-	@Column(name = "tags", nullable = false)
+	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
