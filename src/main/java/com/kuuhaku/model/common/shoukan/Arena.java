@@ -311,22 +311,33 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 		g2d.setStroke(new BasicStroke(2));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
+
+		int slotWidth = bi.getWidth() / 5;
+		int slotHeight = bi.getHeight() / 2;
+		g2d.drawLine(0, slotHeight, bi.getWidth(), slotHeight);
 
 		int y = 0;
 		for (List<SlotColumn> side : slots.values()) {
 			for (int x = 0; x < side.size(); x++) {
 				Senshi s = side.get(x).getTop();
 				if (s != null) {
+					List<Evogear> equips = s.getEquipments();
 					for (int i = 0; i < 3; i++) {
-						Evogear e = s.getEquipments().get(i);
-						if (e != null) {
-							g2d.drawImage(e.render(locale, s.getHand().getUserDeck()), 235 * (x + i), 400 * y, null);
+						if (i < equips.size()) {
+							g2d.drawImage(equips.get(i).render(locale, s.getHand().getUserDeck()), 235 * (x + i), 400 * y, null);
 						}
 					}
 				}
 
-				if (x < side.size() - 1) {
-					g2d.drawLine(705 * x, 0, 705 * x, bi.getHeight());
+				if (x > 0) {
+					FontMetrics fm = g2d.getFontMetrics();
+					Graph.drawOutlinedString(g2d, String.valueOf(x + 1),
+							slotWidth + (slotWidth / 2 - fm.stringWidth(String.valueOf(x + 1)) / 2), slotHeight + fm.getHeight() * y,
+							6, Color.BLACK
+					);
+
+					g2d.drawLine(slotWidth * x, 0, slotWidth * x, bi.getHeight());
 				}
 			}
 
@@ -624,7 +635,7 @@ public class Arena implements Renderer {
 
 							g1.drawImage(r.getBadge(), rect.x, rect.y, rect.width, rect.height, null);
 						}
-				}
+					}
 			);
 
 			Graph.applyTransformed(g, reversed ? 265 : 2240, reversed ? 1176 : 426,
