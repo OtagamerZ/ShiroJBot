@@ -540,6 +540,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public static List<Evogear> getByTag(String... tags) {
-		return DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN by_tag('evogear', ?1)", (Object[]) tags);
+		return DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN function('by_tag', 'evogear', ?1)", (Object[]) tags);
 	}
 }

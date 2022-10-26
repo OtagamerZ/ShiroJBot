@@ -281,6 +281,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public static List<Field> getByTag(String... tags) {
-		return DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN by_tag('field', ?1)", (Object[]) tags);
+		return DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN function('by_tag', 'field', ?1)", (Object[]) tags);
 	}
 }
