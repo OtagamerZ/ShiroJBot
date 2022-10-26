@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION has(JSONB, ANYELEMENT)
+CREATE OR REPLACE FUNCTION has(JSONB, VARCHAR)
     RETURNS BOOLEAN
     LANGUAGE sql
 AS
