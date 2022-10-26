@@ -36,7 +36,7 @@ public class SummonersGacha extends Gacha<String> {
 				           ELSE 0.05
 				    END
 				FROM card c
-				         LEFT JOIN senshi s ON c.id = s.card_id AND get_type(c.id) & 2 = 2 AND get_rarity_index(c.rarity) BETWEEN 1 AND 5 AND NOT s.tags \\? 'FUSION'
+				         LEFT JOIN senshi s ON c.id = s.card_id AND get_type(c.id) & 2 = 2 AND get_rarity_index(c.rarity) BETWEEN 1 AND 5 AND NOT has(tags, 'FUSION')
 				         LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
 				         LEFT JOIN field f ON c.id = f.card_id AND NOT f.effect
 				WHERE (s.card_id IS NOT NULL OR e.card_id IS NOT NULL OR f.card_id IS NOT NULL)
