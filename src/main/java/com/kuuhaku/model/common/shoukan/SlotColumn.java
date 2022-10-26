@@ -183,7 +183,11 @@ public class SlotColumn {
 	}
 
 	public void replace(Senshi card, Senshi with) {
-
+		if (Objects.equals(card, getTop())) {
+			setTop(with);
+		} else if (Objects.equals(card, getBottom())) {
+			setBottom(with);
+		}
 	}
 
 	public void swap() {
