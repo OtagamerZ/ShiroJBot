@@ -305,6 +305,34 @@ public class Arena implements Renderer {
 		return bi;
 	}
 
+	public BufferedImage renderEvogears(I18N locale) {
+		BufferedImage bi = new BufferedImage(3525, 750, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.SD_HINTS);
+
+		int y = 0;
+		for (List<SlotColumn> side : slots.values()) {
+			for (int x = 0; x < side.size(); x++) {
+				Senshi s = side.get(x).getTop();
+				if (s != null) {
+					for (int i = 0; i < 3; i++) {
+						Evogear e = s.getEquipments().get(i);
+						if (e != null) {
+							g2d.drawImage(e.render(locale, s.getHand().getUserDeck()), 235 * (x + i), 400 * y, null);
+						}
+					}
+				}
+			}
+
+			y++;
+		}
+
+		g2d.dispose();
+
+		return bi;
+	}
+
 	private Consumer<Graphics2D> drawBar(Hand hand) {
 		return g -> {
 			boolean reversed = hand.getSide() != Side.TOP;
