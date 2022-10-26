@@ -311,7 +311,7 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 		g2d.setStroke(new BasicStroke(2));
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 75));
 
 		int slotWidth = bi.getWidth() / 5;
 		int slotHeight = bi.getHeight() / 2;
@@ -333,7 +333,7 @@ public class Arena implements Renderer {
 				if (y == 0) {
 					Rectangle rect = Graph.getStringBounds(g2d, String.valueOf(x + 1));
 					Graph.drawOutlinedString(g2d, String.valueOf(x + 1),
-							slotWidth * x + (slotWidth / 2 - rect.width / 2), (slotHeight + rect.height) / 2,
+							slotWidth * x + (slotWidth / 2 - rect.width / 2), slotHeight + rect.height / 2,
 							6, Color.BLACK
 					);
 				}
