@@ -182,6 +182,10 @@ public class SlotColumn {
 		return Arrays.asList(getTop(), getBottom());
 	}
 
+	public void replace(Senshi card, Senshi with) {
+
+	}
+
 	public void swap() {
 		Senshi aux = bottom;
 		bottom = top;
