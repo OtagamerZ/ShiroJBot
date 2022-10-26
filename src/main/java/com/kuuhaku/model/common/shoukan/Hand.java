@@ -163,6 +163,7 @@ public class Hand {
 	private transient Account account;
 	private transient String lastMessage;
 	private transient boolean forfeit;
+	private transient boolean defeat;
 	private transient int kills = 0;
 	private transient byte cooldown = 0;
 	/*
@@ -681,6 +682,14 @@ public class Hand {
 
 	public void setForfeit(boolean forfeit) {
 		this.forfeit = forfeit;
+	}
+
+	public boolean isDefeat() {
+		return defeat;
+	}
+
+	public void setDefeat(boolean defeat) {
+		this.defeat = defeat;
 	}
 
 	public int getOriginCooldown() {

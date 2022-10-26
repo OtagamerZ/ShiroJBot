@@ -927,6 +927,10 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 								pHP = you.getHP();
 
+								if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
+									you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
+								}
+
 								op.addKill();
 								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
 									arena.getBanned().add(ally);
@@ -934,7 +938,6 @@ public class Shoukan extends GameInstance<Phase> {
 									you.getGraveyard().add(ally);
 								}
 
-								you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
 								return true;
 							} else {
@@ -971,7 +974,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								if (ally.getDmg() > eCombatStats) {
 									trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
-									if (enemy.isDefending()) {
+									if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 										dmg = 0;
 									} else {
 										dmg -= enemyStats;
@@ -1295,12 +1298,13 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.getRealDeck();
 			hand.getGraveyard();
 
-			if (hand.getHP() == 0) {
+			if (hand.getHP() == 0 || hand.isDefeat()) {
 				trigger(ON_WIN, side.getOther());
 				trigger(ON_DEFEAT, side);
 
 				if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
 					hand.setHP(1);
+					hand.setDefeat(false);
 					hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
 					hand.setOriginCooldown(4);
 					continue;

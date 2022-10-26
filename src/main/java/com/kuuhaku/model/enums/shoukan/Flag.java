@@ -24,6 +24,7 @@ public enum Flag {
 	NO_CONVERT, // Cannot be converted
 	NO_COMBAT,  // Cannot attack
 	NO_EFFECT,  // Cannot activate effect
+	NO_DAMAGE,  // Does not take damage from combat
 
 	IGNORE_EQUIP,  // Ignores target equipment stats
 	IGNORE_FIELD,  // Ignores field modifiers (NO AUTO)
