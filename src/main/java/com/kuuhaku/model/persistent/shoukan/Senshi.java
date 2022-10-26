@@ -25,6 +25,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
+import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
@@ -931,9 +932,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return DAO.find(Senshi.class, id);
 	}
 
-	public static List<Senshi> getByTag(String... tags) {
+	public static XList<Senshi> getByTag(String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('senshi', ?1)", (Object[]) tags);
 
-		return DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.card.id IN ?1", ids);
+		return (XList<Senshi>) DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.card.id IN ?1", ids);
 	}
 }

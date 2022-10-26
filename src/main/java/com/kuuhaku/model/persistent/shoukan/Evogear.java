@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
@@ -43,8 +44,10 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_ACTIVATE;
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_SPELL_TARGET;
@@ -539,9 +542,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return DAO.find(Evogear.class, id);
 	}
 
-	public static List<Evogear> getByTag(String... tags) {
+	public static XList<Evogear> getByTag(String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('evogear', ?1)", (Object[]) tags);
 
-		return DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids);
+		return (XList<Evogear>) DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids);
 	}
 }

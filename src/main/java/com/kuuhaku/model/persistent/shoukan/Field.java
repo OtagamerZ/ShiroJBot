@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
@@ -280,9 +281,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		return DAO.find(Field.class, id);
 	}
 
-	public static List<Field> getByTag(String... tags) {
+	public static XList<Field> getByTag(String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object[]) tags);
 
-		return DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids);
+		return (XList<Field>) DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids);
 	}
 }
