@@ -930,4 +930,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		return DAO.find(Senshi.class, id);
 	}
+
+	public static List<Senshi> getByTag(String... tags) {
+		return DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.card.id IN by_tag('senshi', ?1)", (Object[]) tags);
+	}
 }
