@@ -306,7 +306,7 @@ public class Arena implements Renderer {
 	}
 
 	public BufferedImage renderEvogears(I18N locale) {
-		BufferedImage bi = new BufferedImage(3525, 750, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(3525, 800, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
@@ -325,7 +325,7 @@ public class Arena implements Renderer {
 					List<Evogear> equips = s.getEquipments();
 					for (int i = 0; i < 3; i++) {
 						if (i < equips.size()) {
-							g2d.drawImage(equips.get(i).render(locale, s.getHand().getUserDeck()), 235 * (x + i), 400 * y, null);
+							g2d.drawImage(equips.get(i).render(locale, s.getHand().getUserDeck()), 5 + 235 * (x + i), 450 * y, null);
 						}
 					}
 				}
