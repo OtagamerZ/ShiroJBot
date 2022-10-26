@@ -163,7 +163,7 @@ public class Hand {
 	private transient Account account;
 	private transient String lastMessage;
 	private transient boolean forfeit;
-	private transient boolean defeat;
+	private transient String defeat;
 	private transient int kills = 0;
 	private transient byte cooldown = 0;
 	/*
@@ -684,11 +684,15 @@ public class Hand {
 		this.forfeit = forfeit;
 	}
 
-	public boolean isDefeat() {
+	public boolean isDefeated() {
+		return defeat != null;
+	}
+
+	public String getDefeat() {
 		return defeat;
 	}
 
-	public void setDefeat(boolean defeat) {
+	public void setDefeat(String defeat) {
 		this.defeat = defeat;
 	}
 

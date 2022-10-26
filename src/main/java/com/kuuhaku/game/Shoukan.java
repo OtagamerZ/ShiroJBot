@@ -1298,19 +1298,25 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.getRealDeck();
 			hand.getGraveyard();
 
-			if (hand.getHP() == 0 || hand.isDefeat()) {
+			String def = hand.getDefeat();
+			if (hand.getHP() == 0 || def != null) {
 				trigger(ON_WIN, side.getOther());
 				trigger(ON_DEFEAT, side);
 
 				if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
 					hand.setHP(1);
-					hand.setDefeat(false);
+					hand.setDefeat(null);
 					hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
 					hand.setOriginCooldown(4);
 					continue;
 				}
 
-				reportResult(GameReport.SUCCESS, hand.isDefeat() ? "str/game_end_doom" : "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
+				if (def != null) {
+					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
+				} else {
+					reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
+				}
+
 				return;
 			}
 
