@@ -57,8 +57,8 @@ public record EffectOverTime(
 	}
 
 	public boolean expired() {
-		if (turns != null) return turns.get() == 0;
-		if (limit != null) return limit.get() == 0;
+		if (turns != null) return turns.get() <= 0;
+		if (limit != null) return limit.get() <= 0;
 
 		return false;
 	}

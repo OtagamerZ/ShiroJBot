@@ -514,7 +514,7 @@ public class Hand {
 	}
 
 	public void setHP(int hp) {
-		this.hp = Math.max(0, hp);
+		this.hp = Utils.clamp(hp, 0, base.hp() * 2);
 	}
 
 	public void modHP(int value) {
@@ -564,7 +564,7 @@ public class Hand {
 			}
 		}
 
-		this.hp = Math.max(0, this.hp + value);
+		this.hp = Utils.clamp(this.hp + value, 0, base.hp() * 2);
 
 		if (!pure) {
 			int delta = before - this.hp;
@@ -626,7 +626,7 @@ public class Hand {
 			return;
 		}
 
-		this.mp = Math.max(0, mp);
+		this.mp = Utils.clamp(mp, 0, 99);
 	}
 
 	public void modMP(int value) {
@@ -635,7 +635,7 @@ public class Hand {
 			return;
 		}
 
-		this.mp = Math.max(0, this.mp + value);
+		this.mp = Utils.clamp(this.mp + value, 0, 99);
 	}
 
 	public void consumeMP(int value) {
@@ -645,7 +645,7 @@ public class Hand {
 			return;
 		}
 
-		this.mp = Math.max(0, this.mp - Math.max(0, value));
+		this.mp = Utils.clamp(this.mp - value, 0, 99);
 	}
 
 	public List<Drawable<?>> consumeSC(int value) {
