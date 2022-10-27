@@ -156,7 +156,7 @@ public class Arena implements Renderer {
 				int regdeg = h.getRegDeg().peek();
 				if (regdeg != 0) {
 					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
-					g1.drawImage(over, 0, bi.getHeight() / 2 * side.ordinal(), null);
+					g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
 				}
 
 				Deck deck = h.getUserDeck();
