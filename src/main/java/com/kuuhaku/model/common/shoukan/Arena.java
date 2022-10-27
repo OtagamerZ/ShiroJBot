@@ -152,7 +152,14 @@ public class Arena implements Renderer {
 					case BOTTOM -> CENTER.y + MARGIN.y * 5;
 				};
 
-				Deck deck = game.getHands().get(side).getUserDeck();
+				Hand h = game.getHands().get(side);
+				int regdeg = h.getRegDeg().peek();
+				if (regdeg != 0) {
+					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
+					g1.drawImage(over, 0, bi.getHeight() / 2 * side.ordinal(), null);
+				}
+
+				Deck deck = h.getUserDeck();
 				DeckStyling style = deck.getStyling();
 
 				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
