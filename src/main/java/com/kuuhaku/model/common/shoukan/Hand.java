@@ -743,8 +743,8 @@ public class Hand {
 
 			if (!ally) {
 				Graph.applyTransformed(g2d, x, bi.getHeight() - 350, g -> {
-					g2d.setClip(userDeck.getStyling().getFrame().getBoundary());
-					g2d.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
+					g.setClip(userDeck.getStyling().getFrame().getBoundary());
+					g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 				});
 			}
 		}
