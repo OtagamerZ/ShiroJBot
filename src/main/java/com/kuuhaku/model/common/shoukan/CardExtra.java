@@ -492,7 +492,8 @@ public class CardExtra implements Cloneable {
 	public String getDescription(I18N locale) {
 		if (description == null || description.isBlank()) return description;
 
-		return DAO.find(LocalizedDescription.class, new LocalizedId(description, locale)).getDescription();
+		LocalizedDescription desc = DAO.find(LocalizedDescription.class, new LocalizedId(description, locale));
+		return desc == null ? description : desc.getDescription();
 	}
 
 	public void setDescription(String description) {
