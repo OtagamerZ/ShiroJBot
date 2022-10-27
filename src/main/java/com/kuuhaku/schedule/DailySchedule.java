@@ -21,7 +21,7 @@ package com.kuuhaku.schedule;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.Schedule;
 
-@Schedule("0 0 0 1/1 * ? *")
+@Schedule("0 0 * * *")
 public class DailySchedule implements Runnable {
 	@Override
 	public void run() {
