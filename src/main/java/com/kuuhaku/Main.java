@@ -20,12 +20,14 @@ package com.kuuhaku;
 
 import com.kuuhaku.manager.CacheManager;
 import com.kuuhaku.manager.CommandManager;
+import com.kuuhaku.manager.ScheduleManager;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 
@@ -35,6 +37,20 @@ public class Main {
 
 	private static final CacheManager cacheManager = new CacheManager();
 	private static final CommandManager commandManager = new CommandManager();
+	private static final ScheduleManager scheduleManager;
+
+	static {
+		ScheduleManager sm;
+		try {
+			sm = new ScheduleManager();
+
+		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+			Constants.LOGGER.error("Failed to start scheduler: " + e, e);
+			sm = null;
+		}
+		scheduleManager = sm;
+	}
+
 	private static Application app;
 
 	public static void main(String[] args) {
