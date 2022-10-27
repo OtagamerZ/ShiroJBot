@@ -761,13 +761,15 @@ public class Hand {
 		getUser().openPrivateChannel()
 				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale, equals(hand)), "png"), "hand.png"))
 				.queue(m -> {
-					if (lastMessage != null) {
-						m.getChannel().retrieveMessageById(lastMessage)
-								.flatMap(Objects::nonNull, Message::delete)
-								.queue();
-					}
+					if (equals(hand)) {
+						if (lastMessage != null) {
+							m.getChannel().retrieveMessageById(lastMessage)
+									.flatMap(Objects::nonNull, Message::delete)
+									.queue();
+						}
 
-					lastMessage = m.getId();
+						lastMessage = m.getId();
+					}
 				});
 	}
 
