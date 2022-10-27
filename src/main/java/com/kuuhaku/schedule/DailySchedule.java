@@ -18,32 +18,10 @@
 
 package com.kuuhaku.schedule;
 
-import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.annotations.Schedule;
-
-@Schedule("0 0 * * *")
+//@Schedule("0 0 * * *")
 public class DailySchedule implements Runnable {
 	@Override
-	@SuppressWarnings("SqlWithoutWhere")
 	public void run() {
-		DAO.applyNative("DELETE FROM aux.card_counter");
-		DAO.applyNative("""
-				INSERT INTO aux.card_counter (anime_id, count)
-				SELECT vcc.anime_id
-				     , vcc.count
-				FROM aux.v_card_counter vcc
-				ON CONFLICT DO NOTHING
-				""");
 
-		DAO.applyNative("DELETE FROM aux.collection_counter");
-		DAO.applyNative("""
-				INSERT INTO aux.collection_counter (uid, anime_id, normal, chrome)
-				SELECT vcc.kawaipon_uid
-				  , vcc.anime_id
-				  , vcc.normal
-				  , vcc.chrome
-				FROM aux.v_collection_counter vcc
-				ON CONFLICT DO NOTHING
-				""");
 	}
 }

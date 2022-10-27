@@ -39,7 +39,7 @@ public class Anime extends DAO<Anime> {
 	private boolean visible = true;
 
 	public int getCount() {
-		return DAO.queryNative(Integer.class, "SELECT count FROM aux.card_counter WHERE anime_id = ?1", id);
+		return DAO.queryNative(Integer.class, "SELECT count FROM v_card_counter WHERE anime_id = ?1", id);
 	}
 
 	public Card getCover() {

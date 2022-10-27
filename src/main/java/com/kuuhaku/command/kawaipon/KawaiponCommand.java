@@ -55,7 +55,7 @@ public class KawaiponCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		int total = DAO.queryNative(Integer.class, "SELECT SUM(count) FROM aux.card_counter");
+		int total = DAO.queryNative(Integer.class, "SELECT SUM(count) FROM v_card_counter");
 		Pair<Integer, Integer> count = kp.countCards();
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/kawaipon_collection", event.user().getName()))

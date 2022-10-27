@@ -16,21 +16,9 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE TABLE IF NOT EXISTS aux.card_counter
-(
-    anime_id VARCHAR NOT NULL PRIMARY KEY,
-    count    INT     NOT NULL
-);
-
-CREATE OR REPLACE VIEW aux.v_card_counter AS
+CREATE OR REPLACE VIEW v_card_counter AS
 SELECT anime_id
      , COUNT(1) AS count
 FROM card
 WHERE get_rarity_index(rarity) < 6
 GROUP BY anime_id;
-
-INSERT INTO aux.card_counter (anime_id, count)
-SELECT anime_id
-     , count
-FROM aux.v_card_counter
-ON CONFLICT DO NOTHING;

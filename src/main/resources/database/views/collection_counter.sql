@@ -16,16 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE TABLE IF NOT EXISTS aux.collection_counter
-(
-    uid      VARCHAR NOT NULL,
-    anime_id VARCHAR NOT NULL,
-    normal   INT     NOT NULL,
-    chrome   INT     NOT NULL,
-    PRIMARY KEY (uid, anime_id)
-);
-
-CREATE OR REPLACE VIEW aux.v_collection_counter AS
+CREATE OR REPLACE VIEW v_collection_counter AS
 SELECT kc.kawaipon_uid
      , c.anime_id
      , COUNT(1) FILTER (WHERE NOT kc.chrome) AS normal
@@ -34,11 +25,3 @@ FROM kawaipon_card kc
          INNER JOIN card c ON c.id = kc.card_id
 WHERE kc.stash_entry IS NULL
 GROUP BY kc.kawaipon_uid, c.anime_id;
-
-INSERT INTO aux.collection_counter (uid, anime_id, normal, chrome)
-SELECT kawaipon_uid
-     , anime_id
-     , normal
-     , chrome
-FROM aux.v_collection_counter
-ON CONFLICT DO NOTHING;
