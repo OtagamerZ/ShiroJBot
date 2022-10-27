@@ -742,9 +742,10 @@ public class Hand {
 			}
 
 			if (!ally) {
-				g2d.setClip(userDeck.getStyling().getFrame().getBoundary());
-				g2d.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), x, bi.getHeight() - 350, null);
-				g2d.setClip(null);
+				Graph.applyTransformed(g2d, x, bi.getHeight() - 350, g -> {
+					g2d.setClip(userDeck.getStyling().getFrame().getBoundary());
+					g2d.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
+				});
 			}
 		}
 
