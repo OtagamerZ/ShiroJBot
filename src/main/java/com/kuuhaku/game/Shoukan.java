@@ -1119,6 +1119,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 					h.getRealDeck().add(JSONUtils.fromJSON(jo.toString(), klass));
 				}
+
+				h.getGraveyard().clear();
+				JSONArray graveyard = new JSONArray(IO.uncompress(p.graveyard()));
+				for (Object o : graveyard) {
+					JSONObject jo = new JSONObject(o);
+					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
+
+					h.getGraveyard().add(JSONUtils.fromJSON(jo.toString(), klass));
+				}
 			}
 
 			for (Map.Entry<Side, List<SlotColumn>> entry : getArena().getSlots().entrySet()) {
