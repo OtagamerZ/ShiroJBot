@@ -794,7 +794,7 @@ public class Hand {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 350, null);
+			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 450, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
