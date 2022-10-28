@@ -213,7 +213,7 @@ public class Arena implements Renderer {
 				});
 			}
 
-			Graph.applyTransformed(g1, MARGIN.x - 15, -15, g2 -> {
+			Graph.applyTransformed(g1, MARGIN.x, -15, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
@@ -234,7 +234,7 @@ public class Arena implements Renderer {
 				}
 			});
 
-			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x - 15, -15, g2 -> {
+			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, -15, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
 					Drawable<?> d = top.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, top.getUserDeck()),
