@@ -196,7 +196,7 @@ public class Arena implements Renderer {
 
 										for (int i = 0; i < s.getEquipments().size(); i++) {
 											g3.drawImage(s.getEquipments().get(i).render(locale, deck),
-													20 + middle + (resized.width - 10) * (i - 1), 0,
+													15 + middle + (resized.width - 5) * (i - 1), 0,
 													resized.width, resized.height,
 													null
 											);
