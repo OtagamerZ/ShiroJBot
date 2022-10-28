@@ -213,11 +213,11 @@ public class Arena implements Renderer {
 				});
 			}
 
-			Graph.applyTransformed(g1, MARGIN.x, CENTER.y - 350 / 2, g2 -> {
+			Graph.applyTransformed(g1, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
-							0, -(Drawable.SIZE.height + MARGIN.y), null
+							0, -(350 + MARGIN.y), null
 					);
 				}
 				if (!banned.isEmpty()) {
@@ -229,16 +229,16 @@ public class Arena implements Renderer {
 				if (!bottom.getGraveyard().isEmpty()) {
 					Drawable<?> d = bottom.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, bottom.getUserDeck()),
-							0, Drawable.SIZE.height + MARGIN.y, null
+							0, 350 + MARGIN.y, null
 					);
 				}
 			});
 
-			Graph.applyTransformed(g1, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - 350 / 2, g2 -> {
+			Graph.applyTransformed(g1, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
 					Drawable<?> d = top.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, top.getUserDeck()),
-							0, -(Drawable.SIZE.height + MARGIN.y), null
+							0, -(350 + MARGIN.y), null
 					);
 				}
 				if (!getField().getId().equals("DEFAULT")) {
@@ -249,7 +249,7 @@ public class Arena implements Renderer {
 				if (!bottom.getRealDeck().isEmpty()) {
 					Deck d = bottom.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
-							0, Drawable.SIZE.height + MARGIN.y, null
+							0, 350 + MARGIN.y, null
 					);
 				}
 			});
