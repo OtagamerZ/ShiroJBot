@@ -341,6 +341,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				));
 			}
 
+			stats.popFlag(Flag.EMPOWERED);
 			return true;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);

@@ -714,6 +714,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				));
 			}
 
+			stats.popFlag(Flag.EMPOWERED);
 			return true;
 		} catch (ActivationException e) {
 			return false;
