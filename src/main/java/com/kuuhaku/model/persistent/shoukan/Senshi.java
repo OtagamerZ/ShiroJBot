@@ -538,61 +538,61 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isSleeping() {
-		return !isStunned() && Bit.on(state, 2, 4);
+		return !isStunned() && Bit.on(state, 3, 4);
 	}
 
 	public void setSleep(int time) {
-		int curr = Bit.get(state, 2, 4);
-		state = Bit.set(state, 2, Math.max(curr, time), 4);
-	}
-
-	public void reduceSleep(int time) {
-		int curr = Bit.get(state, 2, 4);
-		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
-	}
-
-	public boolean isStunned() {
-		return !isStasis() && Bit.on(state, 3, 4);
-	}
-
-	public void setStun(int time) {
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(curr, time), 4);
 	}
 
-	public void reduceStun(int time) {
+	public void reduceSleep(int time) {
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
 	}
 
-	public boolean isStasis() {
-		return Bit.on(state, 4, 4);
+	public boolean isStunned() {
+		return !isStasis() && Bit.on(state, 4, 4);
 	}
 
-	public void setStasis(int time) {
+	public void setStun(int time) {
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(curr, time), 4);
 	}
 
-	public void reduceStasis(int time) {
+	public void reduceStun(int time) {
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(0, curr - time), 4);
 	}
 
-	@Override
-	public int getCooldown() {
-		return Bit.get(state, 5, 4);
+	public boolean isStasis() {
+		return Bit.on(state, 5, 4);
 	}
 
-	@Override
-	public void setCooldown(int time) {
+	public void setStasis(int time) {
 		int curr = Bit.get(state, 5, 4);
 		state = Bit.set(state, 5, Math.max(curr, time), 4);
 	}
 
-	public void reduceCooldown(int time) {
+	public void reduceStasis(int time) {
 		int curr = Bit.get(state, 5, 4);
 		state = Bit.set(state, 5, Math.max(0, curr - time), 4);
+	}
+
+	@Override
+	public int getCooldown() {
+		return Bit.get(state, 6, 4);
+	}
+
+	@Override
+	public void setCooldown(int time) {
+		int curr = Bit.get(state, 6, 4);
+		state = Bit.set(state, 6, Math.max(curr, time), 4);
+	}
+
+	public void reduceCooldown(int time) {
+		int curr = Bit.get(state, 6, 4);
+		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
 	}
 
 	@Override
@@ -795,7 +795,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		byte base = 0b11;
-		base = (byte) Bit.set(base, 5, isSealed());
+		base = (byte) Bit.set(base, 4, isSealed());
 
 		state = base;
 	}
