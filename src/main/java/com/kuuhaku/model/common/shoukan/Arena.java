@@ -217,7 +217,7 @@ public class Arena implements Renderer {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
-							0, -(350 + MARGIN.y), null
+							0, -(Drawable.SIZE.height + MARGIN.y), null
 					);
 				}
 				if (!banned.isEmpty()) {
