@@ -170,11 +170,11 @@ public class Arena implements Renderer {
 						int equips, frontline, backline;
 
 						if (side == Side.TOP) {
-							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4;
+							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 15;
 							frontline = 350 + MARGIN.y - 15;
 							backline = -15;
 						} else {
-							equips = -350 / 3 - MARGIN.y / 4;
+							equips = -350 / 3 - MARGIN.y / 4 - 15;
 							frontline = -15;
 							backline = 350 + MARGIN.y - 15;
 						}
@@ -196,7 +196,7 @@ public class Arena implements Renderer {
 
 										for (int i = 0; i < s.getEquipments().size(); i++) {
 											g3.drawImage(s.getEquipments().get(i).render(locale, deck),
-													middle + (resized.width + 5) * (i - 1), 0,
+													middle + resized.width * (i - 1), 0,
 													resized.width, resized.height,
 													null
 											);
