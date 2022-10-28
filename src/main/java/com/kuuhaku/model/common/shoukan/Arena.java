@@ -316,9 +316,11 @@ public class Arena implements Renderer {
 		g2d.drawLine(0, slotHeight, bi.getWidth(), slotHeight);
 
 		int y = 0;
-		for (List<SlotColumn> side : slots.values()) {
-			for (int x = 0; x < side.size(); x++) {
-				Senshi s = side.get(x).getTop();
+		for (Side side : Side.values()) {
+			List<SlotColumn> slts = slots.get(side);
+
+			for (int x = 0; x < slts.size(); x++) {
+				Senshi s = slts.get(x).getTop();
 				if (s != null) {
 					List<Evogear> equips = s.getEquipments();
 					for (int i = 0; i < 3; i++) {
