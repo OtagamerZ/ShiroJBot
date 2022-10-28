@@ -352,7 +352,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public double getPower() {
-		return 1 + sum(power);
+		return 1 + sum(power) * (hasFlag(Flag.EMPOWERED) ? 2 : 1);
 	}
 
 	public void setPower(double power) {
