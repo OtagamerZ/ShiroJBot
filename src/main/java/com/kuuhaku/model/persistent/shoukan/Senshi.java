@@ -844,13 +844,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (!stats.getWrite().isBlank()) {
 			String val = String.valueOf(stats.getWrite());
 			g2d.setColor(Color.ORANGE);
-			g2d.setFont(Drawable.FONT);
+			g2d.setFont(Drawable.FONT.deriveFont(15f));
 			Graph.drawOutlinedString(g2d, val, 25, 49 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 		}
 
-		card.drawCosts(g2d);
-		if (!isSupporting() && !stats.hasFlag(Flag.HIDE_STATS)) {
-			card.drawAttributes(g2d, !desc.isEmpty());
+		if (!stats.hasFlag(Flag.HIDE_STATS)) {
+			card.drawCosts(g2d);
+			if (!isSupporting()) {
+				card.drawAttributes(g2d, !desc.isEmpty());
+			}
 		}
 
 		if (!isAvailable()) {

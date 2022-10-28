@@ -19,22 +19,39 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum Flag {
-	NO_DEATH,   // Cannot die
-	NO_EQUIP,   // Cannot receive equipment stats
-	NO_CONVERT, // Cannot be converted
-	NO_COMBAT,  // Cannot attack
-	NO_EFFECT,  // Cannot activate effect
-	NO_DAMAGE,  // Does not take damage from combat
+	/** Cannot die **/
+	NO_DEATH,
+	/** Cannot receive equipment stats **/
+	NO_EQUIP,
+	/** Cannot be converted **/
+	NO_CONVERT,
+	/** Cannot attack **/
+	NO_COMBAT,
+	/** Cannot activate effect **/
+	NO_EFFECT,
+	/** Does not take damage from combat **/
+	NO_DAMAGE,
 
-	IGNORE_EQUIP,  // Ignores target equipment stats
-	IGNORE_FIELD,  // Ignores field modifiers (NO AUTO)
-	IGNORE_COMBAT, // Cannot be attacked
-	IGNORE_EFFECT, // Cannot be targeted by effects
 
-	HIDE_STATS,  // Stats are hidden (NO AUTO)
-	BLIND,		 // Hit chance is reduced by 25%
-	TRUE_STRIKE, // Will hit
-	TRUE_DODGE,  // Will dodge
-	TRUE_BLOCK,  // Will block
-	DIRECT,      // Can attack directly regardless of remaining cards
+	/** Ignores target equipment stats **/
+	IGNORE_EQUIP,
+	/** Ignores field modifiers (NO AUTO) **/
+	IGNORE_FIELD,
+	/** Cannot be attacked **/
+	IGNORE_COMBAT,
+	/** Cannot be targeted by effects **/
+	IGNORE_EFFECT,
+
+	/** Stats are hidden (NO AUTO) **/
+	HIDE_STATS,
+	/** Hit chance is reduced by 25% **/
+	BLIND,
+	/** Will hit **/
+	TRUE_STRIKE,
+	/** Will dodge **/
+	TRUE_DODGE,
+	/** Will block **/
+	TRUE_BLOCK,
+	/** Can attack directly regardless of remaining cards **/
+	DIRECT,
 }
