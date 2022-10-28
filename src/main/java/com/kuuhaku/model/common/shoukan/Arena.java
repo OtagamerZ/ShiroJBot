@@ -170,11 +170,11 @@ public class Arena implements Renderer {
 						int equips, frontline, backline;
 
 						if (side == Side.TOP) {
-							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 15;
+							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
 							frontline = 350 + MARGIN.y - 15;
 							backline = -15;
 						} else {
-							equips = -350 / 3 - MARGIN.y / 4 - 15;
+							equips = -350 / 3 - MARGIN.y / 4 - 5;
 							frontline = -15;
 							backline = 350 + MARGIN.y - 15;
 						}
