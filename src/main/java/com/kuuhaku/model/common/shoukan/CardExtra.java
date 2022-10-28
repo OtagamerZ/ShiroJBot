@@ -115,7 +115,7 @@ public class CardExtra implements Cloneable {
 				EnumSet.noneOf(Flag.class),
 				new JSONObject(),
 				new JSONObject(),
-				ListOrderedSet.listOrderedSet(BondedList.withCheck(s -> s != null && s.isBlank()))
+				ListOrderedSet.listOrderedSet(BondedList.withCheck(s -> s != null && !s.isBlank()))
 		);
 	}
 
