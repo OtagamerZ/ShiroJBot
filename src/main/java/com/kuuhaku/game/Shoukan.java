@@ -84,8 +84,8 @@ public class Shoukan extends GameInstance<Phase> {
 	private final I18N locale;
 	private final ShoukanParams params;
 	private final String[] players;
-	private final Map<Side, Hand> hands;
 	private final Arena arena;
+	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new TreeSet<>();
 	private final Map<Drawable<?>, JSONObject> data = new HashMap<>();
