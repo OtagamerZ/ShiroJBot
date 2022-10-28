@@ -802,16 +802,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		DeckStyling style = deck.getStyling();
-		if (isFlipped()) return style.getFrame().getBack(deck);
-
-		Senshi card = Utils.getOr(stats.getDisguise(), this);
-		String desc = card.getDescription(locale);
-
-		BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		DeckStyling style = deck.getStyling();
+		if (isFlipped()) {
+			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+			g2d.dispose();
+
+			return out;
+		}
+
+		Senshi card = Utils.getOr(stats.getDisguise(), this);
+		String desc = card.getDescription(locale);
+		BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
 
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			g1.setClip(style.getFrame().getBoundary());

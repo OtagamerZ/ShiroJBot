@@ -166,11 +166,19 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		DeckStyling style = deck.getStyling();
-		BufferedImage img = getVanity().drawCardNoBorder(false);
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		DeckStyling style = deck.getStyling();
+		if (isFlipped()) {
+			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+			g2d.dispose();
+
+			return out;
+		}
+
+		BufferedImage img = getVanity().drawCardNoBorder(false);
 
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			g1.setClip(style.getFrame().getBoundary());

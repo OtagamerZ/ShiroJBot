@@ -405,15 +405,20 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
-		DeckStyling style = deck.getStyling();
-		if (isFlipped()) return style.getFrame().getBack(deck);
-
-		String desc = getDescription(locale);
-
-		BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		DeckStyling style = deck.getStyling();
+		if (isFlipped()) {
+			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+			g2d.dispose();
+
+			return out;
+		}
+
+		String desc = getDescription(locale);
+		BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
 
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			g1.setClip(style.getFrame().getBoundary());
