@@ -318,9 +318,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 
 		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
-		if (!hasEffect()) return false;
-		else if (isSpell() && ep.trigger() != ON_ACTIVATE) return false;
-		else if (!isSpell() && !effect.contains(ep.trigger().name())) return false;
+		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name()))) return false;
 
 		try {
 			if (isSpell()) {
