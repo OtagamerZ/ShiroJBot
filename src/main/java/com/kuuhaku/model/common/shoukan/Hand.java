@@ -65,20 +65,23 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>(Objects::nonNull, d -> {
-		d.setHand(this);
-		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
+	private final List<Drawable<?>> cards = new BondedList<>(
+			d -> d != null && !getGame().getArena().getBanned().contains(this),
+			d -> {
+				d.setHand(this);
+				getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getCards().addAll(s.getEquipments());
-		} else if (d instanceof Evogear e && e.getEquipper() != null) {
-			e.getEquipper().getEquipments().remove(e);
-		}
+				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+					getCards().addAll(s.getEquipments());
+				} else if (d instanceof Evogear e && e.getEquipper() != null) {
+					e.getEquipper().getEquipments().remove(e);
+				}
 
-		d.setSlot(null);
-	});
+				d.setSlot(null);
+			}
+	);
 	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(
-			d -> d != null && d.keepOnDestroy(),
+			d -> d != null && d.keepOnDestroy() && !getGame().getArena().getBanned().contains(this),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
@@ -94,7 +97,7 @@ public class Hand {
 	);
 	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
 			d -> {
-				if (d == null || !d.keepOnDestroy()) return false;
+				if (d == null || !d.keepOnDestroy() || getGame().getArena().getBanned().contains(this)) return false;
 
 				if (d instanceof Senshi s) {
 					Evogear ward = null;
@@ -142,7 +145,7 @@ public class Hand {
 			}
 	);
 	private final List<Drawable<?>> discard = new BondedList<>(
-			d -> d != null && d.keepOnDestroy(),
+			d -> d != null && d.keepOnDestroy() && !getGame().getArena().getBanned().contains(this),
 			d -> {
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
