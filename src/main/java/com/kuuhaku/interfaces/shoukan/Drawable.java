@@ -212,7 +212,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 				if (this instanceof Senshi s && s.isBlinded()) {
 					g2d.setColor(Color.LIGHT_GRAY);
-					Graph.drawOutlinedString(g2d, "*", x + icon.getWidth() + 5 + m.stringWidth(val), y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+					Graph.drawOutlinedString(g2d, "*", x + icon.getWidth() + 6 + m.stringWidth(val), y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 				}
 
 				y -= icon.getHeight() + 5;
