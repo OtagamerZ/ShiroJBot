@@ -170,13 +170,13 @@ public class Arena implements Renderer {
 						int equips, frontline, backline;
 
 						if (side == Side.TOP) {
-							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4;
-							frontline = 350 + MARGIN.y;
-							backline = 0;
+							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 15;
+							frontline = 350 + MARGIN.y - 15;
+							backline = -15;
 						} else {
-							equips = -350 / 3 - MARGIN.y / 4;
-							frontline = 0;
-							backline = 350 + MARGIN.y;
+							equips = -350 / 3 - MARGIN.y / 4 - 15;
+							frontline = -15;
+							backline = 350 + MARGIN.y - 15;
 						}
 
 						if (slot.isLocked()) {
@@ -189,18 +189,9 @@ public class Arena implements Renderer {
 
 								g2.drawImage(s.render(locale, deck), x, frontline, null);
 
-								double mult = s.getFieldMult(getField());
-								BufferedImage indicator = null;
-								if (mult > 1) {
-									indicator = IO.getResourceAsImage("kawaipon/frames/" + (style.getFrame().isLegacy() ? "old" : "new") + "/buffed.png");
-								} else if (mult < 1) {
-									indicator = IO.getResourceAsImage("kawaipon/frames/" + (style.getFrame().isLegacy() ? "old" : "new") + "/nerfed.png");
-								}
-								g2.drawImage(indicator, x - 15, frontline - 15, null);
-
 								if (!s.getEquipments().isEmpty()) {
 									Graph.applyTransformed(g2, x, equips, g3 -> {
-										Dimension resized = new Dimension(225 / 3, 350 / 3);
+										Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
 										int middle = 225 / 2 - resized.width / 2;
 
 										for (int i = 0; i < s.getEquipments().size(); i++) {
@@ -222,7 +213,7 @@ public class Arena implements Renderer {
 				});
 			}
 
-			Graph.applyTransformed(g1, MARGIN.x, 0, g2 -> {
+			Graph.applyTransformed(g1, MARGIN.x - 15, -15, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
@@ -243,7 +234,7 @@ public class Arena implements Renderer {
 				}
 			});
 
-			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
+			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x - 15, -15, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
 					Drawable<?> d = top.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, top.getUserDeck()),

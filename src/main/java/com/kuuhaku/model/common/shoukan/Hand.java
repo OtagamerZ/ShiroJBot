@@ -723,7 +723,7 @@ public class Hand {
 	}
 
 	public BufferedImage render(I18N locale, boolean ally) {
-		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 480, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
@@ -733,7 +733,7 @@ public class Hand {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 350, null);
+			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 380, null);
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
@@ -742,10 +742,17 @@ public class Hand {
 			}
 
 			if (!ally) {
-				Graph.applyTransformed(g2d, x, bi.getHeight() - 350, g -> {
+				Graph.applyTransformed(g2d, x, bi.getHeight() - 380, g -> {
 					g.setClip(userDeck.getStyling().getFrame().getBoundary());
 					g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 				});
+			}
+
+			if ((d instanceof Senshi s && s.getStats().hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.getStats().hasFlag(Flag.EMPOWERED))) {
+				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
+				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+
+				g2d.drawImage(emp, x, bi.getHeight() - 380, null);
 			}
 		}
 

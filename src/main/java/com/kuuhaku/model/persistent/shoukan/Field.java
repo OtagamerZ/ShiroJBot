@@ -168,52 +168,54 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	public BufferedImage render(I18N locale, Deck deck) {
 		DeckStyling style = deck.getStyling();
 		BufferedImage img = getVanity().drawCardNoBorder(false);
-		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		g2d.setClip(style.getFrame().getBoundary());
-		g2d.drawImage(img, 0, 0, null);
-		g2d.setClip(null);
+		Graph.applyTransformed(g2d, 15, 15, g1 -> {
+			g1.setClip(style.getFrame().getBoundary());
+			g1.drawImage(img, 0, 0, null);
+			g1.setClip(null);
 
-		g2d.drawImage(style.getFrame().getFront(false), 0, 0, null);
+			g1.drawImage(style.getFrame().getFront(false), 0, 0, null);
 
-		g2d.setFont(FONT);
-		g2d.setColor(style.getFrame().getPrimaryColor());
-		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
-		Graph.drawOutlinedString(g2d, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+			g1.setFont(FONT);
+			g1.setColor(style.getFrame().getPrimaryColor());
+			String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
+			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-		if (type != FieldType.NONE) {
-			BufferedImage icon = type.getIcon();
-			assert icon != null;
+			if (type != FieldType.NONE) {
+				BufferedImage icon = type.getIcon();
+				assert icon != null;
 
-			g2d.drawImage(icon, 200 - icon.getWidth(), 55, null);
-		}
+				g1.drawImage(icon, 200 - icon.getWidth(), 55, null);
+			}
 
-		g2d.setFont(FONT);
-		FontMetrics m = g2d.getFontMetrics();
+			g1.setFont(FONT);
+			FontMetrics m = g1.getFontMetrics();
 
-		int i = 0;
-		for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
-			Race r = Race.valueOf(entry.getKey());
-			double mod = (double) entry.getValue();
-			if (mod == 0) continue;
+			int i = 0;
+			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
+				Race r = Race.valueOf(entry.getKey());
+				double mod = (double) entry.getValue();
+				if (mod == 0) continue;
 
-			int y = 279 - 25 * i++;
+				int y = 279 - 25 * i++;
 
-			BufferedImage icon = r.getIcon();
-			g2d.drawImage(icon, 23, y, null);
-			g2d.setColor(r.getColor());
-			Graph.drawOutlinedString(g2d, Utils.sign((int) (mod * 100)) + "%",
-					23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
-					BORDER_WIDTH, Color.BLACK
-			);
-		}
+				BufferedImage icon = r.getIcon();
+				g1.drawImage(icon, 23, y, null);
+				g1.setColor(r.getColor());
+				Graph.drawOutlinedString(g1, Utils.sign((int) (mod * 100)) + "%",
+						23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
+						BORDER_WIDTH, Color.BLACK
+				);
+			}
 
-		if (!isAvailable()) {
-			RescaleOp op = new RescaleOp(0.5f, 0, null);
-			op.filter(out, out);
-		}
+			if (!isAvailable()) {
+				RescaleOp op = new RescaleOp(0.5f, 0, null);
+				op.filter(out, out);
+			}
+		});
 
 		g2d.dispose();
 

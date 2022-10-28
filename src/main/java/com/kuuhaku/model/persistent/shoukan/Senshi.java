@@ -808,66 +808,91 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		String desc = card.getDescription(locale);
 
 		BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
-		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		g2d.setClip(style.getFrame().getBoundary());
-		g2d.drawImage(img, 0, 0, null);
-		g2d.setClip(null);
+		Graph.applyTransformed(g2d, 15, 15, g1 -> {
+			g1.setClip(style.getFrame().getBoundary());
+			g1.drawImage(img, 0, 0, null);
+			g1.setClip(null);
 
-		g2d.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-		g2d.drawImage(card.getRace().getIcon(), 190, 12, null);
+			g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+			g1.drawImage(card.getRace().getIcon(), 190, 12, null);
 
-		g2d.setFont(FONT);
-		g2d.setColor(style.getFrame().getPrimaryColor());
-		String name = Graph.abbreviate(g2d, card.getVanity().getName(), MAX_NAME_WIDTH);
-		Graph.drawOutlinedString(g2d, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+			g1.setFont(FONT);
+			g1.setColor(style.getFrame().getPrimaryColor());
+			String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
+			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-		if (!desc.isEmpty()) {
-			g2d.setColor(style.getFrame().getSecondaryColor());
-			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+			if (!desc.isEmpty()) {
+				g1.setColor(style.getFrame().getSecondaryColor());
+				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
-			int y = 276;
-			String tags = card.processTags(locale);
-			if (tags != null) {
-				g2d.drawString(tags, 7, 275);
-				y += 11;
+				int y = 276;
+				String tags = card.processTags(locale);
+				if (tags != null) {
+					g1.drawString(tags, 7, 275);
+					y += 11;
+				}
+
+				Graph.drawMultilineString(g1, desc,
+						7, y, 211, 3,
+						card.parseValues(g1, deck, this), card.highlightValues(g1, style.getFrame().isLegacy())
+				);
 			}
 
-			Graph.drawMultilineString(g2d, desc,
-					7, y, 211, 3,
-					card.parseValues(g2d, deck, this), card.highlightValues(g2d, style.getFrame().isLegacy())
-			);
-		}
-
-		if (!stats.getWrite().isBlank()) {
-			String val = String.valueOf(stats.getWrite());
-			g2d.setColor(Color.ORANGE);
-			g2d.setFont(Drawable.FONT.deriveFont(15f));
-			Graph.drawOutlinedString(g2d, val, 25, 49 + (23 + g2d.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
-		}
-
-		if (!stats.hasFlag(Flag.HIDE_STATS)) {
-			card.drawCosts(g2d);
-			if (!isSupporting()) {
-				card.drawAttributes(g2d, !desc.isEmpty());
+			if (!stats.getWrite().isBlank()) {
+				String val = String.valueOf(stats.getWrite());
+				g1.setColor(Color.ORANGE);
+				g1.setFont(Drawable.FONT.deriveFont(15f));
+				Graph.drawOutlinedString(g1, val, 25, 49 + (23 + g1.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 			}
-		}
 
-		if (!isAvailable()) {
-			RescaleOp op = new RescaleOp(0.5f, 0, null);
-			op.filter(out, out);
-		}
+			if (!stats.hasFlag(Flag.HIDE_STATS)) {
+				card.drawCosts(g1);
+				if (!isSupporting()) {
+					card.drawAttributes(g1, !desc.isEmpty());
+				}
+			}
 
-		if (isStasis()) {
-			g2d.drawImage(IO.getResourceAsImage("shoukan/states/stasis.png"), 0, 0, null);
-		} else if (isStunned()) {
-			g2d.drawImage(IO.getResourceAsImage("shoukan/states/stun.png"), 0, 0, null);
-		} else if (isSleeping()) {
-			g2d.drawImage(IO.getResourceAsImage("shoukan/states/sleep.png"), 0, 0, null);
-		} else if (isDefending()) {
-			g2d.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
+			if (!isAvailable()) {
+				RescaleOp op = new RescaleOp(0.5f, 0, null);
+				op.filter(out, out);
+			}
+
+			if (isStasis()) {
+				g1.drawImage(IO.getResourceAsImage("shoukan/states/stasis.png"), 0, 0, null);
+			} else if (isStunned()) {
+				g1.drawImage(IO.getResourceAsImage("shoukan/states/stun.png"), 0, 0, null);
+			} else if (isSleeping()) {
+				g1.drawImage(IO.getResourceAsImage("shoukan/states/sleep.png"), 0, 0, null);
+			} else if (isDefending()) {
+				g1.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
+			}
+		});
+
+		if (hand != null) {
+			boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+			String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
+
+			if (stats.hasFlag(Flag.EMPOWERED)) {
+				BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
+
+				g2d.drawImage(emp, 0, 0, null);
+			}
+
+			double mult = getFieldMult(hand.getGame().getArena().getField());
+			if (mult != 1) {
+				BufferedImage indicator = null;
+				if (mult > 1) {
+					indicator = IO.getResourceAsImage(path + "/buffed.png");
+				} else if (mult < 1) {
+					indicator = IO.getResourceAsImage(path + "/nerfed.png");
+				}
+
+				g2d.drawImage(indicator, 0, 0, null);
+			}
 		}
 
 		g2d.dispose();
