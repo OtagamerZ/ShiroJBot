@@ -304,7 +304,7 @@ public class Arena implements Renderer {
 	}
 
 	public BufferedImage renderEvogears(I18N locale) {
-		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * 3 * 5, Drawable.SIZE.height * 2 + 100, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * 3 * 5 + 30, Drawable.SIZE.height * 2 + 100, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
