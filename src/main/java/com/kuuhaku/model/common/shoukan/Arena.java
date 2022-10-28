@@ -166,7 +166,7 @@ public class Arena implements Renderer {
 
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
-						int x = (225 + MARGIN.x) * slot.getIndex();
+						int x = (225 + MARGIN.x) * slot.getIndex() - 15;
 						int equips, frontline, backline;
 
 						if (side == Side.TOP) {
@@ -223,7 +223,7 @@ public class Arena implements Renderer {
 				if (!banned.isEmpty()) {
 					Drawable<?> d = banned.getLast();
 					g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
-							0, 0, null
+							-15, 0, null
 					);
 				}
 				if (!bottom.getGraveyard().isEmpty()) {
@@ -243,7 +243,7 @@ public class Arena implements Renderer {
 				}
 				if (!getField().getId().equals("DEFAULT")) {
 					g2.drawImage(getField().render(locale, Utils.getOr(() -> getField().getHand().getUserDeck(), Deck.INSTANCE)),
-							0, 0, null
+							15, 0, null
 					);
 				}
 				if (!bottom.getRealDeck().isEmpty()) {
