@@ -323,7 +323,11 @@ public class Arena implements Renderer {
 					List<Evogear> equips = s.getEquipments();
 					for (int i = 0; i < 3; i++) {
 						if (i < equips.size()) {
-							g2d.drawImage(equips.get(i).render(locale, s.getHand().getUserDeck()), 5 + 235 * (x + i), 450 * y, null);
+							g2d.drawImage(equips.get(i).render(locale, s.getHand().getUserDeck()),
+									5 + (Drawable.SIZE.width + 10) * (x + i),
+									(Drawable.SIZE.height + 100) * y,
+									null
+							);
 						}
 					}
 				}
