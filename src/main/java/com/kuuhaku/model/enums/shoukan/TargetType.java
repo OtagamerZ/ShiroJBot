@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum TargetType {
-	NONE, ALLY, ENEMY, BOTH;
+	NONE, ALLY, ENEMY, BOTH
 }

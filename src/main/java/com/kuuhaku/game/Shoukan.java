@@ -1540,6 +1540,19 @@ public class Shoukan extends GameInstance<Phase> {
 		return slts;
 	}
 
+	public boolean putAtOpenSlot(Side side, boolean top, Senshi card) {
+		List<SlotColumn> slts = getOpenSlots(side, top);
+		if (slts.isEmpty()) return false;
+
+		if (top) {
+			slts.get(0).setTop(card);
+		} else {
+			slts.get(0).setBottom(card);
+		}
+
+		return true;
+	}
+
 	public String getString(String key, Object... params) {
 		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
 		if (str != null) {
