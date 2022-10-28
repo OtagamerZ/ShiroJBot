@@ -229,7 +229,7 @@ public class Arena implements Renderer {
 				if (!bottom.getGraveyard().isEmpty()) {
 					Drawable<?> d = bottom.getGraveyard().getLast();
 					g2.drawImage(d.render(locale, bottom.getUserDeck()),
-							-15, -15 + 350 + MARGIN.y, null
+							0, 15 + 350 + MARGIN.y, null
 					);
 				}
 			});
@@ -249,7 +249,7 @@ public class Arena implements Renderer {
 				if (!bottom.getRealDeck().isEmpty()) {
 					Deck d = bottom.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
-							-15, -15 + 350 + MARGIN.y, null
+							0, 15 + 350 + MARGIN.y, null
 					);
 				}
 			});
