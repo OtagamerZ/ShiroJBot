@@ -54,6 +54,6 @@ public enum Flag {
 	TRUE_BLOCK,
 	/** Can attack directly regardless of remaining cards **/
 	DIRECT,
-	/** Effect has double power and targets nearby cards **/
+	/** Effect has 50% more power and targets nearby cards **/
 	EMPOWERED
 }

@@ -182,6 +182,14 @@ public class SlotColumn {
 		return Arrays.asList(getTop(), getBottom());
 	}
 
+	public Senshi getAtRole(boolean support) {
+		return support ? bottom : top;
+	}
+
+	public Senshi getUnblocked() {
+		return hasTop() ? top : bottom;
+	}
+
 	public void replace(Senshi card, Senshi with) {
 		if (Objects.equals(card, getTop())) {
 			setTop(with);
