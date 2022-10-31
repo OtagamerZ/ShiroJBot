@@ -831,7 +831,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
 			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-			if (!desc.isEmpty()) {
+			if (!desc.isEmpty() && !isSealed()) {
 				g1.setColor(style.getFrame().getSecondaryColor());
 				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 

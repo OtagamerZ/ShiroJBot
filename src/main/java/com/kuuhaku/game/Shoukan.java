@@ -672,6 +672,9 @@ public class Shoukan extends GameInstance<Phase> {
 		} else if (!chosen.getEffect().contains(ON_ACTIVATE.name())) {
 			getChannel().sendMessage(locale.get("error/card_no_special")).queue();
 			return false;
+		} else if (chosen.isSealed()) {
+			getChannel().sendMessage(locale.get("error/card_sealed")).queue();
+			return false;
 		}
 
 		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting", TargetType.NONE);
