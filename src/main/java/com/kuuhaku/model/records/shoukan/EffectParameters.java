@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
+import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.TargetType;
@@ -69,23 +70,32 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 	}
 
 	public Target[] allies() {
-		return Arrays.stream(targets)
+		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == TargetType.ALLY)
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
+
+		if (out.length == 0) throw new ActivationException();
+		return out;
 	}
 
 
 	public Target[] enemies() {
-		return Arrays.stream(targets)
+		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
+
+		if (out.length == 0) throw new ActivationException();
+		return out;
 	}
 
 	public Target[] slots(TargetType type) {
-		return Arrays.stream(targets)
+		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == type)
 				.toArray(Target[]::new);
+
+		if (out.length == 0) throw new ActivationException();
+		return out;
 	}
 }
