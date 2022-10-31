@@ -1314,13 +1314,15 @@ public class Shoukan extends GameInstance<Phase> {
 				trigger(ON_WIN, side.getOther());
 				trigger(ON_DEFEAT, side);
 
-				if (hand.getHP() > 0) continue;
-				else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
-					hand.setHP(1);
-					hand.setDefeat(null);
-					hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
-					hand.setOriginCooldown(4);
-					continue;
+				if (hand.getDefeat() == null) {
+					if (hand.getHP() > 0) continue;
+					else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
+						hand.setHP(1);
+						hand.setDefeat(null);
+						hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
+						hand.setOriginCooldown(4);
+						continue;
+					}
 				}
 
 				restoring = true;
