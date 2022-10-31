@@ -1021,7 +1021,7 @@ public class Shoukan extends GameInstance<Phase> {
 				you.modHP(-(pHP - op.getHP()) * thorns / 100);
 			}
 			if (lifesteal > 0) {
-				you.modHP((pHP - op.getHP()) * lifesteal / 100);
+				you.getRegDeg().add(new Regen(pHP - op.getHP() * lifesteal / 100, 0.1));
 			}
 
 			if (you.getOrigin().synergy() == Race.LICH) {
