@@ -75,11 +75,6 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 				.toArray(Target[]::new);
 	}
 
-	public Target[] aSlots() {
-		return Arrays.stream(targets)
-				.filter(t -> t.index() > -1 && t.type() == TargetType.ALLY)
-				.toArray(Target[]::new);
-	}
 
 	public Target[] enemies() {
 		return Arrays.stream(targets)
@@ -88,9 +83,9 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 				.toArray(Target[]::new);
 	}
 
-	public Target[] eSlots() {
+	public Target[] slots(TargetType type) {
 		return Arrays.stream(targets)
-				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
+				.filter(t -> t.index() > -1 && t.type() == type)
 				.toArray(Target[]::new);
 	}
 }
