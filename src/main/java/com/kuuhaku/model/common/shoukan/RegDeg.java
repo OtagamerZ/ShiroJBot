@@ -47,6 +47,17 @@ public class RegDeg {
 		}
 	}
 
+	public void leftShift(Number[] number) {
+		int value = number[0].intValue();
+		double mult = number[1].doubleValue();
+
+		if (value < 0) {
+			add(new Degen(-value, mult));
+		} else if (value > 0) {
+			add(new Regen(value, mult));
+		}
+	}
+
 	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {
 		if (val == 0) return 0;
 
