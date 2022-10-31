@@ -37,6 +37,14 @@ public class RegDeg {
 		add(vot);
 	}
 
+	public void leftShift(int value) {
+		if (value < 0) {
+			add(new Degen(-value, 0.1));
+		} else if (value > 0) {
+			add(new Regen(value, 0.1));
+		}
+	}
+
 	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {
 		if (val == 0) return 0;
 

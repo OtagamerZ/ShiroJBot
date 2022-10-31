@@ -27,7 +27,7 @@ public abstract class ValueOverTime {
 	private int value;
 
 	public ValueOverTime(int value, double multiplier) {
-		this.baseValue = this.value = value;
+		this.baseValue = this.value = Math.max(0, value);
 		this.multiplier = Utils.clamp(multiplier, 0, 1);
 	}
 
