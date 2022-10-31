@@ -69,14 +69,24 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 	}
 
 	public Target[] allies() {
+		return allies(true);
+	}
+
+	public Target[] allies(boolean includeNulls) {
 		return Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == TargetType.ALLY)
+				.filter(t -> t.card() == null == includeNulls)
 				.toArray(Target[]::new);
 	}
 
 	public Target[] enemies() {
+		return enemies(true);
+	}
+
+	public Target[] enemies(boolean includeNulls) {
 		return Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
+				.filter(t -> t.card() == null == includeNulls)
 				.toArray(Target[]::new);
 	}
 }
