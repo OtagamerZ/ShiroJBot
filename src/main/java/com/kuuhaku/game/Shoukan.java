@@ -899,8 +899,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (i == 0) {
-					combat:
-					if (enemy != null) {
+					if (enemy != null) combat: {
 						if (enemy.getSlot() == null || ally.getStats().popFlag(Flag.NO_COMBAT) || enemy.getStats().popFlag(Flag.IGNORE_COMBAT)) {
 							break combat;
 						}
