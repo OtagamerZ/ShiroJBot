@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.TargetType;
@@ -75,7 +75,7 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
 
-		if (out.length == 0) throw new ActivationException();
+		if (out.length == 0) throw new TargetException();
 		return out;
 	}
 
@@ -86,7 +86,7 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
 
-		if (out.length == 0) throw new ActivationException();
+		if (out.length == 0) throw new TargetException();
 		return out;
 	}
 
@@ -95,7 +95,7 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 				.filter(t -> t.index() > -1 && t.type() == type)
 				.toArray(Target[]::new);
 
-		if (out.length == 0) throw new ActivationException();
+		if (out.length == 0) throw new TargetException();
 		return out;
 	}
 }

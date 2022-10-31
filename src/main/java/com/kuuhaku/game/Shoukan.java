@@ -591,7 +591,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		if (!tgt.validate(chosen.getTargetType())) {
-			getChannel().sendMessage(locale.get("error/missing_target_" + chosen.getTargetType())).queue();
+			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + chosen.getTargetType()))).queue();
 			return false;
 		}
 
@@ -609,7 +609,6 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!copy.execute(copy.toParameters(tgt))) {
 			curr.getGraveyard().remove(copy);
 			chosen.setAvailable(true);
-			getChannel().sendMessage(locale.get("error/spell")).queue();
 			return false;
 		}
 
@@ -686,10 +685,9 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		if (!tgt.validate(type)) {
-			getChannel().sendMessage(locale.get("error/missing_target_" + type)).queue();
+			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + type))).queue();
 			return false;
 		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
-			getChannel().sendMessage(locale.get("error/activation")).queue();
 			return false;
 		}
 

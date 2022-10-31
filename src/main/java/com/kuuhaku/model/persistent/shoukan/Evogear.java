@@ -21,6 +21,8 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.TargetException;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
@@ -343,6 +345,17 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			stats.popFlag(Flag.EMPOWERED);
 			return true;
+		} catch (TargetException e) {
+			if (targetType != TargetType.NONE) {
+				Shoukan game = hand.getGame();
+				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + targetType))).queue();
+			}
+
+			return false;
+		} catch (ActivationException e) {
+			Shoukan game = hand.getGame();
+			game.getChannel().sendMessage(game.getLocale().get("error/spell")).queue();
+			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 			return false;

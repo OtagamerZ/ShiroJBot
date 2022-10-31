@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
@@ -716,7 +717,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			stats.popFlag(Flag.EMPOWERED);
 			return true;
+		} catch (TargetException e) {
+			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
+			if (type != null) {
+				Shoukan game = hand.getGame();
+				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + type))).queue();
+			}
+
+			return false;
 		} catch (ActivationException e) {
+			Shoukan game = hand.getGame();
+			game.getChannel().sendMessage(game.getLocale().get("error/activation")).queue();
 			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
