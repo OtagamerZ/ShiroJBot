@@ -37,7 +37,9 @@ public class RegDeg {
 		add(vot);
 	}
 
-	public void leftShift(int value) {
+	public void leftShift(Number number) {
+		int value = number.intValue();
+
 		if (value < 0) {
 			add(new Degen(-value, 0.1));
 		} else if (value > 0) {
