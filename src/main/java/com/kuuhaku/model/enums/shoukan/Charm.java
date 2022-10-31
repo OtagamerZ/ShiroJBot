@@ -24,7 +24,6 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 
 import java.awt.image.BufferedImage;
-import java.util.Locale;
 
 public enum Charm {
 	SHIELD,
@@ -34,7 +33,8 @@ public enum Charm {
 	CLONE,
 	WARDING,
 	TIMEWARP,
-	MULTISTRIKE;
+	THORNS,
+	LIFESTEAL;
 
 	public String getName(I18N locale) {
 		return locale.get("charm/" + name());
@@ -46,7 +46,7 @@ public enum Charm {
 
 	public String getDescription(I18N locale, int tier) {
 		String val;
-		if (Utils.equalsAny(this, WARDING, TIMEWARP, MULTISTRIKE)) {
+		if (Utils.equalsAny(this, WARDING, TIMEWARP)) {
 			val = locale.get("str/" + getValue(tier) + "_time");
 		} else {
 			val = String.valueOf(getValue(tier));
@@ -61,8 +61,8 @@ public enum Charm {
 
 	public int getValue(int tier) {
 		return switch (this) {
-			case SHIELD, DRAIN, WARDING, TIMEWARP, MULTISTRIKE -> (int) Calc.getFibonacci(tier);
-			case PIERCING, WOUNDING -> tier * 4;
+			case SHIELD, DRAIN, WARDING, TIMEWARP -> (int) Calc.getFibonacci(tier);
+			case PIERCING, WOUNDING, THORNS, LIFESTEAL -> tier * 4;
 			case CLONE -> tier * 25;
 		};
 	}

@@ -724,59 +724,49 @@ public class Shoukan extends GameInstance<Phase> {
 		int pHP = you.getHP();
 		int dmg = ally.getDmg();
 
-		int attacks = 1 + ally.getEquipments().stream()
-				.filter(e -> e.hasCharm(Charm.MULTISTRIKE))
-				.mapToInt(e -> Charm.MULTISTRIKE.getValue(e.getTier()))
-				.sum();
+		for (Evogear e : ally.getEquipments()) {
+			JSONArray charms = e.getCharms();
 
-		for (int i = 0; i < attacks; i++) {
-			int eDmg = (int) (dmg * Math.pow(0.5, i));
+			for (Object o : charms) {
+				Charm c = Charm.valueOf(String.valueOf(o));
+				switch (c) {
+					case PIERCING -> you.modHP((int) -(dmg * 0.5 * c.getValue(e.getTier()) / 100));
+					case WOUNDING -> {
+						int val = dmg * c.getValue(e.getTier()) / 100;
+						you.getRegDeg().add(new Degen(val, 0.1));
 
-			for (Evogear e : ally.getEquipments()) {
-				JSONArray charms = e.getCharms();
-
-				for (Object o : charms) {
-					Charm c = Charm.valueOf(String.valueOf(o));
-					switch (c) {
-						case PIERCING -> you.modHP((int) -(eDmg * 0.5 * c.getValue(e.getTier()) / 100));
-						case WOUNDING -> {
-							int val = eDmg * c.getValue(e.getTier()) / 100;
+						if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
 							you.getRegDeg().add(new Degen(val, 0.1));
-
-							if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
-								you.getRegDeg().add(new Degen(val, 0.1));
-							}
 						}
 					}
 				}
 			}
+		}
 
-			switch (you.getOrigin().synergy()) {
-				case SHIKI -> {
-					List<SlotColumn> slts = arena.getSlots(you.getSide());
-					for (SlotColumn slt : slts) {
-						if (slt.hasTop()) {
-							slt.getTop().getStats().setDodge(-1);
-						}
+		switch (you.getOrigin().synergy()) {
+			case SHIKI -> {
+				List<SlotColumn> slts = arena.getSlots(you.getSide());
+				for (SlotColumn slt : slts) {
+					if (slt.hasTop()) {
+						slt.getTop().getStats().setDodge(-1);
 					}
 				}
-				case FALLEN -> {
-					int degen = (int) Math.min(you.getRegDeg().peek() * 0.05, 0);
-					you.modHP(degen);
-					you.getRegDeg().reduce(Degen.class, degen);
-				}
-				case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
 			}
+			case FALLEN -> {
+				int degen = (int) Math.min(you.getRegDeg().peek() * 0.05, 0);
+				you.modHP(degen);
+				you.getRegDeg().reduce(Degen.class, degen);
+			}
+			case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
+		}
 
-			eDmg = (int) (dmg * Math.pow(0.5, i));
-			if (ally.getSlot() != null) {
-				ally.setAvailable(false);
-			}
+		if (ally.getSlot() != null) {
+			ally.setAvailable(false);
+		}
 
-			you.modHP((int) -(eDmg * 0.5));
-			if (you.getOrigin().synergy() == Race.LICH) {
-				you.modHP((int) ((pHP - you.getHP()) * 0.01));
-			}
+		you.modHP((int) -(dmg * 0.5));
+		if (you.getOrigin().synergy() == Race.LICH) {
+			you.modHP((int) ((pHP - you.getHP()) * 0.01));
 		}
 
 		reportEvent("str/combat_self", ally, pHP - you.getHP());
@@ -840,6 +830,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int pHP = op.getHP();
 		int dmg = ally.getDmg();
+		int lifesteal = 0;
+		int thorns = 0;
 		float mitigation = 1;
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
 			mitigation /= 2;
@@ -847,64 +839,144 @@ public class Shoukan extends GameInstance<Phase> {
 
 		String outcome = "str/combat_skip";
 		if (enemy == null || posHash == enemy.posHash()) {
-			int attacks = 1 + ally.getEquipments().stream()
-					.filter(e -> e.hasCharm(Charm.MULTISTRIKE))
-					.mapToInt(e -> Charm.MULTISTRIKE.getValue(e.getTier()))
-					.sum();
+			for (Evogear e : ally.getEquipments()) {
+				JSONArray charms = e.getCharms();
 
-			for (int i = 0; i < attacks; i++) {
-				int eDmg = (int) (dmg * Math.pow(0.5, i));
+				for (Object o : charms) {
+					Charm c = Charm.valueOf(String.valueOf(o));
+					switch (c) {
+						case PIERCING -> op.modHP((int) -(dmg * mitigation * c.getValue(e.getTier()) / 100));
+						case WOUNDING -> {
+							int val = dmg * c.getValue(e.getTier()) / 100;
+							op.getRegDeg().add(new Degen(val, 0.1));
 
-				for (Evogear e : ally.getEquipments()) {
+							if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
+								op.getRegDeg().add(new Degen(val, 0.1));
+							}
+						}
+						case DRAIN -> {
+							int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
+							if (toDrain > 0) {
+								you.modMP(toDrain);
+								op.modMP(-toDrain);
+							}
+						}
+						case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
+					}
+				}
+			}
+
+			if (enemy != null) {
+				for (Evogear e : enemy.getEquipments()) {
 					JSONArray charms = e.getCharms();
 
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
-						switch (c) {
-							case PIERCING -> op.modHP((int) -(eDmg * mitigation * c.getValue(e.getTier()) / 100));
-							case WOUNDING -> {
-								int val = eDmg * c.getValue(e.getTier()) / 100;
-								op.getRegDeg().add(new Degen(val, 0.1));
-
-								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
-									op.getRegDeg().add(new Degen(val, 0.1));
-								}
-							}
-							case DRAIN -> {
-								int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
-								if (toDrain > 0) {
-									you.modMP(toDrain);
-									op.modMP(-toDrain);
-								}
-							}
+						if (c == Charm.THORNS) {
+							thorns += c.getValue(e.getTier());
 						}
 					}
 				}
+			}
 
-				switch (you.getOrigin().synergy()) {
-					case SHIKI -> {
-						List<SlotColumn> slts = arena.getSlots(op.getSide());
-						for (SlotColumn slt : slts) {
-							if (slt.hasTop()) {
-								slt.getTop().getStats().setDodge(-1);
-							}
+			switch (you.getOrigin().synergy()) {
+				case SHIKI -> {
+					List<SlotColumn> slts = arena.getSlots(op.getSide());
+					for (SlotColumn slt : slts) {
+						if (slt.hasTop()) {
+							slt.getTop().getStats().setDodge(-1);
 						}
 					}
-					case FALLEN -> {
-						int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
-						op.modHP(degen);
-						op.getRegDeg().reduce(Degen.class, degen);
-					}
-					case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
+				}
+				case FALLEN -> {
+					int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
+					op.modHP(degen);
+					op.getRegDeg().reduce(Degen.class, degen);
+				}
+				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
+			}
+
+			if (enemy != null) combat:{
+				if (enemy.getSlot() == null || ally.getStats().popFlag(Flag.NO_COMBAT) || enemy.getStats().popFlag(Flag.IGNORE_COMBAT)) {
+					break combat;
 				}
 
-				if (i == 0) {
-					if (enemy != null) combat: {
-						if (enemy.getSlot() == null || ally.getStats().popFlag(Flag.NO_COMBAT) || enemy.getStats().popFlag(Flag.IGNORE_COMBAT)) {
-							break combat;
+				if (enemy.isSupporting()) {
+					you.addKill();
+					if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+						arena.getBanned().add(enemy);
+					} else {
+						op.getGraveyard().add(enemy);
+					}
+
+					dmg = 0;
+					outcome = "str/combat_success";
+				} else {
+					boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
+					int enemyStats = enemy.getActiveAttr(dbl);
+					int eEquipStats = enemy.getActiveEquips(dbl);
+					int eCombatStats = enemyStats;
+					if (ally.getStats().popFlag(Flag.IGNORE_EQUIP)) {
+						eCombatStats -= eEquipStats;
+					}
+
+					if (ally.getDmg() < eCombatStats) {
+						trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+						pHP = you.getHP();
+
+						if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
+							you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
 						}
 
-						if (enemy.isSupporting()) {
+						op.addKill();
+						if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+							arena.getBanned().add(ally);
+						} else {
+							you.getGraveyard().add(ally);
+						}
+
+						reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
+						return true;
+					} else {
+						int block = enemy.getBlock();
+						int dodge = enemy.getDodge();
+
+						if (ally.isBlinded(true) && Calc.chance(25)) {
+							trigger(ON_MISS, ally.asSource(ON_MISS));
+
+							reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
+							return true;
+						} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+
+							op.addKill();
+							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+								arena.getBanned().add(ally);
+							} else {
+								you.getGraveyard().add(ally);
+							}
+
+							reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
+							return true;
+						} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
+							trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
+
+							if (you.getOrigin().synergy() == Race.FABLED) {
+								op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
+							}
+
+							reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
+							return true;
+						}
+
+						if (ally.getDmg() > eCombatStats) {
+							trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
+							if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
+								dmg = 0;
+							} else {
+								dmg -= enemyStats;
+							}
+
 							you.addKill();
 							if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
 								arena.getBanned().add(enemy);
@@ -912,119 +984,48 @@ public class Shoukan extends GameInstance<Phase> {
 								op.getGraveyard().add(enemy);
 							}
 
-							dmg = 0;
 							outcome = "str/combat_success";
 						} else {
-							boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
-							int enemyStats = enemy.getActiveAttr(dbl);
-							int eEquipStats = enemy.getActiveEquips(dbl);
-							int eCombatStats = enemyStats;
-							if (ally.getStats().popFlag(Flag.IGNORE_EQUIP)) {
-								eCombatStats -= eEquipStats;
-							}
+							trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
 
-							if (ally.getDmg() < eCombatStats) {
-								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
-								pHP = you.getHP();
-
-								if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
-									you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
-								}
-
-								op.addKill();
-								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(ally);
-								} else {
-									you.getGraveyard().add(ally);
-								}
-
-								reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
-								return true;
+							you.addKill();
+							if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+								arena.getBanned().add(enemy);
 							} else {
-								int block = enemy.getBlock();
-								int dodge = enemy.getDodge();
-
-								if (ally.isBlinded(true) && Calc.chance(25)) {
-									trigger(ON_MISS, ally.asSource(ON_MISS));
-
-									reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
-									return true;
-								} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
-									trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
-
-									op.addKill();
-									if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-										arena.getBanned().add(ally);
-									} else {
-										you.getGraveyard().add(ally);
-									}
-
-									reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
-									return true;
-								} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
-									trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
-
-									if (you.getOrigin().synergy() == Race.FABLED) {
-										op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
-									}
-
-									reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
-									return true;
-								}
-
-								if (ally.getDmg() > eCombatStats) {
-									trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
-									if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
-										dmg = 0;
-									} else {
-										dmg -= enemyStats;
-									}
-
-									you.addKill();
-									if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-										arena.getBanned().add(enemy);
-									} else {
-										op.getGraveyard().add(enemy);
-									}
-
-									outcome = "str/combat_success";
-								} else {
-									trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
-
-									you.addKill();
-									if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-										arena.getBanned().add(enemy);
-									} else {
-										op.getGraveyard().add(enemy);
-									}
-
-									op.addKill();
-									if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-										arena.getBanned().add(ally);
-									} else {
-										you.getGraveyard().add(ally);
-									}
-
-									dmg = 0;
-									outcome = "str/combat_clash";
-								}
+								op.getGraveyard().add(enemy);
 							}
+
+							op.addKill();
+							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+								arena.getBanned().add(ally);
+							} else {
+								you.getGraveyard().add(ally);
+							}
+
+							dmg = 0;
+							outcome = "str/combat_clash";
 						}
-					} else {
-						outcome = "str/combat_direct";
 					}
 				}
+			}
+			else {
+				outcome = "str/combat_direct";
+			}
 
-				eDmg = (int) (dmg * Math.pow(0.5, i));
-				System.out.println(ally.getSlot());
-				if (ally.getSlot() != null) {
-					ally.setAvailable(false);
-				}
+			if (ally.getSlot() != null) {
+				ally.setAvailable(false);
+			}
 
-				op.modHP((int) -(eDmg * mitigation));
-				if (you.getOrigin().synergy() == Race.LICH) {
-					you.modHP((int) ((pHP - op.getHP()) * 0.01));
-				}
+			op.modHP((int) -(dmg * mitigation));
+			if (thorns > 0) {
+				you.modHP(-(pHP - op.getHP()) * thorns / 100);
+			}
+			if (lifesteal > 0) {
+				you.modHP((pHP - op.getHP()) * lifesteal / 100);
+			}
+
+			if (you.getOrigin().synergy() == Race.LICH) {
+				you.modHP((int) ((pHP - op.getHP()) * 0.01));
 			}
 		}
 
@@ -1508,13 +1509,13 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 				put(Utils.parseEmoji("\uD83E\uDEAA"),
 						w -> w.getHook().setEphemeral(true)
-						.sendFile(IO.getBytes(curr.render(locale), "png"), "hand.png")
-						.queue()
+								.sendFile(IO.getBytes(curr.render(locale), "png"), "hand.png")
+								.queue()
 				);
 				put(Utils.parseEmoji("\uD83D\uDD0D"),
 						w -> w.getHook().setEphemeral(true)
-						.sendFile(IO.getBytes(arena.renderEvogears(locale), "png"), "evogears.png")
-						.queue()
+								.sendFile(IO.getBytes(arena.renderEvogears(locale), "png"), "evogears.png")
+								.queue()
 				);
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
