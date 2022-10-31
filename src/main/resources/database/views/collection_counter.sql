@@ -17,7 +17,7 @@
  */
 
 CREATE OR REPLACE VIEW v_collection_counter AS
-SELECT kc.kawaipon_uid
+SELECT kc.kawaipon_uid                       AS uid
      , c.anime_id
      , COUNT(1) FILTER (WHERE NOT kc.chrome) AS normal
      , COUNT(1) FILTER (WHERE kc.chrome)     AS chrome
