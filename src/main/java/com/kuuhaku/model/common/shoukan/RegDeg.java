@@ -47,13 +47,14 @@ public class RegDeg {
 		}
 	}
 
-	public void leftShift(Object[] number) {
-		if (number[0] instanceof Number value && number[1] instanceof Number mult) {
-			if (value.intValue() < 0) {
-				add(new Degen(-value.intValue(), mult.intValue()));
-			} else if (value.intValue() > 0) {
-				add(new Regen(value.intValue(), mult.intValue()));
-			}
+	public void leftShift(List<Number> number) {
+		int value = number.get(0).intValue();
+		double mult = number.get(1).doubleValue();
+
+		if (value < 0) {
+			add(new Degen(-value, mult));
+		} else if (value > 0) {
+			add(new Regen(value, mult));
 		}
 	}
 
