@@ -815,7 +815,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		Senshi card = Utils.getOr(stats.getDisguise(), this);
-		String desc = card.getDescription(locale);
+		String desc = isSealed() ? "" : card.getDescription(locale);
 		BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
 
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
@@ -831,7 +831,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
 			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-			if (!desc.isEmpty() && !isSealed()) {
+			if (!desc.isEmpty()) {
 				g1.setColor(style.getFrame().getSecondaryColor());
 				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
