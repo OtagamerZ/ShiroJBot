@@ -80,19 +80,21 @@ public class SlotColumn {
 	public void setTop(Senshi top) {
 		Senshi current = getTop();
 
-		if (top != null && top.getHand() != null) {
+		if (top != null) {
 			Evogear shield = null;
 			if (!top.getHand().equals(game.getCurrent())) {
+				if (top.getStats().popFlag(Flag.NO_CONVERT)) {
+					return;
+				}
+
 				for (Evogear e : top.getEquipments()) {
 					if (e.hasCharm(Charm.SHIELD)) {
 						shield = e;
 					}
 				}
-			}
+			} // TODO Continue
 
-			if (top.getStats().popFlag(Flag.NO_CONVERT)) {
-				return;
-			} else if (shield != null) {
+			if (shield != null) {
 				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
 				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
 					top.getHand().getGraveyard().add(shield);
@@ -150,7 +152,7 @@ public class SlotColumn {
 	public void setBottom(Senshi bottom) {
 		Senshi current = getBottom();
 
-		if (bottom != null && bottom.getHand() != null && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
+		if (bottom != null && !bottom.getHand().equals(game.getCurrent()) && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
