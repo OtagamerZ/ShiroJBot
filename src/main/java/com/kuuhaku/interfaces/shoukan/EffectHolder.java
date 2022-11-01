@@ -62,7 +62,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		put("b", new Color(0x010101));
 		put("cd", new Color(0x48BAFF));
 		put("ally", new Color(0x000100));
-		put("enemy", new Color(0x010000));
+		put("enemy", new Color(0x910000));
 	}};
 
 	boolean execute(EffectParameters ep);
@@ -159,7 +159,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
 			} else {
-				//g2d.drawString(str, x, y);
+				g2d.drawString(str, x, y);
 			}
 
 			BufferedImage icon = switch (g2d.getColor().getRGB() & 0xFFFFFF) {
