@@ -41,10 +41,30 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
+	Map<String, Color> COLORS = new HashMap<>() {{
+		put("php", new Color(0x85C720));
+		put("pmp", new Color(0x3F9EFF));
+		put("pdg", new Color(0x9A1313));
+		put("prg", new Color(0x7ABCFF));
+
+		put("hp", new Color(0xFF0000));
+		put("mp", new Color(0x3F9EFE));
+		put("atk", new Color(0xFE0000));
+		put("dfs", new Color(0x00C500));
+		put("ddg", new Color(0xFFC800));
+		put("blk", new Color(0xA9A9A9));
+
+		put("b", new Color(0x010101));
+		put("cd", new Color(0x48BAFF));
+		put("ally", new Color(0x000100));
+		put("enemy", new Color(0x010000));
+	}};
+
 	boolean execute(EffectParameters ep);
 
 	default void executeAssert(Trigger trigger) {
@@ -98,25 +118,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
 					String color = groups.getString("color", "");
-					switch (color) {
-						case "php" -> g2d.setColor(new Color(0x85C720));
-						case "pmp" -> g2d.setColor(new Color(0x3F9EFF));
-						case "pdg" -> g2d.setColor(new Color(0x9A1313));
-						case "prg" -> g2d.setColor(new Color(0x7ABCFF));
-
-						case "hp" -> g2d.setColor(new Color(0xFF0000));
-						case "mp" -> g2d.setColor(new Color(0x3F9EFE));
-						case "atk" -> g2d.setColor(new Color(0xFE0000));
-						case "dfs" -> g2d.setColor(new Color(0x00C500));
-						case "ddg" -> g2d.setColor(new Color(0xFFC800));
-						case "blk" -> g2d.setColor(new Color(0xA9A9A9));
-
-						case "b" -> g2d.setColor(new Color(0x010101));
-						case "cd" -> g2d.setColor(new Color(0x48BAFF));
-
-						case "ally" -> g2d.setColor(new Color(0x000100));
-						case "enemy" -> g2d.setColor(new Color(0x000001));
-					}
+					g2d.setColor(COLORS.getOrDefault(color, g2d.getColor()));
 
 					if (!Utils.equalsAny(color, "", "b")) {
 						val = val + "    ";
@@ -140,7 +142,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
 
-
 		return (str, x, y) -> {
 			if (lastVal.get() != y) {
 				line.getAndIncrement();
@@ -152,7 +153,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			if (str.startsWith(Constants.VOID)) {
-				if (Calc.luminance(g2d.getColor()) < 0.2) {
+				if (Calc.luminance(g2d.getColor()) < 0.5) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
@@ -174,7 +175,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				case 0xA9A9A9 -> IO.getResourceAsImage("shoukan/icons/block.png");
 				case 0x48BAFF -> IO.getResourceAsImage("shoukan/icons/cooldown.png");
 				case 0x000100 -> IO.getResourceAsImage("shoukan/icons/ally_target.png");
-				case 0x000001 -> IO.getResourceAsImage("shoukan/icons/enemy_target.png");
+				case 0x010000 -> IO.getResourceAsImage("shoukan/icons/enemy_target.png");
 				default -> null;
 			};
 
