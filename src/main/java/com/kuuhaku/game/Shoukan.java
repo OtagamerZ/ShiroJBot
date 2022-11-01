@@ -900,120 +900,123 @@ public class Shoukan extends GameInstance<Phase> {
 				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 			}
 
-			if (enemy != null) combat:{
-				if (enemy.getSlot() == null || ally.getStats().popFlag(Flag.NO_COMBAT) || enemy.getStats().popFlag(Flag.IGNORE_COMBAT)) {
-					break combat;
-				}
-
-				if (enemy.isSupporting()) {
-					you.addKill();
-					if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-						arena.getBanned().add(enemy);
-					} else {
-						op.getGraveyard().add(enemy);
-					}
-
-					dmg = 0;
-					outcome = "str/combat_success";
-				} else {
-					boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
-					int enemyStats = enemy.getActiveAttr(dbl);
-					int eEquipStats = enemy.getActiveEquips(dbl);
-					int eCombatStats = enemyStats;
-					if (ally.getStats().popFlag(Flag.IGNORE_EQUIP)) {
-						eCombatStats -= eEquipStats;
-					}
-
-					if (ally.getDmg() < eCombatStats) {
-						trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
-						pHP = you.getHP();
-
-						if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
-							you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
-						}
-
-						op.addKill();
-						if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(ally);
-						} else {
-							you.getGraveyard().add(ally);
-						}
-
-						reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
-						return true;
-					} else {
-						int block = enemy.getBlock();
-						int dodge = enemy.getDodge();
-
-						if (ally.isBlinded(true) && Calc.chance(25)) {
-							trigger(ON_MISS, ally.asSource(ON_MISS));
-
-							reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
-							return true;
-						} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
-							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
-
-							op.addKill();
-							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-								arena.getBanned().add(ally);
-							} else {
-								you.getGraveyard().add(ally);
-							}
-
-							reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
-							return true;
-						} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
-							trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
-
-							if (you.getOrigin().synergy() == Race.FABLED) {
-								op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
-							}
-
-							reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
-							return true;
-						}
-
-						if (ally.getDmg() > eCombatStats) {
-							trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
-							if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
-								dmg = 0;
-							} else {
-								dmg -= enemyStats;
-							}
-
-							you.addKill();
-							if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-								arena.getBanned().add(enemy);
-							} else {
-								op.getGraveyard().add(enemy);
-							}
-
-							outcome = "str/combat_success";
-						} else {
-							trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
-
-							you.addKill();
-							if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-								arena.getBanned().add(enemy);
-							} else {
-								op.getGraveyard().add(enemy);
-							}
-
-							op.addKill();
-							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-								arena.getBanned().add(ally);
-							} else {
-								you.getGraveyard().add(ally);
-							}
-
-							dmg = 0;
-							outcome = "str/combat_clash";
-						}
-					}
-				}
+			boolean ignore = ally.getStats().popFlag(Flag.NO_COMBAT);
+			if (!ignore && enemy != null) {
+				ignore = enemy.getSlot() == null || enemy.getStats().popFlag(Flag.IGNORE_COMBAT);
 			}
-			else {
-				outcome = "str/combat_direct";
+
+			if (ignore) {
+				if (enemy != null) {
+					if (enemy.isSupporting()) {
+						you.addKill();
+						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+							arena.getBanned().add(enemy);
+						} else {
+							op.getGraveyard().add(enemy);
+						}
+
+						dmg = 0;
+						outcome = "str/combat_success";
+					} else {
+						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
+						int enemyStats = enemy.getActiveAttr(dbl);
+						int eEquipStats = enemy.getActiveEquips(dbl);
+						int eCombatStats = enemyStats;
+						if (ally.getStats().popFlag(Flag.IGNORE_EQUIP)) {
+							eCombatStats -= eEquipStats;
+						}
+
+						if (ally.getDmg() < eCombatStats) {
+							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+							pHP = you.getHP();
+
+							if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
+								you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
+							}
+
+							op.addKill();
+							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+								arena.getBanned().add(ally);
+							} else {
+								you.getGraveyard().add(ally);
+							}
+
+							reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
+							return true;
+						} else {
+							int block = enemy.getBlock();
+							int dodge = enemy.getDodge();
+
+							if (ally.isBlinded(true) && Calc.chance(25)) {
+								trigger(ON_MISS, ally.asSource(ON_MISS));
+
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
+								return true;
+							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+
+								op.addKill();
+								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(ally);
+								} else {
+									you.getGraveyard().add(ally);
+								}
+
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
+								return true;
+							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
+								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
+
+								if (you.getOrigin().synergy() == Race.FABLED) {
+									op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
+								}
+
+								reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
+								return true;
+							}
+
+							if (ally.getDmg() > eCombatStats) {
+								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
+								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
+									dmg = 0;
+								} else {
+									dmg -= enemyStats;
+								}
+
+								you.addKill();
+								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(enemy);
+								} else {
+									op.getGraveyard().add(enemy);
+								}
+
+								outcome = "str/combat_success";
+							} else {
+								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
+
+								you.addKill();
+								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(enemy);
+								} else {
+									op.getGraveyard().add(enemy);
+								}
+
+								op.addKill();
+								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+									arena.getBanned().add(ally);
+								} else {
+									you.getGraveyard().add(ally);
+								}
+
+								dmg = 0;
+								outcome = "str/combat_clash";
+							}
+						}
+					}
+				}
+				else {
+					outcome = "str/combat_direct";
+				}
 			}
 
 			if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
