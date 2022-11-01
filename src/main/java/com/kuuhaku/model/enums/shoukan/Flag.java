@@ -32,7 +32,6 @@ public enum Flag {
 	/** Does not take damage from combat **/
 	NO_DAMAGE,
 
-
 	/** Ignores target equipment stats **/
 	IGNORE_EQUIP,
 	/** Ignores field modifiers (NO AUTO) **/
@@ -55,5 +54,7 @@ public enum Flag {
 	/** Can attack directly regardless of remaining cards **/
 	DIRECT,
 	/** Effect has 50% more power and targets nearby cards **/
-	EMPOWERED
+	EMPOWERED,
+	/** Does not consume an action **/
+	FREE_ACTION
 }

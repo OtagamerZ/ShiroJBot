@@ -345,9 +345,9 @@ public class Hand {
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
 			Drawable<?> d = draw();
-			if (d != null) {
-				out.add(d);
-			}
+			if (d == null) return out;
+
+			out.add(d);
 		}
 		return out;
 	}

@@ -605,7 +605,10 @@ public class Shoukan extends GameInstance<Phase> {
 			copy.getStats().getData().put("consumed", consumed);
 		}
 
-		chosen.setAvailable(false);
+		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+			chosen.setAvailable(false);
+		}
+
 		if (!copy.execute(copy.toParameters(tgt))) {
 			curr.getGraveyard().remove(copy);
 			chosen.setAvailable(true);
@@ -692,7 +695,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.consumeMP(1);
-		if (getPhase() != Phase.PLAN) {
+		if (getPhase() != Phase.PLAN && !chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
 		}
 
@@ -761,7 +764,7 @@ public class Shoukan extends GameInstance<Phase> {
 			case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
 		}
 
-		if (ally.getSlot() != null) {
+		if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
 			ally.setAvailable(false);
 		}
 
@@ -1013,7 +1016,7 @@ public class Shoukan extends GameInstance<Phase> {
 				outcome = "str/combat_direct";
 			}
 
-			if (ally.getSlot() != null) {
+			if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
 				ally.setAvailable(false);
 			}
 
