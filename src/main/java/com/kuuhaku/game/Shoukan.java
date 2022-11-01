@@ -88,7 +88,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new TreeSet<>();
-	private final Map<Drawable<?>, JSONObject> data = new HashMap<>();
+	private final Map<Side, JSONObject> data = new HashMap<>();
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
@@ -615,6 +615,8 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		getData(side).put("lastSpell", copy);
+		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card",
 				curr.getName(),
 				chosen.getTags().contains("tag/secret") ? locale.get("str/a_spell") : chosen
@@ -699,6 +701,8 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.setAvailable(false);
 		}
 
+		getData(side).put("lastAbility", chosen);
+		trigger(ON_ABILITY, side);
 		reportEvent("str/card_special", curr.getName(), chosen);
 		return !curr.selectionPending();
 	}
@@ -1014,8 +1018,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 						}
 					}
-				}
-				else {
+				} else {
 					outcome = "str/combat_direct";
 				}
 			}
@@ -1263,8 +1266,8 @@ public class Shoukan extends GameInstance<Phase> {
 						effect.lock().set(true);
 					}
 				}
-			} else {
-				if (ep.source() != null && checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+			} else if (ep.source() != null) {
+				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
 					effect.decreaseLimit();
 					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
 				}
@@ -1284,8 +1287,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public JSONObject getData(Drawable<?> holder) {
-		return data.computeIfAbsent(holder, k -> new JSONObject());
+	public JSONObject getData(Side side) {
+		return data.computeIfAbsent(side, k -> new JSONObject());
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {

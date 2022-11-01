@@ -78,7 +78,11 @@ public enum Trigger {
 	// Single-use trigger
 	ON_ACTIVATE,
 
-	// Triggered when targeted by effects
+	// Triggers when a spell/ability is used
+	ON_SPELL,
+	ON_ABILITY,
+
+	// Triggers when targeted by effects
 	ON_SPELL_TARGET,
 	ON_EFFECT_TARGET,
 

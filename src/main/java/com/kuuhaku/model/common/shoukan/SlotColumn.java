@@ -190,10 +190,10 @@ public class SlotColumn {
 		return hasTop() ? top : bottom;
 	}
 
-	public void replace(Senshi card, Senshi with) {
-		if (Objects.equals(card, getTop())) {
+	public void replace(Senshi self, Senshi with) {
+		if (Objects.equals(self, getTop())) {
 			setTop(with);
-		} else if (Objects.equals(card, getBottom())) {
+		} else if (Objects.equals(self, getBottom())) {
 			setBottom(with);
 		}
 	}
