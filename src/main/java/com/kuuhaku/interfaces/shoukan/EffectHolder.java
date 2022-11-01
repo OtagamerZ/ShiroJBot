@@ -153,10 +153,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			if (str.startsWith(Constants.VOID)) {
-				if (Calc.luminance(g2d.getColor()) < 0.5) {
+				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
+					//Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
 			} else {
 				g2d.drawString(str, x, y);
