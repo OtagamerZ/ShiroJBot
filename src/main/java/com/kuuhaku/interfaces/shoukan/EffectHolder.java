@@ -59,10 +59,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		put("ddg", new Color(0xFFC800));
 		put("blk", new Color(0xA9A9A9));
 
-		put("b", new Color(0x010101));
+		put("b", Color.BLACK);
+		put("n", Color.BLACK);
 		put("cd", new Color(0x48BAFF));
 		put("ally", new Color(0x000100));
-		put("enemy", new Color(0x910000));
+		put("enemy", new Color(0x010000));
 	}};
 
 	boolean execute(EffectParameters ep);
@@ -120,11 +121,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					String color = groups.getString("color", "");
 					g2d.setColor(COLORS.getOrDefault(color, g2d.getColor()));
 
-					if (!Utils.equalsAny(color, "", "b")) {
+					if (!Utils.equalsAny(color, "", "b", "n")) {
 						val = val + "    ";
 					}
 
-					if (!Utils.equalsAny(color, "ally", "enemy")) {
+					if (color.equalsIgnoreCase("n")) {
+						val += Constants.VOID;
+					} else if (!Utils.equalsAny(color, "ally", "enemy")) {
 						val = Constants.VOID + val;
 					}
 
@@ -158,6 +161,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				} else {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
+			} else if (str.endsWith(Constants.VOID)) {
+				Graph.drawOutlinedString(g2d, str, x, y, 1.25f, g2d.getColor());
 			} else {
 				g2d.drawString(str, x, y);
 			}
