@@ -23,41 +23,43 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class BondedList<T> extends ArrayList<T> {
-	private final Predicate<T> check;
-	private final Consumer<T> onAdd;
+	private final Function<T, Boolean> onAdd;
 	private final Consumer<T> onRemove;
 
-	public static <T> BondedList<T> withBind(Consumer<T> onAdd) {
+	public static <T> BondedList<T> withBind(Function<T, Boolean> onAdd) {
 		return withBind(onAdd, t -> {});
 	}
 
-	public static <T> BondedList<T> withBind(Consumer<T> onAdd, Consumer<T> onRemove) {
-		return new BondedList<T>(t -> true, onAdd, onRemove);
+	public static <T> BondedList<T> withBind(Consumer<T> onRemove) {
+		return withBind(t -> true, onRemove);
 	}
 
-	public static <T> BondedList<T> withCheck(Predicate<T> check) {
-		return new BondedList<T>(check, t -> {}, t -> {});
+	public static <T> BondedList<T> withBind(Function<T, Boolean> onAdd, Consumer<T> onRemove) {
+		return new BondedList<T>(onAdd, onRemove);
 	}
 
-	public BondedList(Predicate<T> check, Consumer<T> onAdd) {
-		this(check, onAdd, t -> {});
+	public BondedList(Function<T, Boolean> onAdd) {
+		this(onAdd, t -> {});
 	}
 
-	public BondedList(Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
-		this.check = check;
+	public BondedList(Consumer<T> onRemove) {
+		this(t -> true, onRemove);
+	}
+
+	public BondedList(Function<T, Boolean> onAdd, Consumer<T> onRemove) {
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> onAdd) {
-		this(c, check, onAdd, t -> {});
+	public BondedList(@Nonnull Collection<? extends T> c, Function<T, Boolean> onAdd) {
+		this(c, onAdd, t -> {});
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, Predicate<T> check, Consumer<T> onAdd, Consumer<T> onRemove) {
-		this.check = check;
+	public BondedList(@Nonnull Collection<? extends T> c, Function<T, Boolean> onAdd, Consumer<T> onRemove) {
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 		addAll(c);
@@ -65,42 +67,30 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean add(T t) {
-		if (t != null) {
-			onAdd.accept(t);
+		if (t != null && onAdd.apply(t)) {
+			return super.add(t);
 		}
 
-		return check.test(t) && super.add(t);
+		return false;
 	}
 
 	@Override
 	public void add(int index, T t) {
-		if (t != null) {
-			onAdd.accept(t);
-		}
-
-		if (check.test(t)) {
+		if (t != null && onAdd.apply(t)) {
 			super.add(index, t);
 		}
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(check).toList();
-
-		for (T t : filtered) {
-			onAdd.accept(t);
-		}
+		List<? extends T> filtered = c.stream().filter(onAdd::apply).toList();
 
 		return super.addAll(filtered);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(check).toList();
-
-		for (T t : filtered) {
-			onAdd.accept(t);
-		}
+		List<? extends T> filtered = c.stream().filter(onAdd::apply).toList();
 
 		return super.addAll(index, filtered);
 	}

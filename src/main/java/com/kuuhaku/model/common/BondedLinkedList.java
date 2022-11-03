@@ -82,39 +82,29 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	@Override
 	public boolean add(T t) {
 		if (t != null && onAdd.apply(t)) {
-			super.add(t);
+			return super.add(t);
 		}
+
+		return false;
 	}
 
 	@Override
 	public void add(int index, T t) {
-		if (t != null) {
-			onAdd.accept(t);
-		}
-
-		if (check.test(t)) {
+		if (t != null && onAdd.apply(t)) {
 			super.add(index, t);
 		}
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(check).toList();
-
-		for (T t : filtered) {
-			onAdd.accept(t);
-		}
+		List<? extends T> filtered = c.stream().filter(onAdd::apply).toList();
 
 		return super.addAll(filtered);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(check).toList();
-
-		for (T t : filtered) {
-			onAdd.accept(t);
-		}
+		List<? extends T> filtered = c.stream().filter(onAdd::apply).toList();
 
 		return super.addAll(index, filtered);
 	}

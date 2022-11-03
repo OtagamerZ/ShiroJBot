@@ -71,20 +71,18 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(
-			d -> d != null && d.keepOnDestroy(),
-			d -> {
-				getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
+	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(d -> {
+		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
-				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-					getBanned().addAll(s.getEquipments());
-				} else if (d instanceof Evogear e && e.getEquipper() != null) {
-					e.getEquipper().getEquipments().remove(e);
-				}
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getBanned().addAll(s.getEquipments());
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
 
-				d.reset();
-			}
-	);
+		d.reset();
+		return d.keepOnDestroy();
+	});
 
 	private Field field = null;
 
@@ -217,7 +215,7 @@ public class Arena implements Renderer {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
 					g2.drawImage(d.getStyling().getFrame().getBack(d),
-							0, 15 -(350 + MARGIN.y), null
+							0, 15 - (350 + MARGIN.y), null
 					);
 				}
 				if (!banned.isEmpty()) {

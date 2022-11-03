@@ -65,91 +65,88 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>(
-			d -> d != null && !getGame().getArena().getBanned().contains(this),
-			d -> {
-				d.setHand(this);
-				getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
+	private final List<Drawable<?>> cards = new BondedList<>(d -> {
+		if (getGame().getArena().getBanned().contains(this)) return false;
 
-				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-					getCards().addAll(s.getEquipments());
-				} else if (d instanceof Evogear e && e.getEquipper() != null) {
-					e.getEquipper().getEquipments().remove(e);
-				}
+		d.setHand(this);
+		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
-				d.setSlot(null);
-			}
-	);
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(
-			d -> d != null && d.keepOnDestroy() && !getGame().getArena().getBanned().contains(this),
-			d -> {
-				d.setHand(this);
-				getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getCards().addAll(s.getEquipments());
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
 
-				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-					getDeck().addAll(s.getEquipments());
-				} else if (d instanceof Evogear e && e.getEquipper() != null) {
-					e.getEquipper().getEquipments().remove(e);
-				}
+		d.setSlot(null);
+		return true;
+	});
+	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> {
+		if (getGame().getArena().getBanned().contains(this)) return false;
 
-				d.reset();
-			}
-	);
-	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(
-			d -> {
-				if (d == null || !d.keepOnDestroy() || getGame().getArena().getBanned().contains(this)) return false;
+		d.setHand(this);
+		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 
-				return !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH));
-			},
-			d -> {
-				if (d instanceof Senshi s) {
-					Evogear ward = null;
-					for (Evogear e : s.getEquipments()) {
-						if (e.hasCharm(Charm.WARDING)) {
-							ward = e;
-						}
-					}
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getDeck().addAll(s.getEquipments());
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
 
-					if (s.getStats().hasFlag(Flag.NO_DEATH)) {
-						return;
-					} else if (ward != null) {
-						int charges = ward.getStats().getData().getInt("ward", 0) + 1;
-						if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-							getGraveyard().add(ward);
-						} else {
-							ward.getStats().getData().put("ward", charges);
-						}
+		d.reset();
+		return true;
+	});
+	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
+		if (getGame().getArena().getBanned().contains(this)) return false;
 
-						s.getStats().setFlag(Flag.NO_DEATH, true);
-						return;
-					}
-				}
-
-				d.setHand(this);
-				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
-
-				if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-					getGraveyard().addAll(s.getEquipments());
-				} else if (d instanceof Evogear e && e.getEquipper() != null) {
-					e.getEquipper().getEquipments().remove(e);
-				}
-
-				d.reset();
-
-				if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
-					cards.add(d.copy());
-					getGraveyard().remove(d);
+		if (d instanceof Senshi s) {
+			Evogear ward = null;
+			for (Evogear e : s.getEquipments()) {
+				if (e.hasCharm(Charm.WARDING)) {
+					ward = e;
 				}
 			}
-	);
-	private final List<Drawable<?>> discard = new BondedList<>(
-			d -> d != null && d.keepOnDestroy() && !getGame().getArena().getBanned().contains(this),
-			d -> {
-				d.setHand(this);
-				getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
-				d.setAvailable(false);
+
+			if (s.getStats().popFlag(Flag.NO_DEATH)) {
+				return false;
+			} else if (ward != null) {
+				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
+				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
+					getGraveyard().add(ward);
+				} else {
+					ward.getStats().getData().put("ward", charges);
+				}
+
+				return false;
 			}
-	);
+		}
+
+		d.setHand(this);
+		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
+
+		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+			getGraveyard().addAll(s.getEquipments());
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
+
+		d.reset();
+
+		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
+			cards.add(d.copy());
+			getGraveyard().remove(d);
+		}
+
+		return d.keepOnDestroy();
+	});
+	private final List<Drawable<?>> discard = new BondedList<>(d -> {
+		if (getGame().getArena().getBanned().contains(this)) return false;
+
+		d.setHand(this);
+		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
+		d.setAvailable(false);
+
+		return d.keepOnDestroy();
+	});
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
