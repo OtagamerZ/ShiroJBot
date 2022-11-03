@@ -82,7 +82,7 @@ public class SlotColumn {
 
 		if (top != null) {
 			Evogear shield = null;
-			if (!top.getHand().equals(game.getCurrent())) {
+			if (!Objects.equals(top.getHand(), game.getCurrent())) {
 				if (top.getStats().popFlag(Flag.NO_CONVERT)) {
 					return;
 				}
@@ -151,8 +151,7 @@ public class SlotColumn {
 
 	public void setBottom(Senshi bottom) {
 		Senshi current = getBottom();
-
-		if (bottom != null && !bottom.getHand().equals(game.getCurrent()) && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
+		if (bottom != null && !Objects.equals(bottom.getHand(), game.getCurrent()) && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
