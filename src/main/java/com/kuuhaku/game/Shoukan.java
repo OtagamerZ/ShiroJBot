@@ -839,6 +839,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
+		if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
+			ally.setAvailable(false);
+		}
+
 		int pHP = op.getHP();
 		int dmg = ally.getDmg();
 		int lifesteal = 0;
@@ -1023,13 +1027,6 @@ public class Shoukan extends GameInstance<Phase> {
 				} else {
 					outcome = "str/combat_direct";
 				}
-			}
-
-			System.out.println(ally.getSlot() != null);
-			System.out.println(!ally.getStats().popFlag(Flag.FREE_ACTION));
-			if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
-				System.out.println("Consume");
-				ally.setAvailable(false);
 			}
 
 			op.modHP((int) -(dmg * mitigation));
