@@ -769,6 +769,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
+	public void noEffect(Runnable r) {
+		try {
+			base.lock();
+			r.run();
+		} finally {
+			base.unlock();
+		}
+	}
+
 	@Override
 	public boolean keepOnDestroy() {
 		return !isFusion();
