@@ -46,8 +46,8 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
@@ -859,12 +859,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				);
 			}
 
-			if (!stats.getWrite().isBlank()) {
-				String val = String.valueOf(stats.getWrite());
+//			if (!stats.getWrite().isBlank()) {
+//				String val = String.valueOf(stats.getWrite());
+				String val = String.valueOf(getSlot().getIndex());
 				g1.setColor(Color.ORANGE);
 				g1.setFont(Drawable.FONT.deriveFont(15f));
 				Graph.drawOutlinedString(g1, val, 25, 49 + (23 + g1.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
-			}
+//			}
 
 			if (!stats.hasFlag(Flag.HIDE_STATS)) {
 				card.drawCosts(g1);
