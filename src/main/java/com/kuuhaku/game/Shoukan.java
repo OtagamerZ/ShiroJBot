@@ -1025,6 +1025,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
+			System.out.println(ally.getSlot() != null);
+			System.out.println(!ally.getStats().popFlag(Flag.FREE_ACTION));
 			if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
 				System.out.println("Consume");
 				ally.setAvailable(false);
