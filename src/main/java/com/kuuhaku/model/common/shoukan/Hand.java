@@ -443,6 +443,48 @@ public class Hand {
 		return null;
 	}
 
+	public Drawable<?> drawEquipment() {
+		LinkedList<Drawable<?>> deck = getDeck();
+
+		for (int i = 0; i < deck.size(); i++) {
+			if (deck.get(i) instanceof Evogear e && !e.isSpell()) {
+				if (origin.synergy() == Race.EX_MACHINA) {
+					modHP(50);
+				}
+
+				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
+				cards.add(out);
+				getGame().trigger(Trigger.ON_DRAW);
+				return out;
+			}
+		}
+
+		return null;
+	}
+
+	public Drawable<?> drawSpell() {
+		LinkedList<Drawable<?>> deck = getDeck();
+
+		for (int i = 0; i < deck.size(); i++) {
+			if (deck.get(i) instanceof Evogear e && e.isSpell()) {
+				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
+				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
+				cards.add(out);
+				getGame().trigger(Trigger.ON_DRAW);
+				return out;
+			}
+		}
+
+		return null;
+	}
+
 	public LinkedList<Drawable<?>> getGraveyard() {
 		graveyard.removeIf(d -> !equals(d.getHand()));
 
