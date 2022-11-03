@@ -404,7 +404,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setFlag(Flag flag, boolean value) {
-		setFlag(flag, false);
+		setFlag(flag, value, false);
 	}
 
 	public void setFlag(Flag flag, boolean value, boolean permanent) {
