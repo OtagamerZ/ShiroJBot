@@ -146,6 +146,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		AtomicInteger line = new AtomicInteger();
 
 		return (str, x, y) -> {
+			str = str.replace("_", " ");
 			if (lastVal.get() != y) {
 				line.getAndIncrement();
 				lastVal.set(y);
@@ -159,7 +160,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.1f, new Color(0, 0, 0));
 				}
 			} else if (str.endsWith(Constants.VOID)) {
 				Graph.drawOutlinedString(g2d, str, x, y, 1.25f, g2d.getColor());
