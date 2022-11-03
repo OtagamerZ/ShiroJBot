@@ -909,12 +909,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 			boolean ignore = ally.getStats().popFlag(Flag.NO_COMBAT);
 			if (!ignore && enemy != null) {
-				System.out.println(enemy.getSlot() == null);
-				System.out.println(enemy.getStats().popFlag(Flag.IGNORE_COMBAT));
 				ignore = enemy.getSlot() == null || enemy.getStats().popFlag(Flag.IGNORE_COMBAT);
 			}
 
-			if (ignore) {
+			if (!ignore) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
 						you.addKill();
