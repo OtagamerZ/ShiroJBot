@@ -912,7 +912,6 @@ public class Shoukan extends GameInstance<Phase> {
 				ignore = enemy.getSlot() == null || enemy.getStats().popFlag(Flag.IGNORE_COMBAT);
 			}
 
-			System.out.println(ignore);
 			if (ignore) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
@@ -1025,7 +1024,6 @@ public class Shoukan extends GameInstance<Phase> {
 					outcome = "str/combat_direct";
 				}
 			}
-			System.out.println("Pass");
 
 			if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
 				System.out.println("Consume");
@@ -1631,8 +1629,10 @@ public class Shoukan extends GameInstance<Phase> {
 				s.reduceCooldown(1);
 
 				s.getStats().expireMods();
+				s.getStats().clearTFlags();
 				for (Evogear e : s.getEquipments()) {
 					e.getStats().expireMods();
+					e.getStats().clearTFlags();
 				}
 			}
 

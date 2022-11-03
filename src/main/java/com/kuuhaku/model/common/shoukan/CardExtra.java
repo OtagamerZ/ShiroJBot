@@ -57,6 +57,7 @@ public class CardExtra implements Cloneable {
 	private final HashSet<AttrMod> tier;
 
 	private final EnumSet<Flag> flags;
+	private final EnumSet<Flag> tempFlags;
 	private final EnumSet<Flag> permFlags;
 
 	private final JSONObject data;
@@ -79,8 +80,9 @@ public class CardExtra implements Cloneable {
 			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
 			HashSet<AttrMod> atk, HashSet<AttrMod> dfs, HashSet<AttrMod> dodge,
 			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
-			HashSet<AttrMod> power, EnumSet<Flag> flags, EnumSet<Flag> permFlags,
-			JSONObject data, JSONObject perm, ListOrderedSet<String> curses
+			HashSet<AttrMod> power, EnumSet<Flag> flags, EnumSet<Flag> tempFlags,
+			EnumSet<Flag> permFlags, JSONObject data, JSONObject perm,
+			ListOrderedSet<String> curses
 	) {
 		this.mana = mana;
 		this.blood = blood;
@@ -93,6 +95,7 @@ public class CardExtra implements Cloneable {
 		this.power = power;
 		this.tier = tier;
 		this.flags = flags;
+		this.tempFlags = flags;
 		this.permFlags = permFlags;
 		this.data = data;
 		this.perm = perm;
@@ -111,6 +114,7 @@ public class CardExtra implements Cloneable {
 				new HashSet<>(),
 				new HashSet<>(),
 				new HashSet<>(),
+				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				new JSONObject(),
@@ -389,14 +393,18 @@ public class CardExtra implements Cloneable {
 		this.tier.add(mod);
 	}
 
-	public void setFlag(Flag flag, boolean value) {
+	public void setTFlag(Flag flag, boolean value) {
 		if (hasFlag(flag) == value) return;
 
-		if (value) {
-			flags.add(flag);
-		} else {
-			flags.remove(flag);
-		}
+		tempFlags.add(flag);
+	}
+
+	public void clearTFlags() {
+		tempFlags.clear();
+	}
+
+	public void setFlag(Flag flag, boolean value) {
+		setFlag(flag, false);
 	}
 
 	public void setFlag(Flag flag, boolean value, boolean permanent) {
@@ -410,11 +418,11 @@ public class CardExtra implements Cloneable {
 	}
 
 	public boolean hasFlag(Flag flag) {
-		return flags.contains(flag) || permFlags.contains(flag);
+		return tempFlags.contains(flag) || flags.contains(flag) || permFlags.contains(flag);
 	}
 
 	public boolean popFlag(Flag flag) {
-		return flags.remove(flag) || permFlags.contains(flag);
+		return tempFlags.remove(flag) || flags.remove(flag) || permFlags.contains(flag);
 	}
 
 	public JSONObject getData() {
@@ -558,6 +566,7 @@ public class CardExtra implements Cloneable {
 				copier.makeCopy(power),
 				copier.makeCopy(tier),
 				EnumSet.copyOf(flags),
+				EnumSet.copyOf(tempFlags),
 				EnumSet.copyOf(permFlags),
 				data.clone(),
 				perm.clone(),
