@@ -770,10 +770,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
-	public void noEffect(Closure<Void> c) {
+	public void noEffect(Closure<Senshi> c) {
 		try {
 			base.lock();
-			c.run();
+			c.call(this);
 		} finally {
 			base.unlock();
 		}
