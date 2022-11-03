@@ -131,9 +131,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(mana);
-		this.mana.remove(mod);
-		this.mana.add(mod);
+		this.mana.add(new PermMod(mana));
 	}
 
 	public void setMana(Drawable<?> source, int mana) {
@@ -160,9 +158,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(blood);
-		this.blood.remove(mod);
-		this.blood.add(mod);
+		this.blood.add(new PermMod(blood));
 	}
 
 	public void setBlood(Drawable<?> source, int blood) {
@@ -189,9 +185,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(sacrifices);
-		this.sacrifices.remove(mod);
-		this.sacrifices.add(mod);
+		this.sacrifices.add(new PermMod(sacrifices));
 	}
 
 	public void setSacrifices(Drawable<?> source, int sacrifices) {
@@ -218,9 +212,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(atk);
-		this.atk.remove(mod);
-		this.atk.add(mod);
+		this.atk.add(new PermMod(atk));
 	}
 
 	public void setAtk(Drawable<?> source, int atk) {
@@ -247,9 +239,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(def);
-		this.dfs.remove(mod);
-		this.dfs.add(mod);
+		this.dfs.add(new PermMod(def));
 	}
 
 	public void setDfs(Drawable<?> source, int def) {
@@ -276,9 +266,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(dodge);
-		this.dodge.remove(mod);
-		this.dodge.add(mod);
+		this.dodge.add(new PermMod(dodge));
 	}
 
 	public void setDodge(Drawable<?> source, int dodge) {
@@ -305,9 +293,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(block);
-		this.block.remove(mod);
-		this.block.add(mod);
+		this.block.add(new PermMod(block));
 	}
 
 	public void setBlock(Drawable<?> source, int block) {
@@ -334,9 +320,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(attrMult);
-		this.attrMult.remove(mod);
-		this.attrMult.add(mod);
+		this.attrMult.add(new PermMod(attrMult));
 	}
 
 	public void setAttrMult(Drawable<?> source, double attrMult) {
@@ -363,9 +347,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(power);
-		this.power.remove(mod);
-		this.power.add(mod);
+		this.power.add(new PermMod(power));
 	}
 
 	public void setPower(Drawable<?> source, double power) {
@@ -392,9 +374,7 @@ public class CardExtra implements Cloneable {
 			}
 		}
 
-		AttrMod mod = new PermMod(tier);
-		this.tier.remove(mod);
-		this.tier.add(mod);
+		this.tier.add(new PermMod(tier));
 	}
 
 	public void setTier(Drawable<?> source, int tier) {
