@@ -92,7 +92,7 @@ public class SlotColumn {
 						shield = e;
 					}
 				}
-			} // TODO Continue
+			}
 
 			if (shield != null) {
 				int charges = shield.getStats().getData().getInt("shield", 0) + 1;

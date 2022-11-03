@@ -258,6 +258,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}));
 		}
 
+		getData(side).put("lastSummon", copy);
 		reportEvent("str/place_card",
 				curr.getName(),
 				copy.isFlipped() ? locale.get("str/a_card") : copy,
@@ -312,6 +313,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		target.getEquipments().add(copy);
+		getData(side).put("lastEquipment", copy);
 		reportEvent("str/equip_card",
 				curr.getName(),
 				copy.isFlipped() ? locale.get("str/an_equipment") : copy,
@@ -341,6 +343,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		chosen.setAvailable(false);
 		arena.setField(chosen.copy());
+		getData(side).put("lastField", chosen);
 		reportEvent("str/place_field", curr.getName(), chosen);
 		return true;
 	}
