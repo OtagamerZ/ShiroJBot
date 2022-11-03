@@ -146,7 +146,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		AtomicInteger line = new AtomicInteger();
 
 		return (str, x, y) -> {
-			str = str.replace("_", " ");
 			if (lastVal.get() != y) {
 				line.getAndIncrement();
 				lastVal.set(y);

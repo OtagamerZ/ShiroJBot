@@ -99,6 +99,9 @@ public class Hand {
 			d -> {
 				if (d == null || !d.keepOnDestroy() || getGame().getArena().getBanned().contains(this)) return false;
 
+				return !(d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH));
+			},
+			d -> {
 				if (d instanceof Senshi s) {
 					Evogear ward = null;
 					for (Evogear e : s.getEquipments()) {
@@ -108,7 +111,7 @@ public class Hand {
 					}
 
 					if (s.getStats().hasFlag(Flag.NO_DEATH)) {
-						return false;
+						return;
 					} else if (ward != null) {
 						int charges = ward.getStats().getData().getInt("ward", 0) + 1;
 						if (charges >= Charm.WARDING.getValue(ward.getTier())) {
@@ -118,14 +121,9 @@ public class Hand {
 						}
 
 						s.getStats().setFlag(Flag.NO_DEATH, true);
-						return false;
+						return;
 					}
 				}
-
-				return true;
-			},
-			d -> {
-				if (d instanceof Senshi s && (s.getStats().popFlag(Flag.NO_DEATH))) return;
 
 				d.setHand(this);
 				getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
