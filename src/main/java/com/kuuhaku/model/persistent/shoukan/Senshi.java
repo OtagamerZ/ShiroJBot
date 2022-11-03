@@ -37,6 +37,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
+import groovy.lang.Closure;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
@@ -769,10 +770,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
-	public void noEffect(Runnable r) {
+	public void noEffect(Closure<Void> c) {
 		try {
 			base.lock();
-			r.run();
+			c.run();
 		} finally {
 			base.unlock();
 		}
