@@ -595,7 +595,23 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
-			getChannel().sendMessage(locale.get("error/protected_card")).queue();
+			curr.consumeHP(chosen.getHPCost());
+			curr.consumeMP(chosen.getMPCost());
+			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+
+			Evogear copy = chosen.copy();
+			curr.getGraveyard().add(copy);
+			if (!consumed.isEmpty()) {
+				copy.getStats().getData().put("consumed", consumed);
+			}
+
+			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+				chosen.setAvailable(false);
+			}
+
+			getData(side).put("lastSpell", copy);
+			trigger(ON_SPELL, side);
+			reportEvent("str/spell_shield");
 			return false;
 		} else if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + chosen.getTargetType()))).queue();
@@ -698,7 +714,14 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
-			getChannel().sendMessage(locale.get("error/protected_card")).queue();
+			curr.consumeMP(1);
+			if (getPhase() != Phase.PLAN && !chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+				chosen.setAvailable(false);
+			}
+
+			getData(side).put("lastAbility", chosen);
+			trigger(ON_ABILITY, side);
+			reportEvent("str/spell_shield");
 			return false;
 		} else if (!tgt.validate(type)) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + type))).queue();
