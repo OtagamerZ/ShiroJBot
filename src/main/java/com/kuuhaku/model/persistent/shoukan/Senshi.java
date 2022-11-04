@@ -188,7 +188,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isEquipped(String id) {
-		return equipments.stream().anyMatch(e -> e.getCard().getId().equals(id));
+		return equipments.stream().anyMatch(e -> {
+			System.out.println(e.getCard());
+			return e.getCard().getId().equals(id);
+		});
 	}
 
 	public Evogear getEquipped(String id) {
