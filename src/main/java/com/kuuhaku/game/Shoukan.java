@@ -828,13 +828,13 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Target t;
+		Source t;
 		int posHash;
 		if (enemy != null) {
-			t = enemy.asTarget(ON_DEFEND);
+			t = enemy.asSource(ON_DEFEND);
 			posHash = enemy.posHash();
 		} else {
-			t = new Target();
+			t = new Source();
 			posHash = 0;
 		}
 		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
@@ -933,7 +933,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						if (ally.getDmg() < eCombatStats) {
-							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asSource(ON_BLOCK));
 							pHP = you.getHP();
 
 							if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
@@ -954,14 +954,14 @@ public class Shoukan extends GameInstance<Phase> {
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_miss"));
 								return true;
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
-								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asSource(ON_BLOCK));
 
 								you.getGraveyard().add(ally);
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
 								return true;
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
-								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
+								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asSource(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
 									op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
@@ -972,7 +972,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							if (ally.getDmg() > eCombatStats) {
-								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
+								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asSource(ON_LOSE));
 								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;
 								} else {
@@ -983,7 +983,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								outcome = "str/combat_success";
 							} else {
-								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
+								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asSource(ON_LOSE));
 
 								op.getGraveyard().add(enemy);
 								you.getGraveyard().add(ally);

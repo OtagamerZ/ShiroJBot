@@ -56,27 +56,27 @@ public record Targeting(Hand hand, int allyPos, int enemyPos) {
 		};
 	}
 
-	public Target[] targets(Trigger trigger) {
-		List<Target> targets = new ArrayList<>();
+	public Source[] targets(Trigger trigger) {
+		List<Source> targets = new ArrayList<>();
 
 		if (allyPos > -1) {
 			Senshi ally = ally();
 			if (ally != null) {
-				targets.add(ally.asTarget(trigger));
+				targets.add(ally.asSource(trigger));
 			} else {
-				targets.add(new Target(null, hand.getSide(), allyPos, trigger, TargetType.ALLY));
+				targets.add(new Source(null, hand.getSide(), allyPos, trigger));
 			}
 		}
 
 		if (enemyPos > -1) {
 			Senshi enemy = enemy();
 			if (enemy != null) {
-				targets.add(enemy.asTarget(trigger));
+				targets.add(enemy.asSource(trigger));
 			} else {
-				targets.add(new Target(null, hand.getSide().getOther(), enemyPos, trigger, TargetType.ENEMY));
+				targets.add(new Source(null, hand.getSide().getOther(), enemyPos, trigger));
 			}
 		}
 
-		return targets.toArray(Target[]::new);
+		return targets.toArray(Source[]::new);
 	}
 }
