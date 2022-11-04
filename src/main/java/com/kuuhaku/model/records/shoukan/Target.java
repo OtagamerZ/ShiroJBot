@@ -18,50 +18,14 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.TargetType;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 public record Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
 	public Target() {
 		this(null, null, -1, null, TargetType.NONE);
-	}
-
-	public Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
-		Evogear shield = null;
-		if (card != null) {
-			card.getHand().getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(card, Trigger.ON_EFFECT_TARGET));
-			if (!card.getHand().equals(card.getHand().getGame().getCurrent())) {
-				for (Evogear e : card.getEquipments()) {
-					if (e.hasCharm(Charm.SHIELD)) {
-						shield = e;
-					}
-				}
-			}
-		}
-
-		if (shield != null || (card != null && (card.getStats().popFlag(Flag.IGNORE_EFFECT) || card.isStasis()))) {
-			if (shield != null) {
-				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
-				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-					card.getHand().getGraveyard().add(shield);
-				} else {
-					shield.getStats().getData().put("shield", charges);
-				}
-			}
-
-			this.card = null;
-			this.side = null;
-			this.index = -1;
-			this.trigger = null;
-			this.type = TargetType.NONE;
-		} else {
-			this.card = card;
-			this.side = side;
-			this.index = index;
-			this.trigger = trigger;
-			this.type = type;
-		}
 	}
 
 	public boolean execute(EffectParameters ep) {

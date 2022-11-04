@@ -679,6 +679,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		else if (ep.size() == 0 && trigger == Trigger.ON_DEFER) return false;
 		else if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
+		ep.consumeShields();
+
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
 			base.lock();

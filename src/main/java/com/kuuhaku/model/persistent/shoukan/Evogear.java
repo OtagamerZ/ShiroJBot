@@ -322,6 +322,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
 		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name()))) return false;
 
+		ep.consumeShields();
+
 		try {
 			if (isSpell()) {
 				Utils.exec(effect, Map.of(
