@@ -71,12 +71,14 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(d -> {
+	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>((d, it) -> {
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 		d.getHand().getOther().addKill();
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getBanned().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}

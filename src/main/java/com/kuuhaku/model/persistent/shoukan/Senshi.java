@@ -77,7 +77,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private CardAttributes base = new CardAttributes();
 
 	@Transient
-	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
+	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>((e, it) -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
 		e.executeAssert(Trigger.ON_INITIALIZE);
@@ -827,7 +827,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void reset() {
-		equipments = new BondedLinkedList<>(e -> {
+		equipments = new BondedLinkedList<>((e, it) -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
 			e.executeAssert(Trigger.ON_INITIALIZE);

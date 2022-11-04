@@ -65,14 +65,16 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>(d -> {
+	private final List<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getCards().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -80,14 +82,16 @@ public class Hand {
 		d.setSlot(null);
 		return true;
 	});
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> {
+	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getDeck().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -95,7 +99,7 @@ public class Hand {
 		d.reset();
 		return true;
 	});
-	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
+	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		if (d instanceof Senshi s) {
@@ -111,7 +115,7 @@ public class Hand {
 			} else if (ward != null) {
 				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
 				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-					getGraveyard().add(ward);
+					it.add(ward);
 				} else {
 					ward.getStats().getData().put("ward", charges);
 				}
@@ -135,7 +139,9 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getGraveyard().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -149,7 +155,7 @@ public class Hand {
 
 		return d.keepOnDestroy();
 	});
-	private final List<Drawable<?>> discard = new BondedList<>(d -> {
+	private final List<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
@@ -255,7 +261,7 @@ public class Hand {
 	public Side getSide() {
 		return side;
 	}
-	
+
 	public Hand getOther() {
 		return game.getHands().get(side.getOther());
 	}

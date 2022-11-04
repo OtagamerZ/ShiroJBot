@@ -119,7 +119,7 @@ public class CardExtra implements Cloneable {
 				EnumSet.noneOf(Flag.class),
 				new JSONObject(),
 				new JSONObject(),
-				ListOrderedSet.listOrderedSet(BondedList.withBind(s -> !s.isBlank()))
+				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
 		);
 	}
 
@@ -570,7 +570,7 @@ public class CardExtra implements Cloneable {
 				EnumSet.copyOf(permFlags),
 				data.clone(),
 				perm.clone(),
-				ListOrderedSet.listOrderedSet(BondedList.withBind(s -> !s.isBlank()))
+				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
 		);
 
 		clone.removeTemporary();
