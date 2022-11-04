@@ -789,32 +789,34 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return true;
 		}
 
-		Evogear shield = null;
-		hand.getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(this, Trigger.ON_EFFECT_TARGET));
-		if (!hand.equals(hand.getGame().getCurrent())) {
-			for (Evogear e : equipments) {
-				if (e.hasCharm(Charm.SHIELD)) {
-					shield = e;
+		if (hand != null) {
+			Evogear shield = null;
+			hand.getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(this, Trigger.ON_EFFECT_TARGET));
+			if (!hand.equals(hand.getGame().getCurrent())) {
+				for (Evogear e : equipments) {
+					if (e.hasCharm(Charm.SHIELD)) {
+						shield = e;
+					}
 				}
 			}
-		}
 
-		if (shield != null) {
-			int turn = hand.getGame().getTurn();
+			if (shield != null) {
+				int turn = hand.getGame().getTurn();
 
-			int last = shield.getStats().getData().getInt("last", 0);
-			if (last != turn) {
-				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
-				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-					hand.getGraveyard().add(shield);
-				} else {
-					shield.getStats().getData().put("shield", charges);
+				int last = shield.getStats().getData().getInt("last", 0);
+				if (last != turn) {
+					int charges = shield.getStats().getData().getInt("uses", 0) + 1;
+					if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
+						hand.getGraveyard().add(shield);
+					} else {
+						shield.getStats().getData().put("uses", charges);
+					}
+
+					shield.getStats().getData().put("last", turn);
 				}
 
-				shield.getStats().getData().put("last", turn);
+				return true;
 			}
-
-			return true;
 		}
 
 		return false;

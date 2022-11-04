@@ -113,11 +113,18 @@ public class Hand {
 			if (s.getStats().popFlag(Flag.NO_DEATH)) {
 				return false;
 			} else if (ward != null) {
-				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
-				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-					it.add(ward);
-				} else {
-					ward.getStats().getData().put("ward", charges);
+				int turn = getGame().getTurn();
+
+				int last = ward.getStats().getData().getInt("last", 0);
+				if (last != turn) {
+					int charges = ward.getStats().getData().getInt("uses", 0) + 1;
+					if (charges >= Charm.WARDING.getValue(ward.getTier())) {
+						it.add(ward);
+					} else {
+						ward.getStats().getData().put("uses", charges);
+					}
+
+					ward.getStats().getData().put("last", turn);
 				}
 
 				return false;
