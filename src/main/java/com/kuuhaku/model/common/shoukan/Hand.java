@@ -107,6 +107,7 @@ public class Hand {
 			}
 
 			if (s.getStats().popFlag(Flag.NO_DEATH)) {
+				System.out.println("Defended");
 				return false;
 			} else if (ward != null) {
 				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
