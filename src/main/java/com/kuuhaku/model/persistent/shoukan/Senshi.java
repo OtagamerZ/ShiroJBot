@@ -35,6 +35,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import jakarta.persistence.*;
@@ -781,6 +782,42 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} finally {
 			base.unlock();
 		}
+	}
+
+	public boolean isProtected() {
+		if (isStasis() || stats.popFlag(Flag.IGNORE_EFFECT)) {
+			return true;
+		}
+
+		Evogear shield = null;
+		hand.getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(this, Trigger.ON_EFFECT_TARGET));
+		if (!hand.equals(hand.getGame().getCurrent())) {
+			for (Evogear e : equipments) {
+				if (e.hasCharm(Charm.SHIELD)) {
+					shield = e;
+				}
+			}
+		}
+
+		if (shield != null) {
+			int turn = hand.getGame().getTurn();
+
+			int last = shield.getStats().getData().getInt("last", 0);
+			if (last != turn) {
+				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
+				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
+					hand.getGraveyard().add(shield);
+				} else {
+					shield.getStats().getData().put("shield", charges);
+				}
+
+				shield.getStats().getData().put("last", turn);
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

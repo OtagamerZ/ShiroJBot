@@ -20,11 +20,9 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
@@ -46,9 +44,7 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		if (source.card() instanceof Senshi s && s.getStats().hasFlag(Flag.EMPOWERED)) {
 			Shoukan game = source.card().getHand().getGame();
 
-			Iterator<Target> it = tgts.iterator();
-			while (it.hasNext()) {
-				Target tgt = it.next();
+			for (Target tgt : tgts) {
 				boolean support = tgt.card().isSupporting();
 
 				if (tgt.index() > 0) {
@@ -69,32 +65,7 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 			Target t = targets[i];
 			Senshi card = t.card();
 
-			if (card == null || t.type() == TargetType.ALLY) continue;
-			if (card.isStasis()) {
-				targets[i] = new Target();
-				continue;
-			}
-
-			Evogear shield = null;
-			card.getHand().getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(card, Trigger.ON_EFFECT_TARGET));
-			if (!card.getHand().equals(card.getHand().getGame().getCurrent())) {
-				for (Evogear e : card.getEquipments()) {
-					if (e.hasCharm(Charm.SHIELD)) {
-						shield = e;
-					}
-				}
-			}
-
-			if (shield != null || card.getStats().popFlag(Flag.IGNORE_EFFECT)) {
-				if (shield != null) {
-					int charges = shield.getStats().getData().getInt("shield", 0) + 1;
-					if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-						card.getHand().getGraveyard().add(shield);
-					} else {
-						shield.getStats().getData().put("shield", charges);
-					}
-				}
-
+			if (card != null && t.type() != TargetType.ALLY && card.isProtected()) {
 				targets[i] = new Target();
 			}
 		}
