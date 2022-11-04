@@ -136,7 +136,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 
-		curr.showHand(locale);
+		curr.showHand();
 		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
 
 		takeSnapshot();
@@ -161,7 +161,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-				getCurrent().showHand(locale);
+				getCurrent().showHand();
 			}
 		}
 	}
@@ -1464,7 +1464,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						curr.manualDraw(1);
-						curr.showHand(locale);
+						curr.showHand();
 						reportEvent("str/draw_card", curr.getName(), 1, "");
 					});
 
@@ -1476,7 +1476,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
-							curr.showHand(locale);
+							curr.showHand();
 							reportEvent("str/draw_card", curr.getName(), rem, "s");
 						});
 					}
@@ -1509,7 +1509,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
 						curr.setOriginCooldown(3);
-						curr.showHand(locale);
+						curr.showHand();
 						reportEvent("str/spirit_synth", curr.getName());
 					});
 				}
@@ -1653,7 +1653,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		curr.showHand(locale);
+		curr.showHand();
 		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
 
 		takeSnapshot();

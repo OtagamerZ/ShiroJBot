@@ -802,13 +802,13 @@ public class Hand {
 		return bi;
 	}
 
-	public void showHand(I18N locale) {
-		showHand(locale, this);
+	public void showHand() {
+		showHand(this);
 	}
 
-	public void showHand(I18N locale, Hand hand) {
+	public void showHand(Hand hand) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale, equals(hand)), "png"), "hand.png"))
+				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(game.getLocale(), equals(hand)), "png"), "hand.png"))
 				.queue(m -> {
 					if (equals(hand)) {
 						if (lastMessage != null) {
@@ -822,7 +822,7 @@ public class Hand {
 				});
 	}
 
-	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
+	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
 		selection = new Pair<>(cards, new CompletableFuture<>());
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
@@ -831,7 +831,7 @@ public class Hand {
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 		g2d.translate(0, 100);
 
-		String str = locale.get("str/select_a_card");
+		String str = game.getLocale().get("str/select_a_card");
 		Graph.drawOutlinedString(g2d, str,
 				bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10,
 				6, Color.BLACK
@@ -842,7 +842,7 @@ public class Hand {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 450, null);
+			g2d.drawImage(d.render(game.getLocale(), userDeck), x, bi.getHeight() - 450, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
