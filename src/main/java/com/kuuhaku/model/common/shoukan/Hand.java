@@ -257,7 +257,7 @@ public class Hand {
 	}
 	
 	public Hand getOther() {
-		return getOther();
+		return game.getHands().get(side.getOther());
 	}
 
 	public Origin getOrigin() {
