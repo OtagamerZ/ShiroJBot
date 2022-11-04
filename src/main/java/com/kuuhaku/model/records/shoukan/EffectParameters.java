@@ -117,12 +117,6 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		return out;
 	}
 
-	@Override
-	public Target[] targets() {
-		consumeShields();
-		return targets;
-	}
-
 	public Target[] enemies() {
 		consumeShields();
 		Target[] out = Arrays.stream(targets)
