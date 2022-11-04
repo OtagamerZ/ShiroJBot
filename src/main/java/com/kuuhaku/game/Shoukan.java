@@ -1191,16 +1191,16 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	public boolean trigger(Trigger trigger, Source source, Target... targets) {
+	public boolean trigger(Trigger trigger, Source source, Source... targets) {
 		if (restoring) return false;
 
-		EffectParameters ep = new EffectParameters(trigger, source, targets);
-		if (source.execute(ep)) {
-			for (Target t : targets) {
-				t.execute(ep);
-			}
+		for (Source s : targets) {
+			s.execute(new EffectParameters(trigger, s));
+		}
 
-			triggerEOTs(new EffectParameters(trigger, source, targets));
+		Target[] tgts = Arrays.stream(targets).map(Source::toTarget).toArray(Target[]::new);
+		if (source.execute(new EffectParameters(trigger, source, tgts))) {
+			triggerEOTs(new EffectParameters(trigger, source, tgts));
 			return true;
 		}
 
