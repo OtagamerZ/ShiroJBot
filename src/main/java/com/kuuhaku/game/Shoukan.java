@@ -593,12 +593,10 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (tgt.enemy() != null) {
-			Senshi enemy = tgt.enemy();
-			if (enemy.hasCharm(Charm.SHIELD)) {
-				getChannel().sendMessage(locale.get("error/protected_card")).queue();
-				return false;
-			}
+		Senshi enemy = tgt.enemy();
+		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
+			getChannel().sendMessage(locale.get("error/protected_card")).queue();
+			return false;
 		} else if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + chosen.getTargetType()))).queue();
 			return false;
@@ -698,7 +696,11 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(type)) {
+		Senshi enemy = tgt.enemy();
+		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
+			getChannel().sendMessage(locale.get("error/protected_card")).queue();
+			return false;
+		} else if (!tgt.validate(type)) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + type))).queue();
 			return false;
 		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
