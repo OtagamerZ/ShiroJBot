@@ -189,9 +189,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isEquipped(String id) {
-		return true;
-
-//		return equipments.stream().anyMatch(e -> e.getCard().getId().equals(id));
+		return equipments.stream().anyMatch(e -> e.getCard().getId().equals(id));
 	}
 
 	public Evogear getEquipped(String id) {
@@ -199,6 +197,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.filter(e -> e.getCard().getId().equals(id))
 				.findFirst()
 				.orElse(null);
+	}
+
+	public boolean hasCharm(Charm charm) {
+		return equipments.stream().anyMatch(e -> e.hasCharm(charm));
 	}
 
 	public Evogear unequip(String id) {
@@ -801,18 +803,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (shield != null) {
-				int turn = hand.getGame().getTurn();
-
-				int last = shield.getStats().getData().getInt("last", 0);
-				if (last != turn) {
-					int charges = shield.getStats().getData().getInt("uses", 0) + 1;
-					if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-						hand.getGraveyard().add(shield);
-					} else {
-						shield.getStats().getData().put("uses", charges);
-					}
-
-					shield.getStats().getData().put("last", turn);
+				int charges = shield.getStats().getData().getInt("uses", 0) + 1;
+				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
+					hand.getGraveyard().add(shield);
+				} else {
+					shield.getStats().getData().put("uses", charges);
 				}
 
 				return true;

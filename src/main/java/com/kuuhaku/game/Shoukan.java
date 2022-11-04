@@ -593,7 +593,13 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(chosen.getTargetType())) {
+		if (tgt.enemy() != null) {
+			Senshi enemy = tgt.enemy();
+			if (enemy.hasCharm(Charm.SHIELD)) {
+				getChannel().sendMessage(locale.get("error/protected_card")).queue();
+				return false;
+			}
+		} else if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + chosen.getTargetType()))).queue();
 			return false;
 		}
