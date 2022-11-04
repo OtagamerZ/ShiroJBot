@@ -137,7 +137,6 @@ public class ShoukanCommand implements Executable {
 			}
 
 			m.delete().queue(null, Utils::doNothing);
-			throw new RuntimeException("Done");
 		}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 	}
 }
