@@ -1601,12 +1601,6 @@ public class Shoukan extends GameInstance<Phase> {
 				for (Evogear e : s.getEquipments()) {
 					e.getStats().expireMods();
 					e.getStats().clearTFlags();
-
-					if (e.hasCharm(Charm.SHIELD) || e.hasCharm(Charm.WARDING)) {
-						if (e.getStats().getData().getInt("uses", 0) >= Charm.WARDING.getValue(e.getTier())) {
-							curr.getGraveyard().add(e);
-						}
-					}
 				}
 			}
 
