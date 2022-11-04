@@ -70,21 +70,21 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addFirst(T t) {
-		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
+		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			super.addFirst(t);
 		}
 	}
 
 	@Override
 	public void addLast(T t) {
-		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
+		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			super.addLast(t);
 		}
 	}
 
 	@Override
 	public boolean add(T t) {
-		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
+		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			return super.add(t);
 		}
 
@@ -93,7 +93,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void add(int index, T t) {
-		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
+		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			super.add(index, t);
 		}
 	}
@@ -101,7 +101,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream()
-				.filter(t -> onAdd.apply(t, listIterator(size() - 1)))
+				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
 				.toList();
 
 		return super.addAll(filtered);
@@ -110,7 +110,7 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream()
-				.filter(t -> onAdd.apply(t, listIterator(size() - 1)))
+				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
 				.toList();
 
 		return super.addAll(index, filtered);
