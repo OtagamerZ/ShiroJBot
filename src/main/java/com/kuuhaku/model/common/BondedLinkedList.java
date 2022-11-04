@@ -31,7 +31,8 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	private final Consumer<T> onRemove;
 
 	public static <T> BondedLinkedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		return withBind(onAdd, t -> {});
+		return withBind(onAdd, t -> {
+		});
 	}
 
 	public static <T> BondedLinkedList<T> withBind(Consumer<T> onRemove) {
@@ -43,7 +44,8 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	}
 
 	public BondedLinkedList(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		this(onAdd, t -> {});
+		this(onAdd, t -> {
+		});
 	}
 
 	public BondedLinkedList(Consumer<T> onRemove) {
@@ -56,7 +58,8 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 	}
 
 	public BondedLinkedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		this(c, onAdd, t -> {});
+		this(c, onAdd, t -> {
+		});
 	}
 
 	public BondedLinkedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
@@ -67,21 +70,21 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void addFirst(T t) {
-		if (t != null && onAdd.apply(t, listIterator())) {
+		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
 			super.addFirst(t);
 		}
 	}
 
 	@Override
 	public void addLast(T t) {
-		if (t != null && onAdd.apply(t, listIterator())) {
+		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
 			super.addLast(t);
 		}
 	}
 
 	@Override
 	public boolean add(T t) {
-		if (t != null && onAdd.apply(t, listIterator())) {
+		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
 			return super.add(t);
 		}
 
@@ -90,21 +93,25 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 
 	@Override
 	public void add(int index, T t) {
-		if (t != null && onAdd.apply(t, listIterator())) {
+		if (t != null && onAdd.apply(t, listIterator(size() - 1))) {
 			super.add(index, t);
 		}
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(t -> onAdd.apply(t, listIterator())).toList();
+		List<? extends T> filtered = c.stream()
+				.filter(t -> onAdd.apply(t, listIterator(size() - 1)))
+				.toList();
 
 		return super.addAll(filtered);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(t -> onAdd.apply(t, listIterator())).toList();
+		List<? extends T> filtered = c.stream()
+				.filter(t -> onAdd.apply(t, listIterator(size() - 1)))
+				.toList();
 
 		return super.addAll(index, filtered);
 	}
