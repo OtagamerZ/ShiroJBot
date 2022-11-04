@@ -73,6 +73,7 @@ public class Arena implements Renderer {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final LinkedList<Drawable<?>> banned = new BondedLinkedList<>(d -> {
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
+		d.getHand().getOther().addKill();
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
 			getBanned().addAll(s.getEquipments());

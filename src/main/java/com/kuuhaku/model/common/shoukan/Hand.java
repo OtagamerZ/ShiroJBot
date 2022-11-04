@@ -123,6 +123,17 @@ public class Hand {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 
+		if (getGame().getCurrentSide() != getSide()) {
+			Hand op = getOther();
+
+			if (op.kills % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+				getGame().getArena().getBanned().add(d);
+				return false;
+			}
+
+			op.kills++;
+		}
+
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
 			getGraveyard().addAll(s.getEquipments());
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
@@ -133,7 +144,7 @@ public class Hand {
 
 		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
 			cards.add(d.copy());
-			getGraveyard().remove(d);
+			return false;
 		}
 
 		return d.keepOnDestroy();
@@ -244,6 +255,10 @@ public class Hand {
 	public Side getSide() {
 		return side;
 	}
+	
+	public Hand getOther() {
+		return getOther();
+	}
 
 	public Origin getOrigin() {
 		return origin;
@@ -283,7 +298,7 @@ public class Hand {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			for (int i = 0; i < deck.size() && value > 0; i++) {
 				if (deck.get(i) instanceof Senshi) {
-					if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					if (getOther().getOrigin().synergy() == Race.IMP) {
 						modHP(-10);
 					}
 
@@ -304,7 +319,7 @@ public class Hand {
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 				modHP(50);
 			}
-			if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+			if (getOther().getOrigin().synergy() == Race.IMP) {
 				modHP(-10);
 			}
 
@@ -323,7 +338,7 @@ public class Hand {
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 			modHP(50);
 		}
-		if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+		if (getOther().getOrigin().synergy() == Race.IMP) {
 			modHP(-10);
 		}
 
@@ -356,7 +371,7 @@ public class Hand {
 				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 					modHP(50);
 				}
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -377,7 +392,7 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s && s.getRace().isRace(race)) {
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -398,7 +413,7 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s) {
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -422,7 +437,7 @@ public class Hand {
 				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
 					modHP(50);
 				}
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -464,7 +479,7 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && e.isSpell()) {
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -574,7 +589,7 @@ public class Hand {
 			}
 
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
-				value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
+				value *= 1 + getOther().getGraveyard().size();
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
 				int degen = Math.abs(value / 10);
 				if (degen > 0) {
@@ -614,7 +629,7 @@ public class Hand {
 				if (origin.synergy() == Race.VIRUS) {
 					modMP((int) (delta * 0.0025));
 				} else if (origin.synergy() == Race.TORMENTED) {
-					game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+					getOther().modHP((int) -(delta * 0.01));
 				}
 			} else if (delta < 0) {
 				game.trigger(Trigger.ON_HEAL, side);
@@ -755,7 +770,7 @@ public class Hand {
 	}
 
 	public void addKill() {
-		this.kills++;
+		kills++;
 	}
 
 	public BufferedImage render(I18N locale) {

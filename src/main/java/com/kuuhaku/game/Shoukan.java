@@ -919,12 +919,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (!ignore) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
-						you.addKill();
-						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(enemy);
-						} else {
-							op.getGraveyard().add(enemy);
-						}
+						op.getGraveyard().add(enemy);
 
 						dmg = 0;
 						outcome = "str/combat_success";
@@ -945,12 +940,7 @@ public class Shoukan extends GameInstance<Phase> {
 								you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
 							}
 
-							op.addKill();
-							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-								arena.getBanned().add(ally);
-							} else {
-								you.getGraveyard().add(ally);
-							}
+							you.getGraveyard().add(ally);
 
 							reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
 							return true;
@@ -966,12 +956,7 @@ public class Shoukan extends GameInstance<Phase> {
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 
-								op.addKill();
-								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(ally);
-								} else {
-									you.getGraveyard().add(ally);
-								}
+								you.getGraveyard().add(ally);
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
 								return true;
@@ -994,30 +979,14 @@ public class Shoukan extends GameInstance<Phase> {
 									dmg -= enemyStats;
 								}
 
-								you.addKill();
-								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(enemy);
-								} else {
-									op.getGraveyard().add(enemy);
-								}
+								op.getGraveyard().add(enemy);
 
 								outcome = "str/combat_success";
 							} else {
 								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
 
-								you.addKill();
-								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(enemy);
-								} else {
-									op.getGraveyard().add(enemy);
-								}
-
-								op.addKill();
-								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(ally);
-								} else {
-									you.getGraveyard().add(ally);
-								}
+								op.getGraveyard().add(enemy);
+								you.getGraveyard().add(ally);
 
 								dmg = 0;
 								outcome = "str/combat_clash";
