@@ -416,6 +416,31 @@ public class Hand {
 		return null;
 	}
 
+	public Drawable<?> draw(Predicate<Drawable<?>> cond) {
+		LinkedList<Drawable<?>> deck = getDeck();
+
+		for (int i = 0; i < deck.size(); i++) {
+			Drawable<?> d = deck.get(i);
+			if (cond.test(d)) {
+				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
+					modHP(50);
+				}
+				if (getOther().getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
+				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
+				cards.add(out);
+				getGame().trigger(Trigger.ON_DRAW);
+				return out;
+			}
+		}
+
+		return null;
+	}
+
 	public Drawable<?> drawSenshi() {
 		LinkedList<Drawable<?>> deck = getDeck();
 
