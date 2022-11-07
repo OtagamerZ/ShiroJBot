@@ -54,6 +54,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class Hand {
@@ -882,6 +883,10 @@ public class Hand {
 		});
 
 		return selection.getSecond();
+	}
+
+	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {
+		requestChoice(cards.stream().filter(cond).toList()).thenAccept(act);
 	}
 
 	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
