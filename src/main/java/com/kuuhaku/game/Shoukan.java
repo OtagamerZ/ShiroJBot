@@ -1626,9 +1626,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
-				s.getStats().clearTFlags();
-				for (Evogear e : s.getEquipments()) {
-					e.getStats().clearTFlags();
+				if (s != null) {
+					s.getStats().clearTFlags();
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().clearTFlags();
+					}
 				}
 			}
 		}
