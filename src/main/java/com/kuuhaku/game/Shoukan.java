@@ -423,7 +423,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeHP(chosen.getHPCost() / 2);
 		curr.consumeMP(chosen.getMPCost() / 2);
 
-		trigger(ON_SACRIFICE, side);
+		trigger(ON_SACRIFICE, chosen.asSource(ON_SACRIFICE));
 
 		curr.getGraveyard().add(chosen);
 
@@ -468,8 +468,8 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeHP(hp);
 		curr.consumeMP(mp);
 
-		for (Drawable<?> ignored : cards) {
-			trigger(ON_SACRIFICE, side);
+		for (Drawable<?> chosen : cards) {
+			trigger(ON_SACRIFICE, chosen.asSource(ON_SACRIFICE));
 		}
 
 		curr.getGraveyard().addAll(cards);
