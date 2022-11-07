@@ -871,7 +871,9 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
+		cards = cards.stream().filter(Objects::nonNull).toList();
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
+
 		selection = new Pair<>(cards, new CompletableFuture<>());
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
