@@ -655,13 +655,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasEffect() {
-		return !isSealed() && getEffect().contains(Trigger.class.getName());
+		return !isSealed();
 	}
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if ((isStunned() && Calc.chance(25)) || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0)
-			return false;
+		if (stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
 		Trigger trigger = null;
 		if (equals(ep.source().card())) {
@@ -691,7 +690,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
-			if (hasEffect()) {
+			if (hasEffect() && getEffect().contains(trigger.name()) && !(isStunned() && Calc.chance(25))) {
 				Utils.exec(getEffect(), Map.of(
 						"ep", ep,
 						"self", this,
