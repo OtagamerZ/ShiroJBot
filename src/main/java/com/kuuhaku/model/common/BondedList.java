@@ -19,10 +19,7 @@
 package com.kuuhaku.model.common;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -84,6 +81,7 @@ public class BondedList<T> extends ArrayList<T> {
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream()
+				.filter(Objects::nonNull)
 				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
 				.toList();
 
@@ -93,6 +91,7 @@ public class BondedList<T> extends ArrayList<T> {
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
 		List<? extends T> filtered = c.stream()
+				.filter(Objects::nonNull)
 				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
 				.toList();
 
