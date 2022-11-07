@@ -56,5 +56,7 @@ public enum Flag {
 	/** Effect has 50% more power and targets nearby cards **/
 	EMPOWERED,
 	/** Does not consume an action **/
-	FREE_ACTION
+	FREE_ACTION,
+	/** Can attack while defending **/
+	ALWAYS_ATTACK
 }

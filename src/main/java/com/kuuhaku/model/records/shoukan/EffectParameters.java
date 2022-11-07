@@ -99,6 +99,24 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		return out;
 	}
 
+	public Target[] kills() {
+		consumeShields();
+		Target[] out = Arrays.stream(targets)
+				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
+				.filter(t -> {
+					Senshi s = t.card();
+					if (source.card() instanceof Senshi src) {
+						return s != null && s.getActiveAttr() <= src.getActiveAttr();
+					}
+
+					return s != null;
+				})
+				.toArray(Target[]::new);
+
+		if (out.length == 0) throw new TargetException();
+		return out;
+	}
+
 	public Target[] slots(TargetType type) {
 		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == type)
