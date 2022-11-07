@@ -1620,33 +1620,17 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.modHP(curr.getMP() * 10);
 		}
 
-		List<SlotColumn> slts = getSlots(curr.getSide());
-		for (SlotColumn slt : slts) {
-			Senshi s = slt.getTop();
-			if (s != null) {
-				s.setAvailable(true);
+		for (Lock lock : Lock.values()) {
+			curr.modLockTime(lock, -1);
+		}
 
-				s.reduceStasis(1);
-				s.reduceSleep(1);
-				s.reduceStun(1);
-				s.reduceCooldown(1);
-
-				s.getStats().expireMods();
+		for (SlotColumn slt : getSlots(curr.getSide())) {
+			for (Senshi s : slt.getCards()) {
 				s.getStats().clearTFlags();
 				for (Evogear e : s.getEquipments()) {
-					e.getStats().expireMods();
 					e.getStats().clearTFlags();
 				}
 			}
-
-			s = slt.getBottom();
-			if (s != null) {
-				s.getStats().expireMods();
-			}
-		}
-
-		for (Lock lock : Lock.values()) {
-			curr.modLockTime(lock, -1);
 		}
 
 		super.nextTurn();
@@ -1655,6 +1639,24 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
+
+		for (SlotColumn slt : getSlots(curr.getSide())) {
+			for (Senshi s : slt.getCards()) {
+				if (s != null) {
+					s.setAvailable(true);
+
+					s.reduceStasis(1);
+					s.reduceSleep(1);
+					s.reduceStun(1);
+					s.reduceCooldown(1);
+
+					s.getStats().expireMods();
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().expireMods();
+					}
+				}
+			}
+		}
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
