@@ -663,11 +663,19 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
 		Trigger trigger = null;
-		if (equals(ep.source().card())) {
+		Senshi s = this;
+		if (ep.trigger() == Trigger.ON_DEFER) {
+			if (ep.size() == 0) return false;
+
+			s = getFrontline();
+			if (s == null) return false;
+		}
+
+		if (s.equals(ep.source().card())) {
 			trigger = ep.source().trigger();
 		} else {
 			for (Target target : ep.targets()) {
-				if (equals(target.card())) {
+				if (s.equals(target.card())) {
 					trigger = target.trigger();
 					break;
 				}
@@ -679,7 +687,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (base.isLocked()) return false;
-		else if (ep.size() == 0 && trigger == Trigger.ON_DEFER) return false;
 		else if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
