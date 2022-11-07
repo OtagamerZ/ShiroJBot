@@ -422,8 +422,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeHP(chosen.getHPCost() / 2);
 		curr.consumeMP(chosen.getMPCost() / 2);
-		curr.getGraveyard().add(chosen);
+
 		trigger(ON_SACRIFICE, side);
+
+		curr.getGraveyard().add(chosen);
 
 		reportEvent("str/sacrifice_card", curr.getName(), chosen);
 		return true;
