@@ -62,16 +62,6 @@ public class AttrMod implements Cloneable {
 		this.value = value;
 	}
 
-	public AttrMod plus(Number n) {
-		value += n.doubleValue();
-		return this;
-	}
-
-	public AttrMod minus(Number n) {
-		value -= n.doubleValue();
-		return this;
-	}
-
 	public int getExpiration() {
 		return expiration;
 	}
