@@ -764,7 +764,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int pHP = you.getHP();
-		int dmg = ally.getDmg();
+		int dmg = ally.getActiveAttr();
 
 		for (Evogear e : ally.getEquipments()) {
 			JSONArray charms = e.getCharms();
@@ -875,7 +875,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int pHP = op.getHP();
-		int dmg = ally.getDmg();
+		int dmg = ally.getActiveAttr();
 		int lifesteal = 0;
 		int thorns = 0;
 		float mitigation = 1;
@@ -963,12 +963,12 @@ public class Shoukan extends GameInstance<Phase> {
 							eCombatStats -= eEquipStats;
 						}
 
-						if (ally.getDmg() < eCombatStats) {
+						if (ally.getActiveAttr() < eCombatStats) {
 							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
 							if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
-								you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
+								you.modHP((int) -((enemyStats - ally.getActiveAttr()) * mitigation));
 							}
 
 							you.getGraveyard().add(ally);
@@ -995,14 +995,14 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
-									op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
+									op.modHP((int) -(ally.getActiveAttr() * mitigation * 0.02));
 								}
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
 								return true;
 							}
 
-							if (ally.getDmg() > eCombatStats) {
+							if (ally.getActiveAttr() > eCombatStats) {
 								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
 								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;
