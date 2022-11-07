@@ -735,7 +735,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return false;
 		} catch (ActivationException e) {
 			Shoukan game = hand.getGame();
-			game.getChannel().sendMessage(game.getLocale().get("error/activation", e.getMessage())).queue();
+			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);

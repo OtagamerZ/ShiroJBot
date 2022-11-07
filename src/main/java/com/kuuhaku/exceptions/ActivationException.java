@@ -24,7 +24,7 @@ public class ActivationException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = 7714944773474876910L;
 
-	public ActivationException(String message) {
-		super(message);
+	public ActivationException(String key) {
+		super(key);
 	}
 }
