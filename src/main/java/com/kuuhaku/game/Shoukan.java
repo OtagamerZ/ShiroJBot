@@ -467,10 +467,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeHP(hp);
 		curr.consumeMP(mp);
-		curr.getGraveyard().addAll(cards);
+
 		for (Drawable<?> ignored : cards) {
 			trigger(ON_SACRIFICE, side);
 		}
+
+		curr.getGraveyard().addAll(cards);
 
 		reportEvent("str/sacrifice_card", curr.getName(),
 				Utils.properlyJoin(locale.get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
