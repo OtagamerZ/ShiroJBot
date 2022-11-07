@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -870,6 +871,7 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
+		if (cards.isEmpty()) throw new ActivationException();
 		selection = new Pair<>(cards, new CompletableFuture<>());
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);

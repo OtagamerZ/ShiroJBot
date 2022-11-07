@@ -62,6 +62,8 @@ public class AttrMod implements Cloneable {
 		this.value = value;
 	}
 
+	public
+
 	public int getExpiration() {
 		return expiration;
 	}
