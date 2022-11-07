@@ -209,7 +209,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			int i = 0;
 			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
 				Race r = Race.valueOf(entry.getKey());
-				double mod = (double) entry.getValue();
+				double mod = ((Number) entry.getValue()).doubleValue();
 				if (mod == 0) continue;
 
 				int y = 279 - 25 * i++;
