@@ -22,9 +22,11 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -57,6 +59,7 @@ public class CardAttributes implements Serializable {
 	@Column(name = "block", nullable = false)
 	private int block = 0;
 
+	@Type(JsonBinaryType.class)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();

@@ -53,6 +53,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class Hand {
@@ -881,6 +882,10 @@ public class Hand {
 		});
 
 		return selection.getSecond();
+	}
+
+	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
+		requestChoice(cards).thenAccept(act);
 	}
 
 	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {

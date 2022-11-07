@@ -26,12 +26,14 @@ import com.kuuhaku.model.persistent.converter.*;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import com.kuuhaku.util.json.JSONObject;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
+import org.hibernate.annotations.Type;
 
 import java.util.*;
 
@@ -111,6 +113,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = GuildFeatureConverter.class)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
+	@Type(JsonBinaryType.class)
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
