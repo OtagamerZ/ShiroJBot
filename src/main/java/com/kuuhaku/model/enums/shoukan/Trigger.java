@@ -19,77 +19,123 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum Trigger {
-	// Triggers on render
+	/** On each render **/
 	ON_TICK,
 
-	// Triggers on turn change
+	/** When turn begins **/
 	ON_TURN_BEGIN,
+
+	/** When turn ends **/
 	ON_TURN_END,
 
-	// Triggers on each phase
+	/** When PLAN phase begins **/
 	ON_PLAN,
+
+	/** When COMBAT phase begins **/
 	ON_COMBAT,
 
-	// Triggers on win condition
+	/** When victory is imminent **/
 	ON_WIN,
+
+	/** When defeat is imminent **/
 	ON_DEFEAT,
 
-	// Triggers before combat
+	/** Before attack calculations **/
 	ON_ATTACK,
+
+	/** Before defense calculations **/
 	ON_DEFEND,
 
-	// Triggers after combat
+	/** On defeating a card **/
 	ON_HIT,
+
+	/** On successful block **/
 	ON_BLOCK,
+
+	/** On successful dodge **/
 	ON_DODGE,
+
+	/** When both sides have equal attributes **/
 	ON_CLASH,
+
+	/** On being defeated **/
 	ON_LOSE,
+
+	/** On failing an attack **/
 	ON_SUICIDE,
+
+	/** On missing an attack **/
 	ON_MISS,
 
-	// Triggers when sacrificing a card
+	/** On sending a placed card to graveyard **/
 	ON_SACRIFICE,
 
-	// Triggers when added to each stack
+	/** On being added to the graveyard pile **/
 	ON_GRAVEYARD,
+
+	/** On being added to the ban pile **/
 	ON_BAN,
+
+	/** On being added to the hand pile **/
 	ON_HAND,
+
+	/** On being added to the deck pile **/
 	ON_DECK,
+
+	/** On changing the field **/
 	ON_FIELD_CHANGE,
 
-	// Triggers when the card is placed on the field
+	/** On being placed <b>(Asserted)</b> **/
 	ON_INITIALIZE,
 
-	// Triggers when the card is removed from the field
+	/** On being removed <b>(Asserted)</b> **/
 	ON_REMOVE,
 
-	// Triggers on player action
+	/** On drawing a card **/
 	ON_DRAW,
+
+	/** On discarding a card **/
 	ON_DISCARD,
+
+	/** On summoning a card **/
 	ON_SUMMON,
+
+	/** On equipping a card **/
 	ON_EQUIP,
+
+	/** On changing card mode (Flip -> Defense -> Attack -> Defense) **/
 	ON_SWITCH,
+
+	/** On flipping a card **/
 	ON_FLIP,
 
-	// Triggers on player HP change
+	/** On receiving HP **/
 	ON_HEAL,
+
+	/** On losing HP **/
 	ON_DAMAGE,
 
-	// Single-use trigger
+	/** On using a card's active effect **/
 	ON_ACTIVATE,
 
-	// Triggers when a spell/ability is used
+	/** On using a spell **/
 	ON_SPELL,
+
+	/** On using an ability **/
 	ON_ABILITY,
 
-	// Triggers when targeted by effects
+	/** When targeted by a spell **/
 	ON_SPELL_TARGET,
+
+	/** When targeted **/
 	ON_EFFECT_TARGET,
 
-	// Trigger passed from another card
+	/** Triggers mirrored from supported card **/
 	ON_DEFER,
+
+	/** Triggers mirrored from attached player **/
 	ON_LEECH,
 
-	// Used for nothing
+	/** Nothing **/
 	NONE
 }
