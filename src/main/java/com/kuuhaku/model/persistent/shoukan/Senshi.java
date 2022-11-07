@@ -663,19 +663,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if ((isStunned() && Calc.chance(25)) || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0)
 			return false;
 
-		Trigger trigger;
-		check:
+		Trigger trigger = null;
 		if (equals(ep.source().card())) {
 			trigger = ep.source().trigger();
 		} else {
 			for (Target target : ep.targets()) {
 				if (equals(target.card())) {
 					trigger = target.trigger();
-					break check;
+					break;
 				}
 			}
 
-			trigger = ep.trigger();
+			if (trigger == null) {
+				trigger = ep.trigger();
+			}
 		}
 
 		if (base.isLocked()) return false;
