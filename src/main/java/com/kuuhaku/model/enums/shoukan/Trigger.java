@@ -35,7 +35,7 @@ public enum Trigger {
 	ON_COMBAT,
 
 	/** When victory is imminent **/
-	ON_WIN,
+	ON_VICTORY,
 
 	/** When defeat is imminent **/
 	ON_DEFEAT,
@@ -58,7 +58,7 @@ public enum Trigger {
 	/** When both sides have equal attributes **/
 	ON_CLASH,
 
-	/** On being defeated **/
+	/** On losing the combat **/
 	ON_LOSE,
 
 	/** On failing an attack **/

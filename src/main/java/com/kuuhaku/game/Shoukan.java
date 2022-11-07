@@ -1324,7 +1324,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			String def = hand.getDefeat();
 			if (hand.getHP() == 0 || def != null) {
-				trigger(ON_WIN, side.getOther());
+				trigger(ON_VICTORY, side.getOther());
 				trigger(ON_DEFEAT, side);
 
 				if (hand.getDefeat() == null) {
