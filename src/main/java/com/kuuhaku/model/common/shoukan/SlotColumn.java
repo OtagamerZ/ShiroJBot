@@ -61,10 +61,9 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (top != null && (isLocked() || !equals(top.getSlot()))) {
-			Senshi current = top;
-			current.executeAssert(Trigger.ON_REMOVE);
+			top.executeAssert(Trigger.ON_REMOVE);
 
-			if (Objects.equals(current.SERIAL, top.SERIAL)) {
+			if (isLocked() || !equals(top.getSlot())) {
 				top = null;
 			}
 		}
@@ -109,10 +108,9 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (bottom != null && (isLocked() || !equals(bottom.getSlot()))) {
-			Senshi current = bottom;
-			current.executeAssert(Trigger.ON_REMOVE);
+			bottom.executeAssert(Trigger.ON_REMOVE);
 
-			if (Objects.equals(current.SERIAL, bottom.SERIAL)) {
+			if (isLocked() || !equals(bottom.getSlot())) {
 				bottom = null;
 			}
 		}
