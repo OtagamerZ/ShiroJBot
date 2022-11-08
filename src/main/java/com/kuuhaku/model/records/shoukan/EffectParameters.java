@@ -98,4 +98,12 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		if (out.length == 0) throw new TargetException();
 		return out;
 	}
+
+	public boolean deferred() {
+		return trigger == Trigger.ON_DEFER;
+	}
+
+	public boolean leech() {
+		return trigger == Trigger.ON_LEECH;
+	}
 }
