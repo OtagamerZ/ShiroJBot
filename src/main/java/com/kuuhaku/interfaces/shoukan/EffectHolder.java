@@ -93,7 +93,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						val = String.valueOf(
-								Utils.eval(calc, new HashMap<>() {{
+								Utils.exec(calc, new HashMap<>() {{
 									put("bhp", h == null ? 5000 : h.getBase().hp());
 									put("pmp", h == null ? 5 : h.getMP());
 									put("php", h == null ? 5000 : h.getHP());
@@ -206,7 +206,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(
-								Utils.eval(calc, new HashMap<>() {{
+								Utils.exec(calc, new HashMap<>() {{
 									put("bhp", h == null ? 5000 : h.getBase().hp());
 									put("pmp", h == null ? 5 : h.getMP());
 									put("php", h == null ? 5000 : h.getHP());

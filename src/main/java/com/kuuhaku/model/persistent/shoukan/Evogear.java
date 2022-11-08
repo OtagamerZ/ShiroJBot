@@ -24,6 +24,7 @@ import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
@@ -94,6 +95,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
 	private transient Hand leech = null;
+	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
 	private byte state = 0b10;
@@ -327,24 +329,18 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			return false;
 
 		try {
-			if (isSpell()) {
-				Utils.exec(effect, Map.of(
-						"ep", ep,
-						"evo", this,
-						"game", hand.getGame(),
-						"side", hand.getSide(),
-						"props", extractValues(hand.getGame().getLocale(), this)
-				));
-			} else {
-				Utils.exec(effect, Map.of(
-						"ep", ep,
-						"self", equipper,
-						"evo", this,
-						"trigger", ep.trigger(),
-						"game", hand.getGame(),
-						"side", hand.getSide(),
-						"props", extractValues(hand.getGame().getLocale(), this)
-				));
+			cachedEffect.forScript(getEffect())
+					.withConst("evo", this)
+					.withConst("game", hand.getGame())
+					.withVar("ep", ep)
+					.withVar("side", hand.getSide())
+					.withVar("props", extractValues(hand.getGame().getLocale(), this));
+
+			if (!isSpell()) {
+				cachedEffect
+						.withVar("self", equipper)
+						.withVar("trigger", ep.trigger())
+						.run();
 			}
 
 			stats.popFlag(Flag.EMPOWERED);
@@ -416,6 +412,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
+		cachedEffect = new CachedScriptManager();
 
 		state = 0b11;
 	}

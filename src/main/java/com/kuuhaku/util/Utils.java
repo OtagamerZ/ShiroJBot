@@ -39,7 +39,6 @@ import com.kuuhaku.model.records.StashItem;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
@@ -993,17 +992,6 @@ public abstract class Utils {
 		return StringUtils.leftPad(String.valueOf(o), pad, padChar);
 	}
 
-	public static Object eval(@Language("Groovy") String code) {
-		return eval(code, Map.of());
-	}
-
-	public static Object eval(@Language("Groovy") String code, Map<String, Object> variables) {
-		Binding ctx = new Binding(variables);
-		GroovyShell shell = new GroovyShell(ctx);
-
-		return shell.evaluate(code);
-	}
-
 	public static Object exec(@Language("Groovy") String code) {
 		return exec(code, Map.of());
 	}
@@ -1013,6 +1001,10 @@ public abstract class Utils {
 		Script script = Constants.GROOVY.parse(code, ctx);
 
 		return script.run();
+	}
+
+	public static Script compile(@Language("Groovy") String code) {
+		return Constants.GROOVY.parse(code, new Binding());
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {

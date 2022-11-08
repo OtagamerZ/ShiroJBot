@@ -26,6 +26,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedLinkedList;
+import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
@@ -109,6 +110,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
 	private transient Hand leech = null;
+	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
 	private int state = 0b10;
@@ -698,14 +700,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}*/
 
 			if (hasEffect() && getEffect().contains(trigger.name()) && !(isStunned() && Calc.chance(25))) {
-				Utils.exec(getEffect(), Map.of(
-						"ep", ep,
-						"self", this,
-						"trigger", trigger,
-						"game", hand.getGame(),
-						"side", hand.getSide(),
-						"props", extractValues(hand.getGame().getLocale(), this)
-				));
+				cachedEffect.forScript(getEffect())
+						.withConst("self", this)
+						.withConst("game", hand.getGame())
+						.withVar("ep", ep)
+						.withVar("side", hand.getSide())
+						.withVar("trigger", trigger)
+						.withVar("props", extractValues(hand.getGame().getLocale(), this))
+						.run();
 			}
 
 			for (Evogear e : equipments) {
@@ -864,6 +866,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
+		cachedEffect = new CachedScriptManager();
 
 		byte base = 0b11;
 		base = (byte) Bit.set(base, 4, isSealed());
