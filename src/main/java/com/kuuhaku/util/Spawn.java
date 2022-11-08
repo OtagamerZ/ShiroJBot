@@ -54,8 +54,8 @@ public abstract class Spawn {
 	private static Pair<Integer, MoonIllumination> illum = null;
 	private static final int DEBUG_MULT = 10; // TODO Remove
 
-	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(5);
-	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(10);
+	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
+	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(8);
 
 	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
