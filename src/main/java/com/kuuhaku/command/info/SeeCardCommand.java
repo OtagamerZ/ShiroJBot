@@ -81,7 +81,7 @@ public class SeeCardCommand implements Executable {
 				.setTitle(card.getName() + " (" + card.getAnime() + ")")
 				.setImage("attachment://card.png");
 
-		String type = args.getString("kind", "n");
+		String type = args.getString("kind", "n").toLowerCase();
 		BufferedImage bi = null;
 		switch (type) {
 			case "n", "c" -> {
