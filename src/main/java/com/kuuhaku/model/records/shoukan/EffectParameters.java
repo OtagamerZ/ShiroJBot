@@ -42,22 +42,18 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
 		if (source.card() instanceof Senshi s && s.getStats().hasFlag(Flag.EMPOWERED)) {
-			Shoukan game = source.card().getHand().getGame();
-
 			for (Target tgt : tgts) {
-				boolean support = tgt.card().isSupporting();
-
 				if (tgt.index() > 0) {
-					tgts.add(new Target(
-							game.getSlots(tgt.side()).get(tgt.index() - 1).getAtRole(support),
-							tgt.side(),
-							tgt.index() - 1, tgt.trigger(), tgt.type()
-					));
+					tgts.add(new Target(tgt.card().getLeft(), tgt.side(), tgt.index() - 1, tgt.trigger(), tgt.type()));
+				}
+
+				if (tgt.index() < 4) {
+					tgts.add(new Target(tgt.card().getRight(), tgt.side(), tgt.index() + 1, tgt.trigger(), tgt.type()));
 				}
 			}
 		}
 
-		this.targets = targets;
+		this.targets = tgts.toArray(Target[]::new);
 	}
 
 	public void consumeShields() {
