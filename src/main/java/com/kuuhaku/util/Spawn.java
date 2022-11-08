@@ -19,6 +19,7 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.FixedSizeDeque;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.CreditDrop;
@@ -34,6 +35,7 @@ import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +54,9 @@ public abstract class Spawn {
 	private static Pair<Integer, MoonIllumination> illum = null;
 	private static final int DEBUG_MULT = 10; // TODO Remove
 
+	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(5);
+	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(10);
+
 	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
@@ -63,10 +68,25 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE");
-			Map<Rarity, Set<Card>> cPool = Utils.getRandomEntry(animes).getCards().stream()
-					.collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
+			List<Anime> animes = new ArrayList<>(DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE"));
+			animes.removeIf(lastAnimes::contains);
 
+			Anime anime;
+			if (animes.isEmpty()) {
+				anime = lastAnimes.removeFirst();
+			} else {
+				anime = Utils.getRandomEntry(animes);
+			}
+			lastAnimes.add(anime);
+
+			List<Card> cards = new ArrayList<>(anime.getCards());
+			cards.removeIf(lastCards::contains);
+
+			if (cards.isEmpty()) {
+				return null;
+			}
+
+			Map<Rarity, Set<Card>> cPool = cards.stream().collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
 			RandomList<Rarity> rPool = new RandomList<>(3 - rarityBonus);
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
@@ -74,7 +94,10 @@ public abstract class Spawn {
 				rPool.add(r, 6 - r.getIndex());
 			}
 
-			card = new KawaiponCard(Utils.getRandomEntry(cPool.get(rPool.get())), Calc.chance(0.1 * rarityBonus));
+			Card chosen = Utils.getRandomEntry(cPool.get(rPool.get()));
+			lastCards.add(chosen);
+
+			card = new KawaiponCard(chosen, Calc.chance(0.1 * rarityBonus));
 			spawnedCards.put(channel.getId(), new SingleUseReference<>(card));
 		}
 
