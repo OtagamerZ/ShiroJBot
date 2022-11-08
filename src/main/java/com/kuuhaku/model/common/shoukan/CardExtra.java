@@ -578,7 +578,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public String getDescription(I18N locale) {
-		if (description == null || description.isBlank()) return description;
+		if (description == null || description.isBlank() || description.contains(" ")) return description;
 
 		LocalizedDescription desc = DAO.find(LocalizedDescription.class, new LocalizedId(description, locale));
 		return desc == null ? description : desc.getDescription();
@@ -608,7 +608,7 @@ public class CardExtra implements Cloneable {
 		removeExpired(check);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked"})
 	public void removeExpired(Predicate<AttrMod> check) {
 		if (fieldCache == null) {
 			fieldCache = this.getClass().getDeclaredFields();
