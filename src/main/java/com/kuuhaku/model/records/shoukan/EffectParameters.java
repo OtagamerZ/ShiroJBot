@@ -19,7 +19,7 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.exceptions.TargetException;
-import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -72,6 +72,10 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		if (source.card() != null) i++;
 
 		return i;
+	}
+
+	public boolean isTarget(Drawable<?> card) {
+		return Arrays.stream(targets).anyMatch(t -> Objects.equals(t.card(), card));
 	}
 
 	public Target[] allies() {
