@@ -43,6 +43,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Arena implements Renderer {
 	private final Field DEFAULT = DAO.find(Field.class, "DEFAULT");
@@ -281,21 +282,31 @@ public class Arena implements Renderer {
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 
 			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
-				int y = 0;
+				String hist = history.stream()
+						.map(log -> "{" + log.side().name() + "}" + log.message())
+						.collect(Collectors.joining("\n\n"));
 
-				Iterator<HistoryLog> iterator = history.descendingIterator();
-				while (iterator.hasNext()) {
-					HistoryLog log = iterator.next();
+				int h = (int) Graph.getMultilineStringBounds(g2, hist, w).getHeight();
 
-					int h = (int) Graph.getMultilineStringBounds(g2, log.message(), w).getHeight();
-					y -= h * 1.25;
+				Color top = game.getHands().get(Side.TOP).getUserDeck().getStyling().getFrame().getThemeColor();
+				Color bot = game.getHands().get(Side.BOTTOM).getUserDeck().getStyling().getFrame().getThemeColor();
 
-					g2.setColor(game.getHands().get(log.side()).getUserDeck().getStyling().getFrame().getThemeColor());
-					Graph.drawMultilineString(g2, log.message(),
-							MARGIN.x, y, w - MARGIN.x,
-							(str, px, py) -> Graph.drawOutlinedString(g2, str, px, py, 6, Color.BLACK)
-					);
-				}
+				Graph.drawMultilineString(g2, hist,
+						MARGIN.x, -h, w - MARGIN.x, 0,
+						str -> {
+							boolean clrChange = false;
+							if (str.startsWith("{TOP}")) {
+								g2.setColor(top);
+								clrChange = true;
+							} else if (str.startsWith("{BOTTOM}")) {
+								g2.setColor(bot);
+								clrChange = true;
+							}
+
+							return clrChange ? str.substring(str.indexOf("}") + 1) : str;
+						},
+						(str, px, py) -> Graph.drawOutlinedString(g2, str, px, py, 6, Color.BLACK)
+				);
 			});
 		});
 
