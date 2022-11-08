@@ -19,47 +19,44 @@
 package com.kuuhaku.model.common;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class BondedList<T> extends ArrayList<T> {
-	private final Function<T, Boolean> onAdd;
+	private final BiFunction<T, ListIterator<T>, Boolean> onAdd;
 	private final Consumer<T> onRemove;
 
-	public static <T> BondedList<T> withBind(Function<T, Boolean> onAdd) {
+	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		return withBind(onAdd, t -> {});
 	}
 
 	public static <T> BondedList<T> withBind(Consumer<T> onRemove) {
-		return withBind(t -> true, onRemove);
+		return withBind((t, i) -> true, onRemove);
 	}
 
-	public static <T> BondedList<T> withBind(Function<T, Boolean> onAdd, Consumer<T> onRemove) {
-		return new BondedList<T>(onAdd, onRemove);
+	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
+		return new BondedList<>(onAdd, onRemove);
 	}
 
-	public BondedList(Function<T, Boolean> onAdd) {
+	public BondedList(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		this(onAdd, t -> {});
 	}
 
 	public BondedList(Consumer<T> onRemove) {
-		this(t -> true, onRemove);
+		this((t, i) -> true, onRemove);
 	}
 
-	public BondedList(Function<T, Boolean> onAdd, Consumer<T> onRemove) {
+	public BondedList(BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, Function<T, Boolean> onAdd) {
+	public BondedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		this(c, onAdd, t -> {});
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, Function<T, Boolean> onAdd, Consumer<T> onRemove) {
+	public BondedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 		addAll(c);
@@ -67,7 +64,7 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public boolean add(T t) {
-		if (t != null && onAdd.apply(t)) {
+		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			return super.add(t);
 		}
 
@@ -76,21 +73,27 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public void add(int index, T t) {
-		if (t != null && onAdd.apply(t)) {
+		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			super.add(index, t);
 		}
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(onAdd::apply).toList();
+		List<? extends T> filtered = c.stream()
+				.filter(Objects::nonNull)
+				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
+				.toList();
 
 		return super.addAll(filtered);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream().filter(onAdd::apply).toList();
+		List<? extends T> filtered = c.stream()
+				.filter(Objects::nonNull)
+				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
+				.toList();
 
 		return super.addAll(index, filtered);
 	}

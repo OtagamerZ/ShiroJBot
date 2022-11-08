@@ -23,4 +23,8 @@ import java.io.Serial;
 public class ActivationException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = 7714944773474876910L;
+
+	public ActivationException(String key) {
+		super(key);
+	}
 }

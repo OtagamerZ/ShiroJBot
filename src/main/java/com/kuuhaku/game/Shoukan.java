@@ -136,7 +136,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 
-		curr.showHand(locale);
+		curr.showHand();
 		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
 
 		takeSnapshot();
@@ -161,7 +161,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-				getCurrent().showHand(locale);
+				getCurrent().showHand();
 			}
 		}
 	}
@@ -422,8 +422,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeHP(chosen.getHPCost() / 2);
 		curr.consumeMP(chosen.getMPCost() / 2);
+
+		trigger(ON_SACRIFICE, chosen.asSource(ON_SACRIFICE));
+
 		curr.getGraveyard().add(chosen);
-		trigger(ON_SACRIFICE, side);
 
 		reportEvent("str/sacrifice_card", curr.getName(), chosen);
 		return true;
@@ -465,10 +467,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.consumeHP(hp);
 		curr.consumeMP(mp);
-		curr.getGraveyard().addAll(cards);
-		for (Drawable<?> ignored : cards) {
-			trigger(ON_SACRIFICE, side);
+
+		for (Drawable<?> chosen : cards) {
+			trigger(ON_SACRIFICE, chosen.asSource(ON_SACRIFICE));
 		}
+
+		curr.getGraveyard().addAll(cards);
 
 		reportEvent("str/sacrifice_card", curr.getName(),
 				Utils.properlyJoin(locale.get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
@@ -593,7 +597,27 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(chosen.getTargetType())) {
+		Senshi enemy = tgt.enemy();
+		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
+			curr.consumeHP(chosen.getHPCost());
+			curr.consumeMP(chosen.getMPCost());
+			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+
+			Evogear copy = chosen.copy();
+			curr.getGraveyard().add(copy);
+			if (!consumed.isEmpty()) {
+				copy.getStats().getData().put("consumed", consumed);
+			}
+
+			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+				chosen.setAvailable(false);
+			}
+
+			getData(side).put("lastSpell", copy);
+			trigger(ON_SPELL, side);
+			reportEvent("str/spell_shield");
+			return false;
+		} else if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + chosen.getTargetType()))).queue();
 			return false;
 		}
@@ -692,7 +716,18 @@ public class Shoukan extends GameInstance<Phase> {
 			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
 		};
 
-		if (!tgt.validate(type)) {
+		Senshi enemy = tgt.enemy();
+		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
+			curr.consumeMP(1);
+			if (getPhase() != Phase.PLAN && !chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+				chosen.setAvailable(false);
+			}
+
+			getData(side).put("lastAbility", chosen);
+			trigger(ON_ABILITY, side);
+			reportEvent("str/spell_shield");
+			return false;
+		} else if (!tgt.validate(type)) {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + type))).queue();
 			return false;
 		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
@@ -733,7 +768,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int pHP = you.getHP();
-		int dmg = ally.getDmg();
+		int dmg = ally.getActiveAttr();
 
 		for (Evogear e : ally.getEquipments()) {
 			JSONArray charms = e.getCharms();
@@ -844,7 +879,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int pHP = op.getHP();
-		int dmg = ally.getDmg();
+		int dmg = ally.getActiveAttr();
 		int lifesteal = 0;
 		int thorns = 0;
 		float mitigation = 1;
@@ -919,12 +954,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (!ignore) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
-						you.addKill();
-						if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-							arena.getBanned().add(enemy);
-						} else {
-							op.getGraveyard().add(enemy);
-						}
+						op.getGraveyard().add(enemy);
 
 						dmg = 0;
 						outcome = "str/combat_success";
@@ -937,20 +967,15 @@ public class Shoukan extends GameInstance<Phase> {
 							eCombatStats -= eEquipStats;
 						}
 
-						if (ally.getDmg() < eCombatStats) {
+						if (ally.getActiveAttr() < eCombatStats) {
 							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
 							if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
-								you.modHP((int) -((enemyStats - ally.getDmg()) * mitigation));
+								you.modHP((int) -((enemyStats - ally.getActiveAttr()) * mitigation));
 							}
 
-							op.addKill();
-							if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-								arena.getBanned().add(ally);
-							} else {
-								you.getGraveyard().add(ally);
-							}
+							you.getGraveyard().add(ally);
 
 							reportEvent("str/combat", ally, enemy, locale.get("str/combat_defeat", pHP - you.getHP()));
 							return true;
@@ -966,12 +991,7 @@ public class Shoukan extends GameInstance<Phase> {
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 
-								op.addKill();
-								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(ally);
-								} else {
-									you.getGraveyard().add(ally);
-								}
+								you.getGraveyard().add(ally);
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_block", block));
 								return true;
@@ -979,14 +999,14 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
-									op.modHP((int) -(ally.getDmg() * mitigation * 0.02));
+									op.modHP((int) -(ally.getActiveAttr() * mitigation * 0.02));
 								}
 
 								reportEvent("str/combat", ally, enemy, locale.get("str/combat_dodge", dodge));
 								return true;
 							}
 
-							if (ally.getDmg() > eCombatStats) {
+							if (ally.getActiveAttr() > eCombatStats) {
 								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
 								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;
@@ -994,30 +1014,14 @@ public class Shoukan extends GameInstance<Phase> {
 									dmg -= enemyStats;
 								}
 
-								you.addKill();
-								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(enemy);
-								} else {
-									op.getGraveyard().add(enemy);
-								}
+								op.getGraveyard().add(enemy);
 
 								outcome = "str/combat_success";
 							} else {
 								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
 
-								you.addKill();
-								if (you.getKills() % 7 == 0 && you.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(enemy);
-								} else {
-									op.getGraveyard().add(enemy);
-								}
-
-								op.addKill();
-								if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-									arena.getBanned().add(ally);
-								} else {
-									you.getGraveyard().add(ally);
-								}
+								op.getGraveyard().add(enemy);
+								you.getGraveyard().add(ally);
 
 								dmg = 0;
 								outcome = "str/combat_clash";
@@ -1226,11 +1230,11 @@ public class Shoukan extends GameInstance<Phase> {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source, targets);
-		if (source.execute(ep)) {
-			for (Target t : targets) {
-				t.execute(ep);
-			}
+		for (Target t : targets) {
+			t.execute(ep);
+		}
 
+		if (source.execute(ep)) {
 			triggerEOTs(new EffectParameters(trigger, source, targets));
 			return true;
 		}
@@ -1324,7 +1328,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			String def = hand.getDefeat();
 			if (hand.getHP() == 0 || def != null) {
-				trigger(ON_WIN, side.getOther());
+				trigger(ON_VICTORY, side.getOther());
 				trigger(ON_DEFEAT, side);
 
 				if (hand.getDefeat() == null) {
@@ -1464,7 +1468,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						curr.manualDraw(1);
-						curr.showHand(locale);
+						curr.showHand();
 						reportEvent("str/draw_card", curr.getName(), 1, "");
 					});
 
@@ -1476,7 +1480,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
-							curr.showHand(locale);
+							curr.showHand();
 							reportEvent("str/draw_card", curr.getName(), rem, "s");
 						});
 					}
@@ -1509,7 +1513,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
 						curr.setOriginCooldown(3);
-						curr.showHand(locale);
+						curr.showHand();
 						reportEvent("str/spirit_synth", curr.getName());
 					});
 				}
@@ -1616,33 +1620,19 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.modHP(curr.getMP() * 10);
 		}
 
-		List<SlotColumn> slts = getSlots(curr.getSide());
-		for (SlotColumn slt : slts) {
-			Senshi s = slt.getTop();
-			if (s != null) {
-				s.setAvailable(true);
-
-				s.reduceStasis(1);
-				s.reduceSleep(1);
-				s.reduceStun(1);
-				s.reduceCooldown(1);
-
-				s.getStats().expireMods();
-				s.getStats().clearTFlags();
-				for (Evogear e : s.getEquipments()) {
-					e.getStats().expireMods();
-					e.getStats().clearTFlags();
-				}
-			}
-
-			s = slt.getBottom();
-			if (s != null) {
-				s.getStats().expireMods();
-			}
-		}
-
 		for (Lock lock : Lock.values()) {
 			curr.modLockTime(lock, -1);
+		}
+
+		for (SlotColumn slt : getSlots(curr.getSide())) {
+			for (Senshi s : slt.getCards()) {
+				if (s != null) {
+					s.getStats().clearTFlags();
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().clearTFlags();
+					}
+				}
+			}
 		}
 
 		super.nextTurn();
@@ -1652,8 +1642,26 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
 
+		for (SlotColumn slt : getSlots(curr.getSide())) {
+			for (Senshi s : slt.getCards()) {
+				if (s != null) {
+					s.setAvailable(true);
+
+					s.reduceStasis(1);
+					s.reduceSleep(1);
+					s.reduceStun(1);
+					s.reduceCooldown(1);
+
+					s.getStats().expireMods();
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().expireMods();
+					}
+				}
+			}
+		}
+
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		curr.showHand(locale);
+		curr.showHand();
 		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
 
 		takeSnapshot();

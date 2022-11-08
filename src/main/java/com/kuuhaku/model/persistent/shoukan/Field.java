@@ -32,9 +32,11 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -59,6 +61,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@MapsId("id")
 	private Card card;
 
+	@Type(JsonBinaryType.class)
 	@Column(name = "modifiers", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject modifiers = new JSONObject();
@@ -70,6 +73,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Column(name = "effect", nullable = false)
 	private boolean effect = false;
 
+	@Type(JsonBinaryType.class)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
@@ -205,7 +209,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			int i = 0;
 			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
 				Race r = Race.valueOf(entry.getKey());
-				double mod = (double) entry.getValue();
+				double mod = ((Number) entry.getValue()).doubleValue();
 				if (mod == 0) continue;
 
 				int y = 279 - 25 * i++;
@@ -232,6 +236,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	public BufferedImage renderBackground() {
 		BufferedImage bi =  IO.getResourceAsImage("shoukan/arenas/" + id + ".webp");
+		if (bi == null) {
+			bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.webp");
+		}
+
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 

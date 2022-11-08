@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -53,6 +54,8 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class Hand {
@@ -65,14 +68,16 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>(d -> {
+	private final List<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getCards().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -80,14 +85,16 @@ public class Hand {
 		d.setSlot(null);
 		return true;
 	});
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>(d -> {
+	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getDeck().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -95,7 +102,7 @@ public class Hand {
 		d.reset();
 		return true;
 	});
-	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>(d -> {
+	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		if (d instanceof Senshi s) {
@@ -109,11 +116,11 @@ public class Hand {
 			if (s.getStats().popFlag(Flag.NO_DEATH)) {
 				return false;
 			} else if (ward != null) {
-				int charges = ward.getStats().getData().getInt("ward", 0) + 1;
+				int charges = ward.getStats().getData().getInt("uses", 0) + 1;
 				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-					getGraveyard().add(ward);
+					it.add(ward);
 				} else {
-					ward.getStats().getData().put("ward", charges);
+					ward.getStats().getData().put("uses", charges);
 				}
 
 				return false;
@@ -123,8 +130,21 @@ public class Hand {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 
+		if (getGame().getCurrentSide() != getSide()) {
+			Hand op = getOther();
+
+			if (op.kills % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+				getGame().getArena().getBanned().add(d);
+				return false;
+			}
+
+			op.kills++;
+		}
+
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			getGraveyard().addAll(s.getEquipments());
+			for (Evogear e : s.getEquipments()) {
+				it.add(e);
+			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -133,12 +153,12 @@ public class Hand {
 
 		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
 			cards.add(d.copy());
-			getGraveyard().remove(d);
+			return false;
 		}
 
 		return d.keepOnDestroy();
 	});
-	private final List<Drawable<?>> discard = new BondedList<>(d -> {
+	private final List<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
@@ -245,6 +265,10 @@ public class Hand {
 		return side;
 	}
 
+	public Hand getOther() {
+		return game.getHands().get(side.getOther());
+	}
+
 	public Origin getOrigin() {
 		return origin;
 	}
@@ -283,7 +307,7 @@ public class Hand {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			for (int i = 0; i < deck.size() && value > 0; i++) {
 				if (deck.get(i) instanceof Senshi) {
-					if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+					if (getOther().getOrigin().synergy() == Race.IMP) {
 						modHP(-10);
 					}
 
@@ -304,7 +328,7 @@ public class Hand {
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 				modHP(50);
 			}
-			if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+			if (getOther().getOrigin().synergy() == Race.IMP) {
 				modHP(-10);
 			}
 
@@ -323,7 +347,7 @@ public class Hand {
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 			modHP(50);
 		}
-		if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+		if (getOther().getOrigin().synergy() == Race.IMP) {
 			modHP(-10);
 		}
 
@@ -356,7 +380,7 @@ public class Hand {
 				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 					modHP(50);
 				}
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -377,7 +401,32 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s && s.getRace().isRace(race)) {
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
+					modHP(-10);
+				}
+
+				Drawable<?> out = deck.remove(i);
+				out.setSolid(true);
+
+				cards.add(out);
+				getGame().trigger(Trigger.ON_DRAW);
+				return out;
+			}
+		}
+
+		return null;
+	}
+
+	public Drawable<?> draw(Predicate<Drawable<?>> cond) {
+		LinkedList<Drawable<?>> deck = getDeck();
+
+		for (int i = 0; i < deck.size(); i++) {
+			Drawable<?> d = deck.get(i);
+			if (cond.test(d)) {
+				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
+					modHP(50);
+				}
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -398,7 +447,7 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s) {
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -422,7 +471,7 @@ public class Hand {
 				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
 					modHP(50);
 				}
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -464,7 +513,7 @@ public class Hand {
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && e.isSpell()) {
-				if (game.getHands().get(side.getOther()).getOrigin().synergy() == Race.IMP) {
+				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-10);
 				}
 
@@ -574,7 +623,7 @@ public class Hand {
 			}
 
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
-				value *= 1 + game.getHands().get(side.getOther()).getGraveyard().size();
+				value *= 1 + getOther().getGraveyard().size();
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
 				int degen = Math.abs(value / 10);
 				if (degen > 0) {
@@ -614,7 +663,7 @@ public class Hand {
 				if (origin.synergy() == Race.VIRUS) {
 					modMP((int) (delta * 0.0025));
 				} else if (origin.synergy() == Race.TORMENTED) {
-					game.getHands().get(side.getOther()).modHP((int) -(delta * 0.01));
+					getOther().modHP((int) -(delta * 0.01));
 				}
 			} else if (delta < 0) {
 				game.trigger(Trigger.ON_HEAL, side);
@@ -755,7 +804,7 @@ public class Hand {
 	}
 
 	public void addKill() {
-		this.kills++;
+		kills++;
 	}
 
 	public BufferedImage render(I18N locale) {
@@ -801,13 +850,13 @@ public class Hand {
 		return bi;
 	}
 
-	public void showHand(I18N locale) {
-		showHand(locale, this);
+	public void showHand() {
+		showHand(this);
 	}
 
-	public void showHand(I18N locale, Hand hand) {
+	public void showHand(Hand hand) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(locale, equals(hand)), "png"), "hand.png"))
+				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(game.getLocale(), equals(hand)), "png"), "hand.png"))
 				.queue(m -> {
 					if (equals(hand)) {
 						if (lastMessage != null) {
@@ -821,7 +870,10 @@ public class Hand {
 				});
 	}
 
-	public CompletableFuture<Drawable<?>> requestChoice(I18N locale, List<Drawable<?>> cards) {
+	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
+		cards = cards.stream().filter(Objects::nonNull).toList();
+		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
+
 		selection = new Pair<>(cards, new CompletableFuture<>());
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
@@ -830,7 +882,7 @@ public class Hand {
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 		g2d.translate(0, 100);
 
-		String str = locale.get("str/select_a_card");
+		String str = game.getLocale().get("str/select_a_card");
 		Graph.drawOutlinedString(g2d, str,
 				bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10,
 				6, Color.BLACK
@@ -841,7 +893,7 @@ public class Hand {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 450, null);
+			g2d.drawImage(d.render(game.getLocale(), userDeck), x, bi.getHeight() - 450, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
@@ -860,6 +912,14 @@ public class Hand {
 		});
 
 		return selection.getSecond();
+	}
+
+	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {
+		requestChoice(cards.stream().filter(cond).toList()).thenAccept(act);
+	}
+
+	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
+		requestChoice(cards).thenAccept(act);
 	}
 
 	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {

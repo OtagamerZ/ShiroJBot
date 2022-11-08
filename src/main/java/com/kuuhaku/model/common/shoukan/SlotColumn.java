@@ -19,8 +19,10 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 
@@ -81,30 +83,8 @@ public class SlotColumn {
 		Senshi current = getTop();
 		if (Objects.equals(top, current)) return;
 
-		if (top != null) {
-			Evogear shield = null;
-			if (!Objects.equals(top.getHand(), game.getCurrent())) {
-				if (top.getStats().popFlag(Flag.NO_CONVERT)) {
-					return;
-				}
-
-				for (Evogear e : top.getEquipments()) {
-					if (e.hasCharm(Charm.SHIELD)) {
-						shield = e;
-					}
-				}
-			}
-
-			if (shield != null) {
-				int charges = shield.getStats().getData().getInt("shield", 0) + 1;
-				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-					top.getHand().getGraveyard().add(shield);
-				} else {
-					shield.getStats().getData().put("shield", charges);
-				}
-
-				return;
-			}
+		if (top != null && top.isProtected()) {
+			return;
 		}
 
 		if (current != null) {

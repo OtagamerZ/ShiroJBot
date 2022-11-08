@@ -22,9 +22,11 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.id.CustomAnswerId;
 import com.kuuhaku.util.json.JSONArray;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
 import java.util.Objects;
 
@@ -46,10 +48,12 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 	@Column(name = "chance", nullable = false)
 	private int chance = 100;
 
+	@Type(JsonBinaryType.class)
 	@Column(name = "channels", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray channels = new JSONArray();
 
+	@Type(JsonBinaryType.class)
 	@Column(name = "users", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray users = new JSONArray();

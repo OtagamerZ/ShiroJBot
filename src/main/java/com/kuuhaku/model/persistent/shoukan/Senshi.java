@@ -35,6 +35,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import jakarta.persistence.*;
@@ -76,7 +77,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private CardAttributes base = new CardAttributes();
 
 	@Transient
-	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>(e -> {
+	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>((e, it) -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
 		e.executeAssert(Trigger.ON_INITIALIZE);
@@ -196,6 +197,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.filter(e -> e.getCard().getId().equals(id))
 				.findFirst()
 				.orElse(null);
+	}
+
+	public boolean hasCharm(Charm charm) {
+		return equipments.stream().anyMatch(e -> e.hasCharm(charm));
 	}
 
 	public Evogear unequip(String id) {
@@ -508,7 +513,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean canAttack() {
-		return !isDefending() && isAvailable();
+		return (!isDefending() || (stats.popFlag(Flag.ALWAYS_ATTACK) && !isFlipped())) && isAvailable();
 	}
 
 	@Override
@@ -650,31 +655,38 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasEffect() {
-		return !isSealed() && getEffect().contains(Trigger.class.getName());
+		return !isSealed();
 	}
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if ((isStunned() && Calc.chance(25)) || stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0)
-			return false;
+		if (stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
-		Trigger trigger;
-		check:
-		if (equals(ep.source().card())) {
+		Trigger trigger = null;
+		Senshi s = this;
+		if (ep.trigger() == Trigger.ON_DEFER) {
+			if (ep.size() == 0) return false;
+
+			s = getFrontline();
+			if (s == null) return false;
+		}
+
+		if (s.equals(ep.source().card())) {
 			trigger = ep.source().trigger();
 		} else {
 			for (Target target : ep.targets()) {
-				if (equals(target.card())) {
+				if (s.equals(target.card())) {
 					trigger = target.trigger();
-					break check;
+					break;
 				}
 			}
 
-			trigger = ep.trigger();
+			if (trigger == null) {
+				trigger = ep.trigger();
+			}
 		}
 
 		if (base.isLocked()) return false;
-		else if (ep.size() == 0 && trigger == Trigger.ON_DEFER) return false;
 		else if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
@@ -685,7 +697,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
-			if (hasEffect()) {
+			if (hasEffect() && getEffect().contains(trigger.name()) && !(isStunned() && Calc.chance(25))) {
 				Utils.exec(getEffect(), Map.of(
 						"ep", ep,
 						"self", this,
@@ -730,7 +742,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return false;
 		} catch (ActivationException e) {
 			Shoukan game = hand.getGame();
-			game.getChannel().sendMessage(game.getLocale().get("error/activation")).queue();
+			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
@@ -781,6 +793,37 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
+	public boolean isProtected() {
+		if (isStasis() || stats.popFlag(Flag.IGNORE_EFFECT)) {
+			return true;
+		}
+
+		if (hand != null) {
+			Evogear shield = null;
+			hand.getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(this, Trigger.ON_EFFECT_TARGET));
+			if (!hand.equals(hand.getGame().getCurrent())) {
+				for (Evogear e : equipments) {
+					if (e.hasCharm(Charm.SHIELD)) {
+						shield = e;
+					}
+				}
+			}
+
+			if (shield != null) {
+				int charges = shield.getStats().getData().getInt("uses", 0) + 1;
+				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
+					hand.getGraveyard().add(shield);
+				} else {
+					shield.getStats().getData().put("uses", charges);
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean keepOnDestroy() {
 		return !isFusion();
@@ -788,7 +831,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void reset() {
-		equipments = new BondedLinkedList<>(Objects::nonNull, e -> {
+		equipments = new BondedLinkedList<>((e, it) -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
 			e.executeAssert(Trigger.ON_INITIALIZE);
@@ -810,6 +853,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
 				}
 			}
+
+			return true;
+		}, e -> {
+			e.setEquipper(null);
+			e.executeAssert(Trigger.ON_REMOVE);
 		});
 		stats = stats.clone();
 		slot = null;
