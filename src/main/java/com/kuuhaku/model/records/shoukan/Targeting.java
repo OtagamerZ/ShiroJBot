@@ -37,14 +37,14 @@ public record Targeting(Hand hand, int allyPos, int enemyPos) {
 		return allyPos == -1 ? null : hand.getGame()
 				.getSlots(hand.getSide())
 				.get(allyPos)
-				.getTop();
+				.getUnblocked();
 	}
 
 	public Senshi enemy() {
 		return enemyPos == -1 ? null : hand.getGame()
 				.getSlots(hand.getSide().getOther())
 				.get(enemyPos)
-				.getTop();
+				.getUnblocked();
 	}
 
 	public boolean validate(TargetType type) {
