@@ -67,7 +67,7 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE AND a NOT IN ?1", lastAnimes);
+			List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE AND a.id NOT IN ?1", lastAnimes.stream().map(Anime::getId).toList());
 
 			Anime anime;
 			if (animes.isEmpty()) {
