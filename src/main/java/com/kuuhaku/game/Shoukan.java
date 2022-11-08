@@ -1177,8 +1177,16 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public List<SlotColumn> getSlots(Side s) {
-		return arena.getSlots(s);
+	public List<SlotColumn> getSlots(Side side) {
+		return arena.getSlots(side);
+	}
+
+	public List<Evogear> getEquipments(Side side) {
+		return arena.getSlots(side).stream()
+				.flatMap(sc -> sc.getCards().stream())
+				.flatMap(s -> s.getEquipments().stream())
+				.filter(Objects::nonNull)
+				.toList();
 	}
 
 	public void trigger(Trigger trigger) {
