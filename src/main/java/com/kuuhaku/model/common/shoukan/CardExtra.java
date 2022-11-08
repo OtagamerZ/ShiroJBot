@@ -383,8 +383,6 @@ public class CardExtra implements Cloneable {
 	}
 
 	public double getAttrMult() {
-		System.out.println(attrMult);
-
 		return 1 + sum(attrMult);
 	}
 
