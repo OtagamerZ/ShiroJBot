@@ -646,7 +646,7 @@ public class CardExtra implements Cloneable {
 			out += mod.getValue();
 		}
 
-		return Calc.round(out, 1);
+		return out;
 	}
 
 	@Override
