@@ -339,9 +339,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (!isSpell()) {
 				cachedEffect
 						.withVar("self", equipper)
-						.withVar("trigger", ep.trigger())
-						.run();
+						.withVar("trigger", ep.trigger());
 			}
+
+			cachedEffect.run();
 
 			stats.popFlag(Flag.EMPOWERED);
 			return true;
