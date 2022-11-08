@@ -1386,6 +1386,18 @@ public class Shoukan extends GameInstance<Phase> {
 					s.getStats().removeExpired(AttrMod::isExpired);
 				}
 			}
+
+			for (Drawable<?> d : hand.getGraveyard()) {
+				d.setAvailable(true);
+			}
+
+			for (Drawable<?> d : hand.getDeck()) {
+				d.setAvailable(true);
+			}
+		}
+
+		for (Drawable<?> d : arena.getBanned()) {
+			d.setAvailable(true);
 		}
 
 		AtomicBoolean registered = new AtomicBoolean();
