@@ -646,12 +646,12 @@ public class CardExtra implements Cloneable {
 			out += mod.getValue();
 		}
 
-		return out;
+		return Calc.round(out, 2);
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public CardExtra clone() {
-		@SuppressWarnings("rawtypes")
 		Copier<HashSet, AttrMod> copier = new Copier<>(HashSet.class, AttrMod.class);
 
 		CardExtra clone = new CardExtra(

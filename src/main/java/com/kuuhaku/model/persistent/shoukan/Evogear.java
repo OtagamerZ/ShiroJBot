@@ -273,6 +273,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
 
+		System.out.println(mult * stats.getAttrMult());
 		return mult * stats.getAttrMult();
 	}
 
@@ -323,7 +324,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 
 		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
-		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name()))) return false;
+		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name())))
+			return false;
 
 		try {
 			if (isSpell()) {
