@@ -273,7 +273,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
 
-		System.out.println(mult * stats.getAttrMult());
 		return mult * stats.getAttrMult();
 	}
 
