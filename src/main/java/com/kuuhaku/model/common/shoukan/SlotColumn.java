@@ -64,7 +64,7 @@ public class SlotColumn {
 			Senshi current = top;
 			current.executeAssert(Trigger.ON_REMOVE);
 
-			if (Objects.equals(current, top)) {
+			if (Objects.equals(current.SERIAL, top.SERIAL)) {
 				top = null;
 			}
 		}
@@ -112,7 +112,7 @@ public class SlotColumn {
 			Senshi current = bottom;
 			current.executeAssert(Trigger.ON_REMOVE);
 
-			if (Objects.equals(current, bottom)) {
+			if (Objects.equals(current.SERIAL, bottom.SERIAL)) {
 				bottom = null;
 			}
 		}
