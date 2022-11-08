@@ -1284,7 +1284,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			if (effect.expired()) {
+			if (effect.expired() && (effect.source() instanceof Senshi && !effect.limited())) {
 				getChannel().sendMessage(locale.get("str/effect_expiration", effect.source())).queue();
 				it.remove();
 			}

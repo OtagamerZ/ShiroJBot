@@ -21,6 +21,7 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
@@ -57,10 +58,19 @@ public record EffectOverTime(
 	}
 
 	public boolean expired() {
-		if (turns != null) return turns.get() <= 0;
-		if (limit != null) return limit.get() <= 0;
+		if (source instanceof Senshi s && !limited()) {
+			return s.getSlot().getIndex() == -1;
+		}
 
-		return false;
+		boolean expired = false;
+		if (turns != null) expired = turns.get() <= 0;
+		if (limit != null) expired |= limit.get() <= 0;
+
+		return expired;
+	}
+
+	public boolean limited() {
+		return turns != null || limit != null;
 	}
 
 	@Override
