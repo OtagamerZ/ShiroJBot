@@ -35,7 +35,6 @@ import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,8 +67,7 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			List<Anime> animes = new ArrayList<>(DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE"));
-			animes.removeIf(lastAnimes::contains);
+			List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE AND a NOT IN ?1", lastAnimes);
 
 			Anime anime;
 			if (animes.isEmpty()) {
@@ -79,14 +77,14 @@ public abstract class Spawn {
 			}
 			lastAnimes.add(anime);
 
-			List<Card> cards = new ArrayList<>(anime.getCards());
-			cards.removeIf(lastCards::contains);
+			Map<Rarity, Set<Card>> cPool = anime.getCards().stream()
+					.filter(c -> !lastCards.contains(c))
+					.collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
 
-			if (cards.isEmpty()) {
+			if (cPool.isEmpty()) {
 				return null;
 			}
 
-			Map<Rarity, Set<Card>> cPool = cards.stream().collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
 			RandomList<Rarity> rPool = new RandomList<>(3 - rarityBonus);
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
