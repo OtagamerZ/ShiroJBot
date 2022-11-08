@@ -65,6 +65,8 @@ public abstract class Graph {
 	}
 
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {
+		if (text.isEmpty()) return;
+
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
 
