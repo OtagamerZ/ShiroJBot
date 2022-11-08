@@ -130,7 +130,7 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		return trigger == Trigger.ON_DEFER;
 	}
 
-	public boolean leech() {
+	public boolean leeched() {
 		return trigger == Trigger.ON_LEECH;
 	}
 }

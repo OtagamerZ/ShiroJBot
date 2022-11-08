@@ -1627,6 +1627,8 @@ public class Shoukan extends GameInstance<Phase> {
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
 				if (s != null) {
+					s.setAvailable(true);
+
 					s.getStats().clearTFlags();
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().clearTFlags();
@@ -1645,8 +1647,6 @@ public class Shoukan extends GameInstance<Phase> {
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
 				if (s != null) {
-					s.setAvailable(true);
-
 					s.reduceStasis(1);
 					s.reduceSleep(1);
 					s.reduceStun(1);
