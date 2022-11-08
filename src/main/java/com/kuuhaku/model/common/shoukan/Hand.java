@@ -623,7 +623,7 @@ public class Hand {
 			}
 
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
-				value *= 1 + getOther().getGraveyard().size();
+				value *= 1 + getOther().getGraveyard().size() * 0.01;
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
 				int degen = Math.abs(value / 10);
 				if (degen > 0) {
