@@ -159,7 +159,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public List<String> getTags() {
 		List<String> out = new ArrayList<>();
 		if (race != Race.NONE) {
-			out.add("race/" + race.name());
+			out.add("race/" + getRace().name());
 		}
 		if (hasEffect()) {
 			if (base.getTags().contains("MATERIAL")) {
@@ -355,7 +355,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (stats.hasFlag(Flag.IGNORE_FIELD)) return 1;
 
 		double mult = 1;
-		Race[] races = race.split();
+		Race[] races = getRace().split();
 		for (Race r : races) {
 			double mod = f.getModifiers().getDouble(r.name()) / races.length;
 			mult += mod;
