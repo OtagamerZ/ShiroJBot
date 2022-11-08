@@ -1554,10 +1554,9 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {
-		List<SlotColumn> slts = new ArrayList<>(getSlots(side));
-		slts.removeIf(sc -> sc.isLocked() || (top ? sc.hasTop() : sc.hasBottom()));
-
-		return slts;
+		return getSlots(side).stream()
+				.filter(sc -> !sc.isLocked() && !(top ? sc.hasTop() : sc.hasBottom()))
+				.toList();
 	}
 
 	public boolean putAtOpenSlot(Side side, boolean top, Senshi card) {
