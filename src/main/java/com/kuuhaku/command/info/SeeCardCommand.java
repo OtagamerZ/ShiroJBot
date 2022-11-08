@@ -134,7 +134,6 @@ public class SeeCardCommand implements Executable {
 					case FIELD -> DAO.find(Field.class, card.getId());
 				};
 
-				System.out.println(d);
 				if (d != null) {
 					bi = d.render(locale, dk);
 
