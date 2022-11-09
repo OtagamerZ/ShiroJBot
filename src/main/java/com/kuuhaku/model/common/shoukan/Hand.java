@@ -816,9 +816,9 @@ public class Hand {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 
-		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
+		int offset = bi.getWidth() / 2 - (225 * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 225 * i;
+			int x =  + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
@@ -900,9 +900,9 @@ public class Hand {
 				6, Color.BLACK
 		);
 
-		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
+		int offset = bi.getWidth() / 2 - (225 * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 225 * i;
+			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x,100, null);
