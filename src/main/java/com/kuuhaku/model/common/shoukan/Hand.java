@@ -811,26 +811,26 @@ public class Hand {
 	}
 
 	public BufferedImage render(boolean ally) {
-		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * Math.max(5, cards.size()), 100 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 
-		int offset = bi.getWidth() / 2 - (225 * cards.size()) / 2;
+		int offset = bi.getWidth() / 2 - ((Drawable.SIZE.width + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 225 * i;
+			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
-						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
+						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
 						6, Color.BLACK
 				);
 			}
 
 			if (!ally) {
-				Graph.applyTransformed(g2d, x, bi.getHeight() - 380, g -> {
+				Graph.applyTransformed(g2d, x, 100, g -> {
 					g.setClip(userDeck.getStyling().getFrame().getBoundary());
 					g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 				});
@@ -840,7 +840,7 @@ public class Hand {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
 				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
-				g2d.drawImage(emp, x, bi.getHeight() - 380, null);
+				g2d.drawImage(emp, x, 100, null);
 			}
 		}
 
@@ -888,7 +888,7 @@ public class Hand {
 	public BufferedImage renderChoices() {
 		List<Drawable<?>> cards = selection.getFirst();
 
-		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * Math.max(5, cards.size()), 200 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
@@ -900,15 +900,15 @@ public class Hand {
 				6, Color.BLACK
 		);
 
-		int offset = bi.getWidth() / 2 - (225 * cards.size()) / 2;
+		int offset = bi.getWidth() / 2 - ((Drawable.SIZE.width + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 225 * i;
+			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x,100, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
-						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
+						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
 						6, Color.BLACK
 				);
 			}
