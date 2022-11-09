@@ -555,6 +555,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setSleep(int time) {
+		if (stats.popFlag(Flag.NO_SLEEP)) return;
+
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(curr, time), 4);
 	}
@@ -569,6 +571,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setStun(int time) {
+		if (stats.popFlag(Flag.NO_STUN)) return;
+
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(curr, time), 4);
 	}
@@ -583,6 +587,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setStasis(int time) {
+		if (stats.popFlag(Flag.NO_STASIS)) return;
+
 		int curr = Bit.get(state, 5, 4);
 		state = Bit.set(state, 5, Math.max(curr, time), 4);
 	}
@@ -624,6 +630,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setTaunt(Senshi target, int time) {
+		if (stats.popFlag(Flag.NO_TAUNT)) return;
+
 		this.target = target;
 		int curr = Bit.get(state, 7, 4);
 		state = Bit.set(state, 7, Math.max(curr, time), 4);
