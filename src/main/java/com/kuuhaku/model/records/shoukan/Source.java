@@ -29,7 +29,7 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	}
 
 	public Source(Drawable<?> card, Trigger trigger) {
-		this(card, card.getHand().getSide(), card.getSlot().getIndex(), trigger);
+		this(card, card.getSide(), card.getSlot().getIndex(), trigger);
 	}
 
 	@SuppressWarnings("rawtypes")

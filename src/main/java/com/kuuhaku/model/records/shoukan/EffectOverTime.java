@@ -41,7 +41,7 @@ public record EffectOverTime(
 		EnumSet<Trigger> triggers
 ) implements Comparable<EffectOverTime> {
 	public EffectOverTime(Senshi source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, side != source.getHand().getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers));
+		this(source, side != source.getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers));
 	}
 
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {

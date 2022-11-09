@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.id.LocalizedId;
@@ -62,7 +63,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default SlotColumn getSlot() {
-		return new SlotColumn(getHand().getGame(), getHand().getSide(), -1);
+		return new SlotColumn(getHand().getGame(), getSide(), -1);
 	}
 
 	default void setSlot(SlotColumn slot) {
@@ -71,6 +72,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	Hand getHand();
 
 	void setHand(Hand hand);
+
+	default Side getSide() {
+		return getHand().getSide();
+	}
 
 	default String getDescription(I18N locale) {
 		return "";
@@ -330,10 +335,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		if (this instanceof Senshi s) {
 			return new Target(
 					s,
-					getHand().getSide(),
+					getSide(),
 					getSlot().getIndex(),
 					trigger,
-					getHand().getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY
+					getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY
 			);
 		} else {
 			return new Target();

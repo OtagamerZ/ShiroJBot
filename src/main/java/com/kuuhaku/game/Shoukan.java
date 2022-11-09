@@ -852,6 +852,11 @@ public class Shoukan extends GameInstance<Phase> {
 				enemy = opSlot.getTop();
 			}
 
+			if (!Objects.equals(ally.getTarget(), enemy)) {
+				getChannel().sendMessage(locale.get("error/card_taunted", ally.getTarget(), ally.getTarget().getSlot().getIndex())).queue();
+				return false;
+			}
+
 			enemy.setFlipped(false);
 		}
 

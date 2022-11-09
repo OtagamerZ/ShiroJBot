@@ -95,7 +95,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			List<SlotColumn> slts = game.getOpenSlots(getHand().getSide(), true);
+			List<SlotColumn> slts = game.getOpenSlots(getSide(), true);
 			if (!slts.isEmpty()) {
 				slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
 			}
@@ -110,22 +110,24 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
 	private transient Hand leech = null;
+	private transient Senshi target = null;
 	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
 	private int state = 0b10;
 	/*
-	0x00 F FFF FF
-	     │ │││ └┴ 0001 1111
-	     │ │││       │ │││└ solid
-	     │ │││       │ ││└─ available
-	     │ │││       │ │└── defending
-	     │ │││       │ └─── flipped
-	     │ │││       └ sealed
-	     │ ││└─ (0 - 15) sleeping
-	     │ │└── (0 - 15) stunned
-	     │ └─── (0 - 15) stasis
-	     └ (0 - 15) cooldown
+	0x0F F FFF FF
+	   │ │ │││ └┴ 0001 1111
+	   │ │ │││       │ │││└ solid
+	   │ │ │││       │ ││└─ available
+	   │ │ │││       │ │└── defending
+	   │ │ │││       │ └─── flipped
+	   │ │ │││       └ sealed
+	   │ │ ││└─ (0 - 15) sleeping
+	   │ │ │└── (0 - 15) stunned
+	   │ │ └─── (0 - 15) stasis
+	   │ └ (0 - 15) cooldown
+	   └ (0 - 15) taunt
 	 */
 
 	@Override
@@ -606,6 +608,32 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
 	}
 
+	public Senshi getTarget() {
+		return target;
+	}
+
+	public int getTaunt() {
+		int taunt = Bit.get(state, 7, 4);
+		if (taunt == 0 || (target == null || target.getSide() == getSide() || target.getSlot().getIndex() == -1)) {
+			state = Bit.set(state, 7, 0, 4);
+			target = null;
+			taunt = 0;
+		}
+
+		return taunt;
+	}
+
+	public void setTaunt(Senshi target, int time) {
+		this.target = target;
+		int curr = Bit.get(state, 7, 4);
+		state = Bit.set(state, 7, Math.max(curr, time), 4);
+	}
+
+	public void reduceTaunt(int time) {
+		int curr = Bit.get(state, 7, 4);
+		state = Bit.set(state, 7, Math.max(0, curr - time), 4);
+	}
+
 	@Override
 	public ListOrderedSet<String> getCurses() {
 		return stats.getCurses();
@@ -850,7 +878,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (e.hasCharm(Charm.CLONE)) {
-				List<SlotColumn> slts = game.getOpenSlots(getHand().getSide(), true);
+				List<SlotColumn> slts = game.getOpenSlots(getSide(), true);
 				if (!slts.isEmpty()) {
 					slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
 				}
@@ -949,6 +977,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				g1.drawImage(IO.getResourceAsImage("shoukan/states/sleep.png"), 0, 0, null);
 			} else if (isDefending()) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
+			} else if (getTarget() != null) {
+				g1.drawImage(IO.getResourceAsImage("shoukan/states/taunt.png"), 0, 0, null);
 			}
 		});
 
