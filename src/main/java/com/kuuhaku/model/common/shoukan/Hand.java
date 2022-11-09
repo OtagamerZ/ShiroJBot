@@ -818,7 +818,7 @@ public class Hand {
 
 		int offset = bi.getWidth() / 2 - (225 * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x =  + 10 + (225 + 10) * i;
+			int x = offset + 225 * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
@@ -902,7 +902,7 @@ public class Hand {
 
 		int offset = bi.getWidth() / 2 - (225 * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 10 + (225 + 10) * i;
+			int x = offset + 225 * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x,100, null);
