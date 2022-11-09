@@ -576,6 +576,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public static XList<Evogear> getByTag(String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('evogear', ?1)", (Object[]) tags);
 
-		return (XList<Evogear>) DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids);
+		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids));
 	}
 }
