@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
@@ -80,7 +81,7 @@ public class AttrMod implements Cloneable {
 		if (side != null) {
 			if (source instanceof Evogear e && e.getEquipper() == null) {
 				return true;
-			} else if (source.getIndex() == -1 || source.getSide() != side) {
+			} else if (source instanceof Senshi s && (s.getIndex() == -1 || s.getSide() != side)) {
 				return true;
 			}
 		}
