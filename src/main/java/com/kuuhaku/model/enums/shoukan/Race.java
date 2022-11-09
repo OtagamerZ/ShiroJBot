@@ -101,11 +101,23 @@ public enum Race {
 	}
 
 	public boolean isRace(Race race) {
-		return (this.flag & race.flag) == race.flag;
+		return (flag & race.flag) == race.flag;
 	}
 
 	public Race fuse(Race with) {
-		return getByFlag(this.flag | with.flag);
+		return getByFlag(flag | with.flag);
+	}
+
+	public Race plus(Race with) {
+		if (Integer.bitCount(flag) > 1) return this;
+
+		return fuse(with);
+	}
+
+	public Race minus(Race without) {
+		if (Integer.bitCount(flag) < 2) return this;
+
+		return Race.getByFlag(flag & ~without.flag);
 	}
 
 	public Race[] split() {
