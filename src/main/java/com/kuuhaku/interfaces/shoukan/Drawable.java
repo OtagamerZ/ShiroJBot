@@ -340,7 +340,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			return new Target(
 					s,
 					getSide(),
-					getSlot().getIndex(),
+					getIndex(),
 					trigger,
 					getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY
 			);

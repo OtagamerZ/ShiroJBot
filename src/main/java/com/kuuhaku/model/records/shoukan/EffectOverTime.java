@@ -63,7 +63,7 @@ public record EffectOverTime(
 
 	public boolean expired() {
 		if (source instanceof Senshi s && !limited()) {
-			return s.getSlot().getIndex() == -1;
+			return s.getIndex() == -1;
 		}
 
 		boolean expired = false;

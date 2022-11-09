@@ -80,7 +80,7 @@ public class AttrMod implements Cloneable {
 		if (side != null) {
 			if (source instanceof Evogear e && e.getEquipper() == null) {
 				return true;
-			} else if (source.getSlot().getIndex() == -1 || source.getSlot().getSide() != side) {
+			} else if (source.getIndex() == -1 || source.getSide() != side) {
 				return true;
 			}
 		}
