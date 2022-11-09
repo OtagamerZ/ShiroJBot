@@ -77,6 +77,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return getHand().getSide();
 	}
 
+	default int getIndex() {
+		return getSlot().getIndex();
+	}
+
 	default String getDescription(I18N locale) {
 		return "";
 	}
