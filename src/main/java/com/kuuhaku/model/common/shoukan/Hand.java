@@ -807,11 +807,11 @@ public class Hand {
 		kills++;
 	}
 
-	public BufferedImage render(I18N locale) {
-		return render(locale, true);
+	public BufferedImage render() {
+		return render(true);
 	}
 
-	public BufferedImage render(I18N locale, boolean ally) {
+	public BufferedImage render(boolean ally) {
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 480, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
@@ -822,7 +822,7 @@ public class Hand {
 			int x = offset + 10 + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(locale, userDeck), x, bi.getHeight() - 380, null);
+			g2d.drawImage(d.render(game.getLocale(), userDeck), x, bi.getHeight() - 380, null);
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
@@ -856,7 +856,7 @@ public class Hand {
 
 	public void showHand(Hand hand) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(game.getLocale(), equals(hand)), "png"), "hand.png"))
+				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(equals(hand)), "png"), "hand.png"))
 				.queue(m -> {
 					if (equals(hand)) {
 						if (lastMessage != null) {
@@ -875,6 +875,19 @@ public class Hand {
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 
 		selection = new Pair<>(cards, new CompletableFuture<>());
+
+		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(renderChoices(), "png"), "choices.png")));
+
+		selection.getSecond().thenAccept(d -> {
+			msg.delete().queue(null, Utils::doNothing);
+			selection = null;
+		});
+
+		return selection.getSecond();
+	}
+
+	public BufferedImage renderChoices() {
+		List<Drawable<?>> cards = selection.getFirst();
 
 		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 550, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -904,14 +917,7 @@ public class Hand {
 
 		g2d.dispose();
 
-		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(bi, "png"), "choices.png")));
-
-		selection.getSecond().thenAccept(d -> {
-			msg.delete().queue(null, Utils::doNothing);
-			selection = null;
-		});
-
-		return selection.getSecond();
+		return bi;
 	}
 
 	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {

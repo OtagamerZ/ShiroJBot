@@ -1546,14 +1546,21 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/game_history_disable", curr.getName());
 					}
 				});
-				put(Utils.parseEmoji("\uD83E\uDEAA"),
-						w -> w.getHook().setEphemeral(true)
-								.sendFile(IO.getBytes(curr.render(locale), "png"), "hand.png")
-								.queue()
-				);
+				put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+					if (curr.selectionPending()) {
+						w.getHook().setEphemeral(true)
+								.sendFile(IO.getBytes(curr.renderChoices(), "png"), "choices.png")
+								.queue();
+						return;
+					}
+
+					w.getHook().setEphemeral(true)
+							.sendFile(IO.getBytes(curr.render(), "png"), "hand.png")
+							.queue();
+				});
 				put(Utils.parseEmoji("\uD83D\uDD0D"),
 						w -> w.getHook().setEphemeral(true)
-								.sendFile(IO.getBytes(arena.renderEvogears(locale), "png"), "evogears.png")
+								.sendFile(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")
 								.queue()
 				);
 				put(Utils.parseEmoji("🏳"), w -> {
