@@ -31,7 +31,6 @@ import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
