@@ -811,17 +811,17 @@ public class Hand {
 	}
 
 	public BufferedImage render(boolean ally) {
-		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 480, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((225 + 20) * Math.max(5, cards.size()), 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 
 		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + (225 + 10) * i;
+			int x = offset + 225 * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(game.getLocale(), userDeck), x, bi.getHeight() - 380, null);
+			g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
@@ -902,10 +902,10 @@ public class Hand {
 
 		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + (225 + 10) * i;
+			int x = offset + 225 * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(game.getLocale(), userDeck), x,0, null);
+			g2d.drawImage(d.render(game.getLocale(), userDeck), x,100, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
