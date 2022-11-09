@@ -1011,7 +1011,7 @@ public class Shoukan extends GameInstance<Phase> {
 								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;
 								} else {
-									dmg -= enemyStats;
+									dmg = Math.max(0, dmg - enemyStats);
 								}
 
 								op.getGraveyard().add(enemy);
