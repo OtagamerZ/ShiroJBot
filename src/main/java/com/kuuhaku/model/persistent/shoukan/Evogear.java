@@ -244,7 +244,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public int getDodge() {
 		int sum = base.getDodge() + stats.getDodge();
 
-		return (int) (sum * getAttrMult());
+		return (int) Utils.clamp(sum * getAttrMult(), 0, 100);
 	}
 
 	@Override
@@ -256,7 +256,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			min += 2;
 		}
 
-		return (int) ((min + sum) * getAttrMult());
+		return (int) Utils.clamp((min + sum) * getAttrMult(), 0, 100);
 	}
 
 	private double getCostMult() {
