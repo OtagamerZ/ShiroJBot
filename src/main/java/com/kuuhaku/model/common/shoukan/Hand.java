@@ -818,7 +818,7 @@ public class Hand {
 
 		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 10 + (225 + 10) * i;
+			int x = offset + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x, bi.getHeight() - 380, null);
@@ -902,10 +902,10 @@ public class Hand {
 
 		int offset = bi.getWidth() / 2 - ((225 + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 10 + (225 + 10) * i;
+			int x = offset + (225 + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(game.getLocale(), userDeck), x, bi.getHeight() - 450, null);
+			g2d.drawImage(d.render(game.getLocale(), userDeck), x,0, null);
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (225 / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
