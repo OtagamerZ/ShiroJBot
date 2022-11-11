@@ -67,9 +67,6 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			System.out.println(lastAnimes.stream().map(Anime::getId).toList());
-			System.out.println(lastCards.stream().map(Card::getId).toList());
-
 			List<Anime> animes = DAO.queryAll(Anime.class, """
 					SELECT c.anime
 					FROM Card c
@@ -80,8 +77,6 @@ public abstract class Spawn {
 					lastAnimes.stream().map(Anime::getId).toList(),
 					lastCards.stream().map(Card::getId).toList()
 			);
-
-			System.out.println(animes);
 
 			Anime anime;
 			if (animes.isEmpty()) {

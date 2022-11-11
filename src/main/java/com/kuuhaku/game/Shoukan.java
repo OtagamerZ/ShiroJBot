@@ -699,9 +699,6 @@ public class Shoukan extends GameInstance<Phase> {
 		} else if (curr.getMP() < 1) {
 			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 			return false;
-		} else if (!chosen.getEffect().contains(ON_ACTIVATE.name())) {
-			getChannel().sendMessage(locale.get("error/card_no_special")).queue();
-			return false;
 		} else if (chosen.isSealed()) {
 			getChannel().sendMessage(locale.get("error/card_sealed")).queue();
 			return false;
@@ -730,6 +727,7 @@ public class Shoukan extends GameInstance<Phase> {
 			getChannel().sendMessage(locale.get("error/target", locale.get("str/target_" + type))).queue();
 			return false;
 		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+			getChannel().sendMessage(locale.get("error/card_no_special")).queue();
 			return false;
 		}
 
