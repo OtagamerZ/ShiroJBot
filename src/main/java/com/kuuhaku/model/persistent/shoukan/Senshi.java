@@ -149,10 +149,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return Utils.getOr(stats.getRace(), race);
 	}
 
+	@Override
 	public CardAttributes getBase() {
 		return base;
 	}
 
+	@Override
 	public CardExtra getStats() {
 		return stats;
 	}
@@ -287,9 +289,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		Senshi source = (Senshi) Utils.getOr(stats.getSource(), this);
+		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
 
-		return Utils.getOr(source.stats.getDescription(locale), source.base.getDescription(locale));
+		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
 	@Override
@@ -687,9 +689,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public String getEffect() {
-		Senshi source = (Senshi) Utils.getOr(stats.getSource(), this);
+		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
 
-		return Utils.getOr(stats.getEffect(), source.base.getEffect());
+		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
 	public boolean hasEffect() {

@@ -137,8 +137,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return charms.contains(charm.name());
 	}
 
+	@Override
 	public CardAttributes getBase() {
 		return base;
+	}
+
+	@Override
+	public CardExtra getStats() {
+		return stats;
 	}
 
 	public Senshi getEquipper() {
@@ -152,10 +158,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public ListOrderedSet<String> getCurses() {
 		return stats.getCurses();
-	}
-
-	public CardExtra getStats() {
-		return stats;
 	}
 
 	@Override
@@ -208,9 +210,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		Evogear source = (Evogear) Utils.getOr(stats.getSource(), this);
+		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
 
-		return Utils.getOr(source.stats.getDescription(locale), source.base.getDescription(locale));
+		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
 	@Override
@@ -315,9 +317,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		Evogear source = (Evogear) Utils.getOr(stats.getSource(), this);
+		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
 
-		return Utils.getOr(source.stats.getEffect(), source.base.getEffect());
+		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
 	public boolean hasEffect() {

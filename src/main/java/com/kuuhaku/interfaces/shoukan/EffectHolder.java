@@ -19,10 +19,12 @@
 package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -66,16 +68,17 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		put("enemy", new Color(0x010000));
 	}};
 
+	CardAttributes getBase();
+
+	CardExtra getStats();
+
+	Hand getLeech();
+
+	void setLeech(Hand leech);
+
 	boolean execute(EffectParameters ep);
 
 	default void executeAssert(Trigger trigger) {
-	}
-
-	default Hand getLeech() {
-		return null;
-	}
-
-	default void setLeech(Hand leech) {
 	}
 
 	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
