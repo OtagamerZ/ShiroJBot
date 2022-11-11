@@ -244,7 +244,6 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.consumeMP(chosen.getMPCost());
 			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
-
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {

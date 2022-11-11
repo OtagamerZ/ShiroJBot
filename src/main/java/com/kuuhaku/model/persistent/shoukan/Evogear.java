@@ -208,7 +208,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		return Utils.getOr(stats.getDescription(locale), base.getDescription(locale));
+		Evogear source = (Evogear) Utils.getOr(stats.getSource(), this);
+
+		return Utils.getOr(source.stats.getDescription(locale), source.base.getDescription(locale));
 	}
 
 	@Override
@@ -313,7 +315,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		return Utils.getOr(stats.getEffect(), base.getEffect());
+		Evogear source = (Evogear) Utils.getOr(stats.getSource(), this);
+
+		return Utils.getOr(source.stats.getEffect(), source.base.getEffect());
 	}
 
 	public boolean hasEffect() {
