@@ -744,6 +744,7 @@ public class Hand {
 
 			consumed.add(card);
 			game.getArena().getBanned().add(card);
+			cards.remove(card);
 		}
 
 		return consumed;
