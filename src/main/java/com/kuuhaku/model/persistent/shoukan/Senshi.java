@@ -695,7 +695,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasEffect() {
-		return !isSealed();
+		return !isSealed() && !getEffect().isBlank();
+	}
+
+	public boolean hasAbility() {
+		if (getEffect().contains(Trigger.ON_ACTIVATE.name())) {
+			return true;
+		}
+
+		for (Evogear e : equipments) {
+			if (e.getEffect().contains(Trigger.ON_ACTIVATE.name())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
