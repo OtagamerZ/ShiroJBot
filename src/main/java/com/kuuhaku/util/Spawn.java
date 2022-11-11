@@ -35,7 +35,6 @@ import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +67,10 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			List<Anime> animes = new ArrayList<>(DAO.queryAll(Anime.class, """
+			System.out.println(lastAnimes.stream().map(Anime::getId).toList());
+			System.out.println(lastCards.stream().map(Card::getId).toList());
+
+			List<Anime> animes = DAO.queryAll(Anime.class, """
 					SELECT c.anime
 					FROM Card c
 					WHERE c.anime.visible = TRUE
@@ -77,7 +79,7 @@ public abstract class Spawn {
 					""",
 					lastAnimes.stream().map(Anime::getId).toList(),
 					lastCards.stream().map(Card::getId).toList()
-			));
+			);
 
 			Anime anime;
 			if (animes.isEmpty()) {
