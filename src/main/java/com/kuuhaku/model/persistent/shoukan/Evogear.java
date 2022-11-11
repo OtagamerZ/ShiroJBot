@@ -44,7 +44,6 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
-import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -330,12 +329,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public boolean execute(EffectParameters ep) {
 		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 
-		@Language("Groovy") String effect = getEffect();
-		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name())))
+		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !getEffect().contains(ep.trigger().name())))
 			return false;
 
 		try {
-			cachedEffect.forScript(effect)
+			cachedEffect.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", hand.getGame())
 					.withVar("ep", ep)
