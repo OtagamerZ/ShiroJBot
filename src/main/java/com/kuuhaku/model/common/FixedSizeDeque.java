@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class FixedSizeDeque<T> extends LinkedList<T> {
+public class FixedSizeDeque<T> extends ArrayDeque<T> {
 	private final int size;
 
 	public FixedSizeDeque(int size) {
@@ -59,24 +59,8 @@ public class FixedSizeDeque<T> extends LinkedList<T> {
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends T> c) {
-		for (T t : c) {
-			add(index, t);
-		}
-
-		return c.size() > 0;
-	}
-
-	@Override
 	public boolean add(@NotNull T t) {
 		addLast(t);
 		return true;
-	}
-
-	@Override
-	public void add(int index, T element) {
-		if (size() >= size) removeFirst();
-
-		super.add(index, element);
 	}
 }
