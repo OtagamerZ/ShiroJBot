@@ -11,8 +11,6 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -60,14 +58,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			T t;
@@ -95,14 +86,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			T t;
@@ -134,14 +118,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			try {
@@ -183,14 +160,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -211,14 +181,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -247,14 +210,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			return ((Stream<?>) q.getResultStream())
@@ -303,14 +259,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			Query q = em.createQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
 
@@ -332,14 +281,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
 
@@ -359,14 +301,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -387,14 +322,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -423,14 +351,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Query q = em.createNativeQuery(query);
 			for (int i = 0; i < params.length; i++) {
-				Object param = params[i];
-				if (param instanceof Collection<?> c && c.isEmpty()) {
-					param = new ArrayList<>() {{
-						add(null);
-					}};
-				}
-
-				q.setParameter(i + 1, param);
+				q.setParameter(i + 1, params[i]);
 			}
 
 			return processor.apply(q).stream()
