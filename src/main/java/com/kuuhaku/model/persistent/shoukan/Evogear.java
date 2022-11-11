@@ -330,12 +330,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public boolean execute(EffectParameters ep) {
 		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 
-		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
+		@Language("Groovy") String effect = getEffect();
 		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name())))
 			return false;
 
 		try {
-			cachedEffect.forScript(getEffect())
+			cachedEffect.forScript(effect)
 					.withConst("evo", this)
 					.withConst("game", hand.getGame())
 					.withVar("ep", ep)
