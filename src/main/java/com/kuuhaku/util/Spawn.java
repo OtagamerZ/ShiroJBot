@@ -71,8 +71,8 @@ public abstract class Spawn {
 					SELECT c.anime
 					FROM Card c
 					WHERE c.anime.visible = TRUE
-					AND (?1 > 0 AND c.anime.id NOT IN ?2)
-					AND (?3 > 0 AND c.id NOT IN ?4)
+					AND (?1 = 0 OR c.anime.id NOT IN ?2)
+					AND (?3 = 0 OR c.id NOT IN ?4)
 					""",
 					lastAnimes.size(), lastAnimes.stream().map(Anime::getId).toList(),
 					lastCards.size(), lastCards.stream().map(Card::getId).toList()
