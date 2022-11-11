@@ -81,6 +81,8 @@ public abstract class Spawn {
 					lastCards.stream().map(Card::getId).toList()
 			);
 
+			System.out.println(animes);
+
 			Anime anime;
 			if (animes.isEmpty()) {
 				anime = lastAnimes.removeFirst();
