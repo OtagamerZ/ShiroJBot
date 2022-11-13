@@ -36,7 +36,6 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
 import java.util.List;
-import java.util.Locale;
 
 @Command(
 		name = "market",
@@ -55,7 +54,7 @@ public class MarketAddCommand implements Executable {
 
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 		if (card == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
 
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();

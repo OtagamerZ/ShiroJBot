@@ -27,17 +27,17 @@ import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.user.*;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
-import jakarta.persistence.NoResultException;
 import java.util.List;
-import java.util.Locale;
 
 @Command(
 		name = "trade",
@@ -87,7 +87,7 @@ public class TradeAddCommand implements Executable {
 
 			Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 			if (card == null) {
-				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card");
+				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
 
 				Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
 				event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
