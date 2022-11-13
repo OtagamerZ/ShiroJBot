@@ -311,44 +311,54 @@ public class GuildListener extends ListenerAdapter {
 			}
 		}
 
-		KawaiponCard kc = Spawn.getKawaipon(event.getChannel());
-		if (kc != null) {
-			EmbedBuilder eb = new EmbedBuilder()
-					.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
-					.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
-					.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
-					.setImage("attachment://card.png")
-					.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
+		List<TextChannel> channels = config.getSettings().getKawaiponChannels();
+		if (!channels.isEmpty()) {
+			TextChannel chosen = Utils.getRandomEntry(channels);
 
-			event.getChannel().sendMessageEmbeds(eb.build())
-					.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
-					.delay(1, TimeUnit.MINUTES)
-					.flatMap(Message::delete)
-					.queue(null, Utils::doNothing);
+			KawaiponCard kc = Spawn.getKawaipon(chosen);
+			if (kc != null) {
+				EmbedBuilder eb = new EmbedBuilder()
+						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
+						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
+						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
+						.setImage("attachment://card.png")
+						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
+
+				chosen.sendMessageEmbeds(eb.build())
+						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.queue(null, Utils::doNothing);
+			}
 		}
 
-		Drop<?> drop = Spawn.getDrop(event.getChannel());
-		if (drop != null) {
-			Random rng = drop.getRng();
+		channels = config.getSettings().getDropChannels();
+		if (!channels.isEmpty()) {
+			TextChannel chosen = Utils.getRandomEntry(channels);
 
-			EmbedBuilder eb = new EmbedBuilder()
-					.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
-					.setColor(drop.getRarity().getColor(false))
-					.setDescription(drop.getContent().toString(locale))
-					.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
-					.addField(
-							locale.get("str/drop_requirements"),
-							drop.getConditions().stream()
-									.map(dc -> dc.toString(locale, rng))
-									.collect(Collectors.joining("\n")),
-							true
-					)
-					.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
+			Drop<?> drop = Spawn.getDrop(chosen);
+			if (drop != null) {
+				Random rng = drop.getRng();
 
-			event.getChannel().sendMessageEmbeds(eb.build())
-					.delay(1, TimeUnit.MINUTES)
-					.flatMap(Message::delete)
-					.queue(null, Utils::doNothing);
+				EmbedBuilder eb = new EmbedBuilder()
+						.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
+						.setColor(drop.getRarity().getColor(false))
+						.setDescription(drop.getContent().toString(locale))
+						.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
+						.addField(
+								locale.get("str/drop_requirements"),
+								drop.getConditions().stream()
+										.map(dc -> dc.toString(locale, rng))
+										.collect(Collectors.joining("\n")),
+								true
+						)
+						.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
+
+				chosen.sendMessageEmbeds(eb.build())
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.queue(null, Utils::doNothing);
+			}
 		}
 
 		messages.computeIfAbsent(data.guild().getId(), k ->
