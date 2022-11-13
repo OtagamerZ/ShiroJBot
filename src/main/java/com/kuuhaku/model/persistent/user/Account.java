@@ -333,12 +333,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 		if (lastDaily != null && now.isBefore(lastDaily.plusDays(1))) {
-			return lastDaily.until(now, ChronoUnit.MILLIS);
+			return now.until(lastDaily.plusDays(1), ChronoUnit.MILLIS);
 		}
 
-		addCR(15_000, "Daily");
 		lastDaily = now;
 		save();
+
+		addCR(15_000, "Daily");
 
 		return 0;
 	}
