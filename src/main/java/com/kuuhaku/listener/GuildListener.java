@@ -192,8 +192,6 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (!Utils.equalsAny(event.getChannel().getId(), "718666970119143436", "615938347453382656", "971503733202628698", "1003859513239150732"))
-			return;
 		if (event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
@@ -324,8 +322,7 @@ public class GuildListener extends ListenerAdapter {
 
 			event.getChannel().sendMessageEmbeds(eb.build())
 					.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
-					//.delay(1, TimeUnit.MINUTES) TODO Return
-					.delay(20, TimeUnit.SECONDS)
+					.delay(1, TimeUnit.MINUTES)
 					.flatMap(Message::delete)
 					.queue(null, Utils::doNothing);
 		}

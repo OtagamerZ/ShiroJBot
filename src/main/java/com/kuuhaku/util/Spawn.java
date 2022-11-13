@@ -44,15 +44,13 @@ import java.util.stream.Collectors;
 
 public abstract class Spawn {
 	private static final Map<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
-			//.expiration(1, TimeUnit.MINUTES)  TODO Return
-			.expiration(20, TimeUnit.SECONDS)
+			.expiration(1, TimeUnit.MINUTES)
 			.build();
 	private static final Map<String, SingleUseReference<Drop<?>>> spawnedDrops = ExpiringMap.builder()
 			.expiration(1, TimeUnit.MINUTES)
 			.build();
 
 	private static Pair<Integer, MoonIllumination> illum = null;
-	private static final int DEBUG_MULT = 10; // TODO Remove
 
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(8);
@@ -63,7 +61,7 @@ public abstract class Spawn {
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (!config.getSettings().getKawaiponChannels().contains(channel)) return null;
 
-		double dropRate = 8 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double dropRate = 8 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		KawaiponCard card = null;
@@ -110,7 +108,7 @@ public abstract class Spawn {
 		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		if (!config.getSettings().getDropChannels().contains(channel)) return null;
 
-		double dropRate = 10 * DEBUG_MULT * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
+		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		Drop<?> drop = null;
