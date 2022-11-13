@@ -44,12 +44,12 @@ public class AliasCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		JSONObject aliases = data.config().getSettings().getAliases();
-		if (aliases.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/no_aliases")).queue();
-			return;
-		}
-
 		if (args.isEmpty()) {
+			if (aliases.isEmpty()) {
+				event.channel().sendMessage(locale.get("error/no_aliases")).queue();
+				return;
+			}
+
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/alias"));
 
