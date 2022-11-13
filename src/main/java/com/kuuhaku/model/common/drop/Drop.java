@@ -149,7 +149,7 @@ public abstract class Drop<T> {
 
 	public final String getCaptcha(boolean krangle) {
 		if (krangle) {
-			return String.join(Constants.VOID, captcha.split("\\."));
+			return String.join(Constants.VOID, captcha.split(""));
 		}
 
 		return captcha;
