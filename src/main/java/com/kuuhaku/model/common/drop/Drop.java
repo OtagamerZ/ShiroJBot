@@ -66,7 +66,7 @@ public abstract class Drop<T> {
 		add(new DropCondition("cards",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, """
-							SELECT GEO_MEAN(x.count)
+							SELECT IIF(x.count = 0, 1, GEO_MEAN(x.count))
 							FROM (
 							     SELECT COUNT(1) AS count
 							     FROM kawaipon_card
@@ -89,7 +89,7 @@ public abstract class Drop<T> {
 					Anime anime = Utils.getRandomEntry(rng, animes);
 
 					int avg = DAO.queryNative(Integer.class, """
-									SELECT GEO_MEAN(x.count)
+									SELECT IIF(x.count = 0, 1, GEO_MEAN(x.count))
 									FROM (
 									     SELECT COUNT(1) AS count
 									     FROM kawaipon_card kc
