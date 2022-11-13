@@ -104,7 +104,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "created_at", nullable = false)
 	private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-	@Column(name = "last_daily", nullable = false)
+	@Column(name = "last_daily")
 	private ZonedDateTime lastDaily;
 
 	public Account() {
