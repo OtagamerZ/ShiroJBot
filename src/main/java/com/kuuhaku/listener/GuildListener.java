@@ -311,7 +311,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 		}
 
-		KawaiponCard kc = Spawn.getKawaipon(event.getChannel());
+		KawaiponCard kc = Spawn.getKawaipon(config);
 		if (kc != null) {
 			EmbedBuilder eb = new EmbedBuilder()
 					.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
@@ -327,7 +327,7 @@ public class GuildListener extends ListenerAdapter {
 					.queue(null, Utils::doNothing);
 		}
 
-		Drop<?> drop = Spawn.getDrop(event.getChannel());
+		Drop<?> drop = Spawn.getDrop(config);
 		if (drop != null) {
 			Random rng = drop.getRng();
 
