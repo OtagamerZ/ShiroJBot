@@ -73,6 +73,7 @@ public abstract class Drop<T> {
 							     WHERE stash_entry IS NULL
 							     GROUP BY kawaipon_uid
 							     ) AS x
+							GROUP BY x.count
 							""");
 
 					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
@@ -89,16 +90,17 @@ public abstract class Drop<T> {
 					Anime anime = Utils.getRandomEntry(rng, animes);
 
 					int avg = DAO.queryNative(Integer.class, """
-									SELECT IIF(x.count = 0, 1.0, CAST(GEO_MEAN(x.count) AS NUMERIC))
-									FROM (
-									     SELECT COUNT(1) AS count
-									     FROM kawaipon_card kc
-									              INNER JOIN card c ON kc.card_id = c.id
-									     WHERE kc.stash_entry IS NULL
-									       AND c.anime_id = ?1
-									     GROUP BY kc.kawaipon_uid
-									     ) AS x
-									""", anime.getId());
+							SELECT IIF(x.count = 0, 1.0, CAST(GEO_MEAN(x.count) AS NUMERIC))
+							FROM (
+							     SELECT COUNT(1) AS count
+							     FROM kawaipon_card kc
+							              INNER JOIN card c ON kc.card_id = c.id
+							     WHERE kc.stash_entry IS NULL
+							       AND c.anime_id = ?1
+							     GROUP BY kc.kawaipon_uid
+							     ) AS x
+							GROUP BY x.count
+							""", anime.getId());
 
 					return new Object[]{(int) Calc.rng(avg / 2d, Math.min(avg * 1.5, anime.getCount()), seed), anime};
 				},
