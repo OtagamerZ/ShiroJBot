@@ -154,7 +154,6 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
-		boolean aug = getTags().contains("tag/augment");
 
 		int y = 55;
 		if (getMPCost() > 0) {
@@ -162,7 +161,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			assert icon != null;
 			int x = 200 - icon.getWidth();
 
-			String val = aug ? Utils.sign(getMPCost()) : String.valueOf(getMPCost());
+			String val = String.valueOf(getMPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(new Color(0x3F9EFF));
 			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -174,7 +173,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			assert icon != null;
 			int x = 200 - icon.getWidth();
 
-			String val = aug ? Utils.sign(getHPCost()) : String.valueOf(getHPCost());
+			String val = String.valueOf(getHPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.RED);
 			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -186,7 +185,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			assert icon != null;
 			int x = 200 - icon.getWidth();
 
-			String val = aug ? Utils.sign(getSCCost()) : String.valueOf(getSCCost());
+			String val = String.valueOf(getSCCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.LIGHT_GRAY);
 			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -195,8 +194,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	default void drawAttributes(Graphics2D g2d, boolean desc) {
 		BufferedImage icon;
+
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
+		boolean aug = getTags().contains("tag/augment");
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
@@ -205,7 +206,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				assert icon != null;
 				int x = 25;
 
-				String val = String.valueOf(getDfs());
+				String val = aug ? Utils.sign(getDfs()) : String.valueOf(getDfs());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.GREEN);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -217,7 +218,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				assert icon != null;
 				int x = 25;
 
-				String val = String.valueOf(getDmg());
+				String val = aug ? Utils.sign(getDmg()) : String.valueOf(getDmg());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.RED);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -249,7 +250,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				assert icon != null;
 				int x = 200 - icon.getWidth();
 
-				String val = getBlock() + "%";
+				String val = (aug ? Utils.sign(getBlock()) : getBlock()) + "%";
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.GRAY);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -261,7 +262,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				assert icon != null;
 				int x = 200 - icon.getWidth();
 
-				String val = getDodge() + "%";
+				String val = (aug ? Utils.sign(getDodge()) : getDodge()) + "%";
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.ORANGE);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
