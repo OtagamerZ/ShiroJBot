@@ -35,6 +35,7 @@ import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.awt.*;
@@ -153,6 +154,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
+		boolean aug = getTags().contains("tag/augment");
 
 		int y = 55;
 		if (getMPCost() > 0) {
@@ -160,7 +162,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			assert icon != null;
 			int x = 200 - icon.getWidth();
 
-			String val = String.valueOf(getMPCost());
+			String val = aug ? Utils.sign(getMPCost()) : String.valueOf(getMPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(new Color(0x3F9EFF));
 			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -172,7 +174,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			assert icon != null;
 			int x = 200 - icon.getWidth();
 
-			String val = String.valueOf(getHPCost());
+			String val = aug ? Utils.sign(getHPCost()) : String.valueOf(getHPCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.RED);
 			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -184,7 +186,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			assert icon != null;
 			int x = 200 - icon.getWidth();
 
-			String val = String.valueOf(getSCCost());
+			String val = aug ? Utils.sign(getSCCost()) : String.valueOf(getSCCost());
 			g2d.drawImage(icon, x, y, null);
 			g2d.setColor(Color.LIGHT_GRAY);
 			Graph.drawOutlinedString(g2d, val, x - m.stringWidth(val) - 2, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
