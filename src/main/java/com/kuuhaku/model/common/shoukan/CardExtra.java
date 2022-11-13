@@ -37,6 +37,7 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -129,7 +130,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getMana(Drawable<?> source) {
 		for (AttrMod mod : mana) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -166,7 +167,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getBlood(Drawable<?> source) {
 		for (AttrMod mod : blood) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -203,7 +204,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getSacrifices(Drawable<?> source) {
 		for (AttrMod mod : sacrifices) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -240,7 +241,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getAtk(Drawable<?> source) {
 		for (AttrMod mod : atk) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -277,7 +278,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getDfs(Drawable<?> source) {
 		for (AttrMod mod : dfs) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -314,7 +315,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getDodge(Drawable<?> source) {
 		for (AttrMod mod : dodge) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -351,7 +352,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getBlock(Drawable<?> source) {
 		for (AttrMod mod : block) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -388,7 +389,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getAttrMult(Drawable<?> source) {
 		for (AttrMod mod : attrMult) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -425,7 +426,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getPower(Drawable<?> source) {
 		for (AttrMod mod : power) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
@@ -462,7 +463,7 @@ public class CardExtra implements Cloneable {
 
 	public AttrMod getTier(Drawable<?> source) {
 		for (AttrMod mod : tier) {
-			if (mod.getSource().equals(source)) {
+			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}

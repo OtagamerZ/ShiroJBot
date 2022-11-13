@@ -41,7 +41,7 @@ public record EffectOverTime(
 		EnumSet<Trigger> triggers
 ) implements Comparable<EffectOverTime> {
 	public EffectOverTime(Senshi source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, side != source.getHand().getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers));
+		this(source, side != source.getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers));
 	}
 
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
@@ -63,7 +63,7 @@ public record EffectOverTime(
 
 	public boolean expired() {
 		if (source instanceof Senshi s && !limited()) {
-			return s.getSlot().getIndex() == -1;
+			return s.getIndex() == -1;
 		}
 
 		boolean expired = false;

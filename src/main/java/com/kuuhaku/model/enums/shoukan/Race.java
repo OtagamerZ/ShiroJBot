@@ -104,6 +104,10 @@ public enum Race {
 		return (flag & race.flag) == race.flag;
 	}
 
+	public boolean isPure() {
+		return Integer.bitCount(flag) < 2;
+	}
+
 	public Race fuse(Race with) {
 		return getByFlag(flag | with.flag);
 	}

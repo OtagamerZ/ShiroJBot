@@ -302,6 +302,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	public static XList<Field> getByTag(String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object[]) tags);
 
-		return (XList<Field>) DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids);
+		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids));
 	}
 }

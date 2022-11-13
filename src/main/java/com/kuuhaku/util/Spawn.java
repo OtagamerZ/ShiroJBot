@@ -35,7 +35,6 @@ import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +52,7 @@ public abstract class Spawn {
 	private static Pair<Integer, MoonIllumination> illum = null;
 
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
-	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(8);
+	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
 	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
@@ -66,8 +65,16 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			List<Anime> animes = new ArrayList<>(DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE a.visible = TRUE"));
-			animes.removeIf(lastAnimes::contains);
+			List<Anime> animes = DAO.queryAll(Anime.class, """
+					SELECT c.anime
+					FROM Card c
+					WHERE c.anime.visible = TRUE
+					AND (?1 = 0 OR c.anime.id NOT IN ?2)
+					AND (?3 = 0 OR c.id NOT IN ?4)
+					""",
+					lastAnimes.size(), lastAnimes.stream().map(Anime::getId).toList(),
+					lastCards.size(), lastCards.stream().map(Card::getId).toList()
+			);
 
 			Anime anime;
 			if (animes.isEmpty()) {

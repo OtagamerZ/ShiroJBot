@@ -44,11 +44,23 @@ public record EffectParameters(Trigger trigger, Source source, Target... targets
 		if (source.card() instanceof Senshi s && s.getStats().hasFlag(Flag.EMPOWERED)) {
 			for (Target tgt : tgts) {
 				if (tgt.index() > 0) {
-					tgts.add(new Target(tgt.card().getLeft(), tgt.side(), tgt.index() - 1, tgt.trigger(), tgt.type()));
+					tgts.add(new Target(
+							tgt.card().getLeft(),
+							tgt.side(),
+							tgt.index() - 1,
+							tgt.trigger(),
+							tgt.type()
+					));
 				}
 
 				if (tgt.index() < 4) {
-					tgts.add(new Target(tgt.card().getRight(), tgt.side(), tgt.index() + 1, tgt.trigger(), tgt.type()));
+					tgts.add(new Target(
+							tgt.card().getRight(),
+							tgt.side(),
+							tgt.index() + 1,
+							tgt.trigger(),
+							tgt.type()
+					));
 				}
 			}
 		}

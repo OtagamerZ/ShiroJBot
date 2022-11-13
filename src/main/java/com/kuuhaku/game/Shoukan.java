@@ -244,7 +244,6 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.consumeMP(chosen.getMPCost());
 			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
-
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(2));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
@@ -700,7 +699,7 @@ public class Shoukan extends GameInstance<Phase> {
 		} else if (curr.getMP() < 1) {
 			getChannel().sendMessage(locale.get("error/not_enough_mp")).queue();
 			return false;
-		} else if (!chosen.getEffect().contains(ON_ACTIVATE.name())) {
+		} else if (!chosen.hasAbility()) {
 			getChannel().sendMessage(locale.get("error/card_no_special")).queue();
 			return false;
 		} else if (chosen.isSealed()) {
@@ -850,6 +849,11 @@ public class Shoukan extends GameInstance<Phase> {
 				enemy = opSlot.getBottom();
 			} else {
 				enemy = opSlot.getTop();
+			}
+
+			if (ally.getTarget() != null && !Objects.equals(ally.getTarget(), enemy)) {
+				getChannel().sendMessage(locale.get("error/card_taunted", ally.getTarget(), ally.getTarget().getIndex())).queue();
+				return false;
 			}
 
 			enemy.setFlipped(false);
@@ -1011,7 +1015,7 @@ public class Shoukan extends GameInstance<Phase> {
 								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;
 								} else {
-									dmg -= enemyStats;
+									dmg = Math.max(0, dmg - enemyStats);
 								}
 
 								op.getGraveyard().add(enemy);

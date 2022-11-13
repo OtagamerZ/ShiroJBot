@@ -19,11 +19,24 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.util.Utils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class XList<T> extends ArrayList<T> {
+	public XList(int initialCapacity) {
+		super(initialCapacity);
+	}
+
+	public XList() {
+	}
+
+	public XList(@NotNull Collection<? extends T> c) {
+		super(c);
+	}
+
 	public T getRandom() {
 		return Utils.getRandomEntry(this);
 	}

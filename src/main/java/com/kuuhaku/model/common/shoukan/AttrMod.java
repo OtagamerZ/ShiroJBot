@@ -19,6 +19,9 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
@@ -27,12 +30,14 @@ public class AttrMod implements Cloneable {
 	private double value;
 	private int expiration;
 
+	private final Side side;
 	private final int hash;
 
 	protected AttrMod(double value) {
 		this.source = null;
 		this.value = value;
 		this.expiration = -1;
+		this.side = null;
 		this.hash = -1;
 	}
 
@@ -40,6 +45,7 @@ public class AttrMod implements Cloneable {
 		this.source = source;
 		this.value = value;
 		this.expiration = -1;
+		this.side = source.getSide();
 		this.hash = source.getSlot().hashCode();
 	}
 
@@ -47,6 +53,7 @@ public class AttrMod implements Cloneable {
 		this.source = source;
 		this.value = value;
 		this.expiration = expiration;
+		this.side = source.getSide();
 		this.hash = source.getSlot().hashCode();
 	}
 
@@ -71,8 +78,10 @@ public class AttrMod implements Cloneable {
 	}
 
 	public boolean isExpired() {
-		if (hash != -1) {
-			if (source.getSlot() == null || source.getSlot().hashCode() != hash) {
+		if (side != null) {
+			if (source instanceof Evogear e && e.getEquipper() == null) {
+				return true;
+			} else if (source instanceof Senshi s && (s.getIndex() == -1 || s.getSide() != side)) {
 				return true;
 			}
 		}

@@ -44,7 +44,6 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
-import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -137,8 +136,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return charms.contains(charm.name());
 	}
 
+	@Override
 	public CardAttributes getBase() {
 		return base;
+	}
+
+	@Override
+	public CardExtra getStats() {
+		return stats;
 	}
 
 	public Senshi getEquipper() {
@@ -152,10 +157,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public ListOrderedSet<String> getCurses() {
 		return stats.getCurses();
-	}
-
-	public CardExtra getStats() {
-		return stats;
 	}
 
 	@Override
@@ -208,7 +209,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		return Utils.getOr(stats.getDescription(locale), base.getDescription(locale));
+		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
+
+		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
 	@Override
@@ -313,7 +316,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		return Utils.getOr(stats.getEffect(), base.getEffect());
+		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
+
+		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
 	public boolean hasEffect() {
@@ -324,8 +329,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public boolean execute(EffectParameters ep) {
 		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 
-		@Language("Groovy") String effect = Utils.getOr(stats.getEffect(), base.getEffect());
-		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !effect.contains(ep.trigger().name())))
+		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !getEffect().contains(ep.trigger().name())))
 			return false;
 
 		try {
@@ -576,6 +580,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public static XList<Evogear> getByTag(String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('evogear', ?1)", (Object[]) tags);
 
-		return (XList<Evogear>) DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids);
+		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids));
 	}
 }

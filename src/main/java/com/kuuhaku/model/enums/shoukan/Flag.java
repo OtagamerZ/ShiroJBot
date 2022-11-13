@@ -31,6 +31,14 @@ public enum Flag {
 	NO_EFFECT,
 	/** Does not take damage from combat **/
 	NO_DAMAGE,
+	/** Cannot sleep **/
+	NO_SLEEP,
+	/** Cannot be stunned **/
+	NO_STUN,
+	/** Cannot enter stasis **/
+	NO_STASIS,
+	/** Cannot be taunted **/
+	NO_TAUNT,
 
 	/** Ignores target equipment stats **/
 	IGNORE_EQUIP,
