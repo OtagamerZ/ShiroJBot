@@ -39,6 +39,7 @@ import org.hibernate.annotations.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Entity
@@ -102,6 +103,9 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	@Column(name = "created_at", nullable = false)
 	private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
+	@Column(name = "last_daily", nullable = false)
+	private ZonedDateTime lastDaily;
 
 	public Account() {
 	}
@@ -319,6 +323,24 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public ZonedDateTime getCreatedAt() {
 		return createdAt;
+	}
+
+	public ZonedDateTime getLastDaily() {
+		return lastDaily;
+	}
+
+	public long collectDaily() {
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
+		if (lastDaily != null && now.isBefore(lastDaily.plusDays(1))) {
+			return lastDaily.until(now, ChronoUnit.MILLIS);
+		}
+
+		addCR(15_000, "Daily");
+		lastDaily = now;
+		save();
+
+		return 0;
 	}
 
 	public boolean isOldUser() {
