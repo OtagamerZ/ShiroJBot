@@ -54,14 +54,12 @@ public abstract class Spawn {
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static KawaiponCard getKawaipon(GuildConfig config) {
-		List<TextChannel> valid = config.getSettings().getKawaiponChannels().stream()
-				.filter(c -> !spawnedCards.containsKey(c.getId()))
-				.toList();
+	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
+		if (spawnedCards.containsKey(channel.getId())) return null;
 
-		if (valid.isEmpty()) return null;
+		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
+		if (!config.getSettings().getKawaiponChannels().contains(channel)) return null;
 
-		TextChannel channel = Utils.getRandomEntry(valid);
 		double dropRate = 8 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
@@ -111,14 +109,12 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop<?> getDrop(GuildConfig config) {
-		List<TextChannel> valid = config.getSettings().getDropChannels().stream()
-				.filter(c -> !spawnedDrops.containsKey(c.getId()))
-				.toList();
+	public synchronized static Drop<?> getDrop(TextChannel channel) {
+		if (spawnedDrops.containsKey(channel.getId())) return null;
 
-		if (valid.isEmpty()) return null;
+		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
+		if (!config.getSettings().getDropChannels().contains(channel)) return null;
 
-		TextChannel channel = Utils.getRandomEntry(valid);
 		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
