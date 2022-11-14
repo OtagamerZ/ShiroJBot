@@ -861,12 +861,15 @@ public abstract class Utils {
 		else return new Pair<>(match, (size - threshold) * 100d / size);
 	}
 
-	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean store) {
+	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
 		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "evogear", "field", "valid", "min", "max", "mine"};
 		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "v", "gt", "lt", "m"};
 
 		Options opt = new Options();
-		for (int i = 0; i < (store ? longOp.length : longOp.length - 3); i++) {
+		for (int i = 0; i < longOp.length; i++) {
+			if (market && i == 8) continue;
+			else if (!market && i > 8) break;
+
 			String lOp = longOp[i];
 			String sOp = shortOp[i];
 			opt.addOption(sOp, lOp, "nragtlt".contains(sOp), locale.get("search/" + lOp));
