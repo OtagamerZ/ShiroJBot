@@ -603,7 +603,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
+		if (enemy != null && enemy.isProtected()) {
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
 			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
@@ -722,7 +722,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
+		if (enemy != null && enemy.isProtected()) {
 			curr.consumeMP(1);
 			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
