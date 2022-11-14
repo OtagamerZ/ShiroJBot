@@ -1508,7 +1508,7 @@ public class Shoukan extends GameInstance<Phase> {
 						});
 					}
 				}
-				if (curr.getOrigin().major() == Race.SPIRIT && !curr.getDiscard().isEmpty() && curr.getOriginCooldown() == 0) {
+				if (curr.getOrigin().major() == Race.SPIRIT && curr.getDiscard().size() >= 3 && curr.getOriginCooldown() == 0) {
 					put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 						if (curr.selectionPending()) {
 							reportEvent("error/pending_choice");
