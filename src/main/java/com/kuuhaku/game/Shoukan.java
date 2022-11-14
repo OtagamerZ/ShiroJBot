@@ -1532,6 +1532,7 @@ public class Shoukan extends GameInstance<Phase> {
 							cards.add(new StashedCard(null, d.getCard(), type));
 							arena.getBanned().add(d);
 							it.remove();
+							curr.getCards().remove(d);
 						}
 
 						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));

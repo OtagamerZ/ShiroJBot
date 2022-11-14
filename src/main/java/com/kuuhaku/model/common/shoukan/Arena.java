@@ -628,20 +628,20 @@ public class Arena implements Renderer {
 								default -> 1;
 							};
 
+							Polygon clip = Graph.makePoly(new Dimension(rect.width, rect.height),
+									0.5, 0,
+									1, 1 / 4d,
+									1, 1 / 4d * 3,
+									0.5, 1,
+									0, 1 / 4d * 3,
+									0, 1 / 4d
+							);
+							clip.translate(rect.x, rect.y);
+							g1.setClip(clip);
+
 							g1.drawImage(ori.major().getBadge(), rect.x, rect.y, rect.width, rect.height, null);
 
 							if (hand.getOriginCooldown() > 0) {
-								Polygon clip = Graph.makePoly(new Dimension(rect.width, rect.height),
-										0.5, 0,
-										1, 1 / 4d,
-										1, 1 / 4d * 3,
-										0.5, 1,
-										0, 1 / 4d * 3,
-										0, 1 / 4d
-								);
-								clip.translate(rect.x, rect.y);
-								g1.setClip(clip);
-
 								g1.setColor(new Color(255, 0, 0, 200));
 
 								Point offset = new Point((int) (rect.width * 1.25), (int) (rect.height * 1.25));
