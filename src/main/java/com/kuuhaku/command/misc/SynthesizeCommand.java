@@ -39,6 +39,7 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -157,12 +158,18 @@ public class SynthesizeCommand implements Executable {
 
 						if (Calc.chance(field)) {
 							Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-							event.channel().sendMessage(locale.get("success/synth", f)).queue();
 							new StashedCard(kp, f.getCard(), CardType.FIELD).save();
+
+							event.channel().sendMessage(locale.get("success/synth", f))
+									.addFile(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png")
+									.queue();
 						} else {
 							Evogear e = rollSynthesis(mult);
 							new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
-							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")")).queue();
+
+							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
+									.addFile(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png")
+									.queue();
 						}
 
 						return true;
