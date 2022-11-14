@@ -123,7 +123,7 @@ public class DeckRemoveCommand implements Executable {
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					if (!removeFromDeck(event, locale, dk, sc, card)) return;
+					if (!removeFromDeck(event, locale, dk, sc)) return;
 					j++;
 				}
 			}
@@ -136,7 +136,7 @@ public class DeckRemoveCommand implements Executable {
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
-					if (!removeFromDeck(event, locale, dk, sc, card)) return;
+					if (!removeFromDeck(event, locale, dk, sc)) return;
 					dk.save();
 
 					event.channel().sendMessage(locale.get("success/deck_remove")).queue();
@@ -151,7 +151,7 @@ public class DeckRemoveCommand implements Executable {
 				});
 	}
 
-	private boolean removeFromDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc, Card card) {
+	private boolean removeFromDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc) {
 		if (sc == null) {
 			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 			return false;

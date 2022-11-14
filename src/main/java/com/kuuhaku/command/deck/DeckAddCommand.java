@@ -99,7 +99,7 @@ public class DeckAddCommand implements Executable {
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					if (!addToDeck(event, locale, dk, sc, card)) return;
+					if (!addToDeck(event, locale, dk, sc)) return;
 					j++;
 				}
 			}
@@ -112,7 +112,7 @@ public class DeckAddCommand implements Executable {
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
-					if (!addToDeck(event, locale, dk, sc, card)) return;
+					if (!addToDeck(event, locale, dk, sc)) return;
 					dk.save();
 
 					event.channel().sendMessage(locale.get("success/deck_add")).queue();
@@ -127,7 +127,7 @@ public class DeckAddCommand implements Executable {
 				});
 	}
 
-	private boolean addToDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc, Card card) {
+	private boolean addToDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc) {
 		if (sc == null) {
 			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 			return false;
@@ -135,7 +135,7 @@ public class DeckAddCommand implements Executable {
 
 		switch (sc.getType()) {
 			case KAWAIPON -> {
-				Senshi s = DAO.find(Senshi.class, card.getId());
+				Senshi s = DAO.find(Senshi.class, sc.getCard().getId());
 
 				if (s.isFusion()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
@@ -156,7 +156,7 @@ public class DeckAddCommand implements Executable {
 					return false;
 				}
 
-				d.getEvogear().add(DAO.find(Evogear.class, card.getId()));
+				d.getEvogear().add(DAO.find(Evogear.class, sc.getCard().getId()));
 			}
 			case FIELD -> {
 				if (d.getFields().size() >= 3) {
@@ -164,7 +164,7 @@ public class DeckAddCommand implements Executable {
 					return false;
 				}
 
-				d.getFields().add(DAO.find(Field.class, card.getId()));
+				d.getFields().add(DAO.find(Field.class, sc.getCard().getId()));
 			}
 		}
 
