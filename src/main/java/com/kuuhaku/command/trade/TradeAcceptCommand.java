@@ -62,7 +62,6 @@ public class TradeAcceptCommand implements Executable {
 				.addField(trade.getLeft().getName(), trade.toString(locale, true), true)
 				.addField(trade.getRight().getName(), trade.toString(locale, false), true);
 
-		trade.setFinalizing(true);
 		try {
 			Utils.confirm(
 					locale.get("question/trade_close", other.getAsMention(), event.user().getAsMention()),
@@ -79,6 +78,7 @@ public class TradeAcceptCommand implements Executable {
 						return true;
 					}, m -> trade.setFinalizing(false), other
 			);
+			trade.setFinalizing(true);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
