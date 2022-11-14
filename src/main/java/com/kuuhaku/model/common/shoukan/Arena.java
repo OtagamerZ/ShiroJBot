@@ -650,9 +650,9 @@ public class Arena implements Renderer {
 										rect.width + offset.x, rect.height + offset.y, 90,
 										hand.getOriginCooldown() * 360 / maxCd
 								);
-
-								g1.setClip(null);
 							}
+
+							g1.setClip(null);
 
 							xOffset = rect.width + MARGIN.x;
 						}
