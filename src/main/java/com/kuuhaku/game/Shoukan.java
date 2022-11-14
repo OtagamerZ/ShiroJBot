@@ -175,7 +175,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<inHand>\\d+),(?<mode>[adb]),(?<inField>[1-5])(?<notCombat>,nc)?")
 	private boolean placeCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_hand_index")).queue();
 			return false;
 		}
@@ -269,7 +269,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<inHand>\\d+),(?<inField>[1-5])")
 	private boolean equipCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_hand_index")).queue();
 			return false;
 		}
@@ -324,7 +324,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<inHand>\\d+)f")
 	private boolean placeField(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_hand_index")).queue();
 			return false;
 		}
@@ -488,7 +488,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<inHand>\\d+),d")
 	private boolean discardCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_hand_index")).queue();
 			return false;
 		}
@@ -526,7 +526,7 @@ public class Shoukan extends GameInstance<Phase> {
 		JSONArray batch = args.getJSONArray("inHand");
 		for (Object o : batch) {
 			int idx = ((Number) o).intValue();
-			if (!Utils.between(idx, 1, curr.getCards().size() + 1)) {
+			if (!Utils.between(idx, 1, curr.getCards().size())) {
 				getChannel().sendMessage(getLocale().get("error/invalid_hand_index")).queue();
 				return false;
 			}
@@ -564,7 +564,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<inHand>\\d+)s(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean activate(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size() + 1)) {
+		if (!Utils.between(args.getInt("inHand"), 1, curr.getCards().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_hand_index")).queue();
 			return false;
 		}
@@ -662,7 +662,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!curr.selectionPending()) return false;
 
 		Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
-		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size() + 1)) {
+		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_selection_index")).queue();
 			return false;
 		}

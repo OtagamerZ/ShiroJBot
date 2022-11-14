@@ -459,8 +459,7 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, null, channel, action, m -> {
-		}, allowed);
+		confirm(text, null, channel, action, m -> {}, allowed);
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -468,8 +467,7 @@ public abstract class Utils {
 	}
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(null, embed, channel, action, m -> {
-		}, allowed);
+		confirm(null, embed, channel, action, m -> {}, allowed);
 	}
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -477,8 +475,7 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, embed, channel, action, m -> {
-		}, allowed);
+		confirm(text, embed, channel, action, m -> {}, allowed);
 	}
 
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -679,7 +676,7 @@ public abstract class Utils {
 	}
 
 	public static boolean between(int val, int from, int to) {
-		return val >= from && val < to;
+		return val >= from && val <= to;
 	}
 
 	public static boolean between(float val, float from, float to) {

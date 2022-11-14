@@ -34,7 +34,6 @@ import net.dv8tion.jda.api.JDA;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Locale;
 
 @Command(
 		name = "profile",
@@ -68,8 +67,8 @@ public class ProfileWidgetCommand implements Executable {
 
 				if (op.equals("set")) {
 					int id = args.getInt("id", 0) - 1;
-					if (!Utils.between(id, 0, settings.getWidgets().size())) {
-						event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size())).queue();
+					if (!Utils.between(id, 0, settings.getWidgets().size() - 1)) {
+						event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size() - 1)).queue();
 						return;
 					}
 
@@ -89,8 +88,8 @@ public class ProfileWidgetCommand implements Executable {
 			}
 			case "remove" -> {
 				int id = args.getInt("id", 0) - 1;
-				if (!Utils.between(id, 0, settings.getWidgets().size())) {
-					event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size())).queue();
+				if (!Utils.between(id, 0, settings.getWidgets().size() - 1)) {
+					event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size() - 1)).queue();
 					return;
 				}
 

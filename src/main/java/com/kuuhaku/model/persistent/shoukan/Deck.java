@@ -165,7 +165,7 @@ public class Deck extends DAO<Deck> {
 		HashBag<Senshi> bag = new HashBag<>(senshi);
 		bag.removeIf(s -> bag.getCount(s) <= allowed);
 
-		return bag.isEmpty() && Utils.between(senshi.size(), 30, 37);
+		return bag.isEmpty() && Utils.between(senshi.size(), 30, 36);
 	}
 
 	public int countRace(Race race) {
@@ -192,7 +192,7 @@ public class Deck extends DAO<Deck> {
 		bag.removeIf(e -> bag.getCount(e) <= getMaxEvogearCopies(e.getTier()));
 
 		return bag.isEmpty()
-				&& Utils.between(evogear.size(), 0, 25)
+				&& Utils.between(evogear.size(), 0, 26)
 				&& evogear.stream().filter(e -> e.getTier() == 4).count() <= getMaxEvogearCopies(4);
 	}
 
@@ -216,7 +216,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public boolean validateFields() {
-		return Utils.between(field.size(), 0, 4);
+		return Utils.between(field.size(), 0, 3);
 	}
 
 	public DeckStyling getStyling() {

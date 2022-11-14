@@ -44,13 +44,13 @@ public class CustomAnswerAddCommand implements Executable {
 		JSONObject struct = args.getJSONObject("json");
 		struct.put("author", event.user().getId());
 
-		if (!Utils.between(struct.getString("trigger").length(), 3, 256)) {
+		if (!Utils.between(struct.getString("trigger").length(), 3, 255)) {
 			event.channel().sendMessage(locale.get("error/trigger_length")).queue();
 			return;
-		} else if (!Utils.between(struct.getString("answer").length(), 1, 256)) {
+		} else if (!Utils.between(struct.getString("answer").length(), 1, 255)) {
 			event.channel().sendMessage(locale.get("error/answer_length")).queue();
 			return;
-		} else if (!Utils.between(struct.getString("answer").length(), 1, 256)) {
+		} else if (!Utils.between(struct.getString("answer").length(), 1, 255)) {
 			event.channel().sendMessage(locale.get("error/answer_length")).queue();
 			return;
 		}

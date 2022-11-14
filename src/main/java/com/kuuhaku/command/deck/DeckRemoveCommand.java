@@ -39,15 +39,13 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import jakarta.persistence.NoResultException;
-
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 @Command(
@@ -57,7 +55,7 @@ import java.util.Set;
 )
 @Signature({
 		"<action:word:r>[all]",
-		"<card:word:r> <index:number>"
+		"<card:word:r> <amount:number>"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
@@ -114,58 +112,31 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
-		if (args.has("index")) {
-			int i = args.getInt("index");
-			if (!Utils.between(i, 1, stash.size())) {
-				event.channel().sendMessage(locale.get("error/invalid_value_range", 0, stash.size())).queue();
+		if (args.has("amount")) {
+			int qtd = args.getInt("amount");
+			if (qtd < 1) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
 				return;
 			}
 
-			stash = List.of(stash.get(i));
+			Deck dk = d.refresh();
+			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
+				StashedCard sc = stash.get(i);
+				if (sc.getCard().equals(card)) {
+					if (!removeFromDeck(event, locale, dk, sc, card)) return;
+					j++;
+				}
+			}
+			dk.save();
+
+			event.channel().sendMessage(locale.get("success/deck_remove")).queue();
+			return;
 		}
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
-					if (sc == null) {
-						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-						return;
-					}
-
 					Deck dk = d.refresh();
-					switch (sc.getType()) {
-						case KAWAIPON -> {
-							Iterator<Senshi> it = dk.getSenshi().iterator();
-							while (it.hasNext()) {
-								Senshi s = it.next();
-								if (s.getCard().equals(sc.getCard())) {
-									it.remove();
-									break;
-								}
-							}
-						}
-						case EVOGEAR -> {
-							Iterator<Evogear> it = dk.getEvogear().iterator();
-							while (it.hasNext()) {
-								Evogear e = it.next();
-								if (e.getCard().equals(sc.getCard())) {
-									it.remove();
-									break;
-								}
-							}
-						}
-						case FIELD -> {
-							Iterator<Field> it = dk.getFields().iterator();
-							while (it.hasNext()) {
-								Field f = it.next();
-								if (f.getCard().equals(sc.getCard())) {
-									it.remove();
-									break;
-								}
-							}
-						}
-					}
-					sc.setDeck(null);
-					sc.save();
+					if (!removeFromDeck(event, locale, dk, sc, card)) return;
 					dk.save();
 
 					event.channel().sendMessage(locale.get("success/deck_remove")).queue();
@@ -178,5 +149,50 @@ public class DeckRemoveCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
+	}
+
+	private boolean removeFromDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc, Card card) {
+		if (sc == null) {
+			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+			return false;
+		}
+
+		Deck dk = d.refresh();
+		switch (sc.getType()) {
+			case KAWAIPON -> {
+				Iterator<Senshi> it = dk.getSenshi().iterator();
+				while (it.hasNext()) {
+					Senshi s = it.next();
+					if (s.getCard().equals(sc.getCard())) {
+						it.remove();
+						break;
+					}
+				}
+			}
+			case EVOGEAR -> {
+				Iterator<Evogear> it = dk.getEvogear().iterator();
+				while (it.hasNext()) {
+					Evogear e = it.next();
+					if (e.getCard().equals(sc.getCard())) {
+						it.remove();
+						break;
+					}
+				}
+			}
+			case FIELD -> {
+				Iterator<Field> it = dk.getFields().iterator();
+				while (it.hasNext()) {
+					Field f = it.next();
+					if (f.getCard().equals(sc.getCard())) {
+						it.remove();
+						break;
+					}
+				}
+			}
+		}
+
+		sc.setDeck(null);
+		sc.save();
+		return true;
 	}
 }
