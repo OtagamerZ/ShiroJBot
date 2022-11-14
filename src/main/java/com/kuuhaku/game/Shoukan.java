@@ -392,10 +392,12 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = slot.getBottom();
-		slot.setBottom(null);
-		slot.setTop(chosen);
+		slot.swap();
 
-		reportEvent("str/promote_card", curr.getName(), chosen);
+		reportEvent("str/promote_card",
+				curr.getName(),
+				chosen.isFlipped() ? getLocale().get("str/a_card") : chosen
+		);
 		return true;
 	}
 
@@ -722,7 +724,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.hasCharm(Charm.SHIELD)) {
 			curr.consumeMP(1);
-			if (getPhase() != Phase.PLAN && !chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
 			}
 
