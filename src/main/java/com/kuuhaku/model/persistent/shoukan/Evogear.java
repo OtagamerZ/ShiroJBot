@@ -351,7 +351,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			stats.popFlag(Flag.EMPOWERED);
 			return true;
 		} catch (TargetException e) {
-			if (targetType != TargetType.NONE) {
+			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
 				Shoukan game = hand.getGame();
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + targetType))).queue();
 			}

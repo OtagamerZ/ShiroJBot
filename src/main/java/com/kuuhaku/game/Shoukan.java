@@ -1467,6 +1467,7 @@ public class Shoukan extends GameInstance<Phase> {
 				setPhase(Phase.COMBAT);
 				reportEvent("str/game_combat_phase");
 			});
+
 			if (getPhase() == Phase.PLAN) {
 				put(Utils.parseEmoji("⏩"), w -> {
 					if (curr.getLockTime(Lock.TAUNT) > 0) {
@@ -1483,30 +1484,32 @@ public class Shoukan extends GameInstance<Phase> {
 					nextTurn();
 				});
 
-				int rem = curr.getRemainingDraws();
-				if (rem > 0 && !curr.getRealDeck().isEmpty()) {
-					put(Utils.parseEmoji("📤"), w -> {
-						if (curr.selectionPending()) {
-							reportEvent("error/pending_choice");
-							return;
-						}
-
-						curr.manualDraw(1);
-						curr.showHand();
-						reportEvent("str/draw_card", curr.getName(), 1, "");
-					});
-
-					if (rem > 1) {
-						put(Utils.parseEmoji("📦"), w -> {
+				if (!curr.getRealDeck().isEmpty()) {
+					int rem = curr.getRemainingDraws();
+					if (rem > 0) {
+						put(Utils.parseEmoji("📤"), w -> {
 							if (curr.selectionPending()) {
 								reportEvent("error/pending_choice");
 								return;
 							}
 
-							curr.manualDraw(curr.getRemainingDraws());
+							curr.manualDraw(1);
 							curr.showHand();
-							reportEvent("str/draw_card", curr.getName(), rem, "s");
+							reportEvent("str/draw_card", curr.getName(), 1, "");
 						});
+
+						if (rem > 1) {
+							put(Utils.parseEmoji("📦"), w -> {
+								if (curr.selectionPending()) {
+									reportEvent("error/pending_choice");
+									return;
+								}
+
+								curr.manualDraw(curr.getRemainingDraws());
+								curr.showHand();
+								reportEvent("str/draw_card", curr.getName(), rem, "s");
+							});
+						}
 					}
 
 					if (curr.isCritical() && !curr.hasUsedDestiny()) {
@@ -1537,6 +1540,7 @@ public class Shoukan extends GameInstance<Phase> {
 						});
 					}
 				}
+
 				if (curr.getOrigin().major() == Race.SPIRIT && curr.getDiscard().size() >= 3 && curr.getOriginCooldown() == 0) {
 					put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 						if (curr.selectionPending()) {
@@ -1572,6 +1576,7 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/spirit_synth", curr.getName());
 					});
 				}
+
 				put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 					history = !history;
 
@@ -1581,6 +1586,7 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/game_history_disable", curr.getName());
 					}
 				});
+
 				put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 					if (curr.selectionPending()) {
 						w.getHook().setEphemeral(true)
@@ -1593,11 +1599,13 @@ public class Shoukan extends GameInstance<Phase> {
 							.sendFile(IO.getBytes(curr.render(), "png"), "hand.png")
 							.queue();
 				});
+
 				put(Utils.parseEmoji("\uD83D\uDD0D"),
 						w -> w.getHook().setEphemeral(true)
 								.sendFile(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")
 								.queue()
 				);
+				
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");

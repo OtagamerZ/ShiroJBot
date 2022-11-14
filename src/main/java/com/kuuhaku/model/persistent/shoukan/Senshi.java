@@ -796,7 +796,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return true;
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
-			if (type != null) {
+			if (type != null && trigger == Trigger.ON_ACTIVATE) {
 				Shoukan game = hand.getGame();
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + type))).queue();
 			}
