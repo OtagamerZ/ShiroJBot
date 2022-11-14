@@ -872,12 +872,12 @@ public class Hand {
 
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(renderChoices(), "png"), "choices.png")));
 
-		selection.getSecond().thenAccept(d -> {
+		return selection.getSecond().thenApply(d -> {
 			msg.delete().queue(null, Utils::doNothing);
 			selection = null;
-		});
 
-		return selection.getSecond();
+			return d;
+		});
 	}
 
 	public BufferedImage renderChoices() {
