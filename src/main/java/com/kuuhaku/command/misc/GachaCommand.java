@@ -172,7 +172,9 @@ public class GachaCommand implements Executable {
 					g2d.drawImage(c.drawCard(kc.isChrome()), 5, 20, null);
 
 					kc.setKawaipon(kp);
-					return new StashedCard(kp, kc);
+					kc.store();
+
+					return kc.getStashEntry();
 				}
 				case EVOGEAR -> {
 					Evogear e = DAO.find(Evogear.class, card);
