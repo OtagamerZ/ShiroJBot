@@ -1516,8 +1516,10 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						List<StashedCard> cards = new ArrayList<>();
+
+						int i = 3;
 						Iterator<Drawable<?>> it = curr.getDiscard().iterator();
-						while (it.hasNext()) {
+						while (it.hasNext() && i --> 0) {
 							Drawable<?> d = it.next();
 
 							CardType type;
