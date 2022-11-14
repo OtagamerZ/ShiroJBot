@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class Drop<T> {
@@ -116,9 +116,9 @@ public abstract class Drop<T> {
 	private final String captcha = Utils.generateRandomHash(5);
 
 	private final DropContent<T> content;
-	private final BiConsumer<Integer, Account> applier;
+	private final Consumer<Account> applier;
 
-	public Drop(Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
+	public Drop(Function<Integer, DropContent<T>> content, Consumer<Account> applier) {
 		conditions.replaceAll(c -> pool.remove());
 
 		this.content = content.apply(rarity.getIndex());
@@ -171,7 +171,7 @@ public abstract class Drop<T> {
 
 	public final void award(Account acc) {
 		if (check(acc)) {
-			applier.accept(rarity.getIndex(), acc);
+			applier.accept(acc);
 		}
 	}
 }

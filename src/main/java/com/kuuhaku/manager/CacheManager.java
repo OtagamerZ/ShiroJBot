@@ -19,7 +19,7 @@ public class CacheManager {
 			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.expireStoreSize(512 * Constants.MB)
+			.expireStoreSize(Constants.GB)
 			.counterEnable()
 			.create();
 
@@ -28,7 +28,7 @@ public class CacheManager {
 			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.expireStoreSize(512 * Constants.MB)
+			.expireStoreSize(Constants.GB)
 			.counterEnable()
 			.create();
 
